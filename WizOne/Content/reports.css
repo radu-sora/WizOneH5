@@ -1,0 +1,70 @@
+﻿/* Bootstrap custom theme */
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #fff;
+    background-color: #8c8c8c;    
+    cursor: pointer; /* Allow missing href */
+}
+
+/* Page elements */
+
+/* Dynamic report view layout */
+.report-template {
+    width: 100%;
+}
+    .report-template > tbody > tr:first-child > td:first-child {
+        width: 100%;
+        vertical-align: top;
+        padding-right: 7px;
+        display: none;
+    }
+        .report-template > tbody > tr:first-child > td:first-child > table:first-child {
+            margin: 7px 0;
+        }
+            .report-template > tbody > tr:first-child > td:first-child > table:first-child > tbody > tr > td:not(:first-child) {
+                padding-left: 5px;
+            }
+            .report-template > tbody > tr:first-child > td:first-child > table:first-child > tbody > tr > td:nth-child(5) > div > ul.dropdown-menu {
+                min-width: 0;
+            }
+                .report-template > tbody > tr:first-child > td:first-child > table:first-child > tbody > tr > td:nth-child(5) > div > ul.dropdown-menu > li > a {
+                    padding-left: 7px;
+                    padding-right: 6px;
+                    min-width: 44px;
+                }
+        .report-template > tbody > tr:first-child > td:first-child > table:nth-child(2) {
+            width: 100%;
+            height: 100%;
+        }
+            .report-template > tbody > tr:first-child > td:first-child > table:nth-child(2) > tbody > tr > td {
+                height: 50%;
+                vertical-align: top;
+            }
+
+    .report-template .dxrd-image-run-wizard {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxzdHlsZT4uc3Qwe2ZpbGw6IzNEM0QzRDt9PC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTEuMyA1LjdMMTEuMiAwIDYuNyAzLjMgMS41IDEuNWwxLjggNS4yTDAgMTEuMmw1LjcuMUw5LjEgMTZsMS41LTUuNEwxNiA5LjF6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTIzLjUgMjAuNmwtOC43LTguOC0yLjMuNy0uNiAyLjEgOC43IDguOGMuNy43IDEuOS43IDIuNiAwbC4yLS4yYy44LS43LjgtMS45LjEtMi42eiIvPjwvc3ZnPg==);
+        background-repeat: no-repeat;
+    }
+
+    .report-template .dxrd-image-exit {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxzdHlsZT4uc3Qwe2ZpbGw6IzNEM0QzRDt9PC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjIgMTJsLTYtNnY0SDh2NGg4djR6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTEyIDIwSDJWNGgxMHY0aDJWMkgwdjIwaDE0di02aC0yeiIvPjwvc3ZnPg==);
+        background-repeat: no-repeat;
+    }
+
+/* Report designer cube layout */
+.custom-cube-template {
+    width: 100%;
+    height: 100%;
+}
+    .custom-cube-template > tbody > tr {
+        height: 50%;
+    }
+        .custom-cube-template > tbody > tr > td {
+            vertical-align: top;
+        }
+
+/* DX checkboxlist override */
+.dx-checkboxlist-focus-none {
+    border: none !important;
+    outline: none !important;
+}

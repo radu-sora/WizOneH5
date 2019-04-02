@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://api.middle.sdx.ro/" targetNamespace="http://api.middle.sdx.ro/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="addressIdentifierRemove" type="tns:addressIdentifierRemove" />
+  <xs:element name="addressIdentifierRemoveResponse" type="tns:addressIdentifierRemoveResponse" />
+  <xs:element name="addressIdentifierSet" type="tns:addressIdentifierSet" />
+  <xs:element name="addressIdentifierSetResponse" type="tns:addressIdentifierSetResponse" />
+  <xs:element name="company" type="tns:company" />
+  <xs:element name="companyAddressList" type="tns:companyAddressList" />
+  <xs:element name="companyAddressListResponse" type="tns:companyAddressListResponse" />
+  <xs:element name="companyContactList" type="tns:companyContactList" />
+  <xs:element name="companyContactListResponse" type="tns:companyContactListResponse" />
+  <xs:element name="companyList" type="tns:companyList" />
+  <xs:element name="companyListResponse" type="tns:companyListResponse" />
+  <xs:element name="hello" type="tns:hello" />
+  <xs:element name="helloResponse" type="tns:helloResponse" />
+  <xs:element name="login" type="tns:login" />
+  <xs:element name="loginResponse" type="tns:loginResponse" />
+  <xs:element name="order" type="tns:requestPaperOrder" />
+  <xs:element name="orderCancel" type="tns:orderCancel" />
+  <xs:element name="orderCancelResponse" type="tns:orderCancelResponse" />
+  <xs:element name="orderHistory" type="tns:orderHistory" />
+  <xs:element name="orderHistoryResponse" type="tns:orderHistoryResponse" />
+  <xs:element name="paperOrder" type="tns:paperOrder" />
+  <xs:element name="paperOrderResponse" type="tns:paperOrderResponse" />
+  <xs:element name="productFacialValues" type="tns:productFacialValues" />
+  <xs:element name="productList" type="tns:productList" />
+  <xs:element name="productListResponse" type="tns:productListResponse" />
+  <xs:element name="response" nillable="true" type="xs:anyType" />
+  <xs:complexType name="productList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="productListResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultProductList" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultProductList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+      <xs:element minOccurs="0" name="products">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="product" type="tns:productFacialValues" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestParameters">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="sessionId" type="xs:string" />
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="responseCode" type="xs:string" />
+      <xs:element minOccurs="0" name="responseText" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="productFacialValues">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:product">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="values">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="value" type="xs:float" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="product">
+    <xs:sequence>
+      <xs:element name="productId" type="xs:int" />
+      <xs:element minOccurs="0" name="productName" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addressIdentifierRemove">
+    <xs:sequence>
+      <xs:element name="addressId" type="xs:int" />
+      <xs:element minOccurs="0" name="clientAddressId" type="xs:string" />
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addressIdentifierRemoveResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultAddressIdentifierRemove" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultAddressIdentifierRemove">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="paperOrder">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="order" type="tns:requestPaperOrder" />
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="requestPaperOrder">
+    <xs:sequence>
+      <xs:element name="companyId" type="xs:int" />
+      <xs:element name="productId" type="xs:int" />
+      <xs:element minOccurs="0" name="email" type="xs:string" />
+      <xs:element minOccurs="0" name="orderDetails" nillable="true">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="address" type="tns:paperOrderAddress" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="paperOrderAddress">
+    <xs:sequence>
+      <xs:element name="addressId" type="xs:int" />
+      <xs:element name="productValue" type="xs:float" />
+      <xs:element minOccurs="0" name="clientAddressId" type="xs:string" />
+      <xs:element name="contactId" type="xs:int" />
+      <xs:element minOccurs="0" name="contactPerson" type="xs:string" />
+      <xs:element minOccurs="0" name="vouchers">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="employeeVoucher" type="tns:paperOrderPerson" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="paperOrderPerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="firstName" type="xs:string" />
+      <xs:element minOccurs="0" name="lastName" type="xs:string" />
+      <xs:element minOccurs="0" name="SSN" type="xs:string" />
+      <xs:element name="voucherNo" type="xs:int" />
+      <xs:element minOccurs="0" name="department" type="xs:string" />
+      <xs:element minOccurs="0" name="responsiblePerson" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="paperOrderResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultPaperOrder" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultPaperOrder">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+      <xs:element minOccurs="0" name="order" type="tns:resultpOrder" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultpOrder">
+    <xs:sequence>
+      <xs:element name="companyId" type="xs:int" />
+      <xs:element name="productId" type="xs:int" />
+      <xs:element name="email" type="xs:string" />
+      <xs:element minOccurs="0" name="orderId" type="xs:string" />
+      <xs:element minOccurs="0" name="orderValue" type="xs:string" />
+      <xs:element minOccurs="0" name="proformNo" type="xs:string" />
+      <xs:element minOccurs="0" name="errorText" type="xs:string" />
+      <xs:element minOccurs="0" name="orderDetails">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="address" type="tns:errorPaperOrderAddress" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="errorPaperOrderAddress">
+    <xs:sequence>
+      <xs:element name="addressId" type="xs:int" />
+      <xs:element name="productValue" type="xs:float" />
+      <xs:element minOccurs="0" name="clientAddressId" type="xs:string" />
+      <xs:element name="contactId" type="xs:int" />
+      <xs:element minOccurs="0" name="errorText" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="vouchers">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="employeeVoucher" type="tns:errorPaperOrderPerson" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="errorPaperOrderPerson">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:paperOrderPerson">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="firstName" type="xs:string" />
+          <xs:element minOccurs="0" name="lastName" type="xs:string" />
+          <xs:element minOccurs="0" name="SSN" type="xs:string" />
+          <xs:element name="voucherNo" type="xs:int" />
+          <xs:element minOccurs="0" name="department" type="xs:string" />
+          <xs:element minOccurs="0" name="responsiblePerson" type="xs:string" />
+          <xs:element minOccurs="0" name="errorText" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="login">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="loginResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultLogin" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultLogin">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companyContactList">
+    <xs:sequence>
+      <xs:element name="companyId" type="xs:int" />
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companyContactListResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultContactList" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultContactList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+      <xs:element minOccurs="0" name="contacts">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="contact" type="tns:contact" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="contact">
+    <xs:sequence>
+      <xs:element name="contactId" type="xs:int" />
+      <xs:element name="title" type="xs:string" />
+      <xs:element name="firstName" type="xs:string" />
+      <xs:element name="lastName" type="xs:string" />
+      <xs:element name="phone" type="xs:string" />
+      <xs:element name="email" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="hello">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="helloResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addressIdentifierSet">
+    <xs:sequence>
+      <xs:element name="addressId" type="xs:int" />
+      <xs:element minOccurs="0" name="clientAddressId" type="xs:string" />
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addressIdentifierSetResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultAddressIdentifierSet" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultAddressIdentifierSet">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="orderHistory">
+    <xs:sequence>
+      <xs:element name="companyId" type="xs:int" />
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="orderHistoryResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultOrderHistory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultOrderHistory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="order" type="tns:order" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="order">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="orderId" type="xs:string" />
+      <xs:element minOccurs="0" name="orderDate" type="xs:string" />
+      <xs:element minOccurs="0" name="orderStatus" type="xs:string" />
+      <xs:element minOccurs="0" name="productId" type="xs:string" />
+      <xs:element minOccurs="0" name="productName" type="xs:string" />
+      <xs:element minOccurs="0" name="proformNo" type="xs:string" />
+      <xs:element minOccurs="0" name="voucherNo" type="xs:string" />
+      <xs:element minOccurs="0" name="totalValue" type="xs:string" />
+      <xs:element minOccurs="0" name="invoiceNo" type="xs:string" />
+      <xs:element minOccurs="0" name="invoiceDate" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companyAddressList">
+    <xs:sequence>
+      <xs:element name="companyId" type="xs:int" />
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companyAddressListResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultCompanyAddressList" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultCompanyAddressList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:companyAddressParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+      <xs:element minOccurs="0" name="addresses">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="address" type="tns:addressProduct" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companyAddressParameters">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:requestParameters">
+        <xs:sequence>
+          <xs:element name="companyId" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="addressProduct">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:address">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="products">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="product" type="tns:productContact" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="address">
+    <xs:sequence>
+      <xs:element name="addressId" type="xs:int" />
+      <xs:element minOccurs="0" name="city" type="xs:string" />
+      <xs:element minOccurs="0" name="county" type="xs:string" />
+      <xs:element minOccurs="0" name="fullAddress" type="xs:string" />
+      <xs:element minOccurs="0" name="postalCode" type="xs:string" />
+      <xs:element minOccurs="0" name="headQuarter" type="xs:string" />
+      <xs:element name="clientAddressId" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="productContact">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:product">
+        <xs:sequence>
+          <xs:element name="contactId" type="xs:int" />
+          <xs:element minOccurs="0" name="contactPerson" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="companyList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="companyListResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultCompanyList" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultCompanyList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+      <xs:element minOccurs="0" name="companies">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="company" type="tns:company" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="company">
+    <xs:sequence>
+      <xs:element name="companyId" type="xs:int" />
+      <xs:element minOccurs="0" name="companyName" type="xs:string" />
+      <xs:element minOccurs="0" name="companyNameOnVoucher" type="xs:string" />
+      <xs:element minOccurs="0" name="fiscalCode" type="xs:string" />
+      <xs:element minOccurs="0" name="registryNo" type="xs:string" />
+      <xs:element minOccurs="0" name="products">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="product" type="tns:product" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="orderCancel">
+    <xs:sequence>
+      <xs:element name="orderId" type="xs:int" />
+      <xs:element minOccurs="0" name="username" type="xs:string" />
+      <xs:element minOccurs="0" name="password" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="orderCancelResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resultOrderCancel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resultOrderCancel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestParameters" type="tns:requestParameters" />
+      <xs:element minOccurs="0" name="requestResponse" type="tns:requestResponse" />
+      <xs:element minOccurs="0" name="order" type="tns:cancelOrderConfirm" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cancelOrderConfirm">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="orderId" type="xs:string" />
+      <xs:element minOccurs="0" name="cancelDate" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,639 @@
+﻿html {
+    /*overflow-y: scroll;
+    height: 100%;*/
+}
+
+body {
+    font: 13px 'Segoe UI', 'Helvetica Neue', Helvetica, 'Droid Sans', Tahoma, Geneva, sans-serif;
+    color: Gray;
+    background: #FFF;
+    height: 100%;
+}
+
+a, a:focus, a:hover {
+    outline:0;
+    text-decoration:none;
+    color:gray;
+}
+
+/* Header menu control */
+.HeaderMeniu {
+    float:right; 
+    line-height:50px;
+}
+
+.HeaderMeniu > div {
+    display:inline-block;
+    vertical-align:middle;    
+}
+
+.HeaderMeniu > div > table {
+    display:inline-table;
+    vertical-align:middle;
+}
+
+.HeaderMeniu > div > a {
+    margin-left:13px;
+    cursor:pointer;
+}
+
+.HeaderMeniu > div > label,
+.HeaderMeniu > div > a > label {
+    display:inline;
+    vertical-align:middle;
+}
+
+.HeaderMeniu > div > ul.dropdown-menu {
+    min-width:0;
+}
+
+.HeaderMeniu > div > ul.dropdown-menu:before {
+    position:absolute;
+    top:-11px;
+    left:9px;
+    border-right:11px solid transparent;
+    border-bottom:11px solid #ccc;
+    border-left:11px solid transparent;
+    border-bottom-color:rgba(0, 0, 0, 0.2);
+    content:'';
+}
+
+.HeaderMeniu > div > ul.dropdown-menu:after {
+    position:absolute;
+    top:-10px;
+    left:10px;
+    border-right:10px solid transparent;
+    border-bottom:10px solid #ffffff;
+    border-left:10px solid transparent;
+    content:'';
+}
+
+.HeaderMeniu > div > ul.dropdown-menu > li:first-child > div {
+    padding-top:4px;
+    padding-right:8px;
+}
+
+.HeaderMeniu > div > ul.dropdown-menu > li:first-child > div > button {
+    float:right;
+    font-size:16px;
+}
+
+.HeaderMeniu > div > ul.dropdown-menu > li > a {
+    color:gray;
+}
+
+.HeaderMeniu > div > ul.dropdown-menu > li > a > img {
+    margin-top:-3px;
+    margin-right:8px;
+}
+
+.HeaderMeniu > div > ul.dropdown-menu > li > a.selected > img {
+    border:#00588a solid 2px;
+    margin-left:-2px;
+    margin-right:5px;    
+}
+
+/* Theme selector control */
+.theme-selector {
+    width:250px;
+}
+
+.theme-selector > tbody > tr > td {
+    vertical-align:top;
+}
+
+.theme-selector > tbody > tr > td > ul {
+    list-style:none;
+    padding:0 0 4px 0;
+    line-height:1;    
+}
+
+.theme-selector > tbody > tr > td > ul > li {
+    padding:4px 0 4px 16px;    
+    cursor:pointer;   
+}
+
+.theme-selector > tbody > tr > td > ul > li:not(.theme-selector-group-heder):hover,
+.theme-selector > tbody > tr > td > ul > li:not(.theme-selector-group-heder):focus {
+    background-color:#f5f5f5;
+}
+
+.theme-selector > tbody > tr > td > ul > li.selected:before {
+  position:absolute;
+  margin-left:-16px;
+  border-top:10px solid transparent;
+  border-left:10px solid #00588a;
+  border-bottom:10px solid transparent;
+  content:'';
+}
+
+.theme-selector > tbody > tr > td > ul > li > span {
+    margin-right:8px;
+}
+
+.theme-selector > tbody > tr > td > ul > li > * {
+    vertical-align:middle;
+}
+
+.theme-selector > tbody > tr > td > ul > li > span.ThemeDefault,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeDevEx,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeMetropolis,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeMetropolisBlue,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeModerno,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2010Blue,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2010Black,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2010Silver,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2003Blue,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2003Olive,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2003Silver,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeAqua,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeMulberry,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeGlass,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeBlackGlass,
+.theme-selector > tbody > tr > td > ul > li > span.ThemePlasticBlue,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeRedWine,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeSoftOrange,
+.theme-selector > tbody > tr > td > ul > li > span.ThemeYouthful {
+    width:20px;
+    height:20px;
+    display:inline-block;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeDefault {
+    background-color: #DCDCDC;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeDevEx {
+    background-color: #CDCCF5;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeMetropolis {
+    background-color: #7F7F7F;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeMetropolisBlue {
+    background-color: #0072C6;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeModerno {
+    background-color: #1279c0;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2010Blue {
+    background-color: #B5CCE5;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2010Black {
+    background-color: #474747;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2010Silver {
+    background-color: #E7EAEF;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2003Blue {
+    background-color: #B5CEF2;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2003Olive {
+    background-color: #D4DEB6;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeOffice2003Silver {
+    background-color: #D1D1E0;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeAqua {
+    background-color: #96B9EC;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeMulberry {
+    background-color: #BF4E6A;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeGlass {
+    background-color: #C8DDE8;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeBlackGlass {
+    background-color: #4D5A63;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemePlasticBlue {
+    background-color: #5066B3;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeRedWine {
+    background-color: #8A0E3C;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeSoftOrange {
+    background-color: #F06F30;
+}
+.theme-selector > tbody > tr > td > ul > li > span.ThemeYouthful {
+    background-color: #9CC524;
+}
+
+/* Account settings control */
+.account-form {
+    display:block;
+    line-height:1.5;
+    padding:0 16px 11px; 
+}
+           
+/* Badge widget */
+.badgeContainer {
+    /*margin:20px 20px 20px 20px;*/
+    width:150px; 
+    height:174px; 
+    display:inline-block; 
+    text-align:center;
+}
+
+    .badgeContainer h3 {
+         padding:0; margin:0; font-size:16px; font-weight:bold;
+    }
+
+    .badgeContainer div {
+        position:relative;
+        display:inline-block;
+        cursor:pointer;
+        
+        width:130px;
+        height:135px;
+        background:url('../Imagini/bdgBg.png') no-repeat center center;
+        color:#f15922;
+    }
+
+        .badgeContainer div img {
+            margin:0 auto;
+            margin-top:30px;
+        }
+
+        .badgeContainer div .badge {
+            min-width:30px;
+            height:30px;
+            background-color:#f15922;
+            position:absolute;
+            right:-8px;
+            top:-8px;
+            display:inline;
+            color:white;
+            text-align:center;
+            vertical-align:middle;
+            line-height:inherit;
+            white-space:nowrap;
+            font-weight:bold;
+            font-size:14px;
+            border:solid 4px white;
+            border-radius:15px;
+            padding:2px;
+            -webkit-box-shadow: 0 10px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 12px rgba(0, 0, 0, 0.2); 
+        }
+
+
+
+
+/*General*/
+.tbl_class tr td {
+   border:solid 1px green; 
+}
+
+.tbl_class tr td div {
+    padding:0px 10px 0px 10px;
+    /*padding:0px 10px;*/
+    vertical-align:middle;
+    line-height:22px;
+    /*border:solid 1px red;*/
+    width:auto;
+    /*margin-bottom:10px;*/
+}
+
+.div_hor {
+    float:left;
+    width:100%;
+    margin-bottom:15px;
+}
+    .div_hor label, .div_hor span, .div_hor table, .div_hor div {
+        float:left;
+    }
+
+    .div_hor label {
+        padding: 0px 10px 0px 10px;
+        vertical-align: middle;
+        line-height: 22px;
+    }
+
+.div_ver {
+    float:left;
+    width:100%;
+    margin-bottom:15px;
+    margin-left:0px;
+}
+    .div_ver label, .div_ver table {
+        vertical-align: middle;
+        line-height: 22px;
+    }
+
+
+
+
+.col1, .col2, .col3 {
+    width:auto; float:left; overflow:hidden; text-wrap:normal; max-width:50%;
+}
+
+.col2{width:3%;}
+
+.pnlAlign {float:left;}
+
+.indentright5 {margin-right:5px;}
+.indentright20 {margin-right:20px;}
+.indentBottom10 {margin-bottom:10px;}
+.indentTop10 {margin-top:10px;}
+
+
+
+.cmbTip td.dxic 
+{
+    padding-left:0px !important;
+    padding-right:0px !important;
+}
+
+
+.commandColumn
+{
+    margin:0 !important;
+    padding:0 !important;
+    width:86px !important;
+    text-align:center;
+}
+
+    .commandColumn .noButtonStyle
+    {
+        background-color: #FFFFFF!Important;
+        background-image: none!Important;
+        width:20px !important;
+        border:0px !important;
+        margin:0 !important;
+        padding:0 !important;
+    
+        display:inline-block !important;
+    }
+
+        .commandColumn .noButtonStyle div {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+
+
+.Absente_Cereri_AbsDesc
+{
+    position:relative;
+    float:left;
+    width:20px;
+    height:20px;
+    /*margin-left:15px;*/
+    text-align:left;
+}
+
+#txtAbsDesc
+{
+    visibility:hidden;
+    position:absolute;
+    z-index:1500 !important;
+    width:250px !important;
+    height:auto !important;
+    top:30px;
+    left:-20px;
+    border:solid 1px gray;
+    border-radius: 15px;
+    padding:10px;
+    background-color:#fff !important;
+}
+
+
+.Absente_divOuter {
+    width:100%;
+    display:inline-block;
+    margin-left:10px;
+}
+
+.Absente_divOuter .Absente_Cereri_CampuriSup
+{
+    float:left;
+    width:auto;
+    padding-right:15px;
+    display:inline-block;
+}
+
+    .Absente_divOuter .Absente_Cereri_CampuriSup label {
+        margin-top:10px;
+        margin-bottom:10px;
+    }
+
+    .Absente_divOuter .Absente_Cereri_CampuriSup .lbl_Absente_Cereri {
+        margin-top:10px;
+        margin-bottom:10px !important;
+        display:inline-block;
+    }
+
+    .Absente_divOuter .Absente_Cereri_CampuriSup span
+    {
+        display:block;
+    }
+
+
+ .divObs{
+    margin-left:10px;
+}
+
+     .divObs label {
+        margin:10px 0px 10px 0px;
+        display:inline-block;
+    }
+
+
+     /*
+.ert {
+    border:solid 1px gray; width:50px; overflow:hidden;
+    display:inline-block;
+    position:relative;
+}
+
+.ert .asd{
+    position:absolute;
+    right:20px;
+    display:inline-block;
+    border:solid 3px green;
+
+}
+*/
+
+
+
+     
+    .upload_txt, .upload_txt input[type='text'] {
+        padding: 0px;
+        border-width: 0px;
+    }
+
+    .upload_txt input[type='text'] {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+
+     .upload_btn
+     {
+         display:inline-block;
+         width:10px !important;
+         height:15px;
+         border:solid 1px gray;
+         background-color:transparent;
+         background-image:url(../Imagini/Icoane/incarca.png);
+         background-position:center center;
+         background-repeat:no-repeat;
+     }
+    
+
+
+     .Absente_divOuter table .doc_delete{
+        width:40px;
+        /*height:25px;*/
+        display:block;
+        border:solid 1px gray;
+        margin-left:10px;
+        background-color:transparent;
+        background-image:url(../Imagini/Icoane/sterge.png);
+        background-position:center center;
+        background-repeat:no-repeat;
+        cursor:pointer;
+
+         /*ImageUrl="~/Fisiere/Imagini/Icoane/sterge.png" HorizontalPosition="center" VerticalPosition="center" Repeat="NoRepeat"*/
+     }
+
+#grAnual
+{
+    padding:0;
+    margin:0;
+}
+
+#grAnua tr td 
+{
+    padding:0;
+    margin:0;
+}
+
+#grAnual div.IstEx_Luna
+{
+    background-color:#b4d2f0;
+    color:#000000;
+    width:100px;
+    height:22px;
+    vertical-align:middle;
+    line-height:22px;
+    padding-left:8px;
+}
+
+#grAnual div.IstEx_NumeZi
+{
+    background-color:#b4d2f0;
+    color:#000000;
+    width:24px;
+    height:22px;
+    vertical-align:middle;
+    text-align:center;
+    line-height:22px;
+}
+
+table#grAnual div.IstEx_Zi
+{
+    color:#000000 !important;
+    width:22px;
+    height:22px;
+    vertical-align:middle;
+    text-align:center;
+    line-height:22px;
+    border:solid 1px #000000 !important;
+    border-radius:4px;
+}
+
+
+.label_left {
+    float:left;
+    margin-right:15px;
+}
+
+
+/*.dxpnlControl_SoftOrange*/
+
+.pnlTaburiEval
+{
+    width:100%;
+}
+
+.pnlTaburiEval ul
+{
+    list-style-type: none;
+    text-decoration:none;
+    margin:0;
+    padding:0;
+    display:inline-block;
+}
+
+    .pnlTaburiEval ul li {
+        text-decoration:none;
+        display:inline-block;
+        margin:5px 0px;
+        padding:12px 25px;
+        /*background-color:#E1EBFF;*/
+        /*#DCE6F0*/
+        cursor:pointer;
+        border:solid 1px #3C78A0;
+        border-radius: 8px;
+        
+    }
+
+    .pnlTaburiEval ul li:hover {
+        text-decoration:underline;
+    }
+
+    .pnlTaburiEval ul li:active {
+        color:white;
+        background-color:#E1EBFF;
+    }
+
+        .pnlTaburiEval ul li span {
+            color:black;
+            font-size:14px;
+        }
+
+
+
+
+
+.lbl_eval_desc
+{
+    margin:15px 0px !important;
+    display:inline-block;
+}
+
+.margin_top15{
+    margin-top:15px;
+}
+
+.vizibil{
+    display:inline-block;
+    /*border:solid 1px red !important;*/
+}
+
+.ascuns{
+    display:none;
+}
+
+.org_label{
+    display:inline-block; 
+    float:left !important; 
+    padding-right:15px; 
+    width:100px;
+    border:solid 1px red;
+}
+
+.org_class table{
+    float:left !important;
+    border:solid 1px red;
+    display:inline-block;
+}
+
+
+.txtEnabled{
+    color:lightgray;
+}
+
+
+
+
+

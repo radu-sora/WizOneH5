@@ -1,0 +1,2375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6B3746AA-F18B-43FD-AB15-901DF2DF9EAF}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WizOne</RootNamespace>
+    <AssemblyName>WizOne</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Charts.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Data.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.DataAccess.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.DataAccess.v18.1.UI, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Docs.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Office.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.PivotGrid.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Pdf.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.RichEdit.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.SpellChecker.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Spreadsheet.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxPivotGrid.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxRichEdit.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxSpellChecker.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxThemes.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxTreeList.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.Resources.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Spreadsheet.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpo.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v18.1.Web, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGauges.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPivotGrid.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Sparkline.v18.1.Core, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.CodeParser.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.RichEdit.v18.1.Export, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v18.1.Extensions, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v18.1.Web, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v18.1.Web.WebForms, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraTreeList.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\..\..\Radu\documentformat.openxml.2.8.1\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FunctiiCeasuri">
+      <HintPath>..\..\..\DLL\FunctiiCeasuri.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\..\DLL\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.EntityDataSource, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.EntityDataSource.6.0.0\lib\net40\Microsoft.AspNet.EntityDataSource.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.FriendlyUrls, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.FriendlyUrls.Core.1.0.2\lib\net45\Microsoft.AspNet.FriendlyUrls.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MonthClosing">
+      <HintPath>..\..\..\DLL\MonthClosing.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.18.3, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.18.3.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ProceseSec, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DLL\ProceseSec.dll</HintPath>
+    </Reference>
+    <Reference Include="RevisalDLL">
+      <HintPath>..\..\..\DLL\RevisalDLL.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.DirectoryServices.AccountManagement">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Management">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Absente\Cereri.aspx" />
+    <Content Include="Absente\IstoricExtins.aspx" />
+    <Content Include="Absente\Lista.aspx" />
+    <Content Include="Absente\SetariActiuni.aspx" />
+    <Content Include="Absente\ZileCO.aspx" />
+    <Content Include="Absente\ZLP.aspx" />
+    <Content Include="Adeverinta\Adev_CIC_sablon.xml" />
+    <Content Include="Adeverinta\Adev_sanatate_sablon.xml" />
+    <Content Include="Adeverinta\Adev_somaj_sablon.xml" />
+    <Content Include="Adeverinta\Adev_stagiu_sablon.xml" />
+    <Content Include="Adeverinta\Adev_vechime_sablon.xml" />
+    <Content Include="Adeverinta\Adev_venituri_sablon.xml" />
+    <Content Include="Adev\Adeverinta.aspx" />
+    <Content Include="Adev\AdeverintaAngajat.aspx" />
+    <Content Include="Adev\ConfigCIC.aspx" />
+    <Content Include="Adev\ConfigD112.aspx" />
+    <Content Include="Alerte\Alerte.exe" />
+    <Content Include="Alerte\ProceseSec.dll" />
+    <Content Include="Alerte\woLogNtf.txt" />
+    <Content Include="Avs\Aprobare.aspx" />
+    <Content Include="Avs\Cereri.aspx" />
+    <Content Include="Avs\Istoric.aspx" />
+    <Content Include="Avs\IstoricModificari.aspx" />
+    <Content Include="BP\Aprobare.aspx" />
+    <Content Include="BP\CrearePrime.aspx" />
+    <Content Include="BP\ImportPrime.aspx" />
+    <Content Include="CereriDiverse\Cereri.aspx" />
+    <Content Include="CereriDiverse\Lista.aspx" />
+    <Content Include="ConcediiMedicale\Introducere.aspx" />
+    <Content Include="ConcediiMedicale\Istoric.aspx" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\reports.css" />
+    <Content Include="ContracteLucru\Contract.aspx" />
+    <Content Include="ContracteLucru\ContractAbsente.ascx" />
+    <Content Include="ContracteLucru\ContractCiclic.ascx" />
+    <Content Include="ContracteLucru\ContractDetaliu.aspx" />
+    <Content Include="ContracteLucru\ContractVal.ascx" />
+    <Content Include="ContracteLucru\ContractZilnic.ascx" />
+    <Content Include="Default.aspx" />
+    <Content Include="Eval\ActivitatiObiective.aspx" />
+    <Content Include="Eval\Calificative.aspx" />
+    <Content Include="Eval\Competente.aspx" />
+    <Content Include="Eval\EvalBulk.aspx" />
+    <Content Include="Eval\EvalDetaliu.aspx" />
+    <Content Include="Eval\EvalLista.aspx" />
+    <Content Include="Eval\EvalTemp.aspx" />
+    <Content Include="Eval\Invitatie.aspx" />
+    <Content Include="Eval\ListaObiective.aspx" />
+    <Content Include="Eval\QuizAngajatGrup.ascx" />
+    <Content Include="Eval\QuizCircuit.ascx" />
+    <Content Include="Eval\QuizCreate.ascx" />
+    <Content Include="Eval\QuizDetaliu.aspx" />
+    <Content Include="Eval\QuizDrepturi.ascx" />
+    <Content Include="Eval\QuizInit.aspx" />
+    <Content Include="Eval\QuizLista.aspx" />
+    <Content Include="Eval\ValoriLinii.aspx" />
+    <Content Include="Fisiere\css\login.css" />
+    <Content Include="Fisiere\css\style.css" />
+    <Content Include="Fisiere\css\tactil.css" />
+    <Content Include="Fisiere\css\teme.css" />
+    <Content Include="Fisiere\css\widgets.css" />
+    <Content Include="Fisiere\Imagini\bdgBg.png" />
+    <Content Include="Fisiere\Imagini\bdgCer.jpg" />
+    <Content Include="Fisiere\Imagini\bdgCrs.jpg" />
+    <Content Include="Fisiere\Imagini\bdgDec.jpg" />
+    <Content Include="Fisiere\Imagini\bdgEvl.jpg" />
+    <Content Include="Fisiere\Imagini\bdgOut.jpg" />
+    <Content Include="Fisiere\Imagini\bdgPtj.jpg" />
+    <Content Include="Fisiere\Imagini\bg.jpg" />
+    <Content Include="Fisiere\Imagini\bg_intro.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ad.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ae.png" />
+    <Content Include="Fisiere\Imagini\Drapele\af.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ag.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ai.png" />
+    <Content Include="Fisiere\Imagini\Drapele\al.png" />
+    <Content Include="Fisiere\Imagini\Drapele\am.png" />
+    <Content Include="Fisiere\Imagini\Drapele\an.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ao.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ar.png" />
+    <Content Include="Fisiere\Imagini\Drapele\as.png" />
+    <Content Include="Fisiere\Imagini\Drapele\at.png" />
+    <Content Include="Fisiere\Imagini\Drapele\au.png" />
+    <Content Include="Fisiere\Imagini\Drapele\aw.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ax.png" />
+    <Content Include="Fisiere\Imagini\Drapele\az.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ba.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bb.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bd.png" />
+    <Content Include="Fisiere\Imagini\Drapele\be.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bf.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bh.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bi.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bj.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bo.png" />
+    <Content Include="Fisiere\Imagini\Drapele\br.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bs.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bt.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bv.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bw.png" />
+    <Content Include="Fisiere\Imagini\Drapele\by.png" />
+    <Content Include="Fisiere\Imagini\Drapele\bz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ca.png" />
+    <Content Include="Fisiere\Imagini\Drapele\catalonia.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cc.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cd.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cf.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ch.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ci.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ck.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cl.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\co.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cs.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cu.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cv.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cx.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cy.png" />
+    <Content Include="Fisiere\Imagini\Drapele\cz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\de.png" />
+    <Content Include="Fisiere\Imagini\Drapele\dj.png" />
+    <Content Include="Fisiere\Imagini\Drapele\dk.png" />
+    <Content Include="Fisiere\Imagini\Drapele\dm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\do.png" />
+    <Content Include="Fisiere\Imagini\Drapele\dz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ec.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ee.png" />
+    <Content Include="Fisiere\Imagini\Drapele\eg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\eh.png" />
+    <Content Include="Fisiere\Imagini\Drapele\england.png" />
+    <Content Include="Fisiere\Imagini\Drapele\er.png" />
+    <Content Include="Fisiere\Imagini\Drapele\es.png" />
+    <Content Include="Fisiere\Imagini\Drapele\et.png" />
+    <Content Include="Fisiere\Imagini\Drapele\europeanunion.png" />
+    <Content Include="Fisiere\Imagini\Drapele\fam.png" />
+    <Content Include="Fisiere\Imagini\Drapele\fi.png" />
+    <Content Include="Fisiere\Imagini\Drapele\fj.png" />
+    <Content Include="Fisiere\Imagini\Drapele\fk.png" />
+    <Content Include="Fisiere\Imagini\Drapele\fm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\fo.png" />
+    <Content Include="Fisiere\Imagini\Drapele\fr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ga.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gb.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gd.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ge.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gf.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gh.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gi.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gl.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gp.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gq.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gs.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gt.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gu.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gw.png" />
+    <Content Include="Fisiere\Imagini\Drapele\gy.png" />
+    <Content Include="Fisiere\Imagini\Drapele\hk.png" />
+    <Content Include="Fisiere\Imagini\Drapele\hm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\hn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\hr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ht.png" />
+    <Content Include="Fisiere\Imagini\Drapele\hu.png" />
+    <Content Include="Fisiere\Imagini\Drapele\id.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ie.png" />
+    <Content Include="Fisiere\Imagini\Drapele\il.png" />
+    <Content Include="Fisiere\Imagini\Drapele\in.png" />
+    <Content Include="Fisiere\Imagini\Drapele\io.png" />
+    <Content Include="Fisiere\Imagini\Drapele\iq.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ir.png" />
+    <Content Include="Fisiere\Imagini\Drapele\is.png" />
+    <Content Include="Fisiere\Imagini\Drapele\it.png" />
+    <Content Include="Fisiere\Imagini\Drapele\jm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\jo.png" />
+    <Content Include="Fisiere\Imagini\Drapele\jp.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ke.png" />
+    <Content Include="Fisiere\Imagini\Drapele\kg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\kh.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ki.png" />
+    <Content Include="Fisiere\Imagini\Drapele\km.png" />
+    <Content Include="Fisiere\Imagini\Drapele\kn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\kp.png" />
+    <Content Include="Fisiere\Imagini\Drapele\kr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\kw.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ky.png" />
+    <Content Include="Fisiere\Imagini\Drapele\kz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\la.png" />
+    <Content Include="Fisiere\Imagini\Drapele\lb.png" />
+    <Content Include="Fisiere\Imagini\Drapele\lc.png" />
+    <Content Include="Fisiere\Imagini\Drapele\li.png" />
+    <Content Include="Fisiere\Imagini\Drapele\lk.png" />
+    <Content Include="Fisiere\Imagini\Drapele\lr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ls.png" />
+    <Content Include="Fisiere\Imagini\Drapele\lt.png" />
+    <Content Include="Fisiere\Imagini\Drapele\lu.png" />
+    <Content Include="Fisiere\Imagini\Drapele\lv.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ly.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ma.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mc.png" />
+    <Content Include="Fisiere\Imagini\Drapele\md.png" />
+    <Content Include="Fisiere\Imagini\Drapele\me.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mh.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mk.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ml.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mo.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mp.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mq.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ms.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mt.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mu.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mv.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mw.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mx.png" />
+    <Content Include="Fisiere\Imagini\Drapele\my.png" />
+    <Content Include="Fisiere\Imagini\Drapele\mz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\na.png" />
+    <Content Include="Fisiere\Imagini\Drapele\nc.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ne.png" />
+    <Content Include="Fisiere\Imagini\Drapele\nf.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ng.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ni.png" />
+    <Content Include="Fisiere\Imagini\Drapele\nl.png" />
+    <Content Include="Fisiere\Imagini\Drapele\no.png" />
+    <Content Include="Fisiere\Imagini\Drapele\np.png" />
+    <Content Include="Fisiere\Imagini\Drapele\nr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\nu.png" />
+    <Content Include="Fisiere\Imagini\Drapele\nz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\om.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pa.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pe.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pf.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ph.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pk.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pl.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ps.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pt.png" />
+    <Content Include="Fisiere\Imagini\Drapele\pw.png" />
+    <Content Include="Fisiere\Imagini\Drapele\py.png" />
+    <Content Include="Fisiere\Imagini\Drapele\qa.png" />
+    <Content Include="Fisiere\Imagini\Drapele\re.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ro.png" />
+    <Content Include="Fisiere\Imagini\Drapele\rs.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ru.png" />
+    <Content Include="Fisiere\Imagini\Drapele\rw.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sa.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sb.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sc.png" />
+    <Content Include="Fisiere\Imagini\Drapele\scotland.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sd.png" />
+    <Content Include="Fisiere\Imagini\Drapele\se.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sh.png" />
+    <Content Include="Fisiere\Imagini\Drapele\si.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sj.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sk.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sl.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\so.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\st.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sv.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sy.png" />
+    <Content Include="Fisiere\Imagini\Drapele\sz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tc.png" />
+    <Content Include="Fisiere\Imagini\Drapele\td.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tf.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\th.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tj.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tk.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tl.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\to.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tr.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tt.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tv.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tw.png" />
+    <Content Include="Fisiere\Imagini\Drapele\tz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ua.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ug.png" />
+    <Content Include="Fisiere\Imagini\Drapele\um.png" />
+    <Content Include="Fisiere\Imagini\Drapele\us.png" />
+    <Content Include="Fisiere\Imagini\Drapele\uy.png" />
+    <Content Include="Fisiere\Imagini\Drapele\uz.png" />
+    <Content Include="Fisiere\Imagini\Drapele\va.png" />
+    <Content Include="Fisiere\Imagini\Drapele\vc.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ve.png" />
+    <Content Include="Fisiere\Imagini\Drapele\vg.png" />
+    <Content Include="Fisiere\Imagini\Drapele\vi.png" />
+    <Content Include="Fisiere\Imagini\Drapele\vn.png" />
+    <Content Include="Fisiere\Imagini\Drapele\vu.png" />
+    <Content Include="Fisiere\Imagini\Drapele\wales.png" />
+    <Content Include="Fisiere\Imagini\Drapele\wf.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ws.png" />
+    <Content Include="Fisiere\Imagini\Drapele\ye.png" />
+    <Content Include="Fisiere\Imagini\Drapele\yt.png" />
+    <Content Include="Fisiere\Imagini\Drapele\za.png" />
+    <Content Include="Fisiere\Imagini\Drapele\zm.png" />
+    <Content Include="Fisiere\Imagini\Drapele\zw.png" />
+    <Content Include="Fisiere\Imagini\Icoane\adauga.png" />
+    <Content Include="Fisiere\Imagini\Icoane\alerta.png" />
+    <Content Include="Fisiere\Imagini\Icoane\aprobare.png" />
+    <Content Include="Fisiere\Imagini\Icoane\arata.png" />
+    <Content Include="Fisiere\Imagini\Icoane\blocat.png" />
+    <Content Include="Fisiere\Imagini\Icoane\btnInainte.png" />
+    <Content Include="Fisiere\Imagini\Icoane\btnInapoi.png" />
+    <Content Include="Fisiere\Imagini\Icoane\calcul.png" />
+    <Content Include="Fisiere\Imagini\Icoane\cancel.png" />
+    <Content Include="Fisiere\Imagini\Icoane\cauta.png" />
+    <Content Include="Fisiere\Imagini\Icoane\chooser.png" />
+    <Content Include="Fisiere\Imagini\Icoane\clear.png" />
+    <Content Include="Fisiere\Imagini\Icoane\clone.png" />
+    <Content Include="Fisiere\Imagini\Icoane\creion.png" />
+    <Content Include="Fisiere\Imagini\Icoane\cript.png" />
+    <Content Include="Fisiere\Imagini\Icoane\deblocat.png" />
+    <Content Include="Fisiere\Imagini\Icoane\decript.png" />
+    <Content Include="Fisiere\Imagini\Icoane\divide.png" />
+    <Content Include="Fisiere\Imagini\Icoane\doc.png" />
+    <Content Include="Fisiere\Imagini\Icoane\doc2.png" />
+    <Content Include="Fisiere\Imagini\Icoane\duplicare.png" />
+    <Content Include="Fisiere\Imagini\Icoane\edit.png" />
+    <Content Include="Fisiere\Imagini\Icoane\exit.png" />
+    <Content Include="Fisiere\Imagini\Icoane\ExpCsv.png" />
+    <Content Include="Fisiere\Imagini\Icoane\ExportToPdf.png" />
+    <Content Include="Fisiere\Imagini\Icoane\ExportToXls.png" />
+    <Content Include="Fisiere\Imagini\Icoane\ExpPdf.png" />
+    <Content Include="Fisiere\Imagini\Icoane\ExpRtf.png" />
+    <Content Include="Fisiere\Imagini\Icoane\ExpXls.png" />
+    <Content Include="Fisiere\Imagini\Icoane\ExpXlsx.png" />
+    <Content Include="Fisiere\Imagini\Icoane\f1.png" />
+    <Content Include="Fisiere\Imagini\Icoane\f2.png" />
+    <Content Include="Fisiere\Imagini\Icoane\finalizare.png" />
+    <Content Include="Fisiere\Imagini\Icoane\go.png" />
+    <Content Include="Fisiere\Imagini\Icoane\go_over.png" />
+    <Content Include="Fisiere\Imagini\Icoane\grup.png" />
+    <Content Include="Fisiere\Imagini\Icoane\iesire.png" />
+    <Content Include="Fisiere\Imagini\Icoane\incarca.png" />
+    <Content Include="Fisiere\Imagini\Icoane\info.png" />
+    <Content Include="Fisiere\Imagini\Icoane\initializare.png" />
+    <Content Include="Fisiere\Imagini\Icoane\intre.png" />
+    <Content Include="Fisiere\Imagini\Icoane\istoric.png" />
+    <Content Include="Fisiere\Imagini\Icoane\lang.png" />
+    <Content Include="Fisiere\Imagini\Icoane\logout.png" />
+    <Content Include="Fisiere\Imagini\Icoane\lupa.png" />
+    <Content Include="Fisiere\Imagini\Icoane\lupaDel.png" />
+    <Content Include="Fisiere\Imagini\Icoane\m1.png" />
+    <Content Include="Fisiere\Imagini\Icoane\m2.png" />
+    <Content Include="Fisiere\Imagini\Icoane\m3.png" />
+    <Content Include="Fisiere\Imagini\Icoane\m4.png" />
+    <Content Include="Fisiere\Imagini\Icoane\m5.png" />
+    <Content Include="Fisiere\Imagini\Icoane\m6.png" />
+    <Content Include="Fisiere\Imagini\Icoane\m7.png" />
+    <Content Include="Fisiere\Imagini\Icoane\mail.png" />
+    <Content Include="Fisiere\Imagini\Icoane\modifica.png" />
+    <Content Include="Fisiere\Imagini\Icoane\motive.png" />
+    <Content Include="Fisiere\Imagini\Icoane\n2.png" />
+    <Content Include="Fisiere\Imagini\Icoane\new.png" />
+    <Content Include="Fisiere\Imagini\Icoane\new2.png" />
+    <Content Include="Fisiere\Imagini\Icoane\notif.png" />
+    <Content Include="Fisiere\Imagini\Icoane\paleta.png" />
+    <Content Include="Fisiere\Imagini\Icoane\paleta2.png" />
+    <Content Include="Fisiere\Imagini\Icoane\pred.png" />
+    <Content Include="Fisiere\Imagini\Icoane\preluare.png" />
+    <Content Include="Fisiere\Imagini\Icoane\print.png" />
+    <Content Include="Fisiere\Imagini\Icoane\q1.png" />
+    <Content Include="Fisiere\Imagini\Icoane\q2.png" />
+    <Content Include="Fisiere\Imagini\Icoane\q3.png" />
+    <Content Include="Fisiere\Imagini\Icoane\q4.png" />
+    <Content Include="Fisiere\Imagini\Icoane\renunta.png" />
+    <Content Include="Fisiere\Imagini\Icoane\reset.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sagSt.png" />
+    <Content Include="Fisiere\Imagini\Icoane\salveaza.png" />
+    <Content Include="Fisiere\Imagini\Icoane\schimba.png" />
+    <Content Include="Fisiere\Imagini\Icoane\securitate.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sepa.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sepa2.gif" />
+    <Content Include="Fisiere\Imagini\Icoane\sepa3.gif" />
+    <Content Include="Fisiere\Imagini\Icoane\sgCls.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgDr.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgExp.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgJos.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgJosOver.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgSt.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgSus.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sgSusOver.png" />
+    <Content Include="Fisiere\Imagini\Icoane\stare.png" />
+    <Content Include="Fisiere\Imagini\Icoane\sterge.png" />
+    <Content Include="Fisiere\Imagini\Icoane\update.png" />
+    <Content Include="Fisiere\Imagini\Icoane\user.png" />
+    <Content Include="Fisiere\Imagini\Icoane\validare.png" />
+    <Content Include="Fisiere\Imagini\Icoane\view.png" />
+    <Content Include="Fisiere\Imagini\Icoane\word.png" />
+    <Content Include="Fisiere\Imagini\loading.gif" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeAqua.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeBlackGlass.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeDefault.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeDevex.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeGlass.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeMetropolis.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeMetropolisBlue.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeModerno.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeMulberry.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeOffice2003Blue.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeOffice2003Olive.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeOffice2003Silver.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeOffice2010Black.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeOffice2010Blue.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeOffice2010Silver.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemePlasticBlue.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeRedWine.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeSoftOrange.png" />
+    <Content Include="Fisiere\Imagini\Teme\ThemeYouthful.png" />
+    <Content Include="Fisiere\Imagini\Widgets\icoWidget0.png" />
+    <Content Include="Fisiere\Imagini\Widgets\icoWidget1.png" />
+    <Content Include="Fisiere\Imagini\Widgets\icoWidget2.png" />
+    <Content Include="Fisiere\Imagini\Widgets\icoWidget3.png" />
+    <Content Include="Fisiere\Imagini\Widgets\icoWidget4.png" />
+    <Content Include="Fisiere\Imagini\WizOne.png" />
+    <Content Include="Fisiere\js\logare.js" />
+    <Content Include="Fisiere\js\pontaj.js" />
+    <Content Include="Fisiere\js\StringResources.js" />
+    <Content Include="Fisiere\js\utils.js" />
+    <Content Include="Fisiere\MsgBox\sweetalert-dev.js" />
+    <Content Include="Fisiere\MsgBox\sweetalert.css" />
+    <Content Include="Fisiere\MsgBox\sweetalert.min.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Generatoare\Reports\Models\ReportsModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ReportsModel.edmx</DependentUpon>
+      <LastGenOutput>ReportsModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Generatoare\Reports\Models\ReportsModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ReportsModel.edmx</DependentUpon>
+      <LastGenOutput>ReportsModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="Generatoare\Reports\Pages\ReportDesign.aspx" />
+    <Content Include="Generatoare\Reports\Pages\Reports.aspx" />
+    <Content Include="Generatoare\Reports\Pages\ReportView.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Info.aspx" />
+    <Content Include="Organigrama\Lista.aspx" />
+    <Content Include="Organigrama\Posturi.aspx" />
+    <Content Include="Organigrama\PosturiValidare.aspx" />
+    <Content Include="Pagini\ActeAditionale.aspx" />
+    <Content Include="Pagini\CodConfirmare.aspx" />
+    <Content Include="Pagini\Delegari.aspx" />
+    <Content Include="Pagini\Fisiere.aspx" />
+    <Content Include="Pagini\ImportPontaj.aspx" />
+    <Content Include="Pagini\ImportValori.aspx" />
+    <Content Include="Pagini\InchidereLuna.aspx" />
+    <Content Include="Pagini\IntroDetaliu.aspx" />
+    <Content Include="Pagini\Istoric.aspx" />
+    <Content Include="Pagini\IstoricModificari.aspx" />
+    <Content Include="Pagini\MainPage.aspx" />
+    <Content Include="Personal\Activitati.ascx" />
+    <Content Include="Personal\LipsaNecesar.ascx" />
+    <Content Include="Personal\Proba.aspx" />
+    <Content Include="Personal\Test.aspx" />
+    <Content Include="Pontaj\PontajSpecial.aspx" />
+    <Content Include="Reports\ImprimaTactil.aspx" />
+    <Content Include="Revisal\Revisal.aspx" />
+    <Content Include="Tactil\Adeverinte.aspx" />
+    <Content Include="Tactil\CereriDiverseTactil.aspx" />
+    <Content Include="Tactil\CereriTactil.aspx" />
+    <Content Include="Tactil\ListaDiverseTactil.aspx" />
+    <Content Include="Tactil\ListaTactil.aspx" />
+    <Content Include="Tactil\Main.aspx" />
+    <Content Include="Tactil\MainTactil.aspx" />
+    <Content Include="Pagini\MeniuDetaliu.aspx" />
+    <Content Include="Pagini\MeniuSecuritate.aspx" />
+    <Content Include="Pagini\Notificari.aspx" />
+    <Content Include="Pagini\NotificariDetaliu.aspx" />
+    <Content Include="Pagini\Profile.aspx" />
+    <Content Include="Pagini\ProfileDetaliu.aspx" />
+    <Content Include="Pagini\SablonNomen.aspx" />
+    <Content Include="Pagini\SablonLista.aspx" />
+    <Content Include="Pagini\SablonNomenRec.aspx" />
+    <Content Include="Pagini\SchimbaParola.aspx" />
+    <Content Include="Pagini\Securitate.aspx" />
+    <Content Include="Pagini\StiriDetaliu.aspx" />
+    <Content Include="Pagini\Users.aspx" />
+    <Content Include="Personal\Adresa.ascx" />
+    <Content Include="Personal\Atasamente.ascx" />
+    <Content Include="Personal\Banca.ascx" />
+    <Content Include="Personal\Beneficii.ascx" />
+    <Content Include="Personal\Cartele.ascx" />
+    <Content Include="Personal\CautaAdresa.aspx" />
+    <Content Include="Personal\CautaCOR.aspx" />
+    <Content Include="Personal\Contacte.ascx" />
+    <Content Include="Personal\Contract.ascx" />
+    <Content Include="Personal\Contracte.ascx" />
+    <Content Include="Personal\DateAngajat.aspx" />
+    <Content Include="Personal\DateGenerale.ascx" />
+    <Content Include="Personal\DateIdentificare.ascx" />
+    <Content Include="Personal\Detasari.ascx" />
+    <Content Include="Personal\Diverse.ascx" />
+    <Content Include="Personal\Documente.ascx" />
+    <Content Include="Personal\Echipamente.ascx" />
+    <Content Include="Personal\Evolutie.ascx" />
+    <Content Include="Personal\Experienta.ascx" />
+    <Content Include="Personal\Grupuri.ascx" />
+    <Content Include="Personal\Limbi.ascx" />
+    <Content Include="Personal\Lista.aspx" />
+    <Content Include="Personal\Medicina.ascx" />
+    <Content Include="Personal\PersIntretinere.ascx" />
+    <Content Include="Personal\Sablon.aspx" />
+    <Content Include="Personal\Sanctiuni.ascx" />
+    <Content Include="Personal\SituatieCO.ascx" />
+    <Content Include="Personal\Structura.ascx" />
+    <Content Include="Personal\Studii.ascx" />
+    <Content Include="Personal\Supervizori.ascx" />
+    <Content Include="Personal\Suspendari.ascx" />
+    <Content Include="Pontaj\PontajAutomat.aspx" />
+    <Content Include="Pontaj\PontajBulk.aspx" />
+    <Content Include="Pontaj\PontajCalcul.aspx" />
+    <Content Include="Pontaj\PontajCCAprobare.aspx" />
+    <Content Include="Pontaj\PontajCumulat.aspx" />
+    <Content Include="Pontaj\PontajDetaliat.aspx" />
+    <Content Include="Pontaj\PontajEchipa.aspx" />
+    <Content Include="Pontaj\PontajOne.aspx" />
+    <Content Include="Pontaj\PontajUpdate.aspx" />
+    <Content Include="ProgrameLucru\Programe.aspx" />
+    <Content Include="ProgrameLucru\ProgrameAlteOre.ascx" />
+    <Content Include="ProgrameLucru\ProgrameDateGenerale.ascx" />
+    <Content Include="ProgrameLucru\ProgrameDetaliu.aspx" />
+    <Content Include="ProgrameLucru\ProgrameInPeste.ascx" />
+    <Content Include="ProgrameLucru\ProgrameInSub.ascx" />
+    <Content Include="ProgrameLucru\ProgrameOreNormale.ascx" />
+    <Content Include="ProgrameLucru\ProgrameOreSup.ascx" />
+    <Content Include="ProgrameLucru\ProgrameOutPeste.ascx" />
+    <Content Include="ProgrameLucru\ProgrameOutSub.ascx" />
+    <Content Include="ProgrameLucru\ProgramePauza.ascx" />
+    <Content Include="ProgrameLucru\ProgrameValuri.ascx" />
+    <Content Include="Raspuns.aspx" />
+    <Content Include="packages.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Recrutare\Candidati.aspx" />
+    <Content Include="Recrutare\DateGenerale.ascx" />
+    <Content Include="Recrutare\Experienta.ascx" />
+    <Content Include="Recrutare\Limbi.ascx" />
+    <Content Include="Reports\Imprima.aspx" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="DefaultTactil.aspx" />
+    <Content Include="Tactil\PontajDetaliatTactil.aspx" />
+    <Content Include="ViewSwitcher.ascx" />
+    <Content Include="WebForm1.aspx" />
+    <Content Include="WebService\Detalii.aspx" />
+    <Content Include="WebService\Sodexo.aspx" />
+    <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ReportsModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Fisiere\Config" />
+    <Content Include="FisiereRevisal\schemas_datacontract_org_2004_07_Revisal_Entities.xsd">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="FisiereRevisal\schemas_datacontract_org_2004_07_uNhAddIns_Entities.xsd">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="FisiereRevisal\schemas_microsoft_com_2003_10_Serialization_.xsd">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="FisiereRevisal\www_w3_org_2001_XMLSchema.xsd">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Generatoare\Reports\Models\ReportsModel.edmx.diagram">
+      <DependentUpon>ReportsModel.edmx</DependentUpon>
+    </None>
+    <Content Include="Generatoare\Reports\Pages\Download.ashx" />
+    <Content Include="Organigrama\Diagrama.xlsm" />
+    <Content Include="Organigrama\Temp\Diagrama1078.xlsm" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="UploadFiles\Images\imgHon2.jpg" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Site.Mobile.Master" />
+    <None Include="Web References\SodexoOnline\paper.wsdl" />
+    <None Include="Web References\SodexoOnline\paper.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Web References\SodexoOnline\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultAddressIdentifierRemove.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultAddressIdentifierSet.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultCompanyAddressList.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultCompanyList.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultContactList.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultLogin.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultOrderCancel.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultOrderHistory.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultPaperOrder.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SodexoOnline\resultProductList.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Absente\Cereri.aspx.cs">
+      <DependentUpon>Cereri.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\Cereri.aspx.designer.cs">
+      <DependentUpon>Cereri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Absente\IstoricExtins.aspx.cs">
+      <DependentUpon>IstoricExtins.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\IstoricExtins.aspx.designer.cs">
+      <DependentUpon>IstoricExtins.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Absente\Lista.aspx.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\Lista.aspx.designer.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Absente\SetariActiuni.aspx.cs">
+      <DependentUpon>SetariActiuni.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\SetariActiuni.aspx.designer.cs">
+      <DependentUpon>SetariActiuni.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Absente\ZileCO.aspx.cs">
+      <DependentUpon>ZileCO.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\ZileCO.aspx.designer.cs">
+      <DependentUpon>ZileCO.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Absente\ZLP.aspx.cs">
+      <DependentUpon>ZLP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\ZLP.aspx.designer.cs">
+      <DependentUpon>ZLP.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adev\Adeverinta.aspx.cs">
+      <DependentUpon>Adeverinta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adev\Adeverinta.aspx.designer.cs">
+      <DependentUpon>Adeverinta.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adev\AdeverintaAngajat.aspx.cs">
+      <DependentUpon>AdeverintaAngajat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adev\AdeverintaAngajat.aspx.designer.cs">
+      <DependentUpon>AdeverintaAngajat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adev\ConfigCIC.aspx.cs">
+      <DependentUpon>ConfigCIC.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adev\ConfigCIC.aspx.designer.cs">
+      <DependentUpon>ConfigCIC.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Adev\ConfigD112.aspx.cs">
+      <DependentUpon>ConfigD112.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Adev\ConfigD112.aspx.designer.cs">
+      <DependentUpon>ConfigD112.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\General.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>General.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\General.en.designer.cs">
+      <DependentUpon>General.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\General.bg.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>General.bg.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\General.de.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>General.de.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\General.es.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>General.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\General.fr.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>General.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\General.it.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>General.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Meniu.en.designer.cs">
+      <DependentUpon>Meniu.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\Meniu.bg.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Meniu.bg.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Meniu.de.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Meniu.de.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Meniu.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Meniu.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Meniu.es.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Meniu.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Meniu.fr.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Meniu.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Meniu.it.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Meniu.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Mesaje.bg.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Mesaje.bg.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Mesaje.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Mesaje.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Mesaje.de.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Mesaje.de.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Mesaje.en.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Mesaje.en.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Mesaje.es.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Mesaje.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Mesaje.fr.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Mesaje.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Mesaje.it.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Mesaje.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Avs\Aprobare.aspx.cs">
+      <DependentUpon>Aprobare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Avs\Aprobare.aspx.designer.cs">
+      <DependentUpon>Aprobare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Avs\Cereri.aspx.cs">
+      <DependentUpon>Cereri.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Avs\Cereri.aspx.designer.cs">
+      <DependentUpon>Cereri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Avs\Istoric.aspx.cs">
+      <DependentUpon>Istoric.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Avs\Istoric.aspx.designer.cs">
+      <DependentUpon>Istoric.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Avs\IstoricModificari.aspx.cs">
+      <DependentUpon>IstoricModificari.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Avs\IstoricModificari.aspx.designer.cs">
+      <DependentUpon>IstoricModificari.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BP\Aprobare.aspx.cs">
+      <DependentUpon>Aprobare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BP\Aprobare.aspx.designer.cs">
+      <DependentUpon>Aprobare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BP\CrearePrime.aspx.cs">
+      <DependentUpon>CrearePrime.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BP\CrearePrime.aspx.designer.cs">
+      <DependentUpon>CrearePrime.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BP\ImportPrime.aspx.cs">
+      <DependentUpon>ImportPrime.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BP\ImportPrime.aspx.designer.cs">
+      <DependentUpon>ImportPrime.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Cadru.Master.cs">
+      <DependentUpon>Cadru.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Cadru.Master.designer.cs">
+      <DependentUpon>Cadru.Master</DependentUpon>
+    </Compile>
+    <Compile Include="CereriDiverse\Cereri.aspx.cs">
+      <DependentUpon>Cereri.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CereriDiverse\Cereri.aspx.designer.cs">
+      <DependentUpon>Cereri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CereriDiverse\Lista.aspx.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CereriDiverse\Lista.aspx.designer.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ConcediiMedicale\Introducere.aspx.cs">
+      <DependentUpon>Introducere.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ConcediiMedicale\Introducere.aspx.designer.cs">
+      <DependentUpon>Introducere.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ConcediiMedicale\Istoric.aspx.cs">
+      <DependentUpon>Istoric.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ConcediiMedicale\Istoric.aspx.designer.cs">
+      <DependentUpon>Istoric.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ContracteLucru\Contract.aspx.cs">
+      <DependentUpon>Contract.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContracteLucru\Contract.aspx.designer.cs">
+      <DependentUpon>Contract.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractAbsente.ascx.cs">
+      <DependentUpon>ContractAbsente.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractAbsente.ascx.designer.cs">
+      <DependentUpon>ContractAbsente.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractCiclic.ascx.cs">
+      <DependentUpon>ContractCiclic.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractCiclic.ascx.designer.cs">
+      <DependentUpon>ContractCiclic.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractDetaliu.aspx.cs">
+      <DependentUpon>ContractDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractDetaliu.aspx.designer.cs">
+      <DependentUpon>ContractDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractVal.ascx.cs">
+      <DependentUpon>ContractVal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractVal.ascx.designer.cs">
+      <DependentUpon>ContractVal.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractZilnic.ascx.cs">
+      <DependentUpon>ContractZilnic.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContracteLucru\ContractZilnic.ascx.designer.cs">
+      <DependentUpon>ContractZilnic.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\ActivitatiObiective.aspx.cs">
+      <DependentUpon>ActivitatiObiective.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\ActivitatiObiective.aspx.designer.cs">
+      <DependentUpon>ActivitatiObiective.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\Calificative.aspx.cs">
+      <DependentUpon>Calificative.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\Calificative.aspx.designer.cs">
+      <DependentUpon>Calificative.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\Competente.aspx.cs">
+      <DependentUpon>Competente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\Competente.aspx.designer.cs">
+      <DependentUpon>Competente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalBulk.aspx.cs">
+      <DependentUpon>EvalBulk.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\EvalBulk.aspx.designer.cs">
+      <DependentUpon>EvalBulk.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalDetaliu.aspx.cs">
+      <DependentUpon>EvalDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\EvalDetaliu.aspx.designer.cs">
+      <DependentUpon>EvalDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalLista.aspx.cs">
+      <DependentUpon>EvalLista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\EvalLista.aspx.designer.cs">
+      <DependentUpon>EvalLista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\EvalTemp.aspx.cs">
+      <DependentUpon>EvalTemp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\EvalTemp.aspx.designer.cs">
+      <DependentUpon>EvalTemp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\Invitatie.aspx.cs">
+      <DependentUpon>Invitatie.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\Invitatie.aspx.designer.cs">
+      <DependentUpon>Invitatie.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\ListaObiective.aspx.cs">
+      <DependentUpon>ListaObiective.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\ListaObiective.aspx.designer.cs">
+      <DependentUpon>ListaObiective.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizAngajatGrup.ascx.cs">
+      <DependentUpon>QuizAngajatGrup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\QuizAngajatGrup.ascx.designer.cs">
+      <DependentUpon>QuizAngajatGrup.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizCircuit.ascx.cs">
+      <DependentUpon>QuizCircuit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\QuizCircuit.ascx.designer.cs">
+      <DependentUpon>QuizCircuit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizCreate.ascx.cs">
+      <DependentUpon>QuizCreate.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\QuizCreate.ascx.designer.cs">
+      <DependentUpon>QuizCreate.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizDetaliu.aspx.cs">
+      <DependentUpon>QuizDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizDetaliu.aspx.designer.cs">
+      <DependentUpon>QuizDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizDrepturi.ascx.cs">
+      <DependentUpon>QuizDrepturi.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\QuizDrepturi.ascx.designer.cs">
+      <DependentUpon>QuizDrepturi.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizInit.aspx.cs">
+      <DependentUpon>QuizInit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\QuizInit.aspx.designer.cs">
+      <DependentUpon>QuizInit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\QuizLista.aspx.cs">
+      <DependentUpon>QuizLista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\QuizLista.aspx.designer.cs">
+      <DependentUpon>QuizLista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Eval\ValoriLinii.aspx.cs">
+      <DependentUpon>ValoriLinii.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Eval\ValoriLinii.aspx.designer.cs">
+      <DependentUpon>ValoriLinii.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Code\ReportDataSourceWizardConnectionStringsProvider.cs" />
+    <Compile Include="Generatoare\Reports\Code\EntityReportStorageWebExtension.cs" />
+    <Compile Include="Generatoare\Reports\Models\RaportGrupUtilizator.cs">
+      <DependentUpon>ReportsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Models\Report.cs">
+      <DependentUpon>ReportsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Models\ReportsModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportsModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Models\ReportsModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Models\ReportsModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportsModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Models\ReportType.cs">
+      <DependentUpon>ReportsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Models\ReportUser.cs">
+      <DependentUpon>ReportsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\Download.ashx.cs">
+      <DependentUpon>Download.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\ReportDesign.aspx.cs">
+      <DependentUpon>ReportDesign.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\ReportDesign.aspx.designer.cs">
+      <DependentUpon>ReportDesign.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\Reports.aspx.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\ReportView.aspx.cs">
+      <DependentUpon>ReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\ReportView.aspx.designer.cs">
+      <DependentUpon>ReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Info.aspx.cs">
+      <DependentUpon>Info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Info.aspx.designer.cs">
+      <DependentUpon>Info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\ConcediiMedicale.cs" />
+    <Compile Include="Module\Evaluare.cs" />
+    <Compile Include="Module\IdClienti.cs" />
+    <Compile Include="Module\MathExt.cs" />
+    <Compile Include="Module\Notif.cs" />
+    <Compile Include="Module\NotifAsync.cs" />
+    <Compile Include="Organigrama\Lista.aspx.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Organigrama\Lista.aspx.designer.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Organigrama\Posturi.aspx.cs">
+      <DependentUpon>Posturi.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Organigrama\Posturi.aspx.designer.cs">
+      <DependentUpon>Posturi.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Organigrama\PosturiValidare.aspx.cs">
+      <DependentUpon>PosturiValidare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Organigrama\PosturiValidare.aspx.designer.cs">
+      <DependentUpon>PosturiValidare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\ActeAditionale.aspx.cs">
+      <DependentUpon>ActeAditionale.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\ActeAditionale.aspx.designer.cs">
+      <DependentUpon>ActeAditionale.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\CodConfirmare.aspx.cs">
+      <DependentUpon>CodConfirmare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\CodConfirmare.aspx.designer.cs">
+      <DependentUpon>CodConfirmare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Delegari.aspx.cs">
+      <DependentUpon>Delegari.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Delegari.aspx.designer.cs">
+      <DependentUpon>Delegari.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Fisiere.aspx.cs">
+      <DependentUpon>Fisiere.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Fisiere.aspx.designer.cs">
+      <DependentUpon>Fisiere.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\ImportPontaj.aspx.cs">
+      <DependentUpon>ImportPontaj.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\ImportPontaj.aspx.designer.cs">
+      <DependentUpon>ImportPontaj.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\ImportValori.aspx.cs">
+      <DependentUpon>ImportValori.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\ImportValori.aspx.designer.cs">
+      <DependentUpon>ImportValori.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\InchidereLuna.aspx.cs">
+      <DependentUpon>InchidereLuna.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\InchidereLuna.aspx.designer.cs">
+      <DependentUpon>InchidereLuna.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\IntroDetaliu.aspx.cs">
+      <DependentUpon>IntroDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\IntroDetaliu.aspx.designer.cs">
+      <DependentUpon>IntroDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Istoric.aspx.cs">
+      <DependentUpon>Istoric.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Istoric.aspx.designer.cs">
+      <DependentUpon>Istoric.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\IstoricModificari.aspx.cs">
+      <DependentUpon>IstoricModificari.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\IstoricModificari.aspx.designer.cs">
+      <DependentUpon>IstoricModificari.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\MainPage.aspx.cs">
+      <DependentUpon>MainPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\MainPage.aspx.designer.cs">
+      <DependentUpon>MainPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Activitati.ascx.cs">
+      <DependentUpon>Activitati.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Activitati.ascx.designer.cs">
+      <DependentUpon>Activitati.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\LipsaNecesar.ascx.cs">
+      <DependentUpon>LipsaNecesar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\LipsaNecesar.ascx.designer.cs">
+      <DependentUpon>LipsaNecesar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Proba.aspx.cs">
+      <DependentUpon>Proba.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Proba.aspx.designer.cs">
+      <DependentUpon>Proba.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajSpecial.aspx.cs">
+      <DependentUpon>PontajSpecial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajSpecial.aspx.designer.cs">
+      <DependentUpon>PontajSpecial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\AdeverintaGenerala.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\AdeverintaGenerala.Designer.cs">
+      <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\AdeverintaMedic.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\AdeverintaMedic.Designer.cs">
+      <DependentUpon>AdeverintaMedic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ImprimaTactil.aspx.cs">
+      <DependentUpon>ImprimaTactil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ImprimaTactil.aspx.designer.cs">
+      <DependentUpon>ImprimaTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\PrintImage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\PrintImage.Designer.cs">
+      <DependentUpon>PrintImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Revisal\Revisal.aspx.cs">
+      <DependentUpon>Revisal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Revisal\Revisal.aspx.designer.cs">
+      <DependentUpon>Revisal.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Site.Mobile.Master.cs">
+      <DependentUpon>Site.Mobile.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Mobile.Master.designer.cs">
+      <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Tactil\Adeverinte.aspx.cs">
+      <DependentUpon>Adeverinte.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tactil\Adeverinte.aspx.designer.cs">
+      <DependentUpon>Adeverinte.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tactil\CereriDiverseTactil.aspx.cs">
+      <DependentUpon>CereriDiverseTactil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tactil\CereriDiverseTactil.aspx.designer.cs">
+      <DependentUpon>CereriDiverseTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tactil\CereriTactil.aspx.cs">
+      <DependentUpon>CereriTactil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tactil\CereriTactil.aspx.designer.cs">
+      <DependentUpon>CereriTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tactil\ListaDiverseTactil.aspx.cs">
+      <DependentUpon>ListaDiverseTactil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tactil\ListaDiverseTactil.aspx.designer.cs">
+      <DependentUpon>ListaDiverseTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tactil\ListaTactil.aspx.cs">
+      <DependentUpon>ListaTactil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tactil\ListaTactil.aspx.designer.cs">
+      <DependentUpon>ListaTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tactil\Main.aspx.cs">
+      <DependentUpon>Main.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tactil\Main.aspx.designer.cs">
+      <DependentUpon>Main.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tactil\MainTactil.aspx.cs">
+      <DependentUpon>MainTactil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tactil\MainTactil.aspx.designer.cs">
+      <DependentUpon>MainTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\MeniuDetaliu.aspx.cs">
+      <DependentUpon>MeniuDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\MeniuDetaliu.aspx.designer.cs">
+      <DependentUpon>MeniuDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\ApplyThemeModule.cs" />
+    <Compile Include="Module\Constante.cs" />
+    <Compile Include="Module\Dami.cs" />
+    <Compile Include="Module\General.cs" />
+    <Compile Include="Module\MessageBox.cs" />
+    <Compile Include="Pagini\MeniuSecuritate.aspx.cs">
+      <DependentUpon>MeniuSecuritate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\MeniuSecuritate.aspx.designer.cs">
+      <DependentUpon>MeniuSecuritate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Notificari.aspx.cs">
+      <DependentUpon>Notificari.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Notificari.aspx.designer.cs">
+      <DependentUpon>Notificari.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\NotificariDetaliu.aspx.cs">
+      <DependentUpon>NotificariDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\NotificariDetaliu.aspx.designer.cs">
+      <DependentUpon>NotificariDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\ProfileDetaliu.aspx.cs">
+      <DependentUpon>ProfileDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\ProfileDetaliu.aspx.designer.cs">
+      <DependentUpon>ProfileDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\SablonNomen.aspx.cs">
+      <DependentUpon>SablonNomen.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\SablonNomen.aspx.designer.cs">
+      <DependentUpon>SablonNomen.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\SablonLista.aspx.cs">
+      <DependentUpon>SablonLista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\SablonLista.aspx.designer.cs">
+      <DependentUpon>SablonLista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\SablonNomenRec.aspx.cs">
+      <DependentUpon>SablonNomenRec.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\SablonNomenRec.aspx.designer.cs">
+      <DependentUpon>SablonNomenRec.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Users.aspx.cs">
+      <DependentUpon>Users.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Users.aspx.designer.cs">
+      <DependentUpon>Users.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Adresa.ascx.cs">
+      <DependentUpon>Adresa.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Adresa.ascx.designer.cs">
+      <DependentUpon>Adresa.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Atasamente.ascx.cs">
+      <DependentUpon>Atasamente.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Atasamente.ascx.designer.cs">
+      <DependentUpon>Atasamente.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Banca.ascx.cs">
+      <DependentUpon>Banca.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Banca.ascx.designer.cs">
+      <DependentUpon>Banca.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Beneficii.ascx.cs">
+      <DependentUpon>Beneficii.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Beneficii.ascx.designer.cs">
+      <DependentUpon>Beneficii.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Cartele.ascx.cs">
+      <DependentUpon>Cartele.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Cartele.ascx.designer.cs">
+      <DependentUpon>Cartele.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\CautaAdresa.aspx.cs">
+      <DependentUpon>CautaAdresa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\CautaAdresa.aspx.designer.cs">
+      <DependentUpon>CautaAdresa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\CautaCOR.aspx.cs">
+      <DependentUpon>CautaCOR.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\CautaCOR.aspx.designer.cs">
+      <DependentUpon>CautaCOR.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Contacte.ascx.cs">
+      <DependentUpon>Contacte.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Contacte.ascx.designer.cs">
+      <DependentUpon>Contacte.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Contract.ascx.cs">
+      <DependentUpon>Contract.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Contract.ascx.designer.cs">
+      <DependentUpon>Contract.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Contracte.ascx.cs">
+      <DependentUpon>Contracte.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Contracte.ascx.designer.cs">
+      <DependentUpon>Contracte.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\DateAngajat.aspx.cs">
+      <DependentUpon>DateAngajat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\DateAngajat.aspx.designer.cs">
+      <DependentUpon>DateAngajat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\DateGenerale.ascx.cs">
+      <DependentUpon>DateGenerale.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\DateGenerale.ascx.designer.cs">
+      <DependentUpon>DateGenerale.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\DateIdentificare.ascx.cs">
+      <DependentUpon>DateIdentificare.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\DateIdentificare.ascx.designer.cs">
+      <DependentUpon>DateIdentificare.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Detasari.ascx.cs">
+      <DependentUpon>Detasari.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Detasari.ascx.designer.cs">
+      <DependentUpon>Detasari.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Diverse.ascx.cs">
+      <DependentUpon>Diverse.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Diverse.ascx.designer.cs">
+      <DependentUpon>Diverse.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Documente.ascx.cs">
+      <DependentUpon>Documente.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Documente.ascx.designer.cs">
+      <DependentUpon>Documente.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Echipamente.ascx.cs">
+      <DependentUpon>Echipamente.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Echipamente.ascx.designer.cs">
+      <DependentUpon>Echipamente.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Evolutie.ascx.cs">
+      <DependentUpon>Evolutie.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Evolutie.ascx.designer.cs">
+      <DependentUpon>Evolutie.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Experienta.ascx.cs">
+      <DependentUpon>Experienta.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Experienta.ascx.designer.cs">
+      <DependentUpon>Experienta.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Grupuri.ascx.cs">
+      <DependentUpon>Grupuri.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Grupuri.ascx.designer.cs">
+      <DependentUpon>Grupuri.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Limbi.ascx.cs">
+      <DependentUpon>Limbi.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Limbi.ascx.designer.cs">
+      <DependentUpon>Limbi.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Lista.aspx.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Lista.aspx.designer.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Medicina.ascx.cs">
+      <DependentUpon>Medicina.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Medicina.ascx.designer.cs">
+      <DependentUpon>Medicina.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\PersIntretinere.ascx.cs">
+      <DependentUpon>PersIntretinere.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\PersIntretinere.ascx.designer.cs">
+      <DependentUpon>PersIntretinere.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Sablon.aspx.cs">
+      <DependentUpon>Sablon.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Sablon.aspx.designer.cs">
+      <DependentUpon>Sablon.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Sanctiuni.ascx.cs">
+      <DependentUpon>Sanctiuni.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Sanctiuni.ascx.designer.cs">
+      <DependentUpon>Sanctiuni.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\SituatieCO.ascx.cs">
+      <DependentUpon>SituatieCO.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\SituatieCO.ascx.designer.cs">
+      <DependentUpon>SituatieCO.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Structura.ascx.cs">
+      <DependentUpon>Structura.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Structura.ascx.designer.cs">
+      <DependentUpon>Structura.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Studii.ascx.cs">
+      <DependentUpon>Studii.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Studii.ascx.designer.cs">
+      <DependentUpon>Studii.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Supervizori.ascx.cs">
+      <DependentUpon>Supervizori.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Supervizori.ascx.designer.cs">
+      <DependentUpon>Supervizori.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Suspendari.ascx.cs">
+      <DependentUpon>Suspendari.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Suspendari.ascx.designer.cs">
+      <DependentUpon>Suspendari.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajAutomat.aspx.cs">
+      <DependentUpon>PontajAutomat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajAutomat.aspx.designer.cs">
+      <DependentUpon>PontajAutomat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajBulk.aspx.cs">
+      <DependentUpon>PontajBulk.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajBulk.aspx.designer.cs">
+      <DependentUpon>PontajBulk.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajCalcul.aspx.cs">
+      <DependentUpon>PontajCalcul.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajCalcul.aspx.designer.cs">
+      <DependentUpon>PontajCalcul.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajCCAprobare.aspx.cs">
+      <DependentUpon>PontajCCAprobare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajCCAprobare.aspx.designer.cs">
+      <DependentUpon>PontajCCAprobare.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajCumulat.aspx.cs">
+      <DependentUpon>PontajCumulat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajCumulat.aspx.designer.cs">
+      <DependentUpon>PontajCumulat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajDetaliat.aspx.cs">
+      <DependentUpon>PontajDetaliat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajDetaliat.aspx.designer.cs">
+      <DependentUpon>PontajDetaliat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajEchipa.aspx.cs">
+      <DependentUpon>PontajEchipa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajEchipa.aspx.designer.cs">
+      <DependentUpon>PontajEchipa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajOne.aspx.cs">
+      <DependentUpon>PontajOne.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajOne.aspx.designer.cs">
+      <DependentUpon>PontajOne.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PontajUpdate.aspx.cs">
+      <DependentUpon>PontajUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PontajUpdate.aspx.designer.cs">
+      <DependentUpon>PontajUpdate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\Programe.aspx.cs">
+      <DependentUpon>Programe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\Programe.aspx.designer.cs">
+      <DependentUpon>Programe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameAlteOre.ascx.cs">
+      <DependentUpon>ProgrameAlteOre.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameAlteOre.ascx.designer.cs">
+      <DependentUpon>ProgrameAlteOre.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameDateGenerale.ascx.cs">
+      <DependentUpon>ProgrameDateGenerale.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameDateGenerale.ascx.designer.cs">
+      <DependentUpon>ProgrameDateGenerale.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameDetaliu.aspx.cs">
+      <DependentUpon>ProgrameDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameDetaliu.aspx.designer.cs">
+      <DependentUpon>ProgrameDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameInPeste.ascx.cs">
+      <DependentUpon>ProgrameInPeste.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameInPeste.ascx.designer.cs">
+      <DependentUpon>ProgrameInPeste.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameInSub.ascx.cs">
+      <DependentUpon>ProgrameInSub.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameInSub.ascx.designer.cs">
+      <DependentUpon>ProgrameInSub.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOreNormale.ascx.cs">
+      <DependentUpon>ProgrameOreNormale.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOreNormale.ascx.designer.cs">
+      <DependentUpon>ProgrameOreNormale.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOreSup.ascx.cs">
+      <DependentUpon>ProgrameOreSup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOreSup.ascx.designer.cs">
+      <DependentUpon>ProgrameOreSup.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOutPeste.ascx.cs">
+      <DependentUpon>ProgrameOutPeste.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOutPeste.ascx.designer.cs">
+      <DependentUpon>ProgrameOutPeste.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOutSub.ascx.cs">
+      <DependentUpon>ProgrameOutSub.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOutSub.ascx.designer.cs">
+      <DependentUpon>ProgrameOutSub.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgramePauza.ascx.cs">
+      <DependentUpon>ProgramePauza.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgramePauza.ascx.designer.cs">
+      <DependentUpon>ProgramePauza.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameValuri.ascx.cs">
+      <DependentUpon>ProgrameValuri.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameValuri.ascx.designer.cs">
+      <DependentUpon>ProgrameValuri.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pagini\SchimbaParola.aspx.cs">
+      <DependentUpon>SchimbaParola.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\SchimbaParola.aspx.designer.cs">
+      <DependentUpon>SchimbaParola.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Securitate.aspx.cs">
+      <DependentUpon>Securitate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Securitate.aspx.designer.cs">
+      <DependentUpon>Securitate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\StiriDetaliu.aspx.cs">
+      <DependentUpon>StiriDetaliu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\StiriDetaliu.aspx.designer.cs">
+      <DependentUpon>StiriDetaliu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Raspuns.aspx.cs">
+      <DependentUpon>Raspuns.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Raspuns.aspx.designer.cs">
+      <DependentUpon>Raspuns.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Recrutare\Candidati.aspx.cs">
+      <DependentUpon>Candidati.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Recrutare\Candidati.aspx.designer.cs">
+      <DependentUpon>Candidati.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Recrutare\DateGenerale.ascx.cs">
+      <DependentUpon>DateGenerale.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Recrutare\DateGenerale.ascx.designer.cs">
+      <DependentUpon>DateGenerale.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Recrutare\Experienta.ascx.cs">
+      <DependentUpon>Experienta.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Recrutare\Experienta.ascx.designer.cs">
+      <DependentUpon>Experienta.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Recrutare\Limbi.ascx.cs">
+      <DependentUpon>Limbi.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Recrutare\Limbi.ascx.designer.cs">
+      <DependentUpon>Limbi.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Evaluare.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Evaluare.Designer.cs">
+      <DependentUpon>Evaluare.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\EvaluarePeliFilip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\EvaluarePeliFilip.Designer.cs">
+      <DependentUpon>EvaluarePeliFilip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\FluturasHarting.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\FluturasHarting.Designer.cs">
+      <DependentUpon>FluturasHarting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Imprima.aspx.cs">
+      <DependentUpon>Imprima.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Imprima.aspx.designer.cs">
+      <DependentUpon>Imprima.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\PontajDetaliat.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\PontajDetaliat.Designer.cs">
+      <DependentUpon>PontajDetaliat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\PontajDinamic.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\PontajDinamic.Designer.cs">
+      <DependentUpon>PontajDinamic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\XtraReport1.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\XtraReport1.Designer.cs">
+      <DependentUpon>XtraReport1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultTactil.aspx.cs">
+      <DependentUpon>DefaultTactil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DefaultTactil.aspx.designer.cs">
+      <DependentUpon>DefaultTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tactil\PontajDetaliatTactil.aspx.cs">
+      <DependentUpon>PontajDetaliatTactil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tactil\PontajDetaliatTactil.aspx.designer.cs">
+      <DependentUpon>PontajDetaliatTactil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewSwitcher.ascx.designer.cs">
+      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\SodexoOnline\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebService\Detalii.aspx.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebService\Detalii.aspx.designer.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebService\Sodexo.aspx.cs">
+      <DependentUpon>Sodexo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebService\Sodexo.aspx.designer.cs">
+      <DependentUpon>Sodexo.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Nomen\" />
+    <Folder Include="Temp\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\Default.aspx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Mesaje.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Mesaje.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Mesaje.de.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Mesaje.de.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Cadru.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Mesaje.es.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Mesaje.es.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\General.es.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>General.es.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\General.de.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>General.de.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\General.fr.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>General.fr.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\General.it.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>General.it.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\General.bg.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>General.bg.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Meniu.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Meniu.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Meniu.de.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Meniu.de.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Meniu.fr.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Meniu.fr.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Meniu.it.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Meniu.it.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Meniu.bg.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Meniu.bg.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Meniu.es.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Meniu.es.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Mesaje.bg.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Mesaje.bg.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Mesaje.fr.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Mesaje.fr.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Mesaje.it.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Mesaje.it.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Mesaje.en.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Mesaje.en.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Meniu.en.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Meniu.en.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\General.en.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>General.en.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_LocalResources\General.resx" />
+    <Content Include="Absente\App_LocalResources\Cereri.aspx.resx" />
+    <Content Include="App_LocalResources\EvalDetaliu.aspx.resx" />
+    <Content Include="App_LocalResources\Cereri.aspx.resx" />
+    <Content Include="App_GlobalResources\General.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>General.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
+      <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\AdeverintaMedic.resx">
+      <DependentUpon>AdeverintaMedic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Evaluare.resx">
+      <DependentUpon>Evaluare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\EvaluarePeliFilip.resx">
+      <DependentUpon>EvaluarePeliFilip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\FluturasHarting.resx">
+      <DependentUpon>FluturasHarting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PontajDetaliat.resx">
+      <DependentUpon>PontajDetaliat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PontajDinamic.resx">
+      <DependentUpon>PontajDinamic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PrintImage.resx">
+      <DependentUpon>PrintImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\XtraReport1.resx">
+      <DependentUpon>XtraReport1.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Publicat.pubxml" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="https://apitest.sodexoonline.ro/middle.api/v1.0/paper%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\SodexoOnline\</RelPath>
+      <UpdateFromURL>https://apitest.sodexoonline.ro/middle.api/v1.0/paper%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>WizOne_SodexoOnline_v1_0_paper</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>63427</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:63428/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

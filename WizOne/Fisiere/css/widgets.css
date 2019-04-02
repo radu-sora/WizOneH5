@@ -1,0 +1,76 @@
+﻿
+.widgetPanel
+{
+	background: #F9F9FA;
+	border: solid 1px #D3D6DA;
+    padding: 12px 0px 9px 0px;
+	margin: 0 0 5px 0;
+	height: 110px;
+	
+	-moz-box-shadow:inset 0px 1px 4px rgba(0, 0, 0, 0.117188);
+    -webkit-box-shadow:inset 0px 1px 4px rgba(0, 0, 0, 0.117188);
+    box-shadow:inset 0px 1px 4px rgba(0, 0, 0, 0.117188);	
+	
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    
+    width:100%;
+    overflow-x:auto;
+}
+    
+
+.widgetPanel img 
+{
+	margin-right: 0px;
+}
+
+.widgetPanel .cmbTip{
+    margin:0px 0px 10px 20px;
+}
+
+
+.widgetPanel .disabled
+{
+	-moz-opacity: 0.2;
+	filter:alpha(opacity=20);
+	opacity: 0.2;
+	
+	cursor: default !important;
+}
+    
+.cssDockPanel_noBorder
+{
+    border:0 !important;
+}
+
+ .cssDockPanel  .cssHeader {
+        color:#1f4eb0;
+        font-size:18px;
+        background-image:none;
+        border-bottom:none;
+    }
+
+.divPanel
+{
+    position:relative; 
+    border:solid 1px #ffffff;
+}
+
+.cuZIndex
+{
+    z-index:10000;
+}
+
+.faraZIndex
+{
+    z-index:10;
+}
+
+.cssRoundPanel {
+    /*overflow:hidden;
+    border:solid 1px red;*/
+        
+    /*width:500px !important;
+    overflow-x:auto;*/
+}

@@ -1,0 +1,16 @@
+Data:    23/09/2016 2:21:09 PM
+Metoda:    CreazaFiltrul
+-----------------------------------------------------
+Data:    23/09/2016 2:21:09 PM
+Metoda:    CreazaCampurile
+Eroarea:    (ent.Text) AS 'Text', (ent.Email) AS 'email'
+-----------------------------------------------------
+Data:    23/09/2016 2:21:09 PM
+Metoda:    CreazaSelect
+Eroarea:   SELECT  (ent.Text) AS 'Text', (ent.Email) AS 'email' FROM (SELECT * FROM "AlertaTest") ent WHERE 1 = 1 
+-----------------------------------------------------
+Data:    23/09/2016 2:21:09 PM
+Metoda:    CreazaAdreseMail
+Eroarea:   TO       Alerte.Program+metaAdreseMail
+
+-----------------------------------------------------

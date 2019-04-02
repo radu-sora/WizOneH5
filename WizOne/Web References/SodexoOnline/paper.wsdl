@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://api.middle.sdx.ro/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" name="v1.0/paper" targetNamespace="http://api.middle.sdx.ro/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="https://apitest.sodexoonline.ro:443/middle.api/v1.0/paper?xsd=1" namespace="http://api.middle.sdx.ro/" />
+    </xsd:schema>
+  </types>
+  <message name="login">
+    <part name="parameters" element="tns:login" />
+  </message>
+  <message name="loginResponse">
+    <part name="parameters" element="tns:loginResponse" />
+  </message>
+  <message name="hello">
+    <part name="parameters" element="tns:hello" />
+  </message>
+  <message name="helloResponse">
+    <part name="parameters" element="tns:helloResponse" />
+  </message>
+  <message name="companyAddressList">
+    <part name="parameters" element="tns:companyAddressList" />
+  </message>
+  <message name="companyAddressListResponse">
+    <part name="parameters" element="tns:companyAddressListResponse" />
+  </message>
+  <message name="companyList">
+    <part name="parameters" element="tns:companyList" />
+  </message>
+  <message name="companyListResponse">
+    <part name="parameters" element="tns:companyListResponse" />
+  </message>
+  <message name="productList">
+    <part name="parameters" element="tns:productList" />
+  </message>
+  <message name="productListResponse">
+    <part name="parameters" element="tns:productListResponse" />
+  </message>
+  <message name="companyContactList">
+    <part name="parameters" element="tns:companyContactList" />
+  </message>
+  <message name="companyContactListResponse">
+    <part name="parameters" element="tns:companyContactListResponse" />
+  </message>
+  <message name="addressIdentifierSet">
+    <part name="parameters" element="tns:addressIdentifierSet" />
+  </message>
+  <message name="addressIdentifierSetResponse">
+    <part name="parameters" element="tns:addressIdentifierSetResponse" />
+  </message>
+  <message name="addressIdentifierRemove">
+    <part name="parameters" element="tns:addressIdentifierRemove" />
+  </message>
+  <message name="addressIdentifierRemoveResponse">
+    <part name="parameters" element="tns:addressIdentifierRemoveResponse" />
+  </message>
+  <message name="paperOrder">
+    <part name="parameters" element="tns:paperOrder" />
+  </message>
+  <message name="paperOrderResponse">
+    <part name="parameters" element="tns:paperOrderResponse" />
+  </message>
+  <message name="orderCancel">
+    <part name="parameters" element="tns:orderCancel" />
+  </message>
+  <message name="orderCancelResponse">
+    <part name="parameters" element="tns:orderCancelResponse" />
+  </message>
+  <message name="orderHistory">
+    <part name="parameters" element="tns:orderHistory" />
+  </message>
+  <message name="orderHistoryResponse">
+    <part name="parameters" element="tns:orderHistoryResponse" />
+  </message>
+  <portType name="soap">
+    <operation name="login">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/loginRequest" message="tns:login" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/loginResponse" message="tns:loginResponse" />
+    </operation>
+    <operation name="hello">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/helloRequest" message="tns:hello" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/helloResponse" message="tns:helloResponse" />
+    </operation>
+    <operation name="companyAddressList">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/companyAddressListRequest" message="tns:companyAddressList" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/companyAddressListResponse" message="tns:companyAddressListResponse" />
+    </operation>
+    <operation name="companyList">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/companyListRequest" message="tns:companyList" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/companyListResponse" message="tns:companyListResponse" />
+    </operation>
+    <operation name="productList">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/productListRequest" message="tns:productList" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/productListResponse" message="tns:productListResponse" />
+    </operation>
+    <operation name="companyContactList">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/companyContactListRequest" message="tns:companyContactList" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/companyContactListResponse" message="tns:companyContactListResponse" />
+    </operation>
+    <operation name="addressIdentifierSet">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/addressIdentifierSetRequest" message="tns:addressIdentifierSet" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/addressIdentifierSetResponse" message="tns:addressIdentifierSetResponse" />
+    </operation>
+    <operation name="addressIdentifierRemove">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/addressIdentifierRemoveRequest" message="tns:addressIdentifierRemove" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/addressIdentifierRemoveResponse" message="tns:addressIdentifierRemoveResponse" />
+    </operation>
+    <operation name="paperOrder">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/paperOrderRequest" message="tns:paperOrder" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/paperOrderResponse" message="tns:paperOrderResponse" />
+    </operation>
+    <operation name="orderCancel">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/orderCancelRequest" message="tns:orderCancel" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/orderCancelResponse" message="tns:orderCancelResponse" />
+    </operation>
+    <operation name="orderHistory">
+      <input wsam:Action="http://api.middle.sdx.ro/soap/orderHistoryRequest" message="tns:orderHistory" />
+      <output wsam:Action="http://api.middle.sdx.ro/soap/orderHistoryResponse" message="tns:orderHistoryResponse" />
+    </operation>
+  </portType>
+  <binding name="soapPortBinding" type="tns:soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="login">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="hello">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="companyAddressList">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="companyList">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="productList">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="companyContactList">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="addressIdentifierSet">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="addressIdentifierRemove">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="paperOrder">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="orderCancel">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="orderHistory">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="v1.0/paper">
+    <port name="soapPort" binding="tns:soapPortBinding">
+      <soap:address location="https://apitest.sodexoonline.ro:443/middle.api/v1.0/paper" />
+    </port>
+  </service>
+</definitions>

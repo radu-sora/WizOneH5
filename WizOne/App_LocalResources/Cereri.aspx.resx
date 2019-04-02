@@ -1,0 +1,1151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="btnBackResource1.Image.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnBackResource1.Image.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnBackResource1.Image.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnBackResource1.Image.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnBackResource1.Text" xml:space="preserve">
+    <value>Inapoi</value>
+  </data>
+  <data name="btnBackResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocStergeResource1.Image.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocStergeResource1.Image.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocStergeResource1.Image.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocStergeResource1.Image.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocStergeResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocStergeResource1.ToolTip" xml:space="preserve">
+    <value>sterge document</value>
+  </data>
+  <data name="btnDocUploadResource1.AddButton.Text" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="btnDocUploadResource1.BrowseButton.Image.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.BrowseButton.Image.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.BrowseButton.Image.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.BrowseButton.Image.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.BrowseButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.CancelButton.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="btnDocUploadResource1.ClearFileSelectionImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.ClearFileSelectionImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.ClearFileSelectionImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.ClearFileSelectionImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnDocUploadResource1.ProgressBarSettings.DisplayFormatString" xml:space="preserve">
+    <value>0.##</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnDocUploadResource1.ProgressBarSettings.ShowPosition" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="btnDocUploadResource1.RemoveButton.Text" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="btnDocUploadResource1.ToolTip" xml:space="preserve">
+    <value>incarca document</value>
+  </data>
+  <data name="btnDocUploadResource1.UploadButton.Text" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="btnDocUploadResource1.ValidationSettings.FileDoesNotExistErrorText" xml:space="preserve">
+    <value>The uploading file doesn't exist</value>
+  </data>
+  <data name="btnDocUploadResource1.ValidationSettings.GeneralErrorText" xml:space="preserve">
+    <value>File upload failed due to an external error</value>
+  </data>
+  <data name="btnDocUploadResource1.ValidationSettings.MaxFileCountErrorText" xml:space="preserve">
+    <value>{0} file(s) have been removed from the selection because they exceed the limit of files to be uploaded at once (which is set to {1}).</value>
+  </data>
+  <data name="btnDocUploadResource1.ValidationSettings.MaxFileSizeErrorText" xml:space="preserve">
+    <value>File size exceeds the maximum allowed size, which is {0} bytes</value>
+  </data>
+  <data name="btnDocUploadResource1.ValidationSettings.MultiSelectionErrorText" xml:space="preserve">
+    <value>Attention! 
+
+{0} files are invalid and will not be uploaded. Possible reasons are: they exceed the allowed file size ({1}), their extensions are not allowed, or their filenames contain invalid characters. These files have been removed from the selection: 
+
+{2}</value>
+  </data>
+  <data name="btnDocUploadResource1.ValidationSettings.NotAllowedContentTypeErrorText" xml:space="preserve">
+    <value>This content type isn't allowed</value>
+  </data>
+  <data name="btnDocUploadResource1.ValidationSettings.NotAllowedFileExtensionErrorText" xml:space="preserve">
+    <value>This file extension isn't allowed</value>
+  </data>
+  <data name="btnExitResource1.Image.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnExitResource1.Image.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnExitResource1.Image.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnExitResource1.Image.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnExitResource1.Text" xml:space="preserve">
+    <value>Iesire</value>
+  </data>
+  <data name="btnExitResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnIstoricExtinsResource1.Image.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnIstoricExtinsResource1.Image.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnIstoricExtinsResource1.Image.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnIstoricExtinsResource1.Image.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnIstoricExtinsResource1.Text" xml:space="preserve">
+    <value>Istoric Extins</value>
+  </data>
+  <data name="btnIstoricExtinsResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnSaveResource1.Image.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnSaveResource1.Image.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnSaveResource1.Image.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnSaveResource1.Image.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="btnSaveResource1.Text" xml:space="preserve">
+    <value>Trimite la aprobare</value>
+  </data>
+  <data name="btnSaveResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ButtonEditEllipsisImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ButtonEditEllipsisImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ButtonEditEllipsisImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ButtonEditEllipsisImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="cmbAbsResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="cmbAbsResource1.ClearButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ClearButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.DisplayFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.DropDownButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.DropDownButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ItemImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ItemImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ItemImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ItemImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.LoadingPanelImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.LoadingPanelImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.LoadingPanelImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.LoadingPanelImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.SettingsLoadingPanel.Text" xml:space="preserve">
+    <value>Loading&amp;hellip;</value>
+  </data>
+  <data name="cmbAbsResource1.TextFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAbsResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="cmbAngResource1.ButtonEditEllipsisImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ButtonEditEllipsisImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ButtonEditEllipsisImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ButtonEditEllipsisImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="cmbAngResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="cmbAngResource1.ClearButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ClearButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.DisplayFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.DropDownButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.DropDownButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ItemImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ItemImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ItemImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ItemImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.LoadingPanelImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.LoadingPanelImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.LoadingPanelImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.LoadingPanelImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.SettingsLoadingPanel.Text" xml:space="preserve">
+    <value>Loading&amp;hellip;</value>
+  </data>
+  <data name="cmbAngResource1.TextFormatString" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="cmbAngResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbAngResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="cmbInlocResource1.ButtonEditEllipsisImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ButtonEditEllipsisImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ButtonEditEllipsisImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ButtonEditEllipsisImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="cmbInlocResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="cmbInlocResource1.ClearButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ClearButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.DisplayFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.DropDownButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.DropDownButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ItemImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ItemImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ItemImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ItemImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.LoadingPanelImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.LoadingPanelImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.LoadingPanelImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.LoadingPanelImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.SettingsLoadingPanel.Text" xml:space="preserve">
+    <value>Loading&amp;hellip;</value>
+  </data>
+  <data name="cmbInlocResource1.TextFormatString" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="cmbInlocResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbInlocResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="cmbRolResource1.ButtonEditEllipsisImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ButtonEditEllipsisImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ButtonEditEllipsisImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ButtonEditEllipsisImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="cmbRolResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="cmbRolResource1.ClearButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ClearButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.DisplayFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.DropDownButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.DropDownButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ItemImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ItemImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ItemImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ItemImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.LoadingPanelImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.LoadingPanelImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.LoadingPanelImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.LoadingPanelImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.SettingsLoadingPanel.Text" xml:space="preserve">
+    <value>Loading&amp;hellip;</value>
+  </data>
+  <data name="cmbRolResource1.TextFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cmbRolResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="ListBoxColumnResource1.Caption" xml:space="preserve">
+    <value>Marca</value>
+  </data>
+  <data name="ListBoxColumnResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource10.Caption" xml:space="preserve">
+    <value>Sectie</value>
+  </data>
+  <data name="ListBoxColumnResource10.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource11.Caption" xml:space="preserve">
+    <value>Dept</value>
+  </data>
+  <data name="ListBoxColumnResource11.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource12.Caption" xml:space="preserve">
+    <value>Functia</value>
+  </data>
+  <data name="ListBoxColumnResource12.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource2.Caption" xml:space="preserve">
+    <value>Angajat</value>
+  </data>
+  <data name="ListBoxColumnResource2.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource3.Caption" xml:space="preserve">
+    <value>Filiala</value>
+  </data>
+  <data name="ListBoxColumnResource3.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource4.Caption" xml:space="preserve">
+    <value>Sectie</value>
+  </data>
+  <data name="ListBoxColumnResource4.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource5.Caption" xml:space="preserve">
+    <value>Dept</value>
+  </data>
+  <data name="ListBoxColumnResource5.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource6.Caption" xml:space="preserve">
+    <value>Functia</value>
+  </data>
+  <data name="ListBoxColumnResource6.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource7.Caption" xml:space="preserve">
+    <value>Marca</value>
+  </data>
+  <data name="ListBoxColumnResource7.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource8.Caption" xml:space="preserve">
+    <value>Angajat</value>
+  </data>
+  <data name="ListBoxColumnResource8.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ListBoxColumnResource9.Caption" xml:space="preserve">
+    <value>Filiala</value>
+  </data>
+  <data name="ListBoxColumnResource9.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PageResource1.Title" xml:space="preserve">
+    <value>WizOne ver 1.0</value>
+  </data>
+  <data name="PanelContentResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="pnlCtlResource1.LoadingPanelImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="pnlCtlResource1.LoadingPanelImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="pnlCtlResource1.LoadingPanelImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="pnlCtlResource1.LoadingPanelImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="pnlCtlResource1.SettingsLoadingPanel.Text" xml:space="preserve">
+    <value>Loading&amp;hellip;</value>
+  </data>
+  <data name="pnlCtlResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.ButtonEditEllipsisImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.ButtonEditEllipsisImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.ButtonEditEllipsisImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.ButtonEditEllipsisImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.ClearButtonText" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavNextYearImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavNextYearImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavNextYearImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavNextYearImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavPrevYearImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavPrevYearImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavPrevYearImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavPrevYearImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavProperties.CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.FastNavProperties.OkButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.LoadingPanelImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.LoadingPanelImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.LoadingPanelImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.LoadingPanelImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.NextMonthImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.NextMonthImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.NextMonthImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.NextMonthImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.NextYearImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.NextYearImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.NextYearImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.NextYearImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.PrevMonthImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.PrevMonthImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.PrevMonthImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.PrevMonthImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.PrevYearImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.PrevYearImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.PrevYearImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.PrevYearImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.TodayButtonText" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="txtDataIncResource1.CalendarProperties.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="txtDataIncResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="txtDataIncResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="txtDataIncResource1.ClearButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.ClearButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.DateRangeSettings.MinErrorText" xml:space="preserve">
+    <value>The date range must be greater than or equal to {0} days</value>
+  </data>
+  <data name="txtDataIncResource1.DateRangeSettings.RangeErrorText" xml:space="preserve">
+    <value>The date range must be from {0} to {1} days</value>
+  </data>
+  <data name="txtDataIncResource1.DisplayFormatString" xml:space="preserve">
+    <value>dd/MM/yyyy</value>
+  </data>
+  <data name="txtDataIncResource1.DropDownButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.DropDownButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.EditFormatString" xml:space="preserve">
+    <value>dd/MM/yyyy</value>
+  </data>
+  <data name="txtDataIncResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.TimeSectionProperties.CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="txtDataIncResource1.TimeSectionProperties.OkButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="txtDataIncResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataIncResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="txtDataSfResource1.ButtonEditEllipsisImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.ButtonEditEllipsisImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.ButtonEditEllipsisImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.ButtonEditEllipsisImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.ClearButtonText" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavNextYearImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavNextYearImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavNextYearImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavNextYearImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavPrevYearImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavPrevYearImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavPrevYearImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavPrevYearImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavProperties.CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.FastNavProperties.OkButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.LoadingPanelImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.LoadingPanelImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.LoadingPanelImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.LoadingPanelImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.NextMonthImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.NextMonthImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.NextMonthImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.NextMonthImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.NextYearImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.NextYearImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.NextYearImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.NextYearImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.PrevMonthImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.PrevMonthImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.PrevMonthImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.PrevMonthImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.PrevYearImage.AlternateText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.PrevYearImage.DescriptionUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.PrevYearImage.IconID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.PrevYearImage.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.TodayButtonText" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="txtDataSfResource1.CalendarProperties.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="txtDataSfResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="txtDataSfResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="txtDataSfResource1.ClearButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.ClearButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.DateRangeSettings.MinErrorText" xml:space="preserve">
+    <value>The date range must be greater than or equal to {0} days</value>
+  </data>
+  <data name="txtDataSfResource1.DateRangeSettings.RangeErrorText" xml:space="preserve">
+    <value>The date range must be from {0} to {1} days</value>
+  </data>
+  <data name="txtDataSfResource1.DisplayFormatString" xml:space="preserve">
+    <value>dd/MM/yyyy</value>
+  </data>
+  <data name="txtDataSfResource1.DropDownButton.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.DropDownButton.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.EditFormatString" xml:space="preserve">
+    <value>dd/MM/yyyy</value>
+  </data>
+  <data name="txtDataSfResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.TimeSectionProperties.CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="txtDataSfResource1.TimeSectionProperties.OkButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="txtDataSfResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtDataSfResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="txtNrOreResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrOreResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="txtNrOreResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="txtNrOreResource1.DisplayFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrOreResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrOreResource1.MaskSettings.ErrorText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrOreResource1.MaskSettings.Mask" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrOreResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrOreResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrOreResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrOreResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="txtNrZileResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="txtNrZileResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="txtNrZileResource1.DisplayFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileResource1.MaskSettings.ErrorText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileResource1.MaskSettings.Mask" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="txtNrZileViitorResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileViitorResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="txtNrZileViitorResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="txtNrZileViitorResource1.DisplayFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileViitorResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileViitorResource1.MaskSettings.ErrorText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileViitorResource1.MaskSettings.Mask" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileViitorResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileViitorResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileViitorResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtNrZileViitorResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="txtObsResource1.Caption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtObsResource1.CaptionSettings.OptionalMark" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="txtObsResource1.CaptionSettings.RequiredMark" xml:space="preserve">
+    <value>*</value>
+  </data>
+  <data name="txtObsResource1.DisplayFormatString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtObsResource1.HelpText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtObsResource1.NullText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtObsResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtObsResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtObsResource1.ValidationSettings.ErrorText" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="txtTitluResource1.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="txtTitluResource1.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+</root>

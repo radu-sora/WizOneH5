@@ -70,8 +70,12 @@ namespace WizOne.Tactil
                 string denumire = "";
                 switch (Session["CereriTactil"].ToString())
                 {
+                    case "AbsenteOra":
                     case "BiletVoie":
-                        denumire = "BV%";
+                        if (Session["CereriTactil"].ToString() == "BiletVoie")
+                            denumire = "BV%";
+                        else
+                            denumire = "%%";
                         //lblZile.InnerText = "Nr. ore";
                         lblNrOre.Visible = true;
                         tdNrOre.Visible = true;
@@ -91,8 +95,11 @@ namespace WizOne.Tactil
                         tdDataSf.Visible = false;
                         tdNrOre.Width = "550";
 
-                        rbMotiv1.Visible = true;
-                        rbMotiv2.Visible = true;
+                        if (Session["CereriTactil"].ToString() == "BiletVoie")
+                        {
+                            rbMotiv1.Visible = true;
+                            rbMotiv2.Visible = true;
+                        }
 
                         lblZileRamase.Visible = false;
                         txtNrZileRamase.Visible = false;
@@ -108,7 +115,7 @@ namespace WizOne.Tactil
                         break;
                 }
 
-                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
+                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23 || Session["CereriTactil"].ToString() == "AbsenteOra")
                 {
                     tdSelAbs.Visible = true;
                     cmbSelAbs.Visible = true;
@@ -203,7 +210,10 @@ namespace WizOne.Tactil
                     }
 
                     DataRow[] dtRowAbs = null;
-                    dtRowAbs = dtAbs.Select("IdTipOre = 1", "Id");
+                    if (Session["CereriTactil"].ToString() == "AbsenteOra")
+                        dtRowAbs = dtAbs.Select("IdTipOre = 0", "Id");
+                    else
+                        dtRowAbs = dtAbs.Select("IdTipOre = 1", "Id");
                     DataTable dtAbsSpn = new DataTable();
                     if (dtRowAbs != null)
                         dtAbsSpn = dtRowAbs.CopyToDataTable();

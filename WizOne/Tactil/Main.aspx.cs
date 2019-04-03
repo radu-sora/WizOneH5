@@ -132,6 +132,10 @@ namespace WizOne.Tactil
                         Session["CereriTactil"] = "PlanificareCO";
                         Response.Redirect("~/Tactil/CereriTactil.aspx", false);
                         break;
+                    case "absenteora":  //Radu 02.04.2019
+                        Session["CereriTactil"] = "AbsenteOra";
+                        Response.Redirect("~/Tactil/CereriTactil.aspx", false);
+                        break;
                     case "cereriistoric":
                         Response.Redirect("~/Tactil/ListaTactil.aspx", false);
                         break;

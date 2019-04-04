@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Experienta.ascx.cs" Inherits="WizOne.Recrutare.Experienta" %>
 
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
+
 
 
     <dx:ASPxGridView ID="grDate" runat="server" Width="100%" AutoGenerateColumns="false" OnInitNewRow="grDate_InitNewRow" OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting">

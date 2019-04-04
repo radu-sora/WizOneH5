@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProgrameOreNormale.ascx.cs" Inherits="WizOne.ProgrameLucru.ProgrameOreNormale" %>
 
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
+
 <script type="text/javascript">
     function OnValueChangedHandlerOreNormale(s) {
         pnlCtlOreNormale.PerformCallback(s.name + ";" + s.GetValue());

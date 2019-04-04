@@ -1,16 +1,29 @@
 ﻿<%@ Page Title="View Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="ReportView.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.ReportView" %>
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
-<%@ Register Assembly="DevExpress.Web.ASPxPivotGrid.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxPivotGrid" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraCharts.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraCharts.v18.1.Web, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts.Web" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraReports.v18.1.Web.WebForms, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraReports.Web" TagPrefix="dx" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- Modal dialogs -->
 
     <!-- Page content -->                  
-    <table class="report-template">
+    <table class="report-view-template">
         <tr>
+            <td>
+                <dx:ASPxCallbackPanel ID="WebDocumentViewerCallbackPanel" ClientInstanceName="webDocumentViewerCallbackPanel" runat="server" Theme="Mulberry">
+                    <PanelCollection>
+                        <dx:PanelContent runat="server">
+                            <dx:ASPxWebDocumentViewer ID="WebDocumentViewer" ClientInstanceName="webDocumentViewer" runat="server" CssClass="">
+                                <SettingsTabPanel Position="Left" />
+                                <ClientSideEvents    
+                                    Init="function(s, e) {
+                                        onDocumentViewerInit();
+                                    }" 
+                                    CustomizeParameterEditors="function(s, e) {
+                                        onCustomizeParameter(e.parameter, e.info);
+                                    }" />
+                            </dx:ASPxWebDocumentViewer>          
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxCallbackPanel>
+            </td>
             <td id="customLayoutSection">
                 <!-- Toolbar -->
                 <table>
@@ -186,24 +199,7 @@
                     TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0">                                
                 </dx:ASPxGridViewExporter>
 
-            </td>
-            <td>
-                <dx:ASPxCallbackPanel ID="WebDocumentViewerCallbackPanel" ClientInstanceName="webDocumentViewerCallbackPanel" runat="server" Theme="Mulberry">
-                    <PanelCollection>
-                        <dx:PanelContent runat="server">
-                            <dx:ASPxWebDocumentViewer ID="WebDocumentViewer" ClientInstanceName="webDocumentViewer" runat="server" CssClass="pull-right">
-                                <ClientSideEvents    
-                                    Init="function(s, e) {
-                                        onDocumentViewerInit();
-                                    }" 
-                                    CustomizeParameterEditors="function(s, e) {
-                                        onCustomizeParameter(e.parameter, e.info);
-                                    }" />
-                            </dx:ASPxWebDocumentViewer>          
-                        </dx:PanelContent>
-                    </PanelCollection>
-                </dx:ASPxCallbackPanel>
-            </td>
+            </td>            
         </tr>
     </table>        
    

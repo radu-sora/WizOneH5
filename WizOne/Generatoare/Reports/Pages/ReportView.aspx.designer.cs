@@ -13,6 +13,24 @@ namespace WizOne.Generatoare.Reports.Pages {
     public partial class ReportView {
         
         /// <summary>
+        /// WebDocumentViewerCallbackPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel WebDocumentViewerCallbackPanel;
+        
+        /// <summary>
+        /// WebDocumentViewer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.XtraReports.Web.ASPxWebDocumentViewer WebDocumentViewer;
+        
+        /// <summary>
         /// LayoutComboBox control.
         /// </summary>
         /// <remarks>
@@ -83,24 +101,6 @@ namespace WizOne.Generatoare.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridViewExporter CustomTableGridViewExporter;
-        
-        /// <summary>
-        /// WebDocumentViewerCallbackPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel WebDocumentViewerCallbackPanel;
-        
-        /// <summary>
-        /// WebDocumentViewer control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.XtraReports.Web.ASPxWebDocumentViewer WebDocumentViewer;
         
         /// <summary>
         /// globalEvents control.

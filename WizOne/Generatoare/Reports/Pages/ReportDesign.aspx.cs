@@ -132,7 +132,8 @@ namespace WizOne.Generatoare.Reports.Pages
                         O1 = (xrChart.SeriesTemplate.LabelsVisibility == DefaultBoolean.True),
                         O2 = xrPivotGrid.OptionsChartDataSource.ProvideDataByColumns,
                         O3 = xrPivotGrid.OptionsChartDataSource.ProvideColumnGrandTotals,
-                        O4 = xrPivotGrid.OptionsChartDataSource.ProvideRowGrandTotals
+                        O4 = xrPivotGrid.OptionsChartDataSource.ProvideRowGrandTotals,
+                        O5 = xrChart.Visible
                     }
                 });
             }
@@ -160,6 +161,7 @@ namespace WizOne.Generatoare.Reports.Pages
                 {
                     xrChart.SeriesTemplate.ChangeView((ViewType)chartOptions.Type);
                     xrChart.SeriesTemplate.LabelsVisibility = (bool)chartOptions.Options.O1 ? DefaultBoolean.True : DefaultBoolean.False;
+                    xrChart.Visible = (bool)chartOptions.Options.O5;
                 }
 
                 aspxPivotGrid.OptionsChartDataSource.ProvideDataByColumns = chartOptions.Options.O2;
@@ -516,6 +518,7 @@ namespace WizOne.Generatoare.Reports.Pages
                         ChartOptionsCheckBoxList.Items.Add("Generate Series from Columns", "O2");
                         ChartOptionsCheckBoxList.Items.Add("Show Column Grand Totals", "O3");
                         ChartOptionsCheckBoxList.Items.Add("Show Row Grand Totals", "O4");
+                        ChartOptionsCheckBoxList.Items.Add("Show Chart", "O5");
 
                         // Bind to empty datasource to load columns definition.
                         if (pivotGrid.Fields.Count == 0)

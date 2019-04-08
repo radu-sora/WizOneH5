@@ -352,7 +352,9 @@
             $("#myModal").modal("show");
 
         $(window).on('load', function () {
-            $('#anunt').modal('show');
+            var anunt = $('#anunt');
+
+            anunt.length && anunt.modal('show');            
         });
     </script>    
 </body>

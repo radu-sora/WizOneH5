@@ -639,6 +639,7 @@
                 var commandName = '#options';
                 var commandParams = { 'ChartOptions': chartOptions };
 
+                customCubeWebChartControl.SetVisible(chartOptions.Options.O5);
                 customCubeWebChartControl.PerformCallback(commandName + JSON.stringify(commandParams));
             } else {
                 customCubeWebChartControl.PerformCallback();

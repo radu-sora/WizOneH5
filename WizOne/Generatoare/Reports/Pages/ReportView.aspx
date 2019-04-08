@@ -209,7 +209,7 @@
         // Globals
         var reportType = <%: ReportType %>;
         var exportOptions = '<%: ExportOptions %>';
-        var hasChart = '<%: HasChart %>' == 'True';
+        var chartStatus = <%: ChartStatus %>;
         var customLayoutSectionVisible = null;
         var paramsSelectedValues = {};
 
@@ -557,9 +557,11 @@
                 if (reportType == 3) { // Cube
                     $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(5)').hide(); // No export option.
 
-                    if (!hasChart) {
+                    if (chartStatus == 0) { // None
                         $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(6)').hide();
                         $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(7)').hide();
+                        customCubeWebChartControl.SetVisible(false);
+                    } else if (chartStatus == 1) { // Hidden by default
                         customCubeWebChartControl.SetVisible(false);
                     }
 
@@ -617,6 +619,7 @@
                 var commandName = '#options';
                 var commandParams = { 'ChartOptions': chartOptions };
 
+                customCubeWebChartControl.SetVisible(chartOptions.Options.O5);
                 customCubeWebChartControl.PerformCallback(commandName + JSON.stringify(commandParams));
             } else {
                 customCubeWebChartControl.PerformCallback();

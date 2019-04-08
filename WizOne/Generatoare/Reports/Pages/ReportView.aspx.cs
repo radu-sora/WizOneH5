@@ -74,7 +74,7 @@ namespace WizOne.Generatoare.Reports.Pages
 
         protected short ReportType { get; set; }
         protected string ExportOptions { get; set; }
-        protected bool HasChart { get; set; }
+        protected short ChartStatus { get; set; } // 0 - None, 1 - Hidden, 2 - Visible
 
         private void LoadASPxPivotGridLayoutFromXRPivotGrid(ASPxPivotGrid aspxPivotGrid, XRPivotGrid xrPivotGrid)
         {
@@ -140,7 +140,8 @@ namespace WizOne.Generatoare.Reports.Pages
                         O1 = (xrChart.SeriesTemplate.LabelsVisibility == DefaultBoolean.True),
                         O2 = xrPivotGrid.OptionsChartDataSource.ProvideDataByColumns,
                         O3 = xrPivotGrid.OptionsChartDataSource.ProvideColumnGrandTotals,
-                        O4 = xrPivotGrid.OptionsChartDataSource.ProvideRowGrandTotals
+                        O4 = xrPivotGrid.OptionsChartDataSource.ProvideRowGrandTotals,
+                        O5 = xrChart.Visible
                     }
                 });
             }
@@ -168,6 +169,7 @@ namespace WizOne.Generatoare.Reports.Pages
                 {
                     xrChart.SeriesTemplate.ChangeView((ViewType)chartOptions.Type);
                     xrChart.SeriesTemplate.LabelsVisibility = (bool)chartOptions.Options.O1 ? DefaultBoolean.True : DefaultBoolean.False;
+                    xrChart.Visible = (bool)chartOptions.Options.O5;
                 }
 
                 aspxPivotGrid.OptionsChartDataSource.ProvideDataByColumns = chartOptions.Options.O2;
@@ -309,12 +311,11 @@ namespace WizOne.Generatoare.Reports.Pages
                             ReportsUsersDataSource.WhereParameters["RegUserId"].DefaultValue = _userId;
 
                             if (_chart != null)
-                            {
-                                // For client side customization
-                                HasChart = true;
-
+                            {                                                             
                                 // Init chart options
                                 _chartOptions = JObject.Parse(SaveXRChartOptions(_chart, _pivotGrid));
+
+                                ChartStatus = (short)((bool)_chartOptions.Options.O5 ? 2 : 1); // For client side customization
 
                                 ChartTypeComboBox.Items.AddRange(Enum.GetValues(typeof(ViewType)).OfType<ViewType>().
                                     Select(vt => new ListEditItem() { Value = (int)vt, Text = vt.ToString() }).ToList());
@@ -324,6 +325,7 @@ namespace WizOne.Generatoare.Reports.Pages
                                 ChartOptionsCheckBoxList.Items.Add("Generate Series from Columns", "O2").Selected = _chartOptions.Options.O2;
                                 ChartOptionsCheckBoxList.Items.Add("Show Column Grand Totals", "O3").Selected = _chartOptions.Options.O3;
                                 ChartOptionsCheckBoxList.Items.Add("Show Row Grand Totals", "O4").Selected = _chartOptions.Options.O4;
+                                ChartOptionsCheckBoxList.Items.Add("Show Chart", "O5").Selected = _chartOptions.Options.O5;
 
                                 // Init chart control
                                 LoadWebChartOptions(CustomCubeWebChartControl, CustomCubePivotGrid, _chartOptions);

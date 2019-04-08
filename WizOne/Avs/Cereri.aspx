@@ -218,13 +218,13 @@
                     </td>
                     <td id="lbl10Act" runat="server">
                         <dx:ASPxLabel  ID="lblTxt5Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxDateEdit ID="de1Act" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                        <dx:ASPxDateEdit ID="de1Act" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>
                     <td id="lbl11Act" runat="server">
                         <dx:ASPxLabel  ID="lblTxt6Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxDateEdit ID="de2Act" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                        <dx:ASPxDateEdit ID="de2Act" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>
@@ -313,13 +313,15 @@
                     </td>
                     <td id="lbl10Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt5Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxDateEdit ID="de1Nou" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                        <dx:ASPxDateEdit ID="de1Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
+                            <ClientSideEvents  ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxDateEdit>
                     </td>
                     <td id="lbl11Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt6Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
-                        <dx:ASPxDateEdit ID="de2Nou" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                        <dx:ASPxDateEdit ID="de2Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                            <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>

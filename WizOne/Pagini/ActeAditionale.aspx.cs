@@ -47,8 +47,6 @@ namespace WizOne.Pagini
                 DataTable dtAng = General.IncarcaDT(strSql, null);
                 cmbAng.DataSource = dtAng;
                 cmbAng.DataBind();
-
-                IncarcaGrid();
             }
             catch (Exception ex)
             {
@@ -90,11 +88,12 @@ namespace WizOne.Pagini
                 #endregion
 
                 if (!IsPostBack)
+                    IncarcaGrid();
+                else
                 {
-                    //IncarcaGrid();
+                    grDate.DataSource = Session["InformatiaCurenta"];
+                    grDate.DataBind();
                 }
-
-                //IncarcaGrid();
 
                 if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
             }
@@ -209,6 +208,69 @@ namespace WizOne.Pagini
                 #endregion
 
 
+                //dt = General.IncarcaDT($@"
+                //        SELECT * FROM (
+                //        SELECT {cmp} AS Cheie, X.*,
+                //        (SELECT MIN(ColData) FROM (
+                //        SELECT CASE WHEN Candidat = 1 THEN 
+                //        (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=DATEADD(d,-1,F10022) AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+                //        ELSE '2100-01-01' END AS ColData 
+                //        UNION
+                //        SELECT CASE WHEN Motiv = 1 THEN  
+                //        (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=F100993 AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+                //        ELSE '2100-01-01' END AS ColData  
+                //        UNION
+                //        SELECT CASE WHEN Salariul = 1 THEN 
+                //        (SELECT Zi FROM (
+                //        SELECT Zi, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as IdAuto 
+                //        FROM tblZile WHERE Zi>=DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays)) x
+                //        WHERE IdAuto=19)
+                //        ELSE '2100-01-01' END AS ColData 
+                //        UNION
+                //        SELECT CASE WHEN CORCod=1 OR FunctieId = 1 OR CIMDet=1 OR CIMNed=1 THEN 
+                //        (SELECT TOP 1 Zi FROM tblZile WHERE Zi<DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+                //        ELSE '2100-01-01' END AS ColData 
+                //        ) x) AS TermenDepasire
+                //        FROM (
+                //        SELECT A.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, A.DataModif, 0 AS Candidat,
+                //        MAX(CASE WHEN COALESCE(CORCod, 0) > 0 THEN 1 ELSE 0 END) AS CORCod,
+                //        MAX(CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END) AS FunctieId,
+                //        MAX(CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END) AS Norma,
+                //        MAX(CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END) AS Salariul,
+                //        MAX(0) AS Spor,
+                //        MAX(CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END) AS Structura,
+                //        MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
+                //        MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
+                //        MAX(CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END) AS Motiv,
+                //        J.DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+                //        J.IdAuto AS IdAutoAct, 
+                //        CASE WHEN (SELECT COUNT(*) FROM tblFisiere FIS WHERE FIS.Tabela='Admin_NrActAd' AND FIS.Id=J.IdAuto AND FIS.EsteCerere=0) = 0 THEN 0 ELSE 1 END AS AreAtas,
+                //        (SELECT ',' + CONVERT(nvarchar(20),COALESCE(AA.Id, '')) 
+                //        FROM Avs_Cereri AA
+                //        LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
+                //        LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
+                //        WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,-99)=COALESCE(J.DocData,-99)
+                //        GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
+                //        FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993
+                //        FROM Avs_Cereri A
+                //        LEFT JOIN F100 B ON A.F10003 = B.F10003
+                //        LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
+                //        WHERE A.IdStare = 3
+                //        GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993
+                //        UNION
+                //        SELECT A.F10003, COALESCE(A.F10008, '') + ' ' + COALESCE(A.F10009, '') AS NumeComplet, A.F10022, 1 AS Candidat,
+                //        0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                //        A.F100985, A.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+                //        J.IdAuto AS IdAutoAct,
+                //        CASE WHEN (SELECT COUNT(*) FROM tblFisiere FIS WHERE FIS.Tabela='Admin_NrActAd' AND FIS.Id=J.IdAuto AND FIS.EsteCerere=0) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
+                //        A.F10022, A.F100993
+                //        FROM F100 A
+                //        LEFT JOIN Admin_NrActAd J ON A.F10003=J.F10003
+                //        WHERE A.F10025 = 900) X
+                //        ) AS Y
+                //        WHERE 1=1 " + filtru, null);
+
+
                 dt = General.IncarcaDT($@"
                         SELECT * FROM (
                         SELECT {cmp} AS Cheie, X.*,
@@ -217,9 +279,7 @@ namespace WizOne.Pagini
                         (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=DATEADD(d,-1,F10022) AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
                         ELSE '2100-01-01' END AS ColData 
                         UNION
-                        SELECT CASE WHEN Motiv = 1 THEN  
-                        (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=F100993 AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
-                        ELSE '2100-01-01' END AS ColData  
+                        SELECT CASE WHEN Motiv = 1 THEN X.DataModif ELSE '2100-01-01' END AS ColData  
                         UNION
                         SELECT CASE WHEN Salariul = 1 THEN 
                         (SELECT Zi FROM (
@@ -271,7 +331,10 @@ namespace WizOne.Pagini
                         ) AS Y
                         WHERE 1=1 " + filtru, null);
 
+
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["Cheie"] };
+
+                Session["InformatiaCurenta"] = dt;
 
                 grDate.KeyFieldName = "Cheie";
                 grDate.DataSource = dt;
@@ -763,7 +826,7 @@ namespace WizOne.Pagini
 
                 string param = "";
                 string paramRaport = "";
-                List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif" });
+                List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat" });
 
                 if (lst == null || lst.Count() == 0 || lst[0] == null) return;
 
@@ -801,7 +864,7 @@ namespace WizOne.Pagini
                 }
                 else
                 {
-                    if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1)
+                    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                     {
                         paramRaport = "RaportActeAditionale_CIM";
                         param = "&F10003=" + obj[0] + "&Validate=0";

@@ -64,7 +64,14 @@ namespace WizOne.Pagini
                     
                     cmbNumeCalc.DataSource = Session["WizTrace_NumeCalc"] as DataTable;
                     cmbNumeCalc.DataBind();
-                }           
+                }
+                else
+                {
+                    string sql = "SELECT * FROM ALIASTAB";
+                    Session["WizTrace_Tabele"] = General.IncarcaDT(sql, null);
+                    sql = "SELECT * FROM ALIASCMP";
+                    Session["WizTrace_Campuri"] = General.IncarcaDT(sql, null);
+                }          
 
             }
             catch (Exception ex)
@@ -82,10 +89,16 @@ namespace WizOne.Pagini
 
             string sql = "";
 
+            //if (Constante.tipBD == 2)
+            //    sql = "SELECT ROWNUM AS \"Id\", SUBSTR(UPPER(TABLE_NAME), 4, LENGTH(UPPER(TABLE_NAME)) - 3) as \"Denumire\" FROM user_tables WHERE UPPER(TABLE_NAME) LIKE 'WT_%' ORDER BY \"Denumire\"";
+            //else
+            //    sql = "SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS Id, SUBSTRING(UPPER(TABLE_NAME), 4, LEN(UPPER(TABLE_NAME)) -3) as Denumire FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE 'WT_%' ORDER BY Denumire";
+
             if (Constante.tipBD == 2)
-                sql = "SELECT ROWNUM AS \"Id\", SUBSTR(UPPER(TABLE_NAME), 4, LENGTH(UPPER(TABLE_NAME)) - 3) as \"Denumire\" FROM user_tables WHERE UPPER(TABLE_NAME) LIKE 'WT_%' ORDER BY \"Denumire\"";
+                sql = "SELECT ROWNUM AS \"Id\",  NVL(DESCRIERE,  SUBSTR(UPPER(TABLE_NAME), 4, LENGTH(UPPER(TABLE_NAME)) - 3))  as \"Denumire\" FROM user_tables LEFT JOIN ALIASTAB ON SUBSTR(UPPER(TABLE_NAME), 4, LENGTH(UPPER(TABLE_NAME)) - 3) = Nume WHERE UPPER(TABLE_NAME) LIKE 'WT_%' ORDER BY \"Denumire\"";
             else
-                sql = "SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS Id, SUBSTRING(UPPER(TABLE_NAME), 4, LEN(UPPER(TABLE_NAME)) -3) as Denumire FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE 'WT_%' ORDER BY Denumire";
+                sql = "SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS Id,  ISNULL(DESCRIERE, SUBSTRING(UPPER(TABLE_NAME), 4, LEN(UPPER(TABLE_NAME)) -3)) as Denumire FROM INFORMATION_SCHEMA.TABLES LEFT JOIN ALIASTAB ON SUBSTRING(UPPER(TABLE_NAME), 4, LEN(UPPER(TABLE_NAME)) -3) = Nume WHERE UPPER(TABLE_NAME) LIKE 'WT_%' ORDER BY Denumire";
+
 
             try
             {
@@ -106,10 +119,18 @@ namespace WizOne.Pagini
             try
             {
                 string ctrl = e.Parameter.Split(';')[0];
-                switch(ctrl)
+                DataTable dt = Session["WizTrace_Tabele"] as DataTable;
+                switch (ctrl)
                 {
                     case "cmbTabela":
-                        cmbTabela_SelectedIndexChanged(e.Parameter.Split(';')[1]);
+                        StergeFiltre(1);
+                        string tabela = "";
+                        DataRow[] dr = dt.Select("DESCRIERE = '" + e.Parameter.Split(';')[1] + "'");
+                        if (dr != null && dr.Count() > 0)
+                            tabela = dr[0]["NUME"].ToString();
+                        else
+                            tabela = e.Parameter.Split(';')[1];
+                        cmbTabela_SelectedIndexChanged(tabela);
                         break;
                     case "btnFiltru": 
                         IncarcaGrid();
@@ -189,12 +210,19 @@ namespace WizOne.Pagini
                     filtru += (filtru.Length <= 0 ? " WHERE " : " AND ") + "USER_WIN = '" + cmbUtilWin.Text + "' ";
 
                 if (cmbUtilWSWO.Value != null)
-                    filtru += (filtru.Length <= 0 ? " WHERE " : " AND ") + "USER_WS = '" + cmbUtilWSWO.Text + "' ";
+                    filtru += (filtru.Length <= 0 ? " WHERE " : " AND ") + "USER_WS = " + Convert.ToInt32(cmbUtilWSWO.Value).ToString();
 
                 if (cmbNumeCalc.Value != null)
-                    filtru += (filtru.Length <= 0 ? " WHERE " : " AND ") + "COMPUTER_NAME = '" + cmbNumeCalc.Text + "' ";                
+                    filtru += (filtru.Length <= 0 ? " WHERE " : " AND ") + "COMPUTER_NAME = '" + cmbNumeCalc.Text + "' ";
 
-                DataTable dt = GetTrace(cmbTabela.Text, filtru);
+                DataTable dtTabele = Session["WizTrace_Tabele"] as DataTable;
+                string tabela = "";
+                DataRow[] dr = dtTabele.Select("DESCRIERE = '" + cmbTabela.Text + "'");
+                if (dr != null && dr.Count() > 0)
+                    tabela = dr[0]["NUME"].ToString();
+                else
+                    tabela = cmbTabela.Text;
+                DataTable dt = GetTrace(tabela, filtru);
                 grDate.KeyFieldName = "IdAuto";
                 grDate.DataSource = dt;              
                 grDate.DataBind();
@@ -211,7 +239,14 @@ namespace WizOne.Pagini
         {
             try
             {
-                DataTable dt = GetTrace(cmbTabela.Text, "");
+                DataTable dtTabele = Session["WizTrace_Tabele"] as DataTable;
+                string tabela = "";
+                DataRow[] dr = dtTabele.Select("DESCRIERE = '" + cmbTabela.Text + "'");
+                if (dr != null && dr.Count() > 0)
+                    tabela = dr[0]["NUME"].ToString();
+                else
+                    tabela = cmbTabela.Text;
+                DataTable dt = GetTrace(tabela, "");
                 grDate.KeyFieldName = "IdAuto";
                 grDate.DataSource = dt;
                 grDate.DataBind();
@@ -224,7 +259,7 @@ namespace WizOne.Pagini
         }
 
 
-        protected void StergeFiltre()
+        protected void StergeFiltre(int param = 0)
         {
             deDataInceput.Value = null;
             deDataSfarsit.Value = null;
@@ -235,9 +270,12 @@ namespace WizOne.Pagini
             cmbUtilWSWO.Value = null;
             cmbUtilWSWO.SelectedIndex = -1;
             cmbNumeCalc.Value = null;
-            cmbUtilWSWO.SelectedIndex = -1;
-            cmbTabela.Value = null;
-            cmbTabela.SelectedIndex = -1;
+            cmbNumeCalc.SelectedIndex = -1;
+            if (param == 0)
+            {
+                cmbTabela.Value = null;
+                cmbTabela.SelectedIndex = -1;
+            }
         }
 
 
@@ -272,10 +310,17 @@ namespace WizOne.Pagini
 
             string sql = "";
 
+            string criptat = "";
             if (Constante.tipBD == 2)
-                sql = "SELECT ROWNUM AS \"Id\", \"Denumire\" FROM (SELECT DISTINCT F70104 as \"Denumire\" FROM WT_" + tabela + " LEFT JOIN USERS ON F70102=USER_WS) a ORDER BY \"Denumire\"";
+                criptat = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F70102) > 0 then 0  else  1 end ELSE  1   END AS CRIPTAT ";
             else
-                sql = "SELECT CONVERT(int, ROW_NUMBER() OVER (ORDER BY Denumire)) AS Id, Denumire FROM (SELECT DISTINCT F70104 as Denumire FROM WT_" + tabela + " LEFT JOIN USERS ON F70102=USER_WS) a ORDER BY Denumire";
+                criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F70102) > 0 then 0  else 1  end  ELSE 1   END  AS CRIPTAT ";
+
+
+            if (Constante.tipBD == 2)
+                sql = "SELECT F70102 AS \"Id\", \"Denumire\", " + criptat + " FROM (SELECT DISTINCT F70104 as \"Denumire\" FROM WT_" + tabela + " LEFT JOIN USERS ON F70102=USER_WS) a left join users on a.\"Denumire\"=f70104 ORDER BY \"Denumire\"";
+            else
+                sql = "SELECT F70102 AS Id, Denumire, " + criptat + " FROM (SELECT DISTINCT F70104 as Denumire FROM WT_" + tabela + " LEFT JOIN USERS ON F70102=USER_WS) a left join users on a.Denumire=f70104 ORDER BY Denumire";
 
             try
             {
@@ -286,6 +331,13 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
+            foreach (DataColumn col in q.Columns)
+                col.ReadOnly = false;
+
+            for (int i = 0; i < q.Rows.Count; i++)
+                if (q.Rows[i]["CRIPTAT"].ToString() == "1")
+                    q.Rows[i]["Denumire"] = DecryptUser(q.Rows[i]["Denumire"].ToString());
+
             return q;
         }
 
@@ -294,8 +346,6 @@ namespace WizOne.Pagini
             DataTable q = null;
 
             string sql = "";
-
-
 
             if (Constante.tipBD == 2)
                 sql = "SELECT ROWNUM AS \"Id\", \"Denumire\" FROM (SELECT DISTINCT COMPUTER_NAME as \"Denumire\" FROM WT_" + tabela + ") a ORDER BY \"Denumire\"";
@@ -315,11 +365,10 @@ namespace WizOne.Pagini
         }
 
 
-
         public DataTable GetTrace(string tabela, string filtru)
         {
             DataTable q = null;
-
+            
             string sql = "";
 
             string criptat = "";
@@ -330,10 +379,10 @@ namespace WizOne.Pagini
 
 
             if (Constante.tipBD == 2)
-                sql = "SELECT ROWNUM AS \"IdAuto\", Tabela, Nume_Camp, Cod_Op, VAL_NEW, VAL_OLD, TO_CHAR(Data, 'dd/mm/yyyy HH24:mi:ss') AS Data, USER_WIN, (SELECT F70104 FROM USERS WHERE F70102 = USER_WS) as USER_WS, COMPUTER_NAME, " + criptat + " FROM WT_" + tabela + " " + filtru + " ORDER BY DATA";
+                sql = "SELECT ROWNUM AS \"IdAuto\", nvl(ALIASTAB.Descriere, WT_" + tabela + ".Tabela) AS  Tabela, nvl(ALIASCMP.DESCRIERE , Nume_Camp) AS Nume_Camp, Cod_Op, VAL_NEW, VAL_OLD, TO_CHAR(Data, 'dd/mm/yyyy HH24:mi:ss') AS Data, USER_WIN, (SELECT F70104 FROM USERS WHERE F70102 = USER_WS) as USER_WS, COMPUTER_NAME, " + criptat + " FROM WT_" + tabela + " LEFT JOIN ALIASTAB ON tabela = Nume  LEFT JOIN ALIASCMP ON WT_" + tabela + ".Tabela = ALIASCMP.TABELA and NUME_CAMP = CAMP  " + filtru + " ORDER BY DATA";
             else
-                sql = "SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS IdAuto, Tabela, Nume_Camp, Cod_Op, VAL_NEW, VAL_OLD,  CONVERT(VARCHAR, Data, 103) + ' ' + CONVERT(VARCHAR, Data, 108) AS Data, USER_WIN, (SELECT F70104 FROM USERS WHERE F70102 = USER_WS) as USER_WS, COMPUTER_NAME, " + criptat + " FROM WT_" + tabela + " " + filtru + " ORDER BY DATA";
-
+                sql = "SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS IdAuto, isnull(ALIASTAB.Descriere, WT_" + tabela + ".Tabela) AS Tabela, isnull(ALIASCMP.DESCRIERE , Nume_Camp) AS Nume_Camp, Cod_Op, VAL_NEW, VAL_OLD,  CONVERT(VARCHAR, Data, 103) + ' ' + CONVERT(VARCHAR, Data, 108) AS Data, USER_WIN, (SELECT F70104 FROM USERS WHERE F70102 = USER_WS) as USER_WS, COMPUTER_NAME, " + criptat + " FROM WT_" + tabela + "  LEFT JOIN ALIASTAB ON tabela = Nume  LEFT JOIN ALIASCMP ON WT_" + tabela + ".Tabela = ALIASCMP.TABELA and NUME_CAMP = CAMP  " + filtru + " ORDER BY DATA";
+            
             try
             {
                 q = General.IncarcaDT(sql, null);

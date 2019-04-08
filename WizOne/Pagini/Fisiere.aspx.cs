@@ -44,7 +44,14 @@ namespace WizOne.Pagini
                                 {
                                     DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Atasamente"" WHERE ""IdAuto""={id}", null);
                                     if (dtAta.Rows.Count > 0)
-                                        scrieDoc((dtAta.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dtAta.Rows[0]["Attach"], (dtAta.Rows[0]["FisierNume"] ?? "").ToString());
+                                    {
+                                        string numeFis = (dtAta.Rows[0]["DescrAttach"] ?? "").ToString();
+                                        string ext = "txt";
+                                        if (numeFis.LastIndexOf(".") >= 0)
+                                            ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
+
+                                        scrieDoc(ext, (byte[])dtAta.Rows[0]["Attach"], numeFis);
+                                    }
                                     else
                                         Response.Write("Nu exista date de afisat !");
                                     

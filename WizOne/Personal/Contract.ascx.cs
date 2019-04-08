@@ -202,7 +202,12 @@ namespace WizOne.Personal
                     deTermenRevisal.Value = SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
                     if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                     {
-                        if (Convert.ToDateTime(deTermenRevisal.Value).Date < DateTime.Now.Date)
+                        int val = 1;
+                        string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TermenDepasireRevisal'";
+                        DataTable dt = General.IncarcaDT(sql, null);
+                        if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
+                            val = Convert.ToInt32(dt.Rows[0][0].ToString());
+                        if (Convert.ToDateTime(deTermenRevisal.Value).Date < DateTime.Now.Date && val == 1)
                             pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
                     }
                     break;

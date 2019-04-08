@@ -221,60 +221,22 @@
                 <ContentCollection>
                     <dx:ContentControl runat="server">
 
-    <table width="100%">
-		<tr>
-			<td align="left">					
-			</td>			
-		
-		</tr>			
-	</table>
-				
-
-
-   <dx:ASPxCallbackPanel ID = "pnlCtlContract" ClientIDMode="Static" ClientInstanceName="pnlCtlContract" runat="server" SettingsLoadingPanel-Enabled="false">
-       
-      <PanelCollection>
-        <dx:PanelContent>
-    <asp:DataList  ID="DataList1" runat="server">  
-        <ItemTemplate>
-			<div>
-            <tr>
-             <td>
-			  <fieldset class="fieldset-auto-width">
-				<legend class="legend-font-size">Contract</legend>
 				<table width="60%">	
 					<tr>				
 						<td >
 							<dx:ASPxLabel  ID="lblNrCtrInt" Width="100" runat="server"  Text="Nr. ctr. intern" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtNrCtrInt"  Width="100" runat="server" Text='<%# Eval("F100985") %>'  AutoPostBack="false" >
-                                
-							</dx:ASPxTextBox >
+							<dx:ASPxTextBox  ID="ctl_F100985"  Width="100" runat="server" />
 						</td>
-                        <td >
-                            <dx:ASPxButton ID="btnCtrInt" ClientInstanceName="btnCtrInt" ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                
-                                <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
-                                <Paddings PaddingLeft="10px"  PaddingRight="10px"/>
-                            </dx:ASPxButton>
-						</td>	
-						<td >
-                            <dx:ASPxButton ID="btnCtrIntIst" ClientInstanceName="btnCtrIntIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
-                                
-                                <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
-                                <Paddings PaddingLeft="10px" />
-                            </dx:ASPxButton>
-                        </td>
 					</tr>	
 					<tr>
 						<td >		
 							<dx:ASPxLabel  ID="lblDataCtrInt" runat="server"  Text="Data ctr. intern"></dx:ASPxLabel >	
 						</td>
 						<td>			
-							<dx:ASPxDateEdit  ID="deDataCtrInt" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100986") %>'  AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="ctl_F100986" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                
 							</dx:ASPxDateEdit>					
 						</td>
 					</tr>
@@ -283,25 +245,10 @@
 							<dx:ASPxLabel  ID="lblDataAng" runat="server"  Text="Data angajarii"></dx:ASPxLabel >	
 						</td>
 						<td>
-							<dx:ASPxDateEdit  ID="deDataAng" ClientIDMode="Static" ClientInstanceName="deDataAng" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F10022") %>' AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="ctl_F10022" ClientIDMode="Static" ClientInstanceName="deDataAng" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                
 							</dx:ASPxDateEdit>										
 						</td>
-                        <td>
-                            <dx:ASPxButton ID="btnDataAng" ClientInstanceName="btnDataAng"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false">
-                                
-                                <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
-                                <Paddings PaddingLeft="10px" PaddingRight="10px"/>
-                            </dx:ASPxButton>
-                        </td>
-                        <td>
-                            <dx:ASPxButton ID="btnDataAngIst" ClientInstanceName="btnDataAngIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
-                                
-                                <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
-                                <Paddings PaddingLeft="10px"/>
-                            </dx:ASPxButton>
-                        </td>
 					</tr>
 					<tr>
 						<td >		
@@ -318,9 +265,7 @@
 							<dx:ASPxLabel  ID="lblTipCtrMunca" runat="server"  Text="Tip contract munca"></dx:ASPxLabel >	
 						</td>
 						<td>	
-							<dx:ASPxComboBox DataSourceID="dsTCM"  Value='<%#Eval("F100984") %>'   ID="cmbTipCtrMunca" Width="100"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
-                                
-							</dx:ASPxComboBox>
+							<dx:ASPxComboBox ID="ctl_F100984" Width="100" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" />
 						</td>
 					</tr>	
                     
@@ -329,9 +274,7 @@
 							<dx:ASPxLabel  ID="lblDurCtr" runat="server"  Text="Durata contract" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsDC"  Value='<%#Eval("F1009741") %>'  ID="cmbDurCtr"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F08903" ValueField="F08902" ValueType="System.Int32">
-                                
-							</dx:ASPxComboBox >
+							<dx:ASPxComboBox ID="ctl_F1009741"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F08903" ValueField="F08902" ValueType="System.Int32"/>
 						</td>
 					</tr>	
 					<tr>
@@ -339,9 +282,8 @@
 							<dx:ASPxLabel  ID="lblDeLaData" runat="server"  Text="De la data"></dx:ASPxLabel >	
 						</td>
 						<td>			
-							<dx:ASPxDateEdit  ID="deDeLaData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100933") %>'  AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="ctl_F100933" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                
 							</dx:ASPxDateEdit>					
 						</td>
 					</tr>
@@ -350,9 +292,8 @@
 							<dx:ASPxLabel  ID="lblLaData" runat="server"  Text="La data"></dx:ASPxLabel >	
 						</td>
 						<td>	
-							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100934") %>' AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="ctl_F100934" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                
 							</dx:ASPxDateEdit>										
 						</td>
 					</tr>
@@ -361,7 +302,7 @@
 							<dx:ASPxLabel  ID="lblNrLuni" Width="100" runat="server"  Text="Nr. luni" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtNrLuni"  Width="100" runat="server" ReadOnly="true" AutoPostBack="false" ></dx:ASPxTextBox >
+							<dx:ASPxTextBox  ID="txtNrLuni"  Width="100" runat="server" ReadOnly="true" AutoPostBack="false" />
 						</td>
 					</tr>
 					<tr>				
@@ -369,7 +310,7 @@
 							<dx:ASPxLabel  ID="lblNrZile" Width="100" runat="server"  Text="Nr. zile" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtNrZile"  Width="100" runat="server" ReadOnly="true"  AutoPostBack="false" ></dx:ASPxTextBox >
+							<dx:ASPxTextBox  ID="txtNrZile"  Width="100" runat="server" ReadOnly="true"  AutoPostBack="false" />
 						</td>
 					</tr>
 					<tr>				
@@ -377,9 +318,7 @@
 							<dx:ASPxLabel  ID="lblPrel" runat="server"  Text="Prelungire contract" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsPC"  Value='<%#Eval("F100938") %>' ID="cmbPrel"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
-                                
-							</dx:ASPxComboBox >
+							<dx:ASPxComboBox ID="ctl_F100938"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" />
 						</td>
 					</tr>	
 					<tr>				
@@ -387,9 +326,7 @@
 							<dx:ASPxLabel  ID="lblExcIncet" runat="server"  Text="Exceptie incetare" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsEI"  Value='<%#Eval("F100929") %>'  ID="cmbExcIncet"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F09403" ValueField="F09402" ValueType="System.Int32">
-                                
-							</dx:ASPxComboBox>
+							<dx:ASPxComboBox ID="ctl_F100929"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F09403" ValueField="F09402" ValueType="System.Int32"/>
 						</td>
 					</tr>	
 					<tr>				
@@ -397,20 +334,16 @@
 							<dx:ASPxLabel  ID="lblCASSAngajat" runat="server"  Text="CASS angajat" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsCASS"  Value='<%#Eval("F1003900") %>' ID="cmbCASSAngajat"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32" >
-                                
-							</dx:ASPxComboBox >
+							<dx:ASPxComboBox ID="ctl_F1003900"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32" />
 						</td>
                         <td>
                             <dx:ASPxButton ID="btnCASS" ClientInstanceName="btnCASS"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false">
-                                
                                 <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
                                 <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                             </dx:ASPxButton>
                         </td>
                         <td>
                             <dx:ASPxButton ID="btnCASSIst" ClientInstanceName="btnCASSIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
-                                
                                 <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
                                 <Paddings PaddingLeft="10px"/>
                             </dx:ASPxButton>
@@ -421,9 +354,7 @@
 							<dx:ASPxLabel  ID="lblCASSAngajator" runat="server"  Text="CASS Angajator" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsCASS"  Value='<%#Eval("F1003907") %>' ID="cmbCASSAngajator"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32">
-                                
-							</dx:ASPxComboBox >
+							<dx:ASPxComboBox ID="ctl_F1003907"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32"/>
 						</td>
 					</tr>
 					<tr>				
@@ -431,20 +362,16 @@
 							<dx:ASPxLabel  ID="lblSalariu" Width="100" runat="server"  Text="Salariu" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtSalariu"  Width="100" runat="server"  Text='<%# Eval("F100699") %>'  DisplayFormatString="N0" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                
-							</dx:ASPxTextBox >
+							<dx:ASPxTextBox  ID="ctl_F100699"  Width="100" runat="server" DisplayFormatString="N0" oncontextMenu="ctx(this,event)" AutoPostBack="false" />
 						</td>
                         <td>
                             <dx:ASPxButton ID="btnSalariu" ClientInstanceName="btnSalariu"  ClientIDMode="Static"  Width="5" Height="5" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari contract" runat="server" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                
                                 <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
                                 <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                             </dx:ASPxButton>
                         </td>
                         <td>
                             <dx:ASPxButton ID="btnSalariuIst" ClientInstanceName="btnSalariuIst"  ClientIDMode="Static"  Width="5" Height="5" Font-Size="1px"  RenderMode="Link" ToolTip="Istoric modificari" runat="server" oncontextMenu="ctx(this,event)" AutoPostBack="false">
-                                
                                 <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
                                 <Paddings PaddingLeft="10px"/>
                             </dx:ASPxButton>
@@ -455,9 +382,8 @@
 							<dx:ASPxLabel  ID="lblDataModifSa" runat="server"  Text="Data modificare salariu"></dx:ASPxLabel >	
 						</td>
 						<td>	
-							<dx:ASPxDateEdit  ID="deDataModifSal" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Bind("F100991") %>' AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="ctl_F100991" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                
 							</dx:ASPxDateEdit>										
 						</td>
 					</tr>
@@ -466,9 +392,7 @@
 							<dx:ASPxLabel  ID="lblCategAng1" runat="server"  Text="Categorie angajat 1" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsCategAng_61"  Value='<%#Eval("F10061") %>' ID="cmbCategAng1"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F72404" ValueField="F72402" ValueType="System.Int32">
-                                
-							</dx:ASPxComboBox >
+							<dx:ASPxComboBox ID="ctl_F10061"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F72404" ValueField="F72402" ValueType="System.Int32"/>
 						</td>
 					</tr>
 					<tr>				
@@ -476,9 +400,7 @@
 							<dx:ASPxLabel  ID="lblCategAng2" runat="server"  Text="Categorie angajat 2" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsCategAng_62"  Value='<%#Eval("F10062") %>' ID="cmbCategAng2"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F72404" ValueField="F72402" ValueType="System.Int32">
-                                
-							</dx:ASPxComboBox >
+							<dx:ASPxComboBox ID="ctl_F10062"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F72404" ValueField="F72402" ValueType="System.Int32"/>
 						</td>
 					</tr>
 					<tr>				
@@ -486,9 +408,7 @@
 							<dx:ASPxLabel  ID="lblLocAnt" Width="100" runat="server"  Text="Loc anterior" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtLocAnt"  Width="100" runat="server" Text='<%# Eval("F10078") %>'  AutoPostBack="false" >
-                                
-							</dx:ASPxTextBox >
+							<dx:ASPxTextBox  ID="ctl_F10078"  Width="100" runat="server" Text='<%# Eval("F10078") %>'  AutoPostBack="false" />
 						</td>
 					</tr>
 					<tr>				
@@ -496,33 +416,19 @@
 							<dx:ASPxLabel  ID="lblLocatieInt" Width="100" runat="server"  Text="Locatie interna" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsLocatieInt"  Value='<%#Eval("F100966") %>' ID="cmbLocatieInt"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="LOCATIE" ValueField="NUMAR" ValueType="System.Int32">
-                                
-							</dx:ASPxComboBox >
+							<dx:ASPxComboBox ID="ctl_F100966"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="LOCATIE" ValueField="NUMAR" ValueType="System.Int32"/>
 						</td>
 					</tr>
 					             				
 				</table>
-                <asp:ObjectDataSource runat="server" ID="dsTCM" TypeName="WizOne.Module.General" SelectMethod="GetTipContract" />
-                <asp:ObjectDataSource runat="server" ID="dsDC"  TypeName="WizOne.Module.General" SelectMethod="GetDurataContract" />
-                <asp:ObjectDataSource runat="server" ID="dsPC"  TypeName="WizOne.Module.General" SelectMethod="GetPrelungireContract" />
-                <asp:ObjectDataSource runat="server" ID="dsEI"  TypeName="WizOne.Module.General" SelectMethod="GetExceptieIncetare" />
-                <asp:ObjectDataSource runat="server" ID="dsCASS"  TypeName="WizOne.Module.General" SelectMethod="GetCASS" />
-                <asp:ObjectDataSource runat="server" ID="dsCategAng_61"  TypeName="WizOne.Module.General" SelectMethod="GetCategAng_61" />
-                <asp:ObjectDataSource runat="server" ID="dsCategAng_62"  TypeName="WizOne.Module.General" SelectMethod="GetCategAng_62" />
-                <asp:ObjectDataSource runat="server" ID="dsLocatieInt"  TypeName="WizOne.Module.General" SelectMethod="GetLocatieInt" />
-			  </fieldset>
-			  <fieldset class="fieldset-auto-width">
-				<legend class="legend-font-size">Tip munca</legend>
+
 				<table width="60%">	
 					<tr>				
 						<td >
 							<dx:ASPxLabel  ID="lblTipAng" Width="100" runat="server"  Text="Tip angajat" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsTA"  Value='<%#Eval("F10010") %>' ID="cmbTipAng" Width="130"   runat="server" DropDownStyle="DropDown"  TextField="F71604" ValueField="F71602"  ValueType="System.Int32">
-                                
-							</dx:ASPxComboBox >
+							<dx:ASPxComboBox ID="ctl_F10010" Width="130"   runat="server" DropDownStyle="DropDown"  TextField="F71604" ValueField="F71602"  ValueType="System.Int32"/>
 						</td>
 					</tr>
                     <tr>
@@ -733,21 +639,7 @@
 
 				    </tr>                                                                                                                                                                                       				
 				</table>
-                <asp:ObjectDataSource runat="server" ID="dsTA" TypeName="WizOne.Module.General" SelectMethod="GetTipAngajat" />
-                <asp:ObjectDataSource runat="server" ID="dsTP" TypeName="WizOne.Module.General" SelectMethod="GetTimpPartial"/>
-                <asp:ObjectDataSource runat="server" ID="dsN" TypeName="WizOne.Module.General" SelectMethod="GetNorma"/>
-                <asp:ObjectDataSource runat="server" ID="dsTN" TypeName="WizOne.Module.General" SelectMethod="GetTipNorma"/>
-                <asp:ObjectDataSource runat="server" ID="dsDTM" TypeName="WizOne.Module.General" SelectMethod="GetDurataTimpMunca"/>
-                <asp:ObjectDataSource runat="server" ID="dsRTM" TypeName="WizOne.Module.General" SelectMethod="GetRepartizareTimpMunca"/>
-                <asp:ObjectDataSource runat="server" ID="dsIRTM" TypeName="WizOne.Module.General" SelectMethod="GetIntervalRepartizareTimpMunca"/>
-                <asp:ObjectDataSource runat="server" ID="dsCOR" TypeName="WizOne.Module.General" SelectMethod="GetCOR"/>
-                <asp:ObjectDataSource runat="server" ID="dsFunctie" TypeName="WizOne.Module.General" SelectMethod="GetFunctie"/>
-                <asp:ObjectDataSource runat="server" ID="dsMeserie" TypeName="WizOne.Module.General" SelectMethod="GetMeserie"/>
-			  </fieldset>
-            </td>
-           <td valign="top" width="310">      
-			      <fieldset >
-				    <legend class="legend-font-size">Perioada</legend>
+
 				    <table width="60%">	
 					    <tr>				
 						    <td >
@@ -796,9 +688,7 @@
 						    </td>
 					    </tr>
 				    </table>
-			        </fieldset>
-			        <fieldset >
-				    <legend class="legend-font-size">Data incetare</legend>
+
 				        <table width="60%">	
 					        <tr>				
 						        <td>		
@@ -902,13 +792,7 @@
 
 				        </tr>
 				        </table>
-                        <asp:ObjectDataSource runat="server" ID="dsMP" TypeName="WizOne.Module.General" SelectMethod="GetMotivPlecare"/>
-                        <asp:ObjectDataSource runat="server" ID="dsGI" TypeName="WizOne.Module.General" SelectMethod="ListaMP_GradInvaliditate"/>
-			        </fieldset>           
-             </td>
-              <td valign="top">   
-			      <fieldset class="fieldset-auto-width">
-				    <legend class="legend-font-size">Situatie CO</legend>
+
 				    <table width="60%">	
 				       <tr>				
 						   <td >
@@ -1041,15 +925,7 @@
 						    </td>
 					    </tr>
 				    </table>
-			        </fieldset>
-                </td>
-                </tr>      
-			</div>
-        </ItemTemplate>
-    </asp:DataList>
-            </dx:PanelContent>
-          </PanelCollection>
-        </dx:ASPxCallbackPanel>
+
                 
                     </dx:ContentControl>
                 </ContentCollection>

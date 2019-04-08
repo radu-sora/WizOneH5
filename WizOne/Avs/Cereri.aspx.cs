@@ -1210,7 +1210,7 @@ namespace WizOne.Avs
                         if ((e.Parameter.Split(';')[1] == "cmb1Nou") && (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PrelungireCIM ||
                             Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PrelungireCIM_Vanz))
                         {
-                            if (cmb1Nou.Value != null && Convert.ToInt32(e.Parameter.Split(';')[2]) == 1)
+                            if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 1)
                             {
                                 de1Nou.Value = new DateTime(2100, 1, 1);
                                 de2Nou.Value = new DateTime(2100, 1, 1);
@@ -1344,12 +1344,18 @@ namespace WizOne.Avs
                 string dataRev = "";
                 int idAtr = -99;
 
+                int val = 1;
+                string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TermenDepasireRevisal'";
+                DataTable dt = General.IncarcaDT(sql, null);
+                if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
+                    val = Convert.ToInt32(dt.Rows[0][0].ToString());
+
                 idAtr = Convert.ToInt32((cmbAtribute.Value ?? -99));
                 SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out dataRev);
                 if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
                         || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
                         idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.SporTranzactii || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
-                    if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date)
+                    if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date && val == 1)
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");             
                         return;

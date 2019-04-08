@@ -22,13 +22,13 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
         
         /// <summary>
-        /// btnSave control.
+        /// btnInit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSave;
+        protected global::DevExpress.Web.ASPxButton btnInit;
         
         /// <summary>
         /// btnExit control.
@@ -157,6 +157,24 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxDateEdit dtDataSfarsit;
         
         /// <summary>
+        /// lblSablon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSablon;
+        
+        /// <summary>
+        /// cmbSablon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbSablon;
+        
+        /// <summary>
         /// lblDept control.
         /// </summary>
         /// <remarks>
@@ -236,6 +254,24 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label3;
+        
+        /// <summary>
+        /// lblNumeSablon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNumeSablon;
+        
+        /// <summary>
+        /// txtNumeSablon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtNumeSablon;
         
         /// <summary>
         /// lblNrZileSablon control.
@@ -344,6 +380,24 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtZiua10;
+        
+        /// <summary>
+        /// btnSablon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnSablon;
+        
+        /// <summary>
+        /// btnSterge control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnSterge;
         
         /// <summary>
         /// btnFiltru control.

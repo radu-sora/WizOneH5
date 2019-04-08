@@ -333,12 +333,20 @@ namespace WizOne.Personal
                 bool calcCO = false;
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                 {
-                    Contract ctr = new Contract();
-                    DateTime dataRevisal = ctr.SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
-                    if (dataRevisal.Date < DateTime.Now.Date)
+                    int val = 1;
+                    sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TermenDepasireRevisal'";
+                    dt = General.IncarcaDT(sql, null);
+                    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 )
+                        val = Convert.ToInt32(dt.Rows[0][0].ToString());
+                    if (val == 1)
                     {
-                        MessageBox.Show("Termen depunere Revisal depasit!", MessageBox.icoError);
-                        return;
+                        Contract ctr = new Contract();
+                        DateTime dataRevisal = ctr.SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
+                        if (dataRevisal.Date < DateTime.Now.Date)
+                        {
+                            MessageBox.Show("Termen depunere Revisal depasit!", MessageBox.icoError);
+                            return;
+                        }
                     }
 
                     //Florin 2018.11.23

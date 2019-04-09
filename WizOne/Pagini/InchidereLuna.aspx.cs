@@ -136,6 +136,51 @@ namespace WizOne.Pagini
                     mesaj = "Proces realizat cu succes";
                 //else
                 //    mesaj = "Eroare la inchidere de luna";
+
+
+                //Florin 2019.04.09
+                //se trimite in F100 modificarea in avans pentru CIM
+                if (rez)
+                {
+                    DataTable dt = General.IncarcaDT(
+                        @"SELECT A.DataModif, A.DataInceputCIM, A.DataSfarsitCIM, A.DurataContract, B.F10003, B.F10017, B.F100929, B.F10011 FROM F704 A 
+                        INNER JOIN F100 B ON A.F70403=B.F10003
+                        WHERE COALESCE(F70404,-99) IN (25,26) AND COALESCE(F70420,0)=1", null);
+                    for(int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        DataRow dr = dt.Rows[i];
+                        DateTime dtLucru = General.DamiDataLucru();
+
+                        if (Convert.ToDateTime(dr["DataModif"]).Year == dtLucru.Year && Convert.ToDateTime(dr["DataModif"]).Month == dtLucru.Month && Convert.ToInt32(General.Nz(dr["F10003"],-99)) != -99)
+                        {
+                            DateTime dtInc = Convert.ToDateTime(dr["DataInceputCIM"]);
+                            DateTime dtSf = Convert.ToDateTime(dr["DataSfarsitCIM"]);
+
+                            int nrLuni = 0, nrZile = 0;
+                            string sql100Tmp = "";
+                            DateTime dtTmp = new DateTime();
+                            DateTime dtf = new DateTime(2100, 1, 1, 0, 0, 0);
+                            if (dtSf != dtf)
+                                dtTmp = dtSf.AddDays(-1);
+                            else
+                                dtTmp = dtSf;
+
+                            Personal.Contract ctr = new Personal.Contract();
+                            ctr.CalculLuniSiZile(Convert.ToDateTime(dtInc.Date), Convert.ToDateTime(dtSf.Date), out nrLuni, out nrZile);
+
+                            sql100Tmp = "UPDATE F100 SET F100933 = " + General.ToDataUniv(Convert.ToDateTime(dr["DataInceputCIM"])) + ", F100934 = " + General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsitCIM"])) + ", F100936 = " + nrZile.ToString() + ", F100935 = "
+                                + nrLuni.ToString() + ", F100938 = 1, F100993 = " + General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsitCIM"]))
+                                + ", F10023 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
+                                : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " + General.Nz(dr["DurataContract"],1) + "  WHERE F10003 = " + dr["F10003"];
+                            General.IncarcaDT(sql100Tmp, null);
+
+                            string sql095 = "INSERT INTO F095 (F09501, F09502, F09503, F09504, F09505, F09506, F09507, F09508, F09509, F09510, F09511, USER_NO, TIME) "
+                                + " VALUES (95, '" + dr["F10017"] + "', " + dr["F10003"] + ", '" + dr["F10011"] + "', " + General.ToDataUniv(Convert.ToDateTime(dr["DataInceputCIM"])) + ", " + General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsitCIM"]))
+                                + ", " + nrLuni.ToString() + ", " + nrZile.ToString() + ", " + dr["F100929"] + ", 1, " + (General.Nz(dr["DurataContract"], 1).ToString() == "1" ? "'Nedeterminat'" : "'Determinat'") + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            General.IncarcaDT(sql095, null);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {

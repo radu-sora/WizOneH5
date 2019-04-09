@@ -686,7 +686,6 @@
     <Content Include="Pagini\MainPage.aspx" />
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
-    <Content Include="Personal\Proba.aspx" />
     <Content Include="Personal\Test.aspx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
@@ -1476,13 +1475,6 @@
     </Compile>
     <Compile Include="Personal\LipsaNecesar.ascx.designer.cs">
       <DependentUpon>LipsaNecesar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Personal\Proba.aspx.cs">
-      <DependentUpon>Proba.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\Proba.aspx.designer.cs">
-      <DependentUpon>Proba.aspx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Test.aspx.cs">
       <DependentUpon>Test.aspx</DependentUpon>

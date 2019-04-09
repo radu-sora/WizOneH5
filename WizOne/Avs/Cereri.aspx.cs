@@ -2596,25 +2596,23 @@ namespace WizOne.Avs
                     case (int)Constante.Atribute.PrelungireCIM:
                     case (int)Constante.Atribute.PrelungireCIM_Vanz:
                         {
-                            //Radu - se salveaza mai intai in F100 si apoi in F095, deoarece contractul vechi exista deja in F095
-                            //                  si apare eroare de violare cheie primara
-                            //short nrZile = 0;
-                            int nrLuni = 0, nrZile = 0;
-                            //int a = 0;
-                            string sql100Tmp = "";
-                            if (dtF100 != null && dtF100.Rows.Count > 0)
+                            //Florin 2019.04.09
+                            //se doreste acelasi proces ca si la restul atributelor cu diferenta ca totul se face in WizOne fara a folosi tabela F704
+                            //ne folosim de procesul de Inchidere luna din WizOne
+
+                            if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                             {
+                                //    act = 1;
+                                //Radu - se salveaza mai intai in F100 si apoi in F095, deoarece contractul vechi exista deja in F095
+                                //                  si apare eroare de violare cheie primara
+                                int nrLuni = 0, nrZile = 0;
+                                string sql100Tmp = "";
                                 DateTime dtTmp = new DateTime();
                                 DateTime dtf = new DateTime(2100, 1, 1, 0, 0, 0);
                                 if (dtSf != dtf)
                                     dtTmp = dtSf.AddDays(-1);
                                 else
-                                {
                                     dtTmp = dtSf;
-                                    //a = 1;
-                                }
-
-                                //nrZile = (short)dtSf.Subtract(dtInc).TotalDays;
 
                                 Personal.Contract ctr = new Personal.Contract();
                                 ctr.CalculLuniSiZile(Convert.ToDateTime(dtInc.Date), Convert.ToDateTime(dtSf.Date), out nrLuni, out nrZile);
@@ -2623,13 +2621,18 @@ namespace WizOne.Avs
                                     + nrLuni.ToString() + ", F100938 = 1, F100993 = " + data10
                                     + ", F10023 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
                                     : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " + dtCer.Rows[0]["DurataContract"].ToString() + "  WHERE F10003 = " + f10003.ToString();
-                            }
-                            General.IncarcaDT(sql100Tmp, null);
+                                General.IncarcaDT(sql100Tmp, null);
 
-                            string sql095 = "INSERT INTO F095 (F09501, F09502, F09503, F09504, F09505, F09506, F09507, F09508, F09509, F09510, F09511, USER_NO, TIME) "
-                                + " VALUES (95, '" + dtF100.Rows[0]["F10017"].ToString() + "', " + dtF100.Rows[0]["F10003"].ToString() + ", '" + dtF100.Rows[0]["F10011"].ToString() + "', " + data9 + ", " + data10
-                                + ", " + nrLuni.ToString() + ", " + nrZile.ToString() + ", " + dtF100.Rows[0]["F100929"].ToString() + ", 1, " + (Convert.ToInt32(dtCer.Rows[0]["DurataContract"].ToString()) == 1 ? "'Nedeterminat'" : "'Determinat'") + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
-                            General.IncarcaDT(sql095, null);
+                                string sql095 = "INSERT INTO F095 (F09501, F09502, F09503, F09504, F09505, F09506, F09507, F09508, F09509, F09510, F09511, USER_NO, TIME) "
+                                    + " VALUES (95, '" + dtF100.Rows[0]["F10017"].ToString() + "', " + dtF100.Rows[0]["F10003"].ToString() + ", '" + dtF100.Rows[0]["F10011"].ToString() + "', " + data9 + ", " + data10
+                                    + ", " + nrLuni.ToString() + ", " + nrZile.ToString() + ", " + dtF100.Rows[0]["F100929"].ToString() + ", 1, " + (Convert.ToInt32(dtCer.Rows[0]["DurataContract"].ToString()) == 1 ? "'Nedeterminat'" : "'Determinat'") + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                General.IncarcaDT(sql095, null);
+                            }
+
+                            //string sqlTmp = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                            //    + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + Convert.ToInt32(dtCer.Rows[0]["IdAtribut"].ToString()) + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["MeserieId"].ToString() + ", 'Modificari in avans', '"
+                            //    + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            //General.IncarcaDT(sqlTmp, null);
 
                         }
                         break;

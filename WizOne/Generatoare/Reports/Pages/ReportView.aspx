@@ -16,6 +16,9 @@
                                     Init="function(s, e) {
                                         onDocumentViewerInit();
                                     }" 
+                                    CustomizeMenuActions="function(s, e) {
+                                        onCustomizeMenu(e.Actions);
+                                    }"
                                     CustomizeParameterEditors="function(s, e) {
                                         onCustomizeParameter(e.parameter, e.info);
                                     }" />
@@ -184,6 +187,7 @@
                 <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%">                    
                     <Settings ShowHeaderFilterButton="true" />                    
                     <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live" />
                     <SettingsContextMenu Enabled="true">
                         <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" />
                     </SettingsContextMenu>
@@ -208,6 +212,7 @@
     <script>
         // Globals
         var reportType = <%: ReportType %>;
+        var toolbarType = <%: ToolbarType %>;
         var exportOptions = '<%: ExportOptions %>';
         var chartStatus = <%: ChartStatus %>;
         var customLayoutSectionVisible = null;
@@ -241,7 +246,7 @@
                 }
             }
 
-            rptExportOptionsModel(rptExportOptions);        
+            rptExportOptionsModel(rptExportOptions);           
             
             // Setup validation (confirmation) actions
             var validateParam = webDocumentViewer.parametersInfo.parameters.filter(function (param) { return param.Name == 'Validate'; })[0];
@@ -286,6 +291,20 @@
                     viewer.previewModel.exportModel.tabInfo.active(true);
                     viewer.previewModel.tabPanel.collapsed(true);
                     viewer.previewModel.parametersModel.submit();
+                }
+            }
+        }
+
+        function onCustomizeMenu(actions) {
+            if (toolbarType == 1) {
+                for (var action = 0; action < actions.length; action++) {
+                    if (actions[action].id != DevExpress.Report.Preview.ActionId.Print &&
+                        actions[action].imageClassName != 'dxrd-image-run-wizard' &&
+                        actions[action].imageClassName != 'dxrd-image-exit') {
+                        actions[action].visible = false;
+                    } else if (actions[action].id == DevExpress.Report.Preview.ActionId.Print) {
+                        actions[action].hasSeparator = false;
+                    }
                 }
             }
         }

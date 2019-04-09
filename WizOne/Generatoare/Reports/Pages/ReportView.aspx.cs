@@ -73,8 +73,9 @@ namespace WizOne.Generatoare.Reports.Pages
         }
 
         protected short ReportType { get; set; }
+        protected short ToolbarType { get; set; }
         protected string ExportOptions { get; set; }
-        protected short ChartStatus { get; set; } // 0 - None, 1 - Hidden, 2 - Visible
+        protected short ChartStatus { get; set; }
 
         private void LoadASPxPivotGridLayoutFromXRPivotGrid(ASPxPivotGrid aspxPivotGrid, XRPivotGrid xrPivotGrid)
         {
@@ -292,16 +293,18 @@ namespace WizOne.Generatoare.Reports.Pages
                         var name = param.Name.TrimStart('@');
                         var value = Request.QueryString[name] ?? Session[name];
 
-                        param.Value = Convert.ChangeType(value, param.Type);
+                        if (value != null)
+                            param.Value = Convert.ChangeType(value, param.Type);                        
                     }
 
                     // Init controls                   
                     var userId = Convert.ToInt32(_userId);
+                    var reportGroupUser = report.ReportGroupUsers.SingleOrDefault(rgu => rgu.UserId == userId);
 
                     // For client side customization
-                    ReportType = report.ReportTypeId; 
-                    ExportOptions = report.RaportGrupUtilizatori.
-                        SingleOrDefault(rgu => rgu.IdUser == userId)?.ExtensiiPermise ?? "*"; // "pdf,image[...]" or "*" to display all options.
+                    ReportType = report.ReportTypeId;
+                    ToolbarType = reportGroupUser?.ToolbarType ?? 0; // 0 - full items, 1 - only Print, Customize layout & Exit
+                    ExportOptions = reportGroupUser?.ExportOptions ?? "*"; // "pdf,image[...]" or "*" to display all options.
 
                     if (report.ReportTypeId == 3) // Cube
                     {
@@ -315,7 +318,8 @@ namespace WizOne.Generatoare.Reports.Pages
                                 // Init chart options
                                 _chartOptions = JObject.Parse(SaveXRChartOptions(_chart, _pivotGrid));
 
-                                ChartStatus = (short)((bool)_chartOptions.Options.O5 ? 2 : 1); // For client side customization
+                                // For client side customization                                
+                                ChartStatus = (short)((bool)_chartOptions.Options.O5 ? 2 : 1); // 0 - None, 1 - Hidden, 2 - Visible
 
                                 ChartTypeComboBox.Items.AddRange(Enum.GetValues(typeof(ViewType)).OfType<ViewType>().
                                     Select(vt => new ListEditItem() { Value = (int)vt, Text = vt.ToString() }).ToList());

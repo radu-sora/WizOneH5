@@ -69,9 +69,9 @@
             }" />
     </dx:ASPxGridView>
                 
-    <ef:EntityDataSource ID="ReportsDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="Reports" Include="RaportGrupUtilizatori"
+    <ef:EntityDataSource ID="ReportsDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="Reports" Include="ReportGroupUsers"
         EnableFlattening="False" EnableInsert="True" EnableUpdate="True" EnableDelete="True" 
-        Where="EXISTS(SELECT 1 FROM it.RaportGrupUtilizatori AS u WHERE u.IdUser = @UserId)">                      
+        Where="EXISTS(SELECT 1 FROM it.ReportGroupUsers AS u WHERE u.UserId = @UserId)">                      
         <WhereParameters>
             <asp:SessionParameter Name="UserId" Type="Int32" SessionField="UserId" />
         </WhereParameters>

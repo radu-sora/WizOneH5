@@ -1359,10 +1359,10 @@
     </Compile>
     <Compile Include="Generatoare\Reports\Code\ReportDataSourceWizardConnectionStringsProvider.cs" />
     <Compile Include="Generatoare\Reports\Code\EntityReportStorageWebExtension.cs" />
-    <Compile Include="Generatoare\Reports\Models\RaportGrupUtilizator.cs">
+    <Compile Include="Generatoare\Reports\Models\Report.cs">
       <DependentUpon>ReportsModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Generatoare\Reports\Models\Report.cs">
+    <Compile Include="Generatoare\Reports\Models\ReportGroupUser.cs">
       <DependentUpon>ReportsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Models\ReportsModel.Context.cs">

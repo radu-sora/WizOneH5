@@ -289,7 +289,8 @@
                 <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%"
                     OnClientLayout="CustomTableGridView_ClientLayout">
                     <Settings ShowHeaderFilterButton="true" />
-                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />                                       
+                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live" />
                     <SettingsContextMenu Enabled="true">
                         <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" />
                     </SettingsContextMenu>                                        
@@ -413,17 +414,15 @@
         function onCustomizeMenu(actions, preview) {
             if (preview) {
                 for (var action = 0; action < actions.length; action++) {
-                    if (actions[action].text == 'Compose document text' ||
-                        actions[action].text == 'Customize cube layout' ||
-                        actions[action].text == 'Customize table layout') {
+                    if (actions[action].imageClassName == 'dxrd-image-run-wizard') {
                         actions.splice(action, 1);
                     }
                 }
             } else {
                 for (var action = 0; action < actions.length; action++) {
-                    if (actions[action].text == 'New' ||
-                        actions[action].text == 'New via Wizard' ||
-                        actions[action].text == 'Open') {
+                    if (actions[action].id == DevExpress.Designer.Report.ActionId.NewReport ||
+                        actions[action].id == DevExpress.Designer.Report.ActionId.NewReportViaWizard ||
+                        actions[action].id == DevExpress.Designer.Report.ActionId.OpenReport) {
                         actions[action].visible = false;
                     }
                 }

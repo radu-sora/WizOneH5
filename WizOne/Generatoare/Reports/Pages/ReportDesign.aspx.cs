@@ -343,7 +343,7 @@ namespace WizOne.Generatoare.Reports.Pages
                     if (report == null)
                         throw new Exception($"No report found for id {_reportId}");
 
-                    var xtraReport = new XtraReport();
+                    var xtraReport = new XtraReport();                    
 
                     // Update or create default layout by report type
                     if (report.LayoutData != null)
@@ -478,6 +478,9 @@ namespace WizOne.Generatoare.Reports.Pages
                             });
                         }
 
+                        // Set general defaults
+                        xtraReport.ExportOptions.Docx.ExportMode = DevExpress.XtraPrinting.DocxExportMode.SingleFile;
+                        xtraReport.ExportOptions.Docx.KeepRowHeight = true;
                         // Set internal report id
                         xtraReport.Tag = _reportId;
                     }

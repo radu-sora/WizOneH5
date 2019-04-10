@@ -608,10 +608,6 @@ namespace WizOne.Pagini
                                                 pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
                                                 if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
                                                     General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
-
-                                                //Florin 2019-04-02
-                                                //marcam campul Actualizat din Avs_Cereri
-                                                General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { General.Nz(dr["Id"], -99) });
                                             }
                                         }
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;

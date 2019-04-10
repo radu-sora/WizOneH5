@@ -2058,7 +2058,7 @@ namespace WizOne.Avs
 
 
                         //starea
-                        string camp3 = "", camp4 = "";
+                        string camp3 = ", \"IdStare\", \"Culoare\"", camp4 = ", " + idStare + ", (SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare.ToString() + ")";
                         if (idUserCalc == Convert.ToInt32(Session["UserId"].ToString()))
                         {
                             pozUser = poz;
@@ -2783,6 +2783,14 @@ namespace WizOne.Avs
                 if (sql.Length > 0) General.IncarcaDT(sql, null);
                 if (sql100.Length > 0) General.IncarcaDT(sql100, null);
                 if (sql1001.Length > 0) General.IncarcaDT(sql1001, null);
+
+
+
+                //Florin 2019-04-10
+                //procesul acesta s-a mutat din ActeAditionale aici
+                //marcam campul Actualizat din Avs_Cereri cand se duce in F100
+                if (act == 1)
+                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { "Id" });
 
             }
             catch (Exception ex)

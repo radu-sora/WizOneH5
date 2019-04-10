@@ -45,7 +45,7 @@ namespace WizOne.Absente
                 
 
                 DataTable dtAng = General.IncarcaDT(Dami.SelectAngajati(), null);
-                GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colAng = (grDate.Columns["Nume"] as GridViewDataComboBoxColumn);
                 colAng.PropertiesComboBox.DataSource = dtAng;
                 cmbAng.DataSource = dtAng;
                 cmbAng.DataBind();
@@ -62,18 +62,18 @@ namespace WizOne.Absente
                 }
                 else
                 {
-                    foreach (var c in grDate.Columns)
-                    {
-                        try
-                        {
-                            GridViewDataColumn col = (GridViewDataColumn)c;
-                            col.Caption = Dami.TraduCuvant(col.FieldName);
-                        }
-                        catch (Exception) { }
-                    }
-
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();
+                }
+
+                foreach (var c in grDate.Columns)
+                {
+                    try
+                    {
+                        GridViewDataColumn col = (GridViewDataColumn)c;
+                        col.Caption = Dami.TraduCuvant(col.FieldName);
+                    }
+                    catch (Exception) { }
                 }
 
                 grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaZL", "10"));
@@ -441,7 +441,7 @@ namespace WizOne.Absente
             {
                 string strSql = "";
 
-                strSql = $@"SELECT A.* FROM ""Ptj_tblZLP"" A
+                strSql = $@"SELECT A.F10003, A.F10003 AS ""Nume"", ""An"", ""Cuvenite"", ""SoldAnterior"", ""Efectuate"", ""CuveniteAn"" FROM ""Ptj_tblZLP"" A
                         INNER JOIN F100 B ON A.F10003=B.F10003
                         WHERE A.""An""={Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year))}";
 

@@ -93,7 +93,7 @@ namespace WizOne.Eval
                 //Pelifilip - s-a cerut ca utilizatorul sa fie vizibil tot timpul
 
                 //if (esteHr > 0 || manager > 0)
-                if (esteHr > 0)
+                if (esteHr > 0 || (manager > 0 && Convert.ToInt32(General.Nz(Session["IdClient"], -99)) != (int)IdClienti.Clienti.Pelifilip))
                 {
                     btnAproba.Visible = true;
                     btnRespinge.Visible = true;
@@ -266,22 +266,32 @@ namespace WizOne.Eval
                 }
 
 
-                //Florin 2018.12.05
-                //Pelifilip - nu mai vor sa se duca in solictare, vor sa se duca direct in aprobare
-                int idStare = 1;
                 string strSql = "";
-                //if ((rbTip.Value ?? "").ToString() == "1")
-                //{
+                int idStare = 1;
+
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Pelifilip)
+                {
+                    //Florin 2018.12.05
+                    //Pelifilip - nu mai vor sa se duca in solictare, vor sa se duca direct in aprobare
                     strSql += $@"INSERT INTO Eval_RaspunsIstoric(IdQuiz, F10003, IdSuper, IdUser, Pozitie) VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(Pozitie,0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
                     idStare = 3;
-                //}
-                strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
+
+                    strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
+                }
+                else
+                {
+                    if ((rbTip.Value ?? "").ToString() == "1")
+                    {
+                        strSql += $@"INSERT INTO Eval_RaspunsIstoric(IdQuiz, F10003, IdSuper, IdUser, Pozitie) VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(Pozitie,0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
+                        idStare = 3;
+                    }
+                    strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
+                }
 
 
                 bool ras = General.ExecutaNonQuery("BEGIN " + strSql + " END;", null);
                 if (ras)
                 {
-                    //cmbQuiz.SelectedIndex = -1;
                     cmbUsr.SelectedIndex = -1;
 
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");

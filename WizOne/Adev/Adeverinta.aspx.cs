@@ -854,6 +854,10 @@ namespace WizOne.Adev
                 sql = "SELECT * FROM F100 WHERE F10003 = " + marca;
                 DataTable dtAng = General.IncarcaDT(sql, null);
 
+                var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/"));
+                if (!folder.Exists)
+                    folder.Create();
+
                 String FileName = "";
                 switch (adev)
                 {

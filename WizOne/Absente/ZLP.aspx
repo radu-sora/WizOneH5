@@ -114,7 +114,8 @@
                             <ClientSideEvents EndCallback="function(s,e) { OnEndCallback(s,e); }" Init="OnInitGrid" ContextMenu="ctx" />
 
                             <Columns>
-                                <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat">
+                                <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca" />
+                                <dx:GridViewDataComboBoxColumn FieldName="Nume" Name="Nume" Caption="Angajat">
                                     <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown">
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>

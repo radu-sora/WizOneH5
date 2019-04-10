@@ -1088,9 +1088,9 @@ namespace WizOne.Tactil
                 if (Constante.tipBD == 2)
                     camp = "ROUND(\"Valoare\")";
 
-                string sql = "SELECT distinct p.\"Id\", \"An\", \"Luna\", F10003, " + camp + " AS \"Valoare\", p.\"TextAfisare\" FROM  (SELECT \"An\", \"Luna\", F10003, " + listaDen + " FROM \"Ptj_Cumulat\" "
+                string sql = "SELECT distinct p.\"Id\", \"An\", \"Luna\", F10003, " + camp + " AS \"Valoare\", COALESCE(r.\"Explicatii\", p.\"TextAfisare\") as \"TextAfisare\" FROM  (SELECT \"An\", \"Luna\", F10003, " + listaDen + " FROM \"Ptj_Cumulat\" "
                     + " where \"An\" = " + an + " and \"Luna\" = " + luna + ") p UNPIVOT  (\"Valoare\" FOR \"Denumire\" IN  (" + listaDen + ") )AS unpvt "
-                    + " left join \"Ptj_tblPrint\" p on p.\"Denumire\" = unpvt.\"Denumire\" where \"Activ\" = 1 and p.\"Denumire\" like 'F%' and " + func + "(p.\"Denumire\") <= 3 and f10003 = "
+                    + " left join \"Ptj_tblPrint\" p on p.\"Denumire\" = unpvt.\"Denumire\" left join \"Ptj_tblFormuleCumulat\" r on r.\"Coloana\" = unpvt.\"Denumire\"   where \"Activ\" = 1 and p.\"Denumire\" like 'F%' and " + func + "(p.\"Denumire\") <= 3 and f10003 = "
                     + Session["User_Marca"].ToString() + " AND \"An\" = " + an + " AND \"Luna\" = " + luna;
 
                 grDateTotaluri.SettingsPager.PageSize = 40;

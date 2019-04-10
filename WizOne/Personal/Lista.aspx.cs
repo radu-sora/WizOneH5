@@ -102,7 +102,18 @@ namespace WizOne.Personal
         protected void btnFiltru_Click(object sender, EventArgs e)
         {
             try
-            {                
+            {
+
+                DataTable dtTmp = General.IncarcaDT($@"DECLARE
+                    ret_x1 number;
+                    BEGIN
+                    insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") VALUES(460, 2, 5, 20) returning ""IdAuto"" into ret_x1;
+                    commit;
+                END; ", null);
+
+                DataTable dtAAA = General.IncarcaDT($@"
+                    insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") VALUES(460, 2, 5, 20) returning ""IdAuto"" into @out_1", new object[] { "string" });
+
                 DataTable dt = General.GetPersonalRestrans(Convert.ToInt32(Session["UserId"].ToString()), checkComboBoxStare.Text, 1);
                 grDate.DataSource = dt;
                 grDate.FilterExpression = "";

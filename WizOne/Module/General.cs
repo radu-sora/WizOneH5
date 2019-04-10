@@ -820,11 +820,22 @@ namespace WizOne.Module
                         {
                             try
                             {
-                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param.ToString()));
+                                if (strSql.IndexOf(":out_" + x) >= 0)
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("out_" + x.ToString(), OracleDbType.Varchar2,ParameterDirection.ReturnValue));
+                                else
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param.ToString()));
+
+                                //using (OracleCommand cmd = con.CreateCommand())
+                                //{
+                                //    cmd.CommandText = "insert into foo values('foo','bar') returning id into :myOutputParameter";
+                                //    cmd.Parameters.Add(new OracleParameter("myOutputParameter", OracleDbType.Decimal), ParameterDirection.ReturnValue);
+                                //    cmd.ExecuteNonQuery(); // an INSERT is always a Non Query
+                                //    return Convert.ToDecimal(cmd.Parameters["myOutputParameter"].Value);
+                                //}
 
                                 //cmd.Parameters.Add("@" + x.ToString(), param);
                                 //OracleParameter p1 = new OracleParameter();
-                                
+
                                 //p1.Value = param;
                                 ////p1.OleDbType = OleDbType.VarChar;
                                 //p1.DbType = DbType.String;

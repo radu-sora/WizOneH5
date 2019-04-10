@@ -2279,22 +2279,37 @@ namespace WizOne.Pontaj
                 string zileVal = "";
                 string zileF = "";
 
-                string strFiltru = "";
+                string strFiltru = "", strLeg = "";
                 if (Convert.ToInt32(cmbSub.Value ?? -99) != -99) strFiltru += " AND A.F10004 = " + cmbSub.Value;
                 if (Convert.ToInt32(cmbFil.Value ?? -99) != -99) strFiltru += " AND A.F10005 = " + cmbFil.Value;
                 if (Convert.ToInt32(cmbSec.Value ?? -99) != -99) strFiltru += " AND A.F10006 = " + cmbSec.Value;
                 if (Convert.ToInt32(cmbDept.Value ?? -99) != -99) strFiltru += " AND A.F10007 = " + cmbDept.Value;
-                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99) strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99) strFiltru += " AND A.F100959 = " + cmbBirou.Value;
-                if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99) strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-
+                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
+                {
+                    strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
+                    strLeg = " LEFT JOIN F1001 B ON A.F10003 = B.F10003 ";
+                }
+                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
+                {
+                    strFiltru += " AND A.F100959 = " + cmbBirou.Value;
+                    strLeg = " LEFT JOIN F1001 B ON A.F10003 = B.F10003 ";
+                }
+                if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
+                {
+                    strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
+                    strLeg += " LEFT JOIN F100 C ON A.F10003 = C.F10003 ";
+                }
                 if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
-                if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
 
                 //Radu 13.03.2019
                 string strFiltruSpecial = "";
                 if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    strFiltruSpecial = strFiltru;
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "B.F10095").Replace("A.F1006", "C.F1006");
+                else
+                    strLeg = "";
+
+                if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
+
 
                 if (Convert.ToInt32(cmbAng.Value ?? -99) == -99)
                     strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, idRol, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
@@ -2325,7 +2340,7 @@ namespace WizOne.Pontaj
 								LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
 
                 if (Constante.tipBD == 1)
-                    strSql = $@"with ptj_intrari_2 as (select * from Ptj_Intrari A WHERE 1=1 {strFiltruSpecial})
+                    strSql = $@"with ptj_intrari_2 as (select * from Ptj_Intrari A {strLeg}  WHERE 1=1 {strFiltruSpecial})
                                 SELECT *,
                                 (SELECT ',Ziua' + CASE WHEN Y.Zi <= X.F10023 THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
                                 FROM F100 X
@@ -2473,16 +2488,35 @@ namespace WizOne.Pontaj
 
                 string pvt = "", pvtIn = "", pvtOut = "", pvtPauza = "";
 
-                string strFiltru = "";
+                string strFiltru = "", strLeg = "";
                 if (Convert.ToInt32(cmbSub.Value ?? -99) != -99) strFiltru += " AND A.F10004 = " + cmbSub.Value;
                 if (Convert.ToInt32(cmbFil.Value ?? -99) != -99) strFiltru += " AND A.F10005 = " + cmbFil.Value;
                 if (Convert.ToInt32(cmbSec.Value ?? -99) != -99) strFiltru += " AND A.F10006 = " + cmbSec.Value;
                 if (Convert.ToInt32(cmbDept.Value ?? -99) != -99) strFiltru += " AND A.F10007 = " + cmbDept.Value;
-                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99) strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99) strFiltru += " AND A.F100959 = " + cmbBirou.Value;
-                if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99) strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
+                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
+                {
+                    strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
+                    strLeg = " LEFT JOIN F1001 B ON A.F10003 = B.F10003 ";
+                }
+                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
+                {
+                    strFiltru += " AND A.F100959 = " + cmbBirou.Value;
+                    strLeg = " LEFT JOIN F1001 B ON A.F10003 = B.F10003 ";
+                }
+                if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
+                {
+                    strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
+                    strLeg += " LEFT JOIN F100 C ON A.F10003 = C.F10003 ";
+                }
 
                 if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
+
+                string strFiltruSpecial = "";
+                if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "B.F10095").Replace("A.F1006", "C.F1006");
+                else
+                    strLeg = "";
+                
                 if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
                 if (Convert.ToInt32(cmbAng.Value ?? -99) == -99)
                     strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, idRol, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
@@ -2545,14 +2579,10 @@ namespace WizOne.Pontaj
                     OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
                 if (Dami.ValoareParam("") == "2")
                     strInner = $@"LEFT JOIN DamiNorma_Table dn ON dn.F10003=X.F10003 AND dn.dt={dtSf}
-								LEFT JOIN DamiDataPlecare_Table dd ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
-
-                string strFiltruSpecial = "";
-                if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    strFiltruSpecial = strFiltru;
+								LEFT JOIN DamiDataPlecare_Table dd ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}"; 
 
                 if (Constante.tipBD == 1)
-                    strSql = $@"with ptj_intrari_2 as (select * from Ptj_Intrari A WHERE 1=1 {strFiltruSpecial})
+                    strSql = $@"with ptj_intrari_2 as (select * from Ptj_Intrari A {strLeg}  WHERE 1=1 {strFiltruSpecial})
                                 SELECT *
                            
                                 FROM (

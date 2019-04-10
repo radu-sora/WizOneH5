@@ -94,7 +94,6 @@ namespace WizOne.Tactil
                         //tdNrZile.Align = "left";
                         tdDataSf.Visible = false;
                         tdNrOre.Width = "550";
-
                         if (Session["CereriTactil"].ToString() == "BiletVoie")
                         {
                             rbMotiv1.Visible = true;
@@ -135,7 +134,7 @@ namespace WizOne.Tactil
                 if (dtAbs != null && dtAbs.Rows.Count > 0)
                     cmbAbs.Value = Convert.ToInt32(dtAbs.Rows[0]["Id"].ToString());
 
-                DataTable dtZile = General.IncarcaDT("SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + General.Nz(General.VarSession("User_Marca"), -99).ToString() + "AND \"An\" = (SELECT DISTINCT F01011 FROM F010)", null);
+                DataTable dtZile = General.IncarcaDT("SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + General.Nz(General.VarSession("User_Marca"), -99).ToString() + " AND \"An\" = (SELECT DISTINCT F01011 FROM F010)", null);
 
                 if (dtZile != null && dtZile.Rows.Count > 0)
                     txtNrZileRamase.Text = dtZile.Rows[0]["Ramase"].ToString();
@@ -166,25 +165,10 @@ namespace WizOne.Tactil
                         txtDataSf.Value = itm.DataSfarsit;
                     }
 
-                    //Incarcam Absentele
+
                     dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(General.VarSession("User_Marca"), -99).ToString()), null);
 
-                    Session["Cereri_Absente_Absente"] = dtAbs.Select("DenumireScurta LIKE '" + denumire + "'");
 
-                    DataRow[] arr = dtAbs.Select("Id=" + General.Nz(cmbAbs.Value, -99));
-                    //DataRow[] arr = dtAbs.Select("Id=" + General.Nz(General.VarSession("User_Marca"), -99));
-                    if (arr.Count() > 0)
-                    {
-                        //Afisam explicatiile
-                        //calculam nr de zile luate
-                        int nr = 0;
-                        int nrViitor = 0;
-                        string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
-                        General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                        txtNrZile.Value = nr;
-                        Session["TactilNrZile"] = nr;
-                        //txtNrZileViitor.Value = nrViitor;
-                    }
 
 
                     //Incarcam Inlocuitorii
@@ -238,6 +222,24 @@ namespace WizOne.Tactil
                             //tdNrZileRamase.Visible = false;
                             txtNrZileRamase.Visible = false;
                         }
+                    }
+
+                    //Incarcam Absentele
+                    Session["Cereri_Absente_Absente"] = dtAbsSpn; //dtAbs.Select("DenumireScurta LIKE '" + denumire + "'");
+
+                    DataRow[] arr = dtAbsSpn.Select("Id=" + General.Nz(cmbSelAbs.Value, -99));
+                    //DataRow[] arr = dtAbs.Select("Id=" + General.Nz(General.VarSession("User_Marca"), -99));
+                    if (arr.Count() > 0)
+                    {
+                        //Afisam explicatiile
+                        //calculam nr de zile luate
+                        int nr = 0;
+                        int nrViitor = 0;
+                        string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
+                        General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
+                        txtNrZile.Value = nr;
+                        Session["TactilNrZile"] = nr;
+                        //txtNrZileViitor.Value = nrViitor;
                     }
 
                 }
@@ -374,14 +376,17 @@ namespace WizOne.Tactil
             try
             {
                 string tip = e.Parameter;
-                DataTable dtAbs = new DataTable();
+                DataTable dtAbs = new DataTable(), dtAbsente = new DataTable();
 
                 DataRow[] dtRowAbs = null;
 
                 if (tip == "3" && txtDataInc.Value != null) txtDataSf.Value = txtDataInc.Value;
 
                 //if (Session["Cereri_Absente_Absente"] != null) dtAbs = Session["Cereri_Absente_Absente"] as DataTable;
-                if (Session["Cereri_Absente_Absente"] != null) dtRowAbs = Session["Cereri_Absente_Absente"] as DataRow[];
+                //if (Session["Cereri_Absente_Absente"] != null) dtRowAbs = Session["Cereri_Absente_Absente"] as DataRow[];
+                if (Session["Cereri_Absente_Absente"] != null) dtAbsente = Session["Cereri_Absente_Absente"] as DataTable;
+
+                dtRowAbs = dtAbsente.Select();
 
                 if (dtRowAbs != null)
                     dtAbs = dtRowAbs.CopyToDataTable();

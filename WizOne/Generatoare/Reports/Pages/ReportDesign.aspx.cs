@@ -1,5 +1,4 @@
-﻿using DevExpress.Data.PivotGrid;
-using DevExpress.DataAccess.Native.Sql;
+﻿using DevExpress.DataAccess.Native.Sql;
 using DevExpress.DataAccess.Sql;
 using DevExpress.Utils;
 using DevExpress.Utils.Serializing;
@@ -71,20 +70,35 @@ namespace WizOne.Generatoare.Reports.Pages
 
         private void LoadASPxPivotGridLayoutFromXRPivotGrid(ASPxPivotGrid aspxPivotGrid, XRPivotGrid xrPivotGrid)
         {
-            if (xrPivotGrid != null)
+            if (aspxPivotGrid != null && xrPivotGrid != null)
             {
-                var memStream = new MemoryStream(); // Don't dispose e.g. declare with "using"!
+                using (var objectMemStream = new MemoryStream())
+                {
+                    var xmlXtraSerializer = new XmlXtraSerializer();
 
-                (xrPivotGrid as IPivotGridDataContainer).Data.SavePivotGridToStream(memStream, false);
-                memStream.Position = 0;
+                    xmlXtraSerializer.SerializeObject(xrPivotGrid, objectMemStream, "PivotGrid");
+                    objectMemStream.Position = 0;
 
-                aspxPivotGrid.DataSource = new PivotFileDataSource(memStream); // Load full layout & data            
+                    using (var collapsedMemStream = new MemoryStream())
+                    {
+                        (xrPivotGrid as IPivotGridDataContainer).Data.SaveCollapsedStateToStream(collapsedMemStream);
+                        collapsedMemStream.Position = 0;
+
+                        xmlXtraSerializer.DeserializeObject(aspxPivotGrid, objectMemStream, "PivotGrid");
+                        aspxPivotGrid.Data.LoadCollapsedStateFromStream(collapsedMemStream);
+                        aspxPivotGrid.Data.LayoutChanged();
+
+                        // This is reseted to default after DeserializeObject.
+                        // xrPivotGrid.OptionsLayout.ResetOptions & aspxPivotGrid.OptionsLayout.ResetOptions has no effect.
+                        aspxPivotGrid.OptionsCustomization.CustomizationFormStyle = CustomizationFormStyle.Excel2007;
+                    }
+                }                
             }
         }
 
         private void LoadXRPivotGridLayoutFromASPxPivotGrid(XRPivotGrid xrPivotGrid, ASPxPivotGrid aspxPivotGrid)
         {
-            if (xrPivotGrid != null)
+            if (xrPivotGrid != null && aspxPivotGrid != null)
             {
                 using (var objectMemStream = new MemoryStream())
                 {
@@ -97,12 +111,10 @@ namespace WizOne.Generatoare.Reports.Pages
                     {
                         aspxPivotGrid.Data.SaveCollapsedStateToStream(collapsedMemStream);
                         collapsedMemStream.Position = 0;
-
-                        var xrPivotGridData = (xrPivotGrid as IPivotGridDataContainer).Data;
-
+                        
                         xmlXtraSerializer.DeserializeObject(xrPivotGrid, objectMemStream, "PivotGrid");
-                        xrPivotGridData.LoadCollapsedStateFromStream(collapsedMemStream);
-                        xrPivotGridData.LayoutChanged();
+                        (xrPivotGrid as IPivotGridDataContainer).Data.LoadCollapsedStateFromStream(collapsedMemStream);
+                        (xrPivotGrid as IPivotGridDataContainer).Data.LayoutChanged();
                     }
                 }
             }
@@ -120,7 +132,8 @@ namespace WizOne.Generatoare.Reports.Pages
                         O1 = (xrChart.SeriesTemplate.LabelsVisibility == DefaultBoolean.True),
                         O2 = xrPivotGrid.OptionsChartDataSource.ProvideDataByColumns,
                         O3 = xrPivotGrid.OptionsChartDataSource.ProvideColumnGrandTotals,
-                        O4 = xrPivotGrid.OptionsChartDataSource.ProvideRowGrandTotals
+                        O4 = xrPivotGrid.OptionsChartDataSource.ProvideRowGrandTotals,
+                        O5 = xrChart.Visible
                     }
                 });
             }
@@ -148,6 +161,7 @@ namespace WizOne.Generatoare.Reports.Pages
                 {
                     xrChart.SeriesTemplate.ChangeView((ViewType)chartOptions.Type);
                     xrChart.SeriesTemplate.LabelsVisibility = (bool)chartOptions.Options.O1 ? DefaultBoolean.True : DefaultBoolean.False;
+                    xrChart.Visible = (bool)chartOptions.Options.O5;
                 }
 
                 aspxPivotGrid.OptionsChartDataSource.ProvideDataByColumns = chartOptions.Options.O2;
@@ -329,7 +343,7 @@ namespace WizOne.Generatoare.Reports.Pages
                     if (report == null)
                         throw new Exception($"No report found for id {_reportId}");
 
-                    var xtraReport = new XtraReport();
+                    var xtraReport = new XtraReport();                    
 
                     // Update or create default layout by report type
                     if (report.LayoutData != null)
@@ -464,6 +478,9 @@ namespace WizOne.Generatoare.Reports.Pages
                             });
                         }
 
+                        // Set general defaults
+                        xtraReport.ExportOptions.Docx.ExportMode = DevExpress.XtraPrinting.DocxExportMode.SingleFile;
+                        xtraReport.ExportOptions.Docx.KeepRowHeight = true;
                         // Set internal report id
                         xtraReport.Tag = _reportId;
                     }
@@ -504,6 +521,7 @@ namespace WizOne.Generatoare.Reports.Pages
                         ChartOptionsCheckBoxList.Items.Add("Generate Series from Columns", "O2");
                         ChartOptionsCheckBoxList.Items.Add("Show Column Grand Totals", "O3");
                         ChartOptionsCheckBoxList.Items.Add("Show Row Grand Totals", "O4");
+                        ChartOptionsCheckBoxList.Items.Add("Show Chart", "O5");
 
                         // Bind to empty datasource to load columns definition.
                         if (pivotGrid.Fields.Count == 0)
@@ -675,7 +693,7 @@ namespace WizOne.Generatoare.Reports.Pages
                             if (_pivotGrid.Fields.Count == 0)
                                 _pivotGrid.RetrieveFields(); // Retrieve all data source fields into filter area by default. Can be customized later.
 
-                            LoadASPxPivotGridLayoutFromXRPivotGrid(CustomCubePivotGrid, _pivotGrid);
+                            LoadASPxPivotGridLayoutFromXRPivotGrid(CustomCubePivotGrid, _pivotGrid);                            
                         }
                         else if (commandName == "load")
                         {
@@ -697,16 +715,11 @@ namespace WizOne.Generatoare.Reports.Pages
                                 }
                             }
                             else
-                                _report.FillDataSource();
+                                _report.FillDataSource();                            
+                        }                        
 
-                            CustomCubePivotGrid.DataSource = _pivotGrid.DataSource;
-                            CustomCubePivotGrid.DataMember = _pivotGrid.DataMember;
-                        }
-                        else // For save and all native callbacks
-                        {
-                            CustomCubePivotGrid.DataSource = _pivotGrid.DataSource;
-                            CustomCubePivotGrid.DataMember = _pivotGrid.DataMember;
-                        }
+                        CustomCubePivotGrid.DataSource = _pivotGrid.DataSource;
+                        CustomCubePivotGrid.DataMember = _pivotGrid.DataMember;
 
                         // Refresh chart control                        
                         CustomCubePivotGrid.JSProperties["cpRefreshChart"] = GetWebChartRefreshState();
@@ -819,15 +832,7 @@ namespace WizOne.Generatoare.Reports.Pages
                 if (!IsCallback)
                     Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");
             }
-        }
-
-        protected void CustomCubePivotGrid_CustomCallback(object sender, PivotGridCustomCallbackEventArgs e)
-        {
-            // Some re-initializers that must be made after LoadASPxPivotGridLayoutFromXRPivotGrid which reset some layout properties.
-            // xrPivotGrid.OptionsLayout.ResetOptions & aspxPivotGrid.OptionsLayout.ResetOptions has no effect.
-            if (CustomCubePivotGrid.OptionsCustomization.CustomizationFormStyle == CustomizationFormStyle.Simple)
-                CustomCubePivotGrid.OptionsCustomization.CustomizationFormStyle = CustomizationFormStyle.Excel2007;
-        }
+        }        
 
         protected void CustomTableGridView_ClientLayout(object sender, ASPxClientLayoutArgs e)
         {

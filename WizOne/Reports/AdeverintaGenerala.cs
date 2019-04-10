@@ -1,16 +1,11 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using DevExpress.XtraReports.UI;
-using WizOne.Module;
-using System.Web;
+﻿using DevExpress.XtraPrinting;
+using System;
 using System.Data;
-using DevExpress.XtraReports.Design;
-using DevExpress.XtraPrinting.Control;
-using DevExpress.XtraPrinting;
+using System.Drawing;
 using System.IO;
+using System.Web;
 using System.Web.Hosting;
+using WizOne.Module;
 
 namespace WizOne.Reports
 {

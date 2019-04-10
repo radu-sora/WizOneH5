@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Cadru.Master" CodeBehind="EvalDetaliu.aspx.cs" Inherits="WizOne.Eval.EvalDetaliu" %>
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
+
 
 <asp:Content ID="Content3" ContentPlaceHolderID="head" runat="server" >
     <script language="javascript" type="text/javascript">

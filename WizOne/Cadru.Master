@@ -1,5 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Cadru.master.cs" Inherits="WizOne.Cadru" %>
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
+
 
 <!DOCTYPE html>
 
@@ -352,7 +352,9 @@
             $("#myModal").modal("show");
 
         $(window).on('load', function () {
-            $('#anunt').modal('show');
+            var anunt = $('#anunt');
+
+            anunt.length && anunt.modal('show');            
         });
     </script>    
 </body>

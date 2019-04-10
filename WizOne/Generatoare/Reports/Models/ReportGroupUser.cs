@@ -12,11 +12,12 @@ namespace WizOne.Generatoare.Reports.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class RaportGrupUtilizator
+    public partial class ReportGroupUser
     {
-        public int IdRaport { get; set; }
-        public int IdUser { get; set; }
-        public string ExtensiiPermise { get; set; }
+        public int ReportId { get; set; }
+        public int UserId { get; set; }
+        public string ExportOptions { get; set; }
+        public Nullable<short> ToolbarType { get; set; }
     
         public virtual Report Report { get; set; }
     }

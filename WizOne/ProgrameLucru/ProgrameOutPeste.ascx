@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProgrameOutPeste.ascx.cs" Inherits="WizOne.ProgrameLucru.ProgrameOutPeste" %>
 
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
+
 <script type="text/javascript">
 
     function OnTextChangedHandlerOutPeste(s) {

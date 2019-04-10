@@ -1,16 +1,32 @@
 ﻿<%@ Page Title="View Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="ReportView.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.ReportView" %>
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
-<%@ Register Assembly="DevExpress.Web.ASPxPivotGrid.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxPivotGrid" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraCharts.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraCharts.v18.1.Web, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts.Web" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraReports.v18.1.Web.WebForms, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraReports.Web" TagPrefix="dx" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- Modal dialogs -->
 
     <!-- Page content -->                  
-    <table class="report-template">
+    <table class="report-view-template">
         <tr>
+            <td>
+                <dx:ASPxCallbackPanel ID="WebDocumentViewerCallbackPanel" ClientInstanceName="webDocumentViewerCallbackPanel" runat="server" Theme="Mulberry">
+                    <PanelCollection>
+                        <dx:PanelContent runat="server">
+                            <dx:ASPxWebDocumentViewer ID="WebDocumentViewer" ClientInstanceName="webDocumentViewer" runat="server">
+                                <SettingsTabPanel Position="Left" />
+                                <ClientSideEvents    
+                                    Init="function(s, e) {
+                                        onDocumentViewerInit();
+                                    }" 
+                                    CustomizeMenuActions="function(s, e) {
+                                        onCustomizeMenu(e.Actions);
+                                    }"
+                                    CustomizeParameterEditors="function(s, e) {
+                                        onCustomizeParameter(e.parameter, e.info);
+                                    }" />
+                            </dx:ASPxWebDocumentViewer>          
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxCallbackPanel>
+            </td>
             <td id="customLayoutSection">
                 <!-- Toolbar -->
                 <table>
@@ -109,8 +125,7 @@
                 <table>
                     <tr>
                         <td>
-                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry"
-                                OnPreRender="CustomCubePivotGrid_PreRender" OnCustomCallback="CustomCubePivotGrid_CustomCallback">
+                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry">
                                 <OptionsView DataHeadersDisplayMode="Popup" DataHeadersPopupMinCount="3" />                                
                                 <OptionsFilter NativeCheckBoxes="False" />                                
                                 <OptionsCustomization CustomizationFormStyle="Excel2007" />
@@ -172,6 +187,7 @@
                 <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%">                    
                     <Settings ShowHeaderFilterButton="true" />                    
                     <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live" />
                     <SettingsContextMenu Enabled="true">
                         <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" />
                     </SettingsContextMenu>
@@ -186,24 +202,7 @@
                     TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0">                                
                 </dx:ASPxGridViewExporter>
 
-            </td>
-            <td>
-                <dx:ASPxCallbackPanel ID="WebDocumentViewerCallbackPanel" ClientInstanceName="webDocumentViewerCallbackPanel" runat="server" Theme="Mulberry">
-                    <PanelCollection>
-                        <dx:PanelContent runat="server">
-                            <dx:ASPxWebDocumentViewer ID="WebDocumentViewer" ClientInstanceName="webDocumentViewer" runat="server" CssClass="pull-right">
-                                <ClientSideEvents    
-                                    Init="function(s, e) {
-                                        onDocumentViewerInit();
-                                    }" 
-                                    CustomizeParameterEditors="function(s, e) {
-                                        onCustomizeParameter(e.parameter, e.info);
-                                    }" />
-                            </dx:ASPxWebDocumentViewer>          
-                        </dx:PanelContent>
-                    </PanelCollection>
-                </dx:ASPxCallbackPanel>
-            </td>
+            </td>            
         </tr>
     </table>        
    
@@ -213,8 +212,9 @@
     <script>
         // Globals
         var reportType = <%: ReportType %>;
+        var toolbarType = <%: ToolbarType %>;
         var exportOptions = '<%: ExportOptions %>';
-        var hasChart = '<%: HasChart %>' == 'True';
+        var chartStatus = <%: ChartStatus %>;
         var customLayoutSectionVisible = null;
         var paramsSelectedValues = {};
 
@@ -246,7 +246,7 @@
                 }
             }
 
-            rptExportOptionsModel(rptExportOptions);        
+            rptExportOptionsModel(rptExportOptions);           
             
             // Setup validation (confirmation) actions
             var validateParam = webDocumentViewer.parametersInfo.parameters.filter(function (param) { return param.Name == 'Validate'; })[0];
@@ -291,6 +291,20 @@
                     viewer.previewModel.exportModel.tabInfo.active(true);
                     viewer.previewModel.tabPanel.collapsed(true);
                     viewer.previewModel.parametersModel.submit();
+                }
+            }
+        }
+
+        function onCustomizeMenu(actions) {
+            if (toolbarType == 1) {
+                for (var action = 0; action < actions.length; action++) {
+                    if (actions[action].id != DevExpress.Report.Preview.ActionId.Print &&
+                        actions[action].imageClassName != 'dxrd-image-run-wizard' &&
+                        actions[action].imageClassName != 'dxrd-image-exit') {
+                        actions[action].visible = false;
+                    } else if (actions[action].id == DevExpress.Report.Preview.ActionId.Print) {
+                        actions[action].hasSeparator = false;
+                    }
                 }
             }
         }
@@ -562,9 +576,11 @@
                 if (reportType == 3) { // Cube
                     $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(5)').hide(); // No export option.
 
-                    if (!hasChart) {
+                    if (chartStatus == 0) { // None
                         $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(6)').hide();
                         $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(7)').hide();
+                        customCubeWebChartControl.SetVisible(false);
+                    } else if (chartStatus == 1) { // Hidden by default
                         customCubeWebChartControl.SetVisible(false);
                     }
 
@@ -622,6 +638,7 @@
                 var commandName = '#options';
                 var commandParams = { 'ChartOptions': chartOptions };
 
+                customCubeWebChartControl.SetVisible(chartOptions.Options.O5);
                 customCubeWebChartControl.PerformCallback(commandName + JSON.stringify(commandParams));
             } else {
                 customCubeWebChartControl.PerformCallback();

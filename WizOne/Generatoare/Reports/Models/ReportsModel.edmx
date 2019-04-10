@@ -40,8 +40,6 @@
           <Property Name="DynReportTypeId" Type="smallint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'WIZ_COMPANYSAL_FONTANA.dbo.RapoarteGrupuriUtilizatori' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="RapoarteGrupuriUtilizatori">
           <Key>
             <PropertyRef Name="IdRaport" />
@@ -50,6 +48,7 @@ warning 6002: The table/view 'WIZ_COMPANYSAL_FONTANA.dbo.RapoarteGrupuriUtilizat
           <Property Name="IdRaport" Type="int" Nullable="false" />
           <Property Name="IdUser" Type="int" Nullable="false" />
           <Property Name="ExtensiiPermise" Type="nvarchar" MaxLength="100" />
+          <Property Name="MeniuRestrans" Type="smallint" />
         </EntityType>
         <Association Name="FK_DynReports_DynReportTypes">
           <End Role="DynReportTypes" Type="Self.DynReportTypes" Multiplicity="1" />
@@ -85,7 +84,8 @@ warning 6002: The table/view 'WIZ_COMPANYSAL_FONTANA.dbo.RapoarteGrupuriUtilizat
             <DefiningQuery>SELECT 
     [RapoarteGrupuriUtilizatori].[IdRaport] AS [IdRaport], 
     [RapoarteGrupuriUtilizatori].[IdUser] AS [IdUser], 
-    [RapoarteGrupuriUtilizatori].[ExtensiiPermise] AS [ExtensiiPermise]
+    [RapoarteGrupuriUtilizatori].[ExtensiiPermise] AS [ExtensiiPermise], 
+    [RapoarteGrupuriUtilizatori].[MeniuRestrans] AS [MeniuRestrans]
     FROM [dbo].[RapoarteGrupuriUtilizatori] AS [RapoarteGrupuriUtilizatori]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_DynReports_DynReportTypes" Association="Self.FK_DynReports_DynReportTypes">
@@ -116,7 +116,7 @@ warning 6002: The table/view 'WIZ_COMPANYSAL_FONTANA.dbo.RapoarteGrupuriUtilizat
           <Property Name="UpdDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="ReportType" Relationship="Self.FK_DynReports_DynReportTypes" FromRole="DynReports" ToRole="DynReportTypes" />
           <NavigationProperty Name="ReportUsers" Relationship="Self.FK_DynReportsUsers_DynReports" FromRole="DynReports" ToRole="DynReportsUsers" />
-          <NavigationProperty Name="RaportGrupUtilizatori" Relationship="ReportsModel.ReportRaportGrupUtilizator" FromRole="Report" ToRole="RaportGrupUtilizator" />
+          <NavigationProperty Name="ReportGroupUsers" Relationship="ReportsModel.ReportReportGroupUser" FromRole="Report" ToRole="ReportGroupUser" />
         </EntityType>
         <EntityType Name="ReportUser">
           <Key>
@@ -179,31 +179,32 @@ warning 6002: The table/view 'WIZ_COMPANYSAL_FONTANA.dbo.RapoarteGrupuriUtilizat
             <End Role="DynReports" EntitySet="Reports" />
             <End Role="DynReportsUsers" EntitySet="ReportsUsers" />
           </AssociationSet>
-          <EntitySet Name="RapoarteGrupuriUtilizatori" EntityType="ReportsModel.RaportGrupUtilizator" />
-          <AssociationSet Name="ReportRaportGrupUtilizator" Association="ReportsModel.ReportRaportGrupUtilizator">
+          <EntitySet Name="ReportsGroupUsers" EntityType="ReportsModel.ReportGroupUser" />
+          <AssociationSet Name="ReportReportGroupUser" Association="ReportsModel.ReportReportGroupUser">
             <End Role="Report" EntitySet="Reports" />
-            <End Role="RaportGrupUtilizator" EntitySet="RapoarteGrupuriUtilizatori" />
+            <End Role="ReportGroupUser" EntitySet="ReportsGroupUsers" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="RaportGrupUtilizator">
+        <EntityType Name="ReportGroupUser">
           <Key>
-            <PropertyRef Name="IdRaport" />
-            <PropertyRef Name="IdUser" />
+            <PropertyRef Name="ReportId" />
+            <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="IdRaport" Type="Int32" Nullable="false" />
-          <Property Name="IdUser" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Report" Relationship="ReportsModel.ReportRaportGrupUtilizator" FromRole="RaportGrupUtilizator" ToRole="Report" />
-          <Property Name="ExtensiiPermise" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Report" Relationship="ReportsModel.ReportReportGroupUser" FromRole="ReportGroupUser" ToRole="Report" />
+          <Property Name="ExportOptions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ToolbarType" Type="Int16" />
         </EntityType>
-        <Association Name="ReportRaportGrupUtilizator">
+        <Association Name="ReportReportGroupUser">
           <End Type="ReportsModel.Report" Role="Report" Multiplicity="1" />
-          <End Type="ReportsModel.RaportGrupUtilizator" Role="RaportGrupUtilizator" Multiplicity="*" />
+          <End Type="ReportsModel.ReportGroupUser" Role="ReportGroupUser" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Report">
               <PropertyRef Name="ReportId" />
             </Principal>
-            <Dependent Role="RaportGrupUtilizator">
-              <PropertyRef Name="IdRaport" />
+            <Dependent Role="ReportGroupUser">
+              <PropertyRef Name="ReportId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -251,12 +252,13 @@ warning 6002: The table/view 'WIZ_COMPANYSAL_FONTANA.dbo.RapoarteGrupuriUtilizat
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="RapoarteGrupuriUtilizatori">
-            <EntityTypeMapping TypeName="ReportsModel.RaportGrupUtilizator">
+          <EntitySetMapping Name="ReportsGroupUsers">
+            <EntityTypeMapping TypeName="ReportsModel.ReportGroupUser">
               <MappingFragment StoreEntitySet="RapoarteGrupuriUtilizatori">
-                <ScalarProperty Name="ExtensiiPermise" ColumnName="ExtensiiPermise" />
-                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
-                <ScalarProperty Name="IdRaport" ColumnName="IdRaport" />
+                <ScalarProperty Name="ToolbarType" ColumnName="MeniuRestrans" />
+                <ScalarProperty Name="ExportOptions" ColumnName="ExtensiiPermise" />
+                <ScalarProperty Name="UserId" ColumnName="IdUser" />
+                <ScalarProperty Name="ReportId" ColumnName="IdRaport" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

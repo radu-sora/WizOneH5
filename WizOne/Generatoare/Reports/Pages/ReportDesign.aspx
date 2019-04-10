@@ -1,17 +1,10 @@
 ﻿<%@ Page Title="Design Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="ReportDesign.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.ReportDesign" %>
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
-<%@ Register Assembly="DevExpress.Web.ASPxPivotGrid.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxPivotGrid" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.Web.ASPxRichEdit.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxRichEdit" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraCharts.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraCharts.v18.1.Web, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts.Web" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraCharts.v18.1.Web, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts.Web.Designer" TagPrefix="dx" %>
-<%@ Register Assembly="DevExpress.XtraReports.v18.1.Web.WebForms, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraReports.Web" TagPrefix="dx" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- Modal dialogs -->
 
     <!-- Page content -->
-    <table class="report-template">
+    <table class="report-design-template">
         <tr>
             <td id="customLayoutSection">
                 <!-- Toolbar -->
@@ -234,8 +227,7 @@
                 <table>
                     <tr>
                         <td>
-                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry"
-                                OnCustomCallback="CustomCubePivotGrid_CustomCallback">
+                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry">
                                 <OptionsView DataHeadersDisplayMode="Popup" DataHeadersPopupMinCount="3" />                                
                                 <OptionsFilter NativeCheckBoxes="False" />                                
                                 <OptionsCustomization CustomizationFormStyle="Excel2007" />
@@ -297,7 +289,8 @@
                 <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%"
                     OnClientLayout="CustomTableGridView_ClientLayout">
                     <Settings ShowHeaderFilterButton="true" />
-                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />                                       
+                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live" />
                     <SettingsContextMenu Enabled="true">
                         <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" />
                     </SettingsContextMenu>                                        
@@ -421,17 +414,15 @@
         function onCustomizeMenu(actions, preview) {
             if (preview) {
                 for (var action = 0; action < actions.length; action++) {
-                    if (actions[action].text == 'Compose document text' ||
-                        actions[action].text == 'Customize cube layout' ||
-                        actions[action].text == 'Customize table layout') {
+                    if (actions[action].imageClassName == 'dxrd-image-run-wizard') {
                         actions.splice(action, 1);
                     }
                 }
             } else {
                 for (var action = 0; action < actions.length; action++) {
-                    if (actions[action].text == 'New' ||
-                        actions[action].text == 'New via Wizard' ||
-                        actions[action].text == 'Open') {
+                    if (actions[action].id == DevExpress.Designer.Report.ActionId.NewReport ||
+                        actions[action].id == DevExpress.Designer.Report.ActionId.NewReportViaWizard ||
+                        actions[action].id == DevExpress.Designer.Report.ActionId.OpenReport) {
                         actions[action].visible = false;
                     }
                 }
@@ -647,6 +638,7 @@
                 var commandName = '#options';
                 var commandParams = { 'ChartOptions': chartOptions };
 
+                customCubeWebChartControl.SetVisible(chartOptions.Options.O5);
                 customCubeWebChartControl.PerformCallback(commandName + JSON.stringify(commandParams));
             } else {
                 customCubeWebChartControl.PerformCallback();

@@ -1,5 +1,4 @@
 ﻿<%@ Page Title="Manage Reports" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Reports.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.Reports" %>
-<%@ Register Assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web" TagPrefix="dx" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">   
     <!-- Modal dialogs -->    
@@ -70,9 +69,9 @@
             }" />
     </dx:ASPxGridView>
                 
-    <ef:EntityDataSource ID="ReportsDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="Reports" Include="RaportGrupUtilizatori"
+    <ef:EntityDataSource ID="ReportsDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="Reports" Include="ReportGroupUsers"
         EnableFlattening="False" EnableInsert="True" EnableUpdate="True" EnableDelete="True" 
-        Where="EXISTS(SELECT 1 FROM it.RaportGrupUtilizatori AS u WHERE u.IdUser = @UserId)">                      
+        Where="EXISTS(SELECT 1 FROM it.ReportGroupUsers AS u WHERE u.UserId = @UserId)">                      
         <WhereParameters>
             <asp:SessionParameter Name="UserId" Type="Int32" SessionField="UserId" />
         </WhereParameters>

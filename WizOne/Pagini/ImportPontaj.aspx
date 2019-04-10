@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" Async="true"  CodeBehind="ImportPontaj.aspx.cs" Inherits="WizOne.Pagini.ImportPontaj" %>
-<%@ Register assembly="DevExpress.Web.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web" tagprefix="dx" %>
+
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 

@@ -16,6 +16,7 @@ using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,10 @@ namespace WizOne.Generatoare.Reports.Pages
 
                 return int.TryParse(Request.QueryString["ReportId"], out reportId) ? reportId : Session["ReportId"] as int? ?? 0;
             }
+        }
+        private bool _serverPrint
+        {
+            get { return (Request.QueryString["PrintareAutomata"] ?? (Session["PrintareAutomata"] as int? ?? 0).ToString()) == "1"; }
         }
         private int _reportUserId
         {
@@ -303,7 +308,8 @@ namespace WizOne.Generatoare.Reports.Pages
 
                     // For client side customization
                     ReportType = report.ReportTypeId;
-                    ToolbarType = reportGroupUser?.ToolbarType ?? 0; // 0 - full items, 1 - only Print, Customize layout & Exit
+                    ToolbarType = ConfigurationManager.AppSettings["EsteTactil"] == "true" ? // Temp fix until this param can be stored at user group level.
+                        reportGroupUser?.ToolbarType ?? 0 : (short)0; // 0 - full items, 1 - only Print, Customize layout & Exit
                     ExportOptions = reportGroupUser?.ExportOptions ?? "*"; // "pdf,image[...]" or "*" to display all options.
 
                     if (report.ReportTypeId == 3) // Cube
@@ -374,8 +380,13 @@ namespace WizOne.Generatoare.Reports.Pages
                         Container = MenuItemContainer.Toolbar
                     });
 
-                    // Open the report
-                    WebDocumentViewer.OpenReport(_report);
+                    if (_serverPrint) // Send to server default printer & exit
+                    {
+                        new ReportPrintTool(_report).Print();
+                        Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");
+                    }
+                    else // Open the report
+                        WebDocumentViewer.OpenReport(_report);
                 }
                 else if (WebDocumentViewerCallbackPanel.IsCallback)
                 {

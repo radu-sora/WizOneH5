@@ -70,7 +70,7 @@ namespace WizOne.Generatoare.Reports.Pages
                 // Required parameters for ReportDesign
                 Session["ReportId"] = selectedValues[0];
 
-                Response.Redirect("ReportDesign.aspx");
+                Response.Redirect("ReportDesign");
             }
         }     
     }

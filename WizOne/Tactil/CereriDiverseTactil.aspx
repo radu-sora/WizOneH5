@@ -123,7 +123,7 @@
                 <div class="badgeTactil">
                     <asp:LinkButton runat="server" ID="lnkCereri" OnClick="lnkOut_Click">
                         <div>
-                            <img src ="../Fisiere/Imagini/bdgOut.jpg" alt = "Inapoi" />
+                            <img src ="../Fisiere/Imagini/bdgback.png" alt = "Inapoi" />
                         </div>
                     </asp:LinkButton>
                     <h3>Inapoi</h3>

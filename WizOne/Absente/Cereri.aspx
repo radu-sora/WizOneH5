@@ -36,6 +36,17 @@
                 });
                 s.cpAlertMessage = null;
             }
+            if (s.cp_InfoMessage != null) {
+                swal({
+                    title: "Avertisment", text: s.cp_InfoMessage,
+                    type: "info", showCancelButton: false, confirmButtonColor: "#DD6B55", closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.history.back();
+                    }
+                });
+                s.cp_InfoMessage = null;
+            }
         }
 
         function OnCustomButtonClick(s, e) {

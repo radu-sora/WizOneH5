@@ -153,7 +153,8 @@ namespace WizOne.Module
                                             
                                             if ((dtReg.Rows[i]["mesaj"] ?? "avertisment").ToString() == "avertisment")
                                             {
-                                                rez = Constante.MesajeValidari.Avertisment.ToString();
+                                                //rez = Constante.MesajeValidari.Avertisment.ToString();
+                                                rez = corpMsg;  //Radu 15.04.2019
                                                 //MessageBox.ShowProba2(corpMsg, MessageBox.icoWarning, (dtReg.Rows[i]["Subiect"] ?? "").ToString());
                                                 //string asd = @"<script type='text/javascript'> swal({   title: 'Are you sure ? ',   text: 'You will not be able to recover this imaginary file!',   type: 'warning',   showCancelButton: true,   confirmButtonColor: '#DD6B55',   confirmButtonText: 'Yes, delete it!',   closeOnConfirm: false }, function(isConfirm){ if (isConfirm) { <%= Iesire() %> } });</script>";
 

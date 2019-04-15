@@ -41,8 +41,9 @@ namespace WizOne.Tactil
                     {
                         dt.Rows.Add("AdeverintaPractica", "Adeverinta de practica", null, null);
                         dt.Rows.Add("AdeverintaCresa", "Adeverinta cresa/gradinita", null, null);
-                    }
+                    }                    
                 }
+                dt.Rows.Add("Inapoi", "Inapoi", null, null);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     string nume = General.Nz(dt.Rows[i]["Denumire"], "").ToString();
@@ -64,7 +65,10 @@ namespace WizOne.Tactil
                     HtmlGenericControl divLnk = new HtmlGenericControl("div");
 
                     HtmlImage img = new HtmlImage();
-                    img.Src = "../Fisiere/Imagini/bdgPtj.jpg";
+                    if (General.Nz(dt.Rows[i]["Nume"], "").ToString() != "Inapoi")
+                        img.Src = "../Fisiere/Imagini/bdgPtj.jpg";
+                    else
+                        img.Src = "../Fisiere/Imagini/bdgback.png";
                     img.Alt = nume;
 
                     HtmlGenericControl h = new HtmlGenericControl("h3");
@@ -125,7 +129,7 @@ namespace WizOne.Tactil
                     //if (img.Alt.Contains("Adeverinta"))
                     if (tip > 0)
                         param = "&TipAdeverinta=" + tip;
-                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + param);
+                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + param, false);
                 }  
                 else
                 {
@@ -144,6 +148,10 @@ namespace WizOne.Tactil
                         case "adeverintacresa":
                             lnkAdevGrad_Click(); ;
                             break;
+                        case "inapoi":
+                            lnkOut_Click();
+                            break;
+
                     }
                 }             
                 
@@ -166,6 +174,19 @@ namespace WizOne.Tactil
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
 
+            }
+        }
+
+        protected void lnkOut_Click()
+        {
+            try
+            {
+                Response.Redirect("../Tactil/Main.aspx", false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

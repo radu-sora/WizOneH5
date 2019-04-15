@@ -199,47 +199,49 @@ namespace WizOne.Tactil
                     else
                         dtRowAbs = dtAbs.Select("IdTipOre = 1", "Id");
                     DataTable dtAbsSpn = new DataTable();
-                    if (dtRowAbs != null)
+                    if (dtRowAbs != null && dtRowAbs.Count() > 0)
+                    {
                         dtAbsSpn = dtRowAbs.CopyToDataTable();
 
-                    if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0 && Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
-                    {
-                        cmbSelAbs.DataSource = dtAbsSpn;
-                        cmbSelAbs.DataBind();
-                        cmbSelAbs.SelectedIndex = 0;
-                        Session["Absente_Tactil"] = dtAbsSpn;
-
-                        DataRow[] dtRow = dtAbsSpn.Select("Id=" + Convert.ToInt32(cmbSelAbs.Value));
-                        if (dtRow.ElementAt(0)["DenumireScurta"].ToString() == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "COP" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
+                        if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0 && Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
                         {
-                            lblZileRamase.Visible = true;
-                            //tdNrZileRamase.Visible = true;
-                            txtNrZileRamase.Visible = true;
+                            cmbSelAbs.DataSource = dtAbsSpn;
+                            cmbSelAbs.DataBind();
+                            cmbSelAbs.SelectedIndex = 0;
+                            Session["Absente_Tactil"] = dtAbsSpn;
+
+                            DataRow[] dtRow = dtAbsSpn.Select("Id=" + Convert.ToInt32(cmbSelAbs.Value));
+                            if (dtRow.ElementAt(0)["DenumireScurta"].ToString() == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "COP" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
+                            {
+                                lblZileRamase.Visible = true;
+                                //tdNrZileRamase.Visible = true;
+                                txtNrZileRamase.Visible = true;
+                            }
+                            else
+                            {
+                                lblZileRamase.Visible = false;
+                                //tdNrZileRamase.Visible = false;
+                                txtNrZileRamase.Visible = false;
+                            }
                         }
-                        else
+
+                        //Incarcam Absentele
+                        Session["Cereri_Absente_Absente"] = dtAbsSpn; //dtAbs.Select("DenumireScurta LIKE '" + denumire + "'");
+
+                        DataRow[] arr = dtAbsSpn.Select("Id=" + General.Nz(cmbSelAbs.Value, -99));
+                        //DataRow[] arr = dtAbs.Select("Id=" + General.Nz(General.VarSession("User_Marca"), -99));
+                        if (arr.Count() > 0)
                         {
-                            lblZileRamase.Visible = false;
-                            //tdNrZileRamase.Visible = false;
-                            txtNrZileRamase.Visible = false;
+                            //Afisam explicatiile
+                            //calculam nr de zile luate
+                            int nr = 0;
+                            int nrViitor = 0;
+                            string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
+                            General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
+                            txtNrZile.Value = nr;
+                            Session["TactilNrZile"] = nr;
+                            //txtNrZileViitor.Value = nrViitor;
                         }
-                    }
-
-                    //Incarcam Absentele
-                    Session["Cereri_Absente_Absente"] = dtAbsSpn; //dtAbs.Select("DenumireScurta LIKE '" + denumire + "'");
-
-                    DataRow[] arr = dtAbsSpn.Select("Id=" + General.Nz(cmbSelAbs.Value, -99));
-                    //DataRow[] arr = dtAbs.Select("Id=" + General.Nz(General.VarSession("User_Marca"), -99));
-                    if (arr.Count() > 0)
-                    {
-                        //Afisam explicatiile
-                        //calculam nr de zile luate
-                        int nr = 0;
-                        int nrViitor = 0;
-                        string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
-                        General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                        txtNrZile.Value = nr;
-                        Session["TactilNrZile"] = nr;
-                        //txtNrZileViitor.Value = nrViitor;
                     }
 
                 }
@@ -393,7 +395,7 @@ namespace WizOne.Tactil
 
                 if (dtAbs.Rows.Count > 0)
                 {
-                    object id = General.Nz(cmbAbs.Value, -99);
+                    object id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
                     if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
                         id = General.Nz(cmbSelAbs.Value, -99);
 
@@ -722,31 +724,41 @@ namespace WizOne.Tactil
                     return;
                 }
                 DataRow drAbs = null;
-                DataTable dtAbs = new DataTable();
+                DataTable dtAbs = new DataTable(), dtAbsente = new DataTable();
                 DataRow[] dtRowAbs = null;
                 //if (Session["Cereri_Absente_Absente"] != null) dtAbs = Session["Cereri_Absente_Absente"] as DataTable;
-                if (Session["Cereri_Absente_Absente"] != null) dtRowAbs = Session["Cereri_Absente_Absente"] as DataRow[];
+                //if (Session["Cereri_Absente_Absente"] != null) dtRowAbs = Session["Cereri_Absente_Absente"] as DataRow[];
+                //if (Session["Cereri_Absente_Absente"] != null) dtRowAbs = Session["Cereri_Absente_Absente"] as DataRow[];
+                if (Session["Cereri_Absente_Absente"] != null) dtAbsente = Session["Cereri_Absente_Absente"] as DataTable;
 
-                if (dtRowAbs != null && dtRowAbs.Count() > 0)
+
+                if (dtAbsente != null && dtAbsente.Rows.Count > 0)
                 {
-                    dtAbs = dtRowAbs.CopyToDataTable();
+                    dtRowAbs = dtAbsente.Select();                    
 
-                    if (Session["CereriTactil"].ToString() == "BiletVoie")
+                    if (dtRowAbs != null && dtRowAbs.Count() > 0)
                     {
-                        if (rbMotiv1.Checked)
-                            cmbAbs.Value = Convert.ToInt32(dtAbs.Rows[1]["Id"].ToString());
-                        else
-                            cmbAbs.Value = Convert.ToInt32(dtAbs.Rows[0]["Id"].ToString());
+                        dtAbs = dtRowAbs.CopyToDataTable();
+
+                        if (Session["CereriTactil"].ToString() == "BiletVoie")
+                        {
+                            if (rbMotiv1.Checked)
+                                cmbAbs.Value = Convert.ToInt32(dtAbs.Rows[1]["Id"].ToString());
+                            else
+                                cmbAbs.Value = Convert.ToInt32(dtAbs.Rows[0]["Id"].ToString());
+                        }
+
+                        object id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
+                        if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
+                            id = General.Nz(cmbSelAbs.Value, -99);
+
+                        DataRow[] lst = dtAbs.Select("Id=" + id);
+                        if (lst.Count() == 0) return;
+
+                        drAbs = lst[0];
                     }
-
-                    object id = General.Nz(cmbAbs.Value, -99);
-                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
-                        id = General.Nz(cmbSelAbs.Value, -99);
-
-                    DataRow[] lst = dtAbs.Select("Id=" + id);
-                    if (lst.Count() == 0) return;
-
-                    drAbs = lst[0];
+                    else
+                        return;
                 }
                 else
                     return;
@@ -825,8 +837,11 @@ namespace WizOne.Tactil
 
                 #region verif client
 
-                if (txtDataSf.Date < txtDataInc.Date && Session["CereriTactil"].ToString() != "BiletVoie") strErr += " " + Dami.TraduCuvant("Data sfarsit este mai mica decat data inceput");
 
+                if (txtDataSf.Date < txtDataInc.Date && Session["CereriTactil"].ToString() != "BiletVoie" && Session["CereriTactil"].ToString() != "AbsenteOra") strErr += " " + Dami.TraduCuvant("Data sfarsit este mai mica decat data inceput");
+
+                if (txtDataSf.Date < txtDataInc.Date && (Session["CereriTactil"].ToString() == "BiletVoie" || Session["CereriTactil"].ToString() == "AbsenteOra"))
+                    txtDataSf.Date = txtDataInc.Date;
                 //daca abs este de tip ore dtinc si datasf trebuie sa fie aceeasi
                 //if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 1)) == 0 && txtDataInc.Date != txtDataSf.Date) strErr += " " + Dami.TraduCuvant("Data inceput si data sfarsit trebuie sa fie aceeasi in cazul acestui tip de absenta");
 
@@ -843,7 +858,7 @@ namespace WizOne.Tactil
                 #endregion
 
 
-                if (Session["CereriTactil"].ToString() == "BiletVoie")
+                if (Session["CereriTactil"].ToString() == "BiletVoie" || Session["CereriTactil"].ToString() == "AbsenteOra")
                     if (Convert.ToInt32(General.Nz(txtNrOre.Value, -99)) <= 0) strErr += " " + Dami.TraduCuvant("Cerere cu numar de ore 0");
                     else
                     if (Convert.ToInt32(General.Nz(txtNrZile.Value, -99)) <= 0) strErr += " " + Dami.TraduCuvant("Cerere cu numar de zile 0");
@@ -1571,11 +1586,17 @@ namespace WizOne.Tactil
                 //DataTable dtAbs = Session["Cereri_Absente_Absente"] as DataTable;
 
 
-                DataTable dtAbs = new DataTable();
+                DataTable dtAbs = new DataTable(), dtAbsente = new DataTable();
                 DataRow[] dtRowAbs = null;
-                if (Session["Cereri_Absente_Absente"] != null) dtRowAbs = Session["Cereri_Absente_Absente"] as DataRow[];
+                //if (Session["Cereri_Absente_Absente"] != null) dtRowAbs = Session["Cereri_Absente_Absente"] as DataRow[];
+                if (Session["Cereri_Absente_Absente"] != null) dtAbsente = Session["Cereri_Absente_Absente"] as DataTable;
 
-                object id = General.Nz(cmbAbs.Value, -99);
+                dtRowAbs = dtAbsente.Select();
+
+                if (dtRowAbs != null)
+                    dtAbs = dtRowAbs.CopyToDataTable();
+
+                object id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
                 if (dtRowAbs != null && dtRowAbs.Count() > 0)
                 {
                     dtAbs = dtRowAbs.CopyToDataTable();                    
@@ -1590,7 +1611,7 @@ namespace WizOne.Tactil
                 else
                     return "";
 
-                id = General.Nz(cmbAbs.Value, -99);
+                id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
                 if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
                     id = General.Nz(cmbSelAbs.Value, -99);
 
@@ -1652,7 +1673,7 @@ namespace WizOne.Tactil
 
                 //DateTime.Parse(a[1], Constante.formatDataSistem)
 
-                id = General.Nz(cmbAbs.Value, -99);
+                id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
                 if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
                     id = General.Nz(cmbSelAbs.Value, -99);
 

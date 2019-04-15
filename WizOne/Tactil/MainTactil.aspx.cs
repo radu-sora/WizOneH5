@@ -39,14 +39,14 @@ namespace WizOne.Tactil
                     if (dt.Rows[0]["IdParam"] != null && dt.Rows[0]["IdParam"].ToString().Length > 0)
                     {
                         Session["FluturasGeneral"] = dt.Rows[0]["IdParam"].ToString();
-                        lblPrint.Visible = false;
+                        //lblPrint.Visible = false;
                     }
                 }
-                else
-                {
-                    if (Session["FluturasGeneral"] != null && Session["FluturasGeneral"].ToString().Length > 0)
-                        lblPrint.Visible = false;
-                }
+                //else
+                //{
+                //    if (Session["FluturasGeneral"] != null && Session["FluturasGeneral"].ToString().Length > 0)
+                //        lblPrint.Visible = false;
+                //}
 
 
 
@@ -80,7 +80,7 @@ namespace WizOne.Tactil
                 {
                     Session["ReportId"] = Convert.ToInt32(Session["FluturasGeneral"].ToString());
                     Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + "&An="
-                        + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")));
+                        + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")), false);
                 }
                 else
                 {
@@ -110,31 +110,40 @@ namespace WizOne.Tactil
                 }
 
 
-                if (VerificaFluturasLog() == 0)
+                if (Session["FluturasGeneral"] != null && Session["FluturasGeneral"].ToString().Length > 0)
                 {
-                    MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "Atentie !");
+                    Session["ReportId"] = Convert.ToInt32(Session["FluturasGeneral"].ToString());
+                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + "&An="
+                        + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")) + "&PrintareAutomata=1", false);
                 }
                 else
                 {
-                    ScrieInFluturasLog();
+                    if (VerificaFluturasLog() == 0)
+                    {
+                        MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "Atentie !");
+                    }
+                    else
+                    {
+                        ScrieInFluturasLog();
 
-                    Session["Fluturas_An"] = Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru"));
-                    Session["Fluturas_Luna"] = Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"));
-                    Reports.FluturasHarting dlreport = new Reports.FluturasHarting();
-                    dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
-                    dlreport.Margins.Top = 10;
-                    dlreport.Margins.Bottom = 10;
-                    dlreport.Margins.Left = 50;
-                    dlreport.Margins.Right = 50;
-                    dlreport.PrintingSystem.ShowMarginsWarning = false;
-                    //dlreport.PrinterName = "Microsoft XPS Document Writer";
-                    //dlreport.PrinterName = "NPI045772 (HP LaserJet P2055dn)";
-                    dlreport.PrinterName = Dami.ValoareParam("NumeImprimanta", "");
-                    dlreport.ShowPrintMarginsWarning = false;
-                    dlreport.CreateDocument();
+                        Session["Fluturas_An"] = Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru"));
+                        Session["Fluturas_Luna"] = Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"));
+                        Reports.FluturasHarting dlreport = new Reports.FluturasHarting();
+                        dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+                        dlreport.Margins.Top = 10;
+                        dlreport.Margins.Bottom = 10;
+                        dlreport.Margins.Left = 50;
+                        dlreport.Margins.Right = 50;
+                        dlreport.PrintingSystem.ShowMarginsWarning = false;
+                        //dlreport.PrinterName = "Microsoft XPS Document Writer";
+                        //dlreport.PrinterName = "NPI045772 (HP LaserJet P2055dn)";
+                        dlreport.PrinterName = Dami.ValoareParam("NumeImprimanta", "");
+                        dlreport.ShowPrintMarginsWarning = false;
+                        dlreport.CreateDocument();
 
-                    ReportPrintTool pt = new ReportPrintTool(dlreport);
-                    pt.Print();
+                        ReportPrintTool pt = new ReportPrintTool(dlreport);
+                        pt.Print();
+                    }
                 }
             }
             catch (Exception ex)

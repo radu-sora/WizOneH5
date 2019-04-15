@@ -66,7 +66,7 @@
                 <td align="center"><Label runat="server" id="lblNume" style="font-weight: bold;font-size:20px">NUME:</Label></td>
                 <td align="right">
                     <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Inapoi" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
-                        <Image Url="../Fisiere/Imagini/bdgOut.jpg"></Image>
+                        <Image Url="../Fisiere/Imagini/bdgback.png"></Image>
                     </dx:ASPxButton>
                 </td>
             </tr>

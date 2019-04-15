@@ -171,41 +171,41 @@ namespace WizOne.Pagini
 
                 #region OLD
 
-                //dt = General.IncarcaDT($@"
-                //    SELECT {cmp} AS IdAuto, X.*, 
-                //    CASE WHEN X.Candidat = 0 THEN J.DocNr ELSE A.F100985 END AS DocNr, 
-                //    CASE WHEN X.Candidat = 0 THEN J.DocData ELSE A.F100986 END AS DocData,
-                //    CASE WHEN COALESCE(J.IdStare,0)=3 THEN 1 ELSE 0 END AS Tiparit,
-                //    CASE WHEN COALESCE(J.IdStare,0)=4 THEN 1 ELSE 0 END AS Semnat,
-                //    CASE WHEN COALESCE(J.IdStare,0)=5 THEN 1 ELSE 0 END AS Revisal
-                //    FROM (
-                //    SELECT A.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, A.DataModif, 0 AS Candidat,
-                //    CASE WHEN COALESCE(CORCod, 0) > 0 THEN 1 ELSE 0 END AS CORCod,
-                //    CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END AS FunctieId,
-                //    CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END AS Norma,
-                //    CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END AS Salariul,
-                //    NULL AS Spor,
-                //    CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END AS Structura,
-                //    CASE WHEN COALESCE(DurataTimpMunca, 0) = 1 THEN 1 ELSE 0 END AS CIMDet,
-                //    CASE WHEN COALESCE(DurataTimpMunca, 0) = 2 THEN 1 ELSE 0 END AS CIMNed,
-                //    CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END AS Motiv
-                //    FROM Avs_Cereri A
-                //    LEFT JOIN F100 B ON A.F10003 = B.F10003
-                //    WHERE A.IdStare = 3
-                //    UNION
-                //    SELECT A.F10003, COALESCE(A.F10008, '') + ' ' + COALESCE(A.F10009, '') AS NumeComplet, A.F10022, 1 AS Candidat,
-                //    null, null, null, null, null, null, null, null, null
-                //    FROM F100 A
-                //    WHERE A.F10025 = 900) X
-                //    LEFT JOIN F100 A ON X.F10003 = A.F10003
-                //    LEFT JOIN F004 G ON A.F10005 = G.F00405
-                //    LEFT JOIN F005 H ON A.F10006 = H.F00506
-                //    LEFT JOIN F006 I ON A.F10007 = I.F00607
-                //    LEFT JOIN Admin_NrActAd J ON X.F10003=J.F10003
-                //    WHERE 1=1 {filtru}", null);
+                ////dt = General.IncarcaDT($@"
+                ////    SELECT {cmp} AS IdAuto, X.*, 
+                ////    CASE WHEN X.Candidat = 0 THEN J.DocNr ELSE A.F100985 END AS DocNr, 
+                ////    CASE WHEN X.Candidat = 0 THEN J.DocData ELSE A.F100986 END AS DocData,
+                ////    CASE WHEN COALESCE(J.IdStare,0)=3 THEN 1 ELSE 0 END AS Tiparit,
+                ////    CASE WHEN COALESCE(J.IdStare,0)=4 THEN 1 ELSE 0 END AS Semnat,
+                ////    CASE WHEN COALESCE(J.IdStare,0)=5 THEN 1 ELSE 0 END AS Revisal
+                ////    FROM (
+                ////    SELECT A.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, A.DataModif, 0 AS Candidat,
+                ////    CASE WHEN COALESCE(CORCod, 0) > 0 THEN 1 ELSE 0 END AS CORCod,
+                ////    CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END AS FunctieId,
+                ////    CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END AS Norma,
+                ////    CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END AS Salariul,
+                ////    NULL AS Spor,
+                ////    CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END AS Structura,
+                ////    CASE WHEN COALESCE(DurataTimpMunca, 0) = 1 THEN 1 ELSE 0 END AS CIMDet,
+                ////    CASE WHEN COALESCE(DurataTimpMunca, 0) = 2 THEN 1 ELSE 0 END AS CIMNed,
+                ////    CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END AS Motiv
+                ////    FROM Avs_Cereri A
+                ////    LEFT JOIN F100 B ON A.F10003 = B.F10003
+                ////    WHERE A.IdStare = 3
+                ////    UNION
+                ////    SELECT A.F10003, COALESCE(A.F10008, '') + ' ' + COALESCE(A.F10009, '') AS NumeComplet, A.F10022, 1 AS Candidat,
+                ////    null, null, null, null, null, null, null, null, null
+                ////    FROM F100 A
+                ////    WHERE A.F10025 = 900) X
+                ////    LEFT JOIN F100 A ON X.F10003 = A.F10003
+                ////    LEFT JOIN F004 G ON A.F10005 = G.F00405
+                ////    LEFT JOIN F005 H ON A.F10006 = H.F00506
+                ////    LEFT JOIN F006 I ON A.F10007 = I.F00607
+                ////    LEFT JOIN Admin_NrActAd J ON X.F10003=J.F10003
+                ////    WHERE 1=1 {filtru}", null);
 
 
-                #endregion
+
 
 
                 //dt = General.IncarcaDT($@"
@@ -270,67 +270,140 @@ namespace WizOne.Pagini
                 //        ) AS Y
                 //        WHERE 1=1 " + filtru, null);
 
+                #endregion
 
-                dt = General.IncarcaDT($@"
-                        SELECT * FROM (
-                        SELECT {cmp} AS ""Cheie"", X.*,
-                        (SELECT MIN(""ColData"") FROM (
-                        SELECT CASE WHEN ""Candidat"" = 1 THEN 
-                        (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=DATEADD(d,-1,F10022) AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
-                        ELSE '2100-01-01' END AS ColData 
-                        UNION
-                        SELECT CASE WHEN Motiv = 1 THEN X.DataModif ELSE '2100-01-01' END AS ColData  
-                        UNION
-                        SELECT CASE WHEN Salariul = 1 THEN 
-                        (SELECT Zi FROM (
-                        SELECT Zi, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as IdAuto 
-                        FROM tblZile WHERE Zi>=DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays)) x
-                        WHERE IdAuto=19)
-                        ELSE '2100-01-01' END AS ColData 
-                        UNION
-                        SELECT CASE WHEN CORCod=1 OR FunctieId = 1 OR CIMDet=1 OR CIMNed=1 THEN 
-                        (SELECT TOP 1 Zi FROM tblZile WHERE Zi<DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
-                        ELSE '2100-01-01' END AS ColData 
-                        ) x) AS TermenDepasire
-                        FROM (
-                        SELECT A.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, A.DataModif, 0 AS Candidat,
-                        MAX(CASE WHEN COALESCE(CORCod, 0) > 0 THEN 1 ELSE 0 END) AS CORCod,
-                        MAX(CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END) AS FunctieId,
-                        MAX(CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END) AS Norma,
-                        MAX(CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END) AS Salariul,
-                        MAX(0) AS Spor,
-                        MAX(CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END) AS Structura,
-                        MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
-                        MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
-                        MAX(CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END) AS Motiv,
-                        J.DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
-                        J.IdAuto AS IdAutoAct, 
-                        CASE WHEN (SELECT COUNT(*) FROM tblFisiere FIS WHERE FIS.Tabela='Admin_NrActAd' AND FIS.Id=J.IdAuto AND FIS.EsteCerere=0) = 0 THEN 0 ELSE 1 END AS AreAtas,
-                        (SELECT ',' + CONVERT(nvarchar(20),COALESCE(AA.Id, '')) 
-                        FROM Avs_Cereri AA
-                        LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
-                        LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
-                        WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,-99)=COALESCE(J.DocData,-99)
-                        GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
-                        FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993
-                        FROM Avs_Cereri A
-                        LEFT JOIN F100 B ON A.F10003 = B.F10003
-                        LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
-                        WHERE A.IdStare = 3
-                        GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat
-                        UNION
-                        SELECT A.F10003, COALESCE(A.F10008, '') + ' ' + COALESCE(A.F10009, '') AS NumeComplet, A.F10022, 1 AS Candidat,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                        A.F100985, A.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
-                        J.IdAuto AS IdAutoAct,
-                        CASE WHEN (SELECT COUNT(*) FROM tblFisiere FIS WHERE FIS.Tabela='Admin_NrActAd' AND FIS.Id=J.IdAuto AND FIS.EsteCerere=0) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
-                        A.F10022, A.F100993
-                        FROM F100 A
-                        LEFT JOIN Admin_NrActAd J ON A.F10003=J.F10003
-                        WHERE A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) X
-                        ) AS Y
-                        WHERE 1=1 " + filtru, null);
+                if (Constante.tipBD == 1)
+                {
 
+                    #region SQL
+
+                    dt = General.IncarcaDT($@"
+                            SELECT * FROM (
+                            SELECT {cmp} AS ""Cheie"", X.*,
+                            (SELECT MIN(""ColData"") FROM (
+                            SELECT CASE WHEN ""Candidat"" = 1 THEN 
+                            (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=DATEADD(d,-1,F10022) AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+                            ELSE '2100-01-01' END AS ColData 
+                            UNION
+                            SELECT CASE WHEN Motiv = 1 THEN X.DataModif ELSE '2100-01-01' END AS ColData  
+                            UNION
+                            SELECT CASE WHEN Salariul = 1 THEN 
+                            (SELECT Zi FROM (
+                            SELECT Zi, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as IdAuto 
+                            FROM tblZile WHERE Zi>=DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays)) x
+                            WHERE IdAuto=19)
+                            ELSE '2100-01-01' END AS ColData 
+                            UNION
+                            SELECT CASE WHEN CORCod=1 OR FunctieId = 1 OR CIMDet=1 OR CIMNed=1 THEN 
+                            (SELECT TOP 1 Zi FROM tblZile WHERE Zi<DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+                            ELSE '2100-01-01' END AS ColData 
+                            ) x) AS TermenDepasire
+                            FROM (
+                            SELECT A.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, A.DataModif, 0 AS Candidat,
+                            MAX(CASE WHEN COALESCE(CORCod, 0) > 0 THEN 1 ELSE 0 END) AS CORCod,
+                            MAX(CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END) AS FunctieId,
+                            MAX(CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END) AS Norma,
+                            MAX(CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END) AS Salariul,
+                            MAX(0) AS Spor,
+                            MAX(CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END) AS Structura,
+                            MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
+                            MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
+                            MAX(CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END) AS Motiv,
+                            J.DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+                            J.IdAuto AS IdAutoAct, 
+                            CASE WHEN (SELECT COUNT(*) FROM tblFisiere FIS WHERE FIS.Tabela='Admin_NrActAd' AND FIS.Id=J.IdAuto AND FIS.EsteCerere=0) = 0 THEN 0 ELSE 1 END AS AreAtas,
+                            (SELECT ',' + CONVERT(nvarchar(20),COALESCE(AA.Id, '')) 
+                            FROM Avs_Cereri AA
+                            LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
+                            LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
+                            WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,-99)=COALESCE(J.DocData,-99)
+                            GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
+                            FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993
+                            FROM Avs_Cereri A
+                            LEFT JOIN F100 B ON A.F10003 = B.F10003
+                            LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
+                            WHERE A.IdStare = 3
+                            GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat
+                            UNION
+                            SELECT A.F10003, COALESCE(A.F10008, '') + ' ' + COALESCE(A.F10009, '') AS NumeComplet, A.F10022, 1 AS Candidat,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                            A.F100985, A.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+                            J.IdAuto AS IdAutoAct,
+                            CASE WHEN (SELECT COUNT(*) FROM tblFisiere FIS WHERE FIS.Tabela='Admin_NrActAd' AND FIS.Id=J.IdAuto AND FIS.EsteCerere=0) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
+                            A.F10022, A.F100993
+                            FROM F100 A
+                            LEFT JOIN Admin_NrActAd J ON A.F10003=J.F10003
+                            WHERE A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) X
+                            ) AS Y
+                            WHERE 1=1 " + filtru, null);
+
+                    #endregion
+                }
+                else
+                {
+
+                    #region Orcl
+
+                    dt = General.IncarcaDT($@"
+                            SELECT * FROM (
+                            SELECT {cmp} AS ""Cheie"", X.*,
+                            (SELECT MIN(""ColData"") FROM (
+                            SELECT CASE WHEN ""Candidat"" = 1 THEN 
+                            (SELECT ""Zi"" FROM ""tblZile"" WHERE ""Zi""<=(F10022-1) AND ""ZiSapt""<=5 AND ""Zi"" NOT IN (SELECT day FROM Holidays) AND ROWNUM<=1 ORDER BY ""Zi"" Desc)
+                            ELSE TO_DATE('DD-MON-YYYY','01-JAN-2100') END AS ""ColData"" 
+                            UNION
+                            SELECT CASE WHEN ""Motiv"" = 1 THEN X.""DataModif"" ELSE TO_DATE('DD-MON-YYYY','01-JAN-2100') END AS "" ColData""   
+                            UNION
+                            SELECT CASE WHEN "" Salariul""  = 1 THEN 
+                            (SELECT ""Zi"" 
+                            FROM ""tblZile""  WHERE ""Zi"" >=""DataModif""  AND ""ZiSapt"" <=5 AND ""Zi""  NOT IN (SELECT day FROM Holidays) AND ROWNUM=19)
+                            ELSE TO_DATE('DD-MON-YYYY','01-JAN-2100') END AS ColData 
+                            UNION
+                            SELECT CASE WHEN ""CORCod""=1 OR ""FunctieId"" = 1 OR ""CIMDet""=1 OR ""CIMNed""=1 THEN 
+                            (SELECT TOP 1 ""Zi"" FROM ""tblZile"" WHERE ""Zi""<""DataModif"" AND ""ZiSapt""<=5 AND ""Zi"" NOT IN (SELECT day FROM Holidays) ORDER BY ""Zi"" Desc)
+                            ELSE TO_DATE('DD-MON-YYYY','01-JAN-2100') END AS ""ColData""
+                            ) x) AS ""TermenDepasire""
+                            FROM (
+                            SELECT A.F10003, COALESCE(B.F10008, '') || ' ' || COALESCE(B.F10009, '') AS ""NumeComplet"", A.""DataModif"", 0 AS ""Candidat"",
+                            MAX(CASE WHEN COALESCE(""CORCod"", 0) > 0 THEN 1 ELSE 0 END) AS ""CORCod"",
+                            MAX(CASE WHEN COALESCE(""FunctieId"", 0) > 0 THEN 1 ELSE 0 END) AS ""FunctieId"",
+                            MAX(CASE WHEN COALESCE(""Norma"", 0) > 0 THEN 1 ELSE 0 END) AS ""Norma"",
+                            MAX(CASE WHEN COALESCE(""SalariulBrut"", 0) > 0 OR COALESCE(""SalariulNet"", 0) > 0 THEN 1 ELSE 0 END) AS ""Salariul"",
+                            MAX(0) AS ""Spor"",
+                            MAX(CASE WHEN COALESCE(""SubcompanieId"", 0) > 0 OR COALESCE(""FilialaId"", 0) > 0 OR COALESCE(""SectieId"", 0) > 0 OR COALESCE(""DeptId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Structura"",
+                            MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 2 THEN 1 ELSE 0 END) AS ""CIMDet"",
+                            MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 1 THEN 1 ELSE 0 END) AS ""CIMNed"",
+                            MAX(CASE WHEN COALESCE(""MotivId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Motiv"",
+                            CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
+                            J.""IdAuto"" AS ""IdAutoAct"", 
+                            CASE WHEN (SELECT COUNT(*) FROM ""tblFisiere"" FIS WHERE FIS.""Tabela""='Admin_NrActAd' AND FIS.""Id""=J.""IdAuto"" AND FIS.""EsteCerere""=0) = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
+                            (SELECT LISTAGG(AA.""Id"", ',') WITHIN GROUP (ORDER BY AA.""Id"") AS ""Id""
+                            FROM ""Avs_Cereri"" AA
+                            LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
+                            LEFT JOIN ""Admin_NrActAd"" JJ ON AA.""IdActAd""=JJ.""IdAuto""
+                            WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) AND JJ.""DocData""=COALESCE(J.""DocData"",TO_DATE('DD-MON-YYYY','01-JAN-1950'))
+                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto""
+                            ) AS ""IdAvans"", B.F10022, B.F100993
+                            FROM ""Avs_Cereri"" A
+                            LEFT JOIN F100 B ON A.F10003 = B.F10003
+                            LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
+                            WHERE A.""IdStare"" = 3
+                            GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat""
+                            UNION
+                            SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                            A.F100985, A.F100986, COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
+                            J.""IdAuto"" AS ""IdAutoAct"",
+                            CASE WHEN (SELECT COUNT(*) FROM ""tblFisiere"" FIS WHERE FIS.""Tabela""='Admin_NrActAd' AND FIS.""Id""=J.""IdAuto"" AND FIS.""EsteCerere""=0) = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
+                            A.F10022, A.F100993
+                            FROM F100 A
+                            LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
+                            WHERE A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) X
+                            ) 
+                            WHERE 1=1 " + filtru, null);
+
+                    #endregion
+                }
 
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["Cheie"] };
 
@@ -422,16 +495,33 @@ namespace WizOne.Pagini
 
                                         if (Convert.ToInt32(General.Nz(obj[2], 0)) == 0)
                                         {
-                                            DataTable dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                            DataTable dt = new DataTable();
+                                            int id = -99;
+
+                                            if (Constante.tipBD == 1)
+                                            {
+                                                dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
                                                 OUTPUT Inserted.IdAuto
-                                                VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);", 
+                                                VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
                                                 new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
 
-                                            if (dt.Rows.Count > 0)
-                                            {
-                                                int id = Convert.ToInt32(dt.Rows[0]["IdAuto"]);
-                                                General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { dt.Rows[0][0] });
+                                                if (dt.Rows.Count > 0)
+                                                {
+                                                    id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
+                                                    //int id = Convert.ToInt32(dt.Rows[0]["IdAuto"]);
+                                                    //General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { dt.Rows[0][0] });
+                                                }
                                             }
+                                            else
+                                            {
+                                                id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@3, @4, {General.CurrentDate()}, @5, @6) RETURNING ""IdAuto"" INTO @out_1;",
+                                                new object[] { "int",  obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+                                            }
+
+                                            if (Convert.ToInt32(General.Nz(id,-99)) != -99)
+                                                General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { id });
+
 
                                             msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
                                         }
@@ -532,7 +622,7 @@ namespace WizOne.Pagini
                                             continue;
                                         }
 
-                                        DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET Semnat=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
+                                        DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
 
                                     }
@@ -642,7 +732,8 @@ namespace WizOne.Pagini
         {
             try
             {
-                var id = e.Keys["Id"];
+                //var id = e.Keys["Id"];
+                int id = Convert.ToInt32(e.Keys["Id"]);
 
                 object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAutoAct", "F10003", "DataModif", "Revisal", "TermenDepasire", "IdAvans" }) as object[];
 
@@ -670,15 +761,32 @@ namespace WizOne.Pagini
 
                     if (Convert.ToInt32(General.Nz(obj[0], -99)) == -99)
                     {
-                        DataTable dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"") 
-                                                OUTPUT Inserted.IdAuto
-                                                VALUES(@1, @2, @3, @4, {Session["UserId"]}, {General.CurrentDate()}, @5);",
-                                                new object[] { obj[1], docNr, docData, obj[2], obj[4] });
+                        DataTable dt = new DataTable();
+                        //int id = -99;
+                        id = -99;
 
-                        if (dt.Rows.Count > 0)
+                        if (Constante.tipBD == 1)
                         {
-                            General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[5] + ")", new object[] { dt.Rows[0][0] });
+                            dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"") 
+                                            OUTPUT Inserted.IdAuto
+                                            VALUES(@1, @2, @3, @4, {Session["UserId"]}, {General.CurrentDate()}, @5);",
+                                            new object[] { obj[1], docNr, docData, obj[2], obj[4] });
+
+                            if (dt.Rows.Count > 0)
+                            {
+                                id = Convert.ToInt32(General.Nz(dt.Rows[0][0],-99));
+                                //General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[5] + ")", new object[] { dt.Rows[0][0] });
+                            }
                         }
+                        else
+                        {
+                            id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"") 
+                                        VALUES(@2, @3, @4, @5, {Session["UserId"]}, {General.CurrentDate()}, @6) RETURNING ""IdAuto"" INTO @out_1",
+                                        new object[] { "int", obj[1], docNr, docData, obj[2], obj[4] });
+                        }
+
+                        if (id != -99)
+                            General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[5] + ")", new object[] { id });
                     }
                     else
                     {

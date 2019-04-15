@@ -333,6 +333,7 @@
     <Content Include="Fisiere\css\tactil.css" />
     <Content Include="Fisiere\css\teme.css" />
     <Content Include="Fisiere\css\widgets.css" />
+    <Content Include="Fisiere\Imagini\bdgBack.png" />
     <Content Include="Fisiere\Imagini\bdgBg.png" />
     <Content Include="Fisiere\Imagini\bdgCer.jpg" />
     <Content Include="Fisiere\Imagini\bdgCrs.jpg" />
@@ -2395,7 +2396,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63427</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:63428/</IISUrl>
+          <IISUrl>http://localhost:63427/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

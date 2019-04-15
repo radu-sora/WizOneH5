@@ -98,7 +98,7 @@ namespace WizOne.Personal
                         + " JOIN \"Admin_Categorii\" b ON a.\"IdCategorie\" = b.\"Id\" "
                         + " WHERE c.\"Marca\" = {1} "
                         + " UNION "
-                        + " SELECT 10000 + a.\"IdCategory\", 10000 + CAST(a.\"IdCategory\" AS INT) AS \"IdObiect\", a.\"NameCategory\" + ' / ' + 'Document' AS \"NumeCompus\", "
+                        + " SELECT 10000 + a.\"IdCategory\", 10000 + CAST(a.\"IdCategory\" AS INT) AS \"IdObiect\", a.\"NameCategory\" {0} ' / ' {0} 'Document' AS \"NumeCompus\", "
                         + " null as \"ValoareEstimata\", 'Document' AS \"NumeObiect\"   FROM \"CategoriiAtasamente\" a where a.\"Obligatoriu\" = 1";
 
             if (Constante.tipBD == 1)
@@ -160,7 +160,7 @@ namespace WizOne.Personal
 
                         + " UNION "
 
-                        + " SELECT 10000 + a.\"IdCategory\", 10000 + CAST(a.\"IdCategory\" AS INT) AS \"IdObiect\", a.\"NameCategory\" + ' / ' + 'Document' AS \"NumeCompus\", null as \"ValoareEstimata\", 'Document' AS \"NumeObiect\" "
+                        + " SELECT 10000 + a.\"IdCategory\", 10000 + CAST(a.\"IdCategory\" AS INT) AS \"IdObiect\", a.\"NameCategory\" {0} ' / ' {0} 'Document' AS \"NumeCompus\", null as \"ValoareEstimata\", 'Document' AS \"NumeObiect\" "
                         + " FROM \"CategoriiAtasamente\" a "
                         + " where a.\"Obligatoriu\" = 1 and a.\"IdCategory\" not in ( "
                         + " select b.\"IdCategory\" from \"Atasamente\" b where \"IdEmpl\" = {1})";

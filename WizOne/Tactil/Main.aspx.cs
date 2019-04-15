@@ -165,7 +165,7 @@ namespace WizOne.Tactil
                                 if (img.Alt.Contains("Adeverinta") && tip > 0)
                                     param = "&TipAdeverinta=" + tip;
 
-                                Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + param);
+                                Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + param, false);
                             }
                         }
                         break;

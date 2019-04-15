@@ -1947,7 +1947,7 @@ namespace WizOne.Pontaj
                     val_uri += ",\"Val" + i + "\"";
                 }
 
-                string sqlVal = $@"SELECT COALESCE(A.""OreInVal"",'') AS ""ValAbs"", A.""DenumireScurta"", A.""Id"", 
+                string sqlVal = $@"SELECT COALESCE(A.""OreInVal"",'') AS ""ValAbs"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", 
                         COALESCE(D.""Afisare"",1) AS ""Afisare"", COALESCE(A.""VerificareNrMaxOre"",0) AS ""VerificareNrMaxOre"",
                         COALESCE(A.""NrMax"", 23) AS ""NrMax"" {val_uri}
                         FROM ""Ptj_tblAbsente"" a
@@ -1962,7 +1962,7 @@ namespace WizOne.Pontaj
                         (COALESCE(B.D,0)<> 0 AND (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
                         (COALESCE(B.SL,0)<> 0 AND P.""ZiLibera"" = COALESCE(B.SL,0))
                         ) 
-                        GROUP BY A.""OreInVal"", A.""DenumireScurta"", A.""Id"", D.""Afisare"", A.""NrMax"", A.""VerificareNrMaxOre"" {val_uri}
+                        GROUP BY A.""OreInVal"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", D.""Afisare"", A.""NrMax"", A.""VerificareNrMaxOre"" {val_uri}
                         ORDER BY A.""OreInVal"" ";
 
                 DataTable dtVal = General.IncarcaDT(sqlVal, null);
@@ -1976,13 +1976,18 @@ namespace WizOne.Pontaj
                     divCol.Attributes["class"] = "col-md-3";
                     divCol.Style["margin-bottom"] = "15px";
 
-                    HtmlGenericControl lbl = new HtmlGenericControl("label");
-                    lbl.Style["width"] = "100%";
-                    lbl.InnerHtml = General.Nz(dr["DenumireScurta"], "&nbsp;").ToString();
-                    //Label lbl = new Label();
+                    //HtmlGenericControl lbl = new HtmlGenericControl("label");
                     //lbl.Style["width"] = "100%";
-                    //lbl.Text = General.Nz(dr["DenumireScurta"], "&nbsp;").ToString();
+                    //lbl.InnerHtml = General.Nz(dr["DenumireScurta"], "&nbsp;").ToString();
+                    ////Label lbl = new Label();
+                    ////lbl.Style["width"] = "100%";
+                    ////lbl.Text = General.Nz(dr["DenumireScurta"], "&nbsp;").ToString();
 
+
+                    ASPxLabel lbl = new ASPxLabel();
+                    lbl.Text = General.Nz(dr["DenumireScurta"], "___").ToString();
+                    lbl.ToolTip = General.Nz(dr["Denumire"], "&nbsp;").ToString();
+                    lbl.Width = new Unit(100, UnitType.Percentage);
 
                     ASPxSpinEdit txt = new ASPxSpinEdit();
                     txt.ClientInstanceName = id;

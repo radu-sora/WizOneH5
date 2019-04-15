@@ -103,6 +103,7 @@ namespace WizOne.Absente
                 TraduGrid(grView);
                 TraduGrid(grLeg);
 
+                grLunar.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaIstoricExtins", "10"));
             }
             catch (Exception ex)
             {

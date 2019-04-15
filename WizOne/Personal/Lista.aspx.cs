@@ -12,6 +12,7 @@ using System.Reflection;
 using System.IO;
 using System.Globalization;
 using System.Web.UI.HtmlControls;
+using Oracle.ManagedDataAccess.Client;
 
 namespace WizOne.Personal
 {
@@ -103,16 +104,36 @@ namespace WizOne.Personal
         {
             try
             {
+                ////string strSql = "";
+                //OracleConnection conn = new OracleConnection(Constante.cnnWeb);
+                //conn.Open();
 
-                DataTable dtTmp = General.IncarcaDT($@"DECLARE
-                    ret_x1 number;
-                    BEGIN
-                    insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") VALUES(460, 2, 5, 20) returning ""IdAuto"" into ret_x1;
-                    commit;
-                END; ", null);
+                ////OracleCommand cmd = new OracleCommand(strSql, conn);
+                //using (OracleCommand cmd = conn.CreateCommand())
+                //{
+                //    //cmd.Connection = conn;
+                //    //cmd.CommandText = "insert into foo values('foo','bar') returning id into :myOutputParameter";
+                //    cmd.CommandText = @"insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") 
+                //            VALUES(460, 2, 5, 20) returning ""IdAuto"" into :out_1";
+                //    //cmd.Parameters.Add("out_1", OracleDbType.Int32, ParameterDirection.ReturnValue);
+                //    cmd.Parameters.Add(new OracleParameter("out_1", OracleDbType.Int32, ParameterDirection.ReturnValue));
+                //    //cmd.Parameters.Add(new OracleParameter("myOutputParameter", OracleDbType.Decimal, ParameterDirection.ReturnValue));
+                //    //cmd.Parameters.Add(new OracleParameter("out_" + x.ToString(), OracleDbType.Varchar2, ParameterDirection.ReturnValue));
+                //    cmd.ExecuteNonQuery(); // an INSERT is always a Non Query
+                //    var ert = cmd.Parameters["out_1"].Value;
+                //}
 
-                DataTable dtAAA = General.IncarcaDT($@"
-                    insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") VALUES(460, 2, 5, 20) returning ""IdAuto"" into @out_1", new object[] { "string" });
+                //conn.Close();
+
+                //DataTable dtTmp = General.IncarcaDT($@"DECLARE
+                //    ret_x1 number;
+                //    BEGIN
+                //    insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") VALUES(460, 2, 5, 20) returning ""IdAuto"" into ret_x1;
+                //    commit;
+                //END; ", null);
+
+                //var dtAAA = General.DamiOracleScalar($@"
+                //    insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") VALUES(460, 2, 5, 20) returning ""IdAuto"" into @out_1", new object[] { "int" });
 
                 DataTable dt = General.GetPersonalRestrans(Convert.ToInt32(Session["UserId"].ToString()), checkComboBoxStare.Text, 1);
                 grDate.DataSource = dt;

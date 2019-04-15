@@ -68,8 +68,8 @@ namespace WizOne.Personal
                 cmbPL.DataSource = dtPL;
                 cmbPL.DataBind();
 
-                DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 " + (Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "")) <= 0 ? ""
-                        : " WHERE F00808 = " + Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], ""))), null);
+                DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 " + (Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0")) <= 0 ? ""
+                        : " WHERE F00808 = " + Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0"))), null);
                 cmbBir.DataSource = dtBir;
                 cmbBir.DataBind();
 
@@ -87,9 +87,9 @@ namespace WizOne.Personal
                         txtSec.Text = General.Nz(dtF100.Rows[0]["F00507"], "").ToString();
                         txtDept.Text = General.Nz(dtF100.Rows[0]["F00608"], "").ToString();
                         txtSubdept.Text = General.Nz(dtF100.Rows[0]["F00709"], "").ToString();
-                        cmbBir.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F100959"], ""));
-                        cmbCC.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10053"], ""));
-                        cmbPL.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10079"], ""));
+                        cmbBir.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F100959"], "0"));
+                        cmbCC.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10053"], "0"));
+                        cmbPL.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10079"], "0"));
                     }
                 }
 
@@ -198,8 +198,8 @@ namespace WizOne.Personal
                     ds.Tables[0].Rows[0]["F100959"] = 0;
                     ds.Tables[2].Rows[0]["F100959"] = 0;
                 }
-                DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 " + (Convert.ToInt32(General.Nz(ds.Tables[0].Rows[0]["F100958"], "")) <= 0 ? ""
-                    : " WHERE F00808 = " + Convert.ToInt32(General.Nz(ds.Tables[0].Rows[0]["F100958"], ""))), null);
+                DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 " + (Convert.ToInt32(General.Nz(ds.Tables[0].Rows[0]["F100958"], "0")) <= 0 ? ""
+                    : " WHERE F00808 = " + Convert.ToInt32(General.Nz(ds.Tables[0].Rows[0]["F100958"], "0"))), null);
                 cmbBir.DataSource = dtBir;
                 cmbBir.DataBind();
             }

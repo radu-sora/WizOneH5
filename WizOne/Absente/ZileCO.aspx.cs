@@ -71,7 +71,7 @@ namespace WizOne.Absente
                     try
                     {
                         GridViewDataColumn col = (GridViewDataColumn)c;
-                        col.Caption = Dami.TraduCuvant(col.FieldName);
+                        col.Caption = Dami.TraduCuvant(col.FieldName, col.Caption);
                     }
                     catch (Exception) { }
                 }

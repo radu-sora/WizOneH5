@@ -1341,10 +1341,23 @@ namespace WizOne.Absente
 
                 #endregion
 
+                
                 Session["Absente_Cereri_Date_Aditionale"] = null;
-                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                
                 log += DateTime.Now + " - 15" + Environment.NewLine;
-                ASPxPanel.RedirectOnCallback("~/Absente/Lista.aspx");
+
+                if (msg != "" && msg.Substring(0, 1) != "2")
+                {
+                    if (tip == 1)
+                        MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg), MessageBox.icoWarning);
+                    else
+                        pnlCtl.JSProperties["cp_InfoMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
+                }
+                else
+                {
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                    ASPxPanel.RedirectOnCallback("~/Absente/Lista.aspx");
+                }
 
             }
             catch (Exception ex)

@@ -287,6 +287,7 @@ namespace WizOne.Module
             return str;
         }
 
+
         public static bool ExecutaNonQuery(string sql, object[] lstParam)
         {
             try
@@ -811,6 +812,7 @@ namespace WizOne.Module
             try
             {
                 int x = 0;
+                bool areOut = false;
                 if (lstParam != null)
                 {
                     foreach (object param in lstParam)
@@ -821,7 +823,10 @@ namespace WizOne.Module
                             try
                             {
                                 if (strSql.IndexOf(":out_" + x) >= 0)
-                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("out_" + x.ToString(), OracleDbType.Varchar2,ParameterDirection.ReturnValue));
+                                {
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("out_" + x.ToString(), OracleDbType.Int32, ParameterDirection.ReturnValue));
+                                    areOut = true;
+                                }
                                 else
                                     cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param.ToString()));
 
@@ -850,7 +855,7 @@ namespace WizOne.Module
                     }
                 }
                 cmd.CommandText = strSql;
-                if (executa == 1) cmd.ExecuteNonQuery();
+                if (executa == 1 || areOut == true) cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
@@ -863,6 +868,95 @@ namespace WizOne.Module
 
             return cmd;
         }
+
+        public static dynamic DamiOracleScalar(string strSql, object[] lstParam)
+        {
+            dynamic rez = null;
+
+            OracleConnection conn = new OracleConnection(Constante.cnnWeb);
+            conn.Open();
+
+            strSql = strSql.Replace("GLOBAL.IDUSER", (HttpContext.Current.Session["UserId"] ?? "").ToString()).Replace("GLOBAL.MARCA", (HttpContext.Current.Session["User_Marca"] ?? "").ToString());
+
+            OracleCommand cmd = new OracleCommand(strSql, conn);
+
+            strSql = strSql.Replace("@", ":");
+
+            try
+            {
+                //primul parametru este intotdeauna cel care se intoarce
+                int x = 0;
+                if (lstParam != null)
+                {
+                    foreach (object param in lstParam)
+                    {
+                        x += 1;
+                        if (param != null && param.ToString().Length > 0)
+                        {
+                            try
+                            {
+                                if (x == 1)
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("out_" + x.ToString(), OracleDbType.Int32, ParameterDirection.ReturnValue));
+                                else
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param.ToString()));
+                            }
+                            catch (Exception ex)
+                            {
+                                MemoreazaEroarea(ex, "General", "DamiOleDbCommand - Parametrii");
+                            }
+                        }
+                    }
+                }
+                cmd.CommandText = strSql;
+                cmd.ExecuteNonQuery();
+
+                rez = cmd.Parameters["out_1"].Value;
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return rez;
+        }
+
+        public static dynamic ExecutaScalarOracle(string strSql)
+        {
+            dynamic rez = null;
+
+            OracleConnection conn = new OracleConnection(Constante.cnnWeb);
+            conn.Open();
+
+            try
+            {
+                using (OracleCommand cmd = conn.CreateCommand())
+                {
+
+                    cmd.CommandText = strSql;
+                    //cmd.CommandText = @"insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") 
+                    //        VALUES(460, 2, 5, 20) returning ""IdAuto"" into :out_1";
+
+                    cmd.Parameters.Add(new OracleParameter("out_1", OracleDbType.Int32, ParameterDirection.ReturnValue));
+                    cmd.ExecuteNonQuery();
+                    rez = cmd.Parameters["out_1"].Value;
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return rez;
+        }
+
 
 
         //public static OleDbCommand DamiOleDbCommand(string strSql, object[] lstParam, int executa = 0)
@@ -4159,7 +4253,8 @@ namespace WizOne.Module
                         dr["FisierExtensie"] = System.IO.Path.GetExtension(fileName);
                         dr["USER_NO"] = HttpContext.Current.Session["UserId"];
                         dr["TIME"] = DateTime.Now;
-                        int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                        //int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                        int max = Convert.ToInt32(cheie);
                         dr["IdAuto"] = max;
                         dr["EsteCerere"] = 0;
                         dt.Rows.Add(dr);

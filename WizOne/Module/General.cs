@@ -810,7 +810,7 @@ namespace WizOne.Module
 
             OracleCommand cmd = new OracleCommand(strSql, conn);
 
-            strSql = strSql.Replace("@", ":");
+            strSql = strSql.Replace("@", ":param");
 
             try
             {
@@ -821,24 +821,31 @@ namespace WizOne.Module
                     foreach (object param in lstParam)
                     {
                         x += 1;
-                        if (param != null && param.ToString().Length > 0)
+                        try
                         {
-                            try
-                            {
-                                //if (IsNumeric(param))
-                                //    strSql = strSql.Replace("@" + x.ToString(), ":" + x.ToString());
-                                //else
-                                //    strSql = strSql.Replace("@" + x.ToString(), "&" + x.ToString());
-                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param.ToString()));
-                            }
-                            catch (Exception ex)
-                            {
-                                MemoreazaEroarea(ex, "General", "DamiOleDbCommand - Parametrii");
-                            }
+                            //if (IsNumeric(param))
+                            //    strSql = strSql.Replace("@" + x.ToString(), ":" + x.ToString());
+                            //else
+                            //    strSql = strSql.Replace("@" + x.ToString(), "&" + x.ToString());
+                            //cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param));
+                            //cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param));
+
+
+                            if (param.GetType().Name == "Byte[]")
+                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Blob)).Value = param;
+                            else
+                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param));
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MemoreazaEroarea(ex, "General", "DamiOleDbCommand - Parametrii");
                         }
                     }
                 }
                 cmd.CommandText = strSql;
+                cmd.BindByName = true;
                 if (executa == 1 || areOut == true) cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -885,13 +892,13 @@ namespace WizOne.Module
                                 {
                                     cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param.ToString()));
                                     //if (IsNumeric(param))
-                                    //    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Int32, param.ToString(), ParameterDirection.Input));
+                                    //    cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Int32).Value = param;
                                     //else
                                     //{
                                     //    if (IsDate(param))
-                                    //        cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Date, param.ToString(), ParameterDirection.Input));
+                                    //        cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Date).Value = param;
                                     //    else
-                                    //        cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Varchar2, param.ToString(), ParameterDirection.Input));
+                                    //        cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Varchar2).Value = param;
                                     //}
                                 }
                             }
@@ -1216,6 +1223,27 @@ namespace WizOne.Module
             return str;
         }
 
+        public static string ToDataOrcl(object obj)
+        {
+            string rez = "";
+
+            try
+            {
+                if (General.Nz(obj, "").ToString() == "")
+                    rez = "01-JAN-1900";
+                else
+                {
+                    DateTime dt = Convert.ToDateTime(obj);
+                    rez = dt.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Month, 1, "EN") + "-" + dt.Year;
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return rez;
+        }
 
         public static string ToDataUniv(DateTime? dt, bool andTime = false)
         {
@@ -1420,18 +1448,21 @@ namespace WizOne.Module
         {
             try
             {
-                DateTime dt;
-                if (strData != null)
-                {
-                    DateTime dtInc = DateTime.ParseExact(strData.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    return DateTime.TryParseExact(strData.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt);
-                }
-                else
-                    return false;
+                DateTime dt = Convert.ToDateTime(strData);
+                return true;
+
+                //DateTime dt;
+                //if (strData != null)
+                //{
+                //    DateTime dtInc = DateTime.ParseExact(strData.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //    return DateTime.TryParseExact(strData.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt);
+                //}
+                //else
+                //    return false;
             }
             catch (Exception ex)
             {
-                MemoreazaEroarea(ex.ToString(), "General", "IsDate");
+                //MemoreazaEroarea(ex.ToString(), "General", "IsDate");
                 return false;
             }
         }

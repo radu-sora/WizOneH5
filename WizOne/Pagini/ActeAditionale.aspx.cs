@@ -292,11 +292,15 @@ namespace WizOne.Pagini
                             (SELECT Zi FROM (
                             SELECT Zi, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as IdAuto 
                             FROM tblZile WHERE Zi>=DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays)) x
-                            WHERE IdAuto=19)
+                            WHERE IdAuto=20)
                             ELSE '2100-01-01' END AS ColData 
                             UNION
                             SELECT CASE WHEN CORCod=1 OR FunctieId = 1 OR CIMDet=1 OR CIMNed=1 THEN 
                             (SELECT TOP 1 Zi FROM tblZile WHERE Zi<DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
+                            ELSE '2100-01-01' END AS ColData 
+                            UNION
+                            SELECT CASE WHEN ""Norma"" = 1 THEN 
+                            (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=DATEADD(d,-1,X.DataModif) AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
                             ELSE '2100-01-01' END AS ColData 
                             ) x) AS TermenDepasire
                             FROM (
@@ -351,6 +355,8 @@ namespace WizOne.Pagini
                             CASE WHEN ""Candidat"" = 1 then 
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (F10022 - 1) AND ""ZiSapt"" <= 5)
                             when ""Motiv"" = 1 then X.""DataModif""
+                            WHEN ""Norma""=1 THEN
+                            (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (X.""DataModif"" - 1) AND ""ZiSapt"" <= 5)
                             when ""Salariul"" = 1 then
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
                             WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
@@ -370,11 +376,12 @@ namespace WizOne.Pagini
                             CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""tblFisiere"" FIS WHERE FIS.""Tabela""='Admin_NrActAd' AND FIS.""Id""=J.""IdAuto"" AND FIS.""EsteCerere""=0) = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
-                            (SELECT LISTAGG(AA.""Id"", ',') WITHIN GROUP (ORDER BY AA.""Id"") AS ""Id""
+                            (SELECT ',' || LISTAGG(AA.""Id"", ',') WITHIN GROUP (ORDER BY AA.""Id"") AS ""Id""
                             FROM ""Avs_Cereri"" AA
                             LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
                             LEFT JOIN ""Admin_NrActAd"" JJ ON AA.""IdActAd""=JJ.""IdAuto""
-                            WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) AND COALESCE(JJ.""DocData"",TO_DATE('01-JAN-2000','DD-MON-YYYY'))=COALESCE(J.""DocData"",TO_DATE('01-JAN-2000,'DD-MON-YYYY'))
+                            WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) 
+                            AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
                             ) AS ""IdAvans"", B.F10022, B.F100993
                             FROM ""Avs_Cereri"" A
                             LEFT JOIN F100 B ON A.F10003 = B.F10003
@@ -510,12 +517,25 @@ namespace WizOne.Pagini
                                             }
                                             else
                                             {
-                                                //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},@3, @4, {General.CurrentDate()}, @5, @6) RETURNING ""IdAuto"" INTO @out_1;",
-                                                //new object[] { "int",  obj[0], General.ToDataUniv(Convert.ToDateTime(obj[1])), Session["UserId"], General.ToDataUniv(Convert.ToDateTime(obj[11])), obj[10] });
                                                 id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},SYSDATE, @3, {General.CurrentDate()}, SYSDATE, @4) RETURNING ""IdAuto"" INTO @out_1",
-                                                new object[] { "int",  obj[0], Session["UserId"], obj[10] }),0));
+                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                new object[] { "int", obj[0], Session["UserId"], obj[10] }),0));
+
+                                                //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
+                                                //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]).ToUpper(), Session["UserId"], General.ToDataOrcl(obj[11]).ToUpper(), obj[10] });
+
+                                                //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
+                                                //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]), Session["UserId"], General.ToDataOrcl(obj[11]), obj[10] });
+
+                                                //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},TO_DATE(@3,'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5,'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1;",
+                                                //new object[] { "int", obj[0], General.ToDataUniv(Convert.ToDateTime(obj[1])), Session["UserId"], General.ToDataUniv(Convert.ToDateTime(obj[11])), obj[10] });
+
+                                                //id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},SYSDATE, @3, {General.CurrentDate()}, SYSDATE, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                //new object[] { "int",  obj[0], Session["UserId"], obj[10] }),0));
 
                                             }
 
@@ -572,15 +592,18 @@ namespace WizOne.Pagini
                                             continue;
                                         }
 
-                                        string strSql = $@"IF (SELECT COUNT(*) FROM ""Admin_NrActAd"" WHERE ""IdAuto""=@1)=0
-                                                INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"",""Tiparit"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                VALUES(@4, @2, @3, 1, @5, @6, {General.CurrentDate()}, @7, @8)
-                                                ELSE
-                                                UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1";
+                                        //string strSql = $@"IF (SELECT COUNT(*) FROM ""Admin_NrActAd"" WHERE ""IdAuto""=@1)=0
+                                        //        INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"",""Tiparit"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                        //        VALUES(@4, @2, @3, 1, @5, @6, {General.CurrentDate()}, @7, @8)
+                                        //        ELSE
+                                        //        UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1";
 
-                                        //List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData" });
-                                        //DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET Tiparit=1 WHERE ""IdAuto""=@1", new object[] { General.Nz(obj[3],-99) });
-                                        DataTable dt = General.IncarcaDT(strSql, new object[] { General.Nz(obj[3], -99), obj[2], obj[9], obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+                                        ////List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData" });
+                                        ////DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET Tiparit=1 WHERE ""IdAuto""=@1", new object[] { General.Nz(obj[3],-99) });
+                                        //DataTable dt = General.IncarcaDT(strSql, new object[] { General.Nz(obj[3], -99), obj[2], obj[9], obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+
+                                        DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1", new object[] { General.Nz(obj[3], -99) });
+
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
 
                                     }
@@ -670,7 +693,7 @@ namespace WizOne.Pagini
                                             continue;
                                         }
 
-                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET Revisal=1 WHERE ""IdAuto""=@1;";
+                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Revisal""=1 WHERE ""IdAuto""=@1;";
 
                                         //cazul cand este candidat
                                         if (Convert.ToInt32(General.Nz(obj[10], 0)) == 1)
@@ -907,14 +930,26 @@ namespace WizOne.Pagini
                             ELSE
                                 UPDATE ""tblFisiere"" SET ""Fisier""=@3, ""FisierNume""=@4, ""FisierExtensie""=@5 WHERE ""Tabela""=@1 AND ""Id""=@2 AND ""EsteCerere""=0;
                             END;";
+
+                if (Constante.tipBD == 2)
+                    sqlFis = $@"
+                        BEGIN
+                            INSERT INTO ""tblFisiere""(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
+                            SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} {(Constante.tipBD == 1 ? "" : " FROM DUAL")};
+                        EXCEPTION
+                            WHEN DUP_VAL_ON_INDEX THEN
+                            UPDATE ""tblFisiere"" SET ""Fisier""=@3, ""FisierNume""=@4, ""FisierExtensie""=@5 WHERE ""Tabela""=@1 AND ""Id""=@2 AND ""EsteCerere""=0;
+                        END; ";
+
                 General.ExecutaNonQuery(sqlFis, new object[] { "Admin_NrActAd", obj[0], e.UploadedFile.FileBytes, e.UploadedFile.FileName, e.UploadedFile.ContentType, Session["UserId"] });
+                //General.ExecutaNonQuery(sqlFis, new object[] { "Admin_NrActAd", obj[0], null, e.UploadedFile.FileName, e.UploadedFile.ContentType, Session["UserId"] });
 
                 //btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
                 //if (Convert.ToInt32(General.Nz(obj[0],-99)) == -99)
                 //    grDate.JSProperties["cpAlertMessage"] = "Nu se poate adauga atasament deoarece nu exista numar";
 
                 //IncarcaGrid();
-                
+
             }
             catch (Exception ex)
             {

@@ -148,19 +148,10 @@ namespace WizOne
 
         static void RegisterRoutes(RouteCollection routes)
         {
-            ////routes.Ignore("{resource}.aspx/{*pathInfo}");
-
-            ////routes.MapPageRoute("Default", "", "~/Default.aspx");
-            ////routes.MapPageRoute("SchimbaParola", "SchimbaParola", "~/SchimbaParola.aspx");
-            ////routes.MapPageRoute("MainPage", "MainPage", "~/MainPage.aspx");
-            ////routes.MapPageRoute("Default", "Default", "~/Default.aspx");
-
             var settings = new FriendlyUrlSettings();
 
             settings.AutoRedirectMode = RedirectMode.Permanent;
             routes.EnableFriendlyUrls(settings);
-
-            ////routes.EnableFriendlyUrls();
         }
 
 

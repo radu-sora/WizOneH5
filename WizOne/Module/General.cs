@@ -245,8 +245,11 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
-                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                if (strSql.IndexOf("Eval_") < 0)
+                {
+                    MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                    MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                }
             }
 
             return dt;
@@ -822,30 +825,11 @@ namespace WizOne.Module
                         {
                             try
                             {
-                                if (strSql.IndexOf(":out_" + x) >= 0)
-                                {
-                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("out_" + x.ToString(), OracleDbType.Int32, ParameterDirection.ReturnValue));
-                                    areOut = true;
-                                }
-                                else
-                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param.ToString()));
-
-                                //using (OracleCommand cmd = con.CreateCommand())
-                                //{
-                                //    cmd.CommandText = "insert into foo values('foo','bar') returning id into :myOutputParameter";
-                                //    cmd.Parameters.Add(new OracleParameter("myOutputParameter", OracleDbType.Decimal), ParameterDirection.ReturnValue);
-                                //    cmd.ExecuteNonQuery(); // an INSERT is always a Non Query
-                                //    return Convert.ToDecimal(cmd.Parameters["myOutputParameter"].Value);
-                                //}
-
-                                //cmd.Parameters.Add("@" + x.ToString(), param);
-                                //OracleParameter p1 = new OracleParameter();
-
-                                //p1.Value = param;
-                                ////p1.OleDbType = OleDbType.VarChar;
-                                //p1.DbType = DbType.String;
-
-                                //cmd.Parameters.Add(p1);
+                                //if (IsNumeric(param))
+                                //    strSql = strSql.Replace("@" + x.ToString(), ":" + x.ToString());
+                                //else
+                                //    strSql = strSql.Replace("@" + x.ToString(), "&" + x.ToString());
+                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param.ToString()));
                             }
                             catch (Exception ex)
                             {
@@ -880,7 +864,7 @@ namespace WizOne.Module
 
             OracleCommand cmd = new OracleCommand(strSql, conn);
 
-            strSql = strSql.Replace("@", ":");
+            strSql = strSql.Replace("@", ":param");
 
             try
             {
@@ -896,9 +880,20 @@ namespace WizOne.Module
                             try
                             {
                                 if (x == 1)
-                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("out_" + x.ToString(), OracleDbType.Int32, ParameterDirection.ReturnValue));
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("paramout_" + x.ToString(), OracleDbType.Int32, ParameterDirection.ReturnValue));
                                 else
-                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter(x.ToString(), param.ToString()));
+                                {
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param.ToString()));
+                                    //if (IsNumeric(param))
+                                    //    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Int32, param.ToString(), ParameterDirection.Input));
+                                    //else
+                                    //{
+                                    //    if (IsDate(param))
+                                    //        cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Date, param.ToString(), ParameterDirection.Input));
+                                    //    else
+                                    //        cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Varchar2, param.ToString(), ParameterDirection.Input));
+                                    //}
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -908,9 +903,10 @@ namespace WizOne.Module
                     }
                 }
                 cmd.CommandText = strSql;
+                cmd.BindByName = true;
                 cmd.ExecuteNonQuery();
 
-                rez = cmd.Parameters["out_1"].Value;
+                rez = General.Nz(cmd.Parameters["paramout_1"].Value,"-99").ToString();
             }
             catch (Exception ex)
             {
@@ -924,38 +920,38 @@ namespace WizOne.Module
             return rez;
         }
 
-        public static dynamic ExecutaScalarOracle(string strSql)
-        {
-            dynamic rez = null;
+        //public static dynamic ExecutaScalarOracle(string strSql)
+        //{
+        //    dynamic rez = null;
 
-            OracleConnection conn = new OracleConnection(Constante.cnnWeb);
-            conn.Open();
+        //    OracleConnection conn = new OracleConnection(Constante.cnnWeb);
+        //    conn.Open();
 
-            try
-            {
-                using (OracleCommand cmd = conn.CreateCommand())
-                {
+        //    try
+        //    {
+        //        using (OracleCommand cmd = conn.CreateCommand())
+        //        {
 
-                    cmd.CommandText = strSql;
-                    //cmd.CommandText = @"insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") 
-                    //        VALUES(460, 2, 5, 20) returning ""IdAuto"" into :out_1";
+        //            cmd.CommandText = strSql;
+        //            //cmd.CommandText = @"insert into ""Admin_Limbi""(""Marca"", ""IdLimba"", ""Nivel"", ""NrAniVorbit"") 
+        //            //        VALUES(460, 2, 5, 20) returning ""IdAuto"" into :out_1";
 
-                    cmd.Parameters.Add(new OracleParameter("out_1", OracleDbType.Int32, ParameterDirection.ReturnValue));
-                    cmd.ExecuteNonQuery();
-                    rez = cmd.Parameters["out_1"].Value;
-                }
-            }
-            catch (Exception ex)
-            {
-                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-            finally
-            {
-                conn.Close();
-            }
+        //            cmd.Parameters.Add(new OracleParameter("out_1", OracleDbType.Int32, ParameterDirection.ReturnValue));
+        //            cmd.ExecuteNonQuery();
+        //            rez = cmd.Parameters["out_1"].Value;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //    finally
+        //    {
+        //        conn.Close();
+        //    }
 
-            return rez;
-        }
+        //    return rez;
+        //}
 
 
 

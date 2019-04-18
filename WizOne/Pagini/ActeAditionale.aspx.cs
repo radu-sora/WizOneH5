@@ -143,6 +143,7 @@ namespace WizOne.Pagini
 
             try
             {
+                string strSql = "";
                 string filtru = "";
                 if (General.Nz(cmbTip.Value,9).ToString() != "9") filtru = " AND \"Candidat\"= " + cmbTip.Value;
                 if (cmbAng.Value != null) filtru += @" AND ""F10003""= " + cmbAng.Value;
@@ -277,7 +278,7 @@ namespace WizOne.Pagini
 
                     #region SQL
 
-                    dt = General.IncarcaDT($@"
+                    strSql = $@"
                             SELECT * FROM (
                             SELECT {cmp} AS ""Cheie"", X.*,
                             (SELECT MIN(""ColData"") FROM (
@@ -316,7 +317,7 @@ namespace WizOne.Pagini
                             FROM Avs_Cereri AA
                             LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
                             LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
-                            WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,-99)=COALESCE(J.DocData,-99)
+                            WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
                             GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993
                             FROM Avs_Cereri A
@@ -335,7 +336,7 @@ namespace WizOne.Pagini
                             LEFT JOIN Admin_NrActAd J ON A.F10003=J.F10003
                             WHERE A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) X
                             ) AS Y
-                            WHERE 1=1 " + filtru, null);
+                            WHERE 1=1 " + filtru;
 
                     #endregion
                 }
@@ -344,26 +345,18 @@ namespace WizOne.Pagini
 
                     #region Orcl
 
-                    dt = General.IncarcaDT($@"
+                    strSql = $@"
                             SELECT * FROM (
                             SELECT {cmp} AS ""Cheie"", X.*,
-                            (SELECT MIN(""ColData"") FROM (
-                            SELECT CASE WHEN ""Candidat"" = 1 THEN 
-                            (SELECT ""Zi"" FROM ""tblZile"" WHERE ""Zi""<=(F10022-1) AND ""ZiSapt""<=5 AND ""Zi"" NOT IN (SELECT day FROM Holidays) AND ROWNUM<=1 ORDER BY ""Zi"" Desc)
-                            ELSE TO_DATE('DD-MON-YYYY','01-JAN-2100') END AS ""ColData"" 
-                            UNION
-                            SELECT CASE WHEN ""Motiv"" = 1 THEN X.""DataModif"" ELSE TO_DATE('DD-MON-YYYY','01-JAN-2100') END AS "" ColData""   
-                            UNION
-                            SELECT CASE WHEN "" Salariul""  = 1 THEN 
-                            (SELECT ""Zi"" 
-                            FROM ""tblZile""  WHERE ""Zi"" >=""DataModif""  AND ""ZiSapt"" <=5 AND ""Zi""  NOT IN (SELECT day FROM Holidays) AND ROWNUM=19)
-                            ELSE TO_DATE('DD-MON-YYYY','01-JAN-2100') END AS ColData 
-                            UNION
-                            SELECT CASE WHEN ""CORCod""=1 OR ""FunctieId"" = 1 OR ""CIMDet""=1 OR ""CIMNed""=1 THEN 
-                            (SELECT TOP 1 ""Zi"" FROM ""tblZile"" WHERE ""Zi""<""DataModif"" AND ""ZiSapt""<=5 AND ""Zi"" NOT IN (SELECT day FROM Holidays) ORDER BY ""Zi"" Desc)
-                            ELSE TO_DATE('DD-MON-YYYY','01-JAN-2100') END AS ""ColData""
-                            ) x) AS ""TermenDepasire""
-                            FROM (
+                            CASE WHEN ""Candidat"" = 1 then 
+                            (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (F10022 - 1) AND ""ZiSapt"" <= 5)
+                            when ""Motiv"" = 1 then X.""DataModif""
+                            when ""Salariul"" = 1 then
+                            (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
+                            WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
+                            (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
+                            ELSE TO_DATE('01-JAN-2100', 'DD-MON-YYYY') END AS ""TermenDepasire""
+                            FROM(
                             SELECT A.F10003, COALESCE(B.F10008, '') || ' ' || COALESCE(B.F10009, '') AS ""NumeComplet"", A.""DataModif"", 0 AS ""Candidat"",
                             MAX(CASE WHEN COALESCE(""CORCod"", 0) > 0 THEN 1 ELSE 0 END) AS ""CORCod"",
                             MAX(CASE WHEN COALESCE(""FunctieId"", 0) > 0 THEN 1 ELSE 0 END) AS ""FunctieId"",
@@ -381,8 +374,7 @@ namespace WizOne.Pagini
                             FROM ""Avs_Cereri"" AA
                             LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
                             LEFT JOIN ""Admin_NrActAd"" JJ ON AA.""IdActAd""=JJ.""IdAuto""
-                            WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) AND JJ.""DocData""=COALESCE(J.""DocData"",TO_DATE('DD-MON-YYYY','01-JAN-1950'))
-                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto""
+                            WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) AND COALESCE(JJ.""DocData"",TO_DATE('01-JAN-2000','DD-MON-YYYY'))=COALESCE(J.""DocData"",TO_DATE('01-JAN-2000,'DD-MON-YYYY'))
                             ) AS ""IdAvans"", B.F10022, B.F100993
                             FROM ""Avs_Cereri"" A
                             LEFT JOIN F100 B ON A.F10003 = B.F10003
@@ -400,11 +392,15 @@ namespace WizOne.Pagini
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
                             WHERE A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) X
                             ) 
-                            WHERE 1=1 " + filtru, null);
+                            WHERE 1=1 " + filtru;
+
+
+                            //GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"", 0), COALESCE(JJ.""Semnat"", 0), COALESCE(JJ.""Revisal"", 0), JJ.""IdAuto""
 
                     #endregion
                 }
 
+                dt = General.IncarcaDT(strSql, null);
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["Cheie"] };
 
                 Session["InformatiaCurenta"] = dt;
@@ -514,9 +510,13 @@ namespace WizOne.Pagini
                                             }
                                             else
                                             {
-                                                id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@3, @4, {General.CurrentDate()}, @5, @6) RETURNING ""IdAuto"" INTO @out_1;",
-                                                new object[] { "int",  obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+                                                //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},@3, @4, {General.CurrentDate()}, @5, @6) RETURNING ""IdAuto"" INTO @out_1;",
+                                                //new object[] { "int",  obj[0], General.ToDataUniv(Convert.ToDateTime(obj[1])), Session["UserId"], General.ToDataUniv(Convert.ToDateTime(obj[11])), obj[10] });
+                                                id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},SYSDATE, @3, {General.CurrentDate()}, SYSDATE, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                new object[] { "int",  obj[0], Session["UserId"], obj[10] }),0));
+
                                             }
 
                                             if (Convert.ToInt32(General.Nz(id,-99)) != -99)
@@ -526,7 +526,10 @@ namespace WizOne.Pagini
                                             msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
                                         }
                                     }
-                                    catch (Exception) { }
+                                    catch (Exception ex)
+                                    {
+                                        string ert = ex.Message;
+                                    }
                                 }
 
                                 if (msg != "")

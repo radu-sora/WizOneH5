@@ -97,28 +97,6 @@ namespace WizOne.Module
 
         }
 
-
-
-        //public static CultureInfo formatDataSistem;
-
-        //public static string IdLimba = "RO";
-        //public static string IdLimba_Veche = "RO";
-
-        //public static string User = "";
-        //public static int UserId = -99;
-        //public static string User_NumeComplet = "";
-        //public static int User_Marca = -99;
-        //public static int User_IdDept = -99;
-        //public static string User_Dept = "";
-        //public static string User_CNP = "";
-
-        //public static int EsteAdmin = 0;
-        ////public static int SchimbaParola = 0;
-        //public static int EsteInGrup99 = 0;
-        //public static int ParolaComplexa = 0;
-
-
-
         public const string lstValuri = "Val0;Val1;Val2;Val3;Val4;Val5;Val6;Val7;Val8;Val9;Val10;Val11;Val12;Val13;Val14;Val15;Val16;Val17;Val18;Val19;Val20;";
         public const string lstFuri = "F1;F2;F3;F4;F5;F6;F7;F8;F9;F10;F11;F12;F13;F14;F15;F16;F17;F18;F19;F20;F21;F22;F23;F24;F25;F26;F27;F28;F29;F30;F31;F32;F33;F34;F35;F36;F37;F38;F39;F40;F41;F42;F43;F44;F45;F46;F47;F48;F49;F50;F51;F52;F53;F54;F55;F56;F57;F58;F59;F60;";
         public static System.Data.DataTable lstSec;

@@ -575,7 +575,7 @@ namespace WizOne.Eval
                     nameControl = nameControl.Substring(nameControl.IndexOf("_WXY_"));
                     nameControl = nameControl.Replace("_WXY_", "");
 
-                    if (lstEval_RaspunsLinii.Count == 0)
+                    //if (lstEval_RaspunsLinii.Count == 0)
                         lstEval_RaspunsLinii = Session["lstEval_RaspunsLinii"] as List<Eval_RaspunsLinii>;
 
                     string super = "Super" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1));
@@ -649,6 +649,57 @@ namespace WizOne.Eval
 
                                 if (mesaj != "")
                                     pnlSectiune.JSProperties["cpAlertMessage"] = mesaj;
+                            }
+                        }
+
+                        if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24)
+                        {//Cristim
+                            if (raspLinie.TipData == 3 && raspLinie.TipValoare == 2)
+                            {//butoane radio
+                                Eval_QuizIntrebari elem = lstEval_QuizIntrebari.Where(p => p.Id == raspLinie.Id).FirstOrDefault();
+                                Eval_QuizIntrebari parinte = lstEval_QuizIntrebari.Where(p => p.Id == elem.Parinte).FirstOrDefault();
+
+                                if (parinte != null && parinte.Descriere.ToUpper().Contains("EVALUARE CALITATIVA"))
+                                {
+                                    List<Eval_QuizIntrebari> lstIntrebari = lstEval_QuizIntrebari.Where(p => p.Parinte == parinte.Id && p.TipData == 3 && p.TipValoare == 2).OrderBy(p => p.Id).ToList();
+                                    List<int> lst = new List<int>();
+                                    for (int i = 0; i < lstIntrebari.Count; i++)
+                                        lst.Add(lstIntrebari[i].Id);
+                                    List<Eval_RaspunsLinii> lstRasp = lstEval_RaspunsLinii.Where(p => p.F10003 == raspLinie.F10003 && lst.Contains(p.Id)).ToList();
+                                    int suma = 0, nr = 0;
+                                    foreach (Eval_RaspunsLinii linie in lstRasp)
+                                    {
+                                        nr++;
+                                        if (linie.Id == raspLinie.Id)
+                                            suma += Convert.ToInt32(param[1]);
+                                        else
+                                        {
+                                            PropertyInfo val = linie.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                            if (val != null)
+                                            {
+                                                string s = val.GetValue(linie, null).ToString();
+                                                if (s.Length > 0)
+                                                {
+                                                    int rez = 0;
+                                                    int.TryParse(s, out rez);
+                                                    suma += rez;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    double calif = 100 + 100 * ((Convert.ToDouble(suma) / Convert.ToDouble(nr) - 3.5) * 0.1) / 0.5;                                    
+                                    Eval_QuizIntrebari txtCalif = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CALITATIVA")).FirstOrDefault();
+                                    if (txtCalif != null)
+                                    {
+                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalif.Id).FirstOrDefault();
+                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                        if (val != null)
+                                        {
+                                            val.SetValue(linieCalif, calif.ToString(), null);
+                                            Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+                                        }
+                                    }
+                                }
                             }
                         }
 

@@ -6644,13 +6644,19 @@ namespace WizOne.Module
                     if (stergePontariAngPlecati == 1)
                     {
                         //Radu 15.03.2019 - modficare                
+                        //string strDel = @"DELETE A
+                        //            FROM Ptj_Intrari A
+                        //            INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                        //            WHERE CONVERT(date,ISNULL(MODIF.DATA, f10023)) >= {0} AND CONVERT(date,ISNULL(MODIF.DATA, f10023)) <> '2100-01-01') B 
+                        //            ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII ;";
+
                         string strDel = @"DELETE A
                                     FROM Ptj_Intrari A
                                     INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                    WHERE CONVERT(date,ISNULL(MODIF.DATA, f10023)) >= {0} AND CONVERT(date,ISNULL(MODIF.DATA, f10023)) <> '2100-01-01') B 
+                                    WHERE {0} <= A.Ziua AND A.Ziua <= {1} AND CONVERT(date,ISNULL(A.Ziua, f10023)) <> '2100-01-01') B 
                                     ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII ;";
 
-                        strDel = string.Format(strDel, ziInc);
+                        strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel + "\n\r";
 
                         //Radu 12.02.2019
@@ -6793,15 +6799,23 @@ namespace WizOne.Module
                     if (stergePontariAngPlecati == 1)
                     {
                         //Radu 15.03.2019 - modificare
+                        //string strDel = @"DELETE FROM ""Ptj_Intrari"" 
+                        //                WHERE ""IdAuto"" IN 
+                        //                (SELECT A.""IdAuto""
+                        //                FROM ""Ptj_Intrari"" A
+                        //                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                        //                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII);";
+
                         string strDel = @"DELETE FROM ""Ptj_Intrari"" 
                                         WHERE ""IdAuto"" IN 
                                         (SELECT A.""IdAuto""
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                        WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                                        WHERE {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(NVL(A.""Ziua"", f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
                                         ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII);";
 
-                        strDel = string.Format(strDel, ziInc);
+                        strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;
 
                         //Radu 12.02.2019

@@ -248,6 +248,11 @@
                     </dx:ASPxCheckBox>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-1">
+	                 <dx:ASPxLabel  ID="lblText" runat="server"  Text="" ></dx:ASPxLabel >	
+                </div>
+            </div>
             <br />
            <asp:ObjectDataSource runat="server" ID="dsSablon" TypeName="WizOne.Module.General" SelectMethod="GetSablon" />
         </dx:PopupControlContentControl>

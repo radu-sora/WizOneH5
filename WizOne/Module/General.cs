@@ -4148,56 +4148,23 @@ namespace WizOne.Module
         }
 
 
-        public static void IncarcaFotografie(object sender, int id, string Tabela)
+        public static object IncarcaFotografie(object sender, int id, string Tabela)
         {
             try
             {
-                //OpenFileDialog ofd = new OpenFileDialog();
-                //bool? b = ofd.ShowDialog();
-                //if (b == true)
-                //{
-                //    ofd.Multiselect = false;
-                //    byte[] fis = General.ConvertToByte(ofd.File.OpenRead());
-
-                //    srvBuiltIn ctx = new srvBuiltIn();
-
-                //    bool esteNou = false;
-                //    LoadOperation<tblFisiere> loFis = ctx.Load<tblFisiere>(ctx.GetTblFisiereQuery().Where(p => p.Tabela == Tabela && p.Id == id), LoadBehavior.RefreshCurrent, lf =>
-                //    {
-                //        tblFisiere ent = lf.Entities.FirstOrDefault();
-
-                //        if (ent == null)
-                //        {
-                //            ent = new tblFisiere();
-                //            esteNou = true;
-                //        }
-
-                //        ent.Tabela = Tabela;
-                //        ent.Id = id;
-                //        ent.Fisier = fis;
-                //        ent.FisierNume = ofd.File.Name;
-                //        ent.FisierExtensie = ofd.File.Extension;
-                //        ent.USER_NO = HttpContext.Current.Session["UserId"];
-                //        ent.TIME = DateTime.Now;
-
-                //        if (esteNou) ctx.tblFisieres.Add(ent);
-
-                //        //ctx.SubmitChanges( OnSubmitChanges,(sender,id,Tabela));
-                //        SubmitOperation so = ctx.SubmitChanges();
-                //        so.Completed += (s, e) =>
-                //        {
-                //            BitmapImage bitmapImage = new BitmapImage();
-
-                //            bitmapImage.SetSource(new MemoryStream(fis));
-                //            (sender as Image).Source = bitmapImage;
-                //        };
-                //    }, null);
-
-                //}
+                object fisier = null;
+                string sql = "SELECT * FROM \"tblFisiere\" WHERE \"Tabela\" = '" + Tabela + "' AND \"Id\" = " + id;
+                DataTable dt = General.IncarcaDT(sql, null);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    fisier = dt.Rows[0]["Fisier"];
+                }
+                return fisier;                
             }
             catch (Exception ex)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
             }
         }
 
@@ -4205,20 +4172,9 @@ namespace WizOne.Module
         {
             try
             {
-                //srvBuiltIn ctx = new srvBuiltIn();
 
-                //LoadOperation<tblFisiere> loFis = ctx.Load<tblFisiere>(ctx.GetTblFisiereQuery().Where(p => p.Tabela == Tabela && p.Id == id), LoadBehavior.RefreshCurrent, lf =>
-                //{
-                //    if (lf.Entities.Count() > 0)
-                //    {
-                //        ctx.tblFisieres.Remove(lf.Entities.FirstOrDefault());
-                //        SubmitOperation so = ctx.SubmitChanges();
-                //        so.Completed += (s, e) =>
-                //        {
-                //            (sender as Image).Source = null;
-                //        };
-                //    }
-                //}, null);
+                //string sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + Tabela + "' AND \"Id\" = " + id;
+                //General.ExecutaNonQuery(sql, null);          
 
             }
             catch (Exception ex)

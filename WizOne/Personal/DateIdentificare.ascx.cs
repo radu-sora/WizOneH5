@@ -55,6 +55,11 @@ namespace WizOne.Personal
                 txtV.Text = Varsta(dtN).ToString();
 
 
+                if (!IsPostBack)
+                {
+                    btnIncarca_Click();
+                }
+
                 if (table.Rows[0]["F10047"].ToString() == "1")
                 {
                     chk1.Checked = true;
@@ -96,8 +101,8 @@ namespace WizOne.Personal
 
                 btnDocUpload.BrowseButton.Text = Dami.TraduCuvant(btnDocUpload.BrowseButton.Text);
                 btnDocUpload.ToolTip = Dami.TraduCuvant(btnDocUpload.ToolTip);
-                btnDoc2.ToolTip = Dami.TraduCuvant(btnDoc2.ToolTip);
-                btnDoc2.Text = Dami.TraduCuvant(btnDoc2.Text);
+                btnSterge.ToolTip = Dami.TraduCuvant(btnSterge.ToolTip);
+                btnSterge.Text = Dami.TraduCuvant(btnSterge.Text);
                 
                 lgFoto.InnerText = Dami.TraduCuvant("Fotografie");
                 HtmlGenericControl lgIdent = DateIdentListView.Items[0].FindControl("lgIdent") as HtmlGenericControl;
@@ -118,6 +123,9 @@ namespace WizOne.Personal
                     txtMarca.BackColor = Color.LightGray;
                 }
 
+               
+                
+
                 General.SecuritatePersonal(DateIdentListView, Convert.ToInt32(Session["UserId"].ToString()));
             }
             catch (Exception ex)
@@ -137,14 +145,7 @@ namespace WizOne.Personal
             string[] param = e.Parameter.Split(';');
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             switch (param[0])
-            {
-                case "btnIncarca":
-                    btnIncarca_Click();
-                    break;
-                case "btnSterge":
-                    btnSterge_Click();
-                    break;
-
+            {  
                 case "txtCNPDI":
                     txtCNP_LostFocus();
                     //if (txtCNP_LostFocus())
@@ -241,6 +242,16 @@ namespace WizOne.Personal
                     ASPxTextBox txtCNP = DateIdentListView.Items[0].FindControl("txtCNPDI") as ASPxTextBox;
                     PreluareDateContract(txtCNP.Text);
                     break;
+                case "img":
+                    byte[] fisier = Session["DateIdentificare_Fisier"] as byte[];
+                    string base64String = Convert.ToBase64String(fisier, 0, fisier.Length);
+                    img.Src = "data:image/jpg;base64," + base64String;
+                    break;
+                case "btnSterge":
+                    btnSterge_Click();
+                    img.Src = null;
+                    break;
+
             }
 
         }
@@ -249,8 +260,16 @@ namespace WizOne.Personal
         {
             try
             {
-                ASPxTextBox txtMarca = DateIdentListView.Items[0].FindControl("txtMarca") as ASPxTextBox;
-                General.IncarcaFotografie(img, Convert.ToInt32(txtMarca.Text), "F100");
+                if (Session["Marca"] != null)
+                {
+                    byte[] fisier = General.IncarcaFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100") as byte[];
+
+                    if (fisier != null)
+                    {
+                        string base64String = Convert.ToBase64String(fisier, 0, fisier.Length);
+                        img.Src = "data:image/jpg;base64," + base64String;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -262,8 +281,32 @@ namespace WizOne.Personal
         {
             try
             {
-                ASPxTextBox txtMarca = DateIdentListView.Items[0].FindControl("txtMarca") as ASPxTextBox;
-                General.StergeFotografie(img, Convert.ToInt32(txtMarca.Text), "F100");
+                //if (Session["Marca"] != null)
+                //{
+                //    General.StergeFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100");
+                //}
+                string sql = "SELECT * FROM \"tblFisiere\"";
+                DataTable dt = new DataTable();
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                if (ds.Tables.Contains("tblFisiere"))
+                {
+                    dt = ds.Tables["tblFisiere"];
+                }
+                else
+                {
+                    dt = General.IncarcaDT(sql, null);
+                    dt.TableName = "tblFisiere";
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+                    ds.Tables.Add(dt);
+                }
+                DataRow dr = null;
+                if (dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).Count() > 0)               
+                {
+                    dr = dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).FirstOrDefault();
+                    dr.Delete();
+                }
+                Session["InformatiaCurentaPersonal"] = ds;
+
             }
             catch (Exception ex)
             {
@@ -457,6 +500,7 @@ namespace WizOne.Personal
                         dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                     else
                         dr["IdAuto"] = Dami.NextId("tblFisiere");
+                    dr["EsteCerere"] = 0;
                     dt.Rows.Add(dr);
                 }
                 else
@@ -471,19 +515,19 @@ namespace WizOne.Personal
 
 
                 Session["InformatiaCurentaPersonal"] = ds;
-
+                
                 MemoryStream ms = new MemoryStream(btnDocUpload.UploadedFiles[0].FileBytes);
                 //img.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray(), 0, ms.ToArray().Length);
 
 
-           
                 //bitmap.Save(ms, ImageFormat.Gif);
                 //var base64Data = Convert.ToBase64String(ms.ToArray());
                 //img.Src = "data:image/jpeg;base64," + base64Data;
 
+                Session["DateIdentificare_Fisier"] = btnDocUpload.UploadedFiles[0].FileBytes;
 
-                string base64String = Convert.ToBase64String(btnDocUpload.UploadedFiles[0].FileBytes, 0, btnDocUpload.UploadedFiles[0].FileBytes.Length);
-                img.Src = "data:image/jpg;base64," + base64String;
+                //string base64String = Convert.ToBase64String(btnDocUpload.UploadedFiles[0].FileBytes, 0, btnDocUpload.UploadedFiles[0].FileBytes.Length);
+                //img.Src = "data:image/jpg;base64," + base64String;
             }
             catch (Exception ex)
             {

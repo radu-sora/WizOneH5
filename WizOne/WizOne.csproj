@@ -746,6 +746,7 @@
     <Content Include="Pagini\Istoric.aspx" />
     <Content Include="Pagini\IstoricModificari.aspx" />
     <Content Include="Pagini\MainPage.aspx" />
+    <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
     <Content Include="Personal\Test.aspx" />
@@ -865,6 +866,7 @@
     <Content Include="FisiereRevisal\www_w3_org_2001_XMLSchema.xsd">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Fisiere\BDReferinta.csv" />
     <None Include="Generatoare\Reports\Models\ReportsModel.edmx.diagram">
       <DependentUpon>ReportsModel.edmx</DependentUpon>
     </None>
@@ -1524,6 +1526,13 @@
     </Compile>
     <Compile Include="Pagini\MainPage.aspx.designer.cs">
       <DependentUpon>MainPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\VerificareBD.aspx.cs">
+      <DependentUpon>VerificareBD.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\VerificareBD.aspx.designer.cs">
+      <DependentUpon>VerificareBD.aspx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Activitati.ascx.cs">
       <DependentUpon>Activitati.ascx</DependentUpon>
@@ -2327,6 +2336,7 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

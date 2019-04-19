@@ -2133,7 +2133,7 @@ namespace WizOne.Eval
 
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24)
                 {//Cristim
-                    clsObiIndividual.Realizat = Convert.ToInt32(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToInt32(General.Nz(clsObiIndividual.Target, 0)) / Convert.ToInt32(General.Nz(clsObiIndividual.Pondere, 0));
+                    clsObiIndividual.Realizat = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Target, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, 0)));
                     int suma = 0;
                     foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz 
                                                                         && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz && p.Pozitie == clsObiIndividual.Pozitie))

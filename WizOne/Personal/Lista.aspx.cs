@@ -89,8 +89,13 @@ namespace WizOne.Personal
                     catch (Exception) { }
                 }
 
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
+                {//DNATA
+                    lblText.Text = "Campurile insemnate cu gri sunt obligatoriu de completat";
+                }
 
-            }
+
+                }
             catch (Exception ex)
             {
                 //MessageBox.Show(this, ex, MessageBox.icoError, "Atentie !");

@@ -361,13 +361,13 @@ namespace WizOne.Pagini
                 {
                     string idUser = General.Nz(Session["UserId"], -99).ToString() == "" ? "-99" : General.Nz(Session["UserId"], -99).ToString();
 
-                    string strSql = $@"SELECT TOP 1 A.Continut FROM Intro A
-                                    INNER JOIN relGrupIntro B ON A.Id=B.IdIntro
-                                    INNER JOIN relGrupUser C ON B.IdGrup=C.IdGrup
-                                    INNER JOIN tblGrupUsers D ON C.IdGrup=D.Id
-                                    WHERE Activ=1 AND C.IdUser={idUser}
-                                    GROUP BY A.Continut, A.TIME, D.Prioritate
-                                    ORDER BY D.Prioritate DESC, A.TIME DESC";
+                    string strSql = $@"SELECT TOP 1 A.""Continut"" FROM ""Intro"" A
+                                    INNER JOIN ""relGrupIntro"" B ON A.""Id""=B.""IdIntro""
+                                    INNER JOIN ""relGrupUser"" C ON B.""IdGrup""=C.""IdGrup""
+                                    INNER JOIN ""tblGrupUsers"" D ON C.""IdGrup""=D.""Id""
+                                    WHERE ""Activ""=1 AND C.""IdUser""={idUser}
+                                    GROUP BY A.""Continut"", A.TIME, D.""Prioritate""
+                                    ORDER BY D.""Prioritate"" DESC, A.TIME DESC";
                     if (Constante.tipBD == 2)
                         strSql = $@"SELECT * FROM (
                                     SELECT A.""Continut"" FROM ""Intro"" A

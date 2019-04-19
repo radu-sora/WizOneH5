@@ -1,34 +1,11 @@
 ﻿using DevExpress.Web;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Office.Drawing;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Validation;
-using DocumentFormat.OpenXml.Wordprocessing;
-using ProceseSec;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Net.Mime;
-using System.Text;
-using System.Web;
-using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Xml.Linq;
-using System.IO.Packaging;
-using System.Xml;
 using WizOne.Module;
-using A = DocumentFormat.OpenXml.Drawing;
-using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
-using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
-using DevExpress.XtraReports.UI;
 
 namespace WizOne.Adev
 {

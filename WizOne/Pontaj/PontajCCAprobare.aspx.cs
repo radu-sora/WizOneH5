@@ -46,7 +46,7 @@ namespace WizOne.Pontaj
 
                 txtAnLuna.Value = DateTime.Now;
 
-                string strAng = $@"SELECT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS NumeComplet, G.F00406 AS Filiala, H.F00507 AS Sectie, I.F00608 AS Departament
+                string strAng = $@"SELECT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
                                 FROM F100 A
                                 LEFT JOIN F004 G ON A.F10005 = G.F00405
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506

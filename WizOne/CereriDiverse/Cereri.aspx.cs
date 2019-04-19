@@ -267,7 +267,7 @@ namespace WizOne.CereriDiverse
                                 (sqlPozitie == null ? "NULL" : sqlPozitie) + " AS \"Pozitie\", " +
                                 Session["UserId"] + " AS \"UserIntrod\", " + 
                                 General.CurrentDate() + " AS TIME ";
-
+                if (Constante.tipBD == 2) sqlCer += " FROM DUAL";
             }
             catch (Exception ex)
             {
@@ -327,10 +327,10 @@ namespace WizOne.CereriDiverse
                         //se foloseste union pt a acoperi si cazul in care user-ul logat este deja un superviozr pt acest angajat;
                         if (Convert.ToInt32(lstId[i].ToString()) < 0)
                         {
-                            strTmp = @" UNION {4} SELECT TOP 1 {3} AS ""Index"", IdUser, {1} AS IdSuper, 0 AS ""Inlocuitor"" FROM (
-                                        SELECT TOP 1 IdUser FROM F100Supervizori WHERE F10003 = {0} AND IdSuper = (-1 * {1}) AND IdUser = {2}
+                            strTmp = @" UNION {4} SELECT TOP 1 {3} AS ""Index"", ""IdUser"", {1} AS ""IdSuper"", 0 AS ""Inlocuitor"" FROM (
+                                        SELECT TOP 1 ""IdUser"" FROM ""F100Supervizori"" WHERE F10003 = {0} AND ""IdSuper"" = (-1 * {1}) AND ""IdUser"" = {2}
                                         UNION ALL
-                                        SELECT TOP 1 IdUser FROM F100Supervizori WHERE F10003 = {0} AND IdSuper = (-1 * {1})
+                                        SELECT TOP 1 ""IdUser"" FROM ""F100Supervizori"" WHERE F10003 = {0} AND ""IdSuper"" = (-1 * {1})
                                         ) x ";
                             if (Constante.tipBD == 2)
                             {

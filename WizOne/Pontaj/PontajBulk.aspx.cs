@@ -45,7 +45,7 @@ namespace WizOne.Pontaj
                 GridViewDataComboBoxColumn colAbs = (grCC.Columns["F06204"] as GridViewDataComboBoxColumn);
                 colAbs.PropertiesComboBox.DataSource = dtF062;
 
-                DataTable dtAct = General.IncarcaDT("SELECT * FROM tblActivitati", null);
+                DataTable dtAct = General.IncarcaDT(@"SELECT * FROM ""tblActivitati"" ", null);
                 GridViewDataComboBoxColumn colAct = (grCC.Columns["IdActivitate"] as GridViewDataComboBoxColumn);
                 colAct.PropertiesComboBox.DataSource = dtAct;
 
@@ -110,7 +110,7 @@ namespace WizOne.Pontaj
                     return;
                 }
 
-                int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Ptj_CC"" WHERE F10003={Session["User_Marca"]} AND Ziua={General.ToDataUniv(Convert.ToDateTime(e.NewValues["Ziua"]))} AND F06204={e.NewValues["F06204"]}", null),0));
+                int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Ptj_CC"" WHERE F10003={Session["User_Marca"]} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(e.NewValues["Ziua"]))} AND F06204={e.NewValues["F06204"]}", null),0));
                 if (cnt != 0)
                 {
                     msgError = "Inregistrare existenta";
@@ -288,14 +288,14 @@ namespace WizOne.Pontaj
                         DataRow dr = dtAdm.Rows[i];
                         if (General.Nz(dr["Destinatie"], "").ToString() != "" && dr["Camp"].ToString().Substring(0, 5) == "NrOre")
                         {
-                            cmp += ", " + dr["Destinatie"] + "=(SELECT SUM(" + dr["Camp"] + ") * 60 FROM Ptj_CC WHERE F10003=@1 AND Ziua=@2)";
+                            cmp += ", " + dr["Destinatie"] + "=(SELECT SUM(\"" + dr["Camp"] + "\") * 60 FROM \"Ptj_CC\" WHERE F10003=@1 AND \"Ziua\"=@2)";
                         }
                     }
 
                     if (cmp != "")
                     {
                         //transferam suma minutelor din CC in Ptj_Intrari
-                        string sqlVal = $@"UPDATE Ptj_Intrari SET {cmp.Substring(1)} WHERE F10003=@1 AND Ziua=@2;";
+                        string sqlVal = $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)} WHERE F10003=@1 AND ""Ziua""=@2;";
                         sqlVal = sqlVal.Replace("@1", f10003.ToString()).Replace("@2", General.ToDataUniv(ziua));
 
                         //refacem ValStr

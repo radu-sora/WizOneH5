@@ -29,10 +29,15 @@ namespace WizOne.Pagini
 
                 if (txtCod.Text != "")
                 {
-                    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(
-                        $@"SELECT 
+                    string strSql = $@"SELECT 
                         CASE WHEN DATEADD(s, COALESCE((SELECT COALESCE(Valoare,60) FROM tblParametrii WHERE Nume='2FA_Timp'),60), TIME) < GetDate() THEN 0 ELSE 1 END AS Este 
-                        FROM GDPR_2FA WHERE IdUser={Session["UserId"]} AND Cod='{txtCod.Text}'", null),0));
+                        FROM GDPR_2FA WHERE IdUser={Session["UserId"]} AND Cod='{txtCod.Text}'";
+                    if (Constante.tipBD == 2)
+                        strSql = $@"SELECT 
+                        CASE WHEN (TIME + numToDSInterval(TO_NUMBER(COALESCE((SELECT COALESCE(""Valoare"",'60') FROM ""tblParametrii"" WHERE ""Nume"" ='2FA_Timp'),'60')), 'second')) < SYSDATE THEN 0 ELSE 1 END AS ""Este""
+                        FROM GDPR_2FA WHERE ""IdUser"" ={Session["UserId"]} AND ""Cod"" = '{txtCod.Text}'";
+
+                    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(strSql, null),0));
 
                     if (cnt == 0)
                         MessageBox.Show("Cod eronat", MessageBox.icoError, "Atentie !");

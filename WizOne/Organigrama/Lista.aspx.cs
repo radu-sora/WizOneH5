@@ -468,7 +468,7 @@ namespace WizOne.Organigrama
                 {
                     //daca se doreste si modificare de structura
                     int nod = -99;
-                    DataTable dt = General.IncarcaDT("SELECT * FROM Org_Posturi WHERE IdAuto=@1", new object[] { nod_idAuto });
+                    DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Org_Posturi"" WHERE ""IdAuto""=@1", new object[] { nod_idAuto });
                     if (dt.Rows.Count == 0) return;
                     nod = Convert.ToInt32(General.Nz(dt.Rows[0]["Id"],-99));
                     if (nod == -99) return;
@@ -590,7 +590,7 @@ namespace WizOne.Organigrama
                                     ""IdBeneficiu1"", ""IdBeneficiu2"", ""IdBeneficiu3"", ""IdBeneficiu4"", ""IdBeneficiu5"", ""IdBeneficiu6"", ""IdBeneficiu7"", ""IdBeneficiu8"", ""IdBeneficiu9"", ""IdBeneficiu10"", {Session["UserId"]}, GetDate()
                                     FROM ""Org_Posturi"" WHERE ""IdAuto""={idAuto}";
 
-                    strSql += $@"UPDATE Org_Posturi SET DataSfarsit={General.ToDataUniv(txtDtVig.Date.AddDays(-1))} WHERE IdAuto={idAuto}";
+                    strSql += $@"UPDATE ""Org_Posturi"" SET"" DataSfarsit""={General.ToDataUniv(txtDtVig.Date.AddDays(-1))} WHERE ""IdAuto""={idAuto}";
                 }
 
                 General.ExecutaNonQuery(strSql, null);

@@ -345,7 +345,7 @@ namespace WizOne.Personal
                         if (dataRevisal.Date < DateTime.Now.Date)
                         {
                             MessageBox.Show("Termen depunere Revisal depasit!", MessageBox.icoError);
-                            return;
+                            //return;
                         }
                     }
 

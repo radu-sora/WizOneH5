@@ -91,7 +91,7 @@ namespace WizOne.Personal
 
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
                 {//DNATA
-                    lblText.Text = "Campurile insemnate cu gri sunt obligatoriu de completat";
+                    lblText.Text = "Campurile insemnate cu gri sunt obligatoriu de completat";                    
                 }
 
 

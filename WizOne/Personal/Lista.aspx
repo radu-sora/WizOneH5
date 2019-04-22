@@ -250,7 +250,7 @@
             </div>
             <div class="row">
                 <div class="col-md-1">
-	                 <dx:ASPxLabel  ID="lblText" runat="server"  Text="" ></dx:ASPxLabel >	
+	                 <dx:ASPxLabel  ID="lblText" runat="server"  Text="" Width="400" style="text-align: left;"></dx:ASPxLabel >	
                 </div>
             </div>
             <br />

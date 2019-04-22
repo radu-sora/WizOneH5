@@ -192,6 +192,18 @@ namespace WizOne.Personal
                     ds.Tables[0].Rows[0]["F100986"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
                     ds.Tables[1].Rows[0]["F100986"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
                     Session["InformatiaCurentaPersonal"] = ds;
+
+                    DateTime dataCtr = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
+                    string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataCtr.Year;
+                    if (Constante.tipBD == 2)
+                        strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + dataCtr.Year;
+                    DataTable dtHolidays = General.IncarcaDT(strSql, null);
+                    bool ziLibera = EsteZiLibera(dataCtr, dtHolidays);
+                    if (dataCtr.DayOfWeek.ToString().ToLower() == "saturday" || dataCtr.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera)
+                    {
+                        pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data contract intern este intr-o zi nelucratoare!");
+                    }
+
                     break;
                 case "deDataAng":
                     data = param[1].Split('.');
@@ -210,6 +222,18 @@ namespace WizOne.Personal
                         if (Convert.ToDateTime(deTermenRevisal.Value).Date < DateTime.Now.Date && val == 1)
                             pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
                     }
+
+                    DateTime dataAng = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
+                    strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataAng.Year;
+                    if (Constante.tipBD == 2)
+                        strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + dataAng.Year;
+                    dtHolidays = General.IncarcaDT(strSql, null);                  
+                    ziLibera = EsteZiLibera(dataAng, dtHolidays);
+                    if (dataAng.DayOfWeek.ToString().ToLower() == "saturday" || dataAng.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera)
+                    {
+                        pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data angajarii este intr-o zi nelucratoare!");
+                    }
+
                     break;
                 case "cmbTipCtrMunca":
                     ds.Tables[0].Rows[0]["F100984"] = param[1];

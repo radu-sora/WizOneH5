@@ -4175,56 +4175,23 @@ namespace WizOne.Module
         }
 
 
-        public static void IncarcaFotografie(object sender, int id, string Tabela)
+        public static object IncarcaFotografie(object sender, int id, string Tabela)
         {
             try
             {
-                //OpenFileDialog ofd = new OpenFileDialog();
-                //bool? b = ofd.ShowDialog();
-                //if (b == true)
-                //{
-                //    ofd.Multiselect = false;
-                //    byte[] fis = General.ConvertToByte(ofd.File.OpenRead());
-
-                //    srvBuiltIn ctx = new srvBuiltIn();
-
-                //    bool esteNou = false;
-                //    LoadOperation<tblFisiere> loFis = ctx.Load<tblFisiere>(ctx.GetTblFisiereQuery().Where(p => p.Tabela == Tabela && p.Id == id), LoadBehavior.RefreshCurrent, lf =>
-                //    {
-                //        tblFisiere ent = lf.Entities.FirstOrDefault();
-
-                //        if (ent == null)
-                //        {
-                //            ent = new tblFisiere();
-                //            esteNou = true;
-                //        }
-
-                //        ent.Tabela = Tabela;
-                //        ent.Id = id;
-                //        ent.Fisier = fis;
-                //        ent.FisierNume = ofd.File.Name;
-                //        ent.FisierExtensie = ofd.File.Extension;
-                //        ent.USER_NO = HttpContext.Current.Session["UserId"];
-                //        ent.TIME = DateTime.Now;
-
-                //        if (esteNou) ctx.tblFisieres.Add(ent);
-
-                //        //ctx.SubmitChanges( OnSubmitChanges,(sender,id,Tabela));
-                //        SubmitOperation so = ctx.SubmitChanges();
-                //        so.Completed += (s, e) =>
-                //        {
-                //            BitmapImage bitmapImage = new BitmapImage();
-
-                //            bitmapImage.SetSource(new MemoryStream(fis));
-                //            (sender as Image).Source = bitmapImage;
-                //        };
-                //    }, null);
-
-                //}
+                object fisier = null;
+                string sql = "SELECT * FROM \"tblFisiere\" WHERE \"Tabela\" = '" + Tabela + "' AND \"Id\" = " + id;
+                DataTable dt = General.IncarcaDT(sql, null);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    fisier = dt.Rows[0]["Fisier"];
+                }
+                return fisier;                
             }
             catch (Exception ex)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+                return null;
             }
         }
 
@@ -4232,20 +4199,9 @@ namespace WizOne.Module
         {
             try
             {
-                //srvBuiltIn ctx = new srvBuiltIn();
 
-                //LoadOperation<tblFisiere> loFis = ctx.Load<tblFisiere>(ctx.GetTblFisiereQuery().Where(p => p.Tabela == Tabela && p.Id == id), LoadBehavior.RefreshCurrent, lf =>
-                //{
-                //    if (lf.Entities.Count() > 0)
-                //    {
-                //        ctx.tblFisieres.Remove(lf.Entities.FirstOrDefault());
-                //        SubmitOperation so = ctx.SubmitChanges();
-                //        so.Completed += (s, e) =>
-                //        {
-                //            (sender as Image).Source = null;
-                //        };
-                //    }
-                //}, null);
+                //string sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + Tabela + "' AND \"Id\" = " + id;
+                //General.ExecutaNonQuery(sql, null);          
 
             }
             catch (Exception ex)
@@ -6671,13 +6627,19 @@ namespace WizOne.Module
                     if (stergePontariAngPlecati == 1)
                     {
                         //Radu 15.03.2019 - modficare                
+                        //string strDel = @"DELETE A
+                        //            FROM Ptj_Intrari A
+                        //            INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                        //            WHERE CONVERT(date,ISNULL(MODIF.DATA, f10023)) >= {0} AND CONVERT(date,ISNULL(MODIF.DATA, f10023)) <> '2100-01-01') B 
+                        //            ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII ;";
+
                         string strDel = @"DELETE A
                                     FROM Ptj_Intrari A
                                     INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                    WHERE CONVERT(date,ISNULL(MODIF.DATA, f10023)) >= {0} AND CONVERT(date,ISNULL(MODIF.DATA, f10023)) <> '2100-01-01') B 
+                                    WHERE {0} <= A.Ziua AND A.Ziua <= {1} AND CONVERT(date,ISNULL(A.Ziua, f10023)) <> '2100-01-01') B 
                                     ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII ;";
 
-                        strDel = string.Format(strDel, ziInc);
+                        strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel + "\n\r";
 
                         //Radu 12.02.2019
@@ -6820,15 +6782,23 @@ namespace WizOne.Module
                     if (stergePontariAngPlecati == 1)
                     {
                         //Radu 15.03.2019 - modificare
+                        //string strDel = @"DELETE FROM ""Ptj_Intrari"" 
+                        //                WHERE ""IdAuto"" IN 
+                        //                (SELECT A.""IdAuto""
+                        //                FROM ""Ptj_Intrari"" A
+                        //                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                        //                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII);";
+
                         string strDel = @"DELETE FROM ""Ptj_Intrari"" 
                                         WHERE ""IdAuto"" IN 
                                         (SELECT A.""IdAuto""
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                        WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                                        WHERE {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(NVL(A.""Ziua"", f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
                                         ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII);";
 
-                        strDel = string.Format(strDel, ziInc);
+                        strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;
 
                         //Radu 12.02.2019

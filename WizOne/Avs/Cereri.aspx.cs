@@ -1244,6 +1244,15 @@ namespace WizOne.Avs
                         }
                         data = "";
                         SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out data);
+                        string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + Convert.ToDateTime(txtDataMod.Value).Year;
+                        if (Constante.tipBD == 2)
+                            strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + Convert.ToDateTime(txtDataMod.Value).Year;
+                        DataTable dtHolidays = General.IncarcaDT(strSql, null);
+                        bool ziLibera = EsteZiLibera(Convert.ToDateTime(txtDataMod.Value), dtHolidays);
+                        if (Convert.ToDateTime(txtDataMod.Value).DayOfWeek.ToString().ToLower() == "saturday" || Convert.ToDateTime(txtDataMod.Value).DayOfWeek.ToString().ToLower() == "sunday" || ziLibera)
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii este intr-o zi nelucratoare!");
+                        }
                         break;
                 }
 
@@ -1359,7 +1368,7 @@ namespace WizOne.Avs
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");             
                         return;
-                    }
+                    }     
 
                 if (cmbAng.Value == null) strErr += ", angajat";
                 if (idAtr == -99) strErr += ", atribut";
@@ -1367,7 +1376,8 @@ namespace WizOne.Avs
 
                 DateTime dtLucru = General.DamiDataLucru();
                 if (txtDataMod.Value != null && Convert.ToDateTime(txtDataMod.Value) < dtLucru)
-                    strErr += ", data modificarii este anterioara lunii de lucru";
+                    strErr += ", data modificarii este anterioara lunii de lucru";                               
+
 
                 switch (idAtr)
                 {

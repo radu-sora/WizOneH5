@@ -23,11 +23,11 @@
         }
 
         function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=8&id=' + Value, '_blank ')
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=7&id=' + Value, '_blank ')
         }
 
-        function ValidareUpload(s,Value) {
-            if (Value == -99) {
+        function ValidareUpload(s, Value) {
+            if (Value == "-99") {
                 s.Cancel();
                 swal({
                     title: trad_string(limba, "Atentie"), text: trad_string(limba, "Nu se poate adauga atasament deoarece nu exista numar"),
@@ -326,6 +326,7 @@
                         <dx:GridViewDataTextColumn FieldName="IdAutoAct" Name="IdAutoAct" Caption="IdAutoAct" ReadOnly="true" Width="80px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="IdAvans" Name="IdAvans" Caption="IdAvans" ReadOnly="true" Width="80px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Cheie" Name="Cheie" Caption="Cheie" ReadOnly="true" Width="80px" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="IdAutoAtasamente" Name="IdAutoAtasamente" Caption="IdAutoAtasamente" ReadOnly="true" Width="80px" Visible="false" ShowInCustomizationForm="false" />
 
                     </Columns>
 

@@ -19,6 +19,7 @@
             Claim = 21,
             Dnata = 22,
             FM = 23,
+            Cristim = 24,
             Groupama = 34,
             Zitec = 45,
             BancaCarpatica = 65

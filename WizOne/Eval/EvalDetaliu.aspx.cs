@@ -551,6 +551,13 @@ namespace WizOne.Eval
         {
             try
             {
+                //Radu 19.04.2019
+                if (e.Parameter == "CreeazaSectiune")
+                {
+                    CreeazaSectiune("Super" + Session["Eval_ActiveTab"].ToString());
+                    return;
+                }
+
                 if (e.Parameter.Contains(";"))
                 {
                     string[] param = e.Parameter.Split(';');
@@ -575,7 +582,7 @@ namespace WizOne.Eval
                     nameControl = nameControl.Substring(nameControl.IndexOf("_WXY_"));
                     nameControl = nameControl.Replace("_WXY_", "");
 
-                    if (lstEval_RaspunsLinii.Count == 0)
+                    //if (lstEval_RaspunsLinii.Count == 0)
                         lstEval_RaspunsLinii = Session["lstEval_RaspunsLinii"] as List<Eval_RaspunsLinii>;
 
                     string super = "Super" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1));
@@ -649,6 +656,87 @@ namespace WizOne.Eval
 
                                 if (mesaj != "")
                                     pnlSectiune.JSProperties["cpAlertMessage"] = mesaj;
+                            }
+                        }
+
+                        if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24)
+                        {//Cristim
+                            if (raspLinie.TipData == 3 && raspLinie.TipValoare == 2)
+                            {//butoane radio
+                                Eval_QuizIntrebari elem = lstEval_QuizIntrebari.Where(p => p.Id == raspLinie.Id).FirstOrDefault();
+                                Eval_QuizIntrebari parinte = lstEval_QuizIntrebari.Where(p => p.Id == elem.Parinte).FirstOrDefault();
+
+                                if (parinte != null && parinte.Descriere.ToUpper().Contains("EVALUARE CALITATIVA"))
+                                {
+                                    List<Eval_QuizIntrebari> lstIntrebari = lstEval_QuizIntrebari.Where(p => p.Parinte == parinte.Id && p.TipData == 3 && p.TipValoare == 2).OrderBy(p => p.Id).ToList();
+                                    List<int> lst = new List<int>();
+                                    for (int i = 0; i < lstIntrebari.Count; i++)
+                                        lst.Add(lstIntrebari[i].Id);
+                                    List<Eval_RaspunsLinii> lstRasp = lstEval_RaspunsLinii.Where(p => p.F10003 == raspLinie.F10003 && lst.Contains(p.Id)).ToList();
+                                    int suma = 0, nr = 0;
+                                    foreach (Eval_RaspunsLinii linie in lstRasp)
+                                    {
+                                        nr++;
+                                        if (linie.Id == raspLinie.Id)
+                                            suma += Convert.ToInt32(param[1]);
+                                        else
+                                        {
+                                            PropertyInfo val = linie.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                            if (val != null)
+                                            {
+                                                string s = val.GetValue(linie, null).ToString();
+                                                if (s.Length > 0)
+                                                {
+                                                    int rez = 0;
+                                                    int.TryParse(s, out rez);
+                                                    suma += rez;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    double calif = 100 + 100 * ((Convert.ToDouble(suma) / Convert.ToDouble(nr) - 3.5) * 0.1) / 0.5;                                    
+                                    Eval_QuizIntrebari txtCalif = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CALITATIVA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                    if (txtCalif != null)
+                                    {
+                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalif.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                        if (val != null)
+                                        {
+                                            val.SetValue(linieCalif, calif.ToString(), null);
+                                            Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+                                        }
+                                    }
+
+
+                                    Eval_QuizIntrebari txtCalifCalit = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CANTITATIVA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                    if (txtCalifCalit != null)
+                                    {
+                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalifCalit.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                        if (val != null)
+                                        {
+                                            string s = val.GetValue(linieCalif, null).ToString();
+                                            if (s.Length > 0)
+                                            {
+                                                double rez = 0;
+                                                double.TryParse(s, out rez);
+                                                calif += rez;
+                                            }
+                                        }
+                                    }
+
+                                    Eval_QuizIntrebari txtCalifFinal = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV FINAL EVALUARE PERFORMANTA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                    if (txtCalifFinal != null)
+                                    {
+                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalifFinal.Id && p.F10003 == raspLinie.F10003 && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                        if (val != null)
+                                            val.SetValue(linieCalif, calif.ToString(), null);
+                                    }
+                                    Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+
+                                }
                             }
                         }
 
@@ -802,7 +890,7 @@ namespace WizOne.Eval
                             ctl = CreeazaCombo(ent.Id, (int)ent.TipValoare, super);
                             break;
                         case 3: //Butoane radio
-                            ctl = CreeazaButoaneRadio(ent.Id, (int)ent.TipValoare, super);
+                            ctl = CreeazaButoaneRadio(ent.Id, (int)ent.TipValoare, super, ent.Orientare);
                             break;
                         case 4: //CheckBox
                             ctl = CreeazaCheckBox(ent.Id, super);
@@ -885,7 +973,7 @@ namespace WizOne.Eval
                         else
                         {
                             ASPxLabel lbl = CreeazaEticheta(ent.Descriere, ent.Id);
-                            if (ent.Orientare == 1) //orientare orizontala
+                            if (ent.Orientare == 1 && ent.TipData != 3) //orientare orizontala      Radu 19.04.2019 - pentru butoane radio s-a facut o exceptie
                             {
                                 HtmlTableRow row = new HtmlTableRow();
                                 HtmlTableCell cell1 = new HtmlTableCell();
@@ -1189,7 +1277,7 @@ namespace WizOne.Eval
             return cmb;
         }
 
-        private ASPxRadioButtonList CreeazaButoaneRadio(int id, int idGrupValori, string super)
+        private ASPxRadioButtonList CreeazaButoaneRadio(int id, int idGrupValori, string super, int orientare)
         {
             ASPxRadioButtonList radio = new ASPxRadioButtonList();
             try
@@ -1208,6 +1296,8 @@ namespace WizOne.Eval
                     else
                         radio.Items.Add(new ListEditItem { Text = l.Valoare, Value = l.Valoare });
                 }
+
+                radio.RepeatDirection = (RepeatDirection)Enum.Parse(typeof(RepeatDirection), orientare == 1 ? "Horizontal" : "Vertical");  //Radu 19.04.2019
 
                 //Temporar - HardCodat
                 //daca este calificativ final si este angajat nu are acces
@@ -1434,6 +1524,13 @@ namespace WizOne.Eval
                 grDateObiective.RowInserting += GrDateObiective_RowInserting;
                 grDateObiective.RowUpdating += GrDateObiective_RowUpdating;
                 grDateObiective.InitNewRow += GrDateObiective_InitNewRow;
+
+                //Radu 19.04.2019
+                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24)
+                {
+                    string endCallBackFunctionGrDate = @"function " + grDateObiective.ID + @"_EndCallBack(s, e) { pnlSectiune.PerformCallback('CreeazaSectiune');  }";
+                    grDateObiective.ClientSideEvents.EndCallback = endCallBackFunctionGrDate;
+                }
                 #endregion
 
                 #region Grid Default Columns
@@ -1924,6 +2021,8 @@ namespace WizOne.Eval
                 { keys[i] = e.Keys[i]; }
                 ASPxGridView grid = sender as ASPxGridView;
 
+                lstEval_RaspunsLinii = Session["lstEval_RaspunsLinii"] as List<Eval_RaspunsLinii>;
+
                 GridViewDataComboBoxColumn colObiectiv = (grid.Columns["IdObiectiv"] as GridViewDataComboBoxColumn);
                 List<Eval_ObiIndividualeTemp> lst = Session["lstEval_ObiIndividualeTemp"] as List<Eval_ObiIndividualeTemp>;
                 Eval_ObiIndividualeTemp clsObiIndividual = lst.Where(p => p.IdAuto == Convert.ToInt32(keys[0])).FirstOrDefault();
@@ -2032,6 +2131,55 @@ namespace WizOne.Eval
                     catch (Exception){}
                 }
 
+                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24)
+                {//Cristim
+                    clsObiIndividual.Realizat = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Target, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, 0)));
+                    int suma = 0;
+                    foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz 
+                                                                        && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz && p.Pozitie == clsObiIndividual.Pozitie))
+                        suma += Convert.ToInt32(General.Nz(linie.Realizat, 0));
+
+                    Eval_QuizIntrebari txtCalifCantit = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CANTITATIVA") && p.IdQuiz == clsObiIndividual.IdQuiz).FirstOrDefault();
+                    if (txtCalifCantit != null)
+                    {
+                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalifCantit.Id && p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz).FirstOrDefault();
+                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                        if (val != null)                        
+                            val.SetValue(linieCalif, suma.ToString(), null);                
+                    }
+
+                    double califTotal = suma;
+
+                    Eval_QuizIntrebari txtCalifCalit = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CALITATIVA") && p.IdQuiz == clsObiIndividual.IdQuiz).FirstOrDefault();
+                    if (txtCalifCalit != null)
+                    {
+                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalifCalit.Id && p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz).FirstOrDefault();
+                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                        if (val != null)
+                        {
+                            string s = val.GetValue(linieCalif, null).ToString();
+                            if (s.Length > 0)
+                            {
+                                double rez = 0;
+                                double.TryParse(s, out rez);
+                                califTotal += rez;
+                            }
+                        }
+                    }
+
+                    Eval_QuizIntrebari txtCalifFinal = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV FINAL EVALUARE PERFORMANTA") && p.IdQuiz == clsObiIndividual.IdQuiz).FirstOrDefault();
+                    if (txtCalifFinal != null)
+                    {
+                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalifFinal.Id && p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz).FirstOrDefault();
+                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                        if (val != null)
+                            val.SetValue(linieCalif, califTotal.ToString(), null);
+                    }
+                    Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;                   
+
+                }
+
                 e.Cancel = true;
 
                 grid.CancelEdit();
@@ -2042,7 +2190,7 @@ namespace WizOne.Eval
                 //else
                 //{
                     grid.DataSource = lst.Where(p => p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz && p.Pozitie == poz && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz).ToList();
-                //}
+                //}              
             }
             catch (Exception ex)
             {

@@ -21,12 +21,13 @@
         pnlCtlDateIdent.PerformCallback("PreluareDate");
     }
 
-    function StartUpload() {
+    function StartUpload() { 
         pnlLoading.Show();
     }
 
-    function EndUpload(s) {
+    function EndUploadDI(s) {    
         pnlLoading.Hide();
+        pnlCtlDateIdent.PerformCallback("img");
     }
 
     function GoToIstoricDI(s) {
@@ -87,24 +88,25 @@
 				<table width="200" height="200"  valign="bottom">
                     <tr>
                         <td align="left"  valign="bottom">
-                            <img  Height="180" HorizontalAlignment="Center" ID="img" runat="server" visible="false" VerticalAlignment="Center" Width="170" />
+                            <img  Height="180" HorizontalAlignment="Center" ID="img" runat="server"  VerticalAlignment="Center" Width="170" />
                         </td>
                     </tr>
                     <tr style="display:inline-block;" halign="right" valign="bottom">
 					    <td >
                             <dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="false" HorizontalAlignment="Center"
-                                BrowseButton-Text="Incarca" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="Incarca fotografie" ShowTextBox="false"
-                                ClientInstanceName="UploadImage" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false" visible="false" >
+                                BrowseButton-Text="Incarca"  FileUploadMode="OnPageLoad" UploadMode="Advanced"  AutoStartUpload="true"  ToolTip="Incarca fotografie" ShowTextBox="false"
+                                ClientInstanceName="UploadImage" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false">
                                 <BrowseButton>
                                     <Image Url="../Fisiere/Imagini/Icoane/incarca.png" Width="16px" Height="16px"></Image>                                    
                                 </BrowseButton>
-                                <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                                <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUploadDI(s); }" />
                             </dx:ASPxUploadControl>
-                        </td>
+                        </td>   
                         <td >
-                            <dx:ASPxButton ID="btnDoc2" runat="server" ToolTip="Sterge fotografie" HorizontalAlignment="Center" Text="Sterge" visible="false" OnClick="btnDoc_Click"  Height="28">
+                            <dx:ASPxButton ID="btnSterge" runat="server" ToolTip="Sterge fotografie" HorizontalAlignment="Center" Text="Sterge" OnClick="btnDoc_Click"  Height="28">
                                 <Image Url="../Fisiere/Imagini/Icoane/sterge.png" Width="16px" Height="16px"></Image>
                                 <Paddings PaddingLeft="0px" PaddingRight="0px" />
+                                <ClientSideEvents Click="function(s,e) { e.processOnServer = true; pnlCtlDateIdent.PerformCallback('btnSterge'); }" />
                             </dx:ASPxButton>
 
 					    </td>

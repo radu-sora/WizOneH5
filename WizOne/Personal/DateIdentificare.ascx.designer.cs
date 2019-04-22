@@ -49,13 +49,13 @@ namespace WizOne.Personal {
         protected global::DevExpress.Web.ASPxUploadControl btnDocUpload;
         
         /// <summary>
-        /// btnDoc2 control.
+        /// btnSterge control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnDoc2;
+        protected global::DevExpress.Web.ASPxButton btnSterge;
         
         /// <summary>
         /// DateIdentListView control.

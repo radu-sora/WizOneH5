@@ -118,19 +118,7 @@ namespace WizOne
                 if (Constante.tipBD == 2)
                     exp = $@"CASE WHEN (COALESCE((SELECT CASE WHEN COALESCE(""Valoare"",30) = 0 THEN 99999 ELSE COALESCE(""Valoare"",99999) END FROM ""tblParametrii"" WHERE ""Nume""='Parola_VechimeMaxima'),30) + (SELECT TOP 1 ""Data"" FROM ""ParoleUtilizatorIstoric"" WHERE ""IdUser""=A.F70102 ORDER BY ""Data"" Desc)) < SYSDATE THEN 1 ELSE 0 END AS ""ParolaExpirata"" ";
 
-                //string strSql = $@"SELECT a.F70102 AS ""UtilizatorId"", a.F70104 AS ""Utilizator"", COALESCE(a.""F70113"",0) AS ""ResetareParola"", COALESCE(a.""SchimbaParola2"",0) AS ""SchimbaParola2"", F70112 AS ""ParolaComplexa"",
-                //                    CRP.F10003 AS ""Marca"", CRP.F10007 AS ""IdDept"",C.F00608 AS ""Dept"",CRP.F10017 AS CNP,
-                //                    CRP.F10008 As ""Nume"", CRP.F10009 AS ""Prenume"", CRP.F10022 AS F10022,
-                //                    (SELECT MAX(""Tema"") FROM ""tblConfigUsers"" WHERE F70102=A.F70102) AS ""Tema"",
-                //                    CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=0)=0 THEN 0 ELSE 1 END AS ""EsteAdmin"",
-                //                    CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=99)=0 THEN 0 ELSE 1 END AS ""EsteInGrup99""
-                //                    FROM USERS A
-                //                    LEFT JOIN F100 CRP ON A.F10003=CRP.F10003
-                //                    LEFT JOIN F006 C ON CRP.F10007=C.F00607
-                //                    INNER JOIN F100Cartele D ON A.F10003=D.F10003
-                //                    WHERE D.Cartela=@1 AND D.DataInceput <= {General.CurrentDate()} AND {General.CurrentDate()} <= D.DataSfarsit";
-
-                string strSql = $@"SELECT a.F70102 AS ""UtilizatorId"", a.F70104 AS ""Utilizator"", COALESCE(a.""F70113"",0) AS ""ResetareParola"", COALESCE(a.""SchimbaParola2"",0) AS ""SchimbaParola2"", F70112 AS ""ParolaComplexa"",
+                string strSql = $@"SELECT a.F70102 AS ""UtilizatorId"", a.F70104 AS ""Utilizator"", COALESCE(a.""F70113"",0) AS ""ResetareParola"", F70112 AS ""ParolaComplexa"",
                                     CRP.F10003 AS ""Marca"", CRP.F10007 AS ""IdDept"",C.F00608 AS ""Dept"",CRP.F10017 AS CNP,
                                     CRP.F10008 As ""Nume"", CRP.F10009 AS ""Prenume"", CRP.F10022 AS F10022,
                                     (SELECT MAX(""Tema"") FROM ""tblConfigUsers"" WHERE F70102=A.F70102) AS ""Tema"",
@@ -162,44 +150,13 @@ namespace WizOne
                     Session["ParolaComplexa"] = Convert.ToInt32(General.Nz(drUsr["ParolaComplexa"], 0));
 
                     General.SetTheme();
+                    General.InregistreazaLogarea(1, txtPan1.Value);
+                    Session["SecApp"] = "OK_Tactil";
 
-                    //string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
-                    //if (tipVerif == "") tipVerif = "1";
-
-                    //if (Convert.ToInt32(General.Nz(drUsr["ResetareParola"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
-                    //{
-                    //    InregistreazaLogarea(1);
-                    //    Session["SecApp"] = "OK";
-                    //    Response.Redirect("Pagini/SchimbaParola.aspx", false);
-                    //}
-                    //else
-                    //{
-                        //if (Convert.ToInt32(General.Nz(drUsr["ParolaExpirata"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
-                        //{
-                        //    InregistreazaLogarea(0, "Parola expirata");
-                        //    MessageBox.Show("Parola a expirat", MessageBox.icoWarning, "", "Pagini/SchimbaParola.aspx");
-                        //}
-                        //else
-                        //{
-                            General.InregistreazaLogarea(1, txtPan1.Value);
-                            Session["SecApp"] = "OK_Tactil";
-
-                    //if (Dami.ValoareParam("2FA", "") == "1")
-                    //{
-                    //    string ras = General.CreazaCod2FA();
-                    //    if (ras != "")
-                    //        MessageBox.Show(ras, MessageBox.icoError, "");
-                    //    else
-                    //        Response.Redirect("~/Pagini/CodConfirmare.aspx", false);
-                    //}
-                    //else
-
-                            DataTable dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TimeoutSecunde'", null);
-                            if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
-                                Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
-                            Response.Redirect("~/Tactil/Main.aspx", false);
-                        //}
-                    //}
+                    DataTable dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TimeoutSecunde'", null);
+                    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
+                        Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
+                    Response.Redirect("~/Tactil/Main.aspx", false);
                 }
                 else
                 {

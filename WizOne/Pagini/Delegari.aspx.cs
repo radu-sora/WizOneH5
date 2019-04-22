@@ -49,7 +49,7 @@ namespace WizOne.Pagini
                 GridViewDataComboBoxColumn colDg = (grDate.Columns["IdDelegat"] as GridViewDataComboBoxColumn);
                 colDg.PropertiesComboBox.DataSource = dtDg;
 
-                string sqlMod = @"SELECT Id, Denumire FROM tblModule";
+                string sqlMod = @"SELECT ""Id"", ""Denumire"" FROM ""tblModule"" ";
                 DataTable dtMo = General.IncarcaDT(sqlMod, null);
                 GridViewDataComboBoxColumn colMo = (grDate.Columns["IdModul"] as GridViewDataComboBoxColumn);
                 colMo.PropertiesComboBox.DataSource = dtMo;
@@ -69,7 +69,7 @@ namespace WizOne.Pagini
                 if (!IsPostBack)
                 {
                     string sqlTbl = @"SELECT * FROM ""tblDelegari"" ";
-                    if (!esteHr) { sqlTbl += " WHERE IdUser=" + Session["UserId"]; }
+                    if (!esteHr) { sqlTbl += " WHERE \"IdUser\"=" + Session["UserId"]; }
                     DataTable dt = General.IncarcaDT(sqlTbl, null);
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdUser"], dt.Columns["IdDelegat"], dt.Columns["IdModul"] };
 

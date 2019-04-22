@@ -530,8 +530,8 @@ namespace WizOne.Module
         public int F10003 { get; set; }
         public string Mail { get; set; }
         public string NumeComplet { get; set; }
-        public int SchimbaParola2 { get; set; }
-        public string Parola2 { get; set; }
+        public int SchimbaParola { get; set; }
+        public string Parola { get; set; }
         public string PINInfoChiosc { get; set; }
 
         public USERS() { }
@@ -557,7 +557,7 @@ namespace WizOne.Module
             F10003 = columns.Contains("F10003") == true ? Convert.ToInt32(dr["F10003"].ToString() == string.Empty ? "-99" : dr["F10003"].ToString()) : -99;
             Mail = columns.Contains("Mail") == true ? dr["Mail"].ToString() : "";
             NumeComplet = columns.Contains("NumeComplet") == true ? dr["NumeComplet"].ToString() : "";
-            SchimbaParola2 = columns.Contains("SchimbaParola2") == true ? Convert.ToInt32(dr["SchimbaParola2"].ToString() == string.Empty ? "-99" : dr["SchimbaParola2"].ToString()) : -99;
+            SchimbaParola = columns.Contains("SchimbaParola") == true ? Convert.ToInt32(dr["SchimbaParola"].ToString() == string.Empty ? "-99" : dr["SchimbaParola"].ToString()) : -99;
             PINInfoChiosc = columns.Contains("PINInfoChiosc") == true ? dr["PINInfoChiosc"].ToString() : "";
         }
     }

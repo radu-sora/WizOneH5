@@ -461,12 +461,12 @@ namespace WizOne.Eval
 
             try
             {
-                strSql = $@"SELECT CASE WHEN B.F10003 IS NULL THEN B.F70104 ELSE E.F10008 {Dami.Operator()} ' ' {Dami.Operator()} E.F10009 END AS 'User', 
-                        C.F10008 {Dami.Operator()} ' ' {Dami.Operator()} C.F10009 AS 'Evaluat', D.""Denumire"" AS Quiz, 
-                        CASE WHEN A.IdTip=1 AND A.F10003={Session["User_Marca"]} THEN 'Invitat de catre mine' ELSE
-                        CASE WHEN A.IdTip=1 AND A.IdUser={Session["UserId"]} THEN 'Eu sunt invitat' ELSE
-                        CASE WHEN A.IdTip=2 AND A.F10003={Session["User_Marca"]} THEN 'Coleg autoinvitat' ELSE
-                        CASE WHEN A.IdTip=2 AND A.IdUser={Session["UserId"]} THEN 'Eu dau feedback autoinvitat' ELSE '' END END END END AS Tip,
+                strSql = $@"SELECT CASE WHEN B.F10003 IS NULL THEN B.F70104 ELSE E.F10008 {Dami.Operator()} ' ' {Dami.Operator()} E.F10009 END AS ""User"", 
+                        C.F10008 {Dami.Operator()} ' ' {Dami.Operator()} C.F10009 AS ""Evaluat"", D.""Denumire"" AS ""Quiz"", 
+                        CASE WHEN A.""IdTip""=1 AND A.F10003={Session["User_Marca"]} THEN 'Invitat de catre mine' ELSE
+                        CASE WHEN A.""IdTip""=1 AND A.""IdUser""={Session["UserId"]} THEN 'Eu sunt invitat' ELSE
+                        CASE WHEN A.""IdTip""=2 AND A.F10003={Session["User_Marca"]} THEN 'Coleg autoinvitat' ELSE
+                        CASE WHEN A.""IdTip""=2 AND A.""IdUser""={Session["UserId"]} THEN 'Eu dau feedback autoinvitat' ELSE '' END END END END AS ""Tip"",
                         A.*
                         FROM ""Eval_Invitatie360"" A
                         INNER JOIN USERS B ON A.""IdUser""=B.F70102

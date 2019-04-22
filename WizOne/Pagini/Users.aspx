@@ -96,8 +96,8 @@
                                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>
-                                <dx:GridViewDataCheckColumn FieldName="SchimbaParola2" Name="SchimbaParola2" Caption="Schimba Parola 2" VisibleIndex="16"/>
-                                <dx:GridViewDataTextColumn FieldName="Parola2" Name="Parola2" Caption="Parola2" VisibleIndex="17"/>
+                                <dx:GridViewDataCheckColumn FieldName="SchimbaParola" Name="SchimbaParola" Caption="Schimba Parola" VisibleIndex="16"/>
+                                <dx:GridViewDataTextColumn FieldName="Parola" Name="Parola" Caption="Parola" VisibleIndex="17"/>
                                 <dx:GridViewDataTextColumn FieldName="PINInfoChiosc" Name="PINInfoChiosc" Caption="PINInfoChiosc" VisibleIndex="18"/>
 
                                 <dx:GridViewDataTextColumn FieldName="F70122" Name="F70122" Caption="Data editare" VisibleIndex="19" Visible="false" ShowInCustomizationForm="false"/>

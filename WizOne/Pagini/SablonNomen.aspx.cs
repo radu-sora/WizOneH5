@@ -93,17 +93,18 @@ namespace WizOne.Pagini
                     Session["InformatiaCurenta"] = dt;
 
                     DataTable dtCfg = General.IncarcaDT("SELECT * FROM \"tblNomenConfig\" WHERE \"Tabela\"= '" + Session["Sablon_Tabela"] + "'", null);
-                    string sqlSec = @"SELECT X.""IdColoana"", MIN(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+                    string sqlSec = $@"SELECT X.""IdColoana"", MIN(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
                                     SELECT A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                     FROM ""Securitate"" A
                                     INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                    WHERE B.""IdUser"" = @2 AND A.""IdForm"" = @1 AND A.""IdControl"" = 'grDate'
+                                    WHERE B.""IdUser"" = @1 AND A.""IdForm"" = '{"tbl." + Session["Sablon_Tabela"].ToString()}' AND A.""IdControl"" = 'grDate'
                                     UNION
                                     SELECT A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                     FROM ""Securitate"" A
-                                    WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = @1 AND A.""IdControl"" = 'grDate') X
+                                    WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = '{"tbl." + Session["Sablon_Tabela"].ToString()}' AND A.""IdControl"" = 'grDate') X
                                     GROUP BY X.""IdColoana"" ";
-                    DataTable dtSec = General.IncarcaDT(sqlSec, new string[] { "tbl." + Session["Sablon_Tabela"].ToString(), Session["UserId"].ToString() });
+                    //DataTable dtSec = General.IncarcaDT(sqlSec, new string[] { "tbl." + Session["Sablon_Tabela"].ToString(), Session["UserId"].ToString() });
+                    DataTable dtSec = General.IncarcaDT(sqlSec, new string[] { Session["UserId"].ToString() });
 
                     List<metaTblNomenConfig_SelectStr> lst = new List<metaTblNomenConfig_SelectStr>();
                     int x = 1;

@@ -149,8 +149,8 @@ namespace WizOne.Pagini
                 dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
                 dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? DBNull.Value;
                 dr["Mail"] = e.NewValues["Mail"] ?? DBNull.Value;
-                dr["SchimbaParola2"] = e.NewValues["SchimbaParola2"] ?? 0;
-                dr["Parola2"] = e.NewValues["Parola2"] ?? DBNull.Value;
+                dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
+                dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
                 dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
 
                 dr["USER_NO"] = Session["UserId"];
@@ -195,8 +195,8 @@ namespace WizOne.Pagini
                 dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
                 dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? DBNull.Value;
                 dr["Mail"] = e.NewValues["Mail"] ?? DBNull.Value;
-                dr["SchimbaParola2"] = e.NewValues["SchimbaParola2"] ?? 0;
-                dr["Parola2"] = e.NewValues["Parola2"] ?? DBNull.Value;
+                dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
+                dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
                 dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
 
                 dr["USER_NO"] = Session["UserId"];
@@ -218,21 +218,7 @@ namespace WizOne.Pagini
         {
             try
             {
-
-                //e.NewValues["F70102"] = General.DamiNextId("Users");
                 e.NewValues["F70102"] = Dami.NextId("Users");
-
-
-                //DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                //e.NewValues["F70101"] = 701;
-                //e.NewValues["F70111"] = 0;
-                //e.NewValues["F70121"] = 999;
-                //e.NewValues["F70112"] = 0;
-                //e.NewValues["F70113"] = 0;
-                //e.NewValues["F70114"] = 0;
-                //e.NewValues["IdLimba"] = "RO";
-                //e.NewValues["SchimbaParola2"] = 0;
-                //e.NewValues["F70122"] = DateTime.Now;
             }
             catch (Exception ex)
             {

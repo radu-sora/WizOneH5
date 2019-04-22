@@ -305,10 +305,10 @@ namespace WizOne.Organigrama
 
                     DataRow drModif = General.IncarcaDR(
                         @"SELECT 
-                        CASE WHEN (F10002=@2 AND F10004=@3 AND F10005=@4 AND F10006=@5 AND F10007=@6) THEN 0 ELSE 1 END AS modifStruc,
-                        CASE WHEN CodCOR = @7 THEN 0 ELSE 1 END AS modifCor,
-                        CASE WHEN IdFunctie = @8 THEN 0 ELSE 1 END AS modifFunctia
-                        FROM Org_Posturi WHERE IdAuto=@1", new object[] { Session["IdAuto"], 1, cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, cmbCor.Value, cmbFunc.Value ?? -99 });
+                        CASE WHEN (F10002=@2 AND F10004=@3 AND F10005=@4 AND F10006=@5 AND F10007=@6) THEN 0 ELSE 1 END AS ""modifStruc"",
+                        CASE WHEN ""CodCOR"" = @7 THEN 0 ELSE 1 END AS ""modifCor"",
+                        CASE WHEN ""IdFunctie"" = @8 THEN 0 ELSE 1 END AS ""modifFunctia""
+                        FROM ""Org_Posturi"" WHERE ""IdAuto""=@1", new object[] { Session["IdAuto"], 1, cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, cmbCor.Value, cmbFunc.Value ?? -99 });
 
                     //daca este post existent
                     if ((drModif != null && drModif["modifStruc"].ToString() == "0" && drModif["modifCor"].ToString() == "0" && drModif["modifFunctia"].ToString() == "0") 
@@ -374,7 +374,7 @@ namespace WizOne.Organigrama
                     metaCereriDate itm = Session["Posturi_Upload"] as metaCereriDate;
                     if (itm.UploadedFile != null)
                     {
-                        string sqlFis = $@"INSERT INTO tblFisiere(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
+                        string sqlFis = $@"INSERT INTO ""tblFisiere""(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
                             SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
 
                         General.ExecutaNonQuery(sqlFis, new object[] { "Org_Posturi", idAuto, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });

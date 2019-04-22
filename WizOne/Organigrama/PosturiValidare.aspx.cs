@@ -103,7 +103,7 @@ namespace WizOne.Organigrama
                 DataRow drLuc = General.IncarcaDR("SELECT * FROM F010", null);
                 if (drLuc.ToString() != "" && drLuc != null && drLuc["F01011"] != null && drLuc["F01012"] != null) dtLuc = new DateTime(Convert.ToInt32(drLuc["F01011"]), Convert.ToInt32(drLuc["F01012"]), 1);
 
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM Org_relPostAngajat WHERE IdAuto IN ({ids.Substring(1)})", null);
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Org_relPostAngajat"" WHERE ""IdAuto"" IN ({ids.Substring(1)})", null);
                 for(int i =0; i < dt.Rows.Count; i++)
                 {
                     try

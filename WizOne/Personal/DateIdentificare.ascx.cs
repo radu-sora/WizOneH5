@@ -55,10 +55,10 @@ namespace WizOne.Personal
                 txtV.Text = Varsta(dtN).ToString();
 
 
-                if (!IsPostBack)
-                {
+                //if (!IsPostBack)
+                //{
                     btnIncarca_Click();
-                }
+                //}
 
                 if (table.Rows[0]["F10047"].ToString() == "1")
                 {
@@ -262,8 +262,27 @@ namespace WizOne.Personal
             {
                 if (Session["Marca"] != null)
                 {
-                    byte[] fisier = General.IncarcaFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100") as byte[];
-
+                    byte[] fisier = null;
+                    DataTable dt = new DataTable();
+                    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                    if (ds.Tables.Contains("tblFisiere"))
+                    {
+                        dt = ds.Tables["tblFisiere"];
+                        DataRow dr = null;
+                        if (dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).Count() > 0)
+                        {
+                            dr = dt.Select("Tabela = 'F100' AND Id = " + Session["Marca"].ToString()).FirstOrDefault();
+                            fisier = dr["Fisier"] as byte[];
+                        }
+                        else
+                        {
+                            fisier = General.IncarcaFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100") as byte[];
+                        }
+                    }
+                    else
+                    {
+                        fisier = General.IncarcaFotografie(img, Convert.ToInt32(Session["Marca"].ToString()), "F100") as byte[];
+                    }
                     if (fisier != null)
                     {
                         string base64String = Convert.ToBase64String(fisier, 0, fisier.Length);

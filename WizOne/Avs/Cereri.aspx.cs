@@ -1220,6 +1220,8 @@ namespace WizOne.Avs
                         }
                         IncarcaDate();
                         SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out data);
+                        if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma)
+                            SetNorma(e.Parameter.Split(';')[1]);
                         break;
                     case "4":
                         SalveazaDate();
@@ -1264,6 +1266,44 @@ namespace WizOne.Avs
                 //ArataMesaj("Atentie !");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void SetNorma(string cmb)
+        {
+            switch (cmb)
+            {
+                case "cmb1Nou":
+                    if (Convert.ToInt32(cmb1Nou.Value ?? 1) > Convert.ToInt32(cmb3Nou.Value ?? 8))
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Timpul partial este mai mare decat norma!");
+                        cmb1Nou.Value = 1;
+                        Session["Valoare1Noua"] = "cmb1Nou;1";
+                        IncarcaDate();
+                    }
+                    break;
+                case "cmb2Nou":
+                    if (Convert.ToInt32(cmb2Nou.Value) == 2)
+                    {
+                        cmb4Nou.Value = 2;
+                        cmb5Nou.Value = 5;
+                        Session["Valoare4Noua"] = "cmb4Nou;2";
+                        Session["Valoare5Noua"] = "cmb5Nou;5";
+                        IncarcaDate();
+                    }
+                    break;
+                case "cmb3Nou":
+                    {
+                        cmb1Nou.Value = Convert.ToInt32(cmb3Nou.Value ?? 8);
+                        Session["Valoare1Noua"] = "cmb1Nou;" + Convert.ToInt32(cmb3Nou.Value ?? 8);
+                    }
+                    break;           
+                case "cmb7Nou":
+                    if (Convert.ToInt32(cmb7Nou.Value) == 2 || Convert.ToInt32(cmb7Nou.Value) == 3)
+                        txt1Nou.Enabled = true;
+                    else
+                        txt1Nou.Enabled = false;
+                    break;               
             }
         }
 
@@ -1397,7 +1437,7 @@ namespace WizOne.Avs
                         if (cmbStructOrgNou.Value == null) strErr += ", organigrama";
                         break;
                     case (int)Constante.Atribute.Norma:
-                        if (txt1Nou.Value == null) strErr += ", norma";
+                        if (cmb1Nou.Value == null) strErr += ", norma";
                         break;
                     case (int)Constante.Atribute.ContrIn:
                         if (txt1Nou.Value == null || de1Nou.Value == null) strErr += ", contract intern";
@@ -1894,7 +1934,7 @@ namespace WizOne.Avs
                     break;
                 case (int)Constante.Atribute.Norma:
                     camp1 = "\"TipAngajat\", \"TimpPartial\", \"Norma\", \"TipNorma\", \"DurataTimpMunca\", \"RepartizareTimpMunca\", \"IntervalRepartizare\", \"NrOreLuna\"";
-                    camp2 = cmb2Nou.Value.ToString() + "," + cmb1Nou.Value.ToString() + "," + cmb3Nou.Value.ToString() + "," + cmb4Nou.Value.ToString() + "," + cmb5Nou.Value.ToString() + "," + cmb6Nou.Value.ToString() + "," + cmb7Nou.Value.ToString() + "," + txt1Nou.Text;
+                    camp2 = cmb2Nou.Value.ToString() + "," + cmb1Nou.Value.ToString() + "," + cmb3Nou.Value.ToString() + "," + cmb4Nou.Value.ToString() + "," + cmb5Nou.Value.ToString() + "," + cmb6Nou.Value.ToString() + "," + cmb7Nou.Value.ToString() + "," + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text);
                     break;
                 case (int)Constante.Atribute.ContrIn:
                     camp1 = "\"NrIntern\", \"DataIntern\"";

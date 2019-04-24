@@ -46,7 +46,7 @@ namespace WizOne.Pagini
                                     if (dtAta.Rows.Count > 0)
                                     {
                                         string numeFis = (dtAta.Rows[0]["DescrAttach"] ?? "").ToString();
-                                        string ext = "txt";
+                                        string ext = ".txt";
                                         if (numeFis.LastIndexOf(".") >= 0)
                                             ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
 

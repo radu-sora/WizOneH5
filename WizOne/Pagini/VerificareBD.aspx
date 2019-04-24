@@ -29,7 +29,7 @@
           <tr>    
               <td>             
                     <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%">
-                        <Settings ShowFilterRow="False" ShowGroupPanel="False" VerticalScrollBarMode="Visible" VerticalScrollableHeight="500" />
+                        <Settings ShowFilterRow="True" ShowGroupPanel="False" VerticalScrollBarMode="Visible" VerticalScrollableHeight="500" />
                         <SettingsSearchPanel Visible="False" />
                         <ClientSideEvents ContextMenu="ctx" />
                         <Columns>
@@ -48,7 +48,7 @@
                             <dx:GridViewDataTextColumn FieldName="COLUMN_DEFAULT_CLIENT" Name="COLUMN_DEFAULT_CLIENT" Caption="Val. Implicita CLIENT" />
                             <dx:GridViewDataTextColumn FieldName="IS_NULLABLE_CLIENT" Name="IS_NULLABLE_CLIENT" Caption="Accepta NULL CLIENT" />
                             <dx:GridViewDataTextColumn FieldName="DATA_TYPE_CLIENT" Name="DATA_TYPE_CLIENT" Caption="Tip data CLIENT" />
-                            <dx:GridViewDataTextColumn FieldName="CHARACTER_MAXIMUM_LENGTH_CLIENT" Name="CHARACTER_MAXIMUM_LENGTH_CLIENT" Caption="Lungime sir CLIENT" />
+                            <dx:GridViewDataTextColumn FieldName="CHARACTER_MAX_LENGTH_CLIENT" Name="CHARACTER_MAX_LENGTH_CLIENT" Caption="Lungime sir CLIENT" />
                             <dx:GridViewDataTextColumn FieldName="NUMERIC_PRECISION_CLIENT" Name="NUMERIC_PRECISION_CLIENT" Caption="Nr. cifre CLIENT" />
                             <dx:GridViewDataTextColumn FieldName="NUMERIC_SCALE_CLIENT" Name="NUMERIC_SCALE_CLIENT" Caption="Nr. zecimale CLIENT" />                    
                                 

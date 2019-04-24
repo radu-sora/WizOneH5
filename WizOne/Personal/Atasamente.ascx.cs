@@ -148,14 +148,14 @@ namespace WizOne.Personal
 
                 metaUploadFile itm = Session["DocUpload_MP_Atasamente"] as metaUploadFile;
                 dr["Attach"] = itm.UploadedFile;
-                if (itm != null)
-                {
-                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
-                    if (Constante.tipBD == 2)
-                        dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
-                    //dr["FisierNume"] = itm.UploadedFileName;
-                    //dr["FisierExtensie"] = itm.UploadedFileExtension;
-                }
+                //if (itm != null)
+                //{
+                //    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
+                //    if (Constante.tipBD == 2)
+                //        dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
+                //    //dr["FisierNume"] = itm.UploadedFileName;
+                //    //dr["FisierExtensie"] = itm.UploadedFileExtension;
+                //}
 
                 ds.Tables["Atasamente"].Rows.Add(dr);
 
@@ -163,8 +163,8 @@ namespace WizOne.Personal
 
                 e.Cancel = true;
                 grDateAtasamente.CancelEdit();
-                grDateAtasamente.DataSource = ds.Tables["Atasamente"];
                 grDateAtasamente.KeyFieldName = "IdAuto";
+                grDateAtasamente.DataSource = ds.Tables["Atasamente"];                
                 Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
@@ -206,8 +206,8 @@ namespace WizOne.Personal
 
                 e.Cancel = true;
                 grDateAtasamente.CancelEdit();
-                grDateAtasamente.DataSource = ds.Tables["Atasamente"];
                 grDateAtasamente.KeyFieldName = "IdAuto";
+                grDateAtasamente.DataSource = ds.Tables["Atasamente"];                
                 Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)

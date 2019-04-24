@@ -866,7 +866,8 @@
     <Content Include="FisiereRevisal\www_w3_org_2001_XMLSchema.xsd">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Fisiere\BDReferinta.csv" />
+    <Content Include="Fisiere\BDReferintaSQL.csv" />
+    <Content Include="Fisiere\BDReferintaORA.csv" />
     <None Include="Generatoare\Reports\Models\ReportsModel.edmx.diagram">
       <DependentUpon>ReportsModel.edmx</DependentUpon>
     </None>

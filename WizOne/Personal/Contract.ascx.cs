@@ -206,6 +206,7 @@ namespace WizOne.Personal
 
                     break;
                 case "deDataAng":
+                    deDataCrtIntern_EditValueChanged(ds.Tables[1].Rows[0]["F100986"]);
                     data = param[1].Split('.');
                     ds.Tables[0].Rows[0]["F10022"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
                     ds.Tables[1].Rows[0]["F10022"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
@@ -345,6 +346,19 @@ namespace WizOne.Personal
                     Session["InformatiaCurentaPersonal"] = ds;
                     break;
                 case "cmbTipNorma":
+                    dateId = new DateIdentificare();
+                    varsta = dateId.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
+                    if (varsta >= 16 && varsta < 18 && Convert.ToInt32(ds.Tables[0].Rows[0]["F100964"].ToString()) > 30 && Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 2)
+                    {
+                        pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numar invalid de ore pe luna/saptamana (max 30 pentru minori peste 16 ani)!");
+                        SetariNorma();
+                        return;
+                    }
+                    if (Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"].ToString()) == 1 && Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 2 && Convert.ToInt32(ds.Tables[0].Rows[0]["F100964"].ToString()) > 40)
+                    {
+                        pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numar invalid de ore pe luna/saptamana (max 40 pentru norma intreaga)!");
+                        return;
+                    }
                     ds.Tables[0].Rows[0]["F100926"] = param[1];
                     ds.Tables[1].Rows[0]["F100926"] = param[1];
                     Session["InformatiaCurentaPersonal"] = ds;
@@ -368,12 +382,18 @@ namespace WizOne.Personal
                 case "txtNrOre":
                     dateId = new DateIdentificare();
                     varsta = dateId.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
-                    if (varsta >= 16 && varsta < 18 && Convert.ToInt32(param[1]) > 30)
+                    if (varsta >= 16 && varsta < 18 && Convert.ToInt32(param[1]) > 30 && Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 2)
                     {
                         pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numar invalid de ore pe luna/saptamana (max 30 pentru minori peste 16 ani)!");
                         SetariNorma();
                         return;
                     }
+                    if (Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"].ToString()) == 1 && Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 2 && Convert.ToInt32(param[1]) > 40)
+                    {
+                        pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numar invalid de ore pe luna/saptamana (max 40 pentru norma intreaga)!");                       
+                        return;
+                    }
+
                     ds.Tables[0].Rows[0]["F100964"] = param[1];
                     ds.Tables[2].Rows[0]["F100964"] = param[1];
                     Session["InformatiaCurentaPersonal"] = ds;
@@ -1063,9 +1083,9 @@ namespace WizOne.Personal
             DateTime dt = new DateTime(2100, 1, 1, 0, 0, 0);
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             if (deDataAngajarii.Value != null)
-                if (Convert.ToDateTime(deDataCrtIntern.Value) > Convert.ToDateTime(deDataAngajarii.Value))
+                if (Convert.ToDateTime(deDataCrtIntern.Value) >= Convert.ToDateTime(deDataAngajarii.Value))
                 {
-                    pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data contract intern este ulterioara datei angajarii!");
+                    pnlCtlContract.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data contract intern trebuie sa fie anterioara datei angajarii!");
                     deDataCrtIntern.Value = (F100986 == null ? dt : Convert.ToDateTime(F100986));
                     ds.Tables[0].Rows[0]["F100986"] = (F100986 == null ? dt.Date : Convert.ToDateTime(F100986).Date);
                     ds.Tables[1].Rows[0]["F100986"] = (F100986 == null ? dt.Date : Convert.ToDateTime(F100986).Date);

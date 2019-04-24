@@ -253,12 +253,14 @@ namespace WizOne.Personal
                         mesaj += " - de la data" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0)
                         mesaj += " - la data" + Environment.NewLine;
+                    
                     if (mesaj.Length > 0)
                     {
                         mesajDA = "Date angajare: " + Environment.NewLine + mesaj + Environment.NewLine;
                         mesaj = "";
                     }
 
+                    
 
                     if (ds.Tables[0].Rows[0]["F10079"] == null || ds.Tables[0].Rows[0]["F10079"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10079"].ToString() == "0")
                         mesaj += " - punct de lucru" + Environment.NewLine;
@@ -285,6 +287,8 @@ namespace WizOne.Personal
                     if (ds.Tables[0].Rows[0]["F100522"] == null || ds.Tables[0].Rows[0]["F100522"].ToString().Length <= 0
                         || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100522"].ToString()) == new DateTime(2100, 1, 1) || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100522"].ToString()) == new DateTime(1900, 1, 1))
                         mesaj += " - data eliberarii" + Environment.NewLine;
+                    if (ds.Tables[0].Rows[0]["F100963"] == null || ds.Tables[0].Rows[0]["F100963"].ToString().Length <= 0)
+                        mesaj += " - data expirarii BI/CI" + Environment.NewLine;
                     if (mesaj.Length > 0)
                     {
                         mesajDoc = "Documente: " + Environment.NewLine + mesaj + Environment.NewLine;

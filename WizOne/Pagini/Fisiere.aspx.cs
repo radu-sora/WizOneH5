@@ -40,23 +40,23 @@ namespace WizOne.Pagini
                             case "3":   //Florin 2018.09.28
                                 tbl = "Org_Posturi";
                                 break;
-                            //case "4":   //Florin 2019.12.04 (se citeste din tabela Atasamente)
-                            //    {
-                            //        DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Atasamente"" WHERE ""IdAuto""={id}", null);
-                            //        if (dtAta.Rows.Count > 0)
-                            //        {
-                            //            string numeFis = (dtAta.Rows[0]["DescrAttach"] ?? "").ToString();
-                            //            string ext = "txt";
-                            //            if (numeFis.LastIndexOf(".") >= 0)
-                            //                ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
+                            case "4":   //Florin 2019.12.04 (se citeste din tabela Atasamente)
+                                {
+                                    DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Atasamente"" WHERE ""IdAuto""={id}", null);
+                                    if (dtAta.Rows.Count > 0)
+                                    {
+                                        string numeFis = (dtAta.Rows[0]["DescrAttach"] ?? "").ToString();
+                                        string ext = ".txt";
+                                        if (numeFis.LastIndexOf(".") >= 0)
+                                            ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
 
-                            //            scrieDoc(ext, (byte[])dtAta.Rows[0]["Attach"], numeFis);
-                            //        }
-                            //        else
-                            //            Response.Write("Nu exista date de afisat !");
+                                        scrieDoc(ext, (byte[])dtAta.Rows[0]["Attach"], numeFis);
+                                    }
+                                    else
+                                        Response.Write("Nu exista date de afisat !");
                                     
-                            //        return;
-                            //    }
+                                    return;
+                                }
                             case "5":
                                 tbl = "Admin_Medicina"; //Radu 22.02.2019
                                 break;

@@ -23,7 +23,7 @@
         }
 
         function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=7&id=' + Value, '_blank ')
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=4&id=' + Value, '_blank ')
         }
 
         function ValidareUpload(s, Value) {
@@ -157,7 +157,7 @@
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblTip" runat="server" style="display:inline-block;">Tip</label>
-                        <dx:ASPxComboBox ID="cmbTip" ClientInstanceName="cmbTip" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="false" AllowNull="true" >
+                        <dx:ASPxComboBox ID="cmbTip" ClientInstanceName="cmbTip" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="true" AllowNull="true" OnValueChanged="cmbTip_ValueChanged" >
                             <Items>
                                 <dx:ListEditItem Text="(Selectie toate)" Value="9" />
                                 <dx:ListEditItem Text="Angajat" Value="0" />

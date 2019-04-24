@@ -30,7 +30,9 @@ namespace WizOne.Pagini
             {
                 Session["PaginaWeb"] = "Pagini.ActeAditionale";
 
-                string strSql = $@"SELECT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                if (!IsPostBack)
+                {
+                    string strSql = $@"SELECT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
                                 FROM (
                                 SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
                                 FROM ""Avs_Cereri"" A
@@ -44,9 +46,10 @@ namespace WizOne.Pagini
                                 LEFT JOIN F004 G ON A.F10005 = G.F00405
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607";
-                DataTable dtAng = General.IncarcaDT(strSql, null);
-                cmbAng.DataSource = dtAng;
-                cmbAng.DataBind();
+                    DataTable dtAng = General.IncarcaDT(strSql, null);
+                    cmbAng.DataSource = dtAng;
+                    cmbAng.DataBind();
+                }
             }
             catch (Exception ex)
             {
@@ -462,7 +465,7 @@ namespace WizOne.Pagini
                             FROM Avs_Cereri A
                             LEFT JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
-                            WHERE A.IdStare = 3
+                            WHERE A.IdStare = 3 AND A.DataModif >= '2019-01-01'
                             GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') + ' ' + COALESCE(A.F10009, '') AS NumeComplet, A.F10022, 1 AS Candidat,
@@ -521,7 +524,7 @@ namespace WizOne.Pagini
                             FROM ""Avs_Cereri"" A
                             LEFT JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
-                            WHERE A.""IdStare"" = 3
+                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= TO_DATE('01-JAN-2019', 'DD-MON-YYYY')
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente""
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
@@ -580,7 +583,50 @@ namespace WizOne.Pagini
                         return;
                     }
 
-                    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData", "Candidat", "TermenDepasire" });
+                    //if (arr[0] == "cmbTip")
+                    //{
+                    //    string sursa = "";
+
+                    //    switch (General.Nz(cmbTip.Value, "").ToString())
+                    //    {
+                    //        case "0":
+                    //            sursa = $@" SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
+                    //            FROM ""Avs_Cereri"" A
+                    //            LEFT JOIN F100 B ON A.F10003=B.F10003
+                    //            WHERE ""IdStare""=3";
+                    //            break;
+                    //        case "1":
+                    //            sursa = $@"SELECT A.F10003, COALESCE(A.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(A.F10009,'') AS ""NumeComplet"" 
+                    //            FROM F100 A
+                    //            WHERE A.F10025=900";
+                    //            break;
+                    //        default:
+                    //            sursa = $@"SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
+                    //            FROM ""Avs_Cereri"" A
+                    //            LEFT JOIN F100 B ON A.F10003=B.F10003
+                    //            WHERE ""IdStare""=3
+                    //            UNION
+                    //            SELECT A.F10003, COALESCE(A.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(A.F10009,'') AS ""NumeComplet"" 
+                    //            FROM F100 A
+                    //            WHERE A.F10025=900";
+                    //            break;
+                    //    }
+
+                    //    string strSql = $@"SELECT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                    //            FROM ({sursa}) X
+                    //            LEFT JOIN F100 A ON X.F10003=A.F10003
+                    //            LEFT JOIN F004 G ON A.F10005 = G.F00405
+                    //            LEFT JOIN F005 H ON A.F10006 = H.F00506
+                    //            LEFT JOIN F006 I ON A.F10007 = I.F00607";
+
+                    //    DataTable dtAng = General.IncarcaDT(strSql, null);
+                    //    cmbAng.DataSource = dtAng;
+                    //    cmbAng.DataBind();
+                    //    return;
+                    //}
+
+
+                    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData", "Candidat", "TermenDepasire", "Motiv" });
                     if (lst == null || lst.Count() == 0 || lst[0] == null) return;
 
                     switch (arr[0])
@@ -588,9 +634,18 @@ namespace WizOne.Pagini
                         case "btnDocUpload":
                             {
                                 if (arr[1] == "")
+                                {
                                     grDate.JSProperties["cpAlertMessage"] = "Nu se poate adauga atasament deoarece nu exista numar";
+                                    return;
+                                }
                                 else
-                                    IncarcaGrid();
+                                {
+                                    object[] obj = lst[0] as object[];
+                                    msg = obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes");
+                                }
+
+                                //else
+                                //    IncarcaGrid();
                             }
                             break;
                         case "btnSterge":
@@ -608,6 +663,8 @@ namespace WizOne.Pagini
                                         DELETE FROM ""Atasamente"" WHERE ""IdAuto""=@2;
                                         UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=NULL WHERE ""IdAutoAtasamente""=@2;
                                     END;", new object[] { "Atasamente", arr[1] });
+
+                                msg = obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes");
                             }
                             break;
                         case "btnNr":
@@ -637,6 +694,12 @@ namespace WizOne.Pagini
                                             msg += obj[8] + " - " + Dami.TraduCuvant("este finalizata") + System.Environment.NewLine;
                                             continue;
                                         }
+                                        if (Convert.ToInt32(General.Nz(obj[12], 0)) != 0)
+                                        {
+                                            msg += obj[8] + " - " + Dami.TraduCuvant("atribuirea de numar se face doar prin editare") + System.Environment.NewLine;
+                                            continue;
+                                        }
+
 
                                         if (Convert.ToInt32(General.Nz(obj[2], 0)) == 0)
                                         {
@@ -686,6 +749,8 @@ namespace WizOne.Pagini
 
 
                                             msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
+                                            if (Convert.ToDateTime(General.Nz(obj[1], 0)) < DateTime.Now)
+                                                msg += Dami.TraduCuvant("Atentie, data modificare este mai mica decat data documentului") + System.Environment.NewLine;
                                         }
                                     }
                                     catch (Exception ex)
@@ -694,13 +759,13 @@ namespace WizOne.Pagini
                                     }
                                 }
 
-                                if (msg != "")
-                                {
-                                    grDate.JSProperties["cpAlertMessage"] = msg;
-                                    IncarcaGrid();
+                                //if (msg != "")
+                                //{
+                                //    grDate.JSProperties["cpAlertMessage"] = msg;
+                                //    IncarcaGrid();
 
-                                    grDate.Selection.UnselectAll();
-                                }
+                                //    grDate.Selection.UnselectAll();
+                                //}
                             }
                             break;
                         case "btnTiparit":
@@ -744,7 +809,39 @@ namespace WizOne.Pagini
                                         ////DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET Tiparit=1 WHERE ""IdAuto""=@1", new object[] { General.Nz(obj[3],-99) });
                                         //DataTable dt = General.IncarcaDT(strSql, new object[] { General.Nz(obj[3], -99), obj[2], obj[9], obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
 
-                                        DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1", new object[] { General.Nz(obj[3], -99) });
+                                        //daca este candidat inainte trebuie sa salvam in baza de date
+                                        if (General.Nz(obj[10],"0").ToString() == "1")
+                                        {
+                                            int id = -99;
+
+                                            if (Constante.tipBD == 1)
+                                            {
+                                                DataTable dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                OUTPUT Inserted.IdAuto
+                                                VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
+                                                new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+
+                                                if (dt.Rows.Count > 0)
+                                                    id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
+                                            }
+                                            else
+                                            {
+                                                id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
+                                            }
+
+                                            if (Convert.ToInt32(General.Nz(id, -99)) != -99)
+                                            {
+                                                General.ExecutaNonQuery($@"
+                                                    BEGIN
+                                                        UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1{obj[4]});
+                                                        UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1;
+                                                    END:", new object[] { id });
+                                            }
+                                        }
+                                        else
+                                            General.ExecutaNonQuery($@"UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1", new object[] { General.Nz(obj[3], -99) });
 
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
 
@@ -752,10 +849,10 @@ namespace WizOne.Pagini
                                     catch (Exception) { }
                                 }
 
-                                grDate.JSProperties["cpAlertMessage"] = msg;
-                                IncarcaGrid();
+                                //grDate.JSProperties["cpAlertMessage"] = msg;
+                                //IncarcaGrid();
 
-                                grDate.Selection.UnselectAll();
+                                //grDate.Selection.UnselectAll();
                             }
                             break;
                         case "btnSemnat":
@@ -797,10 +894,10 @@ namespace WizOne.Pagini
                                     catch (Exception) { }
                                 }
 
-                                grDate.JSProperties["cpAlertMessage"] = msg;
-                                IncarcaGrid();
+                                //grDate.JSProperties["cpAlertMessage"] = msg;
+                                //IncarcaGrid();
 
-                                grDate.Selection.UnselectAll();
+                                //grDate.Selection.UnselectAll();
                             }
                             break;
                         case "btnFinalizat":
@@ -881,15 +978,21 @@ namespace WizOne.Pagini
                                     }
                                 }
 
-                                grDate.JSProperties["cpAlertMessage"] = msg;
-                                IncarcaGrid();
+                                //grDate.JSProperties["cpAlertMessage"] = msg;
+                                //IncarcaGrid();
 
-                                grDate.Selection.UnselectAll();
+                                //grDate.Selection.UnselectAll();
                             }
                             break;
                     }
 
+                    //IncarcaGrid();
+
+                    grDate.JSProperties["cpAlertMessage"] = msg;
                     IncarcaGrid();
+
+                    grDate.Selection.UnselectAll();
+
                 }
             }
             catch (Exception ex)
@@ -907,11 +1010,12 @@ namespace WizOne.Pagini
                 //var id = e.Keys["Id"];
                 int id = Convert.ToInt32(e.Keys["Id"]);
 
-                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAutoAct", "F10003", "DataModif", "Revisal", "TermenDepasire", "IdAvans" }) as object[];
+                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAutoAct", "F10003", "DataModif", "Revisal", "TermenDepasire", "IdAvans", "Semnat" }) as object[];
 
-                if (Convert.ToInt32(General.Nz(obj[3], 0)) != 0)
+                if (Convert.ToInt32(General.Nz(obj[3], 0)) != 0 || Convert.ToInt32(General.Nz(obj[6], 0)) != 0)
                 {
-                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica. Informatie trimisa in Revisal");
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("In acest stadiu nu mai sunt permise modificari");
+                    //grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica. Informatie trimisa in Revisal");
                     //MessageBox.Show("Informatie trimisa in revisal.", MessageBox.icoWarning, "Nu se poate modifica !");
                 }
                 else
@@ -924,6 +1028,10 @@ namespace WizOne.Pagini
 
                     ASPxDateEdit txtDocData = grDate.FindEditFormTemplateControl("txtDocData") as ASPxDateEdit;
                     if (txtDocData != null && txtDocData.Value != null) docData = txtDocData.Value;
+
+                    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Admin_NrActAd"" WHERE ""DocNr""=@1 ", new object[] { docNr }),0));
+                    if (cnt > 0)
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numarul de document exista deja");
 
                     //string strSql = $@"IF (SELECT COUNT(*) FROM ""Admin_NrActAd"" WHERE ""IdAuto""=@1)=0
                     //INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME) 
@@ -1054,12 +1162,20 @@ namespace WizOne.Pagini
             try
             {
                 //se salveaza direct in tabela Atasamente ca sa se vada in tabul din personal
-                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAutoAct", "Semnat", "F10003", "IdAutoAtasamente", "DocNr", "DocData" }) as object[];
+                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAutoAct", "Semnat", "F10003", "IdAutoAtasamente", "DocNr", "DocData", "CIMDet", "CIMNed", "Candidat", "Motiv" }) as object[];
 
                 if (Convert.ToInt32(General.Nz(obj[0], -99)) == -99) return;
 
                 string strSql = "";
 
+                string categ = "1002";
+                if (General.Nz(obj[6], 0).ToString() == "1" || General.Nz(obj[7], 0).ToString() == "1" || General.Nz(obj[8], 0).ToString() == "1")
+                    categ = "1001";
+                else
+                {
+                    if (General.Nz(obj[9], 0).ToString() == "1")
+                        categ = "1003";
+                }
 
                 #region cazul in care se salveaza si in tblFisiere
 
@@ -1115,7 +1231,7 @@ namespace WizOne.Pagini
 
                                 INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", USER_NO, TIME) 
                                 OUTPUT inserted.IdAuto INTO @IdAuto
-                                VALUES( @8, 999, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()});
+                                VALUES( @8, {categ}, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()});
                             
                                 UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=(SELECT IdAuto FROM @IdAuto) WHERE ""IdAuto""=@2;
                             END;";
@@ -1125,7 +1241,7 @@ namespace WizOne.Pagini
                                 DECLARE param_IdAuto number;
 
                                 INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", USER_NO, TIME) 
-                                VALUES( @8, 999, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()})
+                                VALUES( @8, {categ}, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()})
                                 RETURNING ""IdAuto"" INTO param_IdAuto;
                             
                                 UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=param_IdAuto WHERE ""IdAuto""=@2;
@@ -1290,6 +1406,55 @@ namespace WizOne.Pagini
                 string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;
                 Response.Redirect(url, false);
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void cmbTip_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string sursa = "";
+
+                switch (General.Nz(cmbTip.Value, "").ToString())
+                {
+                    case "0":
+                        sursa = $@" SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
+                            FROM ""Avs_Cereri"" A
+                            LEFT JOIN F100 B ON A.F10003=B.F10003
+                            WHERE ""IdStare""=3";
+                        break;
+                    case "1":
+                        sursa = $@"SELECT A.F10003, COALESCE(A.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(A.F10009,'') AS ""NumeComplet"" 
+                            FROM F100 A
+                            WHERE A.F10025=900";
+                        break;
+                    default:
+                        sursa = $@"SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
+                            FROM ""Avs_Cereri"" A
+                            LEFT JOIN F100 B ON A.F10003=B.F10003
+                            WHERE ""IdStare""=3
+                            UNION
+                            SELECT A.F10003, COALESCE(A.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(A.F10009,'') AS ""NumeComplet"" 
+                            FROM F100 A
+                            WHERE A.F10025=900";
+                        break;
+                }
+
+                string strSql = $@"SELECT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                            FROM ({sursa}) X
+                            LEFT JOIN F100 A ON X.F10003=A.F10003
+                            LEFT JOIN F004 G ON A.F10005 = G.F00405
+                            LEFT JOIN F005 H ON A.F10006 = H.F00506
+                            LEFT JOIN F006 I ON A.F10007 = I.F00607";
+
+                DataTable dtAng = General.IncarcaDT(strSql, null);
+                cmbAng.DataSource = dtAng;
+                cmbAng.DataBind();
             }
             catch (Exception ex)
             {

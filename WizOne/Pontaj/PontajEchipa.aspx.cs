@@ -2292,17 +2292,17 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
                 {
                     strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                    strLeg = " LEFT JOIN F1001 B ON A.F10003 = B.F10003 ";
+                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) B ON A.F10003 = B.F10003 ";
                 }
                 if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
                 {
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
-                    strLeg = " LEFT JOIN F1001 B ON A.F10003 = B.F10003 ";
+                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) B ON A.F10003 = B.F10003 ";
                 }
                 if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
                 {
                     strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-                    strLeg += " LEFT JOIN F100 C ON A.F10003 = C.F10003 ";
+                    strLeg += " LEFT JOIN (SELECT F10003, F10061, F10061 FROM F100) C ON A.F10003 = C.F10003 ";
                 }
                 if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
 
@@ -2501,17 +2501,17 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
                 {
                     strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                    strLeg = " LEFT JOIN F1001 B ON A.F10003 = B.F10003 ";
+                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) B ON A.F10003 = B.F10003 ";
                 }
                 if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
                 {
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
-                    strLeg = " LEFT JOIN F1001 B ON A.F10003 = B.F10003 ";
+                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) B ON A.F10003 = B.F10003 ";
                 }
                 if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
                 {
                     strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-                    strLeg += " LEFT JOIN F100 C ON A.F10003 = C.F10003 ";
+                    strLeg += " LEFT JOIN (SELECT F10003, F10061, F10061 FROM F100) C ON A.F10003 = C.F10003 ";
                 }
 
                 if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;

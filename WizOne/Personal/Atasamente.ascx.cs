@@ -197,7 +197,7 @@ namespace WizOne.Personal
                 dr["Attach"] = itm.UploadedFile;
                 if (itm != null)
                 {
-                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", dr["IdAuto"]);
+                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", dr["IdAuto"]);
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;
                 }

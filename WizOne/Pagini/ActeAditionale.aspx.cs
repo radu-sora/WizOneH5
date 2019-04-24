@@ -451,7 +451,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END) AS Motiv,
                             J.DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct, 
-                            CASE WHEN (SELECT COUNT(*) FROM tblFisiere FIS WHERE FIS.Tabela='Atasamente' AND FIS.Id=J.IdAutoAtasamente AND FIS.EsteCerere=0) = 0 THEN 0 ELSE 1 END AS AreAtas,
+                            CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas,
                             (SELECT ',' + CONVERT(nvarchar(20),COALESCE(AA.Id, '')) 
                             FROM Avs_Cereri AA
                             LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
@@ -469,7 +469,7 @@ namespace WizOne.Pagini
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 
                             A.F100985, A.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct,
-                            CASE WHEN (SELECT COUNT(*) FROM tblFisiere FIS WHERE FIS.Tabela='Atasamente' AND FIS.Id=J.IdAutoAtasamente AND FIS.EsteCerere=0) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
+                            CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
                             A.F10022, A.F100993, J.IdAutoAtasamente
                             FROM F100 A
                             LEFT JOIN Admin_NrActAd J ON A.F10003=J.F10003
@@ -510,7 +510,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(""MotivId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Motiv"",
                             CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"", 
-                            CASE WHEN (SELECT COUNT(*) FROM ""tblFisiere"" FIS WHERE FIS.""Tabela""='Atasamente' AND FIS.""Id""=J.""IdAutoAtasamente"" AND FIS.""EsteCerere""=0) = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
+                            CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
                             (SELECT ',' || LISTAGG(AA.""Id"", ',') WITHIN GROUP (ORDER BY AA.""Id"") AS ""Id""
                             FROM ""Avs_Cereri"" AA
                             LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
@@ -528,7 +528,7 @@ namespace WizOne.Pagini
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 
                             A.F100985, A.F100986, COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"",
-                            CASE WHEN (SELECT COUNT(*) FROM ""tblFisiere"" FIS WHERE FIS.""Tabela""='Atasamente' AND FIS.""Id""=J.""IdAutoAtasamente"" AND FIS.""EsteCerere""=0) = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
+                            CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
                             A.F10022, A.F100993, J.""IdAutoAtasamente""
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
@@ -602,7 +602,12 @@ namespace WizOne.Pagini
 
                                 object[] obj = lst[0] as object[];
                                 //General.ExecutaNonQuery($@"DELETE FROM ""tblFisiere"" WHERE ""Tabela""=@1 AND ""Id""=@2 AND ""EsteCerere""=0", new object[] { "Admin_NrActAd", arr[1] });
-                                General.ExecutaNonQuery($@"DELETE FROM ""tblFisiere"" WHERE ""Tabela""=@1 AND ""Id""=@2 AND ""EsteCerere""=0", new object[] { "Atasamente", arr[1] });
+                                General.ExecutaNonQuery($@"
+                                    BEGIN
+                                        DELETE FROM ""tblFisiere"" WHERE ""Tabela""=@1 AND ""Id""=@2 AND ""EsteCerere""=0;
+                                        DELETE FROM ""Atasamente"" WHERE ""IdAuto""=@2;
+                                        UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=NULL WHERE ""IdAutoAtasamente""=@2;
+                                    END;", new object[] { "Atasamente", arr[1] });
                             }
                             break;
                         case "btnNr":
@@ -1055,6 +1060,52 @@ namespace WizOne.Pagini
 
                 string strSql = "";
 
+
+                #region cazul in care se salveaza si in tblFisiere
+
+                //if (General.Nz(obj[3], "").ToString() == "")
+                //{
+                //    if (Constante.tipBD == 1)
+                //        strSql = $@"
+                //            BEGIN
+                //                DECLARE @IdAuto TABLE (IdAuto int);
+
+                //                INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", USER_NO, TIME) 
+                //                OUTPUT inserted.IdAuto INTO @IdAuto
+                //                VALUES( @8, 999, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()});
+
+                //                INSERT INTO tblFisiere(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
+                //                SELECT @1, (SELECT IdAuto FROM @IdAuto), 0, @3, @4, @5, @6, {General.CurrentDate()};
+
+                //                UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=(SELECT IdAuto FROM @IdAuto) WHERE ""IdAuto""=@2;
+                //            END;";
+                //    else
+                //        strSql = $@"
+                //            BEGIN
+                //                DECLARE param_IdAuto number;
+
+                //                INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", USER_NO, TIME) 
+                //                VALUES( @8, 999, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()})
+                //                RETURNING ""IdAuto"" INTO param_IdAuto;
+
+                //                INSERT INTO tblFisiere(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
+                //                SELECT @1, param_IdAuto, 0, @3, @4, @5, @6, {General.CurrentDate()};
+
+                //                UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=param_IdAuto WHERE ""IdAuto""=@2;
+                //            END;";
+                //}
+                //else
+                //{
+                //    strSql = $@"
+                //        BEGIN
+                //            UPDATE ""tblFisiere"" SET ""Fisier""=@3, ""FisierNume""=@4, ""FisierExtensie""=@5 WHERE ""Tabela""=@1 AND ""Id""=@6 AND ""EsteCerere""=0;
+                //            UPDATE ""Atasamente"" SET ""Attach""=@3, ""DescrAttach""=@4 WHERE ""IdAuto""=@6;
+                //        END;";
+                //}
+
+                #endregion
+
+
                 if (General.Nz(obj[3], "").ToString() == "")
                 {
                     if (Constante.tipBD == 1)
@@ -1066,9 +1117,6 @@ namespace WizOne.Pagini
                                 OUTPUT inserted.IdAuto INTO @IdAuto
                                 VALUES( @8, 999, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()});
                             
-                                INSERT INTO tblFisiere(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
-                                SELECT @1, (SELECT IdAuto FROM @IdAuto), 0, @3, @4, @5, @6, {General.CurrentDate()};
-
                                 UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=(SELECT IdAuto FROM @IdAuto) WHERE ""IdAuto""=@2;
                             END;";
                     else
@@ -1080,17 +1128,22 @@ namespace WizOne.Pagini
                                 VALUES( @8, 999, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()})
                                 RETURNING ""IdAuto"" INTO param_IdAuto;
                             
-                                INSERT INTO tblFisiere(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
-                                SELECT @1, param_IdAuto, 0, @3, @4, @5, @6, {General.CurrentDate()};
-
                                 UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=param_IdAuto WHERE ""IdAuto""=@2;
                             END;";
                 }
                 else
-                    strSql = $@"UPDATE ""tblFisiere"" SET ""Fisier""=@3, ""FisierNume""=@4, ""FisierExtensie""=@5 WHERE ""Tabela""=@1 AND ""Id""=@7 AND ""EsteCerere""=0";
+                {
+                    strSql = $@"
+                        BEGIN
+                            UPDATE ""Atasamente"" SET ""Attach""=@3, ""DescrAttach""=@4 WHERE ""IdAuto""=@6;
+                        END;";
+                }
 
 
-                General.ExecutaNonQuery(strSql, new object[] { "Atasamente", obj[0], e.UploadedFile.FileBytes, e.UploadedFile.FileName + "_" + obj[4] + "_" + Convert.ToDateTime(obj[5]).Year + "." + Convert.ToDateTime(obj[5]).Month.ToString().PadLeft(2,'0') + "." + Convert.ToDateTime(obj[5]).Day.ToString().PadLeft(2, '0'), e.UploadedFile.ContentType, Session["UserId"], obj[3], obj[2] });
+                string numeFis = Path.GetFileNameWithoutExtension(e.UploadedFile.FileName);
+                string ext = Path.GetExtension(e.UploadedFile.FileName);
+                string numeComplet = numeFis + "_" + obj[4] + "_" + Convert.ToDateTime(obj[5]).Year + "." + Convert.ToDateTime(obj[5]).Month.ToString().PadLeft(2, '0') + "." + Convert.ToDateTime(obj[5]).Day.ToString().PadLeft(2, '0') + ext;
+                General.ExecutaNonQuery(strSql, new object[] { "Atasamente", obj[0], e.UploadedFile.FileBytes, numeComplet, e.UploadedFile.ContentType, Session["UserId"], obj[3], obj[2] });
 
             }
             catch (Exception ex)

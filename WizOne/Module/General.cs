@@ -5887,7 +5887,7 @@ namespace WizOne.Module
 
                 HttpContext.Current.Session["IdClient"] = "1";
 
-                HttpContext.Current.Session["PontajulAreCC"] = "";
+                HttpContext.Current.Session["PontajulAreCC"] = "0";
 
                 //nu se initializeaza; este pusa aici pentru documentare
                 //HttpContext.Current.Session["NrIncercari"] = 0;
@@ -5909,7 +5909,7 @@ namespace WizOne.Module
 
                 HttpContext.Current.Session["tblParam"] = General.IncarcaDT(strSql, null);
                 HttpContext.Current.Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));
-                HttpContext.Current.Session["PontajulAreCC"] = Dami.ValoareParam("PontajulAreCC");
+                HttpContext.Current.Session["PontajulAreCC"] = General.Nz(Dami.ValoareParam("PontajulAreCC"),"0");
 
 
                 //Florin 2018.11.13

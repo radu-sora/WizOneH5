@@ -626,7 +626,7 @@ namespace WizOne
 
                 Session["IdClient"] = "1";
 
-                Session["PontajulAreCC"] = "";
+                Session["PontajulAreCC"] = "0";
 
                 //nu se initializeaza; este pusa aici pentru documentare
                 //Session["NrIncercari"] = 0;
@@ -648,7 +648,7 @@ namespace WizOne
 
                 Session["tblParam"] = General.IncarcaDT(strSql, null);
                 Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));
-                Session["PontajulAreCC"] = Dami.ValoareParam("PontajulAreCC");
+                Session["PontajulAreCC"] = General.Nz(Dami.ValoareParam("PontajulAreCC"),"0");
 
 
                 //Florin 2018.11.13

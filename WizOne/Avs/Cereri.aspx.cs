@@ -856,13 +856,13 @@ namespace WizOne.Avs
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma)
             {
-                ArataCtl(12, "Valoare actuala", "Valoare noua", "Tip angajat", "Norma", "Tip norma", "Durata", "Repartizare", "Interval", "Nr. de ore luna/sapt", "");
-                DataTable dtTemp1 = General.IncarcaDT("select F10043 AS \"Id\", F10043 AS \"Denumire\" from F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
-                DataTable dtTemp2 = General.ListaNumere(1, 8);
+                ArataCtl(12, "Tip angajat actual", "Tip angajat nou", "Timp partial", "Norma", "Tip norma", "Durata", "Repartizare", "Interval", "Nr. de ore luna/sapt", "");
+                DataTable dtTemp1 = General.IncarcaDT("select F71602 AS \"Id\", F71604 AS \"Denumire\" from F100, F716 WHERE F10010 = F71602 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                DataTable dtTemp2 = General.IncarcaDT("select F71602 AS \"Id\", F71604 AS \"Denumire\" from F716", null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
 
-                dtTemp1 = General.IncarcaDT("select F71602 AS \"Id\", F71604 AS \"Denumire\" from F100, F716 WHERE F10010 = F71602 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
-                dtTemp2 = General.IncarcaDT("select F71602 AS \"Id\", F71604 AS \"Denumire\" from F716", null);
+                dtTemp1 = General.IncarcaDT("select F10043 AS \"Id\", F10043 AS \"Denumire\" from F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dtTemp2 = General.ListaNumere(1, 8);
                 IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
 
                 dtTemp1 = General.IncarcaDT("select F100973 AS \"Id\", F100973 AS \"Denumire\" from F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
@@ -1224,10 +1224,12 @@ namespace WizOne.Avs
                             SetNorma(e.Parameter.Split(';')[1]);
                         break;
                     case "4":
-                        SalveazaDate();
-                        Session["Avs_MarcaFiltru"] = cmbAngFiltru.SelectedIndex;
-                        Session["Avs_AtributFiltru"] = cmbAtributeFiltru.SelectedIndex;
-                        IncarcaGrid(Convert.ToInt32(General.Nz(cmbAng.Value,-99)));
+                        if (SalveazaDate())
+                        {
+                            Session["Avs_MarcaFiltru"] = cmbAngFiltru.SelectedIndex;
+                            Session["Avs_AtributFiltru"] = cmbAtributeFiltru.SelectedIndex;
+                            IncarcaGrid(Convert.ToInt32(General.Nz(cmbAng.Value, -99)));
+                        }
                         break;
                     case "5":
                         Session["Avs_MarcaFiltru"] = cmbAngFiltru.SelectedIndex;
@@ -1274,36 +1276,106 @@ namespace WizOne.Avs
             switch (cmb)
             {
                 case "cmb1Nou":
-                    if (Convert.ToInt32(cmb1Nou.Value ?? 1) > Convert.ToInt32(cmb3Nou.Value ?? 8))
+                    if (Convert.ToInt32(cmb1Nou.Value) == 0)
                     {
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Timpul partial este mai mare decat norma!");
-                        cmb1Nou.Value = 1;
-                        Session["Valoare1Noua"] = "cmb1Nou;1";
+                        cmb2Nou.Value = 8;
+                        cmb3Nou.Value = 8;
+                        cmb4Nou.Value = 1;
+                        cmb5Nou.Value = 1;
+                        cmb6Nou.Value = 1;
+                        Session["Valoare2Noua"] = "cmb2Nou;8";
+                        Session["Valoare3Noua"] = "cmb3Nou;8";
+                        Session["Valoare4Noua"] = "cmb4Nou;1";
+                        Session["Valoare5Noua"] = "cmb5Nou;1";
+                        Session["Valoare6Noua"] = "cmb6Nou;1";
+                        IncarcaDate();
+                    }
+                    if (Convert.ToInt32(cmb1Nou.Value) == 2)
+                    {
+                        cmb2Nou.Value = 1;
+                        cmb3Nou.Value = 8;
+                        cmb4Nou.Value = 2;
+                        cmb5Nou.Value = 5;
+                        cmb6Nou.Value = 1;
+                        Session["Valoare2Noua"] = "cmb2Nou;1";
+                        Session["Valoare3Noua"] = "cmb3Nou;8";
+                        Session["Valoare4Noua"] = "cmb4Nou;2";
+                        Session["Valoare5Noua"] = "cmb5Nou;5";
+                        Session["Valoare6Noua"] = "cmb6Nou;1";
                         IncarcaDate();
                     }
                     break;
                 case "cmb2Nou":
-                    if (Convert.ToInt32(cmb2Nou.Value) == 2)
+                    if (Convert.ToInt32(cmb2Nou.Value ?? 1) > Convert.ToInt32(cmb3Nou.Value ?? 8))
                     {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Timpul partial este mai mare decat norma!");
+                        cmb2Nou.Value = 1;
+                        Session["Valoare2Noua"] = "cmb2Nou;1";
+                        IncarcaDate();
+                    }
+                    if (Convert.ToInt32(cmb1Nou.Value) == 2 && Convert.ToInt32(cmb2Nou.Value ?? 1) == 8)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Timpul partial nu poate fi de 8 ore pentru angajat de tip partial!");
+                        cmb2Nou.Value = 1;
+                        Session["Valoare2Noua"] = "cmb2Nou;1";
+                        IncarcaDate();
+                    }
+                    break; 
+                case "cmb3Nou":
+                    {
+                        cmb2Nou.Value = Convert.ToInt32(cmb3Nou.Value ?? 8);
+                        Session["Valoare2Noua"] = "cmb2Nou;" + Convert.ToInt32(cmb3Nou.Value ?? 8);
+                    }
+                    break;
+                case "cmb4Nou":
+                    if (Convert.ToInt32(cmb1Nou.Value) == 2 && Convert.ToInt32(cmb4Nou.Value) != 2)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti schimba tip norma pentru tip angajat partial!");
                         cmb4Nou.Value = 2;
-                        cmb5Nou.Value = 5;
                         Session["Valoare4Noua"] = "cmb4Nou;2";
+                        IncarcaDate();
+                    }
+                    break;
+                case "cmb5Nou":
+                    if (Convert.ToInt32(cmb5Nou.Value ?? -1) == 2 && txt1Nou.Text.Length > 0 && Convert.ToInt32(txt1Nou.Text) > 30)
+                        txt1Nou.Text = "30";                   
+                    if (Convert.ToInt32(cmb1Nou.Value) == 2 && Convert.ToInt32(cmb5Nou.Value) != 5)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti schimba durata pentru tip angajat partial!");
+                        cmb5Nou.Value = 5;
                         Session["Valoare5Noua"] = "cmb5Nou;5";
                         IncarcaDate();
                     }
                     break;
-                case "cmb3Nou":
-                    {
-                        cmb1Nou.Value = Convert.ToInt32(cmb3Nou.Value ?? 8);
-                        Session["Valoare1Noua"] = "cmb1Nou;" + Convert.ToInt32(cmb3Nou.Value ?? 8);
-                    }
-                    break;           
                 case "cmb7Nou":
                     if (Convert.ToInt32(cmb7Nou.Value) == 2 || Convert.ToInt32(cmb7Nou.Value) == 3)
                         txt1Nou.Enabled = true;
                     else
+                    {
+                        txt1Nou.Text = "";
                         txt1Nou.Enabled = false;
-                    break;               
+                    }
+                    break;
+                case "txt1Nou":
+                    if (Convert.ToInt32(cmb7Nou.Value ?? -1) == 2 && Convert.ToInt32(cmb5Nou.Value ?? -1) > 0)
+                    {
+                        if (Convert.ToInt32(cmb5Nou.Value ?? -1) == 1 && Convert.ToInt32(txt1Nou.Text) > 40)
+                        {// 8/40
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti introduce mai mult de 40 ore/saptamana!");
+                            txt1Nou.Text = "40";
+                        }
+                        if (Convert.ToInt32(cmb5Nou.Value ?? -1) == 2 && Convert.ToInt32(txt1Nou.Text) > 30)
+                        {// 6/30
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti introduce mai mult de 30 ore/saptamana!");
+                            txt1Nou.Text = "30";
+                        }
+                    }
+                    else
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati introdus intervalul corect!");
+                        txt1Nou.Text = "";
+                    }
+                    break;
             }
         }
 
@@ -1385,7 +1457,7 @@ namespace WizOne.Avs
             return ziLibera;
         }
 
-        private void SalveazaDate()
+        private bool SalveazaDate()
         {
             try
             {
@@ -1407,9 +1479,15 @@ namespace WizOne.Avs
                     if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date && val == 1)
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");             
-                        return;
-                    }     
-
+                        return false;
+                    }   
+                
+                if (idAtr == (int)Constante.Atribute.Norma && Convert.ToInt32(cmb6Nou.Value) == 3 && (Convert.ToInt32(cmb7Nou.Value ?? - 1) <= 0 || txt1Nou.Text.Length <= 0))
+                {
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pentru repartizare inegala trebuie sa completati intervalul si numarul de ore!");
+                    return false;
+                }
+                    
                 if (cmbAng.Value == null) strErr += ", angajat";
                 if (idAtr == -99) strErr += ", atribut";
                 if (txtDataMod.Value == null) strErr += ", data modificare";
@@ -1437,7 +1515,7 @@ namespace WizOne.Avs
                         if (cmbStructOrgNou.Value == null) strErr += ", organigrama";
                         break;
                     case (int)Constante.Atribute.Norma:
-                        if (cmb1Nou.Value == null) strErr += ", norma";
+                        if (cmb2Nou.Value == null) strErr += ", timp partial";
                         break;
                     case (int)Constante.Atribute.ContrIn:
                         if (txt1Nou.Value == null || de1Nou.Value == null) strErr += ", contract intern";
@@ -1509,11 +1587,12 @@ namespace WizOne.Avs
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date: ") + strErr.Substring(1);
                     SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out dataRev);
                     //MessageBox.Show(Dami.TraduCuvant("Lipsesc date: " + strErr.Substring(1)), MessageBox.icoError);
-                    return;
+                    return false;
                 }
 
 
-                AdaugaCerere();
+                return AdaugaCerere();
+                
 
             }
             catch (Exception ex)
@@ -1521,6 +1600,7 @@ namespace WizOne.Avs
                 //ArataMesaj("Atentie !");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                return false;
             }
         }
 
@@ -1800,7 +1880,7 @@ namespace WizOne.Avs
         }
 
 
-        private void AdaugaCerere()
+        private bool AdaugaCerere()
         {
 
             int idUrm = -99;
@@ -1815,7 +1895,7 @@ namespace WizOne.Avs
                 //ArataMesaj("Atributul nu are circuit alocat!");
                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atributul nu are circuit alocat!");
                 //MessageBox.Show(Dami.TraduCuvant("Atributul nu are circuit alocat!"), MessageBox.icoError);
-                return;
+                return false;
             }
 
             //prima data determinam circuitul in functie de userul logat;
@@ -1858,7 +1938,7 @@ namespace WizOne.Avs
                 //ArataMesaj("Angajatul nu are supervizor pe circuit!");
                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul nu are supervizor pe circuit!");
                 //MessageBox.Show(Dami.TraduCuvant("Angajatul nu are supervizor pe circuit!"), MessageBox.icoError);
-                return;
+                return false;
             }
 
             DateTime dtModif = Convert.ToDateTime(txtDataMod.Value);
@@ -1875,7 +1955,7 @@ namespace WizOne.Avs
                 //ArataMesaj("Exista cerere pt acest angajat, atribut si aceasta data!");
                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Exista cerere pt acest angajat, atribut si aceasta data!");
                 //MessageBox.Show(Dami.TraduCuvant("Exista cerere pt acest angajat, atribut si aceasta data!"), MessageBox.icoError);
-                return;
+                return false;
             }
 
             sql = "SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = 1";
@@ -1934,7 +2014,7 @@ namespace WizOne.Avs
                     break;
                 case (int)Constante.Atribute.Norma:
                     camp1 = "\"TipAngajat\", \"TimpPartial\", \"Norma\", \"TipNorma\", \"DurataTimpMunca\", \"RepartizareTimpMunca\", \"IntervalRepartizare\", \"NrOreLuna\"";
-                    camp2 = cmb2Nou.Value.ToString() + "," + cmb1Nou.Value.ToString() + "," + cmb3Nou.Value.ToString() + "," + cmb4Nou.Value.ToString() + "," + cmb5Nou.Value.ToString() + "," + cmb6Nou.Value.ToString() + "," + cmb7Nou.Value.ToString() + "," + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text);
+                    camp2 = cmb1Nou.Value.ToString() + "," + cmb2Nou.Value.ToString() + "," + cmb3Nou.Value.ToString() + "," + cmb4Nou.Value.ToString() + "," + cmb5Nou.Value.ToString() + "," + cmb6Nou.Value.ToString() + "," + cmb7Nou.Value.ToString() + "," + (txt1Nou.Text.Length <= 0 ? "NULL" : txt1Nou.Text);
                     break;
                 case (int)Constante.Atribute.ContrIn:
                     camp1 = "\"NrIntern\", \"DataIntern\"";
@@ -2192,6 +2272,7 @@ namespace WizOne.Avs
             AscundeCtl();
             txtExpl.Text = "";
             cmbAtribute.Value = null;
+            return true;
 
         }
 

@@ -56,7 +56,7 @@ namespace WizOne.Personal
                     txt.BackColor = Color.LightGray;
                 }
 
-                string[] lstDateEdit = new string[1] { "deDataElib" };
+                string[] lstDateEdit = new string[2] { "deDataElib", "deDataExp" };
                 for (int i = 0; i < lstDateEdit.Count(); i++)
                 {
                     ASPxDateEdit de = DataList1.Items[0].FindControl(lstDateEdit[i]) as ASPxDateEdit;
@@ -369,9 +369,15 @@ namespace WizOne.Personal
                 ASPxDateEdit deDataEliberarii = DataList1.Items[0].FindControl("deDataElib") as ASPxDateEdit;
                 if (deDataExpirarii.Value != null)
                 {
-                    if (Convert.ToDateTime(deDataEliberarii.Value) > Convert.ToDateTime(deDataExpirarii.Value))
+                    if (Convert.ToDateTime(deDataEliberarii.Value).Date > Convert.ToDateTime(deDataExpirarii.Value).Date)
                     {
-                        pnlCtlDocumente.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data expirarii BI/CI nu poate fi mai mica decat data eliberarii!");     
+                        pnlCtlDocumente.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data eliberarii BI/CI este ulterioara datei expirarii!");     
+                        deDataEliberarii.Value = null;
+                        valid = false;
+                    }
+                    if (Convert.ToDateTime(deDataEliberarii.Value).Date > DateTime.Now.Date)
+                    {
+                        pnlCtlDocumente.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data eliberarii BI/CI este ulterioara zilei curente!");
                         deDataEliberarii.Value = null;
                         valid = false;
                     }

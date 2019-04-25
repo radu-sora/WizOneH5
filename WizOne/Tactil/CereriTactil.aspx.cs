@@ -134,7 +134,7 @@ namespace WizOne.Tactil
                 if (dtAbs != null && dtAbs.Rows.Count > 0)
                     cmbAbs.Value = Convert.ToInt32(dtAbs.Rows[0]["Id"].ToString());
 
-                DataTable dtZile = General.IncarcaDT("SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + General.Nz(General.VarSession("User_Marca"), -99).ToString() + " AND \"An\" = (SELECT DISTINCT F01011 FROM F010)", null);
+                DataTable dtZile = General.IncarcaDT("SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + General.Nz(General.VarSession("User_Marca"), -99).ToString() + " AND \"An\" = " + DateTime.Now.Year, null);
 
                 if (dtZile != null && dtZile.Rows.Count > 0)
                     txtNrZileRamase.Text = dtZile.Rows[0]["Ramase"].ToString();
@@ -382,7 +382,16 @@ namespace WizOne.Tactil
 
                 DataRow[] dtRowAbs = null;
 
-                if (tip == "3" && txtDataInc.Value != null) txtDataSf.Value = txtDataInc.Value;
+                if (tip == "3" && txtDataInc.Value != null)
+                {
+                    txtDataSf.Value = txtDataInc.Value;                
+                    DataTable dtZile = General.IncarcaDT("SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + General.Nz(General.VarSession("User_Marca"), -99).ToString() + " AND \"An\" = " + Convert.ToDateTime(txtDataInc.Value).Year, null);
+
+                    if (dtZile != null && dtZile.Rows.Count > 0)
+                        txtNrZileRamase.Text = dtZile.Rows[0]["Ramase"].ToString();
+                    else
+                        txtNrZileRamase.Text = "";
+                }
 
                 //if (Session["Cereri_Absente_Absente"] != null) dtAbs = Session["Cereri_Absente_Absente"] as DataTable;
                 //if (Session["Cereri_Absente_Absente"] != null) dtRowAbs = Session["Cereri_Absente_Absente"] as DataRow[];

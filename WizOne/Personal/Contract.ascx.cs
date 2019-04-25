@@ -124,8 +124,8 @@ namespace WizOne.Personal
                 }
 
 
-                string[] lstComboBox = new string[11] { "cmbTipCtrMunca", "cmbDurCtr", "cmbTipAng", "cmbTimpPartial", "cmbNorma", "cmbTipNorma", "cmbDurTimpMunca", "cmbRepTimpMunca",
-                                                "cmbIntervRepTimpMunca", "cmbCOR", "cmbFunctie"};
+                string[] lstComboBox = new string[10] { "cmbTipCtrMunca", "cmbDurCtr", "cmbTipAng", "cmbTimpPartial", "cmbNorma", "cmbTipNorma", "cmbDurTimpMunca", "cmbRepTimpMunca",
+                                                "cmbIntervRepTimpMunca", "cmbCOR"};
                 for (int i = 0; i < lstComboBox.Count(); i++)
                 {
                     ASPxComboBox cmb = DataList1.Items[0].FindControl(lstComboBox[i]) as ASPxComboBox;

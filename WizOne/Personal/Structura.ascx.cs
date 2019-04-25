@@ -96,7 +96,7 @@ namespace WizOne.Personal
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
                 {//DNATA
                     cmbStru.BackColor = Color.LightGray;
-                    cmbPL.BackColor = Color.LightGray;
+                    //cmbPL.BackColor = Color.LightGray;
                 }
             }
             catch (Exception ex)

@@ -847,7 +847,7 @@ namespace WizOne.Avs
                             " inner join F100 b on a.F10003=b.F10003  " +
                             " inner join Avs_tblAtribute c on a.IdAtribut=c.Id  " +
                             " inner join Avs_CereriIstoric f on a.Id = f.Id  " +
-                            " where 1=1 " + filtru +
+                            " where COALESCE(B.F10025,0) <> 900 " + filtru +
                             " order by a.DataModif";
                 }
                 else
@@ -881,7 +881,7 @@ namespace WizOne.Avs
                             " inner join F100 b on a.F10003=b.F10003 " +
                             " inner join \"Avs_tblAtribute\" c on a.\"IdAtribut\"=c.\"Id\" " +
                             " inner join \"Avs_CereriIstoric\" f on a.\"Id\" = f.\"Id\" " +
-                            " where 1=1 " + filtru +
+                            " where COALESCE(B.F10025,0) <> 900 " + filtru +
                             " order by a.\"DataModif\"";
                 }
 
@@ -949,6 +949,9 @@ namespace WizOne.Avs
 
             try
             {
+                //Florin 2019.04.25
+                //s-a adaugat conditia F10025 <> 900;  sa nu apara candidatii
+
                 string op = "+";
                 if (Constante.tipBD == 2) op = "||";
 
@@ -957,12 +960,12 @@ namespace WizOne.Avs
                         FROM (
                         SELECT A.F10003
                         FROM F100 A
-                        WHERE A.F10003 = {(Session["Marca"] == null ? "-99" : Session["Marca"].ToString())}
+                        WHERE COALESCE(A.F10025,0) <> 900 AND A.F10003 = {(Session["Marca"] == null ? "-99" : Session["Marca"].ToString())}
                         UNION
                         SELECT A.F10003
                         FROM F100 A
                         INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
-                        WHERE B.""IdUser""= {Session["UserId"]}) B
+                        WHERE COALESCE(A.F10025,0) <> 900 AND B.""IdUser""= {Session["UserId"]}) B
                         INNER JOIN F100 A ON A.F10003=B.F10003
                         LEFT JOIN F718 X ON A.F10071=X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304

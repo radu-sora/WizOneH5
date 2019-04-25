@@ -694,7 +694,8 @@ namespace WizOne.Eval
                                             }
                                         }
                                     }
-                                    double calif = 100 + 100 * ((Convert.ToDouble(suma) / Convert.ToDouble(nr) - 3.5) * 0.1) / 0.5;                                    
+                                    double calif = 100 + 100 * ((Convert.ToDouble(suma) / Convert.ToDouble(nr) - 3.5) * 0.1) / 0.5;
+                                    calif *= 0.3;
                                     Eval_QuizIntrebari txtCalif = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CALITATIVA") && p.IdQuiz == raspLinie.IdQuiz).FirstOrDefault();
                                     if (txtCalif != null)
                                     {

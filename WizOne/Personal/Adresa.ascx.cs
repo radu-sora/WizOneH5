@@ -133,6 +133,12 @@ namespace WizOne.Personal
                 int idAuto = 0;
                 object[] row = new object[ds.Tables["F100Adrese"].Columns.Count];
                 int x = 0;
+
+                if (Convert.ToInt32(e.NewValues["IdTipAdresa"].ToString()) == 1)
+                    e.NewValues["Principal"] = 1;
+                else
+                    e.NewValues["Principal"] = 0;
+
                 foreach (DataColumn col in ds.Tables["F100Adrese"].Columns)
                 {
                     if (!col.AutoIncrement)
@@ -177,7 +183,7 @@ namespace WizOne.Personal
                     }
 
                     x++;
-                }
+                }             
 
                 ds.Tables["F100Adrese"].Rows.Add(row);
 
@@ -236,6 +242,11 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataRow row = ds.Tables["F100Adrese"].Rows.Find(keys);
+
+                if (Convert.ToInt32(e.NewValues["IdTipAdresa"].ToString()) == 1)
+                    e.NewValues["Principal"] = 1;
+                else
+                    e.NewValues["Principal"] = 0;
 
                 foreach (DataColumn col in ds.Tables["F100Adrese"].Columns)
                 {

@@ -47,11 +47,19 @@ namespace WizOne.Pagini
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607";
                     DataTable dtAng = General.IncarcaDT(strSql, null);
+                    Session["Acte_Ang"] = dtAng;
                     cmbAng.DataSource = dtAng;
                     cmbAng.DataBind();
 
+
                     //in cazul in care se sterge atasamentul din managemetul de personal
                     General.ExecutaNonQuery(@"UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=NULL WHERE ""IdAutoAtasamente"" NOT IN (SELECT ""IdAuto"" FROM ""Atasamente"")", null);
+                }
+                else
+                {
+                    DataTable dtAng = Session["Acte_Ang"] as DataTable;
+                    cmbAng.DataSource = dtAng;
+                    cmbAng.DataBind();
                 }
             }
             catch (Exception ex)
@@ -1438,7 +1446,7 @@ namespace WizOne.Pagini
                             WHERE A.F10025=900";
                         break;
                     default:
-                        sursa = $@"SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
+                        sursa = $@"SELECT DISTINCT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
                             FROM ""Avs_Cereri"" A
                             LEFT JOIN F100 B ON A.F10003=B.F10003
                             WHERE ""IdStare""=3
@@ -1457,6 +1465,7 @@ namespace WizOne.Pagini
                             LEFT JOIN F006 I ON A.F10007 = I.F00607";
 
                 DataTable dtAng = General.IncarcaDT(strSql, null);
+                Session["Acte_Ang"] = dtAng;
                 cmbAng.DataSource = dtAng;
                 cmbAng.DataBind();
             }

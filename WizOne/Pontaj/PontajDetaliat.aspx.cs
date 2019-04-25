@@ -780,12 +780,16 @@ namespace WizOne.Pontaj
                             LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
 
-                            LEFT JOIN Ptj_tblAbsente AB ON AB.DenumireScurta=P.ValStr
+                            
 
                             WHERE CONVERT(date,P.""Ziua"") <= A.F10023
                             {filtru}
                             ORDER BY A.F10003, {General.TruncateDateAsString("P.\"Ziua\"")}";
 
+
+
+                //Florin  2019.04.25 -s-a scos bucata de mai jos pt ca dubla inregistrarile pt absentele care aveau aceeasi denumire scurta (ex:  EV)
+                //LEFT JOIN Ptj_tblAbsente AB ON AB.DenumireScurta=P.ValStr
 
                 //LEFT JOIN ""Ptj_Cereri"" M ON A.F10003=M.F10003 AND M.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= M.""DataSfarsit"" AND M.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1)
 

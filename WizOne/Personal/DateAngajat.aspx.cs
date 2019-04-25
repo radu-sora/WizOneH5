@@ -234,8 +234,8 @@ namespace WizOne.Personal
                         mesaj += " - nr ore pe luna/saptamana" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F10098"] == null || ds.Tables[0].Rows[0]["F10098"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10098"].ToString() == "0")
                         mesaj += " - COR" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F10071"] == null || ds.Tables[0].Rows[0]["F10071"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10071"].ToString() == "0")
-                        mesaj += " - functie" + Environment.NewLine;
+                    //if (ds.Tables[0].Rows[0]["F10071"] == null || ds.Tables[0].Rows[0]["F10071"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10071"].ToString() == "0")
+                    //    mesaj += " - functie" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F1001063"] == null || ds.Tables[0].Rows[0]["F1001063"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1001063"].ToString() == "0")
                         mesaj += " - perioada de proba (zile lucratoare)" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F100975"] == null || ds.Tables[0].Rows[0]["F100975"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100975"].ToString() == "0")
@@ -262,8 +262,8 @@ namespace WizOne.Personal
 
                     
 
-                    if (ds.Tables[0].Rows[0]["F10079"] == null || ds.Tables[0].Rows[0]["F10079"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10079"].ToString() == "0")
-                        mesaj += " - punct de lucru" + Environment.NewLine;
+                    //if (ds.Tables[0].Rows[0]["F10079"] == null || ds.Tables[0].Rows[0]["F10079"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10079"].ToString() == "0")
+                    //    mesaj += " - punct de lucru" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F10007"] == null || ds.Tables[0].Rows[0]["F10007"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10007"].ToString() == "0")
                         mesaj += " - structura" + Environment.NewLine;
                     if (mesaj.Length > 0)

@@ -41,7 +41,7 @@ namespace WizOne.Reports
                 //DefaultPrinterSettingsUsing.UseLandscape = false;
                 //this.Landscape = true;
 
-
+                
                 string str = (HttpContext.Current.Session["PrintParametrii"] ?? "").ToString();
                 if (str != "")
                 {

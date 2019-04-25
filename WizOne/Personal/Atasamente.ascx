@@ -61,7 +61,7 @@
                         <dx:GridViewDataTextColumn FieldName="IdEmpl" Name="IdEmpl" Caption="Angajat" Visible="false" ShowInCustomizationForm="false"/>
 					    <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
-                        <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataDateColumn FieldName="Time" Name="Time" Caption="Time" Visible="false" ShowInCustomizationForm="false" />
                     </Columns>
 
                     <SettingsCommandButton>

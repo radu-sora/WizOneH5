@@ -49,6 +49,9 @@ namespace WizOne.Pagini
                     DataTable dtAng = General.IncarcaDT(strSql, null);
                     cmbAng.DataSource = dtAng;
                     cmbAng.DataBind();
+
+                    //in cazul in care se sterge atasamentul din managemetul de personal
+                    General.ExecutaNonQuery(@"UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=NULL WHERE ""IdAutoAtasamente"" NOT IN (SELECT ""IdAuto"" FROM ""Atasamente"")", null);
                 }
             }
             catch (Exception ex)
@@ -113,6 +116,7 @@ namespace WizOne.Pagini
             try
             {
                 IncarcaGrid();
+                grDate.Selection.UnselectAll();
             }
             catch (Exception ex)
             {
@@ -131,6 +135,7 @@ namespace WizOne.Pagini
                 txtData.Value = null;
 
                 IncarcaGrid();
+                grDate.Selection.UnselectAll();
             }
             catch (Exception ex)
             {
@@ -625,9 +630,11 @@ namespace WizOne.Pagini
                     //    return;
                     //}
 
-
                     List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData", "Candidat", "TermenDepasire", "Motiv" });
-                    if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+                    if (General.Nz(arr[0], "").ToString() != "btnDocUpload" && General.Nz(arr[0], "").ToString() != "btnSterge")
+                    {
+                        if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+                    }
 
                     switch (arr[0])
                     {
@@ -639,10 +646,7 @@ namespace WizOne.Pagini
                                     return;
                                 }
                                 else
-                                {
-                                    object[] obj = lst[0] as object[];
-                                    msg = obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes");
-                                }
+                                    msg = Dami.TraduCuvant("proces realizat cu succes");
 
                                 //else
                                 //    IncarcaGrid();
@@ -655,7 +659,7 @@ namespace WizOne.Pagini
                                 //    UPDATE ""Admin_NrActAd"" SET ""Semnat""=0 WHERE ""IdAuto""=@2;
                                 //    END;";
 
-                                object[] obj = lst[0] as object[];
+
                                 //General.ExecutaNonQuery($@"DELETE FROM ""tblFisiere"" WHERE ""Tabela""=@1 AND ""Id""=@2 AND ""EsteCerere""=0", new object[] { "Admin_NrActAd", arr[1] });
                                 General.ExecutaNonQuery($@"
                                     BEGIN
@@ -664,7 +668,7 @@ namespace WizOne.Pagini
                                         UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=NULL WHERE ""IdAutoAtasamente""=@2;
                                     END;", new object[] { "Atasamente", arr[1] });
 
-                                msg = obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes");
+                                msg = Dami.TraduCuvant("proces realizat cu succes");
                             }
                             break;
                         case "btnNr":
@@ -837,7 +841,7 @@ namespace WizOne.Pagini
                                                     BEGIN
                                                         UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1{obj[4]});
                                                         UPDATE ""Admin_NrActAd"" SET ""Tiparit""=1 WHERE ""IdAuto""=@1;
-                                                    END:", new object[] { id });
+                                                    END;", new object[] { id });
                                             }
                                         }
                                         else
@@ -1029,7 +1033,7 @@ namespace WizOne.Pagini
                     ASPxDateEdit txtDocData = grDate.FindEditFormTemplateControl("txtDocData") as ASPxDateEdit;
                     if (txtDocData != null && txtDocData.Value != null) docData = txtDocData.Value;
 
-                    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Admin_NrActAd"" WHERE ""DocNr""=@1 ", new object[] { docNr }),0));
+                    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Admin_NrActAd"" WHERE ""DocNr""=@1 AND F10003=@2 AND ""IdAuto""<>@3", new object[] { docNr, General.Nz(obj[1],-99), General.Nz(obj[0],-99) }),0));
                     if (cnt > 0)
                         grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numarul de document exista deja");
 
@@ -1071,14 +1075,14 @@ namespace WizOne.Pagini
                     else
                     {
                         string strSql = "";
-                        strSql = $@"UPDATE ""Admin_NrActAd"" SET ""DocNr""=@2, ""DocData""=@3 WHERE ""IdAuto""=@1";
-
-                        if (docNr == null)
+                        if (docNr == null || docData == null)
                             strSql = $@"
                                 BEGIN
                                     UPDATE ""Avs_Cereri"" SET ""IdActAd""=NULL WHERE ""IdActAd""=@1;
                                     DELETE FROM ""Admin_NrActAd"" WHERE ""IdAuto""=@1;
                                 END;";
+                        else
+                            strSql = $@"UPDATE ""Admin_NrActAd"" SET ""DocNr""=@2, ""DocData""=@3, ""Tiparit""=0 WHERE ""IdAuto""=@1";
 
                         General.ExecutaNonQuery(strSql, new object[] { obj[0], docNr, docData, obj[1], obj[2], Session["UserId"] });
                     }

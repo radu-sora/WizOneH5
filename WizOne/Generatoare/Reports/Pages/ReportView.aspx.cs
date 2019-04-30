@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 using WizOne.Generatoare.Reports.Models;
+using WizOne.Module;
 
 namespace WizOne.Generatoare.Reports.Pages
 {
@@ -910,6 +911,7 @@ namespace WizOne.Generatoare.Reports.Pages
                 if (!IsCallback)
                     Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");
             }
-        }       
+        }
+
     }
 }

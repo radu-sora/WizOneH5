@@ -114,7 +114,7 @@
                         <td>
                             <button type="button" class="btn btn-default btn-sm" title="Exit" onclick="onExitButtonClick()">
                                 <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-                            </button>                            
+                            </button> 
                         </td>
                     </tr>
                 </table>
@@ -374,8 +374,11 @@
         }
 
         function onExitButtonClick() {
-            //window.history.back();
-            window.history.go(-1);
+            var sessionValue = '<%=Session["PaginaWeb"]%>'
+            if (sessionValue == "Pagini.ActeAditionale")
+                window.location='<%= ResolveUrl("~/Pagini/ActeAditionale.aspx") %>'
+            else
+                window.history.back();
         }
 
         function saveCustomLayout() {

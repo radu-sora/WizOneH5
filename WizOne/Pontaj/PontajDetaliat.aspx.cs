@@ -1456,6 +1456,10 @@ namespace WizOne.Pontaj
                                 FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
                                 FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
                                 FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                                
+                                //Florin 2019.05.02
+                                FunctiiCeasuri.Calcul.h5 = true;
+
                                 FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
                                 FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
                             }
@@ -1737,6 +1741,10 @@ namespace WizOne.Pontaj
                                         FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
                                         FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
                                         FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+
+                                        //Florin 2019.05.02
+                                        FunctiiCeasuri.Calcul.h5 = true;
+
                                         FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dt.Rows[i]["Ziua"]));
                                         FunctiiCeasuri.Calcul.CalculInOut(dt.Rows[i], true, true);
                                     }

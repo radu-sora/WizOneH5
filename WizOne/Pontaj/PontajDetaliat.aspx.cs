@@ -1489,8 +1489,9 @@ namespace WizOne.Pontaj
                     //grDate.DataSource = dt;
                     //grDate.DataBind();
 
-                    
-                    ExecCalcul(ids);
+                    //Florin 2019.05.03
+                    //nu mai este nevoie deoarece se face in ProceseCeasuri
+                    //ExecCalcul(ids);
                     
                     IncarcaGrid();
 

@@ -549,7 +549,7 @@ namespace WizOne.Module
                                 (SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={HttpContext.Current.Session["UserId"]} AND ""DataInceput"" <= {General.TruncateDateAsString()} AND {General.TruncateDateAsString()} <= ""DataSfarsit"") {condSuplim}";
 
                 if (totiAngajatii == 3)
-                    strSql = $@"SELECT A.*, 77 AS Rol, CASE WHEN A.IdStare IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
+                    strSql = $@"SELECT A.*, 77 AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""Ptj_Cereri"" A
                                INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idHR}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
 
@@ -1408,7 +1408,7 @@ namespace WizOne.Module
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                 INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
                                 WHERE J.""IdUser""={HttpContext.Current.Session["UserId"]} AND COALESCE(C.""IdRol"",0) <= 3 AND B.F10003={f10003}
-                                ORDER BY COALESCE(C.""IdRol"",0) DESC", null);
+                                ORDER BY ""IdRol"" DESC", null);
 
                             if (dt != null && dt.Rows.Count > 0) idRol = Convert.ToInt32(General.Nz(dt.Rows[0]["IdRol"],0));
 

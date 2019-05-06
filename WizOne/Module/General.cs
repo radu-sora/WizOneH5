@@ -873,6 +873,8 @@ namespace WizOne.Module
 
             strSql = strSql.Replace("@", ":param");
 
+            string paramOut = "";
+
             try
             {
                 //primul parametru este intotdeauna cel care se intoarce
@@ -886,21 +888,13 @@ namespace WizOne.Module
                         {
                             try
                             {
-                                if (x == 1)
-                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("paramout_" + x.ToString(), OracleDbType.Int32, ParameterDirection.ReturnValue));
-                                else
+                                if (strSql.IndexOf("paramout_" + x.ToString()) >= 0)
                                 {
-                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param.ToString()));
-                                    //if (IsNumeric(param))
-                                    //    cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Int32).Value = param;
-                                    //else
-                                    //{
-                                    //    if (IsDate(param))
-                                    //        cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Date).Value = param;
-                                    //    else
-                                    //        cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Varchar2).Value = param;
-                                    //}
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("paramout_" + x.ToString(), OracleDbType.Int32, ParameterDirection.ReturnValue));
+                                    paramOut += "," + "paramout_" + x.ToString();
                                 }
+                                else
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param.ToString()));
                             }
                             catch (Exception ex)
                             {
@@ -913,7 +907,25 @@ namespace WizOne.Module
                 cmd.BindByName = true;
                 cmd.ExecuteNonQuery();
 
-                rez = General.Nz(cmd.Parameters["paramout_1"].Value,"-99").ToString();
+                if(paramOut != "")
+                {
+                    string[] arr = paramOut.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    List<string> lstOut = null; 
+                    for(int i = 0; i < arr.Length; i++)
+                    {
+                        lstOut.Add(General.Nz(cmd.Parameters[arr[i]].Value, "-99").ToString());
+                        //rez = General.Nz(cmd.Parameters["paramout_1"].Value, "-99").ToString();
+                    }
+
+                    if (arr.Length > 0)
+                    {
+                        if (arr.Length == 1)
+                            rez = General.Nz(cmd.Parameters[arr[0]].Value, "-99").ToString();
+                        else
+                            rez = lstOut;
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
@@ -926,6 +938,76 @@ namespace WizOne.Module
 
             return rez;
         }
+
+
+        //public static dynamic DamiOracleScalar(string strSql, object[] lstParam)
+        //{
+        //    dynamic rez = null;
+
+        //    OracleConnection conn = new OracleConnection(Constante.cnnWeb);
+        //    conn.Open();
+
+        //    strSql = strSql.Replace("GLOBAL.IDUSER", (HttpContext.Current.Session["UserId"] ?? "").ToString()).Replace("GLOBAL.MARCA", (HttpContext.Current.Session["User_Marca"] ?? "").ToString());
+
+        //    OracleCommand cmd = new OracleCommand(strSql, conn);
+
+        //    strSql = strSql.Replace("@", ":param");
+
+        //    try
+        //    {
+        //        //primul parametru este intotdeauna cel care se intoarce
+        //        int x = 0;
+        //        if (lstParam != null)
+        //        {
+        //            foreach (object param in lstParam)
+        //            {
+        //                x += 1;
+        //                if (param != null && param.ToString().Length > 0)
+        //                {
+        //                    try
+        //                    {
+        //                        if (x == 1)
+        //                            cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("paramout_" + x.ToString(), OracleDbType.Int32, ParameterDirection.ReturnValue));
+        //                        else
+        //                        {
+        //                            cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param.ToString()));
+        //                            //if (IsNumeric(param))
+        //                            //    cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Int32).Value = param;
+        //                            //else
+        //                            //{
+        //                            //    if (IsDate(param))
+        //                            //        cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Date).Value = param;
+        //                            //    else
+        //                            //        cmd.Parameters.Add("param" + x.ToString(), OracleDbType.Varchar2).Value = param;
+        //                            //}
+        //                        }
+        //                    }
+        //                    catch (Exception ex)
+        //                    {
+        //                        MemoreazaEroarea(ex, "General", "DamiOleDbCommand - Parametrii");
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        cmd.CommandText = strSql;
+        //        cmd.BindByName = true;
+        //        cmd.ExecuteNonQuery();
+
+        //        rez = General.Nz(cmd.Parameters["paramout_1"].Value,"-99").ToString();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //    finally
+        //    {
+        //        conn.Close();
+        //    }
+
+        //    return rez;
+        //}
+
+        #region old
 
         //public static dynamic ExecutaScalarOracle(string strSql)
         //{
@@ -1014,6 +1096,8 @@ namespace WizOne.Module
 
         //    return cmd;
         //}
+
+        #endregion
 
         public static void SetLimba()
         {
@@ -2257,7 +2341,7 @@ namespace WizOne.Module
                         if (Constante.tipBD == 2) strPozitie = "ROWNUM";
 
                         sqlIst = @"INSERT INTO ""Ptj_CereriIstoric""(""IdCerere"", ""IdCircuit"", ""IdSuper"", ""IdStare"", ""IdUser"", ""Pozitie"", ""Aprobat"", ""DataAprobare"", USER_NO, TIME, ""Inlocuitor"", ""IdUserInlocuitor"", ""Culoare"")
-                                SELECT *, 
+                                SELECT G.*, 
                                 (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = ""IdStare"") AS ""Culoare""
                                 FROM (
                                 SELECT {7} AS ""IdCerere"", 
@@ -2271,7 +2355,7 @@ namespace WizOne.Module
                                 CASE WHEN ({6} = 1) THEN (CASE WHEN ({3}) = 1 THEN 1 ELSE NULL END) ELSE (CASE WHEN ""IdUser"" = {1} THEN 1 ELSE NULL END) END AS ""Aprobat"", 
                                 CASE WHEN ({6} = 1) THEN (CASE WHEN ({3}) = 1 THEN {5} ELSE NULL END) ELSE (CASE WHEN ""IdUser"" = {1} THEN {5} ELSE NULL END) END AS ""DataAprobare"", 
                                 {1} AS USER_NO, {2} AS TIME, 0 AS ""Inlocuitor"", NULL AS ""IdUserInlocuitor"" 
-                                FROM (SELECT *, COUNT(*) OVER (PARTITION BY 1) AS ""Total"" FROM ({4}) W) X) G";
+                                FROM (SELECT W.*, COUNT(*) OVER (PARTITION BY 1) AS ""Total"" FROM ({4}) W) X) G";
 
                         string strCer = idCerere.ToString();
                         if (idCerere == -99) strCer = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"")";
@@ -2382,10 +2466,10 @@ namespace WizOne.Module
                     INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
                     INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
                     LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
-                    LEFT JOIN ""Ptj_Intrari"" F ON F.F10003={f10003} AND F.Ziua=P.""Zi""
-                    WHERE {General.ToDataUniv(dtInc)} <= CONVERT(date, P.""Zi"") AND CONVERT(date, P.""Zi"") <= {General.ToDataUniv(dtSf)} 
+                    LEFT JOIN ""Ptj_Intrari"" F ON F.F10003={f10003} AND F.""Ziua""=P.""Zi""
+                    WHERE {General.ToDataUniv(dtInc)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= {General.ToDataUniv(dtSf)} 
                     AND A.""Id"" = {idAbsenta}
-                    AND COALESCE(A.""DenumireScurta"", '') <> ''
+                    AND COALESCE(A.""DenumireScurta"", '~') <> '~'
                     AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {f10003} AND ""DataInceput"" <= {General.ToDataUniv(dtInc)} AND {General.ToDataUniv(dtInc)} <= ""DataSfarsit"") ";
             }
             catch (Exception ex)

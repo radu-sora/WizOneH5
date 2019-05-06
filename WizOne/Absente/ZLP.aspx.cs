@@ -441,7 +441,7 @@ namespace WizOne.Absente
             {
                 string strSql = "";
 
-                strSql = $@"SELECT A.F10003, A.F10003 AS ""Nume"", ""An"", ""Cuvenite"", ""SoldAnterior"", ""Efectuate"", ""CuveniteAn"", USER_NO, TIME FROM ""Ptj_tblZLP"" A
+                strSql = $@"SELECT A.F10003, A.F10003 AS ""Nume"", ""An"", ""Cuvenite"", ""SoldAnterior"", ""Efectuate"", ""CuveniteAn"", A.USER_NO, A.TIME FROM ""Ptj_tblZLP"" A
                         INNER JOIN F100 B ON A.F10003=B.F10003
                         WHERE A.""An""={Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year))}";
 

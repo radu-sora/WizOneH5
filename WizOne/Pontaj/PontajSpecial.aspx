@@ -69,24 +69,6 @@
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
                                             </dx:ASPxComboBox>
                                         </div>
-                                        <div style="float:left; padding-right:15px;" >
-                                            <label id="lblDeLa" runat="server" style="display:inline-block; float:left;  min-width:54px; width:80px;">De la</label>
-						                    <dx:ASPxDateEdit  ID="dtDataStart" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
-                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
-							                </dx:ASPxDateEdit>	
-                                         </div>  
-                                         <div style="float:left; padding-right:15px;">
-                                             <label id="lblLa" runat="server" style="display:inline-block; float:left;   width:70px;">La</label>
-						                    <dx:ASPxDateEdit  ID="dtDataSfarsit" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
-                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
-							                </dx:ASPxDateEdit>
-                                         </div>
-                                         <div style="float:left; padding-right:15px;">
-                                            <label id="lblSablon" runat="server" style="display:inline-block; float:left;  min-width:54px; width:60px;">Sablon</label>
-                                            <dx:ASPxComboBox ID="cmbSablon" ClientInstanceName="cmbSablon" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
-                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSablon'); }" />                                 
-                                            </dx:ASPxComboBox>
-                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -110,7 +92,33 @@
                                              <label id="Label1" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:75px;" > </label>                 
                                              <label id="Label2" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:75px;" > </label>    
                                              <label id="Label3" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;" > </label>  
-                                        </div> 
+                                        </div>                                                                                                                                                             
+                                    </td> 
+                                 </tr>
+                                <tr>
+                                    <td>
+                                        <div style="float:left; padding-right:15px;" >
+                                            <label id="lblDeLa" runat="server" style="display:inline-block; float:left;  min-width:54px; width:80px;">De la</label>
+						                    <dx:ASPxDateEdit  ID="dtDataStart" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
+                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
+							                </dx:ASPxDateEdit>	
+                                         </div>  
+                                         <div style="float:left; padding-right:15px;">
+                                             <label id="lblLa" runat="server" style="display:inline-block; float:left;   width:70px;">La</label>
+						                    <dx:ASPxDateEdit  ID="dtDataSfarsit" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
+                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
+							                </dx:ASPxDateEdit>
+                                         </div>
+                                         <div style="float:left; padding-right:15px;">
+                                            <label id="lblSablon" runat="server" style="display:inline-block; float:left;  min-width:54px; width:60px;">Sablon</label>
+                                            <dx:ASPxComboBox ID="cmbSablon" ClientInstanceName="cmbSablon" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSablon'); }" />                                 
+                                            </dx:ASPxComboBox>
+                                         </div>
+                                     </td>   
+                                </tr>
+                                <tr>
+                                    <td>
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblNumeSablon" runat="server" style="display:inline-block; float:left;  min-width:75px; width:80px;">Nume sablon</label>
 							                <dx:ASPxTextBox  ID="txtNumeSablon" style="display:inline-block; float:left; width:100px;" runat="server"  AutoPostBack="false" />
@@ -134,16 +142,16 @@
                                             </dx:ASPxComboBox>
                                          </div> 
                                         <div style="float:left; padding-right:15px;">
-							                <dx:ASPxTextBox  ID="txtZiua1" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua2" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua3" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua4" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua5" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua6" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua7" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua8" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua9" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua10" style="display:inline-block; float:left; width:25px;" runat="server" Visible="false"  AutoPostBack="false" />
+							                <dx:ASPxTextBox  ID="txtZiua1" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua2" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua3" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua4" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua5" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua6" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua7" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua8" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua9" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+                                            <dx:ASPxTextBox  ID="txtZiua10" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
                                        </div>
                                         <div style="float:left;padding-right:15px;">
                                             <dx:ASPxButton ID="btnSablon" runat="server"  RenderMode="Link" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
@@ -156,8 +164,9 @@
                                                 <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                                                 <ClientSideEvents Click="function(s, e) { pnlCtl.PerformCallback('btnSterge'); }" />
                                             </dx:ASPxButton>
-                                        </div>                                                                                                                                            
-                                    </td>                   
+                                        </div> 
+                                    </td>
+                                </tr>
                             </table>
                         </dx:PanelContent>
                     </PanelCollection>

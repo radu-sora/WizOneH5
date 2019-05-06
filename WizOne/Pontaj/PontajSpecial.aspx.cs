@@ -492,7 +492,7 @@ namespace WizOne.Pontaj
                                 {
                                     tx.Visible = true;
                                     if (tx.Text.Length > 0)
-                                        linii[0]["Ziua" + i.ToString()] = Convert.ToInt32(tx.Text);
+                                        linii[0]["Ziua" + i.ToString()] = tx.Text;
                                 }
                             }
                         }

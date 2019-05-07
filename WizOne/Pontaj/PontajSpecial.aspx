@@ -97,7 +97,7 @@
                                  </tr>
                                 <tr>
                                     <td>
-                                        <div style="float:left; padding-right:15px;" >
+                                        <div style="float:left; padding-right:15px;  padding-bottom:10px;" >
                                             <label id="lblDeLa" runat="server" style="display:inline-block; float:left;  min-width:54px; width:80px;">De la</label>
 						                    <dx:ASPxDateEdit  ID="dtDataStart" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
                                                     <CalendarProperties FirstDayOfWeek="Monday" />                                                   
@@ -119,7 +119,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div style="float:left; padding-right:15px;">
+                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
                                             <label id="lblNumeSablon" runat="server" style="display:inline-block; float:left;  min-width:75px; width:80px;">Nume sablon</label>
 							                <dx:ASPxTextBox  ID="txtNumeSablon" style="display:inline-block; float:left; width:100px;" runat="server"  AutoPostBack="false" />
                                         </div>

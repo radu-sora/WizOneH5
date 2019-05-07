@@ -256,8 +256,26 @@ namespace WizOne.Tactil
                     File.Delete(HostingEnvironment.MapPath("~/TEMP/") + Session["PrintImage"].ToString());
                     Session["PrintImage"] = null;
                 }
-                Response.Redirect("~/Tactil/Main.aspx", false);
+                Response.Redirect("../Tactil/Main.aspx", false);       
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void btnLogOut_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["PrintImage"] != null)
+                {
+                    File.Delete(HostingEnvironment.MapPath("~/TEMP/") + Session["PrintImage"].ToString());
+                    Session["PrintImage"] = null;
+                }
+                Response.Redirect("../DefaultTactil.aspx", false);
             }
             catch (Exception ex)
             {

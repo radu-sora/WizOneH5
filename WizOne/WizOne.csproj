@@ -333,6 +333,7 @@
     <Content Include="Fisiere\css\tactil.css" />
     <Content Include="Fisiere\css\teme.css" />
     <Content Include="Fisiere\css\widgets.css" />
+    <Content Include="Fisiere\Imagini\bdgAprobare.jpg" />
     <Content Include="Fisiere\Imagini\bdgBack.png" />
     <Content Include="Fisiere\Imagini\bdgBg.png" />
     <Content Include="Fisiere\Imagini\bdgCer.jpg" />

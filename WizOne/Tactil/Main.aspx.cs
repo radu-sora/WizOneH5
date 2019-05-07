@@ -178,7 +178,7 @@ namespace WizOne.Tactil
             }
         }
 
-        protected void btnBack_Click(object sender, EventArgs e)
+        protected void btnLogOut_Click(object sender, EventArgs e)
         {
             try
             {

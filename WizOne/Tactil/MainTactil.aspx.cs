@@ -153,12 +153,11 @@ namespace WizOne.Tactil
             }
         }
 
-        protected void lnkOut_Click(object sender, EventArgs e)
+        protected void btnLogOut_Click(object sender, EventArgs e)
         {
             try
             {
-                //Response.Redirect("../DefaultTactil.aspx", false);
-                Response.Redirect("../Tactil/Main.aspx", false);
+                Response.Redirect("../DefaultTactil.aspx", false);               
             }
             catch (Exception ex)
             {
@@ -220,7 +219,7 @@ namespace WizOne.Tactil
         {
             try
             {
-                Response.Redirect("../DefaultTactil.aspx", false);
+                Response.Redirect("../Tactil/Main.aspx", false);
             }
             catch (Exception ex)
             {

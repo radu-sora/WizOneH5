@@ -62,10 +62,15 @@
         </table>
         <table style="width:100%;">
             <tr>
+                <td align="left">
+                    <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Inapoi" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
+                        <Image Url="../Fisiere/Imagini/bdgBack.png"></Image>
+                    </dx:ASPxButton>
+                </td>
                 <td align="left"><Label runat="server" id="lblMarca" style="font-weight: bold;font-size:20px">MARCA: </Label> </td>
                 <td align="center"><Label runat="server" id="lblNume" style="font-weight: bold;font-size:20px">NUME:</Label></td>
                 <td align="right">
-                    <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Log Out" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
+                    <dx:ASPxButton ID="btnLogOut" ClientInstanceName="btnLogOut" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Deconectare" AutoPostBack="true" OnClick="btnLogOut_Click" oncontextMenu="ctx(this,event)" >
                         <Image Url="../Fisiere/Imagini/bdgOut.jpg"></Image>
                     </dx:ASPxButton>
                 </td>
@@ -118,18 +123,6 @@
                     <h3>Trimite la aprobare</h3>
                 </div>
             </div>
-
-            <div class="col-sm-4">
-                <div class="badgeTactil">
-                    <asp:LinkButton runat="server" ID="lnkCereri" OnClick="lnkOut_Click">
-                        <div>
-                            <img src ="../Fisiere/Imagini/bdgback.png" alt = "Inapoi" />
-                        </div>
-                    </asp:LinkButton>
-                    <h3>Inapoi</h3>
-                </div>
-            </div>
-
         </div>
 
             </dx:PanelContent>

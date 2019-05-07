@@ -251,18 +251,23 @@
         </table>
     <table width="100%">
         <tr>
+            <td align="left">
+                <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Inapoi" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
+                    <Image Url="../Fisiere/Imagini/bdgBack.png"></Image>
+                </dx:ASPxButton>
+            </td>
             <td align="left"><Label runat="server"  id="lblMarca" style="font-weight: bold;">MARCA: </Label> </td>
             <td align="center"><Label  runat="server" id="lblNume" style="font-weight: bold;">NUME:</Label></td>
             <td align="right">
-                <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Inapoi" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
-                    <Image Url="../Fisiere/Imagini/bdgback.png"></Image>
+                <dx:ASPxButton ID="btnLogOut" ClientInstanceName="btnLogOut" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Deconectare" AutoPostBack="true" OnClick="btnLogOut_Click" oncontextMenu="ctx(this,event)" >
+                    <Image Url="../Fisiere/Imagini/bdgOut.jpg"></Image>
                 </dx:ASPxButton>
             </td>
         </tr>
         <tr align="center">
-            <td colspan="2">
+            <td colspan="3">
 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize" >
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="90%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlEditFormCreated="grDate_HtmlEditFormCreated" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomButtonInitialize="grDate_CustomButtonInitialize" OnCommandButtonInitialize="grDate_CommandButtonInitialize" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowFilterRowMenu="False"  />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
@@ -283,8 +288,8 @@
                             <Settings FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="275px" VisibleIndex="5" Settings-AutoFilterCondition="Contains" />
-                        <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" ReadOnly="true" Width="175px" VisibleIndex="6">
+                        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="350px" Visible="false" VisibleIndex="5" Settings-AutoFilterCondition="Contains" />
+                        <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" ReadOnly="true" Width="595px" VisibleIndex="6">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>

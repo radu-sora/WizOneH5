@@ -1230,10 +1230,11 @@ namespace WizOne.Module
             {
                 //Radu 19.02.2019 - am inlocuit ist cu istPoz la Stare (pt Evaluare angajat si Evaluare supervizor) si am adaugat AND rasp.F10003 = {10} la Evaluare angajat
                 //Radu 20.02.2019 - am inlocuit Finalizat si PoateModifica
+                //Radu 07.05.2019 - am eliminat conditia de CategorieQuiz pentru Culoare       (COALESCE(chest.""CategorieQuiz"",0)=1 OR COALESCE(chest.""CategorieQuiz"",0)=2) AND 
                 strSQL = @"
                 select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS DenumireCategorie,
 	                chest.""DataInceput"", chest.""DataSfarsit"", {0}(fnume.""F10009"", '') {1} ' ' {1} {0}(fnume.""F10008"", '') as ""Utilizator"",
-	                CASE WHEN (COALESCE(chest.""CategorieQuiz"",0)=1 OR COALESCE(chest.""CategorieQuiz"",0)=2) AND COALESCE((SELECT COALESCE(""Aprobat"",0) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz"" = rasp.""IdQuiz"" AND ""IdUser"" = {11}),0)=1 THEN '#FFE18030' ELSE '#FFFFFF00' END AS ""Culoare"",
+	                CASE WHEN COALESCE((SELECT COALESCE(""Aprobat"",0) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz"" = rasp.""IdQuiz"" AND ""IdUser"" = {11}),0)=1 THEN '#FFE18030' ELSE '#FFFFFF00' END AS ""Culoare"",
 	                case
                         when rasp.""LuatLaCunostinta"" = 2 then 'Contestat'
 		                when rasp.""LuatLaCunostinta"" = 1 then 'Luat la cunostinta'

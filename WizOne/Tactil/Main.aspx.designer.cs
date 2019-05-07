@@ -31,13 +31,13 @@ namespace WizOne.Tactil {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNume;
         
         /// <summary>
-        /// btnBack control.
+        /// btnLogOut control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnBack;
+        protected global::DevExpress.Web.ASPxButton btnLogOut;
         
         /// <summary>
         /// pnlGen control.

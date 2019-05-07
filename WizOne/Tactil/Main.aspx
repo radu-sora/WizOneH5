@@ -60,7 +60,7 @@
                 <td align="left"><Label runat="server"  id="lblMarca" style="font-weight: bold;font-size:20px">MARCA: </Label> </td>
                 <td align="center"><Label  runat="server" id="lblNume" style="font-weight: bold;font-size:20px">NUME:</Label></td>
                 <td align="right">
-                    <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Log Out" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" >
+                    <dx:ASPxButton ID="btnLogOut" ClientInstanceName="btnLogOut" ClientIDMode="Static"  RenderMode="Link" runat="server" ToolTip="Deconectare" AutoPostBack="true" OnClick="btnLogOut_Click" oncontextMenu="ctx(this,event)" >
                         <Image Url="../Fisiere/Imagini/bdgOut.jpg"></Image>
                     </dx:ASPxButton>
                 </td>

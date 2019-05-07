@@ -148,9 +148,9 @@ namespace WizOne.Tactil
                         case "adeverintacresa":
                             lnkAdevGrad_Click(); ;
                             break;
-                        case "inapoi":
-                            lnkOut_Click();
-                            break;
+                        //case "inapoi":
+                        //    lnkOut_Click();
+                        //    break;
 
                     }
                 }             
@@ -167,7 +167,7 @@ namespace WizOne.Tactil
         {
             try
             {
-                Response.Redirect("../DefaultTactil.aspx", false);
+                Response.Redirect("../Tactil/Main.aspx", false);
             }
             catch (Exception ex)
             {
@@ -177,11 +177,11 @@ namespace WizOne.Tactil
             }
         }
 
-        protected void lnkOut_Click()
+        protected void btnLogOut_Click(object sender, EventArgs e)
         {
             try
             {
-                Response.Redirect("../Tactil/Main.aspx", false);
+                Response.Redirect("../DefaultTactil.aspx", false);      
             }
             catch (Exception ex)
             {

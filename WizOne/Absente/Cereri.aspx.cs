@@ -569,7 +569,7 @@ namespace WizOne.Absente
             try
             {
                 //calculam norma
-                string strSql = "SELECT CAST(rez as int) FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
+                string strSql = "SELECT * FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
                 if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
                 int norma = Convert.ToInt32(General.ExecutaScalar(strSql,null));
 

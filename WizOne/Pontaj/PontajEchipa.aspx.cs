@@ -1955,7 +1955,7 @@ namespace WizOne.Pontaj
                         INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
                         INNER JOIN (SELECT * FROM Ptj_Intrari Y WHERE {General.ToDataUniv(ziua)} <= CONVERT(date, Y.""Ziua"") AND CONVERT(date, Y.""Ziua"") <= {General.ToDataUniv(ziua)} AND Y.F10003 = {f10003}) P ON 1 = 1
                         LEFT JOIN Ptj_Contracte D ON B.IdContract = D.Id                        
-                        WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND A.""InPontaj"" = 1 AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
+                        WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
                         (
                         (COALESCE(B.ZL,0)<> 0 AND (CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
                         (COALESCE(B.S,0) <> 0 AND (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR

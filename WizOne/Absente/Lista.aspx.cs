@@ -932,9 +932,16 @@ namespace WizOne.Absente
                     Session["IstoricExtins_Angajat_Nume"] = obj[1];
                 }
 
-                Session["IstoricExtins_VineDin"] = 1;
-                Session["grDate_Filtru"] = "Absente.Lista;" + grDate.FilterExpression;
-                Response.Redirect("~/Absente/IstoricExtins.aspx", false);
+                var ert = General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString();
+
+                if (General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString() != "" && General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString() != "-99")
+                {
+                    Session["IstoricExtins_VineDin"] = 1;
+                    Session["grDate_Filtru"] = "Absente.Lista;" + grDate.FilterExpression;
+                    Response.Redirect("~/Absente/IstoricExtins.aspx", false);
+                }
+                else
+                    MessageBox.Show("Nu exista angajat selectat", MessageBox.icoWarning, "Atentie !");
             }
             catch (Exception ex)
             {

@@ -342,7 +342,7 @@ namespace WizOne.Pontaj
                             FROM ""Ptj_tblAbsente"" a
                             INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
                             INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
-                            WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND A.""InPontaj""=1 AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
+                            WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
                             (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
                             ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
                             ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
@@ -381,7 +381,7 @@ namespace WizOne.Pontaj
                             from ""Ptj_tblAbsente"" a
                             inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
                             inner join ""Ptj_relRolAbsenta"" c on a.""Id"" = c.""IdAbsenta""
-                            WHERE A.""OreInVal"" IS NOT NULL AND A.""InPontaj"" = 1
+                            WHERE A.""OreInVal"" IS NOT NULL
                             group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"") x
                             WHERE COALESCE(X.DenumireScurta,'') <> '' AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {idRol} AND
                             (COALESCE(X.""ZileSapt"",0)=(CASE WHEN P.""ZiSapt""<6 AND P.""ZiLibera""=0 THEN 1 ELSE 0 END) 

@@ -236,11 +236,14 @@ namespace WizOne.Tactil
                             //calculam nr de zile luate
                             int nr = 0;
                             int nrViitor = 0;
-                            string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
-                            General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
+                            //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
+                            //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
+                            nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbAbs.Value ?? 0));;
                             txtNrZile.Value = nr;
                             Session["TactilNrZile"] = nr;
                             //txtNrZileViitor.Value = nrViitor;
+
+
                         }
                     }
 
@@ -275,7 +278,7 @@ namespace WizOne.Tactil
         {
             try
             {
-                Response.Redirect("../DefaultTactil.aspx", false);
+                Response.Redirect("../Tactil/Main.aspx", false);       
             }
             catch (Exception ex)
             {
@@ -284,11 +287,11 @@ namespace WizOne.Tactil
             }
         }
 
-        protected void lnkOut_Click(object sender, EventArgs e)
+        protected void btnLogOut_Click(object sender, EventArgs e)
         {
             try
             {
-                Response.Redirect("../Tactil/Main.aspx", false);
+                Response.Redirect("../DefaultTactil.aspx", false);
             }
             catch (Exception ex)
             {
@@ -409,8 +412,9 @@ namespace WizOne.Tactil
                         //calculam nr de zile luate
                         int nr = 0;
                         int nrViitor = 0;
-                        string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
-                        General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
+                        //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
+                        //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
+                        nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbAbs.Value ?? 0)); ;
                         txtNrZile.Value = nr;
                         Session["TactilNrZile"] = nr;
                         //txtNrZileViitor.Value = nrViitor;

@@ -69,9 +69,11 @@ namespace WizOne.Tactil
                     Session["Ptj_IstoricVal"] = dtVal;
 
 
-                    DataTable dt010 = General.IncarcaDT($@"SELECT F01011, F01012 FROM F010 ", null);
-                    luna = Convert.ToInt32(dt010.Rows[0][1].ToString());
-                    an = Convert.ToInt32(dt010.Rows[0][0].ToString());
+                    //DataTable dt010 = General.IncarcaDT($@"SELECT F01011, F01012 FROM F010 ", null);
+                    //luna = Convert.ToInt32(dt010.Rows[0][1].ToString());
+                    //an = Convert.ToInt32(dt010.Rows[0][0].ToString());
+                    luna = DateTime.Now.Month;
+                    an = DateTime.Now.Year;
                 }
                 else
                 {
@@ -110,18 +112,20 @@ namespace WizOne.Tactil
             {
                 Dami.AccesTactil();
 
-                cmbAn.DataSource = General.ListaNumere(2015, 2020);
+                cmbAn.DataSource = General.ListaNumere(2015, 2022);
                 cmbAn.DataBind();
                 cmbLuna.DataSource = General.ListaLuniDesc();
                 cmbLuna.DataBind();
-                DataTable dt010 = General.IncarcaDT($@"SELECT F01011, F01012 FROM F010 ", null);
+                //DataTable dt010 = General.IncarcaDT($@"SELECT F01011, F01012 FROM F010 ", null);
 
                 if (!IsPostBack)
                 {
                     try
                     {
-                        cmbLuna.Value = Convert.ToInt32(dt010.Rows[0][1].ToString());
-                        cmbAn.Value = Convert.ToInt32(dt010.Rows[0][0].ToString());
+                        //cmbLuna.Value = Convert.ToInt32(dt010.Rows[0][1].ToString());
+                        //cmbAn.Value = Convert.ToInt32(dt010.Rows[0][0].ToString());
+                        cmbLuna.Value = DateTime.Now.Month;
+                        cmbAn.Value = DateTime.Now.Year;
                     }
                     catch (Exception) { }
 
@@ -1044,6 +1048,19 @@ namespace WizOne.Tactil
             }
         }
 
+        protected void btnLogOut_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("../DefaultTactil.aspx", false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
         protected void btnFiltru_Click(object sender, EventArgs e)
         {
             try
@@ -1061,12 +1078,14 @@ namespace WizOne.Tactil
         {
             IncarcaGrid();
 
-            DataTable dt010 = General.IncarcaDT($@"SELECT F01011, F01012 FROM F010 ", null);
+            //DataTable dt010 = General.IncarcaDT($@"SELECT F01011, F01012 FROM F010 ", null);
 
             if (!IsPostBack)
             {
-                luna = Convert.ToInt32(dt010.Rows[0][1].ToString());
-                an = Convert.ToInt32(dt010.Rows[0][0].ToString());
+                //luna = Convert.ToInt32(dt010.Rows[0][1].ToString());
+                //an = Convert.ToInt32(dt010.Rows[0][0].ToString());
+                luna = DateTime.Now.Month;
+                an = DateTime.Now.Year;
             }
 
             string func = "LEN";

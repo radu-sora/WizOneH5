@@ -61,6 +61,7 @@
                             <SettingsSearchPanel Visible="True" />
                             <ClientSideEvents EndCallback="function(s,e) { OnEndCallback(s,e); }" Init="OnInitGrid" ContextMenu="ctx" />
                             <SettingsEditing Mode="Inline" />
+                            <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
 
                             <Columns>
                                 <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowClearFilterButton="true" VisibleIndex="0" SelectAllCheckboxMode="AllPages" />

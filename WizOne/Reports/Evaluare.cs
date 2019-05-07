@@ -718,6 +718,16 @@ namespace WizOne.Reports
                 if (descText.ToLower() == "false") descText = "Nu";
                 if (rat == 1) descText = DaMiRating(descText, nomen, entRas["IdCalificativ"].ToString());
 
+                if (Convert.ToInt32(entRas["TipData"].ToString()) == 3)   //butoane radio
+                {//Radu 07.05.2019
+                    string sql = "SELECT * FROM \"Eval_tblTipValoriLinii\" WHERE \"Id\" = " + entRas["TipValoare"].ToString() + " AND \"Nota\" = " + descText;
+                    DataTable dt = General.IncarcaDT(sql, null);
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        descText = (dt.Rows[0]["Valoare"] != DBNull.Value ? dt.Rows[0]["Valoare"].ToString() : descText).ToString();
+                    }                    
+                }
+
                 ras = descText;
             }
             catch (Exception)

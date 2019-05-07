@@ -31,6 +31,7 @@
                     <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%">
                         <Settings ShowFilterRow="True" ShowGroupPanel="False" VerticalScrollBarMode="Visible" VerticalScrollableHeight="500" />
                         <SettingsSearchPanel Visible="False" />
+                        <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                         <ClientSideEvents ContextMenu="ctx" />
                         <Columns>
                                 <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" />                         

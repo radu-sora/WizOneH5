@@ -1443,7 +1443,7 @@ namespace WizOne.Pontaj
 
                     General.SalveazaDate(dt, "Ptj_Intrari");
                     General.SalveazaDate(dtVal, "Ptj_IstoricVal");
-
+                    
                     for (int i = 0; i < dtModif.Rows.Count; i++)
                     {
                         if (dtModif.Rows[i]["CuloareValoare"].ToString() != "#e6c8fa" /*|| ctr*/)
@@ -1456,7 +1456,7 @@ namespace WizOne.Pontaj
                                 FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
                                 FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
                                 FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                                
+
                                 //Florin 2019.05.02
                                 FunctiiCeasuri.Calcul.h5 = true;
 
@@ -1492,7 +1492,7 @@ namespace WizOne.Pontaj
                     //Florin 2019.05.03
                     //nu mai este nevoie deoarece se face in ProceseCeasuri
                     //ExecCalcul(ids);
-                    
+
                     IncarcaGrid();
 
                     MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);

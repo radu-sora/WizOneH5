@@ -969,25 +969,32 @@ namespace WizOne.Absente
 
                 #endregion
 
-                string sqlCer = CreazaSelectCuValori();
+                string sqlCer = "";
+                string sqlPre = "";
+                string strGen = "";
 
-                string sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
-                            OUTPUT Inserted.Id, Inserted.IdStare ";
-
-                string strGen = "BEGIN TRAN " +
-                                sqlIst + "; " +
-                                sqlPre +
-                                sqlCer + "; " +
-                                "COMMIT TRAN";
-
-                if (Constante.tipBD == 2)
+                if (Constante.tipBD == 1)
                 {
+                    sqlCer = CreazaSelectCuValori();
+
+                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
+                                OUTPUT Inserted.Id, Inserted.IdStare ";
+
+                    strGen = "BEGIN TRAN " +
+                            sqlIst + "; " +
+                            sqlPre +
+                            sqlCer + "; " +
+                            "COMMIT TRAN";
+                }
+                else
+                {
+                    sqlCer = CreazaSelectCuValori(2);
                     sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") ";
 
                     strGen = "BEGIN " +
-                                sqlIst + "; " +
+                                sqlIst + "; " + Environment.NewLine +
                                 sqlPre +
-                                sqlCer + " RETURNING \"Id\", \"IdStare\" INTO @out_1, @out_2 ; " +
+                                sqlCer + " RETURNING \"Id\", \"IdStare\" INTO @out_1, @out_2; " +
                                 @"
                                 EXCEPTION
                                     WHEN DUP_VAL_ON_INDEX THEN
@@ -2202,7 +2209,9 @@ namespace WizOne.Absente
 
             try
             {
-                DataTable dt = General.IncarcaDT(CreazaSelectCuValori(), null);
+                string dual = "";
+                if (Constante.tipBD == 2) dual = " FROM DUAL";
+                DataTable dt = General.IncarcaDT(CreazaSelectCuValori() + dual, null);
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     for (int i = 0; i < dt.Columns.Count; i++)
@@ -2226,8 +2235,11 @@ namespace WizOne.Absente
             return str;
         }
 
-        private string CreazaSelectCuValori()
+        private string CreazaSelectCuValori(int tip = 1)
         {
+            //tip = 1 intoarce un select
+            //tip = 2 intoarce ca values; necesar pt Oracle
+
             string sqlCer = "";
 
             try
@@ -2287,10 +2299,13 @@ namespace WizOne.Absente
                 string valExtra = "";
                 for (int i = 0; i < lstExtra.Count(); i++)
                 {
-                    valExtra += "," + lstExtra[i] + "  AS \"CampExtra" + (i + 1).ToString() + "\" ";
+                    if (tip == 1)
+                        valExtra += "," + lstExtra[i] + "  AS \"CampExtra" + (i + 1).ToString() + "\" ";
+                    else
+                        valExtra += "," + lstExtra[i];
                 }
 
-                string dual = "";
+                //string dual = "";
                 string strTop = "";
                 if (Constante.tipBD == 1) strTop = "TOP 1";
 
@@ -2307,7 +2322,7 @@ namespace WizOne.Absente
                     sqlIdStare = $@"(SELECT * FROM ({sqlIdStare}) WHERE ROWNUM=1)";
                     sqlPozitie = $@"(SELECT * FROM ({sqlPozitie}) WHERE ROWNUM=1)";
                     sqlCuloare = $@"(SELECT * FROM ({sqlCuloare}) WHERE ROWNUM=1)";
-                    dual = " FROM DUAL";
+                    //dual = " FROM DUAL";
                 }
 
                 sqlCer = @"SELECT " +
@@ -2330,8 +2345,28 @@ namespace WizOne.Absente
                                 " NULL AS \"TrimiteLa\", " +
                                 (sqlNrOre == null ? "NULL" : sqlNrOre) + " AS \"NrOre\", " +
                                 areAtas + " AS \"AreAtas\"" +
-                                valExtra +
-                                dual;
+                                valExtra;
+                if (tip == 2)
+                    sqlCer = @"VALUES(" +
+                    sqlIdCerere + ", " +
+                    cmbAng.Value + ", " +
+                    cmbAbs.Value + ", " +
+                    General.ToDataUniv(txtDataInc.Date) + ", " +
+                    General.ToDataUniv(txtDataSf.Date) + ", " +
+                    (txtNrZile.Value == null ? "NULL" : txtNrZile.Value.ToString()) + ", " +
+                    (txtNrZileViitor.Value == null ? "NULL" : txtNrZileViitor.Value.ToString()) + ", " +
+                    (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'") + ", " +
+                    (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + ", " +
+                    (idCircuit) + ", " +
+                    Session["UserId"] + " AS \"UserIntrod\", " +
+                    (sqlCuloare == null ? "NULL" : sqlCuloare) + ", " +
+                    (sqlInloc == null ? "NULL" : sqlInloc) + ", " +
+                    (sqlTotal == null ? "NULL" : sqlTotal) + ", " +
+                    (sqlPozitie == null ? "NULL" : sqlPozitie) + ", " +
+                    " NULL, " +
+                    (sqlNrOre == null ? "NULL" : sqlNrOre) + ", " +
+                    areAtas + "" +
+                    valExtra + ")";
             }
             catch (Exception ex)
             {

@@ -2134,11 +2134,17 @@ namespace WizOne.Eval
 
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24)
                 {//Cristim
-                    clsObiIndividual.Realizat = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Target, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, 0)));
+                     //clsObiIndividual.Realizat = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Target, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, 0)));
+                     //int suma = 0;
+                     //foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz 
+                     //                                                    && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz && p.Pozitie == clsObiIndividual.Pozitie))
+                     //    suma += Convert.ToInt32(General.Nz(linie.Realizat, 0));
+
+                    clsObiIndividual.Target = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Activitate, "0")));
                     int suma = 0;
-                    foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz 
+                    foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz
                                                                         && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz && p.Pozitie == clsObiIndividual.Pozitie))
-                        suma += Convert.ToInt32(General.Nz(linie.Realizat, 0));
+                        suma += Convert.ToInt32(General.Nz(linie.Target, 0));
 
                     Eval_QuizIntrebari txtCalifCantit = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CANTITATIVA") && p.IdQuiz == clsObiIndividual.IdQuiz).FirstOrDefault();
                     if (txtCalifCantit != null)

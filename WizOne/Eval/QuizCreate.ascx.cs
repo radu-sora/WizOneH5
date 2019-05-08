@@ -266,7 +266,7 @@ namespace WizOne.Eval
                 }
                 if (Session["createEval_ConfigObiective"] == null)
                 {
-                    string strSQLEval_ConfigObiective = @"select * from ""Eval_ConfigObiective"" ";
+                    string strSQLEval_ConfigObiective = @"select * from ""Eval_ConfigObiective"" ORDER BY ""Ordine"" ";
                     DataTable dtEval_ConfigObiective = General.IncarcaDT(strSQLEval_ConfigObiective, null);
                     lstEval_ConfigObiective = new List<Eval_ConfigObiective>();
                     foreach (DataRow rwEval_ConfigObiective in dtEval_ConfigObiective.Rows)

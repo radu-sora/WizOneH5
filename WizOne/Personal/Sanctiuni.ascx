@@ -14,7 +14,7 @@
         }
     }
 
-    function GoToFisierMedMode(Value) {
+    function GoToFisierSancMode(Value) {
         window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=6&id=' + Value, '_blank ')
         pnlLoading.Hide();
     }

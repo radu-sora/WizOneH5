@@ -1094,6 +1094,10 @@ namespace WizOne.Pagini
 
                         General.ExecutaNonQuery(strSql, new object[] { obj[0], docNr, docData, obj[1], obj[2], Session["UserId"] });
                     }
+
+                    if (Convert.ToDateTime(General.Nz(obj[2], 0)) < Convert.ToDateTime(docData))
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atentie, data modificare este mai mica decat data documentului") + System.Environment.NewLine;
+
                 }
 
                 e.Cancel = true;
@@ -1379,6 +1383,16 @@ namespace WizOne.Pagini
 
                 if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
                 {
+                    if (General.Nz(obj[11],"").ToString() == "")
+                    {
+                        MessageBox.Show("Nu exista data document", MessageBox.icoWarning, "Operatie anulata");
+                        return;
+                    }
+                    if (General.Nz(obj[10], "").ToString() == "")
+                    {
+                        MessageBox.Show("Nu exista numar document", MessageBox.icoWarning, "Operatie anulata");
+                        return;
+                    }
                     DateTime ziua = Convert.ToDateTime(obj[11]);
                     paramRaport = "RaportActeAditionale_Incetare";
                     param = "&NrDecizie=" + obj[10] + "&DataDecizie=" + +ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
@@ -1394,6 +1408,11 @@ namespace WizOne.Pagini
                     {
                         if (Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
                         {
+                            if (General.Nz(obj[12], "").ToString() == "")
+                            {
+                                MessageBox.Show("Nu exista data modificare", MessageBox.icoWarning, "Operatie anulata");
+                                return;
+                            }
                             DateTime ziua = Convert.ToDateTime(obj[12]);
                             paramRaport = "RaportActeAditionale_ModificariCIM";
                             param = "&DataModificare=" + ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2,'0');

@@ -79,7 +79,15 @@ namespace WizOne.Avs
                     cmbAngFiltru.DataBind();
                     cmbAngFiltru.SelectedIndex = -1;
 
-                    DataTable dtAtr = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"Avs_tblAtribute\" ORDER BY \"Id\"", null);
+                    //DataTable dtAtr = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"Avs_tblAtribute\" ORDER BY \"Id\"", null);
+                    DataTable dtAtr = General.IncarcaDT(
+                        $@"SELECT A.Id, A.Denumire 
+                        FROM Avs_tblAtribute A
+                        INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
+                        INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper OR (-1 * B.Super2) = C.IdSuper OR (-1 * B.Super3) = C.IdSuper OR (-1 * B.Super4) = C.IdSuper OR (-1 * B.Super5) = C.IdSuper OR (-1 * B.Super6) = C.IdSuper OR (-1 * B.Super7) = C.IdSuper OR (-1 * B.Super8) = C.IdSuper OR (-1 * B.Super9) = C.IdSuper OR (-1 * B.Super10) = C.IdSuper
+                        WHERE C.IdUser=@1
+                        GROUP BY A.Id, A.Denumire
+                        ORDER BY A.Denumire", new object[] { Session["UserId"] });
                     cmbAtribute.DataSource = dtAtr;
                     cmbAtribute.DataBind();
                     cmbAtributeFiltru.DataSource = dtAtr;
@@ -1222,6 +1230,11 @@ namespace WizOne.Avs
                         SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out data);
                         if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma)
                             SetNorma(e.Parameter.Split(';')[1]);
+                        break;
+                    case "3":
+                        {
+
+                        }
                         break;
                     case "4":
                         if (SalveazaDate())

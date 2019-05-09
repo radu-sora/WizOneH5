@@ -18,7 +18,7 @@ namespace WizOne.Reports
     public partial class EvaluareCristim : DevExpress.XtraReports.UI.XtraReport
     {
         int spatiuVert = 10;
-        int pozY = 275;
+        int pozY = 200;
         int user_id = 1;
         public EvaluareCristim()
         {
@@ -171,7 +171,7 @@ namespace WizOne.Reports
                                             DataRow[] dtColComp = dtTemplateComp.Select("Id = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0"));
                                             if (dtColComp != null && dtColComp.Length > 0)
                                             {
-                                                List<string> cols = new List<string>();                                         
+                                                List<string> cols = new List<string>();
                                                 List<int> rat = new List<int>();
                                                 List<int> latime = new List<int>();
                                                 List<int> note = new List<int>();
@@ -239,7 +239,7 @@ namespace WizOne.Reports
 
                                                 ctl = CreeazaTabel(12, dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Substring(5, 1)), cols.ToArray(), cols.ToArray(), rat.ToArray(), latime.ToArray(), note.ToArray());
                                             }
-                                       }
+                                        }
                                         break;
                                     case 7:                     //Obiective firma
                                         break;
@@ -486,7 +486,7 @@ namespace WizOne.Reports
             {
                 lbl.Text = desc;
 
-                lbl.Font = new Font("Times New Roman", 12F,FontStyle.Underline);
+                lbl.Font = new Font("Times New Roman", 12F, FontStyle.Underline);
                 lbl.WordWrap = true;
                 lbl.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 20, 20, 100F);
                 lbl.CanGrow = true;
@@ -512,6 +512,10 @@ namespace WizOne.Reports
                     lbl.Font = new Font("Times New Roman", 10F, FontStyle.Italic);
                 else
                     lbl.Font = new Font("Times New Roman", 10F);
+
+                if (char.IsNumber(desc[0]) && desc[1] == '.')
+                    lbl.Font = new Font("Times New Roman", 10F, FontStyle.Bold);
+
                 lbl.WordWrap = true;
                 lbl.CanGrow = true;
 
@@ -527,7 +531,7 @@ namespace WizOne.Reports
         private XRTable CreeazaTabel(int tipData, DataRow[] lst, string[] cols, string[] arr, int[] rat, int[] latime, int[] note = null)
         {
             XRTable tbl = new XRTable();
-            
+
             try
             {
                 float rowHeight = 25f;
@@ -550,7 +554,7 @@ namespace WizOne.Reports
                 tbl.Rows.Add(rowH);
 
                 //adauga corpul tabelului
-                if (lst != null && lst.Length  > 0)
+                if (lst != null && lst.Length > 0)
                     for (int i = 0; i < lst.Length; i++)
                     {
                         XRTableRow row = new XRTableRow();
@@ -613,16 +617,16 @@ namespace WizOne.Reports
                 {
                     if (orientare == 1)             //orientare orizontala
                     {
-                        float lt = 150F;
-                        float rt = 570f;
+                        float lt = 450F;
+                        float rt = 270f;
 
                         if (ctl.GetType() == typeof(XRLabel))
                         {
                             XRLabel l = ctl as XRLabel;
                             if (l.Text.Length < 5)
                             {
-                                lt = 300f;
-                                rt = 420f;
+                                lt = 450f;
+                                rt = 270f;
                             }
                         }
 
@@ -695,10 +699,10 @@ namespace WizOne.Reports
                     for (int i = 0; i < lst.Length; i++)
                     {
                         decimal nota = 0;
-                        nota = Convert.ToDecimal((lst[i][super] != DBNull.Value ? lst[i][super].ToString() : "0")); 
+                        nota = Convert.ToDecimal((lst[i][super] != DBNull.Value ? lst[i][super].ToString() : "0"));
 
                         decimal pondere = 0;
-                        if (lst[i]["Tinta"]  != null && lst[i]["Tinta"].ToString().Length > 0) pondere = Convert.ToDecimal(lst[i]["Tinta"].ToString());
+                        if (lst[i]["Tinta"] != null && lst[i]["Tinta"].ToString().Length > 0) pondere = Convert.ToDecimal(lst[i]["Tinta"].ToString());
 
                         if (tipCalcul == 1)
                         {
@@ -734,11 +738,21 @@ namespace WizOne.Reports
                 if (entRas != null)
                 {
                     descText = (entRas[super] != DBNull.Value ? entRas[super].ToString() : "");
-                }           
+                }
 
                 if (descText.ToLower() == "true") descText = "Da";
                 if (descText.ToLower() == "false") descText = "Nu";
                 if (rat == 1) descText = DaMiRating(descText, nomen, entRas["IdCalificativ"].ToString());
+
+                if (Convert.ToInt32(entRas["TipData"].ToString()) == 3)   //butoane radio
+                {//Radu 07.05.2019
+                    string sql = "SELECT * FROM \"Eval_tblTipValoriLinii\" WHERE \"Id\" = " + entRas["TipValoare"].ToString() + " AND \"Nota\" = " + descText;
+                    DataTable dt = General.IncarcaDT(sql, null);
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        descText = (dt.Rows[0]["Valoare"] != DBNull.Value ? dt.Rows[0]["Valoare"].ToString() : descText).ToString();
+                    }
+                }
 
                 ras = descText;
             }

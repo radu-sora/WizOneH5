@@ -1468,7 +1468,7 @@ namespace WizOne.Eval
 
                 if (Session["lstEval_ConfigObTemplateDetail"] == null)
                 {
-                    DataTable dtEval_ConfigObTemplateDetail = General.IncarcaDT(@"select * from ""Eval_ConfigObTemplateDetail"" /* where ""TemplateId"" = @1 */", new object[] { TemplateIdObiectiv  });
+                    DataTable dtEval_ConfigObTemplateDetail = General.IncarcaDT(@"select * from ""Eval_ConfigObTemplateDetail"" ORDER BY ""Ordine"" /* where ""TemplateId"" = @1 */", new object[] { TemplateIdObiectiv  });
                     foreach (DataRow rwEval_ConfigObTemplateDetail in dtEval_ConfigObTemplateDetail.Rows)
                     {
                         Eval_ConfigObTemplateDetail clsConfigObTemplateDetail = new Eval_ConfigObTemplateDetail(rwEval_ConfigObTemplateDetail);
@@ -2849,6 +2849,8 @@ namespace WizOne.Eval
             {
                 Session["PrintDocument"] = "Evaluare";
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 20) Session["PrintDocument"] = "EvaluarePeliFilip";
+
+                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24) Session["PrintDocument"] = "EvaluareCristim";
 
                 Session["PrintParametrii"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))+ ";" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) + ";" + Session["UserId"] + ";Super" + (Session["Eval_ActiveTab"] ?? "1").ToString() + ";0";
                 Session["PaginaWeb"] = "Eval/EvalDetaliu.aspx";

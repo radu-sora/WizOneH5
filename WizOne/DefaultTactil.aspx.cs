@@ -64,7 +64,7 @@ namespace WizOne
             try
             {
                 //Radu 20.03.2019
-                string valMax = Dami.ValoareParam("LungimeMaximaCodCartela");
+                string valMax = Dami.ValoareParam("LungimeMaximaCodCartela","10");
                 int max = 10;
                 if (valMax.Length > 0)
                     max = Convert.ToInt32(valMax);
@@ -102,7 +102,7 @@ namespace WizOne
             try
             {
                 //Radu 20.03.2019
-                string valMax = Dami.ValoareParam("LungimeMaximaCodCartela");
+                string valMax = Dami.ValoareParam("LungimeMaximaCodCartela","10");
                 int max = 10;
                 if (valMax.Length > 0)
                     max = Convert.ToInt32(valMax);
@@ -127,8 +127,8 @@ namespace WizOne
                                     FROM USERS A
                                     LEFT JOIN F100 CRP ON A.F10003=CRP.F10003
                                     LEFT JOIN F006 C ON CRP.F10007=C.F00607
-                                    INNER JOIN F100Cartele D ON A.F10003=D.F10003
-                                    WHERE {camp}='{cartela}' AND D.DataInceput <= {General.CurrentDate()} AND {General.CurrentDate()} <= D.DataSfarsit";
+                                    INNER JOIN ""F100Cartele"" D ON A.F10003=D.F10003
+                                    WHERE {camp}='{cartela}' AND D.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= D.""DataSfarsit"" ";
 
 
 
@@ -153,6 +153,7 @@ namespace WizOne
                     General.InregistreazaLogarea(1, txtPan1.Value);
                     Session["SecApp"] = "OK_Tactil";
 
+                    Session["TimeOutSecunde"] = 99999;
                     DataTable dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TimeoutSecunde'", null);
                     if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
                         Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());

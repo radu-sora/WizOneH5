@@ -1,12 +1,13 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="ListaTactil.aspx.cs" Inherits="WizOne.Tactil.ListaTactil" %>
 
-
-
-
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
 
-    
-    <script language="javascript" type="text/javascript">
+</asp:Content>
+
+
+<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
+    <script>
 
         $(function () {
             $("body").on('click keypress', function () {
@@ -240,10 +241,6 @@
 
     </script>
 
-</asp:Content>
-
-
-<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
         <table style="width:100%;">
             <tr>
                 <td style="text-align:right; padding-right:20px;"><span id="spanTimeLeft"></span> seconds left</td>

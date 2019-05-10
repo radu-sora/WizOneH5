@@ -346,7 +346,7 @@ namespace WizOne.Absente
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
                         WHERE 1=1 ";
 
-                if (idRol != -44) strSql += " AND Rol=" + idRol;
+                if (idRol != -44) strSql += @" AND ""Rol""=" + idRol;
             }
             catch (Exception ex)
             {
@@ -1084,10 +1084,8 @@ namespace WizOne.Absente
                     //trimite in pontaj daca este finalizat
                     if (idStare == 3)
                     {
-                        
                         if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
                         {
-                            
                             General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCer, 5, trimiteLaInlocuitor, Convert.ToInt32(txtNrOre.Value ?? 0));
                             
                             //Se va face cand vom migra GAM
@@ -1102,8 +1100,6 @@ namespace WizOne.Absente
 
 
                 Session["Absente_Cereri_Date_Aditionale"] = null;
-
-                
 
                 if (msg != "" && msg.Substring(0, 1) != "2")
                 {
@@ -2358,7 +2354,7 @@ namespace WizOne.Absente
                     (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'") + ", " +
                     (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + ", " +
                     (idCircuit) + ", " +
-                    Session["UserId"] + " AS \"UserIntrod\", " +
+                    Session["UserId"] + ", " +
                     (sqlCuloare == null ? "NULL" : sqlCuloare) + ", " +
                     (sqlInloc == null ? "NULL" : sqlInloc) + ", " +
                     (sqlTotal == null ? "NULL" : sqlTotal) + ", " +

@@ -2,8 +2,10 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-
-    <script language="javascript" type="text/javascript">
+   
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+     <script>
         $(function () {
             $("body").on('click keypress', function () {
                 ResetThisSession();
@@ -72,8 +74,6 @@
 
     </script>
 
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
         <table style="width:100%;">
             <tr>
                 <td style="text-align:right; padding-right:20px;"><span id="spanTimeLeft"></span> seconds left</td>
@@ -301,7 +301,7 @@
 
             <div class="col-sm-4">
                 <div class="badgeTactil">
-                    <asp:LinkButton runat="server" ID="lnkSave" OnClick="lnkSave_Click"  OnClientClick="function (s,e) { pnlLoading.Show(); }">      
+                    <asp:LinkButton runat="server" ID="lnkSave" OnClick="lnkSave_Click"  >      
                         <div>
                             <img src ="../Fisiere/Imagini/bdgAprobare.jpg" alt = "Trimite la aprobare" />
                         </div>

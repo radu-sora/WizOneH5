@@ -2951,7 +2951,7 @@ namespace WizOne.Pontaj
                     GridViewDataComboBoxColumn colStari = (grCC.Columns["IdStare"] as GridViewDataComboBoxColumn);
                     DataTable dt = colStari.PropertiesComboBox.DataSource as DataTable;
 
-                    string idStare = e.GetValue("IdStare").ToString();
+                    string idStare = General.Nz(e.GetValue("IdStare"),"").ToString();
                     if (idStare != "")
                     {
                         DataRow[] lst = dt.Select("Id=" + idStare);

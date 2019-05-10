@@ -3,9 +3,12 @@
 
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
 
-    
-    <script language="javascript" type="text/javascript">
+
+<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
+    <script>
 
         var limba = "<%= Session["IdLimba"] %>";
 
@@ -162,10 +165,7 @@
 
     </script>
 
-</asp:Content>
 
-
-<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
         <table style="width:100%;">
             <tr>
                 <td style="text-align:right; padding-right:20px;"><span id="spanTimeLeft"></span> seconds left</td>

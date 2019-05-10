@@ -910,7 +910,7 @@ namespace WizOne.Module
                 if(paramOut != "")
                 {
                     string[] arr = paramOut.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                    List<string> lstOut = null; 
+                    List<string> lstOut = new List<string>(); 
                     for(int i = 0; i < arr.Length; i++)
                     {
                         lstOut.Add(General.Nz(cmd.Parameters[arr[i]].Value, "-99").ToString());
@@ -1486,13 +1486,24 @@ namespace WizOne.Module
             return rez;
         }
 
-        public static string CurrentDate()
+        public static string CurrentDate(bool faraTimp = false)
         {
-            string rez = "GetDate()";
+            string rez = "";
 
             try
             {
-                if (Constante.tipBD == 2) rez = "SYSDATE";
+                if (Constante.tipBD == 1)
+                {
+                    rez = "GetDate()";
+                    if (faraTimp)
+                        rez = "CONVERT(DATE,GetDate())";
+                }
+                else
+                {
+                    rez = "SYSDATE";
+                    if (faraTimp)
+                        rez = "TRUNC(SYSDATE)";
+                }
             }
             catch (Exception ex)
             {
@@ -1793,8 +1804,10 @@ namespace WizOne.Module
         {
             try
             {
+                string tipData = "nvarchar(10)";
+                if (Constante.tipBD == 2) tipData = "varchar2(10)";
                 DataTable dt = General.IncarcaDT($@"SELECT A.*, CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN 1 ELSE 0 END AS ""EsteCuBifa"",
-                                                    (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)=0 THEN CAST(@3 AS nvarchar(10)) ELSE '' END) + 
+                                                    (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)=0 THEN CAST(@3 AS {tipData}) ELSE '' END) + 
                                                     (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""DenumireScurta"" ELSE D.""DenumireScurta"" END) ELSE B.""DenumireScurta"" END) AS ""ValStr"",
                                                     E.F10002, E.F10004, E.F10005, E.F10006, E.F10007, E.F10043,
                                                     (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)=0 THEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""OreInVal"" ELSE D.""OreInVal"" END) ELSE B.""OreInVal"" END) ELSE '' END) AS ValPentruOre
@@ -1832,7 +1845,7 @@ namespace WizOne.Module
                                 Dami.ZiSapt(zi.DayOfWeek.ToString()) + ", " +
                                 ziLib + ", " +
                                 ziLibLeg + ", " +
-                                "(SELECT X.IdContract FROM F100Contracte X WHERE X.F10003 = " + dr["F10003"] + " AND X.DataInceput <= " + General.ToDataUniv(zi.Date) + " AND " + General.ToDataUniv(zi.Date) + " <= X.DataSfarsit), " +
+                                "(SELECT X.\"IdContract\" FROM \"F100Contracte\" X WHERE X.F10003 = " + dr["F10003"] + " AND X.\"DataInceput\" <= " + General.ToDataUniv(zi.Date) + " AND " + General.ToDataUniv(zi.Date) + " <= X.\"DataSfarsit\"), " +
                                 dr["F10043"] + ", " +
                                 dr["F10002"] + ", " +
                                 dr["F10004"] + ", " +
@@ -1854,8 +1867,8 @@ namespace WizOne.Module
                                 sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"='" + valStr + "', \"Val0\"=null, \"Val1\"=null, \"Val2\"=null, \"Val3\"=null, \"Val4\"=null, \"Val5\"=null, \"Val6\"=null, \"Val7\"=null, \"Val8\"=null, \"Val9\"=null, \"Val10\"=null, \"Val11\"=null, \"Val12\"=null, \"Val13\"=null, \"Val14\"=null, \"Val15\"=null, \"Val16\"=null, \"Val17\"=null, \"Val18\"=null, \"Val19\"=null, \"Val20\"=null" +
                                         " WHERE F10003 = " + dr["F10003"] + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date);
 
-                                sqlIst = $@"INSERT INTO Ptj_IstoricVal(F10003, Ziua, ValStr, ValStrOld, IdUser, DataModif, USER_NO, TIME, Observatii) 
-                                                VALUES({dr["F10003"]}, {ToDataUniv(zi.Date)}, '{valStr}', '{General.Nz(dtAbs.Rows[i]["ValStr"], "")}', {idUser}, GetDate(), {idUser}, GetDate(), 'Din Cereri')";
+                                sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
+                                                VALUES({dr["F10003"]}, {ToDataUniv(zi.Date)}, '{valStr}', '{General.Nz(dtAbs.Rows[i]["ValStr"], "")}', {idUser}, {General.CurrentDate()}, {idUser}, {General.CurrentDate()}, 'Din Cereri')";
                             }
                             else
                             {
@@ -1866,8 +1879,8 @@ namespace WizOne.Module
                                         (dr["ValPentruOre"] ?? "").ToString() + "=" + (nrOre * 60).ToString() +
                                         "WHERE  F10003=" + dr["F10003"] + " AND \"Ziua\"=" + General.ToDataUniv(zi.Date);
 
-                                sqlIst = $@"INSERT INTO Ptj_IstoricVal(F10003, Ziua, ValStr, ValStrOld, IdUser, DataModif, USER_NO, TIME, Observatii) 
-                                            SELECT {dr["F10003"]}, {ToDataUniv(zi.Date)}, {valStr}, '{General.Nz(dtAbs.Rows[i]["ValStr"],"")}', {idUser}, GetDate(), {idUser}, GetDate(), 'Din Cereri' FROM ""Ptj_Intrari"" WHERE F10003={dr["F10003"]} AND ""Ziua""={General.ToDataUniv(zi.Date)}";
+                                sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
+                                            SELECT {dr["F10003"]}, {ToDataUniv(zi.Date)}, {valStr}, '{General.Nz(dtAbs.Rows[i]["ValStr"],"")}', {idUser}, {General.CurrentDate()}, {idUser}, {General.CurrentDate()}, 'Din Cereri' FROM ""Ptj_Intrari"" WHERE F10003={dr["F10003"]} AND ""Ziua""={General.ToDataUniv(zi.Date)}";
 
                             }
 
@@ -1876,18 +1889,28 @@ namespace WizOne.Module
                             //                VALUES({dr["F10003"]}, {ToDataUniv(zi.Date)}, '{valStr}', {idUser}, GetDate(), {idUser}, GetDate(), 'Din Cereri')";
 
 
-
+                            
                             strSql += "IF((SELECT COUNT(*) FROM \"Ptj_Intrari\" WHERE F10003 = " + dr["F10003"] + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date) + ") = 0) \n"
                                         + sqlIns + "\n" +
                                         "ELSE \n" +
                                         sqlUp  + "; \n" + 
                                         sqlIst + "; \n";
+
+                            if(Constante.tipBD == 2)
+                                strSql = $@"
+                                    {sqlIst};
+                                    BEGIN
+                                        {sqlIns};
+                                        EXCEPTION
+                                        WHEN DUP_VAL_ON_INDEX THEN
+                                        {sqlUp};
+                                    END; ";
                         }
                     }
 
                     if (strSql != "")
                     {
-                        strSql = "BEGIN\n" + strSql + "END;\n";
+                        //strSql = "BEGIN\n" + strSql + "END;\n";
                         ExecutaNonQuery(strSql, null);
 
                         CalculFormuleCumulat(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]).Date.Year, Convert.ToDateTime(dr["DataInceput"]).Date.Month);
@@ -2093,7 +2116,7 @@ namespace WizOne.Module
                     dt = "sysdate";
                 }
 
-                if (idAbs != -99) filtru = " WHERE Y.Id=" + idAbs;
+                if (idAbs != -99) filtru = @" WHERE Y.""Id""=" + idAbs;
 
                 if (Dami.ValoareParam("DreptSolicitareAbsenta") == "1")
                 {
@@ -6539,7 +6562,7 @@ namespace WizOne.Module
             {
                 string strSql = "";
                 //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"",0) = 1 AND CampSelect IS NOT NULL AND COALESCE(CampSelect,'') <> '' ORDER BY ""Ordine"" ", null);
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE CampSelect IS NOT NULL AND COALESCE(CampSelect,'') <> '' ORDER BY ""Ordine"" ", null);
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' ORDER BY ""Ordine"" ", null);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow row = dt.Rows[i];
@@ -7523,6 +7546,23 @@ namespace WizOne.Module
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
             }
+        }
+
+        public static string FromDual()
+        {
+            string rez = "";
+
+            try
+            {
+                if (Constante.tipBD == 2)
+                    rez = " FROM DUAL";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+
+            return rez;
         }
 
     }

@@ -4,10 +4,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
     <link rel="stylesheet" type="text/css" href="../Fisiere/css/tactil.css" />
-    <script src="../Scripts/jquery-3.1.1.min.js"></script>
+    <!--script src="../Scripts/jquery-3.1.1.min.js"></!--script-->
 
 
-    <script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    
+      <script>
         $(function () {
             $("body").on('click keypress', function () {
                 ResetThisSession();
@@ -46,9 +49,6 @@
         }
     </script>
 
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    
         <table style="width:100%;">
             <tr>
                 <td style="text-align:right; padding-right:20px;"><span id="spanTimeLeft"></span> seconds left</td>

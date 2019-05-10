@@ -102,7 +102,7 @@ namespace WizOne.CereriDiverse
                     DataTable dt = General.IncarcaDT($@"SELECT ""Rol"" AS ""Id"", ""RolDenumire"" AS ""Denumire"" FROM (
                             SELECT ""Rol"", ""RolDenumire"", 1 AS ""Ordin"" FROM ({Dami.SelectCereriDiverse()}) X GROUP BY ""Rol"", ""RolDenumire""
                             UNION 
-                            SELECT -1 AS ""Rol"", '{Dami.TraduCuvant("Toate")}' AS ""RolDenumire"", 0 AS ""Ordin"") Y ORDER BY ""Ordin"" ", null);
+                            SELECT -1 AS ""Rol"", '{Dami.TraduCuvant("Toate")}' AS ""RolDenumire"", 0 AS ""Ordin"" {General.FromDual()}) Y ORDER BY ""Ordin"" ", null);
 
                     if (dt.Rows.Count == 0 || dt.Rows.Count == 1 || dt.Rows.Count == 2)
                     {

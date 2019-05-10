@@ -821,7 +821,7 @@ namespace WizOne.Tactil
 
                 string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
 
-                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE IdAbsenta=@1", new object[] { General.VarSession("User_Marca") });
+                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { General.VarSession("User_Marca") });
                 for (int i = 0; i < dtEx.Rows.Count; i++)
                 {
                     DataRow dr = dtEx.Rows[i];
@@ -928,9 +928,14 @@ namespace WizOne.Tactil
                 int valoare = -99;
                 int nrZile = 0;
 
-                string sqlDrp = $@"SELECT 
-                                (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs={Convert.ToInt32(General.VarSession("User_Marca"))} OR DR.IdAbs = -13) AND (DR.IdRol={Convert.ToInt32(cmbRol.Value ?? -99)} OR DR.IdRol = -13) AND (DR.IdActiune=4 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Valoare,
-                                (SELECT TOP 1 NrZile FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs={Convert.ToInt32(General.VarSession("User_Marca"))} OR DR.IdAbs = -13) AND (DR.IdRol={Convert.ToInt32(cmbRol.Value ?? -99)} OR DR.IdRol = -13) AND (DR.IdActiune=4 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS NrZile";
+                string sqlDrp = $@"SELECT  
+                                (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs={Convert.ToInt32(cmbAbs.Value)} OR DR.IdAbs = -13) AND (DR.IdRol={Convert.ToInt32(cmbRol.Value ?? -99)} OR DR.IdRol = -13) AND (DR.IdActiune=4 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Valoare,
+                                (SELECT TOP 1 NrZile FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs={Convert.ToInt32(cmbAbs.Value)} OR DR.IdAbs = -13) AND (DR.IdRol={Convert.ToInt32(cmbRol.Value ?? -99)} OR DR.IdRol = -13) AND (DR.IdActiune=4 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS NrZile";
+                if (Constante.tipBD == 2)
+                    sqlDrp = $@"   SELECT  
+                                (SELECT  ""Valoare"" FROM ""Ptj_CereriDrepturi"" DR WHERE (DR.""IdAbs""={Convert.ToInt32(cmbAbs.Value)} OR DR.""IdAbs"" = -13) AND (DR.""IdRol"" = {Convert.ToInt32(cmbRol.Value ?? -99)} OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 4 OR DR.""IdActiune"" = -13) and rownum=1 ) AS ""Valoare"",
+                                (SELECT  ""NrZile"" FROM ""Ptj_CereriDrepturi"" DR WHERE (DR.""IdAbs"" = {Convert.ToInt32(cmbAbs.Value)} OR DR.""IdAbs"" = -13) AND(  DR.""IdRol"" = {Convert.ToInt32(cmbRol.Value ?? -99)}  OR DR.""IdRol"" = -13) AND(DR.""IdActiune"" = 4 OR DR.""IdActiune"" = -13) and rownum = 1) AS ""NrZile"" FROM dual ";
+
                 DataTable dtDrp = General.IncarcaDT(sqlDrp, null);
                 if (dtDrp.Rows.Count > 0)
                 {
@@ -1026,7 +1031,7 @@ namespace WizOne.Tactil
 
                 #region Validare Max Ore
 
-                int cv = Convert.ToInt32(Dami.ValoareParam("ZileCuveniteInAvans") ?? "0");
+                int cv = Convert.ToInt32(Dami.ValoareParam("ZileCuveniteInAvans", "0") ?? "0");
 
 
 
@@ -1063,7 +1068,7 @@ namespace WizOne.Tactil
 
 
                     //verificam nr max pe an
-                    string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrZile"",0)),0) AS 'ZileAn' FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
+                    string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrZile"",0)),0) AS ""ZileAn"" FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
                     DataRow drAn = General.IncarcaDR(sqlAn, new object[] { Convert.ToInt32(General.VarSession("User_Marca")), txtDataInc.Date.Year, Convert.ToInt32(General.VarSession("User_Marca")) });
 
                     if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(drAbs["NrMaxAn"]) > (int)drAbs[0])
@@ -1209,16 +1214,50 @@ namespace WizOne.Tactil
                 #endregion
 
 
-                string sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
+                //string sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
+                //                OUTPUT Inserted.Id, Inserted.IdStare ";
+
+                //string sqlCer = CreazaSelectCuValori();
+
+                //string strGen = "BEGIN TRAN " +
+                //                sqlIst + "; " +
+                //                sqlPre +
+                //                sqlCer + (Constante.tipBD == 1 ? "" : " FROM DUAL") + "; " +
+                //                "COMMIT TRAN";
+
+
+                string sqlCer = "";
+                string sqlPre = "";
+                string strGen = "";
+
+                if (Constante.tipBD == 1)
+                {
+                    sqlCer = CreazaSelectCuValori();
+
+                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
                                 OUTPUT Inserted.Id, Inserted.IdStare ";
 
-                string sqlCer = CreazaSelectCuValori();
+                    strGen = "BEGIN TRAN " +
+                            sqlIst + "; " +
+                            sqlPre +
+                            sqlCer + "; " +
+                            "COMMIT TRAN";
+                }
+                else
+                {
+                    sqlCer = CreazaSelectCuValori(2);
+                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") ";
 
-                string strGen = "BEGIN TRAN " +
-                                sqlIst + "; " +
+                    strGen = "BEGIN " +
+                                sqlIst + "; " + Environment.NewLine +
                                 sqlPre +
-                                sqlCer + (Constante.tipBD == 1 ? "" : " FROM DUAL") + "; " +
-                                "COMMIT TRAN";
+                                sqlCer + " RETURNING \"Id\", \"IdStare\" INTO @out_1, @out_2; " +
+                                @"
+                                EXCEPTION
+                                    WHEN DUP_VAL_ON_INDEX THEN
+                                        ROLLBACK;
+                            END;";
+                }
 
                 if (Dami.ValoareParam("LogCereri", "0") == "1") General.CreazaLogCereri(strGen, General.VarSession("User_Marca").ToString(), txtDataInc.Value.ToString());
 
@@ -1235,11 +1274,29 @@ namespace WizOne.Tactil
                 else
                 {
                     int idCer = 1;
+                    int idStare = 1;
                     DataTable dtCer = new DataTable();
 
                     try
                     {
-                        dtCer = General.IncarcaDT(strGen, null);
+                        if (Constante.tipBD == 1)
+                        {
+                            dtCer = General.IncarcaDT(strGen, null);
+                            if (dtCer.Rows.Count > 0)
+                            {
+                                idCer = Convert.ToInt32(dtCer.Rows[0]["Id"]);
+                                idStare = Convert.ToInt32(dtCer.Rows[0]["IdStare"]);
+                            }
+                        }
+                        else
+                        {
+                            List<string> lstOut = General.DamiOracleScalar(strGen, new object[] { "int", "int" });
+                            if (lstOut.Count == 2)
+                            {
+                                idCer = Convert.ToInt32(lstOut[0]);
+                                idStare = Convert.ToInt32(lstOut[1]);
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -1247,9 +1304,6 @@ namespace WizOne.Tactil
                         General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
                         return;
                     }
-
-
-                    if (dtCer.Rows.Count > 0) idCer = Convert.ToInt32(dtCer.Rows[0]["Id"]);
 
 
                     string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
@@ -1267,7 +1321,7 @@ namespace WizOne.Tactil
                     General.SituatieZLOperatii(Convert.ToInt32(General.VarSession("User_Marca") ?? -99), txtDataInc.Date, 2, Convert.ToInt32(txtNrZile.Value));
 
                     //trimite in pontaj daca este finalizat
-                    if (Convert.ToInt32(dtCer.Rows[0]["IdStare"]) == 3)
+                    if (idStare == 3)
                     {
                         if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
                         {
@@ -1565,7 +1619,9 @@ namespace WizOne.Tactil
 
             try
             {
-                DataTable dt = General.IncarcaDT(CreazaSelectCuValori(), null);
+                string dual = "";
+                if (Constante.tipBD == 2) dual = " FROM DUAL";
+                DataTable dt = General.IncarcaDT(CreazaSelectCuValori() + dual, null);
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     for (int i = 0; i < dt.Columns.Count; i++)
@@ -1589,8 +1645,11 @@ namespace WizOne.Tactil
             return str;
         }
 
-        private string CreazaSelectCuValori()
+        private string CreazaSelectCuValori(int tip = 1)
         {
+            //tip = 1 intoarce un select
+            //tip = 2 intoarce ca values; necesar pt Oracle
+
             string sqlCer = "";
 
             try
@@ -1673,18 +1732,30 @@ namespace WizOne.Tactil
                 string valExtra = "";
                 for (int i = 0; i < lstExtra.Count(); i++)
                 {
-                    valExtra += "," + lstExtra[i] + "  AS \"CampExtra" + (i + 1).ToString() + "\" ";
+                    if (tip == 1)
+                        valExtra += "," + lstExtra[i] + "  AS \"CampExtra" + (i + 1).ToString() + "\" ";
+                    else
+                        valExtra += "," + lstExtra[i];
                 }
+
+                //string dual = "";
+                string strTop = "";
+                if (Constante.tipBD == 1) strTop = "TOP 1";
 
                 string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
 
                 string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + sqlIdCerere + ")";
-                string sqlIdStare = @"(SELECT ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""=" + sqlIdCerere + ")";
-                string sqlPozitie = @"(SELECT ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""=" + sqlIdCerere + ")";
-                string sqlCuloare = @"(SELECT ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""=" + sqlIdCerere + ")";
+                string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere})";
+                string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere})";
+                string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere})";
                 //string sqlNrOre = txtNrOre.Text == "" ? "NULL" : txtNrOre.Text;
 
-                //DateTime.Parse(a[1], Constante.formatDataSistem)
+                if (Constante.tipBD == 2)
+                {
+                    sqlIdStare = $@"(SELECT * FROM ({sqlIdStare}) WHERE ROWNUM=1)";
+                    sqlPozitie = $@"(SELECT * FROM ({sqlPozitie}) WHERE ROWNUM=1)";
+                    sqlCuloare = $@"(SELECT * FROM ({sqlCuloare}) WHERE ROWNUM=1)";
+                }
 
                 id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
                 if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23)
@@ -1708,9 +1779,30 @@ namespace WizOne.Tactil
                                 (sqlPozitie == null ? "NULL" : sqlPozitie) + " AS \"Pozitie\", " +
                                 //trimiteLaInlocuitor + " AS \"TrimiteLa\", " +
                                 " NULL AS \"TrimiteLa\", " +
-                                (txtNrOre.Text.Length > 0 ? txtNrOre.Text : "NULL") + " AS \"NrOre\"" +
+                                (txtNrOre.Text.Length > 0 ? txtNrOre.Text : "NULL") + " AS \"NrOre\", " +
+                                "NULL AS \"AreAtas\"" +
                                 valExtra;
-
+                if (tip == 2)
+                    sqlCer = @"VALUES(" +
+                    sqlIdCerere + ", " +
+                    General.VarSession("User_Marca") + ", " +
+                    id + ", " +
+                    General.ToDataUniv(txtDataInc.Date) + ", " +
+                    (Session["CereriTactil"].ToString() == "BiletVoie" ? General.ToDataUniv(txtDataInc.Date) : General.ToDataUniv(txtDataSf.Date)) + ", " +
+                    (txtNrZile.Text.Length > 0 ? txtNrZile.Text : "NULL") + ", " +
+                    "NULL" + ", " +
+                    "NULL" + ", " +
+                    (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + ", " +
+                    (idCircuit) + ", " +
+                    Session["UserId"] + ", " +
+                    (sqlCuloare == null ? "NULL" : sqlCuloare) + ", " +
+                    "NULL" + ", " +
+                    (sqlTotal == null ? "NULL" : sqlTotal) + ", " +
+                    (sqlPozitie == null ? "NULL" : sqlPozitie) + ", " +
+                    " NULL, " +
+                    (txtNrOre.Text.Length > 0 ? txtNrOre.Text : "NULL") + ", " +
+                    "NULL" +
+                    valExtra + ")";
             }
             catch (Exception ex)
             {

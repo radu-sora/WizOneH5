@@ -89,7 +89,7 @@ namespace WizOne.Tactil
                     DataTable dt = General.IncarcaDT($@"SELECT ""Rol"" AS ""Id"", ""RolDenumire"" AS ""Denumire"" FROM (
                             SELECT ""Rol"", ""RolDenumire"", 1 AS ""Ordin"" FROM ({Dami.SelectCereri()}) X GROUP BY ""Rol"", ""RolDenumire""
                             UNION 
-                            SELECT -1 AS ""Rol"", 'Toate' AS ""RolDenumire"", 0 AS ""Ordin"") Y ORDER BY ""Ordin"" ", null);
+                            SELECT -1 AS ""Rol"", 'Toate' AS ""RolDenumire"", 0 AS ""Ordin"" {General.FromDual()}) Y ORDER BY ""Ordin"" ", null);
 
 
                     string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");

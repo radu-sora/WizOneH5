@@ -680,7 +680,7 @@ namespace WizOne.Module
                     selectInloc = $@"SELECT Y.F70102 FROM ""Ptj_Cereri"" X
                                 INNER JOIN USERS Y ON X.F10003=Y.F10003
                                 WHERE X.""IdStare""=3 AND X.""Inlocuitor"" = {(HttpContext.Current.Session["User_Marca"])}
-                                AND CONVERT(date,X.""DataInceput"") <= CONVERT(date,GetDate()) AND CONVERT(date,GetDate()) <= CONVERT(date,X.""DataSfarsit"")";
+                                AND CONVERT(date,X.""DataInceput"") <= {General.CurrentDate()} AND {General.CurrentDate()} <= CONVERT(date,X.""DataSfarsit"")";
                 }
 
                 //select 1 - toate cererile mele ca angajat
@@ -696,20 +696,20 @@ namespace WizOne.Module
                 }
 
                 string strSql = $@"SELECT A.*, 0 AS ""Rol"",
-                                CASE WHEN (A.IdStare IN (-1, 0, 3) OR B.""IdCerere"" IS NULL) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
+                                CASE WHEN (A.""IdStare"" IN (-1, 0, 3) OR B.""IdCerere"" IS NULL) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
                                 FROM ""MP_Cereri"" A
                                 LEFT JOIN ""MP_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""Pozitie"" <> 0 AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]} AND B.""IdStare"" IN {idStare}
                                 WHERE A.F10003 = {HttpContext.Current.Session["User_Marca"]}
                                 UNION
                                 SELECT A.*, CASE WHEN C.""Id"" IS NOT NULL THEN C.""Id"" ELSE (CASE WHEN B.""IdSuper"" > 0 THEN 76 ELSE C.""Id"" END) END AS ""Rol"",
-                                CASE WHEN A.IdStare IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN (A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
+                                CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN (A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
                                 FROM ""MP_Cereri"" A
                                 INNER JOIN ""MP_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""Pozitie"" <> 0 AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}
                                 LEFT JOIN ""tblSupervizori"" C ON (-1 * B.""IdSuper"")= C.""Id""
                                 WHERE A.F10003 <> {HttpContext.Current.Session["User_Marca"]} {condSuplim}
                                 UNION
-                                SELECT A.*, 78 AS Rol,
-                                CASE WHEN A.IdStare IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
+                                SELECT A.*, 78 AS ""Rol"",
+                                CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
                                 FROM ""MP_Cereri"" A
                                 INNER JOIN ""MP_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""IdSuper"" <> 0 AND B.""Pozitie"" <> 0 AND B.""IdUser"" IN 
                                 (
@@ -717,14 +717,14 @@ namespace WizOne.Module
                                 )
                                 WHERE 1=1 {condSuplim}
                                 UNION
-                                SELECT A.*, 78 AS Rol,
-                                CASE WHEN A.IdStare IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
+                                SELECT A.*, 78 AS ""Rol"",
+                                CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
                                 FROM ""MP_Cereri"" A
                                 INNER JOIN ""MP_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""IdSuper"" <> 0 AND B.""Pozitie"" <> 0 AND B.""IdUser"" IN 
                                 (SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={HttpContext.Current.Session["UserId"]} AND ""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= ""DataSfarsit"") {condSuplim}";
 
                 if (totiAngajatii == 3)
-                    strSql = $@"SELECT A.*, 77 AS Rol, CASE WHEN A.IdStare IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
+                    strSql = $@"SELECT A.*, 77 AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
                                FROM ""MP_Cereri"" A
                                INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idHR}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
 

@@ -296,12 +296,12 @@ namespace WizOne.Personal
         {
             if (e.VisibleIndex >= 0)
             {
-                string[] fields = { "Modificabil" };
+                //string[] fields = { "Modificabil" };
                 DataRowView values = grDateContracte.GetRow(e.VisibleIndex) as DataRowView;
 
                 if (values != null)
                 {
-                    string modif = values.Row[7].ToString();
+                    string modif = values.Row["Modificabil"].ToString();
 
                     if (modif == "0")
                     {

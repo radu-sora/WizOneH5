@@ -253,7 +253,7 @@ namespace WizOne.Personal
 
                 if (values != null)
                 {
-                    string modif = values.Row[7].ToString();
+                    string modif = values.Row["Modificabil"].ToString();
 
                     if (modif == "0")
                     {

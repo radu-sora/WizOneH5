@@ -68,61 +68,64 @@ namespace WizOne.Tactil
                 cmbAbs.Visible = false;
 
                 string denumire = "";
-                switch (Session["CereriTactil"].ToString())
+                if (!IsPostBack)
                 {
-                    case "AbsenteOra":
-                    case "BiletVoie":
-                        if (Session["CereriTactil"].ToString() == "BiletVoie")
-                            denumire = "BV%";
-                        else
-                            denumire = "%%";
-                        //lblZile.InnerText = "Nr. ore";
-                        lblNrOre.Visible = true;
-                        tdNrOre.Visible = true;
-                        txtNrOre.Visible = true;
-                        txtNrOre.MinValue = 1;
-                        txtNrOre.MaxValue = 8;
-                        tdNrOre.Align = "left";
+                    switch (Session["CereriTactil"].ToString())
+                    {
+                        case "AbsenteOra":
+                        case "BiletVoie":
+                            if (Session["CereriTactil"].ToString() == "BiletVoie")
+                                denumire = "BV%";
+                            else
+                                denumire = "%%";
+                            //lblZile.InnerText = "Nr. ore";
+                            lblNrOre.Visible = true;
+                            tdNrOre.Visible = true;
+                            txtNrOre.Visible = true;
+                            txtNrOre.MinValue = 1;
+                            txtNrOre.MaxValue = 8;
+                            tdNrOre.Align = "left";
 
-                        txtNrZile.Visible = false;
-                        lblZile.Visible = false;
-                        tdNrZile.Visible = false;
+                            txtNrZile.Visible = false;
+                            lblZile.Visible = false;
+                            tdNrZile.Visible = false;
 
-                        lblDataSf.Visible = false;
-                        txtDataSf.Visible = false;
+                            lblDataSf.Visible = false;
+                            txtDataSf.Visible = false;
 
-                        //tdNrZile.Align = "left";
-                        tdDataSf.Visible = false;
-                        tdNrOre.Width = "550";
-                        if (Session["CereriTactil"].ToString() == "BiletVoie")
-                        {
-                            rbMotiv1.Visible = true;
-                            rbMotiv2.Visible = true;
-                        }
+                            //tdNrZile.Align = "left";
+                            tdDataSf.Visible = false;
+                            tdNrOre.Width = "550";
+                            if (Session["CereriTactil"].ToString() == "BiletVoie")
+                            {
+                                rbMotiv1.Visible = true;
+                                rbMotiv2.Visible = true;
+                            }
 
-                        lblZileRamase.Visible = false;
-                        txtNrZileRamase.Visible = false;
-                        tdNrZileRamase.Visible = false;
-                        break;
-                    case "PlanificareCO":
-                        denumire = "COP";
-                        tdDataSf.Width = "550";
-                        break;
-                    case "CerereCO":
-                        denumire = "CO";
-                        tdDataSf.Width = "550";
-                        break;
-                }
+                            lblZileRamase.Visible = false;
+                            txtNrZileRamase.Visible = false;
+                            tdNrZileRamase.Visible = false;
+                            break;
+                        case "PlanificareCO":
+                            denumire = "COP";
+                            tdDataSf.Width = "550";
+                            break;
+                        case "CerereCO":
+                            denumire = "CO";
+                            tdDataSf.Width = "550";
+                            break;
+                    }
 
-                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23 || Session["CereriTactil"].ToString() == "AbsenteOra")
-                {
-                    tdSelAbs.Visible = true;
-                    cmbSelAbs.Visible = true;
-                }
-                else
-                {
-                    tdSelAbs.Visible = false;
-                    cmbSelAbs.Visible = false;
+                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 23 || Session["CereriTactil"].ToString() == "AbsenteOra")
+                    {
+                        tdSelAbs.Visible = true;
+                        cmbSelAbs.Visible = true;
+                    }
+                    else
+                    {
+                        tdSelAbs.Visible = false;
+                        cmbSelAbs.Visible = false;
+                    }
                 }
 
                 lblMarca.InnerText = "MARCA: " + Session["User_Marca"].ToString();
@@ -211,7 +214,7 @@ namespace WizOne.Tactil
                             Session["Absente_Tactil"] = dtAbsSpn;
 
                             DataRow[] dtRow = dtAbsSpn.Select("Id=" + Convert.ToInt32(cmbSelAbs.Value));
-                            if (dtRow.ElementAt(0)["DenumireScurta"].ToString() == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "COP" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
+                            if (dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
                             {
                                 lblZileRamase.Visible = true;
                                 //tdNrZileRamase.Visible = true;
@@ -238,7 +241,7 @@ namespace WizOne.Tactil
                             int nrViitor = 0;
                             //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                             //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                            nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbAbs.Value ?? 0));;
+                            nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbSelAbs.Value ?? 0));;
                             txtNrZile.Value = nr;
                             Session["TactilNrZile"] = nr;
                             //txtNrZileViitor.Value = nrViitor;
@@ -423,7 +426,7 @@ namespace WizOne.Tactil
                         int nrViitor = 0;
                         //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                         //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                        nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbAbs.Value ?? 0)); ;
+                        nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbSelAbs.Value ?? 0)); ;
                         txtNrZile.Value = nr;
                         Session["TactilNrZile"] = nr;
                         //txtNrZileViitor.Value = nrViitor;
@@ -492,7 +495,7 @@ namespace WizOne.Tactil
                         if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0)
                         {
                             DataRow[] dtRow = dtAbsSpn.Select("Id=" + Convert.ToInt32(cmbSelAbs.Value));
-                            if (dtRow.ElementAt(0)["DenumireScurta"].ToString() == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "COP" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
+                            if (dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
                             {
                                 lblZileRamase.Visible = true;
                                 //tdNrZileRamase.Visible = true;

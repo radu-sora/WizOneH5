@@ -1468,7 +1468,7 @@ namespace WizOne.Eval
 
                 if (Session["lstEval_ConfigObTemplateDetail"] == null)
                 {
-                    DataTable dtEval_ConfigObTemplateDetail = General.IncarcaDT(@"select * from ""Eval_ConfigObTemplateDetail"" ORDER BY ""Ordine"" /* where ""TemplateId"" = @1 */", new object[] { TemplateIdObiectiv  });
+                    DataTable dtEval_ConfigObTemplateDetail = General.IncarcaDT(@"select * from ""Eval_ConfigObTemplateDetail"" /* where ""TemplateId"" = @1 */", new object[] { TemplateIdObiectiv  });
                     foreach (DataRow rwEval_ConfigObTemplateDetail in dtEval_ConfigObTemplateDetail.Rows)
                     {
                         Eval_ConfigObTemplateDetail clsConfigObTemplateDetail = new Eval_ConfigObTemplateDetail(rwEval_ConfigObTemplateDetail);
@@ -2140,7 +2140,7 @@ namespace WizOne.Eval
                      //                                                    && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz && p.Pozitie == clsObiIndividual.Pozitie))
                      //    suma += Convert.ToInt32(General.Nz(linie.Realizat, 0));
 
-                    clsObiIndividual.Target = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Activitate, "0")));
+                    clsObiIndividual.Target = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Realizat, "0")));
                     int suma = 0;
                     foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz
                                                                         && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz && p.Pozitie == clsObiIndividual.Pozitie))

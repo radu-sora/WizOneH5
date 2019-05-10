@@ -1650,7 +1650,8 @@ namespace WizOne.Eval
                     foreach(Eval_ConfigObiective rwObiectiv in lstEval_ConfigObiective)
                     {
                         Eval_ConfigObTemplateDetail clsTemplateDetail = new Eval_ConfigObTemplateDetail();
-                        clsTemplateDetail.Id = rwObiectiv.Id;
+                        //clsTemplateDetail.Id = rwObiectiv.Id;
+                        clsTemplateDetail.Id = rwObiectiv.Ordine;   //Radu 10.05.2019
                         clsTemplateDetail.TemplateId = TemplateIdObiectiv;
                         clsTemplateDetail.ColumnName = rwObiectiv.ColumnName;
                         clsTemplateDetail.Width = 100;

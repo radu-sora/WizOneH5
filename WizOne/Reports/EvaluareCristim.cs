@@ -546,7 +546,7 @@ namespace WizOne.Reports
                 for (int j = 0; j <= cols.Length - 1; j++)
                 {
                     XRTableCell cell = new XRTableCell();
-                    cell.Text = cols[j];
+                    cell.Text = Dami.TraduCuvant(cols[j]);
                     cell.WidthF = latime[j];
                     cell.BackColor = Color.FromArgb(206, 255, 206);
                     rowH.Cells.Add(cell);

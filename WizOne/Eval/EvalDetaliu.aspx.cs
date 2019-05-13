@@ -2140,7 +2140,7 @@ namespace WizOne.Eval
                      //                                                    && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz && p.Pozitie == clsObiIndividual.Pozitie))
                      //    suma += Convert.ToInt32(General.Nz(linie.Realizat, 0));
 
-                    clsObiIndividual.Target = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Realizat, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, "0")));
+                    clsObiIndividual.Target = (int)(Convert.ToDouble(General.Nz(clsObiIndividual.Descriere, "0")) * Convert.ToDouble(General.Nz(clsObiIndividual.Pondere, 0)) / Convert.ToDouble(General.Nz(clsObiIndividual.Realizat, "0")));
                     int suma = 0;
                     foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsObiIndividual.F10003 && p.IdQuiz == clsObiIndividual.IdQuiz
                                                                         && p.IdLinieQuiz == clsObiIndividual.IdLinieQuiz && p.Pozitie == clsObiIndividual.Pozitie))
@@ -2849,6 +2849,8 @@ namespace WizOne.Eval
             {
                 Session["PrintDocument"] = "Evaluare";
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 20) Session["PrintDocument"] = "EvaluarePeliFilip";
+
+                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24) Session["PrintDocument"] = "EvaluareCristim";
 
                 Session["PrintParametrii"] = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))+ ";" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) + ";" + Session["UserId"] + ";Super" + (Session["Eval_ActiveTab"] ?? "1").ToString() + ";0";
                 Session["PaginaWeb"] = "Eval/EvalDetaliu.aspx";

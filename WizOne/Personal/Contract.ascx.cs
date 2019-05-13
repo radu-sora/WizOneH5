@@ -520,7 +520,11 @@ namespace WizOne.Personal
                 case "txtVechCarteMuncaLuni":
                     txtVechimePeCarteaMuncaLuni_LostFocus();
                     break;
-
+                case "txtGrila":
+                    ds.Tables[0].Rows[0]["F10072"] = param[1];
+                    ds.Tables[1].Rows[0]["F10072"] = param[1];
+                    Session["InformatiaCurentaPersonal"] = ds;
+                    break;
                 case "txtZileCOFidel":
                     ds.Tables[0].Rows[0]["F100640"] = param[1];
                     ds.Tables[1].Rows[0]["F100640"] = param[1];

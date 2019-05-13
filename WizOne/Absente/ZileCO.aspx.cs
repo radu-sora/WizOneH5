@@ -45,7 +45,7 @@ namespace WizOne.Absente
                 
 
                 DataTable dtAng = General.IncarcaDT(Dami.SelectAngajati(), null);
-                GridViewDataComboBoxColumn colAng = (grDate.Columns["Nume"] as GridViewDataComboBoxColumn);
+                GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
                 colAng.PropertiesComboBox.DataSource = dtAng;
                 cmbAng.DataSource = dtAng;
                 cmbAng.DataBind();

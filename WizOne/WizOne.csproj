@@ -1576,6 +1576,12 @@
     <Compile Include="Reports\AdeverintaMedic.Designer.cs">
       <DependentUpon>AdeverintaMedic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\EvaluareCristim.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\EvaluareCristim.Designer.cs">
+      <DependentUpon>EvaluareCristim.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\ImprimaTactil.aspx.cs">
       <DependentUpon>ImprimaTactil.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2347,6 +2353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Evaluare.resx">
       <DependentUpon>Evaluare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\EvaluareCristim.resx">
+      <DependentUpon>EvaluareCristim.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\EvaluarePeliFilip.resx">
       <DependentUpon>EvaluarePeliFilip.cs</DependentUpon>

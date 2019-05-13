@@ -1093,14 +1093,21 @@ namespace WizOne.Pagini
                     this.ClientScript.RegisterStartupScript(this.GetType(), "cmbCol_SelChg", "cmbCol_SelectedIndexChanged_Client();");
                 }
 
-                //ASPxComboBox cmbVal = grDateCond.FindEditFormTemplateControl("cmbVal") as ASPxComboBox;
-                //if (cmbVal != null)
-                //{
-                //    cmbVal.DataSource = dtCmp;
-                //    cmbVal.DataBind();
-                //    //cmbVal.DataBindItems();
-                //    cmbVal.Value = obj[1];
-                //}
+                ASPxComboBox cmbVal = grDateCond.FindEditFormTemplateControl("cmbVal") as ASPxComboBox;
+                if (cmbVal != null)
+                {
+                    cmbVal.DataSource = dtCmp;
+                    cmbVal.DataBind();
+                    cmbVal.Value = obj[1];
+                }
+
+                ASPxComboBox cmbVal2 = grDateCond.FindEditFormTemplateControl("cmbVal2") as ASPxComboBox;
+                if (cmbVal2 != null)
+                {
+                    cmbVal2.DataSource = dtCmp;
+                    cmbVal2.DataBind();
+                    cmbVal2.Value = obj[1];
+                }
 
                 ASPxComboBox cmbCond = grDateCond.FindEditFormTemplateControl("cmbCond") as ASPxComboBox;
                 if (cmbCond != null)

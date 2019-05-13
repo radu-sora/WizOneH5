@@ -91,8 +91,6 @@ namespace WizOne.Pontaj
                     cmbSablon.DataSource = dt;
                     cmbSablon.DataBind();
                     Session["PtjSpecial_Sabloane"] = dt;
-
-
                 }
                 else
                 {
@@ -138,7 +136,7 @@ namespace WizOne.Pontaj
                 cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
                 cmbBirou.DataBind();
 
-
+                IncarcaPopUp();
 
     
             }
@@ -242,7 +240,7 @@ namespace WizOne.Pontaj
                         lista += ",";
                 }
 
-   
+
                 string sqlSDSL = "";
                 string cond = "";
                 for (int i = 1; i <= nrZile; i++)
@@ -252,7 +250,7 @@ namespace WizOne.Pontaj
 
                     for (DateTime zi = dataStart.AddDays(i - 1); zi <= dataSf; zi = zi.AddDays(nrZile))
                     {
-                        string dtStr = General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day);                    
+                        string dtStr = General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day);
 
                         int nr = dtHolidays.Select("DAY = " + dtStr).Count();
 
@@ -313,11 +311,15 @@ namespace WizOne.Pontaj
                     }
                     else
                         sqlFin += sql + ";";
-                 
-                }       
-                
+
+                }
+
                 General.ExecutaNonQuery("BEGIN " + sqlFin + " END;", null);
-    
+
+
+                //Florin 2019.05.13
+                //calcul formule cumulat
+                General.CalculFormuleCumulatToti(1, 1, $@" {General.ToDataUniv(dataStart)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dataSf)} AND F10003 IN ({lista})");
 
             }
             catch (Exception ex)
@@ -830,7 +832,73 @@ namespace WizOne.Pontaj
             }
         }
 
+        private void IncarcaPopUp()
+        {
+            try
+            {
+                DataTable dtAbs = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE COALESCE(""IdTipOre"",1)=1", null);
+                cmbTipAbs.DataSource = dtAbs;
+                cmbTipAbs.DataBind();
 
+                DataTable dtVal = General.IncarcaDT($@"SELECT COALESCE(A.""OreInVal"",'') AS ""ValAbs"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", COALESCE(A.""NrMax"", 23) AS ""NrMax"" 
+                        FROM ""Ptj_tblAbsente"" A WHERE  COALESCE(A.""IdTipOre"",1)=0 AND A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' ", null);
+
+                string pre = "flo1";
+
+                for (int i = 0; i < dtVal.Rows.Count; i++)
+                {
+                    DataRow dr = dtVal.Rows[i];
+                    //string id = dr["ValAbs"] + "_" + General.Nz(dr["DenumireScurta"], "").ToString().Trim().Replace(" ", "");
+                    string id = General.Nz(dr["DenumireScurta"], "").ToString().Trim().Replace(" ", "");
+                    if (id == "")
+                    {
+                        id = pre;
+                        pre += "flo1";
+                    }
+
+                    HtmlGenericControl divCol = new HtmlGenericControl("div");
+                    divCol.Attributes["class"] = "col-md-3";
+                    divCol.Style["margin-bottom"] = "15px";
+
+                    ASPxLabel lbl = new ASPxLabel();
+                    lbl.Text = General.Nz(dr["DenumireScurta"], "___").ToString();
+                    lbl.ToolTip = General.Nz(dr["Denumire"], "&nbsp;").ToString();
+                    lbl.Width = new Unit(100, UnitType.Percentage);
+
+                    ASPxSpinEdit txt = new ASPxSpinEdit();
+                    txt.ClientInstanceName = id;
+                    txt.ID = id;
+                    txt.ClientIDMode = ClientIDMode.Static;
+                    txt.Width = 70;
+                    txt.MinValue = 0;
+                    txt.ClientSideEvents.ValueChanged = "EmptyCmbAbs";
+                    txt.MaxValue = Convert.ToInt32(dr["NrMax"]);
+                    txt.DecimalPlaces = 0;
+                    txt.NumberType = SpinEditNumberType.Integer;
+                    //txt.Attributes["data-val"] = General.Nz(dr["DenumireScurta"], "").ToString().Trim().Replace(" ", "");
+
+                    //if (General.Nz(dr["ValAbs"], "").ToString() != "")
+                    //{
+                    //    try
+                    //    {
+                    //        int min = Convert.ToInt32(General.Nz(dr[dr["ValAbs"].ToString()], "0"));
+                    //        txt.Text = (min / 60).ToString();
+                    //    }
+                    //    catch (Exception) { }
+                    //}
+
+                    divCol.Controls.Add(lbl);
+                    divCol.Controls.Add(txt);
+
+                    pnlValuri.Controls.Add(divCol);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
 
     }

@@ -236,9 +236,9 @@
 
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnRowUpdating="grDate_RowUpdating" OnAutoFilterCellEditorInitialize="grDate_AutoFilterCellEditorInitialize" OnHtmlRowCreated="grDate_HtmlRowCreated" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                    <Settings ShowFilterRow="True" ShowGroupPanel="True" HorizontalScrollBarMode="Auto" ShowFilterRowMenu="true" VerticalScrollBarMode="Visible" />
+                    <Settings ShowFilterRow="True" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" ShowFilterRowMenu="true" VerticalScrollBarMode="Visible" />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
-                    <SettingsSearchPanel Visible="true" />
+                    <SettingsSearchPanel Visible="false" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents 
                         ContextMenu="ctx" 

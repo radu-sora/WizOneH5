@@ -4,7 +4,63 @@
 
     <script type="text/javascript">
 
+        var __name_text_box = "";
 
+        function ArataPopUp(s, e) {
+            if (e.htmlEvent.keyCode == 24 || e.htmlEvent.keyCode == 107 || e.htmlEvent.keyCode == 187) {
+                popUpModif.Show();
+                ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
+                __name_text_box = s.name;
+            }
+        }
+
+        function OnModif(s, e) {
+            popUpModif.Hide();
+            var texts = "";
+            if (cmbTipAbs.GetText() != "")
+                texts = cmbTipAbs.GetText();
+            else {
+                $('#<% =pnlValuri.ID %> input[type="text"]').each(function () {
+                    if ($(this).val() != '')
+                        texts += "/" + $(this).val() + $(this).attr('id').replace('_I','').replace('flo1','');
+                });
+
+                if (texts != "")
+                    texts = texts.substring(1);
+            }
+
+            if (texts != "")
+            {
+                var txt = ASPxClientControl.GetControlCollection().GetByName(__name_text_box);
+                txt.SetText(texts);
+            }
+            __name_text_box = "";
+            EmptyVal();
+            cmbTipAbs.SetText(null);
+        }
+
+        function EmptyVal() {
+            $('#<% =pnlValuri.ID %> input[type="text"]').val('');
+        }
+
+        function EmptyCmbAbs(s, e) {
+            cmbTipAbs.SetValue(null);
+        }
+
+        function EmptyFields(s, e) {
+            //cmbAng.SetValue(null);
+            //cmbCtr.SetValue(null);
+            //cmbStare.SetValue(null);
+
+            //cmbSub.SetValue(null);
+            //cmbSec.SetValue(null);
+            //cmbFil.SetValue(null);
+            //cmbDept.SetValue(null);
+            //cmbSubDept.SetValue(null);
+            //cmbBirou.SetValue(null);
+
+            //pnlCtl.PerformCallback('EmptyFields');
+        }
 
     </script>
 
@@ -35,7 +91,7 @@
                     <PanelCollection>
                         <dx:PanelContent>
 
-                            <table style="margin-left:15px;">                                              
+                            <table style="margin-left:15px;">
                                 <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
@@ -142,16 +198,16 @@
                                             </dx:ASPxComboBox>
                                          </div> 
                                         <div style="float:left; padding-right:15px;">
-							                <dx:ASPxTextBox  ID="txtZiua1" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua2" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua3" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua4" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua5" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua6" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua7" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua8" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua9" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
-                                            <dx:ASPxTextBox  ID="txtZiua10" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false"  AutoPostBack="false" />
+							                <dx:ASPxTextBox ID="txtZiua1" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua2" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua3" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua4" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua5" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua6" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua7" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua8" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua9" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
+                                            <dx:ASPxTextBox ID="txtZiua10" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                        </div>
                                         <div style="float:left;padding-right:15px;">
                                             <dx:ASPxButton ID="btnSablon" runat="server"  RenderMode="Link" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
@@ -195,7 +251,6 @@
             <td colspan="2">
 
                 <br />
-
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnDataBound="grDate_DataBound" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" />                   
@@ -225,6 +280,64 @@
         </tr>
     </table>
 
+    <dx:ASPxPopupControl ID="popUpModif" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpModifArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="550px" Height="200px" HeaderText="Modificare pontaj"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpModif" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel2" runat="server">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="display:inline-table; float:right;">
+                                <dx:ASPxButton ID="btnModif" runat="server" Text="Salveaza" AutoPostBack="false" >
+                                    <ClientSideEvents Click="function(s, e) {
+                                        OnModif(s,e);
+                                    }" />
+                                    <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
+                                </dx:ASPxButton>
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span style="font-weight:bold; font-size:14px;">Absente de tip zi</span>
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row" style="text-align:center;">
+                            <div class="col-md-12">
+                                <div style="display:inline-table;">
+                                    <dx:ASPxComboBox ID="cmbTipAbs" runat="server" ClientIDMode="Static" ClientInstanceName="cmbTipAbs" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="DenumireScurta" AutoPostBack="false" TextFormatString="{0}">
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="DenumireScurta" Caption="Id" Width="50" />
+                                            <dx:ListBoxColumn FieldName="Denumire" Caption="Denumire" Width="200" />
+                                        </Columns>
+                                        <ClientSideEvents SelectedIndexChanged="function(s, e) {
+                                                    e.processOnServer = false;
+                                                    EmptyVal();
+                                                }" />
+                                    </dx:ASPxComboBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <br /><br /><br />
+                                <span style="font-weight:bold; font-size:14px;">Absente de tip ora</span>
+                            </div>
+                        </div>
+                        <div class="row" id="pnlValuri" runat="server" style="margin:20px 50px 50px 50px;">
+                        </div>
+                    </div>
+                    <dx:ASPxHiddenField ID="txtValuri" runat="server"></dx:ASPxHiddenField>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
 
 
 

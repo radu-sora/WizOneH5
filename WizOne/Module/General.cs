@@ -6621,7 +6621,7 @@ namespace WizOne.Module
         }
 
 
-        public static void CalculFormuleCumulatToti(int an, int luna)
+        public static void CalculFormuleCumulatToti(int an, int luna, string filtru="")
         {
             try
             {
@@ -6635,11 +6635,17 @@ namespace WizOne.Module
                     DataRow row = dt.Rows[i];
                     if (General.Nz(row["Coloana"], "").ToString() != "" && General.Nz(row["CampSelect"], "").ToString() != "")
                     {
-                        strSql += $@"UPDATE Y 
+                        if (filtru == "")
+                            strSql += $@"UPDATE Y 
                             SET {row["Coloana"]} = ({row["CampSelect"]}) 
                             FROM ""Ptj_Cumulat"" Y
                             WHERE Y.F10003 IN (SELECT F10003 FROM Ptj_Intrari WHERE {ziInc} <= Ziua AND Ziua <= {ziSf} GROUP BY F10003) 
                             AND Y.""An""={an} AND Y.""Luna""={luna};" + "\n\r";
+                        else
+                            strSql += $@"UPDATE Y 
+                                SET {row["Coloana"]} = ({row["CampSelect"]}) 
+                                FROM ""Ptj_Cumulat"" Y
+                                WHERE {filtru};" + "\n\r";
                     }
                 }
 

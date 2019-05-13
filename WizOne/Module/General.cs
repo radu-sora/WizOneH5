@@ -1343,7 +1343,7 @@ namespace WizOne.Module
                     string ora = dt.Value.Hour.ToString().PadLeft(2, '0');
                     string min = dt.Value.Minute.ToString().PadLeft(2, '0');
                     string sec = dt.Value.Second.ToString().PadLeft(2, '0');
-                    string mask = "DD-MON-YYYY";
+                    string mask = "DD-MM-YYYY";
 
                     switch (Constante.tipBD)
                     {
@@ -1354,16 +1354,16 @@ namespace WizOne.Module
                             if (!andTime) rez = "CONVERT(date," + rez + ")";
                             break;
                         case 2:
-                            mask = "DD/MM/YYYY";
-                            //rez = zi + "-" + Dami.NumeLuna(Convert.ToInt32(luna), 1, "EN").ToUpper() + "-" + an;
-                            rez = zi + "/" + luna + "/" + an;
+                            //mask = "DD/MM/YYYY";
+                            rez = zi.ToString().PadLeft(2, '0') + "-" + luna.ToString().PadLeft(2,'0') + "-" + an;
+                            //rez = zi + "/" + luna + "/" + an;
                             if (andTime)
                             {
-                                mask = "DD/MM/YYYY HH24:MI:SS";
+                                mask = "DD-MM-YYYY HH24:MI:SS";
                                 rez += " " + ora + ":" + min + ":" + sec;
                             }
                             //if (convertFunction) rez = "to_date('" + rez + "','" + mask + "')";
-                            rez = "to_date('" + rez + "','" + mask + "')";
+                            rez = "TO_DATE('" + rez + "','" + mask + "')";
                             if (!andTime) rez = "TRUNC(" + rez + ")";
                             break;
                     }
@@ -1403,8 +1403,9 @@ namespace WizOne.Module
                             dt = new DateTime(anul, luna, zi);
 
                         //if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Value.Month, 1, "EN").ToUpper() + "-" + dt.Value.Year.ToString() + "','DD-MON-RRRR')";
-                        if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "/" + dt.Value.Month.ToString().PadLeft(2, '0') + "/" + dt.Value.Year.ToString() + "','DD/MM/YYYY')";                        
-						break;
+                        //if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "/" + dt.Value.Month.ToString().PadLeft(2, '0') + "/" + dt.Value.Year.ToString() + "','DD/MM/YYYY')";
+                        if (dt != null) rez = "TO_DATE('" + dt.Value.Day.ToString().PadLeft(2, '0') + "-" + dt.Value.Month.ToString().PadLeft(2, '0') + "-" + dt.Value.Year.ToString() + "','DD-MM-YYYY')";
+                        break;
                 }
             }
             catch (Exception ex)
@@ -6147,15 +6148,25 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    dtInc = "01-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
-                    dtSf = DateTime.DaysInMonth(an, luna) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
+                    dtInc = "01-" + luna.ToString().PadLeft(2, '0') + "-" + an.ToString().Substring(2);
+                    dtSf = DateTime.DaysInMonth(an, luna) + "-" + luna.ToString().PadLeft(2,'0') + "-" + an.ToString();
 
-                    strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MON-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MON-RRRR'))>=0";
+                    strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MM-RRRR'))>=0";
                     if (zi > 0 && zi <= 31)
                     {
                         string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
-                        strSql = " AND TRUNC(to_date('" + dt + "','DD-MON-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MON-RRRR'))>=0";
+                        strSql = " AND TRUNC(to_date('" + dt + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MM-RRRR'))>=0";
                     }
+
+                    //dtInc = "01-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
+                    //dtSf = DateTime.DaysInMonth(an, luna) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
+
+                    //strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MON-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MON-RRRR'))>=0";
+                    //if (zi > 0 && zi <= 31)
+                    //{
+                    //    string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
+                    //    strSql = " AND TRUNC(to_date('" + dt + "','DD-MON-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MON-RRRR'))>=0";
+                    //}
                 }
             }
             catch (Exception ex)
@@ -6418,6 +6429,23 @@ namespace WizOne.Module
                     }
                     else
                     {
+                        //Florin 2019.05.10
+
+                        //strSql = "SELECT X.F10003 FROM ( " +
+                        //        " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
+                        //        " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+                        //        " WHERE C.\"IdSuper\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+                        //        " GROUP BY B.F10003 " +
+                        //        " UNION " +
+                        //        " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
+                        //        " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+                        //        " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND (100 * " + an + " + " + luna + " BETWEEN nvl(100 * EXTRACT(year from D.\"DataInceput\") + extract(month from D.\"DataInceput\"), 190000) AND nvl(100 * EXTRACT(year from D.\"DataSfarsit\") + EXTRACT(month from D.\"DataSfarsit\"), 210000)) " +
+                        //        " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+                        //        " GROUP BY B.F10003) X  " +
+                        //        " INNER JOIN F100 A ON A.F10003=X.F10003  " +
+                        //        " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(A.F100993) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+                        //        " GROUP BY X.F10003";
+
                         strSql = "SELECT X.F10003 FROM ( " +
                                 " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
                                 " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
@@ -6426,12 +6454,13 @@ namespace WizOne.Module
                                 " UNION " +
                                 " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
                                 " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
-                                " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND (100 * " + an + " + " + luna + " BETWEEN nvl(100 * EXTRACT(year from D.\"DataInceput\") + extract(month from D.\"DataInceput\"), 190000) AND nvl(100 * EXTRACT(year from D.\"DataSfarsit\") + EXTRACT(month from D.\"DataSfarsit\"), 210000)) " +
+                                " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND D.\"DataInceput\" <= " + ToDataUniv(an, luna, 99) + " AND " + ToDataUniv(an, luna, 1) + " <= D.\"DataSfarsit\" " +
                                 " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
                                 " GROUP BY B.F10003) X  " +
                                 " INNER JOIN F100 A ON A.F10003=X.F10003  " +
                                 " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(A.F100993) " + strFiltru + General.FiltruActivi(an, luna, zi) +
                                 " GROUP BY X.F10003";
+
                     }
 
                     str = " AND A.F10003 IN (" + strSql + ")";

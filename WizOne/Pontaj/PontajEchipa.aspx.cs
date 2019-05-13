@@ -202,6 +202,8 @@ namespace WizOne.Pontaj
         {
             try
             {
+                //test();
+
                 Dami.AccesApp();
 
                 #region Traducere
@@ -780,6 +782,8 @@ namespace WizOne.Pontaj
             try
             {
                 DateTime dtData = Convert.ToDateTime(txtAnLuna.Value);
+
+                DataTable dtErt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Cereri"" WHERE ""DataInceput"" >= " + General.ToDataUniv(dtData.Year, dtData.Month, 99), null);
 
                 string strSql = $@"SELECT X.""IdRol"", X.""RolDenumire"" FROM ({SelectComun()}) X 
                                 WHERE X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023
@@ -2321,11 +2325,10 @@ namespace WizOne.Pontaj
                 else
                     strFiltru += " AND A.F10003=" + cmbAng.Value;
 
-
                 for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)
                 {
                     string strZi = "[" + an + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "]";
-                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2) + "'";
+                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "'";
 
                     zile += ", " + strZi;
                     zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";
@@ -2411,7 +2414,7 @@ namespace WizOne.Pontaj
                                 WHERE X.F10003 = A.F10003
                                 ) AS ""ZileLucrate""
                                 FROM (
-                                SELECT COALESCE({idRol},1) AS ""IdRol"", st.""Denumire"" AS ""StarePontaj"", nvl(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", isnull(zlp.""Ramase"", 0) as ""ZLPNeefectuate"", A.F100901, {dtInc}  AS ""ZiuaInc"", 
+                                SELECT COALESCE({idRol},1) AS ""IdRol"", st.""Denumire"" AS ""StarePontaj"", nvl(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"", A.F100901, {dtInc}  AS ""ZiuaInc"", 
                                 TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"",  A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", C.""Id"" AS ""IdContract"", 
                                 Y.""Norma"", Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.""Denumire"" AS ""DescContract"", NVL(C.""OreSup"",0) AS ""OreSup"", NVL(C.""Afisare"",1) AS ""Afisare"", 
@@ -2426,9 +2429,12 @@ namespace WizOne.Pontaj
                                 L.F06205, Fct.F71804 AS ""Functie"",                                
                                 X.* {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
-                                INNER JOIN (SELECT F10003 {zileAs} FROM 
+                                LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
+                                left join (SELECT * FROM ""SituatieZileAbsente"" WHERE ""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An""
+                                left join ""SituatieZLP"" zlp on zlp.F10003 = x.F10003 and zlp.""An"" = x.""An""
+                                INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""ValStr"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf})  source  
-                                PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                                PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003
                                 LEFT JOIN F100 A ON A.F10003=X.F10003 
                                 LEFT JOIN F1001 B ON A.F10003=B.F10003 
@@ -2449,7 +2455,7 @@ namespace WizOne.Pontaj
 							    LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
                                 LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
 
-                                LEFT JOIN F062 L ON Y.F06204Default=L.F06204
+                                LEFT JOIN F062 L ON Y.""F06204Default""=L.F06204
 
                                 LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
 
@@ -2532,7 +2538,7 @@ namespace WizOne.Pontaj
                 for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)
                 {
                     string strZi = "[" + an + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "]";
-                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2) + "'";
+                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "'";
 
                     zile += ", " + strZi;
                     zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";
@@ -2638,8 +2644,8 @@ namespace WizOne.Pontaj
                                 {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
 		                        LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
-		                        left join ""SituatieZileAbsente"" zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An"" and zabs.""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')
-		                        left join ""SituatieZLP"" zlp on zlp.F10003 = x.F10003 and zlp.""An"" = x.""An""
+		                        left join (SELECT * FROM ""SituatieZileAbsente"" WHERE ""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An""
+                                left join ""SituatieZLP"" zlp on zlp.F10003 = x.F10003 and zlp.""An"" = x.""An""
                                 INNER JOIN (SELECT F10003 {zileAs} FROM 
                                 (SELECT F10003, ""ValStr"", ""Ziua"" From ""Ptj_Intrari"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf})  source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
@@ -2678,6 +2684,108 @@ namespace WizOne.Pontaj
             }
 
             return strSql;
+        }
+
+        private void test()
+        {
+            try
+            {
+                //--AND (100 * 2019 + 5 BETWEEN nvl(100 * EXTRACT(year from D.""DataInceput"") + extract(month from D.""DataInceput""), 190000) AND nvl(100 * EXTRACT(year from D.""DataSfarsit"") + EXTRACT(month from D.""DataSfarsit""), 210000))  
+                string aaa = @"
+SELECT X.F10003 FROM (  
+SELECT B.f10003 FROM ""relGrupAngajat"" B  INNER JOIN ""Ptj_relGrupSuper"" C ON B.""IdGrup"" = C.""IdGrup""  WHERE C.""IdSuper"" =100 AND C.""IdRol""=3 GROUP BY B.F10003  UNION  
+SELECT B.F10003 FROM ""relGrupAngajat"" B  INNER JOIN ""Ptj_relGrupSuper"" C ON B.""IdGrup"" = C.""IdGrup""  INNER JOIN ""F100Supervizori"" D ON D.F10003 = B.F10003 AND D.""IdSuper"" = (-1 * C.""IdSuper"") 
+AND ((100 * 2019 + 5) BETWEEN (nvl(100 * TO_NUMBER(TO_CHAR(D.""DataInceput"",'YYYY')) + TO_NUMBER(TO_CHAR(D.""DataInceput"",'MM')), 190000)) 
+AND (nvl(100 * TO_NUMBER(TO_CHAR(D.""DataSfarsit"",'YYYY')) + TO_NUMBER(TO_CHAR(D.""DataSfarsit"",'MM')), 210000)))  
+WHERE D.""IdUser"" =100 AND C.""IdRol""=3 GROUP BY B.F10003) X   INNER JOIN F100 A ON A.F10003=X.F10003   WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(A.F100993)  AND TRUNC(to_date('31-05-2019','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('01-05-19','DD-MM-RRRR'))>=0 GROUP BY X.F10003";
+                DataTable dtAAA = General.IncarcaDT(aaa, null);
+
+                return;
+
+
+                string dtInc = General.ToDataUniv(2019, 5, 1);
+                string dtSf = General.ToDataUniv(2019, 5, 99);
+                int an = 2019;
+                int luna = 5;
+                string zile = "";
+                string zileAs = "";
+                string strFiltruSpecial = "";
+                string strFiltru = @" AND A.F10003 IN (SELECT X.F10003 FROM (  SELECT B.f10003 FROM ""relGrupAngajat"" B  INNER JOIN ""Ptj_relGrupSuper"" C ON B.""IdGrup"" = C.""IdGrup""  WHERE C.""IdSuper"" =100 AND C.""IdRol""=3 GROUP BY B.F10003  UNION  SELECT B.F10003 FROM ""relGrupAngajat"" B  INNER JOIN ""Ptj_relGrupSuper"" C ON B.""IdGrup"" = C.""IdGrup""  INNER JOIN ""F100Supervizori"" D ON D.F10003 = B.F10003 AND D.""IdSuper"" = (-1 * C.""IdSuper"") AND (100 * 2019 + 5 BETWEEN nvl(100 * EXTRACT(year from D.""DataInceput"") + extract(month from D.""DataInceput""), 190000) AND nvl(100 * EXTRACT(year from D.""DataSfarsit"") + EXTRACT(month from D.""DataSfarsit""), 210000))  WHERE D.""IdUser"" =100 AND C.""IdRol""=3 GROUP BY B.F10003) X   INNER JOIN F100 A ON A.F10003=X.F10003   WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(A.F100993)  AND TRUNC(to_date('31-05-2019','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('01-05-19','DD-MM-RRRR'))>=0 GROUP BY X.F10003)";
+
+
+                for (int i = 1; i <= DateTime.DaysInMonth(2019, 5); i++)
+                {
+                    string strZi = "[" + an + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "]";
+                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "'";
+                    zile += ", " + strZi;
+                    zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";
+                }
+
+                string strSql = $@"with ""Ptj_Intrari_2"" as (select * from ""Ptj_Intrari"" A WHERE 1=1  {strFiltruSpecial})
+                                SELECT A.*,
+                                (SELECT LISTAGG(',Ziua' || CASE WHEN Y.""Zi"" <= X.F10023 THEN TO_CHAR(EXTRACT(DAY FROM Y.""Zi"")) END) WITHIN GROUP (ORDER BY X.F10003)
+                                FROM F100 X
+                                INNER JOIN ""tblZile"" Y ON {dtInc} <= Y.""Zi"" AND Y.""Zi"" <= {dtSf}
+                                WHERE X.F10003 = A.F10003
+                                ) AS ""ZileLucrate""
+                                FROM (
+                                SELECT COALESCE(3,1) AS ""IdRol"", st.""Denumire"" AS ""StarePontaj"", nvl(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"", A.F100901, {dtInc}  AS ""ZiuaInc"", 
+                                TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"",  A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", C.""Id"" AS ""IdContract"", 
+                                Y.""Norma"", Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
+                                C.""Denumire"" AS ""DescContract"", NVL(C.""OreSup"",0) AS ""OreSup"", NVL(C.""Afisare"",1) AS ""Afisare"", 
+                                B.F100958, B.F100959,
+                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062,
+                                NVL(K.""Culoare"",'#FFFFFFFF') AS ""Culoare"", K.""Denumire"" AS ""StareDenumire"",
+                                A.F10078 AS ""Angajator"", DR.F08903 AS ""TipContract"", 
+                                (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
+                                CA.F72404 AS ""CategAngajat"", 
+                                ""DamiNorma""(X.F10003, {dtSf}) AS ""AvansNorma"", 
+                                CASE WHEN ""Norma"" <> ""DamiNorma""(X.F10003, {dtSf}) THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND EXTRACT(YEAR FROM F70406)={an} AND EXTRACT(MONTH FROM F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS ""AvansData"",
+                                L.F06205, Fct.F71804 AS ""Functie"",                                
+                                X.*
+                                FROM ""Ptj_Cumulat"" X 
+                                LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
+                                left join (SELECT * FROM ""SituatieZileAbsente"" WHERE ""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An""
+                                left join ""SituatieZLP"" zlp on zlp.F10003 = x.F10003 and zlp.""An"" = x.""An""
+                                INNER JOIN (SELECT F10003 {zileAs} FROM 
+                                (SELECT F10003, ""ValStr"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf})  source  
+                                PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                                ) pvt ON X.F10003=pvt.F10003
+                                LEFT JOIN F100 A ON A.F10003=X.F10003 
+                                LEFT JOIN F1001 B ON A.F10003=B.F10003 
+                                LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari_2"" R WHERE EXTRACT(YEAR FROM R.""Ziua"")= {an} AND EXTRACT(MONTH FROM R.""Ziua"")= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
+                                LEFT JOIN ""Ptj_Intrari_2"" Y ON A.F10003=Y.F10003 AND Y.""Ziua""=Q.""ZiuaMin""
+                                LEFT JOIN ""Ptj_tblStariPontaj"" K ON K.""Id"" = NVL(X.""IdStare"",1) 
+                                LEFT JOIN ""Ptj_Contracte"" C on C.""Id"" = Y.""IdContract""
+                                LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
+                                LEFT JOIN F724 CA ON A.F10061 = CA.F72402  
+
+							    LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
+							    LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304
+							    LEFT JOIN F004 S4 ON Y.F10005 = S4.F00405
+
+							    LEFT JOIN F005 H ON Y.F10006 = H.F00506
+							    LEFT JOIN F006 I ON Y.F10007 = I.F00607
+
+							    LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
+                                LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+
+                                LEFT JOIN F062 L ON Y.""F06204Default""=L.F06204
+
+                                LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
+
+                                WHERE X.""An""= {an} AND X.""Luna"" = {luna}
+                                ORDER BY ""AngajatNume"") A
+                                WHERE 1=1  {strFiltru}";
+
+                DataTable dt = General.IncarcaDT(strSql, null);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
     }

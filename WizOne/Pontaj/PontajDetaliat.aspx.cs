@@ -675,7 +675,10 @@ namespace WizOne.Pontaj
                 string[] arrVal = Constante.lstValuri.Split(new char[] { ';' },StringSplitOptions.RemoveEmptyEntries);
                 for(int i = 0; i < arrVal.Length - 1; i++)
                 {
-                    valTmp += $@",CONVERT(datetime,DATEADD(minute, P.""{arrVal[i]}"", '')) AS ""ValTmp{arrVal[i].Replace("Val","")}"" ";
+                    if (Constante.tipBD == 1)
+                        valTmp += $@",CONVERT(datetime,DATEADD(minute, P.""{arrVal[i]}"", '')) AS ""ValTmp{arrVal[i].Replace("Val","")}"" ";
+                    else
+                        valTmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + P.""{arrVal[i]}""/1440 AS ""ValTmp{arrVal[i].Replace("Val", "")}"" ";
                 }
 
                 //Schimbam IdAuto in Cheia si modificam valoarea cu ziua cand este pontaj pe zi si cu Marca cand este pontaj pe angajat pentru a putea dezactiva valurile pe care nu avem voie sa pontam
@@ -700,39 +703,34 @@ namespace WizOne.Pontaj
                             WHERE Z.F10003 = P.F10003 AND Z.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= Z.""DataSfarsit"" AND Z.""IdStare"" = 3
                             AND Z.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre"" = 1) AND COALESCE(Y.""NuTrimiteInPontaj"", 0) = 0) = 0 THEN 0 ELSE 1 END AS ""VineDinCereri"", 
                             A.F10022, A.F10023,
-                            (SELECT COALESCE(A.""OreInVal"",'') + ';'
-                            FROM ""Ptj_tblAbsente"" a
-                            INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
+                            (SELECT LISTAGG(A.""OreInVal"", ',') WITHIN GROUP (ORDER BY A.""OreInVal"") || ';' AS ""OreInVal""
+                            FROM(SELECT * FROM ""Ptj_tblAbsente"" ORDER BY ""OreInVal"") a INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
                             INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
                             WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
                             (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
                             ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
                             ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
                             P.""ZiLibera"" = COALESCE(B.SL,0)) 
-                            GROUP BY A.""OreInVal""
-                            ORDER BY A.""OreInVal""
-                            FOR XML PATH ('')) AS ""ValActive"",
+                            GROUP BY A.""OreInVal"") AS ""ValActive"",
 
 
-							(SELECT COALESCE(A.""Coloana"",'') + ';'
+							(SELECT LISTAGG(A.""Coloana"", ',') WITHIN GROUP (ORDER BY A.""Coloana"") || ';'
                             FROM(
-                            SELECT ""Coloana"" FROM ""Ptj_tblAdmin"" WHERE SUBSTRING(""Coloana"", 1, 3) = 'Val' AND ""Coloana"" NOT IN('ValAbs', 'ValStr') AND COALESCE(""Blocat"", 0) = 1
+                            SELECT ""Coloana"" FROM ""Ptj_tblAdmin"" WHERE SUBSTR(""Coloana"", 1, 3) = 'Val' AND ""Coloana"" NOT IN('ValAbs', 'ValStr') AND COALESCE(""Blocat"", 0) = 1
                             UNION
                             SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
                             FROM ""Securitate"" A
                             INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
                             UNION
                             SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
                             FROM ""Securitate"" A
-                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
                             ) A
-                            GROUP BY A.""Coloana""
-                            ORDER BY A.""Coloana""
-                            FOR XML PATH('')) AS ""ValSecuritate"",
+                            GROUP BY A.""Coloana"") AS ""ValSecuritate"",
 
 
-	                        (select ',' + X.""DenumireScurta"" + '=' + X.""Denumire"" from ( 
+	                        (select  LISTAGG(X.""DenumireScurta"" + '=' + X.""Denumire"", ',') WITHIN GROUP (ORDER BY X.""Id"") from ( 
                             select a.""Id"", b.""IdContract"", c.""IdRol"", a.""Id"" as ""IdAbsenta"" , b.ZL as ""ZileSapt"", b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"", 0 AS ""Tip"" 
                             from ""Ptj_tblAbsente"" a
                             inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
@@ -740,14 +738,13 @@ namespace WizOne.Pontaj
                             WHERE A.""IdTipOre"" = 1
                             group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal""
                             ) x
-                            WHERE COALESCE(X.DenumireScurta,'') <> '' AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {idRol} AND
+                            WHERE COALESCE(X.""DenumireScurta"",'') <> '' AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {idRol} AND
                             ( (COALESCE(X.""ZileSapt"",0)=(CASE WHEN P.""ZiSapt""<6 AND P.""ZiLibera""=0 THEN 1 ELSE 0 END) AND COALESCE(X.""ZileSapt"",0) <> 0)
                             OR (COALESCE(X.S,0) = (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) AND COALESCE(X.S,0) <> 0)
                             OR (COALESCE(X.D,0) = (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) AND COALESCE(X.D,0) <> 0)
 							OR (COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 1 THEN 1 ELSE 0 END) AND COALESCE(X.SL,0) <> 0))
                             GROUP BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
-                            ORDER BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
-                            FOR XML PATH ('')) AS ""ValAbsente"",
+                            ) AS ""ValAbsente"",
 
                             CASE WHEN (
                             CASE WHEN {idRol} = 3 THEN 1 ELSE 
@@ -758,10 +755,10 @@ namespace WizOne.Pontaj
                             THEN 1 ELSE 0 END AS ""DrepturiModif"", 
                             Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"",
                             CASE WHEN 
-							    (SELECT COUNT(*) FROM Ptj_Cereri X
-                                INNER JOIN Ptj_tblAbsente Y ON X.IdAbsenta=Y.Id
-                                WHERE X.DataInceput <= P.Ziua AND P.Ziua <= X.DataSfarsit AND Y.DenumireScurta=P.ValStr AND
-                                X.F10003=P.F10003 AND X.IdStare=3 AND Y.IdTipOre=1 AND COALESCE(Y.NuTrimiteInPontaj,0) != 1) = 0
+							    (SELECT COUNT(*) FROM ""Ptj_Cereri"" X
+                                INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
+                                WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta""=P.""ValStr"" AND
+                                X.F10003=P.F10003 AND X.""IdStare""=3 AND Y.""IdTipOre""=1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
                             THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
@@ -780,9 +777,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
 
-                            
-
-                            WHERE CONVERT(date,P.""Ziua"") <= A.F10023
+                            WHERE CAST(P.""Ziua"" AS date) <= A.F10023
                             {filtru}
                             ORDER BY A.F10003, {General.TruncateDateAsString("P.\"Ziua\"")}";
 

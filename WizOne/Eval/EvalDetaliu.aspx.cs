@@ -2818,7 +2818,7 @@ namespace WizOne.Eval
                         suma += (nota == null ? 0 : nota.Nota);
                         cnt++;
                     }
-                    medie = (suma / cnt) * 0.2;
+                    medie = (Convert.ToDouble(suma) / Convert.ToDouble(cnt)) * 0.2;
                 
 
                     Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Id == clsCompetenteAngajat.IdLinieQuiz + 1 && p.IdQuiz == clsCompetenteAngajat.IdQuiz).FirstOrDefault();

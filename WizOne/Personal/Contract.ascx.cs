@@ -49,7 +49,7 @@ namespace WizOne.Personal
             ASPxTextBox txtVechCarteMuncaAni = DataList1.Items[0].FindControl("txtVechCarteMuncaAni") as ASPxTextBox;
             ASPxTextBox txtVechCarteMuncaLuni = DataList1.Items[0].FindControl("txtVechCarteMuncaLuni") as ASPxTextBox;
 
-            if (ds.Tables[1].Rows[0]["F100643"] != null && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 2)
+            if (ds.Tables[1].Rows[0]["F100643"] != null && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
             {
                 txtVechCompAni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(0, 2);
                 txtVechCompLuni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(2, 2);
@@ -60,7 +60,7 @@ namespace WizOne.Personal
                 txtVechCompLuni.Text = "00";
             }
 
-            if (ds.Tables[1].Rows[0]["F100644"] != null && ds.Tables[1].Rows[0]["F100644"].ToString().Length >= 2)
+            if (ds.Tables[1].Rows[0]["F100644"] != null && ds.Tables[1].Rows[0]["F100644"].ToString().Length >= 4)
             {
                 txtVechCarteMuncaAni.Text = ds.Tables[1].Rows[0]["F100644"].ToString().Substring(0, 2);
                 txtVechCarteMuncaLuni.Text = ds.Tables[1].Rows[0]["F100644"].ToString().Substring(2, 2);

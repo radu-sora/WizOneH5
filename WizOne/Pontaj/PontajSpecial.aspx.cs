@@ -292,12 +292,7 @@ namespace WizOne.Pontaj
 
 
                                 sqlSDSL += "OR (\"Ziua\" = " + data1 + " AND F10003 IN (" + lista1 + ")) ";
-
-                                data += ",";
-                                if (Constante.tipBD == 1)
-                                    data += " CONVERT(DATETIME, '" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 103) ";
-                                else
-                                    data += " TO_DATE('" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 'dd/mm/yyyy') ";
+                            
                             }
 
                         }
@@ -311,15 +306,18 @@ namespace WizOne.Pontaj
                         }
                     }
 
-                    data = data.Substring(1);
-
                     if (Constante.tipBD == 1)
                         cond = " ISNUMERIC(\"ValStr\") = 1 ";
                     else
                         cond = " TRIM(TRANSLATE(\"ValStr\",'0123456789', ' ')) is null ";
 
-                    string sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + sablon[i] + "' WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                    string sql = "";
+                    if (data.Length > 0)
+                    {
+                        data = data.Substring(1);
 
+                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + sablon[i] + "' WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                    }
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);

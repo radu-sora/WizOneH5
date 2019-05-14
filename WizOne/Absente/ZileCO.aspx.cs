@@ -124,6 +124,14 @@ namespace WizOne.Absente
                 dr["USER_NO"] = Session["UserId"] ?? DBNull.Value;
                 dr["TIME"] = DateTime.Now;
 
+                int idAuto = 1;
+                if (Constante.tipBD == 1)
+                    idAuto = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                else
+                    idAuto = Dami.NextId("Ptj_tblZileCO");
+
+                dr["IdAuto"] = idAuto;
+
                 dt.Rows.Add(dr);
                 e.Cancel = true;
                 grDate.CancelEdit();
@@ -448,7 +456,7 @@ namespace WizOne.Absente
             {
                 string strSql = "";
 
-                strSql = $@"SELECT A.F10003, A.F10003 AS ""Nume"", ""An"", ""Cuvenite"", ""SoldAnterior"", ""Efectuate"", ""CuveniteAn"", A.USER_NO, A.TIME FROM ""Ptj_tblZileCO"" A
+                strSql = $@"SELECT A.F10003, A.F10003 AS ""Nume"", ""An"", ""Cuvenite"", ""SoldAnterior"", ""Efectuate"", ""CuveniteAn"", A.USER_NO, A.TIME, A.""IdAuto"" FROM ""Ptj_tblZileCO"" A
                         INNER JOIN F100 B ON A.F10003=B.F10003
                         WHERE A.""An""={Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year))}";
 
@@ -475,12 +483,12 @@ namespace WizOne.Absente
                 }
 
                 DataTable dt = General.IncarcaDT(strSql, null);
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["An"] };
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
 
                 Session["InformatiaCurenta"] = dt;
 
                 grDate.DataSource = Session["InformatiaCurenta"];
-                grDate.KeyFieldName = "F10003; An";
+                grDate.KeyFieldName = "IdAuto";
                 grDate.DataBind();
             }
             catch (Exception ex)

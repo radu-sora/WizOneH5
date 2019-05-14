@@ -142,7 +142,7 @@
                                         <ValidationSettings ErrorDisplayMode="ImageWithTooltip" />
                                     </PropertiesTextEdit>
                                 </dx:GridViewDataTextColumn>
-                                
+                                <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" />
                                 <dx:GridViewCommandColumn Width="50px" ShowDeleteButton="true" ShowEditButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                             </Columns>
 

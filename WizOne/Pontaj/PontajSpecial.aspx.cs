@@ -112,7 +112,17 @@ namespace WizOne.Pontaj
                     }
                     DataTable dt = Session["PtjSpecial_Sabloane"] as DataTable;
                     cmbSablon.DataSource = dt;
-                    cmbSablon.DataBind();                   
+                    cmbSablon.DataBind();
+
+                    if (cmbNrZileSablon.Value != null)
+                    {
+                        for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                        {
+                            ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                            if (tx != null)                            
+                                tx.Visible = true;                                                            
+                        }
+                    }
                 }
 
                 cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003", null);
@@ -282,6 +292,12 @@ namespace WizOne.Pontaj
 
 
                                 sqlSDSL += "OR (\"Ziua\" = " + data1 + " AND F10003 IN (" + lista1 + ")) ";
+
+                                data += ",";
+                                if (Constante.tipBD == 1)
+                                    data += " CONVERT(DATETIME, '" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 103) ";
+                                else
+                                    data += " TO_DATE('" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 'dd/mm/yyyy') ";
                             }
 
                         }

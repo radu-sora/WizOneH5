@@ -20,6 +20,7 @@ namespace WizOne.Reports
         int spatiuVert = 10;
         int pozY = 0;
         int user_id = 1;
+        int idClient = 1;
         public Evaluare()
         {
             InitializeComponent();
@@ -52,7 +53,7 @@ namespace WizOne.Reports
                     if (arr.Length > 3 && arr[3] != "") super = arr[3];
                     if (arr.Length > 4 && arr[4] != "") finalizat = Convert.ToInt32(arr[4]);
                 }
-
+                                             
                 string sql = "SELECT MAX(\"Pozitie\") FROM \"Eval_RaspunsIstoric\" WHERE \"IdQuiz\" = " + idQuiz + " AND F10003 = " + f10003;
                 DataTable dtSuper = General.IncarcaDT(sql, null);
                 if (finalizat == 1)
@@ -61,6 +62,11 @@ namespace WizOne.Reports
                     if (dtSuper != null && dtSuper.Rows.Count > 0 && dtSuper.Rows[0][0].ToString().Length > 0)
                         super = "Super" + dtSuper.Rows[0][0].ToString();
                 }
+
+                sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'IdClient'";
+                DataTable dtClient = General.IncarcaDT(sql, null);
+                if (dtClient != null && dtClient.Rows.Count > 0 && dtClient.Rows[0][0] != null && dtClient.Rows[0][0].ToString().Length > 0)
+                    idClient = Convert.ToInt32(dtClient.Rows[0][0].ToString());
 
                 //titlul raportului
                 string titlu = "";
@@ -251,7 +257,7 @@ namespace WizOne.Reports
                                                 for (int k = 0; k < dtColOb.Length; k++)
                                                 {
                                                     cols.Add(dtColOb[k]["ColumnName"].ToString());
-                                                    if (dtColOb[k]["ColumnName"].ToString() == "Calificativ")
+                                                    if (idClient != 25 && dtColOb[k]["ColumnName"].ToString() == "Calificativ")
                                                         rat.Add(1);
                                                     else
                                                         rat.Add(0);
@@ -451,8 +457,8 @@ namespace WizOne.Reports
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, "PontajDinamic", new StackTrace().GetFrame(0).GetMethod().Name);
+                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -473,6 +479,7 @@ namespace WizOne.Reports
             }
             catch (Exception ex)
             {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return lbl;
@@ -497,6 +504,7 @@ namespace WizOne.Reports
             }
             catch (Exception ex)
             {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return lbl;
@@ -547,8 +555,9 @@ namespace WizOne.Reports
 
                 tbl.AdjustSize();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return tbl;
@@ -569,8 +578,9 @@ namespace WizOne.Reports
                     ras = (dt.Rows[0]["Denumire"] != DBNull.Value ? dt.Rows[0]["Denumire"].ToString() : "").ToString();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return ras;
@@ -652,8 +662,9 @@ namespace WizOne.Reports
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -694,8 +705,9 @@ namespace WizOne.Reports
                 else
                     rasp = Convert.ToInt32(Math.Round(calc / nr, MidpointRounding.AwayFromZero));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return rasp;
@@ -718,7 +730,7 @@ namespace WizOne.Reports
                 if (descText.ToLower() == "false") descText = "Nu";
                 if (rat == 1) descText = DaMiRating(descText, nomen, entRas["IdCalificativ"].ToString());
 
-                if (Convert.ToInt32(entRas["TipData"].ToString()) == 3)   //butoane radio
+                if (entRas.Table.Columns.Contains("TipData") && Convert.ToInt32(entRas["TipData"].ToString()) == 3)   //butoane radio
                 {//Radu 07.05.2019
                     string sql = "SELECT * FROM \"Eval_tblTipValoriLinii\" WHERE \"Id\" = " + entRas["TipValoare"].ToString() + " AND \"Nota\" = " + descText;
                     DataTable dt = General.IncarcaDT(sql, null);
@@ -730,8 +742,9 @@ namespace WizOne.Reports
 
                 ras = descText;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                General.MemoreazaEroarea(ex, "Evaluare", new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return ras;

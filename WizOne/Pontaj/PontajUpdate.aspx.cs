@@ -117,7 +117,7 @@ namespace WizOne.Pontaj
                                     FROM Ptj_Intrari A
                                     INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                     ) B 
-                                    ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2} AND {0} <= A.Ziua AND A.Ziua <= {3} AND CONVERT(date,ISNULL(A.Ziua, f10023)) <> '2100-01-01'";
+                                    ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2} AND {0} <= A.Ziua AND A.Ziua <= {3} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01'";
 
                         strDel = string.Format(strDel, ziInceput, angIn, angSf, ziSfarsit);
                         ras = General.ExecutaNonQuery(strDel, null);
@@ -229,7 +229,7 @@ namespace WizOne.Pontaj
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                         ) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2} AND {0} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {3} AND TRUNC(NVL(A.""Ziua"", B.DATA_PLECARII)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY'))";
+                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2} AND {0} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {3} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-JAN-2100','DD-MON-YYYY'))";
 
                         strDel = string.Format(strDel, ziInceput, angIn, angSf, ziSfarsit);
                         ras = General.ExecutaNonQuery(strDel, null);

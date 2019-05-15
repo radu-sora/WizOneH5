@@ -681,16 +681,122 @@ namespace WizOne.Pontaj
                         valTmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + P.""{arrVal[i]}""/1440 AS ""ValTmp{arrVal[i].Replace("Val", "")}"" ";
                 }
 
-                //Schimbam IdAuto in Cheia si modificam valoarea cu ziua cand este pontaj pe zi si cu Marca cand este pontaj pe angajat pentru a putea dezactiva valurile pe care nu avem voie sa pontam
-
                 string op = "+";
                 if (Constante.tipBD == 2) op = "||";
 
+                //Florin 2019.05.15
+                //s-a inlocuit in DpreturiModif codul de mai jos
+                //(SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDateAsString("FS.\"DataInceput\"")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <=  {General.TruncateDateAsString("FS.\"DataSfarsit\"")}) = 1
 
-                //Florin 2018-07-25 am adugat filtrul CONVERT(date,P.""Ziua"") <= A.F10023
-                //Florin 2019.04.01 s-a adaugat conditia cu validitatea supervizorului pt campul DrepturiModif
 
-                string strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
+                string strSql = "";
+                if (Constante.tipBD == 1)
+                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
+                            {cheia} AS ""Cheia"", 
+                            E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
+                            L.""Denumire"" AS ""DescContract"", P.""IdContract"", M.""Denumire"" AS DescProgram, P.""IdProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
+                            CASE WHEN {General.TruncateDateAsString("A.F10022")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <= {General.TruncateDateAsString("A.F10023")} AND
+                            (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDateAsString("FS.\"DataInceput\"")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <=  {General.TruncateDateAsString("FS.\"DataSfarsit\"")}) = 1
+                            THEN 1 ELSE 0 END AS ""Activ"",  
+                            COALESCE(J.""IdStare"",1) AS ""IdStare"", K.""Culoare"" AS ""CuloareStare"", K.""Denumire"" AS ""NumeStare"", 
+                            CASE WHEN (SELECT COUNT(*) FROM ""Ptj_Cereri"" Z 
+                            INNER JOIN ""Ptj_tblAbsente"" Y ON Z.""IdAbsenta"" = Y.""Id""
+                            WHERE Z.F10003 = P.F10003 AND Z.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= Z.""DataSfarsit"" AND Z.""IdStare"" = 3
+                            AND Z.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre"" = 1) AND COALESCE(Y.""NuTrimiteInPontaj"", 0) = 0) = 0 THEN 0 ELSE 1 END AS ""VineDinCereri"", 
+                            A.F10022, A.F10023,
+                            (SELECT COALESCE(A.""OreInVal"",'') + ';'
+                            FROM ""Ptj_tblAbsente"" a
+                            INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
+                            INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
+                            WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
+                            (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
+                            ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
+                            ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
+                            P.""ZiLibera"" = COALESCE(B.SL,0)) 
+                            GROUP BY A.""OreInVal""
+                            ORDER BY A.""OreInVal""
+                            FOR XML PATH ('')) AS ""ValActive"",
+
+
+							(SELECT COALESCE(A.""Coloana"",'') + ';'
+                            FROM(
+                            SELECT ""Coloana"" FROM ""Ptj_tblAdmin"" WHERE SUBSTRING(""Coloana"", 1, 3) = 'Val' AND ""Coloana"" NOT IN('ValAbs', 'ValStr') AND COALESCE(""Blocat"", 0) = 1
+                            UNION
+                            SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
+                            FROM ""Securitate"" A
+                            INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            UNION
+                            SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
+                            FROM ""Securitate"" A
+                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            ) A
+                            GROUP BY A.""Coloana""
+                            ORDER BY A.""Coloana""
+                            FOR XML PATH('')) AS ""ValSecuritate"",
+
+
+	                        (select ',' + X.""DenumireScurta"" + '=' + X.""Denumire"" from ( 
+                            select a.""Id"", b.""IdContract"", c.""IdRol"", a.""Id"" as ""IdAbsenta"" , b.ZL as ""ZileSapt"", b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"", 0 AS ""Tip"" 
+                            from ""Ptj_tblAbsente"" a
+                            inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
+                            inner join ""Ptj_relRolAbsenta"" c on a.""Id"" = c.""IdAbsenta""
+                            WHERE A.""IdTipOre"" = 1 
+                            group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal""
+                            ) x
+                            WHERE COALESCE(X.DenumireScurta,'') <> '' AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {idRol} AND
+                            ( (COALESCE(X.""ZileSapt"",0)=(CASE WHEN P.""ZiSapt""<6 AND P.""ZiLibera""=0 THEN 1 ELSE 0 END) AND COALESCE(X.""ZileSapt"",0) <> 0)
+                            OR (COALESCE(X.S,0) = (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) AND COALESCE(X.S,0) <> 0)
+                            OR (COALESCE(X.D,0) = (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) AND COALESCE(X.D,0) <> 0)
+							OR (COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 1 THEN 1 ELSE 0 END) AND COALESCE(X.SL,0) <> 0))
+                            GROUP BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
+                            ORDER BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
+                            FOR XML PATH ('')) AS ""ValAbsente"",
+
+                            CASE WHEN (
+                            CASE WHEN {idRol} = 3 THEN 1 ELSE 
+                            CASE WHEN ({idRol} = 2 AND ((COALESCE(J.""IdStare"",1)=1 OR COALESCE(J.""IdStare"",1) = 2 OR COALESCE(J.""IdStare"",1) = 4 OR COALESCE(J.""IdStare"",1) = 6))) THEN 1 ELSE 
+                            CASE WHEN ({idRol} = 1 AND(COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
+                            END END END)=1 AND
+                            (SELECT COUNT(*)
+                            FROM Ptj_relGrupSuper BB
+                            INNER JOIN relGrupAngajat CC ON BB.IdGrup  = CC.IdGrup 
+                            INNER JOIN F100Supervizori DD ON CC.F10003 = DD.F10003 AND (-1 * BB.IdSuper)= DD.IdSuper 
+                            WHERE DD.F10003=P.F10003 AND BB.IdRol={idRol} AND DD.IdUser={Session["UserId"]}
+                            AND {General.TruncateDateAsString("DD.\"DataInceput\"")} <= {General.TruncateDateAsString("P.\"Ziua\"")} 
+                            AND {General.TruncateDateAsString("P.\"Ziua\"")} <=  {General.TruncateDateAsString("DD.\"DataSfarsit\"")}) = 1
+                            THEN 1 ELSE 0 END AS ""DrepturiModif"", 
+                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"",
+                            CASE WHEN 
+							    (SELECT COUNT(*) FROM Ptj_Cereri X
+                                INNER JOIN Ptj_tblAbsente Y ON X.IdAbsenta=Y.Id
+                                WHERE X.DataInceput <= P.Ziua AND P.Ziua <= X.DataSfarsit AND Y.DenumireScurta=P.ValStr AND
+                                X.F10003=P.F10003 AND X.IdStare=3 AND Y.IdTipOre=1 AND COALESCE(Y.NuTrimiteInPontaj,0) != 1) = 0
+                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
+                            FROM ""Ptj_Intrari"" P
+                            LEFT JOIN F100 A ON A.F10003 = P.F10003
+                            LEFT JOIN F1001 C ON A.F10003=C.F10003
+                            LEFT JOIN F002 E ON P.F10002 = E.F00202
+                            LEFT JOIN F003 F ON P.F10004 = F.F00304
+                            LEFT JOIN F004 G ON P.F10005 = G.F00405
+                            LEFT JOIN F005 H ON P.F10006 = H.F00506
+                            LEFT JOIN F006 I ON P.F10007 = I.F00607
+                            LEFT JOIN ""Ptj_Cumulat"" J ON J.F10003=A.F10003 AND J.""An""={General.FunctiiData("P.\"Ziua\"", "A")} AND J.""Luna""={General.FunctiiData("P.\"Ziua\"", "L")}
+                            LEFT JOIN ""Ptj_tblStariPontaj"" K ON COALESCE(J.""IdStare"",1) = K.""Id""
+                            LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""
+                            LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
+
+                            LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
+                            LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
+                            LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
+
+                            
+
+                            WHERE CONVERT(date,P.""Ziua"") <= A.F10023
+                            {filtru}
+                            ORDER BY A.F10003, {General.TruncateDateAsString("P.\"Ziua\"")}";
+                else
+                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
                             {cheia} AS ""Cheia"", 
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
                             L.""Denumire"" AS ""DescContract"", P.""IdContract"", M.""Denumire"" AS DescProgram, P.""IdProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
@@ -782,23 +888,6 @@ namespace WizOne.Pontaj
                             ORDER BY A.F10003, {General.TruncateDateAsString("P.\"Ziua\"")}";
 
 
-
-                //Florin  2019.04.25 -s-a scos bucata de mai jos pt ca dubla inregistrarile pt absentele care aveau aceeasi denumire scurta (ex:  EV)
-                //LEFT JOIN Ptj_tblAbsente AB ON AB.DenumireScurta=P.ValStr
-
-                //LEFT JOIN ""Ptj_Cereri"" M ON A.F10003=M.F10003 AND M.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= M.""DataSfarsit"" AND M.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1)
-
-                //(select ',' + '""' + CONVERT(nvarchar(10),COALESCE(X.Id,'')) + ' = ' + X.DenumireScurta + '""' from ( 
-
-                //Florin 2018.12.13
-                //s-a scos codul de mai jos din ValAbsente
-                //UNION
-                //select a.""Id"", b.""IdContract"", c.""IdRol"", a.""Id"" as ""IdAbsenta"" , b.ZL as ""ZileSapt"", b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"", 1 AS ""Tip""
-                //            from ""Ptj_tblAbsente"" a
-                //            inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
-                //            inner join ""Ptj_relRolAbsenta"" c on a.""Id"" = c.""IdAbsenta""
-                //            WHERE A.""OreInVal"" IS NOT NULL AND A.""InPontaj"" = 1
-                //            group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal""
 
                 dt = General.IncarcaDT(strSql, null);
 

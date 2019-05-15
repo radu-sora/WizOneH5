@@ -6860,10 +6860,12 @@ namespace WizOne.Module
                     }
 
 
-
-                    //Florin 2018.10.23
-                    string strInner = @"OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn
-                                        OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp";
+                    //Florin 2019.05.14
+                    string strInner = @"LEFT JOIN (SELECT F70403, MAX(DATEADD(d,-1,F70406)) DataPlecarii FROM f704 WHERE F70404=4 GROUP BY F70403) ddp ON c.F10003 = ddp.F70403 
+                                        OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn";
+                    ////Florin 2018.10.23
+                    //string strInner = @"OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn
+                    //                    OUTER APPLY dbo.DamiDataPlecare(A.F10003, A.Ziua) ddp";
                     if (Dami.ValoareParam("TipCalculDate") == "2")
                     {
                         strInner =
@@ -6883,7 +6885,7 @@ namespace WizOne.Module
                                         LEFT JOIN HOLIDAYS B ON A.Ziua=B.DAY
                                         {5}
                                         WHERE YEAR(A.""Ziua"")={0} AND MONTH(A.""Ziua"")={1} AND (A.""ValStr"" IS NULL OR RTRIM(A.""ValStr"") = '') AND F06204=-1 
-                                        AND CONVERT(date, A.Ziua) <= COALESCE(CONVERT(date, ddp.DataPlecare),'2100-01-01')
+                                        AND CONVERT(date, A.Ziua) <= COALESCE(CONVERT(date, ddp.DataPlecarii),C.F10023)
                                         {2} {3} {4}";
 
                     strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruZile.Replace("X.", "A."), strInner);

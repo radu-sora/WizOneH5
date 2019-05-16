@@ -1,15 +1,19 @@
-﻿using DevExpress.Web;
-using DevExpress.Web.Data;
-using System;
-using System.ComponentModel;
-using System.Data;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using WizOne.Module;
+using System.Data;
+using DevExpress.Web.Data;
+using System.ComponentModel;
+using DevExpress.Web;
 
 namespace WizOne
 {
-    public partial class WebForm1 : System.Web.UI.Page
+    public partial class WebForm2 : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -17,21 +21,21 @@ namespace WizOne
             {
                 if (!IsPostBack)
                 {
-                    DataTable dt1 = General.IncarcaDT("Select * from tblLimbi", null);
-                    gridA.KeyFieldName = "Id";
+                    DataTable dt1 = General.IncarcaDT("Select * from tblGrupAngajati", null);
+                    gridA.KeyFieldName = "IdAuto";
                     gridA.DataSource = dt1;
                     gridA.DataBind();
                     Session["tbl1"] = dt1;
 
-                    DataTable dt2 = General.IncarcaDT("Select * from tblGrupAngajati", null);
-                    gridB.KeyFieldName = "IdAuto";
+                    DataTable dt2 = General.IncarcaDT("Select * from tblLimbi", null);
+                    gridB.KeyFieldName = "Id";
                     gridB.DataSource = dt2;
                     gridB.DataBind();
                     Session["tbl2"] = dt2;
                 }
                 else
                 {
-                    if (General.Nz(Session["tbl1"],"").ToString() != "")
+                    if (General.Nz(Session["tbl1"], "").ToString() != "")
                     {
                         gridA.DataSource = Session["tbl1"];
                         gridA.DataBind();
@@ -42,14 +46,14 @@ namespace WizOne
                         gridB.DataBind();
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
-
         }
+
 
         protected void grid1_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
         {
@@ -69,7 +73,7 @@ namespace WizOne
                 if (upd.NewValues["Denumire"] != null) row["Denumire"] = upd.NewValues["Denumire"];
             }
 
-            General.SalveazaDate(dt, "tblGrupUsers");
+            General.SalveazaDate(dt, "tblGrupAngajati");
         }
 
         protected void grid2_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
@@ -90,7 +94,7 @@ namespace WizOne
                 if (upd.NewValues["Denumire"] != null) row["Denumire"] = upd.NewValues["Denumire"];
             }
 
-            General.SalveazaDate(dt, "tblGrupAngajati");
+            General.SalveazaDate(dt, "tblLimbi");
         }
 
         protected void gridA_RowInserting(object sender, ASPxDataInsertingEventArgs e)
@@ -129,6 +133,8 @@ namespace WizOne
             ASPxGridView grid = sender as ASPxGridView;
             grid.CancelEdit();
         }
+
+
 
     }
 }

@@ -1,15 +1,19 @@
-﻿using DevExpress.Web;
-using DevExpress.Web.Data;
-using System;
-using System.ComponentModel;
-using System.Data;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using WizOne.Module;
+using System.Data;
+using DevExpress.Web.Data;
+using System.ComponentModel;
+using DevExpress.Web;
 
 namespace WizOne
 {
-    public partial class WebForm1 : System.Web.UI.Page
+    public partial class WebForm2 : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -17,7 +21,7 @@ namespace WizOne
             {
                 if (!IsPostBack)
                 {
-                    DataTable dt1 = General.IncarcaDT("Select * from tblLimbi", null);
+                    DataTable dt1 = General.IncarcaDT("Select * from tblGrupUsers", null);
                     gridA.KeyFieldName = "Id";
                     gridA.DataSource = dt1;
                     gridA.DataBind();
@@ -28,10 +32,16 @@ namespace WizOne
                     gridB.DataSource = dt2;
                     gridB.DataBind();
                     Session["tbl2"] = dt2;
+
+                    //DataTable dt3 = General.IncarcaDT("Select * from tblGrupAngajati", null);
+                    //grCC.KeyFieldName = "Id";
+                    //grCC.DataSource = dt3;
+                    //grCC.DataBind();
+
                 }
                 else
                 {
-                    if (General.Nz(Session["tbl1"],"").ToString() != "")
+                    if (General.Nz(Session["tbl1"], "").ToString() != "")
                     {
                         gridA.DataSource = Session["tbl1"];
                         gridA.DataBind();
@@ -42,14 +52,14 @@ namespace WizOne
                         gridB.DataBind();
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
-
         }
+
 
         protected void grid1_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
         {
@@ -129,6 +139,8 @@ namespace WizOne
             ASPxGridView grid = sender as ASPxGridView;
             grid.CancelEdit();
         }
+
+
 
     }
 }

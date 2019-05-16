@@ -532,7 +532,9 @@ namespace WizOne.Pagini
                             return;
                     }
 
-                    dt = General.IncarcaDT(strSql, null);
+                    if (strSql != "")
+                        dt = General.IncarcaDT(strSql, null);
+
                     cmbAdr.DataSource = dt;
                     cmbAdr.DataBindItems();
                 }

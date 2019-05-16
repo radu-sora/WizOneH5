@@ -146,6 +146,12 @@ namespace WizOne.Pontaj
                 cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
                 cmbBirou.DataBind();
 
+                cmbCateg.DataSource = General.IncarcaDT("SELECT F72402, F72404 FROM F724", null);
+                cmbCateg.DataBind();
+
+                cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
+                cmbCtr.DataBind();
+
                 IncarcaPopUp();
 
     
@@ -372,7 +378,8 @@ namespace WizOne.Pontaj
                 cmbDept.Value = null;
                 cmbSubDept.Value = null;
                 cmbBirou.Value = null;
-           
+                cmbCtr.Value = null;
+                cmbCateg.Value = null;
 
                 cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
                 cmbDept.DataBind();
@@ -576,7 +583,7 @@ namespace WizOne.Pontaj
                 grDate.KeyFieldName = "F10003";
 
                 DataTable dt = GetF100NumeCompletPontajSpecial(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99),
-                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99));
+                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), Convert.ToInt32(cmbCateg.Value ?? -99));
                 //dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
                 grDate.DataSource = dt;
                 Session["InformatiaCurenta_PS"] = dt;
@@ -591,7 +598,7 @@ namespace WizOne.Pontaj
             }
         }
 
-        public DataTable GetF100NumeCompletPontajSpecial(int idUser, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idAngajat = -99)
+        public DataTable GetF100NumeCompletPontajSpecial(int idUser, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99)
         {
             DataTable dt = new DataTable();
 
@@ -605,7 +612,8 @@ namespace WizOne.Pontaj
                 string strSql = @"SELECT Y.* FROM(
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
                                 A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025,
-                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"" 
+                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
+                                A.F10061, A.F10062
 
                                 FROM ""relGrupAngajat"" B                                
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
@@ -618,14 +626,15 @@ namespace WizOne.Pontaj
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506                                
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607                                
                                 LEFT JOIN F007 K ON X.F100958 = K.F00708  
-                                LEFT JOIN F008 L ON X.F100959 = L.F00809  
+                                LEFT JOIN F008 L ON X.F100959 = L.F00809                                 
                                 WHERE C.""IdSuper"" = {1}
 
                                 UNION
 
                                 SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
                                 A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  ,
-                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"" 
+                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
+                                A.F10061, A.F10062
 
                                 FROM ""relGrupAngajat"" B                                
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
@@ -643,10 +652,11 @@ namespace WizOne.Pontaj
                                 WHERE J.""IdUser"" = {1}
   
                                                            
-                                ) Y ";
+                                ) Y 
+                                {2}    ";
 
 
-                string tmp = "", cond = "";
+                string tmp = "", cond = "", condCtr= "";
 
                 if (idSubcomp != -99)
                 {
@@ -693,6 +703,25 @@ namespace WizOne.Pontaj
                         cond += " AND " + tmp;
                 }
 
+                if (idCtr != -99)
+                {
+                    condCtr = " LEFT JOIN \"F100Contracte\" Ctr ON Ctr.F10003 = Y.F10003  ";                        
+                    tmp = string.Format("  \"DataInceput\" <= {0} AND {0} <= \"DataSfarsit\" AND \"IdContract\" = {1}", (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), idCtr);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idCateg != -99)
+                {
+                    tmp = string.Format("  (Y.F10061 = {0} OR Y.F10062 = {0})", idCateg);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
                 if (cond.Length <= 0)
                     cond = " WHERE (Y.F10025 = 0 OR Y.F10025 = 999) ";
                 else
@@ -700,7 +729,7 @@ namespace WizOne.Pontaj
 
                 strSql += cond;
 
-                strSql = string.Format(strSql, op, idUser);
+                strSql = string.Format(strSql, op, idUser, condCtr);
 
                 dt = General.IncarcaDT(strSql, null);
 

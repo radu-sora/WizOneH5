@@ -58,6 +58,15 @@ namespace WizOne.Tactil {
         protected global::DevExpress.Web.ASPxGridView grDate;
         
         /// <summary>
+        /// btnPrint control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnPrint;
+        
+        /// <summary>
         /// btnDelete control.
         /// </summary>
         /// <remarks>

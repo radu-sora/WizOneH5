@@ -423,7 +423,7 @@ namespace WizOne.Eval
         {
             try
             {
-                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdQuiz", "F10003", "Pozitie", "Finalizat", "CategorieQuiz" }) as object[];
+                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdQuiz", "F10003", "PozitiePeCircuit", "Finalizat", "CategorieQuiz" }) as object[];
                 if (obj == null || obj.Count() == 0)
                 {
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata1");
@@ -442,7 +442,7 @@ namespace WizOne.Eval
                     return;
                 }
 
-                if (Convert.ToInt32((obj[2] ?? 0).ToString()) < 2)
+                if (obj[2] == null || obj[2].ToString().Length <= 0 || Convert.ToInt32(obj[2].ToString()) < 2)
                 {
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica starea deoarece chestionarul este pe prima pozitie!");
                     return;

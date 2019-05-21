@@ -26,6 +26,16 @@
             popGen.Show();
         }
 
+
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie !", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;        
+            }
+        }
     </script>
 </asp:Content>
 
@@ -35,8 +45,8 @@
             <td align="left">
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
-            <td align="right">
-                <dx:ASPxButton ID="btnModif" ClientInstanceName="btnModif" ClientIDMode="Static" runat="server" Text="Modifica stare" AutoPostBack="false" oncontextMenu="ctx(this, event)" Visible="false" >
+            <td align="right">     
+                <dx:ASPxButton ID="btnModif" ClientInstanceName="btnModif" ClientIDMode="Static" runat="server" Text="Modifica stare" AutoPostBack="false" oncontextMenu="ctx(this, event)"  >
                     <ClientSideEvents Click="function(s, e) {
                         grDate.PerformCallback('btnModif');
                     }" />
@@ -136,7 +146,7 @@
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="true" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
-                    <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" />
+                    <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="OnEndCallback"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="60px" VisibleIndex="0" ButtonType="Image" ShowEditButton="true" Caption=" " Name="butoaneGrid">
                             <CustomButtons>
@@ -169,6 +179,10 @@
                         <dx:GridViewDataTextColumn FieldName="IdQuiz" Name="IdQuiz" Caption="IdQuiz" Visible="false" Width="50px" ReadOnly="true" />   
                         <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare" ReadOnly="true" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="Pozitie" Name="Pozitie" Caption="Pozitie" ReadOnly="true" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="PozitiePeCircuit" Name="PozitiePeCircuit" Caption="PozitiePeCircuit" ReadOnly="true" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="F10003" ReadOnly="true" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="Finalizat" Name="Finalizat" Caption="Finalizat" ReadOnly="true" Visible="false" />
+                        <dx:GridViewDataTextColumn FieldName="CategorieQuiz" Name="CategorieQuiz" Caption="CategorieQuiz" ReadOnly="true" Visible="false" />
                     </Columns>
 
                     <Templates>

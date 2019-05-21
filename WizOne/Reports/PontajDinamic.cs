@@ -32,6 +32,8 @@ namespace WizOne.Reports
             this.ExportOptions.Xls.TextExportMode = DevExpress.XtraPrinting.TextExportMode.Value;
             this.ExportOptions.Xlsx.TextExportMode = DevExpress.XtraPrinting.TextExportMode.Value;
 
+            TopMargin.HeightF = 149.25f;
+
         }
 
         private void IncarcaDate()

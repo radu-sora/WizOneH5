@@ -46,22 +46,9 @@
             {
                 case "btnDelete":
                     grDate.GetRowValues(e.visibleIndex, 'IdStare', GoToDeleteMode);
-                    break;
-                case "btnPlanif":
-                    grDate.PerformCallback("btnPlanif;0");
-                    break;
-                case "btnIstoric":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
-                    break;
-                case "btnDivide":
-                    grDate.GetRowValues(e.visibleIndex, 'Id;IdStare;DataInceput;DataSfarsit', GoToDivide);
-                    //popUpDivide.Show();
-                    break;
-                case "btnCerere":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToCerereMode);
-                    break;
-                case "btnAtasament":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
+                    break;    
+                case "btnPrint":
+                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToPrintMode);
                     break;
             }
         }
@@ -115,8 +102,8 @@
             window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=1&tbl=1&id=' + Value, '_blank ')
         }
 
-        function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=1&id=' + Value, '_blank ')
+        function GoToPrintMode(Value) {
+            grDate.PerformCallback("btnPrint;" + Value);
         }
 
         function CloseDeferedWindow() {
@@ -274,6 +261,9 @@
                     <Columns>
                         <dx:GridViewCommandColumn Width="160px" VisibleIndex="1" ButtonType="Image" ShowEditButton="true" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnPrint">
+                                    <Image ToolTip="Imprima" Url="~/Fisiere/Imagini/Icoane/print.png" />
+                                </dx:GridViewCommandColumnCustomButton>
                                 <dx:GridViewCommandColumnCustomButton ID="btnDelete">
                                     <Image ToolTip="Anulare" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
                                 </dx:GridViewCommandColumnCustomButton>
@@ -298,6 +288,8 @@
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="Nr. zile" ReadOnly="true" Width="70px" VisibleIndex="9" />                        
                         <dx:GridViewDataTextColumn FieldName="NrOre" Name="NrOre" Caption="Nr. ore" ReadOnly="true" Width="70px" VisibleIndex="10" />
+                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="11" />
+
 
                     </Columns>    
                     

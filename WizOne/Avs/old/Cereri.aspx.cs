@@ -52,8 +52,6 @@ namespace WizOne.Avs
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
 
-                var ert = cmb1Nou.Value;
-
                 if (!IsPostBack)
                 {
                     //txtTitlu.Text = (Session["Titlu"] ?? "").ToString();
@@ -3042,23 +3040,6 @@ namespace WizOne.Avs
                 SetDataRevisal(2, dataMod, Convert.ToInt32(e.GetListSourceFieldValue("IdAtribut").ToString()), out data);
 
                 e.Value = data;
-            }
-        }
-
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (SalveazaDate())
-                {
-                    Session["Avs_MarcaFiltru"] = cmbAngFiltru.SelectedIndex;
-                    Session["Avs_AtributFiltru"] = cmbAtributeFiltru.SelectedIndex;
-                    IncarcaGrid(Convert.ToInt32(General.Nz(cmbAng.Value, -99)));
-                }
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

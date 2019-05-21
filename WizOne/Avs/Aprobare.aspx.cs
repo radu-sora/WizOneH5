@@ -299,16 +299,22 @@ namespace WizOne.Avs
             try
             {
  
-                int f10003 = Convert.ToInt32(cmbAngFiltru.Value ?? -99);
-                int idAtr = Convert.ToInt32(cmbAtributeFiltru.Value ?? -99);
+                //int f10003 = Convert.ToInt32(cmbAngFiltru.Value ?? -99);
+                //int idAtr = Convert.ToInt32(cmbAtributeFiltru.Value ?? -99);
 
                 grDate.KeyFieldName = "Id";
 
-                //Florin 2019.03.04
-                //if (Session["Avs_Grid"] == null)
-                    dt = GetCereriAprobare(f10003, idAtr, FiltruTipStari(ref checkComboBoxStare), 0, Convert.ToInt32(Session["UserId"].ToString()));
-                //else
-                //    dt = Session["Avs_Grid"] as DataTable;
+                //Florin 2019.05.20
+
+                ////Florin 2019.03.04
+                ////if (Session["Avs_Grid"] == null)
+                //    dt = GetCereriAprobare(f10003, idAtr, FiltruTipStari(ref checkComboBoxStare), 0, Convert.ToInt32(Session["UserId"].ToString()));
+                ////else
+                ////    dt = Session["Avs_Grid"] as DataTable;
+
+                dt = GetCereriAprobare(0, Convert.ToInt32(Session["UserId"].ToString()));
+
+
                 grDate.DataSource = dt;
                 grDate.DataBind();
                 Session["Avs_Grid"] = dt;
@@ -527,7 +533,7 @@ namespace WizOne.Avs
                             msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("este respinsa") + System.Environment.NewLine;
                             continue;
                         case 3:
-                            if (tipActiune == 3 && EsteActualizata(arr[5].ToString(), arr[2].ToString(), data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString()))
+                            if ((tipActiune == 2 || tipActiune == 3) && EsteActualizata(arr[5].ToString(), arr[2].ToString(), data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString()))
                             {
                                 msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("este deja actualizata in F100") + System.Environment.NewLine;
                                 continue;
@@ -791,7 +797,8 @@ namespace WizOne.Avs
         }
 
 
-        public DataTable GetCereriAprobare(int f10003, int idAtr, string filtruStari, int tip, int idUser)
+        //public DataTable GetCereriAprobare(int f10003, int idAtr, string filtruStari, int tip, int idUser)
+        public DataTable GetCereriAprobare(int tip, int idUser)
         {
             //tip
             //0  -  Toate
@@ -804,9 +811,12 @@ namespace WizOne.Avs
                 string strSql = "";
                 string filtru = "";
 
-                if (f10003 != -99) filtru += " AND a.F10003 = " + f10003;
-                if (idAtr != -99) filtru += " AND a.\"IdAtribut\" = " + idAtr;
-                if (filtruStari != "") filtru += " AND a.\"IdStare\" IN (" + filtruStari.Replace(";", ",").Substring(0, filtruStari.Length - 1) + ")";
+                if (Convert.ToInt32(cmbAngFiltru.Value ?? -99) != -99) filtru += " AND a.F10003 = " + Convert.ToInt32(cmbAngFiltru.Value ?? -99);
+                if (Convert.ToInt32(cmbAtributeFiltru.Value ?? -99) != -99) filtru += " AND a.\"IdAtribut\" = " + Convert.ToInt32(cmbAtributeFiltru.Value ?? -99);
+
+                //Florin 2019.05.20
+                //if (filtruStari != "") filtru += " AND a.\"IdStare\" IN (" + filtruStari.Replace(";", ",").Substring(0, filtruStari.Length - 1) + ")";
+                if (checkComboBoxStare.Value != null) filtru += @" AND A.""IdStare"" IN (" + DamiStari() + ")";
 
                 if (tip == 1)
                     filtru += " AND \"IdUser\"=" + idUser + " AND (a.\"Pozitie\" + 1) = f.\"Pozitie\" ";
@@ -897,50 +907,50 @@ namespace WizOne.Avs
         }
 
 
-        public static string FiltruTipStari(ref ASPxDropDownEdit cmbTip)
-        {
-            string val = "";
+        //public static string FiltruTipStari(ref ASPxDropDownEdit cmbTip)
+        //{
+        //    string val = "";
 
-            try
-            {
-                List<object> lst = cmbTip.Value as List<object>;
-                foreach (var ele in lst)
-                {
-                    switch (ele.ToString().ToLower())
-                    {
-                        case "solicitat":
-                            val += "1;";
-                            break;
-                        case "in curs":
-                            val += "2;";
-                            break;
-                        case "aprobat":
-                            val += "3;";
-                            break;
-                        case "respins":
-                            val += "0;";
-                            break;
-                        case "anulat":
-                            val += "-1;";
-                            break;
-                        case "planificat":
-                            val += "4;";
-                            break;
-                        case "prezent":
-                            val += "5;";
-                            break;
-                        case "absent":
-                            val += "6;";
-                            break;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
+        //    try
+        //    {
+        //        List<object> lst = cmbTip.Value as List<object>;
+        //        foreach (var ele in lst)
+        //        {
+        //            switch (ele.ToString().ToLower())
+        //            {
+        //                case "solicitat":
+        //                    val += "1;";
+        //                    break;
+        //                case "in curs":
+        //                    val += "2;";
+        //                    break;
+        //                case "aprobat":
+        //                    val += "3;";
+        //                    break;
+        //                case "respins":
+        //                    val += "0;";
+        //                    break;
+        //                case "anulat":
+        //                    val += "-1;";
+        //                    break;
+        //                case "planificat":
+        //                    val += "4;";
+        //                    break;
+        //                case "prezent":
+        //                    val += "5;";
+        //                    break;
+        //                case "absent":
+        //                    val += "6;";
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
 
-            return val;
-        }
+        //    return val;
+        //}
 
 
         private string SelectAngajati()
@@ -984,6 +994,23 @@ namespace WizOne.Avs
             return strSql;
         }
 
+        private string DamiStari()
+        {
+            string val = "";
+
+            try
+            {
+                if (General.Nz(checkComboBoxStare.Value, "").ToString() != "")
+                {
+                    val = checkComboBoxStare.Value.ToString().ToLower().Replace("solicitat", "1").Replace("in curs", "2").Replace("aprobat", "3").Replace("respins", "0").Replace("anulat", "-1").Replace("planificat", "4");
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return val;
+        }
 
     }
 }

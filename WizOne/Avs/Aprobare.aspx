@@ -62,7 +62,7 @@
         }
 
 
-        var textSeparator = ";";
+        var textSeparator = ",";
         function OnListBoxSelectionChanged(listBox, args) {
             if (args.index == 0)
                 args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
@@ -176,8 +176,7 @@
                 <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare" ID="checkComboBoxStare" Width="210px" runat="server" AnimationType="None">
                     <DropDownWindowStyle BackColor="#EDEDED" />
                     <DropDownWindowTemplate>
-                        <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn"
-                            runat="server">
+                        <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
                             <Border BorderStyle="None" />
                             <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                             <Items>

@@ -347,7 +347,7 @@
                         <dx:ASPxDropDownEdit ClientInstanceName="cmbStare" ID="cmbStare" Width="150px" runat="server" AnimationType="None">
                             <DropDownWindowStyle BackColor="#EDEDED" />
                             <DropDownWindowTemplate>
-                                <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="200px">
+                                <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
                                     <Border BorderStyle="None" />
                                     <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                                     <Items>

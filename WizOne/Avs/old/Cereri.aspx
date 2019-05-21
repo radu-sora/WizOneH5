@@ -7,9 +7,8 @@
         function grDate_CustomButtonClick(s, e) {
             switch (e.buttonID) {
                 case "btnIstoric":
-                    //alert(s.GetRowKey(e.visibleIndex));
-                    //grDate.GetRowValues(s.GetFocusedRowIndex(), 'Id', GoToIstoric);
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
+                    alert(s.GetRowKey(e.visibleIndex));
+                    grDate.GetRowValues(s.GetFocusedRowIndex(), 'Id', GoToIstoric);
                     break;
             }
         }

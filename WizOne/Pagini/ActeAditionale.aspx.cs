@@ -1357,42 +1357,40 @@ namespace WizOne.Pagini
 
                 object[] obj = lst[0] as object[];
 
-                    //if(Convert.ToInt32(General.Nz(lst[1],0)) == 1)
-                    //{
-                    //    Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_Incetare");
-                    //    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&NrDecizie=" + lst[10] + "&DataDecizie=" + lst[11]);
-                    //}
-                    //else
-                    //{
-                    //    if (Convert.ToInt32(General.Nz(lst[2], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 0)) == 1)
-                    //    {
-                    //        Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_CIM");
-                    //        Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + lst[0] + "&F10003=" + lst[0] + "&Validate=0");
-                    //    }
-                    //    else
-                    //    {
-                    //        if (Convert.ToInt32(General.Nz(lst[4], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 5)) == 1 ||
-                    //            Convert.ToInt32(General.Nz(lst[6], 0)) == 1 || Convert.ToInt32(General.Nz(lst[7], 5)) == 1 ||
-                    //            Convert.ToInt32(General.Nz(lst[8], 0)) == 1 || Convert.ToInt32(General.Nz(lst[9], 5)) == 1)
-                    //        {
-                    //            Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_ModificariCIM");
-                    //            Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&DataModificare=" + lst[12]);
-                    //        }
-                    //    }
-                    //}
+                //if(Convert.ToInt32(General.Nz(lst[1],0)) == 1)
+                //{
+                //    Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_Incetare");
+                //    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&NrDecizie=" + lst[10] + "&DataDecizie=" + lst[11]);
+                //}
+                //else
+                //{
+                //    if (Convert.ToInt32(General.Nz(lst[2], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 0)) == 1)
+                //    {
+                //        Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_CIM");
+                //        Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + lst[0] + "&F10003=" + lst[0] + "&Validate=0");
+                //    }
+                //    else
+                //    {
+                //        if (Convert.ToInt32(General.Nz(lst[4], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 5)) == 1 ||
+                //            Convert.ToInt32(General.Nz(lst[6], 0)) == 1 || Convert.ToInt32(General.Nz(lst[7], 5)) == 1 ||
+                //            Convert.ToInt32(General.Nz(lst[8], 0)) == 1 || Convert.ToInt32(General.Nz(lst[9], 5)) == 1)
+                //        {
+                //            Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_ModificariCIM");
+                //            Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&DataModificare=" + lst[12]);
+                //        }
+                //    }
+                //}
+
+
+                if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
+                {
+                    MessageBox.Show("Nu exista numar si data document", MessageBox.icoWarning, "Operatie anulata");
+                    return;
+                }
+
 
                 if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
                 {
-                    if (General.Nz(obj[11],"").ToString() == "")
-                    {
-                        MessageBox.Show("Nu exista data document", MessageBox.icoWarning, "Operatie anulata");
-                        return;
-                    }
-                    if (General.Nz(obj[10], "").ToString() == "")
-                    {
-                        MessageBox.Show("Nu exista numar document", MessageBox.icoWarning, "Operatie anulata");
-                        return;
-                    }
                     DateTime ziua = Convert.ToDateTime(obj[11]);
                     paramRaport = "RaportActeAditionale_Incetare";
                     param = "&NrDecizie=" + obj[10] + "&DataDecizie=" + +ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');

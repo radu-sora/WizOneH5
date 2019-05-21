@@ -751,6 +751,8 @@
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
     <Content Include="Personal\Test.aspx" />
+    <Content Include="Personal\Test1.ascx" />
+    <Content Include="Personal\Test2.ascx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
@@ -1557,6 +1559,20 @@
     </Compile>
     <Compile Include="Personal\Test.aspx.designer.cs">
       <DependentUpon>Test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Test1.ascx.cs">
+      <DependentUpon>Test1.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Test1.ascx.designer.cs">
+      <DependentUpon>Test1.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Test2.ascx.cs">
+      <DependentUpon>Test2.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Test2.ascx.designer.cs">
+      <DependentUpon>Test2.ascx</DependentUpon>
     </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>

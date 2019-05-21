@@ -43,7 +43,8 @@
 <div>
 
         <dx:ASPxLabel  ID="lblDateAngajat" runat="server"  Text="" ></dx:ASPxLabel >	
-        <dx:ASPxPageControl ID="ASPxPageControl2" runat="server" Width="100%" ActiveTabIndex="0" TabSpacing="0px" CssClass="pcTemplates" SkinID="None" EnableViewState="false" EnableHierarchyRecreation="True" OnActiveTabChanged="ASPxPageControl2_ActiveTabChanged" OnCallback="ASPxPageControl2_Callback">
+        <dx:ASPxPageControl ID="ASPxPageControl2" runat="server" Width="100%" TabSpacing="0px" CssClass="pcTemplates" SkinID="None" 
+             EnableViewState="false" EnableHierarchyRecreation="false" OnCallback="ASPxPageControl2_Callback">
             <ClientSideEvents TabClick="OnTabClick" />
                         <TabPages>
 

@@ -313,7 +313,7 @@ namespace WizOne.Pontaj
                     cmbAng.DataSource = Session["Pontaj_Angajati"];
                     cmbAng.DataBind();
 
-                    DataTable dtert = Session["InformatiaCurenta"] as DataTable;
+                    //DataTable dtert = Session["InformatiaCurenta"] as DataTable;
 
                     if (Session["InformatiaCurenta"] != null)
                     {
@@ -783,7 +783,7 @@ namespace WizOne.Pontaj
             {
                 DateTime dtData = Convert.ToDateTime(txtAnLuna.Value);
 
-                DataTable dtErt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Cereri"" WHERE ""DataInceput"" >= " + General.ToDataUniv(dtData.Year, dtData.Month, 99), null);
+                //DataTable dtErt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Cereri"" WHERE ""DataInceput"" >= " + General.ToDataUniv(dtData.Year, dtData.Month, 99), null);
 
                 string strSql = $@"SELECT X.""IdRol"", X.""RolDenumire"" FROM ({SelectComun()}) X 
                                 WHERE X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023

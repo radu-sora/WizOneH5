@@ -197,13 +197,14 @@ namespace WizOne.ProgrameLucru
                 tabPage9.Controls.Add(ctrl9);
                 this.ASPxPageControl2.TabPages.Add(tabPage9);
 
-                TabPage tabPage10 = new TabPage();
-                tabPage10.Name = "ProgrameValuri";
-                tabPage10.Text = "Val-uri din pontaj";
-                Control ctrl10 = new Control();
-                ctrl10 = this.LoadControl(tabPage10.Name + ".ascx");
-                tabPage10.Controls.Add(ctrl10);
-                this.ASPxPageControl2.TabPages.Add(tabPage10);
+                //Florin 2019.05.21
+                //TabPage tabPage10 = new TabPage();
+                //tabPage10.Name = "ProgrameValuri";
+                //tabPage10.Text = "Val-uri din pontaj";
+                //Control ctrl10 = new Control();
+                //ctrl10 = this.LoadControl(tabPage10.Name + ".ascx");
+                //tabPage10.Controls.Add(ctrl10);
+                //this.ASPxPageControl2.TabPages.Add(tabPage10);
 
             }
             catch (Exception ex)

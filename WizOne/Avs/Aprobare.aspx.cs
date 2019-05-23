@@ -135,6 +135,7 @@ namespace WizOne.Avs
             {
                 cmbAngFiltru.Value = null;
                 cmbAtributeFiltru.Value = null;
+                checkComboBoxStare.Value = null;
 
                 IncarcaGrid();
             }
@@ -513,7 +514,7 @@ namespace WizOne.Avs
                 string comentarii = "";
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal", "Actualizat" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
@@ -557,6 +558,13 @@ namespace WizOne.Avs
                         continue;
                     }
 
+                    //Florin 2019.05.23
+                    //Nu se poate anula o cerere daca este actualizata in F100
+                    if ((tipActiune == 2 || tipActiune == 3) && Convert.ToInt32(General.Nz(arr[7], 0)) == 1)
+                    {
+                        msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Datele au fost trimise in personal") + System.Environment.NewLine;
+                        continue;
+                    }
 
                     if (Convert.ToInt32(General.Nz(arr[1], 0)) == 1 || Convert.ToInt32(General.Nz(arr[1], 0)) == 2 
                         || (Convert.ToInt32(General.Nz(arr[1], 0)) == 3 && !EsteActualizata(arr[5].ToString(), arr[2].ToString(), data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString())))
@@ -698,7 +706,7 @@ namespace WizOne.Avs
                                 sql = "UPDATE \"Avs_CereriIstoric\" SET \"DataAprobare\" = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", \"Aprobat\" = 1, \"IdStare\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare
                                     + "', USER_NO = " + idUser.ToString() + ", TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")
                                     + (dtCerIst.Rows[0]["IdUser"].ToString() != idUser.ToString() ? ", \"IdUserInlocuitor\" = " + idUser.ToString() : "")
-                                    + " WHERE \"Id\" = " + id.ToString();
+                                    + " WHERE \"Id\" = " + id.ToString() + " AND \"IdUSer\"=" + Session["UserId"];
                             }
                             else
                             {

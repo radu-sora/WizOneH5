@@ -122,13 +122,13 @@ namespace WizOne.ContracteLucru
                 tabPage3.Controls.Add(ctrl3);
                 this.ASPxPageControl2.TabPages.Add(tabPage3);
 
-                TabPage tabPage4 = new TabPage();
-                tabPage4.Name = "ContractVal";
-                tabPage4.Text = "Val-uri";
-                Control ctrl4 = new Control();
-                ctrl4 = this.LoadControl(tabPage4.Name + ".ascx");
-                tabPage4.Controls.Add(ctrl4);
-                this.ASPxPageControl2.TabPages.Add(tabPage4);
+                //TabPage tabPage4 = new TabPage();
+                //tabPage4.Name = "ContractVal";
+                //tabPage4.Text = "Val-uri";
+                //Control ctrl4 = new Control();
+                //ctrl4 = this.LoadControl(tabPage4.Name + ".ascx");
+                //tabPage4.Controls.Add(ctrl4);
+                //this.ASPxPageControl2.TabPages.Add(tabPage4);
 
                 TabPage tabPage2 = new TabPage();
                 tabPage2.Name = "ContractZilnic";

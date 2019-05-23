@@ -1670,11 +1670,11 @@ namespace WizOne.Avs
                 varSom = lst[1];
                 varCas = lst[2];
                 varNr = lst[3];
-                //scutit = lst[4];
+                scutit = lst[4];
                 varImp = lst[7];
 
-                DataTable dtTemp = General.IncarcaDT("SELECT F10026 FROM F100 WHERE F10003 = " + F10003.ToString(), null);
-                scutit = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
+                //DataTable dtTemp = General.IncarcaDT("SELECT F10026 FROM F100 WHERE F10003 = " + F10003.ToString(), null);
+                //scutit = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
 
                 //scutit = Convert.ToDecimal(txtScutitAct.EditValue ?? 0);
                 tipAng = lst[5];

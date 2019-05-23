@@ -125,6 +125,10 @@
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
                                             </dx:ASPxComboBox>
                                         </div>
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Categorie</label>
+                                            <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="F72402" TextField="F72404" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -144,11 +148,10 @@
                                             <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="150px" ValueField="F00809" TextField="F00810" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                              </dx:ASPxComboBox>
                                         </div>   
-                                         <div style="float:left; padding-right:15px;" >
-                                             <label id="Label1" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:75px;" > </label>                 
-                                             <label id="Label2" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:75px;" > </label>    
-                                             <label id="Label3" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;" > </label>  
-                                        </div>                                                                                                                                                             
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblCtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Contract</label>
+                                            <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
+                                        </div>                                                                                                                                                            
                                     </td> 
                                  </tr>
                                 <tr>

@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using DevExpress.XtraReports.UI;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -507,6 +508,31 @@ namespace WizOne.Tactil
                             break;
                         case "btnAproba":
                             btnAproba_Click(null, null);
+                            break;
+                        case "btnPrint":
+                            Session["IdCerereTactil"] = Convert.ToInt32(arr[1]);
+
+                            DataTable dt = General.IncarcaDT($@"SELECT * FROM ""tblFisiere"" WHERE ""Tabela""='Ptj_Cereri' AND ""Id""={(Session["IdCerereTactil"] ?? "0")} AND ""EsteCerere""=1", null);
+                            if (dt == null || dt.Rows.Count <= 0)
+                            {
+                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista date de afisat!");
+                            }
+                            else
+                            {
+
+                                Reports.PrintCereri dlreport = new Reports.PrintCereri();
+                                dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+                                dlreport.Margins.Top = 10;
+                                dlreport.Margins.Bottom = 10;
+                                dlreport.Margins.Left = 50;
+                                dlreport.Margins.Right = 50;
+                                dlreport.PrintingSystem.ShowMarginsWarning = false;
+                                dlreport.PrinterName = Dami.ValoareParam("NumeImprimanta", "");
+                                dlreport.ShowPrintMarginsWarning = false;
+                                dlreport.CreateDocument();
+                                ReportPrintTool pt = new ReportPrintTool(dlreport);
+                                pt.Print();
+                            }
                             break;
                     }
                 }

@@ -100,9 +100,9 @@ namespace WizOne.Eval
                 cmbRoluri.DataBind();
                 #endregion
 
-                string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
-                string sqlHr = $@"SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"" ";
-                if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) != 0) btnModif.Visible = true;
+                //string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
+                //string sqlHr = $@"SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"" ";
+                //if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) != 0) btnModif.Visible = true;
             }
             catch (Exception ex)
             {
@@ -309,7 +309,7 @@ namespace WizOne.Eval
                             break;
                         case "btnModif":
                             btnModif_Click(null, null);
-                            break;
+                            break;                       
                     }
                 }
             }
@@ -423,23 +423,63 @@ namespace WizOne.Eval
         {
             try
             {
-                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdQuiz", "F10003" }) as object[];
+                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdQuiz", "F10003", "PozitiePeCircuit", "Finalizat", "CategorieQuiz" }) as object[];
                 if (obj == null || obj.Count() == 0)
                 {
-                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata");
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata1");
+                    return;
+                }
+
+                if (obj[4] != null && obj[4].ToString() != "0")
+                {
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica starea acestui tip de chestionar!");
+                    return;
+                }
+
+                if (obj[3] != null && obj[3].ToString() == "1")
+                {
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica starea deoarece chestionarul este finalizat!");
+                    return;
+                }
+
+                if (obj[2] == null || obj[2].ToString().Length <= 0 || Convert.ToInt32(obj[2].ToString()) < 2)
+                {
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica starea deoarece chestionarul este pe prima pozitie!");
+                    return;
+                }
+
+                bool poateModifica = false;
+
+                string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
+                string sqlHr = $@"SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"" ";
+                if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) != 0) poateModifica = true;
+
+                if (!poateModifica)
+                {//cautare utilizator conectat in istoric
+                    string sql = "select  case when b.\"IdSuper\" > 0 and {0} = b.\"IdUser\" then 1 "
+                            + "  when b.\"IdSuper\" < 0 and {0} in (select a.\"IdUser\" from \"F100Supervizori\" a where a.\"IdSuper\" = -1 * b.\"IdSuper\" and a.f10003 = b.f10003) then 1 "
+                            + " else 0 end as drept from \"Eval_RaspunsIstoric\" b where \"IdQuiz = {1} and f10003 = {2} and \"Pozitie\" = 2";
+                    sql = string.Format(sql, Session["UserId"].ToString(), obj[0], obj[1]);
+                    DataTable dt = General.IncarcaDT(sql, null);
+                    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)
+                        poateModifica = true;
+                }
+
+                if (!poateModifica)
+                {
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica starea deoarece nu aveti drepturi pe acest chestionar!");
                     return;
                 }
 
                 string strSql = 
                     $@"BEGIN
 
-                    UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta""=null, ""Finalizat""=0, ""Pozitie""=(CASE WHEN ""Pozitie"" = 1 THEN ""Pozitie"" ELSE CASE WHEN ""Pozitie""=""TotalCircuit"" AND COALESCE(""Finalizat"",0) = 1 THEN ""Pozitie"" ELSE ""Pozitie""-1 END END)
-                    WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie"" >= 1 AND COALESCE(""LuatLaCunostinta"",0) <> 1;
+                    UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta""=null, ""Pozitie""=""Pozitie""-1 
+                    WHERE ""IdQuiz""=@1 AND F10003=@2 ;
                     
                     UPDATE ""Eval_RaspunsIstoric"" SET ""Aprobat""=null, ""DataAprobare""=null
                     WHERE ""IdQuiz""=@1 AND F10003=@2 AND 
-                    COALESCE((SELECT MAX(COALESCE(""Pozitie"",0)) FROM ""Eval_Raspuns"" WHERE ""IdQuiz""=@1 AND F10003=@2),0) <= ""Pozitie"" AND
-                    COALESCE((SELECT COALESCE(""LuatLaCunostinta"",0) FROM ""Eval_Raspuns"" WHERE ""IdQuiz""=@1 AND F10003=@2),0) <> 1;
+                    COALESCE((SELECT COALESCE(""Pozitie"",0) FROM ""Eval_Raspuns"" WHERE ""IdQuiz""=@1 AND F10003=@2),0) <= ""Pozitie"";
                     
                     END;";
 
@@ -447,25 +487,6 @@ namespace WizOne.Eval
 
                 grDate.DataBind();
 
-
-                //var ctx = new cnWeb();
-                //var ent = ctx.Eval_Raspuns.Where(p => p.IdQuiz == idQuiz && p.F10003 == f10003).FirstOrDefault();
-                //if ((ent.LuatLaCunostinta ?? 0) == 0 && ent.Pozitie > 1)
-                //{
-                //    ent.Pozitie -= 1;
-                //    ent.Culoare = DamiEvalCuloare(ent.Pozitie ?? 1);
-                //    ent.Finalizat = 0;
-
-                //    var entIst = ctx.Eval_RaspunsIstoric.Where(p => p.IdQuiz == idQuiz && p.F10003 == f10003 && p.Pozitie >= ent.Pozitie);
-                //    foreach (var l in entIst)
-                //    {
-                //        l.Aprobat = null;
-                //        l.DataAprobare = null;
-                //        if (l.Pozitie != 1) l.Culoare = null;
-                //    }
-
-                //    ctx.SaveChanges();
-                //}
             }
             catch (Exception ex)
             {
@@ -473,6 +494,7 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
 
 
     }

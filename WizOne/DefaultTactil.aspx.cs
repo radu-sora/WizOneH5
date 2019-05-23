@@ -69,14 +69,17 @@ namespace WizOne
                 if (valMax.Length > 0)
                     max = Convert.ToInt32(valMax);
 
-                if (txtPan1.Value.Trim().Length >= max)
+                //Radu 20.05.2019 - anumite cititoare returneaza un numar variabil de caractere
+                //if (txtPan1.Value.Trim().Length >= max)
+                //{
+                if (txtPan1.Value.Trim().Length > max)
                 {
-                    if (txtPan1.Value.Trim().Length > max)
-                    {
-                        MessageBox.Show("Cod invalid! Va rugam apropiati din nou cardul de cititor", MessageBox.icoWarning, "Atentie !");
-                        txtPan1.Value = null;
-                        txtPan1.Focus();
-                    }
+                    MessageBox.Show("Cod invalid! Va rugam apropiati din nou cardul de cititor", MessageBox.icoWarning, "Atentie !");
+                    txtPan1.Value = null;
+                    txtPan1.Focus();
+                }
+                else
+                {
                     string msg = PermisiuneConectare();
                     if (msg != "")
                     {
@@ -86,6 +89,7 @@ namespace WizOne
                     else
                         VerificaCartela();
                 }
+                //}
             }
             catch (Exception ex)
             {
@@ -108,9 +112,17 @@ namespace WizOne
                     max = Convert.ToInt32(valMax);
 
                 string cartela = txtPan1.Value;
+
+                cartela = cartela.PadLeft(max, '0');
+
                 //int lung = Convert.ToInt32(General.Nz(Dami.ValoareParam("LungimeCartela","0"),"0"));
                 //if (lung > 0 && cartela.Length >= lung) cartela = cartela.Substring(cartela.Length - lung);
-                string camp = "RIGHT(convert(varchar, '0000000000')+convert(varchar, ISNULL(D.Cartela,''))," + max +")";
+
+                string sir = "";
+                for (int i = 1; i <= max; i++)
+                    sir += "0";
+
+                string camp = "RIGHT(convert(varchar, '" + sir + "')+convert(varchar, ISNULL(D.Cartela,''))," + max +")";
                 if (Constante.tipBD == 2)
                     camp = " LPAD(D.\"Cartela\", " + cartela.Length + ", '0')";
 

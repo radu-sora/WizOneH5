@@ -121,6 +121,24 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxComboBox cmbSec;
         
         /// <summary>
+        /// lblCateg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCateg;
+        
+        /// <summary>
+        /// cmbCateg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCateg;
+        
+        /// <summary>
         /// lblDept control.
         /// </summary>
         /// <remarks>
@@ -175,31 +193,22 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxComboBox cmbBirou;
         
         /// <summary>
-        /// Label1 control.
+        /// lblCtr control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label1;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCtr;
         
         /// <summary>
-        /// Label2 control.
+        /// cmbCtr control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label2;
-        
-        /// <summary>
-        /// Label3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Label3;
+        protected global::DevExpress.Web.ASPxComboBox cmbCtr;
         
         /// <summary>
         /// lblDeLa control.

@@ -27,8 +27,6 @@ namespace WizOne.Personal
             }
             grDateTarife.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
             grDateTarife.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
-            grDateTarife.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
-            grDateTarife.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
             grDateTarife.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
 
@@ -51,38 +49,51 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            DataTable dt = new DataTable();          
-            DataSet ds = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
-            if (ds != null && ds.Tables.Contains("Tarife"))
+            DataTable dt = new DataTable();
+            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
+            if (dsCalcul != null && dsCalcul.Tables.Contains("Tarife"))
             {
-                dt = ds.Tables["Tarife"];
+                dt = dsCalcul.Tables["Tarife"];
             }
             else
             {
                 dt = new DataTable();
+                dt.Columns.Add("DenCateg", typeof(string));
+                dt.Columns.Add("DenTarif", typeof(string));
                 dt.Columns.Add("F01104", typeof(int));
                 dt.Columns.Add("F01105", typeof(int));
-                dt.TableName = "Tarife";
+                
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F01104"], dt.Columns["F01105"] };
 
-                if (ds == null)
-                    ds = new DataSet();
+                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                string sqlFinal = "";
+                string sql = "SELECT F01104, F01105, (SELECT TOP 1 b.F01107 FROM F011 b WHERE b.F01104 = a.F01104) AS \"DenCateg\", " 
+                        + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"DenTarif\" FROM F011 a ", cond = "";
 
-                ds.Tables.Add(dt);
+                if (Constante.tipBD == 2)
+                    sql = "SELECT F01104, F01105, (SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 WHERE ROWNUM = 1) AS \"DenCateg\", "
+                        + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"DenTarif\" FROM F011 a ";
+
+                for (int i = 0; i < sir.Length; i++)
+                    if (sir[i] != '0')
+                    {
+                        cond = "WHERE (a.F01104 = " + (i + 1).ToString() + " AND a.F01105 = " + sir[i] + ") ";
+                        sqlFinal += (sqlFinal.Length <= 0 ? "" : " UNION ") + sql + cond;
+                    }
+
+                if (sqlFinal.Length > 0)
+                    dt = General.IncarcaDT(sqlFinal, null);
+                dt.TableName = "Tarife";
+                if (dsCalcul == null)
+                    dsCalcul = new DataSet();
+
+                dsCalcul.Tables.Add(dt);
             }
             grDateTarife.KeyFieldName = "F01104; F01105";
-            grDateTarife.DataSource = dt;
+            grDateTarife.DataSource = dt;   
 
-            string sql = @"SELECT * FROM F011 WHERE F01105 = 1 ORDER BY F01104";
-            if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F011", "F01104") + "ORDER BY F01104 ";
-          
-            //DataTable dtGrup = General.IncarcaDT(sql, null);
-            //GridViewDataComboBoxColumn colCateg = (grDateTarife.Columns["F01104"] as GridViewDataComboBoxColumn);
-            //colCateg.PropertiesComboBox.DataSource = dtGrup;
-
-
-            Session["InformatiaCurentaPersonalCalcul"] = ds;
+            Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
 
         }
 
@@ -90,36 +101,53 @@ namespace WizOne.Personal
         protected void grDateTarife_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
             try
-            {            
+            {             
 
-                //DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                //DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
-              
-                //object[] rowComp = new object[dsCalcul.Tables["Componente"].Columns.Count];
-                //int x = 0;
-                //foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
-                //{                   
-                //    switch (col.ColumnName.ToUpper())
-                //    {
-                //        case "SUMA":
-                //            rowComp[x] = e.NewValues[col.ColumnName];
-                //            ds.Tables[1].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
-                //            break;
-                //        default:
-                //            rowComp[x] = e.NewValues[col.ColumnName];
-                //            break;
-                //    } 
-                //    x++;
-                //}
+                int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
+                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
+                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster");
+                e.NewValues["F01104"] = cb1.Value;
+                e.NewValues["DenCateg"] = cb1.Text;
+                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["DenTarif"] as GridViewDataColumn;
+                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild");
+                e.NewValues["F01105"] = cb2.Value;
+                e.NewValues["DenTarif"] = cb2.Text;
 
-                //dsCalcul.Tables["Componente"].Rows.Add(rowComp);
-                //e.Cancel = true;
-                //grDateTarife.CancelEdit();
-                //grDateTarife.DataSource = dsCalcul.Tables["Componente"];
-                //grDateTarife.KeyFieldName = "F02104";               
 
-                //Session["InformatiaCurentaPersonal"] = ds;
-                //Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
+
+                object[] row = new object[dsCalcul.Tables["Tarife"].Columns.Count];
+                int x = 0, poz = 0, val = 0;
+                foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                {
+                    row[x] = e.NewValues[col.ColumnName];
+                    if (col.ColumnName == "F01104")
+                        poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    if (col.ColumnName == "F01105")
+                        val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    x++;
+                }
+
+                dsCalcul.Tables["Tarife"].Rows.Add(row);
+                e.Cancel = true;
+                grDateTarife.CancelEdit();
+                grDateTarife.DataSource = dsCalcul.Tables["Tarife"];
+                grDateTarife.KeyFieldName = "F01104;F01105";
+
+                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                string sirNou = "";
+                for (int i = 0; i < sir.Length; i++)
+                    if (i == poz - 1)
+                        sirNou += val.ToString();
+                    else
+                        sirNou += sir[i];
+
+                ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                ds.Tables[1].Rows[0]["F10067"] = sirNou;
+
+                Session["InformatiaCurentaPersonal"] = ds;
+                Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
             }
             catch (Exception ex)
             {
@@ -130,34 +158,56 @@ namespace WizOne.Personal
         protected void grDateTarife_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             try
-            {    
-                
-                //object[] keys = new object[e.Keys.Count];
-                //for (int i = 0; i < e.Keys.Count; i++)
-                //{ keys[i] = e.Keys[i]; }
+            {
 
-                //DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                //DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
+                int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
+                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
+                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster");
+                e.NewValues["F01104"] = cb1.Value;
+                e.NewValues["DenCateg"] = cb1.Text;
+                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["DenTarif"] as GridViewDataColumn;
+                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild");
+                e.NewValues["F01105"] = cb2.Value;
+                e.NewValues["DenTarif"] = cb2.Text;
 
-                //DataRow rowComp = dsCalcul.Tables["Componente"].Rows.Find(keys);
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
 
-                //foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
-                //{
-                //    if (col.ColumnName.ToUpper() == "SUMA")
-                //    {
-                //        col.ReadOnly = false;
-                //        var edc = e.NewValues[col.ColumnName];
-                //        rowComp[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                //        ds.Tables[1].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
-                //    }
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
 
-                //}
+                DataRow row = dsCalcul.Tables["Tarife"].Rows.Find(keys);
+                int poz = 0, val = 0;
+                foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                {                  
+                    col.ReadOnly = false;
+                    var edc = e.NewValues[col.ColumnName];
+                    row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                    if (col.ColumnName == "F01104")
+                        poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    if (col.ColumnName == "F01105")
+                        val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                }
 
-                //e.Cancel = true;
-                //grDateTarife.CancelEdit();
-                //Session["InformatiaCurentaPersonal"] = ds;
-                //Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
-                //grDateTarife.DataSource = dsCalcul.Tables["Componente"];
+                e.Cancel = true;
+                grDateTarife.CancelEdit();
+
+                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                string sirNou = "";
+                for (int i = 0; i < sir.Length; i++)
+                    if (i == poz - 1)
+                        sirNou += val.ToString();
+                    else
+                        sirNou += sir[i];
+
+                ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                ds.Tables[1].Rows[0]["F10067"] = sirNou;
+
+
+                Session["InformatiaCurentaPersonal"] = ds;
+                Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
+                grDateTarife.DataSource = dsCalcul.Tables["Tarife"];
             }
             catch (Exception ex)
             {

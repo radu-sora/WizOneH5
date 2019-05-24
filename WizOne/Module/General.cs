@@ -5869,9 +5869,9 @@ namespace WizOne.Module
             try
             {
 
-                string sql = @"SELECT * FROM F011  WHERE F01104 = " + categ;
+                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ;
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ;
+                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ;
                 table = IncarcaDT(sql, null);
 
             }

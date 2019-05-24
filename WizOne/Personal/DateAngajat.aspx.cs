@@ -131,8 +131,8 @@ namespace WizOne.Personal
                         tabPage.Visible = vizibil;
                     }
 
-                    if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
-                    {//DNATA
+                    if (Dami.ValoareParam("ValidariPersonal") == "1")
+                    {
                         string[] lst = new string[5] { "DateIdentificare", "Contract", "Structura", "Adresa", "Documente" };
                         if (lst.Contains(dt.Rows[i]["Pagina"].ToString()))
                             tabPage.TabStyle.BackColor = Color.FromArgb(255, 255, 179, 128);
@@ -187,8 +187,8 @@ namespace WizOne.Personal
                 //da.Dispose();
                 //da = null;
 
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
-                {//DNATA
+                if (Dami.ValoareParam("ValidariPersonal") == "1")
+                {
                     string mesaj = "", mesajDI = "", mesajDA = "", mesajStr = "", mesajAdr = "", mesajDoc = "";
 
                     if (ds.Tables[0].Rows[0]["F10017"] == null || ds.Tables[0].Rows[0]["F10017"].ToString().Length <= 0)

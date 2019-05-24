@@ -112,8 +112,8 @@ namespace WizOne.Personal
                 HtmlGenericControl lgNume = DateIdentListView.Items[0].FindControl("lgNume") as HtmlGenericControl;
                 lgNume.InnerText = Dami.TraduCuvant("Nume si prenume");
 
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
-                {//DNATA
+                if (Dami.ValoareParam("ValidariPersonal") == "1")
+                {
                     ASPxTextBox txtCNPDI = DateIdentListView.Items[0].FindControl("txtCNPDI") as ASPxTextBox;
                     ASPxTextBox txtNume = DateIdentListView.Items[0].FindControl("txtNume") as ASPxTextBox;
                     ASPxTextBox txtPrenume = DateIdentListView.Items[0].FindControl("txtPrenume") as ASPxTextBox;

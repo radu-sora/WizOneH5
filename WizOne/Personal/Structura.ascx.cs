@@ -93,8 +93,8 @@ namespace WizOne.Personal
                     }
                 }
 
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
-                {//DNATA
+                if (Dami.ValoareParam("ValidariPersonal") == "1")
+                {
                     cmbStru.BackColor = Color.LightGray;
                     //cmbPL.BackColor = Color.LightGray;
                 }

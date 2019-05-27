@@ -749,7 +749,10 @@
     <Content Include="Pagini\MainPage.aspx" />
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
+    <Content Include="Personal\Calcul.ascx" />
+    <Content Include="Personal\Componente.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
+    <Content Include="Personal\Tarife.ascx" />
     <Content Include="Personal\Test.aspx" />
     <Content Include="Personal\Test1.ascx" />
     <Content Include="Personal\Test2.ascx" />
@@ -1544,12 +1547,33 @@
     <Compile Include="Personal\Activitati.ascx.designer.cs">
       <DependentUpon>Activitati.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Personal\Calcul.ascx.cs">
+      <DependentUpon>Calcul.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Calcul.ascx.designer.cs">
+      <DependentUpon>Calcul.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Componente.ascx.cs">
+      <DependentUpon>Componente.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Componente.ascx.designer.cs">
+      <DependentUpon>Componente.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Personal\LipsaNecesar.ascx.cs">
       <DependentUpon>LipsaNecesar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Personal\LipsaNecesar.ascx.designer.cs">
       <DependentUpon>LipsaNecesar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Tarife.ascx.cs">
+      <DependentUpon>Tarife.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Tarife.ascx.designer.cs">
+      <DependentUpon>Tarife.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Test.aspx.cs">
       <DependentUpon>Test.aspx</DependentUpon>

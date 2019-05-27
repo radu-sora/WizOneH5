@@ -89,8 +89,8 @@ namespace WizOne.Personal
                     catch (Exception) { }
                 }
 
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
-                {//DNATA
+                if (Dami.ValoareParam("ValidariPersonal") == "1")
+                {
                     lblText.Text = "Campurile insemnate cu gri sunt obligatoriu de completat";                    
                 }
 
@@ -283,6 +283,7 @@ namespace WizOne.Personal
                                     table1.PrimaryKey = new DataColumn[] { table1.Columns["F10003"] };
                                     ds.Tables.Add(table1);
                                     Session["InformatiaCurentaPersonal"] = ds;
+                                    Session["InformatiaCurentaPersonalCalcul"] = null;
 
 
 

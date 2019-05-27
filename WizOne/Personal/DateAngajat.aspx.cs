@@ -131,8 +131,8 @@ namespace WizOne.Personal
                         tabPage.Visible = vizibil;
                     }
 
-                    if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
-                    {//DNATA
+                    if (Dami.ValoareParam("ValidariPersonal") == "1")
+                    {
                         string[] lst = new string[5] { "DateIdentificare", "Contract", "Structura", "Adresa", "Documente" };
                         if (lst.Contains(dt.Rows[i]["Pagina"].ToString()))
                             tabPage.TabStyle.BackColor = Color.FromArgb(255, 255, 179, 128);
@@ -148,7 +148,7 @@ namespace WizOne.Personal
                     for (int i = 0; i < this.ASPxPageControl2.TabPages.Count; i++)
                         if (this.ASPxPageControl2.TabPages[i].Name == Session["MP_Avans_Tab"].ToString())
                         {
-                            //this.ASPxPageControl2.ActiveTabIndex = i;
+                            this.ASPxPageControl2.ActiveTabIndex = i;
                             break;
                         }
                     Session["MP_Avans_Tab"] = null;
@@ -187,11 +187,8 @@ namespace WizOne.Personal
                 //da.Dispose();
                 //da = null;
 
-
-                AdaugaValorile();
-
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
-                {//DNATA
+                if (Dami.ValoareParam("ValidariPersonal") == "1")
+                {
                     string mesaj = "", mesajDI = "", mesajDA = "", mesajStr = "", mesajAdr = "", mesajDoc = "";
 
                     if (ds.Tables[0].Rows[0]["F10017"] == null || ds.Tables[0].Rows[0]["F10017"].ToString().Length <= 0)
@@ -709,72 +706,7 @@ namespace WizOne.Personal
 
         protected void ASPxPageControl2_ActiveTabChanged(object source, TabControlEventArgs e)
         {
-            try
-            {
-                for(int x=0; x < ASPxPageControl2.TabPages.Count; x++)
-                {
-                    TabPage esx = ASPxPageControl2.TabPages[x];
-                    if (esx.IsActive)
-                    {
-                        var qwe = "";
-                    }
-                    
-                }
-                TabPage tab = ASPxPageControl2.ActiveTabPage;
-
-                for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
-                {
-                    if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
-                    {
-                        ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
-                        for (int k = 0; k < cb.Controls.Count; k++)
-                        {
-                            if (cb.Controls[k].GetType() == typeof(ListView) || cb.Controls[k].GetType() == typeof(DataList))
-                            {
-                                dynamic dl = cb.Controls[k];
-                                DataTable dt = dl.DataSource as DataTable;
-                                var ert = dt.GetChanges();
-                                if (dt.Rows.Count == 0) return;
-                                var ert1 = dt.Rows[0].RowState;
-
-                                var wsx = dt.Rows[0]["F10008"];
-
-                                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                                DataColumnCollection cols0 = ds.Tables[0].Columns;
-                                DataColumnCollection cols1 = ds.Tables[1].Columns;
-                                DataColumnCollection cols2 = ds.Tables[2].Columns;
-
-                                for (int i = 0; i < dt.Columns.Count; i++)
-                                {
-                                    string colName = dt.Columns[i].ColumnName;
-
-                                    if (ds.Tables[0].Rows.Count > 0 && cols0.Contains(colName) && General.Nz(ds.Tables[0].Rows[0][colName], "").ToString() != General.Nz(dt.Rows[0][colName], "").ToString()) ds.Tables[0].Rows[0][colName] = dt.Rows[0][colName];
-                                    if (ds.Tables[1].Rows.Count > 0 && cols1.Contains(colName) && General.Nz(ds.Tables[1].Rows[0][colName], "").ToString() != General.Nz(dt.Rows[0][colName], "").ToString()) ds.Tables[1].Rows[0][colName] = dt.Rows[0][colName];
-                                    if (ds.Tables[2].Rows.Count > 0 && cols2.Contains(colName) && General.Nz(ds.Tables[2].Rows[0][colName], "").ToString() != General.Nz(dt.Rows[0][colName], "").ToString()) ds.Tables[2].Rows[0][colName] = dt.Rows[0][colName];
-                                }
-
-                                //switch (tab.Name)
-                                //{
-                                //    case "DateIdentificare":
-                                //        {
-                                //            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                                //            ds.Tables.Remove("F100");
-                                //            DataTable dt = dl.DataSource as DataTable;
-                                //            ds.Tables.Add(dt);
-                                //        }
-                                //        break;
-                                //}
-                                //break;
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
-            }
+            string ert = "safdasdf";
         }
 
         protected void ASPxPageControl2_Callback(object sender, CallbackEventArgsBase e)
@@ -816,153 +748,5 @@ namespace WizOne.Personal
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
         }
-
-        protected void ASPxPageControl2_TabClick(object source, TabControlCancelEventArgs e)
-        {
-            //object ert = e.Tab;
-            //DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-            //var ert1 = ds.Tables[0].Rows[0]["F10008"];
-            //var ert2 = ds.Tables[1].Rows[0]["F10008"];
-
-            //for (int x = 0; x < ASPxPageControl2.TabPages.Count; x++)
-            //{
-            //    TabPage esx = ASPxPageControl2.TabPages[x];
-            //    if (esx.IsActive)
-            //    {
-            //        var qwe = "";
-            //    }
-            //}
-
-            
-
-
-            TabPage tab = ASPxPageControl2.TabPages[0];
-
-
-            //dynamic ttt = FindControlRecursive(tab, "");
-
-            //ASPxCallbackPanel cb1 = tab.Controls[0].FindControl("pnlCtlDateIdent") as ASPxCallbackPanel;
-            //DataList dl1 = cb1.FindControl("DateIdentListView") as DataList;
-            //ASPxTextBox txt1 = dl1.Items[0].FindControl("txtNume") as ASPxTextBox;
-
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-
-            dynamic ctl1 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtNume");
-            if (ctl1 != null) ds.Tables[0].Rows[0]["F10008"] = ctl1.Value;
-            dynamic ctl2 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtPrenume");
-            if (ctl2 != null) ds.Tables[0].Rows[0]["F10009"] = ctl2.Value;
-            dynamic ctl3 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtCNPDI");
-            if (ctl3 != null) ds.Tables[0].Rows[0]["F10017"] = ctl3.Value;
-            dynamic ctl4 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("deDataModifNume");
-            if (ctl4 != null) ds.Tables[0].Rows[0]["F100906"] = ctl4.Value;
-
-
-            for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
-            {
-                if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
-                {
-                    ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
-                    for (int k = 0; k < cb.Controls.Count; k++)
-                    {
-                        if (cb.Controls[k].GetType() == typeof(ListView) || cb.Controls[k].GetType() == typeof(DataList))
-                        {
-                            dynamic dl = cb.Controls[k];
-                            dynamic txt = dl.Items[0].FindControl("txtNume");
-                            var val = txt.Value;
-                            //var ert = dl.FindControl("txtNume");
-                            //DataTable dt = dl.DataSource as DataTable;
-                            //var wsx = dt.Rows[0]["F10008"];
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        protected void ASPxPageControl2_ActiveTabChanging(object source, TabControlCancelEventArgs e)
-        {
-            TabPage tab = ASPxPageControl2.ActiveTabPage;
-            
-        }
-
-        private void AdaugaValorile()
-        {
-            try
-            {
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                //string[] tabs = { "DateIdentificare", "Contract" };
-                string[] tabs = { "Test1", "Test2" };
-                //DateIdentificare
-                Dictionary<String, String> lstDI = new Dictionary<string, string>();
-                lstDI.Add("txtNume", "F10008");
-                lstDI.Add("txtPrenume", "F10009");
-                lstDI.Add("txtCNPDI", "F10017");
-                lstDI.Add("deDataModifNume", "F100906");
-                //Contract
-                Dictionary<String, String> lstCtr = new Dictionary<string, string>();
-                lstCtr.Add("txtNrCtrInt", "F100985");
-                lstCtr.Add("deDataCtrInt", "F100986");
-
-                DataColumnCollection cols1 = ds.Tables[1].Columns;
-                DataColumnCollection cols2 = ds.Tables[2].Columns;
-
-                for (int i = 0; i < ASPxPageControl2.TabPages.Count; i++)
-                {
-                    if (tabs.Contains(ASPxPageControl2.TabPages[i].Name))
-                    {
-                        string numeTab = ASPxPageControl2.TabPages[i].Name;
-                        Dictionary<String, String> lst = new Dictionary<string, string>();
-                        switch(numeTab)
-                        {
-                            case "DateIdentificare":
-                                lst = lstDI;
-                                break;
-                            case "Contract":
-                                lst = lstCtr;
-                                break;
-                            case "Test1":
-                                lst = lstDI;
-                                break;
-                            case "Test2":
-                                lst = lstCtr;
-                                break;
-                        }
-                        foreach (string idCtl in lstDI.Keys)
-                        {
-                            try
-                            {
-                                string colName = lstDI[idCtl];
-                                DataTable dt = new DataTable();
-                                if (cols1.Contains(colName)) dt = ds.Tables[1];
-                                if (cols2.Contains(colName)) dt = ds.Tables[2];
-
-                                dynamic ctl = ((dynamic)ASPxPageControl2.TabPages[i].Controls[0].FindControl(numeTab + "_pnlCtl").FindControl(numeTab + "_DataList")).Items[0].FindControl(idCtl);
-                                if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt.Rows[0][colName] = ctl.Value;
-                            }
-                            catch (Exception)
-                            {
-
-                                throw;
-                            }
-                        }
-                    }
-                    //dynamic ctl1 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtNume");
-                    //if (ctl1 != null) ds.Tables[1].Rows[0]["F10008"] = ctl1.Value;
-                    //dynamic ctl2 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtPrenume");
-                    //if (ctl2 != null) ds.Tables[1].Rows[0]["F10009"] = ctl2.Value;
-                    //dynamic ctl3 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtCNPDI");
-                    //if (ctl3 != null) ds.Tables[0].Rows[0]["F10017"] = ctl3.Value;
-                    //dynamic ctl4 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("deDataModifNume");
-                    //if (ctl4 != null) ds.Tables[0].Rows[0]["F100906"] = ctl4.Value;
-                }
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
     }
 }

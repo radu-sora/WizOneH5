@@ -106,8 +106,8 @@ namespace WizOne.Personal
                 btn.ToolTip = Dami.TraduCuvant(btn.ToolTip);
             }
 
-            if (Convert.ToInt32(General.Nz(Session["IdClient"], 1)) == 22)
-            {//DNATA
+            if (Dami.ValoareParam("ValidariPersonal") == "1")
+            {
                 string[] lstTextBox = new string[8] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc",
                                                     "txtZileCOCuvAnCrt", "txtNrOre"};
                 for (int i = 0; i < lstTextBox.Count(); i++)

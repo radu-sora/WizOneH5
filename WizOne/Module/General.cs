@@ -5843,6 +5843,46 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
+        public static DataTable GetCategTarife()
+        {
+            DataTable table = new DataTable();
+
+            try
+            {
+                string sql = @"SELECT * FROM F011 WHERE F01105 = 1 ";
+                if (Constante.tipBD == 2)
+                    sql = General.SelectOracle("F011", "F01104") + " WHERE F01105 = 1 ";
+                table = IncarcaDT(sql, null);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return table;
+        }
+
+        public static DataTable GetTarife(string categ)
+        {
+            DataTable table = new DataTable();
+
+            try
+            {
+
+                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ;
+                if (Constante.tipBD == 2)
+                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ;
+                table = IncarcaDT(sql, null);
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return table;
+        }
+
         //end Radu
 
         public static string SelectInlocuitori(int f10003, DateTime? dtINc, DateTime? dtSf)

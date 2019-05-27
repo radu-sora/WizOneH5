@@ -665,6 +665,32 @@ namespace WizOne.Absente
                 }
                 catch (Exception) { }
 
+                #endregion
+
+                #region Verificare validitate inlocuitor
+                //Radu 21.05.2019
+                try
+                {
+                    if (cmbInloc.Value != null)
+                    {
+                        int esteActiv = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM F100 WHERE F10003={cmbInloc.Value} AND F10022 <= {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Value))} AND {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Value))} <= F10023", null), 0));
+                        if (esteActiv == 0)
+                        {
+                            string campData = "CONVERT(VARCHAR, F10023, 103)";
+                            if (Constante.tipBD == 2)
+                                campData = "TO_CHAR(F10023, 'dd/mm/yyyy')";
+                            string data = General.Nz(General.ExecutaScalar($@"SELECT {campData} AS F10023 FROM F100 WHERE F10003={cmbInloc.Value}", null), "").ToString();
+                            if (tip == 1)
+                                MessageBox.Show(Dami.TraduCuvant("In perioada solicitata, inlocuitorul este inactiv (ultima zi lucrata: " + data + ")"), MessageBox.icoWarning);
+                            else
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("In perioada solicitata, inlocuitorul este inactiv (ultima zi lucrata: " + data + ")");
+
+                            return;
+                        }
+                    }
+                }
+                catch (Exception) { }
+
                 #endregion  
 
 

@@ -899,25 +899,48 @@ namespace WizOne.Pagini
                                             continue;
                                         }
 
-                                        DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
+
+                                        //Florin 2019.05.27
+
+                                        //DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
+                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1";
+
+
+                                        //cazul cand este candidat
+                                        if (Convert.ToInt32(General.Nz(obj[10], 0)) == 1)
+                                        {
+                                            DateTime dtLucru = General.DamiDataLucru();
+                                            if (Convert.ToDateTime(obj[1]).Year == dtLucru.Year && Convert.ToDateTime(obj[1]).Month == dtLucru.Month)
+                                                strSql += $@"UPDATE F100 SET F10025=0 WHERE F10003=@2;";
+                                            else
+                                                strSql += $@"UPDATE F100 SET F10025=999 WHERE F10003=@2;";
+                                        }
+
+                                        General.ExecutaNonQuery("BEGIN " + strSql + " END;", new object[] { obj[3], obj[0], Session["UserId"] });
+
+                                        if (Dami.ValoareParam("FinalizareCuActeAditionale") == "1")
+                                        {
+                                            DataTable dtAvs = General.IncarcaDT($@"SELECT * FROM ""Avs_Cereri"" WHERE ""IdActAd""=@1", new object[] { obj[3] });
+                                            for (int x = 0; x < dtAvs.Rows.Count; x++)
+                                            {
+                                                //cazul cand este angajat
+                                                DataRow dr = dtAvs.Rows[x];
+                                                Cereri pag = new Cereri();
+                                                pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
+                                                if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
+                                                    General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
+                                            }
+                                        }
+
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
 
                                     }
                                     catch (Exception) { }
                                 }
-
-                                //grDate.JSProperties["cpAlertMessage"] = msg;
-                                //IncarcaGrid();
-
-                                //grDate.Selection.UnselectAll();
                             }
                             break;
                         case "btnFinalizat":
                             {
-                                //string msg = "";
-                                //List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "Tiparit", "Semnat", "Revisal", "NumeComplet" });
-                                //if (lst == null || lst.Count() == 0 || lst[0] == null) return;
-
                                 for (int i = 0; i < lst.Count(); i++)
                                 {
                                     try
@@ -944,43 +967,39 @@ namespace WizOne.Pagini
                                             continue;
                                         }
 
-                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Revisal""=1 WHERE ""IdAuto""=@1;";
+                                        
+                                        DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Revisal""=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
 
-                                        //cazul cand este candidat
-                                        if (Convert.ToInt32(General.Nz(obj[10], 0)) == 1)
-                                        {
-                                            DateTime dtLucru = General.DamiDataLucru();
-                                            if (Convert.ToDateTime(obj[1]).Year == dtLucru.Year && Convert.ToDateTime(obj[1]).Month == dtLucru.Month)
-                                                strSql += $@"UPDATE F100 SET F10025=0 WHERE F10003=@2;";
-                                            else
-                                                strSql += $@"UPDATE F100 SET F10025=999 WHERE F10003=@2;";
-                                        }
+                                        //Florin 2019.05.27
+                                        //s-a mutat in butonul se Semnat
 
+                                        //string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Revisal""=1 WHERE ""IdAuto""=@1;";
 
-                                        //Florin 2019.04.22
-                                        //atasamentul se salveaza direct in Atasamente
+                                        ////cazul cand este candidat
+                                        //if (Convert.ToInt32(General.Nz(obj[10], 0)) == 1)
+                                        //{
+                                        //    DateTime dtLucru = General.DamiDataLucru();
+                                        //    if (Convert.ToDateTime(obj[1]).Year == dtLucru.Year && Convert.ToDateTime(obj[1]).Month == dtLucru.Month)
+                                        //        strSql += $@"UPDATE F100 SET F10025=0 WHERE F10003=@2;";
+                                        //    else
+                                        //        strSql += $@"UPDATE F100 SET F10025=999 WHERE F10003=@2;";
+                                        //}
 
-                                        //copiem atasamentul si in personal
-                                        //strSql += $@"
-                                        //    INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", USER_NO, TIME) 
-                                        //    SELECT @2, 999, {General.CurrentDate()}, ""Fisier"", ""FisierNume"", @3, {General.CurrentDate()} 
-                                        //    FROM ""tblFisiere"" WHERE ""Tabela""='Admin_NrActAd' AND ""Id""=@1;";
+                                        //General.ExecutaNonQuery("BEGIN " + strSql + " END;", new object[] { obj[3], obj[0], Session["UserId"] });
 
-                                        General.ExecutaNonQuery("BEGIN " + strSql + " END;", new object[] { obj[3], obj[0], Session["UserId"] });
-
-                                        if (Dami.ValoareParam("FinalizareCuActeAditionale") == "1")
-                                        {
-                                            DataTable dtAvs = General.IncarcaDT($@"SELECT * FROM ""Avs_Cereri"" WHERE ""IdActAd""=@1", new object[] { obj[3] });
-                                            for (int x = 0; x < dtAvs.Rows.Count; x++)
-                                            {
-                                                //cazul cand este angajat
-                                                DataRow dr = dtAvs.Rows[x];
-                                                Cereri pag = new Cereri();
-                                                pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
-                                                if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
-                                                    General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
-                                            }
-                                        }
+                                        //if (Dami.ValoareParam("FinalizareCuActeAditionale") == "1")
+                                        //{
+                                        //    DataTable dtAvs = General.IncarcaDT($@"SELECT * FROM ""Avs_Cereri"" WHERE ""IdActAd""=@1", new object[] { obj[3] });
+                                        //    for (int x = 0; x < dtAvs.Rows.Count; x++)
+                                        //    {
+                                        //        //cazul cand este angajat
+                                        //        DataRow dr = dtAvs.Rows[x];
+                                        //        Cereri pag = new Cereri();
+                                        //        pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
+                                        //        if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
+                                        //            General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
+                                        //    }
+                                        //}
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
 
                                     }
@@ -989,16 +1008,9 @@ namespace WizOne.Pagini
                                         string ert = ex.Message;
                                     }
                                 }
-
-                                //grDate.JSProperties["cpAlertMessage"] = msg;
-                                //IncarcaGrid();
-
-                                //grDate.Selection.UnselectAll();
                             }
                             break;
                     }
-
-                    //IncarcaGrid();
 
                     grDate.JSProperties["cpAlertMessage"] = msg;
                     IncarcaGrid();
@@ -1010,7 +1022,6 @@ namespace WizOne.Pagini
             catch (Exception ex)
             {
                 grDate.JSProperties["cpAlertMessage"] = ex.Message;
-                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }

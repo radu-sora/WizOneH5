@@ -1932,7 +1932,7 @@ namespace WizOne.Pontaj
 							    OR
                                 (COALESCE(X.D,0)  <> 0 AND COALESCE(X.D,0) = (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END))
                                 OR
-                                (COALESCE(X.SL,0) <> 0 AND COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 1 THEN 1 ELSE 0 END))
+                                (COALESCE(X.SL,0) <> 0 AND COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND COALESCE(P.""ZiLiberaLegala"",0) = 1 THEN 1 ELSE 0 END))
 							)
                             GROUP BY X.""Id"", X.""DenumireScurta"", X.""Denumire"", P.""ValStr"" ";
 
@@ -1964,7 +1964,7 @@ namespace WizOne.Pontaj
                         (COALESCE(B.ZL,0)<> 0 AND (CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
                         (COALESCE(B.S,0) <> 0 AND (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
                         (COALESCE(B.D,0)<> 0 AND (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
-                        (COALESCE(B.SL,0)<> 0 AND P.""ZiLibera"" = COALESCE(B.SL,0))
+                        (COALESCE(B.SL,0)<> 0 AND COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0))
                         ) 
                         GROUP BY A.""OreInVal"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", D.""Afisare"", A.""NrMax"", A.""VerificareNrMaxOre"" {val_uri}
                         ORDER BY A.""OreInVal"" ";

@@ -149,7 +149,11 @@
     </table> 
     <br /> 
     <table width="60%">   
-        <tr >
+        <tr>
+            <td id="divRol" runat="server">
+                <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
+                <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="250px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" />
+            </td>
             <td align="left">
                 <label id="lblAngFiltru" runat="server" style="display:inline-block;">Angajat</label>
                 <dx:ASPxComboBox ID="cmbAngFiltru" ClientInstanceName="cmbAngFiltru" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"

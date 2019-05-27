@@ -559,7 +559,7 @@ namespace WizOne.Avs
                     }
 
                     //Florin 2019.05.23
-                    //Nu se poate anula o cerere daca este actualizata in F100
+                    //Nu se poate respinge sau anula o cerere daca este actualizata in F100
                     if ((tipActiune == 2 || tipActiune == 3) && Convert.ToInt32(General.Nz(arr[7], 0)) == 1)
                     {
                         msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Datele au fost trimise in personal") + System.Environment.NewLine;
@@ -860,7 +860,8 @@ namespace WizOne.Avs
                             " when 26 then convert(nvarchar(20),a.DataInceputCIM,103) + ' - ' + convert(nvarchar(20),a.DataSfarsitCIM,103)  " +
                             " end AS ValoareNoua,  " +
                             " a.SalariulNet, a.ScutitImpozit,  " +
-                            " COALESCE((SELECT COALESCE(NR.Revisal,0) FROM Admin_NrActAd NR WHERE NR.IdAuto=COALESCE(A.IdActAd,-99)),0) AS Revisal " +
+                            " COALESCE((SELECT COALESCE(NR.Revisal,0) FROM Admin_NrActAd NR WHERE NR.IdAuto=COALESCE(A.IdActAd,-99)),0) AS Revisal, " +
+                            " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.IdAtribut AND X.F70406=A.DataModif),0) AS ActualizatF704 " +
                             " from Avs_Cereri a  " +
                             " inner join F100 b on a.F10003=b.F10003  " +
                             " inner join Avs_tblAtribute c on a.IdAtribut=c.Id  " +
@@ -894,7 +895,8 @@ namespace WizOne.Avs
                             " when 26 then to_char(a.\"DataInceputCIM\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfarsitCIM\",'DD/MM/YYYY') " +
                             " end AS \"ValoareNoua\", " +
                             " a.\"SalariulNet\", a.\"ScutitImpozit\", " +
-                            " COALESCE((SELECT COALESCE(NR.\"Revisal\",0) FROM \"Admin_NrActAd\" NR WHERE NR.\"IdAuto\"=COALESCE(A.\"IdActAd\",-99)),0) AS \"Revisal\" " +
+                            " COALESCE((SELECT COALESCE(NR.\"Revisal\",0) FROM \"Admin_NrActAd\" NR WHERE NR.\"IdAuto\"=COALESCE(A.\"IdActAd\",-99)),0) AS \"Revisal\", " +
+                            " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.\"IdAtribut\" AND X.F70406=A.\"DataModif\"),0) AS \"ActualizatF704\" " +
                             " from \"Avs_Cereri\" a " +
                             " inner join F100 b on a.F10003=b.F10003 " +
                             " inner join \"Avs_tblAtribute\" c on a.\"IdAtribut\"=c.\"Id\" " +

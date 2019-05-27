@@ -346,7 +346,7 @@ namespace WizOne.Pontaj
                             (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
                             ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
                             ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
-                            P.""ZiLibera"" = COALESCE(B.SL,0)) 
+                            COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0)) 
                             GROUP BY A.""OreInVal""
                             ORDER BY A.""OreInVal""
                             FOR XML PATH ('')) AS ""ValActive"",
@@ -387,7 +387,7 @@ namespace WizOne.Pontaj
                             (COALESCE(X.""ZileSapt"",0)=(CASE WHEN P.""ZiSapt""<6 AND P.""ZiLibera""=0 THEN 1 ELSE 0 END) 
                             AND COALESCE(X.S,0) = (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) 
                             AND COALESCE(X.D,0) = (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) 
-							AND COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 1 THEN 1 ELSE 0 END))
+							AND COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND COALESCE(P.""ZiLiberaLegala"",0) = 1 THEN 1 ELSE 0 END))
                             GROUP BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
                             ORDER BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
                             FOR XML PATH ('')) AS ""ValAbsente"",

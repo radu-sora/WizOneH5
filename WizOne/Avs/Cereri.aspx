@@ -124,6 +124,13 @@
 
               <table width="40%" align="top">	      
                 <tr>
+                    <td id="divRol" runat="server">
+                        <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px;">Roluri</label>
+                        <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="250px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" >
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback(8); }" />
+                        </dx:ASPxComboBox>
+                    </td>
+
                     <td>
                         <label id="lblAng" runat="server" style="display:inline-block;">Angajat</label>
                         <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
@@ -135,7 +142,8 @@
                                 <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
                                 <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
                                 <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="130px" />
-                            </Columns>                        
+                            </Columns>
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback(9); }" />
                         </dx:ASPxComboBox>
                     </td>
 
@@ -143,7 +151,7 @@
                         <label id="lblAtr" runat="server" style="display:inline-block;">Atribut</label>
                         <dx:ASPxComboBox ID="cmbAtribute" runat="server" ClientInstanceName="cmbAtribute" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
-                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback(1); }" />
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback(1); }" />
                         </dx:ASPxComboBox>
                     </td>
 

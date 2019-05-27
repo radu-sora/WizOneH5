@@ -5,14 +5,8 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Data.SqlClient;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using WizOne.Module;
-using System.Data.OleDb;
-using Oracle.ManagedDataAccess.Client;
 
 namespace WizOne.Avs
 {
@@ -36,28 +30,12 @@ namespace WizOne.Avs
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
 
-                //string qwe = Convert.ToString(General.Nz(Request["qwe"], -99));
-                //if (qwe.Length > 0)
-                //{
-                //    Session["Marca_atribut"] = Session["Marca"].ToString() + ";" + qwe;
-                //    Session["MP_Avans"] = "true";
-                //}
-                //else
-                //{
-                //    Session["Marca_atribut"] = null;
-                //    Session["MP_Avans"] = null;
-                //}
-
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
 
-                var ert = cmb1Nou.Value;
-
                 if (!IsPostBack)
                 {
-                    //txtTitlu.Text = (Session["Titlu"] ?? "").ToString();
-
                     if (Session["MP_Avans"] == null)
                     {
                         btnBack.Visible = false;
@@ -66,31 +44,73 @@ namespace WizOne.Avs
                     else
                         Session["MP_Avans"] = null;
 
-
-
                     txtDataMod.Date = DateTime.Now;
                     lblDataRevisal.Visible = false;
                     deDataRevisal.Visible = false;
 
-                    DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
-                    cmbAng.DataSource = dtAng;
-                    cmbAngFiltru.DataSource = dtAng;
-                    Session["Modif_Avans_Angajati"] = dtAng;
+                    DataTable dtAng = General.IncarcaDT(SelectAngajati(-44), null, "F10003;Rol");
+
+                    DataView view = new DataView(dtAng);
+                    DataTable dtRol = view.ToTable(true, "Rol", "RolDenumire");
+
+                    switch (dtRol.Rows.Count)
+                    {
+                        case 0:
+                            divRol.Visible = false;
+                            cmbRol.Value = 0;
+                            break;
+                        case 1:
+                            divRol.Visible = false;
+                            cmbRol.DataSource = dtRol;
+                            cmbRol.DataBind();
+                            cmbRol.SelectedIndex = 0;
+
+                            //if (Convert.ToInt32(General.Nz(cmbRol.Value, 0)) != 0)
+                            //{
+                            //    cmbAng.Buttons.Add(new EditButton { Text = "Activi" });
+                            //    cmbAng.Buttons.Add(new EditButton { Text = "Toti" });
+                            //}
+                            break;
+                        default:
+                            divRol.Visible = true;
+                            cmbRol.DataSource = dtRol;
+                            cmbRol.DataBind();
+                            cmbRol.SelectedIndex = 0;
+                            cmbAng.SelectedIndex = 0;
+
+                            //cmbAng.Buttons.Add(new EditButton { Text = "Activi" });
+                            //cmbAng.Buttons.Add(new EditButton { Text = "Toti" });
+
+                            break;
+                    }
+
+                    DataTable dtAngFiltrati = dtAng;
+                    if (cmbRol.Value != null && Convert.ToInt32(cmbRol.Value) != -44 && dtAng != null && dtAng.Rows.Count > 0) dtAngFiltrati = dtAng.Select("Rol=" + cmbRol.Value).CopyToDataTable();
+
+                    cmbAng.DataSource = dtAngFiltrati;
+                    cmbAngFiltru.DataSource = dtAngFiltrati;
+                    Session["Modif_Avans_Angajati"] = dtAngFiltrati;
                     cmbAng.DataBind();
-                    cmbAng.SelectedIndex = -1;
                     cmbAngFiltru.DataBind();
+
+                    //cmbAng.DataSource = dtAng;
+                    //cmbAngFiltru.DataSource = dtAng;
+                    //Session["Modif_Avans_Angajati"] = dtAng;
+                    //cmbAng.DataBind();
+                    //cmbAngFiltru.DataBind();
+                    cmbAng.SelectedIndex = -1;
                     cmbAngFiltru.SelectedIndex = -1;
 
-                    //Florin 2019.05.20
-                    //DataTable dtAtr = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"Avs_tblAtribute\" ORDER BY \"Id\"", null);
-                    DataTable dtAtr = General.IncarcaDT(
-                        $@"SELECT A.Id, A.Denumire 
-                        FROM Avs_tblAtribute A
-                        INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
-                        INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper OR (-1 * B.Super2) = C.IdSuper OR (-1 * B.Super3) = C.IdSuper OR (-1 * B.Super4) = C.IdSuper OR (-1 * B.Super5) = C.IdSuper OR (-1 * B.Super6) = C.IdSuper OR (-1 * B.Super7) = C.IdSuper OR (-1 * B.Super8) = C.IdSuper OR (-1 * B.Super9) = C.IdSuper OR (-1 * B.Super10) = C.IdSuper
-                        WHERE C.IdUser=@1
-                        GROUP BY A.Id, A.Denumire
-                        ORDER BY A.Denumire", new object[] { Session["UserId"] });
+                    //DataTable dtAtr = General.IncarcaDT(
+                    //    $@"SELECT A.Id, A.Denumire 
+                    //    FROM Avs_tblAtribute A
+                    //    INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
+                    //    INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper OR (-1 * B.Super2) = C.IdSuper OR (-1 * B.Super3) = C.IdSuper OR (-1 * B.Super4) = C.IdSuper OR (-1 * B.Super5) = C.IdSuper OR (-1 * B.Super6) = C.IdSuper OR (-1 * B.Super7) = C.IdSuper OR (-1 * B.Super8) = C.IdSuper OR (-1 * B.Super9) = C.IdSuper OR (-1 * B.Super10) = C.IdSuper
+                    //    WHERE C.IdUser=@1 AND C.IdSuper=@2
+                    //    GROUP BY A.Id, A.Denumire
+                    //    ORDER BY A.Denumire", new object[] { Session["UserId"], General.Nz(cmbRol.Value,-99) });
+
+                    DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                     cmbAtribute.DataSource = dtAtr;
                     cmbAtribute.DataBind();
                     cmbAtributeFiltru.DataSource = dtAtr;
@@ -136,15 +156,15 @@ namespace WizOne.Avs
                         cmbAngFiltru.DataSource = Session["Modif_Avans_Angajati"];
                         cmbAngFiltru.DataBind();
 
-                        //Florin 2019.05.20
-                        //DataTable dtAtr = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"Avs_tblAtribute\" ORDER BY \"Id\"", null);
-                        DataTable dtAtr = General.IncarcaDT($@"SELECT A.Id, A.Denumire 
-                        FROM Avs_tblAtribute A
-                        INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
-                        INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper OR (-1 * B.Super2) = C.IdSuper OR (-1 * B.Super3) = C.IdSuper OR (-1 * B.Super4) = C.IdSuper OR (-1 * B.Super5) = C.IdSuper OR (-1 * B.Super6) = C.IdSuper OR (-1 * B.Super7) = C.IdSuper OR (-1 * B.Super8) = C.IdSuper OR (-1 * B.Super9) = C.IdSuper OR (-1 * B.Super10) = C.IdSuper
-                        WHERE C.IdUser=@1
-                        GROUP BY A.Id, A.Denumire
-                        ORDER BY A.Denumire", new object[] { Session["UserId"] });
+                        //DataTable dtAtr = General.IncarcaDT($@"SELECT A.Id, A.Denumire 
+                        //FROM Avs_tblAtribute A
+                        //INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
+                        //INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper OR (-1 * B.Super2) = C.IdSuper OR (-1 * B.Super3) = C.IdSuper OR (-1 * B.Super4) = C.IdSuper OR (-1 * B.Super5) = C.IdSuper OR (-1 * B.Super6) = C.IdSuper OR (-1 * B.Super7) = C.IdSuper OR (-1 * B.Super8) = C.IdSuper OR (-1 * B.Super9) = C.IdSuper OR (-1 * B.Super10) = C.IdSuper
+                        //WHERE C.IdUser=@1 AND C.IdSuper=@2
+                        //GROUP BY A.Id, A.Denumire
+                        //ORDER BY A.Denumire", new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99) });
+
+                        DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                         cmbAtribute.DataSource = dtAtr;
                         cmbAtribute.DataBind();
                         cmbAtributeFiltru.DataSource = dtAtr;
@@ -162,10 +182,8 @@ namespace WizOne.Avs
                             IncarcaDate();
                         }
 
-                        //if (cmbAngFiltru.Value != null)
                         if (Session["Avs_MarcaFiltru"] != null)
                         {
-                            //F10003 = Convert.ToInt32(cmbAngFiltru.Value.ToString());
                             if (cmbAtributeFiltru.SelectedIndex < 0 && Convert.ToInt32(Session["Avs_AtributFiltru"].ToString()) != -1)
                                 cmbAngFiltru.SelectedIndex = Convert.ToInt32(Session["Avs_MarcaFiltru"].ToString());
                             if (Session["Avs_AtributFiltru"] != null && cmbAtributeFiltru.SelectedIndex < 0 && Convert.ToInt32(Session["Avs_AtributFiltru"].ToString()) != -1)
@@ -178,11 +196,158 @@ namespace WizOne.Avs
             }
             catch (Exception ex)
             {
-                //ArataMesaj("Atentie !");
-                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        //protected void Page_Load(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        Dami.AccesApp();
+
+        //        #region Traducere
+        //        string ctlPost = Request.Params["__EVENTTARGET"];
+        //        //if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Constante.IdLimba = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
+
+        //        #endregion
+
+        //        btnBack.Text = Dami.TraduCuvant("btnBack", "Inapoi");
+        //        btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+        //        btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
+
+        //        DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
+        //        GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+        //        colStari.PropertiesComboBox.DataSource = dtStari;
+
+        //        var ert = cmb1Nou.Value;
+
+        //        if (!IsPostBack)
+        //        {
+        //            if (Session["MP_Avans"] == null)
+        //            {
+        //                btnBack.Visible = false;
+        //                Session["Marca_atribut"] = null;
+        //            }
+        //            else
+        //                Session["MP_Avans"] = null;
+
+        //            txtDataMod.Date = DateTime.Now;
+        //            lblDataRevisal.Visible = false;
+        //            deDataRevisal.Visible = false;
+
+        //            DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
+        //            cmbAng.DataSource = dtAng;
+        //            cmbAngFiltru.DataSource = dtAng;
+        //            Session["Modif_Avans_Angajati"] = dtAng;
+        //            cmbAng.DataBind();
+        //            cmbAng.SelectedIndex = -1;
+        //            cmbAngFiltru.DataBind();
+        //            cmbAngFiltru.SelectedIndex = -1;
+
+        //            //Florin 2019.05.20
+        //            //DataTable dtAtr = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"Avs_tblAtribute\" ORDER BY \"Id\"", null);
+        //            DataTable dtAtr = General.IncarcaDT(
+        //                $@"SELECT A.Id, A.Denumire 
+        //                FROM Avs_tblAtribute A
+        //                INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
+        //                INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper OR (-1 * B.Super2) = C.IdSuper OR (-1 * B.Super3) = C.IdSuper OR (-1 * B.Super4) = C.IdSuper OR (-1 * B.Super5) = C.IdSuper OR (-1 * B.Super6) = C.IdSuper OR (-1 * B.Super7) = C.IdSuper OR (-1 * B.Super8) = C.IdSuper OR (-1 * B.Super9) = C.IdSuper OR (-1 * B.Super10) = C.IdSuper
+        //                WHERE C.IdUser=@1
+        //                GROUP BY A.Id, A.Denumire
+        //                ORDER BY A.Denumire", new object[] { Session["UserId"] });
+        //            cmbAtribute.DataSource = dtAtr;
+        //            cmbAtribute.DataBind();
+        //            cmbAtributeFiltru.DataSource = dtAtr;
+        //            cmbAtributeFiltru.DataBind();
+
+        //            if (Session["Marca_atribut"] != null)
+        //            {
+        //                string[] param = Session["Marca_atribut"].ToString().Split(';');
+        //                F10003 = Convert.ToInt32(param[0]);
+        //                for (int i = 0; i < cmbAng.Items.Count; i++)
+        //                    if (cmbAng.Items[i].Value.ToString() == param[0])
+        //                    {
+        //                        cmbAng.SelectedIndex = i;
+        //                        cmbAngFiltru.SelectedIndex = i;
+        //                        break;
+        //                    }
+        //                cmbAng.Enabled = false;
+        //                cmbAngFiltru.Enabled = false;
+        //                for (int i = 0; i < cmbAtribute.Items.Count; i++)
+        //                    if (Convert.ToInt32(cmbAtribute.Items[i].Value) == Convert.ToInt32(param[1]))
+        //                    {
+        //                        cmbAtribute.SelectedIndex = i;
+        //                        break;
+        //                    }
+        //                cmbAtribute.Enabled = false;
+        //            }
+        //            AscundeCtl();
+        //            IncarcaDate();
+
+
+        //        }
+        //        else
+        //        {
+        //            if (IsCallback)
+        //            {
+        //                cmbAng.DataSource = null;
+        //                cmbAng.Items.Clear();
+        //                cmbAng.DataSource = Session["Modif_Avans_Angajati"];
+        //                cmbAng.DataBind();
+
+        //                cmbAngFiltru.DataSource = null;
+        //                cmbAngFiltru.Items.Clear();
+        //                cmbAngFiltru.DataSource = Session["Modif_Avans_Angajati"];
+        //                cmbAngFiltru.DataBind();
+
+        //                //Florin 2019.05.20
+        //                //DataTable dtAtr = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"Avs_tblAtribute\" ORDER BY \"Id\"", null);
+        //                DataTable dtAtr = General.IncarcaDT($@"SELECT A.Id, A.Denumire 
+        //                FROM Avs_tblAtribute A
+        //                INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
+        //                INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper OR (-1 * B.Super2) = C.IdSuper OR (-1 * B.Super3) = C.IdSuper OR (-1 * B.Super4) = C.IdSuper OR (-1 * B.Super5) = C.IdSuper OR (-1 * B.Super6) = C.IdSuper OR (-1 * B.Super7) = C.IdSuper OR (-1 * B.Super8) = C.IdSuper OR (-1 * B.Super9) = C.IdSuper OR (-1 * B.Super10) = C.IdSuper
+        //                WHERE C.IdUser=@1
+        //                GROUP BY A.Id, A.Denumire
+        //                ORDER BY A.Denumire", new object[] { Session["UserId"] });
+        //                cmbAtribute.DataSource = dtAtr;
+        //                cmbAtribute.DataBind();
+        //                cmbAtributeFiltru.DataSource = dtAtr;
+        //                cmbAtributeFiltru.DataBind();
+
+        //                if (Session["Marca_atribut"] != null)
+        //                {
+        //                    string[] param = Session["Marca_atribut"].ToString().Split(';');
+        //                    F10003 = Convert.ToInt32(param[0]);
+        //                }
+
+        //                if (cmbAng.Value != null && cmbAtribute.Value != null)
+        //                {
+        //                    F10003 = Convert.ToInt32(cmbAng.Value.ToString());
+        //                    IncarcaDate();
+        //                }
+
+        //                //if (cmbAngFiltru.Value != null)
+        //                if (Session["Avs_MarcaFiltru"] != null)
+        //                {
+        //                    //F10003 = Convert.ToInt32(cmbAngFiltru.Value.ToString());
+        //                    if (cmbAtributeFiltru.SelectedIndex < 0 && Convert.ToInt32(Session["Avs_AtributFiltru"].ToString()) != -1)
+        //                        cmbAngFiltru.SelectedIndex = Convert.ToInt32(Session["Avs_MarcaFiltru"].ToString());
+        //                    if (Session["Avs_AtributFiltru"] != null && cmbAtributeFiltru.SelectedIndex < 0 && Convert.ToInt32(Session["Avs_AtributFiltru"].ToString()) != -1)
+        //                        cmbAtributeFiltru.SelectedIndex = Convert.ToInt32(Session["Avs_AtributFiltru"].ToString());
+        //                    IncarcaGrid();
+        //                }
+        //            }
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //ArataMesaj("Atentie !");
+        //        //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
         protected void btnBack_Click(object sender, EventArgs e)
         {
             try
@@ -213,7 +378,47 @@ namespace WizOne.Avs
             }
         }
 
-        private string SelectAngajati()
+        //  private string SelectAngajati()
+        //  {
+        //      string strSql = "";
+
+        //      try
+        //      {
+        //          string op = "+";
+        //          if (Constante.tipBD == 2) op = "||";
+
+        //          strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
+        //                  X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+        //                  FROM (
+        //                  SELECT A.F10003
+        //                  FROM F100 A
+        //                  WHERE A.F10003 = {(Session["Marca"] == null ? "-99" : Session["Marca"].ToString())}
+        //                  UNION
+        //                  SELECT A.F10003
+        //                  FROM F100 A
+        //                  INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
+        //                  WHERE B.""IdUser""= {Session["UserId"]}) B
+        //                  INNER JOIN F100 A ON A.F10003=B.F10003
+        //                  LEFT JOIN F718 X ON A.F10071=X.F71802
+        //                  LEFT JOIN F003 F ON A.F10004 = F.F00304
+        //                  LEFT JOIN F004 G ON A.F10005 = G.F00405
+        //                  LEFT JOIN F005 H ON A.F10006 = H.F00506
+        //                  LEFT JOIN F006 I ON A.F10007 = I.F00607
+        //where A.f10025 IN (0, 999) ";
+
+        //      }
+        //      catch (Exception ex)
+        //      {
+        //          //ArataMesaj("Atentie !");
+        //          //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //          General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //      }
+
+        //      return strSql;
+        //  }
+
+
+        private string SelectAngajati(int idRol = -44)
         {
             string strSql = "";
 
@@ -222,24 +427,33 @@ namespace WizOne.Avs
                 string op = "+";
                 if (Constante.tipBD == 2) op = "||";
 
-                strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
+                strSql = $@"SELECT  B.""Rol"", B.""RolDenumire"", A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
                         X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
                         FROM (
-                        SELECT A.F10003
+                        SELECT A.F10003, 0 AS ""Rol"", COALESCE((SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""=0),'Angajat') AS ""RolDenumire""
                         FROM F100 A
-                        WHERE A.F10003 = {(Session["Marca"] == null ? "-99" : Session["Marca"].ToString())}
+                        WHERE A.F10003 = {Session["UserId"]} AND (SELECT COUNT(*) FROM ""Avs_Circuit"" WHERE ""Super1""=0) > 0
                         UNION
-                        SELECT A.F10003
+                        SELECT A.F10003, B.""IdSuper"" AS ""Rol"", CASE WHEN D.""Alias"" IS NOT NULL AND D.""Alias"" <> '' THEN D.""Alias"" ELSE D.""Denumire"" END AS ""RolDenumire""
                         FROM F100 A
                         INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
-                        WHERE B.""IdUser""= {Session["UserId"]}) B
+                        INNER JOIN ""Avs_Circuit"" C ON B.""IdSuper"" = -1 * c.""Super1""
+                        LEFT JOIN ""tblSupervizori"" D ON D.""Id"" = B.""IdSuper""
+                        WHERE B.""IdUser""={Session["UserId"]}
+                        UNION
+                        SELECT A.F10003, 76 AS ""Rol"", '{Dami.TraduCuvant("Fara rol")}' AS ""RolDenumire""
+                        FROM F100 A
+                        INNER JOIN ""Avs_Circuit"" C ON C.""Super1""={Session["UserId"]}
+                        ) B
                         INNER JOIN F100 A ON A.F10003=B.F10003
                         LEFT JOIN F718 X ON A.F10071=X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
                         LEFT JOIN F005 H ON A.F10006 = H.F00506
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
-						where A.f10025 IN (0, 999) ";
+						WHERE A.F10025 IN (0, 999) ";
+
+                if (idRol != -44) strSql += @" AND ""Rol""=" + idRol;
 
             }
             catch (Exception ex)
@@ -251,7 +465,6 @@ namespace WizOne.Avs
 
             return strSql;
         }
-
 
 
         private void AscundeCtl()
@@ -1252,7 +1465,14 @@ namespace WizOne.Avs
                         {
                             Session["Avs_MarcaFiltru"] = cmbAngFiltru.SelectedIndex;
                             Session["Avs_AtributFiltru"] = cmbAtributeFiltru.SelectedIndex;
-                            IncarcaGrid(Convert.ToInt32(General.Nz(cmbAng.Value, -99)));
+                            //Florin 2019.05.23
+                            //IncarcaGrid(Convert.ToInt32(General.Nz(cmbAng.Value, -99)));
+                            cmbAngFiltru.Value = cmbAng.Value;
+                            grDate.DataSource = null;
+
+                            Session["Avs_MarcaFiltru"] = cmbAngFiltru.SelectedIndex;
+                            Session["Avs_AtributFiltru"] = cmbAtributeFiltru.SelectedIndex;
+                            IncarcaGrid();
                         }
                         break;
                     case "5":
@@ -1282,6 +1502,37 @@ namespace WizOne.Avs
                             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii este intr-o zi nelucratoare!");
                         }
                         break;
+                    case "8":               //cmbRol
+                        {
+                            DataTable dtAng = General.IncarcaDT(SelectAngajati(Convert.ToInt32(cmbRol.Value ?? -99)), null);
+                            cmbAng.DataSource = dtAng;
+                            Session["Modif_Avans_Angajati"] = dtAng;
+                            cmbAng.DataBind();
+                            //cmbAng.SelectedIndex = 0;
+                            cmbAng.SelectedIndex = -1;
+                            //cmbAtribute.SelectedIndex = -1;
+                            //cmbAtribute.DataSource = null;
+                            //cmbAtribute.DataBind();
+
+                            ////acelasi cod ca la case "9"
+                            DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
+                            cmbAtribute.DataSource = dtAtr;
+                            cmbAtribute.DataBind();
+                            cmbAtributeFiltru.DataSource = dtAtr;
+                            cmbAtributeFiltru.DataBind();
+
+                        }
+                        break;
+                    case "9":               //cmbAng
+                        {
+                            DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
+                            cmbAtribute.DataSource = dtAtr;
+                            cmbAtribute.DataBind();
+                            cmbAtributeFiltru.DataSource = dtAtr;
+                            cmbAtributeFiltru.DataBind();
+                        }
+                        break;
+
                 }
 
 
@@ -2175,7 +2426,7 @@ namespace WizOne.Avs
                             //idUserCalc = idUser;
                             strSql = "SELECT * FROM USERS WHERE F10003 = " + F10003.ToString();
                             dtTemp = General.IncarcaDT(strSql, null);
-                            if (dtTemp == null || dtTemp.Rows.Count == 0 || dtTemp.Rows[0]["F70102"] == null || dtTemp.Rows[0]["F70102"].ToString().Length <= 0)
+                            if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0]["F70102"] != null)
                             {
                                 idUserCalc = Convert.ToInt32(dtTemp.Rows[0]["F70102"].ToString());
                             }
@@ -3045,25 +3296,6 @@ namespace WizOne.Avs
             }
         }
 
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (SalveazaDate())
-                {
-                    Session["Avs_MarcaFiltru"] = cmbAngFiltru.SelectedIndex;
-                    Session["Avs_AtributFiltru"] = cmbAtributeFiltru.SelectedIndex;
-                    IncarcaGrid(Convert.ToInt32(General.Nz(cmbAng.Value, -99)));
-                }
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-
-
         //private void OnClose()
         //{
         //    Session["Marca_atribut"] = null;
@@ -3084,6 +3316,44 @@ namespace WizOne.Avs
         //    script.Controls.Add(new LiteralControl("var str = '" + mesaj + "'; alert(str);"));
         //}
 
+        private string SelectAtribute()
+        {
+            string strSql = "";
+
+            try
+            {
+                //strSql = $@"SELECT A.Id, A.Denumire 
+                //        FROM Avs_tblAtribute A
+                //        INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
+                //        INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper OR (-1 * B.Super2) = C.IdSuper OR (-1 * B.Super3) = C.IdSuper OR (-1 * B.Super4) = C.IdSuper OR (-1 * B.Super5) = C.IdSuper OR (-1 * B.Super6) = C.IdSuper OR (-1 * B.Super7) = C.IdSuper OR (-1 * B.Super8) = C.IdSuper OR (-1 * B.Super9) = C.IdSuper OR (-1 * B.Super10) = C.IdSuper
+                //        WHERE C.IdUser=@1 AND C.IdSuper=@2
+                //        GROUP BY A.Id, A.Denumire
+                //        ORDER BY A.Denumire";
+
+                strSql = $@"SELECT A.""Id"", A.""Denumire"" FROM ""Avs_tblAtribute"" A
+                        INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=0
+                        WHERE {Session["User_Marca"]} = @3
+                        UNION
+                        SELECT A.""Id"", A.""Denumire"" 
+                        FROM ""Avs_tblAtribute"" A
+                        INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut""
+                        INNER JOIN ""F100Supervizori"" C ON (-1 * B.""Super1"") = C.""IdSuper""
+                        WHERE C.""IdUser""=@1 AND C.""IdSuper""=@2 AND C.F10003=@3
+                        GROUP BY A.""Id"", A.""Denumire""
+                        UNION
+                        SELECT A.""Id"", A.""Denumire"" 
+                        FROM ""Avs_tblAtribute"" A
+                        INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=@1
+                        ORDER BY A.""Denumire"" ";
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+
+        }
 
     }
 

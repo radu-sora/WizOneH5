@@ -21,27 +21,27 @@ namespace WizOne.Avs
             public string Denumire { get; set; }
         }
 
-        protected void Page_Init(object sender, EventArgs e)
-        {
-            try
-            {
+        //protected void Page_Init(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
 
-                DataTable dtAtr = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Avs_tblAtribute"" ", null);
-                GridViewDataComboBoxColumn colAtr = (grDate.Columns["IdAtribut"] as GridViewDataComboBoxColumn);
-                colAtr.PropertiesComboBox.DataSource = dtAtr;
+        //        DataTable dtAtr = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Avs_tblAtribute"" ", null);
+        //        GridViewDataComboBoxColumn colAtr = (grDate.Columns["IdAtribut"] as GridViewDataComboBoxColumn);
+        //        colAtr.PropertiesComboBox.DataSource = dtAtr;
 
-                DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
-                GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
-                colStari.PropertiesComboBox.DataSource = dtStari;
+        //        DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
+        //        GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+        //        colStari.PropertiesComboBox.DataSource = dtStari;
 
-                //Page.ClientScript.RegisterStartupScript(this.GetType(), "ANY_KEY13", "CloseDeferedWindow();", true);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        //Page.ClientScript.RegisterStartupScript(this.GetType(), "ANY_KEY13", "CloseDeferedWindow();", true);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -77,23 +77,30 @@ namespace WizOne.Avs
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
-                //if (!IsPostBack)
-                //{
 
-                //    //grDate.DataBind();
+                DataTable dtAtr = General.IncarcaDT(SelectAtribute(), null);
+                GridViewDataComboBoxColumn colAtr = (grDate.Columns["IdAtribut"] as GridViewDataComboBoxColumn);
+                colAtr.PropertiesComboBox.DataSource = dtAtr;
 
+                cmbAtributeFiltru.DataSource = dtAtr;
+                cmbAtributeFiltru.DataBind();
 
-                //}
+                DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
+                GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+                colStari.PropertiesComboBox.DataSource = dtStari;
 
-                IncarcaGrid();
+                DataTable dtRol = General.IncarcaDT(SelectRoluri(), null);
+                cmbRol.DataSource = dtRol;
+                cmbRol.DataBind();
+                if (dtRol != null && dtRol.Rows.Count > 0) cmbRol.SelectedIndex = 0;
 
                 DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
                 cmbAngFiltru.DataSource = dtAng;
                 cmbAngFiltru.DataBind();
 
-                DataTable dtAtr = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"Avs_tblAtribute\" ORDER BY \"Id\"", null);
-                cmbAtributeFiltru.DataSource = dtAtr;
-                cmbAtributeFiltru.DataBind();
+                IncarcaGrid();
+
+
             }
             catch (Exception ex)
             {
@@ -313,7 +320,10 @@ namespace WizOne.Avs
                 ////else
                 ////    dt = Session["Avs_Grid"] as DataTable;
 
-                dt = GetCereriAprobare(0, Convert.ToInt32(Session["UserId"].ToString()));
+
+                //Florin 2019.05.27
+                //dt = GetCereriAprobare(0, Convert.ToInt32(Session["UserId"].ToString()));
+                dt = SelectGrid();
 
 
                 grDate.DataSource = dt;
@@ -805,12 +815,294 @@ namespace WizOne.Avs
         }
 
 
-        //public DataTable GetCereriAprobare(int f10003, int idAtr, string filtruStari, int tip, int idUser)
-        public DataTable GetCereriAprobare(int tip, int idUser)
+        ////public DataTable GetCereriAprobare(int f10003, int idAtr, string filtruStari, int tip, int idUser)
+        //public DataTable GetCereriAprobare(int tip, int idUser)
+        //{
+        //    //tip
+        //    //0  -  Toate
+        //    //1  -  Ale mele
+
+        //    DataTable q = null;
+
+        //    try
+        //    {
+        //        string strSql = "";
+        //        string filtru = "";
+
+        //        if (Convert.ToInt32(cmbAngFiltru.Value ?? -99) != -99) filtru += " AND a.F10003 = " + Convert.ToInt32(cmbAngFiltru.Value ?? -99);
+        //        if (Convert.ToInt32(cmbAtributeFiltru.Value ?? -99) != -99) filtru += " AND a.\"IdAtribut\" = " + Convert.ToInt32(cmbAtributeFiltru.Value ?? -99);
+
+        //        //Florin 2019.05.20
+        //        //if (filtruStari != "") filtru += " AND a.\"IdStare\" IN (" + filtruStari.Replace(";", ",").Substring(0, filtruStari.Length - 1) + ")";
+        //        if (checkComboBoxStare.Value != null) filtru += @" AND A.""IdStare"" IN (" + DamiStari() + ")";
+
+        //        if (tip == 1)
+        //            filtru += " AND \"IdUser\"=" + idUser + " AND (a.\"Pozitie\" + 1) = f.\"Pozitie\" ";
+        //        else
+        //            filtru += " AND \"IdUser\"=" + idUser + " AND (a.\"Pozitie\" <= f.\"Pozitie\" or a.\"IdStare\" = 3 or a.\"IdStare\" = 0) ";
+
+
+        //        //Florin 2019.03.26
+        //        //S-a adaugat coloana Revisal
+        //        if (Constante.tipBD == 1)
+        //        {
+        //            strSql = "select DISTINCT a.Id, a.F10003, b.F10008 + ' ' + b.F10009 AS NumeAngajat, a.IdAtribut, c.Denumire AS NumeAtribut , a.DataModif, a.Explicatii, a.Motiv, a.Actualizat, a.IdStare, a.Culoare,  " +
+        //                    " case a.IdAtribut  " +
+        //                    " when 1 then convert(nvarchar(20),a.SalariulBrut)  " +
+        //                    " when 2 then a.FunctieNume  " +
+        //                    " when 3 then a.CORNume  " +
+        //                    " when 4 then a.MotivNume  " +
+        //                    " when 5 then ''  " +
+        //                    " when 6 then convert(nvarchar(20),a.Norma)  " +
+        //                    " when 8 then convert(nvarchar(20),a.NrIntern) + ' / ' + convert(nvarchar(20),a.DataIntern,103)  " +
+        //                    " when 9 then convert(nvarchar(20),a.NrITM) + ' / ' + convert(nvarchar(20),a.DataITM,103)  " +
+        //                    " when 10 then convert(nvarchar(20),a.DataAngajarii,103)  " +
+        //                    " when 11 then ''  " +
+        //                    " when 12 then a.TitlulAcademicNume  " +
+        //                    " when 13 then a.MesajPersonalNume  " +
+        //                    " when 14 then a.CentruCostNume  " +
+        //                    " when 15 then ''  " +
+        //                    " when 16 then a.PunctLucruNume  " +
+        //                    " when 22 then a.MeserieNume  " +
+        //                    " when 23 then a.SectieNume  " +
+        //                    " when 24 then a.DeptNume  " +
+        //                    " when 25 then convert(nvarchar(20),a.DataInceputCIM,103) + ' - ' + convert(nvarchar(20),a.DataSfarsitCIM,103)  " +
+        //                    " when 26 then convert(nvarchar(20),a.DataInceputCIM,103) + ' - ' + convert(nvarchar(20),a.DataSfarsitCIM,103)  " +
+        //                    " end AS ValoareNoua,  " +
+        //                    " a.SalariulNet, a.ScutitImpozit,  " +
+        //                    " COALESCE((SELECT COALESCE(NR.Revisal,0) FROM Admin_NrActAd NR WHERE NR.IdAuto=COALESCE(A.IdActAd,-99)),0) AS Revisal, " +
+        //                    " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.IdAtribut AND X.F70406=A.DataModif),0) AS ActualizatF704 " +
+        //                    " from Avs_Cereri a  " +
+        //                    " inner join F100 b on a.F10003=b.F10003  " +
+        //                    " inner join Avs_tblAtribute c on a.IdAtribut=c.Id  " +
+        //                    " inner join Avs_CereriIstoric f on a.Id = f.Id  " +
+        //                    " where COALESCE(B.F10025,0) <> 900 " + filtru +
+        //                    " order by a.DataModif";
+        //        }
+        //        else
+        //        {
+        //            strSql = "select DISTINCT a.\"Id\", a.F10003, b.F10008 || ' ' || b.F10009 AS \"NumeAngajat\", a.\"IdAtribut\", c.\"Denumire\" AS \"NumeAtribut\" , a.\"DataModif\", a.\"Explicatii\", a.\"Motiv\", a.\"Actualizat\", a.\"IdStare\", a.\"Culoare\", " +
+        //                    " case a.\"IdAtribut\" " +
+        //                    " when 1 then to_char(a.\"SalariulBrut\") " +
+        //                    " when 2 then a.\"FunctieNume\" " +
+        //                    " when 3 then a.\"CORNume\" " +
+        //                    " when 4 then a.\"MotivNume\" " +
+        //                    " when 5 then '' " +
+        //                    " when 6 then to_char(a.\"Norma\") " +
+        //                    " when 8 then to_char(a.\"NrIntern\") || ' / ' || to_char(a.\"DataIntern\",'DD/MM/YYYY') " +
+        //                    " when 9 then to_char(a.\"NrITM\") || ' / ' || to_char(a.\"DataITM\",'DD/MM/YYYY') " +
+        //                    " when 10 then to_char(a.\"DataAngajarii\",'DD/MM/YYYY') " +
+        //                    " when 11 then '' " +
+        //                    " when 12 then a.\"TitlulAcademicNume\" " +
+        //                    " when 13 then a.\"MesajPersonalNume\" " +
+        //                    " when 14 then a.\"CentruCostNume\" " +
+        //                    " when 15 then '' " +
+        //                    " when 16 then a.\"PunctLucruNume\" " +
+        //                    " when 22 then a.\"MeserieNume\" " +
+        //                    " when 23 then a.\"SectieNume\" " +
+        //                    " when 24 then a.\"DeptNume\" " +
+        //                    " when 25 then to_char(a.\"DataInceputCIM\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfarsitCIM\",'DD/MM/YYYY') " +
+        //                    " when 26 then to_char(a.\"DataInceputCIM\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfarsitCIM\",'DD/MM/YYYY') " +
+        //                    " end AS \"ValoareNoua\", " +
+        //                    " a.\"SalariulNet\", a.\"ScutitImpozit\", " +
+        //                    " COALESCE((SELECT COALESCE(NR.\"Revisal\",0) FROM \"Admin_NrActAd\" NR WHERE NR.\"IdAuto\"=COALESCE(A.\"IdActAd\",-99)),0) AS \"Revisal\", " +
+        //                    " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.\"IdAtribut\" AND X.F70406=A.\"DataModif\"),0) AS \"ActualizatF704\" " +
+        //                    " from \"Avs_Cereri\" a " +
+        //                    " inner join F100 b on a.F10003=b.F10003 " +
+        //                    " inner join \"Avs_tblAtribute\" c on a.\"IdAtribut\"=c.\"Id\" " +
+        //                    " inner join \"Avs_CereriIstoric\" f on a.\"Id\" = f.\"Id\" " +
+        //                    " where COALESCE(B.F10025,0) <> 900 " + filtru +
+        //                    " order by a.\"DataModif\"";
+        //        }
+
+        //        q = General.IncarcaDT(strSql, null);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return q;
+        //}
+
+
+        //public static string FiltruTipStari(ref ASPxDropDownEdit cmbTip)
+        //{
+        //    string val = "";
+
+        //    try
+        //    {
+        //        List<object> lst = cmbTip.Value as List<object>;
+        //        foreach (var ele in lst)
+        //        {
+        //            switch (ele.ToString().ToLower())
+        //            {
+        //                case "solicitat":
+        //                    val += "1;";
+        //                    break;
+        //                case "in curs":
+        //                    val += "2;";
+        //                    break;
+        //                case "aprobat":
+        //                    val += "3;";
+        //                    break;
+        //                case "respins":
+        //                    val += "0;";
+        //                    break;
+        //                case "anulat":
+        //                    val += "-1;";
+        //                    break;
+        //                case "planificat":
+        //                    val += "4;";
+        //                    break;
+        //                case "prezent":
+        //                    val += "5;";
+        //                    break;
+        //                case "absent":
+        //                    val += "6;";
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
+
+        //    return val;
+        //}
+
+
+        //private string SelectAngajati()
+        //{
+        //    string strSql = "";
+
+        //    try
+        //    {
+        //        //Florin 2019.04.25
+        //        //s-a adaugat conditia F10025 <> 900;  sa nu apara candidatii
+
+        //        string op = "+";
+        //        if (Constante.tipBD == 2) op = "||";
+
+        //        strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
+        //                X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+        //                FROM (
+        //                SELECT A.F10003
+        //                FROM F100 A
+        //                WHERE COALESCE(A.F10025,0) <> 900 AND A.F10003 = {(Session["Marca"] == null ? "-99" : Session["Marca"].ToString())}
+        //                UNION
+        //                SELECT A.F10003
+        //                FROM F100 A
+        //                INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
+        //                WHERE COALESCE(A.F10025,0) <> 900 AND B.""IdUser""= {Session["UserId"]}) B
+        //                INNER JOIN F100 A ON A.F10003=B.F10003
+        //                LEFT JOIN F718 X ON A.F10071=X.F71802
+        //                LEFT JOIN F003 F ON A.F10004 = F.F00304
+        //                LEFT JOIN F004 G ON A.F10005 = G.F00405
+        //                LEFT JOIN F005 H ON A.F10006 = H.F00506
+        //                LEFT JOIN F006 I ON A.F10007 = I.F00607";
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //ArataMesaj("Atentie !");
+        //        //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return strSql;
+        //}
+
+        private string SelectAngajati()
         {
-            //tip
-            //0  -  Toate
-            //1  -  Ale mele
+            string strSql = "";
+
+            try
+            {
+                //Florin 2019.05.27
+                strSql = $@"SELECT DISTINCT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""NumeComplet"", 
+                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+                        FROM ""Avs_CereriIstoric"" B
+                        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
+                        INNER JOIN F100 A ON A.F10003=C.F10003
+                        LEFT JOIN F718 X ON A.F10071=X.F71802
+                        LEFT JOIN F003 F ON A.F10004 = F.F00304
+                        LEFT JOIN F004 G ON A.F10005 = G.F00405
+                        LEFT JOIN F005 H ON A.F10006 = H.F00506
+                        LEFT JOIN F006 I ON A.F10007 = I.F00607
+                        WHERE B.""IdUser"" = {Session["UserId"]}";
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+        }
+
+        private string SelectRoluri()
+        {
+            string strSql = "";
+
+            try
+            {
+                //Florin 2019.05.27
+                strSql = $@"SELECT DISTINCT (-1 * B.IdSuper) AS ""Rol"",  COALESCE(A.""Alias"", A.""Denumire"") AS ""RolDenumire""
+                        FROM ""Avs_CereriIstoric"" B
+                        LEFT JOIN tblSupervizori A ON A.Id=(-1 * B.IdSuper)
+                        WHERE B.""IdUser"" = {Session["UserId"]}";
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+        }
+
+        private string SelectAtribute()
+        {
+            string strSql = "";
+
+            try
+            {
+                //Florin 2019.05.27
+                strSql = $@"SELECT DISTINCT C.""Id"", C.""Denumire""
+                        FROM ""Avs_CereriIstoric"" B
+                        INNER JOIN ""Avs_Cereri"" A ON A.Id=B.Id
+                        INNER JOIN ""Avs_tblAtribute"" C ON C.""Id""=A.""IdAtribut""
+                        WHERE B.""IdUser"" = {Session["UserId"]}
+                        ORDER BY C.""Denumire""";
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+        }
+
+        private string DamiStari()
+        {
+            string val = "";
+
+            try
+            {
+                if (General.Nz(checkComboBoxStare.Value, "").ToString() != "")
+                {
+                    val = checkComboBoxStare.Value.ToString().ToLower().Replace("solicitat", "1").Replace("in curs", "2").Replace("aprobat", "3").Replace("respins", "0").Replace("anulat", "-1").Replace("planificat", "4");
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return val;
+        }
+
+        public DataTable SelectGrid()
+        {
 
             DataTable q = null;
 
@@ -819,21 +1111,24 @@ namespace WizOne.Avs
                 string strSql = "";
                 string filtru = "";
 
+
                 if (Convert.ToInt32(cmbAngFiltru.Value ?? -99) != -99) filtru += " AND a.F10003 = " + Convert.ToInt32(cmbAngFiltru.Value ?? -99);
                 if (Convert.ToInt32(cmbAtributeFiltru.Value ?? -99) != -99) filtru += " AND a.\"IdAtribut\" = " + Convert.ToInt32(cmbAtributeFiltru.Value ?? -99);
-
-                //Florin 2019.05.20
-                //if (filtruStari != "") filtru += " AND a.\"IdStare\" IN (" + filtruStari.Replace(";", ",").Substring(0, filtruStari.Length - 1) + ")";
                 if (checkComboBoxStare.Value != null) filtru += @" AND A.""IdStare"" IN (" + DamiStari() + ")";
 
-                if (tip == 1)
-                    filtru += " AND \"IdUser\"=" + idUser + " AND (a.\"Pozitie\" + 1) = f.\"Pozitie\" ";
+                //daca este rol de hr aratam toate cererile
+                string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
+                if (("," + idHR + ",").IndexOf("," + General.Nz(cmbRol.Value,-99).ToString() + ",") < 0)
+                {
+                    filtru += " AND F.\"IdUser\"=" + Session["UserId"];
+                    if (Convert.ToInt32(cmbRol.Value ?? -99) != -99) filtru += " AND (-1 * F.\"IdSuper\") = " + Convert.ToInt32(cmbRol.Value ?? -99);
+                }
                 else
-                    filtru += " AND \"IdUser\"=" + idUser + " AND (a.\"Pozitie\" <= f.\"Pozitie\" or a.\"IdStare\" = 3 or a.\"IdStare\" = 0) ";
+                {
+                    //aratam toate cererile
+                }
 
 
-                //Florin 2019.03.26
-                //S-a adaugat coloana Revisal
                 if (Constante.tipBD == 1)
                 {
                     strSql = "select DISTINCT a.Id, a.F10003, b.F10008 + ' ' + b.F10009 AS NumeAngajat, a.IdAtribut, c.Denumire AS NumeAtribut , a.DataModif, a.Explicatii, a.Motiv, a.Actualizat, a.IdStare, a.Culoare,  " +
@@ -917,110 +1212,7 @@ namespace WizOne.Avs
         }
 
 
-        //public static string FiltruTipStari(ref ASPxDropDownEdit cmbTip)
-        //{
-        //    string val = "";
 
-        //    try
-        //    {
-        //        List<object> lst = cmbTip.Value as List<object>;
-        //        foreach (var ele in lst)
-        //        {
-        //            switch (ele.ToString().ToLower())
-        //            {
-        //                case "solicitat":
-        //                    val += "1;";
-        //                    break;
-        //                case "in curs":
-        //                    val += "2;";
-        //                    break;
-        //                case "aprobat":
-        //                    val += "3;";
-        //                    break;
-        //                case "respins":
-        //                    val += "0;";
-        //                    break;
-        //                case "anulat":
-        //                    val += "-1;";
-        //                    break;
-        //                case "planificat":
-        //                    val += "4;";
-        //                    break;
-        //                case "prezent":
-        //                    val += "5;";
-        //                    break;
-        //                case "absent":
-        //                    val += "6;";
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-
-        //    return val;
-        //}
-
-
-        private string SelectAngajati()
-        {
-            string strSql = "";
-
-            try
-            {
-                //Florin 2019.04.25
-                //s-a adaugat conditia F10025 <> 900;  sa nu apara candidatii
-
-                string op = "+";
-                if (Constante.tipBD == 2) op = "||";
-
-                strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
-                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
-                        FROM (
-                        SELECT A.F10003
-                        FROM F100 A
-                        WHERE COALESCE(A.F10025,0) <> 900 AND A.F10003 = {(Session["Marca"] == null ? "-99" : Session["Marca"].ToString())}
-                        UNION
-                        SELECT A.F10003
-                        FROM F100 A
-                        INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
-                        WHERE COALESCE(A.F10025,0) <> 900 AND B.""IdUser""= {Session["UserId"]}) B
-                        INNER JOIN F100 A ON A.F10003=B.F10003
-                        LEFT JOIN F718 X ON A.F10071=X.F71802
-                        LEFT JOIN F003 F ON A.F10004 = F.F00304
-                        LEFT JOIN F004 G ON A.F10005 = G.F00405
-                        LEFT JOIN F005 H ON A.F10006 = H.F00506
-                        LEFT JOIN F006 I ON A.F10007 = I.F00607";
-
-            }
-            catch (Exception ex)
-            {
-                //ArataMesaj("Atentie !");
-                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return strSql;
-        }
-
-        private string DamiStari()
-        {
-            string val = "";
-
-            try
-            {
-                if (General.Nz(checkComboBoxStare.Value, "").ToString() != "")
-                {
-                    val = checkComboBoxStare.Value.ToString().ToLower().Replace("solicitat", "1").Replace("in curs", "2").Replace("aprobat", "3").Replace("respins", "0").Replace("anulat", "-1").Replace("planificat", "4");
-                }
-            }
-            catch (Exception)
-            {
-            }
-
-            return val;
-        }
 
     }
 }

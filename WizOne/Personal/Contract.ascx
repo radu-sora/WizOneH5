@@ -5,43 +5,43 @@
 <script type="text/javascript">
 
     function OnTextChangedHandlerCtr(s) {
-        //if (s.name == "deUltimaZiLucr") {
-        //    var DateTo = new Date(s.GetDate());
-        //    var DateAng = new Date(deDataAng.GetDate());
+        if (s.name == "deUltimaZiLucr") {
+            var DateTo = new Date(s.GetDate());
+            var DateAng = new Date(deDataAng.GetDate());
 
-        //    if (DateTo < DateAng) {
-        //        swal({
-        //            title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
-        //            type: "warning"
-        //        });
-        //    }
-        //    else {
-        //        DateTo.setDate(DateTo.getDate() + 1);
-        //        deDataPlecarii.SetDate(DateTo);
-        //    }
-        //}
+            if (DateTo < DateAng) {
+                swal({
+                    title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
+                    type: "warning"
+                });
+            }
+            else {
+                DateTo.setDate(DateTo.getDate() + 1);
+                deDataPlecarii.SetDate(DateTo);
+            }
+        }
 
-        //if (s.name == "deDataPlecarii")
-        //{
-        //    var DateTo = new Date(s.GetDate());
-        //    var DateMax = new Date(2100, 1, 1);
-        //    var DateAng = new Date(deDataAng.GetDate());
+        if (s.name == "deDataPlecarii")
+        {
+            var DateTo = new Date(s.GetDate());
+            var DateMax = new Date(2100, 1, 1);
+            var DateAng = new Date(deDataAng.GetDate());
 
-        //    if (DateTo < DateAng) {
-        //        swal({
-        //            title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
-        //            type: "warning"
-        //        });
-        //    }
-        //    else {
-        //        if (DateTo.getTime() != DateMax.getTime()) {
-        //            DateTo.setDate(DateTo.getDate() - 1);
-        //            deUltimaZiLucr.SetDate(DateTo);
-        //        }
-        //    }
-        //}
+            if (DateTo < DateAng) {
+                swal({
+                    title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
+                    type: "warning"
+                });
+            }
+            else {
+                if (DateTo.getTime() != DateMax.getTime()) {
+                    DateTo.setDate(DateTo.getDate() - 1);
+                    deUltimaZiLucr.SetDate(DateTo);
+                }
+            }
+        }
 
-        //pnlCtlContract.PerformCallback(s.name + ";" +s.GetText());
+        pnlCtlContract.PerformCallback(s.name + ";" +s.GetText());
     }
 
     function OnValueChangedHandlerCtr(s) {

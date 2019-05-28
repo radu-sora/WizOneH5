@@ -5,8 +5,8 @@
 <script type="text/javascript">
 
     function OnTextChangedHandlerDI(s) {
-        //debugger
-        //pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetText());
+        debugger
+        pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetText());
     }
     function OnValueChangedHandlerDI(s) {
         pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetValue());

@@ -45,7 +45,7 @@ namespace WizOne.Personal
         {
             try
             {
-                IncarcaGrid();
+                IncarcaGrid1();
             }
             catch (Exception)
             {
@@ -58,7 +58,7 @@ namespace WizOne.Personal
         {
             try
             {
-                IncarcaGrid();
+                IncarcaGrid2();
             }
             catch (Exception)
             {
@@ -67,57 +67,47 @@ namespace WizOne.Personal
             }
         }
 
-        private void IncarcaGrid()
+        private void IncarcaGrid1()
         {
 
             DataTable dt = new DataTable();
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
-            if (dsCalcul != null && dsCalcul.Tables.Contains("Tarife"))
+            if (dsCalcul != null && dsCalcul.Tables.Contains("Sporuri1"))
             {
-                dt = dsCalcul.Tables["Tarife"];
+                dt = dsCalcul.Tables["Sporuri1"];
             }
             else
             {
                 dt = new DataTable();
-                dt.Columns.Add("DenCateg", typeof(string));
-                dt.Columns.Add("DenTarif", typeof(string));
-                dt.Columns.Add("F01104", typeof(int));
+                dt.Columns.Add("Spor", typeof(string));
+                dt.Columns.Add("Tarif", typeof(string));
+                dt.Columns.Add("F02504", typeof(int));
                 dt.Columns.Add("F01105", typeof(int));
-                
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["F01104"], dt.Columns["F01105"] };
+                dt.Columns.Add("Id", typeof(int));
 
-                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
-                string sqlFinal = "";
-                string sql = "SELECT F01104, F01105, (SELECT TOP 1 b.F01107 FROM F011 b WHERE b.F01104 = a.F01104) AS \"DenCateg\", " 
-                        + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"DenTarif\" FROM F011 a ", cond = "";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F02504"], dt.Columns["F01105"] };
 
-                if (Constante.tipBD == 2)
-                    sql = "SELECT F01104, F01105, (SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 WHERE ROWNUM = 1) AS \"DenCateg\", "
-                        + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"DenTarif\" FROM F011 a ";
+                string sql = "";
 
-                for (int i = 0; i < sir.Length; i++)
-                    if (sir[i] != '0')
-                    {
-                        cond = "WHERE (a.F01104 = " + (i + 1).ToString() + " AND a.F01105 = " + sir[i] + ") ";
-                        sqlFinal += (sqlFinal.Length <= 0 ? "" : " UNION ") + sql + cond;
-                    }
-
-                if (sqlFinal.Length > 0)
-                    dt = General.IncarcaDT(sqlFinal, null);
-                dt.TableName = "Tarife";
+                dt = General.IncarcaDT(sql, null);
+                dt.TableName = "Sporuri1";
                 if (dsCalcul == null)
                     dsCalcul = new DataSet();
 
                 dsCalcul.Tables.Add(dt);
             }
-            grDateSporuri1.KeyFieldName = "F01104; F01105";
+            grDateSporuri1.KeyFieldName = "F02504; F01105";
             grDateSporuri1.DataSource = dt;   
 
             Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
 
         }
 
+        private void IncarcaGrid2()
+        {
+
+        }
 
         protected void grDateSporuri1_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {

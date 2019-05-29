@@ -32,14 +32,14 @@
         <SettingsEditing Mode="Inline" />                       
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
-			<dx:GridViewDataTextColumn FieldName="DenCateg" Caption="Categorie" VisibleIndex="1">
+			<dx:GridViewDataTextColumn FieldName="Spor" Caption="Spor" VisibleIndex="1">
 				<EditItemTemplate>
-					<dx:ASPxComboBox ID="cmbMaster1" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F01104" TextField="F01107" OnInit="cmbMaster1_Init">
+					<dx:ASPxComboBox ID="cmbMaster1" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster1_Init">
 					</dx:ASPxComboBox>
-                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetCategTarife" />                    
+                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" />                    
 				</EditItemTemplate>
 			</dx:GridViewDataTextColumn>
-			<dx:GridViewDataTextColumn FieldName="DenTarif" Caption="Tarif" VisibleIndex="2">
+			<dx:GridViewDataTextColumn FieldName="Tarif" Caption="Tarif" VisibleIndex="2">
 				<EditItemTemplate>
 					<dx:ASPxComboBox ID="cmbChild1" runat="server" DataSourceID="asdChild" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild1_Callback" OnInit="cmbChild1_Init">                        
 					</dx:ASPxComboBox>	  
@@ -50,8 +50,9 @@
                     </asp:ObjectDataSource>
 				</EditItemTemplate>
 			</dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="F01104" VisibleIndex="3" Visible="false"/>
-            <dx:GridViewDataTextColumn FieldName="F01105" VisibleIndex="4" Visible="false"/> 
+            <dx:GridViewDataTextColumn FieldName="F02504" VisibleIndex="3" Visible="false"/>
+            <dx:GridViewDataTextColumn FieldName="F01105" VisibleIndex="4" Visible="false"/>            
+            <dx:GridViewDataTextColumn FieldName="Id" VisibleIndex="5" Visible="false"/>      
         </Columns>       
         <SettingsCommandButton>
             <UpdateButton ButtonType="Link" Text="Actualizeaza">
@@ -80,14 +81,14 @@
         <SettingsEditing Mode="Inline" />                       
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
-			<dx:GridViewDataTextColumn FieldName="DenCateg" Caption="Categorie" VisibleIndex="1">
+			<dx:GridViewDataTextColumn FieldName="Spor" Caption="Spor" VisibleIndex="1">
 				<EditItemTemplate>
-					<dx:ASPxComboBox ID="cmbMaster2" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F01104" TextField="F01107" OnInit="cmbMaster2_Init">
+					<dx:ASPxComboBox ID="cmbMaster2" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster2_Init">
 					</dx:ASPxComboBox>
-                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetCategTarife" />                    
+                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" />                    
 				</EditItemTemplate>
 			</dx:GridViewDataTextColumn>
-			<dx:GridViewDataTextColumn FieldName="DenTarif" Caption="Tarif" VisibleIndex="2">
+			<dx:GridViewDataTextColumn FieldName="Tarif" Caption="Tarif" VisibleIndex="2">
 				<EditItemTemplate>
 					<dx:ASPxComboBox ID="cmbChild2" runat="server" DataSourceID="asdChild" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild2_Callback" OnInit="cmbChild2_Init">                        
 					</dx:ASPxComboBox>	  
@@ -98,8 +99,9 @@
                     </asp:ObjectDataSource>
 				</EditItemTemplate>
 			</dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="F01104" VisibleIndex="3" Visible="false"/>
+            <dx:GridViewDataTextColumn FieldName="F02504" VisibleIndex="3" Visible="false"/>
             <dx:GridViewDataTextColumn FieldName="F01105" VisibleIndex="4" Visible="false"/> 
+            <dx:GridViewDataTextColumn FieldName="Id" VisibleIndex="5" Visible="false"/>      
         </Columns>       
         <SettingsCommandButton>
             <UpdateButton ButtonType="Link" Text="Actualizeaza">

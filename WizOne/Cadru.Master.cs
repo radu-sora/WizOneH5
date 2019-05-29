@@ -13,6 +13,7 @@ using System.Web.Hosting;
 
 namespace WizOne
 {
+    //Test Florin 2019.05.29
     public partial class Cadru : System.Web.UI.MasterPage
     {
         protected override void FrameworkInitialize()

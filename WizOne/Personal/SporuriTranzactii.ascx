@@ -6,7 +6,7 @@
 <body>
 
     <dx:ASPxGridView ID="grDateSporTran" runat="server" ClientInstanceName="grDateSporTran" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateSporTran_DataBinding" 
-           OnRowUpdating="grDateSporTran_RowUpdating"  >        
+           OnRowUpdating="grDateSporTran_RowUpdating"   >        
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
         <ClientSideEvents  ContextMenu="ctx" /> 

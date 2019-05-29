@@ -149,8 +149,8 @@ namespace WizOne.Personal
                 e.Cancel = true;
                 grDateSporTran.CancelEdit();
 
-                //ds.Tables[0].Rows[0]["F10067"] = sirNou;
-                //ds.Tables[1].Rows[0]["F10067"] = sirNou;
+                ds.Tables[0].Rows[0]["F10095" + (79 + Convert.ToInt32(e.NewValues["Id"])).ToString()] = e.NewValues["Cod"];
+                ds.Tables[2].Rows[0]["F10095" + (79 + Convert.ToInt32(e.NewValues["Id"])).ToString()] = e.NewValues["Cod"];
 
 
                 Session["InformatiaCurentaPersonal"] = ds;
@@ -164,8 +164,5 @@ namespace WizOne.Personal
             }
         }
 
-
-
-
-    }
+     
 }

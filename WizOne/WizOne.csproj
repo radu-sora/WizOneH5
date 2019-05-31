@@ -14,7 +14,7 @@
     <RootNamespace>WizOne</RootNamespace>
     <AssemblyName>WizOne</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -879,6 +879,7 @@
     <Content Include="Generatoare\Reports\Pages\Download.ashx" />
     <Content Include="Organigrama\Diagrama.xlsm" />
     <Content Include="Organigrama\Temp\Diagrama1078.xlsm" />
+    <Content Include="NuGet.config" />
     <None Include="Properties\PublishProfiles\Publicat.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

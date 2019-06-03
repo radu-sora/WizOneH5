@@ -83,7 +83,7 @@
 							        <dx:ASPxLabel  ID="lblPauza"  Width="100"  runat="server"  Text="Pauza min: "></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="dePauza" Width="60"  runat="server" Value='<%# Eval("PauzaMin") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
+							        <dx:ASPxDateEdit  ID="dePauza" Width="60"  runat="server" Value='<%# Eval("PauzaMin") %>' AutoPostBack="false"   DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
                                         <CalendarProperties FirstDayOfWeek="Monday" />
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerDateGen(s); }" />
 							        </dx:ASPxDateEdit>

@@ -752,6 +752,8 @@
     <Content Include="Personal\Calcul.ascx" />
     <Content Include="Personal\Componente.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
+    <Content Include="Personal\Sporuri.ascx" />
+    <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\Tarife.ascx" />
     <Content Include="Personal\Test.aspx" />
     <Content Include="Personal\Test1.ascx" />
@@ -1568,6 +1570,20 @@
     </Compile>
     <Compile Include="Personal\LipsaNecesar.ascx.designer.cs">
       <DependentUpon>LipsaNecesar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Sporuri.ascx.cs">
+      <DependentUpon>Sporuri.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Sporuri.ascx.designer.cs">
+      <DependentUpon>Sporuri.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\SporuriTranzactii.ascx.cs">
+      <DependentUpon>SporuriTranzactii.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\SporuriTranzactii.ascx.designer.cs">
+      <DependentUpon>SporuriTranzactii.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Tarife.ascx.cs">
       <DependentUpon>Tarife.ascx</DependentUpon>

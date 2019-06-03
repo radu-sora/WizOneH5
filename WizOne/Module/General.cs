@@ -5883,6 +5883,42 @@ namespace WizOne.Module
             return table;
         }
 
+        public static DataTable GetTarifeSp(string categ)
+        {
+            DataTable table = new DataTable();
+
+            try
+            {
+
+                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = (  select distinct f01104 from f025
+                                left join f021 on f02510 = f02104
+                                left join f011 on f02106 = f01104
+                                where  f02504 = " + categ + @")";
+                if (Constante.tipBD == 2)
+                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = (  select distinct f01104 from f025 "
+                               + " left join f021 on f02510 = f02104 "
+                               + " left join f011 on f02106 = f01104 "
+                               + " where f02504 = " + categ + ")";
+                table = IncarcaDT(sql, null);
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return table;
+        }
+
+
+        public static DataTable GetSporuri(string param)
+        {
+            string sql = @"SELECT F02504, F02505 FROM F025  WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") ;
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("F025", "F02504") + " WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ");
+            return General.IncarcaDT(sql, null);
+        }
+
         //end Radu
 
         public static string SelectInlocuitori(int f10003, DateTime? dtINc, DateTime? dtSf)

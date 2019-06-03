@@ -101,7 +101,9 @@ namespace WizOne.Personal
         protected void grDateTarife_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
             try
-            {             
+            {
+                if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
+                    return;
 
                 int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
                 GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
@@ -159,6 +161,8 @@ namespace WizOne.Personal
         {
             try
             {
+                if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
+                    return;
 
                 int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
                 GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
@@ -217,16 +221,11 @@ namespace WizOne.Personal
 
         protected void grDateTarife_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
         {
-            //if (!grDateTarife.IsEditing || e.Column.FieldName != "F01105") return;
-            //if (e.KeyValue == DBNull.Value || e.KeyValue == null) return;
-            //object val = grDateTarife.GetRowValuesByKeyValue(e.KeyValue, "F01104");
-            //if (val == DBNull.Value) return;
-            //int tarif = Convert.ToInt32(val);
-
-            //ASPxComboBox combo = e.Editor as ASPxComboBox;
-            //FillTarifCombo(combo, tarif);
-
-            //combo.Callback += new CallbackEventHandlerBase(cmbTarif_OnCallback);
+            //if (e.Column.FieldName == "DenCateg")
+            //{
+            //    var tb = e.Editor as ASPxTextBox;
+            //    tb.ClientSideEvents.TextChanged = "OnTextChangedTarife";
+            //}
         }
 
         //protected void FillTarifCombo(ASPxComboBox cmb, int tarif)
@@ -302,10 +301,10 @@ namespace WizOne.Personal
         {
             ASPxComboBox cmbChild = sender as ASPxComboBox;
 
-            ObjectDataSource cmbChildAccessDataSource = cmbChild.NamingContainer.FindControl("asdChild") as ObjectDataSource;
+            ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("asdChild") as ObjectDataSource;
 
-            cmbChildAccessDataSource.SelectParameters.Clear();
-            cmbChildAccessDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Clear();
+            cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
             cmbChild.DataBindItems();
         }
 

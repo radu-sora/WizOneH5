@@ -34,16 +34,20 @@
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
 			<dx:GridViewDataTextColumn FieldName="Spor" Caption="Spor" VisibleIndex="1">
 				<EditItemTemplate>
-					<dx:ASPxComboBox ID="cmbMaster1" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster1_Init">
+					<dx:ASPxComboBox ID="cmbMaster1" runat="server" DataSourceID="adsMaster1" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster1_Init">
 					</dx:ASPxComboBox>
-                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" />                    
+                     <asp:ObjectDataSource runat="server" ID="adsMaster1" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" >                    
+                        <SelectParameters>
+                             <asp:Parameter Name="param"  Type="String" />
+                        </SelectParameters>
+                     </asp:ObjectDataSource>
 				</EditItemTemplate>
 			</dx:GridViewDataTextColumn>
 			<dx:GridViewDataTextColumn FieldName="Tarif" Caption="Tarif" VisibleIndex="2">
 				<EditItemTemplate>
-					<dx:ASPxComboBox ID="cmbChild1" runat="server" DataSourceID="asdChild" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild1_Callback" OnInit="cmbChild1_Init">                        
+					<dx:ASPxComboBox ID="cmbChild1" runat="server" DataSourceID="adsChild1" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild1_Callback" OnInit="cmbChild1_Init">                        
 					</dx:ASPxComboBox>	  
-                    <asp:ObjectDataSource runat="server" ID="asdChild" TypeName="WizOne.Module.General" SelectMethod="GetTarife" > 
+                    <asp:ObjectDataSource runat="server" ID="adsChild1" TypeName="WizOne.Module.General" SelectMethod="GetTarifeSp" > 
                         <SelectParameters>
                              <asp:Parameter Name="categ"  Type="String" />
                         </SelectParameters>
@@ -83,16 +87,20 @@
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
 			<dx:GridViewDataTextColumn FieldName="Spor" Caption="Spor" VisibleIndex="1">
 				<EditItemTemplate>
-					<dx:ASPxComboBox ID="cmbMaster2" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster2_Init">
+					<dx:ASPxComboBox ID="cmbMaster2" runat="server" DataSourceID="adsMaster2" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster2_Init">
 					</dx:ASPxComboBox>
-                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" />                    
+                     <asp:ObjectDataSource runat="server" ID="adsMaster2" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" >                    
+                        <SelectParameters>
+                             <asp:Parameter Name="param"  Type="String" />
+                        </SelectParameters>
+                     </asp:ObjectDataSource>
 				</EditItemTemplate>
 			</dx:GridViewDataTextColumn>
 			<dx:GridViewDataTextColumn FieldName="Tarif" Caption="Tarif" VisibleIndex="2">
 				<EditItemTemplate>
-					<dx:ASPxComboBox ID="cmbChild2" runat="server" DataSourceID="asdChild" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild2_Callback" OnInit="cmbChild2_Init">                        
+					<dx:ASPxComboBox ID="cmbChild2" runat="server" DataSourceID="adsChild2" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild2_Callback" OnInit="cmbChild2_Init">                        
 					</dx:ASPxComboBox>	  
-                    <asp:ObjectDataSource runat="server" ID="asdChild" TypeName="WizOne.Module.General" SelectMethod="GetTarife" > 
+                    <asp:ObjectDataSource runat="server" ID="adsChild2" TypeName="WizOne.Module.General" SelectMethod="GetTarifeSp" > 
                         <SelectParameters>
                              <asp:Parameter Name="categ"  Type="String" />
                         </SelectParameters>

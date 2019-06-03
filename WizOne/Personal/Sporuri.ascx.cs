@@ -85,19 +85,40 @@ namespace WizOne.Personal
                 dt.Columns.Add("F02504", typeof(int));
                 dt.Columns.Add("F01105", typeof(int));
                 dt.Columns.Add("Id", typeof(int));
-
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["F02504"], dt.Columns["F01105"] };
-
+                               
                 string sql = "";
+                string cmp = "ISNULL";
+                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                if (Constante.tipBD == 2)
+                    cmp = "NVL";     
+
+                for (int i = 0; i <= 9; i++)
+                {
+                    string val = "0";
+                    DataTable dtTemp = General.IncarcaDT("select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + ds.Tables[0].Rows[0]["F10065" + i].ToString(), null);
+                    if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
+                        val = dtTemp.Rows[0][0].ToString();
+
+                    sql += "select " + (i + 1).ToString() + " as \"Id\", f10065" + i + " as F02504, CASE WHEN f10065" + i + " = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT TOP 1 F02505 FROM F025 WHERE F02504 = F10065" + i + ") END as \"Spor\", "
+                            + " case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "                           
+                            + " CASE WHEN(case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                            +   cmp + "((select top 1 f01107 from f025 "
+                            + " left join f021 on f02510 = f02104 "
+                            + " left join f011 on f02106 = f01104 "
+                            + " where f02504 = f10065" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
+                            + " from f100 where f10003 = " + Session["Marca"].ToString();
+                    if (i < 9)
+                        sql += " UNION ";
+                }
 
                 dt = General.IncarcaDT(sql, null);
                 dt.TableName = "Sporuri1";
                 if (dsCalcul == null)
                     dsCalcul = new DataSet();
-
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
                 dsCalcul.Tables.Add(dt);
             }
-            grDateSporuri1.KeyFieldName = "F02504; F01105";
+            grDateSporuri1.KeyFieldName = "Id";
             grDateSporuri1.DataSource = dt;   
 
             Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
@@ -106,7 +127,57 @@ namespace WizOne.Personal
 
         private void IncarcaGrid2()
         {
+            DataTable dt = new DataTable();
+            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
+            if (dsCalcul != null && dsCalcul.Tables.Contains("Sporuri2"))
+            {
+                dt = dsCalcul.Tables["Sporuri2"];
+            }
+            else
+            {
+                dt = new DataTable();
+                dt.Columns.Add("Spor", typeof(string));
+                dt.Columns.Add("Tarif", typeof(string));
+                dt.Columns.Add("F02504", typeof(int));
+                dt.Columns.Add("F01105", typeof(int));
+                dt.Columns.Add("Id", typeof(int));
 
+                string sql = "";
+                string cmp = "ISNULL";
+                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                if (Constante.tipBD == 2)
+                    cmp = "NVL";
+                for (int i = 0; i <= 9; i++)
+                {
+                    string val = "0";
+                    DataTable dtTemp = General.IncarcaDT("select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + ds.Tables[0].Rows[0]["F10066" + i].ToString(), null);
+                    if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
+                        val = dtTemp.Rows[0][0].ToString();
+
+                    sql += "select " + (i + 11).ToString() + " as \"Id\", f10066" + i + " as F02504, CASE WHEN f10066" + i + " = 0 THEN 'Spor " + (i + 11).ToString() + "' ELSE (SELECT TOP 1 F02505 FROM F025 WHERE F02504 = F10066" + i + ") END as \"Spor\", "
+                            + " case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                            + cmp + "((select top 1 f01107 from f025 "
+                            + " left join f021 on f02510 = f02104 "
+                            + " left join f011 on f02106 = f01104 "
+                            + " where f02504 = f10066" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
+                            + " from f100 where f10003 = " + Session["Marca"].ToString();
+                    if (i < 9)
+                        sql += " UNION ";
+                }
+
+                dt = General.IncarcaDT(sql, null);
+                dt.TableName = "Sporuri2";
+                if (dsCalcul == null)
+                    dsCalcul = new DataSet();
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
+                dsCalcul.Tables.Add(dt);
+            }
+            grDateSporuri2.KeyFieldName = "Id";
+            grDateSporuri2.DataSource = dt;
+
+            Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
         }
 
         protected void grDateSporuri1_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
@@ -115,14 +186,14 @@ namespace WizOne.Personal
             {
 
                 int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
-                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
-                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster");
-                e.NewValues["F01104"] = cb1.Value;
-                e.NewValues["DenCateg"] = cb1.Text;
-                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["DenTarif"] as GridViewDataColumn;
-                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild");
+                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["Spor"] as GridViewDataColumn;
+                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster1");
+                e.NewValues["F02504"] = cb1.Value;
+                e.NewValues["Spor"] = cb1.Text;
+                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["Tarif"] as GridViewDataColumn;
+                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild1");
                 e.NewValues["F01105"] = cb2.Value;
-                e.NewValues["DenTarif"] = cb2.Text;
+                e.NewValues["Tarif"] = cb2.Text;
 
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
@@ -131,21 +202,30 @@ namespace WizOne.Personal
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
 
-                DataRow row = dsCalcul.Tables["Tarife"].Rows.Find(keys);
+                DataRow row = dsCalcul.Tables["Sporuri1"].Rows.Find(keys);
                 int poz = 0, val = 0;
-                foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
-                {                  
-                    col.ReadOnly = false;
-                    var edc = e.NewValues[col.ColumnName];
-                    row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                    if (col.ColumnName == "F01104")
-                        poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
-                    if (col.ColumnName == "F01105")
-                        val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                foreach (DataColumn col in dsCalcul.Tables["Sporuri1"].Columns)
+                {
+                    if (col.ColumnName != "Id")
+                    {
+                        col.ReadOnly = false;
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                        if (col.ColumnName == "F02504")
+                        {
+                            DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
+                            poz = Convert.ToInt32(dt.Rows[0][0].ToString());
+                        }
+                        if (col.ColumnName == "F01105")
+                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    }
                 }
 
                 e.Cancel = true;
-                grDateSporuri1.CancelEdit();
+                grDateSporuri1.CancelEdit();              
+
+                ds.Tables[0].Rows[0]["F10065" + (Convert.ToInt32(keys[0]) - 1).ToString()] = e.NewValues["F02504"];
+                ds.Tables[1].Rows[0]["F10065" + (Convert.ToInt32(keys[0]) - 1).ToString()] = e.NewValues["F02504"];
+
 
                 string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
                 string sirNou = "";
@@ -161,7 +241,7 @@ namespace WizOne.Personal
 
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
-                grDateSporuri1.DataSource = dsCalcul.Tables["Tarife"];
+                grDateSporuri1.DataSource = dsCalcul.Tables["Sporuri1"];
             }
             catch (Exception ex)
             {
@@ -174,15 +254,16 @@ namespace WizOne.Personal
             try
             {
 
+
                 int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
-                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
-                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster");
-                e.NewValues["F01104"] = cb1.Value;
-                e.NewValues["DenCateg"] = cb1.Text;
-                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["DenTarif"] as GridViewDataColumn;
-                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild");
+                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["Spor"] as GridViewDataColumn;
+                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster2");
+                e.NewValues["F02504"] = cb1.Value;
+                e.NewValues["Spor"] = cb1.Text;
+                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["Tarif"] as GridViewDataColumn;
+                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild2");
                 e.NewValues["F01105"] = cb2.Value;
-                e.NewValues["DenTarif"] = cb2.Text;
+                e.NewValues["Tarif"] = cb2.Text;
 
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
@@ -190,22 +271,30 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
-
-                DataRow row = dsCalcul.Tables["Tarife"].Rows.Find(keys);
                 int poz = 0, val = 0;
-                foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                DataRow row = dsCalcul.Tables["Sporuri2"].Rows.Find(keys);
+                foreach (DataColumn col in dsCalcul.Tables["Sporuri2"].Columns)
                 {
-                    col.ReadOnly = false;
-                    var edc = e.NewValues[col.ColumnName];
-                    row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                    if (col.ColumnName == "F01104")
-                        poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
-                    if (col.ColumnName == "F01105")
-                        val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    if (col.ColumnName != "Id")
+                    {
+                        col.ReadOnly = false;
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                        if (col.ColumnName == "F02504")
+                        {
+                            DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
+                            poz = Convert.ToInt32(dt.Rows[0][0].ToString());
+                        }
+                        if (col.ColumnName == "F01105")
+                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    }
                 }
 
                 e.Cancel = true;
                 grDateSporuri2.CancelEdit();
+
+                ds.Tables[0].Rows[0]["F10066" + (Convert.ToInt32(keys[0]) - 11).ToString()] = e.NewValues["F02504"];
+                ds.Tables[1].Rows[0]["F10066" + (Convert.ToInt32(keys[0]) - 11).ToString()] = e.NewValues["F02504"];
+
 
                 string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
                 string sirNou = "";
@@ -221,7 +310,7 @@ namespace WizOne.Personal
 
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
-                grDateSporuri2.DataSource = dsCalcul.Tables["Tarife"];
+                grDateSporuri2.DataSource = dsCalcul.Tables["Sporuri2"];
             }
             catch (Exception ex)
             {
@@ -237,8 +326,14 @@ namespace WizOne.Personal
             GridViewDataItemTemplateContainer templateContainer = cmbParent.NamingContainer as GridViewDataItemTemplateContainer;
 
             cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged1(s, e, {0}); }}", templateContainer.VisibleIndex);
-                      
-                
+
+            ObjectDataSource cmbMasterDataSource = cmbParent.NamingContainer.FindControl("adsMaster1") as ObjectDataSource;
+
+            cmbMasterDataSource.SelectParameters.Clear();
+            cmbMasterDataSource.SelectParameters.Add("param", "1");
+            cmbParent.DataBindItems();
+
+
         }
 
         protected void cmbChild1_Init(object sender, EventArgs e)
@@ -261,10 +356,10 @@ namespace WizOne.Personal
         {
             ASPxComboBox cmbChild = sender as ASPxComboBox;
 
-            ObjectDataSource cmbChildAccessDataSource = cmbChild.NamingContainer.FindControl("asdChild") as ObjectDataSource;
+            ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("adsChild1") as ObjectDataSource;
 
-            cmbChildAccessDataSource.SelectParameters.Clear();
-            cmbChildAccessDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Clear();
+            cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
             cmbChild.DataBindItems();
         }
 
@@ -278,7 +373,11 @@ namespace WizOne.Personal
 
             cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged2(s, e, {0}); }}", templateContainer.VisibleIndex);
 
-   
+            ObjectDataSource cmbMasterDataSource = cmbParent.NamingContainer.FindControl("adsMaster2") as ObjectDataSource;
+
+            cmbMasterDataSource.SelectParameters.Clear();
+            cmbMasterDataSource.SelectParameters.Add("param", "0");
+            cmbParent.DataBindItems();
         }
 
         protected void cmbChild2_Init(object sender, EventArgs e)
@@ -301,10 +400,10 @@ namespace WizOne.Personal
         {
             ASPxComboBox cmbChild = sender as ASPxComboBox;
 
-            ObjectDataSource cmbChildAccessDataSource = cmbChild.NamingContainer.FindControl("asdChild") as ObjectDataSource;
+            ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("adsChild2") as ObjectDataSource;
 
-            cmbChildAccessDataSource.SelectParameters.Clear();
-            cmbChildAccessDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Clear();
+            cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
             cmbChild.DataBindItems();
         }
 

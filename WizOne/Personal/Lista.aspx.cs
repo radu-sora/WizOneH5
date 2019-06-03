@@ -329,8 +329,7 @@ namespace WizOne.Personal
                     object row = grDate.GetRowValues(e.VisibleIndex, "Culoare");
                     string culoare = row.ToString();
 
-                    e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(culoare);
-                    
+                    e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(culoare);                    
                 }
             }
             catch (Exception ex)

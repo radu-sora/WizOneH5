@@ -14,7 +14,7 @@
     <RootNamespace>WizOne</RootNamespace>
     <AssemblyName>WizOne</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -710,6 +710,7 @@
     <Content Include="Fisiere\Imagini\Widgets\icoWidget3.png" />
     <Content Include="Fisiere\Imagini\Widgets\icoWidget4.png" />
     <Content Include="Fisiere\Imagini\WizOne.png" />
+    <Content Include="Fisiere\js\iban.js" />
     <Content Include="Fisiere\js\logare.js" />
     <Content Include="Fisiere\js\pontaj.js" />
     <Content Include="Fisiere\js\StringResources.js" />
@@ -755,9 +756,6 @@
     <Content Include="Personal\Sporuri.ascx" />
     <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\Tarife.ascx" />
-    <Content Include="Personal\Test.aspx" />
-    <Content Include="Personal\Test1.ascx" />
-    <Content Include="Personal\Test2.ascx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
@@ -856,6 +854,7 @@
     <Content Include="Tactil\PontajDetaliatTactil.aspx" />
     <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
+    <Content Include="WebForm3.aspx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -1592,27 +1591,6 @@
     <Compile Include="Personal\Tarife.ascx.designer.cs">
       <DependentUpon>Tarife.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Personal\Test.aspx.cs">
-      <DependentUpon>Test.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\Test.aspx.designer.cs">
-      <DependentUpon>Test.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Personal\Test1.ascx.cs">
-      <DependentUpon>Test1.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\Test1.ascx.designer.cs">
-      <DependentUpon>Test1.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Personal\Test2.ascx.cs">
-      <DependentUpon>Test2.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\Test2.ascx.designer.cs">
-      <DependentUpon>Test2.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2289,6 +2267,13 @@
     </Compile>
     <Compile Include="WebForm2.aspx.designer.cs">
       <DependentUpon>WebForm2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm3.aspx.cs">
+      <DependentUpon>WebForm3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm3.aspx.designer.cs">
+      <DependentUpon>WebForm3.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebService\Detalii.aspx.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>

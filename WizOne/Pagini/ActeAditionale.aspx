@@ -156,8 +156,8 @@
                 <div class="Absente_divOuter" style="margin:15px 0px;">
 
                     <div class="Absente_Cereri_CampuriSup" id="pnlComp" runat="server" visible="false">
-                        <label id="lblCmp" runat="server" style="display:inline-block;">Tip</label>
-                        <dx:ASPxComboBox ID="cmbCmp" ClientInstanceName="cmbTip" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="true" ValueField="F00202" TextField="F00204" ValueType="System.Int32" AllowNull="false" OnSelectedIndexChanged="cmbComp_SelectedIndexChanged"/>
+                        <label id="lblCmp" runat="server" style="display:inline-block;">Companie</label>
+                        <dx:ASPxComboBox ID="cmbCmp" ClientInstanceName="cmbCmp" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="true" ValueField="F00202" TextField="F00204" ValueType="System.Int32" AllowNull="false" OnSelectedIndexChanged="cmbComp_SelectedIndexChanged"/>
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">

@@ -13,13 +13,13 @@ namespace WizOne.Personal {
     public partial class DateIdentificare {
         
         /// <summary>
-        /// pnlCtlDateIdent control.
+        /// DateIdentificare_pnlCtl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlDateIdent;
+        protected global::DevExpress.Web.ASPxCallbackPanel DateIdentificare_pnlCtl;
         
         /// <summary>
         /// lgFoto control.
@@ -58,12 +58,12 @@ namespace WizOne.Personal {
         protected global::DevExpress.Web.ASPxButton btnSterge;
         
         /// <summary>
-        /// DateIdentListView control.
+        /// DateIdentificare_DataList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView DateIdentListView;
+        protected global::System.Web.UI.WebControls.DataList DateIdentificare_DataList;
     }
 }

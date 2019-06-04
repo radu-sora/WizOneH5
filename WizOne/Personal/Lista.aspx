@@ -135,11 +135,10 @@
         </tr>
         <tr>
 			<td align="left" Width="210">		               
-                <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare" ID="checkComboBoxStare" Width="210" runat="server" AnimationType="None">
+                <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare" ID="checkComboBoxStare" Width="300" runat="server" AnimationType="None">
                     <DropDownWindowStyle BackColor="#EDEDED" />
                     <DropDownWindowTemplate>
-                        <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn"
-                            runat="server">
+                        <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170">
                             <Border BorderStyle="None" />
                             <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                             <Items>

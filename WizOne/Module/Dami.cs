@@ -1520,7 +1520,21 @@ namespace WizOne.Module
             }
         }
 
+        public static int Varsta(DateTime dataNasterii)
+        {
+            int rez = 0;
 
+            try
+            {
+                rez = Convert.ToInt32((DateTime.Now - dataNasterii).TotalDays / 365);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return rez;
+        }
 
 
 

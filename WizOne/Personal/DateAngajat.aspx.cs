@@ -15,6 +15,7 @@ using System.Web.UI.HtmlControls;
 using DevExpress.Data;
 using System.Web.Hosting;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace WizOne.Personal
 {
@@ -159,10 +160,13 @@ namespace WizOne.Personal
                     Session["AdresaCompusa"] = null;
                     Session["AdresaSelectata"] = null;
                 }
+
+                Session["FaraCNPInvalid"] = General.Nz(General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'1') FROM ""tblParametrii"" WHERE ""Nume"" = 'NuPermiteCNPInvalid' ", null),1);
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -171,21 +175,9 @@ namespace WizOne.Personal
         {
             try
             {
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                //SqlDataAdapter da = new SqlDataAdapter();
-                //SqlCommandBuilder cb = new SqlCommandBuilder();
-                //da.SelectCommand = General.DamiSqlCommand(@"SELECT TOP 0 * FROM F100 ", null);
-                //SqlCommandBuilder cb = new SqlCommandBuilder(da);
-                //da.Update(ds.Tables[1]);
-                //da.Dispose();
-                //da = null;
+                AdaugaValorile();
 
-                //da = new SqlDataAdapter();
-                //da.SelectCommand = General.DamiSqlCommand(@"SELECT TOP 0 * FROM F1001 ", null);
-                //cb = new SqlCommandBuilder(da);
-                //da.Update(ds.Tables[2]);
-                //da.Dispose();
-                //da = null;
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
                 if (Dami.ValoareParam("ValidariPersonal") == "1")
                 {
@@ -302,23 +294,25 @@ namespace WizOne.Personal
                     }         
                 }
 
-                string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'NuPermiteCNPInvalid'";
-                DataTable dt = General.IncarcaDT(sql, null);
-                if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)
-                    if (!General.VerificaCNP(ds.Tables[1].Rows[0]["F10017"].ToString()))
-                    {
-                        MessageBox.Show("CNP invalid!", MessageBox.icoError);
-                        return;
-                    }
+                //verificarea se face pe partea de client
+                //string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'NuPermiteCNPInvalid'";
+                //DataTable dt = General.IncarcaDT(sql, null);
+                //if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)
+                //    if (!General.VerificaCNP(ds.Tables[1].Rows[0]["F10017"].ToString()))
+                //    {
+                //        MessageBox.Show("CNP invalid!", MessageBox.icoError);
+                //        return;
+                //    }
 
-                DateIdentificare dateId = new DateIdentificare();
-                int varsta = dateId.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
-                if (varsta < 16)
-                {
-                    MessageBox.Show(Dami.TraduCuvant("Nu puteti angaja o persoana cu varsta mai mica de 16 ani!"), MessageBox.icoError);
-                    return;
-                }
+                //DateIdentificare dateId = new DateIdentificare();
+                //int varsta = dateId.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
+                //if (varsta < 16)
+                //{
+                //    MessageBox.Show(Dami.TraduCuvant("Nu puteti angaja o persoana cu varsta mai mica de 16 ani!"), MessageBox.icoError);
+                //    return;
+                //}
 
+                int varsta = Dami.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"]));
                 if (varsta >= 16 && varsta < 18 && Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"].ToString()) > 6)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Timp partial invalid (max 6 pentru minori peste 16 ani)!"));
@@ -338,8 +332,8 @@ namespace WizOne.Personal
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                 {
                     int val = 1;
-                    sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TermenDepasireRevisal'";
-                    dt = General.IncarcaDT(sql, null);
+                    string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TermenDepasireRevisal'";
+                    DataTable dt = General.IncarcaDT(sql, null);
                     if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 )
                         val = Convert.ToInt32(dt.Rows[0][0].ToString());
                     if (val == 1)
@@ -406,12 +400,6 @@ namespace WizOne.Personal
 
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {
-                    //da = new SqlDataAdapter();
-                    //da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM \"" + ds.Tables[i].TableName + "\"", null);
-                    //cb = new SqlCommandBuilder(da);
-                    //da.Update(ds.Tables[i]);
-                    //da.Dispose();
-                    //da = null;
                     General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                 }
 
@@ -432,144 +420,138 @@ namespace WizOne.Personal
 
                 //Florin 2018.11.22
                 //trimitem la lista de angajati
-
-                //MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
-
-                //DataTable dtDept = General.IncarcaDT("SELECT F00608 FROM F006 WHERE F00607 = " + ds.Tables[0].Rows[0]["F10007"].ToString(), null);
-                //lblDateAngajat.Text = ds.Tables[0].Rows[0]["F10008"].ToString() + " " + ds.Tables[0].Rows[0]["F10009"].ToString() + ", Marca: " + ds.Tables[0].Rows[0]["F10003"].ToString()
-                //                    + ", Deptartament: " + dtDept.Rows[0]["F00608"].ToString();
-
                 Response.Redirect("~/Personal/Lista.aspx", false);
 
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
 
         protected void Initializare(DataSet ds)
         {
-            ds = new DataSet();
-
-
-            string idSablon = Session["IdSablon"].ToString();
-            string sql = "SELECT * FROM F099 WHERE F09903 = " + idSablon;
-            DataTable dt = General.IncarcaDT(sql, null);
-
-            sql = "SELECT * FROM F0991 WHERE F09903 = " + idSablon;
-            DataTable dt1 = General.IncarcaDT(sql, null);
-
-            DataTable dtComb = General.IncarcaDT("SELECT * FROM F100, F1001 WHERE F100.F10003 = F1001.F10003 AND F100.F10003 = (SELECT MIN(F10003) FROM F100)", null);
-            object[] rowComb = new object[dtComb.Columns.Count];
-
-            DataTable dt100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = (SELECT MIN(F10003) FROM F100)", null);
-            object[] row100 = new object[dt100.Columns.Count];
-
-            int x = 0;
-            foreach (DataColumn col in dt100.Columns)
+            try
             {
-                switch (col.ColumnName.ToUpper())
+                ds = new DataSet();
+
+
+                string idSablon = Session["IdSablon"].ToString();
+                string sql = "SELECT * FROM F099 WHERE F09903 = " + idSablon;
+                DataTable dt = General.IncarcaDT(sql, null);
+
+                sql = "SELECT * FROM F0991 WHERE F09903 = " + idSablon;
+                DataTable dt1 = General.IncarcaDT(sql, null);
+
+                DataTable dtComb = General.IncarcaDT("SELECT * FROM F100, F1001 WHERE F100.F10003 = F1001.F10003 AND F100.F10003 = (SELECT MIN(F10003) FROM F100)", null);
+                object[] rowComb = new object[dtComb.Columns.Count];
+
+                DataTable dt100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = (SELECT MIN(F10003) FROM F100)", null);
+                object[] row100 = new object[dt100.Columns.Count];
+
+                int x = 0;
+                foreach (DataColumn col in dt100.Columns)
                 {
-                    case "F10003":
-                    case "F100985":
-                        row100[x] = Convert.ToInt32(Session["Marca"].ToString());
-                        rowComb[x] = Convert.ToInt32(Session["Marca"].ToString());
-                        break;
-                    case "USER_NO":
-                        row100[x] = Session["UserId"];
-                        rowComb[x] = Session["UserId"];
-                        break;
-                    case "TIME":
-                        row100[x] = DateTime.Now;
-                        rowComb[x] = DateTime.Now;
-                        break;
+                    switch (col.ColumnName.ToUpper())
+                    {
+                        case "F10003":
+                        case "F100985":
+                            row100[x] = Convert.ToInt32(Session["Marca"].ToString());
+                            rowComb[x] = Convert.ToInt32(Session["Marca"].ToString());
+                            break;
+                        case "USER_NO":
+                            row100[x] = Session["UserId"];
+                            rowComb[x] = Session["UserId"];
+                            break;
+                        case "TIME":
+                            row100[x] = DateTime.Now;
+                            rowComb[x] = DateTime.Now;
+                            break;
+                    }
+                    x++;
                 }
-                x++;
+                if (dt100.Rows.Count > 0)
+                    dt100.Rows.RemoveAt(0);
+                dt100.Rows.Add(row100);
+                dt100.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+
+                DataTable dt1001 = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = (SELECT MIN(F10003) FROM F1001)", null);
+                dt1001.TableName = "F1001";
+                object[] row1001 = new object[dt1001.Columns.Count];
+
+                x = 0;
+                foreach (DataColumn col in dt1001.Columns)
+                {
+                    switch (col.ColumnName.ToUpper())
+                    {
+                        case "F10003":
+                            row1001[x] = Convert.ToInt32(Session["Marca"].ToString());
+                            rowComb[x + dt100.Columns.Count] = Convert.ToInt32(Session["Marca"].ToString());
+                            break;
+                        case "USER_NO":
+                            row1001[x] = Session["UserId"];
+                            rowComb[x + dt100.Columns.Count] = Session["UserId"];
+                            break;
+                        case "TIME":
+                            row1001[x] = DateTime.Now;
+                            rowComb[x + dt100.Columns.Count] = DateTime.Now;
+                            break;
+                    }
+                    x++;
+                }
+                if (dt1001.Rows.Count > 0)
+                    dt1001.Rows.RemoveAt(0);
+                dt1001.Rows.Add(row1001);
+                dt1001.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+
+                if (dtComb.Rows.Count > 0)
+                    dtComb.Rows.RemoveAt(0);
+                dtComb.Rows.Add(rowComb);
+                dtComb.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+
+                for (int i = 0; i < dt.Columns.Count; i++)
+                    if (dt.Columns[i].ColumnName != "F09903" && dt.Columns[i].ColumnName != "F099985" && dt.Columns[i].ColumnName != "F09908" && dt.Columns[i].ColumnName != "F09909" && dt.Columns[i].ColumnName != "USER_NO" && dt.Columns[i].ColumnName != "TIME")
+                    {
+                        dt100.Rows[0][dt.Columns[i].ColumnName.Replace("F099", "F100")] = dt.Rows[0][dt.Columns[i].ColumnName];
+                        dtComb.Rows[0][dt.Columns[i].ColumnName.Replace("F099", "F100")] = dt.Rows[0][dt.Columns[i].ColumnName];
+                    }
+
+                for (int i = 0; i < dt1.Columns.Count; i++)
+                    if (dt1.Columns[i].ColumnName != "F09903" && dt1.Columns[i].ColumnName != "USER_NO" && dt1.Columns[i].ColumnName != "TIME")
+                    {
+                        dt1001.Rows[0][dt1.Columns[i].ColumnName.Replace("F099", "F100")] = dt1.Rows[0][dt1.Columns[i].ColumnName];
+                        dtComb.Rows[0][dt1.Columns[i].ColumnName.Replace("F099", "F100")] = dt1.Rows[0][dt1.Columns[i].ColumnName];
+                    }
+
+                ds.Tables.Add(dtComb);
+                dt100.TableName = "F100";
+                ds.Tables.Add(dt100);
+                dt1001.TableName = "F1001";
+                ds.Tables.Add(dt1001);
+
+                Session["InformatiaCurentaPersonal"] = ds;
             }
-            if (dt100.Rows.Count > 0)
-                dt100.Rows.RemoveAt(0);
-            dt100.Rows.Add(row100);
-            dt100.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
-
-            DataTable dt1001 = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = (SELECT MIN(F10003) FROM F1001)", null);
-            dt1001.TableName = "F1001";
-            object[] row1001 = new object[dt1001.Columns.Count];
-
-            x = 0;
-            foreach (DataColumn col in dt1001.Columns)
+            catch (Exception ex)
             {
-                switch (col.ColumnName.ToUpper())
-                {
-                    case "F10003":
-                        row1001[x] = Convert.ToInt32(Session["Marca"].ToString());
-                        rowComb[x + dt100.Columns.Count] = Convert.ToInt32(Session["Marca"].ToString());
-                        break;
-                    case "USER_NO":
-                        row1001[x] = Session["UserId"];
-                        rowComb[x + dt100.Columns.Count] = Session["UserId"];
-                        break;
-                    case "TIME":
-                        row1001[x] = DateTime.Now;
-                        rowComb[x + dt100.Columns.Count] = DateTime.Now;
-                        break;
-                }
-                x++;
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-            if (dt1001.Rows.Count > 0)
-                dt1001.Rows.RemoveAt(0);
-            dt1001.Rows.Add(row1001);
-            dt1001.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
-
-            if (dtComb.Rows.Count > 0)
-                dtComb.Rows.RemoveAt(0);
-            dtComb.Rows.Add(rowComb);
-            dtComb.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
-
-            for (int i = 0; i < dt.Columns.Count; i++)
-                if (dt.Columns[i].ColumnName != "F09903" && dt.Columns[i].ColumnName != "F099985" && dt.Columns[i].ColumnName != "F09908" && dt.Columns[i].ColumnName != "F09909" && dt.Columns[i].ColumnName != "USER_NO" && dt.Columns[i].ColumnName != "TIME")
-                {
-                    dt100.Rows[0][dt.Columns[i].ColumnName.Replace("F099", "F100")] = dt.Rows[0][dt.Columns[i].ColumnName];
-                    dtComb.Rows[0][dt.Columns[i].ColumnName.Replace("F099", "F100")] = dt.Rows[0][dt.Columns[i].ColumnName];
-                }
-
-            for (int i = 0; i < dt1.Columns.Count; i++)
-                if (dt1.Columns[i].ColumnName != "F09903" && dt1.Columns[i].ColumnName != "USER_NO" && dt1.Columns[i].ColumnName != "TIME")
-                {
-                    dt1001.Rows[0][dt1.Columns[i].ColumnName.Replace("F099", "F100")] = dt1.Rows[0][dt1.Columns[i].ColumnName];
-                    dtComb.Rows[0][dt1.Columns[i].ColumnName.Replace("F099", "F100")] = dt1.Rows[0][dt1.Columns[i].ColumnName];
-                }
-
-            ds.Tables.Add(dtComb);
-            dt100.TableName = "F100";
-            ds.Tables.Add(dt100);
-            dt1001.TableName = "F1001";
-            ds.Tables.Add(dt1001);
-
-            Session["InformatiaCurentaPersonal"] = ds;
         }
 
         protected void InserareAngajat(string marca, DataTable dt100, DataTable dt1001)
         {
-
-            //SqlDataAdapter da = new SqlDataAdapter();
-            //SqlCommandBuilder cb = new SqlCommandBuilder();
-            //da = new SqlDataAdapter();
-            //da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM F100", null);
-            //cb = new SqlCommandBuilder(da);
-            //da.Update(dt100);
-            //da.Dispose();
-            //da = null;
-            General.SalveazaDate(dt100, "F100");
-
-            //da = new SqlDataAdapter();
-            //da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM F1001", null);
-            //cb = new SqlCommandBuilder(da);
-            //da.Update(dt1001);
-            //da.Dispose();
-            //da = null;
-            General.SalveazaDate(dt1001, "F1001");
+            try
+            {
+                General.SalveazaDate(dt100, "F100");
+                General.SalveazaDate(dt1001, "F1001");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
 
@@ -629,8 +611,10 @@ namespace WizOne.Personal
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return id;
@@ -666,7 +650,8 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -699,14 +684,10 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
             return lista;
-        }
-
-        protected void ASPxPageControl2_ActiveTabChanged(object source, TabControlEventArgs e)
-        {
-            string ert = "safdasdf";
         }
 
         protected void ASPxPageControl2_Callback(object sender, CallbackEventArgsBase e)
@@ -716,7 +697,6 @@ namespace WizOne.Personal
                 ASPxPageControl ctl = sender as ASPxPageControl;
                 if (ctl == null) return;
                 TabPage tab = ctl.ActiveTabPage;
-                //TabPage tab = e.Tab;
                 
                 if (Session["PreluareDate"] != null && Session["PreluareDate"].ToString() == "1")
                 {
@@ -745,8 +725,291 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+        private void AdaugaValorile()
+        {
+            try
+            {
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                string[] tabs = { "DateIdentificare", "Contract" };
+
+                //DateIdentificare
+                #region DateIdentificare
+                Dictionary<String, String> lstDI = new Dictionary<string, string>();
+                lstDI.Add("txtMarcaDI", "F10003");
+                lstDI.Add("txtCNPDI", "F10017");
+                lstDI.Add("txtMarcaUnica", "F1001036");
+                lstDI.Add("txtEIDDI", "F100901");
+                lstDI.Add("deDataNasterii", "F10021");
+                lstDI.Add("txtNume", "F10008");
+                lstDI.Add("txtPrenume", "F10009");
+                lstDI.Add("txtNumeAnt", "F100905");
+                lstDI.Add("deDataModifNume", "F100906");
+                lstDI.Add("cmbStareCivila", "F10046");
+                lstDI.Add("rbSex", "F10047");
+                #endregion
+
+                //Contract
+                #region Contract
+                Dictionary<String, String> lstCtr = new Dictionary<string, string>();
+                lstCtr.Add("txtNrCtrInt", "F100985");
+                lstCtr.Add("deDataCtrInt", "F100986");
+                lstCtr.Add("deDataAng", "F10022");
+                //lstCtr.Add("deTermenRevisal", "F100986");
+                lstCtr.Add("cmbTipCtrMunca", "F100984");
+                lstCtr.Add("cmbDurCtr", "F1009741");
+                lstCtr.Add("deDeLaData", "F100933");
+                lstCtr.Add("deLaData", "F100934");
+                lstCtr.Add("cmbPrel", "F100938");
+                lstCtr.Add("cmbExcIncet", "F100929");
+                lstCtr.Add("cmbCASSAngajat", "F1003900");
+                lstCtr.Add("cmbCASSAngajator", "F1003907");
+                lstCtr.Add("txtSalariu", "F100699");
+                lstCtr.Add("deDataModifSal", "F100991");
+                lstCtr.Add("cmbCategAng1", "F10061");
+                lstCtr.Add("cmbCategAng2", "F10062");
+                lstCtr.Add("txtLocAnt", "F10078");
+                lstCtr.Add("cmbLocatieInt", "F100966");
+                lstCtr.Add("cmbTipAng", "F10010");
+                lstCtr.Add("cmbTimpPartial", "F10043");
+                lstCtr.Add("cmbNorma", "F100973");
+                lstCtr.Add("deDataModifNorma", "F100955");
+                lstCtr.Add("cmbTipNorma", "F100926");
+                lstCtr.Add("cmbDurTimpMunca", "F100927");
+                lstCtr.Add("cmbRepTimpMunca", "F100928");
+                lstCtr.Add("cmbIntervRepTimpMunca", "F100939");
+                lstCtr.Add("txtNrOre", "F100964");
+                lstCtr.Add("cmbCOR", "F10098");
+                lstCtr.Add("deDataModifCOR", "F100956");
+                lstCtr.Add("cmbFunctie", "F10071");
+                lstCtr.Add("deDataModifFunctie", "F100992");
+                lstCtr.Add("cmbMeserie", "F10029");
+                lstCtr.Add("chkFunctieBaza", "F10048");
+                lstCtr.Add("txtPerProbaZL", "F1001063");
+                lstCtr.Add("txtPerProbaZC", "F100975");
+                lstCtr.Add("txtNrZilePreavizDemisie", "F1009742");
+                lstCtr.Add("txtNrZilePreavizConc", "F100931");
+                //lstCtr.Add("deUltimaZiLucr", "F10023");
+                //lstCtr.Add("deUltimaZiLucr", "F100993");
+                lstCtr.Add("cmbMotivPlecare", "F10025");
+                //lstCtr.Add("deDataPlecarii", "F100993");
+                lstCtr.Add("deDataReintegr", "F100930");
+                lstCtr.Add("cmbGradInvalid", "F10027");
+                lstCtr.Add("deDataValabInvalid", "F100271");
+                lstCtr.Add("chkScutitImp", "F10026");
+                lstCtr.Add("chkBifaPensionar", "F10037");
+                lstCtr.Add("chkBifaDetasat", "F100954");
+
+                //lstCtr.Add("txtVechCompAni", "F100986");
+                //lstCtr.Add("txtVechCompLuni", "F100986");
+                //lstCtr.Add("txtVechCarteMuncaAni", "F100986");
+                //lstCtr.Add("txtVechCarteMuncaLuni", "F100986");
+
+                lstCtr.Add("txtGrila", "F10072");
+                lstCtr.Add("txtZileCOFidel", "F100640");
+                lstCtr.Add("txtZileCOAnAnt", "F100641");
+                lstCtr.Add("txtZileCOCuvAnCrt", "F100642");
+                lstCtr.Add("deDataPrimeiAng", "F1001049");
+                lstCtr.Add("txtVechimeCompanie", "F100643");
+                lstCtr.Add("txtVechimeCarte", "F100644");
+
+                lstCtr.Add("hfNrLuni", "F100935");
+                lstCtr.Add("hfNrAni", "F100936");
+
+                #endregion
+
+                //DateGenerale
+                #region DateGenerale
+                Dictionary<String, String> lstDG = new Dictionary<string, string>();
+                lstDG.Add("txtCNP", "F10017");
+                lstDG.Add("txtCNPVechi", "F100171");
+                lstDG.Add("txtEID", "F100901");
+                lstDG.Add("txtNrCtr", "F100985");
+                lstDG.Add("txtNumeDG", "F10008");
+                lstDG.Add("txtPrenumeDG", "F10009");
+                lstDG.Add("txtNumeAntDG", "F100905");
+                lstDG.Add("dePanaLa", "F100906");
+                lstDG.Add("deDataNasteriiDG", "F10021");
+                lstDG.Add("cmbCompanie", "F10002");
+                lstDG.Add("cmbSubcompanie", "F10004");
+                lstDG.Add("cmbFiliala", "F10005");
+                lstDG.Add("cmbSectie", "F10006");
+                lstDG.Add("cmbDepartament", "F10007");
+                lstDG.Add("cmbSubdept", "F100958");
+                lstDG.Add("cmbBirouEchipa", "F100959");
+                lstDG.Add("deDataAngDG", "F10022");
+                lstDG.Add("deUltimaZiLucrDG", "F10023");
+                lstDG.Add("cmbMotivPlecareDG", "F10025");
+                lstDG.Add("cmbTimpPartialDG", "F10043");
+                lstDG.Add("cmbNormaDG", "F100973");
+                lstDG.Add("cmbCategAng", "F10061");
+                #endregion
+
+                //Detasari
+                #region Detasari
+                Dictionary<String, String> lstDS = new Dictionary<string, string>();
+                lstDS.Add("txtNumeAngajator", "F100918");
+                lstDS.Add("txtCUI", "F100919");
+                lstDS.Add("cmbNationalitate", "F100920");
+                lstDS.Add("deDataInceputDet", "F100915");
+                lstDS.Add("deDataSfarsitDet", "F100916");
+                lstDS.Add("deDataIncetareDet", "F100917");
+                #endregion
+
+                //Diverse
+                #region Diverse
+                Dictionary<String, String> lstDV = new Dictionary<string, string>();
+                lstDV.Add("txtNr", "F10011");
+                lstDV.Add("txtNorma", "F10043");
+                lstDV.Add("deData", "FX1");
+                lstDV.Add("txtLocNastere", "F100980");
+                lstDV.Add("cmbStudiiDiv", "F10050");
+                lstDV.Add("txtStudiiDet", "F100902");
+                lstDV.Add("cmbFunctieDiv", "F10071");
+                lstDV.Add("cmbNivel", "F10029");
+                lstDV.Add("txtZileCOFidel", "F100640");
+                lstDV.Add("txtZileCOAnAnt", "F100641");
+                lstDV.Add("txtZileCOCuvAnC", "F100642");
+                lstDV.Add("txtVechimeComp", "F100643");
+                lstDV.Add("txtVechimeCarteMunca", "F100644");
+                #endregion
+
+                //Documente
+                #region Documente
+                Dictionary<String, String> lstDO = new Dictionary<string, string>();
+                lstDO.Add("cmbTara", "F100987");
+                lstDO.Add("cmbCetatenie", "F100981");
+                lstDO.Add("cmbTipAutMunca", "F100911");
+                lstDO.Add("deDataInc", "F100912");
+                lstDO.Add("deDataSf", "F100913");
+                lstDO.Add("txtNumeMama", "F100988");
+                lstDO.Add("txtNumeTata", "F100989");
+                lstDO.Add("cmbTipDoc", "F100983");
+                lstDO.Add("txtSerieNr", "F10052");
+                lstDO.Add("txtEmisDe", "F100521");
+                lstDO.Add("txtLocNastere", "F100980");
+                lstDO.Add("deDataElib", "F100522");
+                lstDO.Add("deDataExp", "F100963");
+                lstDO.Add("txtNrPermisMunca", "F100982");
+                lstDO.Add("deDataPermisMunca", "F100994");
+                lstDO.Add("txtNrCtrIntVechi", "F100940");
+                lstDO.Add("txtDataCtrIntVechi", "F100941");
+                lstDO.Add("txtDetaliiCtrAngajat", "F100942");
+                lstDO.Add("cmbCateg", "F10028");
+                lstDO.Add("deDataEmitere", "F10024");
+                lstDO.Add("deDataExpirare", "F1001000");
+                lstDO.Add("txtNr", "F1001001");
+                lstDO.Add("txtPermisEmisDe", "F1001002");
+                lstDO.Add("cmbStudiiDoc", "F10050");
+                lstDO.Add("txtCalif1", "F100903");
+                lstDO.Add("txtCalif2", "F100904");
+                lstDO.Add("cmbTitluAcademic", "F10051");
+                lstDO.Add("cmbDedSomaj", "F10073");
+                lstDO.Add("txtNrCarteMunca", "F10012");
+                lstDO.Add("txtSerieCarteMunca", "F10013");
+                lstDO.Add("deDataCarteMunca", "FX1");
+                lstDO.Add("txtLivret", "F100571");
+                lstDO.Add("txtElibDe", "F100572");
+                lstDO.Add("deDeLaDataLivMil", "F100573");
+                lstDO.Add("deLaDataLivMil", "F100574");
+                lstDO.Add("txtGrad", "F100575");
+                lstDO.Add("txtOrdin", "F100576");
+                #endregion
+
+                //Studii
+                #region Studii
+                Dictionary<String, String> lstSU = new Dictionary<string, string>();
+                lstSU.Add("cmbStudiiSt", "F10050");
+                lstSU.Add("txtInstit", "F1001085");
+                lstSU.Add("txtSpec", "F1001086");
+                lstSU.Add("deDataInceputSt", "F1001087");
+                lstSU.Add("deDataSfarsitSt", "F1001088");
+                lstSU.Add("deDataDiploma", "F1001089");
+                lstSU.Add("txtObs", "F1001090");
+                #endregion
+
+                //Structura
+                #region Structura
+                Dictionary<String, String> lstST = new Dictionary<string, string>();
+                lstST.Add("xxxxxxxxxxxxx", "F10003");
+
+                #endregion
+
+                DataColumnCollection cols1 = ds.Tables[1].Columns;
+                DataColumnCollection cols2 = ds.Tables[2].Columns;
+
+                for (int i = 0; i < ASPxPageControl2.TabPages.Count; i++)
+                {
+                    if (tabs.Contains(ASPxPageControl2.TabPages[i].Name))
+                    {
+                        string numeTab = ASPxPageControl2.TabPages[i].Name;
+                        Dictionary<String, String> lst = new Dictionary<string, string>();
+                        switch (numeTab)
+                        {
+                            case "DateIdentificare":
+                                lst = lstDI;
+                                break;
+                            case "Contract":
+                                lst = lstCtr;
+                                break;
+                            case "DateGenerale":
+                                lst = lstDG;
+                                break;
+                            case "Detasari":
+                                lst = lstDS;
+                                break;
+                            case "Diverse":
+                                lst = lstDV;
+                                break;
+                            case "Documente":
+                                lst = lstDO;
+                                break;
+                            case "Studii":
+                                lst = lstSU;
+                                break;
+                            case "Structura":
+                                lst = lstST;
+                                break;
+                        }
+                        foreach (string idCtl in lst.Keys)
+                        {
+                            try
+                            {
+                                string colName = lst[idCtl];
+                                DataTable dt = new DataTable();
+                                if (cols1.Contains(colName)) dt = ds.Tables[1];
+                                if (cols2.Contains(colName)) dt = ds.Tables[2];
+
+                                dynamic ctl = ((dynamic)ASPxPageControl2.TabPages[i].Controls[0].FindControl(numeTab + "_pnlCtl").FindControl(numeTab + "_DataList")).Items[0].FindControl(idCtl);
+                                if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt.Rows[0][colName] = ctl.Value;
+                            }
+                            catch (Exception ex)
+                            {
+                                var ert = ex.Message;
+                            }
+                        }
+                    }
+                    //dynamic ctl1 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtNume");
+                    //if (ctl1 != null) ds.Tables[1].Rows[0]["F10008"] = ctl1.Value;
+                    //dynamic ctl2 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtPrenume");
+                    //if (ctl2 != null) ds.Tables[1].Rows[0]["F10009"] = ctl2.Value;
+                    //dynamic ctl3 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("txtCNPDI");
+                    //if (ctl3 != null) ds.Tables[0].Rows[0]["F10017"] = ctl3.Value;
+                    //dynamic ctl4 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("deDataModifNume");
+                    //if (ctl4 != null) ds.Tables[0].Rows[0]["F100906"] = ctl4.Value;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
     }
 }

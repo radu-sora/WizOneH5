@@ -13,21 +13,21 @@ namespace WizOne.Personal {
     public partial class Banca {
         
         /// <summary>
-        /// pnlCtlBanca control.
+        /// Banca_pnlCtl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlBanca;
+        protected global::DevExpress.Web.ASPxCallbackPanel Banca_pnlCtl;
         
         /// <summary>
-        /// DataList1 control.
+        /// Banca_DataList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList DataList1;
+        protected global::System.Web.UI.WebControls.DataList Banca_DataList;
     }
 }

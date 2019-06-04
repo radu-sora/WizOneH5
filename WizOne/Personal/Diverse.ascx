@@ -1,15 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Diverse.ascx.cs" Inherits="WizOne.Personal.Diverse" %>
 
 
-<script type="text/javascript">
-
-    function OnTextChangedHandlerDiverse(s) {
-        pnlCtlDiverse.PerformCallback(s.name + ";" + s.GetText());
-    }
-    function OnValueChangedHandlerDiverse(s) {
-        pnlCtlDiverse.PerformCallback(s.name + ";" + s.GetValue());
-    }
-</script>
 <body>
     <table width="100%">
 		<tr>
@@ -20,10 +11,10 @@
 	</table>
 				
 
-   <dx:ASPxCallbackPanel ID = "pnlCtlDiverse" ClientIDMode="Static" ClientInstanceName="pnlCtlDiverse" runat="server" OnCallback="pnlCtlDiverse_Callback" SettingsLoadingPanel-Enabled="false">
+   <dx:ASPxCallbackPanel ID = "Diverse_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlDiverse" runat="server" OnCallback="pnlCtlDiverse_Callback" SettingsLoadingPanel-Enabled="false">
       <PanelCollection>
         <dx:PanelContent>
-    <asp:DataList ID="DataList1" runat="server">
+    <asp:DataList ID="Diverse_DataList" runat="server">
         <ItemTemplate>
 			<div>
             <tr>  
@@ -38,7 +29,6 @@
 					            <td>	
 						            <dx:ASPxDateEdit  ID="deData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("FX1") %>' AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
-                                        <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 						            </dx:ASPxDateEdit>										
 					            </td>
 				            </tr>
@@ -48,7 +38,6 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtNr" Width="150"  runat="server" Text='<%# Eval("F10011") %>' AutoPostBack="false" >
-                                        <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -58,7 +47,6 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtNorma" Width="150"  runat="server" Text='<%# Eval("F10043") %>' AutoPostBack="false" >
-                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -73,17 +61,15 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtLocNastere" Width="150"  runat="server" Text='<%# Eval("F100980") %>' AutoPostBack="false" >
-                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
 					        <tr>				
-						        <td >
+						        <td>
 							        <dx:ASPxLabel  ID="lblStudii" Width="100" runat="server"  Text="Studii" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
 							        <dx:ASPxComboBox DataSourceID="dsStudii" Width="150"  Value='<%#Eval("F10050") %>' ID="cmbStudiiDiv"   runat="server" DropDownStyle="DropDown"  TextField="F71204" ValueField="F71202" AutoPostBack="false"  ValueType="System.Int32" >
-                                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerDiverse(s); }" />
 							        </dx:ASPxComboBox>
 						        </td>
 					        </tr>
@@ -93,27 +79,24 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtStudiiDet" Width="150"  runat="server" Text='<%# Eval("F100902") %>' AutoPostBack="false" >
-                                        <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
 					        <tr>				
-						        <td >
+						        <td>
 							        <dx:ASPxLabel  ID="lblFunctie" Width="100" runat="server"  Text="Functie" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
 							        <dx:ASPxComboBox  DataSourceID="dsFunctie" Width="150" Value='<%#Eval("F10071") %>' ID="cmbFunctieDiv"   runat="server" DropDownStyle="DropDown"  TextField="F71804" ValueField="F71802" AutoPostBack="false"  ValueType="System.Int32" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerDiverse(s); }" />
 							        </dx:ASPxComboBox>
 						        </td>
 					        </tr>					  
 					        <tr>				
-						        <td >
+						        <td>
 							        <dx:ASPxLabel  ID="lblNivel" Width="100" runat="server"  Text="Nivel" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
 							        <dx:ASPxComboBox DataSourceID="dsNivel" Width="150" Value='<%#Eval("F10029") %>' ID="cmbNivel"   runat="server" DropDownStyle="DropDown"  TextField="F71704" ValueField="F71702" AutoPostBack="false"  ValueType="System.Int32" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerDiverse(s); }" />
 							        </dx:ASPxComboBox>
 						        </td>
 					        </tr>
@@ -131,7 +114,6 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtZileCOFidel" Width="150"  runat="server" Text='<%# Eval("F100640") %>' AutoPostBack="false" >
-                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -141,7 +123,6 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtZileCOAnAnt" Width="150"  runat="server" Text='<%# Eval("F100641") %>' AutoPostBack="false" >
-                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -151,7 +132,6 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtZileCOCuvAnC" Width="150"  runat="server" Text='<%# Eval("F100642") %>' AutoPostBack="false" >
-                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -161,7 +141,6 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtVechimeComp" Width="150"  runat="server" Text='<%# Eval("F100643") %>' AutoPostBack="false" >
-                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -171,7 +150,6 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtVechimeCarteMunca" Width="150"  runat="server" Text='<%# Eval("F100644") %>' AutoPostBack="false" >
-                                         <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDiverse(s); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>

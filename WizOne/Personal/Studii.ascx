@@ -4,17 +4,6 @@
 
 <script type="text/javascript">
 
-    function OnTextChangedHandlerStudii(s) {
-        pnlCtlStudii.PerformCallback(s.name + ";" + s.GetText());
-    }
-    function OnValueChangedHandlerStudii(s) {
-        pnlCtlStudii.PerformCallback(s.name + ";" + s.GetValue());
-    }
-    function OnClickStudii(s) {
-        pnlLoading.Show();
-        pnlCtlStudii.PerformCallback(s.name);
-    }
-
     function GoToIstoricStudii(s) {
         strUrl = getAbsoluteUrl + "Avs/Istoric.aspx?qwe=" + s.name;
         popGenIst.SetHeaderText("Istoric modificari contract");
@@ -32,10 +21,10 @@
 		</tr>			
 	</table>			
 
-   <dx:ASPxCallbackPanel ID = "pnlCtlStudii" ClientIDMode="Static" ClientInstanceName="pnlCtlStudii" runat="server" OnCallback="pnlCtlStudii_Callback" SettingsLoadingPanel-Enabled="false">
+   <dx:ASPxCallbackPanel ID = "Studii_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlStudii" runat="server" OnCallback="pnlCtlStudii_Callback" SettingsLoadingPanel-Enabled="false">
       <PanelCollection>
         <dx:PanelContent>
-    <asp:DataList ID="DataList1" runat="server">
+    <asp:DataList ID="Studii_DataList" runat="server">
         <ItemTemplate>
 			<div>
 
@@ -48,7 +37,6 @@
 						</td>
 						<td>	
 						<dx:ASPxComboBox DataSourceID="dsStudii" Width="150"  Value='<%#Eval("F10050") %>' ID="cmbStudiiSt"   runat="server" DropDownStyle="DropDown"  TextField="F71204" ValueField="F71202" AutoPostBack="false"  ValueType="System.Int32" >
-                                    <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStudii(s); }" />
 							</dx:ASPxComboBox>
 						</td>
                         <td>
@@ -72,7 +60,6 @@
 						</td>	
 						<td>
 							<dx:ASPxTextBox  ID="txtInstit"  Width="100" runat="server" Text='<%# Bind("F1001085") %>'  AutoPostBack="false" >
-                                <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerStudii(s); }" />
 							</dx:ASPxTextBox >
 						</td>
 					</tr>
@@ -82,7 +69,6 @@
 						</td>	
 						<td>
 							<dx:ASPxTextBox  ID="txtSpec"  Width="100" runat="server" Text='<%# Bind("F1001086") %>'  AutoPostBack="false" >
-                                <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerStudii(s); }" />
 							</dx:ASPxTextBox >
 						</td>
 					</tr>
@@ -94,7 +80,6 @@
 						<td>			
 							<dx:ASPxDateEdit  ID="deDataInceputSt" Width="75" runat="server" Value='<%# Bind("F1001087") %>' DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  > 
                                 <CalendarProperties FirstDayOfWeek="Monday" /> 
-                                <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerStudii(s); }" />
 							</dx:ASPxDateEdit>					
 						</td>
 					</tr>
@@ -105,7 +90,6 @@
 						<td>			
 							<dx:ASPxDateEdit  ID="deDataSfarsitSt" Width="75" runat="server" Value='<%# Bind("F1001088") %>'  DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerStudii(s); }" />
 							</dx:ASPxDateEdit>					
 						</td>
 					</tr>
@@ -116,7 +100,6 @@
 						<td>			
 							<dx:ASPxDateEdit  ID="deDataDiploma" Width="75" runat="server" Value='<%# Bind("F1001089") %>'  DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerStudii(s); }" />
 							</dx:ASPxDateEdit>					
 						</td>
 					</tr>                                                            
@@ -127,7 +110,6 @@
 						</td>	
 						<td>
 							<dx:ASPxTextBox  ID="txtObs"  Width="100" runat="server" Text='<%# Bind("F1001090") %>' AutoPostBack="false" >
-                                <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerStudii(s); }" />
 							</dx:ASPxTextBox >
 						</td>
 					</tr>                                                            

@@ -30,6 +30,7 @@
                 <asp:ScriptReference Path="~/Fisiere/js/utils.js" />
                 <asp:ScriptReference Path="~/Fisiere/MsgBox/sweetalert.min.js" />
                 <asp:ScriptReference Path="~/Fisiere/js/StringResources.js" />
+                <asp:ScriptReference Path="~/Fisiere/js/iban.js" />
             </Scripts>
         </asp:ScriptManager>     
              

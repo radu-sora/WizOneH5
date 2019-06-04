@@ -20,8 +20,8 @@ namespace WizOne.Personal
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             table = ds.Tables[0];
 
-            DataList1.DataSource = table;
-            DataList1.DataBind();
+            Detasari_DataList.DataSource = table;
+            Detasari_DataList.DataBind();
 
             grDateDetasari.DataBind();
             foreach (dynamic c in grDateDetasari.Columns)
@@ -42,10 +42,10 @@ namespace WizOne.Personal
             string[] etichete = new string[6] { "lblNumeAngajator", "lblCUI", "lblNationalitate", "lblDataInceputDet", "lblDataSfarsitDet", "lblDataIncetareDet" };
             for (int i = 0; i < etichete.Count(); i++)
             {
-                ASPxLabel lbl = DataList1.Items[0].FindControl(etichete[i]) as ASPxLabel;
+                ASPxLabel lbl = Detasari_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
                 lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
             }
-            General.SecuritatePersonal(DataList1, Convert.ToInt32(Session["UserId"].ToString()));
+            General.SecuritatePersonal(Detasari_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 
         }
 
@@ -77,60 +77,6 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colDet = (grDateDetasari.Columns["F11206"] as GridViewDataComboBoxColumn);
             colDet.PropertiesComboBox.DataSource = dtDet;
 
-        }
-
-        protected void btnSalveaza_Click(object sender, EventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        protected void pnlCtlDet_Callback(object source, CallbackEventArgsBase e)
-        {
-            string[] param = e.Parameter.Split(';');
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-            switch (param[0])
-            {
-                case "txtNumeAngajator":
-                    ds.Tables[0].Rows[0]["F100918"] = param[1];
-                    ds.Tables[1].Rows[0]["F100918"] = param[1];
-                    Session["InformatiaCurentaPersonal"] = ds;
-                    break;
-                case "txtCUI":
-                    ds.Tables[0].Rows[0]["F100919"] = param[1];
-                    ds.Tables[1].Rows[0]["F100919"] = param[1];
-                    Session["InformatiaCurentaPersonal"] = ds;
-                    break;
-                case "cmbNationalitate":
-                    ds.Tables[0].Rows[0]["F100920"] = param[1];
-                    ds.Tables[1].Rows[0]["F100920"] = param[1];
-                    Session["InformatiaCurentaPersonal"] = ds;
-                    break;
-                case "deDataInceputDet":
-                    string[] data = param[1].Split('.');
-                    ds.Tables[0].Rows[0]["F100915"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
-                    ds.Tables[1].Rows[0]["F100915"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
-                    Session["InformatiaCurentaPersonal"] = ds;
-                    break;
-                case "deDataSfarsitDet":
-                    data = param[1].Split('.');
-                    ds.Tables[0].Rows[0]["F100916"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
-                    ds.Tables[1].Rows[0]["F100916"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
-                    Session["InformatiaCurentaPersonal"] = ds;
-                    break;
-                case "deDataIncetareDet":
-                    data = param[1].Split('.');
-                    ds.Tables[0].Rows[0]["F100917"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
-                    ds.Tables[1].Rows[0]["F100917"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
-                    Session["InformatiaCurentaPersonal"] = ds;
-                    break;
-            }
         }
 
 

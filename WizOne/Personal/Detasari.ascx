@@ -39,7 +39,7 @@
 							        </dx:ASPxComboBox>
 						        </td>
                                 <td  valign="top">
-					                <dx:ASPxButton ID="btnSalveazaDet" ClientInstanceName="btnSalveazaDet" ClientIDMode="Static" runat="server" OnClick="btnSalveaza_Click" AutoPostBack="true"  RenderMode="Link">
+					                <dx:ASPxButton ID="btnSalveazaDet" ClientInstanceName="btnSalveazaDet" ClientIDMode="Static" runat="server" OnClick="btnSalveazaDet_Click" AutoPostBack="true"  RenderMode="Link">
 						                <Image Url="../Fisiere/Imagini/Icoane/salveaza.png"></Image>
                                         <Paddings PaddingLeft="10px" />
 					                </dx:ASPxButton>

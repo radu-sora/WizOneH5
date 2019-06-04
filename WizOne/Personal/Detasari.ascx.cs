@@ -79,6 +79,9 @@ namespace WizOne.Personal
 
         }
 
+        protected void btnSalveazaDet_Click(object sender, EventArgs e)
+        {
 
+        }
     }
 }

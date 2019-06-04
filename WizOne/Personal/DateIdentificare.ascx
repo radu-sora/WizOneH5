@@ -1,5 +1,163 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DateIdentificare.ascx.cs" Inherits="WizOne.Personal.DateIdentificare" %>
 
+
+<script type="text/javascript">
+
+    function VerifMarca(s) {
+        pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetText());
+    }
+    function OnClickDI(s) {
+        pnlLoading.Show();
+        pnlCtlDateIdent.PerformCallback(s.name);
+    }
+
+    function OnConfirm() {
+        pnlCtlDateIdent.PerformCallback("PreluareDate");
+    }
+
+    function StartUpload() {
+        pnlLoading.Show();
+    }
+
+    function EndUploadDI(s) {
+        pnlLoading.Hide();
+        pnlCtlDateIdent.PerformCallback("img");
+    }
+
+    function GoToIstoricDI(s) {
+        strUrl = getAbsoluteUrl + "Avs/Istoric.aspx?qwe=" + s.name;
+        popGenIst.SetHeaderText("Istoric modificari contract");
+        popGenIst.SetContentUrl(strUrl);
+        popGenIst.Show();
+    }
+
+    function OnEndCallbackDI(s, e) {
+        pnlLoading.Hide();
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "Atentie !", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
+        }
+
+        if (s.cp_InfoMessage != null) {
+            swal({
+                title: "Informare", text: s.cp_InfoMessage,
+                type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    pnlCtlDateIdent.PerformCallback("PreluareDate");
+                }
+            });
+            s.cp_InfoMessage = null;
+        }
+    }
+
+    function ValidareCNP(s, e) {
+        if (<%=Session["NuPermiteCNPInvalid"] %> == 1) {
+            var cnp = s.GetText();
+            if (cnp != "") {
+                if (verifCnp(cnp)) {
+
+                    var strZiua = "2000-01-01";
+                    switch (cnp.substr(0, 1)) {
+                        case '1':
+                        case '2':
+                            an = "19";
+                            break;
+                        case '3':
+                        case '4':
+                            an = "18";
+                            break;
+                        case '5':
+                        case '6':
+                            an = "20";
+                            break;
+                    }
+                    strZiua = an + cnp.substr(1, 2) + "-" + cnp.substr(3, 2) + "-" + cnp.substr(5, 2);
+                    var ziua = new Date(strZiua);
+                    deDataNasterii.SetValue(ziua);
+
+                    var azi = new Date();
+                    var varsta = dateDiffInDays(ziua, azi);
+                    txtVarsta.SetValue(varsta);
+
+                    var idSex = 0;
+                    if ((parseInt(cnp.substr(0, 1)) % 2) != 0)
+                        idSex = 1;
+                    else
+                        idSex = 2;
+                    rbSex.SetValue(idSex);
+
+                    if (varsta < 16) {
+                        swal({ title: "Atentie !", text: "Nu puteti angaja o persoana cu varsta mai mica de 16 ani!", type: "warning" });
+                    }
+                    else {
+                        swal({ title: "Va rugam asteptati !", text: "Se verifica CNP-ul", type: "warning" });
+                        pnlLoading.Show();
+                        pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetText());
+                    }
+                }
+                else {
+                    swal({ title: "Atentie !", text: "CNP invalid", type: "warning" });
+                }
+            }
+        }
+    }
+
+    function map(fn, arr) {
+        var ret = [];
+        for (var x = 0; x < arr.length; x++)
+            ret.push(fn(arr[x]));
+        return ret;
+    }
+
+    function reduce(fn, arr, initial) {
+        ret = initial;
+        for (var i = 0; i < arr.length; i++) { ret = fn(arr[i], ret); }
+        return ret;
+    }
+
+    function sum(arr) { return reduce(function (x, y) { return x + y; }, arr, 0); }
+
+    function verifCnp(cnp) {
+        if (cnp.length != 13)
+            return false;
+
+        cnp = map(parseInt, cnp.split(''));
+
+        var coefs = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9];
+        var idx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+        var s = map(function (x) { return coefs[x] * cnp[x]; }, idx);
+        s = sum(s) % 11;
+
+        return (s < 10 && s == cnp[12]) || (s == 10 && cnp[12] == 1);
+    }
+
+    function dateDiffInDays(a, b) {
+        const _MS_PER_DAY = 1000 * 60 * 60 * 24 * 365;
+
+        // Discard the time and time-zone information.
+        const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+        const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+        return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+    }
+
+    function CalcVarsta() {
+        var azi = new Date();
+        //var ziua = new Date(strZiua);
+        var ziua = deDataNasterii.GetValue();
+        var varsta = dateDiffInDays(ziua, azi);
+        txtVarsta.SetValue(varsta);
+    }
+
+</script>
+
+
+
 <body>
 	<style type="text/css">
 		.fieldset-auto-width {
@@ -237,163 +395,6 @@
     </dx:ASPxCallbackPanel>
 </body>		
 
-
-
-<script type="text/javascript">
-
-    function VerifMarca(s) {
-        pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetText());
-    }
-    function OnClickDI(s) {
-        pnlLoading.Show();
-        pnlCtlDateIdent.PerformCallback(s.name);
-    }
-
-    function OnConfirm() {
-        pnlCtlDateIdent.PerformCallback("PreluareDate");
-    }
-
-    function StartUpload() {
-        pnlLoading.Show();
-    }
-
-    function EndUploadDI(s) {
-        pnlLoading.Hide();
-        pnlCtlDateIdent.PerformCallback("img");
-    }
-
-    function GoToIstoricDI(s) {
-        strUrl = getAbsoluteUrl + "Avs/Istoric.aspx?qwe=" + s.name;
-        popGenIst.SetHeaderText("Istoric modificari contract");
-        popGenIst.SetContentUrl(strUrl);
-        popGenIst.Show();
-    }
-
-    function OnEndCallbackDI(s, e) {
-        pnlLoading.Hide();
-        if (s.cpAlertMessage != null) {
-            swal({
-                title: "Atentie !", text: s.cpAlertMessage,
-                type: "warning"
-            });
-            s.cpAlertMessage = null;
-        }
-
-        if (s.cp_InfoMessage != null) {
-            swal({
-                title: "Informare", text: s.cp_InfoMessage,
-                type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    pnlCtlDateIdent.PerformCallback("PreluareDate");
-                }
-            });
-            s.cp_InfoMessage = null;
-        }
-    }
-
-    function ValidareCNP(s, e) {
-        if (<%=Session["NuPermiteCNPInvalid"] %> == 1)
-        {
-            var cnp = s.GetText();
-            if (cnp != "") {
-                if (verifCnp(cnp)) {
-
-                    var strZiua = "2000-01-01";
-                    switch (cnp.substr(0, 1)) {
-                        case '1':
-                        case '2':
-                            an = "19";
-                            break;
-                        case '3':
-                        case '4':
-                            an = "18";
-                            break;
-                        case '5':
-                        case '6':
-                            an = "20";
-                            break;
-                    }
-                    strZiua = an + cnp.substr(1, 2) + "-" + cnp.substr(3, 2) + "-" + cnp.substr(5, 2);
-                    var ziua = new Date(strZiua);
-                    deDataNasterii.SetValue(ziua);
-
-                    var azi = new Date();
-                    var varsta = dateDiffInDays(ziua, azi);
-                    txtVarsta.SetValue(varsta);
-
-                    var idSex = 0;
-                    if ((parseInt(cnp.substr(0, 1)) % 2) != 0)
-                        idSex = 1;
-                    else
-                        idSex = 2;
-                    rbSex.SetValue(idSex);
-
-                    if (varsta < 16) {
-                        swal({ title: "Atentie !", text: "Nu puteti angaja o persoana cu varsta mai mica de 16 ani!", type: "warning" });
-                    }
-                    else {
-                        swal({ title: "Va rugam asteptati !", text: "Se verifica CNP-ul", type: "warning" });
-                        pnlLoading.Show();
-                        pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetText());
-                    }
-                }
-                else {
-                    swal({ title: "Atentie !", text: "CNP invalid", type: "warning" });
-                }
-            }
-        }
-    }
-
-    function map(fn, arr) {
-        var ret = [];
-        for (var x = 0; x < arr.length; x++)
-            ret.push(fn(arr[x]));
-        return ret;
-    }
-
-    function reduce(fn, arr, initial) {
-        ret = initial;
-        for (var i = 0; i < arr.length; i++) { ret = fn(arr[i], ret); }
-        return ret;
-    }
-
-    function sum(arr) { return reduce(function (x, y) { return x + y; }, arr, 0); }
-
-    function verifCnp(cnp) {
-        if (cnp.length != 13)
-            return false;
-
-        cnp = map(parseInt, cnp.split(''));
-
-        var coefs = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9];
-        var idx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-
-        var s = map(function (x) { return coefs[x] * cnp[x]; }, idx);
-        s = sum(s) % 11;
-
-        return (s < 10 && s == cnp[12]) || (s == 10 && cnp[12] == 1);
-    }
-
-    function dateDiffInDays(a, b) {
-        const _MS_PER_DAY = 1000 * 60 * 60 * 24 * 365;
-
-        // Discard the time and time-zone information.
-        const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-        const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
-        return Math.floor((utc2 - utc1) / _MS_PER_DAY);
-    }
-
-    function CalcVarsta() {
-        var azi = new Date();
-        //var ziua = new Date(strZiua);
-        var ziua = deDataNasterii.GetValue();
-        var varsta = dateDiffInDays(ziua, azi);
-        txtVarsta.SetValue(varsta);
-    }
-
-</script>
 
 
 

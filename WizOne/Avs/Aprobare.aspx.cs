@@ -1076,7 +1076,10 @@ namespace WizOne.Avs
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
                         LEFT JOIN F005 H ON A.F10006 = H.F00506
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
-                        WHERE B.""IdUser"" = {Session["UserId"]}";
+                        LEFT JOIN ""F100Supervizori"" FF on C.F10003 = FF.F10003 AND (-1 * B.""IdSuper"") = FF.""IdSuper""
+                        LEFT JOIN ""F100Supervizori"" GG ON C.F10003 = GG.F10003 AND CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0   
+                        WHERE (B.""IdSuper"" >= 0 AND B.""IdUser""={Session["UserId"]}) OR (B.""IdSuper"" < 0 AND FF.""IdUser""={Session["UserId"]})
+                        OR gg.""IdUser"" = {Session["UserId"]} ";
             }
             catch (Exception ex)
             {
@@ -1097,8 +1100,10 @@ namespace WizOne.Avs
                         CASE WHEN B.""IdSuper"" > 0 THEN 76 ELSE (-1 * B.""IdSuper"") END AS ""Rol"",  
                         CASE WHEN B.""IdSuper"" > 0 THEN 'Fara Rol' ELSE COALESCE(A.""Alias"", A.""Denumire"") END AS ""RolDenumire""
                         FROM ""Avs_CereriIstoric"" B
+                        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id"" 
                         LEFT JOIN ""tblSupervizori"" A ON A.""Id""=(-1 * B.""IdSuper"")
-                        WHERE B.""IdUser"" = {Session["UserId"]}";
+                        LEFT JOIN ""F100Supervizori"" F on C.f10003 = F.f10003 AND (-1 * B.""IdSuper"") = F.""IdSuper""
+                        WHERE (B.""IdSuper"" >= 0 AND B.""IdUser""={Session["UserId"]}) OR (B.""IdSuper"" < 0 AND F.""IdUser""={Session["UserId"]})";
             }
             catch (Exception ex)
             {

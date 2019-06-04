@@ -655,7 +655,7 @@ namespace WizOne
                 if (HttpContext.Current != null && Session["tblParam"] != null)
                 {
                     DataTable dt = Session["tblParam"] as DataTable;
-                    if (dt != null)
+                    if (dt != null && dt.Rows.Count > 0)
                     {
                         DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
                         if (arr1.Count() > 0)

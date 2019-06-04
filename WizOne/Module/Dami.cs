@@ -1174,7 +1174,7 @@ namespace WizOne.Module
                 if (HttpContext.Current != null && HttpContext.Current.Session["tblParam"] != null)
                 {
                     dt = HttpContext.Current.Session["tblParam"] as DataTable;
-                    if (dt != null)
+                    if (dt != null && dt.Rows.Count > 0)
                     {
                         DataRow[] arr = dt.Select("Nume='" + strParam + "'");
                         if (arr.Count() == 0)

@@ -1521,6 +1521,9 @@ namespace WizOne.Avs
                             cmbAtributeFiltru.DataSource = dtAtr;
                             cmbAtributeFiltru.DataBind();
 
+                            AscundeCtl();
+                            txtExpl.Text = "";
+                            cmbAtribute.Value = null;
                         }
                         break;
                     case "9":               //cmbAng
@@ -3332,7 +3335,7 @@ namespace WizOne.Avs
 
                 strSql = $@"SELECT A.""Id"", A.""Denumire"" FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=0
-                        WHERE {Session["User_Marca"]} = @3
+                        WHERE {Session["User_Marca"]} = @3 AND {cmbRol.Value} = 0
                         UNION
                         SELECT A.""Id"", A.""Denumire"" 
                         FROM ""Avs_tblAtribute"" A

@@ -76,6 +76,33 @@ namespace WizOne.Pagini {
         protected global::DevExpress.Web.ASPxButton btnExit;
         
         /// <summary>
+        /// pnlComp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlComp;
+        
+        /// <summary>
+        /// lblCmp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCmp;
+        
+        /// <summary>
+        /// cmbCmp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCmp;
+        
+        /// <summary>
         /// lblTip control.
         /// </summary>
         /// <remarks>

@@ -765,10 +765,10 @@ namespace WizOne.Avs
                             }
                             else
                             {
-                                //sql = "INSERT INTO \"Avs_CereriIstoric\" (\"Id\", \"IdCircuit\", \"IdUser\", \"IdStare\", \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", \"Inlocuitor\", \"IdSuper\") "
-                                //    + " VALUES ({0}, {1}, {2}, -1, {3}, '{4}', 1, {5}, {6}, {7})";
-                                //sql = string.Format(sql, id.ToString(), dtCerIst.Rows[0]["IdCircuit"].ToString(), dtCerIst.Rows[0]["IdCircuit"].ToString(), dtCerIst.Rows[0]["IdCircuit"].ToString(),
-                                //    dtCerIst.Rows[0]["IdCircuit"].ToString(), )
+                                //Florin 2019.06.03
+                                //daca anuleaza, introducem o linie noua cu anulat
+                                sql = $@"INSERT INTO ""Avs_CereriIstoric"" (""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", ""Inlocuitor"", ""IdSuper"")
+                                        VALUES ({id}, {dtCerIst.Rows[0]["IdCircuit"]}, {Session["UserId"]}, -1, 22, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1), 1, {General.CurrentDate()}, null, {-1 * Convert.ToInt32(General.Nz(cmbRol.Value,0))})";
                             }
                             General.IncarcaDT(sql, null);
 

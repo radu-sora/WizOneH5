@@ -13,21 +13,21 @@ namespace WizOne.Personal {
     public partial class Documente {
         
         /// <summary>
-        /// pnlCtlDocumente control.
+        /// Documente_pnlCtl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlDocumente;
+        protected global::DevExpress.Web.ASPxCallbackPanel Documente_pnlCtl;
         
         /// <summary>
-        /// DataList1 control.
+        /// Documente_DataList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList DataList1;
+        protected global::System.Web.UI.WebControls.DataList Documente_DataList;
     }
 }

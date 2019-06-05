@@ -59,8 +59,8 @@
             case "deDeLaData":
             case "deLaData":
                 {
-                    var dateDeLa = new Date(deDeLaData.GetDate());
-                    var dateLa = new Date(deLaData.GetDate());
+                    var dateDeLa = new Date(deDeLaData.GetValue());
+                    var dateLa = new Date(deLaData.GetValue());
 
                     if (dateDeLa > dateLa) {
                         swal({
@@ -78,6 +78,8 @@
                         var dtTmp = dateLa;
                         dtTmp.setDate(dtTmp.getDate() - 1)
                         deUltimaZiLucr.SetValue(dtTmp);
+
+                        Validare36Luni();
                     }
                 }
                 break;
@@ -264,7 +266,7 @@
     }
 
     function cmbIntervRepTimpMunca_SelectedIndexChanged(s) {
-        if (cmbIntervRepTimpMunca.GetValue() == 2 || cmbIntervalRepartizareTimpMunca.GetValue() == 3)
+        if (cmbIntervRepTimpMunca.GetValue() == 2 || cmbIntervRepTimpMunca.GetValue() == 3)
             txtNrOre.SetEnabled(true);
         else
             txtNrOre.SetEnabled(false);
@@ -276,7 +278,61 @@
         else {
             deDataValabInvalid.SetEnabled(false);
             var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
-            deDataValabInvalid.SetVAlue(dtTmp);
+            deDataValabInvalid.SetValue(dtTmp);
+        }
+    }
+
+    function cmbDurataContract_SelectedIndexChanged(s) {
+        Validare36Luni();
+    }
+
+    function Validare36Luni() {
+        if (cmbDurCtr.GetValue() == 1) {
+            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+
+            deDeLaData.SetEnabled(false);
+            deLaData.SetEnabled(false);
+            deUltimaZiLucr.SetEnabled(false);
+            deDataPlecarii.SetEnabled(false);
+
+            deDeLaData.SetValue(dtTmp);
+            deLaData.SetValue(dtTmp);
+            deUltimaZiLucr.SetValue(dtTmp);
+            deDataPlecarii.SetValue(dtTmp);
+
+            txtNrZile.SetValue("");
+            txtNrLuni.SetValue("");
+        }
+
+        if (cmbDurCtr.GetValue() == 2) {
+
+            deDeLaData.SetEnabled(true);
+            deLaData.SetEnabled(true);
+            deUltimaZiLucr.SetEnabled(true);
+            deDataPlecarii.SetEnabled(true);
+            if (<%=Session["MP_AreContract"] %> == 0)
+                deDeLaData.SetValue(deDataAng.GetValue());
+
+            if (deDeLaData.GetValue() != "" && deLaData.GetValue() != "") {
+                if (txtNrLuni.GetValue() > 36 || (txtNrLuni.GetValue() == 36 && txtNrZile.GetValue() > 0)) {
+                    swal({ title: "Atentie !", text: "Durata maxima a unui contract pe perioada determinata nu poate depasi 36 de luni", type: "warning" });
+                }
+                else {
+                    var ds36 = new Date("<%=Session["MP_DataSfarsit36"] %>");
+                    if (ds36 < deLaData.GetValue())
+                        swal({ title: "Atentie !", text: "Nu puteti prelungi un contract pe perioada determinata mai mult de 36 luni. Mai puteti prelungi contractul pana la data de " + ds36, type: "warning" });
+                }
+            }
+        }
+    }
+
+    function cmbPrel_SelectedIndexChanged() {
+        if (cmbPrel.GetValue() == 1) {
+            deDeLaData.SetValue(deLaData.GetValue());
+
+            //var d = deLaData.GetValue();
+            //var cal = d.setMonth(d.getMonth() + Number(txtNrLuni.GetValue()));
+            //deLaData.SetValue(d);
         }
     }
 
@@ -389,8 +445,8 @@
 							<dx:ASPxLabel  ID="lblDurCtr" runat="server"  Text="Durata contract" ></dx:ASPxLabel>	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsDC"  Value='<%#Eval("F1009741") %>'  ID="cmbDurCtr"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F08903" ValueField="F08902" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsDC"  Value='<%#Eval("F1009741") %>'  ID="cmbDurCtr"  ClientInstanceName="cmbDurCtr" Width="100" runat="server" DropDownStyle="DropDown"  TextField="F08903" ValueField="F08902" ValueType="System.Int32">
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbDurataContract_SelectedIndexChanged(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>	
@@ -436,8 +492,8 @@
 							<dx:ASPxLabel  ID="lblPrel" runat="server"  Text="Prelungire contract" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsPC"  Value='<%#Eval("F100938") %>' ID="cmbPrel"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsPC"  Value='<%#Eval("F100938") %>' ID="cmbPrel" ClientInstanceName="cmbPrel"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbPrel_SelectedIndexChanged(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>	

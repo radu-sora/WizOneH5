@@ -6083,7 +6083,10 @@ namespace WizOne.Module
                 HttpContext.Current.Session["SecAuditSelect"] = "0";
                 HttpContext.Current.Session["SecCriptare"] = "0";
 
-
+                //Florin 2019.06.04
+                HttpContext.Current.Session["MP_NuPermiteCNPInvalid"] = "1";
+                HttpContext.Current.Session["MP_AreContract"] = "0";
+                HttpContext.Current.Session["MP_DataSfarsit36"] = "01/01/2100";
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";

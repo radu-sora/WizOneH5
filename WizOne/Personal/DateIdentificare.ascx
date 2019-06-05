@@ -15,7 +15,7 @@
         pnlCtlDateIdent.PerformCallback("PreluareDate");
     }
 
-    function StartUpload() {
+    function StartUploadDI() {
         pnlLoading.Show();
     }
 
@@ -55,7 +55,7 @@
     }
 
     function ValidareCNP(s, e) {
-        if (<%=Session["NuPermiteCNPInvalid"] %> == 1) {
+        if (<%=Session["MP_NuPermiteCNPInvalid"] %> == 1) {
             var cnp = s.GetText();
             if (cnp != "") {
                 if (verifCnp(cnp)) {
@@ -195,7 +195,7 @@
                                                     <BrowseButton>
                                                         <Image Url="../Fisiere/Imagini/Icoane/incarca.png" Width="16px" Height="16px"></Image>                                    
                                                     </BrowseButton>
-                                                    <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUploadDI(s); }" />
+                                                    <ClientSideEvents FilesUploadStart="StartUploadDI" FileUploadComplete="function(s,e) { EndUploadDI(s); }" />
                                                 </dx:ASPxUploadControl>
                                             </td>   
                                             <td >

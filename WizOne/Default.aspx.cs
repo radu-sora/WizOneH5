@@ -635,8 +635,9 @@ namespace WizOne
                 Session["SecCriptare"] = "0";
 
                 //Florin 2019.06.04
-                Session["NuPermiteCNPInvalid"] = "1";
-
+                Session["MP_NuPermiteCNPInvalid"] = "1";
+                Session["MP_AreContract"] = "0";
+                Session["MP_DataSfarsit36"] = "01/01/2100";
 
 
                 string ti = "nvarchar";

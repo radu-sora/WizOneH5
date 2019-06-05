@@ -43,7 +43,7 @@ namespace WizOne.Personal
 
                     Session["esteNou"] = "true";
 
-                    Initializare(ds);
+                    Initializare(ref ds);
                 }
 
                 if (Session["esteNou"] == null || Session["esteNou"].ToString().Length <= 0 || Session["esteNou"].ToString() == "false")
@@ -161,7 +161,14 @@ namespace WizOne.Personal
                     Session["AdresaSelectata"] = null;
                 }
 
-                Session["FaraCNPInvalid"] = General.Nz(General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'1') FROM ""tblParametrii"" WHERE ""Nume"" = 'NuPermiteCNPInvalid' ", null),1);
+                Session["MP_NuPermiteCNPInvalid"] = General.Nz(General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'1') FROM ""tblParametrii"" WHERE ""Nume"" = 'NuPermiteCNPInvalid' ", null),1);
+                Session["MP_AreContract"] = General.Nz(General.ExecutaScalar(@"SELECT COUNT(*) FROM F095 WHERE F09503=@1 ", new object[] { Session["Marca"]  }), 1);
+                string sql36 = @"SELECT CONVERT(nvarchar(20),DATEADD(m,36,MIN(F09505)),103) FROM F095 WHERE F09503=@1 AND F09504=@2 AND COALESCE(F09511,'Determinat')='Determinat' ";
+                if (Constante.tipBD == 2)
+                    sql36 = "SELECT ADD_MONTHS(F09505, 36) FROM F095 WHERE F09503=@1 AND F09504=@2 AND COALESCE(F09511,'Determinat')='Determinat' ";
+                Session["MP_DataSfarsit36"] = General.Nz(General.ExecutaScalar(sql36, new object[] { Session["Marca"], ds.Tables[1].Rows[0]["F100985"] }), "01/01/2100").ToString();
+                var ert = Session["MP_DataSfarsit36"];
+
             }
             catch (Exception ex)
             {
@@ -431,7 +438,7 @@ namespace WizOne.Personal
         }
 
 
-        protected void Initializare(DataSet ds)
+        protected void Initializare(ref DataSet ds)
         {
             try
             {
@@ -941,6 +948,7 @@ namespace WizOne.Personal
 
                 DataColumnCollection cols1 = ds.Tables[1].Columns;
                 DataColumnCollection cols2 = ds.Tables[2].Columns;
+                DataColumnCollection cols3 = ds.Tables[0].Columns;
 
                 for (int i = 0; i < ASPxPageControl2.TabPages.Count; i++)
                 {
@@ -980,12 +988,16 @@ namespace WizOne.Personal
                             try
                             {
                                 string colName = lst[idCtl];
+                                dynamic ctl = ((dynamic)ASPxPageControl2.TabPages[i].Controls[0].FindControl(numeTab + "_pnlCtl").FindControl(numeTab + "_DataList")).Items[0].FindControl(idCtl);
+
                                 DataTable dt = new DataTable();
                                 if (cols1.Contains(colName)) dt = ds.Tables[1];
                                 if (cols2.Contains(colName)) dt = ds.Tables[2];
-
-                                dynamic ctl = ((dynamic)ASPxPageControl2.TabPages[i].Controls[0].FindControl(numeTab + "_pnlCtl").FindControl(numeTab + "_DataList")).Items[0].FindControl(idCtl);
                                 if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt.Rows[0][colName] = ctl.Value;
+
+                                DataTable dt2 = new DataTable();
+                                if (cols3.Contains(colName)) dt2 = ds.Tables[0];
+                                if (ctl != null && General.Nz(dt2.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt2.Rows[0][colName] = ctl.Value;
                             }
                             catch (Exception ex)
                             {

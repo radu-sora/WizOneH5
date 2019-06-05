@@ -231,12 +231,12 @@ namespace WizOne.Personal
                     }
 
                     break;
-                case "cmbDurCtr":
-                    cmbDurataContract_SelectedIndexChanged();
-                    //ds.Tables[0].Rows[0]["F1009741"] = param[1];
-                    //ds.Tables[1].Rows[0]["F1009741"] = param[1];
-                    //Session["InformatiaCurentaPersonal"] = ds;
-                    break;
+                //case "cmbDurCtr":
+                //    cmbDurataContract_SelectedIndexChanged();
+                //    //ds.Tables[0].Rows[0]["F1009741"] = param[1];
+                //    //ds.Tables[1].Rows[0]["F1009741"] = param[1];
+                //    //Session["InformatiaCurentaPersonal"] = ds;
+                //    break;
                 //case "deDeLaData":
                 //    deDeLaData_LostFocus(ds.Tables[1].Rows[0]["F100933"]);
                 //    data = param[1].Split('.');
@@ -244,19 +244,19 @@ namespace WizOne.Personal
                 //    ds.Tables[1].Rows[0]["F100933"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
                 //    Session["InformatiaCurentaPersonal"] = ds;
                 //    break;
-                case "deLaData":
-                    deLaData_LostFocus(ds.Tables[1].Rows[0]["F100934"]);
-                    //data = param[1].Split('.');
-                    //ds.Tables[0].Rows[0]["F100934"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
-                    //ds.Tables[1].Rows[0]["F100934"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
-                    //Session["InformatiaCurentaPersonal"] = ds;
-                    break;
-                case "cmbPrel":
-                    cmbPrel_SelectedIndexChanged();
-                    //ds.Tables[0].Rows[0]["F100938"] = param[1];
-                    //ds.Tables[1].Rows[0]["F100938"] = param[1];
-                    //Session["InformatiaCurentaPersonal"] = ds;
-                    break;
+                //case "deLaData":
+                //    deLaData_LostFocus(ds.Tables[1].Rows[0]["F100934"]);
+                //    //data = param[1].Split('.');
+                //    //ds.Tables[0].Rows[0]["F100934"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
+                //    //ds.Tables[1].Rows[0]["F100934"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
+                //    //Session["InformatiaCurentaPersonal"] = ds;
+                //    break;
+                //case "cmbPrel":
+                //    cmbPrel_SelectedIndexChanged();
+                //    //ds.Tables[0].Rows[0]["F100938"] = param[1];
+                //    //ds.Tables[1].Rows[0]["F100938"] = param[1];
+                //    //Session["InformatiaCurentaPersonal"] = ds;
+                //    break;
                 //case "cmbExcIncet":
                 //    ds.Tables[0].Rows[0]["F100929"] = param[1];
                 //    ds.Tables[1].Rows[0]["F100929"] = param[1];
@@ -668,17 +668,17 @@ namespace WizOne.Personal
         //    }
         //}
 
-        private void cmbDurataContract_SelectedIndexChanged()
-        {
-            try
-            {
-                VerificaNrLuni();
-            }
-            catch (Exception ex)
-            {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //private void cmbDurataContract_SelectedIndexChanged()
+        //{
+        //    try
+        //    {
+        //        //VerificaNrLuni();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         private void VerificaNrLuni()
         {
@@ -846,34 +846,34 @@ namespace WizOne.Personal
         //    }
         //}
 
-        private void deLaData_LostFocus(object F100934)
-        {
-            try
-            {
-                //ActualizareZileLuni();
-                VerificaNrLuni();
+        //private void deLaData_LostFocus(object F100934)
+        //{
+        //    try
+        //    {
+        //        //ActualizareZileLuni();
+        //        VerificaNrLuni();
 
-                //ASPxDateEdit deDeLaData = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
-                //ASPxDateEdit deLaData = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
-                //DateTime dt = new DateTime(2100, 1, 1, 0, 0, 0);
-                //DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+        //        //ASPxDateEdit deDeLaData = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
+        //        //ASPxDateEdit deLaData = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
+        //        //DateTime dt = new DateTime(2100, 1, 1, 0, 0, 0);
+        //        //DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
-                //if (Convert.ToDateTime(deDeLaData.Value) != null)
-                //    if (Convert.ToDateTime(deLaData.Value) < Convert.ToDateTime(deDeLaData.Value))
-                //    {
-                //        Contract_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data start este ulterioara celei de final!");
-                //        deLaData.Value = (F100934 == null ? dt : Convert.ToDateTime(F100934));
-                //        ds.Tables[0].Rows[0]["F100934"] = (F100934 == null ? dt.Date : Convert.ToDateTime(F100934).Date);
-                //        ds.Tables[1].Rows[0]["F100934"] = (F100934 == null ? dt.Date : Convert.ToDateTime(F100934).Date);
-                //        Session["InformatiaCurentaPersonal"] = ds;
-                //    }
+        //        //if (Convert.ToDateTime(deDeLaData.Value) != null)
+        //        //    if (Convert.ToDateTime(deLaData.Value) < Convert.ToDateTime(deDeLaData.Value))
+        //        //    {
+        //        //        Contract_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data start este ulterioara celei de final!");
+        //        //        deLaData.Value = (F100934 == null ? dt : Convert.ToDateTime(F100934));
+        //        //        ds.Tables[0].Rows[0]["F100934"] = (F100934 == null ? dt.Date : Convert.ToDateTime(F100934).Date);
+        //        //        ds.Tables[1].Rows[0]["F100934"] = (F100934 == null ? dt.Date : Convert.ToDateTime(F100934).Date);
+        //        //        Session["InformatiaCurentaPersonal"] = ds;
+        //        //    }
 
-            }
-            catch (Exception ex)
-            {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         //private void ActualizareZileLuni()
         //{
@@ -1154,48 +1154,48 @@ namespace WizOne.Personal
 
         //}
 
-        private void cmbPrel_SelectedIndexChanged()
-        {
-            try
-            {
-                VerificaNrLuni();
+        //private void cmbPrel_SelectedIndexChanged()
+        //{
+        //    try
+        //    {
+        //        VerificaNrLuni();
 
-                ASPxComboBox cmbPrelungireContract = Contract_DataList.Items[0].FindControl("cmbPrel") as ASPxComboBox;
-                ASPxDateEdit deDeLaData = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
-                ASPxDateEdit deLaData = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
-                ASPxTextBox txtNrCtrIntern = Contract_DataList.Items[0].FindControl("txtNrCtrInt") as ASPxTextBox;
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                if (Convert.ToInt32(cmbPrelungireContract.SelectedIndex) == 1)
-                {
-                    inactiveazaDeLaLa = true;
+        //        ASPxComboBox cmbPrelungireContract = Contract_DataList.Items[0].FindControl("cmbPrel") as ASPxComboBox;
+        //        ASPxDateEdit deDeLaData = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
+        //        ASPxDateEdit deLaData = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
+        //        ASPxTextBox txtNrCtrIntern = Contract_DataList.Items[0].FindControl("txtNrCtrInt") as ASPxTextBox;
+        //        DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+        //        if (Convert.ToInt32(cmbPrelungireContract.SelectedIndex) == 1)
+        //        {
+        //            inactiveazaDeLaLa = true;
 
-                    deDeLaData.Enabled = true;
-                    deLaData.Enabled = true;
+        //            deDeLaData.Enabled = true;
+        //            deLaData.Enabled = true;
 
-                    string data = "CONVERT(VARCHAR, F09506, 103)";
-                    if (Constante.tipBD == 2)
-                        data = "TO_CHAR(F09506, 'dd/mm/yyyy')";
+        //            string data = "CONVERT(VARCHAR, F09506, 103)";
+        //            if (Constante.tipBD == 2)
+        //                data = "TO_CHAR(F09506, 'dd/mm/yyyy')";
 
-                    DataTable dt = General.IncarcaDT("SELECT " + data + " FROM F095 WHERE F09503 = " + Session["Marca"].ToString() + " AND F09504 = " + txtNrCtrIntern.Text, null);
+        //            DataTable dt = General.IncarcaDT("SELECT " + data + " FROM F095 WHERE F09503 = " + Session["Marca"].ToString() + " AND F09504 = " + txtNrCtrIntern.Text, null);
 
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        string[] param = dt.Rows[0]["F09506"].ToString().Split('/');
-                        deDeLaData.Value = new DateTime(Convert.ToInt32(param[2]), Convert.ToInt32(param[1]), Convert.ToInt32(param[0]));
-                        ds.Tables[0].Rows[0]["F100933"] = new DateTime(Convert.ToInt32(param[2]), Convert.ToInt32(param[1]), Convert.ToInt32(param[0]));
-                        ds.Tables[1].Rows[0]["F100933"] = new DateTime(Convert.ToInt32(param[2]), Convert.ToInt32(param[1]), Convert.ToInt32(param[0]));
-                        Session["InformatiaCurentaPersonal"] = ds;
-                    }
+        //            if (dt != null && dt.Rows.Count > 0)
+        //            {
+        //                string[] param = dt.Rows[0]["F09506"].ToString().Split('/');
+        //                deDeLaData.Value = new DateTime(Convert.ToInt32(param[2]), Convert.ToInt32(param[1]), Convert.ToInt32(param[0]));
+        //                ds.Tables[0].Rows[0]["F100933"] = new DateTime(Convert.ToInt32(param[2]), Convert.ToInt32(param[1]), Convert.ToInt32(param[0]));
+        //                ds.Tables[1].Rows[0]["F100933"] = new DateTime(Convert.ToInt32(param[2]), Convert.ToInt32(param[1]), Convert.ToInt32(param[0]));
+        //                Session["InformatiaCurentaPersonal"] = ds;
+        //            }
                         
                     
-                }
-            }
-            catch (Exception ex)
-            {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-        }
+        //}
 
         private void ModifAvans(int atribut)
         {

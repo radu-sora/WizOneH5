@@ -73,6 +73,9 @@ namespace WizOne.Personal
                     dt.TableName = "Admin_Medicina";
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
+
+                    DataTable dtGen = General.IncarcaDT(@"SELECT * FROM ""Admin_Medicina"" ", null);
+                    Session["Admin_Medicina_General"] = dtGen;
                 }
                 grDateMedicina.KeyFieldName = "IdAuto";
                 grDateMedicina.DataSource = dt;
@@ -80,6 +83,8 @@ namespace WizOne.Personal
                 DataTable dtMedicina = General.GetObiecteDinArie("ArieTabMedicinaDinPersonal");
                 GridViewDataComboBoxColumn colMedicina = (grDateMedicina.Columns["IdObiect"] as GridViewDataComboBoxColumn);
                 colMedicina.PropertiesComboBox.DataSource = dtMedicina;
+
+                Session["InformatiaCurentaPersonal"] = ds;
             }
             catch (Exception ex)
             {
@@ -90,21 +95,22 @@ namespace WizOne.Personal
         protected void grDateMedicina_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
         {
             try
-            {
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                DataTable dt = ds.Tables["Admin_Medicina"];
+            {               
+                DataTable dtGen = Session["Admin_Medicina_General"] as DataTable;
                 if (Constante.tipBD == 1)
                 {
-                    if (dt.Columns["IdAuto"] != null)
+                    if (dtGen != null && dtGen.Columns["IdAuto"] != null)
                     {
-                        if (dt != null && dt.Rows.Count > 0)
+                        if (dtGen.Rows.Count > 0)
                         {
-                            int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                            int max = Convert.ToInt32(General.Nz(dtGen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                             e.NewValues["IdAuto"] = max;
                         }
                         else
                             e.NewValues["IdAuto"] = 1;
                     }
+                    else
+                        e.NewValues["IdAuto"] = 1;
                 }
                 else
                     e.NewValues["IdAuto"] = Dami.NextId("Admin_Medicina");
@@ -124,6 +130,7 @@ namespace WizOne.Personal
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
                 DataTable dt = ds.Tables["Admin_Medicina"];
+                DataTable dtGen = Session["Admin_Medicina_General"] as DataTable;
                 DataRow dr = dt.NewRow();
 
                 ASPxMemo txtObs = grDateMedicina.FindEditFormTemplateControl("txtObs") as ASPxMemo;
@@ -134,7 +141,7 @@ namespace WizOne.Personal
                 ASPxTextBox txtEmi = grDateMedicina.FindEditFormTemplateControl("txtEmi") as ASPxTextBox;
 
                 if (Constante.tipBD == 1)
-                    dr["IdAuto"] = Convert.ToInt32(General.Nz(ds.Tables["Admin_Medicina"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                    dr["IdAuto"] = Convert.ToInt32(General.Nz(dtGen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                 else
                     dr["IdAuto"] = Dami.NextId("Admin_Medicina");
                 dr["Marca"] = Session["Marca"];
@@ -150,17 +157,15 @@ namespace WizOne.Personal
                 metaUploadFile itm = Session["DocUpload_MP_Medicina"] as metaUploadFile;
                 if (itm != null)
                 {
-                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Medicina", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
-                    if (Constante.tipBD == 2)
-                        dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
+                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Medicina", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
+                    //if (Constante.tipBD == 2)
+                    //    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
                     //dr["Fisier"] = itm.UploadedFile;
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;
                 }
 
-                ds.Tables["Admin_Medicina"].Rows.Add(dr);
-
-                Session["DocUpload_MP_Medicina"] = null;
+                ds.Tables["Admin_Medicina"].Rows.Add(dr);             
 
                 e.Cancel = true;
                 grDateMedicina.CancelEdit();
@@ -203,13 +208,12 @@ namespace WizOne.Personal
                 metaUploadFile itm = Session["DocUpload_MP_Medicina"] as metaUploadFile;
                 if (itm != null)
                 {
-                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Medicina", dr["IdAuto"]);
+                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Medicina", dr["IdAuto"]);
                     //dr["Fisier"] = itm.UploadedFile;
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;
                 }
 
-                Session["DocUpload_MP_Medicina"] = null;
 
                 e.Cancel = true;
                 grDateMedicina.CancelEdit();

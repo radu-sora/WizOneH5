@@ -77,6 +77,9 @@ namespace WizOne.Personal
                     dt.TableName = "Admin_Sanctiuni";
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
+
+                    DataTable dtGen = General.IncarcaDT(@"SELECT * FROM ""Admin_Sanctiuni"" ", null);
+                    Session["Admin_Sanctiuni_General"] = dtGen;
                 }
                 grDateSanctiuni.KeyFieldName = "IdAuto";
                 grDateSanctiuni.DataSource = dt;
@@ -95,21 +98,22 @@ namespace WizOne.Personal
         protected void grDateSanctiuni_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
         {
             try
-            {
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                DataTable dt = ds.Tables["Admin_Sanctiuni"];
+            {           
+                DataTable dtGen = Session["Admin_Sanctiuni_General"] as DataTable;
                 if (Constante.tipBD == 1)
                 {
-                    if (dt.Columns["IdAuto"] != null)
+                    if (dtGen != null && dtGen.Columns["IdAuto"] != null)
                     {
-                        if (dt != null && dt.Rows.Count > 0)
+                        if (dtGen.Rows.Count > 0)
                         {
-                            int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                            int max = Convert.ToInt32(General.Nz(dtGen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                             e.NewValues["IdAuto"] = max;
                         }
                         else
                             e.NewValues["IdAuto"] = 1;
                     }
+                    else
+                        e.NewValues["IdAuto"] = 1;
                 }
                 else
                     e.NewValues["IdAuto"] = Dami.NextId("Admin_Sanctiuni");
@@ -128,7 +132,7 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-
+                DataTable dtGen = Session["Admin_Sanctiuni_General"] as DataTable;
                 DataTable dt = ds.Tables["Admin_Sanctiuni"];
                 DataRow dr = dt.NewRow();
 
@@ -140,7 +144,7 @@ namespace WizOne.Personal
                 ASPxTextBox txtProc = grDateSanctiuni.FindEditFormTemplateControl("txtProc") as ASPxTextBox;
 
                 if (Constante.tipBD == 1)
-                    dr["IdAuto"] = Convert.ToInt32(General.Nz(ds.Tables["Admin_Sanctiuni"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                    dr["IdAuto"] = Convert.ToInt32(General.Nz(dtGen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                 else
                     dr["IdAuto"] = Dami.NextId("Admin_Sanctiuni");
                 dr["Marca"] = Session["Marca"];
@@ -156,17 +160,15 @@ namespace WizOne.Personal
                 metaUploadFile itm = Session["DocUpload_MP_Sanctiuni"] as metaUploadFile;
                 if (itm != null)
                 {
-                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Sanctiuni", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
-                    if (Constante.tipBD == 2)
-                        dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
+                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Sanctiuni", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
+                    //if (Constante.tipBD == 2)
+                    //    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
                     //dr["Fisier"] = itm.UploadedFile;
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;
                 }
 
-                ds.Tables["Admin_Sanctiuni"].Rows.Add(dr);
-
-                Session["DocUpload_MP_Sanctiuni"] = null;
+                ds.Tables["Admin_Sanctiuni"].Rows.Add(dr);               
 
                 e.Cancel = true;
                 grDateSanctiuni.CancelEdit();
@@ -210,14 +212,12 @@ namespace WizOne.Personal
                 metaUploadFile itm = Session["DocUpload_MP_Sanctiuni"] as metaUploadFile;
                 if (itm != null)
                 {
-                    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Sanctiuni", dr["IdAuto"]);
+                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Sanctiuni", dr["IdAuto"]);
                     //dr["Fisier"] = itm.UploadedFile;
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;
                 }
-
-                Session["DocUpload_MP_Sanctiuni"] = null;
-
+                
                 e.Cancel = true;
                 grDateSanctiuni.CancelEdit();
                 grDateSanctiuni.DataSource = ds.Tables["Admin_Sanctiuni"];
@@ -243,7 +243,7 @@ namespace WizOne.Personal
 
                 DataRow row = ds.Tables["Admin_Sanctiuni"].Rows.Find(keys);
 
-                row.Delete();
+                row.Delete();                
 
                 e.Cancel = true;
                 grDateSanctiuni.CancelEdit();

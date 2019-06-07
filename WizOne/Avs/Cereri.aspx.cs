@@ -212,7 +212,7 @@ namespace WizOne.Avs
                 if (Constante.tipBD == 2) op = "||";
 
                 strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
-                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+                        X.F71804 AS ""Functia"", C.F00204 AS ""Compania"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
                         FROM (
                         SELECT A.F10003
                         FROM F100 A
@@ -224,6 +224,7 @@ namespace WizOne.Avs
                         WHERE B.""IdUser""= {Session["UserId"]}) B
                         INNER JOIN F100 A ON A.F10003=B.F10003
                         LEFT JOIN F718 X ON A.F10071=X.F71802
+                        LEFT JOIN F002 C ON A.F10002 = C.F00202
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
                         LEFT JOIN F005 H ON A.F10006 = H.F00506
@@ -2618,9 +2619,12 @@ namespace WizOne.Avs
                                 act = 1;
                                 sql100 = "UPDATE F100 SET F10023 = " + data1 + ", F100993 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
+                            //sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                            //+ " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + dtCer.Rows[0]["MotivId"].ToString() + ", 'Modificari in avans', '"
+                            //+ dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
-                            + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + dtCer.Rows[0]["MotivId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", (SELECT F72102 FROM F721 WHERE F72106 = " + dtCer.Rows[0]["MotivId"].ToString() + "), 'Modificari in avans', '"
+                                + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Norma:

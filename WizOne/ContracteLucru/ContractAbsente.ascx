@@ -37,19 +37,17 @@
 							        <dx:ASPxLabel  ID="lblOraIn"  Width="70"  runat="server"  Text="Ora Sch. IN: "></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="txtOraIn" Width="70"  runat="server" Value='<%# Eval("OraInSchimbare") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="txtOraIn" Width="70"  runat="server" Value='<%# Eval("OraInSchimbare") %>' AutoPostBack="false">     
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtrAbs(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
 						        <td>		
 							        <dx:ASPxLabel  ID="lblOraOut"  Width="90"  runat="server"  Text="Ora Sch. OUT: "></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="txtOraOut" Width="70"  runat="server" Value='<%# Eval("OraOutSchimbare") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="txtOraOut" Width="70"  runat="server" Value='<%# Eval("OraOutSchimbare") %>' AutoPostBack="false"  >    
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtrAbs(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
                                 <td>
                                     <dx:ASPxCheckBox ID="chkOreSup"  runat="server" Width="80" Text="Ore sup. ?" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"OreSup").ToString()=="1"%>' ClientInstanceName="chkbx1" >
@@ -98,16 +96,14 @@
                                     </dx:ASPxCheckBox>
                                 </td>
                                 <td>
-    							    <dx:ASPxDateEdit  ID="txtInInit" Width="70"  runat="server" Value='<%# Eval("OraInInitializare") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+    							    <dx:ASPxTimeEdit  ID="txtInInit" Width="70"  runat="server" Value='<%# Eval("OraInInitializare") %>' AutoPostBack="false"  >
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtrAbs(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
                                 </td>
                                 <td>
-    							    <dx:ASPxDateEdit  ID="txtOutInit" Width="70"  runat="server" Value='<%# Eval("OraOutInitializare") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+    							    <dx:ASPxTimeEdit  ID="txtOutInit" Width="70"  runat="server" Value='<%# Eval("OraOutInitializare") %>' AutoPostBack="false"  >
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtrAbs(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
                                 </td>
                             </tr>
 				        </table>

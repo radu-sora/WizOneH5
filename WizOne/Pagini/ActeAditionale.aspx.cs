@@ -1491,7 +1491,7 @@ namespace WizOne.Pagini
                         break;
                 }
 
-                string strSql = $@"SELECT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                string strSql = $@"SELECT DISTINCT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
                             FROM ({sursa}) X
                             LEFT JOIN F100 A ON X.F10003=A.F10003
                             LEFT JOIN F004 G ON A.F10005 = G.F00405

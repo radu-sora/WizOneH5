@@ -80,6 +80,10 @@
                                 </dx:GridViewDataTextColumn>
                                 <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" VisibleIndex="5">
                                     <PropertiesComboBox TextField="NumeComplet" ValueField="Marca" ValueType="System.Int32" DropDownStyle="DropDown">
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="Marca" Caption="Marca" Width="50px" />
+                                            <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />                
+                                        </Columns> 
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>
                                 <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume Complet" VisibleIndex="6" ReadOnly="false" Settings-AutoFilterCondition="Contains"/>

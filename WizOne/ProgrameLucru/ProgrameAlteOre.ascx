@@ -20,11 +20,41 @@
                 <dx:GridViewDataComboBoxColumn FieldName="Rotunjire" Name="Rotunjire" Caption="Rotunjire" Width="200px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora Inceput" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" />  
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sfarsit" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" />  
-                <dx:GridViewDataDateColumn FieldName="ValMin" Name="ValMin" Caption="Val Min" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" />  
-                <dx:GridViewDataDateColumn FieldName="ValMax" Name="ValMax" Caption="Val Max" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" />  
-                <dx:GridViewDataDateColumn FieldName="ValFixa" Name="ValFixa" Caption="Val Fixa" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" />  
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora Inceput" Width="60px" >  
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sfarsit" Width="60px"  >  
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="ValMin" Name="ValMin" Caption="Val Min" Width="60px"  >  
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="ValMax" Name="ValMax" Caption="Val Max" Width="60px" >  
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="ValFixa" Name="ValFixa" Caption="Val Fixa" Width="60px" >  
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
                 <dx:GridViewDataTextColumn FieldName="Multiplicator" Name="Multiplicator" Caption="Multiplicator" Width="75px">
                     <PropertiesTextEdit DisplayFormatInEditMode="true" DisplayFormatString="N2"></PropertiesTextEdit>
                 </dx:GridViewDataTextColumn>

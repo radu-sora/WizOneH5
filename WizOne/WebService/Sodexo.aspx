@@ -44,7 +44,7 @@
                 });
                 s.cpAlertMessage = null;
             }
-        }
+        }  
 
     </script>
 
@@ -181,15 +181,21 @@
                     <tr>
 						<td >
 							<dx:ASPxLabel  ID="lblCriteriu1"  runat="server"  Text="Criteriul 1: " ></dx:ASPxLabel >	
-							<dx:ASPxComboBox Width="150" ID="cmbCriteriu1"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" >							</dx:ASPxComboBox>
+							<dx:ASPxComboBox Width="150" ID="cmbCriteriu1"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" >							
+                                <ClientSideEvents  SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }"/>
+							</dx:ASPxComboBox>
 						</td>
 						<td >
 							<dx:ASPxLabel  ID="lblCriteriu2"  runat="server"  Text="Criteriul 2: " ></dx:ASPxLabel >	
-							<dx:ASPxComboBox Width="150" ID="cmbCriteriu2"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" >							</dx:ASPxComboBox>
+							<dx:ASPxComboBox Width="150" ID="cmbCriteriu2"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" >							
+                                 <ClientSideEvents  SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }"/>
+							</dx:ASPxComboBox>
 						</td>
 						<td >
 							<dx:ASPxLabel  ID="lblCriteriu3"  runat="server"  Text="Criteriul 3: " ></dx:ASPxLabel >	
-							<dx:ASPxComboBox Width="150" ID="cmbCriteriu3"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" >							</dx:ASPxComboBox>
+							<dx:ASPxComboBox Width="150" ID="cmbCriteriu3"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" >							
+                                 <ClientSideEvents  SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }"/>
+							</dx:ASPxComboBox>
 						</td>
                     </tr>
                    </table>

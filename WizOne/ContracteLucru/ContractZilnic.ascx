@@ -310,13 +310,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn>
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
 
@@ -413,13 +448,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn>
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" ReadOnly="true" /> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
 
@@ -516,12 +586,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn> 
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
@@ -619,13 +725,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn> 
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
 
@@ -723,13 +864,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn> 
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
 
@@ -827,13 +1003,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn>
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
 
@@ -930,13 +1141,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn>
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
 
@@ -1033,13 +1279,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn>
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" ReadOnly="true" /> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
 
@@ -1137,13 +1418,48 @@
                         </Columns>
                     </PropertiesComboBox>
                 </dx:GridViewDataComboBoxColumn> 
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"  ReadOnly="true"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm"/> 
-                <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>    
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn> 
+                <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                 <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                 </dx:GridViewDataComboBoxColumn>  
 

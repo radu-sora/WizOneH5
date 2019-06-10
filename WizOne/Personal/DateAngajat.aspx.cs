@@ -20,15 +20,6 @@ namespace WizOne.Personal
 {
     public partial class DateAngajat : System.Web.UI.Page
     {
-
-        public class metaUploadFile
-        {
-            public object UploadedFile { get; set; }
-            public object UploadedFileName { get; set; }
-            public object UploadedFileExtension { get; set; }
-
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -505,7 +496,8 @@ namespace WizOne.Personal
                             sir += ",\"" + dt.Columns[k].ColumnName + "\" = " + val; 
                         }                       
                     }
-                    sql += sir.Substring(1) + " WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto"].ToString();                                       
+                    sql += sir.Substring(1) + " WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto"].ToString();
+                    General.ExecutaNonQuery(sql, null);
                 }
                 else
                 {//INSERT
@@ -559,14 +551,22 @@ namespace WizOne.Personal
                         List<string> lstOut = General.DamiOracleScalar(sql, null);
                         if (lstOut.Count == 1)                        
                             idAuto = Convert.ToInt32(lstOut[0]);                        
+                    } 
+                    
+                    if (tabela == "Admin_Medicina")
+                    {
+                        Personal.Medicina.metaUploadFile itm = Session["DocUpload_MP_Medicina"] as Personal.Medicina.metaUploadFile;
+                        General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, tabela, idAuto);
+                        Session["DocUpload_MP_Medicina"] = null;
+                    }
+                    if (tabela == "Admin_Sanctiuni")
+                    {
+                        Personal.Sanctiuni.metaUploadFile itm = Session["DocUpload_MP_Sanctiuni"] as Personal.Sanctiuni.metaUploadFile;
+                        General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, tabela, idAuto);
+                        Session["DocUpload_MP_Sanctiuni"] = null;
                     }
 
-                    metaUploadFile itm = Session["DocUpload_MP_" + tabela.Split('_')[1]] as metaUploadFile;
-                    if (itm != null)
-                    {
-                        General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, tabela, idAuto);
-                        Session["DocUpload_MP_" + tabela.Split('_')[1]] = null;
-                    }
+                 
                 }
             }
         }     

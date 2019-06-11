@@ -45,7 +45,7 @@
             case "deDataAng":
             case "deDataCtrInt":
                 {
-                    var DateCtr = new Date(s.GetDate());
+                    var DateCtr = new Date(deDataCtrInt.GetDate());
                     var DateAng = new Date(deDataAng.GetDate());
 
                     if (DateCtr >= DateAng) {
@@ -54,13 +54,16 @@
                             type: "warning"
                         });
                     }
+
+                    pnlLoading.Show();
+                    pnlCtlContract.PerformCallback(s.name + ";" + s.GetDate());
                 }
                 break;
             case "deDeLaData":
             case "deLaData":
                 {
-                    var dateDeLa = new Date(deDeLaData.GetValue());
-                    var dateLa = new Date(deLaData.GetValue());
+                    var dateDeLa = new Date(deDeLaData.GetDate());
+                    var dateLa = new Date(deLaData.GetDate());
 
                     if (dateDeLa > dateLa) {
                         swal({
@@ -68,12 +71,13 @@
                             type: "warning"
                         });
                     }
-
+                    
                     if (s.name == "deLaData"
                         && (dateDeLa.getFullYear() != 2100 || dateDeLa.getMonth() != 1 || dateDeLa.getDate() != 1)
                         && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 1 || dateLa.getDate() != 1)) {
-                        CalculLuniSiZile(dateDeLa, dateLa);
 
+                        CalculLuniSiZile(dateDeLa, dateLa);
+                        
                         deDataPlecarii.SetValue(dateLa);
                         var dtTmp = dateLa;
                         dtTmp.setDate(dtTmp.getDate() - 1)
@@ -121,6 +125,7 @@
             });
             s.cpAlertMessage = null;
         }
+        pnlLoading.Hide();
     }
 
     function CalcVechimeComp(s) {
@@ -169,12 +174,11 @@
     }
 
     function dateDiffInDays(a, b) {
-        const _MS_PER_DAY = 1000 * 60 * 60 * 24 * 365;
+        const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
         // Discard the time and time-zone information.
         const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
         const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
         return Math.floor((utc2 - utc1) / _MS_PER_DAY);
     }
 
@@ -182,7 +186,7 @@
         var ani = (dtSf.getFullYear() - dtInc.getFullYear());
         var luni = (dtSf.getMonth() - dtInc.getMonth());
         var zile = (dtSf.getDate() - dtInc.getDate());
-
+        
         if (dtSf.getMonth() < dtInc.getMonth()) {
             luni = 12 - (dtSf.getMonth() - dtInc.getMonth());
             ani = ani - 1;
@@ -191,7 +195,7 @@
         if (dtSf.getDate() < dtInc.getDate()) {
             luni = luni - 1;
             var dtTmp = Date.UTC(dtSf.getFullYear(), dtSf.getMonth() - 1, dtInc.getDate());
-            zile = dateDiffInDays(dtTmp, dtSf);
+            zile = dateDiffInDays(new Date(dtTmp), dtSf);
         }
 
         txtNrLuni.SetValue((ani * 12 + luni).toString());
@@ -200,22 +204,37 @@
 
     function SetNorma(s) {
         switch (cmbTipAng.GetSelectedItem().value) {
-            case 0:
+            case 0:                 //angajat permanent
                 {
-                    if (cmbTimpPartial.GetSelectedItem().value)
-                        cmbTimpPartial.SetSelectedIndex(0);
-                    cmbTimpPartial.SetValue(cmbTimpPartial.GetSelectedItem().value);
-                    cmbTimpPartial.SetEnabled(false);
+                    if (cmbNorma.GetValue() == "")
+                        cmbNorma.SetSelectedIndex(2);
+                    if (cmbTimpPartial.GetValue() == "")
+                        cmbTimpPartial.SetValue(cmbNorma.GetValue());
+                    if (cmbNorma.GetValue() < cmbTimpPartial.GetValue()) {
+                        swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
+                        cmbTimpPartial.SetValue(cmbNorma.GetValue());
+                    }
+
+                    cmbTipNorma.SetValue(1);
+                    if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18) 
+                        cmbDurTimpMunca.SetValue(2);
+                    else
+                        cmbDurTimpMunca.SetValue(1);
                 }
                 break;
-            default:
+            case 2:                 //angajat timp partial
                 {
-                    cmbTimpPartial.SetSelectedIndex(0);
-                    cmbTimpPartial.SetEnabled(true);
-                    if (cmbTipAng.GetSelectedItem().value == 2) {
-                        cmbTipNorma.SetValue(2);
-                        cmbDurTimpMunca.SetValue(5);
+                    if (cmbNorma.GetValue() == "")
+                        cmbNorma.SetSelectedIndex(2);
+                    if (cmbTimpPartial.GetValue() == "")
+                        cmbTimpPartial.SetValue(cmbNorma.GetValue() - 1);   
+                    if (cmbNorma.GetValue() <= cmbTimpPartial.GetValue()) {
+                        swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
+                        cmbTimpPartial.SetValue(cmbNorma.GetValue() - 1);
                     }
+
+                    cmbTipNorma.SetValue(2);
+                    cmbDurTimpMunca.SetValue(5);
                 }
                 break;
         }
@@ -223,46 +242,52 @@
 
     function cmbTimpPartial_SelectedIndexChanged(s) {
 
-        if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18 && cmbTimpPartial.GetValue() > 6) {
-            swal({ title: "Atentie !", text: "Timp partial invalid (max 6 pentru minori peste 16 ani)!", type: "warning" });
-            SetariNorma();
-        }
-        else {
-            if (cmbNorma.GetValue() < cmbTimpPartial.GetSelectedItem().value) {
-                swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
-                cmbTimpPartial.SetValue(1);
-            }
-        }
+        //if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18 && cmbTimpPartial.GetValue() > 6) {
+        //    swal({ title: "Atentie !", text: "Timp partial invalid (max 6 pentru minori peste 16 ani)!", type: "warning" });
+        //    SetariNorma();
+        //}
+        //else {
+        //    if (cmbNorma.GetValue() < cmbTimpPartial.GetSelectedItem().value) {
+        //        swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
+        //        cmbTimpPartial.SetValue(1);
+        //    }
+        //}
     }
 
-    function SetariNorma() {
-        cmbNorma.SetValue(6);
-        cmbNorma.SetEnabled(false);
-        cmbTimpPartial.SetValue(6);
-        if (txtNrOre.GetValue() > 30)
-            txtNrOre.SetValue(0);
-    }
+    //function SetariNorma() {
+    //    cmbNorma.SetValue(6);
+    //    cmbNorma.SetEnabled(false);
+    //    cmbTimpPartial.SetValue(6);
+    //    if (txtNrOre.GetValue() > 30)
+    //        txtNrOre.SetValue(0);
+    //}
 
     function cmbNorma_SelectedIndexChanged(s) {
-        if (cmbNorma.GetValue() == "") {
-            swal({ title: "Atentie !", text: "Nu ati completat norma!", type: "warning" });
-            cmbNorma.SetValue(8);
-            cmbTimpPartial.SetValue(1);
-        }
-        else {
-            cmbTimpPartial.SetValue(cmbNorma.GetValue());
-        }
+        //if (cmbNorma.GetValue() == "") {
+        //    swal({ title: "Atentie !", text: "Nu ati completat norma!", type: "warning" });
+        //    cmbNorma.SetValue(8);
+        //    cmbTimpPartial.SetValue(1);
+        //}
+        //else {
+        //    cmbTimpPartial.SetValue(cmbNorma.GetValue());
+        //}
     }
 
     function ValidareNrOre(s) {
-        if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18 && txtNrOre.GetValue() > 30 && cmbIntervRepTimpMunca.GetValue() == 2) {
-            swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 30 pentru minori peste 16 ani)!", type: "warning" });
-            SetariNorma();
-        }
+        if (cmbDurTimpMunca.GetValue() == 2 && txtNrOre.GetValue() > 30)
+            swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 30)!", type: "warning" });
 
-        if (cmbTipNorma.GetValue() == 1 && txtNrOre.GetValue() > 40 && cmbIntervRepTimpMunca.GetValue() == 2) {
-            swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 40 pentru norma intreaga)!", type: "warning" });
-        }
+        if (cmbDurTimpMunca.GetValue() == 1 && txtNrOre.GetValue() > 40)
+            swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 40)!", type: "warning" });
+
+        //if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18 && txtNrOre.GetValue() > 30 && cmbIntervRepTimpMunca.GetValue() == 2) {
+        //    swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 30 pentru minori peste 16 ani)!", type: "warning" });
+        //    SetariNorma();
+        //}
+
+        //if (cmbTipNorma.GetValue() == 1 && txtNrOre.GetValue() > 40 && cmbIntervRepTimpMunca.GetValue() == 2) {
+        //    swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 40 pentru norma intreaga)!", type: "warning" });
+        //}
     }
 
     function cmbIntervRepTimpMunca_SelectedIndexChanged(s) {
@@ -646,7 +671,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsTP"  Value='<%#Eval("F10043") %>' ID="cmbTimpPartial" Width="100" runat="server" ClientInstanceName="cmbTimpPartial" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbTimpPartial_SelectedIndexChanged(s); }" />
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ SetNorma(s); }" />
 							</dx:ASPxComboBox>
 						</td>
                     </tr>
@@ -656,7 +681,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsN"  Value='<%#Eval("F100973") %>' ID="cmbNorma" Width="100" runat="server" ClientInstanceName="cmbNorma" TextField="Denumire" ValueField="Id"  AutoPostBack="false" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbNorma_SelectedIndexChanged(s); }" />
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ SetNorma(s); }" />
 							</dx:ASPxComboBox>
 						</td>
 						<td>	
@@ -701,7 +726,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsDTM"  Value='<%#Eval("F100927") %>'  ID="cmbDurTimpMunca" Width="130" ClientInstanceName="cmbDurTimpMunca" runat="server" DropDownStyle="DropDown"  TextField="F09103" ValueField="F09102" ValueType="System.Int32">
-                                
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ ValidareNrOre(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>   

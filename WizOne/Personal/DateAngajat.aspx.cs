@@ -742,7 +742,7 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                string[] tabs = { "DateIdentificare", "Contract" };
+                string[] tabs = { "DateIdentificare", "Contract", "DateGenerale", "Detasari", "Diverse", "Documente", "Studii", "Banca" };
 
                 //DateIdentificare
                 #region DateIdentificare
@@ -946,6 +946,18 @@ namespace WizOne.Personal
 
                 #endregion
 
+                //Banca
+                #region Banca
+                Dictionary<String, String> lstBC = new Dictionary<string, string>();
+                lstBC.Add("txtIBANSal", "F10020");
+                lstBC.Add("txtNrCard", "F10055");
+                lstBC.Add("dsBanca", "F10018");
+                lstBC.Add("cmbSucSal", "F10019");
+                lstBC.Add("txtIBANGar", "F1001028");
+                lstBC.Add("cmbBancaGar", "F1001026");
+                lstBC.Add("cmbSucGar", "F1001027");
+                #endregion
+
                 DataColumnCollection cols1 = ds.Tables[1].Columns;
                 DataColumnCollection cols2 = ds.Tables[2].Columns;
                 DataColumnCollection cols3 = ds.Tables[0].Columns;
@@ -981,6 +993,9 @@ namespace WizOne.Personal
                                 break;
                             case "Structura":
                                 lst = lstST;
+                                break;
+                            case "Banca":
+                                lst = lstBC;
                                 break;
                         }
                         foreach (string idCtl in lst.Keys)

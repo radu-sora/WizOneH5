@@ -182,13 +182,15 @@ namespace WizOne.Personal
             string[] param = e.Parameter.Split(';');
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
-            string[] data = param[1].Split('.');
+            //string[] data = param[1].Split('.');
 
 
             switch (param[0])
             {
                 case "deDataCtrInt":
-                    DateTime dataCtr = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
+                    ASPxDateEdit deDataCtrInt = Contract_DataList.Items[0].FindControl("deDataCtrInt") as ASPxDateEdit;
+                    DateTime dataCtr = deDataCtrInt.Date;
+                    //DateTime dataCtr = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
                     string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataCtr.Year;
                     if (Constante.tipBD == 2)
                         strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + dataCtr.Year;
@@ -207,7 +209,10 @@ namespace WizOne.Personal
                     //ds.Tables[1].Rows[0]["F10022"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
                     //Session["InformatiaCurentaPersonal"] = ds;
                     ASPxDateEdit deTermenRevisal = Contract_DataList.Items[0].FindControl("deTermenRevisal") as ASPxDateEdit;
-                    deTermenRevisal.Value = SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
+                    ASPxDateEdit deDataAng = Contract_DataList.Items[0].FindControl("deDataAng") as ASPxDateEdit;
+                    //deTermenRevisal.Value = SetDataRevisal(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
+                    deTermenRevisal.Value = SetDataRevisal(deDataAng.Date);
+
                     if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                     {
                         int val = 1;
@@ -219,7 +224,8 @@ namespace WizOne.Personal
                             Contract_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
                     }
 
-                    DateTime dataAng = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
+                    //DateTime dataAng = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
+                    DateTime dataAng = deDataAng.Date;
                     strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataAng.Year;
                     if (Constante.tipBD == 2)
                         strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + dataAng.Year;

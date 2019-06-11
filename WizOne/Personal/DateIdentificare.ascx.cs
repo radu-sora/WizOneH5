@@ -44,8 +44,11 @@ namespace WizOne.Personal
                 DateIdentificare_DataList.DataBind();
 
                 DateTime dtN = Convert.ToDateTime(table.Rows[0]["F10021"].ToString());
-                ASPxTextBox txtVarsta = DateIdentificare_DataList.Items[0].FindControl("txtVarsta") as ASPxTextBox;
-                txtVarsta.Text = Dami.Varsta(dtN).ToString();  //((DateTime.Now - dtN).TotalDays/365).ToString();
+                if (dtN.Year != 1900)
+                {
+                    ASPxTextBox txtVarsta = DateIdentificare_DataList.Items[0].FindControl("txtVarsta") as ASPxTextBox;
+                    txtVarsta.Text = Dami.Varsta(dtN).ToString();  //((DateTime.Now - dtN).TotalDays/365).ToString();
+                }
 
                 btnIncarca_Click();
 

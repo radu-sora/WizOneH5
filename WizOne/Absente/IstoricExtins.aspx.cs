@@ -905,7 +905,7 @@ namespace WizOne.Absente
                                     UNION
                                     SELECT - 1, CASE WHEN COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareSambataSiDuminica'),'#FF0000') = '' THEN '#FF0000' ELSE COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareSambataSiDuminica'),'#FF0000') END, '{Dami.TraduCuvant("Sambata sau Duminica")}' {cmp}
                                     UNION
-                                    SELECT - 3, CASE WHEN COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') = '' THEN '#EE8D3D' ELSE COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') END, '{Dami.TraduCuvant("CO Planificat")}' {cmp}
+                                    SELECT - 3, CASE WHEN COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') = '' THEN '#EE8D3D' ELSE COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') END, '{Dami.TraduCuvant("CO Planificat")}' {cmp}  WHERE (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE COALESCE(""Planificare"",0)=1) > 0
                                     ) X ORDER BY ""Id"" ";
 
                             DataTable dt = General.IncarcaDT(sqlLeg, null);

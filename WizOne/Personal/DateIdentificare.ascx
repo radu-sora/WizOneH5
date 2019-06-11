@@ -4,6 +4,8 @@
 <script type="text/javascript">
 
     function VerifMarca(s) {
+        pnlLoading.Show();
+        txtNrCtrInt.SetValue(s.GetValue());
         pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetText());
     }
     function OnClickDI(s) {
@@ -76,13 +78,14 @@
                             break;
                     }
                     strZiua = an + cnp.substr(1, 2) + "-" + cnp.substr(3, 2) + "-" + cnp.substr(5, 2);
+                   
                     var ziua = new Date(strZiua);
                     deDataNasterii.SetValue(ziua);
 
                     var azi = new Date();
-                    var varsta = dateDiffInDays(ziua, azi);
+                    var varsta = dateDiffInYears(ziua, azi);
                     txtVarsta.SetValue(varsta);
-
+                    
                     var idSex = 0;
                     if ((parseInt(cnp.substr(0, 1)) % 2) != 0)
                         idSex = 1;
@@ -94,6 +97,15 @@
                         swal({ title: "Atentie !", text: "Nu puteti angaja o persoana cu varsta mai mica de 16 ani!", type: "warning" });
                     }
                     else {
+                        cmbNorma.SetEnabled(true);
+                        if (varsta <= 18) {
+                            cmbNorma.SetValue(6);
+                            cmbNorma.SetEnabled(false);
+                            cmbTimpPartial.SetValue(6);
+                            cmbDurTimpMunca.SetValue(2);
+                            if (txtNrOre.GetValue() > 30 || txtNrOre.GetValue() == 0)
+                                txtNrOre.SetValue(30);
+                        }
                         swal({ title: "Va rugam asteptati !", text: "Se verifica CNP-ul", type: "warning" });
                         pnlLoading.Show();
                         pnlCtlDateIdent.PerformCallback(s.name + ";" + s.GetText());
@@ -136,7 +148,7 @@
         return (s < 10 && s == cnp[12]) || (s == 10 && cnp[12] == 1);
     }
 
-    function dateDiffInDays(a, b) {
+    function dateDiffInYears(a, b) {
         const _MS_PER_DAY = 1000 * 60 * 60 * 24 * 365;
 
         // Discard the time and time-zone information.
@@ -206,9 +218,9 @@
                                                 </dx:ASPxButton>
 
 					                        </td>
-                                        </tr>	                    
+                                        </tr>
 				                    </table>
-			                      </fieldset>                    	
+			                      </fieldset>
                                 </td>
                  
                                 <td style="padding:0px 15px;"></td>

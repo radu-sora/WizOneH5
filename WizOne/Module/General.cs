@@ -6964,7 +6964,7 @@ namespace WizOne.Module
                                         LEFT JOIN HOLIDAYS B ON A.Ziua=B.DAY
                                         {5}
                                         WHERE YEAR(A.""Ziua"")={0} AND MONTH(A.""Ziua"")={1} AND (A.""ValStr"" IS NULL OR RTRIM(A.""ValStr"") = '') AND F06204=-1 
-                                        AND CONVERT(date, A.Ziua) <= COALESCE(CONVERT(date, ddp.DataPlecarii),C.F10023)
+                                        AND CONVERT(date, A.Ziua) <= COALESCE(CONVERT(date, ddp.DataPlecare),C.F10023)
                                         {2} {3} {4}";
 
                     strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruZile.Replace("X.", "A."), strInner);

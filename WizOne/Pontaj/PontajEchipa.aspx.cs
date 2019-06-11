@@ -2517,7 +2517,7 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
                 {
                     strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-                    strLeg += " LEFT JOIN (SELECT F10003, F10061, F10061 FROM F100) C ON A.F10003 = C.F10003 ";
+                    strLeg += " LEFT JOIN (SELECT F10003, F10061, F10062 FROM F100) C ON A.F10003 = C.F10003 ";
                 }
 
                 if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
@@ -2598,7 +2598,7 @@ namespace WizOne.Pontaj
                            
                                 FROM (
                                  SELECT TOP 100 PERCENT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, A.F10008 + ' ' + A.F10009 AS AngajatNume, st.Denumire AS StarePontaj, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate,
-                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou""
+                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"", F10061, F10062
                                 {zileVal}  {zileF}
                                 FROM Ptj_Cumulat X 
 		                        LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
@@ -2616,6 +2616,7 @@ namespace WizOne.Pontaj
                                 LEFT JOIN Ptj_Contracte C on C.Id = Y.IdContract 
                                 LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
                                 LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
+                                LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
                                 {strInner}
 
 							    LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
@@ -2640,7 +2641,7 @@ namespace WizOne.Pontaj
                                 SELECT  *                                
                                 FROM (
                                 SELECT X.F10003, TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"", A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", st.""Denumire"" AS ""StarePontaj"", nvl(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", isnull(zlp.""Ramase"", 0) as ""ZLPNeefectuate"",
-                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"" , F10061, F10062,                          
+                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"" ,  F10061, F10062                       
                                 {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
 		                        LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
@@ -2658,6 +2659,7 @@ namespace WizOne.Pontaj
                                 LEFT JOIN ""Ptj_Contracte"" C on C.""Id"" = Y.""IdContract""
                                 LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
                                 LEFT JOIN F724 CA ON A.F10061 = CA.F72402  
+                                LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
 
 							    LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
 							    LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304

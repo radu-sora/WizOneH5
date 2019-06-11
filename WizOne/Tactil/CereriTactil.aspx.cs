@@ -231,7 +231,7 @@ namespace WizOne.Tactil
                         //Incarcam Absentele
                         Session["Cereri_Absente_Absente"] = dtAbsSpn; //dtAbs.Select("DenumireScurta LIKE '" + denumire + "'");
 
-                        DataRow[] arr = dtAbsSpn.Select("Id=" + General.Nz(cmbSelAbs.Value, -99));
+                        DataRow[] arr = dtAbsSpn.Select("Id=" + (cmbSelAbs.Visible == true ? General.Nz(cmbSelAbs.Value, -99) : General.Nz(cmbAbs.Value, -99)));
                         //DataRow[] arr = dtAbs.Select("Id=" + General.Nz(General.VarSession("User_Marca"), -99));
                         if (arr.Count() > 0)
                         {
@@ -241,7 +241,8 @@ namespace WizOne.Tactil
                             int nrViitor = 0;
                             //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                             //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                            nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbSelAbs.Value ?? 0));;
+                            nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0),
+                                (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value ?? 0) : Convert.ToInt32(cmbAbs.Value ?? 0)));;
                             txtNrZile.Value = nr;
                             Session["TactilNrZile"] = nr;
                             //txtNrZileViitor.Value = nrViitor;
@@ -426,7 +427,8 @@ namespace WizOne.Tactil
                         int nrViitor = 0;
                         //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                         //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
-                        nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0), Convert.ToInt32(cmbSelAbs.Value ?? 0)); ;
+                        nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0),
+                           (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value ?? 0) : Convert.ToInt32(cmbAbs.Value ?? 0))); ;
                         txtNrZile.Value = nr;
                         Session["TactilNrZile"] = nr;
                         //txtNrZileViitor.Value = nrViitor;
@@ -494,7 +496,7 @@ namespace WizOne.Tactil
                         DataTable dtAbsSpn = Session["Absente_Tactil"] as DataTable;
                         if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0)
                         {
-                            DataRow[] dtRow = dtAbsSpn.Select("Id=" + Convert.ToInt32(cmbSelAbs.Value));
+                            DataRow[] dtRow = dtAbsSpn.Select("Id=" + (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value) : Convert.ToInt32(cmbAbs.Value)));
                             if (dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
                             {
                                 lblZileRamase.Visible = true;

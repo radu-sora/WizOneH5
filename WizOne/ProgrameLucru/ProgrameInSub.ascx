@@ -30,10 +30,9 @@
 							        <dx:ASPxLabel  ID="lblDifRap"  Width="120"  runat="server"  Text="Diferenta raportare"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="deDifRap" Width="60"  runat="server" Value='<%# Eval("INSubDiferentaRaportare") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="deDifRap" Width="60"  runat="server" Value='<%# Eval("INSubDiferentaRaportare") %>' AutoPostBack="false"  >  
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerInSub(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
 					        </tr>
 					        <tr>				
@@ -41,10 +40,9 @@
 							        <dx:ASPxLabel  ID="lblMinPlata"  Width="120"  runat="server"  Text="Minim pt plata"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="deMinPlata" Width="60"  runat="server" Value='<%# Eval("INSubMinPlata") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="deMinPlata" Width="60"  runat="server" Value='<%# Eval("INSubMinPlata") %>' AutoPostBack="false"  >    
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerInSub(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
 					        </tr>
 					        <tr>				
@@ -52,10 +50,9 @@
 							        <dx:ASPxLabel  ID="lblMaxPlatit"  Width="120"  runat="server"  Text="Maximum platit"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="deMaxPlatit" Width="60"  runat="server" Value='<%# Eval("INSubMaxPlata") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="deMaxPlatit" Width="60"  runat="server" Value='<%# Eval("INSubMaxPlata") %>' AutoPostBack="false"  >  
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerInSub(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
 					        </tr>
 				        </table>

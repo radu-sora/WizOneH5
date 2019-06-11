@@ -4298,7 +4298,7 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
                 return null;
             }
         }
@@ -4318,6 +4318,20 @@ namespace WizOne.Module
             }
         }
 
+
+        public static void StergeFisier(string Tabela, object cheie)
+        {
+            try
+            {
+
+            
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
 
         public static void IncarcaFisier(string fileName, object fis, string Tabela, object cheie)

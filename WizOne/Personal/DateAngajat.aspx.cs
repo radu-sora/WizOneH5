@@ -406,8 +406,11 @@ namespace WizOne.Personal
 
 
                 for (int i = 1; i < ds.Tables.Count; i++)
-                {
-                    General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
+                {//Radu 10.06.2019
+                    if (ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni")
+                        SalvareSpeciala(ds.Tables[i].TableName);
+                    else
+                        General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                 }
 
 
@@ -434,6 +437,125 @@ namespace WizOne.Personal
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
+        protected void SalvareSpeciala(string tabela)
+        {
+            string sql = "SELECT * FROM \"" + tabela + "\"";
+            DataTable dtGen = new DataTable();
+            dtGen = General.IncarcaDT(sql, null);
+            dtGen.TableName = tabela;
+            dtGen.PrimaryKey = new DataColumn[] { dtGen.Columns["IdAuto"] };
+
+            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataTable dt = ds.Tables[tabela] as DataTable;
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i].RowState == DataRowState.Deleted)
+                {
+                    sql = "DELETE FROM \"" + tabela + "\" WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto", DataRowVersion.Original].ToString();
+                    General.ExecutaNonQuery(sql, null);
+                    sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' \"Id\" = " + dt.Rows[i]["IdAuto", DataRowVersion.Original].ToString();
+                    General.ExecutaNonQuery(sql, null);
+                    continue;
+                }
+
+                if (dtGen.Select("IdAuto = " + dt.Rows[i]["IdAuto"].ToString()).Count() > 0)
+                {//UPDATE 
+                    DataRow dr = dt.Select("IdAuto = " + dt.Rows[i]["IdAuto"].ToString()).FirstOrDefault();
+                    string sir = "";
+                    sql = "UPDATE \"" + tabela + "\" SET ";
+                    for (int k = 0; k < dt.Columns.Count; k++)
+                    {
+                        if (!dt.Columns[k].AutoIncrement)
+                        {
+                            string val = "";
+                            if (dr[k].GetType() == typeof(int))
+                                val = dr[k] == null ? "null" : dr[k].ToString();
+                            if (dr[k].GetType() == typeof(string))
+                                val = dr[k] == null ? "null" : "'" + dr[k].ToString() + "'";
+                            if (dr[k].GetType() == typeof(DateTime))
+                                val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
+                            if (val.Length <= 0)
+                                val = "''";
+                            sir += ",\"" + dt.Columns[k].ColumnName + "\" = " + val;
+                        }
+                    }
+                    sql += sir.Substring(1) + " WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto"].ToString();
+                    General.ExecutaNonQuery(sql, null);
+                }
+                else
+                {//INSERT
+                    DataRow dr = dt.Select("IdAuto = " + dt.Rows[i]["IdAuto"].ToString()).FirstOrDefault();
+                    sql = "INSERT INTO \"" + tabela + "\" (";
+                    string sir = "";
+                    for (int k = 0; k < dt.Columns.Count; k++)
+                    {
+                        if (!dt.Columns[k].AutoIncrement)
+                            sir += ",\"" + dt.Columns[k].ColumnName + "\"";
+                    }
+
+                    string rez1 = " OUTPUT Inserted.IdAuto ";
+                    if (Constante.tipBD == 2) rez1 = "";
+
+                    sql += sir.Substring(1) + ") " + rez1 + " VALUES (";
+
+                    sir = "";
+                    for (int k = 0; k < dt.Columns.Count; k++)
+                    {
+                        if (!dt.Columns[k].AutoIncrement)
+                        {
+                            string val = "";
+                            if (dr[k].GetType() == typeof(int))
+                                val = dr[k] == null ? "null" : dr[k].ToString();
+                            if (dr[k].GetType() == typeof(string))
+                                val = dr[k] == null ? "null" : "'" + dr[k].ToString() + "'";
+                            if (dr[k].GetType() == typeof(DateTime))
+                                val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
+                            if (val.Length <= 0)
+                                val = "''";
+                            sir += "," + val;
+                        }
+                    }
+
+                    string rez2 = "";
+                    if (Constante.tipBD == 2) rez2 = "  RETURNING \"IdAuto\" INTO @out_1; ";
+
+                    sql += sir.Substring(1) + ") " + rez2;
+
+                    DataTable dtRez = new DataTable();
+                    int idAuto = -99;
+                    if (Constante.tipBD == 1)
+                    {
+                        dtRez = General.IncarcaDT(sql, null);
+                        if (dtRez.Rows.Count > 0)
+                            idAuto = Convert.ToInt32(dtRez.Rows[0]["IdAuto"]);
+                    }
+                    else
+                    {
+                        List<string> lstOut = General.DamiOracleScalar(sql, null);
+                        if (lstOut.Count == 1)
+                            idAuto = Convert.ToInt32(lstOut[0]);
+                    }
+
+                    if (tabela == "Admin_Medicina")
+                    {
+                        Personal.Medicina.metaUploadFile itm = Session["DocUpload_MP_Medicina"] as Personal.Medicina.metaUploadFile;
+                        General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, tabela, idAuto);
+                        Session["DocUpload_MP_Medicina"] = null;
+                    }
+                    if (tabela == "Admin_Sanctiuni")
+                    {
+                        Personal.Sanctiuni.metaUploadFile itm = Session["DocUpload_MP_Sanctiuni"] as Personal.Sanctiuni.metaUploadFile;
+                        General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, tabela, idAuto);
+                        Session["DocUpload_MP_Sanctiuni"] = null;
+                    }
+
+
+                }
             }
         }
 

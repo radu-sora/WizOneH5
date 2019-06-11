@@ -2887,9 +2887,12 @@ namespace WizOne.Avs
                                 act = 1;
                                 sql100 = "UPDATE F100 SET F10023 = " + data1 + ", F100993 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
+                            //sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                            //+ " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + dtCer.Rows[0]["MotivId"].ToString() + ", 'Modificari in avans', '"
+                            //+ dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
-                            + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + dtCer.Rows[0]["MotivId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", (SELECT F72102 FROM F721 WHERE F72106 = " + dtCer.Rows[0]["MotivId"].ToString() + "), 'Modificari in avans', '"
+                                + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Norma:

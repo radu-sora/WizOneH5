@@ -2,6 +2,8 @@
 
 <script type="text/javascript">  
 
+    var newItem = 0;
+
     function OnSelectedIndexChanged1(s, e, visibleIndex) {
         var cmbChild;
         if (visibleIndex < 0)
@@ -9,6 +11,12 @@
         else
             cmbChild = eval('cmbChild1_' + visibleIndex);
         cmbChild.PerformCallback(s.GetValue());
+
+        newItem = s.GetValue();
+        for (var index = grDateSporuri1.GetTopVisibleIndex(); index < grDateSporuri1.GetVisibleRowsOnPage(); index++) {
+            if (index != visibleIndex)
+                grDateSporuri1.GetRowValues(index, "F02504", OnCallbackSp1);
+        }
     }
 
     function OnSelectedIndexChanged2(s, e, visibleIndex) {
@@ -18,14 +26,41 @@
         else
             cmbChild = eval('cmbChild2_' + visibleIndex);
         cmbChild.PerformCallback(s.GetValue());
+
+        newItem = s.GetValue();
+        for (var index = grDateSporuri2.GetTopVisibleIndex(); index < grDateSporuri2.GetVisibleRowsOnPage(); index++) {
+            if (index != visibleIndex)
+                grDateSporuri2.GetRowValues(index, "F02504", OnCallbackSp);
+        }
     }
 
+    function OnCallbackSp1(value) {
+        if (value == newItem) {
+            swal({
+                title: "Atentie !", text: "Acest spor a mai fost deja atribuit acestui angajat!",
+                type: "warning"
+            });
+            var tb = grDateSporuri1.GetEditor("Spor");
+            tb.SetValue(null);
+        }
+    }
+
+    function OnCallbackSp2(value) {
+        if (value == newItem) {
+            swal({
+                title: "Atentie !", text: "Acest spor a mai fost deja atribuit acestui angajat!",
+                type: "warning"
+            });
+            var tb = grDateSporuri2.GetEditor("Spor");
+            tb.SetValue(null);
+        }
+    }
     
 </script>
 <body>
 
     <dx:ASPxGridView ID="grDateSporuri1" runat="server" ClientInstanceName="grDateSporuri1" ClientIDMode="Static" Width="40%" AutoGenerateColumns="false"  OnDataBinding="grDateSporuri1_DataBinding" 
-          OnRowUpdating="grDateSporuri1_RowUpdating"  >        
+          OnRowUpdating="grDateSporuri1_RowUpdating" >        
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
         <ClientSideEvents  ContextMenu="ctx" /> 

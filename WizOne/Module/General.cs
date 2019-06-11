@@ -5289,6 +5289,46 @@ namespace WizOne.Module
             }
         }
 
+        public static void SecuritatePersonal(ASPxCallbackPanel pnl, int idUser)
+        {
+            List<string> lista = new List<string>();
+            string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                                FROM ""Securitate"" A
+                                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+                                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" like '%_I%'
+                                UNION
+                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                                FROM ""Securitate"" A
+                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl""  like '%_I%') X
+                                GROUP BY X.""IdControl"", X.""IdColoana""";
+            strSql = string.Format(strSql, idUser.ToString());
+
+            DataTable dt = General.IncarcaDT(strSql, null);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                    lista.Add(dt.Rows[i]["IdControl"].ToString());
+            }
+
+            if (lista != null && lista.Count > 0)
+            {
+                foreach (string elem in lista)
+                {
+                    bool vizibil = true, blocat = false;
+                    string[] param = elem.Split('_');
+                    SecuritateCtrl(elem, idUser, out vizibil, out blocat);
+                    WebControl ctl = pnl.FindControl(param[0]) as WebControl;
+                    if (ctl != null)
+                    {
+                        ctl.Visible = vizibil;
+                        ctl.Enabled = !blocat;
+                    }
+                }
+            }
+        }
+
         public static void SecuritatePersonal(ListView dtList, int idUser)
         {
             List<string> lista = new List<string>();

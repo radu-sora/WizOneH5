@@ -428,7 +428,7 @@ namespace WizOne.Avs
                 if (Constante.tipBD == 2) op = "||";
 
                 strSql = $@"SELECT  B.""Rol"", B.""RolDenumire"", A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
-                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+                        X.F71804 AS ""Functia"", C.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
                         FROM (
                         SELECT A.F10003, 0 AS ""Rol"", COALESCE((SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""=0),'Angajat') AS ""RolDenumire""
                         FROM F100 A
@@ -446,6 +446,7 @@ namespace WizOne.Avs
                         INNER JOIN ""Avs_Circuit"" C ON C.""Super1""={Session["UserId"]}
                         ) B
                         INNER JOIN F100 A ON A.F10003=B.F10003
+                        LEFT JOIN F002 C ON A.F10002 = C.F00202
                         LEFT JOIN F718 X ON A.F10071=X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
                         LEFT JOIN F004 G ON A.F10005 = G.F00405

@@ -64,7 +64,7 @@ namespace WizOne.Personal
                 dt.Columns.Add("F01104", typeof(int));
                 dt.Columns.Add("F01105", typeof(int));
                 
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["F01104"], dt.Columns["F01105"] };
+             
 
                 string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
                 string sqlFinal = "";
@@ -84,13 +84,14 @@ namespace WizOne.Personal
 
                 if (sqlFinal.Length > 0)
                     dt = General.IncarcaDT(sqlFinal, null);
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F01104"] };
                 dt.TableName = "Tarife";
                 if (dsCalcul == null)
                     dsCalcul = new DataSet();
 
                 dsCalcul.Tables.Add(dt);
             }
-            grDateTarife.KeyFieldName = "F01104; F01105";
+            grDateTarife.KeyFieldName = "F01104";
             grDateTarife.DataSource = dt;   
 
             Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
@@ -102,9 +103,6 @@ namespace WizOne.Personal
         {
             try
             {
-                if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
-                    return;
-
                 int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
                 GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
                 ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster");
@@ -115,6 +113,8 @@ namespace WizOne.Personal
                 e.NewValues["F01105"] = cb2.Value;
                 e.NewValues["DenTarif"] = cb2.Text;
 
+                if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
+                    return;
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
@@ -135,7 +135,7 @@ namespace WizOne.Personal
                 e.Cancel = true;
                 grDateTarife.CancelEdit();
                 grDateTarife.DataSource = dsCalcul.Tables["Tarife"];
-                grDateTarife.KeyFieldName = "F01104;F01105";
+                grDateTarife.KeyFieldName = "F01104";
 
                 string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
                 string sirNou = "";
@@ -161,9 +161,6 @@ namespace WizOne.Personal
         {
             try
             {
-                if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
-                    return;
-
                 int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
                 GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
                 ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster");
@@ -173,6 +170,9 @@ namespace WizOne.Personal
                 ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild");
                 e.NewValues["F01105"] = cb2.Value;
                 e.NewValues["DenTarif"] = cb2.Text;
+
+                if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
+                    return;
 
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
@@ -270,15 +270,14 @@ namespace WizOne.Personal
 
             GridViewDataItemTemplateContainer templateContainer = cmbParent.NamingContainer as GridViewDataItemTemplateContainer;
 
-            cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged(s, e, {0}); }}", templateContainer.VisibleIndex);
-                       
-            //ControlParameter idCateg = new ControlParameter();
-            //idCateg.ControlID = cmbParent.UniqueID;
-            //idCateg.PropertyName = "Value";
-            //idCateg.Name = "categ";
-            //idCateg.Type = TypeCode.Int32;
-            //asdChild.SelectParameters.Add(idCateg);
-            
+            string[] param = templateContainer.ClientID.Split('_');
+            if (param[1] != "editnew")
+            {
+                cmbParent.Value = Convert.ToInt32(templateContainer.KeyValue);
+                Session["Tarife_cmbMaster"] = templateContainer.KeyValue;
+            }
+
+            cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged(s, e, {0}); }}", templateContainer.VisibleIndex);               
         }
 
         protected void cmbChild_Init(object sender, EventArgs e)
@@ -287,10 +286,21 @@ namespace WizOne.Personal
 
             GridViewDataItemTemplateContainer templateContainer = cmbChild.NamingContainer as GridViewDataItemTemplateContainer;
 
+            string[] param = templateContainer.ClientID.Split('_');    
+
             cmbChild.ClientInstanceName = String.Format("cmbChild_{0}", templateContainer.VisibleIndex);
 
             if (templateContainer.Grid.IsNewRowEditing)
                 cmbChild.ClientInstanceName = String.Format("cmbChild_new", templateContainer.VisibleIndex);
+            else
+            {           
+                ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("asdChild") as ObjectDataSource;
+
+                cmbChildDataSource.SelectParameters.Clear();
+                cmbChildDataSource.SelectParameters.Add("categ", Session["Tarife_cmbMaster"].ToString());
+                cmbChild.DataBindItems();
+                //cmbChild.Value = Convert.ToInt32(param[2]);
+            }
      
     
             cmbChild.Callback += new CallbackEventHandlerBase(cmbChild_Callback);
@@ -308,7 +318,7 @@ namespace WizOne.Personal
             cmbChild.DataBindItems();
         }
 
-
+  
 
 
 

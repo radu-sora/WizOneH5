@@ -54,7 +54,7 @@
     <table width="100%">
         <tr>
             <td >
-                <dx:ASPxGridView ID="grDatePersIntr" runat="server" ClientInstanceName="grDatePersIntr" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDatePersIntr_DataBinding" OnInitNewRow="grDatePersIntr_InitNewRow" 
+                <dx:ASPxGridView ID="grDatePersIntr" runat="server" ClientInstanceName="grDatePersIntr" Width="100%" AutoGenerateColumns="false"  OnDataBinding="grDatePersIntr_DataBinding" OnInitNewRow="grDatePersIntr_InitNewRow" 
                     OnRowInserting="grDatePersIntr_RowInserting" OnRowUpdating="grDatePersIntr_RowUpdating" OnRowDeleting="grDatePersIntr_RowDeleting" OnCellEditorInitialize="grDatePersIntr_CellEditorInitialize"
                     OnCustomCallback="grDatePersIntr_CustomCallback">        
                     <SettingsBehavior AllowFocusedRow="true" />
@@ -66,7 +66,7 @@
                         <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                         <dx:GridViewDataTextColumn FieldName="F11010" Name="F11010" Caption="Nume"  Width="150px" />
                         <dx:GridViewDataTextColumn FieldName="F11005" Name="F11005" Caption="Prenume"  Width="150px" />
-                        <dx:GridViewDataTextColumn FieldName="F11012" Name="F11012" Caption="CNP"  Width="100px" />
+                        <dx:GridViewDataTextColumn FieldName="F11012" Name="F11012" Caption="CNP"  Width="120px" />
                         <dx:GridViewDataDateColumn FieldName="F11006" Name="F11006" Caption="Data nasterii"  Width="100px" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
@@ -75,7 +75,7 @@
                         <dx:GridViewDataCheckColumn FieldName="F11017" Name="F11017" Caption="Coasigurat"  Width="50px" >
                             <PropertiesCheckEdit ValueChecked="False" ValueUnchecked="True" />
                         </dx:GridViewDataCheckColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="F11004" Name="F11004" Caption="Relatie"  Width="100px" >
+                        <dx:GridViewDataComboBoxColumn FieldName="F11004" Name="F11004" Caption="Relatie"  Width="80px" >
                             <PropertiesComboBox TextField="F71104" ValueField="F71102" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="F11014" Name="F11014" Caption="Grad invaliditate"  Width="100px" >

@@ -12,7 +12,8 @@
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />   
         <ClientSideEvents CustomButtonClick="function(s, e) { grDateContracte_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
-        <SettingsEditing Mode="Inline" />                       
+        <SettingsEditing Mode="Inline" />        
+        <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>

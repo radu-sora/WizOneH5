@@ -11,7 +11,8 @@
                 <dx:ASPxGridView ID="grDateNecesar" runat="server" ClientInstanceName="grDateNecesar" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateNecesar_DataBinding"  >
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />         
-                    <ClientSideEvents ContextMenu="ctx" />                                                 
+                    <ClientSideEvents ContextMenu="ctx" />     
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                         <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Nume Obiect Lipsa" Width="490px" >

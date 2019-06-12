@@ -72,7 +72,8 @@
 
                 <dx:ASPxGridView ID="grDateSuspendari" runat="server" ClientInstanceName="grDateSuspendari" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false">
                     <SettingsBehavior AllowFocusedRow="true" />
-                    <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                  
+                    <Settings ShowFilterRow="False" ShowColumnHeaders="true"  /> 
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
                         <dx:GridViewDataComboBoxColumn FieldName="F11104" Name="F11104" Caption="Motiv" ReadOnly="true" Width="250px" >
                             <PropertiesComboBox TextField="F09003" ValueField="F09002" ValueType="System.Int32" DropDownStyle="DropDown" />

@@ -60,7 +60,8 @@
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
                     <ClientSideEvents CustomButtonClick="function(s, e) { grDatePersIntr_CustomButtonClick(s, e); }" ContextMenu="ctx"  EndCallback="OnEndCallbackPI"/> 
-                    <SettingsEditing Mode="Inline" />                                                    
+                    <SettingsEditing Mode="Inline" />         
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                         <dx:GridViewDataTextColumn FieldName="F11010" Name="F11010" Caption="Nume"  Width="250px" />

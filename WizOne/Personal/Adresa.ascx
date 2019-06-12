@@ -64,6 +64,7 @@
                 <Settings ShowFilterRow="False" ShowColumnHeaders="true" />
                 <ClientSideEvents ContextMenu="ctx" CustomButtonClick="function(s,e){ popUpCauta.Show(); }" EndCallback="DamiAdresa" />
                 <SettingsEditing Mode="Inline" />
+                <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                 <Columns>
                     <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                     <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat"  Width="75px" Visible="false"/>

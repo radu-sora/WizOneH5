@@ -136,10 +136,10 @@ namespace WizOne.Personal
 
 
                 //Florin 2019.05.31
-                if (!IsPostBack)
-                {
-                    SetariNorma();
-                }
+                //if (!IsPostBack)
+                //{
+                //    SetariNorma();
+                //}
 
             }
 
@@ -147,35 +147,35 @@ namespace WizOne.Personal
 
         }
 
-        private void SetariNorma()
-        {
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-            //DateIdentificare dateId = new DateIdentificare();
-            int varsta = Dami.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
-            if (varsta >= 16 && varsta < 18)
-            {
-                ASPxComboBox cmbNorma = Contract_DataList.Items[0].FindControl("cmbNorma") as ASPxComboBox;
-                ASPxComboBox cmbTimpPartial = Contract_DataList.Items[0].FindControl("cmbTimpPartial") as ASPxComboBox;
-                ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
+        //private void SetariNorma()
+        //{
+        //    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+        //    //DateIdentificare dateId = new DateIdentificare();
+        //    int varsta = Dami.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
+        //    if (varsta >= 16 && varsta < 18)
+        //    {
+        //        ASPxComboBox cmbNorma = Contract_DataList.Items[0].FindControl("cmbNorma") as ASPxComboBox;
+        //        ASPxComboBox cmbTimpPartial = Contract_DataList.Items[0].FindControl("cmbTimpPartial") as ASPxComboBox;
+        //        ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
 
-                cmbNorma.Value = 6;
-                cmbNorma.ReadOnly = true;
-                cmbTimpPartial.Value = 6;
+        //        cmbNorma.Value = 6;
+        //        cmbNorma.ReadOnly = true;
+        //        cmbTimpPartial.Value = 6;
 
-                if (txtNrOre.Text.Length > 0 && Convert.ToInt32(txtNrOre.Text) > 30)
-                {
-                    txtNrOre.Text = "";
-                    ds.Tables[0].Rows[0]["F100964"] = DBNull.Value;
-                    ds.Tables[2].Rows[0]["F100964"] = DBNull.Value;
-                }
+        //        if (txtNrOre.Text.Length > 0 && Convert.ToInt32(txtNrOre.Text) > 30)
+        //        {
+        //            txtNrOre.Text = "";
+        //            ds.Tables[0].Rows[0]["F100964"] = DBNull.Value;
+        //            ds.Tables[2].Rows[0]["F100964"] = DBNull.Value;
+        //        }
 
-                ds.Tables[0].Rows[0]["F100973"] = 6;
-                ds.Tables[1].Rows[0]["F100973"] = 6;
-                ds.Tables[0].Rows[0]["F10043"] = 6;
-                ds.Tables[1].Rows[0]["F10043"] = 6;
-                Session["InformatiaCurentaPersonal"] = ds;
-            }
-        }
+        //        ds.Tables[0].Rows[0]["F100973"] = 6;
+        //        ds.Tables[1].Rows[0]["F100973"] = 6;
+        //        ds.Tables[0].Rows[0]["F10043"] = 6;
+        //        ds.Tables[1].Rows[0]["F10043"] = 6;
+        //        Session["InformatiaCurentaPersonal"] = ds;
+        //    }
+        //}
 
         protected void pnlCtlContract_Callback(object source, CallbackEventArgsBase e)
         {

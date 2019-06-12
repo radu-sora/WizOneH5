@@ -88,8 +88,6 @@
                 }
                 break;
         }
-
-        //pnlCtlContract.PerformCallback(s.name + ";" +s.GetText());
     }
 
     function OnValueChangedHandlerCtr(s) {
@@ -240,54 +238,12 @@
         }
     }
 
-    function cmbTimpPartial_SelectedIndexChanged(s) {
-
-        //if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18 && cmbTimpPartial.GetValue() > 6) {
-        //    swal({ title: "Atentie !", text: "Timp partial invalid (max 6 pentru minori peste 16 ani)!", type: "warning" });
-        //    SetariNorma();
-        //}
-        //else {
-        //    if (cmbNorma.GetValue() < cmbTimpPartial.GetSelectedItem().value) {
-        //        swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
-        //        cmbTimpPartial.SetValue(1);
-        //    }
-        //}
-    }
-
-    //function SetariNorma() {
-    //    cmbNorma.SetValue(6);
-    //    cmbNorma.SetEnabled(false);
-    //    cmbTimpPartial.SetValue(6);
-    //    if (txtNrOre.GetValue() > 30)
-    //        txtNrOre.SetValue(0);
-    //}
-
-    function cmbNorma_SelectedIndexChanged(s) {
-        //if (cmbNorma.GetValue() == "") {
-        //    swal({ title: "Atentie !", text: "Nu ati completat norma!", type: "warning" });
-        //    cmbNorma.SetValue(8);
-        //    cmbTimpPartial.SetValue(1);
-        //}
-        //else {
-        //    cmbTimpPartial.SetValue(cmbNorma.GetValue());
-        //}
-    }
-
     function ValidareNrOre(s) {
         if (cmbDurTimpMunca.GetValue() == 2 && txtNrOre.GetValue() > 30)
             swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 30)!", type: "warning" });
 
         if (cmbDurTimpMunca.GetValue() == 1 && txtNrOre.GetValue() > 40)
             swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 40)!", type: "warning" });
-
-        //if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18 && txtNrOre.GetValue() > 30 && cmbIntervRepTimpMunca.GetValue() == 2) {
-        //    swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 30 pentru minori peste 16 ani)!", type: "warning" });
-        //    SetariNorma();
-        //}
-
-        //if (cmbTipNorma.GetValue() == 1 && txtNrOre.GetValue() > 40 && cmbIntervRepTimpMunca.GetValue() == 2) {
-        //    swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 40 pentru norma intreaga)!", type: "warning" });
-        //}
     }
 
     function cmbIntervRepTimpMunca_SelectedIndexChanged(s) {
@@ -307,7 +263,7 @@
         }
     }
 
-    function cmbDurataContract_SelectedIndexChanged(s) {
+    function cmbDurataContract_SelectedIndexChanged() {
         Validare36Luni();
     }
 
@@ -354,10 +310,6 @@
     function cmbPrel_SelectedIndexChanged() {
         if (cmbPrel.GetValue() == 1) {
             deDeLaData.SetValue(deLaData.GetValue());
-
-            //var d = deLaData.GetValue();
-            //var cal = d.setMonth(d.getMonth() + Number(txtNrLuni.GetValue()));
-            //deLaData.SetValue(d);
         }
     }
 
@@ -460,7 +412,7 @@
 							<dx:ASPxLabel  ID="lblTipCtrMunca" runat="server"  Text="Tip contract munca"></dx:ASPxLabel>	
 						</td>
 						<td>	
-							<dx:ASPxComboBox DataSourceID="dsTCM"  Value='<%#Eval("F100984") %>'   ID="cmbTipCtrMunca" Width="100"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
+							<dx:ASPxComboBox DataSourceID="dsTCM"  Value='<%#Eval("F100984") %>' ID="cmbTipCtrMunca" Width="100"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
 							</dx:ASPxComboBox>
 						</td>
 					</tr>	
@@ -471,7 +423,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsDC"  Value='<%#Eval("F1009741") %>'  ID="cmbDurCtr"  ClientInstanceName="cmbDurCtr" Width="100" runat="server" DropDownStyle="DropDown"  TextField="F08903" ValueField="F08902" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbDurataContract_SelectedIndexChanged(s); }" />
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbDurataContract_SelectedIndexChanged(); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>	
@@ -480,7 +432,7 @@
 							<dx:ASPxLabel  ID="lblDeLaData" runat="server"  Text="De la data"></dx:ASPxLabel>
 						</td>
 						<td>			
-							<dx:ASPxDateEdit  ID="deDeLaData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100933") %>'  AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deDeLaData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100933") %>'  AutoPostBack="false" ClientEnabled="false" >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
 							</dx:ASPxDateEdit>					
 						</td>
@@ -490,7 +442,7 @@
 							<dx:ASPxLabel  ID="lblLaData" runat="server"  Text="La data"></dx:ASPxLabel>	
 						</td>
 						<td>	
-							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100934") %>' AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100934") %>' AutoPostBack="false" ClientEnabled="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
                                 <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
 							</dx:ASPxDateEdit>										

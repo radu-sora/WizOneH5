@@ -1073,7 +1073,7 @@ namespace WizOne.Personal
                 Dictionary<String, String> lstBC = new Dictionary<string, string>();
                 lstBC.Add("txtIBANSal", "F10020");
                 lstBC.Add("txtNrCard", "F10055");
-                lstBC.Add("dsBanca", "F10018");
+                lstBC.Add("cmbBancaSal", "F10018");
                 lstBC.Add("cmbSucSal", "F10019");
                 lstBC.Add("txtIBANGar", "F1001028");
                 lstBC.Add("cmbBancaGar", "F1001026");

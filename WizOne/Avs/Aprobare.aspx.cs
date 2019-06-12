@@ -1172,7 +1172,7 @@ namespace WizOne.Avs
                         INNER JOIN ""Avs_tblAtribute"" C ON C.""Id"" = A.""IdAtribut""
                         left join ""F100Supervizori"" GG on A.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                 
                         WHERE gg.iduser = {Session["UserId"]} ) T
-                        ORDER BY T.”Denumire"" ";
+                        ORDER BY T.""Denumire"" ";
 
 
             }

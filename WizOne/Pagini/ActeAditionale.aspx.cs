@@ -930,7 +930,7 @@ namespace WizOne.Pagini
                                         //Florin 2019.05.27
 
                                         //DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
-                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1;";
+                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1, ""Candidat""=0 WHERE ""IdAuto""=@1;";
 
 
                                         //cazul cand este candidat

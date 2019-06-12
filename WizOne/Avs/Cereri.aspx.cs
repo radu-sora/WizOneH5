@@ -428,7 +428,7 @@ namespace WizOne.Avs
                 if (Constante.tipBD == 2) op = "||";
 
                 strSql = $@"SELECT  B.""Rol"", B.""RolDenumire"", A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
-                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+                        X.F71804 AS ""Functia"", J.F00204 AS ""Compania"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
                         FROM (
                         SELECT A.F10003, 0 AS ""Rol"", COALESCE((SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""=0),'Angajat') AS ""RolDenumire""
                         FROM F100 A
@@ -451,6 +451,7 @@ namespace WizOne.Avs
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
                         LEFT JOIN F005 H ON A.F10006 = H.F00506
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
+                        LEFT JOIN F002 J ON A.F10002 = J.F00202
 						WHERE A.F10025 IN (0, 999) ";
 
                 if (idRol != -44) strSql += @" AND ""Rol""=" + idRol;

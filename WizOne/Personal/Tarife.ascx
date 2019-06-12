@@ -42,7 +42,6 @@
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
         <ClientSideEvents  ContextMenu="ctx" /> 
         <SettingsEditing Mode="Inline" />     
-        <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />  
 			<dx:GridViewDataTextColumn FieldName="DenCateg" Caption="Categorie" VisibleIndex="1">

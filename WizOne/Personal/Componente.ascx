@@ -43,7 +43,6 @@
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
         <ClientSideEvents  ContextMenu="ctx" /> 
         <SettingsEditing Mode="Inline" />       
-        <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />          
             <dx:GridViewDataComboBoxColumn FieldName="F02104" Name="F02104" Caption="Componenta" Width="250px" >

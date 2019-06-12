@@ -288,7 +288,7 @@ namespace WizOne.Personal
                         if (col.ColumnName == "F02504")
                         {
                             DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
-                            poz = Convert.ToInt32(dt.Rows[0][0].ToString());
+                            poz = Convert.ToInt32(dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
                         }
                         if (col.ColumnName == "F01105")
                             val = Convert.ToInt32(e.NewValues[col.ColumnName]);

@@ -11,7 +11,6 @@
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
         <ClientSideEvents  ContextMenu="ctx" /> 
         <SettingsEditing Mode="Inline" />  
-        <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />   
             <dx:GridViewDataTextColumn FieldName="Cod" Name="Cod" Caption="Cod"  Width="75px"  ReadOnly="true"/>

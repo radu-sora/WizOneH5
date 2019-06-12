@@ -8,7 +8,7 @@
     <table width="100%">
         <tr>
             <td >
-                <dx:ASPxGridView ID="grDateActivitati" runat="server" ClientInstanceName="grDateActivitati" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateActivitati_DataBinding"  OnInitNewRow="grDateActivitati_InitNewRow"
+                <dx:ASPxGridView ID="grDateActivitati" runat="server" ClientInstanceName="grDateActivitati" ClientIDMode="Static" Width="65%" AutoGenerateColumns="false"  OnDataBinding="grDateActivitati_DataBinding"  OnInitNewRow="grDateActivitati_InitNewRow"
                     OnRowInserting="grDateActivitati_RowInserting" OnRowUpdating="grDateActivitati_RowUpdating" OnRowDeleting="grDateActivitati_RowDeleting">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  

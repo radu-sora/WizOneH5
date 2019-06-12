@@ -64,21 +64,21 @@
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
-                        <dx:GridViewDataTextColumn FieldName="F11010" Name="F11010" Caption="Nume"  Width="250px" />
-                        <dx:GridViewDataTextColumn FieldName="F11005" Name="F11005" Caption="Prenume"  Width="250px" />
-                        <dx:GridViewDataTextColumn FieldName="F11012" Name="F11012" Caption="CNP"  Width="150px" />
+                        <dx:GridViewDataTextColumn FieldName="F11010" Name="F11010" Caption="Nume"  Width="150px" />
+                        <dx:GridViewDataTextColumn FieldName="F11005" Name="F11005" Caption="Prenume"  Width="150px" />
+                        <dx:GridViewDataTextColumn FieldName="F11012" Name="F11012" Caption="CNP"  Width="100px" />
                         <dx:GridViewDataDateColumn FieldName="F11006" Name="F11006" Caption="Data nasterii"  Width="100px" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="F11007" Name="F11007" Caption="Id"  Width="70px"  />
-                        <dx:GridViewDataCheckColumn FieldName="F11016" Name="F11016" Caption="Intretinut"  Width="70px"  />
-                        <dx:GridViewDataCheckColumn FieldName="F11017" Name="F11017" Caption="Coasigurat"  Width="70px" >
+                        <dx:GridViewDataTextColumn FieldName="F11007" Name="F11007" Caption="Id"  Width="50px"  />
+                        <dx:GridViewDataCheckColumn FieldName="F11016" Name="F11016" Caption="Intretinut"  Width="50px"  />
+                        <dx:GridViewDataCheckColumn FieldName="F11017" Name="F11017" Caption="Coasigurat"  Width="50px" >
                             <PropertiesCheckEdit ValueChecked="False" ValueUnchecked="True" />
                         </dx:GridViewDataCheckColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="F11004" Name="F11004" Caption="Relatie"  Width="250px" >
+                        <dx:GridViewDataComboBoxColumn FieldName="F11004" Name="F11004" Caption="Relatie"  Width="100px" >
                             <PropertiesComboBox TextField="F71104" ValueField="F71102" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="F11014" Name="F11014" Caption="Grad invaliditate"  Width="250px" >
+                        <dx:GridViewDataComboBoxColumn FieldName="F11014" Name="F11014" Caption="Grad invaliditate"  Width="100px" >
                             <PropertiesComboBox TextField="F71504" ValueField="F71502" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataDateColumn FieldName="F11015" Name="F11015" Caption="Invaliditate pana la" Width="100px" HeaderStyle-Wrap="True" >
@@ -90,7 +90,7 @@
                         <dx:GridViewDataDateColumn FieldName="F11019" Name="F11019" Caption="Data sfarsit coasigurare" Width="100px" HeaderStyle-Wrap="True" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="F11020" Name="F11020" Caption="Nr doc coasigurare"  Width="150px" />
+                        <dx:GridViewDataTextColumn FieldName="F11020" Name="F11020" Caption="Nr doc coasigurare"  Width="100px" />
                         <dx:GridViewDataDateColumn FieldName="F11021" Name="F11021" Caption="Data doc coasigurare"  Width="100px" HeaderStyle-Wrap="True" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>

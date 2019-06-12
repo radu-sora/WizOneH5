@@ -8,7 +8,7 @@
     <table width="100%">
         <tr>
             <td >
-                <dx:ASPxGridView ID="grDateNecesar" runat="server" ClientInstanceName="grDateNecesar" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateNecesar_DataBinding"  >
+                <dx:ASPxGridView ID="grDateNecesar" runat="server" ClientInstanceName="grDateNecesar" ClientIDMode="Static" Width="60%" AutoGenerateColumns="false"  OnDataBinding="grDateNecesar_DataBinding"  >
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />         
                     <ClientSideEvents ContextMenu="ctx" />     

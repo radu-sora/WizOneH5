@@ -7,7 +7,7 @@
     <dx:ASPxButton ID="btnAct" ClientInstanceName="btnAct" ClientIDMode="Static" runat="server" OnClick="btnAct_Click"  AutoPostBack="false"   RenderMode="Link">
 	    <Image Url="../Fisiere/Imagini/Icoane/m5.png"></Image>
     </dx:ASPxButton>
-    <dx:ASPxGridView ID="grDateContracte" runat="server" ClientInstanceName="grDateContracte" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateContracte_DataBinding" OnInitNewRow="grDateContracte_InitNewRow"
+    <dx:ASPxGridView ID="grDateContracte" runat="server" ClientInstanceName="grDateContracte" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnDataBinding="grDateContracte_DataBinding" OnInitNewRow="grDateContracte_InitNewRow"
         OnRowInserting="grDateContracte_RowInserting" OnRowUpdating="grDateContracte_RowUpdating" OnRowDeleting="grDateContracte_RowDeleting" OnCommandButtonInitialize="grDateContracte_CommandButtonInitialize">
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />   

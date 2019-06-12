@@ -5,7 +5,7 @@
 
 <body>
 
-    <dx:ASPxGridView ID="grDateGrupuri" runat="server" ClientInstanceName="grDateGrupuri" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateGrupuri_DataBinding" OnInitNewRow="grDateGrupuri_InitNewRow"
+    <dx:ASPxGridView ID="grDateGrupuri" runat="server" ClientInstanceName="grDateGrupuri" ClientIDMode="Static" Width="40%" AutoGenerateColumns="false"  OnDataBinding="grDateGrupuri_DataBinding" OnInitNewRow="grDateGrupuri_InitNewRow"
           OnRowInserting="grDateGrupuri_RowInserting" OnRowUpdating="grDateGrupuri_RowUpdating" OnRowDeleting="grDateGrupuri_RowDeleting"  OnCommandButtonInitialize="grDateGrupuri_CommandButtonInitialize">        
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  

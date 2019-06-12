@@ -2520,9 +2520,9 @@ namespace WizOne.Avs
                 if (dtCer == null || dtCer.Rows.Count == 0) return;
 
                 int? idComp = 1;
-                DataTable dtComp = General.IncarcaDT("SELECT * FROM F002", null);
-                if (dtComp != null && dtComp.Rows.Count > 0 && dtComp.Rows[0]["F00202"] != null && dtComp.Rows[0]["F00202"].ToString().Length > 0)
-                    idComp = Convert.ToInt32(dtComp.Rows[0]["F00202"].ToString());
+                DataTable dtComp = General.IncarcaDT("SELECT F10002 FROM F100 WHERE F10003 = " + dtCer.Rows[0]["F10003"].ToString(), null);
+                if (dtComp != null && dtComp.Rows.Count > 0 && dtComp.Rows[0]["F10002"] != null && dtComp.Rows[0]["F10002"].ToString().Length > 0)
+                    idComp = Convert.ToInt32(dtComp.Rows[0]["F10002"].ToString());
 
                 DateTime dtLucru = General.DamiDataLucru();
                 int f10003 = Convert.ToInt32(dtCer.Rows[0]["F10003"].ToString());

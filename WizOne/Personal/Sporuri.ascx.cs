@@ -195,6 +195,9 @@ namespace WizOne.Personal
                 e.NewValues["F01105"] = cb2.Value;
                 e.NewValues["Tarif"] = cb2.Text;
 
+                if (e.NewValues["Spor"] == null || e.NewValues["Spor"].ToString().Length < 0)
+                    return;
+
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
@@ -213,7 +216,7 @@ namespace WizOne.Personal
                         if (col.ColumnName == "F02504")
                         {
                             DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
-                            poz = Convert.ToInt32(dt.Rows[0][0].ToString());
+                            poz = Convert.ToInt32(dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
                         }
                         if (col.ColumnName == "F01105")
                             val = Convert.ToInt32(e.NewValues[col.ColumnName]);
@@ -264,6 +267,9 @@ namespace WizOne.Personal
                 ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild2");
                 e.NewValues["F01105"] = cb2.Value;
                 e.NewValues["Tarif"] = cb2.Text;
+
+                if (e.NewValues["Spor"] == null || e.NewValues["Spor"].ToString().Length < 0)
+                    return;
 
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
@@ -333,6 +339,14 @@ namespace WizOne.Personal
             cmbMasterDataSource.SelectParameters.Add("param", "1");
             cmbParent.DataBindItems();
 
+            string[] param = templateContainer.ClientID.Split('_');
+            if (param[1] != "editnew")
+            {
+                object[] obj = grDateSporuri1.GetRowValues(grDateSporuri1.FocusedRowIndex, new string[] { "Spor", "Tarif", "F02504" }) as object[];
+                cmbParent.Value = Convert.ToInt32(obj[2].ToString());
+                Session["Sporuri_cmbMaster1"] = Convert.ToInt32(obj[2].ToString());
+            }
+
 
         }
 
@@ -346,8 +360,16 @@ namespace WizOne.Personal
 
             if (templateContainer.Grid.IsNewRowEditing)
                 cmbChild.ClientInstanceName = String.Format("cmbChild1_new", templateContainer.VisibleIndex);
-     
-    
+            else
+            {
+                ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("adsChild1") as ObjectDataSource;
+
+                cmbChildDataSource.SelectParameters.Clear();
+                cmbChildDataSource.SelectParameters.Add("categ", Session["Sporuri_cmbMaster1"].ToString());
+                cmbChild.DataBindItems();
+                //cmbChild.Value = Convert.ToInt32(param[2]);
+            }
+
             cmbChild.Callback += new CallbackEventHandlerBase(cmbChild1_Callback);
     
         }
@@ -378,6 +400,14 @@ namespace WizOne.Personal
             cmbMasterDataSource.SelectParameters.Clear();
             cmbMasterDataSource.SelectParameters.Add("param", "0");
             cmbParent.DataBindItems();
+
+            string[] param = templateContainer.ClientID.Split('_');
+            if (param[1] != "editnew")
+            {
+                object[] obj = grDateSporuri2.GetRowValues(grDateSporuri2.FocusedRowIndex, new string[] { "Spor", "Tarif", "F02504" }) as object[];
+                cmbParent.Value = Convert.ToInt32(obj[2].ToString());
+                Session["Sporuri_cmbMaster2"] = Convert.ToInt32(obj[2].ToString());
+            }
         }
 
         protected void cmbChild2_Init(object sender, EventArgs e)
@@ -390,7 +420,15 @@ namespace WizOne.Personal
 
             if (templateContainer.Grid.IsNewRowEditing)
                 cmbChild.ClientInstanceName = String.Format("cmbChild2_new", templateContainer.VisibleIndex);
+            else
+            {
+                ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("adsChild2") as ObjectDataSource;
 
+                cmbChildDataSource.SelectParameters.Clear();
+                cmbChildDataSource.SelectParameters.Add("categ", Session["Sporuri_cmbMaster2"].ToString());
+                cmbChild.DataBindItems();
+                //cmbChild.Value = Convert.ToInt32(param[2]);
+            }
 
             cmbChild.Callback += new CallbackEventHandlerBase(cmbChild2_Callback);
 
@@ -407,6 +445,6 @@ namespace WizOne.Personal
             cmbChild.DataBindItems();
         }
 
-
+ 
     }
 }

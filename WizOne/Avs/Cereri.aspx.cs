@@ -428,7 +428,7 @@ namespace WizOne.Avs
                 if (Constante.tipBD == 2) op = "||";
 
                 strSql = $@"SELECT  B.""Rol"", B.""RolDenumire"", A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
-                        X.F71804 AS ""Functia"", J.F00204 AS ""Compania"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+                        X.F71804 AS ""Functia"", C.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
                         FROM (
                         SELECT A.F10003, 0 AS ""Rol"", COALESCE((SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""=0),'Angajat') AS ""RolDenumire""
                         FROM F100 A
@@ -446,12 +446,12 @@ namespace WizOne.Avs
                         INNER JOIN ""Avs_Circuit"" C ON C.""Super1""={Session["UserId"]}
                         ) B
                         INNER JOIN F100 A ON A.F10003=B.F10003
+                        LEFT JOIN F002 C ON A.F10002 = C.F00202
                         LEFT JOIN F718 X ON A.F10071=X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
                         LEFT JOIN F005 H ON A.F10006 = H.F00506
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
-                        LEFT JOIN F002 J ON A.F10002 = J.F00202
 						WHERE A.F10025 IN (0, 999) ";
 
                 if (idRol != -44) strSql += @" AND ""Rol""=" + idRol;
@@ -2789,9 +2789,9 @@ namespace WizOne.Avs
                 if (dtCer == null || dtCer.Rows.Count == 0) return;
 
                 int? idComp = 1;
-                DataTable dtComp = General.IncarcaDT("SELECT * FROM F002", null);
-                if (dtComp != null && dtComp.Rows.Count > 0 && dtComp.Rows[0]["F00202"] != null && dtComp.Rows[0]["F00202"].ToString().Length > 0)
-                    idComp = Convert.ToInt32(dtComp.Rows[0]["F00202"].ToString());
+                DataTable dtComp = General.IncarcaDT("SELECT F10002 FROM F100 WHERE F10003 = " + dtCer.Rows[0]["F10003"].ToString(), null);
+                if (dtComp != null && dtComp.Rows.Count > 0 && dtComp.Rows[0]["F10002"] != null && dtComp.Rows[0]["F10002"].ToString().Length > 0)
+                    idComp = Convert.ToInt32(dtComp.Rows[0]["F10002"].ToString());
 
                 DateTime dtLucru = General.DamiDataLucru();
                 int f10003 = Convert.ToInt32(dtCer.Rows[0]["F10003"].ToString());

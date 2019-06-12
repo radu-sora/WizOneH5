@@ -2,13 +2,33 @@
 
 <script type="text/javascript">  
 
-    function OnSelectedIndexChanged(s, e, visibleIndex) {
+    var newItem = 0;
+
+    function OnSelectedIndexChanged(s, e, visibleIndex) {    
         var cmbChild;
-        if (visibleIndex < 0)
-            cmbChild = eval('cmbChild_new');
-        else
+        if (visibleIndex < 0) 
+            cmbChild = eval('cmbChild_new');        
+        else 
             cmbChild = eval('cmbChild_' + visibleIndex);
         cmbChild.PerformCallback(s.GetValue());
+
+        newItem = s.GetValue();
+        for (var index = grDateTarife.GetTopVisibleIndex(); index < grDateTarife.GetVisibleRowsOnPage(); index++) {
+            if (index != visibleIndex)
+                grDateTarife.GetRowValues(index, "F01104", OnCallbackTar);
+        }  
+
+    }
+
+    function OnCallbackTar(value) {
+        if (value == newItem) {
+            swal({
+                title: "Atentie !", text: "Aceasta categorie a mai fost deja atribuita acestui angajat!",
+                type: "warning"
+            }); 
+            var tb = grDateTarife.GetEditor("DenCateg");
+            tb.SetValue(null);
+        }
     }
 
 

@@ -7,12 +7,12 @@
         gasit = false;
         newItem = s.GetValue();
         for (var index = grDateComponente.GetTopVisibleIndex(); index < grDateComponente.GetVisibleRowsOnPage(); index++) {  
-            grDateComponente.GetRowValues(index, "F02104", OnCallback);          
+            grDateComponente.GetRowValues(index, "F02104", OnCallbackComp);          
         }  
         
     }
 
-    function OnCallback(value) {
+    function OnCallbackComp(value) {
         if (value == newItem) {
             swal({
                 title: "Atentie !", text: "Codul a mai fost deja atribuit acestui angajat!",

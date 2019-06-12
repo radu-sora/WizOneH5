@@ -179,6 +179,7 @@
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" />
                     <Settings ShowFilterRow="True" ShowGroupPanel="False" />
                     <SettingsSearchPanel Visible="False" />
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick"  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="50px" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" >

@@ -41,7 +41,8 @@
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />    
                     <ClientSideEvents CustomButtonClick="function(s, e) { grDateSanctiuni_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
-                    <SettingsEditing Mode="EditFormAndDisplayRow" />                                                 
+                    <SettingsEditing Mode="EditFormAndDisplayRow" />   
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " >
                             <CustomButtons>

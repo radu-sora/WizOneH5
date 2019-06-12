@@ -105,7 +105,8 @@
 
     <dx:ASPxGridView ID="grDateDetasari" runat="server" ClientInstanceName="grDateDetasari" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateDetasari_DataBinding" >
         <SettingsBehavior AllowFocusedRow="true" />
-        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                 
+        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
+        <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>
             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
             <dx:GridViewDataTextColumn FieldName="F11204" Name="F11204" Caption="Nume angajator"  Width="150px"/>

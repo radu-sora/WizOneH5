@@ -486,21 +486,27 @@ namespace WizOne.Personal
                     }
                     sql += sir.Substring(1) + " WHERE \"IdAuto\" = " + dt.Rows[i]["IdAuto"].ToString();
                     General.ExecutaNonQuery(sql, null);
-
-                    sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
-                    General.ExecutaNonQuery(sql, null);
+           
                     int idAuto = Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString());
                     if (tabela == "Admin_Medicina")
                     {
                         Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
                         if (lstFiles != null && lstFiles.ContainsKey(idAuto))
-                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);            
+                        {
+                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                            General.ExecutaNonQuery(sql, null);
+                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                        }
                     }
                     if (tabela == "Admin_Sanctiuni")
                     {
                         Dictionary<int, Personal.Sanctiuni.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, Personal.Sanctiuni.metaUploadFile>;
                         if (lstFiles != null && lstFiles.ContainsKey(idAuto))
-                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);               
+                        {
+                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                            General.ExecutaNonQuery(sql, null);
+                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                        }
                     }
 
 ;

@@ -26,14 +26,16 @@ namespace WizOne.Pontaj
             {
                 if (!IsPostBack)
                 {
-                    DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_CumulatSetari"" ORDER BY ""Ordine"" ", null);
+                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
+                                                        FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.Coloana = AF.Denumire 
+                                                        ORDER BY CS.""Ordine""  ", null);
 
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         GridViewDataSpinEditColumn c = new GridViewDataSpinEditColumn();
                         c.Name = "col" + i;
                         c.FieldName = dt.Rows[i]["Coloana"].ToString();
-                        c.Caption = Dami.TraduCuvant(dt.Rows[i]["Coloana"].ToString());
+                        c.Caption = Dami.TraduCuvant(dt.Rows[i]["Caption"].ToString());
                         c.ReadOnly = true;
                         //c.Width = Unit.Pixel(100);
                         c.VisibleIndex = 100 + i;
@@ -45,6 +47,12 @@ namespace WizOne.Pontaj
                         c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
 
                         grDate.Columns.Add(c);
+
+                        ASPxSummaryItem s = new ASPxSummaryItem();
+                        s.FieldName = dt.Rows[i]["Coloana"].ToString();
+                        s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+
+                        grDate.TotalSummary.Add(s);
 
                     }
                 }

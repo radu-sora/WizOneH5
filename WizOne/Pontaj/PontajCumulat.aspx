@@ -146,7 +146,7 @@
 
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" >
                     <SettingsBehavior ColumnResizeMode="Control" />
-                    <Settings ShowStatusBar="Hidden" ShowFilterRow="True"  />
+                    <Settings ShowStatusBar="Hidden" ShowFilterRow="True"  ShowFilterRowMenu="True" ShowFooter="True" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
 
                     <Columns>

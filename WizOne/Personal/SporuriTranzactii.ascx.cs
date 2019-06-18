@@ -106,32 +106,51 @@ namespace WizOne.Personal
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
-
+                bool dublura = false;
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
 
                 DataRow row = dsCalcul.Tables["SporTran"].Rows.Find(keys);
-                foreach (DataColumn col in dsCalcul.Tables["SporTran"].Columns)
+                for (int i = 0; i < dsCalcul.Tables["SporTran"].Rows.Count; i++)
                 {
-                    col.ReadOnly = false;
-                    if (col.ColumnName != "Id")
+                    if (dsCalcul.Tables["SporTran"].Rows[i]["Spor"].ToString() == e.NewValues["Spor"].ToString())
                     {
-                        row[col.ColumnName] = e.NewValues[col.ColumnName];
-                        if (col.ColumnName == "Cod" && e.NewValues["Spor"].ToString() == "0")
-                            row[col.ColumnName] = "Spor " + keys[0];
-                        else
-                            row[col.ColumnName] = e.NewValues["Spor"];
+                        dublura = true;
+                        break;
                     }
                 }
 
+                if (dublura)
+                {
+                    grDateSporTran.JSProperties["cpAlertMessage"] = "Acest spor a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["SporTran"].Columns)
+                    {
+                        col.ReadOnly = false;
+                        if (col.ColumnName != "Id")
+                        {
+                            //row[col.ColumnName] = e.NewValues[col.ColumnName];
+                            if (col.ColumnName == "Cod" && e.NewValues["Spor"].ToString() == "0")
+                                row[col.ColumnName] = "Spor " + keys[0];
+                            else
+                                row[col.ColumnName] = e.NewValues["Spor"];                            
+                        }
+                    }
+                }
                 e.Cancel = true;
                 grDateSporTran.CancelEdit();
 
-                ds.Tables[0].Rows[0]["F10095" + (79 + Convert.ToInt32(keys[0])).ToString()] = e.NewValues["Spor"];
-                ds.Tables[2].Rows[0]["F10095" + (79 + Convert.ToInt32(keys[0])).ToString()] = e.NewValues["Spor"];          
+                if (!dublura)
+                {
+                    ds.Tables[0].Rows[0]["F10095" + (79 + Convert.ToInt32(keys[0])).ToString()] = e.NewValues["Spor"];
+                    ds.Tables[2].Rows[0]["F10095" + (79 + Convert.ToInt32(keys[0])).ToString()] = e.NewValues["Spor"];
+                }
 
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
+                
                 grDateSporTran.DataSource = dsCalcul.Tables["SporTran"];
             }
             catch (Exception ex)

@@ -710,6 +710,7 @@
     <Content Include="Fisiere\Imagini\Widgets\icoWidget3.png" />
     <Content Include="Fisiere\Imagini\Widgets\icoWidget4.png" />
     <Content Include="Fisiere\Imagini\WizOne.png" />
+    <Content Include="Fisiere\js\iban.js" />
     <Content Include="Fisiere\js\logare.js" />
     <Content Include="Fisiere\js\pontaj.js" />
     <Content Include="Fisiere\js\StringResources.js" />
@@ -752,10 +753,9 @@
     <Content Include="Personal\Calcul.ascx" />
     <Content Include="Personal\Componente.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
+    <Content Include="Personal\Sporuri.ascx" />
+    <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\Tarife.ascx" />
-    <Content Include="Personal\Test.aspx" />
-    <Content Include="Personal\Test1.ascx" />
-    <Content Include="Personal\Test2.ascx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
@@ -854,6 +854,7 @@
     <Content Include="Tactil\PontajDetaliatTactil.aspx" />
     <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
+    <Content Include="WebForm3.aspx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -879,6 +880,7 @@
     <Content Include="Generatoare\Reports\Pages\Download.ashx" />
     <Content Include="Organigrama\Diagrama.xlsm" />
     <Content Include="Organigrama\Temp\Diagrama1078.xlsm" />
+    <None Include="NuGet.config" />
     <None Include="Properties\PublishProfiles\Publicat.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -1568,33 +1570,26 @@
     <Compile Include="Personal\LipsaNecesar.ascx.designer.cs">
       <DependentUpon>LipsaNecesar.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Personal\Sporuri.ascx.cs">
+      <DependentUpon>Sporuri.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Sporuri.ascx.designer.cs">
+      <DependentUpon>Sporuri.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\SporuriTranzactii.ascx.cs">
+      <DependentUpon>SporuriTranzactii.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\SporuriTranzactii.ascx.designer.cs">
+      <DependentUpon>SporuriTranzactii.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Personal\Tarife.ascx.cs">
       <DependentUpon>Tarife.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Personal\Tarife.ascx.designer.cs">
       <DependentUpon>Tarife.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Personal\Test.aspx.cs">
-      <DependentUpon>Test.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\Test.aspx.designer.cs">
-      <DependentUpon>Test.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Personal\Test1.ascx.cs">
-      <DependentUpon>Test1.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\Test1.ascx.designer.cs">
-      <DependentUpon>Test1.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Personal\Test2.ascx.cs">
-      <DependentUpon>Test2.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\Test2.ascx.designer.cs">
-      <DependentUpon>Test2.ascx</DependentUpon>
     </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>
@@ -2272,6 +2267,13 @@
     </Compile>
     <Compile Include="WebForm2.aspx.designer.cs">
       <DependentUpon>WebForm2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm3.aspx.cs">
+      <DependentUpon>WebForm3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm3.aspx.designer.cs">
+      <DependentUpon>WebForm3.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebService\Detalii.aspx.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>

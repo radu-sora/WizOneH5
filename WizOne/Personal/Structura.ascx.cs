@@ -98,6 +98,8 @@ namespace WizOne.Personal
                     cmbStru.BackColor = Color.LightGray;
                     //cmbPL.BackColor = Color.LightGray;
                 }
+
+                General.SecuritatePersonal(pnlCtlStruct, Convert.ToInt32(Session["UserId"].ToString()));
             }
             catch (Exception ex)
             {
@@ -119,12 +121,14 @@ namespace WizOne.Personal
                     txtCom.Value = itm.GetFieldValue("F00204");
                     ds.Tables[0].Rows[0]["F10002"] = itm.GetFieldValue("F00202");
                     ds.Tables[1].Rows[0]["F10002"] = itm.GetFieldValue("F00202");
+                    ds.Tables[2].Rows[0]["F10002"] = itm.GetFieldValue("F00202");
                 }
                 else
                 {
                     txtCom.Value = "";
                     ds.Tables[0].Rows[0]["F10002"] = 0;
                     ds.Tables[1].Rows[0]["F10002"] = 0;
+                    ds.Tables[2].Rows[0]["F10002"] = 0;
                 }
                 if (General.Nz(itm.GetFieldValue("F00304"), "").ToString() != "")
                 {

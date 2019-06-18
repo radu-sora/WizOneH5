@@ -7,12 +7,13 @@
     <dx:ASPxButton ID="btnAct" ClientInstanceName="btnAct" ClientIDMode="Static" runat="server" OnClick="btnAct_Click"  AutoPostBack="false"   RenderMode="Link">
 	    <Image Url="../Fisiere/Imagini/Icoane/m5.png"></Image>
     </dx:ASPxButton>
-    <dx:ASPxGridView ID="grDateContracte" runat="server" ClientInstanceName="grDateContracte" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateContracte_DataBinding" OnInitNewRow="grDateContracte_InitNewRow"
+    <dx:ASPxGridView ID="grDateContracte" runat="server" ClientInstanceName="grDateContracte" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnDataBinding="grDateContracte_DataBinding" OnInitNewRow="grDateContracte_InitNewRow"
         OnRowInserting="grDateContracte_RowInserting" OnRowUpdating="grDateContracte_RowUpdating" OnRowDeleting="grDateContracte_RowDeleting" OnCommandButtonInitialize="grDateContracte_CommandButtonInitialize">
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />   
         <ClientSideEvents CustomButtonClick="function(s, e) { grDateContracte_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
-        <SettingsEditing Mode="Inline" />                       
+        <SettingsEditing Mode="Inline" />        
+        <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>

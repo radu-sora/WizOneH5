@@ -7,12 +7,12 @@
         gasit = false;
         newItem = s.GetValue();
         for (var index = grDateComponente.GetTopVisibleIndex(); index < grDateComponente.GetVisibleRowsOnPage(); index++) {  
-            grDateComponente.GetRowValues(index, "F02104", OnCallback);          
+            grDateComponente.GetRowValues(index, "F02104", OnCallbackComp);          
         }  
         
     }
 
-    function OnCallback(value) {
+    function OnCallbackComp(value) {
         if (value == newItem) {
             swal({
                 title: "Atentie !", text: "Codul a mai fost deja atribuit acestui angajat!",
@@ -42,7 +42,7 @@
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
         <ClientSideEvents  ContextMenu="ctx" /> 
-        <SettingsEditing Mode="Inline" />                       
+        <SettingsEditing Mode="Inline" />       
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />          
             <dx:GridViewDataComboBoxColumn FieldName="F02104" Name="F02104" Caption="Componenta" Width="250px" >

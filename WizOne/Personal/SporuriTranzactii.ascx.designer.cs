@@ -10,24 +10,15 @@
 namespace WizOne.Personal {
     
     
-    public partial class Test2 {
+    public partial class SporuriTranzactii {
         
         /// <summary>
-        /// Test2_pnlCtl control.
+        /// grDateSporTran control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel Test2_pnlCtl;
-        
-        /// <summary>
-        /// Test2_DataList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList Test2_DataList;
+        protected global::DevExpress.Web.ASPxGridView grDateSporTran;
     }
 }

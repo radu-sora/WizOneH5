@@ -1808,7 +1808,7 @@ namespace WizOne.Module
                 string tipData = "nvarchar(10)";
                 if (Constante.tipBD == 2) tipData = "varchar2(10)";
                 DataTable dt = General.IncarcaDT($@"SELECT A.*, CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN 1 ELSE 0 END AS ""EsteCuBifa"",
-                                                    (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)=0 THEN CAST(@3 AS {tipData}) ELSE '' END) + 
+                                                    (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)=0 THEN CAST(@3 AS {tipData}) ELSE '' END) {Dami.Operator()}  
                                                     (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""DenumireScurta"" ELSE D.""DenumireScurta"" END) ELSE B.""DenumireScurta"" END) AS ""ValStr"",
                                                     E.F10002, E.F10004, E.F10005, E.F10006, E.F10007, E.F10043,
                                                     (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)=0 THEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN (CASE WHEN 1=@2 THEN C.""OreInVal"" ELSE D.""OreInVal"" END) ELSE B.""OreInVal"" END) ELSE '' END) AS ValPentruOre
@@ -1897,15 +1897,28 @@ namespace WizOne.Module
                                         sqlUp  + "; \n" + 
                                         sqlIst + "; \n";
 
-                            if(Constante.tipBD == 2)
+                            //if(Constante.tipBD == 2)
+                            //    strSql = $@"
+                            //        {sqlIst};
+                            //        BEGIN
+                            //            {sqlIns};
+                            //            EXCEPTION
+                            //            WHEN DUP_VAL_ON_INDEX THEN
+                            //            {sqlUp};
+                            //        END; ";
+
+                            if (Constante.tipBD == 2)
                                 strSql = $@"
-                                    {sqlIst};
                                     BEGIN
-                                        {sqlIns};
-                                        EXCEPTION
-                                        WHEN DUP_VAL_ON_INDEX THEN
-                                        {sqlUp};
-                                    END; ";
+                                        {sqlIst};
+                                        BEGIN
+                                            {sqlUp};
+
+                                            IF (SQL%ROWCOUNT = 0) THEN 
+                                              {sqlIns};
+                                            END IF;
+                                        END;
+                                    END;";
                         }
                     }
 
@@ -1969,10 +1982,10 @@ namespace WizOne.Module
                         masca = "'CASE WHEN ' + \"OreInVal\" + '=0 THEN '''' ELSE COALESCE(''/'' + CAST(' + \"OreInVal\" + '/60 AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''') END'";
                         break;
                     case 2:
-                        masca = "'COALESCE(''/'' + CAST(' + \"OreInVal\" + ' / 60 AS nvarchar(10)) + ''.'' + CAST(' + \"OreInVal\" + ' % 60 AS nvarchar(10))' + ''' + COALESCE(DenumireScurta,'') + ''','''')'";
+                        masca = "'COALESCE(''/'' + CAST(' + \"OreInVal\" + ' / 60 AS nvarchar(10)) + ''.'' + CAST(' + \"OreInVal\" + ' % 60 AS nvarchar(10))' + ''' + COALESCE(DenumireScurta,'') + ''',''')'";
                         break;
                     case 3:
-                        masca = "'COALESCE(''/'' + CAST(CAST(ROUND(CAST(' + OreInVal + ' AS decimal) / 60,2) as decimal(18,2)) AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''')'";
+                        masca = "'COALESCE(''/'' + CAST(CAST(ROUND(CAST(' + OreInVal + ' AS decimal) / 60,2) as decimal(18,2)) AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''',''')'";
                         break;
                 }
 
@@ -4298,7 +4311,7 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
                 return null;
             }
         }
@@ -4318,6 +4331,20 @@ namespace WizOne.Module
             }
         }
 
+
+        public static void StergeFisier(string Tabela, object cheie)
+        {
+            try
+            {
+
+            
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
 
         public static void IncarcaFisier(string fileName, object fis, string Tabela, object cheie)
@@ -5275,6 +5302,46 @@ namespace WizOne.Module
             }
         }
 
+        public static void SecuritatePersonal(ASPxCallbackPanel pnl, int idUser)
+        {
+            List<string> lista = new List<string>();
+            string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                                FROM ""Securitate"" A
+                                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+                                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" like '%_I%'
+                                UNION
+                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                                FROM ""Securitate"" A
+                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl""  like '%_I%') X
+                                GROUP BY X.""IdControl"", X.""IdColoana""";
+            strSql = string.Format(strSql, idUser.ToString());
+
+            DataTable dt = General.IncarcaDT(strSql, null);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                    lista.Add(dt.Rows[i]["IdControl"].ToString());
+            }
+
+            if (lista != null && lista.Count > 0)
+            {
+                foreach (string elem in lista)
+                {
+                    bool vizibil = true, blocat = false;
+                    string[] param = elem.Split('_');
+                    SecuritateCtrl(elem, idUser, out vizibil, out blocat);
+                    WebControl ctl = pnl.FindControl(param[0]) as WebControl;
+                    if (ctl != null)
+                    {
+                        ctl.Visible = vizibil;
+                        ctl.Enabled = !blocat;
+                    }
+                }
+            }
+        }
+
         public static void SecuritatePersonal(ListView dtList, int idUser)
         {
             List<string> lista = new List<string>();
@@ -5883,6 +5950,42 @@ namespace WizOne.Module
             return table;
         }
 
+        public static DataTable GetTarifeSp(string categ)
+        {
+            DataTable table = new DataTable();
+
+            try
+            {
+
+                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = (  select distinct f01104 from f025
+                                left join f021 on f02510 = f02104
+                                left join f011 on f02106 = f01104
+                                where  f02504 = " + categ + @")";
+                if (Constante.tipBD == 2)
+                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = (  select distinct f01104 from f025 "
+                               + " left join f021 on f02510 = f02104 "
+                               + " left join f011 on f02106 = f01104 "
+                               + " where f02504 = " + categ + ")";
+                table = IncarcaDT(sql, null);
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return table;
+        }
+
+
+        public static DataTable GetSporuri(string param)
+        {
+            string sql = @"SELECT F02504, F02505 FROM F025  WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") ;
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("F025", "F02504") + " WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ");
+            return General.IncarcaDT(sql, null);
+        }
+
         //end Radu
 
         public static string SelectInlocuitori(int f10003, DateTime? dtINc, DateTime? dtSf)
@@ -6047,7 +6150,10 @@ namespace WizOne.Module
                 HttpContext.Current.Session["SecAuditSelect"] = "0";
                 HttpContext.Current.Session["SecCriptare"] = "0";
 
-
+                //Florin 2019.06.04
+                HttpContext.Current.Session["MP_NuPermiteCNPInvalid"] = "1";
+                HttpContext.Current.Session["MP_AreContract"] = "0";
+                HttpContext.Current.Session["MP_DataSfarsit36"] = "01/01/2100";
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
@@ -6669,7 +6775,7 @@ namespace WizOne.Module
                 string ziSf = ToDataUniv(an, luna, 99);
 
                 string strSql = "";
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE CampSelect IS NOT NULL AND COALESCE(CampSelect,'') <> '' ORDER BY ""Ordine"" ", null);
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' ORDER BY ""Ordine"" ", null);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow row = dt.Rows[i];
@@ -6901,7 +7007,7 @@ namespace WizOne.Module
 
 
                     //Florin 2019.05.14
-                    string strInner = @"LEFT JOIN (SELECT F70403, MAX(DATEADD(d,-1,F70406)) DataPlecarii FROM f704 WHERE F70404=4 GROUP BY F70403) ddp ON c.F10003 = ddp.F70403 
+                    string strInner = @"LEFT JOIN (SELECT F70403, MAX(DATEADD(d,-1,F70406)) DataPlecare FROM f704 WHERE F70404=4 GROUP BY F70403) ddp ON c.F10003 = ddp.F70403 
                                         OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn";
                     ////Florin 2018.10.23
                     //string strInner = @"OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn
@@ -6925,7 +7031,7 @@ namespace WizOne.Module
                                         LEFT JOIN HOLIDAYS B ON A.Ziua=B.DAY
                                         {5}
                                         WHERE YEAR(A.""Ziua"")={0} AND MONTH(A.""Ziua"")={1} AND (A.""ValStr"" IS NULL OR RTRIM(A.""ValStr"") = '') AND F06204=-1 
-                                        AND CONVERT(date, A.Ziua) <= COALESCE(CONVERT(date, ddp.DataPlecarii),C.F10023)
+                                        AND CONVERT(date, A.Ziua) <= COALESCE(CONVERT(date, ddp.DataPlecare),C.F10023)
                                         {2} {3} {4}";
 
                     strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruZile.Replace("X.", "A."), strInner);
@@ -7001,8 +7107,8 @@ namespace WizOne.Module
                     }
 
                     string strFiltruZile = "";
-                    if (cuNormaZL) strFiltruZile += @"OR (CASE WHEN (1 + TRUNC (X.Ziua) - TRUNC (X.Ziua, 'IW')) in (1,2,3,4,5) AND B.DAY is null THEN 1 ELSE 0 END) = 1";
-                    if (cuNormaSD) strFiltruZile += @"OR (CASE WHEN (1 + TRUNC (X.Ziua) - TRUNC (X.Ziua, 'IW')) in (6,7) AND B.DAY is null THEN 1 ELSE 0 END) = 1";
+                    if (cuNormaZL) strFiltruZile += @"OR (CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW')) in (1,2,3,4,5) AND B.DAY is null THEN 1 ELSE 0 END) = 1";
+                    if (cuNormaSD) strFiltruZile += @"OR (CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW')) in (6,7) AND B.DAY is null THEN 1 ELSE 0 END) = 1";
                     if (cuNormaSL) strFiltruZile += @"OR B.DAY is not null";
 
 
@@ -7021,7 +7127,7 @@ namespace WizOne.Module
                     if (idSectie != -99) strFiltru += " AND A.F10006 = " + idSectie.ToString();
                     if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""ValStr"", ""Val0"")
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
 
                     strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1), strFiltru, strFiltruZile, usr);
@@ -7179,39 +7285,39 @@ namespace WizOne.Module
                 else
                 {
                     if (cuNorma == 1)
-                        nrm = @" ,CASE WHEN (1 + TRUNC (X.Ziua) - TRUNC (X.Ziua, 'IW'))=6 OR (1 + TRUNC (X.Ziua) - TRUNC (X.Ziua, 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR TRUNC(X.Ziua) > TRUNC(""DamiDataPlecare""(A.F10003, X.Ziua)) THEN NULL ELSE ""DamiNorma""(A.F10003, X.Ziua) END AS ValStr
-                                 ,CASE WHEN (1 + TRUNC (X.Ziua) - TRUNC (X.Ziua, 'IW'))=6 OR (1 + TRUNC (X.Ziua) - TRUNC (X.Ziua, 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 OR TRUNC(X.Ziua) > TRUNC(""DamiDataPlecare""(A.F10003, X.Ziua)) THEN NULL ELSE ""DamiNorma""(A.F10003, X.Ziua) * 60 END AS Val0";
+                        nrm = @" ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") END AS ""ValStr""
+                                 ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") * 60 END AS ""Val0"" ";
 
                     for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)               //pt fiecare zi din luna
                     {
-                        strZile += " union select " + General.ToDataUniv(an, luna, i) + " AS Ziua FROM Dual";
+                        strZile += " union select " + General.ToDataUniv(an, luna, i) + " AS \"Ziua\" FROM Dual";
                     }
 
                     //Radu 04.04.2017 - am modificat F06204Default
-                    strSql = @"SELECT A.F10003, X.Ziua, (1 + TRUNC(X.Ziua) - TRUNC(X.Ziua, 'IW')) AS ""ZiSapt"",
-                                CASE WHEN (1 + TRUNC(X.Ziua) - TRUNC(X.Ziua, 'IW'))=6 OR (1 + TRUNC(X.Ziua) - TRUNC(X.Ziua, 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 THEN 1 ELSE 0 END AS ""ZiLibera"",
+                    strSql = @"SELECT A.F10003, X.""Ziua"", (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW')) AS ""ZiSapt"",
+                                CASE WHEN (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW'))=6 OR (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 THEN 1 ELSE 0 END AS ""ZiLibera"",
                                 0 as ""Parinte"", 0 as ""Linia"", -1 as F06204, 
-                                (SELECT C.F00603 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.Ziua)) AS F10002,
-                                (SELECT C.F00604 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.Ziua)) AS F10004,
-                                (SELECT C.F00605 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.Ziua)) AS F10005,
-                                (SELECT C.F00606 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.Ziua)) AS F10006,
-                                ""DamiDept""(A.F10003, X.Ziua) AS F10007,                                
+                                (SELECT C.F00603 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10002,
+                                (SELECT C.F00604 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10004,
+                                (SELECT C.F00605 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10005,
+                                (SELECT C.F00606 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10006,
+                                ""DamiDept""(A.F10003, X.""Ziua"") AS F10007,                                
                                 '#00FFFFFF' as ""CuloareValoare"", 
-                                ""DamiNorma""(A.F10003, X.Ziua) as ""Norma"", 
-                                (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.Ziua AND X.Ziua <= B.""DataSfarsit"" and ROWNUM <= 1) AS ""IdContract"", 
+                                ""DamiNorma""(A.F10003, X.""Ziua"") as ""Norma"", 
+                                (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"" and ROWNUM <= 1) AS ""IdContract"", 
                                 {0} as USER_NO, SYSDATE as TIME,
                                 CASE WHEN B.DAY is not null THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
 
-                                CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.Ziua AND X.Ziua <= C.""DataSfarsit"" and ROWNUM <= 1) IS NULL THEN
-                                CASE WHEN COALESCE(""DamiCC""(A.F10003, X.Ziua), 9999) <> 9999 THEN ""DamiCC""(A.F10003, X.Ziua) ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = ""DamiDept""(A.F10003, X.Ziua)) END 
-                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.Ziua AND X.Ziua <= C.""DataSfarsit"" and ROWNUM <= 1) END AS ""F06204Default""
+                                CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= C.""DataSfarsit"" and ROWNUM <= 1) IS NULL THEN
+                                CASE WHEN COALESCE(""DamiCC""(A.F10003, X.""Ziua""), 9999) <> 9999 THEN ""DamiCC""(A.F10003, X.""Ziua"") ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = ""DamiDept""(A.F10003, X.""Ziua"")) END 
+                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= C.""DataSfarsit"" and ROWNUM <= 1) END AS ""F06204Default""
 
                                 {1}
                                 {6}
                                 FROM ({2}) x
-                                inner join F100 A on 1=1 AND TRUNC(A.F10022) <= TRUNC(X.Ziua) AND TRUNC(X.Ziua) <= TRUNC(A.F10023)
-                                left join HOLIDAYS B on X.Ziua=B.DAY
-                                left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" WHERE TO_NUMBER(TO_CHAR(""Ziua"",'YYYY'))={3} AND TO_NUMBER(TO_CHAR(""Ziua"",'MM'))={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = X.Ziua
+                                inner join F100 A on 1=1 AND TRUNC(A.F10022) <= TRUNC(X.""Ziua"") AND TRUNC(X.""Ziua"") <= TRUNC(A.F10023)
+                                left join HOLIDAYS B on X.""Ziua""=B.DAY
+                                left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" WHERE TO_NUMBER(TO_CHAR(""Ziua"",'YYYY'))={3} AND TO_NUMBER(TO_CHAR(""Ziua"",'MM'))={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = X.""Ziua""
                                 where COALESCE(D.CNT,0) = 0";
 
                 }

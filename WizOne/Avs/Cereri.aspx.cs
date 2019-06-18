@@ -428,7 +428,7 @@ namespace WizOne.Avs
                 if (Constante.tipBD == 2) op = "||";
 
                 strSql = $@"SELECT  B.""Rol"", B.""RolDenumire"", A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", 
-                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+                        X.F71804 AS ""Functia"", C.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
                         FROM (
                         SELECT A.F10003, 0 AS ""Rol"", COALESCE((SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""=0),'Angajat') AS ""RolDenumire""
                         FROM F100 A
@@ -446,6 +446,7 @@ namespace WizOne.Avs
                         INNER JOIN ""Avs_Circuit"" C ON C.""Super1""={Session["UserId"]}
                         ) B
                         INNER JOIN F100 A ON A.F10003=B.F10003
+                        LEFT JOIN F002 C ON A.F10002 = C.F00202
                         LEFT JOIN F718 X ON A.F10071=X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
@@ -1521,6 +1522,9 @@ namespace WizOne.Avs
                             cmbAtributeFiltru.DataSource = dtAtr;
                             cmbAtributeFiltru.DataBind();
 
+                            AscundeCtl();
+                            txtExpl.Text = "";
+                            cmbAtribute.Value = null;
                         }
                         break;
                     case "9":               //cmbAng
@@ -2785,9 +2789,9 @@ namespace WizOne.Avs
                 if (dtCer == null || dtCer.Rows.Count == 0) return;
 
                 int? idComp = 1;
-                DataTable dtComp = General.IncarcaDT("SELECT * FROM F002", null);
-                if (dtComp != null && dtComp.Rows.Count > 0 && dtComp.Rows[0]["F00202"] != null && dtComp.Rows[0]["F00202"].ToString().Length > 0)
-                    idComp = Convert.ToInt32(dtComp.Rows[0]["F00202"].ToString());
+                DataTable dtComp = General.IncarcaDT("SELECT F10002 FROM F100 WHERE F10003 = " + dtCer.Rows[0]["F10003"].ToString(), null);
+                if (dtComp != null && dtComp.Rows.Count > 0 && dtComp.Rows[0]["F10002"] != null && dtComp.Rows[0]["F10002"].ToString().Length > 0)
+                    idComp = Convert.ToInt32(dtComp.Rows[0]["F10002"].ToString());
 
                 DateTime dtLucru = General.DamiDataLucru();
                 int f10003 = Convert.ToInt32(dtCer.Rows[0]["F10003"].ToString());
@@ -2884,9 +2888,12 @@ namespace WizOne.Avs
                                 act = 1;
                                 sql100 = "UPDATE F100 SET F10023 = " + data1 + ", F100993 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
+                            //sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                            //+ " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + dtCer.Rows[0]["MotivId"].ToString() + ", 'Modificari in avans', '"
+                            //+ dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
-                            + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + dtCer.Rows[0]["MotivId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", (SELECT F72102 FROM F721 WHERE F72106 = " + dtCer.Rows[0]["MotivId"].ToString() + "), 'Modificari in avans', '"
+                                + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Norma:
@@ -2904,7 +2911,7 @@ namespace WizOne.Avs
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 6, 'Norma Contract', " + data + ", " + dtCer.Rows[0]["Norma"].ToString() + ", 'Modificari in avans', '"
                             + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", " + dtCer.Rows[0]["TipAngajat"].ToString() + ", " + dtCer.Rows[0]["TimpPartial"].ToString() + ", "
                             + dtCer.Rows[0]["Norma"].ToString() + ", " + dtCer.Rows[0]["TipNorma"].ToString() + ", " + dtCer.Rows[0]["DurataTimpMunca"].ToString() + ", " + dtCer.Rows[0]["RepartizareTimpMunca"].ToString()
-                            + ", " + dtCer.Rows[0]["IntervalRepartizare"].ToString() + ", " + dtCer.Rows[0]["NrOreLuna"].ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + ", " + dtCer.Rows[0]["IntervalRepartizare"].ToString() + ", " + General.Nz(dtCer.Rows[0]["NrOreLuna"],"0").ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.ContrIn:
@@ -3039,10 +3046,10 @@ namespace WizOne.Avs
                                 General.IncarcaDT(sql095, null);
                             }
 
-                            //string sqlTmp = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
-                            //    + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + Convert.ToInt32(dtCer.Rows[0]["IdAtribut"].ToString()) + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["MeserieId"].ToString() + ", 'Modificari in avans', '"
-                            //    + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
-                            //General.IncarcaDT(sqlTmp, null);
+                            string sqlTmp = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
+                                + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + Convert.ToInt32(dtCer.Rows[0]["IdAtribut"].ToString()) + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["MeserieId"].ToString() + ", 'Modificari in avans', '"
+                                + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            General.IncarcaDT(sqlTmp, null);
 
                         }
                         break;
@@ -3332,7 +3339,7 @@ namespace WizOne.Avs
 
                 strSql = $@"SELECT A.""Id"", A.""Denumire"" FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=0
-                        WHERE {Session["User_Marca"]} = @3
+                        WHERE {Session["User_Marca"]} = @3 AND {cmbRol.Value} = 0
                         UNION
                         SELECT A.""Id"", A.""Denumire"" 
                         FROM ""Avs_tblAtribute"" A

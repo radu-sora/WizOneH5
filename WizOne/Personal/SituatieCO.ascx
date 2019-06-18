@@ -12,9 +12,10 @@
             </dx:ASPxButton>
         </tr>
         <tr>
-        <dx:ASPxGridView ID="grDateSituatieCO" runat="server" ClientInstanceName="grDateSituatieCO" ClientIDMode="Static" Width="43%" AutoGenerateColumns="false"  OnDataBinding="grDateSituatieCO_DataBinding" >
+        <dx:ASPxGridView ID="grDateSituatieCO" runat="server" ClientInstanceName="grDateSituatieCO" ClientIDMode="Static" Width="60%" AutoGenerateColumns="false"  OnDataBinding="grDateSituatieCO_DataBinding" >
             <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-            <Settings ShowFilterRow="False" HorizontalScrollBarMode="Auto"  />                
+            <Settings ShowFilterRow="False" HorizontalScrollBarMode="Auto"  />    
+            <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                 <Columns>            
                     <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca"  Width="75px" Visible="false"/>
                     <dx:GridViewDataTextColumn FieldName="An" Name="An" Caption="Anul"  Width="75px" />

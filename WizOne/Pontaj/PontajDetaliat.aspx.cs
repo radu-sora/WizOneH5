@@ -799,7 +799,7 @@ namespace WizOne.Pontaj
                     strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
                             {cheia} AS ""Cheia"", 
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
-                            L.""Denumire"" AS ""DescContract"", P.""IdContract"", M.""Denumire"" AS DescProgram, P.""IdProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
+                            L.""Denumire"" AS ""DescContract"", P.""IdContract"", M.""Denumire"" AS ""DescProgram"", P.""IdProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
                             CASE WHEN {General.TruncateDateAsString("A.F10022")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <= {General.TruncateDateAsString("A.F10023")} AND
                             (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDateAsString("FS.\"DataInceput\"")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <=  {General.TruncateDateAsString("FS.\"DataSfarsit\"")}) = 1
                             THEN 1 ELSE 0 END AS ""Activ"",  
@@ -1350,7 +1350,7 @@ namespace WizOne.Pontaj
 
                                     if (General.Nz(obj, "").ToString() != "")
                                     {
-                                        if (General.CuloarePontaj((int)obj) != null) e.Cell.BackColor = (System.Drawing.Color)General.CuloarePontaj((int)obj);
+                                        if (General.CuloarePontaj(Convert.ToInt32(obj)) != null) e.Cell.BackColor = (System.Drawing.Color)General.CuloarePontaj(Convert.ToInt32(obj));
                                     }
 
                                 }

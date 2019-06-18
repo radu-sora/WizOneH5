@@ -1,23 +1,12 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Detasari.ascx.cs" Inherits="WizOne.Personal.Detasari" %>
 
-
-
-<script type="text/javascript">
-
-    function OnTextChangedHandlerDet(s) {
-        pnlCtlDet.PerformCallback(s.name + ";" + s.GetText());
-    }
-    function OnValueChangedHandlerDet(s) {
-        pnlCtlDet.PerformCallback(s.name + ";" + s.GetValue());
-    }
-</script>
 <body>
 
-   <dx:ASPxCallbackPanel ID = "pnlCtlDet" ClientIDMode="Static" ClientInstanceName="pnlCtlDet" runat="server" OnCallback="pnlCtlDet_Callback" SettingsLoadingPanel-Enabled="false">
+   <dx:ASPxCallbackPanel ID = "Detasari_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlDet" runat="server" SettingsLoadingPanel-Enabled="false">
       <PanelCollection>
         <dx:PanelContent>
 
-    <asp:DataList ID="DataList1" runat="server">
+    <asp:DataList ID="Detasari_DataList" runat="server">
         <ItemTemplate>
 			<div>
             <tr>
@@ -26,67 +15,61 @@
 				        <legend class="legend-font-size">Detasari</legend>
 				        <table width="60%">	
 					        <tr>	
-						        <td >
+						        <td>
 							        <dx:ASPxLabel  ID="lblNumeAngajator" runat="server"  Text="Nume angajator" Width="120" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
 							        <dx:ASPxTextBox  ID="txtNumeAngajator" runat="server" Text='<%# Bind("F100918") %>'  AutoPostBack="false" >
-                                        <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDet(s); }" />
 							        </dx:ASPxTextBox >
 						        </td>
                                 <td><label style="display:inline-block;">&nbsp; </label></td>
-						        <td >
+						        <td>
 							        <dx:ASPxLabel  ID="lblCUI" runat="server"  Text="CUI" Width="80" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
 							        <dx:ASPxTextBox  ID="txtCUI" runat="server" Text='<%# Bind("F100919") %>'  AutoPostBack="false" Width="100" >
-                                        <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerDet(s); }" />
 							        </dx:ASPxTextBox >
 						        </td> 
                                 <td><label style="display:inline-block;">&nbsp; </label></td>                                                                			
-						        <td >
+						        <td>
 							        <dx:ASPxLabel  ID="lblNationalitate" Width="100" runat="server"  Text="Nationalitate" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
 							        <dx:ASPxComboBox DataSourceID="dsNationalitate" Width="150"  Value='<%#Eval("F100920") %>' ID="cmbNationalitate"   runat="server" DropDownStyle="DropDown"  TextField="F73304" ValueField="F73302" AutoPostBack="false"  ValueType="System.Int32" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerDet(s); }" />
 							        </dx:ASPxComboBox>
 						        </td>
                                 <td  valign="top">
-					                <dx:ASPxButton ID="btnSalveazaDet" ClientInstanceName="btnSalveazaDet" ClientIDMode="Static" runat="server" OnClick="btnSalveaza_Click" AutoPostBack="true"  RenderMode="Link">
+					                <dx:ASPxButton ID="btnSalveazaDet" ClientInstanceName="btnSalveazaDet" ClientIDMode="Static" runat="server" OnClick="btnSalveazaDet_Click" AutoPostBack="true"  RenderMode="Link">
 						                <Image Url="../Fisiere/Imagini/Icoane/salveaza.png"></Image>
                                         <Paddings PaddingLeft="10px" />
 					                </dx:ASPxButton>
                                 </td>
 					        </tr>
                             <tr>
-						        <td >	
+						        <td>	
 							        <dx:ASPxLabel  ID="lblDataInceputDet" runat="server"  Text="Data inceput" Width="120"></dx:ASPxLabel >	
 						        </td>
 						        <td>			
 							        <dx:ASPxDateEdit  ID="deDataInceputDet" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100915") %>'  AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
-                                        <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerDet(s); }" />
 							        </dx:ASPxDateEdit>					
 						        </td>
 					            <td><label style="display:inline-block;">&nbsp; </label></td>
-						        <td >		
+						        <td>		
 							        <dx:ASPxLabel  ID="lblDataSfarsitDet" runat="server"  Text="Data sfarsit" Width="80"></dx:ASPxLabel >	
 						        </td>
 						        <td>			
 							        <dx:ASPxDateEdit  ID="deDataSfarsitDet" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100916") %>'  AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
-                                        <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerDet(s); }" />
 							        </dx:ASPxDateEdit>					
 						        </td>
 					            <td><label style="display:inline-block;">&nbsp; </label></td>
-						        <td >		
+						        <td>		
 							        <dx:ASPxLabel  ID="lblDataIncetareDet" runat="server"  Text="Data incetare" Width="100"></dx:ASPxLabel >	
 						        </td>
 						        <td>			
 							        <dx:ASPxDateEdit  ID="deDataIncetareDet" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100917") %>'  AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
-                                        <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerDet(s); }" />
 							        </dx:ASPxDateEdit>					
 						        </td>
 					        </tr>
@@ -105,7 +88,8 @@
 
     <dx:ASPxGridView ID="grDateDetasari" runat="server" ClientInstanceName="grDateDetasari" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateDetasari_DataBinding" >
         <SettingsBehavior AllowFocusedRow="true" />
-        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                 
+        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
+        <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>
             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
             <dx:GridViewDataTextColumn FieldName="F11204" Name="F11204" Caption="Nume angajator"  Width="150px"/>

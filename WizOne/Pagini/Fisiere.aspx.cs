@@ -27,7 +27,7 @@ namespace WizOne.Pagini
 
                     if (tipTbl != "" && id != "")
                     {
-                        string tbl = "xxx";
+                        string tbl = "";
 
                         switch (tipTbl)
                         {
@@ -40,25 +40,49 @@ namespace WizOne.Pagini
                             case "3":   //Florin 2018.09.28
                                 tbl = "Org_Posturi";
                                 break;
-                            case "4":   //Florin 2019.12.04 (se citeste din tabela Atasamente)
-                                {
-                                    DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Atasamente"" WHERE ""IdAuto""={id}", null);
-                                    if (dtAta.Rows.Count > 0)
+                            case "4":   //Florin 2018.12.04 (se citeste din tabela Atasamente)
+                                {//Radu 13.06.2019
+                                    DataTable dt = new DataTable();
+                                    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                                    if (ds.Tables.Contains("Atasamente"))
                                     {
-                                        string numeFis = (dtAta.Rows[0]["DescrAttach"] ?? "").ToString();
-                                        string ext = ".txt";
-                                        if (numeFis.LastIndexOf(".") >= 0)
-                                            ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
-
-                                        scrieDoc(ext, (byte[])dtAta.Rows[0]["Attach"], numeFis);
+                                        dt = ds.Tables["Atasamente"];
+                                        if (dt.Rows.Count != 0)
+                                        {
+                                            DataRow dr = dt.Select("IdEmpl = " + (Session["Marca"] ?? "").ToString() + " AND IdAuto = " + id).FirstOrDefault();
+                                            if (dr != null)
+                                            {
+                                                string numeFis = (dr["DescrAttach"] ?? "").ToString();
+                                                string ext = ".txt";
+                                                if (numeFis.LastIndexOf(".") >= 0)
+                                                    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
+                                                scrieDoc(ext, (byte[])dr["Attach"], numeFis);
+                                            }
+                                            else
+                                                Response.Write("Nu exista date de afisat !");
+                                        }
+                                        else
+                                            Response.Write("Nu exista date de afisat !");
                                     }
                                     else
                                         Response.Write("Nu exista date de afisat !");
+                                    //DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Atasamente"" WHERE ""IdAuto""={id}", null);
+                                    //if (dtAta.Rows.Count > 0)
+                                    //{
+                                    //    string numeFis = (dtAta.Rows[0]["DescrAttach"] ?? "").ToString();
+                                    //    string ext = ".txt";
+                                    //    if (numeFis.LastIndexOf(".") >= 0)
+                                    //        ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
+
+                                    //    scrieDoc(ext, (byte[])dtAta.Rows[0]["Attach"], numeFis);
+                                    //}
+                                    //else
+                                    //    Response.Write("Nu exista date de afisat !");
                                     
                                     return;
                                 }
                             case "5":
-                                tbl = "Admin_Medicina"; //Radu 22.02.2019
+                                tbl = "Admin_Medicina"; //Radu 22.02.2019    
                                 break;
                             case "6":
                                 tbl = "Admin_Sanctiuni"; //Radu 22.02.2019
@@ -90,14 +114,55 @@ namespace WizOne.Pagini
                                 //    }
                         }
 
-                        DataTable dt = General.IncarcaDT($@"SELECT * FROM ""tblFisiere"" WHERE ""Tabela""='{tbl}' AND ""Id""={id} AND ""EsteCerere""={tip}", null);
-                        if (dt.Rows.Count != 0)
-                        {
-                            scrieDoc((dt.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dt.Rows[0]["Fisier"], (dt.Rows[0]["FisierNume"] ?? "").ToString());
+                        if (tbl == "Admin_Medicina" || tbl == "Admin_Sanctiuni" /*|| tbl == "Atasamente"*/)
+                        {//Radu 13.06.2019
+                            if (tbl == "Admin_Medicina")
+                            {
+                                Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
+                                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                {
+                                    scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                    tbl = "";
+                                }                                                               
+                            }
+                            if (tbl == "Admin_Sanctiuni")
+                            {
+                                Dictionary<int, Personal.Sanctiuni.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, Personal.Sanctiuni.metaUploadFile>;
+                                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                {
+                                    scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                    tbl = "";
+                                }                                
+                            }
+                            //if (tbl == "Atasamente")
+                            //{
+                            //    DataTable dt = new DataTable();
+                            //    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                            //    if (ds.Tables.Contains("Atasamente"))
+                            //    {
+                            //        dt = ds.Tables["Atasamente"];
+                            //        if (dt.Rows.Count != 0)                                    
+                            //            scrieDoc("", (byte[])dt.Rows[0]["Attach"], "");                                    
+                            //        else                                    
+                            //            Response.Write("Nu exista date de afisat !");                                    
+                            //    }
+                            //    else
+                            //        Response.Write("Nu exista date de afisat !");
+                            //}
                         }
-                        else
+                        
+                        if (tbl.Length > 0)
                         {
-                            Response.Write("Nu exista date de afisat !");
+                            DataTable dt = General.IncarcaDT($@"SELECT * FROM ""tblFisiere"" WHERE ""Tabela""='{tbl}' AND ""Id""={id} AND ""EsteCerere""={tip}", null);
+
+                            if (dt.Rows.Count != 0)
+                            {
+                                scrieDoc((dt.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dt.Rows[0]["Fisier"], (dt.Rows[0]["FisierNume"] ?? "").ToString());
+                            }
+                            else
+                            {
+                                Response.Write("Nu exista date de afisat !");
+                            }
                         }
                     }
                     else

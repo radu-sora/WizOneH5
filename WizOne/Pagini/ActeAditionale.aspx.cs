@@ -32,11 +32,34 @@ namespace WizOne.Pagini
 
                 if (!IsPostBack)
                 {
+                    DataTable dtCmp = General.IncarcaDT("SELECT F00202, F00204 FROM F002", null);
+                    cmbCmp.DataSource = dtCmp;
+                    cmbCmp.DataBind();
+                    cmbCmp.SelectedIndex = -1;
+                    if (dtCmp != null && dtCmp.Rows.Count > 1)
+                        pnlComp.Visible = true;
+
+                    //string strSql = $@"SELECT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                    //            FROM (
+                    //            SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
+                    //            FROM ""Avs_Cereri"" A
+                    //            INNER JOIN F100 B ON A.F10003=B.F10003
+                    //            WHERE ""IdStare""=3 AND B.F10002={cmbCmp.Value}
+                    //            UNION
+                    //            SELECT A.F10003, COALESCE(A.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(A.F10009,'') AS ""NumeComplet"" 
+                    //            FROM F100 A
+                    //            WHERE A.F10025=900 AND A.F10002={cmbCmp.Value}) X
+                    //            LEFT JOIN F100 A ON X.F10003=A.F10003
+                    //            LEFT JOIN F004 G ON A.F10005 = G.F00405
+                    //            LEFT JOIN F005 H ON A.F10006 = H.F00506
+                    //            LEFT JOIN F006 I ON A.F10007 = I.F00607";
+
+
                     string strSql = $@"SELECT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
                                 FROM (
                                 SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
                                 FROM ""Avs_Cereri"" A
-                                LEFT JOIN F100 B ON A.F10003=B.F10003
+                                INNER JOIN F100 B ON A.F10003=B.F10003
                                 WHERE ""IdStare""=3
                                 UNION
                                 SELECT A.F10003, COALESCE(A.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(A.F10009,'') AS ""NumeComplet"" 
@@ -46,11 +69,11 @@ namespace WizOne.Pagini
                                 LEFT JOIN F004 G ON A.F10005 = G.F00405
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607";
+
                     DataTable dtAng = General.IncarcaDT(strSql, null);
                     Session["Acte_Ang"] = dtAng;
                     cmbAng.DataSource = dtAng;
                     cmbAng.DataBind();
-
 
                     //in cazul in care se sterge atasamentul din managemetul de personal
                     General.ExecutaNonQuery(@"UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=NULL WHERE ""IdAutoAtasamente"" NOT IN (SELECT ""IdAuto"" FROM ""Atasamente"")", null);
@@ -141,6 +164,7 @@ namespace WizOne.Pagini
                 cmbAng.Value = null;
                 cmbStatus.Value = null;
                 txtData.Value = null;
+                cmbCmp.SelectedIndex = -1;
 
                 IncarcaGrid();
                 grDate.Selection.UnselectAll();
@@ -159,12 +183,15 @@ namespace WizOne.Pagini
 
             try
             {
+                string companie = "";
                 string strSql = "";
                 string filtru = "";
                 if (General.Nz(cmbTip.Value,9).ToString() != "9") filtru = " AND \"Candidat\"= " + cmbTip.Value;
                 if (cmbAng.Value != null) filtru += @" AND ""F10003""= " + cmbAng.Value;
                 if (txtData.Value != null) filtru += " AND \"DataModif\" = " + General.ToDataUniv(Convert.ToDateTime(txtData.Value));
                 if (txtDepasire.Value != null) filtru += " AND \"TermenDepasire\" = " + General.ToDataUniv(Convert.ToDateTime(txtDepasire.Value));
+
+                if (cmbCmp.Value != null) companie = " AND B.F10002 = " + cmbCmp.Value;
 
                 switch (Convert.ToInt32(General.Nz(cmbStatus.Value,0)))
                 {
@@ -476,20 +503,20 @@ namespace WizOne.Pagini
                             GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente
                             FROM Avs_Cereri A
-                            LEFT JOIN F100 B ON A.F10003 = B.F10003
+                            INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
-                            WHERE A.IdStare = 3 AND A.DataModif >= '2019-01-01'
+                            WHERE A.IdStare = 3 AND A.DataModif >= '2019-01-01' {companie}
                             GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente
                             UNION
-                            SELECT A.F10003, COALESCE(A.F10008, '') + ' ' + COALESCE(A.F10009, '') AS NumeComplet, A.F10022, 1 AS Candidat,
+                            SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                            A.F100985, A.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+                            B.F100985, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
-                            A.F10022, A.F100993, J.IdAutoAtasamente
-                            FROM F100 A
-                            LEFT JOIN Admin_NrActAd J ON A.F10003=J.F10003
-                            WHERE A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) X
+                            B.F10022, B.F100993, J.IdAutoAtasamente
+                            FROM F100 B
+                            LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
+                            WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
                             ) AS Y
                             WHERE 1=1 " + filtru;
 
@@ -535,9 +562,9 @@ namespace WizOne.Pagini
                             AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
                             ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente""
                             FROM ""Avs_Cereri"" A
-                            LEFT JOIN F100 B ON A.F10003 = B.F10003
+                            INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
-                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= TO_DATE('01-JAN-2019', 'DD-MON-YYYY')
+                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= TO_DATE('01-JAN-2019', 'DD-MON-YYYY') {companie}
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente""
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
@@ -548,7 +575,7 @@ namespace WizOne.Pagini
                             A.F10022, A.F100993, J.""IdAutoAtasamente""
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
-                            WHERE A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) X
+                            WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0)) = 1 {companie}) X
                             ) 
                             WHERE 1=1 " + filtru;
 
@@ -903,7 +930,7 @@ namespace WizOne.Pagini
                                         //Florin 2019.05.27
 
                                         //DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
-                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1";
+                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1, ""Candidat""=0 WHERE ""IdAuto""=@1;";
 
 
                                         //cazul cand este candidat
@@ -1137,7 +1164,7 @@ namespace WizOne.Pagini
                         cmb.Items.Clear();
                         cmb.ValueType = chk.PropertiesCheckEdit.ValueType;
                         cmb.Items.Add(string.Empty, null);
-                        cmb.Items.Add(Dami.TraduCuvant("BIfat"), chk.PropertiesCheckEdit.ValueChecked);
+                        cmb.Items.Add(Dami.TraduCuvant("Bifat"), chk.PropertiesCheckEdit.ValueChecked);
                         cmb.Items.Add(Dami.TraduCuvant("Nebifat"), chk.PropertiesCheckEdit.ValueUnchecked);
                     }
                 }
@@ -1459,33 +1486,35 @@ namespace WizOne.Pagini
             try
             {
                 string sursa = "";
+                string companie = "";
+                if (General.Nz(cmbCmp.Value, "").ToString() != "") companie = " AND B.F10002=" + cmbCmp.Value;
 
                 switch (General.Nz(cmbTip.Value, "").ToString())
                 {
                     case "0":
                         sursa = $@" SELECT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
                             FROM ""Avs_Cereri"" A
-                            LEFT JOIN F100 B ON A.F10003=B.F10003
-                            WHERE ""IdStare""=3";
+                            INNER JOIN F100 B ON A.F10003=B.F10003
+                            WHERE ""IdStare""=3 {companie}";
                         break;
                     case "1":
-                        sursa = $@"SELECT A.F10003, COALESCE(A.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(A.F10009,'') AS ""NumeComplet"" 
-                            FROM F100 A
-                            WHERE A.F10025=900";
+                        sursa = $@"SELECT B.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet"" 
+                            FROM F100 B
+                            WHERE B.F10025=900 {companie}";
                         break;
                     default:
                         sursa = $@"SELECT DISTINCT A.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet""
                             FROM ""Avs_Cereri"" A
-                            LEFT JOIN F100 B ON A.F10003=B.F10003
-                            WHERE ""IdStare""=3
+                            INNER JOIN F100 B ON A.F10003=B.F10003
+                            WHERE ""IdStare""=3 {companie}
                             UNION
-                            SELECT A.F10003, COALESCE(A.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(A.F10009,'') AS ""NumeComplet"" 
-                            FROM F100 A
-                            WHERE A.F10025=900";
+                            SELECT B.F10003, COALESCE(B.F10008,'') {Dami.Operator()} ' ' {Dami.Operator()} COALESCE(B.F10009,'') AS ""NumeComplet"" 
+                            FROM F100 B
+                            WHERE B.F10025=900 {companie}";
                         break;
                 }
 
-                string strSql = $@"SELECT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
+                string strSql = $@"SELECT DISTINCT X.F10003, X.""NumeComplet"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
                             FROM ({sursa}) X
                             LEFT JOIN F100 A ON X.F10003=A.F10003
                             LEFT JOIN F004 G ON A.F10005 = G.F00405
@@ -1496,6 +1525,22 @@ namespace WizOne.Pagini
                 Session["Acte_Ang"] = dtAng;
                 cmbAng.DataSource = dtAng;
                 cmbAng.DataBind();
+                cmbAng.SelectedIndex = -1;
+
+                IncarcaGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void cmbComp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                cmbTip_ValueChanged(null, null);
             }
             catch (Exception ex)
             {

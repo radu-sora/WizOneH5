@@ -13,22 +13,22 @@ namespace WizOne.Personal {
     public partial class Detasari {
         
         /// <summary>
-        /// pnlCtlDet control.
+        /// Detasari_pnlCtl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlDet;
+        protected global::DevExpress.Web.ASPxCallbackPanel Detasari_pnlCtl;
         
         /// <summary>
-        /// DataList1 control.
+        /// Detasari_DataList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList DataList1;
+        protected global::System.Web.UI.WebControls.DataList Detasari_DataList;
         
         /// <summary>
         /// grDateDetasari control.

@@ -34,12 +34,16 @@ namespace WizOne.Personal
             tabPage = new TabPage();
             tabPage.Name = "Sporuri";
             tabPage.Text = "Sporuri";
+            ctrl = this.LoadControl("Sporuri.ascx");
+            tabPage.Controls.Add(ctrl);
             tabPage.TabStyle.BackColor = Color.FromArgb(255, 194, 194, 214);
             this.ASPxPageControlCalcul.TabPages.Add(tabPage);
 
             tabPage = new TabPage();
             tabPage.Name = "Sporuri si tranzactii";
             tabPage.Text = "Sporuri si tranzactii";
+            ctrl = this.LoadControl("SporuriTranzactii.ascx");
+            tabPage.Controls.Add(ctrl);
             tabPage.TabStyle.BackColor = Color.FromArgb(255, 194, 194, 214);
             this.ASPxPageControlCalcul.TabPages.Add(tabPage);
 

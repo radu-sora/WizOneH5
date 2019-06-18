@@ -7,12 +7,13 @@
     <table width="100%">
         <tr>
             <td >
-                <dx:ASPxGridView ID="grDateLimbi" runat="server" ClientInstanceName="grDateLimbi" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateLimbi_DataBinding"  OnInitNewRow="grDateLimbi_InitNewRow"
+                <dx:ASPxGridView ID="grDateLimbi" runat="server" ClientInstanceName="grDateLimbi" ClientIDMode="Static" Width="40%" AutoGenerateColumns="false"  OnDataBinding="grDateLimbi_DataBinding"  OnInitNewRow="grDateLimbi_InitNewRow"
                     OnRowInserting="grDateLimbi_RowInserting" OnRowUpdating="grDateLimbi_RowUpdating" OnRowDeleting="grDateLimbi_RowDeleting">        
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />             
                     <ClientSideEvents CustomButtonClick="function(s, e) { grDateLimbi_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
-                    <SettingsEditing Mode="Inline" />                                            
+                    <SettingsEditing Mode="Inline" /> 
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false"/>

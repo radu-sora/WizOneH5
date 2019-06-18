@@ -214,6 +214,30 @@ namespace WizOne.WebService
                         grDateAdrese.DataSource = null;
                         grDateAdrese.DataBind();
                         break;
+                    case "cmbCriteriu1":
+                        if ((cmbCriteriu2.Value != null && Convert.ToInt32(cmbCriteriu2.Value) == Convert.ToInt32(param[1])) 
+                            || (cmbCriteriu3.Value != null && Convert.ToInt32(cmbCriteriu3.Value) == Convert.ToInt32(param[1])))
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Valoarea a fost deja selectata!");
+                            cmbCriteriu1.Value = null;
+                        }
+                        break;
+                    case "cmbCriteriu2":
+                        if ((cmbCriteriu1.Value != null && Convert.ToInt32(cmbCriteriu1.Value) == Convert.ToInt32(param[1]))
+                            || (cmbCriteriu3.Value != null && Convert.ToInt32(cmbCriteriu3.Value) == Convert.ToInt32(param[1])))
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Valoarea a fost deja selectata!");
+                            cmbCriteriu2.Value = null;
+                        }
+                        break;
+                    case "cmbCriteriu3":
+                        if ((cmbCriteriu2.Value != null && Convert.ToInt32(cmbCriteriu2.Value) == Convert.ToInt32(param[1]))
+                             || (cmbCriteriu1.Value != null && Convert.ToInt32(cmbCriteriu1.Value) == Convert.ToInt32(param[1])))
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Valoarea a fost deja selectata!");
+                            cmbCriteriu3.Value = null;
+                        }
+                        break;
                 }
             }
             catch (Exception ex)

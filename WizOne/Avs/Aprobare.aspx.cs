@@ -92,7 +92,8 @@ namespace WizOne.Avs
                 DataTable dtRol = General.IncarcaDT(SelectRoluri(), null);
                 cmbRol.DataSource = dtRol;
                 cmbRol.DataBind();
-                if (dtRol != null && dtRol.Rows.Count > 0) cmbRol.SelectedIndex = 0;
+
+                if (!IsPostBack && dtRol != null && dtRol.Rows.Count > 0) cmbRol.SelectedIndex = 0;
 
                 DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
                 cmbAngFiltru.DataSource = dtAng;
@@ -361,7 +362,7 @@ namespace WizOne.Avs
                     {
                         case "btnDelete":
                             {
-                                MetodeCereri(3);
+                                MetodeCereri(3,1);
                                 IncarcaGrid();
                             }
                             break;                       
@@ -511,7 +512,7 @@ namespace WizOne.Avs
         }
 
 
-        private void MetodeCereri(int tipActiune)
+        private void MetodeCereri(int tipActiune, int tipMsg = 0)
         {
             //actiune  1  - aprobare
             //actiune  2  - respingere
@@ -524,10 +525,13 @@ namespace WizOne.Avs
                 string comentarii = "";
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal", "Actualizat" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal", "Actualizat", "PoateModifica" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
-                    grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
+                    if (tipMsg == 0)
+                        MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "Atentie !");
+                    else
+                        grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
                     return;
                 }
 
@@ -576,8 +580,21 @@ namespace WizOne.Avs
                         continue;
                     }
 
+                    //Florin 2019.05.28
+                    //daca este aprobare sau respingere si nu are dreptul de a modifica, il blocam; aici, implicit, se respecta ordinea
+                    //algoritmul de modificare se calculeaza in selectul cu care se populeaza grodul
+                    //daca este HR are voie, daca 'Fara Rol' si userul logat este la pozitie care trebuie sa aprobe poate modifica, daca rolul selectat di combo box si userul logat este acelasi cu idSuper si user-ul de la pozitia care trebuie sa aprobe poate modifica
+                    if ((tipActiune == 1 || tipActiune == 2) && Convert.ToInt32(General.Nz(arr[8], 0)) == 0)
+                    {
+                        msg += "Cererea pt " + arr[3] + "-" + data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString() + " - " + Dami.TraduCuvant("Nu este randul dvs.") + System.Environment.NewLine;
+                        continue;
+                    }
+
+
+
+
                     if (Convert.ToInt32(General.Nz(arr[1], 0)) == 1 || Convert.ToInt32(General.Nz(arr[1], 0)) == 2 
-                        || (Convert.ToInt32(General.Nz(arr[1], 0)) == 3 && !EsteActualizata(arr[5].ToString(), arr[2].ToString(), data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString())))
+                    || (Convert.ToInt32(General.Nz(arr[1], 0)) == 3 && !EsteActualizata(arr[5].ToString(), arr[2].ToString(), data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString())))
                     {
                         ids += Convert.ToInt32(General.Nz(arr[0], 0)) + ";";
                         idsAtr += Convert.ToInt32(General.Nz(arr[2], 0)) + ";";
@@ -597,16 +614,31 @@ namespace WizOne.Avs
                 if (nrSel == 0)
                 {
                     if (msg.Length <= 0)
-                        grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
-                    else
-                        grDate.JSProperties["cpAlertMessage"] = msg;
+                    {
+                        if (tipMsg == 0)
+                            MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "Atentie !");
+                        else
+                            grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
 
+                    }
+                    else
+                    {
+                        if (tipMsg == 0)
+                            MessageBox.Show(msg, MessageBox.icoWarning, "Atentie !");
+                        else
+                            grDate.JSProperties["cpAlertMessage"] = msg;
+                    }
                     return;
                 }
 
                 msg = msg + AprobaCerere(Convert.ToInt32(Session["UserId"].ToString()), ids, idsAtr, lstDataModif, lstMarci, nrSel, tipActiune, General.ListaCuloareValoare()[5], false, comentarii, Convert.ToInt32(Session["User_Marca"].ToString()));
-                grDate.JSProperties["cpAlertMessage"] = msg;
+                //grDate.JSProperties["cpAlertMessage"] = msg;
                 //Session["Avs_Grid"] = null;
+                if (tipMsg == 0)
+                    MessageBox.Show(msg, MessageBox.icoWarning, "Atentie !");
+                else
+                    grDate.JSProperties["cpAlertMessage"] = msg;
+
                 IncarcaGrid();
 
                 grDate.Selection.UnselectAll();
@@ -634,6 +666,10 @@ namespace WizOne.Avs
             {
                 if (ids == "") return "Nu exista cereri pentru aceasta actiune !";
 
+                string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
+                if (("," + idHR + ",").IndexOf("," + General.Nz(cmbRol.Value, -99).ToString() + ",") >= 0)
+                    HR = true;
+
                 int nr = 0;
                 string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.None);
                 string[] arrAtr = idsAtr.Split(new string[] { ";" }, StringSplitOptions.None);
@@ -658,7 +694,7 @@ namespace WizOne.Avs
                         {
                             string sql = "SELECT * FROM \"Avs_Cereri\" WHERE \"Id\" = " + id.ToString();
                             DataTable dtCer = General.IncarcaDT(sql, null);
-                            sql = "SELECT * FROM \"Avs_CereriIstoric\" WHERE \"Id\" = " + id.ToString() + " AND \"IdUser\" = " + idUser.ToString() 
+                            sql = "SELECT * FROM \"Avs_CereriIstoric\" WHERE \"Id\" = " + id.ToString() + (!HR ? " AND \"IdUser\" = " + idUser.ToString() : "") 
                                 + (actiune == 1 || actiune == 2 ? " AND \"Aprobat\" IS NULL" : " AND (\"Aprobat\" IS NULL  OR (\"Aprobat\" = 1 AND \"Pozitie\" = " + dtCer.Rows[0]["TotalCircuit"].ToString() + "))");
                             DataTable dtCerIst = General.IncarcaDT(sql, null);
 
@@ -683,10 +719,14 @@ namespace WizOne.Avs
 
                             int idStare = 2;
 
-                            if (HR)
-                                idStare = 3;
-                            else
-                                if (idStare == 2 && dtCer.Rows[0]["TotalCircuit"].ToString() == dtCerIst.Rows[0]["Pozitie"].ToString()) idStare = 3;
+                            //Florin 2019.05.28
+                            //if (HR)
+                            //    idStare = 3;
+                            //else
+                            //    if (idStare == 2 && dtCer.Rows[0]["TotalCircuit"].ToString() == dtCerIst.Rows[0]["Pozitie"].ToString()) idStare = 3;
+
+                            if (idStare == 2 && dtCer.Rows[0]["TotalCircuit"].ToString() == dtCerIst.Rows[0]["Pozitie"].ToString()) idStare = 3;
+
 
                             if (actiune == 2)
                                 idStare = 0;
@@ -713,17 +753,22 @@ namespace WizOne.Avs
 
                             if (actiune == 1 || actiune == 2)
                             {
+                                //Florin 2019.05.28
+                                //sql = "UPDATE \"Avs_CereriIstoric\" SET \"DataAprobare\" = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", \"Aprobat\" = 1, \"IdStare\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare
+                                //    + "', USER_NO = " + idUser.ToString() + ", TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")
+                                //    + (dtCerIst.Rows[0]["IdUser"].ToString() != idUser.ToString() ? ", \"IdUserInlocuitor\" = " + idUser.ToString() : "")
+                                //    + " WHERE \"Id\" = " + id.ToString() + " AND \"IdUSer\"=" + Session["UserId"];
                                 sql = "UPDATE \"Avs_CereriIstoric\" SET \"DataAprobare\" = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", \"Aprobat\" = 1, \"IdStare\" = " + idStare.ToString() + ", \"Culoare\" = '" + culoare
-                                    + "', USER_NO = " + idUser.ToString() + ", TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")
-                                    + (dtCerIst.Rows[0]["IdUser"].ToString() != idUser.ToString() ? ", \"IdUserInlocuitor\" = " + idUser.ToString() : "")
-                                    + " WHERE \"Id\" = " + id.ToString() + " AND \"IdUSer\"=" + Session["UserId"];
+                                + "', USER_NO = " + idUser.ToString() + ", TIME = " + (Constante.tipBD == 1 ? "getdate()" : "sysdate")
+                                + (dtCerIst.Rows[0]["IdUser"].ToString() != idUser.ToString() ? ", \"IdUserInlocuitor\" = " + idUser.ToString() : "")
+                                + " WHERE \"Id\" = " + id.ToString() + " AND \"Pozitie\"=" + dtCerIst.Rows[0]["Pozitie"].ToString();
                             }
                             else
                             {
-                                //sql = "INSERT INTO \"Avs_CereriIstoric\" (\"Id\", \"IdCircuit\", \"IdUser\", \"IdStare\", \"Pozitie\", \"Culoare\", \"Aprobat\", \"DataAprobare\", \"Inlocuitor\", \"IdSuper\") "
-                                //    + " VALUES ({0}, {1}, {2}, -1, {3}, '{4}', 1, {5}, {6}, {7})";
-                                //sql = string.Format(sql, id.ToString(), dtCerIst.Rows[0]["IdCircuit"].ToString(), dtCerIst.Rows[0]["IdCircuit"].ToString(), dtCerIst.Rows[0]["IdCircuit"].ToString(),
-                                //    dtCerIst.Rows[0]["IdCircuit"].ToString(), )
+                                //Florin 2019.06.03
+                                //daca anuleaza, introducem o linie noua cu anulat
+                                sql = $@"INSERT INTO ""Avs_CereriIstoric"" (""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", ""Inlocuitor"", ""IdSuper"")
+                                        VALUES ({id}, {dtCerIst.Rows[0]["IdCircuit"]}, {Session["UserId"]}, -1, 22, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1), 1, {General.CurrentDate()}, null, {-1 * Convert.ToInt32(General.Nz(cmbRol.Value,0))})";
                             }
                             General.IncarcaDT(sql, null);
 
@@ -1021,17 +1066,50 @@ namespace WizOne.Avs
             try
             {
                 //Florin 2019.05.27
-                strSql = $@"SELECT DISTINCT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""NumeComplet"", 
-                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+                //strSql = $@"SELECT DISTINCT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""NumeComplet"", 
+                //        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"" 
+                //        FROM ""Avs_CereriIstoric"" B
+                //        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
+                //        INNER JOIN F100 A ON A.F10003=C.F10003
+                //        LEFT JOIN F718 X ON A.F10071=X.F71802
+                //        LEFT JOIN F003 F ON A.F10004 = F.F00304
+                //        LEFT JOIN F004 G ON A.F10005 = G.F00405
+                //        LEFT JOIN F005 H ON A.F10006 = H.F00506
+                //        LEFT JOIN F006 I ON A.F10007 = I.F00607
+                //        LEFT JOIN ""F100Supervizori"" FF on C.F10003 = FF.F10003 AND (-1 * B.""IdSuper"") = FF.""IdSuper""
+                //        LEFT JOIN ""F100Supervizori"" GG ON C.F10003 = GG.F10003 AND CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0   
+                //        WHERE (B.""IdSuper"" >= 0 AND B.""IdUser""={Session["UserId"]}) OR (B.""IdSuper"" < 0 AND FF.""IdUser""={Session["UserId"]})
+                //        OR gg.""IdUser"" = {Session["UserId"]} ";
+
+
+                strSql = $@"select F10003, ""NumeComplet"", ""Functia"", ""Subcompanie"", ""Filiala"", ""Sectie"", ""Departament""
+                        from
+                        (SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"",
+                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament""
                         FROM ""Avs_CereriIstoric"" B
                         INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
-                        INNER JOIN F100 A ON A.F10003=C.F10003
-                        LEFT JOIN F718 X ON A.F10071=X.F71802
+                        INNER JOIN F100 A ON A.F10003 = C.F10003
+                        LEFT JOIN F718 X ON A.F10071 = X.F71802
                         LEFT JOIN F003 F ON A.F10004 = F.F00304
                         LEFT JOIN F004 G ON A.F10005 = G.F00405
                         LEFT JOIN F005 H ON A.F10006 = H.F00506
                         LEFT JOIN F006 I ON A.F10007 = I.F00607
-                        WHERE B.""IdUser"" = {Session["UserId"]}";
+                        left join ""F100Supervizori"" FF on C.f10003 = FF.f10003 and(-1 * B.""IdSuper"") = FF.IdSuper
+                        WHERE case when B.""IdSuper"" >= 0 then  B.""IdUser"" else FF.IdUser end = {Session["UserId"]}
+                        union
+                        SELECT DISTINCT A.F10003, A.F10008 + ' ' + A.F10009 AS ""NumeComplet"", 
+                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament""
+                        FROM ""Avs_CereriIstoric"" B
+                        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id""
+                        INNER JOIN F100 A ON A.F10003 = C.F10003
+                        LEFT JOIN F718 X ON A.F10071 = X.F71802
+                        LEFT JOIN F003 F ON A.F10004 = F.F00304
+                        LEFT JOIN F004 G ON A.F10005 = G.F00405
+                        LEFT JOIN F005 H ON A.F10006 = H.F00506
+                        LEFT JOIN F006 I ON A.F10007 = I.F00607
+                        left join ""F100Supervizori"" GG on C.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                     
+                        WHERE gg.iduser = {Session["UserId"]} ) T order by T.""NumeComplet"" ";
+
             }
             catch (Exception ex)
             {
@@ -1048,10 +1126,14 @@ namespace WizOne.Avs
             try
             {
                 //Florin 2019.05.27
-                strSql = $@"SELECT DISTINCT (-1 * B.IdSuper) AS ""Rol"",  COALESCE(A.""Alias"", A.""Denumire"") AS ""RolDenumire""
+                strSql = $@"SELECT DISTINCT 
+                        CASE WHEN B.""IdSuper"" > 0 THEN 76 ELSE (-1 * B.""IdSuper"") END AS ""Rol"",  
+                        CASE WHEN B.""IdSuper"" > 0 THEN 'Fara Rol' ELSE COALESCE(A.""Alias"", A.""Denumire"") END AS ""RolDenumire""
                         FROM ""Avs_CereriIstoric"" B
-                        LEFT JOIN tblSupervizori A ON A.Id=(-1 * B.IdSuper)
-                        WHERE B.""IdUser"" = {Session["UserId"]}";
+                        INNER JOIN ""Avs_Cereri"" C ON B.""Id"" = C.""Id"" 
+                        LEFT JOIN ""tblSupervizori"" A ON A.""Id""=(-1 * B.""IdSuper"")
+                        LEFT JOIN ""F100Supervizori"" F on C.f10003 = F.f10003 AND (-1 * B.""IdSuper"") = F.""IdSuper""
+                        WHERE (B.""IdSuper"" >= 0 AND B.""IdUser""={Session["UserId"]}) OR (B.""IdSuper"" < 0 AND F.""IdUser""={Session["UserId"]})";
             }
             catch (Exception ex)
             {
@@ -1068,12 +1150,31 @@ namespace WizOne.Avs
             try
             {
                 //Florin 2019.05.27
-                strSql = $@"SELECT DISTINCT C.""Id"", C.""Denumire""
+                //strSql = $@"SELECT DISTINCT C.""Id"", C.""Denumire""
+                //        FROM ""Avs_CereriIstoric"" B
+                //        INNER JOIN ""Avs_Cereri"" A ON A.Id=B.Id
+                //        INNER JOIN ""Avs_tblAtribute"" C ON C.""Id""=A.""IdAtribut""
+                //        WHERE B.""IdUser"" = {Session["UserId"]}
+                //        ORDER BY C.""Denumire""";
+
+
+                strSql = $@"SELECT ""Id"", ""Denumire"" FROM (					 
+                        SELECT DISTINCT C.""Id"", C.""Denumire""
                         FROM ""Avs_CereriIstoric"" B
-                        INNER JOIN ""Avs_Cereri"" A ON A.Id=B.Id
-                        INNER JOIN ""Avs_tblAtribute"" C ON C.""Id""=A.""IdAtribut""
-                        WHERE B.""IdUser"" = {Session["UserId"]}
-                        ORDER BY C.""Denumire""";
+                        INNER JOIN ""Avs_Cereri"" A ON A.Id = B.Id
+                        INNER JOIN ""Avs_tblAtribute"" C ON C.""Id"" = A.""IdAtribut""
+                        LEFT JOIN ""F100Supervizori"" FF on A.f10003 = FF.f10003 AND (-1 * B.""IdSuper"") = FF.IdSuper
+                        WHERE case when B.""IdSuper"" >= 0 then B.""IdUser"" else FF.IdUser end = {Session["UserId"]}
+                        union
+                        SELECT DISTINCT C.""Id"", C.""Denumire""
+                        FROM ""Avs_CereriIstoric"" B
+                        INNER JOIN ""Avs_Cereri"" A ON A.Id = B.Id
+                        INNER JOIN ""Avs_tblAtribute"" C ON C.""Id"" = A.""IdAtribut""
+                        left join ""F100Supervizori"" GG on A.f10003 = GG.f10003 and CHARINDEX(',' + CONVERT(nvarchar(20),GG.""IdSuper"") + ','  ,  ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0                 
+                        WHERE gg.iduser = {Session["UserId"]} ) T
+                        ORDER BY T.""Denumire"" ";
+
+
             }
             catch (Exception ex)
             {
@@ -1120,8 +1221,8 @@ namespace WizOne.Avs
                 string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
                 if (("," + idHR + ",").IndexOf("," + General.Nz(cmbRol.Value,-99).ToString() + ",") < 0)
                 {
-                    filtru += " AND F.\"IdUser\"=" + Session["UserId"];
-                    if (Convert.ToInt32(cmbRol.Value ?? -99) != -99) filtru += " AND (-1 * F.\"IdSuper\") = " + Convert.ToInt32(cmbRol.Value ?? -99);
+                    filtru += " AND G.\"IdUser\"=" + Session["UserId"];
+                    if (Convert.ToInt32(cmbRol.Value ?? -99) != -99) filtru += @" AND (CASE WHEN G.""IdSuper"" > 0 THEN 76 ELSE (-1 * G.""IdSuper"") END) = " + Convert.ToInt32(cmbRol.Value ?? -99);
                 }
                 else
                 {
@@ -1156,11 +1257,15 @@ namespace WizOne.Avs
                             " end AS ValoareNoua,  " +
                             " a.SalariulNet, a.ScutitImpozit,  " +
                             " COALESCE((SELECT COALESCE(NR.Revisal,0) FROM Admin_NrActAd NR WHERE NR.IdAuto=COALESCE(A.IdActAd,-99)),0) AS Revisal, " +
-                            " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.IdAtribut AND X.F70406=A.DataModif),0) AS ActualizatF704 " +
+                            " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.IdAtribut AND X.F70406=A.DataModif),0) AS ActualizatF704, " +
+                            " CASE WHEN CHARINDEX('," + General.Nz(cmbRol.Value,-99).ToString() + ",', ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0 THEN 1 ELSE  " +
+                            " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = 76 AND F.IdUser = " + Session["UserId"] + " THEN 1 ELSE " +
+                            " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = F.IdSuper AND F.IdUser= " + Session["UserId"] + " THEN 1 ELSE 0 END END END AS PoateModifica " +
                             " from Avs_Cereri a  " +
                             " inner join F100 b on a.F10003=b.F10003  " +
                             " inner join Avs_tblAtribute c on a.IdAtribut=c.Id  " +
-                            " inner join Avs_CereriIstoric f on a.Id = f.Id  " +
+                            " LEFT join Avs_CereriIstoric f on a.Id = f.Id AND (A.Pozitie+1)=F.Pozitie " +
+                            " INNER JOIN Avs_CereriIstoric G ON A.Id = G.Id " + 
                             " where COALESCE(B.F10025,0) <> 900 " + filtru +
                             " order by a.DataModif";
                 }
@@ -1191,11 +1296,14 @@ namespace WizOne.Avs
                             " end AS \"ValoareNoua\", " +
                             " a.\"SalariulNet\", a.\"ScutitImpozit\", " +
                             " COALESCE((SELECT COALESCE(NR.\"Revisal\",0) FROM \"Admin_NrActAd\" NR WHERE NR.\"IdAuto\"=COALESCE(A.\"IdActAd\",-99)),0) AS \"Revisal\", " +
-                            " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.\"IdAtribut\" AND X.F70406=A.\"DataModif\"),0) AS \"ActualizatF704\" " +
+                            " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.\"IdAtribut\" AND X.F70406=A.\"DataModif\"),0) AS \"ActualizatF704\", " +
+                            " CASE WHEN INSTR(',' + (SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\"='Avans_IDuriRoluriHR') + ',', '," + General.Nz(cmbRol.Value, -99).ToString() + ",') > 0 THEN 1 ELSE  " +
+                            " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = 76 AND F.\"IdUser\" = " + Session["UserId"] + " THEN 1 ELSE " +
+                            " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = F.\"IdSuper\" AND F.\"IdUser\"= " + Session["UserId"] + " THEN 1 ELSE 0 END END END AS \"PoateModifica\" " +
                             " from \"Avs_Cereri\" a " +
                             " inner join F100 b on a.F10003=b.F10003 " +
                             " inner join \"Avs_tblAtribute\" c on a.\"IdAtribut\"=c.\"Id\" " +
-                            " inner join \"Avs_CereriIstoric\" f on a.\"Id\" = f.\"Id\" " +
+                            " LEFT join \"Avs_CereriIstoric\" f on a.\"Id\" = f.\"Id\" AND (A.\"Pozitie\"+1)=F.\"Pozitie\" " +
                             " where COALESCE(B.F10025,0) <> 900 " + filtru +
                             " order by a.\"DataModif\"";
                 }

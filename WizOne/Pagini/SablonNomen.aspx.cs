@@ -227,7 +227,7 @@ namespace WizOne.Pagini
                                             case 1:
                                                 c.PropertiesComboBox.TextField = dtCmb.Columns[0].ColumnName;
                                                 break;
-                                            case 2:
+                                            default:
                                                 c.PropertiesComboBox.TextField = dtCmb.Columns[1].ColumnName;
                                                 break;
                                         }

@@ -258,7 +258,8 @@ namespace WizOne.Pontaj
                         int an = ziIn.Year;
                         int luna = ziIn.Month;
 
-                        string sql = "SELECT F10003 FROM F100 WHERE F10025 IN (0, 999) AND " + angIn + " <= F10003 AND F10003 <= " + angSf;
+                        //string sql = "SELECT F10003 FROM F100 WHERE F10025 IN (0, 999) AND " + angIn + " <= F10003 AND F10003 <= " + angSf;
+                        string sql = "SELECT F10003 FROM F100 WHERE " + angIn + " <= F10003 AND F10003 <= " + angSf;
                         DataTable dt = General.IncarcaDT(sql, null);
 
                         if (dt != null && dt.Rows.Count > 0)

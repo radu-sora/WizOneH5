@@ -135,11 +135,10 @@
         </tr>
         <tr>
 			<td align="left" Width="210">		               
-                <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare" ID="checkComboBoxStare" Width="210" runat="server" AnimationType="None">
+                <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare" ID="checkComboBoxStare" Width="300" runat="server" AnimationType="None">
                     <DropDownWindowStyle BackColor="#EDEDED" />
                     <DropDownWindowTemplate>
-                        <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn"
-                            runat="server">
+                        <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170">
                             <Border BorderStyle="None" />
                             <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
                             <Items>
@@ -178,7 +177,7 @@
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" />
                     <Settings ShowFilterRow="True" ShowGroupPanel="False" />
-                    <SettingsSearchPanel Visible="False" />
+                    <SettingsSearchPanel Visible="False" />        
                     <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick"  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="50px" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" >

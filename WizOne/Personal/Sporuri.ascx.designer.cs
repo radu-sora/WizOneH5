@@ -10,24 +10,24 @@
 namespace WizOne.Personal {
     
     
-    public partial class Documente {
+    public partial class Sporuri {
         
         /// <summary>
-        /// Documente_pnlCtl control.
+        /// grDateSporuri1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel Documente_pnlCtl;
+        protected global::DevExpress.Web.ASPxGridView grDateSporuri1;
         
         /// <summary>
-        /// Documente_DataList control.
+        /// grDateSporuri2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList Documente_DataList;
+        protected global::DevExpress.Web.ASPxGridView grDateSporuri2;
     }
 }

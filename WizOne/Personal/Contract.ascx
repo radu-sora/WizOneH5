@@ -5,43 +5,89 @@
 <script type="text/javascript">
 
     function OnTextChangedHandlerCtr(s) {
-        if (s.name == "deUltimaZiLucr") {
-            var DateTo = new Date(s.GetDate());
-            var DateAng = new Date(deDataAng.GetDate());
+        switch (s.name) {
+            case "deUltimaZiLucr":
+                {
+                    var DateTo = new Date(s.GetDate());
+                    var DateAng = new Date(deDataAng.GetDate());
 
-            if (DateTo < DateAng) {
-                swal({
-                    title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
-                    type: "warning"
-                });
-            }
-            else {
-                DateTo.setDate(DateTo.getDate() + 1);
-                deDataPlecarii.SetDate(DateTo);
-            }
-        }
-
-        if (s.name == "deDataPlecarii")
-        {
-            var DateTo = new Date(s.GetDate());
-            var DateMax = new Date(2100, 1, 1);
-            var DateAng = new Date(deDataAng.GetDate());
-
-            if (DateTo < DateAng) {
-                swal({
-                    title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
-                    type: "warning"
-                });
-            }
-            else {
-                if (DateTo.getTime() != DateMax.getTime()) {
-                    DateTo.setDate(DateTo.getDate() - 1);
-                    deUltimaZiLucr.SetDate(DateTo);
+                    if (DateTo < DateAng) {
+                        swal({
+                            title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
+                            type: "warning"
+                        });
+                    }
+                    else {
+                        DateTo.setDate(DateTo.getDate() + 1);
+                        deDataPlecarii.SetDate(DateTo);
+                    }
                 }
-            }
-        }
+                break;
+            case "deDataPlecarii":
+                {
+                    var DateTo = new Date(s.GetDate());
+                    var DateAng = new Date(deDataAng.GetDate());
 
-        pnlCtlContract.PerformCallback(s.name + ";" +s.GetText());
+                    if (DateTo < DateAng) {
+                        swal({
+                            title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
+                            type: "warning"
+                        });
+                    }
+                    else {
+                        if (DateTo.getTime() != DateMax.getTime()) {
+                            DateTo.setDate(DateTo.getDate() - 1);
+                            deUltimaZiLucr.SetDate(DateTo);
+                        }
+                    }
+                }
+                break;
+            case "deDataAng":
+            case "deDataCtrInt":
+                {
+                    var DateCtr = new Date(deDataCtrInt.GetDate());
+                    var DateAng = new Date(deDataAng.GetDate());
+
+                    if (DateCtr >= DateAng) {
+                        swal({
+                            title: "Atentie !", text: "Data contract intern trebuie sa fie anterioara datei angajarii!",
+                            type: "warning"
+                        });
+                    }
+
+                    pnlLoading.Show();
+                    pnlCtlContract.PerformCallback(s.name + ";" + s.GetDate());
+                }
+                break;
+            case "deDeLaData":
+            case "deLaData":
+                {
+                    var dateDeLa = new Date(deDeLaData.GetDate());
+                    var dateLa = new Date(deLaData.GetDate());
+
+                    if (dateDeLa > dateLa) {
+                        swal({
+                            title: "Atentie !", text: "Data start este ulterioara celei de final!",
+                            type: "warning"
+                        });
+                    }
+                    
+                    if (s.name == "deLaData"
+                        && (dateDeLa.getFullYear() != 2100 || dateDeLa.getMonth() != 1 || dateDeLa.getDate() != 1)
+                        && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 1 || dateLa.getDate() != 1)) {
+
+                        CalculLuniSiZile(dateDeLa, dateLa);
+                        
+                        deDataPlecarii.SetValue(dateLa);
+                        var dtTmp = dateLa;
+                        dtTmp.setDate(dtTmp.getDate() - 1)
+                        deUltimaZiLucr.SetValue(dtTmp);
+
+                        Validare36Luni();
+                    }
+                }
+                break;
+        }
     }
 
     function OnValueChangedHandlerCtr(s) {
@@ -77,8 +123,196 @@
             });
             s.cpAlertMessage = null;
         }
+        pnlLoading.Hide();
     }
-    
+
+    function CalcVechimeComp(s) {
+        var ani = "00";
+        var luni = "00";
+        if (txtVechCompAni.GetValue() != "") ani = txtVechCompAni.GetValue();
+        if (txtVechCompLuni.GetValue() != "") luni = txtVechCompLuni.GetValue();
+        ani = ('00' + ani).substring(ani.length);
+        luni = ('00' + luni).substring(luni.length);
+        txtVechimeCompanie.SetValue(ani + luni);
+    }
+
+    function CalcVechimeCarte(s) {
+        var ani = "00";
+        var luni = "00";
+        if (txtVechCarteMuncaAni.GetValue() != "") ani = txtVechCarteMuncaAni.GetValue();
+        if (txtVechCarteMuncaLuni.GetValue() != "") luni = txtVechCarteMuncaLuni.GetValue();
+        ani = ('00' + ani).substring(ani.length);
+        luni = ('00' + luni).substring(luni.length);
+        txtVechimeCarte.SetValue(ani + luni);
+    }
+
+    function CalcVechime(s)
+    {
+        var azi = new Date();
+        var primaAng = deDataPrimeiAng.GetValue();
+
+        var ani = (azi.getFullYear() - primaAng.getFullYear());
+        var luni = (azi.getMonth() - primaAng.getMonth());
+        if (azi.getMonth() < primaAng.getMonth() || (azi.getMonth() == primaAng.getMonth() && azi.getDate() < primaAng.getDate())) {
+            luni = 12 - (primaAng.getMonth() - azi.getMonth());
+            ani = ani - 1;
+        }
+
+
+        if (azi.getDate() < primaAng.getDate()) {
+                luni = luni - 1;
+        }
+        
+        ani = ('00' + ani.toString()).substring(ani.toString().length);
+        luni = ('00' + luni.toString()).substring(luni.toString().length);
+
+        txtVechCarteMuncaAni.SetValue(ani);
+        txtVechCarteMuncaLuni.SetValue(luni);
+        txtVechimeCarte.SetValue(ani + luni);
+    }
+
+    function dateDiffInDays(a, b) {
+        const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+        // Discard the time and time-zone information.
+        const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+        const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+        return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+    }
+
+    function CalculLuniSiZile(dtInc, dtSf) {
+        var ani = (dtSf.getFullYear() - dtInc.getFullYear());
+        var luni = (dtSf.getMonth() - dtInc.getMonth());
+        var zile = (dtSf.getDate() - dtInc.getDate());
+        
+        if (dtSf.getMonth() < dtInc.getMonth()) {
+            luni = 12 - (dtSf.getMonth() - dtInc.getMonth());
+            ani = ani - 1;
+        }
+
+        if (dtSf.getDate() < dtInc.getDate()) {
+            luni = luni - 1;
+            var dtTmp = Date.UTC(dtSf.getFullYear(), dtSf.getMonth() - 1, dtInc.getDate());
+            zile = dateDiffInDays(new Date(dtTmp), dtSf);
+        }
+
+        txtNrLuni.SetValue((ani * 12 + luni).toString());
+        txtNrZile.SetValue(zile);
+    }
+
+    function SetNorma(s) {
+        switch (cmbTipAng.GetSelectedItem().value) {
+            case 0:                 //angajat permanent
+                {
+                    if (cmbNorma.GetValue() == "")
+                        cmbNorma.SetSelectedIndex(2);
+                    if (cmbTimpPartial.GetValue() == "")
+                        cmbTimpPartial.SetValue(cmbNorma.GetValue());
+                    if (cmbNorma.GetValue() < cmbTimpPartial.GetValue()) {
+                        swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
+                        cmbTimpPartial.SetValue(cmbNorma.GetValue());
+                    }
+
+                    cmbTipNorma.SetValue(1);
+                    if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18) 
+                        cmbDurTimpMunca.SetValue(2);
+                    else
+                        cmbDurTimpMunca.SetValue(1);
+                }
+                break;
+            case 2:                 //angajat timp partial
+                {
+                    if (cmbNorma.GetValue() == "")
+                        cmbNorma.SetSelectedIndex(2);
+                    if (cmbTimpPartial.GetValue() == "")
+                        cmbTimpPartial.SetValue(cmbNorma.GetValue() - 1);   
+                    if (cmbNorma.GetValue() <= cmbTimpPartial.GetValue()) {
+                        swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
+                        cmbTimpPartial.SetValue(cmbNorma.GetValue() - 1);
+                    }
+
+                    cmbTipNorma.SetValue(2);
+                    cmbDurTimpMunca.SetValue(5);
+                }
+                break;
+        }
+    }
+
+    function ValidareNrOre(s) {
+        if (cmbDurTimpMunca.GetValue() == 2 && txtNrOre.GetValue() > 30)
+            swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 30)!", type: "warning" });
+
+        if (cmbDurTimpMunca.GetValue() == 1 && txtNrOre.GetValue() > 40)
+            swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 40)!", type: "warning" });
+    }
+
+    function cmbIntervRepTimpMunca_SelectedIndexChanged(s) {
+        if (cmbIntervRepTimpMunca.GetValue() == 2 || cmbIntervRepTimpMunca.GetValue() == 3)
+            txtNrOre.SetEnabled(true);
+        else
+            txtNrOre.SetEnabled(false);
+    }
+
+    function cmbGradInvalid_SelectedIndexChanged(s) {
+        if (cmbGradInvalid.GetSelectedIndex() > 0)
+            deDataValabInvalid.SetEnabled(true);
+        else {
+            deDataValabInvalid.SetEnabled(false);
+            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+            deDataValabInvalid.SetValue(dtTmp);
+        }
+    }
+
+    function cmbDurataContract_SelectedIndexChanged() {
+        Validare36Luni();
+    }
+
+    function Validare36Luni() {
+        if (cmbDurCtr.GetValue() == 1) {
+            var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
+
+            deDeLaData.SetEnabled(false);
+            deLaData.SetEnabled(false);
+            deUltimaZiLucr.SetEnabled(false);
+            deDataPlecarii.SetEnabled(false);
+
+            deDeLaData.SetValue(dtTmp);
+            deLaData.SetValue(dtTmp);
+            deUltimaZiLucr.SetValue(dtTmp);
+            deDataPlecarii.SetValue(dtTmp);
+
+            txtNrZile.SetValue("");
+            txtNrLuni.SetValue("");
+        }
+
+        if (cmbDurCtr.GetValue() == 2) {
+
+            deDeLaData.SetEnabled(true);
+            deLaData.SetEnabled(true);
+            deUltimaZiLucr.SetEnabled(true);
+            deDataPlecarii.SetEnabled(true);
+            if (<%=Session["MP_AreContract"] %> == 0)
+                deDeLaData.SetValue(deDataAng.GetValue());
+
+            if (deDeLaData.GetValue() != "" && deLaData.GetValue() != "") {
+                if (txtNrLuni.GetValue() > 36 || (txtNrLuni.GetValue() == 36 && txtNrZile.GetValue() > 0)) {
+                    swal({ title: "Atentie !", text: "Durata maxima a unui contract pe perioada determinata nu poate depasi 36 de luni", type: "warning" });
+                }
+                else {
+                    var ds36 = new Date("<%=Session["MP_DataSfarsit36"] %>");
+                    if (ds36 < deLaData.GetValue())
+                        swal({ title: "Atentie !", text: "Nu puteti prelungi un contract pe perioada determinata mai mult de 36 luni. Mai puteti prelungi contractul pana la data de " + ds36, type: "warning" });
+                }
+            }
+        }
+    }
+
+    function cmbPrel_SelectedIndexChanged() {
+        if (cmbPrel.GetValue() == 1) {
+            deDeLaData.SetValue(deLaData.GetValue());
+        }
+    }
+
 </script>
 
 <body>
@@ -86,18 +320,17 @@
     <table width="100%">
 		<tr>
 			<td align="left">					
-			</td>			
-		
+			</td>
 		</tr>			
 	</table>
 				
 
 
-   <dx:ASPxCallbackPanel ID = "pnlCtlContract" ClientIDMode="Static" ClientInstanceName="pnlCtlContract" runat="server" OnCallback="pnlCtlContract_Callback" SettingsLoadingPanel-Enabled="false">
+   <dx:ASPxCallbackPanel ID = "Contract_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlContract" runat="server" OnCallback="pnlCtlContract_Callback" SettingsLoadingPanel-Enabled="false">
        <ClientSideEvents EndCallback="function (s,e) { OnEndCallbackCtr(s,e); }" />
       <PanelCollection>
         <dx:PanelContent>
-    <asp:DataList  ID="DataList1" runat="server">  
+    <asp:DataList  ID="Contract_DataList" runat="server">  
         <ItemTemplate>
 			<div>
             <tr>
@@ -111,7 +344,6 @@
 						</td>	
 						<td>
 							<dx:ASPxTextBox  ID="txtNrCtrInt"  Width="100" runat="server" Text='<%# Eval("F100985") %>'  AutoPostBack="false" >
-                                <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
 							</dx:ASPxTextBox >
 						</td>
                         <td >
@@ -134,7 +366,7 @@
 							<dx:ASPxLabel  ID="lblDataCtrInt" runat="server"  Text="Data ctr. intern"></dx:ASPxLabel >	
 						</td>
 						<td>			
-							<dx:ASPxDateEdit  ID="deDataCtrInt" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100986") %>'  AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deDataCtrInt" ClientInstanceName="deDataCtrInt" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100986") %>'  AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
                                 <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
 							</dx:ASPxDateEdit>					
@@ -177,42 +409,40 @@
 					</tr>
 					<tr>				
 						<td>		
-							<dx:ASPxLabel  ID="lblTipCtrMunca" runat="server"  Text="Tip contract munca"></dx:ASPxLabel >	
+							<dx:ASPxLabel  ID="lblTipCtrMunca" runat="server"  Text="Tip contract munca"></dx:ASPxLabel>	
 						</td>
 						<td>	
-							<dx:ASPxComboBox DataSourceID="dsTCM"  Value='<%#Eval("F100984") %>'   ID="cmbTipCtrMunca" Width="100"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsTCM"  Value='<%#Eval("F100984") %>' ID="cmbTipCtrMunca" Width="100"  runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
 							</dx:ASPxComboBox>
 						</td>
 					</tr>	
                     
 					<tr>				
 						<td >
-							<dx:ASPxLabel  ID="lblDurCtr" runat="server"  Text="Durata contract" ></dx:ASPxLabel >	
+							<dx:ASPxLabel  ID="lblDurCtr" runat="server"  Text="Durata contract" ></dx:ASPxLabel>	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsDC"  Value='<%#Eval("F1009741") %>'  ID="cmbDurCtr"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F08903" ValueField="F08902" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsDC"  Value='<%#Eval("F1009741") %>'  ID="cmbDurCtr"  ClientInstanceName="cmbDurCtr" Width="100" runat="server" DropDownStyle="DropDown"  TextField="F08903" ValueField="F08902" ValueType="System.Int32">
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbDurataContract_SelectedIndexChanged(); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>	
 					<tr>
 						<td >		
-							<dx:ASPxLabel  ID="lblDeLaData" runat="server"  Text="De la data"></dx:ASPxLabel >	
+							<dx:ASPxLabel  ID="lblDeLaData" runat="server"  Text="De la data"></dx:ASPxLabel>
 						</td>
 						<td>			
-							<dx:ASPxDateEdit  ID="deDeLaData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100933") %>'  AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deDeLaData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100933") %>'  AutoPostBack="false" ClientEnabled="false" >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
 							</dx:ASPxDateEdit>					
 						</td>
 					</tr>
 					<tr>				
 						<td>		
-							<dx:ASPxLabel  ID="lblLaData" runat="server"  Text="La data"></dx:ASPxLabel >	
+							<dx:ASPxLabel  ID="lblLaData" runat="server"  Text="La data"></dx:ASPxLabel>	
 						</td>
 						<td>	
-							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100934") %>' AutoPostBack="false"  >
+							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100934") %>' AutoPostBack="false" ClientEnabled="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
                                 <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
 							</dx:ASPxDateEdit>										
@@ -220,10 +450,10 @@
 					</tr>
 					<tr>				
 						<td >
-							<dx:ASPxLabel  ID="lblNrLuni" Width="100" runat="server"  Text="Nr. luni" ></dx:ASPxLabel >	
+							<dx:ASPxLabel  ID="lblNrLuni" Width="100" runat="server"  Text="Nr. luni" ></dx:ASPxLabel>	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtNrLuni"  Width="100" runat="server" ReadOnly="true" AutoPostBack="false" ></dx:ASPxTextBox >
+							<dx:ASPxTextBox  ID="txtNrLuni" ClientInstanceName="txtNrLuni"  Width="100" runat="server" ReadOnly="true" AutoPostBack="false" ></dx:ASPxTextBox >
 						</td>
 					</tr>
 					<tr>				
@@ -231,7 +461,7 @@
 							<dx:ASPxLabel  ID="lblNrZile" Width="100" runat="server"  Text="Nr. zile" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtNrZile"  Width="100" runat="server" ReadOnly="true"  AutoPostBack="false" ></dx:ASPxTextBox >
+							<dx:ASPxTextBox  ID="txtNrZile" ClientInstanceName="txtNrZile" Width="100" runat="server" ReadOnly="true"  AutoPostBack="false" ></dx:ASPxTextBox >
 						</td>
 					</tr>
 					<tr>				
@@ -239,8 +469,8 @@
 							<dx:ASPxLabel  ID="lblPrel" runat="server"  Text="Prelungire contract" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsPC"  Value='<%#Eval("F100938") %>' ID="cmbPrel"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsPC"  Value='<%#Eval("F100938") %>' ID="cmbPrel" ClientInstanceName="cmbPrel"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32" >
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbPrel_SelectedIndexChanged(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>	
@@ -250,7 +480,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsEI"  Value='<%#Eval("F100929") %>'  ID="cmbExcIncet"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F09403" ValueField="F09402" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox>
 						</td>
 					</tr>	
@@ -260,7 +490,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsCASS"  Value='<%#Eval("F1003900") %>' ID="cmbCASSAngajat"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox >
 						</td>
                         <td>
@@ -284,7 +514,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsCASS"  Value='<%#Eval("F1003907") %>' ID="cmbCASSAngajator"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox >
 						</td>
 					</tr>
@@ -294,7 +524,7 @@
 						</td>	
 						<td>
 							<dx:ASPxTextBox  ID="txtSalariu"  Width="100" runat="server"  Text='<%# Eval("F100699") %>'  DisplayFormatString="N0" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxTextBox >
 						</td>
                         <td>
@@ -319,7 +549,7 @@
 						<td>	
 							<dx:ASPxDateEdit  ID="deDataModifSal" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Bind("F100991") %>' AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxDateEdit>										
 						</td>
 					</tr>
@@ -329,7 +559,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsCategAng_61"  Value='<%#Eval("F10061") %>' ID="cmbCategAng1"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F72404" ValueField="F72402" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox >
 						</td>
 					</tr>
@@ -339,7 +569,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsCategAng_62"  Value='<%#Eval("F10062") %>' ID="cmbCategAng2"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F72404" ValueField="F72402" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox >
 						</td>
 					</tr>
@@ -349,7 +579,7 @@
 						</td>	
 						<td>
 							<dx:ASPxTextBox  ID="txtLocAnt"  Width="100" runat="server" Text='<%# Eval("F10078") %>'  AutoPostBack="false" >
-                                <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                               
 							</dx:ASPxTextBox >
 						</td>
 					</tr>
@@ -359,7 +589,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsLocatieInt"  Value='<%#Eval("F100966") %>' ID="cmbLocatieInt"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="LOCATIE" ValueField="NUMAR" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox >
 						</td>
 					</tr>
@@ -382,8 +612,8 @@
 							<dx:ASPxLabel  ID="lblTipAng" Width="100" runat="server"  Text="Tip angajat" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsTA"  Value='<%#Eval("F10010") %>' ID="cmbTipAng" Width="130"   runat="server" DropDownStyle="DropDown"  TextField="F71604" ValueField="F71602"  ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsTA"  Value='<%#Eval("F10010") %>' ID="cmbTipAng" Width="130" ClientInstanceName="cmbTipAng" runat="server" DropDownStyle="DropDown"  TextField="F71604" ValueField="F71602"  ValueType="System.Int32">
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ SetNorma(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>
@@ -392,8 +622,8 @@
 							<dx:ASPxLabel  ID="lblTimpPartial"  Width="100" runat="server"  Text="Timp partial" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsTP"  Value='<%#Eval("F10043") %>' ID="cmbTimpPartial" Width="100" runat="server"  TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsTP"  Value='<%#Eval("F10043") %>' ID="cmbTimpPartial" Width="100" runat="server" ClientInstanceName="cmbTimpPartial" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ SetNorma(s); }" />
 							</dx:ASPxComboBox>
 						</td>
                     </tr>
@@ -402,8 +632,8 @@
 							<dx:ASPxLabel  ID="lblNorma"  Width="100" runat="server"  Text="Norma" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsN"  Value='<%#Eval("F100973") %>' ID="cmbNorma" Width="100" runat="server"   TextField="Denumire" ValueField="Id"  AutoPostBack="false" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsN"  Value='<%#Eval("F100973") %>' ID="cmbNorma" Width="100" runat="server" ClientInstanceName="cmbNorma" TextField="Denumire" ValueField="Id"  AutoPostBack="false" ValueType="System.Int32" >
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ SetNorma(s); }" />
 							</dx:ASPxComboBox>
 						</td>
 						<td>	
@@ -428,7 +658,7 @@
 						<td>	
 							<dx:ASPxDateEdit  ID="deDataModifNorma" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Bind("F100955") %>' AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxDateEdit>										
 						</td>
 					</tr>
@@ -437,8 +667,8 @@
 							<dx:ASPxLabel  ID="lblTipNorma" runat="server"  Text="Tip norma" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsTN"  Value='<%#Eval("F100926") %>' ID="cmbTipNorma"  Width="130" runat="server" DropDownStyle="DropDown"  TextField="F09203" ValueField="F09202" ValueType="System.Int32" >
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsTN"  Value='<%#Eval("F100926") %>' ID="cmbTipNorma"  Width="130" ClientInstanceName="cmbTipNorma" runat="server" DropDownStyle="DropDown"  TextField="F09203" ValueField="F09202" ValueType="System.Int32" >
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ ValidareNrOre(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>	
@@ -447,8 +677,8 @@
 							<dx:ASPxLabel  ID="lblDurTimpMunca" runat="server"  Text="Durata timp munca" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsDTM"  Value='<%#Eval("F100927") %>'  ID="cmbDurTimpMunca" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F09103" ValueField="F09102" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsDTM"  Value='<%#Eval("F100927") %>'  ID="cmbDurTimpMunca" Width="130" ClientInstanceName="cmbDurTimpMunca" runat="server" DropDownStyle="DropDown"  TextField="F09103" ValueField="F09102" ValueType="System.Int32">
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ ValidareNrOre(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>   
@@ -458,7 +688,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsRTM"  Value='<%#Eval("F100928") %>'  ID="cmbRepTimpMunca" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F09303" ValueField="F09302" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox >
 						</td>
 					</tr>    
@@ -468,7 +698,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsIRTM"  Value='<%#Eval("F100939") %>' ID="cmbIntervRepTimpMunca" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F09603" ValueField="F09602"  ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbIntervRepTimpMunca_SelectedIndexChanged(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>     
@@ -477,8 +707,8 @@
 							<dx:ASPxLabel  ID="lblNrOre" Width="100" runat="server"  Text="Nr ore pe luna/saptamana" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtNrOre"  Width="75" runat="server" Text='<%# Bind("F100964") %>'  AutoPostBack="false" >
-                                <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+							<dx:ASPxTextBox  ID="txtNrOre"  Width="75" runat="server" ClientInstanceName="txtNrOre" Text='<%# Bind("F100964") %>'  AutoPostBack="false" >
+                                <ClientSideEvents TextChanged="function(s,e){ ValidareNrOre(s); }" />
 							</dx:ASPxTextBox >
 						</td>
 					</tr>  
@@ -523,7 +753,7 @@
 						<td>	
 							<dx:ASPxDateEdit  ID="deDataModifCOR" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100956") %>' AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                               
 							</dx:ASPxDateEdit>										
 						</td>
 					</tr>  
@@ -533,7 +763,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsFunctie"  Value='<%#Eval("F10071") %>' ID="cmbFunctie" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F71804" ValueField="F71802" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox >
 						</td>
                         <td>
@@ -558,7 +788,7 @@
 						<td>	
 							<dx:ASPxDateEdit  ID="deDataModifFunctie" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100992") %>' AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
-                                <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxDateEdit>										
 						</td>
 					</tr> 
@@ -568,7 +798,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsMeserie"  Value='<%#Eval("F10029") %>' ID="cmbMeserie" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F71704" ValueField="F71702" ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
 							</dx:ASPxComboBox >
 						</td>
                         <td>
@@ -589,7 +819,7 @@
                     <tr>
                         <td>
                             <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10048").ToString()=="1"%>' ClientInstanceName="chkbx4" >
-                                <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                
                             </dx:ASPxCheckBox>
                         </td>
 
@@ -620,7 +850,7 @@
                             </td>
                             <td align="right">
 							    <dx:ASPxTextBox  ID="txtPerProbaZL" Width="20"  runat="server" Text='<%# Eval("F1001063") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                    
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -633,7 +863,7 @@
                             </td>
                             <td align="right">
 							    <dx:ASPxTextBox  ID="txtPerProbaZC" Width="20"  runat="server" Text='<%# Eval("F100975") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                  
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -643,7 +873,7 @@
 						    </td>	
 						    <td>
 							    <dx:ASPxTextBox  ID="txtNrZilePreavizDemisie" Width="75"  runat="server" Text='<%# Eval("F1009742") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                    
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -653,7 +883,7 @@
 						    </td>	
 						    <td>
 							    <dx:ASPxTextBox  ID="txtNrZilePreavizConc" Width="75"  runat="server" Text='<%# Eval("F100931") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                    
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -679,7 +909,7 @@
 						        </td>	
 						        <td>
 							        <dx:ASPxComboBox DataSourceID="dsMP"  Value='<%#Eval("F10025") %>' ID="cmbMotivPlecare"  Width="100"  runat="server" DropDownStyle="DropDown"  TextField="F72104" ValueField="F72102" AutoPostBack="false"  ValueType="System.Int32" >
-                                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                        
 							        </dx:ASPxComboBox>
 						        </td>
                                 <td>
@@ -715,7 +945,7 @@
 						        <td>	
 							        <dx:ASPxDateEdit  ID="deDataReintegr" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100930") %>' AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
-                                        <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                       
 							        </dx:ASPxDateEdit>										
 						        </td>
 					        </tr>
@@ -724,8 +954,8 @@
 							        <dx:ASPxLabel  ID="lblGradInvalid" Width="100" runat="server"  Text="Grad invaliditate" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsGI"  Value='<%#Eval("F10027") %>' ID="cmbGradInvalid" Width="100"  runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+							        <dx:ASPxComboBox DataSourceID="dsGI"  Value='<%#Eval("F10027") %>' ID="cmbGradInvalid" ClientInstanceName="cmbGradInvalid" Width="100"  runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" >
+                                        <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbGradInvalid_SelectedIndexChanged(s); }" />
 							        </dx:ASPxComboBox>
 						        </td>
 					        </tr>
@@ -734,23 +964,23 @@
 							        <dx:ASPxLabel  ID="lblDataValabInvalid" runat="server"  Text="Data valabilitate invaliditate"></dx:ASPxLabel >	
 						        </td>
 						        <td>	
-							        <dx:ASPxDateEdit  ID="deDataValabInvalid" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100271") %>' AutoPostBack="false"  >
+							        <dx:ASPxDateEdit  ID="deDataValabInvalid" Width="100" runat="server" ClientInstanceName="deDataValabInvalid" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100271") %>' AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
-                                        <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                        
 							        </dx:ASPxDateEdit>										
 						        </td>
 					        </tr>
                         <tr>
                             <td>
                                 <dx:ASPxCheckBox ID="chkScutitImp" runat="server" Width="150" Text="Scutit impozit" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10026").ToString()=="1"%>' ClientInstanceName="chkbx1">
-                                    <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                    
                                 </dx:ASPxCheckBox>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <dx:ASPxCheckBox ID="chkBifaPensionar" runat="server" Width="150" Text="Bifa pensionar" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10037").ToString()=="1"%>' ClientInstanceName="chkbx2" >
-                                    <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                    
                                 </dx:ASPxCheckBox>
                             </td>
 
@@ -758,7 +988,7 @@
                         <tr>
                             <td>
                                 <dx:ASPxCheckBox ID="chkBifaDetasat"  runat="server" Width="150" Text="Bifa detasat de la alt angajator" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F100954").ToString()=="1"%>' ClientInstanceName="chkbx3" >
-                                    <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtr(s); }" />
+                                    
                                 </dx:ASPxCheckBox>
                             </td>
 
@@ -780,8 +1010,8 @@
                                 <dx:ASPxLabel  ID="lblVechCompAni"  runat="server"  Text="ani" ></dx:ASPxLabel >
                             </td>
                             <td align="left">
-							    <dx:ASPxTextBox  ID="txtVechCompAni" Width="25"  runat="server" AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+							    <dx:ASPxTextBox  ID="txtVechCompAni" ClientInstanceName="txtVechCompAni" Width="25"  runat="server" AutoPostBack="false" MaxLength="2">
+                                    <ClientSideEvents TextChanged="function(s,e){ CalcVechimeComp(s); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -793,8 +1023,8 @@
                                 <dx:ASPxLabel  ID="lblVechCompLuni" runat="server"  Text="luni" ></dx:ASPxLabel >
                             </td>
                             <td align="left">
-							    <dx:ASPxTextBox  ID="txtVechCompLuni" Width="25"  runat="server" AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+							    <dx:ASPxTextBox  ID="txtVechCompLuni" ClientInstanceName="txtVechCompLuni" Width="25"  runat="server" AutoPostBack="false" MaxLength="2">
+                                    <ClientSideEvents TextChanged="function(s,e){ CalcVechimeComp(s); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -806,8 +1036,8 @@
                                 <dx:ASPxLabel  ID="lblVechCarteMuncaAni" runat="server"  Text="ani" ></dx:ASPxLabel >
                             </td>
                             <td align="left">
-							    <dx:ASPxTextBox  ID="txtVechCarteMuncaAni" Width="25"  runat="server" AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+							    <dx:ASPxTextBox  ID="txtVechCarteMuncaAni" Width="25"  runat="server" AutoPostBack="false" MaxLength="2">
+                                    <ClientSideEvents TextChanged="function(s,e){ CalcVechimeCarte(s); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -819,8 +1049,8 @@
                                  <dx:ASPxLabel  ID="lblVechCarteMuncaLuni" runat="server"  Text="luni" ></dx:ASPxLabel >                                
                             </td>
                             <td align="left">
-							    <dx:ASPxTextBox  ID="txtVechCarteMuncaLuni" Width="25"  runat="server" AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+							    <dx:ASPxTextBox  ID="txtVechCarteMuncaLuni" Width="25"  runat="server" AutoPostBack="false" MaxLength="2" >
+                                    <ClientSideEvents TextChanged="function(s,e){ CalcVechimeCarte(s); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -831,7 +1061,7 @@
                             <td></td>		
 						    <td>
 							    <dx:ASPxTextBox  ID="txtGrila" Width="75"  runat="server" Text='<%# Eval("F10072") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                    
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -842,7 +1072,7 @@
                             <td></td>	                            	
 						    <td>
 							    <dx:ASPxTextBox  ID="txtZileCOFidel" Width="75"  runat="server" Text='<%# Eval("F100640") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                    
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -853,7 +1083,7 @@
                             <td></td>		
 						    <td>
 							    <dx:ASPxTextBox  ID="txtZileCOAnAnt" Width="75"  runat="server" Text='<%# Eval("F100641") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                    
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -864,7 +1094,7 @@
                             <td></td>	
 						    <td>
 							    <dx:ASPxTextBox  ID="txtZileCOCuvAnCrt" Width="75"  runat="server" Text='<%# Eval("F100642") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                    
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -896,9 +1126,9 @@
 						    </td>
                             <td></td>	
 						    <td>	
-							    <dx:ASPxDateEdit  ID="deDataPrimeiAng" Width="85" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001049") %>' AutoPostBack="false"  >
+							    <dx:ASPxDateEdit  ID="deDataPrimeiAng" ClientInstanceName="deDataPrimeiAng" Width="85" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001049") %>' AutoPostBack="false"  >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
-                                    <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+                                    <ClientSideEvents DateChanged="function(s,e){ CalcVechime(s); }" />
 							    </dx:ASPxDateEdit>										
 						    </td>
 					    </tr>
@@ -907,9 +1137,18 @@
                 </td>
                 </tr>      
 			</div>
+
+            <dx:ASPxTextBox ID="txtVechimeCompanie" ClientInstanceName="txtVechimeCompanie" runat="server" ClientVisible="false" Text='<%# Eval("F100643") %>' />
+            <dx:ASPxTextBox ID="txtVechimeCarte" ClientInstanceName="txtVechimeCarte" runat="server" ClientVisible="false" Text='<%# Eval("F100644") %>' />
+
+            <dx:ASPxTextBox ID="hfNrLuni" ClientInstanceName="hfNrLuni" runat="server" ClientVisible="false" />
+            <dx:ASPxTextBox ID="hfNrAni" ClientInstanceName="hfNrAni" runat="server" ClientVisible="false" />
+            
         </ItemTemplate>
     </asp:DataList>
             </dx:PanelContent>
           </PanelCollection>
         </dx:ASPxCallbackPanel>
+
+    
 </body>

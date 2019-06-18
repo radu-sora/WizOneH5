@@ -30,10 +30,9 @@
 							        <dx:ASPxLabel  ID="lblDifRapOutSub"  Width="120"  runat="server"  Text="Diferenta raportare"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="deDifRapOutSub" Width="60"  runat="server" Value='<%# Eval("OUTSubDiferentaRaportare") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="deDifRapOutSub" Width="60"  runat="server" Value='<%# Eval("OUTSubDiferentaRaportare") %>' AutoPostBack="false" > 
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerOutSub(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
 					        </tr>
 					        <tr>				
@@ -41,10 +40,9 @@
 							        <dx:ASPxLabel  ID="lblDifPlataOutSub"  Width="120"  runat="server"  Text="Diferenta plata"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="deDifPlataOutSub" Width="60"  runat="server" Value='<%# Eval("OUTSubDiferentaPlata") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="deDifPlataOutSub" Width="60"  runat="server" Value='<%# Eval("OUTSubDiferentaPlata") %>' AutoPostBack="false"  >   
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerOutSub(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
 					        </tr>
 				        </table>
@@ -101,9 +99,27 @@
                 <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                 <dx:GridViewDataTextColumn FieldName="IdProgram" Name="IdProgram" Caption="Program"  Width="75px" Visible="false"/>                                    
                 <dx:GridViewDataTextColumn FieldName="TipInOut" Name="TipInOut" Caption="TipInOut"  Width="75px" Visible="false"/>
-                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Timp de la" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" />  
-                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Timp la" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" />  
-                <dx:GridViewDataDateColumn FieldName="Valoare" Name="Valoare" Caption="Valoare" Width="60px" PropertiesDateEdit-DisplayFormatString="HH:mm"  PropertiesDateEdit-EditFormatString="HH:mm" />  
+                <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Timp de la" Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
+                <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Timp la" Width="60px" >  
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>
+                <dx:GridViewDataDateColumn FieldName="Valoare" Name="Valoare" Caption="Valoare" Width="60px" >
+                    <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                        <DropDownButton Visible="False">
+                        </DropDownButton>
+                        <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                    </PropertiesDateEdit>  
+                </dx:GridViewDataDateColumn>                    
                 <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>      
                 <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
                 <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />              

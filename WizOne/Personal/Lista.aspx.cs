@@ -298,7 +298,7 @@ namespace WizOne.Personal
                             break;
                         case "btnSterge":
                             //Florin 2019.03.26
-                            int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Admin_NrActAd"" WHERE F10003=@1 AND COALESCE(""Revisal"",0)=1", new object[] { arr[1] }),0));
+                            int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Admin_NrActAd"" WHERE F10003=@1 AND COALESCE(""Semnat"",0)=1", new object[] { arr[1] }),0));
                             if (cnt == 1)
                                 grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti sterge angajatul deoarece acesta a fost trimis in Revisal!");
                             else
@@ -329,8 +329,7 @@ namespace WizOne.Personal
                     object row = grDate.GetRowValues(e.VisibleIndex, "Culoare");
                     string culoare = row.ToString();
 
-                    e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(culoare);
-                    
+                    e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(culoare);                    
                 }
             }
             catch (Exception ex)

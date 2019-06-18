@@ -634,6 +634,10 @@ namespace WizOne
                 Session["SecAuditSelect"] = "0";
                 Session["SecCriptare"] = "0";
 
+                //Florin 2019.06.04
+                Session["MP_NuPermiteCNPInvalid"] = "1";
+                Session["MP_AreContract"] = "0";
+                Session["MP_DataSfarsit36"] = "01/01/2100";
 
 
                 string ti = "nvarchar";
@@ -655,7 +659,7 @@ namespace WizOne
                 if (HttpContext.Current != null && Session["tblParam"] != null)
                 {
                     DataTable dt = Session["tblParam"] as DataTable;
-                    if (dt != null)
+                    if (dt != null && dt.Rows.Count > 0)
                     {
                         DataRow[] arr1 = dt.Select("Nume='SecAuditSelect'");
                         if (arr1.Count() > 0)

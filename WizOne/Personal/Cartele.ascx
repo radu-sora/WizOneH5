@@ -8,12 +8,13 @@
     <table width="100%">
         <tr>
             <td >
-                <dx:ASPxGridView ID="grDateCartele" runat="server" ClientInstanceName="grDateCartele" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"  OnDataBinding="grDateCartele_DataBinding"  OnInitNewRow="grDateCartele_InitNewRow"
+                <dx:ASPxGridView ID="grDateCartele" runat="server" ClientInstanceName="grDateCartele" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnDataBinding="grDateCartele_DataBinding"  OnInitNewRow="grDateCartele_InitNewRow"
                     OnRowInserting="grDateCartele_RowInserting" OnRowUpdating="grDateCartele_RowUpdating" OnRowDeleting="grDateCartele_RowDeleting">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
                     <ClientSideEvents CustomButtonClick="function(s, e) { grDateCartele_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
-                    <SettingsEditing Mode="Inline" />            
+                    <SettingsEditing Mode="Inline" /> 
+                    <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                         <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="250px" Visible="false" >

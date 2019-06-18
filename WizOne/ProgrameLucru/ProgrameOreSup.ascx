@@ -40,10 +40,9 @@
 							        <dx:ASPxLabel  ID="lblValMin"  Width="70"  runat="server"  Text="Val. min.: "></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="deValMin" Width="60"  runat="server" Value='<%# Eval("OSValMin") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="deValMin" Width="60"  runat="server" Value='<%# Eval("OSValMin") %>' AutoPostBack="false"  >        
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerOreSup(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
 					        </tr>
 					        <tr>				
@@ -51,10 +50,9 @@
 							        <dx:ASPxLabel  ID="lblValMax"  Width="70"  runat="server"  Text="Val. max.: "></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxDateEdit  ID="deValMax" Width="60"  runat="server" Value='<%# Eval("OSValMax") %>' AutoPostBack="false"  DisplayFormatString="HH:mm" EditFormatString="HH:mm">                                         
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        <dx:ASPxTimeEdit  ID="deValMax" Width="60"  runat="server" Value='<%# Eval("OSValMax") %>' AutoPostBack="false"  >  
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerOreSup(s); }" />
-							        </dx:ASPxDateEdit>
+							        </dx:ASPxTimeEdit>
 						        </td>
 					        </tr>
 				        </table>

@@ -88,7 +88,19 @@ namespace WizOne.Pagini
                                 tbl = "Admin_Sanctiuni"; //Radu 22.02.2019
                                 break;
                             case "7":
-                                tbl = "Atasamente"; //Radu 22.02.2019
+                                //tbl = "Atasamente"; //Radu 22.02.2019
+                                DataTable dtAt = General.IncarcaDT("SELECT * FROM \"Atasamente\"", null);
+                                DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
+                                if (drAt != null)
+                                {
+                                    string numeFis = (drAt["DescrAttach"] ?? "").ToString();
+                                    string ext = ".txt";
+                                    if (numeFis.LastIndexOf(".") >= 0)
+                                        ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
+                                    scrieDoc(ext, (byte[])drAt["Attach"], numeFis);
+                                }
+                                else
+                                    Response.Write("Nu exista date de afisat !");
                                 break;
                             case "8":
                                 tbl = "Admin_NrActAd";

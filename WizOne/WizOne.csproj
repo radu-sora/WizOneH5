@@ -200,8 +200,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Artifacts\ProceseSec.dll</HintPath>
     </Reference>
-    <Reference Include="RevisalDLL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="RevisalDLL">
       <HintPath>..\Artifacts\RevisalDLL.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations">

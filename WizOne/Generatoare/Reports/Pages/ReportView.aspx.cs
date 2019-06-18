@@ -313,6 +313,10 @@ namespace WizOne.Generatoare.Reports.Pages
                         reportGroupUser?.ToolbarType ?? 0 : (short)0; // 0 - full items, 1 - only Print, Customize layout & Exit
                     ExportOptions = reportGroupUser?.ExportOptions ?? "*"; // "pdf,image[...]" or "*" to display all options.
 
+                    //Radu 18.06.2019
+                    if (ConfigurationManager.AppSettings["EsteTactil"] == "true")
+                        Session["EsteTactil"] = 1;
+
                     if (report.ReportTypeId == 3) // Cube
                     {
                         if (_pivotGrid != null)

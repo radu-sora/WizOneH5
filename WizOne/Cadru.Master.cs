@@ -180,6 +180,12 @@ namespace WizOne
                     pnlHeader.Visible = false;
                     pnlMeniu.Visible = false;
                 }
+
+                if (Constante.esteTactil)
+                {
+                    txtLunaLucru.Visible = false;
+                    txtUsr.Visible = false;
+                }
             }
             catch (Exception ex)
             {

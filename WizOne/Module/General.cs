@@ -7672,6 +7672,10 @@ namespace WizOne.Module
                 strSql = "BEGIN " + strSql + " END;";
 
                 General.ExecutaNonQuery(strSql, null);
+
+              
+                strSql = "UPDATE a SET  a.F100642 = b.\"CuveniteAn\", a.F100995 = b.\"Cuvenite\", a.F100996 = b.\"SoldAnterior\" FROM F100 a,  \"Ptj_tblZileCO\" b WHERE a.F10003 = B.F10003 AND b.\"An\" =  " + an;
+                General.ExecutaNonQuery(strSql, null);
             }
             catch (Exception ex)
             {

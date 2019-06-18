@@ -971,11 +971,13 @@ namespace WizOne.Personal
 
                 lstCtr.Add("txtGrila", "F10072");
                 lstCtr.Add("txtZileCOFidel", "F100640");
-                lstCtr.Add("txtZileCOAnAnt", "F100641");
+                //lstCtr.Add("txtZileCOAnAnt", "F100641");
+                lstCtr.Add("txtZileCOAnAnt", "F100996");
                 lstCtr.Add("txtZileCOCuvAnCrt", "F100642");
                 lstCtr.Add("deDataPrimeiAng", "F1001049");
                 lstCtr.Add("txtVechimeCompanie", "F100643");
                 lstCtr.Add("txtVechimeCarte", "F100644");
+                lstCtr.Add("txtZileCOAnCrt", "F100995");
 
                 lstCtr.Add("hfNrLuni", "F100935");
                 lstCtr.Add("hfNrAni", "F100936");
@@ -1032,8 +1034,11 @@ namespace WizOne.Personal
                 lstDV.Add("cmbFunctieDiv", "F10071");
                 lstDV.Add("cmbNivel", "F10029");
                 lstDV.Add("txtZileCOFidel", "F100640");
-                lstDV.Add("txtZileCOAnAnt", "F100641");
+                //lstDV.Add("txtZileCOAnAnt", "F100641");
+                lstDV.Add("txtZileCOAnAnt", "F100996");
                 lstDV.Add("txtZileCOCuvAnC", "F100642");
+                lstDV.Add("txtZileCOAnCrt", "F100995");
+
                 lstDV.Add("txtVechimeComp", "F100643");
                 lstDV.Add("txtVechimeCarteMunca", "F100644");
                 #endregion

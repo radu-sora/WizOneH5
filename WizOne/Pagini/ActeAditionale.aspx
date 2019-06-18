@@ -23,7 +23,7 @@
         }
 
         function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=4&id=' + Value, '_blank ')
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=7&id=' + Value, '_blank ')
         }
 
         function ValidareUpload(s, Value) {

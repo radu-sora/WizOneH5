@@ -680,6 +680,42 @@
                 }
             });
         }
+
+        
+
+
+        $(function () {
+            $("body").on('click keypress', function () {
+                ResetThisSession();
+            });
+        });
+
+        var esteTactil = <%= Session["EsteTactil"] %>;
+        var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
+        var timeInSecondsAfterSessionOut = 30;
+        var secondTick = 0;
+
+        function ResetThisSession() {
+            secondTick = 0;
+        }
+
+        function StartThisSessionTimer() {
+            secondTick++;
+            if (timeOutSecunde != null)
+                timeInSecondsAfterSessionOut = timeOutSecunde;
+            var timeLeft = ((timeInSecondsAfterSessionOut - secondTick) / 60).toFixed(0); // in minutes
+            timeLeft = timeInSecondsAfterSessionOut - secondTick;
+       
+
+            if (esteTactil == 1 && secondTick >= timeInSecondsAfterSessionOut) {
+                clearTimeout(tick);
+                window.location = "../../../../DefaultTactil.aspx";
+                return;
+            }
+            tick = setTimeout("StartThisSessionTimer()", 1000);
+        }
+
+        StartThisSessionTimer();
     </script>    
 
     <dx:ASPxGlobalEvents ID="globalEvents" runat="server">

@@ -122,16 +122,27 @@
 							        <dx:ASPxLabel  ID="lblZileCOAnAnt"  Width="100"  runat="server"  Text="Zile CO an anterior"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxTextBox  ID="txtZileCOAnAnt" Width="150"  runat="server" Text='<%# Eval("F100641") %>' AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtZileCOAnAnt" Width="150"  runat="server" Text='<%# Eval("F100996") %>' AutoPostBack="false" >
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
 					        <tr>				
 						        <td>		
-							        <dx:ASPxLabel  ID="lblZileCOCuvAnC"  Width="100"  runat="server"  Text="Zile CO cuvenite an curent"></dx:ASPxLabel >	
+							        <dx:ASPxLabel  ID="lblZileCOCuvAnC"  Width="100"  runat="server"  Text="Zile CO cuvenite cf. grila"></dx:ASPxLabel >	
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtZileCOCuvAnC" Width="150"  runat="server" Text='<%# Eval("F100642") %>' AutoPostBack="false" >
+							        </dx:ASPxTextBox>
+						        </td>
+					        </tr>
+					        <tr>				
+						        <td >
+							        <dx:ASPxLabel  ID="lblZileCOAnCrt" runat="server"  Text="Zile CO an curent" ></dx:ASPxLabel >	
+						        </td>	
+                                <td></td>	
+						        <td>
+							        <dx:ASPxTextBox  ID="txtZileCOAnCrt" Width="75"  runat="server" Text='<%# Eval("F100995") %>' AutoPostBack="false" >
+                                    
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>

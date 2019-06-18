@@ -9,7 +9,7 @@
         switch (e.buttonID) {
             case "btnAtasament":
                 pnlLoading.Show();
-                grDateSanctiuni.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierMedMode);
+                grDateSanctiuni.GetRowValues(e.visibleIndex, 'IdAuto', GoToFisierSancMode);
                 break;
         }
     }

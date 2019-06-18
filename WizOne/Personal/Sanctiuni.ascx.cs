@@ -78,8 +78,8 @@ namespace WizOne.Personal
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     ds.Tables.Add(dt);
 
-                    DataTable dtGen = General.IncarcaDT(@"SELECT * FROM ""Admin_Sanctiuni"" ", null);
-                    Session["Admin_Sanctiuni_General"] = dtGen;
+                    //DataTable dtGen = General.IncarcaDT(@"SELECT * FROM ""Admin_Sanctiuni"" ", null);
+                    //Session["Admin_Sanctiuni_General"] = dtGen;
                 }
                 grDateSanctiuni.KeyFieldName = "IdAuto";
                 grDateSanctiuni.DataSource = dt;
@@ -99,7 +99,7 @@ namespace WizOne.Personal
         {
             try
             {           
-                DataTable dtGen = Session["Admin_Sanctiuni_General"] as DataTable;
+                DataTable dtGen = Session["Admin_Sanctiuni"] as DataTable;
                 if (Constante.tipBD == 1)
                 {
                     if (dtGen != null && dtGen.Columns["IdAuto"] != null)
@@ -132,7 +132,7 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                DataTable dtGen = Session["Admin_Sanctiuni_General"] as DataTable;
+                //DataTable dtGen = Session["Admin_Sanctiuni_General"] as DataTable;
                 DataTable dt = ds.Tables["Admin_Sanctiuni"];
                 DataRow dr = dt.NewRow();
 
@@ -144,9 +144,11 @@ namespace WizOne.Personal
                 ASPxTextBox txtProc = grDateSanctiuni.FindEditFormTemplateControl("txtProc") as ASPxTextBox;
 
                 if (Constante.tipBD == 1)
-                    dr["IdAuto"] = Convert.ToInt32(General.Nz(dtGen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                    dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                 else
                     dr["IdAuto"] = Dami.NextId("Admin_Sanctiuni");
+                if (Convert.ToInt32(dr["IdAuto"].ToString()) < 1000000)
+                    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1000000;
                 dr["Marca"] = Session["Marca"];
                 dr["IdObiect"] = cmbObi.Value ?? DBNull.Value;
                 dr["DataInceput"] = txtDataInc.Value ?? DBNull.Value;
@@ -166,9 +168,15 @@ namespace WizOne.Personal
                     //dr["Fisier"] = itm.UploadedFile;
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    lstFiles.Add(Convert.ToInt32(dr["IdAuto"].ToString()), itm);
+                    Session["List_DocUpload_MP_Sanctiuni"] = lstFiles;
                 }
 
-                ds.Tables["Admin_Sanctiuni"].Rows.Add(dr);               
+                ds.Tables["Admin_Sanctiuni"].Rows.Add(dr);
+                Session["DocUpload_MP_Sanctiuni"] = null;
 
                 e.Cancel = true;
                 grDateSanctiuni.CancelEdit();
@@ -216,8 +224,13 @@ namespace WizOne.Personal
                     //dr["Fisier"] = itm.UploadedFile;
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    lstFiles.Add(Convert.ToInt32(idAuto.ToString()), itm);
+                    Session["List_DocUpload_MP_Sanctiuni"] = lstFiles;
                 }
-                
+                Session["DocUpload_MP_Sanctiuni"] = null;
                 e.Cancel = true;
                 grDateSanctiuni.CancelEdit();
                 grDateSanctiuni.DataSource = ds.Tables["Admin_Sanctiuni"];
@@ -242,6 +255,11 @@ namespace WizOne.Personal
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
                 DataRow row = ds.Tables["Admin_Sanctiuni"].Rows.Find(keys);
+
+                Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, metaUploadFile>;
+                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
+                    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
+                Session["List_DocUpload_MP_Sanctiuni"] = lstFiles;
 
                 row.Delete();                
 

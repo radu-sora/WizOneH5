@@ -66,13 +66,13 @@
                 <SettingsEditing Mode="Inline" />
                 <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                 <Columns>
-                    <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+                     <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                     <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat"  Width="75px" Visible="false"/>
                     <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
-                    <dx:GridViewDataComboBoxColumn FieldName="IdTipAdresa" Name="IdTipAdresa" Caption="Tip adresa" Width="150px">
+                    <dx:GridViewDataComboBoxColumn FieldName="IdTipAdresa" Name="IdTipAdresa" Caption="Tip adresa" Width="100px">
                         <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                     </dx:GridViewDataComboBoxColumn>
-                    <dx:GridViewCommandColumn Width="75px" ButtonType="Image" ShowEditButton="false"  Caption=" ">
+                    <dx:GridViewCommandColumn Width="50px" ButtonType="Image" ShowEditButton="false"  Caption=" ">
                         <CustomButtons>
                             <dx:GridViewCommandColumnCustomButton ID="btnCauta" Visibility="EditableRow">
                                 <Image ToolTip="Cauta" Url="~/Fisiere/Imagini/Icoane/lupa.png" />
@@ -81,23 +81,23 @@
                         
                     </dx:GridViewCommandColumn>
                     <dx:GridViewDataTextColumn FieldName="IdTipStrada" Name="IdTipStrada" Caption="Tip artera" Visible="false" Width="150px" />
-                    <dx:GridViewDataTextColumn FieldName="Judet" Name="Judet" Caption="Judet"  ReadOnly="true" Width="150px" />
+                    <dx:GridViewDataTextColumn FieldName="Judet" Name="Judet" Caption="Judet"  ReadOnly="true" Width="100px" />
                     <dx:GridViewDataTextColumn FieldName="SirutaJudet" Name="SirutaJudet" Caption="Judet" Visible="false" Width="200px" />
-                    <dx:GridViewDataTextColumn FieldName="Oras" Name="Oras" Caption="Mun/Oras/Comuna" ReadOnly="true" Width="200px" />
+                    <dx:GridViewDataTextColumn FieldName="Oras" Name="Oras" Caption="Mun/Oras/Comuna" ReadOnly="true" Width="150px" />
                     <dx:GridViewDataTextColumn FieldName="SirutaOras" Name="SirutaOras" Caption="Oras" Visible="false" Width="200px" />
-                    <dx:GridViewDataTextColumn FieldName="Sat" Name="Sat" Caption="Localitate/Sector" ReadOnly="true" Width="200px" />
+                    <dx:GridViewDataTextColumn FieldName="Sat" Name="Sat" Caption="Localitate/Sector" ReadOnly="true" Width="150px" />
                     <dx:GridViewDataTextColumn FieldName="SirutaSat" Name="SirutaSat" Caption="Sat" Visible="false" Width="200px" />
-                    <dx:GridViewDataTextColumn FieldName="Strada" Name="Strada" Caption="Strada" Width="200px" />
-                    <dx:GridViewDataTextColumn FieldName="Numar" Name="Numar" Caption="Numar" Width="75px" />
-                    <dx:GridViewDataTextColumn FieldName="Bloc" Name="Bloc" Caption="Bloc" Width="75px" />
-                    <dx:GridViewDataTextColumn FieldName="Scara" Name="Scara" Caption="Scara" Width="75px" />
-                    <dx:GridViewDataTextColumn FieldName="Etaj" Name="Etaj" Caption="Etaj" Width="75px" />
+                    <dx:GridViewDataTextColumn FieldName="Strada" Name="Strada" Caption="Strada" Width="150px" />
+                    <dx:GridViewDataTextColumn FieldName="Numar" Name="Numar" Caption="Numar" Width="50px" />
+                    <dx:GridViewDataTextColumn FieldName="Bloc" Name="Bloc" Caption="Bloc" Width="50px" />
+                    <dx:GridViewDataTextColumn FieldName="Scara" Name="Scara" Caption="Scara" Width="50px" />
+                    <dx:GridViewDataTextColumn FieldName="Etaj" Name="Etaj" Caption="Etaj" Width="50px" />
                     <dx:GridViewDataTextColumn FieldName="Apartament" Name="Apartament" Caption="Apartament" Width="80px" />
                     <dx:GridViewDataTextColumn FieldName="CodPostal" Name="CodPostal" Caption="Cod postal" Width="80px" />
                     <dx:GridViewDataDateColumn FieldName="DataModif" Name="DataModif" Caption="Data modif." Width="100px" >         
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                     </dx:GridViewDataDateColumn>
-                    <dx:GridViewDataCheckColumn FieldName="Principal" Name="Principal" Caption="Principal"  Width="70px"  />
+                    <dx:GridViewDataCheckColumn FieldName="Principal" Name="Principal" Caption="Principal"  Width="50px"  />
                 </Columns>
                 <SettingsCommandButton>
                     <UpdateButton ButtonType="Link" Text="Actualizeaza">

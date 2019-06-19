@@ -1982,12 +1982,14 @@ namespace WizOne.Module
                         masca = "'CASE WHEN ' + \"OreInVal\" + '=0 THEN '''' ELSE COALESCE(''/'' + CAST(' + \"OreInVal\" + '/60 AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''') END'";
                         break;
                     case 2:
-                        masca = "'COALESCE(''/'' + CAST(' + \"OreInVal\" + ' / 60 AS nvarchar(10)) + ''.'' + CAST(' + \"OreInVal\" + ' % 60 AS nvarchar(10))' + ''' + COALESCE(DenumireScurta,'') + ''',''')'";
+                        masca = "'COALESCE(''/'' + CAST(' + \"OreInVal\" + ' / 60 AS nvarchar(10)) + ''.'' + CAST(' + \"OreInVal\" + ' % 60 AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''')'";
                         break;
                     case 3:
-                        masca = "'COALESCE(''/'' + CAST(CAST(ROUND(CAST(' + OreInVal + ' AS decimal) / 60,2) as decimal(18,2)) AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''',''')'";
+                        masca = "'COALESCE(''/'' + CAST(CAST(ROUND(CAST(' + OreInVal + ' AS decimal) / 60,2) as decimal(18,2)) AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''')'";
                         break;
                 }
+
+                //COALESCE('/' + CAST(Val0 / 60 AS nvarchar(10)) + '.' + CAST(Val0 % 60 AS nvarchar(10)) + 'OG','')
 
 
                 string ert = @"SELECT '+' + {0} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL ORDER BY CONVERT(int,REPLACE(""OreInVal"", 'Val','')) For XML PATH ('') ";

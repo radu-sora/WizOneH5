@@ -96,7 +96,7 @@ namespace WizOne.Tactil
                     //        </div>
                     //    </div>";
                 }
-
+               
 
             }
             catch (Exception ex)

@@ -72,7 +72,7 @@ namespace WizOne.Personal
                         + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"DenTarif\" FROM F011 a ", cond = "";
 
                 if (Constante.tipBD == 2)
-                    sql = "SELECT F01104, F01105, (SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 WHERE ROWNUM = 1) AS \"DenCateg\", "
+                    sql = "SELECT F01104, F01105, (SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND ROWNUM = 1) AS \"DenCateg\", "
                         + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"DenTarif\" FROM F011 a ";
 
                 for (int i = 0; i < sir.Length; i++)

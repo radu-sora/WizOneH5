@@ -539,7 +539,7 @@ namespace WizOne.Pagini
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
                             WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
-                            ELSE TO_DATE('01-JAN-2100', 'DD-MON-YYYY') END AS ""TermenDepasire""
+                            ELSE TO_DATE('01-01-2100', 'DD-MM-YYYY') END AS ""TermenDepasire""
                             FROM(
                             SELECT A.F10003, COALESCE(B.F10008, '') || ' ' || COALESCE(B.F10009, '') AS ""NumeComplet"", A.""DataModif"", 0 AS ""Candidat"",
                             MAX(CASE WHEN COALESCE(""CORCod"", 0) > 0 THEN 1 ELSE 0 END) AS ""CORCod"",
@@ -564,7 +564,7 @@ namespace WizOne.Pagini
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
-                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= TO_DATE('01-JAN-2019', 'DD-MON-YYYY') {companie}
+                            WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= TO_DATE('01-01-2019', 'DD-MM-YYYY') {companie}
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente""
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
@@ -575,7 +575,7 @@ namespace WizOne.Pagini
                             A.F10022, A.F100993, J.""IdAutoAtasamente""
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
-                            WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0)) = 1 {companie}) X
+                            WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
                             ) 
                             WHERE 1=1 " + filtru;
 

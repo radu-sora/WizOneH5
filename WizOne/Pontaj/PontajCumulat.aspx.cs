@@ -39,8 +39,12 @@ namespace WizOne.Pontaj
                         c.ReadOnly = true;
                         //c.Width = Unit.Pixel(100);
                         c.VisibleIndex = 100 + i;
-                        //c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] ?? 0);
-                        c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["Editabil"].ToString()));
+
+                        //Florin 2019.06.24
+                        ////c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] ?? 0);
+                        //c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["Editabil"].ToString()));
+                        c.ReadOnly = !Convert.ToBoolean(General.Nz(dt.Rows[i]["Editabil"], 0));
+
                         c.PropertiesSpinEdit.MaxLength = 10;
                         c.PropertiesSpinEdit.NumberFormat = SpinEditNumberFormat.Number;
                         c.PropertiesSpinEdit.DisplayFormatString = "N0";

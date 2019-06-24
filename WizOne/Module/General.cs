@@ -6157,6 +6157,11 @@ namespace WizOne.Module
                 HttpContext.Current.Session["MP_AreContract"] = "0";
                 HttpContext.Current.Session["MP_DataSfarsit36"] = "01/01/2100";
 
+                //Florin 2019.06.21
+                HttpContext.Current.Session["EsteTactil"] = "0";
+                HttpContext.Current.Session["TimeOutSecunde"] = "99999";
+
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

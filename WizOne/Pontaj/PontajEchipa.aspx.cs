@@ -2306,7 +2306,7 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
                 {
                     strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-                    strLeg += " LEFT JOIN (SELECT F10003, F10061, F10061 FROM F100) C ON A.F10003 = C.F10003 ";
+                    strLeg += " LEFT JOIN (SELECT F10003, F10061, F10062 FROM F100) C ON A.F10003 = C.F10003 ";
                 }
                 if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
 
@@ -2348,7 +2348,7 @@ namespace WizOne.Pontaj
 								LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
 
                 if (Constante.tipBD == 1)
-                    strSql = $@"with ptj_intrari_2 as (select * from Ptj_Intrari A {strLeg}  WHERE 1=1 {strFiltruSpecial})
+                    strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A {strLeg}  WHERE 1=1 {strFiltruSpecial})
                                 SELECT *,
                                 (SELECT ',Ziua' + CASE WHEN Y.Zi <= X.F10023 THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
                                 FROM F100 X

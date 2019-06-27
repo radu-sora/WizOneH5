@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Cereri.aspx.cs" Inherits="WizOne.Avs.Cereri" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" Async="true" CodeBehind="Cereri.aspx.cs" Inherits="WizOne.Avs.Cereri" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">

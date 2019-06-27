@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Web.UI;
 using WizOne.Module;
+using System.Web;
+using System.Web.Hosting;
 
 namespace WizOne.Avs
 {
@@ -2547,6 +2549,14 @@ namespace WizOne.Avs
                 if (idAtr == 2)
                     General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
             }
+
+
+            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+
+            HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+            {
+                NotifAsync.TrimiteNotificare("Avs.Cereri", (int)Constante.TipNotificare.Notificare, @"SELECT *, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Avs_Cereri"" WHERE ""Id""=" + idUrm, "Avs_Cereri", idUrm, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
+            });
 
             //ArataMesaj("Proces finalizat cu succes!");
             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes!");

@@ -99,7 +99,7 @@
             </tr>
         </table>
 
-    <table width="82%"  >
+    <table width="67%"  >
         <tr>
             <td  align="center" valign="top" width="675">               
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
@@ -138,7 +138,7 @@
                     <Columns>
                         <dx:GridViewDataTextColumn FieldName="Id" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TextAfisare" Caption="Denumire" ReadOnly="true"  Width="200px" Visible="true" ShowInCustomizationForm="true" FixedStyle="Left" />
-                        <dx:GridViewDataTextColumn FieldName="Valoare" Name="Valoare" Caption="Valoare" ReadOnly="true" Width="200px"  ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Valoare" Name="Valoare" Caption="Valoare" ReadOnly="true" Width="150px"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="An" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Luna" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

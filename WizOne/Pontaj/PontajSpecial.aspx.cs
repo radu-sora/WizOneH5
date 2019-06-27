@@ -367,7 +367,7 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void btnFiltruSterge_Click(object sender, EventArgs e)
+        protected void btnFiltruSterge_Click()
         {
             try
             {
@@ -433,8 +433,9 @@ namespace WizOne.Pontaj
                         cmbSubDept.Value = null;
                         break;
                     case "EmptyFields":
-                        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
-                        cmbDept.DataBind();
+                        //cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
+                        //cmbDept.DataBind();
+                        btnFiltruSterge_Click();
                         return;
                     case "cmbNrZileSablon":
                         for (int i = 1; i <= 10; i++)

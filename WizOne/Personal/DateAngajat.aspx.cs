@@ -382,6 +382,108 @@ namespace WizOne.Personal
                             ds.Tables[1].Rows[0]["F10025"] = 0;
                     }
 
+
+                    //Florin 2019.06.24
+                    //Mihnea 2019.06.13
+                    int tip_pass = 0;
+                    tip_pass = Convert.ToInt32(Dami.ValoareParam("Parola_creare_user", "0"));
+
+                    string pass = General.Nz(ds.Tables[1].Rows[0]["F10017"],"").ToString();
+                    ProceseSec.CriptDecript cls = new ProceseSec.CriptDecript();
+
+                    switch (tip_pass)
+                    {
+                        case 0:
+                            //parola este cnp-ul
+                            break;
+                        case 1:
+                            if (ds.Tables[1].Rows[0]["F10017"].ToString().Length >= 4)
+                                pass = ds.Tables[1].Rows[0]["F10017"].ToString().Substring(ds.Tables[1].Rows[0]["F10017"].ToString().Length - 4);
+                            break;
+                        default:
+                            //parola este cnp-ul
+                            break;
+                    }
+
+                    if (pass == "") pass = "0";
+                    string userNume = "";
+                    if (General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString() != "" || General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString() != "")
+                        userNume = General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString().Replace("-","").Replace(" ","") + "." + General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString().Replace("-", "").Replace(" ", "");
+
+                    //daca numele de utilizator exista, adaugam un 2 in coada
+                    if (Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM USERS WHERE F70104=@1", new object[] { userNume })) != 0)
+                        userNume += "2";
+
+
+                    General.ExecutaNonQuery($@"
+                        BEGIN
+                            INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003, USER_NO, TIME) VALUES(701, (SELECT MAX(COALESCE(F70102,0)) + 1 FROM USERS), @1, @2, @3, @4, {General.CurrentDate()})
+                            INSERT INTO relGrupUser(IdGrup, IdUser) VALUES(1, (SELECT MAX(COALESCE(F70102,1)) FROM USERS));
+                        END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
+
+
+
+                    #region OLD
+
+                    ////Mihnea 2019.06.13
+                    //if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                    //{
+                    //    int tip_pass = -1;
+                    //    sql = "SELECT COALESCE(\"Valoare\", '-1') FROM \"tblParametrii\" WHERE \"Nume\" = 'Parola_creare_user'";
+                    //    dt = General.IncarcaDT(sql, null);
+                    //    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
+                    //    {
+                    //        try
+                    //        {
+                    //            tip_pass = Convert.ToInt32(dt.Rows[0][0].ToString());
+                    //        }
+                    //        catch
+                    //        {
+                    //            tip_pass = -1;
+                    //        }
+
+                    //    }
+                    //    if (val != -1)
+                    //    {
+                    //        string pass = string.Empty;
+                    //        ProceseSec.CriptDecript cls = new ProceseSec.CriptDecript();
+
+                    //        switch (tip_pass)
+                    //        {
+                    //            case 1:
+                    //                if (ds.Tables[1].Rows[0]["F10017"].ToString().Length >= 4)
+                    //                {
+                    //                    pass = ds.Tables[1].Rows[0]["F10017"].ToString().Substring(ds.Tables[1].Rows[0]["F10017"].ToString().Length - 4);
+                    //                }
+                    //                else
+                    //                {
+                    //                    pass = ds.Tables[1].Rows[0]["F10017"].ToString();
+                    //                }
+
+                    //                General.ExecutaNonQuery($@"INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003) VALUES (701, (SELECT MAX(F70102) + 1 FROM USERS),@1, @2, @3)", new object[] { cls.EncryptString("WizOne2016", pass, 1), Session["Marca"].ToString(), Session["Marca"].ToString() });
+
+                    //                break;
+                    //            case 0:
+
+                    //                General.ExecutaNonQuery($@"INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003) VALUES (701, (SELECT MAX(F70102) + 1 FROM USERS),@1, @2, @3)", new object[] { cls.EncryptString("WizOne2016", "0", 1), Session["Marca"].ToString(), Session["Marca"].ToString() });
+
+                    //                break;
+                    //            default:
+                    //                // am parametrul completat cu o valoare non null ,dar nu am tratat-o
+
+                    //                break;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        //nu exista parametrul in tblparametrii sau e null
+                    //    }
+
+                    //}
+
+                    #endregion
+
+
                     InserareAngajat(Session["Marca"].ToString(), ds.Tables[1], ds.Tables[2]);
                     Session["esteNou"] = "false";
 

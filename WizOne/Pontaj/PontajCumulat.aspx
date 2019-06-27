@@ -44,10 +44,10 @@
             <td colspan="2">
                 <br /><br />
 
-                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
+<%--                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
                     <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
-                        <dx:PanelContent>
+                        <dx:PanelContent>--%>
 
                             <table style="margin-left:15px;">
                                 <tr>
@@ -115,9 +115,9 @@
                             </table>
                             
 
-                        </dx:PanelContent>
+<%--                        </dx:PanelContent>
                     </PanelCollection>
-                </dx:ASPxCallbackPanel>
+                </dx:ASPxCallbackPanel>--%>
 
 
                 <div style="float:left; padding:0px 15px;">
@@ -146,7 +146,7 @@
 
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" >
                     <SettingsBehavior ColumnResizeMode="Control" />
-                    <Settings ShowStatusBar="Hidden" ShowFilterRow="True"  />
+                    <Settings ShowStatusBar="Hidden" ShowFilterRow="True"  ShowFilterRowMenu="True" ShowFooter="True" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
 
                     <Columns>

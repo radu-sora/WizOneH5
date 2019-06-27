@@ -712,7 +712,7 @@
                 window.location = "../../../../DefaultTactil.aspx";
                 return;
             }
-            tick = setTimeout("StartThisSessionTimer()", 1000);
+            tick = setTimeout(StartThisSessionTimer(), 1000);
         }
 
         StartThisSessionTimer();

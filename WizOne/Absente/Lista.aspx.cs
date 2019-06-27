@@ -1167,18 +1167,20 @@ namespace WizOne.Absente
                         btn.Visible = false;
                 }
 
-                if (obj[8] == null || ((int)obj[8] != 1 && (int)obj[8] != 2 && (int)obj[8] != 4))
-                {
-                    txtObs.ReadOnly = true;
-                    txtObs.Enabled = false;
-                    txtCom.ReadOnly = true;
-                    txtCom.Enabled = false;
 
-                    cmbInl.ReadOnly = true;
-                    cmbInl.Enabled = false;
-                    cmbCps.ReadOnly = true;
-                    cmbCps.Enabled = false;
-                }
+                //Florin    2019.06.24
+                //if (obj[8] == null || ((int)obj[8] != 1 && (int)obj[8] != 2 && (int)obj[8] != 4))
+                //{
+                //    txtObs.ReadOnly = true;
+                //    txtObs.Enabled = false;
+                //    txtCom.ReadOnly = true;
+                //    txtCom.Enabled = false;
+
+                //    cmbInl.ReadOnly = true;
+                //    cmbInl.Enabled = false;
+                //    cmbCps.ReadOnly = true;
+                //    cmbCps.Enabled = false;
+                //}
 
 
                 //daca starea cererii este aprobata si rolul este cel de hr afisam campul bifa

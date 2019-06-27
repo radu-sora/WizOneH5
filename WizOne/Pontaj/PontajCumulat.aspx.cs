@@ -26,25 +26,37 @@ namespace WizOne.Pontaj
             {
                 if (!IsPostBack)
                 {
-                    DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_CumulatSetari"" ORDER BY ""Ordine"" ", null);
+                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
+                                                        FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.Coloana = AF.Denumire 
+                                                        ORDER BY CS.""Ordine""  ", null);
 
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         GridViewDataSpinEditColumn c = new GridViewDataSpinEditColumn();
                         c.Name = "col" + i;
                         c.FieldName = dt.Rows[i]["Coloana"].ToString();
-                        c.Caption = Dami.TraduCuvant(dt.Rows[i]["Coloana"].ToString());
+                        c.Caption = Dami.TraduCuvant(dt.Rows[i]["Caption"].ToString());
                         c.ReadOnly = true;
                         //c.Width = Unit.Pixel(100);
                         c.VisibleIndex = 100 + i;
-                        //c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] ?? 0);
-                        c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["Editabil"].ToString()));
+
+                        //Florin 2019.06.24
+                        ////c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] ?? 0);
+                        //c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["Editabil"].ToString()));
+                        c.ReadOnly = !Convert.ToBoolean(General.Nz(dt.Rows[i]["Editabil"], 0));
+
                         c.PropertiesSpinEdit.MaxLength = 10;
                         c.PropertiesSpinEdit.NumberFormat = SpinEditNumberFormat.Number;
                         c.PropertiesSpinEdit.DisplayFormatString = "N0";
                         c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
 
                         grDate.Columns.Add(c);
+
+                        ASPxSummaryItem s = new ASPxSummaryItem();
+                        s.FieldName = dt.Rows[i]["Coloana"].ToString();
+                        s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+
+                        grDate.TotalSummary.Add(s);
 
                     }
                 }

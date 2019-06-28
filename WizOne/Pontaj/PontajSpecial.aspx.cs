@@ -584,11 +584,12 @@ namespace WizOne.Pontaj
                 grDate.KeyFieldName = "F10003";
 
                 DataTable dt = GetF100NumeCompletPontajSpecial(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99),
-                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), Convert.ToInt32(cmbCateg.Value ?? -99));
+                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbSubDept.Value ?? -99), Convert.ToInt32(cmbBirou.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), Convert.ToInt32(cmbCateg.Value ?? -99));
                 //dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
                 grDate.DataSource = dt;
                 Session["InformatiaCurenta_PS"] = dt;
                 grDate.DataBind();
+                grDate.SettingsPager.PageSize = 25;
 
 
             }
@@ -599,7 +600,7 @@ namespace WizOne.Pontaj
             }
         }
 
-        public DataTable GetF100NumeCompletPontajSpecial(int idUser, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99)
+        public DataTable GetF100NumeCompletPontajSpecial(int idUser, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idSubdept = -99, int idBirou = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99)
         {
             DataTable dt = new DataTable();
 
@@ -689,6 +690,24 @@ namespace WizOne.Pontaj
                 if (idDept != -99)
                 {
                     tmp = string.Format("  Y.F10007 = {0} ", idDept);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idSubdept != -99)
+                {
+                    tmp = string.Format("  Y.F100958 = {0} ", idSubdept);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idBirou != -99)
+                {
+                    tmp = string.Format("  Y.F100959 = {0} ", idBirou);
                     if (cond.Length <= 0)
                         cond = " WHERE " + tmp;
                     else

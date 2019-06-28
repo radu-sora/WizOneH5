@@ -727,10 +727,12 @@ namespace WizOne.Personal
                             row100[x] = Session["UserId"];
                             rowComb[x] = Session["UserId"];
                             break;
+                        case "F100986":
+                        case "F10022":
                         case "TIME":
                             row100[x] = DateTime.Now;
                             rowComb[x] = DateTime.Now;
-                            break;
+                            break;                  
                     }
                     x++;
                 }
@@ -774,7 +776,7 @@ namespace WizOne.Personal
                 dtComb.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
 
                 for (int i = 0; i < dt.Columns.Count; i++)
-                    if (dt.Columns[i].ColumnName != "F09903" && dt.Columns[i].ColumnName != "F099985" && dt.Columns[i].ColumnName != "F09908" && dt.Columns[i].ColumnName != "F09909" && dt.Columns[i].ColumnName != "USER_NO" && dt.Columns[i].ColumnName != "TIME")
+                    if (dt.Columns[i].ColumnName != "F09903" && dt.Columns[i].ColumnName != "F099985" && dt.Columns[i].ColumnName != "F099986" && dt.Columns[i].ColumnName != "F09922" && dt.Columns[i].ColumnName != "F09908" && dt.Columns[i].ColumnName != "F09909" && dt.Columns[i].ColumnName != "USER_NO" && dt.Columns[i].ColumnName != "TIME")
                     {
                         dt100.Rows[0][dt.Columns[i].ColumnName.Replace("F099", "F100")] = dt.Rows[0][dt.Columns[i].ColumnName];
                         dtComb.Rows[0][dt.Columns[i].ColumnName.Replace("F099", "F100")] = dt.Rows[0][dt.Columns[i].ColumnName];

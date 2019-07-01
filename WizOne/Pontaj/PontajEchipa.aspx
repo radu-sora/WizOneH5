@@ -63,6 +63,7 @@
             cmbDept.SetValue(null);
             cmbSubDept.SetValue(null);
             cmbBirou.SetValue(null);
+            cmbCateg.SetValue(null);
 
             pnlCtl.PerformCallback('EmptyFields');
         }

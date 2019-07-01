@@ -1402,7 +1402,7 @@ namespace WizOne.Module
                         else
                             dt = new DateTime(anul, luna, zi);
 
-                        //if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Value.Month, 1, "EN").ToUpper() + "-" + dt.Value.Year.ToString() + "','DD-MON-RRRR')";
+                        //if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Value.Month, 1, "EN").ToUpper() + "-" + dt.Value.Year.ToString() + "','DD-MM-YYYY')";
                         //if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "/" + dt.Value.Month.ToString().PadLeft(2, '0') + "/" + dt.Value.Year.ToString() + "','DD/MM/YYYY')";
                         if (dt != null) rez = "TO_DATE('" + dt.Value.Day.ToString().PadLeft(2, '0') + "-" + dt.Value.Month.ToString().PadLeft(2, '0') + "-" + dt.Value.Year.ToString() + "','DD-MM-YYYY')";
                         break;
@@ -4866,7 +4866,7 @@ namespace WizOne.Module
                     string ora = dt.Value.Hour.ToString().PadLeft(2, Convert.ToChar("0"));
                     string min = dt.Value.Minute.ToString().PadLeft(2, Convert.ToChar("0"));
                     string sec = dt.Value.Second.ToString().PadLeft(2, Convert.ToChar("0"));
-                    string mask = "DD-MON-YYYY";
+                    string mask = "DD-MM-YYYY";
 
                     switch (Constante.tipBD)
                     {
@@ -4879,7 +4879,7 @@ namespace WizOne.Module
                             rez = zi + "-" + General.NumeLuna(Convert.ToInt32(luna), 1, "EN").ToUpper() + "-" + an;
                             if (cuTimp == 1)
                             {
-                                mask = "DD-MON-YYYY HH24:MI:SS";
+                                mask = "DD-MM-YYYY HH24:MI:SS";
                                 rez += " " + ora + ":" + min + ":" + sec;
                             }
                             if (tip == 2) rez = "to_date('" + rez + "','" + mask + "')";
@@ -6161,6 +6161,8 @@ namespace WizOne.Module
                 HttpContext.Current.Session["EsteTactil"] = "0";
                 HttpContext.Current.Session["TimeOutSecunde"] = "99999";
 
+                HttpContext.Current.Session["NumeGriduri"] = "";
+                HttpContext.Current.Session["IdGrid"] = "1";
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
@@ -6314,11 +6316,11 @@ namespace WizOne.Module
                     //dtInc = "01-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
                     //dtSf = DateTime.DaysInMonth(an, luna) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
 
-                    //strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MON-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MON-RRRR'))>=0";
+                    //strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MM-YYYY') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MM-YYYY'))>=0";
                     //if (zi > 0 && zi <= 31)
                     //{
                     //    string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
-                    //    strSql = " AND TRUNC(to_date('" + dt + "','DD-MON-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MON-RRRR'))>=0";
+                    //    strSql = " AND TRUNC(to_date('" + dt + "','DD-MM-YYYY') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MM-YYYY'))>=0";
                     //}
                 }
             }
@@ -7088,7 +7090,7 @@ namespace WizOne.Module
                         //                (SELECT A.""IdAuto""
                         //                FROM ""Ptj_Intrari"" A
                         //                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
                         //                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII);";
 
                         string strDel = @"DELETE FROM ""Ptj_Intrari"" 
@@ -7097,7 +7099,7 @@ namespace WizOne.Module
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                         ) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-JAN-2100','DD-MON-YYYY'));";
+                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-JAN-2100','DD-MM-YYYY'));";
 
                         strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;
@@ -7107,7 +7109,7 @@ namespace WizOne.Module
                                         WHERE ""IdAuto"" IN 
                                         (SELECT A.""IdAuto""
                                         FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {1} AND TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1});";
+                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {1} AND TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1});";
 
                         strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;

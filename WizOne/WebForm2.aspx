@@ -25,9 +25,9 @@
         </dx:ASPxButton>
 
 
-        <dx:ASPxGridView ID="gridB" ClientInstanceName="gridB" runat="server" AutoGenerateColumns="false"
+        <dx:ASPxGridView ID="gridB" ClientInstanceName="gridB" runat="server" AutoGenerateColumns="false" Settings-ShowStatusBar="Hidden"
             OnBatchUpdate="grid2_BatchUpdate" OnRowInserting="gridB_RowInserting" OnRowUpdating="gridB_RowUpdating" OnRowDeleting="gridB_RowDeleting">
-            <SettingsEditing Mode="Batch"></SettingsEditing>
+            <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
             <Columns>
                 <dx:GridViewCommandColumn ShowNewButtonInHeader="true" ShowDeleteButton="true" />
                 <dx:GridViewDataColumn FieldName="Id" Caption="Id" />

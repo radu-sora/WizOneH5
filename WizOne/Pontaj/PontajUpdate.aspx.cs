@@ -220,7 +220,7 @@ namespace WizOne.Pontaj
                         //                (SELECT A.""IdAuto""
                         //                FROM ""Ptj_Intrari"" A
                         //                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
                         //                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2})";
 
                         string strDel = @"DELETE FROM ""Ptj_Intrari"" 
@@ -229,7 +229,7 @@ namespace WizOne.Pontaj
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                         ) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2} AND {0} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {3} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-JAN-2100','DD-MON-YYYY'))";
+                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2} AND {0} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {3} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-JAN-2100','DD-MM-YYYY'))";
 
                         strDel = string.Format(strDel, ziInceput, angIn, angSf, ziSfarsit);
                         ras = General.ExecutaNonQuery(strDel, null);
@@ -238,14 +238,14 @@ namespace WizOne.Pontaj
                         //                WHERE ""IdAuto"" IN 
                         //                (SELECT A.""IdAuto""
                         //                FROM ""Ptj_Intrari"" A
-                        //                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {0} AND TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                        //                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {0} AND TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
                         //                ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {1} AND A.F10003 <= {2})";
 
                         strDel = @"DELETE FROM ""Ptj_Intrari"" 
                                         WHERE ""IdAuto"" IN 
                                         (SELECT A.""IdAuto""
                                         FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE  TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE  TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
                                         ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {1} AND A.F10003 <= {2} AND {3} <= A.""Ziua"" AND A.""Ziua"" <= {0})";
 
                         strDel = string.Format(strDel, ziSfarsit, angIn, angSf, ziInceput);

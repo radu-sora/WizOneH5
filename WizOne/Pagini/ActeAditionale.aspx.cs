@@ -402,7 +402,7 @@ namespace WizOne.Pagini
                 //            (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
                 //            WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
                 //            (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
-                //            ELSE TO_DATE('01-JAN-2100', 'DD-MON-YYYY') END AS ""TermenDepasire""
+                //            ELSE TO_DATE('01-JAN-2100', 'DD-MM-YYYY') END AS ""TermenDepasire""
                 //            FROM(
                 //            SELECT A.F10003, COALESCE(B.F10008, '') || ' ' || COALESCE(B.F10009, '') AS ""NumeComplet"", A.""DataModif"", 0 AS ""Candidat"",
                 //            MAX(CASE WHEN COALESCE(""CORCod"", 0) > 0 THEN 1 ELSE 0 END) AS ""CORCod"",
@@ -766,15 +766,15 @@ namespace WizOne.Pagini
                                                 new object[] { "int", obj[0], Session["UserId"], obj[10] }),0));
 
                                                 //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
                                                 //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]).ToUpper(), Session["UserId"], General.ToDataOrcl(obj[11]).ToUpper(), obj[10] });
 
                                                 //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
                                                 //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]), Session["UserId"], General.ToDataOrcl(obj[11]), obj[10] });
 
                                                 //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},TO_DATE(@3,'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5,'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1;",
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},TO_DATE(@3,'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5,'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1;",
                                                 //new object[] { "int", obj[0], General.ToDataUniv(Convert.ToDateTime(obj[1])), Session["UserId"], General.ToDataUniv(Convert.ToDateTime(obj[11])), obj[10] });
 
                                                 //id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 

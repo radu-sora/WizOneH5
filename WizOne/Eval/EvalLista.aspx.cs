@@ -183,11 +183,11 @@ namespace WizOne.Eval
                                     string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
                                     if (idHR.Trim() != "")
                                         General.ExecutaNonQuery(
-                                            $@"UPDATE Eval_RaspunsIstoric 
-                                            SET IdUser=@3
-                                            WHERE IdQuiz=@1 AND F10003=@2 AND 
-                                            (SELECT COUNT(IdUser) FROM F100Supervizori WHERE IdUser=@3 AND IdSuper IN ({idHR}) GROUP BY IdUser) <> 0 AND
-                                            (-1 * IdSuper) IN ({idHR})", new object[] { Convert.ToInt32(General.Nz(obj[1], 1)), Convert.ToInt32(General.Nz(obj[2], 1)), Session["UserId"] });
+                                            $@"UPDATE ""Eval_RaspunsIstoric"" 
+                                            SET ""IdUser""=@3
+                                            WHERE ""IdQuiz""=@1 AND F10003=@2 AND 
+                                            (SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""=@3 AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"") <> 0 AND
+                                            (-1 * ""IdSuper"") IN ({idHR})", new object[] { Convert.ToInt32(General.Nz(obj[1], 1)), Convert.ToInt32(General.Nz(obj[2], 1)), Session["UserId"] });
                                 }
                                 catch (Exception) { }
 
@@ -227,6 +227,10 @@ namespace WizOne.Eval
                                 Session["Eval_PozitieUserLogat"] = General.Nz(General.ExecutaScalar($@"SELECT ""Pozitie"" FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""={ Convert.ToInt32(obj[1] ?? -99)} AND F10003={ Convert.ToInt32(obj[2] ?? -99)} AND ""IdUser""={Session["UserId"]}", null), 1);
                                 Session["IdClient"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdClient'", null), 1));
 
+
+                                //Florin 2019.06.27
+                                Session["lstEval_ObiIndividualeTemp_Sterse"] = null;
+                                Session["lstEval_CompetenteAngajatTemp_Sterse"] = null;
 
                                 if (Page.IsCallback)
                                     ASPxWebControl.RedirectOnCallback("~/Eval/EvalDetaliu.aspx");

@@ -49,7 +49,7 @@ namespace WizOne.Eval
                     cmbTip.Items.Add(lst);
                     cmbTip.Items.Add(lst2);
 
-                    DataTable dt = General.IncarcaDT(@"SELECT Id, Denumire FROM ""Eval_Quiz"" WHERE COALESCE(""CategorieQuiz"",0)=1 ", null);
+                    DataTable dt = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Eval_Quiz"" WHERE COALESCE(""CategorieQuiz"",0)=1 ", null);
                     cmbQuiz.DataSource = dt;
                     cmbQuiz.DataBind();
                 }
@@ -71,7 +71,7 @@ namespace WizOne.Eval
                     return;
                 }
 
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM Eval_SetAngajatiDetail WHERE IdSetAng = (SELECT IdGrup FROM Eval_relGrupAngajatQuiz WHERE IdQuiz=@1)", new object[] { cmbQuiz.Value });
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Eval_SetAngajatiDetail"" WHERE ""IdSetAng"" = (SELECT ""IdGrup"" FROM ""Eval_relGrupAngajatQuiz"" WHERE ""IdQuiz""=@1)", new object[] { cmbQuiz.Value });
                 for(int i = 0; i < dt.Rows.Count; i++)
                 {
                     //facem o initializare clasica apoi stergem istoricul si il cream pt 360
@@ -93,14 +93,25 @@ namespace WizOne.Eval
                     //    INNER JOIN USERS B ON A.F10003=B.F10003
                     //    WHERE A.F10003 <> @2 AND A.F10007=(SELECT X.F10007 FROM F100 X WHERE X.F10003=@2)", new object[] { cmbQuiz.Value, dt.Rows[i]["Id"] });
 
-                    General.ExecutaScalar(
-                        $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"", ""Culoare"", USER_NO, TIME)
+
+                    string strSql = $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"", ""Culoare"", USER_NO, TIME)
                         SELECT @1 AS IdQuiz, @2 AS F10003, B.F70102 AS IdSuper, B.F70102,  
                         CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS Pozitie, 
                         '#FFFFFF00' AS Culoare, 1 AS USER_NO, GetDate() AS TIME
                         FROM F100 A
                         INNER JOIN USERS B ON A.F10003=B.F10003
-                        WHERE A.F10003 <> @2 AND A.F10007=(SELECT X.F10007 FROM F100 X WHERE X.F10003=@2)", new object[] { cmbQuiz.Value, dt.Rows[i]["Id"] });
+                        WHERE A.F10003 <> @2 AND A.F10007=(SELECT X.F10007 FROM F100 X WHERE X.F10003=@2)";
+
+                    if (Constante.tipBD == 2)
+                        strSql = $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"", ""Culoare"", USER_NO, TIME)
+                        SELECT @1 AS IdQuiz, @2 AS F10003, B.F70102 AS IdSuper, B.F70102,  
+                        ROWNUM AS Pozitie, 
+                        '#FFFFFF00' AS Culoare, 1 AS USER_NO, GetDate() AS TIME
+                        FROM F100 A
+                        INNER JOIN USERS B ON A.F10003=B.F10003
+                        WHERE A.F10003 <> @2 AND A.F10007=(SELECT X.F10007 FROM F100 X WHERE X.F10003=@2)";
+
+                    General.ExecutaScalar(strSql, new object[] { cmbQuiz.Value, dt.Rows[i]["Id"] });
 
                 }
 

@@ -233,13 +233,23 @@ namespace WizOne.Eval
                 if ((rbTip.Value ?? 1).ToString() == "2")
                     idUsrQuiz = Convert.ToInt32(cmbUsr.Value ?? -99);
 
-                DataTable dtQuiz = General.IncarcaDT(
-                    @"SELECT TOP 1 A.Id
+
+                string sqlSel = @"SELECT TOP 1 A.Id
                     FROM Eval_Quiz A
                     INNER JOIN Eval_relGrupAngajatQuiz B ON A.Id=B.IdQuiz
                     INNER JOIN Eval_SetAngajatiDetail C ON B.IdGrup=C.IdSetAng
                     INNER JOIN USERS D ON C.Id=D.F10003
-                    WHERE A.CategorieQuiz = @1 AND D.F70102 = @2 AND COALESCE(A.""Activ"",0)=1", new object[] { cmbTip.Value, idUsrQuiz });
+                    WHERE A.CategorieQuiz = @1 AND D.F70102 = @2 AND COALESCE(A.""Activ"",0)=1";
+
+                if (Constante.tipBD == 2)
+                    sqlSel = @"SELECT A.""Id""
+                    FROM ""Eval_Quiz"" A
+                    INNER JOIN ""Eval_relGrupAngajatQuiz"" B ON A.""Id""=B.""IdQuiz""
+                    INNER JOIN ""Eval_SetAngajatiDetail"" C ON B.""IdGrup""=C.""IdSetAng""
+                    INNER JOIN USERS D ON C.Id=D.F10003
+                    WHERE A.""CategorieQuiz"" = @1 AND D.F70102 = @2 AND COALESCE(A.""Activ"",0)=1 AND ROWNUM <= 1";
+
+                DataTable dtQuiz = General.IncarcaDT(sqlSel, new object[] { cmbTip.Value, idUsrQuiz });
 
                 if (dtQuiz != null && dtQuiz.Rows.Count > 0) idQuiz = Convert.ToInt32(General.Nz(dtQuiz.Rows[0]["Id"],-99));
 
@@ -273,7 +283,7 @@ namespace WizOne.Eval
                 {
                     //Florin 2018.12.05
                     //Pelifilip - nu mai vor sa se duca in solictare, vor sa se duca direct in aprobare
-                    strSql += $@"INSERT INTO Eval_RaspunsIstoric(IdQuiz, F10003, IdSuper, IdUser, Pozitie) VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(Pozitie,0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
+                    strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
                     idStare = 3;
 
                     strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
@@ -282,7 +292,7 @@ namespace WizOne.Eval
                 {
                     if ((rbTip.Value ?? "").ToString() == "1")
                     {
-                        strSql += $@"INSERT INTO Eval_RaspunsIstoric(IdQuiz, F10003, IdSuper, IdUser, Pozitie) VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(Pozitie,0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
+                        strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
                         idStare = 3;
                     }
                     strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
@@ -587,15 +597,15 @@ namespace WizOne.Eval
                             {
                                 cmp = $@"UPDATE ""Eval_RaspunsLinii"" SET ""Super{poz}""=null, ""Super{poz}_1""=null, ""Super{poz}_2""=null, ""Super{poz}_3""=null, 
                                     ""Super{poz}_4""=null, ""Super{poz}_5""=null, ""Super{poz}_6""=null 
-                                    WHERE F10003={obj[1]} AND IdQuiz={obj[2]};";
+                                    WHERE F10003={obj[1]} AND ""IdQuiz""={obj[2]};";
 
                                 cmp += $@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""={obj[2]} AND F10003={obj[1]} AND ""Pozitie""={poz}; ";
                             }
 
                             string strSql = $@"BEGIN
-                                            DELETE ""Eval_Invitatie360"" WHERE IdUser={obj[0]} AND F10003={obj[1]} AND IdQuiz={obj[2]};
+                                            DELETE ""Eval_Invitatie360"" WHERE ""IdUser""={obj[0]} AND F10003={obj[1]} AND ""IdQuiz""={obj[2]};
                                             {cmp}
-                                            DELETE ""Eval_RaspunsIstoric"" WHERE IdUser={obj[0]} AND F10003={obj[1]} AND IdQuiz={obj[2]};
+                                            DELETE ""Eval_RaspunsIstoric"" WHERE ""IdUser""={obj[0]} AND F10003={obj[1]} AND ""IdQuiz""={obj[2]};
                                             END";
 
                             General.ExecutaNonQuery(strSql, null);
@@ -678,9 +688,9 @@ namespace WizOne.Eval
                             continue;
                         default:
                             {
-                                string sqlUpd = $@"UPDATE ""Eval_Invitatie360"" SET ""IdStare""={tip} WHERE IdUser={arr[0]} AND F10003={arr[1]} AND IdQuiz={arr[2]};";
+                                string sqlUpd = $@"UPDATE ""Eval_Invitatie360"" SET ""IdStare""={tip} WHERE ""IdUser""={arr[0]} AND F10003={arr[1]} AND ""IdQuiz""={arr[2]};";
                                 string sqlIns = "";
-                                if (tip == 3) sqlIns = $@"INSERT INTO Eval_RaspunsIstoric(IdQuiz, F10003, IdSuper, IdUser, Pozitie) VALUES({arr[2]}, {arr[1]}, 1, {arr[0]}, (SELECT COALESCE(MAX(COALESCE(Pozitie,0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {arr[2]} AND F10003 = {arr[1]}));";
+                                if (tip == 3) sqlIns = $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({arr[2]}, {arr[1]}, 1, {arr[0]}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {arr[2]} AND F10003 = {arr[1]}));";
                                 string sqlGen = "BEGIN " + "\n\r" +
                                            sqlUpd + "\n\r" +
                                            sqlIns + "\n\r" +

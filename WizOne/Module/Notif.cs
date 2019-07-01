@@ -571,7 +571,7 @@ namespace WizOne.Module
                     if (Constante.tipBD == 1)
                         str[0] = dt.Year + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Day.ToString().PadLeft(2, '0');
                     else
-                        str[0] = "to_date('" + dt.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Month, 1, "EN").ToUpper() + "-" + dt.Year.ToString() + "','DD-MON-RRRR')";
+                        str[0] = "to_date('" + dt.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Month, 1, "EN").ToUpper() + "-" + dt.Year.ToString() + "','DD-MM-YYYY')";
 
                     str[1] = "2";
                 }

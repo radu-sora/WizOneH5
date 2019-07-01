@@ -3351,7 +3351,7 @@ namespace WizOne.Avs
                         SELECT A.""Id"", A.""Denumire"" 
                         FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=@1
-                        ORDER BY A.""Denumire"" ";
+                        ORDER BY ""Denumire"" ";
             }
             catch (Exception ex)
             {

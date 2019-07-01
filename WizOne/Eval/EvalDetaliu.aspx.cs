@@ -1,5 +1,7 @@
 ﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -208,6 +210,9 @@ namespace WizOne.Eval
                     return;
                 }
 
+                //Florin 2019.06.27
+                SalveazaGridurile();
+
                 string sqlCommandDelete = string.Empty;
                 string sqlCommandDeleteTemp = string.Empty;
                 string sqlCommandInsert = string.Empty;
@@ -364,6 +369,30 @@ namespace WizOne.Eval
                         Session["lstEval_ObiIndividualeTemp"] = lstEval_ObiIndividualeTemp;
                     }
                 }
+
+
+
+                //Florin 2019.06.27
+                //stergem liniile din baza
+                {
+                    List<Eval_ObiIndividualeTemp> lstSterse = Session["lstEval_ObiIndividualeTemp_Sterse"] as List<Eval_ObiIndividualeTemp>;
+                    if (lstSterse != null && lstSterse.Count != 0)
+                    {
+                        string idauto = "";
+
+                        foreach (Eval_ObiIndividualeTemp l in lstSterse)
+                        {
+                            idauto += "," + l.IdAuto;
+                        }
+
+                        if (idauto != "")
+                            General.ExecutaNonQuery($@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdAuto"" IN ({idauto.Substring(1)})", null);
+
+                        Session["lstEval_ObiIndividualeTemp_Sterse"] = null;
+                    }
+                }
+
+
                 #endregion
 
 
@@ -418,6 +447,29 @@ namespace WizOne.Eval
                         Session["lstEval_CompetenteAngajatTemp"] = lstEval_CompetenteAngajatTemp;
                     }
                 }
+
+
+                //Florin 2019.06.27
+                //stergem liniile din baza
+                {
+                    List<Eval_CompetenteAngajatTemp> lstSterse = Session["lstEval_CompetenteAngajatTemp_Sterse"] as List<Eval_CompetenteAngajatTemp>;
+                    if (lstSterse != null && lstSterse.Count != 0)
+                    {
+                        string idauto = "";
+
+                        foreach (Eval_CompetenteAngajatTemp l in lstSterse)
+                        {
+                            idauto += "," + l.IdAuto;
+                        }
+
+                        if (idauto != "")
+                            General.ExecutaNonQuery($@"DELETE FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdAuto"" IN ({idauto.Substring(1)})", null);
+
+                        Session["lstEval_CompetenteAngajatTemp_Sterse"] = null;
+                    }
+                }
+
+
                 #endregion
 
                 if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && idCateg == "0")
@@ -551,6 +603,12 @@ namespace WizOne.Eval
         {
             try
             {
+                if (e.Parameter == "btnSave")
+                {
+                    btnSave_Click(null, null);
+                    return;
+                }
+
                 //Radu 19.04.2019
                 if (e.Parameter == "CreeazaSectiune")
                 {
@@ -827,6 +885,11 @@ namespace WizOne.Eval
         {
             try
             {
+                //Florin 2019.06.27
+                SalveazaGridurile();
+                Session["NumeGriduri"] = "";
+
+
                 divIntrebari.Controls.Clear();
                 grIntrebari = new HtmlTable();
                 grIntrebari.CellSpacing = 12;
@@ -1505,6 +1568,13 @@ namespace WizOne.Eval
                 #region Grid Properties
                 grDateObiective.Width = new Unit(100, UnitType.Percentage);
                 grDateObiective.ID = "grDateObiective" + "_WXY_" + id.ToString();
+
+                //Florin 2019.06.26
+                grDateObiective.ClientInstanceName = "grDateObiective" + "_WXY_" + id.ToString();
+                grDateObiective.ClientIDMode = ClientIDMode.Static;
+                grDateObiective.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
+
                 grDateObiective.SettingsBehavior.AllowFocusedRow = true;
                 grDateObiective.SettingsBehavior.EnableCustomizationWindow = true;
                 grDateObiective.SettingsBehavior.AllowSelectByRowClick = true;
@@ -1520,11 +1590,23 @@ namespace WizOne.Eval
                 grDateObiective.SettingsBehavior.ConfirmDelete = true;
                 grDateObiective.SettingsText.ConfirmDelete = "Confirmati operatia de stergere?";
 
-                grDateObiective.RowDeleting += GrDateObiective_RowDeleting;
-                grDateObiective.AutoFilterCellEditorInitialize += GrDateObiective_AutoFilterCellEditorInitialize;
-                grDateObiective.RowInserting += GrDateObiective_RowInserting;
-                grDateObiective.RowUpdating += GrDateObiective_RowUpdating;
+                //grDateObiective.RowDeleting += GrDateObiective_RowDeleting;
+                //grDateObiective.AutoFilterCellEditorInitialize += GrDateObiective_AutoFilterCellEditorInitialize;
+                //grDateObiective.RowInserting += GrDateObiective_RowInserting;
+                //grDateObiective.RowUpdating += GrDateObiective_RowUpdating;
                 grDateObiective.InitNewRow += GrDateObiective_InitNewRow;
+
+                grDateObiective.SettingsEditing.Mode = GridViewEditingMode.Batch;
+                grDateObiective.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+                grDateObiective.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+                grDateObiective.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+
+
+                //Florin 2019.06.26
+                grDateObiective.BatchUpdate += GrDateObiective_BatchUpdate;
+                Session["NumeGriduri"] += ";" + grDateObiective.ID;
+
+
 
                 //Radu 19.04.2019
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 24 || Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 25)
@@ -1539,7 +1621,8 @@ namespace WizOne.Eval
                 colCommand.Width = 80;
                 colCommand.ShowDeleteButton = clsEval_ConfigObTemplate.PoateSterge == 1 ? true : false;
                 colCommand.ShowNewButtonInHeader = clsEval_ConfigObTemplate.PoateAdauga == 1 ? true : false;
-                colCommand.ShowEditButton = clsEval_ConfigObTemplate.PoateModifica == 1 ? true : false;
+                //colCommand.ShowEditButton = clsEval_ConfigObTemplate.PoateModifica == 1 ? true : false;
+                grDateObiective.Enabled = clsEval_ConfigObTemplate.PoateModifica == 1 ? true : false;
                 colCommand.VisibleIndex = 0;
                 colCommand.Caption = " ";
                 colCommand.ButtonRenderMode = GridCommandButtonRenderMode.Image;
@@ -1998,6 +2081,548 @@ namespace WizOne.Eval
             }
             return grDateObiective;
         }
+
+
+        //Florin 2019.06.27
+        private void GrDateObiective_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        {
+            try
+            {
+                ASPxGridView grid = sender as ASPxGridView;
+                grid.CancelEdit();
+                GridViewDataComboBoxColumn colObiectiv = (grid.Columns["IdObiectiv"] as GridViewDataComboBoxColumn);
+
+                List<Eval_ObiIndividualeTemp> lst = Session["lstEval_ObiIndividualeTemp"] as List<Eval_ObiIndividualeTemp>;
+
+                for (int x = 0; x < e.InsertValues.Count; x++)
+                {
+                    ASPxDataInsertValues ins = e.InsertValues[x] as ASPxDataInsertValues;
+                    Eval_ObiIndividualeTemp clsNew = new Eval_ObiIndividualeTemp();
+                    clsNew.IdAuto = -1 * (Convert.ToInt32(General.Nz(lst.Max(p => (int?)Math.Abs(p.IdAuto)), 0)) + 1);
+                    clsNew.F10003 = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+                    int poz = Convert.ToInt32(Session["Eval_ActiveTab"]);
+
+                    clsNew.Pozitie = poz;
+                    clsNew.IdQuiz = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+                    clsNew.IdLinieQuiz = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+
+                    clsNew.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    clsNew.TIME = DateTime.Now;
+
+                    foreach (DictionaryEntry de in ins.NewValues)
+                    {
+                        switch (de.Key.ToString())
+                        {
+                            case "IdObiectiv":
+                                clsNew.IdObiectiv = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (colObiectiv != null)
+                                    clsNew.Obiectiv = colObiectiv.PropertiesComboBox.Items.FindByValue(clsNew.IdObiectiv).Text;
+                                break;
+                            case "Obiectiv":
+                                if (colObiectiv == null)
+                                    clsNew.Obiectiv = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "IdActivitate":
+                                clsNew.IdActivitate = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (lstActivitati != null && lstActivitati.Count > 0)
+                                    clsNew.Activitate = General.Nz(lstActivitati.Find(p => p.Id == clsNew.IdActivitate),"").ToString();
+
+
+                                if (Session["feedEval_ObiectivActivitate"] == null)
+                                {
+                                    DataTable dtObiectivActivitate = General.IncarcaDT(
+                                        @"select ""IdObiectiv"" as ""Parinte"", ""IdActivitate"" as ""Id"", ""Activitate"" as ""Denumire""
+                                        from  ""Eval_ObiectivXActivitate"" WHERE  ""IdActivitate"" = @1 ", new object[] { clsNew.IdActivitate });
+                                    lstActivitati.Clear();
+                                    foreach (DataRow rwObiectivActivitate in dtObiectivActivitate.Rows)
+                                    {
+                                        metaDate clsObiectivActivitate = new metaDate();
+                                        clsObiectivActivitate.Id = Convert.ToInt32(rwObiectivActivitate["Id"]);
+                                        clsObiectivActivitate.Denumire = rwObiectivActivitate["Denumire"].ToString();
+                                        clsObiectivActivitate.ParentId = Convert.ToInt32(rwObiectivActivitate["Parinte"].ToString());
+                                        lstActivitati.Add(clsObiectivActivitate);
+                                    }
+                                }
+                                else
+                                    lstActivitati = Session["feedEval_ObiectivActivitate"] as List<metaDate>;
+
+
+                                break;
+                            case "Activitate":
+                                clsNew.Activitate = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Pondere":
+                                clsNew.Pondere = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "Descriere":
+                                clsNew.Descriere = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Target":
+                                clsNew.Target = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "Realizat":
+                                clsNew.Realizat = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "IdCalificativ":
+                                clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "Calificativ":
+                                clsNew.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "ExplicatiiCalificativ":
+                                clsNew.ExplicatiiCalificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "ColoanaSuplimentara1":
+                                clsNew.ColoanaSuplimentara1 = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "ColoanaSuplimentara2":
+                                clsNew.ColoanaSuplimentara2 = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                        }
+
+                    }
+
+                    lst.Add(clsNew);
+                }
+
+                for (int x = 0; x < e.UpdateValues.Count; x++)
+                {
+                    ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
+                    object[] keys = new object[] { upd.Keys[0] };
+
+                    ASPxDataUpdateValues ins = e.UpdateValues[x] as ASPxDataUpdateValues;
+                    Eval_ObiIndividualeTemp clsUpd = lst.Where(p => p.IdAuto == Convert.ToInt32(keys[0])).FirstOrDefault();
+                    if (clsUpd == null) return;
+
+                    clsUpd.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    clsUpd.TIME = DateTime.Now;
+
+                    foreach (DictionaryEntry de in ins.NewValues)
+                    {
+                        switch (de.Key.ToString())
+                        {
+                            case "IdObiectiv":
+                                clsUpd.IdObiectiv = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (colObiectiv != null)
+                                    clsUpd.Obiectiv = colObiectiv.PropertiesComboBox.Items.FindByValue(clsUpd.IdObiectiv).Text;
+                                break;
+                            case "Obiectiv":
+                                if (colObiectiv == null)
+                                    clsUpd.Obiectiv = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "IdActivitate":
+                                clsUpd.IdActivitate = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (lstActivitati != null && lstActivitati.Count > 0)
+                                    clsUpd.Activitate = General.Nz(lstActivitati.Find(p => p.Id == clsUpd.IdActivitate), "").ToString();
+
+
+                                if (Session["feedEval_ObiectivActivitate"] == null)
+                                {
+                                    DataTable dtObiectivActivitate = General.IncarcaDT(
+                                        @"select ""IdObiectiv"" as ""Parinte"", ""IdActivitate"" as ""Id"", ""Activitate"" as ""Denumire""
+                                        from  ""Eval_ObiectivXActivitate"" WHERE  ""IdActivitate"" = @1 ", new object[] { clsUpd.IdActivitate });
+                                    lstActivitati.Clear();
+                                    foreach (DataRow rwObiectivActivitate in dtObiectivActivitate.Rows)
+                                    {
+                                        metaDate clsObiectivActivitate = new metaDate();
+                                        clsObiectivActivitate.Id = Convert.ToInt32(rwObiectivActivitate["Id"]);
+                                        clsObiectivActivitate.Denumire = rwObiectivActivitate["Denumire"].ToString();
+                                        clsObiectivActivitate.ParentId = Convert.ToInt32(rwObiectivActivitate["Parinte"].ToString());
+                                        lstActivitati.Add(clsObiectivActivitate);
+                                    }
+                                }
+                                else
+                                    lstActivitati = Session["feedEval_ObiectivActivitate"] as List<metaDate>;
+
+                                break;
+                            case "Activitate":
+                                clsUpd.Activitate = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Pondere":
+                                clsUpd.Pondere = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "Descriere":
+                                clsUpd.Descriere = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Target":
+                                clsUpd.Target = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "Realizat":
+                                clsUpd.Realizat = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "IdCalificativ":
+                                clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "Calificativ":
+                                clsUpd.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "ExplicatiiCalificativ":
+                                clsUpd.ExplicatiiCalificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "ColoanaSuplimentara1":
+                                clsUpd.ColoanaSuplimentara1 = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "ColoanaSuplimentara2":
+                                clsUpd.ColoanaSuplimentara2 = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                        }
+                    }
+
+                    switch(General.Nz(Session["IdClient"], 1).ToString())
+                    {
+                        case "20":
+                            {
+                                try
+                                {
+                                    if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)) >= 2)   //se doreste ca rating-ul sa fie afisat numai dupa ce angajatul finalizeaza
+                                    {
+                                        decimal activitate = 0;
+                                        if (decimal.TryParse(clsUpd.Activitate, out activitate))
+                                        {
+                                            clsUpd.Target = (Convert.ToDecimal(clsUpd.Pondere) / Convert.ToDecimal(clsUpd.Activitate)) * 100;
+                                            if (clsUpd.Target < 80) clsUpd.IdCalificativ = 1;
+                                            if (80 <= clsUpd.Target && clsUpd.Target < 95) clsUpd.IdCalificativ = 2;
+                                            if (95 <= clsUpd.Target && clsUpd.Target < 105) clsUpd.IdCalificativ = 3;
+                                            if (105 <= clsUpd.Target && clsUpd.Target < 130) clsUpd.IdCalificativ = 4;
+                                            if (clsUpd.Target >= 130) clsUpd.IdCalificativ = 5;
+                                        }
+                                        //if (clsObiIndividual.Target < 80) clsObiIndividual.Calificativ = "mult sub asteptari";
+                                        //if (80 <= clsObiIndividual.Target && clsObiIndividual.Target < 95) clsObiIndividual.Calificativ = "sub asteptari";
+                                        //if (95 <= clsObiIndividual.Target && clsObiIndividual.Target < 105) clsObiIndividual.Calificativ = "in linie cu asteptarile";
+                                        //if (105 <= clsObiIndividual.Target && clsObiIndividual.Target < 130) clsObiIndividual.Calificativ = "peste asteptari";
+                                        //if (clsObiIndividual.Target >= 130) clsObiIndividual.Calificativ = "mult peste asteptari";
+                                    }
+                                }
+                                catch (Exception) { }
+                            }
+                            break;
+                        case "24":                          //Cristim
+                            {
+                                clsUpd.Target = (int)(Convert.ToDouble(General.Nz(clsUpd.Descriere, "0")) * Convert.ToDouble(General.Nz(clsUpd.Pondere, 0)) / Convert.ToDouble(General.Nz(clsUpd.Realizat, "0")));
+                                int suma = 0;
+                                foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
+                                                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
+                                    suma += Convert.ToInt32(General.Nz(linie.Target, 0));
+
+                                Eval_QuizIntrebari txtCalifCantit = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CANTITATIVA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (txtCalifCantit != null)
+                                {
+                                    Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalifCantit.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                    if (val != null)
+                                        val.SetValue(linieCalif, suma.ToString(), null);
+                                }
+
+                                double califTotal = suma;
+
+                                Eval_QuizIntrebari txtCalifCalit = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV EVALUARE CALITATIVA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (txtCalifCalit != null)
+                                {
+                                    Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalifCalit.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                    if (val != null)
+                                    {
+                                        string s = val.GetValue(linieCalif, null).ToString();
+                                        if (s.Length > 0)
+                                        {
+                                            double rez = 0;
+                                            double.TryParse(s, out rez);
+                                            califTotal += rez;
+                                        }
+                                    }
+                                }
+
+                                Eval_QuizIntrebari txtCalifFinal = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("CALIFICATIV FINAL EVALUARE PERFORMANTA") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (txtCalifFinal != null)
+                                {
+                                    Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == txtCalifFinal.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieCalif, califTotal.ToString(), null);
+                                }
+                                Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+
+
+                            }
+                            break;
+                        case "25":                          //Franke
+                            {
+                                clsUpd.Calificativ = (10 * Convert.ToDouble(General.Nz(clsUpd.Realizat, 0)) / Convert.ToDouble(General.Nz(clsUpd.Target, 0))).ToString();
+                                double total = 0;
+                                int cnt = 0;
+                                foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
+                                                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
+                                {
+                                    total += Convert.ToDouble(General.Nz(linie.Calificativ, "0"));
+                                    cnt++;
+                                }
+                                double nota = (total / cnt) * 0.4;
+
+                                Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Id == clsUpd.IdLinieQuiz + 1 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (notaFinala != null)
+                                {
+                                    Eval_RaspunsLinii linieNota = lstEval_RaspunsLinii.Where(p => p.Id == notaFinala.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieNota, nota.ToString("0.##"), null);
+                                }
+
+                                double notaF = 0;
+                                List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA OBIECTIV") && p.IdQuiz == clsUpd.IdQuiz).ToList();
+                                if (lstNoteFinale != null && lstNoteFinale.Count > 0)
+                                {
+                                    foreach (Eval_QuizIntrebari linie in lstNoteFinale)
+                                    {
+                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                        if (val != null)
+                                        {
+                                            string s = val.GetValue(linieCalif, null).ToString();
+                                            if (s.Length > 0)
+                                            {
+                                                double rez = 0;
+                                                double.TryParse(s, out rez);
+                                                notaF += rez;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA EVALUARE") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (notaFinalaEvaluare != null)
+                                {
+                                    Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == notaFinalaEvaluare.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieNotaFinala, notaF.ToString("0.##"), null);
+                                }
+
+                                Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+
+                            }
+                            break;
+                    }
+                }
+
+                for (int x = 0; x < e.DeleteValues.Count; x++)
+                {
+                    ASPxDataDeleteValues del = e.DeleteValues[x] as ASPxDataDeleteValues;
+                    object[] keys = new object[] { del.Keys[0] };
+
+                    Eval_ObiIndividualeTemp clsDel = lst.Where(p => p.IdAuto == Convert.ToInt32(keys[0])).FirstOrDefault();
+                    if (clsDel == null) return;
+                    lst.Remove(clsDel);
+
+                    List<Eval_ObiIndividualeTemp> lstSterse = Session["lstEval_ObiIndividualeTemp_Sterse"] as List<Eval_ObiIndividualeTemp>;
+                    if (lstSterse == null) lstSterse = new List<Eval_ObiIndividualeTemp>();
+                    lstSterse.Add(clsDel);
+                    Session["lstEval_ObiIndividualeTemp_Sterse"] = lstSterse;
+                }
+
+                Session["lstEval_ObiIndividualeTemp"] = lst;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        //Florin 2019.06.28
+        private void GrDateCompetente_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        {
+            try
+            {
+                ASPxGridView grid = sender as ASPxGridView;
+                grid.CancelEdit();
+                GridViewDataComboBoxColumn colCompetenta = (grid.Columns["IdCompetenta"] as GridViewDataComboBoxColumn);
+
+                List<Eval_CompetenteAngajatTemp> lst = Session["lstEval_CompetenteAngajatTemp"] as List<Eval_CompetenteAngajatTemp>;
+
+                for (int x = 0; x < e.InsertValues.Count; x++)
+                {
+                    ASPxDataInsertValues ins = e.InsertValues[x] as ASPxDataInsertValues;
+                    Eval_CompetenteAngajatTemp clsNew = new Eval_CompetenteAngajatTemp();
+                    clsNew.IdAuto = Convert.ToInt32(General.Nz(lst.Max(p => (int?)p.IdAuto), 0)) + 1;
+                    clsNew.F10003 = Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1));
+                    clsNew.Pozitie = Convert.ToInt32(Session["Eval_ActiveTab"]); ;
+                    clsNew.IdQuiz = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
+                    clsNew.IdLinieQuiz = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
+
+                    clsNew.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    clsNew.TIME = DateTime.Now;
+
+                    foreach (DictionaryEntry de in ins.NewValues)
+                    {
+                        switch (de.Key.ToString())
+                        {
+                            case "IdCompetenta":
+                                clsNew.IdCompetenta = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (colCompetenta != null)
+                                    clsNew.Competenta = colCompetenta.PropertiesComboBox.Items.FindByValue(clsNew.IdCompetenta).Text;
+                                break;
+                            case "Competenta":
+                                if (colCompetenta == null)
+                                    clsNew.Competenta = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Pondere":
+                                clsNew.Pondere = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "IdCalificativ":
+                                clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "Calificativ":
+                                clsNew.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "ExplicatiiCalificativ":
+                                clsNew.ExplicatiiCalificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Explicatii":
+                                clsNew.Explicatii = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                        }
+
+                    }
+
+                    lst.Add(clsNew);
+                }
+
+                for (int x = 0; x < e.UpdateValues.Count; x++)
+                {
+                    ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
+                    object[] keys = new object[] { upd.Keys[0] };
+
+                    ASPxDataUpdateValues ins = e.UpdateValues[x] as ASPxDataUpdateValues;
+                    Eval_CompetenteAngajatTemp clsUpd = lst.Where(p => p.IdAuto == Convert.ToInt32(keys[0])).FirstOrDefault();
+                    if (clsUpd == null) return;
+
+                    clsUpd.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
+                    clsUpd.TIME = DateTime.Now;
+
+                    foreach (DictionaryEntry de in ins.NewValues)
+                    {
+                        switch (de.Key.ToString())
+                        {
+                            case "IdCompetenta":
+                                clsUpd.IdCompetenta = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (colCompetenta != null)
+                                    clsUpd.Competenta = colCompetenta.PropertiesComboBox.Items.FindByValue(clsUpd.IdCompetenta).Text;
+                                break;
+                            case "Competenta":
+                                if (clsUpd == null)
+                                    clsUpd.Competenta = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Pondere":
+                                clsUpd.Pondere = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToDecimal(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "IdCalificativ":
+                                clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                break;
+                            case "Calificativ":
+                                clsUpd.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "ExplicatiiCalificativ":
+                                clsUpd.ExplicatiiCalificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                            case "Explicatii":
+                                clsUpd.Explicatii = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
+                                break;
+                        }
+                    }
+
+                    switch (General.Nz(Session["IdClient"], 1).ToString())
+                    {
+                        case "25":                          //Franke
+                            {
+                                int suma = 0, cnt = 0;
+                                double medie = 0;
+
+                                lstEval_CompSetCalificativDet = Session["feedEval_CompCalificativ"] as List<Eval_SetCalificativDet>;
+
+                                foreach (Eval_CompetenteAngajatTemp linie in lst)
+                                {
+                                    Eval_SetCalificativDet nota = lstEval_CompSetCalificativDet.Where(p => p.IdCalificativ == linie.IdCalificativ).FirstOrDefault();
+                                    suma += (nota == null ? 0 : nota.Nota);
+                                    cnt++;
+                                }
+                                medie = (Convert.ToDouble(suma) / Convert.ToDouble(cnt)) * 0.2;
+
+
+                                Eval_QuizIntrebari notaFinala = lstEval_QuizIntrebari.Where(p => p.Id == clsUpd.IdLinieQuiz + 1 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (notaFinala != null)
+                                {
+                                    Eval_RaspunsLinii linieNota = lstEval_RaspunsLinii.Where(p => p.Id == notaFinala.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieNota.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieNota, medie.ToString("0.##"), null);
+                                }
+
+                                double notaF = 0;
+                                List<Eval_QuizIntrebari> lstNoteFinale = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA OBIECTIV") && p.IdQuiz == clsUpd.IdQuiz).ToList();
+                                if (lstNoteFinale != null && lstNoteFinale.Count > 0)
+                                {
+                                    foreach (Eval_QuizIntrebari linie in lstNoteFinale)
+                                    {
+                                        Eval_RaspunsLinii linieCalif = lstEval_RaspunsLinii.Where(p => p.Id == linie.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                        PropertyInfo val = linieCalif.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                                        if (val != null)
+                                        {
+                                            string s = val.GetValue(linieCalif, null).ToString();
+                                            if (s.Length > 0)
+                                            {
+                                                double rez = 0;
+                                                double.TryParse(s, out rez);
+                                                notaF += rez;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Eval_QuizIntrebari notaFinalaEvaluare = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTA FINALA EVALUARE") && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                if (notaFinalaEvaluare != null)
+                                {
+                                    Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == notaFinalaEvaluare.Id && p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz).FirstOrDefault();
+                                    PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+
+                                    if (val != null)
+                                        val.SetValue(linieNotaFinala, notaF.ToString("0.##"), null);
+                                }
+
+                                Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
+
+                            }
+                            break;
+                    }
+                }
+
+                for (int x = 0; x < e.DeleteValues.Count; x++)
+                {
+                    ASPxDataDeleteValues del = e.DeleteValues[x] as ASPxDataDeleteValues;
+                    object[] keys = new object[] { del.Keys[0] };
+
+                    Eval_CompetenteAngajatTemp clsDel = lst.Where(p => p.IdAuto == Convert.ToInt32(keys[0])).FirstOrDefault();
+                    if (clsDel == null) return;
+                    lst.Remove(clsDel);
+
+                    List<Eval_CompetenteAngajatTemp> lstSterse = Session["lstEval_CompetenteAngajatTemp_Sterse"] as List<Eval_CompetenteAngajatTemp>;
+                    if (lstSterse == null) lstSterse = new List<Eval_CompetenteAngajatTemp>();
+                    lstSterse.Add(clsDel);
+                    Session["lstEval_CompetenteAngajatTemp_Sterse"] = lstSterse;
+                }
+
+                Session["lstEval_CompetenteAngajatTemp"] = lst;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
 
         private void GrDateObiective_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
         {
@@ -2520,6 +3145,12 @@ namespace WizOne.Eval
                 #region GridProperties
                 grDateCompetente.Width = 1500;
                 grDateCompetente.ID = "grDateCompetente" + "_WXY_" + id.ToString();
+
+                //Florin 2019.06.26
+                grDateCompetente.ClientInstanceName = "grDateObiective" + "_WXY_" + id.ToString();
+                grDateCompetente.ClientIDMode = ClientIDMode.Static;
+                grDateCompetente.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+
                 grDateCompetente.SettingsBehavior.AllowFocusedRow = true;
                 grDateCompetente.SettingsBehavior.EnableCustomizationWindow = true;
                 grDateCompetente.SettingsBehavior.AllowSelectByRowClick = true;
@@ -2531,11 +3162,19 @@ namespace WizOne.Eval
                 grDateCompetente.ClientSideEvents.ContextMenu = "ctx";
                 grDateCompetente.SettingsEditing.Mode = GridViewEditingMode.Inline;
 
-                grDateCompetente.RowDeleting += GrDateCompetente_RowDeleting;
-                grDateCompetente.AutoFilterCellEditorInitialize += GrDateCompetente_AutoFilterCellEditorInitialize;
-                grDateCompetente.RowInserting += GrDateCompetente_RowInserting;
-                grDateCompetente.RowUpdating += GrDateCompetente_RowUpdating;
+                //grDateCompetente.RowDeleting += GrDateCompetente_RowDeleting;
+                //grDateCompetente.AutoFilterCellEditorInitialize += GrDateCompetente_AutoFilterCellEditorInitialize;
+                //grDateCompetente.RowInserting += GrDateCompetente_RowInserting;
+                //grDateCompetente.RowUpdating += GrDateCompetente_RowUpdating;
                 grDateCompetente.InitNewRow += GrDateCompetente_InitNewRow;
+
+
+
+                //Florin 2019.06.26
+                grDateCompetente.BatchUpdate += GrDateCompetente_BatchUpdate;
+                Session["NumeGriduri"] += ";" + grDateCompetente.ID;
+
+
 
                 //Radu 13.05.2019
                 if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 25)
@@ -3439,8 +4078,8 @@ namespace WizOne.Eval
             {
                 string sqlUpd = "";
                 string sablon =
-                    @"UPDATE ""Eval_RaspunsLinii"" SET Super@pozIst=Super@poz
-                    WHERE ""IdQuiz""=@1 AND F10003=@2 AND Super@poz IS NOT NULL AND Super@poz<>'' AND Super@pozIst<>Super@poz;";
+                    @"UPDATE ""Eval_RaspunsLinii"" SET ""Super@pozIst""=""Super@poz""
+                    WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Super@poz"" IS NOT NULL AND ""Super@poz""<>'' AND ""Super@pozIst""<>""Super@poz"";";
 
                 DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>@3", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), pozitie });
                 for(int i = 0; i < dt.Rows.Count; i++)
@@ -3463,23 +4102,48 @@ namespace WizOne.Eval
                     
                     INSERT INTO ""Eval_ObiIndividualeTemp""(""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", F10003,  ""Pozitie"", ""Id"",  ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""IdUnic"", USER_NO, TIME)
                     SELECT ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", A.""IdQuiz"", A.F10003,  B.""Pozitie"", ""Id"",  ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""IdUnic"", A.USER_NO, A.TIME
-                    FROM Eval_ObiIndividualeTemp A
-                    INNER JOIN Eval_RaspunsIstoric B ON A.IdQuiz=B.IdQuiz AND A.F10003=B.F10003 AND B.Pozitie<>@3
-                    WHERE A.IdQuiz = @1 AND A.F10003 = @2 AND A.Pozitie=@3 AND
-                    (B.Pozitie * 100000000 + A.IdUnic) NOT IN (SELECT (Pozitie * 100000000 + IdUnic)
-                    FROM Eval_ObiIndividualeTemp A
-                    WHERE A.IdQuiz = @1 AND A.F10003 = @2 AND A.Pozitie<>@3);
+                    FROM ""Eval_ObiIndividualeTemp"" A
+                    INNER JOIN ""Eval_RaspunsIstoric"" B ON A.""IdQuiz""=B.""IdQuiz"" AND A.F10003=B.F10003 AND B.""Pozitie""<>@3
+                    WHERE A.""IdQuiz"" = @1 AND A.F10003 = @2 AND A.""Pozitie""=@3 AND
+                    (B.""Pozitie"" * 100000000 + A.""IdUnic"") NOT IN (SELECT (""Pozitie"" * 100000000 + ""IdUnic"")
+                    FROM ""Eval_ObiIndividualeTemp"" A
+                    WHERE A.""IdQuiz"" = @1 AND A.F10003 = @2 AND A.""Pozitie""<>@3);
 
                     DELETE
-                    FROM Eval_ObiIndividualeTemp
-                    WHERE IdQuiz = @1 AND F10003 = @2 AND Pozitie<>@3 AND
-                    IdUnic NOT IN (SELECT IdUnic
-                    FROM Eval_ObiIndividualeTemp
-                    WHERE IdQuiz = @1 AND F10003 = @2 AND Pozitie=@3);
+                    FROM ""Eval_ObiIndividualeTemp""
+                    WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie""<>@3 AND
+                    ""IdUnic"" NOT IN (SELECT ""IdUnic""
+                    FROM ""Eval_ObiIndividualeTemp""
+                    WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie""=@3);
 
                     END;";
 
                 General.ExecutaNonQuery(strSql, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), pozitie });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
+
+        //Florin 2019.06.27
+        public void SalveazaGridurile()
+        {
+            try
+            {
+                if (General.Nz(Session["NumeGriduri"], "").ToString() != "")
+                {
+                    string[] arr = Session["NumeGriduri"].ToString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        ASPxGridView grDate = grIntrebari.FindControl(arr[i]) as ASPxGridView;
+                        if (grDate != null)
+                            grDate.UpdateEdit();
+                    }
+                }
             }
             catch (Exception ex)
             {

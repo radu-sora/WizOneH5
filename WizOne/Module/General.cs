@@ -7529,12 +7529,10 @@ namespace WizOne.Module
 
 
 
-        public static void CalculCO(int an, int marca = -99)
+        public static void CalculCO(int an, int marca = -99, bool cuActualizareInF100 = true)
         {
             try
             {
-                //int an = Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year));
-
                 string dtInc = an.ToString() + "-01-01";
                 string dtSf = an.ToString() + "-12-31";
 
@@ -7614,23 +7612,23 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    dtInc = "01/01/" + an.ToString();
-                    dtSf = "31/12/" + an.ToString();
+                    dtInc = "01-01-" + an.ToString();
+                    dtSf = "31-12-" + an.ToString();
 
                     //daca nu exista inseram linie goala si apoi updatam
                     strSql += "insert into \"Ptj_tblZileCO\"(F10003, \"An\", USER_NO, TIME) " +
                     " select F10003, " + an + ", " + HttpContext.Current.Session["UserId"] + ", SYSDATE from F100 where F10003 not in (select F10003 from \"Ptj_tblZileCO\" where \"An\"=" + an + ") " +
-                    " and F10022 <= to_date('" + dtSf + "','DD/MM/YYYY') and to_date('" + dtInc + "','DD/MM/YYYY') <= F10023" + filtruIns + ";";
+                    " and F10022 <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023" + filtruIns + ";";
 
                     strSql += "update \"Ptj_tblZileCO\" x set x.\"Cuvenite\" = ( " +
                             " with xx as " +
-                            " (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01/01/2100','DD/MM/YYYY') then f111.f11106 else f111.f11107 end la_data from f111 inner join  " +
-                            " (select a.f11103, a.f11105, case when a.f11107=to_date('01/01/2100','DD/MM/YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) timp from F111 a inner join f111 b " +
-                            " on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01/01/2100','DD/MM/YYYY') then b.f11106 else b.f11107 end  " +
-                            " and b.f11105 <= case when a.f11107=to_date('01/01/2100','DD/MM/YYYY') then a.f11106 else a.f11107 end) " +
-                            " group by a.f11103, a.f11105, case when a.f11107=to_date('01/01/2100','DD/MM/YYYY') then a.f11106 else a.f11107 end, a.time) t " +
+                            " (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end la_data from f111 inner join  " +
+                            " (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) timp from F111 a inner join f111 b " +
+                            " on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end  " +
+                            " and b.f11105 <= case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end) " +
+                            " group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end, a.time) t " +
                             " on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and  " +
-                            " case when f111.f11107=to_date('01/01/2100','DD/MM/YYYY') then f111.f11106 else f111.f11107 end = t.f11107 and f111.time = t.timp " +
+                            " case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 and f111.time = t.timp " +
                             " union all " +
                             " select f10003 Marca, \"DataInceput\" de_la_data, \"DataSfarsit\" la_data " +
                             " from \"Ptj_Cereri\" inner join \"Ptj_tblAbsente\" on \"Ptj_Cereri\".\"IdAbsenta\" = \"Ptj_tblAbsente\".\"Id\" " +
@@ -7648,19 +7646,19 @@ namespace WizOne.Module
                     " ROUND((case when a.F100642 is null or a.F100642 = 0 then c.F02615 else TO_NUMBER(a.F100642) end " +                                                   //nr zile cuvenite conform grilei
                     " + (CASE WHEN NVL(a.F10027,0)>=2 THEN to_number(nvl((select \"Valoare\" from \"tblParametrii\" where \"Nume\"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) ELSE 0 END)) " +               //daca este pers. cu dizabilitati mai se adauga 3 zile
                     " * " +                                                                 //aceste zile cuvenite se inmultesc cu ce urmeaza
-                    " (least(trunc(f10023),to_date('31/12/" + an + "','DD/MM/YYYY') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
-                    " ) - greatest(trunc(f10022),to_date('01/01/" + an + "','DD/MM/YYYY'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta
+                    " (least(trunc(f10023),to_date('31-12-" + an + "','DD-MM-YYYY') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
+                    " ) - greatest(trunc(f10022),to_date('01-01-" + an + "','DD-MM-YYYY'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta
                     " - nvl(b.cfp,0) " +                                                   //scadem zilele de concediu fara plata luate in anul de referinta
-                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('31/12/" + an + "','DD/MM/YYYY')) - greatest(trunc(f11105),to_date('01/01/" + an + "','DD/MM/YYYY')) + 1),0) from f111 A where f11103=" + f10003 + " and F11105 <= F11107 AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')) " +
+                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('31-12-" + an + "','DD-MM-YYYY')) - greatest(trunc(f11105),to_date('01-01-" + an + "','DD-MM-YYYY')) + 1),0) from f111 A where f11103=" + f10003 + " and F11105 <= F11107 AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')) " +
                     " ) " +
                     " /365,0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus
                     " from F100 a " +
-                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31/12/" + an + "','DD/MM/YYYY'), " +
-                    " (select to_date('01/' ||  F01012 || '/' ||  F01011,'DD/MM/YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
+                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
+                    " (select to_date('01/' ||  F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma + luna de lucru deschisa pt ca functia MONTHS_BETWEEN nu tine cont de ea
                     " left join F026 c on a.F10072 = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
-                    " left join ((select F10003, nvl(sum(least(trunc(\"DataSfarsit\"),to_date('31/12/" + an + "','DD/MM/YYYY')-1) - greatest(trunc(\"DataInceput\"),to_date('01/01/" + an + "','DD/MM/YYYY'))+1),0) as cfp from \"Ptj_Cereri\" where \"IdAbsenta\" in (SELECT \"Id\" from \"Ptj_tblAbsente\" where \"AbsenteCFPInCalculCO\"=1) and \"IdStare\"=3 AND (to_Char(\"DataInceput\",'YYYY') ='" + an + "' OR to_Char(\"DataSfarsit\",'YYYY') ='" + an + "') group by f10003)) b on a.F10003 = b.F10003 " +  //se calcuelaza nr de cfp avute in anul de referinta
-                    " where F10022 <= to_date('31/12/" + an + "','DD/MM/YYYY') and to_date('01/01/" + an + "','DD/MM/YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " left join ((select F10003, nvl(sum(least(trunc(\"DataSfarsit\"),to_date('31-12-" + an + "','DD-MM-YYYY')-1) - greatest(trunc(\"DataInceput\"),to_date('01-01-" + an + "','DD-MM-YYYY'))+1),0) as cfp from \"Ptj_Cereri\" where \"IdAbsenta\" in (SELECT \"Id\" from \"Ptj_tblAbsente\" where \"AbsenteCFPInCalculCO\"=1) and \"IdStare\"=3 AND (to_Char(\"DataInceput\",'YYYY') ='" + an + "' OR to_Char(\"DataSfarsit\",'YYYY') ='" + an + "') group by f10003)) b on a.F10003 = b.F10003 " +  //se calcuelaza nr de cfp avute in anul de referinta
+                    " where F10022 <= to_date('31-12-" + an + "','DD-MM-YYYY') and to_date('01-01-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
 
                     strSql += "update \"Ptj_tblZileCO\" x set x.\"CuveniteAn\" = (select y.ZileCuvenite from " +
@@ -7669,11 +7667,11 @@ namespace WizOne.Module
                     " + (CASE WHEN NVL(a.F10027,0)>=2 THEN to_number(nvl((select \"Valoare\" from \"tblParametrii\" where \"Nume\"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) ELSE 0 END) " +               //daca este pers. cu dizabilitati mai se adauga 3 zile
                     " ) as ZileCuvenite " +
                     " from F100 a " +
-                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31/12/" + an + "','DD/MM/YYYY'), " +
-                    " (select to_date('01/' || F01012 || '/' ||  F01011,'DD/MM/YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
+                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
+                    " (select to_date('01/' || F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma + luna de lucru deschisa pt ca functia MONTHS_BETWEEN nu tine cont de ea
                     " left join F026 c on a.F10072 = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
-                    " where F10022 <= to_date('31/12/" + an + "','DD/MM/YYYY') and to_date('01/01/" + an + "','DD/MM/YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " where F10022 <= to_date('31-12-" + an + "','DD-MM-YYYY') and to_date('01-01-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
 
                 }
@@ -7682,9 +7680,11 @@ namespace WizOne.Module
 
                 General.ExecutaNonQuery(strSql, null);
 
-              
-                strSql = "UPDATE a SET  a.F100642 = b.\"CuveniteAn\", a.F100995 = b.\"Cuvenite\", a.F100996 = b.\"SoldAnterior\" FROM F100 a,  \"Ptj_tblZileCO\" b WHERE a.F10003 = B.F10003 AND b.\"An\" =  " + an;
-                General.ExecutaNonQuery(strSql, null);
+                if (cuActualizareInF100)
+                {
+                    strSql = "UPDATE a SET  a.F100642 = b.\"CuveniteAn\", a.F100995 = b.\"Cuvenite\", a.F100996 = b.\"SoldAnterior\" FROM F100 a,  \"Ptj_tblZileCO\" b WHERE a.F10003 = B.F10003 AND b.\"An\" =  " + an;
+                    General.ExecutaNonQuery(strSql, null);
+                }
             }
             catch (Exception ex)
             {

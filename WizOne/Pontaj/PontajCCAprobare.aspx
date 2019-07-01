@@ -103,7 +103,7 @@
                     
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblAnLuna" runat="server" style="display:inline-block;">Luna/An</label>
-                            <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" EditFormatString="MM/yyyy" EditFormat="Custom" >
+                            <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
                             </dx:ASPxDateEdit>
                     </div>

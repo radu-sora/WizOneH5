@@ -3,25 +3,35 @@
 <script type="text/javascript">  
     var newItem = 0;
 
-    function OnValueChangedComp(s, e) {
-        gasit = false;
-        newItem = s.GetValue();
-        for (var index = grDateComponente.GetTopVisibleIndex(); index < grDateComponente.GetVisibleRowsOnPage(); index++) {  
-            grDateComponente.GetRowValues(index, "F02104", OnCallbackComp);          
-        }  
-        
-    }
-
-    function OnCallbackComp(value) {
-        if (value == newItem) {
+    function OnEndCallbackComp(s, e) {
+        if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: "Codul a mai fost deja atribuit acestui angajat!",
+                title: "Atentie !", text: s.cpAlertMessage,
                 type: "warning"
             });
-            var cb = grDateComponente.GetEditor("F02104"); 
-            cb.SetValue(null);
+            s.cpAlertMessage = null;
         }
     }
+
+    //function OnValueChangedComp(s, e) {
+    //    gasit = false;
+    //    newItem = s.GetValue();
+    //    for (var index = grDateComponente.GetTopVisibleIndex(); index < grDateComponente.GetVisibleRowsOnPage(); index++) {  
+    //        grDateComponente.GetRowValues(index, "F02104", OnCallbackComp);          
+    //    }  
+        
+    //}
+
+    //function OnCallbackComp(value) {
+    //    if (value == newItem) {
+    //        swal({
+    //            title: "Atentie !", text: "Codul a mai fost deja atribuit acestui angajat!",
+    //            type: "warning"
+    //        });
+    //        var cb = grDateComponente.GetEditor("F02104"); 
+    //        cb.SetValue(null);
+    //    }
+    //}
 
     function OnTextChangedComp(s, e) {
         var val = s.GetValue();
@@ -41,7 +51,7 @@
           OnRowInserting="grDateComponente_RowInserting" OnRowUpdating="grDateComponente_RowUpdating" OnCellEditorInitialize="grDateComponente_CellEditorInitialize">        
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-        <ClientSideEvents  ContextMenu="ctx" /> 
+        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackComp"/> 
         <SettingsEditing Mode="Inline" />       
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />          

@@ -12,11 +12,11 @@
             cmbChild = eval('cmbChild1_' + visibleIndex);
         cmbChild.PerformCallback(s.GetValue());
 
-        newItem = s.GetValue();
-        for (var index = grDateSporuri1.GetTopVisibleIndex(); index < grDateSporuri1.GetVisibleRowsOnPage(); index++) {
-            if (index != visibleIndex)
-                grDateSporuri1.GetRowValues(index, "F02504", OnCallbackSp1);
-        }
+        //newItem = s.GetValue();
+        //for (var index = grDateSporuri1.GetTopVisibleIndex(); index < grDateSporuri1.GetVisibleRowsOnPage(); index++) {
+        //    if (index != visibleIndex)
+        //        grDateSporuri1.GetRowValues(index, "F02504", OnCallbackSp1);
+        //}
     }
 
     function OnSelectedIndexChanged2(s, e, visibleIndex) {
@@ -27,34 +27,46 @@
             cmbChild = eval('cmbChild2_' + visibleIndex);
         cmbChild.PerformCallback(s.GetValue());
 
-        newItem = s.GetValue();
-        for (var index = grDateSporuri2.GetTopVisibleIndex(); index < grDateSporuri2.GetVisibleRowsOnPage(); index++) {
-            if (index != visibleIndex)
-                grDateSporuri2.GetRowValues(index, "F02504", OnCallbackSp);
+        //newItem = s.GetValue();
+        //for (var index = grDateSporuri2.GetTopVisibleIndex(); index < grDateSporuri2.GetVisibleRowsOnPage(); index++) {
+        //    if (index != visibleIndex)
+        //        grDateSporuri2.GetRowValues(index, "F02504", OnCallbackSp);
+        //}
+    }
+
+    //function OnCallbackSp1(value) {
+    //    if (value == newItem) {
+    //        swal({
+    //            title: "Atentie !", text: "Acest spor a mai fost deja atribuit acestui angajat!",
+    //            type: "warning"
+    //        });
+    //        var tb = grDateSporuri1.GetEditor("Spor");
+    //        tb.SetValue(null);
+    //    }
+    //}
+
+    //function OnCallbackSp2(value) {
+    //    if (value == newItem) {
+    //        swal({
+    //            title: "Atentie !", text: "Acest spor a mai fost deja atribuit acestui angajat!",
+    //            type: "warning"
+    //        });
+    //        var tb = grDateSporuri2.GetEditor("Spor");
+    //        tb.SetValue(null);
+    //    }
+    //}
+
+    function OnEndCallbackSporuri(s, e) {
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "Atentie !", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
         }
     }
 
-    function OnCallbackSp1(value) {
-        if (value == newItem) {
-            swal({
-                title: "Atentie !", text: "Acest spor a mai fost deja atribuit acestui angajat!",
-                type: "warning"
-            });
-            var tb = grDateSporuri1.GetEditor("Spor");
-            tb.SetValue(null);
-        }
-    }
 
-    function OnCallbackSp2(value) {
-        if (value == newItem) {
-            swal({
-                title: "Atentie !", text: "Acest spor a mai fost deja atribuit acestui angajat!",
-                type: "warning"
-            });
-            var tb = grDateSporuri2.GetEditor("Spor");
-            tb.SetValue(null);
-        }
-    }
     
 </script>
 <body>
@@ -63,7 +75,7 @@
           OnRowUpdating="grDateSporuri1_RowUpdating" >        
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-        <ClientSideEvents  ContextMenu="ctx" /> 
+        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackSporuri"/> 
         <SettingsEditing Mode="Inline" />         
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
@@ -116,7 +128,7 @@
           OnRowUpdating="grDateSporuri2_RowUpdating"  >        
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-        <ClientSideEvents  ContextMenu="ctx" /> 
+        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackSporuri"/> 
         <SettingsEditing Mode="Inline" />                       
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  

@@ -16,7 +16,7 @@
                     <SettingsEditing Mode="Inline" />   
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                         <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat"  Width="75px" Visible="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                         <dx:GridViewDataComboBoxColumn FieldName="IdContact" Name="IdContact" Caption="Tip contact" Width="100px" >

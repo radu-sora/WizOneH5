@@ -26,14 +26,15 @@
                 });
 
                 if (texts != "")
-                    texts = texts.substring(1);
+                    texts = texts.substring(1);               
+                    
             }
 
-            if (texts != "")
-            {
+            //if (texts != "")
+            //{
                 var txt = ASPxClientControl.GetControlCollection().GetByName(__name_text_box);
                 txt.SetText(texts);
-            }
+            //}
             __name_text_box = "";
             EmptyVal();
             cmbTipAbs.SetText(null);
@@ -58,8 +59,9 @@
             //cmbDept.SetValue(null);
             //cmbSubDept.SetValue(null);
             //cmbBirou.SetValue(null);
+            //cmbCateg.SetValue(null);
 
-            //pnlCtl.PerformCallback('EmptyFields');
+            pnlCtl.PerformCallback('EmptyFields');
         }
 
     </script>

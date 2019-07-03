@@ -237,40 +237,60 @@ namespace WizOne.Personal
 
                 DataRow row = dsCalcul.Tables["Sporuri1"].Rows.Find(keys);
                 int poz = 0, val = 0;
-                foreach (DataColumn col in dsCalcul.Tables["Sporuri1"].Columns)
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Sporuri1"].Rows.Count; i++)
                 {
-                    if (col.ColumnName != "Id")
+                    if (dsCalcul.Tables["Sporuri1"].Rows[i]["F02504"].ToString() == e.NewValues["F02504"].ToString())
                     {
-                        col.ReadOnly = false;
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                        if (col.ColumnName == "F02504")
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateSporuri1.JSProperties["cpAlertMessage"] = "Acest spor a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Sporuri1"].Columns)
+                    {
+                        if (col.ColumnName != "Id")
                         {
-                            DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
-                            poz = Convert.ToInt32(dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
+                            col.ReadOnly = false;
+                            row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                            if (col.ColumnName == "F02504")
+                            {
+                                DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
+                                poz = Convert.ToInt32(dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
+                            }
+                            if (col.ColumnName == "F01105")
+                                val = Convert.ToInt32(e.NewValues[col.ColumnName]);
                         }
-                        if (col.ColumnName == "F01105")
-                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
                     }
                 }
 
                 e.Cancel = true;
-                grDateSporuri1.CancelEdit();              
+                grDateSporuri1.CancelEdit();
 
-                ds.Tables[0].Rows[0]["F10065" + (Convert.ToInt32(keys[0]) - 1).ToString()] = e.NewValues["F02504"];
-                ds.Tables[1].Rows[0]["F10065" + (Convert.ToInt32(keys[0]) - 1).ToString()] = e.NewValues["F02504"];
+                if (!dublura)
+                {
+                    ds.Tables[0].Rows[0]["F10065" + (Convert.ToInt32(keys[0]) - 1).ToString()] = e.NewValues["F02504"];
+                    ds.Tables[1].Rows[0]["F10065" + (Convert.ToInt32(keys[0]) - 1).ToString()] = e.NewValues["F02504"];
 
 
-                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
-                string sirNou = "";
-                for (int i = 0; i < sir.Length; i++)
-                    if (i == poz - 1)
-                        sirNou += val.ToString();
-                    else
-                        sirNou += sir[i];
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
 
-                ds.Tables[0].Rows[0]["F10067"] = sirNou;
-                ds.Tables[1].Rows[0]["F10067"] = sirNou;
-
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                    ds.Tables[1].Rows[0]["F10067"] = sirNou;
+                }
 
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
@@ -309,40 +329,59 @@ namespace WizOne.Personal
                 DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
                 int poz = 0, val = 0;
                 DataRow row = dsCalcul.Tables["Sporuri2"].Rows.Find(keys);
-                foreach (DataColumn col in dsCalcul.Tables["Sporuri2"].Columns)
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Sporuri2"].Rows.Count; i++)
                 {
-                    if (col.ColumnName != "Id")
+                    if (dsCalcul.Tables["Sporuri2"].Rows[i]["F02504"].ToString() == e.NewValues["F02504"].ToString())
                     {
-                        col.ReadOnly = false;
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                        if (col.ColumnName == "F02504")
-                        {
-                            DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
-                            poz = Convert.ToInt32(dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
-                        }
-                        if (col.ColumnName == "F01105")
-                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        dublura = true;
+                        break;
                     }
                 }
 
+                if (dublura)
+                {
+                    grDateSporuri2.JSProperties["cpAlertMessage"] = "Acest spor a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Sporuri2"].Columns)
+                    {
+                        if (col.ColumnName != "Id")
+                        {
+                            col.ReadOnly = false;
+                            row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                            if (col.ColumnName == "F02504")
+                            {
+                                DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
+                                poz = Convert.ToInt32(dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
+                            }
+                            if (col.ColumnName == "F01105")
+                                val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        }
+                    }
+                }
                 e.Cancel = true;
                 grDateSporuri2.CancelEdit();
 
-                ds.Tables[0].Rows[0]["F10066" + (Convert.ToInt32(keys[0]) - 11).ToString()] = e.NewValues["F02504"];
-                ds.Tables[1].Rows[0]["F10066" + (Convert.ToInt32(keys[0]) - 11).ToString()] = e.NewValues["F02504"];
+                if (!dublura)
+                {
+                    ds.Tables[0].Rows[0]["F10066" + (Convert.ToInt32(keys[0]) - 11).ToString()] = e.NewValues["F02504"];
+                    ds.Tables[1].Rows[0]["F10066" + (Convert.ToInt32(keys[0]) - 11).ToString()] = e.NewValues["F02504"];
 
 
-                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
-                string sirNou = "";
-                for (int i = 0; i < sir.Length; i++)
-                    if (i == poz - 1)
-                        sirNou += val.ToString();
-                    else
-                        sirNou += sir[i];
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
 
-                ds.Tables[0].Rows[0]["F10067"] = sirNou;
-                ds.Tables[1].Rows[0]["F10067"] = sirNou;
-
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                    ds.Tables[1].Rows[0]["F10067"] = sirNou;
+                }
 
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;

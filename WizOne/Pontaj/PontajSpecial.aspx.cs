@@ -339,7 +339,9 @@ namespace WizOne.Pontaj
 
                 //Florin 2019.05.13
                 //calcul formule cumulat
-                General.CalculFormuleCumulatToti(1, 1, $@" {General.ToDataUniv(dataStart)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dataSf)} AND F10003 IN ({lista})");
+                //General.CalculFormuleCumulatToti(1, 1, $@" {General.ToDataUniv(dataStart)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dataSf)} AND F10003 IN ({lista})");
+                //Radu 01.07.2019
+                General.CalculFormuleCumulatToti(dataStart.Year, dataStart.Month, $@" F10003 IN ({lista})");
 
             }
             catch (Exception ex)

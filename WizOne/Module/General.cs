@@ -939,6 +939,47 @@ namespace WizOne.Module
             return rez;
         }
 
+        public static void ExecutaNonQueryOracle(string procNume, object[] lstParam)
+        {
+            OracleConnection conn = new OracleConnection(Constante.cnnWeb);
+            conn.Open();
+
+            try
+            {
+                OracleCommand cmd = new OracleCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = procNume;
+                cmd.CommandType = CommandType.StoredProcedure;
+                if (lstParam != null)
+                {
+                    foreach (object param in lstParam)
+                    {
+                        try
+                        {
+                            string[] arr = param.ToString().Split('=');
+                            cmd.Parameters.Add(arr[0], OracleDbType.Varchar2).Value = arr[1];
+                        }
+                        catch (Exception ex)
+                        {
+                            MemoreazaEroarea(ex, "General", "DamiOleDbCommand - Parametrii");
+                        }
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
 
         //public static dynamic DamiOracleScalar(string strSql, object[] lstParam)
         //{

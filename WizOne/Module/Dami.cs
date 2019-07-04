@@ -1285,14 +1285,16 @@ namespace WizOne.Module
                     if (Constante.tipBD == 1)           //SQL
                     {
                         sqlQuery = "exec \"GetNextId\" '{0}', {1}";
+                        sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
+                        General.ExecutaNonQuery(sqlQuery, null);
                     }
                     else
                     {
                         //Oracle
                         sqlQuery = "exec \"GetNextId\" ('{0}', {1})";
+                        sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
+                        General.ExecutaNonQueryOracle("\"GetNextId\"", new object[] { "tableName=" + tabela, "nrInreg=" + nrInreg });
                     }
-                    sqlQuery = string.Format(sqlQuery, tabela, nrInreg);
-                    General.ExecutaNonQuery(sqlQuery, null);
 
                     sqlQuery = "select \"NextId\" from \"TableSYSInfo_NextId\" where \"TableName\" ='{0}'";
                     sqlQuery = string.Format(sqlQuery, tabela);

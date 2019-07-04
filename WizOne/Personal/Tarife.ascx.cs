@@ -121,33 +121,53 @@ namespace WizOne.Personal
 
                 object[] row = new object[dsCalcul.Tables["Tarife"].Columns.Count];
                 int x = 0, poz = 0, val = 0;
-                foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
                 {
-                    row[x] = e.NewValues[col.ColumnName];
-                    if (col.ColumnName == "F01104")
-                        poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
-                    if (col.ColumnName == "F01105")
-                        val = Convert.ToInt32(e.NewValues[col.ColumnName]);
-                    x++;
+                    if (dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
                 }
 
-                dsCalcul.Tables["Tarife"].Rows.Add(row);
+                if (dublura)
+                {
+                    grDateTarife.JSProperties["cpAlertMessage"] = "Aceasta categorie a mai fost deja atribuita acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                    {
+                        row[x] = e.NewValues[col.ColumnName];
+                        if (col.ColumnName == "F01104")
+                            poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        if (col.ColumnName == "F01105")
+                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        x++;
+                    }
+                    dsCalcul.Tables["Tarife"].Rows.Add(row);
+                }
+            
                 e.Cancel = true;
                 grDateTarife.CancelEdit();
                 grDateTarife.DataSource = dsCalcul.Tables["Tarife"];
                 grDateTarife.KeyFieldName = "F01104";
 
-                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
-                string sirNou = "";
-                for (int i = 0; i < sir.Length; i++)
-                    if (i == poz - 1)
-                        sirNou += val.ToString();
-                    else
-                        sirNou += sir[i];
+                if (!dublura)
+                {
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
 
-                ds.Tables[0].Rows[0]["F10067"] = sirNou;
-                ds.Tables[1].Rows[0]["F10067"] = sirNou;
-
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                    ds.Tables[1].Rows[0]["F10067"] = sirNou;
+                }
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
             }
@@ -183,31 +203,51 @@ namespace WizOne.Personal
 
                 DataRow row = dsCalcul.Tables["Tarife"].Rows.Find(keys);
                 int poz = 0, val = 0;
-                foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
-                {                  
-                    col.ReadOnly = false;
-                    var edc = e.NewValues[col.ColumnName];
-                    row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                    if (col.ColumnName == "F01104")
-                        poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
-                    if (col.ColumnName == "F01105")
-                        val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
+                {
+                    if (dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateTarife.JSProperties["cpAlertMessage"] = "Aceasta categorie a mai fost deja atribuita acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                    {
+                        col.ReadOnly = false;
+                        var edc = e.NewValues[col.ColumnName];
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                        if (col.ColumnName == "F01104")
+                            poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        if (col.ColumnName == "F01105")
+                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    }
                 }
 
                 e.Cancel = true;
                 grDateTarife.CancelEdit();
 
-                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
-                string sirNou = "";
-                for (int i = 0; i < sir.Length; i++)
-                    if (i == poz - 1)
-                        sirNou += val.ToString();
-                    else
-                        sirNou += sir[i];
+                if (!dublura)
+                {
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
 
-                ds.Tables[0].Rows[0]["F10067"] = sirNou;
-                ds.Tables[1].Rows[0]["F10067"] = sirNou;
-
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                    ds.Tables[1].Rows[0]["F10067"] = sirNou;
+                }
 
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;

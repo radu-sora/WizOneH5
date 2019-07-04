@@ -2507,24 +2507,24 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
                 {
                     strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) B ON A.F10003 = B.F10003 ";
+                    strLeg = " LEFT JOIN (SELECT F10003 AS MARCA1, F100958, F100959 FROM F1001) B ON A.F10003 = B.MARCA1 ";
                 }
                 if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
                 {
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
-                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) B ON A.F10003 = B.F10003 ";
+                    strLeg = " LEFT JOIN (SELECT F10003 AS MARCA2, F100958, F100959 FROM F1001) B ON A.F10003 = B.MARCA2 ";
                 }
                 if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
                 {
                     strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-                    strLeg += " LEFT JOIN (SELECT F10003, F10061, F10062 FROM F100) C ON A.F10003 = C.F10003 ";
+                    strLeg += " LEFT JOIN (SELECT F10003 AS MARCA3, F10061 AS CATEG1, F10062 AS CATEG2 FROM F100) C ON A.F10003 = C.MARCA3 ";
                 }
 
                 if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
 
                 string strFiltruSpecial = "";
                 if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    strFiltruSpecial = strFiltru.Replace("A.F10095", "B.F10095").Replace("A.F1006", "C.F1006");
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "B.F10095").Replace("A.F10061", "C.CATEG1").Replace("A.F10062", "C.CATEG2");
                 else
                     strLeg = "";
                 
@@ -2598,7 +2598,7 @@ namespace WizOne.Pontaj
                            
                                 FROM (
                                  SELECT TOP 100 PERCENT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, A.F10008 + ' ' + A.F10009 AS AngajatNume, st.Denumire AS StarePontaj, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate,
-                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"", F10061, F10062
+                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"", F10061, F10062, B.F100958, B.F100959
                                 {zileVal}  {zileF}
                                 FROM Ptj_Cumulat X 
 		                        LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
@@ -2641,7 +2641,7 @@ namespace WizOne.Pontaj
                                 SELECT  *                                
                                 FROM (
                                 SELECT X.F10003, TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"", A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", st.""Denumire"" AS ""StarePontaj"", nvl(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", isnull(zlp.""Ramase"", 0) as ""ZLPNeefectuate"",
-                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"" ,  F10061, F10062                       
+                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"" ,  F10061, F10062,  B.F100958, B.F100959                       
                                 {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
 		                        LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""

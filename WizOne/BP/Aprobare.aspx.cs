@@ -187,7 +187,7 @@ namespace WizOne.BP
                     if (Convert.ToInt32(arr[6].ToString()) < Convert.ToInt32(dt010.Rows[0][0].ToString())
                         || (Convert.ToInt32(arr[6].ToString()) == Convert.ToInt32(dt010.Rows[0][0].ToString()) && Convert.ToInt32(arr[5].ToString()) < Convert.ToInt32(dt010.Rows[0][1].ToString())))
                     {
-                        MessageBox.Show("Nu se pot introduce bonusuri pentru o luna anterioara lunii de salarizare curente!", MessageBox.icoError, "Atentie !");
+                        grDate.JSProperties["cpAlertMessage"] = "Nu se pot introduce bonusuri pentru o luna anterioara lunii de salarizare curente!";
                         return;
                     }
 
@@ -223,7 +223,7 @@ namespace WizOne.BP
                                     DateTime dt = new DateTime(Convert.ToInt32(dtZiBloc.Rows[0][0].ToString().Substring(6, 4)), Convert.ToInt32(dtZiBloc.Rows[0][0].ToString().Substring(3, 2)), Convert.ToInt32(dtZiBloc.Rows[0][0].ToString().Substring(0, 2)));
                                     if (dt.Date < DateTime.Now.Date)
                                     {
-                                        MessageBox.Show("Operatie blocata pentru aceasta luna", MessageBox.icoError, "Atentie !");
+                                        grDate.JSProperties["cpAlertMessage"] = "Operatie blocata pentru aceasta luna";
                                         return;
                                     }
                                 }

@@ -12,26 +12,34 @@
             cmbChild = eval('cmbChild_' + visibleIndex);
         cmbChild.PerformCallback(s.GetValue());
 
-        newItem = s.GetValue();
-        for (var index = grDateTarife.GetTopVisibleIndex(); index < grDateTarife.GetVisibleRowsOnPage(); index++) {
-            if (index != visibleIndex)
-                grDateTarife.GetRowValues(index, "F01104", OnCallbackTar);
-        }  
+        //newItem = s.GetValue();
+        //for (var index = grDateTarife.GetTopVisibleIndex(); index < grDateTarife.GetVisibleRowsOnPage(); index++) {
+        //    if (index != visibleIndex)
+        //        grDateTarife.GetRowValues(index, "F01104", OnCallbackTar);
+        //}  
 
     }
 
-    function OnCallbackTar(value) {
-        if (value == newItem) {
+    //function OnCallbackTar(value) {
+    //    if (value == newItem) {
+    //        swal({
+    //            title: "Atentie !", text: "Aceasta categorie a mai fost deja atribuita acestui angajat!",
+    //            type: "warning"
+    //        }); 
+    //        var tb = grDateTarife.GetEditor("DenCateg");
+    //        tb.SetValue(null);
+    //    }
+    //}
+
+    function OnEndCallbackTarife(s, e) {
+        if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: "Aceasta categorie a mai fost deja atribuita acestui angajat!",
+                title: "Atentie !", text: s.cpAlertMessage,
                 type: "warning"
-            }); 
-            var tb = grDateTarife.GetEditor("DenCateg");
-            tb.SetValue(null);
+            });
+            s.cpAlertMessage = null;
         }
     }
-
-
     
 </script>
 <body>
@@ -40,7 +48,7 @@
           OnRowInserting="grDateTarife_RowInserting" OnRowUpdating="grDateTarife_RowUpdating" OnCellEditorInitialize="grDateTarife_CellEditorInitialize"  >        
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-        <ClientSideEvents  ContextMenu="ctx" /> 
+        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackTarife"/> 
         <SettingsEditing Mode="Inline" />     
         <Columns>
             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />  

@@ -3783,31 +3783,31 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetStructOrg()
-        {
-            DataTable table = new DataTable();
+        //public static DataTable GetStructOrg()
+        //{
+        //    DataTable table = new DataTable();
 
-            string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+        //    string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
 
-            if (Constante.tipBD == 2) cmp = " CAST(ROWNUM AS INT) ";
+        //    if (Constante.tipBD == 2) cmp = " CAST(ROWNUM AS INT) ";
 
-            string strSql = @"SELECT {0} as ""IdAuto"", a.F00204, b.F00305, c.F00406, d.F00507 ,e.F00608, F.F00709, G.F00810,
-                                a.F00202, b.F00304 , c.F00405 , d.F00506, e.F00607, F.F00708 , G.F00809
-                                FROM F002 A
-                                LEFT JOIN F003 B ON A.F00202 = B.F00303
-                                LEFT JOIN F004 C ON B.F00304 = C.F00404
-                                LEFT JOIN F005 D ON C.F00405 = D.F00505 
-                                LEFT JOIN F006 E ON D.F00506 = E.F00606
-                                LEFT JOIN F007 F ON E.F00607 = F.F00707
-                                LEFT JOIN F008 G ON F.F00708 = G.F00808
-                                ORDER BY E.F00607";
+        //    string strSql = @"SELECT {0} as ""IdAuto"", a.F00204, b.F00305, c.F00406, d.F00507 ,e.F00608, F.F00709, G.F00810,
+        //                        a.F00202, b.F00304 , c.F00405 , d.F00506, e.F00607, F.F00708 , G.F00809
+        //                        FROM F002 A
+        //                        LEFT JOIN F003 B ON A.F00202 = B.F00303
+        //                        LEFT JOIN F004 C ON B.F00304 = C.F00404
+        //                        LEFT JOIN F005 D ON C.F00405 = D.F00505 
+        //                        LEFT JOIN F006 E ON D.F00506 = E.F00606
+        //                        LEFT JOIN F007 F ON E.F00607 = F.F00707
+        //                        LEFT JOIN F008 G ON F.F00708 = G.F00808
+        //                        ORDER BY E.F00607";
 
-            strSql = string.Format(strSql, cmp);
+        //    strSql = string.Format(strSql, cmp);
 
-            table = General.IncarcaDT(strSql, null);
+        //    table = General.IncarcaDT(strSql, null);
 
-            return table;
-        }
+        //    return table;
+        //}
 
         public static DataTable GetStructOrgModif(DateTime data)
         {
@@ -3820,14 +3820,25 @@ namespace WizOne.Module
 
             if (data != null)
             {
+                string dataRef = data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString();
                 if (Constante.tipBD == 2)
-                    cmpData = " WHERE E.F00622 <= TO_DATE('" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString()
-                        + "', 'dd/mm/yyyy') AND TO_DATE('" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString()
-                        + "', 'dd/mm/yyyy') <= E.F00623 ";
+                {
+                    cmpData = " WHERE  B.F00310 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= B.F00311 AND "
+                        + " C.F00411 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= C.F00412 AND "
+                        + " D.F00513 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= D.F00514 AND "
+                        + " E.F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= E.F00623 AND "
+                        + " F.F00714 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F.F00715 AND "
+                        + " G.F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= G.F00815 ";
+                }
                 else
-                    cmpData = " WHERE E.F00622 <= CONVERT(DATETIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString()
-                     + "', 103) AND CONVERT(DATETIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString()
-                     + "', 103) <= E.F00623 ";
+                {
+                    cmpData = " WHERE B.F00310 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= B.F00311 AND "
+                        + " C.F00411 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= C.F00412 AND "
+                        + " D.F00513 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= D.F00514 AND "
+                        + " E.F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= E.F00623 AND "
+                        + " F.F00714 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F.F00715 AND "
+                        + " G.F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= G.F00815  ";
+                }
             }
             string strSql = @"SELECT {0} as ""IdAuto"", a.F00204, b.F00305, c.F00406, d.F00507 ,e.F00608, F.F00709, G.F00810,
                                 a.F00202, b.F00304 , c.F00405 , d.F00506, e.F00607, F.F00708 , G.F00809
@@ -3846,6 +3857,11 @@ namespace WizOne.Module
             table = General.IncarcaDT(strSql, null);
 
             return table;
+        }
+
+        public static DataTable GetStructOrgModifGen(string data)
+        {
+            return GetStructOrgModif(Convert.ToDateTime(data));
         }
 
         public static DataTable GetStructOrgAng(int marca)
@@ -4002,13 +4018,13 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetPuncteLucru()
-        {
-            string sql = @"SELECT * FROM F080";
-            if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F080", "F08002");
-            return General.IncarcaDT("SELECT F08003, F08002 FROM F080", null);
-        }
+        //public static DataTable GetPuncteLucru()
+        //{
+        //    string sql = @"SELECT * FROM F080";
+        //    if (Constante.tipBD == 2)
+        //        sql = General.SelectOracle("F080", "F08002");
+        //    return General.IncarcaDT("SELECT F08003, F08002 FROM F080", null);
+        //}
 
         public static DataTable ListaContacteF100()
         {
@@ -5912,15 +5928,29 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetCategTarife()
+        public static DataTable GetCategTarife(string data)
         {
             DataTable table = new DataTable();
+            string cmpData = "";
+            if (data != null && data.Length > 0)
+            {
+                DateTime dt = Convert.ToDateTime(data);
+                string dataRef = dt.Day.ToString().PadLeft(2, '0') + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                if (Constante.tipBD == 2)
+                {
+                    cmpData = " AND  F01118 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F01119 ";
+                }
+                else
+                {
+                    cmpData = " AND F01118 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F01119 ";
+                }
+            }
 
             try
             {
-                string sql = @"SELECT * FROM F011 WHERE F01105 = 1 ";
+                string sql = @"SELECT * FROM F011 WHERE F01105 = 1 " + cmpData;
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F011", "F01104") + " WHERE F01105 = 1 ";
+                    sql = General.SelectOracle("F011", "F01104") + " WHERE F01105 = 1 " + cmpData;
                 table = IncarcaDT(sql, null);
             }
             catch (Exception ex)
@@ -5931,16 +5961,31 @@ namespace WizOne.Module
             return table;
         }
 
-        public static DataTable GetTarife(string categ)
+        public static DataTable GetTarife(string categ, string data)
         {
             DataTable table = new DataTable();
+
+            string cmpData = "";
+            if (data != null && data.Length > 0)
+            {
+                DateTime dt = Convert.ToDateTime(data);
+                string dataRef = dt.Day.ToString().PadLeft(2, '0') + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                if (Constante.tipBD == 2)
+                {
+                    cmpData = " AND  F01118 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F01119 ";
+                }
+                else
+                {
+                    cmpData = " AND F01118 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F01119 ";
+                }
+            }
 
             try
             {
 
-                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ;
+                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ + cmpData;
                 if (Constante.tipBD == 2)
-                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ;
+                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ + cmpData;
                 table = IncarcaDT(sql, null);
 
             }
@@ -5952,17 +5997,32 @@ namespace WizOne.Module
             return table;
         }
 
-        public static DataTable GetTarifeSp(string categ)
+        public static DataTable GetTarifeSp(string categ, string data)
         {
             DataTable table = new DataTable();
 
             try
             {
+
+                string cmpData = "";
+                if (data != null && data.Length > 0)
+                {
+                    DateTime dt = Convert.ToDateTime(data);
+                    string dataRef = dt.Day.ToString().PadLeft(2, '0') + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                    if (Constante.tipBD == 2)
+                    {
+                        cmpData = " AND  F01118 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F01119 ";
+                    }
+                    else
+                    {
+                        cmpData = " AND F01118 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F01119 ";
+                    }
+                }
 
                 string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = (  select distinct f01104 from f025
                                 left join f021 on f02510 = f02104
                                 left join f011 on f02106 = f01104
-                                where  f02504 = " + categ + @")";
+                                where  f02504 = " + categ + cmpData + @")";
                 if (Constante.tipBD == 2)
                     sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = (  select distinct f01104 from f025 "
                                + " left join f021 on f02510 = f02104 "

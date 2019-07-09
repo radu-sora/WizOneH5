@@ -435,6 +435,7 @@ namespace WizOne.Personal
 
                 cmbChildDataSource.SelectParameters.Clear();
                 cmbChildDataSource.SelectParameters.Add("categ", Session["Sporuri_cmbMaster1"].ToString());
+                cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
                 cmbChild.DataBindItems();
                 //cmbChild.Value = Convert.ToInt32(param[2]);
             }
@@ -451,6 +452,7 @@ namespace WizOne.Personal
 
             cmbChildDataSource.SelectParameters.Clear();
             cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
             cmbChild.DataBindItems();
         }
 
@@ -495,6 +497,7 @@ namespace WizOne.Personal
 
                 cmbChildDataSource.SelectParameters.Clear();
                 cmbChildDataSource.SelectParameters.Add("categ", Session["Sporuri_cmbMaster2"].ToString());
+                cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
                 cmbChild.DataBindItems();
                 //cmbChild.Value = Convert.ToInt32(param[2]);
             }
@@ -511,6 +514,7 @@ namespace WizOne.Personal
 
             cmbChildDataSource.SelectParameters.Clear();
             cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
             cmbChild.DataBindItems();
         }
 

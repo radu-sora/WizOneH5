@@ -766,7 +766,7 @@ namespace WizOne.Pontaj
                             AND {General.TruncateDateAsString("DD.\"DataInceput\"")} <= {General.TruncateDateAsString("P.\"Ziua\"")} 
                             AND {General.TruncateDateAsString("P.\"Ziua\"")} <=  {General.TruncateDateAsString("DD.\"DataSfarsit\"")}) = 1
                             THEN 1 ELSE 0 END AS ""DrepturiModif"", 
-                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"",
+                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",
                             CASE WHEN 
 							    (SELECT COUNT(*) FROM Ptj_Cereri X
                                 INNER JOIN Ptj_tblAbsente Y ON X.IdAbsenta=Y.Id
@@ -789,7 +789,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
                             LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
-
+                            LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
+                            LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
                             
 
                             WHERE CONVERT(date,P.""Ziua"") <= A.F10023
@@ -859,7 +860,7 @@ namespace WizOne.Pontaj
                             END END END)=1 AND
                             (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDateAsString("FS.\"DataInceput\"")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <=  {General.TruncateDateAsString("FS.\"DataSfarsit\"")}) = 1
                             THEN 1 ELSE 0 END AS ""DrepturiModif"", 
-                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"",
+                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",
                             CASE WHEN 
 							    (SELECT COUNT(*) FROM ""Ptj_Cereri"" X
                                 INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
@@ -882,6 +883,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
                             LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
+                            LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
+                            LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
 
                             WHERE CAST(P.""Ziua"" AS date) <= A.F10023
                             {filtru}

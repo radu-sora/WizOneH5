@@ -207,7 +207,7 @@ namespace WizOne.Personal
                 bool dublura = false;
                 for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
                 {
-                    if (dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
+                    if (grDateTarife.EditingRowVisibleIndex != i && dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
                     {
                         dublura = true;
                         break;

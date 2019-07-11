@@ -225,6 +225,12 @@ namespace WizOne.Personal
                 e.NewValues["F01105"] = cb2.Value;
                 e.NewValues["Tarif"] = cb2.Text;
 
+                if (e.NewValues["F02504"].ToString() == "0")
+                {
+                    e.NewValues["Spor"] = "Spor " + (grDateSporuri1.EditingRowVisibleIndex + 1).ToString();
+                    e.NewValues["Tarif"] = "---";
+                }
+
                 if (e.NewValues["Spor"] == null || e.NewValues["Spor"].ToString().Length < 0)
                     return;
 
@@ -241,7 +247,7 @@ namespace WizOne.Personal
                 bool dublura = false;
                 for (int i = 0; i < dsCalcul.Tables["Sporuri1"].Rows.Count; i++)
                 {
-                    if (dsCalcul.Tables["Sporuri1"].Rows[i]["F02504"].ToString() == e.NewValues["F02504"].ToString())
+                    if (grDateSporuri1.EditingRowVisibleIndex != i && e.NewValues["F02504"].ToString() != "0" && dsCalcul.Tables["Sporuri1"].Rows[i]["F02504"].ToString() == e.NewValues["F02504"].ToString())
                     {
                         dublura = true;
                         break;
@@ -263,7 +269,7 @@ namespace WizOne.Personal
                             if (col.ColumnName == "F02504")
                             {
                                 DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
-                                poz = Convert.ToInt32(dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
+                                poz = Convert.ToInt32(dt == null || dt.Rows.Count <= 0 || dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
                             }
                             if (col.ColumnName == "F01105")
                                 val = Convert.ToInt32(e.NewValues[col.ColumnName]);
@@ -318,6 +324,12 @@ namespace WizOne.Personal
                 e.NewValues["F01105"] = cb2.Value;
                 e.NewValues["Tarif"] = cb2.Text;
 
+                if (e.NewValues["F02504"].ToString() == "0")
+                {
+                    e.NewValues["Spor"] = "Spor " + (grDateSporuri1.EditingRowVisibleIndex + 1).ToString();
+                    e.NewValues["Tarif"] = "---";
+                }
+
                 if (e.NewValues["Spor"] == null || e.NewValues["Spor"].ToString().Length < 0)
                     return;
 
@@ -333,7 +345,7 @@ namespace WizOne.Personal
                 bool dublura = false;
                 for (int i = 0; i < dsCalcul.Tables["Sporuri2"].Rows.Count; i++)
                 {
-                    if (dsCalcul.Tables["Sporuri2"].Rows[i]["F02504"].ToString() == e.NewValues["F02504"].ToString())
+                    if (grDateSporuri2.EditingRowVisibleIndex != i && e.NewValues["F02504"].ToString() != "0" && dsCalcul.Tables["Sporuri2"].Rows[i]["F02504"].ToString() == e.NewValues["F02504"].ToString())
                     {
                         dublura = true;
                         break;
@@ -355,7 +367,7 @@ namespace WizOne.Personal
                             if (col.ColumnName == "F02504")
                             {
                                 DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
-                                poz = Convert.ToInt32(dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
+                                poz = Convert.ToInt32(dt == null || dt.Rows.Count <= 0 || dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
                             }
                             if (col.ColumnName == "F01105")
                                 val = Convert.ToInt32(e.NewValues[col.ColumnName]);
@@ -406,6 +418,7 @@ namespace WizOne.Personal
 
             cmbMasterDataSource.SelectParameters.Clear();
             cmbMasterDataSource.SelectParameters.Add("param", "1");
+            cmbMasterDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
             cmbParent.DataBindItems();
 
             string[] param = templateContainer.ClientID.Split('_');
@@ -470,6 +483,7 @@ namespace WizOne.Personal
 
             cmbMasterDataSource.SelectParameters.Clear();
             cmbMasterDataSource.SelectParameters.Add("param", "0");
+            cmbMasterDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
             cmbParent.DataBindItems();
 
             string[] param = templateContainer.ClientID.Split('_');

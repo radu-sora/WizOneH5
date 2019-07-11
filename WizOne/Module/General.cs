@@ -6040,11 +6040,26 @@ namespace WizOne.Module
         }
 
 
-        public static DataTable GetSporuri(string param)
+        public static DataTable GetSporuri(string param, string data)
         {
-            string sql = @"SELECT F02504, F02505 FROM F025  WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") ;
+            string cmpData = "";
+            if (data != null && data.Length > 0)
+            {
+                DateTime dt = Convert.ToDateTime(data);
+                string dataRef = dt.Day.ToString().PadLeft(2, '0') + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                if (Constante.tipBD == 2)
+                {
+                    cmpData = " AND  F02524 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F02525 ";
+                }
+                else
+                {
+                    cmpData = " AND F02524 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F02525 ";
+                }
+            }
+
+            string sql = @"SELECT 0 AS F02504, '---' AS F02505 UNION  SELECT F02504, F02505 FROM F025  WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") + cmpData ;
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F025", "F02504") + " WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ");
+                sql = " SELECT 0 AS F02504, '---' AS F02505 FROM DUAL UNION " +  General.SelectOracle("F025", "F02504") + " WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") + cmpData;
             return General.IncarcaDT(sql, null);
         }
 

@@ -707,7 +707,7 @@
             timeLeft = timeInSecondsAfterSessionOut - secondTick;
        
 
-            if (esteTactil == 1 && secondTick >= timeInSecondsAfterSessionOut) {
+            if (esteTactil == 1 && secondTick >= timeInSecondsAfterSessionOut) {               
                 clearTimeout(tick);
                 window.location = "../../../../DefaultTactil.aspx";
                 return;

@@ -207,7 +207,7 @@ namespace WizOne.Personal
                 bool dublura = false;
                 for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
                 {
-                    if (dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
+                    if (grDateTarife.EditingRowVisibleIndex != i && dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
                     {
                         dublura = true;
                         break;
@@ -315,7 +315,12 @@ namespace WizOne.Personal
             {
                 cmbParent.Value = Convert.ToInt32(templateContainer.KeyValue);
                 Session["Tarife_cmbMaster"] = templateContainer.KeyValue;
-            }
+            }       
+
+            ObjectDataSource cmbParentDataSource = cmbParent.NamingContainer.FindControl("adsMaster") as ObjectDataSource;
+            cmbParentDataSource.SelectParameters.Clear();
+            cmbParentDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbParent.DataBindItems();
 
             cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged(s, e, {0}); }}", templateContainer.VisibleIndex);               
         }
@@ -338,6 +343,7 @@ namespace WizOne.Personal
 
                 cmbChildDataSource.SelectParameters.Clear();
                 cmbChildDataSource.SelectParameters.Add("categ", Session["Tarife_cmbMaster"].ToString());
+                cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
                 cmbChild.DataBindItems();
                 //cmbChild.Value = Convert.ToInt32(param[2]);
             }
@@ -355,6 +361,7 @@ namespace WizOne.Personal
 
             cmbChildDataSource.SelectParameters.Clear();
             cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
             cmbChild.DataBindItems();
         }
 

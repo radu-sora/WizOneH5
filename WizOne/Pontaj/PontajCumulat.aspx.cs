@@ -27,7 +27,7 @@ namespace WizOne.Pontaj
                 if (!IsPostBack)
                 {
                     DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
-                                                        FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.Coloana = AF.Denumire 
+                                                        FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.""Coloana"" = AF.""Denumire""
                                                         ORDER BY CS.""Ordine""  ", null);
 
                     for (int i = 0; i < dt.Rows.Count; i++)

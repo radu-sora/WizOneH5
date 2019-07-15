@@ -29,7 +29,7 @@ namespace WizOne.Pontaj
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                btnAct.Text = Dami.TraduCuvant("btnAct", "Actualizeaza absenta");
+                btnAct.Text = Dami.TraduCuvant("btnAct", "Actualizeaza");
 
                 #endregion
 
@@ -209,7 +209,7 @@ namespace WizOne.Pontaj
                             inn += " OUTER APPLY dbo.DamiNorma(A.F10003, A.Ziua) dn \n";
                             //Florin 2018.10.23
                             if (Dami.ValoareParam("TipCalculDate") == "2")
-                                inn += "LEFT JOIN DamiNorma_Table dnt ON dnt.F10003=A.F10003 AND dnt.dt=A.Ziua";
+                                inn += " LEFT JOIN DamiNorma_Table dnt ON dnt.F10003=A.F10003 AND dnt.dt=A.Ziua";
                         }
                         //if (chkCC == true)
                         //{
@@ -224,7 +224,7 @@ namespace WizOne.Pontaj
                                    " LEFT JOIN F006 G ON G.F00607 = dd.Dept";
                             //Florin 2018.10.23
                             if (Dami.ValoareParam("TipCalculDate") == "2")
-                                inn += "LEFT JOIN DamiDept_Table ddt ON ddt.F10003=A.F10003 AND ddt.dt=A.Ziua";
+                                inn += " LEFT JOIN DamiDept_Table ddt ON ddt.F10003=A.F10003 AND ddt.dt=A.Ziua";
                         }
 
 

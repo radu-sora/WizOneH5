@@ -56,7 +56,11 @@
 				<EditItemTemplate>
 					<dx:ASPxComboBox ID="cmbMaster" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F01104" TextField="F01107" OnInit="cmbMaster_Init">
 					</dx:ASPxComboBox>
-                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetCategTarife" />                    
+                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetCategTarife" >                    
+                        <SelectParameters>
+                             <asp:Parameter Name="data"  Type="String" />
+                        </SelectParameters>
+                    </asp:ObjectDataSource>
 				</EditItemTemplate>
 			</dx:GridViewDataTextColumn>
 			<dx:GridViewDataTextColumn FieldName="DenTarif" Caption="Tarif" VisibleIndex="2">
@@ -66,6 +70,7 @@
                     <asp:ObjectDataSource runat="server" ID="asdChild" TypeName="WizOne.Module.General" SelectMethod="GetTarife" > 
                         <SelectParameters>
                              <asp:Parameter Name="categ"  Type="String" />
+                             <asp:Parameter Name="data"  Type="String" />
                         </SelectParameters>
                     </asp:ObjectDataSource>
 				</EditItemTemplate>

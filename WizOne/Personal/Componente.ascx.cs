@@ -173,7 +173,7 @@ namespace WizOne.Personal
 
                 for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
                 {
-                    if (dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
+                    if (grDateComponente.EditingRowVisibleIndex != i &&  dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
                     {
                         dublura = true;
                         break;

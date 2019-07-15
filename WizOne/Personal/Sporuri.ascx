@@ -86,6 +86,7 @@
                      <asp:ObjectDataSource runat="server" ID="adsMaster1" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" >                    
                         <SelectParameters>
                              <asp:Parameter Name="param"  Type="String" />
+                             <asp:Parameter Name="data"  Type="String" />
                         </SelectParameters>
                      </asp:ObjectDataSource>
 				</EditItemTemplate>
@@ -97,6 +98,7 @@
                     <asp:ObjectDataSource runat="server" ID="adsChild1" TypeName="WizOne.Module.General" SelectMethod="GetTarifeSp" > 
                         <SelectParameters>
                              <asp:Parameter Name="categ"  Type="String" />
+                             <asp:Parameter Name="data"  Type="String" />
                         </SelectParameters>
                     </asp:ObjectDataSource>
 				</EditItemTemplate>
@@ -139,6 +141,7 @@
                      <asp:ObjectDataSource runat="server" ID="adsMaster2" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" >                    
                         <SelectParameters>
                              <asp:Parameter Name="param"  Type="String" />
+                             <asp:Parameter Name="data"  Type="String" />
                         </SelectParameters>
                      </asp:ObjectDataSource>
 				</EditItemTemplate>
@@ -150,6 +153,7 @@
                     <asp:ObjectDataSource runat="server" ID="adsChild2" TypeName="WizOne.Module.General" SelectMethod="GetTarifeSp" > 
                         <SelectParameters>
                              <asp:Parameter Name="categ"  Type="String" />
+                             <asp:Parameter Name="data"  Type="String" />
                         </SelectParameters>
                     </asp:ObjectDataSource>
 				</EditItemTemplate>

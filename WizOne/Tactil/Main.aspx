@@ -34,6 +34,7 @@
             $("#spanTimeLeft").html(timeLeft);
 
             if (secondTick >= timeInSecondsAfterSessionOut) {
+                debugger;
                 clearTimeout(tick);
                 window.location = "../DefaultTactil.aspx";
                 return;

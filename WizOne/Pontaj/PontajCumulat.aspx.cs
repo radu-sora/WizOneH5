@@ -161,6 +161,8 @@ namespace WizOne.Pontaj
         {
             try
             {
+                grDate.CancelEdit();
+
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 string ids = "";
 
@@ -200,6 +202,9 @@ namespace WizOne.Pontaj
                 }
                 else
                     MessageBox.Show("Nu exista modificari", MessageBox.icoInfo);
+
+
+                e.Handled = true;
             }
             catch (Exception ex)
             {
@@ -315,8 +320,6 @@ namespace WizOne.Pontaj
 
             return strSql;
         }
-
-
 
     }
 }

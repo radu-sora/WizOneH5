@@ -137,28 +137,56 @@ namespace WizOne.Pontaj
                         ras = General.ExecutaNonQuery(strDel, null);
                     }
 
+
+                    //Florin 2019.07.15    Rescrisa
                     //Radu 12.02.2019
-                    if (chkRecalc == true)
+                    //if (chkRecalc == true)
+                    //{
+                    //    int an = ziIn.Year;
+                    //    int luna = ziIn.Month;
+
+                    //    string sql = "SELECT F10003 FROM F100 WHERE F10025 IN (0, 999) AND " + angIn + " <= F10003 AND F10003 <= " + angSf;
+                    //    DataTable dt = General.IncarcaDT(sql, null);
+
+                    //    if (dt != null && dt.Rows.Count > 0)
+                    //    {
+                    //        while (an < ziSf.Year || (an == ziSf.Year && luna <= ziSf.Month))
+                    //        {
+                    //            for (int i = 0; i < dt.Rows.Count; i++)
+                    //                General.CalculFormuleCumulat(Convert.ToInt32(dt.Rows[i][0].ToString()), an, luna);
+                    //            luna++;
+                    //            if (luna > 12)
+                    //            {
+                    //                luna = 1;
+                    //                an++;
+                    //            }
+                    //        }
+                    //    }
+                    //    ras = true;
+                    //}
+
+                    if (chkRecalc)
                     {
-                        int an = ziIn.Year;
-                        int luna = ziIn.Month;
+                        string sqlCum = $@"
+                            SELECT A.F10003, YEAR(X.""Zi"") AS ""An"", MONTH(X.""Zi"") AS ""Luna"" 
+                            FROM ""tblZile"" X
+                            INNER JOIN F100 A ON {angIn} <= A.F10003 AND A.F10003 <= {angSf} AND A.F10022 <= X.""Zi"" AND X.""Zi"" <= A.F10023
+                            WHERE {General.ToDataUniv(ziIn)} <= X.""Zi"" AND X.""Zi"" <= {General.ToDataUniv(ziSf)}
+                            GROUP BY A.F10003, YEAR(X.""Zi""), MONTH(X.""Zi"")";
 
-                        string sql = "SELECT F10003 FROM F100 WHERE F10025 IN (0, 999) AND " + angIn + " <= F10003 AND F10003 <= " + angSf;
-                        DataTable dt = General.IncarcaDT(sql, null);
+                        if (Constante.tipBD == 2)
+                            sqlCum = $@"
+                            SELECT A.F10003, TO_NUMBER(TO_CHAR(X.""Zi"", 'YYYY')) AS ""An"", TO_NUMBER(TO_CHAR(X.""Zi"", 'MM')) AS ""Luna"" 
+                            FROM ""tblZile"" X
+                            INNER JOIN F100 A ON {angIn} <= A.F10003 AND A.F10003 <= {angSf} AND A.F10022 <= X.""Zi"" AND X.""Zi"" <= A.F10023
+                            WHERE {General.ToDataUniv(ziIn)} <= X.""Zi"" AND X.""Zi"" <= {General.ToDataUniv(ziSf)}
+                            GROUP BY A.F10003, TO_NUMBER(TO_CHAR(X.""Zi"", 'YYYY')), TO_NUMBER(TO_CHAR(X.""Zi"", 'MM'))";
 
-                        if (dt != null && dt.Rows.Count > 0)
+                        DataTable dt = General.IncarcaDT(sqlCum, null);
+
+                        for (int i = 0; i < dt.Rows.Count; i++)
                         {
-                            while (an < ziSf.Year || (an == ziSf.Year && luna <= ziSf.Month))
-                            {
-                                for (int i = 0; i < dt.Rows.Count; i++)
-                                    General.CalculFormuleCumulat(Convert.ToInt32(dt.Rows[i][0].ToString()), an, luna);
-                                luna++;
-                                if (luna > 12)
-                                {
-                                    luna = 1;
-                                    an++;
-                                }
-                            }
+                            General.CalculFormuleCumulat(Convert.ToInt32(dt.Rows[i]["F10003"]), Convert.ToInt32(dt.Rows[i]["An"]), Convert.ToInt32(dt.Rows[i]["Luna"]));
                         }
                         ras = true;
                     }

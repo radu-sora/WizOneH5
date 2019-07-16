@@ -21,6 +21,7 @@
             FM = 23,
             Cristim = 24,
             Franke = 25,
+            Chimpex = 26,
             Groupama = 34,
             Zitec = 45,
             BancaCarpatica = 65

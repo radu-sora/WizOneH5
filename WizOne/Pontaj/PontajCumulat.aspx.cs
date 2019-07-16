@@ -39,8 +39,12 @@ namespace WizOne.Pontaj
                         c.ReadOnly = true;
                         //c.Width = Unit.Pixel(100);
                         c.VisibleIndex = 100 + i;
-                        //c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] ?? 0);
-                        c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["Editabil"].ToString()));
+
+                        //Florin 2019.06.24
+                        ////c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] ?? 0);
+                        //c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["Editabil"].ToString()));
+                        c.ReadOnly = !Convert.ToBoolean(General.Nz(dt.Rows[i]["Editabil"], 0));
+
                         c.PropertiesSpinEdit.MaxLength = 10;
                         c.PropertiesSpinEdit.NumberFormat = SpinEditNumberFormat.Number;
                         c.PropertiesSpinEdit.DisplayFormatString = "N0";
@@ -173,7 +177,7 @@ namespace WizOne.Pontaj
 
                     foreach (DictionaryEntry de in upd.NewValues)
                     {
-                        if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >=0)
+                        if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
                         {
                             row[de.Key.ToString()] = upd.NewValues[de.Key.ToString()] ?? DBNull.Value;
                         }
@@ -187,7 +191,7 @@ namespace WizOne.Pontaj
                     General.SalveazaDate(dt, "Ptj_Cumulat");
 
                     string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                    for(int i = 0; i < arr.Length; i++)
+                    for (int i = 0; i < arr.Length; i++)
                     {
                         General.CalculFormuleCumulat(Convert.ToInt32(arr[i]), txtAnLuna.Date.Year, txtAnLuna.Date.Month);
                     }

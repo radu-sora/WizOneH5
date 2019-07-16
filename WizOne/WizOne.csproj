@@ -327,6 +327,7 @@
     <Content Include="Eval\QuizInit.aspx" />
     <Content Include="Eval\QuizLista.aspx" />
     <Content Include="Eval\ValoriLinii.aspx" />
+    <Content Include="Fisiere\css\login2.css" />
     <Content Include="Fisiere\css\login.css" />
     <Content Include="Fisiere\css\style.css" />
     <Content Include="Fisiere\css\tactil.css" />
@@ -747,6 +748,8 @@
     <Content Include="Pagini\Istoric.aspx" />
     <Content Include="Pagini\IstoricModificari.aspx" />
     <Content Include="Pagini\MainPage.aspx" />
+    <Content Include="Pagini\Captcha.aspx" />
+    <Content Include="Pagini\SchimbaParolaCaptcha.aspx" />
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\Calcul.ascx" />
@@ -1533,6 +1536,20 @@
     </Compile>
     <Compile Include="Pagini\MainPage.aspx.designer.cs">
       <DependentUpon>MainPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\Captcha.aspx.cs">
+      <DependentUpon>Captcha.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Captcha.aspx.designer.cs">
+      <DependentUpon>Captcha.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.cs">
+      <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.designer.cs">
+      <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pagini\VerificareBD.aspx.cs">
       <DependentUpon>VerificareBD.aspx</DependentUpon>

@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -125,7 +126,40 @@ namespace WizOne.Pagini
                 #endregion
 
                 if (!IsPostBack)
-                    IncarcaGrid();
+                {
+                    //Florin2019.07.15
+                    NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_ActeAditionale"] ?? "").ToString());
+                    if (lst.Count > 0)
+                    {
+                        if (General.Nz(lst["Cmp"], "").ToString() != "") cmbCmp.Value = Convert.ToInt32(lst["Cmp"]);
+                        if (General.Nz(lst["Tip"], "").ToString() != "")
+                        {
+                            switch (General.Nz(lst["Tip"], "").ToString())
+                            {
+                                case "9":
+                                    cmbTip.SelectedIndex = 0;
+                                    break;
+                                case "0":
+                                    cmbTip.SelectedIndex = 1;
+                                    break;
+                                case "1":
+                                    cmbTip.SelectedIndex = 2;
+                                    break;
+                            }
+                        }
+                        cmbTip_ValueChanged(null, null);
+                        if (General.Nz(lst["Ang"], "").ToString() != "") cmbAng.Value = Convert.ToInt32(lst["Ang"]);
+                        if (General.Nz(lst["Status"], "").ToString() != "") cmbStatus.Value = Convert.ToInt32(lst["Status"]);
+
+                        if (General.Nz(lst["Data"], "").ToString() != "") txtData.Value = Convert.ToDateTime(lst["Data"]);
+                        if (General.Nz(lst["Depasire"], "").ToString() != "") txtDepasire.Value = Convert.ToDateTime(lst["Depasire"]);
+
+                        Session["Filtru_ActeAditionale"] = "";
+                    }
+
+                    btnFiltru_Click(null, null);
+                    //IncarcaGrid();
+                }
                 else
                 {
                     grDate.DataSource = Session["InformatiaCurenta"];
@@ -1468,6 +1502,24 @@ namespace WizOne.Pagini
                     MessageBox.Show("Nu exista parametrii", MessageBox.icoWarning, "Operatie anulata");
                     return;
                 }
+
+
+                //Florin 2019.07.15
+                #region Salvam Filtrul
+
+                string req = "";
+                if (cmbCmp.Value != null) req += "&Cmp=" + cmbCmp.Value;
+                if (cmbTip.Value != null) req += "&Tip=" + cmbTip.Value;
+                if (cmbAng.Value != null) req += "&Ang=" + cmbAng.Value;
+                if (cmbStatus.Value != null) req += "&Status=" + cmbStatus.Value;
+                if (txtData.Value != null) req += "&Data=" + txtData.Value;
+                if (txtDepasire.Value != null) req += "&Depasire=" + txtDepasire.Value;
+
+                Session["Filtru_ActeAditionale"] = req;
+
+                #endregion
+
+
 
                 Session["ReportId"] = Convert.ToInt32(idRap);
                 string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;

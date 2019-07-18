@@ -72,7 +72,8 @@
                         <td><dx:ASPxCheckBox ID="chkPerAng" runat="server" Text="Perioada angajare" TextAlign="Right" /></td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                         <td><dx:ASPxCheckBox ID="chkRecalc" runat="server" Text="Recalcul totaluri" TextAlign="Right" /></td>
-                    </tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><dx:ASPxCheckBox ID="chkCC" runat="server" Text="Centrul de cost" TextAlign="Right" /></td>                    </tr>
                 </table>
 
             </td>

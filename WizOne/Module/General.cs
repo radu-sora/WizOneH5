@@ -6280,6 +6280,12 @@ namespace WizOne.Module
                 HttpContext.Current.Session["NumeGriduri"] = "";
                 HttpContext.Current.Session["IdGrid"] = "1";
 
+                //Florin 2019.07.15
+                HttpContext.Current.Session["Filtru_ActeAditionale"] = "";
+
+                //Florin 2019.07.17
+                HttpContext.Current.Session["Filtru_CereriAbs"] = "";
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

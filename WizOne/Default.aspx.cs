@@ -644,6 +644,11 @@ namespace WizOne
                 Session["EsteTactil"] = "0";
                 Session["TimeOutSecunde"] = "99999";
 
+                //Florin 2019.07.15
+                Session["Filtru_ActeAditionale"] = "";
+
+                //Florin 2019.07.17
+                Session["Filtru_CereriAbs"] = "";
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";

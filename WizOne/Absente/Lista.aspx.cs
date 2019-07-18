@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -194,6 +195,19 @@ namespace WizOne.Absente
                         cmbViz.Items.Add(itm);
                     }
 
+                    //Florin2019.07.17
+                    NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_CereriAbs"] ?? "").ToString());
+                    if (lst.Count > 0)
+                    {
+                        if (General.Nz(lst["Viz"], "").ToString() != "") cmbViz.SelectedIndex = Convert.ToInt32(lst["Viz"])-1;
+                        if (General.Nz(lst["Rol"], "").ToString() != "") cmbRol.Value = Convert.ToInt32(lst["Rol"]);
+                        if (General.Nz(lst["Stare"], "").ToString() != "") cmbStare.Text = lst["Stare"].ToString();
+                        if (General.Nz(lst["DtInc"], "").ToString() != "") txtDtInc.Value = Convert.ToDateTime(lst["DtInc"]);
+                        if (General.Nz(lst["DtSf"], "").ToString() != "") txtDtSf.Value = Convert.ToDateTime(lst["DtSf"]);
+
+                        Session["Filtru_CereriAbs"] = "";
+                    }
+
                     grDate.DataBind();
                 }
 
@@ -227,6 +241,20 @@ namespace WizOne.Absente
         {
             try
             {
+                //Florin 2019.07.17
+                #region Salvam Filtrul
+
+                string req = "";
+                if (cmbViz.Value != null) req += "&Viz=" + cmbViz.Value;
+                if (cmbRol.Value != null) req += "&Rol=" + cmbRol.Value;
+                if (cmbStare.Value != null) req += "&Stare=" + cmbStare.Value;
+                if (txtDtInc.Value != null) req += "&DtInc=" + txtDtInc.Value;
+                if (txtDtSf.Value != null) req += "&DtSf=" + txtDtSf.Value;
+
+                Session["Filtru_CereriAbs"] = req;
+
+                #endregion
+
                 Session["grDate_Filtru"] = "Absente.Lista;" + grDate.FilterExpression;
                 Session["Sablon_CheiePrimara"] = -99;
                 Session["Sablon_TipActiune"] = "New";
@@ -918,6 +946,22 @@ namespace WizOne.Absente
         {
             try
             {
+
+                //Florin 2019.07.17
+                #region Salvam Filtrul
+
+                string req = "";
+                if (cmbViz.Value != null) req += "&Viz=" + cmbViz.Value;
+                if (cmbRol.Value != null) req += "&Rol=" + cmbRol.Value;
+                if (cmbStare.Value != null) req += "&Stare=" + cmbStare.Value;
+                if (txtDtInc.Value != null) req += "&DtInc=" + txtDtInc.Value;
+                if (txtDtSf.Value != null) req += "&DtSf=" + txtDtSf.Value;
+
+                Session["Filtru_CereriAbs"] = req;
+
+                #endregion
+
+
                 object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "F10003", "NumeAngajat" }) as object[];
                 if (obj == null || obj.Count() == 0 || obj[0] == null || obj[1] == null)
                 {
@@ -931,8 +975,6 @@ namespace WizOne.Absente
                     Session["IstoricExtins_Angajat_Marca"] = obj[0];
                     Session["IstoricExtins_Angajat_Nume"] = obj[1];
                 }
-
-                var ert = General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString();
 
                 if (General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString() != "" && General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString() != "-99")
                 {

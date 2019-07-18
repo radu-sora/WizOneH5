@@ -739,7 +739,7 @@ namespace WizOne.Personal
                 if (dt100.Rows.Count > 0)
                     dt100.Rows.RemoveAt(0);
                 dt100.Rows.Add(row100);
-                dt100.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                dt100.PrimaryKey = new DataColumn[] { dt100.Columns["F10003"] };
 
                 DataTable dt1001 = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = (SELECT MIN(F10003) FROM F1001)", null);
                 dt1001.TableName = "F1001";
@@ -768,7 +768,7 @@ namespace WizOne.Personal
                 if (dt1001.Rows.Count > 0)
                     dt1001.Rows.RemoveAt(0);
                 dt1001.Rows.Add(row1001);
-                dt1001.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                dt1001.PrimaryKey = new DataColumn[] { dt1001.Columns["F10003"] };
 
                 if (dtComb.Rows.Count > 0)
                     dtComb.Rows.RemoveAt(0);

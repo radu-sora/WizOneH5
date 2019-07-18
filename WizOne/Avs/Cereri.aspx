@@ -11,12 +11,22 @@
                     //grDate.GetRowValues(s.GetFocusedRowIndex(), 'Id', GoToIstoric);
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
                     break;
+                case "btnDetalii":
+                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToDetalii);
+                    break;
             }
         }
 
         function GoToIstoric(Value) {
             strUrl = getAbsoluteUrl + "Pagini/Istoric.aspx?tip=5&qwe=" + Value;
             popGen.SetHeaderText("Istoric");
+            popGen.SetContentUrl(strUrl);
+            popGen.Show();
+        }
+
+        function GoToDetalii(Value) {
+            strUrl = getAbsoluteUrl + "Avs/Detalii.aspx?qwe=" + Value;
+            popGen.SetHeaderText("Detalii");
             popGen.SetContentUrl(strUrl);
             popGen.Show();
         }
@@ -84,7 +94,86 @@
             return actualValues;
         }
 
+        var newItem = 0;
+        function OnEndCallbackComp(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie !", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        } 
 
+        function OnTextChangedComp(s, e) {
+            var val = s.GetValue();
+            if (val < 0) {
+                swal({
+                    title: "Atentie !", text: "Suma nu poate fi negativa!",
+                    type: "warning"
+                });
+                var tb = grDateComponente.GetEditor("Suma");
+                tb.SetValue("0");
+            }
+        }
+
+    function OnSelectedIndexChanged(s, e, visibleIndex) {    
+        var cmbChild;
+        if (visibleIndex < 0) 
+            cmbChild = eval('cmbChild_new');        
+        else 
+            cmbChild = eval('cmbChild_' + visibleIndex);
+        cmbChild.PerformCallback(s.GetValue());
+   
+    }
+
+    function OnEndCallbackTarife(s, e) {
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "Atentie !", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
+            }
+        }
+
+        function OnSelectedIndexChanged1(s, e, visibleIndex) {
+            var cmbChild;
+            if (visibleIndex < 0)
+                cmbChild = eval('cmbChild1_new');
+            else
+                cmbChild = eval('cmbChild1_' + visibleIndex);
+            cmbChild.PerformCallback(s.GetValue());
+        }
+
+        function OnSelectedIndexChanged2(s, e, visibleIndex) {
+            var cmbChild;
+            if (visibleIndex < 0)
+                cmbChild = eval('cmbChild2_new');
+            else
+                cmbChild = eval('cmbChild2_' + visibleIndex);
+            cmbChild.PerformCallback(s.GetValue());
+        }  
+
+        function OnEndCallbackSporuri(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie !", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
+
+        function OnEndCallbackSpTr(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie !", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
     </script>
 
 </asp:Content>
@@ -359,6 +448,246 @@
                     </td>
                </tr>
                 <tr>
+                    <dx:ASPxGridView ID="grDateComponente" runat="server" ClientInstanceName="grDateComponente" ClientIDMode="Static" Width="30%" AutoGenerateColumns="false"  OnDataBinding="grDateComponente_DataBinding" 
+                          OnRowInserting="grDateComponente_RowInserting" OnRowUpdating="grDateComponente_RowUpdating" OnCellEditorInitialize="grDateComponente_CellEditorInitialize">        
+                        <SettingsBehavior AllowFocusedRow="true" />
+                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
+                        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackComp"/> 
+                        <SettingsEditing Mode="Inline" />       
+                        <Columns>
+                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />          
+                            <dx:GridViewDataComboBoxColumn FieldName="F02104" Name="F02104" Caption="Componenta" Width="250px" >
+                                <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            </dx:GridViewDataComboBoxColumn>         
+                            <dx:GridViewDataTextColumn FieldName="Suma" Name="Suma" Caption="Suma"    Width="100px"  />          
+              
+                        </Columns>
+                        <SettingsCommandButton>
+                            <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                                <Styles>
+                                    <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+                                    </Style>
+                                </Styles>
+                            </UpdateButton>
+                            <CancelButton ButtonType="Link" Text="Renunta">
+                            </CancelButton>
+
+                            <EditButton Image-ToolTip="Edit">
+                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </EditButton>         
+                            <NewButton Image-ToolTip="Rand nou">
+                                <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                                <Styles>
+                                    <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </NewButton>
+                        </SettingsCommandButton>
+                    </dx:ASPxGridView>
+                   <dx:ASPxGridView ID="grDateTarife" runat="server" ClientInstanceName="grDateTarife" ClientIDMode="Static" Width="40%" AutoGenerateColumns="false"  OnDataBinding="grDateTarife_DataBinding" 
+                          OnRowInserting="grDateTarife_RowInserting" OnRowUpdating="grDateTarife_RowUpdating"  >        
+                        <SettingsBehavior AllowFocusedRow="true" />
+                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
+                        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackTarife"/> 
+                        <SettingsEditing Mode="Inline" />     
+                        <Columns>
+                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />  
+			                <dx:GridViewDataTextColumn FieldName="DenCateg" Caption="Categorie" VisibleIndex="1">
+				                <EditItemTemplate>
+					                <dx:ASPxComboBox ID="cmbMaster" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F01104" TextField="F01107" OnInit="cmbMaster_Init">
+					                </dx:ASPxComboBox>
+                                     <asp:ObjectDataSource runat="server" ID="adsMaster" TypeName="WizOne.Module.General" SelectMethod="GetCategTarife" >                    
+                                        <SelectParameters>
+                                             <asp:Parameter Name="data"  Type="String" />
+                                        </SelectParameters>
+                                    </asp:ObjectDataSource>
+				                </EditItemTemplate>
+			                </dx:GridViewDataTextColumn>
+			                <dx:GridViewDataTextColumn FieldName="DenTarif" Caption="Tarif" VisibleIndex="2">
+				                <EditItemTemplate>
+					                <dx:ASPxComboBox ID="cmbChild" runat="server" DataSourceID="asdChild" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild_Callback" OnInit="cmbChild_Init">                        
+					                </dx:ASPxComboBox>	  
+                                    <asp:ObjectDataSource runat="server" ID="asdChild" TypeName="WizOne.Module.General" SelectMethod="GetTarife" > 
+                                        <SelectParameters>
+                                             <asp:Parameter Name="categ"  Type="String" />
+                                             <asp:Parameter Name="data"  Type="String" />
+                                        </SelectParameters>
+                                    </asp:ObjectDataSource>
+				                </EditItemTemplate>
+			                </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="F01104" VisibleIndex="3" Visible="false"/>
+                            <dx:GridViewDataTextColumn FieldName="F01105" VisibleIndex="4" Visible="false"/> 
+                        </Columns>       
+                        <SettingsCommandButton>
+                            <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                                <Styles>
+                                    <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+                                    </Style>
+                                </Styles>
+                            </UpdateButton>
+                            <CancelButton ButtonType="Link" Text="Renunta">
+                            </CancelButton>
+
+                            <EditButton Image-ToolTip="Edit">
+                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </EditButton>           
+                            <NewButton Image-ToolTip="Rand nou">
+                                <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                                <Styles>
+                                    <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </NewButton>
+                        </SettingsCommandButton>
+                    </dx:ASPxGridView>
+                    <dx:ASPxGridView ID="grDateSporuri1" runat="server" ClientInstanceName="grDateSporuri1" ClientIDMode="Static" Width="40%" AutoGenerateColumns="false"  OnDataBinding="grDateSporuri1_DataBinding" 
+                          OnRowUpdating="grDateSporuri1_RowUpdating" >        
+                        <SettingsBehavior AllowFocusedRow="true" />
+                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
+                        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackSporuri"/> 
+                        <SettingsEditing Mode="Inline" />         
+                        <Columns>
+                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
+			                <dx:GridViewDataTextColumn FieldName="Spor" Caption="Spor" VisibleIndex="1">
+				                <EditItemTemplate>
+					                <dx:ASPxComboBox ID="cmbMaster1" runat="server" DataSourceID="adsMaster1" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster1_Init">
+					                </dx:ASPxComboBox>
+                                     <asp:ObjectDataSource runat="server" ID="adsMaster1" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" >                    
+                                        <SelectParameters>
+                                             <asp:Parameter Name="param"  Type="String" />
+                                             <asp:Parameter Name="data"  Type="String" />
+                                        </SelectParameters>
+                                     </asp:ObjectDataSource>
+				                </EditItemTemplate>
+			                </dx:GridViewDataTextColumn>
+			                <dx:GridViewDataTextColumn FieldName="Tarif" Caption="Tarif" VisibleIndex="2">
+				                <EditItemTemplate>
+					                <dx:ASPxComboBox ID="cmbChild1" runat="server" DataSourceID="adsChild1" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild1_Callback" OnInit="cmbChild1_Init">                        
+					                </dx:ASPxComboBox>	  
+                                    <asp:ObjectDataSource runat="server" ID="adsChild1" TypeName="WizOne.Module.General" SelectMethod="GetTarifeSp" > 
+                                        <SelectParameters>
+                                             <asp:Parameter Name="categ"  Type="String" />
+                                             <asp:Parameter Name="data"  Type="String" />
+                                        </SelectParameters>
+                                    </asp:ObjectDataSource>
+				                </EditItemTemplate>
+			                </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="F02504" VisibleIndex="3" Visible="false"/>
+                            <dx:GridViewDataTextColumn FieldName="F01105" VisibleIndex="4" Visible="false"/>            
+                            <dx:GridViewDataTextColumn FieldName="Id" VisibleIndex="5" Visible="false"/>      
+                        </Columns>       
+                        <SettingsCommandButton>
+                            <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                                <Styles>
+                                    <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+                                    </Style>
+                                </Styles>
+                            </UpdateButton>
+                            <CancelButton ButtonType="Link" Text="Renunta">
+                            </CancelButton>
+
+                            <EditButton Image-ToolTip="Edit">
+                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </EditButton>  
+                        </SettingsCommandButton>
+                    </dx:ASPxGridView>
+ 
+                    <dx:ASPxGridView ID="grDateSporuri2" runat="server" ClientInstanceName="grDateSporuri2" ClientIDMode="Static" Width="40%" AutoGenerateColumns="false"  OnDataBinding="grDateSporuri2_DataBinding" 
+                          OnRowUpdating="grDateSporuri2_RowUpdating"  >        
+                        <SettingsBehavior AllowFocusedRow="true" />
+                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
+                        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackSporuri"/> 
+                        <SettingsEditing Mode="Inline" />                       
+                        <Columns>
+                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
+			                <dx:GridViewDataTextColumn FieldName="Spor" Caption="Spor" VisibleIndex="1">
+				                <EditItemTemplate>
+					                <dx:ASPxComboBox ID="cmbMaster2" runat="server" DataSourceID="adsMaster2" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster2_Init">
+					                </dx:ASPxComboBox>
+                                     <asp:ObjectDataSource runat="server" ID="adsMaster2" TypeName="WizOne.Module.General" SelectMethod="GetSporuri" >                    
+                                        <SelectParameters>
+                                             <asp:Parameter Name="param"  Type="String" />
+                                             <asp:Parameter Name="data"  Type="String" />
+                                        </SelectParameters>
+                                     </asp:ObjectDataSource>
+				                </EditItemTemplate>
+			                </dx:GridViewDataTextColumn>
+			                <dx:GridViewDataTextColumn FieldName="Tarif" Caption="Tarif" VisibleIndex="2">
+				                <EditItemTemplate>
+					                <dx:ASPxComboBox ID="cmbChild2" runat="server" DataSourceID="adsChild2" ValueType="System.Int32" ValueField="F01105" TextField="F01107" OnCallback="cmbChild2_Callback" OnInit="cmbChild2_Init">                        
+					                </dx:ASPxComboBox>	  
+                                    <asp:ObjectDataSource runat="server" ID="adsChild2" TypeName="WizOne.Module.General" SelectMethod="GetTarifeSp" > 
+                                        <SelectParameters>
+                                             <asp:Parameter Name="categ"  Type="String" />
+                                             <asp:Parameter Name="data"  Type="String" />
+                                        </SelectParameters>
+                                    </asp:ObjectDataSource>
+				                </EditItemTemplate>
+			                </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="F02504" VisibleIndex="3" Visible="false"/>
+                            <dx:GridViewDataTextColumn FieldName="F01105" VisibleIndex="4" Visible="false"/> 
+                            <dx:GridViewDataTextColumn FieldName="Id" VisibleIndex="5" Visible="false"/>      
+                        </Columns>       
+                        <SettingsCommandButton>
+                            <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                                <Styles>
+                                    <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+                                    </Style>
+                                </Styles>
+                            </UpdateButton>
+                            <CancelButton ButtonType="Link" Text="Renunta">
+                            </CancelButton>
+
+                            <EditButton Image-ToolTip="Edit">
+                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </EditButton>  
+                        </SettingsCommandButton>
+                    </dx:ASPxGridView>
+                    <dx:ASPxGridView ID="grDateSporTran" runat="server" ClientInstanceName="grDateSporTran" ClientIDMode="Static" Width="30%" AutoGenerateColumns="false"  OnDataBinding="grDateSporTran_DataBinding" 
+                           OnRowUpdating="grDateSporTran_RowUpdating"   >        
+                        <SettingsBehavior AllowFocusedRow="true" />
+                        <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
+                        <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackSpTr"/> 
+                        <SettingsEditing Mode="Inline" />  
+                        <Columns>
+                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />   
+                            <dx:GridViewDataTextColumn FieldName="Cod" Name="Cod" Caption="Cod"  Width="75px"  ReadOnly="true"/>
+                            <dx:GridViewDataComboBoxColumn FieldName="Spor" Name="Spor" Caption="Spor" Width="150px" ReadOnly="false" >
+                                <PropertiesComboBox TextField="F02105" ValueField="F02104" ValueType="System.Int32" DropDownStyle="DropDown" />                
+                            </dx:GridViewDataComboBoxColumn>                 
+                             <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  Width="100px" Visible="false"/>
+                        </Columns>
+                        <SettingsCommandButton>
+                            <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                                <Styles>
+                                    <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+                                    </Style>
+                                </Styles>
+                            </UpdateButton>
+                            <CancelButton ButtonType="Link" Text="Renunta">
+                            </CancelButton>
+
+                            <EditButton Image-ToolTip="Edit">
+                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                                <Styles>
+                                    <Style Paddings-PaddingRight="5px" />
+                                </Styles>
+                            </EditButton>
+                        </SettingsCommandButton>
+                    </dx:ASPxGridView>
+
+                </tr>
+                <tr>
                     <td>
                         <label id="lblExpl" runat="server">Explicatii</label>
                         <dx:ASPxMemo ID="txtExpl" runat="server"  Width="250px" Height="100px" ></dx:ASPxMemo>
@@ -450,7 +779,7 @@
                 <tr>
                     <td >
                        <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared"
-                            OnCustomUnboundColumnData="grDate_CustomUnboundColumnData" >
+                            OnCustomUnboundColumnData="grDate_CustomUnboundColumnData" OnCustomButtonInitialize="grDate_CustomButtonInitialize">
                             <SettingsBehavior AllowFocusedRow="true"  />
                             <Settings ShowFilterRow="False" ShowColumnHeaders="true" />  
                             <SettingsEditing Mode="Inline" />    
@@ -460,6 +789,9 @@
                                     <CustomButtons>
                                         <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
                                             <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
+                                        </dx:GridViewCommandColumnCustomButton>
+                                        <dx:GridViewCommandColumnCustomButton ID="btnDetalii">
+                                            <Image ToolTip="Detalii" Url="~/Fisiere/Imagini/Icoane/arata.png" />
                                         </dx:GridViewCommandColumnCustomButton>
                                     </CustomButtons>
                                 </dx:GridViewCommandColumn>

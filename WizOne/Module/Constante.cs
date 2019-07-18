@@ -85,6 +85,8 @@ namespace WizOne.Module
             Meserie = 22,
             PrelungireCIM = 25,
             PrelungireCIM_Vanz = 26,
+            Componente = 27,
+            Tarife = 28,
             NumePrenume = 101,
             CASS = 102,
             Studii = 103,

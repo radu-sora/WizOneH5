@@ -289,6 +289,7 @@
     <Content Include="Adev\ConfigD112.aspx" />
     <Content Include="Avs\Aprobare.aspx" />
     <Content Include="Avs\Cereri.aspx" />
+    <Content Include="Avs\Detalii.aspx" />
     <Content Include="Avs\Istoric.aspx" />
     <Content Include="Avs\IstoricModificari.aspx" />
     <Content Include="BP\Aprobare.aspx" />
@@ -1129,6 +1130,13 @@
     </Compile>
     <Compile Include="Avs\Cereri.aspx.designer.cs">
       <DependentUpon>Cereri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Avs\Detalii.aspx.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Avs\Detalii.aspx.designer.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Avs\Istoric.aspx.cs">
       <DependentUpon>Istoric.aspx</DependentUpon>

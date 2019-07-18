@@ -244,7 +244,7 @@
         <dx:ASPxPopupControl ID="popGen" runat="server" AllowDragging="True" AllowResize="True"
             CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Middle"
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
-            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="900px" MinHeight="500px"
+            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="900px" MinHeight="600px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGen" EnableHierarchyRecreation="True">
                 <ClientSideEvents CloseUp="function(s, e) { s.PerformCallback(); }" />
                 <ContentCollection>

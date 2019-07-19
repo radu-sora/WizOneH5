@@ -650,6 +650,9 @@ namespace WizOne
                 //Florin 2019.07.17
                 Session["Filtru_CereriAbs"] = "";
 
+                //Florin 2019.07.19
+                Session["Ptj_DataBlocare"] = "22001231";
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

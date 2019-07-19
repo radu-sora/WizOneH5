@@ -410,6 +410,21 @@ namespace WizOne.Pontaj
                 IncarcaGrid();
                 grCC.DataSource = null;
                 grCC.DataBind();
+
+                //Florin 2019.07.19
+                int idRol = Convert.ToInt32(cmbRolAng.Value);
+                if (Convert.ToInt32(General.Nz(Request["tip"], 1)) == 2)
+                    idRol = Convert.ToInt32(cmbRolZi.Value);
+
+                string dataBlocare = "22001231";
+                string strSql = $@"SELECT COALESCE(Ziua,'2200-12-31') FROM Ptj_tblBlocarePontaj WHERE IdRol=@1";
+                if (Constante.tipBD == 2)
+                    strSql = @"SELECT COALESCE(""Ziua"",TO_DATE('31-12-2200','DD-MM-YYYY')) FROM ""Ptj_tblBlocarePontaj"" WHERE ""IdRol""=@1";
+                DataTable dt = General.IncarcaDT(strSql, new object[] { idRol });
+                if (dt != null && dt.Rows.Count > 0 && General.Nz(dt.Rows[0][0], "").ToString() != "" && General.IsDate(dt.Rows[0][0]))
+                    dataBlocare = Convert.ToDateTime(dt.Rows[0][0]).Year + Convert.ToDateTime(dt.Rows[0][0]).Month.ToString().PadLeft(2, '0') + Convert.ToDateTime(dt.Rows[0][0]).Day.ToString().PadLeft(2, '0');
+
+                Session["Ptj_DataBlocare"] = dataBlocare.ToString();
             }
             catch (Exception ex)
             {

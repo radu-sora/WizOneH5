@@ -94,6 +94,25 @@
 
             oldRowIndex = key;
 
+            //Florin 2019.07.19 Begin
+            var tip = getQueryVariable("tip");
+            var dtCurr = new Date(2200, 12, 31);
+            if (tip == 1) {
+                var luna = txtAnLuna.GetValue();
+                dtCurr = new Date(luna.getFullYear(), luna.getMonth(), key);
+            }
+            else {
+                var luna = txtZiua.GetValue();
+                dtCurr = new Date(luna.getFullYear(), luna.getMonth(), luna.getDate());
+            }
+
+            var time = <%= Session["Ptj_DataBlocare"] %>;
+            var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
+
+            if (dtBlocare >= dtCurr)
+                e.cancel = true;
+            //Florin 2019.07.19 End
+
             if (typeof s.cp_cellsDrepturi[key] != "undefined" && s.cp_cellsDrepturi[key] != null && s.cp_cellsDrepturi[key] == 0) {
                 e.cancel = true;
             }
@@ -413,6 +432,15 @@
             grDate.SetHeight(height);
         }
 
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) { return pair[1]; }
+            }
+            return (false);
+        }
     </script>
 
 

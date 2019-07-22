@@ -244,7 +244,7 @@ namespace WizOne.Personal
                     if (ds.Tables[0].Rows[0]["F100931"] == null || ds.Tables[0].Rows[0]["F100931"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100931"].ToString() == "0")
                         mesaj += " - nr zile preaviz concediere" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F100642"] == null || ds.Tables[0].Rows[0]["F100642"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100642"].ToString() == "0")
-                        mesaj += " - zile CO cuvenite an curent" + Environment.NewLine;
+                        mesaj += " - zile CO cuvenite cf. grila" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F10022"] == null || ds.Tables[0].Rows[0]["F10022"].ToString().Length <= 0
                         || Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()) == new DateTime(2100, 1, 1) || Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()) == new DateTime(1900, 1, 1))
                         mesaj += " - data angajarii" + Environment.NewLine;

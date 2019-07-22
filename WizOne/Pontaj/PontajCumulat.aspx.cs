@@ -296,8 +296,8 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(cmbFil.Value ?? -99) != -99) strFiltru += " AND A.F10005 = " + cmbFil.Value;
                 if (Convert.ToInt32(cmbSec.Value ?? -99) != -99) strFiltru += " AND A.F10006 = " + cmbSec.Value;
                 if (Convert.ToInt32(cmbDept.Value ?? -99) != -99) strFiltru += " AND A.F10007 = " + cmbDept.Value;
-                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99) strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99) strFiltru += " AND A.F100959 = " + cmbBirou.Value;
+                if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99) strFiltru += " AND B.F100958 = " + cmbSubDept.Value;
+                if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99) strFiltru += " AND B.F100959 = " + cmbBirou.Value;
 
                 strFiltru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), an, luna, 0, -99, Convert.ToInt32(cmbRol.Value ?? -99), 0, Convert.ToInt32(cmbDept.Value ?? -99), -99);
 

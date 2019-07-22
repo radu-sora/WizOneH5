@@ -751,6 +751,7 @@
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\Calcul.ascx" />
+    <Content Include="Personal\CentreCost.ascx" />
     <Content Include="Personal\Componente.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
     <Content Include="Personal\Sporuri.ascx" />
@@ -1562,6 +1563,13 @@
     </Compile>
     <Compile Include="Personal\Calcul.ascx.designer.cs">
       <DependentUpon>Calcul.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\CentreCost.ascx.cs">
+      <DependentUpon>CentreCost.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\CentreCost.ascx.designer.cs">
+      <DependentUpon>CentreCost.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Componente.ascx.cs">
       <DependentUpon>Componente.ascx</DependentUpon>

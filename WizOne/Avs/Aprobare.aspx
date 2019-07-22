@@ -16,6 +16,12 @@
                 case "btnIstoric":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToIstoric);
                     break;
+                case "btnDetalii":
+                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToDetalii);
+                    break;
+                case "btnArata":
+                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
+                    break;
             }
         }
 
@@ -43,6 +49,17 @@
             popGen.SetHeaderText("Istoric");
             popGen.SetContentUrl(strUrl);
             popGen.Show();
+        }
+
+        function GoToDetalii(Value) {
+            strUrl = getAbsoluteUrl + "Avs/Detalii.aspx?qwe=" + Value;
+            popGen.SetHeaderText("Detalii");
+            popGen.SetContentUrl(strUrl);
+            popGen.Show();
+        }
+
+        function GoToAtasMode(Value) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=9&id=' + Value, '_blank ')
         }
 
 
@@ -240,6 +257,12 @@
                                 <dx:GridViewCommandColumnCustomButton ID="btnIstoric">
                                     <Image ToolTip="Istoric" Url="~/Fisiere/Imagini/Icoane/motive.png" />
                                 </dx:GridViewCommandColumnCustomButton>
+                                <dx:GridViewCommandColumnCustomButton ID="btnDetalii">
+                                    <Image ToolTip="Detalii" Url="~/Fisiere/Imagini/Icoane/arata.png" />
+                                </dx:GridViewCommandColumnCustomButton>
+                                <dx:GridViewCommandColumnCustomButton ID="btnArata">
+                                    <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/view.png" />
+                                </dx:GridViewCommandColumnCustomButton>                
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca" ReadOnly="true" Width="50px" Visible="false" />

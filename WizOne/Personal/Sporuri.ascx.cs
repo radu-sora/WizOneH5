@@ -326,7 +326,7 @@ namespace WizOne.Personal
 
                 if (e.NewValues["F02504"].ToString() == "0")
                 {
-                    e.NewValues["Spor"] = "Spor " + (grDateSporuri1.EditingRowVisibleIndex + 1).ToString();
+                    e.NewValues["Spor"] = "Spor " + (grDateSporuri2.EditingRowVisibleIndex + 11).ToString();
                     e.NewValues["Tarif"] = "---";
                 }
 

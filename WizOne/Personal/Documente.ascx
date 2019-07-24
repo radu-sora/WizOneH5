@@ -65,6 +65,10 @@
             swal({ title: "Atentie !", text: "Data start este ulterioara celei de final!", type: "warning" });
         }
     }
+
+    function cmbTara_SelectedIndexChanged(s) {
+        pnlCtlDocumente.PerformCallback(s.name + ";" + s.GetValue());
+    }
 </script>
 <body>
     <table width="100%">
@@ -94,6 +98,7 @@
 						        </td>	
 						        <td>
 							        <dx:ASPxComboBox DataSourceID="dsTN" Width="150"  Value='<%#Eval("F100987") %>' ID="cmbTara"   runat="server" DropDownStyle="DropDown"  TextField="F73304" ValueField="F73302" AutoPostBack="false"  ValueType="System.Int32" >
+                                        <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbTara_SelectedIndexChanged(s); }" />
 							        </dx:ASPxComboBox>
 						        </td>
 					        </tr>
@@ -102,7 +107,7 @@
 							        <dx:ASPxLabel  ID="lblCetatenie" Width="100" runat="server"  Text="Cetatenie" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsCet" Width="150" Value='<%#Eval("F100981") %>' ID="cmbCetatenie"   runat="server" DropDownStyle="DropDown"  TextField="F73204" ValueField="F73202" AutoPostBack="false"  ValueType="System.Int32" >
+							        <dx:ASPxComboBox DataSourceID="dsCet" Width="150" Value='<%#Eval("F100981") %>' ID="cmbCetatenie"  Enabled="false"  runat="server" DropDownStyle="DropDown"  TextField="F73204" ValueField="F73202" AutoPostBack="false"  ValueType="System.Int32" >
 							        </dx:ASPxComboBox>
 						        </td>
 					        </tr>

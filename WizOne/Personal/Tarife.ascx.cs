@@ -116,6 +116,12 @@ namespace WizOne.Personal
                 if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
                     return;
 
+                if (e.NewValues["F01104"].ToString() == "0")
+                {
+                    e.NewValues["F01105"] = 0;
+                    e.NewValues["DenTarif"] = "---";
+                }
+
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
 
@@ -193,6 +199,12 @@ namespace WizOne.Personal
 
                 if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
                     return;
+
+                if (e.NewValues["F01104"].ToString() == "0")
+                {
+                    e.NewValues["F01105"] = 0;
+                    e.NewValues["DenTarif"] = "---";
+                }
 
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)

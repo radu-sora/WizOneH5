@@ -19,6 +19,14 @@ namespace WizOne.Avs
     {
         int F10003 = -99;
 
+        public class metaCereriDate
+        {   
+            public object UploadedFile { get; set; }
+            public object UploadedFileName { get; set; }
+            public object UploadedFileExtension { get; set; }
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -43,6 +51,7 @@ namespace WizOne.Avs
                 {
                     Session["AvsCereri"] = null;
                     Session["AvsCereriCalcul"] = null;
+                    Session["Avs_Cereri_Date"] = null;
 
                     if (Session["MP_Avans"] == null)
                     {
@@ -197,6 +206,13 @@ namespace WizOne.Avs
                             if (Session["Avs_AtributFiltru"] != null && cmbAtributeFiltru.SelectedIndex < 0 && Convert.ToInt32(Session["Avs_AtributFiltru"].ToString()) != -1)
                                 cmbAtributeFiltru.SelectedIndex = Convert.ToInt32(Session["Avs_AtributFiltru"].ToString());
                             IncarcaGrid();
+                        }
+
+                        metaCereriDate itm = new metaCereriDate();
+                        if (Session["Avs_Cereri_Date"] != null)
+                        {
+                            itm = Session["Avs_Cereri_Date"] as metaCereriDate;
+                            lblDoc.InnerText = General.Nz(itm.UploadedFileName, "").ToString();
                         }
                     }
 
@@ -660,6 +676,10 @@ namespace WizOne.Avs
             grDateSporuri1.Visible = false;
             grDateSporuri2.Visible = false;
             grDateSporTran.Visible = false;
+
+            lblDoc.Visible = false;
+            btnDocUpload.Visible = false;
+            btnDocSterge.Visible = false;
         }
 
         private void ArataCtl(int nr, string text1, string text2, string text3, string text4, string text5, string text6, string text7, string text8, string text9, string text10)
@@ -1306,7 +1326,7 @@ namespace WizOne.Avs
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaSalariu)
             {
-                ArataCtl(8, "Banca actuala", "Banca noua", "Sucursala actuala", "Sucursala noua", "IBAN actual", "IBAN nou", "Nr. card actual", "Nr. card nou", "", "");
+                ArataCtl(8, "Banca actuala", "Banca noua", "Sucursala actuala", "Sucursala noua", "IBAN actual", "Nr. card actual", "IBAN nou", "Nr. card nou", "", "");
                 DataTable dtTemp1 = General.IncarcaDT("select F07503 AS \"Id\", F07509 AS \"Denumire\" from F100, F075 WHERE F10018 = F07503 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " group by F07503 , F07509 ", null);
                 DataTable dtTemp2 = General.IncarcaDT("select F07503 AS \"Id\", F07509 AS \"Denumire\" from F075 group by F07503 , F07509", null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
@@ -1323,6 +1343,9 @@ namespace WizOne.Avs
                     dtTemp2 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F075 WHERE F07503 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString(), null);
 
                 IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
+                lblDoc.Visible = true;
+                btnDocUpload.Visible = true;
+                btnDocSterge.Visible = true;
 
             }
 
@@ -1359,6 +1382,9 @@ namespace WizOne.Avs
                     txt1Act.Text = dtTemp.Rows[0][0].ToString();
                     txt2Act.Text = dtTemp.Rows[0][1].ToString();
                 }
+                lblDoc.Visible = true;
+                btnDocUpload.Visible = true;
+                btnDocSterge.Visible = true;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.DocId)
@@ -1384,6 +1410,9 @@ namespace WizOne.Avs
                 txt2Act.Text = dtTemp.Rows[0][1].ToString();
                 de1Act.Date = Convert.ToDateTime(dtTemp.Rows[0][2].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][2].ToString());
                 de2Act.Date = Convert.ToDateTime(dtTemp.Rows[0][3].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][3].ToString());
+                lblDoc.Visible = true;
+                btnDocUpload.Visible = true;
+                btnDocSterge.Visible = true;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PermisAuto)
@@ -1409,6 +1438,9 @@ namespace WizOne.Avs
                 txt2Act.Text = dtTemp.Rows[0][1].ToString();
                 de1Act.Date = Convert.ToDateTime(dtTemp.Rows[0][2].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][2].ToString());
                 de2Act.Date = Convert.ToDateTime(dtTemp.Rows[0][3].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][3].ToString());
+                lblDoc.Visible = true;
+                btnDocUpload.Visible = true;
+                btnDocSterge.Visible = true;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BonusTeamLeader)
@@ -1575,6 +1607,8 @@ namespace WizOne.Avs
                             Session["AvsCereri"] = null;
                             Session["AvsCereriCalcul"] = null;
                         }
+                        break;
+                    case "10":                //Document
                         break;
 
                 }
@@ -1794,7 +1828,7 @@ namespace WizOne.Avs
                 SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out dataRev);
                 if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
                         || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
-                        idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.SporTranzactii || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
+                        idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
                     if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date && val == 1)
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");             
@@ -2361,19 +2395,7 @@ namespace WizOne.Avs
                         camp1 += "\"Spor" + (i + 10).ToString() + "\"" + ", ";
                         camp2 += dsCalcul.Tables["Sporuri2"].Rows[i]["F02504"].ToString() + ", ";              
                     }
-                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
-                    for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
-                    {
-                        string sirNou = "";
-                        for (int j = 0; j < sir.Length; j++)
-                        {
-                            if (i == Convert.ToInt32(dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString()) - 1)
-                                sirNou += dsCalcul.Tables["Tarife"].Rows[i]["F01105"].ToString();
-                            else
-                                sirNou += sir[j];
-                        }
-                        sir = sirNou;
-                    }
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();          
                     camp1 += "\"Tarife\"";
                     camp2 += "'" + sir + "'";
                     break;
@@ -2428,19 +2450,8 @@ namespace WizOne.Avs
                     }     
                     break;
                 case (int)Constante.Atribute.Tarife:
-                    sir = ds.Tables[0].Rows[0]["F10067"].ToString();                   
-                    for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
-                    {
-                        string sirNou = "";
-                        for (int j = 0; j < sir.Length; j++)
-                        {
-                            if (i == Convert.ToInt32(dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString()) - 1)
-                                sirNou += dsCalcul.Tables["Tarife"].Rows[i]["F01105"].ToString();
-                            else
-                                sirNou += sir[j];
-                        }
-                        sir = sirNou;                      
-                    }
+                    sir = ds.Tables[0].Rows[0]["F10067"].ToString();                  
+        
                     camp1 = "\"Tarife\"";
                     camp2 = "'" + sir + "'";
                     break;
@@ -2603,6 +2614,19 @@ namespace WizOne.Avs
             sql = string.Format(sql, camp1, camp2);
             General.ExecutaNonQuery(sql, null);
 
+
+            if (Session["Avs_Cereri_Date"] != null)
+            {
+                metaCereriDate itm = Session["Avs_Cereri_Date"] as metaCereriDate;
+                if (itm.UploadedFile != null)
+                {
+                    string sqlFis = $@"INSERT INTO ""tblFisiere""(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
+                            SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+
+                    General.ExecutaNonQuery(sqlFis, new object[] { "Avs_Cereri", idUrm, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
+                }
+            }
+
             #region OLD
             //dtTemp = General.IncarcaDT(sql, null);
             //if (Constante.tipBD == 1)
@@ -2662,6 +2686,10 @@ namespace WizOne.Avs
             {
                 NotifAsync.TrimiteNotificare("Avs.Cereri", (int)Constante.TipNotificare.Notificare, @"SELECT *, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Avs_Cereri"" WHERE ""Id""=" + idUrm, "Avs_Cereri", idUrm, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
             });
+
+            Session["AvsCereri"] = null;
+            Session["AvsCereriCalcul"] = null;
+            Session["Avs_Cereri_Date"] = null;
 
             //ArataMesaj("Proces finalizat cu succes!");
             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes!");
@@ -2866,13 +2894,11 @@ namespace WizOne.Avs
             if (e.VisibleIndex >= 0)
             {
                 DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
-                
                 if (values != null)
                 {
+                    int idAtr = Convert.ToInt32(values.Row["IdAtribut"].ToString());
                     if (e.ButtonID == "btnDetalii")
                     {
-                        int idAtr = Convert.ToInt32(values.Row["IdAtribut"].ToString());
-
                         if (idAtr != (int)Constante.Atribute.Sporuri && idAtr != (int)Constante.Atribute.SporTranzactii
                             && idAtr != (int)Constante.Atribute.Componente && idAtr != (int)Constante.Atribute.Tarife)
                         {
@@ -2880,7 +2906,19 @@ namespace WizOne.Avs
                             
                         }
                     }
-               
+
+                    if (e.ButtonID == "btnArata")
+                    {     
+                        if (idAtr == (int)Constante.Atribute.BancaSalariu || idAtr == (int)Constante.Atribute.BancaGarantii
+                            || idAtr == (int)Constante.Atribute.DocId || idAtr == (int)Constante.Atribute.PermisAuto)
+                        {
+                            e.Visible = DefaultBoolean.True;
+
+                        }
+                        else
+                            e.Visible = DefaultBoolean.False;
+                    }
+
                 }
             }
         }
@@ -3240,7 +3278,7 @@ namespace WizOne.Avs
                         if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                         {
                             act = 1;
-                            sql100 = "UPDATE F100 SET F10067 = " + dtCer.Rows[0]["Tarife"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                            sql100 = "UPDATE F100 SET F10067 = '" + dtCer.Rows[0]["Tarife"].ToString() + "' WHERE F10003 = " + f10003.ToString();
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70467, F70420, USER_NO, TIME) "
                         + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 8, 'Tarife', " + data + ", 0, 'Modificari in avans', '"
@@ -3251,10 +3289,14 @@ namespace WizOne.Avs
                         {
                             act = 1;
                             sql100 = "UPDATE F100 SET ";
-                            for (int i = 50; i <= 69; i++)                                                          
-                                sql100 += " F1006" + i + " = " + dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString();                          
+                            for (int i = 50; i <= 69; i++)
+                            {
+                                sql100 += " F1006" + i + " = " + dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString();
+                                if (i < 69)
+                                    sql100 += ", ";
+                            }
                             
-                            sql100 += ", F10067 = " + dtCer.Rows[0]["Tarife"].ToString() + " WHERE F10003 = " + f10003.ToString();
+                            sql100 += ", F10067 = '" + dtCer.Rows[0]["Tarife"].ToString() + "' WHERE F10003 = " + f10003.ToString();
                         }
                         camp1 = ""; camp2 = "";
                         for (int i = 50; i <= 69; i++)
@@ -3382,7 +3424,7 @@ namespace WizOne.Avs
                             if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                             {
                                 act = 1;
-                                sql100 = "UPDATE F100 SET F100983 = " + dtCer.Rows[0]["TipID"].ToString() + ", F10052 = '" + dtCer.Rows[0]["SerieNrID"].ToString() + "', F100521 = '" + dtCer.Rows[0]["F100521"].ToString()
+                                sql100 = "UPDATE F100 SET F100983 = " + dtCer.Rows[0]["TipID"].ToString() + ", F10052 = '" + dtCer.Rows[0]["SerieNrID"].ToString() + "', F100521 = '" + dtCer.Rows[0]["IDEmisDe"].ToString()
                                     + "', F100522 = " + data5 + " WHERE F10003 = " + f10003.ToString();
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
                                     sql1001 = "UPDATE F1001 SET F100963 = " + data6 + " WHERE F10003 = " + f10003.ToString();
@@ -3904,6 +3946,12 @@ namespace WizOne.Avs
                 if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
                     return;
 
+                if (e.NewValues["F01104"].ToString() == "0")
+                {
+                    e.NewValues["F01105"] = 0;
+                    e.NewValues["DenTarif"] = "---";
+                }
+
                 DataSet ds = Session["AvsCereri"] as DataSet;
                 DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
 
@@ -3980,6 +4028,12 @@ namespace WizOne.Avs
 
                 if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
                     return;
+
+                if (e.NewValues["F01104"].ToString() == "0")
+                {
+                    e.NewValues["F01105"] = 0;
+                    e.NewValues["DenTarif"] = "---";
+                }
 
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
@@ -4426,7 +4480,7 @@ namespace WizOne.Avs
 
                 if (e.NewValues["F02504"].ToString() == "0")
                 {
-                    e.NewValues["Spor"] = "Spor " + (grDateSporuri1.EditingRowVisibleIndex + 1).ToString();
+                    e.NewValues["Spor"] = "Spor " + (grDateSporuri2.EditingRowVisibleIndex + 11).ToString();
                     e.NewValues["Tarif"] = "---";
                 }
 
@@ -4771,6 +4825,29 @@ namespace WizOne.Avs
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+        }
+
+
+        protected void btnDocUpload_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+                metaCereriDate itm = new metaCereriDate();
+                if (Session["Avs_Cereri_Date"] != null) itm = Session["Avs_Cereri_Date"] as metaCereriDate;
+
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+
+                Session["Avs_Cereri_Date"] = itm;
+
+                btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

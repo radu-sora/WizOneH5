@@ -214,6 +214,7 @@
                     }
 
                     cmbTipNorma.SetValue(1);
+                    pnlCtlContract.PerformCallback("cmbTipNorma;1");
                     if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18) 
                         cmbDurTimpMunca.SetValue(2);
                     else
@@ -232,10 +233,18 @@
                     }
 
                     cmbTipNorma.SetValue(2);
-                    cmbDurTimpMunca.SetValue(5);
+                    pnlCtlContract.PerformCallback("cmbTipNorma;2");
+                    //cmbDurTimpMunca.SetValue(5);
+                    cmbDurTimpMunca.SetValue(null);
                 }
-                break;
+                break;               
         }
+        if (cmbTipAng.GetSelectedItem().value == 0) {
+            cmbIntRepTimpMunca.SetSelectedIndex(0);
+            cmbIntRepTimpMunca.SetEnabled(false);
+        }
+        else
+            cmbIntRepTimpMunca.SetEnabled(true);        
     }
 
     function ValidareNrOre(s) {
@@ -244,10 +253,25 @@
 
         if (cmbDurTimpMunca.GetValue() == 1 && txtNrOre.GetValue() > 40)
             swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 40)!", type: "warning" });
+
+        if (s.name == "cmbTipNorma") {
+            cmbDurTimpMunca.SetValue(null);
+            if (cmbTipAng.GetSelectedItem().value == 0 && cmbTipNorma.GetSelectedItem().value == 2) {
+                swal({ title: "Atentie !", text: "Pentru un angajat permanent, tipul de norma nu poate fi 'Cu timp partial'!", type: "warning" });
+                cmbTipNorma.SetValue(1);
+                pnlCtlContract.PerformCallback("cmbTipNorma;1");
+            }
+            if (cmbTipAng.GetSelectedItem().value == 2 && cmbTipNorma.GetSelectedItem().value == 1) {
+                swal({ title: "Atentie !", text: "Pentru un angajat cu timp partial, tipul de norma nu poate fi 'intreaga'!", type: "warning" });
+                cmbTipNorma.SetValue(2);
+                pnlCtlContract.PerformCallback("cmbTipNorma;2");
+            }
+            pnlCtlContract.PerformCallback(s.name + ";" + s.GetValue());
+        }
     }
 
-    function cmbIntervRepTimpMunca_SelectedIndexChanged(s) {
-        if (cmbIntervRepTimpMunca.GetValue() == 2 || cmbIntervRepTimpMunca.GetValue() == 3)
+    function cmbIntRepTimpMunca_SelectedIndexChanged(s) {
+        if (cmbIntRepTimpMunca.GetValue() == 2 || cmbIntRepTimpMunca.GetValue() == 3)
             txtNrOre.SetEnabled(true);
         else
             txtNrOre.SetEnabled(false);
@@ -313,6 +337,35 @@
         }
     }
 
+    function chkFunctieBaza_CheckedChanged(){
+        if (chkbx4.GetValue() == 0)
+            chkbx5.SetValue(0);
+    }
+
+    function chkScutitImp_CheckedChanged() {
+        if (chkbx1.GetValue() == 0) {
+            cmbMotivScutit.SetEnabled(false);
+            cmbMotivScutit.SetValue(0);
+        }
+        else {
+            if (chkbx5.GetValue() == 0)
+                cmbMotivScutit.SetEnabled(true);
+            else {
+                chkbx1.SetValue(0);
+                swal({ title: "Atentie !", text: "Mai intai debifati Calcul deduceri FB!", type: "warning" });
+            }
+        }
+    }
+
+    function chkScutitCAS_CheckedChanged() {
+        if (chkbx6.GetValue() == 0) {
+            cmbMotivScutitCAS.SetEnabled(false);
+            cmbMotivScutitCAS.SetValue(0);
+        }
+        else {            
+            cmbMotivScutitCAS.SetEnabled(true);        
+        }
+    }
 </script>
 
 <body>
@@ -486,7 +539,7 @@
 					</tr>	
 					<tr>				
 						<td >
-							<dx:ASPxLabel  ID="lblCASSAngajat" runat="server"  Text="CASS angajat" ></dx:ASPxLabel >	
+							<dx:ASPxLabel  ID="lblCASSAngajat" runat="server"  Text="Casa sanatate" ></dx:ASPxLabel >	
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsCASS"  Value='<%#Eval("F1003900") %>' ID="cmbCASSAngajat"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32" >
@@ -510,10 +563,10 @@
 					</tr>
 					<tr>				
 						<td >
-							<dx:ASPxLabel  ID="lblCASSAngajator" runat="server"  Text="CASS Angajator" ></dx:ASPxLabel >	
+							<dx:ASPxLabel  ID="lblCASSAngajator" runat="server"  Text="CASS Angajator" Visible="false" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsCASS"  Value='<%#Eval("F1003907") %>' ID="cmbCASSAngajator"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32">
+							<dx:ASPxComboBox DataSourceID="dsCASS"  Value='<%#Eval("F1003907") %>' ID="cmbCASSAngajator" Visible="false"  Width="100" runat="server" DropDownStyle="DropDown"  TextField="F06303" ValueField="F06302" ValueType="System.Int32">
                                 
 							</dx:ASPxComboBox >
 						</td>
@@ -677,7 +730,7 @@
 							<dx:ASPxLabel  ID="lblDurTimpMunca" runat="server"  Text="Durata timp munca" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsDTM"  Value='<%#Eval("F100927") %>'  ID="cmbDurTimpMunca" Width="130" ClientInstanceName="cmbDurTimpMunca" runat="server" DropDownStyle="DropDown"  TextField="F09103" ValueField="F09102" ValueType="System.Int32">
+							<dx:ASPxComboBox DataSourceID="dsDTM" Value='<%#Eval("F100927") %>'  ID="cmbDurTimpMunca" Width="130" ClientInstanceName="cmbDurTimpMunca" runat="server" DropDownStyle="DropDown"  TextField="F09103" ValueField="F09102" ValueType="System.Int32">
                                 <ClientSideEvents SelectedIndexChanged="function(s,e){ ValidareNrOre(s); }" />
 							</dx:ASPxComboBox >
 						</td>
@@ -687,7 +740,7 @@
 							<dx:ASPxLabel  ID="lblRepTimpMunca" runat="server"  Text="Repartizare timp munca" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsRTM"  Value='<%#Eval("F100928") %>'  ID="cmbRepTimpMunca" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F09303" ValueField="F09302" ValueType="System.Int32">
+							<dx:ASPxComboBox DataSourceID="dsRTM"  Value='<%#Eval("F100928") %>'  ID="cmbRepTimpMunca" Width="130" runat="server" DropDownStyle="DropDown"  TextField="F09303" ValueField="F09302" ValueType="System.Int32">
                                 
 							</dx:ASPxComboBox >
 						</td>
@@ -697,8 +750,8 @@
 							<dx:ASPxLabel  ID="lblIntervRepTimpMunca" runat="server"  Text="Interval repartizare timp munca" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsIRTM"  Value='<%#Eval("F100939") %>' ID="cmbIntervRepTimpMunca" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F09603" ValueField="F09602"  ValueType="System.Int32">
-                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbIntervRepTimpMunca_SelectedIndexChanged(s); }" />
+							<dx:ASPxComboBox DataSourceID="dsIRTM"  Value='<%#Eval("F100939") %>' ID="cmbIntRepTimpMunca" Width="130" ClientInstanceName="cmbIntRepTimpMunca" runat="server" DropDownStyle="DropDown"  TextField="F09603" ValueField="F09602"  ValueType="System.Int32">
+                                <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbIntRepTimpMunca_SelectedIndexChanged(s); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr>     
@@ -818,18 +871,64 @@
 					</tr>  
                     <tr>
                         <td>
-                            <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10048").ToString()=="1"%>' ClientInstanceName="chkbx4" >
+                            <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10032").ToString()=="1"%>' ClientInstanceName="chkbx4" >
+                                <ClientSideEvents CheckedChanged="function(s,e){ chkFunctieBaza_CheckedChanged(s); }" />
+                            </dx:ASPxCheckBox>
+                        </td>
+
+				    </tr>         
+                   <tr>
+                        <td>
+                            <dx:ASPxCheckBox ID="chkCalcDed"  runat="server" Width="150" Text="Calcul deduceri FB" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10048").ToString()=="1"%>' ClientInstanceName="chkbx5" >
                                 
                             </dx:ASPxCheckBox>
                         </td>
 
-				    </tr>                                                                                                                                                                                       				
+				    </tr>   
+                        <tr>
+                            <td>
+                                <dx:ASPxCheckBox ID="chkScutitImp" runat="server" Width="150" Text="Scutit impozit" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10026").ToString()=="1"%>' ClientInstanceName="chkbx1">
+                                    <ClientSideEvents CheckedChanged="function(s,e){ chkScutitImp_CheckedChanged(s); }" />
+                                </dx:ASPxCheckBox>
+                            </td>
+                        </tr>
+					    <tr>				
+						    <td >
+							    <dx:ASPxLabel  ID="lblMotivScutit" Width="100" runat="server"  Text="Motiv scutire impozit" ></dx:ASPxLabel >	
+						    </td>	
+						    <td>
+							    <dx:ASPxComboBox DataSourceID="dsMSI"  Value='<%#Eval("F1001098") %>' ID="cmbMotivScutit"  ClientInstanceName="cmbMotivScutit" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F80404" ValueField="F80403" AutoPostBack="false"  ValueType="System.Int32" >
+                                        
+							    </dx:ASPxComboBox>
+						    </td>               
+					    </tr>
+                        <tr>
+                            <td colspan="2">
+                                <dx:ASPxCheckBox ID="chkScutitCAS" runat="server" Width="150" Text="Scutit de la pragul minim CASS si CAS asigurat" TextAlign="Left"  ClientInstanceName="chkbx6">
+                                    <ClientSideEvents CheckedChanged="function(s,e){ chkScutitCAS_CheckedChanged(s); }" />
+                                </dx:ASPxCheckBox>
+                            </td>
+                        </tr>
+					    <tr>				
+						    <td >
+							    <dx:ASPxLabel  ID="lblMotivScutitCAS" Width="100" runat="server"  Text="Motiv scutire de la pragul minim CASS si CAS asigurat" ></dx:ASPxLabel >	
+						    </td>	
+						    <td>
+							    <dx:ASPxComboBox DataSourceID="dsMSCAS"  Value='<%#Eval("F1001096") %>' ID="cmbMotivScutitCAS"  ClientInstanceName="cmbMotivScutitCAS" Width="130"  runat="server" DropDownStyle="DropDown"  TextField="F80204" ValueField="F80203" AutoPostBack="false"  ValueType="System.Int32" >
+                                        
+							    </dx:ASPxComboBox>
+						    </td>               
+					    </tr>                    
 				</table>
                 <asp:ObjectDataSource runat="server" ID="dsTA" TypeName="WizOne.Module.General" SelectMethod="GetTipAngajat" />
                 <asp:ObjectDataSource runat="server" ID="dsTP" TypeName="WizOne.Module.General" SelectMethod="GetTimpPartial"/>
                 <asp:ObjectDataSource runat="server" ID="dsN" TypeName="WizOne.Module.General" SelectMethod="GetNorma"/>
-                <asp:ObjectDataSource runat="server" ID="dsTN" TypeName="WizOne.Module.General" SelectMethod="GetTipNorma"/>
-                <asp:ObjectDataSource runat="server" ID="dsDTM" TypeName="WizOne.Module.General" SelectMethod="GetDurataTimpMunca"/>
+                <asp:ObjectDataSource runat="server" ID="dsTN" TypeName="WizOne.Module.General" SelectMethod="GetTipNorma"/>  
+                <asp:ObjectDataSource runat="server" ID="dsDTM" TypeName="WizOne.Module.General" SelectMethod="GetDurataTimpMunca">                      
+                <SelectParameters>
+                        <asp:Parameter Name="param"  Type="String" />
+                </SelectParameters>
+                </asp:ObjectDataSource>
                 <asp:ObjectDataSource runat="server" ID="dsRTM" TypeName="WizOne.Module.General" SelectMethod="GetRepartizareTimpMunca"/>
                 <asp:ObjectDataSource runat="server" ID="dsIRTM" TypeName="WizOne.Module.General" SelectMethod="GetIntervalRepartizareTimpMunca"/>
                 <asp:ObjectDataSource runat="server" ID="dsCOR" TypeName="WizOne.Module.General" SelectMethod="GetCOR"/>
@@ -971,15 +1070,40 @@
 						        </td>
 					        </tr>
                         <tr>
-                            <td>
-                                <dx:ASPxCheckBox ID="chkScutitImp" runat="server" Width="150" Text="Scutit impozit" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10026").ToString()=="1"%>' ClientInstanceName="chkbx1">
+                            <td colspan="2">
+                                <dx:ASPxCheckBox ID="chkSalMin"  runat="server" Width="150" Text="Salariu minim conform studii superioare"  TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F1001117").ToString()=="1"%>' ClientInstanceName="chkbx7" >
                                     
                                 </dx:ASPxCheckBox>
                             </td>
-                        </tr>
+
+				        </tr>
+                       <tr>
+                            <td colspan="2">
+                                <dx:ASPxCheckBox ID="chkConstr"  runat="server" Width="150" Text="Calcul activitate constructii (indiferent de venit)" TextAlign="Left" Enabled="false" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F1001118").ToString()=="1"%>' ClientInstanceName="chkbx8" >
+                                    
+                                </dx:ASPxCheckBox>
+                            </td>
+
+				        </tr>
                         <tr>
-                            <td>
-                                <dx:ASPxCheckBox ID="chkBifaPensionar" runat="server" Width="150" Text="Bifa pensionar" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10037").ToString()=="1"%>' ClientInstanceName="chkbx2" >
+                            <td colspan="2">
+                                <dx:ASPxCheckBox ID="chkBifaPensionar" runat="server" Width="150" Text="Pensionar" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10037").ToString()=="1"%>' ClientInstanceName="chkbx2" >
+                                    
+                                </dx:ASPxCheckBox>
+                            </td>
+
+				        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <dx:ASPxCheckBox ID="chkCotaForfetara" runat="server" Width="150" Text="Cota forfetara" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F1001069").ToString()=="1"%>' ClientInstanceName="chkbx9" >
+                                    
+                                </dx:ASPxCheckBox>
+                            </td>
+
+				        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <dx:ASPxCheckBox ID="chkBifaDetasat"  runat="server" Width="150" Text="Detasat de la alt angajator" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F100954").ToString()=="1"%>' ClientInstanceName="chkbx3" >
                                     
                                 </dx:ASPxCheckBox>
                             </td>
@@ -987,15 +1111,23 @@
 				        </tr>
                         <tr>
                             <td>
-                                <dx:ASPxCheckBox ID="chkBifaDetasat"  runat="server" Width="150" Text="Bifa detasat de la alt angajator" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F100954").ToString()=="1"%>' ClientInstanceName="chkbx3" >
-                                    
-                                </dx:ASPxCheckBox>
+                                <dx:ASPxLabel ID="lblCtrRadiat" runat="server" Text="Contract radiat"></dx:ASPxLabel>
+                            </td>
+                            <td>
+                                <dx:ASPxRadioButtonList ID="rbCtrRadiat" runat="server" ClientInstanceName="rbCtrRadiat" RepeatDirection="Horizontal">
+                                    <Items>
+                                        <dx:ListEditItem Text="DA" Value="1" />
+                                        <dx:ListEditItem Text="NU" Value="0" />
+                                    </Items>
+                                </dx:ASPxRadioButtonList>
                             </td>
 
-				        </tr>
+					    </tr>
 				        </table>
                         <asp:ObjectDataSource runat="server" ID="dsMP" TypeName="WizOne.Module.General" SelectMethod="GetMotivPlecare"/>
                         <asp:ObjectDataSource runat="server" ID="dsGI" TypeName="WizOne.Module.General" SelectMethod="ListaMP_GradInvaliditate"/>
+                        <asp:ObjectDataSource runat="server" ID="dsMSI" TypeName="WizOne.Module.General" SelectMethod="GetMotivScutireImpozit"/>
+                        <asp:ObjectDataSource runat="server" ID="dsMSCAS" TypeName="WizOne.Module.General" SelectMethod="GetMotivScutireCAS"/>
 			        </fieldset>           
              </td>
               <td valign="top">   

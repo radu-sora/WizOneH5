@@ -74,6 +74,16 @@
 							        </dx:ASPxComboBox>
 						        </td>
 					        </tr>
+					        <tr>
+						        <td >		
+							        <dx:ASPxLabel  ID="lblDataModifSal" runat="server"  Text="Data modificarii"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataModifSal" ClientInstanceName="deDataModifSal" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001040") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
+						        </td>
+					        </tr>
 				        </table>
                       <asp:ObjectDataSource runat="server" ID="dsBanca" TypeName="WizOne.Module.General" SelectMethod="GetBanci"/>
 			        </fieldset>
@@ -123,8 +133,53 @@
 							        </dx:ASPxComboBox>
 						        </td>
 					        </tr>
+					        <tr>
+						        <td >		
+							        <dx:ASPxLabel  ID="lblDataModifGar" runat="server"  Text="Data modificarii"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataModifGar" ClientInstanceName="deDataModifGar" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001041") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
+						        </td>
+					        </tr>
 				        </table>
                       <asp:ObjectDataSource runat="server" ID="ObjectDataSource1" TypeName="WizOne.Module.General" SelectMethod="GetBanci"/>
+			        </fieldset>
+			      <fieldset >
+				        <legend class="legend-font-size">Cont tichete</legend>
+				        <table width="60%">	
+					        <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblIBANTichete"  Width="100"  runat="server"  Text="IBAN"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtIBANTichete" Width="250"  runat="server" Text='<%# Eval("F1001121") %>' AutoPostBack="false" >
+                                        <ClientSideEvents TextChanged="function(s,e) { ValidareIBAN(s,e); }" />
+							        </dx:ASPxTextBox>
+						        </td>      
+					        </tr>		
+					        <tr>
+						        <td >		
+							        <dx:ASPxLabel  ID="lblDataIncTichete" runat="server"  Text="Data inceput valabilitate"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataIncTichete" ClientInstanceName="deDataIncTichete" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001122") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
+						        </td>
+					        </tr>
+					        <tr>
+						        <td >		
+							        <dx:ASPxLabel  ID="lblDataSfTichete" runat="server"  Text="Data sfarsit valabilitate"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataSfTichete" ClientInstanceName="deDataSfTichete" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001123") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
+						        </td>
+					        </tr>
+				        </table>
 			        </fieldset>
                  </td> 
                 </tr>      

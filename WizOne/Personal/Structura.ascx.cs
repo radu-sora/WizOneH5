@@ -36,6 +36,8 @@ namespace WizOne.Personal
                 lblBir.InnerText = Dami.TraduCuvant("Birou/Echipa");
                 lblCC.InnerText = Dami.TraduCuvant("Centru cost");
                 lblPL.InnerText = Dami.TraduCuvant("Punct de lucru");
+                lblCAEN.InnerText = Dami.TraduCuvant("CAEN");
+                lblUnitStat.InnerText = Dami.TraduCuvant("Unitate locala statistica");
 
                 btnCC.ToolTip = Dami.TraduCuvant("Modificari contract");
                 btnCC.ToolTip = Dami.TraduCuvant("Istoric modificari");
@@ -77,6 +79,20 @@ namespace WizOne.Personal
                 cmbBir.DataSource = dtBir;
                 cmbBir.DataBind();
 
+                sql = @"SELECT * FROM F801";
+                if (Constante.tipBD == 2)
+                    sql = General.SelectOracle("F801", "F80103");
+                DataTable dtCAEN = General.IncarcaDT(sql, null);
+                cmbCAEN.DataSource = dtCAEN;
+                cmbCAEN.DataBind();
+
+                sql = @"SELECT * FROM F803";
+                if (Constante.tipBD == 2)
+                    sql = General.SelectOracle("F803", "F80303");
+                DataTable dtUnit = General.IncarcaDT(sql, null);
+                cmbUnitStat.DataSource = dtUnit;
+                cmbUnitStat.DataBind();
+
 
                 if (!Page.IsCallback)
                 {
@@ -94,6 +110,8 @@ namespace WizOne.Personal
                         cmbBir.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F100959"], "0"));
                         cmbCC.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10053"], "0"));
                         cmbPL.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10079"], "0"));
+                        cmbCAEN.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001095"], "0"));
+                        cmbUnitStat.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001097"], "0"));
                     }
                 }
 
@@ -236,6 +254,16 @@ namespace WizOne.Personal
                 case "cmbPL":
                     ds.Tables[0].Rows[0]["F10079"] = param[1];
                     ds.Tables[1].Rows[0]["F10079"] = param[1];
+                    Session["InformatiaCurentaPersonal"] = ds;
+                    break;
+                case "cmbCAEN":
+                    ds.Tables[0].Rows[0]["F1001095"] = param[1];
+                    ds.Tables[2].Rows[0]["F1001095"] = param[1];
+                    Session["InformatiaCurentaPersonal"] = ds;
+                    break;
+                case "cmbUnitStat":
+                    ds.Tables[0].Rows[0]["F1001097"] = param[1];
+                    ds.Tables[2].Rows[0]["F1001097"] = param[1];
                     Session["InformatiaCurentaPersonal"] = ds;
                     break;
                 case "btnCC":

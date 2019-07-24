@@ -124,6 +124,7 @@
         //}
 
         function OnModif(s, e) {
+            debugger;
             var texts = "";
             $('#<% =pnlValuri.ID %> input[type="text"]').each(function () {
                 texts += ";" + $(this).attr('id') + "=" + $(this).val();

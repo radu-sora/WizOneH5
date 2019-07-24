@@ -263,7 +263,7 @@
 					                    </tr>
 					                    <tr>				
 						                    <td>		
-							                    <dx:ASPxLabel  ID="lblEID" runat="server"  Text="EID"></dx:ASPxLabel >	
+							                    <dx:ASPxLabel  ID="lblEIDDI" runat="server"  Text="EID"></dx:ASPxLabel >	
 						                    </td>
 						                    <td>	
 							                    <dx:ASPxTextBox  ID="txtEIDDI" runat="server" Text='<%# Eval("F100901") %>'  AutoPostBack="false" >

@@ -51,6 +51,12 @@ namespace WizOne.Personal
             ASPxTextBox txtVechCarteMuncaAni = Contract_DataList.Items[0].FindControl("txtVechCarteMuncaAni") as ASPxTextBox;
             ASPxTextBox txtVechCarteMuncaLuni = Contract_DataList.Items[0].FindControl("txtVechCarteMuncaLuni") as ASPxTextBox;
 
+            ASPxComboBox cmbIntervRepTimpMunca = Contract_DataList.Items[0].FindControl("cmbIntRepTimpMunca") as ASPxComboBox;
+            ASPxComboBox cmbMotivScutit = Contract_DataList.Items[0].FindControl("cmbMotivScutit") as ASPxComboBox;
+            ASPxComboBox cmbMotivScutitCAS = Contract_DataList.Items[0].FindControl("cmbMotivScutitCAS") as ASPxComboBox;
+            ASPxCheckBox chkScutitCAS = Contract_DataList.Items[0].FindControl("chkScutitCAS") as ASPxCheckBox;
+            ASPxCheckBox chkConstr = Contract_DataList.Items[0].FindControl("chkConstr") as ASPxCheckBox;
+
             if (ds.Tables[1].Rows[0]["F100643"] != null && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
             {
                 txtVechCompAni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(0, 2);
@@ -71,8 +77,43 @@ namespace WizOne.Personal
             {
                 txtVechCarteMuncaAni.Text = "00";
                 txtVechCarteMuncaLuni.Text = "00";
-            }			
-			
+            }
+
+
+            if (!IsPostBack)
+            {
+                if (ds.Tables[1].Rows[0]["F10010"] != null || ds.Tables[1].Rows[0]["F10010"].ToString() == "0")
+                {
+                    cmbIntervRepTimpMunca.SelectedIndex = 0;
+                    cmbIntervRepTimpMunca.ClientEnabled = false;
+                }
+                if (ds.Tables[2].Rows[0]["F1001098"] == null || ds.Tables[2].Rows[0]["F1001098"].ToString() == "0")
+                {
+                    cmbMotivScutit.SelectedIndex = 0;
+                    cmbMotivScutit.ClientEnabled = false;
+                }
+                if (ds.Tables[2].Rows[0]["F1001096"] == null || ds.Tables[2].Rows[0]["F1001096"].ToString() == "0")
+                {
+                    chkScutitCAS.Checked = false;
+                    cmbMotivScutitCAS.ClientEnabled = false;
+                }
+                else
+                {
+                    chkScutitCAS.Checked = true;
+                    cmbMotivScutitCAS.ClientEnabled = true;
+                }
+            }
+            SetDurataTimpMunca();
+
+            ASPxRadioButtonList rbCtrRadiat = Contract_DataList.Items[0].FindControl("rbCtrRadiat") as ASPxRadioButtonList;
+            rbCtrRadiat.Value = General.Nz(table.Rows[0]["F1001077"], 0).ToString();
+            rbCtrRadiat.Items[0].Text = Dami.TraduCuvant(rbCtrRadiat.Items[0].Text);
+            rbCtrRadiat.Items[1].Text = Dami.TraduCuvant(rbCtrRadiat.Items[1].Text);
+
+            DataTable dtComp = General.IncarcaDT("SELECT * FROM F002 WHERE F00202 = " + ds.Tables[0].Rows[0]["F10002"].ToString(), null);
+            if ((dtComp.Rows[0]["F00287"] != null && dtComp.Rows[0]["F00287"].ToString() == "1") || (dtComp.Rows[0]["F00288"] != null && dtComp.Rows[0]["F00288"].ToString() == "1"))
+                chkConstr.ClientEnabled = true;
+
             ASPxComboBox cmbCOR = Contract_DataList.Items[0].FindControl("cmbCOR") as ASPxComboBox;
             cmbCOR.Value = Convert.ToInt32((ds.Tables[1].Rows[0]["F10098"] == null || ds.Tables[1].Rows[0]["F10098"].ToString().Length <= 0 ? "0" : ds.Tables[1].Rows[0]["F10098"].ToString()));
                         
@@ -80,19 +121,19 @@ namespace WizOne.Personal
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
             Session["InformatiaCurentaPersonal"] = ds;
 
-            string[] etichete = new string[57] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
+            string[] etichete = new string[60] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
                                                  "lblCASSAngajator", "lblSalariu", "lblDataModifSa", "lblCategAng1", "lblCategAng2", "lblLocAnt", "lblLocatieInt", "lblTipAng", "lblTimpPartial", "lblNorma", "lblDataModifNorma",
                                                  "lblTipNorma", "lblDurTimpMunca", "lblRepTimpMunca", "lblIntervRepTimpMunca", "lblNrOre", "lblCOR", "lblDataModifCOR", "lblFunctie", "lblDataModifFunctie", "lblMeserie",
                                                  "lblPerioadaProba", "lblZL", "lblZC", "lblNrZilePreavizDemisie", "lblNrZilePreavizConc", "lblUltimaZiLucr", "lblMotivPlecare", "lblDataPlecarii", "lblDataReintegr", "lblGradInvalid",
                                                  "lblDataValabInvalid", "lblVechimeComp", "lblVechCompAni", "lblVechCompLuni", "lblVechimeCarteMunca", "lblVechCarteMuncaAni", "lblVechCarteMuncaLuni", "lblGrila", "lblZileCOFidel",
-                                                 "lblZileCOAnAnt", "lblZileCOCuvAnCrt", "lblZLP", "lblZLPCuv", "lblDataPrimeiAng"};
+                                                 "lblZileCOAnAnt", "lblZileCOCuvAnCrt", "lblZLP", "lblZLPCuv", "lblDataPrimeiAng", "lblMotivScutit", "lblMotivScutitCAS", "lblCtrRadiat"};
             for (int i = 0; i < etichete.Count(); i++)
             {
                 ASPxLabel lbl = Contract_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
                 lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
             }
 
-            string[] bife = new string[4] { "chkFunctieBaza",  "chkScutitImp", "chkBifaPensionar", "chkBifaDetasat"};
+            string[] bife = new string[9] { "chkFunctieBaza",  "chkScutitImp", "chkBifaPensionar", "chkBifaDetasat", "chkCalcDed", "chkScutitCAS", "chkSalMin", "chkConstr", "chkCotaForfetara"};
             for (int i = 0; i < bife.Count(); i++)
             {
                 ASPxCheckBox chk = Contract_DataList.Items[0].FindControl(bife[i]) as ASPxCheckBox;
@@ -127,7 +168,7 @@ namespace WizOne.Personal
 
 
                 string[] lstComboBox = new string[10] { "cmbTipCtrMunca", "cmbDurCtr", "cmbTipAng", "cmbTimpPartial", "cmbNorma", "cmbTipNorma", "cmbDurTimpMunca", "cmbRepTimpMunca",
-                                                "cmbIntervRepTimpMunca", "cmbCOR"};
+                                                "cmbIntRepTimpMunca", "cmbCOR"};
                 for (int i = 0; i < lstComboBox.Count(); i++)
                 {
                     ASPxComboBox cmb = Contract_DataList.Items[0].FindControl(lstComboBox[i]) as ASPxComboBox;
@@ -238,6 +279,9 @@ namespace WizOne.Personal
 
                     CalculCO();
 
+                    break;
+                case "cmbTipNorma":
+                    SetDurataTimpMunca();
                     break;
                 //case "cmbDurCtr":
                 //    cmbDurataContract_SelectedIndexChanged();
@@ -588,6 +632,20 @@ namespace WizOne.Personal
                     }
                     break;
             }
+
+        }
+
+
+        protected void SetDurataTimpMunca()
+        {
+            ASPxComboBox cmbDurTimpMunca = Contract_DataList.Items[0].FindControl("cmbDurTimpMunca") as ASPxComboBox;
+            ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
+
+            ObjectDataSource cmbDTMDataSource = cmbDurTimpMunca.NamingContainer.FindControl("dsDTM") as ObjectDataSource;
+
+            cmbDTMDataSource.SelectParameters.Clear();
+            cmbDTMDataSource.SelectParameters.Add("param", cmbTipNorma.SelectedIndex.ToString()); 
+            cmbDurTimpMunca.DataBindItems();
 
         }
 

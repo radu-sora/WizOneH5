@@ -14,6 +14,9 @@
                 case "btnDetalii":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToDetalii);
                     break;
+                case "btnArata":
+                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToAtasMode);
+                    break;
             }
         }
 
@@ -29,6 +32,10 @@
             popGen.SetHeaderText("Detalii");
             popGen.SetContentUrl(strUrl);
             popGen.Show();
+        }
+
+        function GoToAtasMode(Value) {
+            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=9&id=' + Value, '_blank ')
         }
 
         function OnValueChangedHandler(s) {
@@ -174,6 +181,16 @@
                 s.cpAlertMessage = null;
             }
         }
+
+        function StartUpload() {
+            //pnlLoading.Show();
+        }
+
+        function EndUpload(s) {
+            //pnlLoading.Hide();
+            lblDoc.innerText = s.cpDocUploadName;
+            s.cpDocUploadName = null;
+        }
     </script>
 
 </asp:Content>
@@ -262,13 +279,13 @@
 
             <table width="40%">
                             <tr>
-                    <td id="lbl1Act" runat="server">
+                    <td id="lbl1Act" runat="server"  >
                         <dx:ASPxLabel  ID="lblTxt3Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb1Act" runat="server" ClientInstanceName="cmb1Act" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                         </dx:ASPxComboBox>
                     </td>
-                    <td id="lbl2Act" runat="server">
+                    <td id="lbl2Act" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt4Act" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb2Act" runat="server" ClientInstanceName="cmb2Act" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
@@ -304,7 +321,7 @@
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                         </dx:ASPxComboBox>
                     </td>
-                    <td id="lbl8Act" runat="server">
+                    <td id="lbl8Act" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt1Act" runat="server"  Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt1Act" runat="server"  Visible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
@@ -357,7 +374,7 @@
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
-                    <td id="lbl2Nou" runat="server">
+                    <td id="lbl2Nou" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt4Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmb2Nou" runat="server" ClientInstanceName="cmb2Nou" ClientIDMode="Static" Width="250px" ValueField="Id" DropDownWidth="250" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
@@ -399,7 +416,7 @@
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
-                    <td id="lbl8Nou" runat="server">
+                    <td id="lbl8Nou" runat="server" colspan="2">
                         <dx:ASPxLabel  ID="lblTxt1Nou" runat="server"   Visible="false"></dx:ASPxLabel >
                         <dx:ASPxTextBox ID="txt1Nou" runat="server"  Visible="false">
                             <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />
@@ -692,7 +709,34 @@
                         <label id="lblExpl" runat="server">Explicatii</label>
                         <dx:ASPxMemo ID="txtExpl" runat="server"  Width="250px" Height="100px" ></dx:ASPxMemo>
                     </td>
+                    <td style="padding-right:10px;" >
+                   
+                        <dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px" 
+                            BrowseButton-Text="" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="Incarca document" ShowTextBox="false"
+                            ClientInstanceName="UploadImage" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false" meta:resourcekey="btnDocUploadResource1">
+                            <BrowseButton>
+                                <Image Url="../Fisiere/Imagini/Icoane/incarca.png"></Image>
+                            </BrowseButton>
+                            <ValidationSettings ShowErrors="False"></ValidationSettings>
+
+                            <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
+                        </dx:ASPxUploadControl>
+                    </td>
+                    <td style="padding-right:10px;">   
+                        <dx:ASPxButton ID="btnDocSterge" runat="server" ToolTip="Sterge document" AutoPostBack="false" Height="28px"   meta:resourcekey="btnDocStergeResource1">
+                            <Image Url="../Fisiere/Imagini/Icoane/sterge.png" Width="16px" Height="16px"></Image>
+                            <Paddings PaddingLeft="0px" PaddingRight="0px" />
+                            <ClientSideEvents Click="function(s,e) { pnlCtl.PerformCallback(10); }" />
+                        </dx:ASPxButton>
+                        
+                    </td>
                 </tr>
+                <tr>
+                    <td colspan="3">
+                        <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
+                    </td>
+                </tr>
+        
 
             </table>
             <p></p>
@@ -792,6 +836,9 @@
                                         </dx:GridViewCommandColumnCustomButton>
                                         <dx:GridViewCommandColumnCustomButton ID="btnDetalii">
                                             <Image ToolTip="Detalii" Url="~/Fisiere/Imagini/Icoane/arata.png" />
+                                        </dx:GridViewCommandColumnCustomButton>
+                                        <dx:GridViewCommandColumnCustomButton ID="btnArata">
+                                            <Image ToolTip="Arata document" Url="~/Fisiere/Imagini/Icoane/view.png" />
                                         </dx:GridViewCommandColumnCustomButton>
                                     </CustomButtons>
                                 </dx:GridViewCommandColumn>

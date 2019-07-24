@@ -64,7 +64,7 @@ namespace WizOne.Personal
                     if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0]["Valoare"] != null && dtTemp.Rows[0]["Valoare"].ToString() == "1")  
                         txtMarca.ReadOnly = false;
 
-                string[] etichete = new string[12] { "lblMarca", "lblCNP", "lblMarcaUnica", "lblEID", "lblNume", "lblPrenume", "lblNumeAnt", "lblDataModifNume", "lblDataNasterii", "lblSex", "lblStareCivila", "lblVarsta" };
+                string[] etichete = new string[12] { "lblMarca", "lblCNP", "lblMarcaUnica", "lblEIDDI", "lblNume", "lblPrenume", "lblNumeAnt", "lblDataModifNume", "lblDataNasterii", "lblSex", "lblStareCivila", "lblVarsta" };
                 for (int i = 0; i < etichete.Count(); i++)
                 {
                     ASPxLabel lbl = DateIdentificare_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;

@@ -14,6 +14,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Diagnostics;
 using ProceseSec;
 using System.Text.RegularExpressions;
+using System.Security.Claims;
 
 namespace WizOne
 {
@@ -59,16 +60,56 @@ namespace WizOne
                 Session["IdLimba"] = Dami.ValoareParam("LimbaStart");
                 if (General.VarSession("IdLimba").ToString() == "") Session["IdLimba"] = "RO";
                 if (Dami.ValoareParam("LinkParolaUitata") != "" && Dami.ValoareParam("LinkParolaUitata") == "0") lnkUitat.Visible = false;
-                
-                string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
-                if (tipVerif == "3" || tipVerif == "4")
-                {
-                    string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
-                    int poz = usrTMP.IndexOf(@"\");
-                    if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
 
-                    Verifica(usrTMP, "");
+
+                //Florin 2019.07.23
+                string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
+                switch (tipVerif)
+                {
+                    case "3":
+                    case "4":
+                        {
+                            string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
+                            int poz = usrTMP.IndexOf(@"\");
+                            if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
+
+                            Verifica(usrTMP, "");
+                        }
+                        break;
+                    case "5":
+                        {
+                            if (Page.User.Identity.IsAuthenticated)
+                            {
+                                var claimsPrincipal = Page.User as ClaimsPrincipal;
+
+                                if (claimsPrincipal != null)
+                                {
+                                    //var q1 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.GivenName).Select(c => c.Value).SingleOrDefault();
+                                    //var upn = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
+                                    //var q3 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+                                    //var q4 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+                                    //var q5 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
+
+                                    string usrTMP = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
+                                    int poz = usrTMP.IndexOf("@");
+                                    if (poz > 0) usrTMP = usrTMP.Remove(poz);
+                                    MessageBox.Show(usrTMP);
+                                    Verifica(usrTMP, "");
+                                }
+                            }
+                        }
+                        break;
                 }
+
+                //string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
+                //if (tipVerif == "3" || tipVerif == "4")
+                //{
+                //    string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
+                //    int poz = usrTMP.IndexOf(@"\");
+                //    if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
+
+                //    Verifica(usrTMP, "");
+                //}
             }
             catch (Exception ex)
             {

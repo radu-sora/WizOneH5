@@ -3727,11 +3727,16 @@ namespace WizOne.Module
             return table;
         }
 
-        public static DataTable GetDurataTimpMunca()
+        public static DataTable GetDurataTimpMunca(string param)
         {
-            string sql = @"SELECT * FROM F091";
+            string cond = " WHERE F09105 IN (0, 1, 2)";
+            if (param == "1")
+                cond = " WHERE F09105 = 1";
+            if (param == "2")
+                cond = " WHERE F09105 = 2";
+            string sql = @"SELECT * FROM F091 " + cond;
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F091", "F09102");
+                sql = General.SelectOracle("F091", "F09102") + cond;
             return General.IncarcaDT(sql, null);
         }
 
@@ -3921,9 +3926,9 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetTipDoc(int idCet)
+        public static DataTable GetTipDoc(int idTara)
         {
-            return General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\" from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 where d.F73302 = " + idCet.ToString(), null);
+            return General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\" from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 where d.F73302 = " + idTara.ToString(), null);
         }
 
         public static DataTable GetCategPermis()
@@ -3931,6 +3936,22 @@ namespace WizOne.Module
             string sql = @"SELECT * FROM F714";
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("F714", "F71402");
+            return General.IncarcaDT(sql, null);
+        }
+
+        public static DataTable GetMotivScutireImpozit()
+        {
+            string sql = @"SELECT * FROM F804";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("F804", "F80403");
+            return General.IncarcaDT(sql, null);
+        }
+
+        public static DataTable GetMotivScutireCAS()
+        {
+            string sql = @"SELECT * FROM F802";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("F802", "F80203");
             return General.IncarcaDT(sql, null);
         }
 
@@ -4128,6 +4149,14 @@ namespace WizOne.Module
             string sql = @"SELECT * FROM F733";
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("F733", "F73302");
+            return General.IncarcaDT(sql, null);
+        }
+
+        public static DataTable GetF737()
+        {
+            string sql = @"SELECT * FROM F737";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("F737", "F73702");
             return General.IncarcaDT(sql, null);
         }
 

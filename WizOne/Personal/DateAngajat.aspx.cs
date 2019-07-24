@@ -1045,14 +1045,15 @@ namespace WizOne.Personal
                 lstCtr.Add("cmbTipNorma", "F100926");
                 lstCtr.Add("cmbDurTimpMunca", "F100927");
                 lstCtr.Add("cmbRepTimpMunca", "F100928");
-                lstCtr.Add("cmbIntervRepTimpMunca", "F100939");
+                lstCtr.Add("cmbIntRepTimpMunca", "F100939");
                 lstCtr.Add("txtNrOre", "F100964");
                 lstCtr.Add("cmbCOR", "F10098");
                 lstCtr.Add("deDataModifCOR", "F100956");
                 lstCtr.Add("cmbFunctie", "F10071");
                 lstCtr.Add("deDataModifFunctie", "F100992");
                 lstCtr.Add("cmbMeserie", "F10029");
-                lstCtr.Add("chkFunctieBaza", "F10048");
+                lstCtr.Add("chkFunctieBaza", "F10032");
+                lstCtr.Add("chkCalcDed", "F10048");
                 lstCtr.Add("txtPerProbaZL", "F1001063");
                 lstCtr.Add("txtPerProbaZC", "F100975");
                 lstCtr.Add("txtNrZilePreavizDemisie", "F1009742");
@@ -1065,8 +1066,14 @@ namespace WizOne.Personal
                 lstCtr.Add("cmbGradInvalid", "F10027");
                 lstCtr.Add("deDataValabInvalid", "F100271");
                 lstCtr.Add("chkScutitImp", "F10026");
+                lstCtr.Add("cmbMotivScutit", "F1001098");          
+                lstCtr.Add("cmbMotivScutitCAS", "F1001096");
+                lstCtr.Add("chkSalMin", "F1001117");
+                lstCtr.Add("chkConstr", "F1001118");
                 lstCtr.Add("chkBifaPensionar", "F10037");
+                lstCtr.Add("chkCotaForfetara", "F1001069");
                 lstCtr.Add("chkBifaDetasat", "F100954");
+                lstCtr.Add("rbCtrRadiat", "F1001077");
 
                 //lstCtr.Add("txtVechCompAni", "F100986");
                 //lstCtr.Add("txtVechCompLuni", "F100986");
@@ -1215,9 +1222,14 @@ namespace WizOne.Personal
                 lstBC.Add("txtNrCard", "F10055");
                 lstBC.Add("cmbBancaSal", "F10018");
                 lstBC.Add("cmbSucSal", "F10019");
+                lstBC.Add("deDataModifSal", "F1001040");
                 lstBC.Add("txtIBANGar", "F1001028");
                 lstBC.Add("cmbBancaGar", "F1001026");
                 lstBC.Add("cmbSucGar", "F1001027");
+                lstBC.Add("deDataModifGar", "F1001041");
+                lstBC.Add("txtIBANTichete", "F1001121");
+                lstBC.Add("deDataIncTichete", "F1001122");
+                lstBC.Add("deDataSfTichete", "F1001123");
                 #endregion
 
                 DataColumnCollection cols1 = ds.Tables[1].Columns;

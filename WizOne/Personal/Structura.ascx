@@ -147,6 +147,31 @@
                     </table>
                 </div>	
 
+                <div style="width:100%; margin-bottom:10px;">
+                    <label id="lblCAEN" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Cod CAEN</label>
+                    <table>
+                        <tr>
+                            <td>
+				                <dx:ASPxComboBox ID="cmbCAEN" runat="server" DropDownStyle="DropDown" TextField="F80104" ValueField="F80103" ValueType="System.Int32" Width="200">
+                                    <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
+				                </dx:ASPxComboBox>
+                            </td>    
+                        </tr>
+                    </table>
+                </div>
+                <div style="width:100%; margin-bottom:10px;">
+                    <label id="lblUnitStat" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Unitate locala statistica</label>
+                    <table>
+                        <tr>
+                            <td>
+				                <dx:ASPxComboBox ID="cmbUnitStat" runat="server" DropDownStyle="DropDown" TextField="F80304" ValueField="F80303" ValueType="System.Int32" Width="200">
+                                    <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
+				                </dx:ASPxComboBox>
+                            </td>    
+                        </tr>
+                    </table>
+                </div>
+
             </dx:PanelContent>
         </PanelCollection>
     </dx:ASPxCallbackPanel>	

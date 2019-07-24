@@ -26,9 +26,16 @@ namespace WizOne.Personal
 
             ASPxComboBox cmbTara = Documente_DataList.Items[0].FindControl("cmbTara") as ASPxComboBox;
             ASPxComboBox cmbTipDoc = Documente_DataList.Items[0].FindControl("cmbTipDoc") as ASPxComboBox;
+            ASPxComboBox cmbCetatenie = Documente_DataList.Items[0].FindControl("cmbCetatenie") as ASPxComboBox;
 
             cmbTipDoc.DataSource = General.GetTipDoc(Convert.ToInt32(table.Rows[0]["F100987"] == DBNull.Value ? "0" : table.Rows[0]["F100987"].ToString()));
             cmbTipDoc.DataBindItems();
+
+            if (!IsPostBack)
+            {
+                SeteazaCetatenie();
+                cmbTipDoc.Value = Convert.ToInt32(table.Rows[0]["F100983"] == DBNull.Value ? "0" : table.Rows[0]["F100983"].ToString());
+            }
 
             string[] etichete = new string[37] { "lblTara", "lblCetatenie", "lblTipAutMunca", "lblDataInc", "lblDataSf", "lblNumeMama", "lblNumeTata", "lblTipDoc", "lblSerieNr", "lblEmisDe", "lblLocNastere", "lblDataELib", "lblDataExp",
                                                  "lblNrPermisMunca", "lblDataPermisMunca", "lblNrCtrIntVechi", "lblDataCtrIntVechi", "lblDetaliiCtrAngajat", "lblCateg", "lblDataEmitere", "lblDataExpirare", "lblNr", "lblPermisEmisDe",
@@ -123,7 +130,9 @@ namespace WizOne.Personal
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             switch (param[0])
             {
-                //case "cmbTara":
+                case "cmbTara":
+                    SeteazaCetatenie();
+                    break;
                 //    cmbTara_SelectedIndexChanged();
                 //    ds.Tables[0].Rows[0]["F100987"] = param[1];
                 //    ds.Tables[1].Rows[0]["F100987"] = param[1];
@@ -418,69 +427,64 @@ namespace WizOne.Personal
         {
             try
             {
-                //F733 ent = cmbTara.SelectedItem as F733;
+                ASPxComboBox cmbTara = Documente_DataList.Items[0].FindControl("cmbTara") as ASPxComboBox;
+                ASPxComboBox cmbTipDoc = Documente_DataList.Items[0].FindControl("cmbTipDoc") as ASPxComboBox;
+                ASPxComboBox cmbCetatenie = Documente_DataList.Items[0].FindControl("cmbCetatenie") as ASPxComboBox;
+                ASPxComboBox cmbTipAutMunca = Documente_DataList.Items[0].FindControl("cmbTipAutMunca") as ASPxComboBox;
+                ASPxDateEdit deDataInc = Documente_DataList.Items[0].FindControl("deDataInc") as ASPxDateEdit;
+                ASPxDateEdit deDataSf = Documente_DataList.Items[0].FindControl("deDataSf") as ASPxDateEdit;
 
-                //if (ent != null)
-                //{
-                //    srvPersonal ctxPersonal = new srvPersonal();
-                //    LoadOperation<metaTipDoc> loTipDocument = ctxPersonal.Load<metaTipDoc>(ctxPersonal.GetTipDocQuery(Convert.ToInt32(ent.F73302)), LoadBehavior.RefreshCurrent, lc =>
-                //    {
-                //        if (lc != null && lc.Entities.Count() > 0)
-                //            //cmbTipDocument.ItemsSource = lc.Entities.Distinct().OrderBy(p=> p.Denumire);
-                //            cmbTipDocument.ItemsSource = lc.Entities.Distinct().OrderBy(p => p.Id);
+                if (cmbTara.SelectedIndex > 0)
+                {
 
-                //        //cmbTipDocument.SelectedIndex = 0;
+                    DataTable dtCet = General.IncarcaDT("SELECT F73306 FROM F733 WHERE F73302 = " + cmbTara.Value, null);
+                    cmbCetatenie.Value = Convert.ToInt32(dtCet.Rows[0][0].ToString());
 
-                //    }, null);
+                    cmbTipDoc.DataSource = General.GetTipDoc(Convert.ToInt32(cmbTara.Value));
+                    cmbTipDoc.DataBindItems();
+                    if (!IsPostBack)
+                        cmbTipDoc.Value = null;
 
-                //    srvBuiltIn ctx = new srvBuiltIn();
-                //    LoadOperation<F732> loCategoriePermis = ctx.Load<F732>(ctx.GetF732Query().Where(p => p.F73202 == (ent.F73306 == null ? -99 : ent.F73306)), LoadBehavior.RefreshCurrent, lc =>
-                //    {
-                //        string cet = "";
-                //        if (lc != null && lc.Entities.Count() > 0)
-                //            cet = lc.Entities.FirstOrDefault().F73204.ToString();
-
-                //        cmbCetatenie.ItemsSource = lc.Entities.OrderBy(p => p.F73204);
-                //        cmbCetatenie.SelectedIndex = 0;
-
-                //        if (ent.F73306 == 3)
-                //        {
-                //            cmbAutorizatie.IsEnabled = true;
-                //            deDataInceput.IsEnabled = true;
-                //            deDataSfarsit.IsEnabled = true;
-                //        }
-                //        else
-                //        {
-                //            cmbAutorizatie.IsEnabled = false;
-                //            deDataInceput.IsEnabled = false;
-                //            deDataSfarsit.IsEnabled = false;
-                //        }
-                //    }, null);
-                //}
-                //else
-                //{
-                //    cmbTipDocument.ItemsSource = null;
-                //    cmbCetatenie.ItemsSource = null;
-                //}
+                    if (Convert.ToInt32(dtCet.Rows[0][0].ToString()) == 3)
+                    {
+                        cmbTipAutMunca.ClientEnabled = true;
+                        deDataInc.ClientEnabled = true;
+                        deDataSf.ClientEnabled = true;
+                    }
+                    else
+                    {
+                        cmbTipAutMunca.ClientEnabled = false;
+                        deDataInc.ClientEnabled = false;
+                        deDataSf.ClientEnabled = false;
+                    }                   
+                }
+                else
+                {
+                    cmbTipDoc.DataSource = null;
+                    cmbTipDoc.DataBind();
+                    if (!IsPostBack)
+                        cmbTipDoc.Value = null;
+                    cmbCetatenie.Value = 0;
+                }
             }
             catch (Exception ex)
             {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+               
             }
         }
 
-        private void cmbTara_SelectedIndexChanged()
-        {
-            try
-            {
-                SeteazaCetatenie();
-            }
-            catch (Exception ex)
-            {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //private void cmbTara_SelectedIndexChanged()
+        //{
+        //    try
+        //    {
+        //        SeteazaCetatenie();
+        //    }
+        //    catch (Exception ex)
+        //    {
+               
+        //    }
 
-        }
+        //}
 
 
         //private bool deDataInceput_EditValueChanged(object F100912)

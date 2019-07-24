@@ -180,13 +180,16 @@ namespace WizOne.Avs
                 case (int)Constante.Atribute.Tarife:
                     sir = dt.Rows[0]["Tarife"].ToString();
                     string sqlFinal = "", cond = "";
-                    sql = "SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS \"Coloana0\", (SELECT TOP 1 b.F01107 FROM F011 b WHERE b.F01104 = a.F01104) AS \"Coloana1\", "
+                    sql = "SELECT (SELECT TOP 1 b.F01107 FROM F011 b WHERE b.F01104 = a.F01104) AS \"Coloana1\", "
                             + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"Coloana2\" FROM F011 a ";
+                    string col0 = "SELECT CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) AS \"Coloana0\", a.* FROM (";
 
                     if (Constante.tipBD == 2)
-                        sql = "SELECT ROWNUM AS \"Coloana0\", (SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND ROWNUM = 1) AS \"Coloana1\", "
+                    {
+                        sql = "SELECT (SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND ROWNUM = 1) AS \"Coloana1\", "
                             + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"Coloana2\" FROM F011 a ";
-
+                        col0 = "SELECT ROWNUM AS \"Coloana0\", a.* FROM (";
+                    }
                     for (int i = 0; i < sir.Length; i++)
                         if (sir[i] != '0')
                         {
@@ -195,7 +198,7 @@ namespace WizOne.Avs
                         }
 
                     if (sqlFinal.Length > 0)
-                        dt = General.IncarcaDT(sqlFinal, null);
+                        dt = General.IncarcaDT(col0 + sqlFinal + ") a ", null);
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["Coloana0"] };                
                     grDate.KeyFieldName = "Coloana0";
                     grDate.DataSource = dt;

@@ -868,6 +868,33 @@ namespace WizOne.Avs {
         protected global::DevExpress.Web.ASPxMemo txtExpl;
         
         /// <summary>
+        /// btnDocUpload control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxUploadControl btnDocUpload;
+        
+        /// <summary>
+        /// btnDocSterge control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnDocSterge;
+        
+        /// <summary>
+        /// lblDoc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDoc;
+        
+        /// <summary>
         /// lblAngFiltru control.
         /// </summary>
         /// <remarks>
@@ -965,5 +992,14 @@ namespace WizOne.Avs {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDetalii;
+        
+        /// <summary>
+        /// btnArata control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnArata;
     }
 }

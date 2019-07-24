@@ -23,6 +23,9 @@ namespace WizOne.Personal
             Detasari_DataList.DataSource = table;
             Detasari_DataList.DataBind();
 
+            Mutare_DataList.DataSource = table;
+            Mutare_DataList.DataBind();
+
             grDateDetasari.DataBind();
             foreach (dynamic c in grDateDetasari.Columns)
             {
@@ -39,7 +42,7 @@ namespace WizOne.Personal
             grDateDetasari.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
 
-            string[] etichete = new string[6] { "lblNumeAngajator", "lblCUI", "lblNationalitate", "lblDataInceputDet", "lblDataSfarsitDet", "lblDataIncetareDet" };
+            string[] etichete = new string[6] { "lblNumeAngajator", "lblCUI", "lblNationalitate", "lblDataInceputDet", "lblDataSfarsitDet", "lblDataIncetareDet"};
             for (int i = 0; i < etichete.Count(); i++)
             {
                 ASPxLabel lbl = Detasari_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
@@ -47,6 +50,15 @@ namespace WizOne.Personal
             }
             General.SecuritatePersonal(Detasari_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 
+
+            etichete = new string[9] {  "lblNumeAngExp", "lblCUIExp", "lblMutareExp", "lblTemeiLegal", "lblDataMutare",
+                                                "lblNumeAngPrel", "lblCUIPrel", "lblMutarePrel", "lblDataPrel"};
+            for (int i = 0; i < etichete.Count(); i++)
+            {
+                ASPxLabel lbl = Mutare_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
+                lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
+            }
+            General.SecuritatePersonal(Mutare_DataList, Convert.ToInt32(Session["UserId"].ToString()));
         }
 
         protected void grDateDetasari_DataBinding(object sender, EventArgs e)
@@ -79,9 +91,6 @@ namespace WizOne.Personal
 
         }
 
-        protected void btnSalveazaDet_Click(object sender, EventArgs e)
-        {
-
-        }
+    
     }
 }

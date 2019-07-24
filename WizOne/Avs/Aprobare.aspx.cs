@@ -1,4 +1,5 @@
-﻿using DevExpress.Web;
+﻿using DevExpress.Utils;
+using DevExpress.Web;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -461,6 +462,37 @@ namespace WizOne.Avs
                 if (e.ButtonID == "btnDelete")
                 {
 
+                }
+
+                if (e.VisibleIndex >= 0)
+                {
+                    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
+                    if (values != null)
+                    {
+                        int idAtr = Convert.ToInt32(values.Row["IdAtribut"].ToString());
+                        if (e.ButtonID == "btnDetalii")
+                        {
+                            if (idAtr != (int)Constante.Atribute.Sporuri && idAtr != (int)Constante.Atribute.SporTranzactii
+                                && idAtr != (int)Constante.Atribute.Componente && idAtr != (int)Constante.Atribute.Tarife)
+                            {
+                                e.Visible = DefaultBoolean.False;
+
+                            }
+                        }
+
+                        if (e.ButtonID == "btnArata")
+                        {
+                            if (idAtr == (int)Constante.Atribute.BancaSalariu || idAtr == (int)Constante.Atribute.BancaGarantii
+                                || idAtr == (int)Constante.Atribute.DocId || idAtr == (int)Constante.Atribute.PermisAuto)
+                            {
+                                e.Visible = DefaultBoolean.True;
+
+                            }
+                            else
+                                e.Visible = DefaultBoolean.False;
+                        }
+
+                    }
                 }
             }
             catch (Exception ex)

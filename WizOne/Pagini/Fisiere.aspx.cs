@@ -105,25 +105,28 @@ namespace WizOne.Pagini
                             case "8":
                                 tbl = "Admin_NrActAd";
                                 break;                                //case "5":   //Florin 2019.12.04 (se citeste din tabela Admin_Medicina)
-                                //    {
-                                //        DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Admin_Medicina"" WHERE ""IdAuto""={id}", null);
-                                //        if (dtAta.Rows.Count > 0)
-                                //            scrieDoc((dtAta.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dtAta.Rows[0]["Fisier"], (dtAta.Rows[0]["FisierNume"] ?? "").ToString());
-                                //        else
-                                //            Response.Write("Nu exista date de afisat !");
+                                                                      //    {
+                                                                      //        DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Admin_Medicina"" WHERE ""IdAuto""={id}", null);
+                                                                      //        if (dtAta.Rows.Count > 0)
+                                                                      //            scrieDoc((dtAta.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dtAta.Rows[0]["Fisier"], (dtAta.Rows[0]["FisierNume"] ?? "").ToString());
+                                                                      //        else
+                                                                      //            Response.Write("Nu exista date de afisat !");
 
-                                //        return;
-                                //    }
-                                //case "6":   //Florin 2019.12.07 (se citeste din tabela Admin_Sanctiuni)
-                                //    {
-                                //        DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Admin_Sanctiuni"" WHERE ""IdAuto""={id}", null);
-                                //        if (dtAta.Rows.Count > 0)
-                                //            scrieDoc((dtAta.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dtAta.Rows[0]["Fisier"], (dtAta.Rows[0]["FisierNume"] ?? "").ToString());
-                                //        else
-                                //            Response.Write("Nu exista date de afisat !");
+                            //        return;
+                            //    }
+                            //case "6":   //Florin 2019.12.07 (se citeste din tabela Admin_Sanctiuni)
+                            //    {
+                            //        DataTable dtAta = General.IncarcaDT($@"SELECT * FROM ""Admin_Sanctiuni"" WHERE ""IdAuto""={id}", null);
+                            //        if (dtAta.Rows.Count > 0)
+                            //            scrieDoc((dtAta.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dtAta.Rows[0]["Fisier"], (dtAta.Rows[0]["FisierNume"] ?? "").ToString());
+                            //        else
+                            //            Response.Write("Nu exista date de afisat !");
 
-                                //        return;
-                                //    }
+                            //        return;
+                            //    }
+                            case "9":
+                                tbl = "Avs_Cereri";
+                                break;
                         }
 
                         if (tbl == "Admin_Medicina" || tbl == "Admin_Sanctiuni" /*|| tbl == "Atasamente"*/)

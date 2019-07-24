@@ -93,7 +93,7 @@ namespace WizOne
                                     string usrTMP = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
                                     int poz = usrTMP.IndexOf("@");
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
-                                    MessageBox.Show(usrTMP);
+                                    //MessageBox.Show(usrTMP);
                                     Verifica(usrTMP, "");
                                 }
                             }
@@ -451,6 +451,8 @@ namespace WizOne
 
             try
             {
+                //Florin 2019.07.23
+                //s-a adaugat conditia cu tip 5
                 string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
                 if (tipVerif == "") tipVerif = "1";
 
@@ -458,6 +460,7 @@ namespace WizOne
                 {
                     case "1":
                     case "3":
+                    case "5":
                         {
                             DataRow dr = General.IncarcaDR(@"SELECT F70103, F70114, ""Mail"", ""IdLimba"" FROM USERS WHERE UPPER(F70104)=@1", new string[] { utilizator.ToUpper() });
                             //DataRow dr = General.IncarcaDR(@"SELECT F70103, F70114, ""Mail"", ""IdLimba"" FROM USERS WHERE UPPER(F70104)='" + utilizator.ToUpper() + "'", null);
@@ -472,7 +475,7 @@ namespace WizOne
                                 {
                                     //ProceseSec.CriptDecript sec = new ProceseSec.CriptDecript();
                                     //if (sec.EncryptString("WizOne-2015",entUsr.FirstOrDefault().F70103.ToString(),2) != parola) return 1;
-                                    if (tipVerif == "3")
+                                    if (tipVerif == "3" || tipVerif == "5")
                                     {
                                         stare = "3" + idLimba;
                                     }

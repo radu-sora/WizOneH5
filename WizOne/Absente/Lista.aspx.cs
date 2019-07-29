@@ -603,33 +603,46 @@ namespace WizOne.Absente
                                                     WHERE ""Id""= " + obj[0];
                                     sqlUp = string.Format(sqlUp, sqlTotal, sqlIdStare, sqlPozitie, sqlCuloare);
 
-                                    string strGen = "BEGIN TRAN " +
-                                        sqlDel + "; " +
-                                        sqlPlf + "; " +
-                                        sqlIst + "; " +
-                                        sqlUp + "; " +
-                                        "COMMIT TRAN";
+                                    //Florin 2019.07.29
+                                    //s-a adaugat si validare
+                                    int idStare = Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlIdStare, null), 1));
 
-                                    DataTable dtCer = General.IncarcaDT(strGen, null);
-                                    //General.ExecutaNonQuery(strGen,null);
-
-                                    //trimite in pontaj daca este finalizat
-                                    if (Convert.ToInt32(dtCer.Rows[0]["IdStare"]) == 3)
+                                    string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                    if (msg != "" && msg.Substring(0, 1) == "2")
                                     {
-                                        if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
-                                        {
-                                            General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(General.Nz(obj[0],1)), 5, trimiteLaInlocuitor, Convert.ToInt32(General.Nz(obj[5],0)));
-
-                                            //Se va face cand vom migra GAM
-                                            //TrimiteCerereInF300(Session["UserId"], idCer);
-                                        }
+                                        MessageBox.Show(Dami.TraduCuvant(msg.Substring(2)));
+                                        return;
                                     }
+                                    else
+                                    {
+                                        string strGen = "BEGIN TRAN " +
+                                            sqlDel + "; " +
+                                            sqlPlf + "; " +
+                                            sqlIst + "; " +
+                                            sqlUp + "; " +
+                                            "COMMIT TRAN";
 
-                                    Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT *, 2 AS ""Actiune"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                        DataTable dtCer = General.IncarcaDT(strGen, null);
+                                        //General.ExecutaNonQuery(strGen,null);
 
-                                    grDate.DataBind();
-                                    //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoWarning);
-                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                                        //trimite in pontaj daca este finalizat
+                                        if (Convert.ToInt32(dtCer.Rows[0]["IdStare"]) == 3)
+                                        {
+                                            if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
+                                            {
+                                                General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(General.Nz(obj[0], 1)), 5, trimiteLaInlocuitor, Convert.ToInt32(General.Nz(obj[5], 0)));
+
+                                                //Se va face cand vom migra GAM
+                                                //TrimiteCerereInF300(Session["UserId"], idCer);
+                                            }
+                                        }
+
+                                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+
+                                        grDate.DataBind();
+                                        //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoWarning);
+                                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                                    }
                                 }
                                 #endregion
                             }

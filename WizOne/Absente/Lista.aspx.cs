@@ -605,7 +605,7 @@ namespace WizOne.Absente
 
                                     //Florin 2019.07.29
                                     //s-a adaugat si validare
-                                    int idStare = Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlIdStare, null), 1));
+                                    int idStare = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT TOP 1 ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Pozitie""<>0 AND ""Aprobat""=1 AND ""IdStare""<>4 AND ""IdCerere""={obj[0]} ORDER BY ""IdAuto"" DESC", null), 1));
 
                                     string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                                     if (msg != "" && msg.Substring(0, 1) == "2")
@@ -641,7 +641,10 @@ namespace WizOne.Absente
 
                                         grDate.DataBind();
                                         //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoWarning);
-                                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                                        string strPopUp = "Proces realizat cu succes";
+                                        if (msg != "")
+                                            strPopUp += " " + Dami.TraduCuvant("cu urmatorul avertisment") + Environment.NewLine + msg;
+                                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(strPopUp);
                                     }
                                 }
                                 #endregion

@@ -2439,6 +2439,7 @@ namespace WizOne.Pontaj
                                     c.Width = Unit.Pixel(latime);
                                     c.VisibleIndex = i + 4;
                                     c.ToolTip = tt;
+                                    c.PropertiesTimeEdit.AllowNull = true;
                                     //c.PropertiesTimeEdit.ClientSideEvents.KeyDown = "function(s, e) { TestGigi(s,e) }";
 
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;

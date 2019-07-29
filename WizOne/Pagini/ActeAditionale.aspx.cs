@@ -500,7 +500,7 @@ namespace WizOne.Pagini
                             UNION
                             SELECT CASE WHEN Motiv = 1 THEN X.DataModif ELSE '2100-01-01' END AS ColData  
                             UNION
-                            SELECT CASE WHEN Salariul = 1 THEN 
+                            SELECT CASE WHEN (Salariul = 1 OR Spor = 1) THEN 
                             (SELECT Zi FROM (
                             SELECT Zi, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as IdAuto 
                             FROM tblZile WHERE Zi>=DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays)) x
@@ -521,7 +521,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END) AS FunctieId,
                             MAX(CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END) AS Norma,
                             MAX(CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END) AS Salariul,
-                            MAX(0) AS Spor,
+                            MAX(CASE WHEN (COALESCE(Spor0,0) + COALESCE(Spor1,0) +COALESCE(Spor2,0) +COALESCE(Spor3,0) +COALESCE(Spor4,0) +COALESCE(Spor5,0) +COALESCE(Spor6,0) +COALESCE(Spor7,0) +COALESCE(Spor8,0) +COALESCE(Spor9,0) +COALESCE(Spor10,0) +COALESCE(Spor11,0) +COALESCE(Spor12,0) +COALESCE(Spor13,0) +COALESCE(Spor14,0) +COALESCE(Spor15,0) +COALESCE(Spor16,0) +COALESCE(Spor17,0) +COALESCE(Spor18,0) +COALESCE(Spor19,0)) > 0 THEN 1 ELSE 0 END ) AS Spor,
                             MAX(CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END) AS Structura,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
@@ -569,7 +569,7 @@ namespace WizOne.Pagini
                             when ""Motiv"" = 1 then X.""DataModif""
                             WHEN ""Norma""=1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (X.""DataModif"" - 1) AND ""ZiSapt"" <= 5)
-                            when ""Salariul"" = 1 then
+                            when ""Salariul"" = 1 OR ""Spor"" = 1 then
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
                             WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
@@ -580,7 +580,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(""FunctieId"", 0) > 0 THEN 1 ELSE 0 END) AS ""FunctieId"",
                             MAX(CASE WHEN COALESCE(""Norma"", 0) > 0 THEN 1 ELSE 0 END) AS ""Norma"",
                             MAX(CASE WHEN COALESCE(""SalariulBrut"", 0) > 0 OR COALESCE(""SalariulNet"", 0) > 0 THEN 1 ELSE 0 END) AS ""Salariul"",
-                            MAX(0) AS ""Spor"",
+                            MAX(CASE WHEN (COALESCE(""Spor0"",0) + COALESCE(""Spor1"",0) +COALESCE(""Spor2"",0) +COALESCE(""Spor3"",0) +COALESCE(""Spor4"",0) +COALESCE(""Spor5"",0) +COALESCE(""Spor6"",0) +COALESCE(""Spor7"",0) +COALESCE(""Spor8"",0) +COALESCE(""Spor9"",0) +COALESCE(""Spor10"",0) +COALESCE(""Spor11"",0) +COALESCE(""Spor12"",0) +COALESCE(""Spor13"",0) +COALESCE(""Spor14"",0) +COALESCE(""Spor15"",0) +COALESCE(""Spor16"",0) +COALESCE(""Spor17"",0) +COALESCE(""Spor18"",0) +COALESCE(""Spor19"",0)) > 0 THEN 1 ELSE 0 END ) AS ""Spor"",
                             MAX(CASE WHEN COALESCE(""SubcompanieId"", 0) > 0 OR COALESCE(""FilialaId"", 0) > 0 OR COALESCE(""SectieId"", 0) > 0 OR COALESCE(""DeptId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Structura"",
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 2 THEN 1 ELSE 0 END) AS ""CIMDet"",
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 1 THEN 1 ELSE 0 END) AS ""CIMNed"",

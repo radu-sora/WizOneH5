@@ -826,9 +826,13 @@ namespace WizOne.Avs
 
                             //ctx.SaveChanges();
 
+
                             //Florin 2019.03.01
                             //s-a adaugat conditia cu parametrul
-                            if (idStare == 3 && Dami.ValoareParam("FinalizareCuActeAditionale") == "0")
+                            //Florin 2019.07.29
+                            //s-a adaugat si parametrul cu id-uri excluse
+                            string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
+                            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + id + ",") >= 0)))
                             {
                                 Cereri pag = new Cereri();
                                 pag.TrimiteInF704(id);

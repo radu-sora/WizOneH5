@@ -49,7 +49,7 @@ namespace WizOne.Pagini
                         pnlMail.Visible = false;
                         pnlMesaj.Visible = true;
                         pnlAtasament.Visible = false;
-                        pnlXLS.Visible = false;
+                        pnlXLS.Visible = true;
                         break;
                     case "3":
                         pnlMail.Visible = true;

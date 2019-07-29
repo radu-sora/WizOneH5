@@ -2668,11 +2668,15 @@ namespace WizOne.Avs
             //}
             #endregion
 
+
             //Florin 2018.11.16
             //daca s-a modificat functia modificam si in posturi 
             //Florin 2019.03.01
             //s-a adaugat conditia cu parametrul
-            if (idStare == 3 && Dami.ValoareParam("FinalizareCuActeAditionale") == "0")
+            //Florin 2019.07.29
+            //s-a adaugat si parametrul cu id-uri excluse
+            string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
+            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idUrm + ",") >=0)))
             {
                 TrimiteInF704(idUrm);
                 if (idAtr == 2)

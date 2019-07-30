@@ -6304,7 +6304,7 @@ namespace WizOne.Module
 
                 //Florin 2019.06.21
                 HttpContext.Current.Session["EsteTactil"] = "0";
-                HttpContext.Current.Session["TimeOutSecunde"] = "99999";
+                HttpContext.Current.Session["TimeOutSecunde"] = 0;
 
                 HttpContext.Current.Session["NumeGriduri"] = "";
                 HttpContext.Current.Session["IdGrid"] = "1";

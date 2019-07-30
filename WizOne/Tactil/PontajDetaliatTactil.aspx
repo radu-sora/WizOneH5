@@ -1,58 +1,19 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="PontajDetaliatTactil.aspx.cs" Inherits="WizOne.Tactil.PontajDetaliatTactil" %>
 
-
-
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     
 </asp:Content>
-
-
-
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <script>
-        $(function () {
-            $("body").on('click keypress', function () {
-                ResetThisSession();
-            });
-        });
-
-        var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
-        var timeInSecondsAfterSessionOut = 30;
-        var secondTick = 0;
-
-        function ResetThisSession() {
-            secondTick = 0;
+    <script>        
+        function OnControlsInitialized(s, e) {          
+            AdjustSize();      
         }
 
-        function StartThisSessionTimer() {
-            secondTick++;
-            if (timeOutSecunde != null)
-                timeInSecondsAfterSessionOut = timeOutSecunde;
-            var timeLeft = ((timeInSecondsAfterSessionOut - secondTick) / 60).toFixed(0); // in minutes
-            timeLeft = timeInSecondsAfterSessionOut - secondTick;
-            $("#spanTimeLeft").html(timeLeft);
-
-            if (secondTick >= timeInSecondsAfterSessionOut) {
-                clearTimeout(tick);
-                window.location = "../DefaultTactil.aspx";
-                return;
-            }
-            tick = setTimeout("StartThisSessionTimer()", 1000);
-        }
-
-        StartThisSessionTimer();
-
-        function OnControlsInitialized(s, e) {
-          
-            AdjustSize();
-           
-        }
         function AdjustSize() {
             grDate.SetHeight(850);
             grDateTotaluri.SetHeight(850);
         }
-
     </script>
         <table style="width:100%;">
             <tr>

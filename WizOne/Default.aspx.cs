@@ -686,7 +686,7 @@ namespace WizOne
 
                 //Florin 2019.06.21
                 Session["EsteTactil"] = "0";
-                Session["TimeOutSecunde"] = "99999";
+                Session["TimeOutSecunde"] = 0;
 
                 //Florin 2019.07.15
                 Session["Filtru_ActeAditionale"] = "";

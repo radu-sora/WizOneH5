@@ -114,7 +114,7 @@
                         <td>
                             <button type="button" class="btn btn-default btn-sm" title="Exit" onclick="onExitButtonClick()">
                                 <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-                            </button> 
+                            </button>                            
                         </td>
                     </tr>
                 </table>
@@ -374,11 +374,7 @@
         }
 
         function onExitButtonClick() {
-            var sessionValue = '<%=Session["PaginaWeb"]%>'
-            if (sessionValue == "Pagini.ActeAditionale")
-                window.location='<%= ResolveUrl("~/Pagini/ActeAditionale.aspx") %>'
-            else
-                window.history.back();
+            window.history.back();
         }
 
         function saveCustomLayout() {
@@ -680,42 +676,6 @@
                 }
             });
         }
-
-        
-
-
-        $(function () {
-            $("body").on('click keypress', function () {
-                ResetThisSession();
-            });
-        });
-
-        var esteTactil = <%= Session["EsteTactil"] %>;
-        var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
-        var timeInSecondsAfterSessionOut = 30;
-        var secondTick = 0;
-
-        function ResetThisSession() {
-            secondTick = 0;
-        }
-
-        function StartThisSessionTimer() {
-            secondTick++;
-            if (timeOutSecunde != null)
-                timeInSecondsAfterSessionOut = timeOutSecunde;
-            var timeLeft = ((timeInSecondsAfterSessionOut - secondTick) / 60).toFixed(0); // in minutes
-            timeLeft = timeInSecondsAfterSessionOut - secondTick;
-       
-
-            if (esteTactil == 1 && secondTick >= timeInSecondsAfterSessionOut) {               
-                clearTimeout(tick);
-                window.location = "../../../../DefaultTactil.aspx";
-                return;
-            }
-            tick = setTimeout(StartThisSessionTimer(), 1000);
-        }
-
-        StartThisSessionTimer();
     </script>    
 
     <dx:ASPxGlobalEvents ID="globalEvents" runat="server">

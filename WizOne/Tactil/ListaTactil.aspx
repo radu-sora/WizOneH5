@@ -3,44 +3,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
 
 </asp:Content>
-
-
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <script>
-
-        $(function () {
-            $("body").on('click keypress', function () {
-                ResetThisSession();
-            });
-        });
-
-        var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
-        var timeInSecondsAfterSessionOut = 30;
-        var secondTick = 0;
-
-        function ResetThisSession() {
-            secondTick = 0;
-        }
-
-        function StartThisSessionTimer() {
-            secondTick++;
-            if (timeOutSecunde != null)
-                timeInSecondsAfterSessionOut = timeOutSecunde;
-            var timeLeft = ((timeInSecondsAfterSessionOut - secondTick) / 60).toFixed(0); // in minutes
-            timeLeft = timeInSecondsAfterSessionOut - secondTick;
-            $("#spanTimeLeft").html(timeLeft);
-
-            if (secondTick >= timeInSecondsAfterSessionOut) {
-                clearTimeout(tick);
-                window.location = "../DefaultTactil.aspx";
-                return;
-            }
-            tick = setTimeout("StartThisSessionTimer()", 1000);
-        }
-
-        StartThisSessionTimer();
-
+    <script>        
         function grDate_CustomButtonClick(s, e) {
             switch(e.buttonID)
             {
@@ -52,7 +17,6 @@
                     break;
             }
         }
-
 
         function OnMotivRespingere(s,e)
         {
@@ -70,7 +34,6 @@
                 txtMtv.SetText('');
             }
         }
-
 
         function GoToDeleteMode(Value) {
             if (Value == 0 || Value == -1) {
@@ -109,7 +72,6 @@
         function CloseDeferedWindow() {
             popUpDivide.Hide();
         }
-
 
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
@@ -228,11 +190,11 @@
 
     </script>
 
-        <table style="width:100%;">
-            <tr>
-                <td style="text-align:right; padding-right:20px;"><span id="spanTimeLeft"></span> seconds left</td>
-            </tr>
-        </table>
+    <table style="width:100%;">
+        <tr>
+            <td style="text-align:right; padding-right:20px;"><span id="spanTimeLeft"></span> seconds left</td>
+        </tr>
+    </table>
     <table width="100%">
         <tr>
             <td align="left">
@@ -269,12 +231,10 @@
                                 </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
-
                         <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="175px" VisibleIndex="2" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings FilterMode="DisplayText" />
                         </dx:GridViewDataComboBoxColumn>
-
                         <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="350px" Visible="false" VisibleIndex="5" Settings-AutoFilterCondition="Contains" />
                         <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" ReadOnly="true" Width="595px" VisibleIndex="6">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
@@ -289,10 +249,7 @@
                         <dx:GridViewDataTextColumn FieldName="NrZile" Name="NrZile" Caption="Nr. zile" ReadOnly="true" Width="70px" VisibleIndex="9" />                        
                         <dx:GridViewDataTextColumn FieldName="NrOre" Name="NrOre" Caption="Nr. ore" ReadOnly="true" Width="70px" VisibleIndex="10" />
                         <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" ReadOnly="true" Width="50px" Visible="false" ShowInCustomizationForm="false" VisibleIndex="11" />
-
-
-                    </Columns>    
-                    
+                    </Columns>                        
                 </dx:ASPxGridView>
                     
             </td>

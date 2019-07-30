@@ -58,6 +58,14 @@ namespace WizOne.Personal
                     chk2.Checked = true;
                 }
 
+                if (!IsPostBack)
+                {
+                    ASPxComboBox cmbTimpPartialDG = DateGenListView.Items[0].FindControl("cmbTimpPartialDG") as ASPxComboBox;
+                    cmbTimpPartialDG.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
+                    cmbTimpPartialDG.DataBind();
+                    cmbTimpPartialDG.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"].ToString());
+                }
+
                 ASPxTextBox txtMarca = DateGenListView.Items[0].FindControl("txtMarca") as ASPxTextBox;
                 //txtMarca.ReadOnly = false;
                 txtMarca.Text = Session["Marca"].ToString();

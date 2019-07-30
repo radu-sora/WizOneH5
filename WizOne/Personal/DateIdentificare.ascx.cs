@@ -90,7 +90,7 @@ namespace WizOne.Personal
                 lgSex.InnerText = Dami.TraduCuvant("Data nasterii si Sex");
                 HtmlGenericControl lgNume = DateIdentificare_DataList.Items[0].FindControl("lgNume") as HtmlGenericControl;
                 lgNume.InnerText = Dami.TraduCuvant("Nume si prenume");
-
+                
                 if (Dami.ValoareParam("ValidariPersonal") == "1")
                 {
                     ASPxTextBox txtCNPDI = DateIdentificare_DataList.Items[0].FindControl("txtCNPDI") as ASPxTextBox;
@@ -100,9 +100,9 @@ namespace WizOne.Personal
                     txtNume.BackColor = Color.LightGray;
                     txtPrenume.BackColor = Color.LightGray;
                     txtMarca.BackColor = Color.LightGray;
-                }
-
+                }          
                 General.SecuritatePersonal(DateIdentificare_DataList, Convert.ToInt32(Session["UserId"].ToString()));
+            
             }
             catch (Exception ex)
             {

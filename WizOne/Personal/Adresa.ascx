@@ -58,7 +58,7 @@
     <tr>
         <td>
             <dx:ASPxHiddenField ID="hfSiruta" runat="server" ClientInstanceName="hfSiruta" ClientIDMode="Static"/>
-            <dx:ASPxGridView ID="grDateAdresa" runat="server" ClientInstanceName="grDateAdresa" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false" OnDataBinding="grDateAdresa_DataBinding" OnInitNewRow="grDateAdresa_InitNewRow"
+            <dx:ASPxGridView ID="grDateAdresa" runat="server" ClientInstanceName="grDateAdresa" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnDataBinding="grDateAdresa_DataBinding" OnInitNewRow="grDateAdresa_InitNewRow"
                 OnRowInserting="grDateAdresa_RowInserting" OnRowUpdating="grDateAdresa_RowUpdating" OnRowDeleting="grDateAdresa_RowDeleting">
                 <SettingsBehavior AllowFocusedRow="true" />
                 <Settings ShowFilterRow="False" ShowColumnHeaders="true" />

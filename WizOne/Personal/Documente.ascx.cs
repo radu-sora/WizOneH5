@@ -31,10 +31,24 @@ namespace WizOne.Personal
             cmbTipDoc.DataSource = General.GetTipDoc(Convert.ToInt32(table.Rows[0]["F100987"] == DBNull.Value ? "0" : table.Rows[0]["F100987"].ToString()));
             cmbTipDoc.DataBindItems();
 
+            cmbCetatenie.ClientEnabled = false;
+
+            SeteazaCetatenie();
+
             if (!IsPostBack)
             {
-                SeteazaCetatenie();
+               
                 cmbTipDoc.Value = Convert.ToInt32(table.Rows[0]["F100983"] == DBNull.Value ? "0" : table.Rows[0]["F100983"].ToString());
+
+                DataTable dtTipDoc = General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\", F73302, F73306 from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 ", null);
+                string tipDoc = "";
+                for (int i = 0; i < dtTipDoc.Rows.Count; i++)
+                {
+                    tipDoc += dtTipDoc.Rows[i]["Id"].ToString() + "," + dtTipDoc.Rows[i]["Denumire"].ToString() + "," + dtTipDoc.Rows[i]["F73302"].ToString() + "," + dtTipDoc.Rows[i]["F73306"].ToString();
+                    if (i < dtTipDoc.Rows.Count - 1)
+                        tipDoc += ";";
+                }
+                Session["MP_ComboTipDoc"] = tipDoc;
             }
 
             string[] etichete = new string[37] { "lblTara", "lblCetatenie", "lblTipAutMunca", "lblDataInc", "lblDataSf", "lblNumeMama", "lblNumeTata", "lblTipDoc", "lblSerieNr", "lblEmisDe", "lblLocNastere", "lblDataELib", "lblDataExp",
@@ -436,11 +450,13 @@ namespace WizOne.Personal
 
                 if (cmbTara.SelectedIndex > 0)
                 {
-
-                    DataTable dtCet = General.IncarcaDT("SELECT F73306 FROM F733 WHERE F73302 = " + cmbTara.Value, null);
+                    int tara = Convert.ToInt32(cmbTara.Value);
+                    if (IsPostBack)
+                        if (hfTara.Contains("Tara")) tara = Convert.ToInt32(General.Nz(hfTara["Tara"], 0));
+                    DataTable dtCet = General.IncarcaDT("SELECT F73306 FROM F733 WHERE F73302 = " + tara, null);
                     cmbCetatenie.Value = Convert.ToInt32(dtCet.Rows[0][0].ToString());
 
-                    cmbTipDoc.DataSource = General.GetTipDoc(Convert.ToInt32(cmbTara.Value));
+                    cmbTipDoc.DataSource = General.GetTipDoc(Convert.ToInt32(tara));
                     cmbTipDoc.DataBindItems();
                     if (!IsPostBack)
                         cmbTipDoc.Value = null;

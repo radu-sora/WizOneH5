@@ -238,7 +238,7 @@
 							                    <dx:ASPxLabel  ID="lblMarca" runat="server"  Text="Marca" ></dx:ASPxLabel >	
 						                    </td>	
 						                    <td>
-							                    <dx:ASPxTextBox  ID="txtMarcaDI" runat="server" Text='<%# Eval("F10003") %>' AutoPostBack="false" >
+							                    <dx:ASPxTextBox  ID="txtMarcaDI" runat="server" Text='<%# Eval("F10003") %>' TabIndex="1" AutoPostBack="false" >
                                                     <ClientSideEvents TextChanged="function(s,e){ VerifMarca(s); }" />
 							                    </dx:ASPxTextBox >
 						                    </td>
@@ -248,7 +248,7 @@
 							                    <dx:ASPxLabel  ID="lblCNP" runat="server"  Text="CNP/CUI" ></dx:ASPxLabel>
 						                    </td>	
 						                    <td>
-							                    <dx:ASPxTextBox  ID="txtCNPDI" runat="server" Text='<%# Eval("F10017") %>'  AutoPostBack="false" >
+							                    <dx:ASPxTextBox  ID="txtCNPDI" runat="server" Text='<%# Eval("F10017") %>' TabIndex="2" AutoPostBack="false" >
                                                     <ClientSideEvents TextChanged="function(s,e){ ValidareCNP(s,e); }" />
 							                    </dx:ASPxTextBox >
 						                    </td>
@@ -266,7 +266,7 @@
 							                    <dx:ASPxLabel  ID="lblEIDDI" runat="server"  Text="EID"></dx:ASPxLabel >	
 						                    </td>
 						                    <td>	
-							                    <dx:ASPxTextBox  ID="txtEIDDI" runat="server" Text='<%# Eval("F100901") %>'  AutoPostBack="false" >
+							                    <dx:ASPxTextBox  ID="txtEIDDI" runat="server" Text='<%# Eval("F100901") %>'  TabIndex="3" AutoPostBack="false" >
 							                    </dx:ASPxTextBox >										
 						                    </td>
 					                    </tr>					
@@ -281,7 +281,7 @@
 							                    <dx:ASPxLabel  ID="lblDataNasterii" Width="100" runat="server"  Text="Data nasterii" ></dx:ASPxLabel>	
 						                    </td>	
 						                    <td>
-							                    <dx:ASPxDateEdit  ID="deDataNasterii" ClientInstanceName="deDataNasterii"  Enabled="true" Width="100" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" runat="server" Value='<%# Eval("F10021") %>'  AutoPostBack="false" >
+							                    <dx:ASPxDateEdit  ID="deDataNasterii" ClientInstanceName="deDataNasterii" TabIndex="4" Enabled="true" Width="100" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" runat="server" Value='<%# Eval("F10021") %>'  AutoPostBack="false" >
                                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                                     <ClientSideEvents DateChanged="function(s,e){ CalcVarsta(); }" />
 							                    </dx:ASPxDateEdit>
@@ -300,7 +300,7 @@
                                                 <dx:ASPxLabel ID="lblSex" runat="server" Text="Sex"></dx:ASPxLabel>
                                             </td>
                                             <td>
-                                                <dx:ASPxRadioButtonList ID="rbSex" runat="server" ClientInstanceName="rbSex" RepeatDirection="Horizontal">
+                                                <dx:ASPxRadioButtonList ID="rbSex" runat="server"  TabIndex="5" ClientInstanceName="rbSex" RepeatDirection="Horizontal">
                                                     <Items>
                                                         <dx:ListEditItem Text="Masculin" Value="1" />
                                                         <dx:ListEditItem Text="Feminin" Value="2" />
@@ -322,7 +322,7 @@
 							                    <dx:ASPxLabel  ID="lblNume" runat="server" Text="Nume"></dx:ASPxLabel >	
 						                    </td>
 						                    <td>		
-							                    <dx:ASPxTextBox  ID="txtNume" runat="server" Text='<%# Eval("F10008") %>'  AutoPostBack="false" >
+							                    <dx:ASPxTextBox  ID="txtNume" runat="server" Text='<%# Eval("F10008") %>' TabIndex="6" AutoPostBack="false" >
 							                    </dx:ASPxTextBox >						
 						                    </td>
                                             <td>
@@ -345,7 +345,7 @@
 							                    <dx:ASPxLabel  ID="lblPrenume" runat="server"  Text="Prenume"></dx:ASPxLabel >	
 						                    </td>
 						                    <td>	
-							                    <dx:ASPxTextBox  ID="txtPrenume" runat="server" ClientInstanceName="txtPrenume"  Text='<%# Eval("F10009") %>'  AutoPostBack="false"  >
+							                    <dx:ASPxTextBox  ID="txtPrenume" runat="server" ClientInstanceName="txtPrenume" TabIndex="7" Text='<%# Eval("F10009") %>'  AutoPostBack="false"  >
 							                    </dx:ASPxTextBox >										
 						                    </td>
                                             <td>
@@ -368,7 +368,7 @@
 							                    <dx:ASPxLabel  ID="lblNumeAnt" runat="server" Text="Nume anterior"></dx:ASPxLabel >	
 						                    </td>
 						                    <td>		
-							                    <dx:ASPxTextBox  ID="txtNumeAnt" runat="server" Text='<%# Eval("F100905") %>'  AutoPostBack="false" >
+							                    <dx:ASPxTextBox  ID="txtNumeAnt" runat="server" Text='<%# Eval("F100905") %>' TabIndex="8" AutoPostBack="false" >
 							                    </dx:ASPxTextBox >						
 						                    </td>
 					                    </tr>
@@ -377,7 +377,7 @@
 							                    <dx:ASPxLabel  ID="lblDataModifNume" runat="server"  Text="Data modificare nume"></dx:ASPxLabel >	
 						                    </td>
 						                    <td>	
-							                    <dx:ASPxDateEdit  ID="deDataModifNume" Width="100" runat="server"  DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100906") %>' AutoPostBack="false"  >
+							                    <dx:ASPxDateEdit  ID="deDataModifNume" Width="100" runat="server" TabIndex="9"  DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100906") %>' AutoPostBack="false"  >
                                                     <CalendarProperties FirstDayOfWeek="Monday" />
 							                    </dx:ASPxDateEdit>										
 						                    </td>
@@ -387,7 +387,7 @@
 							                    <dx:ASPxLabel  ID="lblStareCivila" Width="100" runat="server"  Text="Stare civila" ></dx:ASPxLabel >	
 						                    </td>	
 						                    <td>
-							                    <dx:ASPxComboBox DataSourceID="dsStareCivila"   Value='<%#Eval("F10046") %>' ID="cmbStareCivila"   runat="server" DropDownStyle="DropDown"  TextField="F71004" ValueField="F71002" AutoPostBack="false"  ValueType="System.Int32" >
+							                    <dx:ASPxComboBox DataSourceID="dsStareCivila"   Value='<%#Eval("F10046") %>' ID="cmbStareCivila"  TabIndex="10" runat="server" DropDownStyle="DropDown"  TextField="F71004" ValueField="F71002" AutoPostBack="false"  ValueType="System.Int32" >
 							                    </dx:ASPxComboBox>
 						                    </td>
 					                    </tr>                                     	

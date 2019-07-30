@@ -3734,24 +3734,31 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetTimpPartial()
+        public static DataTable GetTimpPartial(int tip)
         {
             DataTable table = new DataTable();
 
             table.Columns.Add("Id", typeof(int));
             table.Columns.Add("Denumire", typeof(string));
 
-            for (int i = 1; i <= 8; i++)
+            int j = 1, k = 7;
+            if (tip == 0)
+            {
+                j = 6;
+                k = 8;
+            }
+
+            for (int i = j; i <= k; i++)
                 table.Rows.Add(i, i.ToString());
 
             return table;
         }
 
-        public static DataTable GetTipNorma()
+        public static DataTable GetTipNorma(string param)
         {
-            string sql = @"SELECT * FROM F092";
+            string sql = @"SELECT * FROM F092 WHERE F09202 = " + param;
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F092", "F09202");
+                sql = General.SelectOracle("F092", "F09202") + " WHERE F09202 = " + param;
             return General.IncarcaDT(sql, null);
         }
 

@@ -34,7 +34,7 @@
 
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblStru" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Structura</label>
-				    <dx:ASPxComboBox ID="cmbStru" runat="server" DropDownStyle="DropDown" ValueField="IdAuto" ValueType="System.Int32" AutoPostBack="false" Width="250" >
+				    <dx:ASPxComboBox ID="cmbStru" runat="server" DropDownStyle="DropDown" ValueField="IdAuto" ValueType="System.Int32" TabIndex="1" AutoPostBack="false" Width="250" >
                         <Columns>
                             <dx:ListBoxColumn FieldName="F00204" Caption="Companie" Width="130px" />
                             <dx:ListBoxColumn FieldName="F00202" Caption="IdCompanie" Width="130px" Visible="false"/>
@@ -58,37 +58,37 @@
                 
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblCom" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Companie</label>
-                    <dx:ASPxTextBox ID="txtCom" runat="server" Width="250" ReadOnly="true" CssClass="txtEnabled" />
+                    <dx:ASPxTextBox ID="txtCom" runat="server" Width="250" ReadOnly="true" TabIndex="2" CssClass="txtEnabled" />
                 </div>
 						
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblSub" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Subcompanie</label>
-                    <dx:ASPxTextBox ID="txtSub" runat="server" Width="250" ReadOnly="true" CssClass="txtEnabled" />
+                    <dx:ASPxTextBox ID="txtSub" runat="server" Width="250" ReadOnly="true" TabIndex="3" CssClass="txtEnabled" />
                 </div>
 						
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblFil" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Filiala</label>
-                    <dx:ASPxTextBox ID="txtFil" runat="server" Width="250" ReadOnly="true" CssClass="txtEnabled" />
+                    <dx:ASPxTextBox ID="txtFil" runat="server" Width="250" ReadOnly="true" TabIndex="4" CssClass="txtEnabled" />
                 </div>
 
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblSec" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Sectie</label>
-                    <dx:ASPxTextBox ID="txtSec" runat="server" Width="250" ReadOnly="true" CssClass="txtEnabled" />
+                    <dx:ASPxTextBox ID="txtSec" runat="server" Width="250" ReadOnly="true" TabIndex="5" CssClass="txtEnabled" />
                 </div>
 
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblDept" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Departament</label>
-                    <dx:ASPxTextBox ID="txtDept" runat="server" Width="250" ReadOnly="true" CssClass="txtEnabled" />
+                    <dx:ASPxTextBox ID="txtDept" runat="server" Width="250" ReadOnly="true" TabIndex="6" CssClass="txtEnabled" />
                 </div>
             			
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblSubdept" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Subdepartament</label>
-                    <dx:ASPxTextBox ID="txtSubdept" runat="server" Width="250" ReadOnly="true" CssClass="txtEnabled" />
+                    <dx:ASPxTextBox ID="txtSubdept" runat="server" Width="250" ReadOnly="true" TabIndex="7" CssClass="txtEnabled" />
                 </div>
             			
                 <div style="width:100%; margin-bottom:10px;">
                     <label id="lblBir" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Birou/Echipa</label>
-				    <dx:ASPxComboBox ID="cmbBir" runat="server" DropDownStyle="DropDown" TextField="F00810" ValueField="F00809" ValueType="System.Int32" Width="250">
+				    <dx:ASPxComboBox ID="cmbBir" runat="server" DropDownStyle="DropDown" TextField="F00810" TabIndex="8" ValueField="F00809" ValueType="System.Int32" Width="250">
                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				    </dx:ASPxComboBox>
                 </div>
@@ -98,7 +98,7 @@
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbCC" runat="server" DropDownStyle="DropDown" TextField="F06205" ValueField="F06204" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbCC" runat="server" DropDownStyle="DropDown" TabIndex="9" TextField="F06205" ValueField="F06204" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>
@@ -125,7 +125,7 @@
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbPL" runat="server" DropDownStyle="DropDown" TextField="F08003" ValueField="F08002" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbPL" runat="server" DropDownStyle="DropDown" TabIndex="10" TextField="F08003" ValueField="F08002" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>
@@ -152,7 +152,7 @@
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbCAEN" runat="server" DropDownStyle="DropDown" TextField="F80104" ValueField="F80103" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbCAEN" runat="server" DropDownStyle="DropDown" TabIndex="11" TextField="F80104" ValueField="F80103" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>    
@@ -164,7 +164,7 @@
                     <table>
                         <tr>
                             <td>
-				                <dx:ASPxComboBox ID="cmbUnitStat" runat="server" DropDownStyle="DropDown" TextField="F80304" ValueField="F80303" ValueType="System.Int32" Width="200">
+				                <dx:ASPxComboBox ID="cmbUnitStat" runat="server" DropDownStyle="DropDown" TabIndex="12" TextField="F80304" ValueField="F80303" ValueType="System.Int32" Width="200">
                                     <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
 				                </dx:ASPxComboBox>
                             </td>    

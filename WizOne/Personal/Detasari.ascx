@@ -35,7 +35,7 @@
 							        <dx:ASPxLabel  ID="lblNationalitate" Width="100" runat="server"  Text="Nationalitate" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsNationalitate" Width="150"  Value='<%#Eval("F100920") %>' ID="cmbNationalitate"   runat="server" DropDownStyle="DropDown"  TextField="F73304" ValueField="F73302" AutoPostBack="false"  ValueType="System.Int32" >
+							        <dx:ASPxComboBox DataSourceID="dsNationalitate" Width="120"  Value='<%#Eval("F100920") %>' ID="cmbNationalitate"   runat="server" DropDownStyle="DropDown"  TextField="F73304" ValueField="F73302" AutoPostBack="false"  ValueType="System.Int32" >
 							        </dx:ASPxComboBox>
 						        </td>                
 					        </tr>
@@ -62,7 +62,7 @@
 							        <dx:ASPxLabel  ID="lblDataIncetareDet" runat="server"  Text="Data incetare" Width="100"></dx:ASPxLabel >	
 						        </td>
 						        <td>			
-							        <dx:ASPxDateEdit  ID="deDataIncetareDet" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100917") %>'  AutoPostBack="false"  >
+							        <dx:ASPxDateEdit  ID="deDataIncetareDet" Width="120" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100917") %>'  AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
 							        </dx:ASPxDateEdit>					
 						        </td>
@@ -118,47 +118,47 @@
 				        <legend class="legend-font-size">Export mutare</legend>
 				        <table width="60%">	
 					        <tr>	
+						        <td>	
+							        <dx:ASPxLabel  ID="lblDataMutare" runat="server"  Text="Data mutare" Width="120"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataMutare" Width="130" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001072") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
+						        </td>
+                                <td><label style="display:inline-block;">&nbsp; </label></td>  
 						        <td>
-							        <dx:ASPxLabel  ID="lblNumeAngExp" runat="server"  Text="Nume angajator" Width="120" ></dx:ASPxLabel >	
+							        <dx:ASPxLabel  ID="lblNumeAngExp" runat="server"  Text="Nume angajator" Width="100" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxTextBox  ID="txtNumeAngExp" runat="server" Text='<%# Bind("F1001073") %>'  AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtNumeAngExp" runat="server" Text='<%# Bind("F1001073") %>'  Width="120"  AutoPostBack="false" >
 							        </dx:ASPxTextBox >
 						        </td>
                                 <td><label style="display:inline-block;">&nbsp; </label></td>
 						        <td>
-							        <dx:ASPxLabel  ID="lblCUIExp" runat="server"  Text="CUI" Width="80" ></dx:ASPxLabel >	
-						        </td>	
-						        <td>
-							        <dx:ASPxTextBox  ID="txtCUIExp" runat="server" Text='<%# Bind("F1001074") %>'  AutoPostBack="false" Width="100" >
-							        </dx:ASPxTextBox >
-						        </td> 
-                                <td><label style="display:inline-block;">&nbsp; </label></td>                                                                			
-						        <td>
-							        <dx:ASPxLabel  ID="lblMutareExp" Width="100" runat="server"  Text="Tip mutare" ></dx:ASPxLabel >	
-						        </td>	
-						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsTipMutare" Width="150"  Value='<%#Eval("F1001076") %>' ID="cmbMutareExp"   runat="server" DropDownStyle="DropDown"  TextField="F73703" ValueField="F73702" AutoPostBack="false"  ValueType="System.Int32" >
-							        </dx:ASPxComboBox>
-						        </td>                         
-					        </tr>
-                            <tr>
-						        <td>
-							        <dx:ASPxLabel  ID="lblTemeiLegal" Width="100" runat="server"  Text="Temei legal" ></dx:ASPxLabel >	
+							        <dx:ASPxLabel  ID="lblTemeiLegal" Width="80" runat="server"  Text="Temei legal" ></dx:ASPxLabel >	
 						        </td>	
 					            <td>
 							        <dx:ASPxTextBox  ID="txtTemeiLegal" runat="server" Text='<%# Bind("F1001075") %>'  AutoPostBack="false" >
 							        </dx:ASPxTextBox >
-						        </td>					
-                                <td><label style="display:inline-block;">&nbsp; </label></td>    
-						        <td>	
-							        <dx:ASPxLabel  ID="lblDataMutare" runat="server"  Text="Data mutare" Width="80"></dx:ASPxLabel >	
+						        </td>    
+					        </tr>
+                            <tr>
+					        <td>
+							        <dx:ASPxLabel  ID="lblMutareExp" Width="100" runat="server"  Text="Tip mutare" ></dx:ASPxLabel >	
+						        </td>	
+						        <td>
+							        <dx:ASPxComboBox DataSourceID="dsTipMutare" Width="130"  Value='<%#Eval("F1001076") %>' ID="cmbMutareExp"   runat="server" DropDownStyle="DropDown"  TextField="F73703" ValueField="F73702" AutoPostBack="false"  ValueType="System.Int32" >
+							        </dx:ASPxComboBox>
 						        </td>
-						        <td>			
-							        <dx:ASPxDateEdit  ID="deDataMutare" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001072") %>'  AutoPostBack="false"  >
-                                        <CalendarProperties FirstDayOfWeek="Monday" />
-							        </dx:ASPxDateEdit>					
-						        </td>					            
+                                <td><label style="display:inline-block;">&nbsp; </label></td>    
+					            <td>
+							        <dx:ASPxLabel  ID="lblCUIExp" runat="server"  Text="CUI" Width="100" ></dx:ASPxLabel >	
+						        </td>	
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCUIExp" runat="server" Text='<%# Bind("F1001074") %>'  AutoPostBack="false" Width="120" >
+							        </dx:ASPxTextBox >
+						        </td> 
 					        </tr>
 
 				        </table>
@@ -168,39 +168,39 @@
 				        <legend class="legend-font-size">Preluare mutare</legend>
 				        <table width="60%">	
 					        <tr>	
-						        <td>
-							        <dx:ASPxLabel  ID="lblNumeAngPrel" runat="server"  Text="Nume angajator" Width="120" ></dx:ASPxLabel >	
-						        </td>	
-						        <td>
-							        <dx:ASPxTextBox  ID="txtNumeAngPrel" runat="server" Text='<%# Bind("F1001079") %>'  AutoPostBack="false" >
-							        </dx:ASPxTextBox >
-						        </td>
-                                <td><label style="display:inline-block;">&nbsp; </label></td>
-						        <td>
-							        <dx:ASPxLabel  ID="lblCUIPrel" runat="server"  Text="CUI" Width="80" ></dx:ASPxLabel >	
-						        </td>	
-						        <td>
-							        <dx:ASPxTextBox  ID="txtCUIPrel" runat="server" Text='<%# Bind("F1001078") %>'  AutoPostBack="false" Width="100" >
-							        </dx:ASPxTextBox >
-						        </td> 
-                                <td><label style="display:inline-block;">&nbsp; </label></td>                                                                			
-						        <td>
-							        <dx:ASPxLabel  ID="lblMutarePrel" Width="100" runat="server"  Text="Tip mutare" ></dx:ASPxLabel >	
-						        </td>	
-						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsTipMutare" Width="150"  Value='<%#Eval("F1001081") %>' ID="cmbMutarePrel"   runat="server" DropDownStyle="DropDown"  TextField="F73703" ValueField="F73702" AutoPostBack="false"  ValueType="System.Int32" >
-							        </dx:ASPxComboBox>
-						        </td>                         
-					        </tr>
-                            <tr>						          
 						        <td>	
 							        <dx:ASPxLabel  ID="lblDataPrel" runat="server"  Text="Data preluare" Width="120"></dx:ASPxLabel >	
 						        </td>
 						        <td>			
-							        <dx:ASPxDateEdit  ID="deDataPrel" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001080") %>'  AutoPostBack="false"  >
+							        <dx:ASPxDateEdit  ID="deDataPrel" Width="130" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001080") %>'  AutoPostBack="false"  >
                                         <CalendarProperties FirstDayOfWeek="Monday" />
 							        </dx:ASPxDateEdit>					
-						        </td>					            
+						        </td>
+                                 <td><label style="display:inline-block;">&nbsp; </label></td>
+						        <td>
+							        <dx:ASPxLabel  ID="lblNumeAngPrel" runat="server"  Text="Nume angajator" Width="100" ></dx:ASPxLabel >	
+						        </td>	
+						        <td>
+							        <dx:ASPxTextBox  ID="txtNumeAngPrel" runat="server" Text='<%# Bind("F1001079") %>'  Width="120"  AutoPostBack="false" >
+							        </dx:ASPxTextBox >
+						        </td>      
+					        </tr>
+                            <tr>						          
+						        <td>
+							        <dx:ASPxLabel  ID="lblMutarePrel" Width="100" runat="server"  Text="Tip mutare" ></dx:ASPxLabel >	
+						        </td>	
+						        <td>
+							        <dx:ASPxComboBox DataSourceID="dsTipMutare" Width="130"  Value='<%#Eval("F1001081") %>' ID="cmbMutarePrel"   runat="server" DropDownStyle="DropDown"  TextField="F73703" ValueField="F73702" AutoPostBack="false"  ValueType="System.Int32" >
+							        </dx:ASPxComboBox>
+						        </td>
+                                <td><label style="display:inline-block;">&nbsp; </label></td>
+						        <td>
+							        <dx:ASPxLabel  ID="lblCUIPrel" runat="server"  Text="CUI" Width="100" ></dx:ASPxLabel >	
+						        </td>	
+						        <td>
+							        <dx:ASPxTextBox  ID="txtCUIPrel" runat="server" Text='<%# Bind("F1001078") %>'  AutoPostBack="false" Width="120" >
+							        </dx:ASPxTextBox >
+						        </td>                                 
 					        </tr>
 
 				        </table>                      

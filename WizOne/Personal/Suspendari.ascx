@@ -28,7 +28,7 @@
 						    <dx:ASPxLabel  ID="lblMtvSusp" Width="170" runat="server" Text="Motiv suspendare"/>
 					    </td>	
 					    <td>
-						    <dx:ASPxComboBox ID="cmbMotivSuspendare" runat="server" DropDownStyle="DropDown" TextField="F09003" ValueField="F09002" AutoPostBack="false" ValueType="System.Int32" Width="250" />
+						    <dx:ASPxComboBox ID="cmbMotivSuspendare" runat="server" DropDownStyle="DropDown" TabIndex="1" TextField="F09003" ValueField="F09002" AutoPostBack="false" ValueType="System.Int32" Width="250" />
 					    </td>
                         <td>
 					        <dx:ASPxButton ID="btnSalveazaSusp" runat="server" AutoPostBack="false"  RenderMode="Link">  
@@ -43,7 +43,7 @@
 						    <dx:ASPxLabel ID="lblDataInceputSusp" runat="server" Text="Data inceput suspendare"/>	
 					    </td>
 					    <td>			
-						    <dx:ASPxDateEdit  ID="deDataInceputSusp" Width="120" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false">
+						    <dx:ASPxDateEdit  ID="deDataInceputSusp" Width="120" runat="server" TabIndex="2" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false">
                                 <CalendarProperties FirstDayOfWeek="Monday" />
 						    </dx:ASPxDateEdit>					
 					    </td>
@@ -53,7 +53,7 @@
 						    <dx:ASPxLabel ID="lblDataSfarsitSusp" runat="server" Text="Data sfarsit suspendare"/>	
 					    </td>
 					    <td>			
-						    <dx:ASPxDateEdit  ID="deDataSfarsitSusp" Width="120" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false">
+						    <dx:ASPxDateEdit  ID="deDataSfarsitSusp" Width="120" runat="server" TabIndex="3" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false">
                                 <CalendarProperties FirstDayOfWeek="Monday" />
 						    </dx:ASPxDateEdit>					
 					    </td>
@@ -63,7 +63,7 @@
 						    <dx:ASPxLabel ID="lblDataIncetareSusp" runat="server" Text="Data incetare suspendare"/>	
 					    </td>
 					    <td>			
-						    <dx:ASPxDateEdit ID="deDataIncetareSusp" Width="120" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false">
+						    <dx:ASPxDateEdit ID="deDataIncetareSusp" Width="120" runat="server" TabIndex="4" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false">
                                 <CalendarProperties FirstDayOfWeek="Monday" />
 						    </dx:ASPxDateEdit>					
 					    </td>

@@ -57,6 +57,8 @@ namespace WizOne.Personal
             ASPxCheckBox chkScutitCAS = Contract_DataList.Items[0].FindControl("chkScutitCAS") as ASPxCheckBox;
             ASPxCheckBox chkConstr = Contract_DataList.Items[0].FindControl("chkConstr") as ASPxCheckBox;
 
+            ASPxComboBox cmbTipAngajat = Contract_DataList.Items[0].FindControl("cmbTipAng") as ASPxComboBox;
+
             if (ds.Tables[1].Rows[0]["F100643"] != null && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
             {
                 txtVechCompAni.Text = ds.Tables[1].Rows[0]["F100643"].ToString().Substring(0, 2);
@@ -80,30 +82,118 @@ namespace WizOne.Personal
             }
 
 
+          
+            if (cmbTipAngajat.Value == null || Convert.ToInt32(cmbTipAngajat.Value.ToString()) == 0)
+            {
+                cmbIntervRepTimpMunca.SelectedIndex = 0;
+                cmbIntervRepTimpMunca.ClientEnabled = false;
+            }
+            if (cmbMotivScutit.Value == null || Convert.ToInt32(cmbMotivScutit.Value.ToString()) == 0)
+            {
+                cmbMotivScutit.SelectedIndex = 0;
+                cmbMotivScutit.ClientEnabled = false;
+            }
+            if (cmbMotivScutitCAS.Value == null ||Convert.ToInt32(cmbMotivScutitCAS.Value.ToString()) == 0)
+            {
+                chkScutitCAS.Checked = false;
+                cmbMotivScutitCAS.ClientEnabled = false;
+            }
+            else
+            {
+                chkScutitCAS.Checked = true;
+                cmbMotivScutitCAS.ClientEnabled = true;
+            }
+
+            ASPxComboBox cmbTimpPartial = Contract_DataList.Items[0].FindControl("cmbTimpPartial") as ASPxComboBox;
+            ASPxComboBox cmbDurTimpMunca = Contract_DataList.Items[0].FindControl("cmbDurTimpMunca") as ASPxComboBox;
+            ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
+            ASPxComboBox cmbIntRepTimpMunca = Contract_DataList.Items[0].FindControl("cmbIntRepTimpMunca") as ASPxComboBox;
+            ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
             if (!IsPostBack)
             {
-                if (ds.Tables[1].Rows[0]["F10010"] != null || ds.Tables[1].Rows[0]["F10010"].ToString() == "0")
+                cmbTimpPartial.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
+                cmbTimpPartial.DataBind();
+                cmbTimpPartial.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"].ToString());
+
+                cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(ds.Tables[0].Rows[0]["F100926"].ToString());
+                cmbDurTimpMunca.DataBind();
+                cmbDurTimpMunca.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100927"].ToString());
+
+                cmbTipNorma.DataSource = General.GetTipNorma(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0 ? "1" : "2");
+                cmbTipNorma.DataBind();
+                cmbTipNorma.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"].ToString());
+
+                if (Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
                 {
-                    cmbIntervRepTimpMunca.SelectedIndex = 0;
-                    cmbIntervRepTimpMunca.ClientEnabled = false;
+                    cmbIntRepTimpMunca.ClientEnabled = false;
+                    txtNrOre.ClientEnabled = false;
+                    txtNrOre.Text = "0";
                 }
-                if (ds.Tables[2].Rows[0]["F1001098"] == null || ds.Tables[2].Rows[0]["F1001098"].ToString() == "0")
+
+                if (Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
                 {
-                    cmbMotivScutit.SelectedIndex = 0;
-                    cmbMotivScutit.ClientEnabled = false;
+                    txtNrOre.ClientEnabled = false;
+                    txtNrOre.Text = "0";
                 }
-                if (ds.Tables[2].Rows[0]["F1001096"] == null || ds.Tables[2].Rows[0]["F1001096"].ToString() == "0")
+            }
+            else
+            {
+                int tipAng = Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString());
+                if (hfTipAngajat.Contains("TipAng")) tipAng = Convert.ToInt32(General.Nz(hfTipAngajat["TipAng"], -1));
+                cmbTimpPartial.DataSource = General.GetTimpPartial(tipAng);
+                cmbTimpPartial.DataBind();
+
+                cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(tipAng == 0 ? "1" : "2");
+                cmbDurTimpMunca.DataBind();
+
+                cmbTipNorma.DataSource = General.GetTipNorma(tipAng == 0 ? "1" : "2");
+                cmbTipNorma.DataBind();
+
+                if (tipAng == 0)
                 {
-                    chkScutitCAS.Checked = false;
-                    cmbMotivScutitCAS.ClientEnabled = false;
+                    cmbIntRepTimpMunca.ClientEnabled = false;
+                    txtNrOre.ClientEnabled = false;
+                    txtNrOre.Text = "0";
                 }
                 else
                 {
-                    chkScutitCAS.Checked = true;
-                    cmbMotivScutitCAS.ClientEnabled = true;
+                    cmbIntRepTimpMunca.ClientEnabled = true;
+                    txtNrOre.ClientEnabled = true;
                 }
+
+                if (hfIntRepTM.Contains("IntRepTM") && (Convert.ToInt32(General.Nz(hfIntRepTM["IntRepTM"], 0)) == 0 || Convert.ToInt32(General.Nz(hfIntRepTM["IntRepTM"], 0)) == 1))
+                {
+                    txtNrOre.ClientEnabled = false;
+                    txtNrOre.Text = "0";
+                }
+                else
+                    txtNrOre.ClientEnabled = true;
             }
-            SetDurataTimpMunca();
+
+            if (!IsPostBack)
+            {
+                DataTable dtDTM = General.IncarcaDT("SELECT * FROM F091", null);
+                string dtm = "";
+                for (int i = 0; i < dtDTM.Rows.Count; i++)
+                {
+                    dtm += dtDTM.Rows[i]["F09102"].ToString() + "," + dtDTM.Rows[i]["F09103"].ToString() + "," + dtDTM.Rows[i]["F09105"].ToString();
+                    if (i < dtDTM.Rows.Count - 1)
+                        dtm += ";";
+                }
+                Session["MP_ComboDTM"] = dtm;
+
+                DataTable dtTN = General.IncarcaDT("SELECT * FROM F092", null);
+                string tipN = "";
+                for (int i = 0; i < dtTN.Rows.Count; i++)
+                {
+                    tipN += dtTN.Rows[i]["F09202"].ToString() + "," + dtTN.Rows[i]["F09203"].ToString() ;
+                    if (i < dtTN.Rows.Count - 1)
+                        tipN += ";";
+                }
+                Session["MP_ComboTN"] = tipN;
+            }
+            
+            //SetDurataTimpMunca();
 
             ASPxRadioButtonList rbCtrRadiat = Contract_DataList.Items[0].FindControl("rbCtrRadiat") as ASPxRadioButtonList;
             rbCtrRadiat.Value = General.Nz(table.Rows[0]["F1001077"], 0).ToString();
@@ -122,7 +212,7 @@ namespace WizOne.Personal
             Session["InformatiaCurentaPersonal"] = ds;
 
             string[] etichete = new string[60] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
-                                                 "lblCASSAngajator", "lblSalariu", "lblDataModifSa", "lblCategAng1", "lblCategAng2", "lblLocAnt", "lblLocatieInt", "lblTipAng", "lblTimpPartial", "lblNorma", "lblDataModifNorma",
+                                                 "lblCASSAngajator", "lblSalariu", "lblDataModifSal", "lblCategAng1", "lblCategAng2", "lblLocAnt", "lblLocatieInt", "lblTipAng", "lblTimpPartial", "lblNorma", "lblDataModifNorma",
                                                  "lblTipNorma", "lblDurTimpMunca", "lblRepTimpMunca", "lblIntervRepTimpMunca", "lblNrOre", "lblCOR", "lblDataModifCOR", "lblFunctie", "lblDataModifFunctie", "lblMeserie",
                                                  "lblPerioadaProba", "lblZL", "lblZC", "lblNrZilePreavizDemisie", "lblNrZilePreavizConc", "lblUltimaZiLucr", "lblMotivPlecare", "lblDataPlecarii", "lblDataReintegr", "lblGradInvalid",
                                                  "lblDataValabInvalid", "lblVechimeComp", "lblVechCompAni", "lblVechCompLuni", "lblVechimeCarteMunca", "lblVechCarteMuncaAni", "lblVechCarteMuncaLuni", "lblGrila", "lblZileCOFidel",
@@ -280,6 +370,61 @@ namespace WizOne.Personal
                     break;
                 case "cmbTipNorma":
                     SetDurataTimpMunca();
+                    break;
+                case "txtGrila":
+                    ASPxTextBox txtVechimeCarte = Contract_DataList.Items[0].FindControl("txtVechimeCarte") as ASPxTextBox;
+                    ASPxTextBox txtZileCOCuvAnCrt = Contract_DataList.Items[0].FindControl("txtZileCOCuvAnCrt") as ASPxTextBox;
+                    if (txtVechimeCarte.Text != null && txtVechimeCarte.Text.Length >= 4)
+                    {                        
+                        string sql = "select a.f10003, Convert(int, F02615) from f100 a left join "
+                            + " (select ISNULL(convert(int, substring('" + txtVechimeCarte.Text + "', 1, 2)), 0) * 12 + ISNULL(convert(int, substring('" + txtVechimeCarte.Text + "', 3, 2)), 0) + DATEDIFF(MONTH,"
+                            + " (select convert(nvarchar(4), F01011) + '-' + convert(nvarchar(4), F01012) + '-01' from F010), '" + DateTime.Now.Year + "-12-31') as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
+                            + " left join F026 c on convert(int, " + param[1] + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int, c.F02611 / 100) * 12) "
+                            + " where a.f10003 = " + Session["Marca"].ToString();
+                        if (Constante.tipBD == 2)
+                            sql = "select a.f10003, TO_NUMBER(F02615, 0)  from F100 a "
+                               + " left join(select nvl(to_number(substr('" + txtVechimeCarte.Text + "',1,2)),0) *12 + nvl(to_number(substr('" + txtVechimeCarte.Text + "', 3, 2)), 0) + trunc(MONTHS_BETWEEN(to_date('31/12/" + DateTime.Now.Year + "', 'DD/MM/YYYY'), "
+                               + " (select to_date('01/' || F01012 || '/' || F01011, 'DD/MM/YYYY') from F010)) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
+                               + "  left join F026 c on " + param[1] + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611 / 100) * 12) where a.f10003 = " + Session["Marca"].ToString();
+                        DataTable dtGrila = General.IncarcaDT(sql, null);
+                        if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][1] != null && dtGrila.Rows[0][1].ToString().Length > 0)
+                            txtZileCOCuvAnCrt.Text = dtGrila.Rows[0][1].ToString();
+                        else
+                            txtZileCOCuvAnCrt.Text = "";
+                    }
+                    break;
+                case "cmbTimpPartial":
+                    DataTable dtZL = General.IncarcaDT("SELECT * FROM F069", null);
+                    DataTable dtTarife = General.IncarcaDT("SELECT * FROM F011", null);
+                    int poz = 0, valoare = 0;
+                    int zile_lucratoare_luna = Convert.ToInt32(dtZL.Rows[0]["F06907"].ToString());
+                    int ore_lucratoare_luna = zile_lucratoare_luna * Convert.ToInt32(param[1]);
+                    bool gasit = false;
+                    for (int i = 0; i < dtTarife.Rows.Count; i++)
+                    {
+                        if (Convert.ToInt32(dtTarife.Rows[i]["F01114"].ToString()) == 1 && Convert.ToDecimal(dtTarife.Rows[i]["F01108"].ToString()) == ore_lucratoare_luna)                        
+                        {
+                            gasit = true;
+                            poz = Convert.ToInt32(dtTarife.Rows[i]["F01104"].ToString());
+                            valoare = Convert.ToInt32(dtTarife.Rows[i]["F01105"].ToString());
+                            break;
+                        }
+                    }
+                    if (gasit)
+                    {
+                        string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                        string sirNou = "";
+                        for (int i = 0; i < sir.Length; i++)
+                            if (i == poz - 1)
+                                sirNou += valoare.ToString();
+                            else
+                                sirNou += sir[i];
+
+                        ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                        ds.Tables[1].Rows[0]["F10067"] = sirNou;
+                    }
+                    else
+                        Contract_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu a fost gasit tarif corespunzator normei selectate! Setati tariful manual!");
                     break;
                 //case "cmbDurCtr":
                 //    cmbDurataContract_SelectedIndexChanged();

@@ -227,10 +227,16 @@ namespace WizOne.Personal
                         mesaj += " - durata timp munca" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F100928"] == null || ds.Tables[0].Rows[0]["F100928"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100928"].ToString() == "0")
                         mesaj += " - repartizare timp munca" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100939"] == null || ds.Tables[0].Rows[0]["F100939"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100939"].ToString() == "0")
-                        mesaj += " - interval repartizare timp munca" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100964"] == null || ds.Tables[0].Rows[0]["F100964"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100964"].ToString() == "0")
-                        mesaj += " - nr ore pe luna/saptamana" + Environment.NewLine;
+                    if (ds.Tables[0].Rows[0]["F10010"] != null && ds.Tables[0].Rows[0]["F10010"].ToString() != "0")
+                    {
+                        if (ds.Tables[0].Rows[0]["F100939"] == null || ds.Tables[0].Rows[0]["F100939"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100939"].ToString() == "0")
+                            mesaj += " - interval repartizare timp munca" + Environment.NewLine;
+                        if (ds.Tables[0].Rows[0]["F100939"] != null && Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) > 1)
+                        {
+                            if (ds.Tables[0].Rows[0]["F100964"] == null || ds.Tables[0].Rows[0]["F100964"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100964"].ToString() == "0")
+                                mesaj += " - nr ore pe luna/saptamana" + Environment.NewLine;
+                        }
+                    }
                     if (ds.Tables[0].Rows[0]["F10098"] == null || ds.Tables[0].Rows[0]["F10098"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10098"].ToString() == "0")
                         mesaj += " - COR" + Environment.NewLine;
                     //if (ds.Tables[0].Rows[0]["F10071"] == null || ds.Tables[0].Rows[0]["F10071"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10071"].ToString() == "0")

@@ -303,7 +303,7 @@ namespace WizOne.Generatoare.Reports.Pages
             return rtf;
         }
 
-        private string GetReportName(string name)
+        public static string GetReportName(string name)
         {
             if (!string.IsNullOrEmpty(name))
             {

@@ -71,13 +71,14 @@
                 
     <ef:EntityDataSource ID="ReportsDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="Reports" Include="ReportGroupUsers"
         EnableFlattening="False" EnableInsert="True" EnableUpdate="True" EnableDelete="True" 
-        Where="EXISTS(SELECT 1 FROM it.ReportGroupUsers AS u WHERE u.UserId = @UserId)">                      
+        Where="it.ReportTypeId != 5 && EXISTS(SELECT 1 FROM it.ReportGroupUsers AS u WHERE u.UserId = @UserId)">  
         <WhereParameters>
             <asp:SessionParameter Name="UserId" Type="Int32" SessionField="UserId" />
         </WhereParameters>
     </ef:EntityDataSource>
-    <ef:EntityDataSource ID="ReportTypesDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="ReportTypes">
-    </ef:EntityDataSource>       
+    <ef:EntityDataSource ID="ReportTypesDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="ReportTypes"
+        Where="it.ReportTypeId != 5">
+    </ef:EntityDataSource>
            
     <script>
         // Globals

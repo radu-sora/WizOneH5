@@ -13,7 +13,7 @@ CREATE TABLE [dbo].[tblGrupUsers](
 	[Ordine] [int] NULL,
 	[Prioritate] [int] NULL,
 	[ExtensiiPermise] [nvarchar](100) NULL,
-	[MeniuRestrans] [smallint] NULL,
+	--[MeniuRestrans] [smallint] NULL,
  CONSTRAINT [tblGrupUsers_PK] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -29,7 +29,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[RapoarteGrupuriUtilizatori]
 AS
-SELECT DISTINCT r.DynReportId AS IdRaport, gu.IdUser, gs.ExtensiiPermise, gs.MeniuRestrans
+SELECT DISTINCT r.DynReportId AS IdRaport, gu.IdUser, gs.ExtensiiPermise, CAST(1 AS SMALLINT) AS MeniuRestrans -- gs.MeniuRestrans
 FROM DynReports AS r
 INNER JOIN relGrupRaport AS gr ON r.DynReportId = gr.IdRaport 
 INNER JOIN relGrupUser AS gu ON gr.IdGrup = gu.IdGrup

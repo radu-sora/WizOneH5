@@ -171,7 +171,6 @@
             <BorderBottom BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
         </dx:ASPxPanel>
 
-
         <dx:ASPxPanel ID="pnlMeniu" runat="server" FixedPosition="WindowLeft" Width="260px" BackColor="#FFFFFF" Collapsible="true" ScrollBars="Auto">
             <PanelCollection>
                 <dx:PanelContent ID="PanelContent2" runat="server">
@@ -184,7 +183,6 @@
                 </dx:PanelContent>
             </PanelCollection>
         </dx:ASPxPanel>
-
 
         <dx:ASPxPanel ID="pnlFooter" runat="server" FixedPosition="WindowBottom" Width="100%" BackColor="#FFFFFF" >
             <PanelCollection>
@@ -201,8 +199,7 @@
             <BorderTop BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
         </dx:ASPxPanel>
 
-
-        <dx:ASPxPanel ID="pnlContent1" runat="server" Width="100%" Paddings-Padding="10px" >
+        <dx:ASPxPanel ID="pnlContent1" runat="server" Width="100%" Height="100%" Paddings-Padding="10px" >
             <PanelCollection>
                 <dx:PanelContent runat="server">
                
@@ -211,7 +208,6 @@
                 </dx:PanelContent>
             </PanelCollection>
         </dx:ASPxPanel>
-
 
         <dx:ASPxPopupMenu runat="server" ID="mnuCtx" ClientInstanceName="mnuCtx" AutoPostBack="false" EnableCallBacks="true" >
             <ItemSubMenuOffset X="10" />

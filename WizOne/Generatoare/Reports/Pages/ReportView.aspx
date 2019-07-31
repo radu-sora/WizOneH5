@@ -7,10 +7,10 @@
     <table class="report-view-template">
         <tr>
             <td>
-                <dx:ASPxCallbackPanel ID="WebDocumentViewerCallbackPanel" ClientInstanceName="webDocumentViewerCallbackPanel" runat="server" Theme="Mulberry">
+                <dx:ASPxCallbackPanel ID="WebDocumentViewerCallbackPanel" ClientInstanceName="webDocumentViewerCallbackPanel" runat="server" Theme="Mulberry" Height="100%">
                     <PanelCollection>
                         <dx:PanelContent runat="server">
-                            <dx:ASPxWebDocumentViewer ID="WebDocumentViewer" ClientInstanceName="webDocumentViewer" runat="server">
+                            <dx:ASPxWebDocumentViewer ID="WebDocumentViewer" ClientInstanceName="webDocumentViewer" runat="server" Height="100%">
                                 <SettingsTabPanel Position="Left" />
                                 <ClientSideEvents    
                                     Init="function(s, e) {
@@ -185,18 +185,20 @@
 
                 <!-- Table customization -->
                 <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%">                    
-                    <Settings ShowHeaderFilterButton="true" />                    
-                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />
+                    <Settings ShowHeaderFilterButton="true" ShowFilterBar="Auto" VerticalScrollBarMode="Auto" />                    
+                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" AllowEllipsisInText="true" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live" />
-                    <SettingsContextMenu Enabled="true">
-                        <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" />
+                    <SettingsContextMenu Enabled="true">                        
+                        <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" Refresh="false" />
                     </SettingsContextMenu>
+                    <SettingsCustomizationDialog Enabled="true" />
+                    <SettingsFilterControl ViewMode="VisualAndText" AllowHierarchicalColumns="true" ShowAllDataSourceColumns="true" ShowOperandTypeButton="true" />
                     <SettingsPager PageSize="30">
                         <PageSizeItemSettings Visible="true" />
                     </SettingsPager>
                     <Styles>
                         <Header Font-Bold="true" Wrap="True" />
-                    </Styles>
+                    </Styles>                    
                 </dx:ASPxGridView>
                 <dx:ASPxGridViewExporter ID="CustomTableGridViewExporter" runat="server" GridViewID="CustomTableGridView"
                     TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0">                                
@@ -226,7 +228,17 @@
             }
 
             // Initialize UI            
-            if (reportType == 3 || reportType == 4) { // For Cube and Table, display custom layout section with the toolbar and hide report client area.
+            if (reportType == 3 || reportType == 4) { // For Cube and Table, display custom layout section with the toolbar and hide report client area.                
+                if (reportType == 4) {
+                    $(window).on('load', function () {
+                        resizeGridView(customTableGridView, 177, true);
+                    });
+
+                    $(window).on('resize', function () {
+                        resizeGridView(customTableGridView, 177, false);
+                    });                    
+                }
+
                 showCustomLayoutSection(true);
             }
         }
@@ -675,6 +687,32 @@
                     }
                 }
             });
+        }
+
+        function resizeGridView(gridView, offset, init) {
+            var newHeight = getScreenHeight() - offset;
+
+            if (init) {
+                gridView.SetHeight(newHeight);
+            } else {
+                if (gridView.GetHeight() != newHeight) {
+                    gridView.SetHeight(newHeight);
+                }
+            }
+        }
+
+        function getScreenHeight() {
+            var height = 0;
+
+            if (typeof (window.innerWidth) == 'number') {
+                height = window.innerHeight;
+            } else if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
+                height = document.documentElement.clientHeight;
+            } else if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
+                height = document.body.clientHeight;
+            }
+
+            return height;
         }
     </script>    
 

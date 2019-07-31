@@ -1,4 +1,9 @@
-﻿/* Bootstrap custom theme */
+﻿html, form {
+    width: 100%;
+    height: 100%
+}
+
+/* Bootstrap custom theme */
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
     color: #fff;
@@ -8,9 +13,10 @@
 
 /* Page elements */
 
-/* Dynamic report view layout */
+/* Dynamic report view & design layout */
 .report-view-template {
     width: 100%;
+    height: 100%;
 }
     .report-view-template > tbody > tr:first-child > td:first-child {
         padding-right: 7px;
@@ -46,6 +52,7 @@
 
 .report-design-template {
     width: 100%;
+    height: 100%;
 }    
     .report-design-template > tbody > tr:first-child > td:first-child {
         width: 100%;

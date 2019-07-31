@@ -77,11 +77,11 @@
                         && (dateLa.getFullYear() != 2100 || dateLa.getMonth() != 1 || dateLa.getDate() != 1)) {
 
                         CalculLuniSiZile(dateDeLa, dateLa);
-                        
-                        deDataPlecarii.SetValue(dateLa);
+
+                        deUltimaZiLucr.SetValue(dateLa);
                         var dtTmp = dateLa;
-                        dtTmp.setDate(dtTmp.getDate() - 1)
-                        deUltimaZiLucr.SetValue(dtTmp);
+                        dtTmp.setDate(dtTmp.getDate() + 1);
+                        deDataPlecarii.SetValue(dtTmp);
 
                         Validare36Luni();
                     }

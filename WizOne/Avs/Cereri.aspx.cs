@@ -3380,6 +3380,8 @@ namespace WizOne.Avs
                                 act = 1;
                                 sql100 = "UPDATE F100 SET F10018 = " + dtCer.Rows[0]["BancaSal"].ToString() + ", F10019 = " + dtCer.Rows[0]["SucursalaSal"].ToString() + ", F10020 = '"
                                     + dtCer.Rows[0]["IBANSal"].ToString() + "', F10055 = '" + dtCer.Rows[0]["NrCard"].ToString() + "' WHERE F10003 = " + f10003.ToString();
+                                if (dtF1001 != null && dtF1001.Rows.Count > 0)
+                                    sql1001 = "UPDATE F1001 SET F1001040 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70431, F70432, F70433, F70434, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 104, 'Banca - cont salariu', " + data + ", " + dtCer.Rows[0]["BancaSal"].ToString() + ", 'Modificari in avans', '"
@@ -3394,6 +3396,8 @@ namespace WizOne.Avs
                                 act = 1;
                                 sql1001 = "UPDATE F1001 SET F1001026 = " + dtCer.Rows[0]["BancaGar"].ToString() + ", F1001027 = " + dtCer.Rows[0]["SucursalaGar"].ToString() + ", F1001028 = '"
                                     + dtCer.Rows[0]["IBANGar"].ToString() + "' WHERE F10003 = " + f10003.ToString();
+                                if (dtF1001 != null && dtF1001.Rows.Count > 0)
+                                    sql1001 = "UPDATE F1001 SET F1001041 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70435, F70436, F70437, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 105, 'Banca - cont gar.', " + data + ", " + dtCer.Rows[0]["BancaGar"].ToString() + ", 'Modificari in avans', '"

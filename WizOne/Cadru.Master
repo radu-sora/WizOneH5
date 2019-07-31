@@ -415,7 +415,7 @@
                     $("#spanTimeLeft").text(timeLeft).parent().removeClass('text-danger');
                 }
             }, function () {
-                window.location = "../DefaultTactil.aspx";
+                window.location = "/DefaultTactil.aspx";
             });
             timerControl.start();
         }

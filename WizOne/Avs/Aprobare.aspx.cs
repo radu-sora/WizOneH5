@@ -1,4 +1,5 @@
-﻿using DevExpress.Web;
+﻿using DevExpress.Utils;
+using DevExpress.Web;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -462,6 +463,37 @@ namespace WizOne.Avs
                 {
 
                 }
+
+                if (e.VisibleIndex >= 0)
+                {
+                    DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
+                    if (values != null)
+                    {
+                        int idAtr = Convert.ToInt32(values.Row["IdAtribut"].ToString());
+                        if (e.ButtonID == "btnDetalii")
+                        {
+                            if (idAtr != (int)Constante.Atribute.Sporuri && idAtr != (int)Constante.Atribute.SporTranzactii
+                                && idAtr != (int)Constante.Atribute.Componente && idAtr != (int)Constante.Atribute.Tarife)
+                            {
+                                e.Visible = DefaultBoolean.False;
+
+                            }
+                        }
+
+                        if (e.ButtonID == "btnArata")
+                        {
+                            if (idAtr == (int)Constante.Atribute.BancaSalariu || idAtr == (int)Constante.Atribute.BancaGarantii
+                                || idAtr == (int)Constante.Atribute.DocId || idAtr == (int)Constante.Atribute.PermisAuto)
+                            {
+                                e.Visible = DefaultBoolean.True;
+
+                            }
+                            else
+                                e.Visible = DefaultBoolean.False;
+                        }
+
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -794,9 +826,13 @@ namespace WizOne.Avs
 
                             //ctx.SaveChanges();
 
+
                             //Florin 2019.03.01
                             //s-a adaugat conditia cu parametrul
-                            if (idStare == 3 && Dami.ValoareParam("FinalizareCuActeAditionale") == "0")
+                            //Florin 2019.07.29
+                            //s-a adaugat si parametrul cu id-uri excluse
+                            string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
+                            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + id + ",") >= 0)))
                             {
                                 Cereri pag = new Cereri();
                                 pag.TrimiteInF704(id);

@@ -939,6 +939,47 @@ namespace WizOne.Module
             return rez;
         }
 
+        public static void ExecutaNonQueryOracle(string procNume, object[] lstParam)
+        {
+            OracleConnection conn = new OracleConnection(Constante.cnnWeb);
+            conn.Open();
+
+            try
+            {
+                OracleCommand cmd = new OracleCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = procNume;
+                cmd.CommandType = CommandType.StoredProcedure;
+                if (lstParam != null)
+                {
+                    foreach (object param in lstParam)
+                    {
+                        try
+                        {
+                            string[] arr = param.ToString().Split('=');
+                            cmd.Parameters.Add(arr[0], OracleDbType.Varchar2).Value = arr[1];
+                        }
+                        catch (Exception ex)
+                        {
+                            MemoreazaEroarea(ex, "General", "DamiOleDbCommand - Parametrii");
+                        }
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
 
         //public static dynamic DamiOracleScalar(string strSql, object[] lstParam)
         //{
@@ -1423,7 +1464,7 @@ namespace WizOne.Module
                         else
                             dt = new DateTime(anul, luna, zi);
 
-                        //if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Value.Month, 1, "EN").ToUpper() + "-" + dt.Value.Year.ToString() + "','DD-MON-RRRR')";
+                        //if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Value.Month, 1, "EN").ToUpper() + "-" + dt.Value.Year.ToString() + "','DD-MM-YYYY')";
                         //if (dt != null) rez = "to_date('" + dt.Value.Day.ToString().PadLeft(2, '0') + "/" + dt.Value.Month.ToString().PadLeft(2, '0') + "/" + dt.Value.Year.ToString() + "','DD/MM/YYYY')";
                         if (dt != null) rez = "TO_DATE('" + dt.Value.Day.ToString().PadLeft(2, '0') + "-" + dt.Value.Month.ToString().PadLeft(2, '0') + "-" + dt.Value.Year.ToString() + "','DD-MM-YYYY')";
                         break;
@@ -3714,24 +3755,31 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetTimpPartial()
+        public static DataTable GetTimpPartial(int tip)
         {
             DataTable table = new DataTable();
 
             table.Columns.Add("Id", typeof(int));
             table.Columns.Add("Denumire", typeof(string));
 
-            for (int i = 1; i <= 8; i++)
+            int j = 1, k = 7;
+            if (tip == 0)
+            {
+                j = 6;
+                k = 8;
+            }
+
+            for (int i = j; i <= k; i++)
                 table.Rows.Add(i, i.ToString());
 
             return table;
         }
 
-        public static DataTable GetTipNorma()
+        public static DataTable GetTipNorma(string param)
         {
-            string sql = @"SELECT * FROM F092";
+            string sql = @"SELECT * FROM F092 WHERE F09202 = " + param;
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F092", "F09202");
+                sql = General.SelectOracle("F092", "F09202") + " WHERE F09202 = " + param;
             return General.IncarcaDT(sql, null);
         }
 
@@ -3748,11 +3796,16 @@ namespace WizOne.Module
             return table;
         }
 
-        public static DataTable GetDurataTimpMunca()
+        public static DataTable GetDurataTimpMunca(string param)
         {
-            string sql = @"SELECT * FROM F091";
+            string cond = " WHERE F09105 IN (0, 1, 2)";
+            if (param == "1")
+                cond = " WHERE F09105 = 1";
+            if (param == "2")
+                cond = " WHERE F09105 = 2";
+            string sql = @"SELECT * FROM F091 " + cond;
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F091", "F09102");
+                sql = General.SelectOracle("F091", "F09102") + cond;
             return General.IncarcaDT(sql, null);
         }
 
@@ -3804,31 +3857,31 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetStructOrg()
-        {
-            DataTable table = new DataTable();
+        //public static DataTable GetStructOrg()
+        //{
+        //    DataTable table = new DataTable();
 
-            string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+        //    string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
 
-            if (Constante.tipBD == 2) cmp = " CAST(ROWNUM AS INT) ";
+        //    if (Constante.tipBD == 2) cmp = " CAST(ROWNUM AS INT) ";
 
-            string strSql = @"SELECT {0} as ""IdAuto"", a.F00204, b.F00305, c.F00406, d.F00507 ,e.F00608, F.F00709, G.F00810,
-                                a.F00202, b.F00304 , c.F00405 , d.F00506, e.F00607, F.F00708 , G.F00809
-                                FROM F002 A
-                                LEFT JOIN F003 B ON A.F00202 = B.F00303
-                                LEFT JOIN F004 C ON B.F00304 = C.F00404
-                                LEFT JOIN F005 D ON C.F00405 = D.F00505 
-                                LEFT JOIN F006 E ON D.F00506 = E.F00606
-                                LEFT JOIN F007 F ON E.F00607 = F.F00707
-                                LEFT JOIN F008 G ON F.F00708 = G.F00808
-                                ORDER BY E.F00607";
+        //    string strSql = @"SELECT {0} as ""IdAuto"", a.F00204, b.F00305, c.F00406, d.F00507 ,e.F00608, F.F00709, G.F00810,
+        //                        a.F00202, b.F00304 , c.F00405 , d.F00506, e.F00607, F.F00708 , G.F00809
+        //                        FROM F002 A
+        //                        LEFT JOIN F003 B ON A.F00202 = B.F00303
+        //                        LEFT JOIN F004 C ON B.F00304 = C.F00404
+        //                        LEFT JOIN F005 D ON C.F00405 = D.F00505 
+        //                        LEFT JOIN F006 E ON D.F00506 = E.F00606
+        //                        LEFT JOIN F007 F ON E.F00607 = F.F00707
+        //                        LEFT JOIN F008 G ON F.F00708 = G.F00808
+        //                        ORDER BY E.F00607";
 
-            strSql = string.Format(strSql, cmp);
+        //    strSql = string.Format(strSql, cmp);
 
-            table = General.IncarcaDT(strSql, null);
+        //    table = General.IncarcaDT(strSql, null);
 
-            return table;
-        }
+        //    return table;
+        //}
 
         public static DataTable GetStructOrgModif(DateTime data)
         {
@@ -3841,14 +3894,25 @@ namespace WizOne.Module
 
             if (data != null)
             {
+                string dataRef = data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString();
                 if (Constante.tipBD == 2)
-                    cmpData = " WHERE E.F00622 <= TO_DATE('" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString()
-                        + "', 'dd/mm/yyyy') AND TO_DATE('" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString()
-                        + "', 'dd/mm/yyyy') <= E.F00623 ";
+                {
+                    cmpData = " WHERE  B.F00310 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= B.F00311 AND "
+                        + " C.F00411 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= C.F00412 AND "
+                        + " D.F00513 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= D.F00514 AND "
+                        + " E.F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= E.F00623  ";
+                        //+ " AND F.F00714 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F.F00715 AND "
+                        //+ " G.F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= G.F00815 ";
+                }
                 else
-                    cmpData = " WHERE E.F00622 <= CONVERT(DATETIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString()
-                     + "', 103) AND CONVERT(DATETIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString()
-                     + "', 103) <= E.F00623 ";
+                {
+                    cmpData = " WHERE B.F00310 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= B.F00311 AND "
+                        + " C.F00411 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= C.F00412 AND "
+                        + " D.F00513 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= D.F00514 AND "
+                        + " E.F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= E.F00623  ";
+                        //+ " AND F.F00714 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F.F00715 AND "
+                        //+ " G.F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= G.F00815  ";
+                }
             }
             string strSql = @"SELECT {0} as ""IdAuto"", a.F00204, b.F00305, c.F00406, d.F00507 ,e.F00608, F.F00709, G.F00810,
                                 a.F00202, b.F00304 , c.F00405 , d.F00506, e.F00607, F.F00708 , G.F00809
@@ -3867,6 +3931,11 @@ namespace WizOne.Module
             table = General.IncarcaDT(strSql, null);
 
             return table;
+        }
+
+        public static DataTable GetStructOrgModifGen(string data)
+        {
+            return GetStructOrgModif(Convert.ToDateTime(data));
         }
 
         public static DataTable GetStructOrgAng(int marca)
@@ -3926,9 +3995,9 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetTipDoc(int idCet)
+        public static DataTable GetTipDoc(int idTara)
         {
-            return General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\" from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 where d.F73302 = " + idCet.ToString(), null);
+            return General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\" from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 where d.F73302 = " + idTara.ToString(), null);
         }
 
         public static DataTable GetCategPermis()
@@ -3936,6 +4005,22 @@ namespace WizOne.Module
             string sql = @"SELECT * FROM F714";
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("F714", "F71402");
+            return General.IncarcaDT(sql, null);
+        }
+
+        public static DataTable GetMotivScutireImpozit()
+        {
+            string sql = @"SELECT * FROM F804";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("F804", "F80403");
+            return General.IncarcaDT(sql, null);
+        }
+
+        public static DataTable GetMotivScutireCAS()
+        {
+            string sql = @"SELECT * FROM F802";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("F802", "F80203");
             return General.IncarcaDT(sql, null);
         }
 
@@ -4023,13 +4108,13 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetPuncteLucru()
-        {
-            string sql = @"SELECT * FROM F080";
-            if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F080", "F08002");
-            return General.IncarcaDT("SELECT F08003, F08002 FROM F080", null);
-        }
+        //public static DataTable GetPuncteLucru()
+        //{
+        //    string sql = @"SELECT * FROM F080";
+        //    if (Constante.tipBD == 2)
+        //        sql = General.SelectOracle("F080", "F08002");
+        //    return General.IncarcaDT("SELECT F08003, F08002 FROM F080", null);
+        //}
 
         public static DataTable ListaContacteF100()
         {
@@ -4133,6 +4218,14 @@ namespace WizOne.Module
             string sql = @"SELECT * FROM F733";
             if (Constante.tipBD == 2)
                 sql = General.SelectOracle("F733", "F73302");
+            return General.IncarcaDT(sql, null);
+        }
+
+        public static DataTable GetF737()
+        {
+            string sql = @"SELECT * FROM F737";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("F737", "F73702");
             return General.IncarcaDT(sql, null);
         }
 
@@ -4887,7 +4980,7 @@ namespace WizOne.Module
                     string ora = dt.Value.Hour.ToString().PadLeft(2, Convert.ToChar("0"));
                     string min = dt.Value.Minute.ToString().PadLeft(2, Convert.ToChar("0"));
                     string sec = dt.Value.Second.ToString().PadLeft(2, Convert.ToChar("0"));
-                    string mask = "DD-MON-YYYY";
+                    string mask = "DD-MM-YYYY";
 
                     switch (Constante.tipBD)
                     {
@@ -4900,7 +4993,7 @@ namespace WizOne.Module
                             rez = zi + "-" + General.NumeLuna(Convert.ToInt32(luna), 1, "EN").ToUpper() + "-" + an;
                             if (cuTimp == 1)
                             {
-                                mask = "DD-MON-YYYY HH24:MI:SS";
+                                mask = "DD-MM-YYYY HH24:MI:SS";
                                 rez += " " + ora + ":" + min + ":" + sec;
                             }
                             if (tip == 2) rez = "to_date('" + rez + "','" + mask + "')";
@@ -5933,15 +6026,29 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetCategTarife()
+        public static DataTable GetCategTarife(string data)
         {
             DataTable table = new DataTable();
+            string cmpData = "";
+            if (data != null && data.Length > 0)
+            {
+                DateTime dt = Convert.ToDateTime(data);
+                string dataRef = dt.Day.ToString().PadLeft(2, '0') + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                if (Constante.tipBD == 2)
+                {
+                    cmpData = " AND  F01118 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F01119 ";
+                }
+                else
+                {
+                    cmpData = " AND F01118 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F01119 ";
+                }
+            }
 
             try
             {
-                string sql = @"SELECT * FROM F011 WHERE F01105 = 1 ";
+                string sql = @"SELECT * FROM F011 WHERE F01105 = 1 " + cmpData;
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F011", "F01104") + " WHERE F01105 = 1 ";
+                    sql = General.SelectOracle("F011", "F01104") + " WHERE F01105 = 1 " + cmpData;
                 table = IncarcaDT(sql, null);
             }
             catch (Exception ex)
@@ -5952,16 +6059,31 @@ namespace WizOne.Module
             return table;
         }
 
-        public static DataTable GetTarife(string categ)
+        public static DataTable GetTarife(string categ, string data)
         {
             DataTable table = new DataTable();
+
+            string cmpData = "";
+            if (data != null && data.Length > 0)
+            {
+                DateTime dt = Convert.ToDateTime(data);
+                string dataRef = dt.Day.ToString().PadLeft(2, '0') + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                if (Constante.tipBD == 2)
+                {
+                    cmpData = " AND  F01118 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F01119 ";
+                }
+                else
+                {
+                    cmpData = " AND F01118 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F01119 ";
+                }
+            }
 
             try
             {
 
-                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ;
+                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ + cmpData;
                 if (Constante.tipBD == 2)
-                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ;
+                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ + cmpData;
                 table = IncarcaDT(sql, null);
 
             }
@@ -5973,17 +6095,32 @@ namespace WizOne.Module
             return table;
         }
 
-        public static DataTable GetTarifeSp(string categ)
+        public static DataTable GetTarifeSp(string categ, string data)
         {
             DataTable table = new DataTable();
 
             try
             {
+
+                string cmpData = "";
+                if (data != null && data.Length > 0)
+                {
+                    DateTime dt = Convert.ToDateTime(data);
+                    string dataRef = dt.Day.ToString().PadLeft(2, '0') + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                    if (Constante.tipBD == 2)
+                    {
+                        cmpData = " AND  F01118 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F01119 ";
+                    }
+                    else
+                    {
+                        cmpData = " AND F01118 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F01119 ";
+                    }
+                }
 
                 string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = (  select distinct f01104 from f025
                                 left join f021 on f02510 = f02104
                                 left join f011 on f02106 = f01104
-                                where  f02504 = " + categ + @")";
+                                where  f02504 = " + categ + cmpData + @")";
                 if (Constante.tipBD == 2)
                     sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = (  select distinct f01104 from f025 "
                                + " left join f021 on f02510 = f02104 "
@@ -6001,11 +6138,26 @@ namespace WizOne.Module
         }
 
 
-        public static DataTable GetSporuri(string param)
+        public static DataTable GetSporuri(string param, string data)
         {
-            string sql = @"SELECT F02504, F02505 FROM F025  WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") ;
+            string cmpData = "";
+            if (data != null && data.Length > 0)
+            {
+                DateTime dt = Convert.ToDateTime(data);
+                string dataRef = dt.Day.ToString().PadLeft(2, '0') + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Year.ToString();
+                if (Constante.tipBD == 2)
+                {
+                    cmpData = " AND  F02524 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F02525 ";
+                }
+                else
+                {
+                    cmpData = " AND F02524 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F02525 ";
+                }
+            }
+
+            string sql = @"SELECT 0 AS F02504, '---' AS F02505 UNION  SELECT F02504, F02505 FROM F025  WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") + cmpData ;
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F025", "F02504") + " WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ");
+                sql = " SELECT 0 AS F02504, '---' AS F02505 FROM DUAL UNION " +  General.SelectOracle("F025", "F02504") + " WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") + cmpData;
             return General.IncarcaDT(sql, null);
         }
 
@@ -6178,6 +6330,25 @@ namespace WizOne.Module
                 HttpContext.Current.Session["MP_AreContract"] = "0";
                 HttpContext.Current.Session["MP_DataSfarsit36"] = "01/01/2100";
 
+                //Florin 2019.06.21
+                HttpContext.Current.Session["EsteTactil"] = "0";
+                HttpContext.Current.Session["TimeOutSecunde"] = 0;
+
+                HttpContext.Current.Session["NumeGriduri"] = "";
+                HttpContext.Current.Session["IdGrid"] = "1";
+
+                //Florin 2019.07.15
+                HttpContext.Current.Session["Filtru_ActeAditionale"] = "";
+
+                //Florin 2019.07.17
+                HttpContext.Current.Session["Filtru_CereriAbs"] = "";
+
+                //Florin 2019.07.19
+                HttpContext.Current.Session["Ptj_DataBlocare"] = "22001231";
+
+
+
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 
@@ -6330,11 +6501,11 @@ namespace WizOne.Module
                     //dtInc = "01-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
                     //dtSf = DateTime.DaysInMonth(an, luna) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
 
-                    //strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MON-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MON-RRRR'))>=0";
+                    //strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MM-YYYY') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MM-YYYY'))>=0";
                     //if (zi > 0 && zi <= 31)
                     //{
                     //    string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
-                    //    strSql = " AND TRUNC(to_date('" + dt + "','DD-MON-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MON-RRRR'))>=0";
+                    //    strSql = " AND TRUNC(to_date('" + dt + "','DD-MM-YYYY') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MM-YYYY'))>=0";
                     //}
                 }
             }
@@ -7104,7 +7275,7 @@ namespace WizOne.Module
                         //                (SELECT A.""IdAuto""
                         //                FROM ""Ptj_Intrari"" A
                         //                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B 
+                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
                         //                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII);";
 
                         string strDel = @"DELETE FROM ""Ptj_Intrari"" 
@@ -7113,7 +7284,7 @@ namespace WizOne.Module
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                         ) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-JAN-2100','DD-MON-YYYY'));";
+                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-JAN-2100','DD-MM-YYYY'));";
 
                         strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;
@@ -7123,7 +7294,7 @@ namespace WizOne.Module
                                         WHERE ""IdAuto"" IN 
                                         (SELECT A.""IdAuto""
                                         FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {1} AND TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MON-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1});";
+                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {1} AND TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1});";
 
                         strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;
@@ -7543,12 +7714,10 @@ namespace WizOne.Module
 
 
 
-        public static void CalculCO(int an, int marca = -99)
+        public static void CalculCO(int an, int marca = -99, bool cuActualizareInF100 = true)
         {
             try
             {
-                //int an = Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year));
-
                 string dtInc = an.ToString() + "-01-01";
                 string dtSf = an.ToString() + "-12-31";
 
@@ -7628,23 +7797,23 @@ namespace WizOne.Module
                 }
                 else
                 {
-                    dtInc = "01/01/" + an.ToString();
-                    dtSf = "31/12/" + an.ToString();
+                    dtInc = "01-01-" + an.ToString();
+                    dtSf = "31-12-" + an.ToString();
 
                     //daca nu exista inseram linie goala si apoi updatam
                     strSql += "insert into \"Ptj_tblZileCO\"(F10003, \"An\", USER_NO, TIME) " +
                     " select F10003, " + an + ", " + HttpContext.Current.Session["UserId"] + ", SYSDATE from F100 where F10003 not in (select F10003 from \"Ptj_tblZileCO\" where \"An\"=" + an + ") " +
-                    " and F10022 <= to_date('" + dtSf + "','DD/MM/YYYY') and to_date('" + dtInc + "','DD/MM/YYYY') <= F10023" + filtruIns + ";";
+                    " and F10022 <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023" + filtruIns + ";";
 
                     strSql += "update \"Ptj_tblZileCO\" x set x.\"Cuvenite\" = ( " +
                             " with xx as " +
-                            " (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01/01/2100','DD/MM/YYYY') then f111.f11106 else f111.f11107 end la_data from f111 inner join  " +
-                            " (select a.f11103, a.f11105, case when a.f11107=to_date('01/01/2100','DD/MM/YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) timp from F111 a inner join f111 b " +
-                            " on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01/01/2100','DD/MM/YYYY') then b.f11106 else b.f11107 end  " +
-                            " and b.f11105 <= case when a.f11107=to_date('01/01/2100','DD/MM/YYYY') then a.f11106 else a.f11107 end) " +
-                            " group by a.f11103, a.f11105, case when a.f11107=to_date('01/01/2100','DD/MM/YYYY') then a.f11106 else a.f11107 end, a.time) t " +
+                            " (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end la_data from f111 inner join  " +
+                            " (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) timp from F111 a inner join f111 b " +
+                            " on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end  " +
+                            " and b.f11105 <= case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end) " +
+                            " group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end, a.time) t " +
                             " on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and  " +
-                            " case when f111.f11107=to_date('01/01/2100','DD/MM/YYYY') then f111.f11106 else f111.f11107 end = t.f11107 and f111.time = t.timp " +
+                            " case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 and f111.time = t.timp " +
                             " union all " +
                             " select f10003 Marca, \"DataInceput\" de_la_data, \"DataSfarsit\" la_data " +
                             " from \"Ptj_Cereri\" inner join \"Ptj_tblAbsente\" on \"Ptj_Cereri\".\"IdAbsenta\" = \"Ptj_tblAbsente\".\"Id\" " +
@@ -7662,19 +7831,19 @@ namespace WizOne.Module
                     " ROUND((case when a.F100642 is null or a.F100642 = 0 then c.F02615 else TO_NUMBER(a.F100642) end " +                                                   //nr zile cuvenite conform grilei
                     " + (CASE WHEN NVL(a.F10027,0)>=2 THEN to_number(nvl((select \"Valoare\" from \"tblParametrii\" where \"Nume\"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) ELSE 0 END)) " +               //daca este pers. cu dizabilitati mai se adauga 3 zile
                     " * " +                                                                 //aceste zile cuvenite se inmultesc cu ce urmeaza
-                    " (least(trunc(f10023),to_date('31/12/" + an + "','DD/MM/YYYY') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
-                    " ) - greatest(trunc(f10022),to_date('01/01/" + an + "','DD/MM/YYYY'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta
+                    " (least(trunc(f10023),to_date('31-12-" + an + "','DD-MM-YYYY') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
+                    " ) - greatest(trunc(f10022),to_date('01-01-" + an + "','DD-MM-YYYY'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta
                     " - nvl(b.cfp,0) " +                                                   //scadem zilele de concediu fara plata luate in anul de referinta
-                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('31/12/" + an + "','DD/MM/YYYY')) - greatest(trunc(f11105),to_date('01/01/" + an + "','DD/MM/YYYY')) + 1),0) from f111 A where f11103=" + f10003 + " and F11105 <= F11107 AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')) " +
+                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('31-12-" + an + "','DD-MM-YYYY')) - greatest(trunc(f11105),to_date('01-01-" + an + "','DD-MM-YYYY')) + 1),0) from f111 A where f11103=" + f10003 + " and F11105 <= F11107 AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')) " +
                     " ) " +
                     " /365,0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus
                     " from F100 a " +
-                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31/12/" + an + "','DD/MM/YYYY'), " +
-                    " (select to_date('01/' ||  F01012 || '/' ||  F01011,'DD/MM/YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
+                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
+                    " (select to_date('01/' ||  F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma + luna de lucru deschisa pt ca functia MONTHS_BETWEEN nu tine cont de ea
                     " left join F026 c on a.F10072 = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
-                    " left join ((select F10003, nvl(sum(least(trunc(\"DataSfarsit\"),to_date('31/12/" + an + "','DD/MM/YYYY')-1) - greatest(trunc(\"DataInceput\"),to_date('01/01/" + an + "','DD/MM/YYYY'))+1),0) as cfp from \"Ptj_Cereri\" where \"IdAbsenta\" in (SELECT \"Id\" from \"Ptj_tblAbsente\" where \"AbsenteCFPInCalculCO\"=1) and \"IdStare\"=3 AND (to_Char(\"DataInceput\",'YYYY') ='" + an + "' OR to_Char(\"DataSfarsit\",'YYYY') ='" + an + "') group by f10003)) b on a.F10003 = b.F10003 " +  //se calcuelaza nr de cfp avute in anul de referinta
-                    " where F10022 <= to_date('31/12/" + an + "','DD/MM/YYYY') and to_date('01/01/" + an + "','DD/MM/YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " left join ((select F10003, nvl(sum(least(trunc(\"DataSfarsit\"),to_date('31-12-" + an + "','DD-MM-YYYY')-1) - greatest(trunc(\"DataInceput\"),to_date('01-01-" + an + "','DD-MM-YYYY'))+1),0) as cfp from \"Ptj_Cereri\" where \"IdAbsenta\" in (SELECT \"Id\" from \"Ptj_tblAbsente\" where \"AbsenteCFPInCalculCO\"=1) and \"IdStare\"=3 AND (to_Char(\"DataInceput\",'YYYY') ='" + an + "' OR to_Char(\"DataSfarsit\",'YYYY') ='" + an + "') group by f10003)) b on a.F10003 = b.F10003 " +  //se calcuelaza nr de cfp avute in anul de referinta
+                    " where F10022 <= to_date('31-12-" + an + "','DD-MM-YYYY') and to_date('01-01-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
 
                     strSql += "update \"Ptj_tblZileCO\" x set x.\"CuveniteAn\" = (select y.ZileCuvenite from " +
@@ -7683,11 +7852,11 @@ namespace WizOne.Module
                     " + (CASE WHEN NVL(a.F10027,0)>=2 THEN to_number(nvl((select \"Valoare\" from \"tblParametrii\" where \"Nume\"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) ELSE 0 END) " +               //daca este pers. cu dizabilitati mai se adauga 3 zile
                     " ) as ZileCuvenite " +
                     " from F100 a " +
-                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31/12/" + an + "','DD/MM/YYYY'), " +
-                    " (select to_date('01/' || F01012 || '/' ||  F01011,'DD/MM/YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
+                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
+                    " (select to_date('01/' || F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma + luna de lucru deschisa pt ca functia MONTHS_BETWEEN nu tine cont de ea
                     " left join F026 c on a.F10072 = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
-                    " where F10022 <= to_date('31/12/" + an + "','DD/MM/YYYY') and to_date('01/01/" + an + "','DD/MM/YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " where F10022 <= to_date('31-12-" + an + "','DD-MM-YYYY') and to_date('01-01-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
 
                 }
@@ -7696,9 +7865,11 @@ namespace WizOne.Module
 
                 General.ExecutaNonQuery(strSql, null);
 
-              
-                strSql = "UPDATE a SET  a.F100642 = b.\"CuveniteAn\", a.F100995 = b.\"Cuvenite\", a.F100996 = b.\"SoldAnterior\" FROM F100 a,  \"Ptj_tblZileCO\" b WHERE a.F10003 = B.F10003 AND b.\"An\" =  " + an;
-                General.ExecutaNonQuery(strSql, null);
+                if (cuActualizareInF100)
+                {
+                    strSql = "UPDATE a SET  a.F100642 = b.\"CuveniteAn\", a.F100995 = b.\"Cuvenite\", a.F100996 = b.\"SoldAnterior\" FROM F100 a,  \"Ptj_tblZileCO\" b WHERE a.F10003 = B.F10003 AND b.\"An\" =  " + an;
+                    General.ExecutaNonQuery(strSql, null);
+                }
             }
             catch (Exception ex)
             {

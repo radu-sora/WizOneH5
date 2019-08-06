@@ -327,17 +327,17 @@ namespace WizOne.Absente
                     //daca nu exista inseram linie goala si apoi updatam
                     strSql += "insert into \"Ptj_tblZLP\"(F10003, \"An\", USER_NO, TIME) " +
                     " select F10003, " + an + ", " + Session["UserId"] + ", SYSDATE from F100 where F10003 not in (select F10003 from \"Ptj_tblZLP\" where \"An\"=" + an + ") " +
-                    " and F10022 <= to_date('" + dtSf + "','DD-MON-RRRR') and to_date('" + dtInc + "','DD-MON-RRRR') <= F10023" + filtruIns + ";";
+                    " and F10022 <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023" + filtruIns + ";";
 
                     strSql += "update \"Ptj_tblZLP\" x set x.\"Cuvenite\" = ( " +
                             " with xx as " +
-                            " (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-JAN-2100','DD-MON-YYYY') then f111.f11106 else f111.f11107 end la_data from f111 inner join  " +
-                            " (select a.f11103, a.f11105, case when a.f11107=to_date('01-JAN-2100','DD-MON-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) timp from F111 a inner join f111 b " +
-                            " on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-JAN-2100','DD-MON-YYYY') then b.f11106 else b.f11107 end  " +
-                            " and b.f11105 <= case when a.f11107=to_date('01-JAN-2100','DD-MON-YYYY') then a.f11106 else a.f11107 end) " +
-                            " group by a.f11103, a.f11105, case when a.f11107=to_date('01-JAN-2100','DD-MON-YYYY') then a.f11106 else a.f11107 end, a.time) t " +
+                            " (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end la_data from f111 inner join  " +
+                            " (select a.f11103, a.f11105, case when a.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) timp from F111 a inner join f111 b " +
+                            " on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end  " +
+                            " and b.f11105 <= case when a.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end) " +
+                            " group by a.f11103, a.f11105, case when a.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end, a.time) t " +
                             " on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and  " +
-                            " case when f111.f11107=to_date('01-JAN-2100','DD-MON-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 and f111.time = t.timp " +
+                            " case when f111.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 and f111.time = t.timp " +
                             " union all " +
 
                             " select f10003 Marca, \"DataInceput\" de_la_data, \"DataSfarsit\" la_data " +
@@ -358,15 +358,15 @@ namespace WizOne.Absente
                     " ROUND((SELECT nvl((SELECT TO_NUMBER(\"Valoare\") FROM \"tblParametrii\" WHERE \"Nume\" = 'NumarZileLiberePlatite'), 0) from dual) " +               
                     
                     " * " +                                                                 //aceste zile cuvenite se inmultesc cu ce urmeaza
-                    " (least(trunc(f10023),to_date('31-DEC-" + an + "','DD-MON-RRRR') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
-                    " ) - greatest(trunc(f10022),to_date('01-JAN-" + an + "','DD-MON-RRRR'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta                   
-                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('31-DEC-" + an + "','DD-MON-RRRR')) - greatest(trunc(f11105),to_date('01-JAN-" + an + "','DD-MON-RRRR')) + 1),0) from f111 A where f11103=" + f10003 + " and F11105 <= F11107 AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')) " +
+                    " (least(trunc(f10023),to_date('31-DEC-" + an + "','DD-MM-YYYY') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
+                    " ) - greatest(trunc(f10022),to_date('01-JAN-" + an + "','DD-MM-YYYY'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta                   
+                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('31-DEC-" + an + "','DD-MM-YYYY')) - greatest(trunc(f11105),to_date('01-JAN-" + an + "','DD-MM-YYYY')) + 1),0) from f111 A where f11103=" + f10003 + " and F11105 <= F11107 AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')) " +
                     
                     " ) " +
                     " /365,0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus
                     " from F100 a " +                    
                   
-                    " where F10022 <= to_date('31-DEC-" + an + "','DD-MON-RRRR') and to_date('01-JAN-" + an + "','DD-MON-RRRR') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " where F10022 <= to_date('31-DEC-" + an + "','DD-MM-YYYY') and to_date('01-JAN-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
 
                     strSql += "update \"Ptj_tblZLP\" x set x.\"CuveniteAn\" = (select y.ZileCuvenite from " +
@@ -377,7 +377,7 @@ namespace WizOne.Absente
                     " ) as ZileCuvenite " +
                     " from F100 a " +
                   
-                    " where F10022 <= to_date('31-DEC-" + an + "','DD-MON-RRRR') and to_date('01-JAN-" + an + "','DD-MON-RRRR') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " where F10022 <= to_date('31-DEC-" + an + "','DD-MM-YYYY') and to_date('01-JAN-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
 
                 }

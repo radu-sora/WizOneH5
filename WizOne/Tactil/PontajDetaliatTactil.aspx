@@ -1,58 +1,19 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="PontajDetaliatTactil.aspx.cs" Inherits="WizOne.Tactil.PontajDetaliatTactil" %>
 
-
-
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     
 </asp:Content>
-
-
-
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <script>
-        $(function () {
-            $("body").on('click keypress', function () {
-                ResetThisSession();
-            });
-        });
-
-        var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
-        var timeInSecondsAfterSessionOut = 30;
-        var secondTick = 0;
-
-        function ResetThisSession() {
-            secondTick = 0;
+    <script>        
+        function OnControlsInitialized(s, e) {          
+            AdjustSize();      
         }
 
-        function StartThisSessionTimer() {
-            secondTick++;
-            if (timeOutSecunde != null)
-                timeInSecondsAfterSessionOut = timeOutSecunde;
-            var timeLeft = ((timeInSecondsAfterSessionOut - secondTick) / 60).toFixed(0); // in minutes
-            timeLeft = timeInSecondsAfterSessionOut - secondTick;
-            $("#spanTimeLeft").html(timeLeft);
-
-            if (secondTick >= timeInSecondsAfterSessionOut) {
-                clearTimeout(tick);
-                window.location = "../DefaultTactil.aspx";
-                return;
-            }
-            tick = setTimeout("StartThisSessionTimer()", 1000);
-        }
-
-        StartThisSessionTimer();
-
-        function OnControlsInitialized(s, e) {
-          
-            AdjustSize();
-           
-        }
         function AdjustSize() {
             grDate.SetHeight(850);
             grDateTotaluri.SetHeight(850);
         }
-
     </script>
         <table style="width:100%;">
             <tr>
@@ -99,7 +60,7 @@
             </tr>
         </table>
 
-    <table width="82%"  >
+    <table width="67%"  >
         <tr>
             <td  align="center" valign="top" width="675">               
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
@@ -138,7 +99,7 @@
                     <Columns>
                         <dx:GridViewDataTextColumn FieldName="Id" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TextAfisare" Caption="Denumire" ReadOnly="true"  Width="200px" Visible="true" ShowInCustomizationForm="true" FixedStyle="Left" />
-                        <dx:GridViewDataTextColumn FieldName="Valoare" Name="Valoare" Caption="Valoare" ReadOnly="true" Width="200px"  ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Valoare" Name="Valoare" Caption="Valoare" ReadOnly="true" Width="150px"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="An" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Luna" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

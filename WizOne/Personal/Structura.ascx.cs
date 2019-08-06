@@ -36,6 +36,8 @@ namespace WizOne.Personal
                 lblBir.InnerText = Dami.TraduCuvant("Birou/Echipa");
                 lblCC.InnerText = Dami.TraduCuvant("Centru cost");
                 lblPL.InnerText = Dami.TraduCuvant("Punct de lucru");
+                lblCAEN.InnerText = Dami.TraduCuvant("CAEN");
+                lblUnitStat.InnerText = Dami.TraduCuvant("Unitate locala statistica");
 
                 btnCC.ToolTip = Dami.TraduCuvant("Modificari contract");
                 btnCC.ToolTip = Dami.TraduCuvant("Istoric modificari");
@@ -49,29 +51,47 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 table = ds.Tables[0];
-
-                DataTable dtSrc = General.GetStructOrgModif(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
+             
+                //DataTable dtSrc = General.GetStructOrgModif(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()));
+                DataTable dtSrc = General.GetStructOrgModif(DateTime.Now);
                 cmbStru.DataSource = dtSrc;
                 cmbStru.DataBind();
 
-                string sql = @"SELECT * FROM F062";
+                string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
+                string sql = @"SELECT * FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F06209";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F062", "F06204");
+                    sql = General.SelectOracle("F062", "F06204") + " WHERE F06208 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F06209 ";
                 DataTable dtCC = General.IncarcaDT(sql, null);
                 cmbCC.DataSource = dtCC;
                 cmbCC.DataBind();
 
-                sql = @"SELECT * FROM F080";
+                sql = @"SELECT * FROM F080 WHERE F08020 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F08021";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F080", "F08002");
+                    sql = General.SelectOracle("F080", "F08002") + " WHERE F08020 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F08021 ";
                 DataTable dtPL = General.IncarcaDT(sql, null);
                 cmbPL.DataSource = dtPL;
                 cmbPL.DataBind();
 
-                DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 " + (Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0")) <= 0 ? ""
-                        : " WHERE F00808 = " + Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0"))), null);
+                DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 WHERE 1=1 " + (Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0")) <= 0 
+                    ? (Constante.tipBD == 1 ? " AND F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00815" : " AND F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00815")
+                    : " AND F00808 = " + Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0"))
+                    + (Constante.tipBD == 1 ? " AND F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00815" : " AND F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00815")), null);
                 cmbBir.DataSource = dtBir;
                 cmbBir.DataBind();
+
+                sql = @"SELECT * FROM F801";
+                if (Constante.tipBD == 2)
+                    sql = General.SelectOracle("F801", "F80103");
+                DataTable dtCAEN = General.IncarcaDT(sql, null);
+                cmbCAEN.DataSource = dtCAEN;
+                cmbCAEN.DataBind();
+
+                sql = @"SELECT * FROM F803";
+                if (Constante.tipBD == 2)
+                    sql = General.SelectOracle("F803", "F80303");
+                DataTable dtUnit = General.IncarcaDT(sql, null);
+                cmbUnitStat.DataSource = dtUnit;
+                cmbUnitStat.DataBind();
 
 
                 if (!Page.IsCallback)
@@ -90,6 +110,8 @@ namespace WizOne.Personal
                         cmbBir.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F100959"], "0"));
                         cmbCC.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10053"], "0"));
                         cmbPL.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10079"], "0"));
+                        cmbCAEN.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001095"], "0"));
+                        cmbUnitStat.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001097"], "0"));
                     }
                 }
 
@@ -150,7 +172,7 @@ namespace WizOne.Personal
                 }
                 else
                 {
-                    txtSub.Value = "";
+                    txtFil.Value = "";
                     ds.Tables[0].Rows[0]["F10005"] = 0;
                     ds.Tables[1].Rows[0]["F10005"] = 0;
                 }
@@ -232,6 +254,16 @@ namespace WizOne.Personal
                 case "cmbPL":
                     ds.Tables[0].Rows[0]["F10079"] = param[1];
                     ds.Tables[1].Rows[0]["F10079"] = param[1];
+                    Session["InformatiaCurentaPersonal"] = ds;
+                    break;
+                case "cmbCAEN":
+                    ds.Tables[0].Rows[0]["F1001095"] = param[1];
+                    ds.Tables[2].Rows[0]["F1001095"] = param[1];
+                    Session["InformatiaCurentaPersonal"] = ds;
+                    break;
+                case "cmbUnitStat":
+                    ds.Tables[0].Rows[0]["F1001097"] = param[1];
+                    ds.Tables[2].Rows[0]["F1001097"] = param[1];
                     Session["InformatiaCurentaPersonal"] = ds;
                     break;
                 case "btnCC":

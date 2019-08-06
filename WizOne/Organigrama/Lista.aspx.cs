@@ -686,9 +686,9 @@ namespace WizOne.Organigrama
                                 " LEFT JOIN (select \"IdPost\", count(*)as NR from \"Org_relPostAngajat\" group by \"IdPost\") NR_ANG on NR_ANG.\"IdPost\"  = \"Org_Posturi\".\"Id\" " +
 
                                 " where level<=" + nivel +
-                                " and TRUNC(\"DataInceput\")<=to_date('" + strRef + "','DD-MON-RRRR') AND to_date('" + strRef + "','DD-MON-RRRR') <=TRUNC(\"DataSfarsit\") " +
+                                " and TRUNC(\"DataInceput\")<=to_date('" + strRef + "','DD-MM-YYYY') AND to_date('" + strRef + "','DD-MM-YYYY') <=TRUNC(\"DataSfarsit\") " +
                                 " start with \"Id\"=" + idPost + " connect by nocycle prior \"Id\" = \"IdSuperior\" " +      //Radu 26.05.2016 - am adaugat nocycle pentru a opri bucla infinita
-                               " and TRUNC(\"DataInceput\")<=to_date('" + strRef + "','DD-MON-RRRR') AND to_date('" + strRef + "','DD-MON-RRRR') <=TRUNC(\"DataSfarsit\") " + //Radu 09.01.2017 - conditie pentru a nu returna decat un post activ								
+                               " and TRUNC(\"DataInceput\")<=to_date('" + strRef + "','DD-MM-YYYY') AND to_date('" + strRef + "','DD-MM-YYYY') <=TRUNC(\"DataSfarsit\") " + //Radu 09.01.2017 - conditie pentru a nu returna decat un post activ								
                                " and \"Stare\" = " + activ;     //Radu 07.02.2017
 
                 //Radu 26.05.2016

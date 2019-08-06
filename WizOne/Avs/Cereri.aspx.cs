@@ -7,12 +7,25 @@ using System.IO;
 using System.Linq;
 using System.Web.UI;
 using WizOne.Module;
+using System.Web;
+using System.Web.Hosting;
+using System.Web.UI.WebControls;
+using System.Globalization;
+using DevExpress.Utils;
 
 namespace WizOne.Avs
 {
     public partial class Cereri : System.Web.UI.Page
     {
         int F10003 = -99;
+
+        public class metaCereriDate
+        {   
+            public object UploadedFile { get; set; }
+            public object UploadedFileName { get; set; }
+            public object UploadedFileExtension { get; set; }
+
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -33,9 +46,13 @@ namespace WizOne.Avs
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
-
+         
                 if (!IsPostBack)
                 {
+                    Session["AvsCereri"] = null;
+                    Session["AvsCereriCalcul"] = null;
+                    Session["Avs_Cereri_Date"] = null;
+
                     if (Session["MP_Avans"] == null)
                     {
                         btnBack.Visible = false;
@@ -189,6 +206,13 @@ namespace WizOne.Avs
                             if (Session["Avs_AtributFiltru"] != null && cmbAtributeFiltru.SelectedIndex < 0 && Convert.ToInt32(Session["Avs_AtributFiltru"].ToString()) != -1)
                                 cmbAtributeFiltru.SelectedIndex = Convert.ToInt32(Session["Avs_AtributFiltru"].ToString());
                             IncarcaGrid();
+                        }
+
+                        metaCereriDate itm = new metaCereriDate();
+                        if (Session["Avs_Cereri_Date"] != null)
+                        {
+                            itm = Session["Avs_Cereri_Date"] as metaCereriDate;
+                            lblDoc.InnerText = General.Nz(itm.UploadedFileName, "").ToString();
                         }
                     }
 
@@ -646,6 +670,16 @@ namespace WizOne.Avs
             Session["Valoare6Noua"] = null;
             Session["Valoare7Noua"] = null;
             Session["Valoare8Noua"] = null;
+
+            grDateComponente.Visible = false;
+            grDateTarife.Visible = false;
+            grDateSporuri1.Visible = false;
+            grDateSporuri2.Visible = false;
+            grDateSporTran.Visible = false;
+
+            lblDoc.Visible = false;
+            btnDocUpload.Visible = false;
+            btnDocSterge.Visible = false;
         }
 
         private void ArataCtl(int nr, string text1, string text2, string text3, string text4, string text5, string text6, string text7, string text8, string text9, string text10)
@@ -1057,14 +1091,14 @@ namespace WizOne.Avs
                 ArataCtl(3, "Cod COR actual", "Cod COR nou", "", "", "", "", "", "", "", "");
                 string sql = "";
                 if (Constante.tipBD == 1)
-                    sql = "select F72202 AS \"Id\", CONVERT(VARCHAR, F72202) + ' - '  +  F72204 AS \"Denumire\" from F100, f722 WHERE F10098 = F72202 AND f72206 = (select max(f72206) from f722) AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
+                    sql = "select F72202 AS \"Id\", CONVERT(VARCHAR, F72202) + ' - '  +  F72204 AS \"Denumire\" from F100 LEFT JOIN F1001 ON F100.F10003 = F1001.F10003 LEFT JOIN f722 ON F10098 = F72202 WHERE F1001082=F72206 AND F100.F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
                 else
-                    sql = "select F72202 AS \"Id\", F72202 || ' - '  ||  F72204 AS \"Denumire\" from F100, f722 WHERE F10098 = F72202 AND f72206 = (select max(f72206) from f722) AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
+                    sql = "select F72202 AS \"Id\", F72202 || ' - '  ||  F72204 AS \"Denumire\" from LEFT JOIN F1001 ON F100.F10003 = F1001.F10003 LEFT JOIN f722 ON F10098 = F72202 WHERE F1001082=F72206 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
                 DataTable dtTemp1 = General.IncarcaDT(sql, null);
                 if (Constante.tipBD == 1)
-                    sql = "select F72202 AS \"Id\", CONVERT(VARCHAR, F72202) + ' - '  +  F72204 AS \"Denumire\" from f722";
+                    sql = "select F72202 AS \"Id\", CONVERT(VARCHAR, F72202) + ' - '  +  F72204 AS \"Denumire\" from f722 WHERE f72206 = (select max(f72206) from f722) ";
                 else
-                    sql = "select F72202 AS \"Id\", F72202 || ' - '  ||  F72204 AS \"Denumire\" from f722"; ;
+                    sql = "select F72202 AS \"Id\", F72202 || ' - '  ||  F72204 AS \"Denumire\" from f722 WHERE f72206 = (select max(f72206) from f722) "; ;
                 DataTable dtTemp2 = General.IncarcaDT(sql, null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
             }
@@ -1162,7 +1196,12 @@ namespace WizOne.Avs
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Sporuri)
             {
-                //nu mai este folosit
+                //Session["AvsCereri"] = null;
+                //Session["AvsCereriCalcul"] = null;
+                grDateSporuri1.Visible = true;
+                grDateSporuri1.DataBind();
+                grDateSporuri2.Visible = true;
+                grDateSporuri2.DataBind();
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.TitluAcademic)
@@ -1191,7 +1230,10 @@ namespace WizOne.Avs
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.SporTranzactii)
             {
-                //nu mai este folosit
+                //Session["AvsCereri"] = null;
+                //Session["AvsCereriCalcul"] = null;
+                grDateSporTran.Visible = true;
+                grDateSporTran.DataBind();
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PunctLucru)
@@ -1242,6 +1284,22 @@ namespace WizOne.Avs
                 txt2Act.Value = nrZile;
             }
 
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Componente)
+            {
+                //Session["AvsCereri"] = null;
+                //Session["AvsCereriCalcul"] = null;
+                grDateComponente.Visible = true;
+                grDateComponente.DataBind();
+            }
+
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Tarife)
+            {
+                //Session["AvsCereri"] = null;
+                //Session["AvsCereriCalcul"] = null;
+                grDateTarife.Visible = true;
+                grDateTarife.DataBind();
+            }
+
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.NumePrenume)
             {
                 ArataCtl(2, "Nume actual", "Nume nou", "Prenume actual", "Prenume nou", "", "", "", "", "", "");
@@ -1268,7 +1326,7 @@ namespace WizOne.Avs
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaSalariu)
             {
-                ArataCtl(8, "Banca actuala", "Banca noua", "Sucursala actuala", "Sucursala noua", "IBAN actual", "IBAN nou", "Nr. card actual", "Nr. card nou", "", "");
+                ArataCtl(8, "Banca actuala", "Banca noua", "Sucursala actuala", "Sucursala noua", "IBAN actual", "Nr. card actual", "IBAN nou", "Nr. card nou", "", "");
                 DataTable dtTemp1 = General.IncarcaDT("select F07503 AS \"Id\", F07509 AS \"Denumire\" from F100, F075 WHERE F10018 = F07503 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " group by F07503 , F07509 ", null);
                 DataTable dtTemp2 = General.IncarcaDT("select F07503 AS \"Id\", F07509 AS \"Denumire\" from F075 group by F07503 , F07509", null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
@@ -1285,6 +1343,9 @@ namespace WizOne.Avs
                     dtTemp2 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F075 WHERE F07503 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString(), null);
 
                 IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
+                lblDoc.Visible = true;
+                btnDocUpload.Visible = true;
+                btnDocSterge.Visible = true;
 
             }
 
@@ -1321,6 +1382,9 @@ namespace WizOne.Avs
                     txt1Act.Text = dtTemp.Rows[0][0].ToString();
                     txt2Act.Text = dtTemp.Rows[0][1].ToString();
                 }
+                lblDoc.Visible = true;
+                btnDocUpload.Visible = true;
+                btnDocSterge.Visible = true;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.DocId)
@@ -1346,6 +1410,9 @@ namespace WizOne.Avs
                 txt2Act.Text = dtTemp.Rows[0][1].ToString();
                 de1Act.Date = Convert.ToDateTime(dtTemp.Rows[0][2].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][2].ToString());
                 de2Act.Date = Convert.ToDateTime(dtTemp.Rows[0][3].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][3].ToString());
+                lblDoc.Visible = true;
+                btnDocUpload.Visible = true;
+                btnDocSterge.Visible = true;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PermisAuto)
@@ -1371,6 +1438,9 @@ namespace WizOne.Avs
                 txt2Act.Text = dtTemp.Rows[0][1].ToString();
                 de1Act.Date = Convert.ToDateTime(dtTemp.Rows[0][2].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][2].ToString());
                 de2Act.Date = Convert.ToDateTime(dtTemp.Rows[0][3].ToString().Length <= 0 ? "01/01/2100" : dtTemp.Rows[0][3].ToString());
+                lblDoc.Visible = true;
+                btnDocUpload.Visible = true;
+                btnDocSterge.Visible = true;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BonusTeamLeader)
@@ -1534,7 +1604,11 @@ namespace WizOne.Avs
                             cmbAtribute.DataBind();
                             cmbAtributeFiltru.DataSource = dtAtr;
                             cmbAtributeFiltru.DataBind();
+                            Session["AvsCereri"] = null;
+                            Session["AvsCereriCalcul"] = null;
                         }
+                        break;
+                    case "10":                //Document
                         break;
 
                 }
@@ -1686,7 +1760,7 @@ namespace WizOne.Avs
                 else
                     data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();
             }
-            if (atribut == (int)Constante.Atribute.Salariul || atribut == (int)Constante.Atribute.SporTranzactii || atribut == (int)Constante.Atribute.Sporuri)
+            if (atribut == (int)Constante.Atribute.Salariul || atribut == (int)Constante.Atribute.Sporuri)
             {
                 string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataMod.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + (dataMod.Year - 1).ToString();
                 if (Constante.tipBD == 2)
@@ -1754,7 +1828,7 @@ namespace WizOne.Avs
                 SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out dataRev);
                 if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
                         || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
-                        idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.SporTranzactii || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
+                        idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
                     if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date && val == 1)
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");             
@@ -2165,6 +2239,9 @@ namespace WizOne.Avs
             int idUrm = -99;
             idUrm = Convert.ToInt32(Dami.NextId("Avs_Cereri"));
 
+            DataSet ds = Session["AvsCereri"] as DataSet;
+            DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+
             string sql = "SELECT COUNT(*) FROM \"Avs_Circuit\" WHERE \"IdAtribut\" = " + cmbAtribute.Value.ToString();
             string strSql = "";
             DataTable dtTemp = General.IncarcaDT(sql, null);
@@ -2308,6 +2385,19 @@ namespace WizOne.Avs
                     camp2 = (Constante.tipBD == 1 ? " CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy') ");
                     break;
                 case (int)Constante.Atribute.Sporuri:
+                    for (int i = 0; i < dsCalcul.Tables["Sporuri1"].Rows.Count; i++)
+                    {
+                        camp1 += "\"Spor" + i.ToString() + "\"" + ", ";
+                        camp2 += dsCalcul.Tables["Sporuri1"].Rows[i]["F02504"].ToString() + ", ";                 
+                    }
+                    for (int i = 0; i < dsCalcul.Tables["Sporuri2"].Rows.Count; i++)
+                    {
+                        camp1 += "\"Spor" + (i + 10).ToString() + "\"" + ", ";
+                        camp2 += dsCalcul.Tables["Sporuri2"].Rows[i]["F02504"].ToString() + ", ";              
+                    }
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();          
+                    camp1 += "\"Tarife\"";
+                    camp2 += "'" + sir + "'";
                     break;
                 case (int)Constante.Atribute.TitluAcademic:
                     camp1 = "\"TitlulAcademicId\", \"TitlulAcademicNume\"";
@@ -2322,6 +2412,16 @@ namespace WizOne.Avs
                     camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "'";
                     break;
                 case (int)Constante.Atribute.SporTranzactii:
+                    for (int i = 0; i < dsCalcul.Tables["SporTran"].Rows.Count; i++)
+                    {
+                        camp1 += "\"SporTran" + i.ToString() + "\"";
+                        camp2 += dsCalcul.Tables["SporTran"].Rows[i]["Spor"].ToString();
+                        if (i < dsCalcul.Tables["SporTran"].Rows.Count - 1)
+                        {
+                            camp1 += ", ";
+                            camp2 += ", ";
+                        }
+                    }
                     break;
                 case (int)Constante.Atribute.PunctLucru:
                     camp1 = "\"PunctLucruId\", \"PunctLucruNume\"";
@@ -2336,6 +2436,24 @@ namespace WizOne.Avs
                     camp1 = "\"DataInceputCIM\", \"DataSfarsitCIM\", \"DurataContract\"";
                     camp2 = (Constante.tipBD == 1 ? " CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy') ") + ", "
                         + (Constante.tipBD == 1 ? " CONVERT(DATETIME, '" + de2Nou.Text + "', 103)" : "TO_DATE('" + de2Nou.Text + "', 'dd/mm/yyyy') ") + ", " + cmb1Nou.Value.ToString();
+                    break;
+                case (int)Constante.Atribute.Componente:
+                    for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
+                    {
+                        camp1 += "\"Comp" + (Convert.ToInt32(dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString().Substring(2)) - 1).ToString() + "\"";
+                        camp2 += dsCalcul.Tables["Componente"].Rows[i]["Suma"].ToString().Replace(',', '.');
+                        if (i < dsCalcul.Tables["Componente"].Rows.Count - 1)
+                        {
+                            camp1 += ", ";
+                            camp2 += ", ";
+                        }
+                    }     
+                    break;
+                case (int)Constante.Atribute.Tarife:
+                    sir = ds.Tables[0].Rows[0]["F10067"].ToString();                  
+        
+                    camp1 = "\"Tarife\"";
+                    camp2 = "'" + sir + "'";
                     break;
                 case (int)Constante.Atribute.NumePrenume:
                     camp1 = "\"Nume\", \"Prenume\"";
@@ -2496,6 +2614,19 @@ namespace WizOne.Avs
             sql = string.Format(sql, camp1, camp2);
             General.ExecutaNonQuery(sql, null);
 
+
+            if (Session["Avs_Cereri_Date"] != null)
+            {
+                metaCereriDate itm = Session["Avs_Cereri_Date"] as metaCereriDate;
+                if (itm.UploadedFile != null)
+                {
+                    string sqlFis = $@"INSERT INTO ""tblFisiere""(""Tabela"", ""Id"", ""EsteCerere"", ""Fisier"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
+                            SELECT @1, @2, 0, @3, @4, @5, @6, {General.CurrentDate()} " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+
+                    General.ExecutaNonQuery(sqlFis, new object[] { "Avs_Cereri", idUrm, itm.UploadedFile, itm.UploadedFileName, itm.UploadedFileExtension, Session["UserId"] });
+                }
+            }
+
             #region OLD
             //dtTemp = General.IncarcaDT(sql, null);
             //if (Constante.tipBD == 1)
@@ -2537,16 +2668,32 @@ namespace WizOne.Avs
             //}
             #endregion
 
+
             //Florin 2018.11.16
             //daca s-a modificat functia modificam si in posturi 
             //Florin 2019.03.01
             //s-a adaugat conditia cu parametrul
-            if (idStare == 3 && Dami.ValoareParam("FinalizareCuActeAditionale") == "0")
+            //Florin 2019.07.29
+            //s-a adaugat si parametrul cu id-uri excluse
+            string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
+            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idUrm + ",") >=0)))
             {
                 TrimiteInF704(idUrm);
                 if (idAtr == 2)
                     General.ModificaFunctieAngajat(F10003, Convert.ToInt32(General.Nz(cmb1Nou.Value,-99)), Convert.ToDateTime(txtDataMod.Value), new DateTime(2100,1,1));
             }
+
+
+            string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+
+            HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+            {
+                NotifAsync.TrimiteNotificare("Avs.Cereri", (int)Constante.TipNotificare.Notificare, @"SELECT *, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Avs_Cereri"" WHERE ""Id""=" + idUrm, "Avs_Cereri", idUrm, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
+            });
+
+            Session["AvsCereri"] = null;
+            Session["AvsCereriCalcul"] = null;
+            Session["Avs_Cereri_Date"] = null;
 
             //ArataMesaj("Proces finalizat cu succes!");
             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes!");
@@ -2730,12 +2877,53 @@ namespace WizOne.Avs
                         e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(lst[0]["Culoare"].ToString());
                     }
                 }
+                //if (e.DataColumn.Name == "butoaneGrid")
+                //{
+                //    int idAtr = Convert.ToInt32(e.GetValue("IdAtribut").ToString());
+                //    if (idAtr != 11 && idAtr != 15 && idAtr != 27 && idAtr != 28)
+                //        btnDetalii.Visibility = GridViewCustomButtonVisibility.Invisible;
+                //}
+                
             }
             catch (Exception ex)
             {
                 //ArataMesaj("Atentie !");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDate_CustomButtonInitialize(object sender, ASPxGridViewCustomButtonEventArgs e)
+        {
+            if (e.VisibleIndex >= 0)
+            {
+                DataRowView values = grDate.GetRow(e.VisibleIndex) as DataRowView;
+                if (values != null)
+                {
+                    int idAtr = Convert.ToInt32(values.Row["IdAtribut"].ToString());
+                    if (e.ButtonID == "btnDetalii")
+                    {
+                        if (idAtr != (int)Constante.Atribute.Sporuri && idAtr != (int)Constante.Atribute.SporTranzactii
+                            && idAtr != (int)Constante.Atribute.Componente && idAtr != (int)Constante.Atribute.Tarife)
+                        {
+                            e.Visible = DefaultBoolean.False;
+                            
+                        }
+                    }
+
+                    if (e.ButtonID == "btnArata")
+                    {     
+                        if (idAtr == (int)Constante.Atribute.BancaSalariu || idAtr == (int)Constante.Atribute.BancaGarantii
+                            || idAtr == (int)Constante.Atribute.DocId || idAtr == (int)Constante.Atribute.PermisAuto)
+                        {
+                            e.Visible = DefaultBoolean.True;
+
+                        }
+                        else
+                            e.Visible = DefaultBoolean.False;
+                    }
+
+                }
             }
         }
 
@@ -3067,6 +3255,86 @@ namespace WizOne.Avs
                             + ", " + dtCer.Rows[0]["DeptId"].ToString() + ", " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
+                    case (int)Constante.Atribute.Componente:
+                        if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
+                        {
+                            act = 1;
+                            sql100 = "UPDATE F100 SET ";
+                            for (int i = 0; i <= 9; i++)
+                            {
+                                sql100 += " F10069" + i + " = " + dtCer.Rows[0]["Comp" + i].ToString().Replace(',', '.');
+                                if (i < 9)
+                                    sql100 += ", ";
+                            }
+                            sql100 += " WHERE F10003 = " + f10003.ToString();
+                        }
+                        string camp1 = "", camp2 = "";
+                        for (int i = 0; i <= 9; i++)
+                        {
+                            camp1 += " F704" + (41 + i).ToString() + ", ";
+                            camp2 += dtCer.Rows[0]["Comp" + i].ToString().Replace(',', '.') + ", ";
+                        }
+                        sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70420, USER_NO, TIME) "
+                        + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 27, 'Componente', " + data + ", 0, 'Modificari in avans', '"
+                        + dtCer.Rows[0]["Explicatii"].ToString() + "', " + camp2 + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                        break;
+                    case (int)Constante.Atribute.Tarife:
+                        if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
+                        {
+                            act = 1;
+                            sql100 = "UPDATE F100 SET F10067 = '" + dtCer.Rows[0]["Tarife"].ToString() + "' WHERE F10003 = " + f10003.ToString();
+                        }
+                        sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70467, F70420, USER_NO, TIME) "
+                        + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 8, 'Tarife', " + data + ", 0, 'Modificari in avans', '"
+                        + dtCer.Rows[0]["Explicatii"].ToString() + "','" + dtCer.Rows[0]["Tarife"].ToString() + "' ," + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                        break;
+                    case (int)Constante.Atribute.Sporuri:
+                        if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
+                        {
+                            act = 1;
+                            sql100 = "UPDATE F100 SET ";
+                            for (int i = 50; i <= 69; i++)
+                            {
+                                sql100 += " F1006" + i + " = " + dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString();
+                                if (i < 69)
+                                    sql100 += ", ";
+                            }
+                            
+                            sql100 += ", F10067 = '" + dtCer.Rows[0]["Tarife"].ToString() + "' WHERE F10003 = " + f10003.ToString();
+                        }
+                        camp1 = ""; camp2 = "";
+                        for (int i = 50; i <= 69; i++)
+                        {
+                            camp1 += " F7046" + i + ", ";
+                            camp2 += dtCer.Rows[0]["Spor" + (i - 50).ToString()].ToString() + ", ";
+                        }
+                        sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70467, F70420, USER_NO, TIME) "
+                        + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 11, 'Sporuri', " + data + ", 0, 'Modificari in avans', '"
+                        + dtCer.Rows[0]["Explicatii"].ToString() + "', " + camp2 + "'" + dtCer.Rows[0]["Tarife"].ToString() + "'" + ", " +  act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                        break;
+                    case (int)Constante.Atribute.SporTranzactii:
+                        if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
+                        {
+                            act = 1;
+                            sql1001 = "UPDATE F1001 SET ";
+                            for (int i = 80; i <= 99; i++)
+                            {
+                                sql1001 += " F10095" + i + " = " + dtCer.Rows[0]["SporTran" + (i - 80).ToString()].ToString();
+                                if (i < 99)
+                                    sql1001 += ", ";
+                            }
+                            sql1001 += " WHERE F10003 = " + f10003.ToString();
+                        }
+                        camp1 = ""; camp2 = "";
+                        for (int i = 80; i <= 99; i++)
+                        {
+                            camp1 += " F70495" + i + ", ";
+                            camp2 += dtCer.Rows[0]["SporTran" + (i - 80).ToString()].ToString() + ", ";
+                        }
+                        sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70420, USER_NO, TIME) "
+                        + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 15, 'Spor tranzactii', " + data + ", 0, 'Modificari in avans', '"
+                        + dtCer.Rows[0]["Explicatii"].ToString() + "', " + camp2 + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                        break;
                     case (int)Constante.Atribute.NumePrenume:
                         {
                             if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
@@ -3112,6 +3380,8 @@ namespace WizOne.Avs
                                 act = 1;
                                 sql100 = "UPDATE F100 SET F10018 = " + dtCer.Rows[0]["BancaSal"].ToString() + ", F10019 = " + dtCer.Rows[0]["SucursalaSal"].ToString() + ", F10020 = '"
                                     + dtCer.Rows[0]["IBANSal"].ToString() + "', F10055 = '" + dtCer.Rows[0]["NrCard"].ToString() + "' WHERE F10003 = " + f10003.ToString();
+                                if (dtF1001 != null && dtF1001.Rows.Count > 0)
+                                    sql1001 = "UPDATE F1001 SET F1001040 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70431, F70432, F70433, F70434, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 104, 'Banca - cont salariu', " + data + ", " + dtCer.Rows[0]["BancaSal"].ToString() + ", 'Modificari in avans', '"
@@ -3126,6 +3396,8 @@ namespace WizOne.Avs
                                 act = 1;
                                 sql1001 = "UPDATE F1001 SET F1001026 = " + dtCer.Rows[0]["BancaGar"].ToString() + ", F1001027 = " + dtCer.Rows[0]["SucursalaGar"].ToString() + ", F1001028 = '"
                                     + dtCer.Rows[0]["IBANGar"].ToString() + "' WHERE F10003 = " + f10003.ToString();
+                                if (dtF1001 != null && dtF1001.Rows.Count > 0)
+                                    sql1001 = "UPDATE F1001 SET F1001041 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70435, F70436, F70437, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 105, 'Banca - cont gar.', " + data + ", " + dtCer.Rows[0]["BancaGar"].ToString() + ", 'Modificari in avans', '"
@@ -3160,7 +3432,7 @@ namespace WizOne.Avs
                             if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                             {
                                 act = 1;
-                                sql100 = "UPDATE F100 SET F100983 = " + dtCer.Rows[0]["TipID"].ToString() + ", F10052 = '" + dtCer.Rows[0]["SerieNrID"].ToString() + "', F100521 = '" + dtCer.Rows[0]["F100521"].ToString()
+                                sql100 = "UPDATE F100 SET F100983 = " + dtCer.Rows[0]["TipID"].ToString() + ", F10052 = '" + dtCer.Rows[0]["SerieNrID"].ToString() + "', F100521 = '" + dtCer.Rows[0]["IDEmisDe"].ToString()
                                     + "', F100522 = " + data5 + " WHERE F10003 = " + f10003.ToString();
                                 if (dtF1001 != null && dtF1001.Rows.Count > 0)
                                     sql1001 = "UPDATE F1001 SET F100963 = " + data6 + " WHERE F10003 = " + f10003.ToString();
@@ -3351,7 +3623,7 @@ namespace WizOne.Avs
                         SELECT A.""Id"", A.""Denumire"" 
                         FROM ""Avs_tblAtribute"" A
                         INNER JOIN ""Avs_Circuit"" B ON A.""Id""=B.""IdAtribut"" AND B.""Super1""=@1
-                        ORDER BY A.""Denumire"" ";
+                        ORDER BY ""Denumire"" ";
             }
             catch (Exception ex)
             {
@@ -3360,6 +3632,1231 @@ namespace WizOne.Avs
 
             return strSql;
 
+        }
+
+
+
+        //////////////////////////////////////////////////////////// Componente
+
+        protected void grDateComponente_DataBinding(object sender, EventArgs e)
+        {
+            try
+            {
+                IncarcaGridComp();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void IncarcaGridComp()
+        {
+            DataSet ds = Session["AvsCereri"] as DataSet;
+            DataTable dt = new DataTable();
+            if (ds == null)
+            {
+                ds = new DataSet();
+
+                dt = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F100";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+
+                dt = new DataTable();
+                dt = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F1001";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+            }
+
+
+            string sql = " select F02104, f100690 as \"Suma\" from f021 join f100 on f02104 = 4001 and f100690 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100691 as \"Suma\" from f021 join f100 on f02104 = 4002 and f100691 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100692 as \"Suma\" from f021 join f100 on f02104 = 4003 and f100692 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100693 as \"Suma\" from f021 join f100 on f02104 = 4004 and f100693 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100694 as \"Suma\" from f021 join f100 on f02104 = 4005 and f100694 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100695 as \"Suma\" from f021 join f100 on f02104 = 4006 and f100695 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100696 as \"Suma\" from f021 join f100 on f02104 = 4007 and f100696 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100697 as \"Suma\" from f021 join f100 on f02104 = 4008 and f100697 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100698 as \"Suma\" from f021 join f100 on f02104 = 4009 and f100698 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                        + "union "
+                        + "select F02104, f100699 as \"Suma\" from f021 join f100 on f02104 = 4010 and f100699 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " ORDER BY F02104";
+           
+
+            DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+            if (dsCalcul != null && dsCalcul.Tables.Contains("Componente"))
+            {
+                dt = dsCalcul.Tables["Componente"];
+            }
+            else
+            {
+                dt = General.IncarcaDT(sql, null);
+                dt.TableName = "Componente";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F02104"] };
+
+                if (dsCalcul == null)
+                    dsCalcul = new DataSet();
+
+                dsCalcul.Tables.Add(dt);
+            }
+            grDateComponente.KeyFieldName = "F02104";
+            grDateComponente.DataSource = dt;
+
+            sql = @"SELECT F02104 AS Id, CONVERT(VARCHAR, F02104) + ' - ' + F02105 as Denumire FROM F021 WHERE F02104 BETWEEN 4001 AND 4010";
+            if (Constante.tipBD == 2)
+                sql = @"SELECT F02104 AS ""Id"", F02104 || ' - ' || F02105 as ""Denumire"" FROM F021 WHERE F02104 BETWEEN 4001 AND 4010";
+            DataTable dtGrup = General.IncarcaDT(sql, null);
+            GridViewDataComboBoxColumn colComp = (grDateComponente.Columns["F02104"] as GridViewDataComboBoxColumn);
+            colComp.PropertiesComboBox.DataSource = dtGrup;
+
+            Session["AvsCereri"] = ds;
+            Session["AvsCereriCalcul"] = dsCalcul;
+
+        }
+
+
+        protected void grDateComponente_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            try
+            {
+
+                DataSet ds = Session["AvsCereri"] as DataSet;   
+                DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+
+                object[] rowComp = new object[dsCalcul.Tables["Componente"].Columns.Count];
+                int x = 0;
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
+                {
+                    if (dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateComponente.JSProperties["cpAlertMessage"] = "Codul a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
+                    {
+                        switch (col.ColumnName.ToUpper())
+                        {
+                            case "SUMA":
+                                rowComp[x] = e.NewValues[col.ColumnName];
+                                ds.Tables[0].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
+                                break;
+                            default:
+                                rowComp[x] = e.NewValues[col.ColumnName];
+                                break;
+                        }
+                        x++;
+                    }
+                    dsCalcul.Tables["Componente"].Rows.Add(rowComp);
+                }
+
+                e.Cancel = true;
+                grDateComponente.CancelEdit();
+                grDateComponente.DataSource = dsCalcul.Tables["Componente"];
+                grDateComponente.KeyFieldName = "F02104";
+
+                Session["AvsCereri"] = ds;
+                Session["AvsCereriCalcul"] = dsCalcul;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+            }
+        }
+
+        protected void grDateComponente_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                bool dublura = false;
+
+     
+                DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+
+                DataSet ds = Session["AvsCereri"] as DataSet;  
+                DataRow rowComp = dsCalcul.Tables["Componente"].Rows.Find(keys);
+
+                for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
+                {
+                    if (grDateComponente.EditingRowVisibleIndex != i && dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+
+                if (dublura)
+                {
+                    grDateComponente.JSProperties["cpAlertMessage"] = "Codul a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
+                    {
+                        if (col.ColumnName.ToUpper() == "SUMA")
+                        {
+                            col.ReadOnly = false;
+                            var edc = e.NewValues[col.ColumnName];
+                            rowComp[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                            ds.Tables[0].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
+                        }
+
+                    }
+                }
+
+                e.Cancel = true;
+                grDateComponente.CancelEdit();
+                Session["AvsCereri"] = ds;
+                Session["AvsCereriCalcul"] = dsCalcul;
+                grDateComponente.DataSource = dsCalcul.Tables["Componente"];
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+            }
+        }
+
+        protected void grDateComponente_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            var grid = sender as ASPxGridView;
+            e.Editor.ReadOnly = false;   
+            if (e.Column.FieldName == "Suma")
+            {
+                var tb = e.Editor as ASPxTextBox;
+                tb.ClientSideEvents.TextChanged = "OnTextChangedComp";
+            }
+        }
+
+
+        //////////////////////////////////////////////////////////// Tarife
+
+        protected void grDateTarife_DataBinding(object sender, EventArgs e)
+        {
+            try
+            {
+                IncarcaGridTarife();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void IncarcaGridTarife()
+        {
+
+            DataTable dt = new DataTable();
+            DataSet ds = Session["AvsCereri"] as DataSet;
+            if (ds == null)
+            {
+                ds = new DataSet();
+
+                dt = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F100";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };              
+                ds.Tables.Add(dt);
+
+                dt = new DataTable();
+                dt = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F1001";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };            
+                ds.Tables.Add(dt);
+            }
+            DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+            if (dsCalcul != null && dsCalcul.Tables.Contains("Tarife"))
+            {
+                dt = dsCalcul.Tables["Tarife"];
+            }
+            else
+            {
+                dt = new DataTable();
+                dt.Columns.Add("DenCateg", typeof(string));
+                dt.Columns.Add("DenTarif", typeof(string));
+                dt.Columns.Add("F01104", typeof(int));
+                dt.Columns.Add("F01105", typeof(int));
+
+
+
+                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                string sqlFinal = "";
+                string sql = "SELECT F01104, F01105, (SELECT TOP 1 b.F01107 FROM F011 b WHERE b.F01104 = a.F01104) AS \"DenCateg\", "
+                        + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"DenTarif\" FROM F011 a ", cond = "";
+
+                if (Constante.tipBD == 2)
+                    sql = "SELECT F01104, F01105, (SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND ROWNUM = 1) AS \"DenCateg\", "
+                        + "(SELECT b.F01107 FROM F011 b WHERE b.F01104 = a.F01104 AND b.F01105 = a.F01105) AS \"DenTarif\" FROM F011 a ";
+
+                for (int i = 0; i < sir.Length; i++)
+                    if (sir[i] != '0')
+                    {
+                        cond = "WHERE (a.F01104 = " + (i + 1).ToString() + " AND a.F01105 = " + sir[i] + ") ";
+                        sqlFinal += (sqlFinal.Length <= 0 ? "" : " UNION ") + sql + cond;
+                    }
+
+                if (sqlFinal.Length > 0)
+                    dt = General.IncarcaDT(sqlFinal, null);
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F01104"] };
+                dt.TableName = "Tarife";
+                if (dsCalcul == null)
+                    dsCalcul = new DataSet();
+
+                dsCalcul.Tables.Add(dt);
+            }
+            grDateTarife.KeyFieldName = "F01104";
+            grDateTarife.DataSource = dt;
+
+            Session["AvsCereri"] = ds;
+            Session["AvsCereriCalcul"] = dsCalcul;
+
+        }
+
+
+        protected void grDateTarife_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            try
+            {
+                int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
+                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
+                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster");
+                e.NewValues["F01104"] = cb1.Value;
+                e.NewValues["DenCateg"] = cb1.Text;
+                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["DenTarif"] as GridViewDataColumn;
+                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild");
+                e.NewValues["F01105"] = cb2.Value;
+                e.NewValues["DenTarif"] = cb2.Text;
+
+                if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
+                    return;
+
+                if (e.NewValues["F01104"].ToString() == "0")
+                {
+                    e.NewValues["F01105"] = 0;
+                    e.NewValues["DenTarif"] = "---";
+                }
+
+                DataSet ds = Session["AvsCereri"] as DataSet;
+                DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+
+                object[] row = new object[dsCalcul.Tables["Tarife"].Columns.Count];
+                int x = 0, poz = 0, val = 0;
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
+                {
+                    if (dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateTarife.JSProperties["cpAlertMessage"] = "Aceasta categorie a mai fost deja atribuita acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                    {
+                        row[x] = e.NewValues[col.ColumnName];
+                        if (col.ColumnName == "F01104")
+                            poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        if (col.ColumnName == "F01105")
+                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        x++;
+                    }
+                    dsCalcul.Tables["Tarife"].Rows.Add(row);
+                }
+
+                e.Cancel = true;
+                grDateTarife.CancelEdit();
+                grDateTarife.DataSource = dsCalcul.Tables["Tarife"];
+                grDateTarife.KeyFieldName = "F01104";
+
+                if (!dublura)
+                {
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
+
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;                  
+                }
+                Session["AvsCereri"] = ds;
+                Session["AvsCereriCalcul"] = dsCalcul;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+            }
+        }
+
+        protected void grDateTarife_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
+                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["DenCateg"] as GridViewDataColumn;
+                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster");
+                e.NewValues["F01104"] = cb1.Value;
+                e.NewValues["DenCateg"] = cb1.Text;
+                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["DenTarif"] as GridViewDataColumn;
+                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild");
+                e.NewValues["F01105"] = cb2.Value;
+                e.NewValues["DenTarif"] = cb2.Text;
+
+                if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
+                    return;
+
+                if (e.NewValues["F01104"].ToString() == "0")
+                {
+                    e.NewValues["F01105"] = 0;
+                    e.NewValues["DenTarif"] = "---";
+                }
+
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataSet ds = Session["AvsCereri"] as DataSet;
+                DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+
+                DataRow row = dsCalcul.Tables["Tarife"].Rows.Find(keys);
+                int poz = 0, val = 0;
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
+                {
+                    if (grDateTarife.EditingRowVisibleIndex != i && dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateTarife.JSProperties["cpAlertMessage"] = "Aceasta categorie a mai fost deja atribuita acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                    {
+                        col.ReadOnly = false;
+                        var edc = e.NewValues[col.ColumnName];
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                        if (col.ColumnName == "F01104")
+                            poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        if (col.ColumnName == "F01105")
+                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    }
+                }
+
+                e.Cancel = true;
+                grDateTarife.CancelEdit();
+
+                if (!dublura)
+                {
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
+
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                }
+
+                Session["AvsCereri"] = ds;
+                Session["AvsCereriCalcul"] = dsCalcul;
+                grDateTarife.DataSource = dsCalcul.Tables["Tarife"];
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+            }
+        } 
+
+       
+
+        protected void cmbMaster_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbParent = sender as ASPxComboBox;
+
+            GridViewDataItemTemplateContainer templateContainer = cmbParent.NamingContainer as GridViewDataItemTemplateContainer;
+
+            string[] param = templateContainer.ClientID.Split('_');
+            if (param[1] != "editnew")
+            {
+                cmbParent.Value = Convert.ToInt32(templateContainer.KeyValue);
+                Session["Tarife_cmbMaster"] = templateContainer.KeyValue;
+            }
+
+            ObjectDataSource cmbParentDataSource = cmbParent.NamingContainer.FindControl("adsMaster") as ObjectDataSource;
+            cmbParentDataSource.SelectParameters.Clear();
+            cmbParentDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbParent.DataBindItems();
+
+            cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged(s, e, {0}); }}", templateContainer.VisibleIndex);
+        }
+
+        protected void cmbChild_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbChild = sender as ASPxComboBox;
+
+            GridViewDataItemTemplateContainer templateContainer = cmbChild.NamingContainer as GridViewDataItemTemplateContainer;
+
+            string[] param = templateContainer.ClientID.Split('_');
+
+            cmbChild.ClientInstanceName = String.Format("cmbChild_{0}", templateContainer.VisibleIndex);
+
+            if (templateContainer.Grid.IsNewRowEditing)
+                cmbChild.ClientInstanceName = String.Format("cmbChild_new", templateContainer.VisibleIndex);
+            else
+            {
+                ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("asdChild") as ObjectDataSource;
+
+                cmbChildDataSource.SelectParameters.Clear();
+                cmbChildDataSource.SelectParameters.Add("categ", Session["Tarife_cmbMaster"].ToString());
+                cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+                cmbChild.DataBindItems();
+                //cmbChild.Value = Convert.ToInt32(param[2]);
+            }
+
+
+            cmbChild.Callback += new CallbackEventHandlerBase(cmbChild_Callback);
+
+        }
+
+        protected void cmbChild_Callback(object sender, CallbackEventArgsBase e)
+        {
+            ASPxComboBox cmbChild = sender as ASPxComboBox;
+
+            ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("asdChild") as ObjectDataSource;
+
+            cmbChildDataSource.SelectParameters.Clear();
+            cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbChild.DataBindItems();
+        }
+
+
+
+        protected void grDateSporuri1_DataBinding(object sender, EventArgs e)
+        {
+            try
+            {
+                IncarcaGrid1();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        protected void grDateSporuri2_DataBinding(object sender, EventArgs e)
+        {
+            try
+            {
+                IncarcaGrid2();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        private void IncarcaGrid1()
+        {
+
+            DataTable dt = new DataTable();
+            DataSet ds = Session["AvsCereri"] as DataSet;
+            if (ds == null)
+            {
+                ds = new DataSet();
+
+                dt = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F100";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+
+                dt = new DataTable();
+                dt = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F1001";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+            }
+            DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+            if (dsCalcul != null && dsCalcul.Tables.Contains("Sporuri1"))
+            {
+                dt = dsCalcul.Tables["Sporuri1"];
+            }
+            else
+            {
+                dt = new DataTable();
+                dt.Columns.Add("Spor", typeof(string));
+                dt.Columns.Add("Tarif", typeof(string));
+                dt.Columns.Add("F02504", typeof(int));
+                dt.Columns.Add("F01105", typeof(int));
+                dt.Columns.Add("Id", typeof(int));
+
+                string sql = "";
+                string cmp = "ISNULL";
+                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                if (Constante.tipBD == 2)
+                    cmp = "NVL";
+
+                for (int i = 0; i <= 9; i++)
+                {
+                    string val = "0";
+                    DataTable dtTemp = General.IncarcaDT("select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + ds.Tables[0].Rows[0]["F10065" + i].ToString(), null);
+                    if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
+                        val = dtTemp.Rows[0][0].ToString();
+
+
+                    //Florin 2019.06.20
+                    //am inlocuit TOP 1 cu ROWNUM
+                    if (Constante.tipBD == 1)
+                        sql += "select " + (i + 1).ToString() + " as \"Id\", f10065" + i + " as F02504, CASE WHEN f10065" + i + " = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT TOP 1 F02505 FROM F025 WHERE F02504 = F10065" + i + ") END as \"Spor\", "
+                            + " case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                            + cmp + "((select top 1 f01107 from f025 "
+                            + " left join f021 on f02510 = f02104 "
+                            + " left join f011 on f02106 = f01104 "
+                            + " where f02504 = f10065" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
+                            + " from f100 where f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
+                    else
+                        sql += "select " + (i + 1).ToString() + " as \"Id\", f10065" + i + " as F02504, CASE WHEN f10065" + i + " = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT F02505 FROM F025 WHERE F02504 = F10065" + i + " AND ROWNUM <= 1) END as \"Spor\", "
+                            + " case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                            + cmp + "((select f01107 from f025 "
+                            + " left join f021 on f02510 = f02104 "
+                            + " left join f011 on f02106 = f01104 "
+                            + " where f02504 = f10065" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " AND ROWNUM <= 1), '---')  END as \"Tarif\" "
+                            + " from f100 where f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
+
+
+                    if (i < 9)
+                        sql += " UNION ";
+                }
+
+                dt = General.IncarcaDT(sql, null);
+                dt.TableName = "Sporuri1";
+                if (dsCalcul == null)
+                    dsCalcul = new DataSet();
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
+                dsCalcul.Tables.Add(dt);
+            }
+            grDateSporuri1.KeyFieldName = "Id";
+            grDateSporuri1.DataSource = dt;
+
+            Session["AvsCereri"] = ds;
+            Session["AvsCereriCalcul"] = dsCalcul;
+
+        }
+
+        private void IncarcaGrid2()
+        {
+            DataTable dt = new DataTable();
+            DataSet ds = Session["AvsCereri"] as DataSet;
+            if (ds == null)
+            {
+                ds = new DataSet();
+
+                dt = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F100";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+
+                dt = new DataTable();
+                dt = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F1001";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+            }
+            DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+            if (dsCalcul != null && dsCalcul.Tables.Contains("Sporuri2"))
+            {
+                dt = dsCalcul.Tables["Sporuri2"];
+            }
+            else
+            {
+                dt = new DataTable();
+                dt.Columns.Add("Spor", typeof(string));
+                dt.Columns.Add("Tarif", typeof(string));
+                dt.Columns.Add("F02504", typeof(int));
+                dt.Columns.Add("F01105", typeof(int));
+                dt.Columns.Add("Id", typeof(int));
+
+                string sql = "";
+                string cmp = "ISNULL";
+                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                if (Constante.tipBD == 2)
+                    cmp = "NVL";
+                for (int i = 0; i <= 9; i++)
+                {
+                    string val = "0";
+                    DataTable dtTemp = General.IncarcaDT("select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + ds.Tables[0].Rows[0]["F10066" + i].ToString(), null);
+                    if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
+                        val = dtTemp.Rows[0][0].ToString();
+
+
+                    //Florin 2019.06.20
+                    //am inlocuit TOP 1 cu ROWNUM
+                    if (Constante.tipBD == 1)
+                        sql += "select " + (i + 11).ToString() + " as \"Id\", f10066" + i + " as F02504, CASE WHEN f10066" + i + " = 0 THEN 'Spor " + (i + 11).ToString() + "' ELSE (SELECT TOP 1 F02505 FROM F025 WHERE F02504 = F10066" + i + ") END as \"Spor\", "
+                            + " case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                            + cmp + "((select top 1 f01107 from f025 "
+                            + " left join f021 on f02510 = f02104 "
+                            + " left join f011 on f02106 = f01104 "
+                            + " where f02504 = f10066" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
+                            + " from f100 where f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
+                    else
+                        sql += "select " + (i + 11).ToString() + " as \"Id\", f10066" + i + " as F02504, CASE WHEN f10066" + i + " = 0 THEN 'Spor " + (i + 11).ToString() + "' ELSE (SELECT F02505 FROM F025 WHERE F02504 = F10066" + i + " AND ROWNUM <= 1) END as \"Spor\", "
+                            + " case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                            + cmp + "((select f01107 from f025 "
+                            + " left join f021 on f02510 = f02104 "
+                            + " left join f011 on f02106 = f01104 "
+                            + " where f02504 = f10066" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " AND ROWNUM <= 1), '---')  END as \"Tarif\" "
+                            + " from f100 where f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
+
+
+                    if (i < 9)
+                        sql += " UNION ";
+                }
+
+                dt = General.IncarcaDT(sql, null);
+                dt.TableName = "Sporuri2";
+                if (dsCalcul == null)
+                    dsCalcul = new DataSet();
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
+                dsCalcul.Tables.Add(dt);
+            }
+            grDateSporuri2.KeyFieldName = "Id";
+            grDateSporuri2.DataSource = dt;
+
+            Session["AvsCereri"] = ds;
+            Session["AvsCereriCalcul"] = dsCalcul;
+        }
+
+        protected void grDateSporuri1_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+
+                int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
+                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["Spor"] as GridViewDataColumn;
+                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster1");
+                e.NewValues["F02504"] = cb1.Value;
+                e.NewValues["Spor"] = cb1.Text;
+                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["Tarif"] as GridViewDataColumn;
+                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild1");
+                e.NewValues["F01105"] = cb2.Value;
+                e.NewValues["Tarif"] = cb2.Text;
+
+                if (e.NewValues["F02504"].ToString() == "0")
+                {
+                    e.NewValues["Spor"] = "Spor " + (grDateSporuri1.EditingRowVisibleIndex + 1).ToString();
+                    e.NewValues["Tarif"] = "---";
+                }
+
+                if (e.NewValues["Spor"] == null || e.NewValues["Spor"].ToString().Length < 0)
+                    return;
+
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataSet ds = Session["AvsCereri"] as DataSet;
+                DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+
+                DataRow row = dsCalcul.Tables["Sporuri1"].Rows.Find(keys);
+                int poz = 0, val = 0;
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Sporuri1"].Rows.Count; i++)
+                {
+                    if (grDateSporuri1.EditingRowVisibleIndex != i && e.NewValues["F02504"].ToString() != "0" && dsCalcul.Tables["Sporuri1"].Rows[i]["F02504"].ToString() == e.NewValues["F02504"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateSporuri1.JSProperties["cpAlertMessage"] = "Acest spor a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Sporuri1"].Columns)
+                    {
+                        if (col.ColumnName != "Id")
+                        {
+                            col.ReadOnly = false;
+                            row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                            if (col.ColumnName == "F02504")
+                            {
+                                DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
+                                poz = Convert.ToInt32(dt == null || dt.Rows.Count <= 0 || dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
+                            }
+                            if (col.ColumnName == "F01105")
+                                val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        }
+                    }
+                }
+
+                e.Cancel = true;
+                grDateSporuri1.CancelEdit();
+
+                if (!dublura)
+                {
+                    ds.Tables[0].Rows[0]["F10065" + (Convert.ToInt32(keys[0]) - 1).ToString()] = e.NewValues["F02504"];
+
+
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
+
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                }
+
+                Session["AvsCereri"] = ds;
+                Session["AvsCereriCalcul"] = dsCalcul;
+                grDateSporuri1.DataSource = dsCalcul.Tables["Sporuri1"];
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+            }
+        }
+
+        protected void grDateSporuri2_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+
+
+                int index = ((ASPxGridView)sender).EditingRowVisibleIndex;
+                GridViewDataColumn col1 = ((ASPxGridView)sender).Columns["Spor"] as GridViewDataColumn;
+                ASPxComboBox cb1 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col1, "cmbMaster2");
+                e.NewValues["F02504"] = cb1.Value;
+                e.NewValues["Spor"] = cb1.Text;
+                GridViewDataColumn col2 = ((ASPxGridView)sender).Columns["Tarif"] as GridViewDataColumn;
+                ASPxComboBox cb2 = (ASPxComboBox)((ASPxGridView)sender).FindEditRowCellTemplateControl(col2, "cmbChild2");
+                e.NewValues["F01105"] = cb2.Value;
+                e.NewValues["Tarif"] = cb2.Text;
+
+                if (e.NewValues["F02504"].ToString() == "0")
+                {
+                    e.NewValues["Spor"] = "Spor " + (grDateSporuri2.EditingRowVisibleIndex + 11).ToString();
+                    e.NewValues["Tarif"] = "---";
+                }
+
+                if (e.NewValues["Spor"] == null || e.NewValues["Spor"].ToString().Length < 0)
+                    return;
+
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataSet ds = Session["AvsCereri"] as DataSet;
+                DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+                int poz = 0, val = 0;
+                DataRow row = dsCalcul.Tables["Sporuri2"].Rows.Find(keys);
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Sporuri2"].Rows.Count; i++)
+                {
+                    if (grDateSporuri2.EditingRowVisibleIndex != i && e.NewValues["F02504"].ToString() != "0" && dsCalcul.Tables["Sporuri2"].Rows[i]["F02504"].ToString() == e.NewValues["F02504"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateSporuri2.JSProperties["cpAlertMessage"] = "Acest spor a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Sporuri2"].Columns)
+                    {
+                        if (col.ColumnName != "Id")
+                        {
+                            col.ReadOnly = false;
+                            row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                            if (col.ColumnName == "F02504")
+                            {
+                                DataTable dt = General.IncarcaDT("  select distinct f01104 from f025 left join f021 on f02510 = f02104 left join f011 on f02106 = f01104 where  f02504 = " + e.NewValues[col.ColumnName], null);
+                                poz = Convert.ToInt32(dt == null || dt.Rows.Count <= 0 || dt.Rows[0][0] == DBNull.Value ? "0" : dt.Rows[0][0].ToString());
+                            }
+                            if (col.ColumnName == "F01105")
+                                val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        }
+                    }
+                }
+                e.Cancel = true;
+                grDateSporuri2.CancelEdit();
+
+                if (!dublura)
+                {
+                    ds.Tables[0].Rows[0]["F10066" + (Convert.ToInt32(keys[0]) - 11).ToString()] = e.NewValues["F02504"];
+
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
+
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                }
+
+                Session["AvsCereri"] = ds;
+                Session["AvsCereriCalcul"] = dsCalcul;
+                grDateSporuri2.DataSource = dsCalcul.Tables["Sporuri2"];
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+            }
+        }
+
+
+        protected void cmbMaster1_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbParent = sender as ASPxComboBox;
+
+            GridViewDataItemTemplateContainer templateContainer = cmbParent.NamingContainer as GridViewDataItemTemplateContainer;
+
+            cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged1(s, e, {0}); }}", templateContainer.VisibleIndex);
+
+            ObjectDataSource cmbMasterDataSource = cmbParent.NamingContainer.FindControl("adsMaster1") as ObjectDataSource;
+
+            cmbMasterDataSource.SelectParameters.Clear();
+            cmbMasterDataSource.SelectParameters.Add("param", "1");
+            cmbMasterDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbParent.DataBindItems();
+
+            string[] param = templateContainer.ClientID.Split('_');
+            if (param[1] != "editnew")
+            {
+                object[] obj = grDateSporuri1.GetRowValues(grDateSporuri1.FocusedRowIndex, new string[] { "Spor", "Tarif", "F02504" }) as object[];
+                cmbParent.Value = Convert.ToInt32(obj[2].ToString());
+                Session["Sporuri_cmbMaster1"] = Convert.ToInt32(obj[2].ToString());
+            }
+
+
+        }
+
+        protected void cmbChild1_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbChild = sender as ASPxComboBox;
+
+            GridViewDataItemTemplateContainer templateContainer = cmbChild.NamingContainer as GridViewDataItemTemplateContainer;
+
+            cmbChild.ClientInstanceName = String.Format("cmbChild1_{0}", templateContainer.VisibleIndex);
+
+            if (templateContainer.Grid.IsNewRowEditing)
+                cmbChild.ClientInstanceName = String.Format("cmbChild1_new", templateContainer.VisibleIndex);
+            else
+            {
+                ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("adsChild1") as ObjectDataSource;
+
+                cmbChildDataSource.SelectParameters.Clear();
+                cmbChildDataSource.SelectParameters.Add("categ", Session["Sporuri_cmbMaster1"].ToString());
+                cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+                cmbChild.DataBindItems();
+                //cmbChild.Value = Convert.ToInt32(param[2]);
+            }
+
+            cmbChild.Callback += new CallbackEventHandlerBase(cmbChild1_Callback);
+
+        }
+
+        protected void cmbChild1_Callback(object sender, CallbackEventArgsBase e)
+        {
+            ASPxComboBox cmbChild = sender as ASPxComboBox;
+
+            ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("adsChild1") as ObjectDataSource;
+
+            cmbChildDataSource.SelectParameters.Clear();
+            cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbChild.DataBindItems();
+        }
+
+
+
+        protected void cmbMaster2_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbParent = sender as ASPxComboBox;
+
+            GridViewDataItemTemplateContainer templateContainer = cmbParent.NamingContainer as GridViewDataItemTemplateContainer;
+
+            cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged2(s, e, {0}); }}", templateContainer.VisibleIndex);
+
+            ObjectDataSource cmbMasterDataSource = cmbParent.NamingContainer.FindControl("adsMaster2") as ObjectDataSource;
+
+            cmbMasterDataSource.SelectParameters.Clear();
+            cmbMasterDataSource.SelectParameters.Add("param", "0");
+            cmbMasterDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbParent.DataBindItems();
+
+            string[] param = templateContainer.ClientID.Split('_');
+            if (param[1] != "editnew")
+            {
+                object[] obj = grDateSporuri2.GetRowValues(grDateSporuri2.FocusedRowIndex, new string[] { "Spor", "Tarif", "F02504" }) as object[];
+                cmbParent.Value = Convert.ToInt32(obj[2].ToString());
+                Session["Sporuri_cmbMaster2"] = Convert.ToInt32(obj[2].ToString());
+            }
+        }
+
+        protected void cmbChild2_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbChild = sender as ASPxComboBox;
+
+            GridViewDataItemTemplateContainer templateContainer = cmbChild.NamingContainer as GridViewDataItemTemplateContainer;
+
+            cmbChild.ClientInstanceName = String.Format("cmbChild2_{0}", templateContainer.VisibleIndex);
+
+            if (templateContainer.Grid.IsNewRowEditing)
+                cmbChild.ClientInstanceName = String.Format("cmbChild2_new", templateContainer.VisibleIndex);
+            else
+            {
+                ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("adsChild2") as ObjectDataSource;
+
+                cmbChildDataSource.SelectParameters.Clear();
+                cmbChildDataSource.SelectParameters.Add("categ", Session["Sporuri_cmbMaster2"].ToString());
+                cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+                cmbChild.DataBindItems();
+                //cmbChild.Value = Convert.ToInt32(param[2]);
+            }
+
+            cmbChild.Callback += new CallbackEventHandlerBase(cmbChild2_Callback);
+
+        }
+
+        protected void cmbChild2_Callback(object sender, CallbackEventArgsBase e)
+        {
+            ASPxComboBox cmbChild = sender as ASPxComboBox;
+
+            ObjectDataSource cmbChildDataSource = cmbChild.NamingContainer.FindControl("adsChild2") as ObjectDataSource;
+
+            cmbChildDataSource.SelectParameters.Clear();
+            cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbChild.DataBindItems();
+        }
+
+
+        protected void grDateSporTran_DataBinding(object sender, EventArgs e)
+        {
+            try
+            {
+                IncarcaGridSpTr();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void IncarcaGridSpTr()
+        {
+            DataTable dt = new DataTable();
+            DataSet ds = Session["AvsCereri"] as DataSet;
+            if (ds == null)
+            {
+                ds = new DataSet();
+
+                dt = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F100";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+
+                dt = new DataTable();
+                dt = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dt.TableName = "F1001";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
+                ds.Tables.Add(dt);
+            }
+            DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+            string sql = "";
+            if (dsCalcul != null && dsCalcul.Tables.Contains("SporTran"))
+            {
+                dt = dsCalcul.Tables["SporTran"];
+            }
+            else
+            {
+                dt = new DataTable();
+                dt.Columns.Add("Id", typeof(int));
+                dt.Columns.Add("Spor", typeof(int));
+                dt.Columns.Add("Cod", typeof(string));
+
+
+
+                string cmp = "CONVERT(VARCHAR, ";
+                if (Constante.tipBD == 2)
+                    cmp = "TO_CHAR(";
+                for (int i = 80; i <= 99; i++)
+                {
+                    sql += "select " + (i - 79).ToString() + " as \"Id\", f10095" + i + " as \"Spor\", CASE WHEN f10095" + i + " = 0 THEN 'Spor " + (i - 79).ToString() + "' ELSE " + cmp + " f10095" + i + ") END as \"Cod\" from f1001 where f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString();
+                    if (i < 99)
+                        sql += " UNION ";
+                }
+
+                dt = General.IncarcaDT(sql, null);
+                dt.Columns["Spor"].ReadOnly = false;
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
+                dt.TableName = "SporTran";
+                if (dsCalcul == null)
+                    dsCalcul = new DataSet();
+
+                dsCalcul.Tables.Add(dt);
+            }
+            grDateSporTran.KeyFieldName = "Id";
+            grDateSporTran.DataSource = dt;
+            grDateSporTran.SettingsPager.PageSize = 20;
+
+
+            sql = @"SELECT 0 as F02104, '---' AS F02105 UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
+            if (Constante.tipBD == 2)
+                sql = "SELECT 0 as F02104, '---' AS F02105 FROM DUAL UNION " + General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
+            DataTable dtSpor = General.IncarcaDT(sql, null);
+            GridViewDataComboBoxColumn colSpor = (grDateSporTran.Columns["Spor"] as GridViewDataComboBoxColumn);
+            colSpor.PropertiesComboBox.DataSource = dtSpor;
+
+            Session["AvsCereri"] = ds;
+            Session["AvsCereriCalcul"] = dsCalcul;
+
+        }
+
+
+
+        protected void grDateSporTran_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+                bool dublura = false;
+                DataSet ds = Session["AvsCereri"] as DataSet;
+                DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+
+                DataRow row = dsCalcul.Tables["SporTran"].Rows.Find(keys);
+                for (int i = 0; i < dsCalcul.Tables["SporTran"].Rows.Count; i++)
+                {
+                    if (grDateSporTran.EditingRowVisibleIndex != i && e.NewValues["Spor"].ToString() != "0" && dsCalcul.Tables["SporTran"].Rows[i]["Spor"].ToString() == e.NewValues["Spor"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateSporTran.JSProperties["cpAlertMessage"] = "Acest spor a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["SporTran"].Columns)
+                    {
+                        col.ReadOnly = false;
+                        if (col.ColumnName != "Id")
+                        {
+                            //row[col.ColumnName] = e.NewValues[col.ColumnName];
+                            if (col.ColumnName == "Cod" && e.NewValues["Spor"].ToString() == "0")
+                                row[col.ColumnName] = "Spor " + keys[0];
+                            else
+                                row[col.ColumnName] = e.NewValues["Spor"];
+                        }
+                    }
+                }
+                e.Cancel = true;
+                grDateSporTran.CancelEdit();
+
+                if (!dublura)
+                {
+                    ds.Tables[1].Rows[0]["F10095" + (79 + Convert.ToInt32(keys[0])).ToString()] = e.NewValues["Spor"];
+                }
+
+                Session["AvsCereri"] = ds;
+                Session["AvsCereriCalcul"] = dsCalcul;
+
+                grDateSporTran.DataSource = dsCalcul.Tables["SporTran"];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+        }
+
+
+        protected void btnDocUpload_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+                metaCereriDate itm = new metaCereriDate();
+                if (Session["Avs_Cereri_Date"] != null) itm = Session["Avs_Cereri_Date"] as metaCereriDate;
+
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+
+                Session["Avs_Cereri_Date"] = itm;
+
+                btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
     }

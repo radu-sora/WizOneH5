@@ -44,7 +44,7 @@ function OnItemPressed(s, e) {
     var strUrl = "";
 
     switch (nme) {
-        case "securitate":
+        case "securitate":       
             strUrl = getAbsoluteUrl + "/Pagini/Securitate.aspx?" + __reqSec;
             popGen.SetHeaderText("Securitate");
             popGen.SetContentUrl(strUrl);

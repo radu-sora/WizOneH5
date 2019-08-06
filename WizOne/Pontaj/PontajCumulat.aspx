@@ -21,15 +21,16 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+
     <table width="100%">
         <tr>
             <td align="left">
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                     <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
+                        
                         grDate.UpdateEdit();
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
@@ -54,7 +55,7 @@
                                     <td>
                                         <div style="float:left; padding-right:65px; padding-bottom:10px;">
                                             <label id="lblAnLuna" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Luna/An</label>
-                                             <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" EditFormatString="MM/yyyy" EditFormat="Custom" >
+                                             <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" >
                                                  <CalendarProperties FirstDayOfWeek="Monday" />
                                             </dx:ASPxDateEdit>
                                         </div>
@@ -114,7 +115,6 @@
                                 </tr>
                             </table>
                             
-
                         </dx:PanelContent>
                     </PanelCollection>
                 </dx:ASPxCallbackPanel>
@@ -169,5 +169,8 @@
             </td>
         </tr>		
     </table>
+
+
+
 
 </asp:Content>

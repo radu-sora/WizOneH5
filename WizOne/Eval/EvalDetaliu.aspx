@@ -122,7 +122,10 @@
         </div>
     </div>
 
-
+         <dx:ASPxCallbackPanel ID="pnlSectiune" ClientIDMode="Static" ClientInstanceName="pnlSectiune" ScrollBars="Vertical" runat="server" OnCallback="pnlSectiune_Callback" SettingsLoadingPanel-Enabled="false">
+          <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }"/>
+        <PanelCollection>
+            <dx:PanelContent>
     <table width="100%">
         <tr>
             <td align="left" />
@@ -142,10 +145,10 @@
                         }" />
                     <Image Url="../Fisiere/Imagini/Icoane/finalizare.png" />
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" OnClick="btnSave_Click" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
-                        e.ProcessOnServer = true;
+                        pnlSectiune.PerformCallback('btnSave');
                         }" />
                     <Image Url="../Fisiere/Imagini/Icoane/salveaza.png" />
                 </dx:ASPxButton>
@@ -155,10 +158,7 @@
             </td>
         </tr>
     </table>
-     <dx:ASPxCallbackPanel ID="pnlSectiune" ClientIDMode="Static" ClientInstanceName="pnlSectiune" ScrollBars="Vertical" runat="server" OnCallback="pnlSectiune_Callback" SettingsLoadingPanel-Enabled="false">
-          <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }"/>
-        <PanelCollection>
-            <dx:PanelContent>
+
                 <div style="width:100%; display:inline; text-align:left;">
                     <span id="lblEvaluat" runat="server" style="font-size:14px; margin:15px 15px 25px 0px; padding:5px; font-weight:bold; background-color:#dadada;"></span>
                 </div>

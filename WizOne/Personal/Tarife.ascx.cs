@@ -116,38 +116,64 @@ namespace WizOne.Personal
                 if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
                     return;
 
+                if (e.NewValues["F01104"].ToString() == "0")
+                {
+                    e.NewValues["F01105"] = 0;
+                    e.NewValues["DenTarif"] = "---";
+                }
+
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
 
                 object[] row = new object[dsCalcul.Tables["Tarife"].Columns.Count];
                 int x = 0, poz = 0, val = 0;
-                foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
                 {
-                    row[x] = e.NewValues[col.ColumnName];
-                    if (col.ColumnName == "F01104")
-                        poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
-                    if (col.ColumnName == "F01105")
-                        val = Convert.ToInt32(e.NewValues[col.ColumnName]);
-                    x++;
+                    if (dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
                 }
 
-                dsCalcul.Tables["Tarife"].Rows.Add(row);
+                if (dublura)
+                {
+                    grDateTarife.JSProperties["cpAlertMessage"] = "Aceasta categorie a mai fost deja atribuita acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                    {
+                        row[x] = e.NewValues[col.ColumnName];
+                        if (col.ColumnName == "F01104")
+                            poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        if (col.ColumnName == "F01105")
+                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        x++;
+                    }
+                    dsCalcul.Tables["Tarife"].Rows.Add(row);
+                }
+            
                 e.Cancel = true;
                 grDateTarife.CancelEdit();
                 grDateTarife.DataSource = dsCalcul.Tables["Tarife"];
                 grDateTarife.KeyFieldName = "F01104";
 
-                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
-                string sirNou = "";
-                for (int i = 0; i < sir.Length; i++)
-                    if (i == poz - 1)
-                        sirNou += val.ToString();
-                    else
-                        sirNou += sir[i];
+                if (!dublura)
+                {
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
 
-                ds.Tables[0].Rows[0]["F10067"] = sirNou;
-                ds.Tables[1].Rows[0]["F10067"] = sirNou;
-
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                    ds.Tables[1].Rows[0]["F10067"] = sirNou;
+                }
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
             }
@@ -174,6 +200,12 @@ namespace WizOne.Personal
                 if (e.NewValues["DenCateg"] == null || e.NewValues["DenCateg"].ToString().Length < 0)
                     return;
 
+                if (e.NewValues["F01104"].ToString() == "0")
+                {
+                    e.NewValues["F01105"] = 0;
+                    e.NewValues["DenTarif"] = "---";
+                }
+
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
@@ -183,31 +215,51 @@ namespace WizOne.Personal
 
                 DataRow row = dsCalcul.Tables["Tarife"].Rows.Find(keys);
                 int poz = 0, val = 0;
-                foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
-                {                  
-                    col.ReadOnly = false;
-                    var edc = e.NewValues[col.ColumnName];
-                    row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                    if (col.ColumnName == "F01104")
-                        poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
-                    if (col.ColumnName == "F01105")
-                        val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Tarife"].Rows.Count; i++)
+                {
+                    if (grDateTarife.EditingRowVisibleIndex != i && dsCalcul.Tables["Tarife"].Rows[i]["F01104"].ToString() == e.NewValues["F01104"].ToString())
+                    {
+                        dublura = true;
+                        break;
+                    }
+                }
+
+                if (dublura)
+                {
+                    grDateTarife.JSProperties["cpAlertMessage"] = "Aceasta categorie a mai fost deja atribuita acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Tarife"].Columns)
+                    {
+                        col.ReadOnly = false;
+                        var edc = e.NewValues[col.ColumnName];
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                        if (col.ColumnName == "F01104")
+                            poz = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                        if (col.ColumnName == "F01105")
+                            val = Convert.ToInt32(e.NewValues[col.ColumnName]);
+                    }
                 }
 
                 e.Cancel = true;
                 grDateTarife.CancelEdit();
 
-                string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
-                string sirNou = "";
-                for (int i = 0; i < sir.Length; i++)
-                    if (i == poz - 1)
-                        sirNou += val.ToString();
-                    else
-                        sirNou += sir[i];
+                if (!dublura)
+                {
+                    string sir = ds.Tables[0].Rows[0]["F10067"].ToString();
+                    string sirNou = "";
+                    for (int i = 0; i < sir.Length; i++)
+                        if (i == poz - 1)
+                            sirNou += val.ToString();
+                        else
+                            sirNou += sir[i];
 
-                ds.Tables[0].Rows[0]["F10067"] = sirNou;
-                ds.Tables[1].Rows[0]["F10067"] = sirNou;
-
+                    ds.Tables[0].Rows[0]["F10067"] = sirNou;
+                    ds.Tables[1].Rows[0]["F10067"] = sirNou;
+                }
 
                 Session["InformatiaCurentaPersonal"] = ds;
                 Session["InformatiaCurentaPersonalCalcul"] = dsCalcul;
@@ -275,7 +327,12 @@ namespace WizOne.Personal
             {
                 cmbParent.Value = Convert.ToInt32(templateContainer.KeyValue);
                 Session["Tarife_cmbMaster"] = templateContainer.KeyValue;
-            }
+            }       
+
+            ObjectDataSource cmbParentDataSource = cmbParent.NamingContainer.FindControl("adsMaster") as ObjectDataSource;
+            cmbParentDataSource.SelectParameters.Clear();
+            cmbParentDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbParent.DataBindItems();
 
             cmbParent.ClientSideEvents.SelectedIndexChanged = String.Format("function(s, e) {{ OnSelectedIndexChanged(s, e, {0}); }}", templateContainer.VisibleIndex);               
         }
@@ -298,6 +355,7 @@ namespace WizOne.Personal
 
                 cmbChildDataSource.SelectParameters.Clear();
                 cmbChildDataSource.SelectParameters.Add("categ", Session["Tarife_cmbMaster"].ToString());
+                cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
                 cmbChild.DataBindItems();
                 //cmbChild.Value = Convert.ToInt32(param[2]);
             }
@@ -315,6 +373,7 @@ namespace WizOne.Personal
 
             cmbChildDataSource.SelectParameters.Clear();
             cmbChildDataSource.SelectParameters.Add("categ", e.Parameter);
+            cmbChildDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
             cmbChild.DataBindItems();
         }
 

@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -125,7 +126,40 @@ namespace WizOne.Pagini
                 #endregion
 
                 if (!IsPostBack)
-                    IncarcaGrid();
+                {
+                    //Florin2019.07.15
+                    NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_ActeAditionale"] ?? "").ToString());
+                    if (lst.Count > 0)
+                    {
+                        if (General.Nz(lst["Cmp"], "").ToString() != "") cmbCmp.Value = Convert.ToInt32(lst["Cmp"]);
+                        if (General.Nz(lst["Tip"], "").ToString() != "")
+                        {
+                            switch (General.Nz(lst["Tip"], "").ToString())
+                            {
+                                case "9":
+                                    cmbTip.SelectedIndex = 0;
+                                    break;
+                                case "0":
+                                    cmbTip.SelectedIndex = 1;
+                                    break;
+                                case "1":
+                                    cmbTip.SelectedIndex = 2;
+                                    break;
+                            }
+                        }
+                        cmbTip_ValueChanged(null, null);
+                        if (General.Nz(lst["Ang"], "").ToString() != "") cmbAng.Value = Convert.ToInt32(lst["Ang"]);
+                        if (General.Nz(lst["Status"], "").ToString() != "") cmbStatus.Value = Convert.ToInt32(lst["Status"]);
+
+                        if (General.Nz(lst["Data"], "").ToString() != "") txtData.Value = Convert.ToDateTime(lst["Data"]);
+                        if (General.Nz(lst["Depasire"], "").ToString() != "") txtDepasire.Value = Convert.ToDateTime(lst["Depasire"]);
+
+                        Session["Filtru_ActeAditionale"] = "";
+                    }
+
+                    btnFiltru_Click(null, null);
+                    //IncarcaGrid();
+                }
                 else
                 {
                     grDate.DataSource = Session["InformatiaCurenta"];
@@ -402,7 +436,7 @@ namespace WizOne.Pagini
                 //            (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
                 //            WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
                 //            (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
-                //            ELSE TO_DATE('01-JAN-2100', 'DD-MON-YYYY') END AS ""TermenDepasire""
+                //            ELSE TO_DATE('01-JAN-2100', 'DD-MM-YYYY') END AS ""TermenDepasire""
                 //            FROM(
                 //            SELECT A.F10003, COALESCE(B.F10008, '') || ' ' || COALESCE(B.F10009, '') AS ""NumeComplet"", A.""DataModif"", 0 AS ""Candidat"",
                 //            MAX(CASE WHEN COALESCE(""CORCod"", 0) > 0 THEN 1 ELSE 0 END) AS ""CORCod"",
@@ -466,7 +500,7 @@ namespace WizOne.Pagini
                             UNION
                             SELECT CASE WHEN Motiv = 1 THEN X.DataModif ELSE '2100-01-01' END AS ColData  
                             UNION
-                            SELECT CASE WHEN Salariul = 1 THEN 
+                            SELECT CASE WHEN (Salariul = 1 OR Spor = 1) THEN 
                             (SELECT Zi FROM (
                             SELECT Zi, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as IdAuto 
                             FROM tblZile WHERE Zi>=DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays)) x
@@ -487,7 +521,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(FunctieId, 0) > 0 THEN 1 ELSE 0 END) AS FunctieId,
                             MAX(CASE WHEN COALESCE(Norma, 0) > 0 THEN 1 ELSE 0 END) AS Norma,
                             MAX(CASE WHEN COALESCE(SalariulBrut, 0) > 0 OR COALESCE(SalariulNet, 0) > 0 THEN 1 ELSE 0 END) AS Salariul,
-                            MAX(0) AS Spor,
+                            MAX(CASE WHEN (COALESCE(Spor0,0) + COALESCE(Spor1,0) +COALESCE(Spor2,0) +COALESCE(Spor3,0) +COALESCE(Spor4,0) +COALESCE(Spor5,0) +COALESCE(Spor6,0) +COALESCE(Spor7,0) +COALESCE(Spor8,0) +COALESCE(Spor9,0) +COALESCE(Spor10,0) +COALESCE(Spor11,0) +COALESCE(Spor12,0) +COALESCE(Spor13,0) +COALESCE(Spor14,0) +COALESCE(Spor15,0) +COALESCE(Spor16,0) +COALESCE(Spor17,0) +COALESCE(Spor18,0) +COALESCE(Spor19,0)) > 0 THEN 1 ELSE 0 END ) AS Spor,
                             MAX(CASE WHEN COALESCE(SubcompanieId, 0) > 0 OR COALESCE(FilialaId, 0) > 0 OR COALESCE(SectieId, 0) > 0 OR COALESCE(DeptId, 0) > 0 THEN 1 ELSE 0 END) AS Structura,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
@@ -535,7 +569,7 @@ namespace WizOne.Pagini
                             when ""Motiv"" = 1 then X.""DataModif""
                             WHEN ""Norma""=1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (X.""DataModif"" - 1) AND ""ZiSapt"" <= 5)
-                            when ""Salariul"" = 1 then
+                            when ""Salariul"" = 1 OR ""Spor"" = 1 then
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
                             WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
@@ -546,7 +580,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(""FunctieId"", 0) > 0 THEN 1 ELSE 0 END) AS ""FunctieId"",
                             MAX(CASE WHEN COALESCE(""Norma"", 0) > 0 THEN 1 ELSE 0 END) AS ""Norma"",
                             MAX(CASE WHEN COALESCE(""SalariulBrut"", 0) > 0 OR COALESCE(""SalariulNet"", 0) > 0 THEN 1 ELSE 0 END) AS ""Salariul"",
-                            MAX(0) AS ""Spor"",
+                            MAX(CASE WHEN (COALESCE(""Spor0"",0) + COALESCE(""Spor1"",0) +COALESCE(""Spor2"",0) +COALESCE(""Spor3"",0) +COALESCE(""Spor4"",0) +COALESCE(""Spor5"",0) +COALESCE(""Spor6"",0) +COALESCE(""Spor7"",0) +COALESCE(""Spor8"",0) +COALESCE(""Spor9"",0) +COALESCE(""Spor10"",0) +COALESCE(""Spor11"",0) +COALESCE(""Spor12"",0) +COALESCE(""Spor13"",0) +COALESCE(""Spor14"",0) +COALESCE(""Spor15"",0) +COALESCE(""Spor16"",0) +COALESCE(""Spor17"",0) +COALESCE(""Spor18"",0) +COALESCE(""Spor19"",0)) > 0 THEN 1 ELSE 0 END ) AS ""Spor"",
                             MAX(CASE WHEN COALESCE(""SubcompanieId"", 0) > 0 OR COALESCE(""FilialaId"", 0) > 0 OR COALESCE(""SectieId"", 0) > 0 OR COALESCE(""DeptId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Structura"",
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 2 THEN 1 ELSE 0 END) AS ""CIMDet"",
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 1 THEN 1 ELSE 0 END) AS ""CIMNed"",
@@ -766,15 +800,15 @@ namespace WizOne.Pagini
                                                 new object[] { "int", obj[0], Session["UserId"], obj[10] }),0));
 
                                                 //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
                                                 //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]).ToUpper(), Session["UserId"], General.ToDataOrcl(obj[11]).ToUpper(), obj[10] });
 
                                                 //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
                                                 //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]), Session["UserId"], General.ToDataOrcl(obj[11]), obj[10] });
 
                                                 //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},TO_DATE(@3,'DD-MON-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5,'DD-MON-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1;",
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},TO_DATE(@3,'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5,'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1;",
                                                 //new object[] { "int", obj[0], General.ToDataUniv(Convert.ToDateTime(obj[1])), Session["UserId"], General.ToDataUniv(Convert.ToDateTime(obj[11])), obj[10] });
 
                                                 //id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
@@ -930,7 +964,8 @@ namespace WizOne.Pagini
                                         //Florin 2019.05.27
 
                                         //DataTable dt = General.IncarcaDT($@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1", new object[] { obj[3] });
-                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1, ""Candidat""=0 WHERE ""IdAuto""=@1;";
+                                        //string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1, ""Candidat""=0 WHERE ""IdAuto""=@1;";
+                                        string strSql = $@"UPDATE ""Admin_NrActAd"" SET ""Semnat""=1 WHERE ""IdAuto""=@1;";
 
 
                                         //cazul cand este candidat
@@ -1468,6 +1503,24 @@ namespace WizOne.Pagini
                     MessageBox.Show("Nu exista parametrii", MessageBox.icoWarning, "Operatie anulata");
                     return;
                 }
+
+
+                //Florin 2019.07.15
+                #region Salvam Filtrul
+
+                string req = "";
+                if (cmbCmp.Value != null) req += "&Cmp=" + cmbCmp.Value;
+                if (cmbTip.Value != null) req += "&Tip=" + cmbTip.Value;
+                if (cmbAng.Value != null) req += "&Ang=" + cmbAng.Value;
+                if (cmbStatus.Value != null) req += "&Status=" + cmbStatus.Value;
+                if (txtData.Value != null) req += "&Data=" + txtData.Value;
+                if (txtDepasire.Value != null) req += "&Depasire=" + txtDepasire.Value;
+
+                Session["Filtru_ActeAditionale"] = req;
+
+                #endregion
+
+
 
                 Session["ReportId"] = Convert.ToInt32(idRap);
                 string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;

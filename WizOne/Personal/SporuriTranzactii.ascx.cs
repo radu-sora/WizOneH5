@@ -88,7 +88,7 @@ namespace WizOne.Personal
 
             sql = @"SELECT 0 as F02104, '---' AS F02105 UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
+                sql = "SELECT 0 as F02104, '---' AS F02105 FROM DUAL UNION " + General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
             DataTable dtSpor = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colSpor = (grDateSporTran.Columns["Spor"] as GridViewDataComboBoxColumn);
             colSpor.PropertiesComboBox.DataSource = dtSpor;
@@ -113,7 +113,7 @@ namespace WizOne.Personal
                 DataRow row = dsCalcul.Tables["SporTran"].Rows.Find(keys);
                 for (int i = 0; i < dsCalcul.Tables["SporTran"].Rows.Count; i++)
                 {
-                    if (dsCalcul.Tables["SporTran"].Rows[i]["Spor"].ToString() == e.NewValues["Spor"].ToString())
+                    if (grDateSporTran.EditingRowVisibleIndex != i && e.NewValues["Spor"].ToString() != "0" && dsCalcul.Tables["SporTran"].Rows[i]["Spor"].ToString() == e.NewValues["Spor"].ToString())
                     {
                         dublura = true;
                         break;

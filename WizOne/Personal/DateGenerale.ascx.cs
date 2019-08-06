@@ -38,11 +38,11 @@ namespace WizOne.Personal
                 DataTable table = new DataTable();
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                table = ds.Tables[0];
+                table = ds.Tables[0];   
 
                 //bindingSource1.DataSource = table;
                 DateGenListView.DataSource = table;
-                DateGenListView.DataBind();
+                DateGenListView.DataBind();              
 
                 ASPxRadioButton chk1 = DateGenListView.Items[0].FindControl("chkM") as ASPxRadioButton;
                 ASPxRadioButton chk2 = DateGenListView.Items[0].FindControl("chkF") as ASPxRadioButton;
@@ -56,6 +56,14 @@ namespace WizOne.Personal
                 {
                     chk1.Checked = false;
                     chk2.Checked = true;
+                }
+
+                if (!IsPostBack)
+                {
+                    ASPxComboBox cmbTimpPartialDG = DateGenListView.Items[0].FindControl("cmbTimpPartialDG") as ASPxComboBox;
+                    cmbTimpPartialDG.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
+                    cmbTimpPartialDG.DataBind();
+                    cmbTimpPartialDG.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"].ToString());
                 }
 
                 ASPxTextBox txtMarca = DateGenListView.Items[0].FindControl("txtMarca") as ASPxTextBox;
@@ -163,6 +171,11 @@ namespace WizOne.Personal
                 case "cmbStructOrg":
                     cmbStructOrg_SelectedIndexChanged();
                     break;
+                //case "cmbBir":
+                //    ds.Tables[0].Rows[0]["F100959"] = param[1];
+                //    ds.Tables[2].Rows[0]["F100959"] = param[1];
+                //    Session["InformatiaCurentaPersonal"] = ds;
+                //    break;
                 case "deDataAngDG":
                     data = param[1].Split('.');
                     ds.Tables[0].Rows[0]["F10022"] = new DateTime(Convert.ToInt32(data[2]), Convert.ToInt32(data[1]), Convert.ToInt32(data[0]));
@@ -339,7 +352,7 @@ namespace WizOne.Personal
             }
         }
 
-
+       
 
         private bool txtCNP_LostFocus()
         {
@@ -534,6 +547,88 @@ namespace WizOne.Personal
             }
         }
 
+
+
+        protected void cmbStructOrg_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbStructOrg = sender as ASPxComboBox;
+      
+            ObjectDataSource cmbStructOrgDataSource = cmbStructOrg.NamingContainer.FindControl("dsStructOrg") as ObjectDataSource;
+            cmbStructOrgDataSource.SelectParameters.Clear();
+            cmbStructOrgDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbStructOrg.DataBindItems();
+           
+        }
+
+        protected void cmbCompanie_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbCompanie = sender as ASPxComboBox;
+   
+            ObjectDataSource cmbCompanieDataSource = cmbCompanie.NamingContainer.FindControl("dsStructOrg") as ObjectDataSource;
+            cmbCompanieDataSource.SelectParameters.Clear();
+            cmbCompanieDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbCompanie.DataBindItems();
+        }
+
+        protected void cmbSubcompanie_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbSubcompanie = sender as ASPxComboBox;
+          
+            ObjectDataSource cmbSubcompanieDataSource = cmbSubcompanie.NamingContainer.FindControl("dsStructOrg") as ObjectDataSource;
+            cmbSubcompanieDataSource.SelectParameters.Clear();
+            cmbSubcompanieDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbSubcompanie.DataBindItems();
+        }
+
+        protected void cmbFiliala_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbFiliala = sender as ASPxComboBox;
+      
+            ObjectDataSource cmbFilialaDataSource = cmbFiliala.NamingContainer.FindControl("dsStructOrg") as ObjectDataSource;
+            cmbFilialaDataSource.SelectParameters.Clear();
+            cmbFilialaDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbFiliala.DataBindItems();
+        }
+
+        protected void cmbSectie_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbSectie = sender as ASPxComboBox;
+        
+            ObjectDataSource cmbSectieDataSource = cmbSectie.NamingContainer.FindControl("dsStructOrg") as ObjectDataSource;
+            cmbSectieDataSource.SelectParameters.Clear();
+            cmbSectieDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbSectie.DataBindItems();
+        }
+
+        protected void cmbDepartament_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbDepartament = sender as ASPxComboBox;
+       
+            ObjectDataSource cmbDepartamentDataSource = cmbDepartament.NamingContainer.FindControl("dsStructOrg") as ObjectDataSource;
+            cmbDepartamentDataSource.SelectParameters.Clear();
+            cmbDepartamentDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbDepartament.DataBindItems();
+        }
+
+        protected void cmbSubdept_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbSubdept = sender as ASPxComboBox;
+           
+            ObjectDataSource cmbSubdeptDataSource = cmbSubdept.NamingContainer.FindControl("dsStructOrg") as ObjectDataSource;
+            cmbSubdeptDataSource.SelectParameters.Clear();
+            cmbSubdeptDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbSubdept.DataBindItems();
+        }
+
+        protected void cmbBirouEchipa_Init(object sender, EventArgs e)
+        {
+            ASPxComboBox cmbBirouEchipa = sender as ASPxComboBox;           
+
+            ObjectDataSource cmbBirouEchipaDataSource = cmbBirouEchipa.NamingContainer.FindControl("dsStructOrg") as ObjectDataSource;
+            cmbBirouEchipaDataSource.SelectParameters.Clear();
+            cmbBirouEchipaDataSource.SelectParameters.Add("data", DateTime.Now.ToShortDateString());
+            cmbBirouEchipa.DataBindItems();
+        }
     }
 
 

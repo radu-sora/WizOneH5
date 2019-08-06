@@ -107,22 +107,40 @@ namespace WizOne.Personal
               
                 object[] rowComp = new object[dsCalcul.Tables["Componente"].Columns.Count];
                 int x = 0;
-                foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
-                {                   
-                    switch (col.ColumnName.ToUpper())
+
+                bool dublura = false;
+                for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
+                {
+                    if (dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
                     {
-                        case "SUMA":
-                            rowComp[x] = e.NewValues[col.ColumnName];
-                            ds.Tables[1].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
-                            break;
-                        default:
-                            rowComp[x] = e.NewValues[col.ColumnName];
-                            break;
-                    } 
-                    x++;
+                        dublura = true;
+                        break;
+                    }
                 }
 
-                dsCalcul.Tables["Componente"].Rows.Add(rowComp);
+                if (dublura)
+                {
+                    grDateComponente.JSProperties["cpAlertMessage"] = "Codul a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
+                    {
+                        switch (col.ColumnName.ToUpper())
+                        {
+                            case "SUMA":
+                                rowComp[x] = e.NewValues[col.ColumnName];
+                                ds.Tables[1].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
+                                break;
+                            default:
+                                rowComp[x] = e.NewValues[col.ColumnName];
+                                break;
+                        }
+                        x++;
+                    }
+                    dsCalcul.Tables["Componente"].Rows.Add(rowComp);
+                }
+            
                 e.Cancel = true;
                 grDateComponente.CancelEdit();
                 grDateComponente.DataSource = dsCalcul.Tables["Componente"];
@@ -146,21 +164,40 @@ namespace WizOne.Personal
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
 
+                bool dublura = false;
+
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataSet dsCalcul = Session["InformatiaCurentaPersonalCalcul"] as DataSet;
 
                 DataRow rowComp = dsCalcul.Tables["Componente"].Rows.Find(keys);
 
-                foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
+                for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
                 {
-                    if (col.ColumnName.ToUpper() == "SUMA")
+                    if (grDateComponente.EditingRowVisibleIndex != i &&  dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
                     {
-                        col.ReadOnly = false;
-                        var edc = e.NewValues[col.ColumnName];
-                        rowComp[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                        ds.Tables[1].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
+                        dublura = true;
+                        break;
                     }
+                }
 
+
+                if (dublura)
+                {
+                    grDateComponente.JSProperties["cpAlertMessage"] = "Codul a mai fost deja atribuit acestui angajat!";
+                }
+                else
+                {
+                    foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
+                    {
+                        if (col.ColumnName.ToUpper() == "SUMA")
+                        {
+                            col.ReadOnly = false;
+                            var edc = e.NewValues[col.ColumnName];
+                            rowComp[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+                            ds.Tables[1].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
+                        }
+
+                    }
                 }
 
                 e.Cancel = true;
@@ -179,15 +216,15 @@ namespace WizOne.Personal
         {
             var grid = sender as ASPxGridView;
             e.Editor.ReadOnly = false;
-            if (e.Column.FieldName == "F02104")
-            {              
-                e.Editor.ReadOnly = !grid.IsNewRowEditing;
-                if (!e.Editor.ReadOnly)
-                {
-                    var cb = e.Editor as ASPxComboBox;
-                    cb.ClientSideEvents.ValueChanged = "OnValueChangedComp";
-                }
-            }
+            //if (e.Column.FieldName == "F02104")
+            //{              
+            //    e.Editor.ReadOnly = !grid.IsNewRowEditing;
+            //    if (!e.Editor.ReadOnly)
+            //    {
+            //        var cb = e.Editor as ASPxComboBox;
+            //        cb.ClientSideEvents.ValueChanged = "OnValueChangedComp";
+            //    }
+            //}
 
             if (e.Column.FieldName == "Suma")
             {

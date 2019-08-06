@@ -51,104 +51,146 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Charts.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Charts.Core.18.2.7\lib\net452\DevExpress.Charts.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Charts.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Charts.Core.19.1.4\lib\net452\DevExpress.Charts.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.CodeParser.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.CodeParser.18.2.7\lib\net452\DevExpress.CodeParser.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.CodeParser.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.CodeParser.19.1.4\lib\net452\DevExpress.CodeParser.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Data.18.2.7\lib\net452\DevExpress.Data.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Data.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Data.19.1.4\lib\net452\DevExpress.Data.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.DataAccess.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.DataAccess.18.2.7\lib\net452\DevExpress.DataAccess.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.DataAccess.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.DataAccess.19.1.4\lib\net452\DevExpress.DataAccess.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Docs.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Document.Processor.18.2.7\lib\net452\DevExpress.Docs.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Docs.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Document.Processor.19.1.4\lib\net452\DevExpress.Docs.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Office.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Office.Core.18.2.7\lib\net452\DevExpress.Office.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Images.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Images.19.1.4\lib\net452\DevExpress.Images.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Pdf.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Pdf.Core.18.2.7\lib\net452\DevExpress.Pdf.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Office.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Office.Core.19.1.4\lib\net452\DevExpress.Office.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.PivotGrid.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.PivotGrid.Core.18.2.7\lib\net452\DevExpress.PivotGrid.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Pdf.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Pdf.Core.19.1.4\lib\net452\DevExpress.Pdf.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Printing.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Printing.Core.18.2.7\lib\net452\DevExpress.Printing.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Pdf.v19.1.Drawing, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Pdf.Drawing.19.1.4\lib\net452\DevExpress.Pdf.v19.1.Drawing.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.RichEdit.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.RichEdit.Core.18.2.7\lib\net452\DevExpress.RichEdit.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.PivotGrid.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.PivotGrid.Core.19.1.4\lib\net452\DevExpress.PivotGrid.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.RichEdit.v18.2.Export, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.RichEdit.Export.18.2.7\lib\net452\DevExpress.RichEdit.v18.2.Export.dll</HintPath>
+    <Reference Include="DevExpress.Printing.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Printing.Core.19.1.4\lib\net452\DevExpress.Printing.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Sparkline.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Sparkline.Core.18.2.7\lib\net452\DevExpress.Sparkline.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.RichEdit.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.RichEdit.Core.19.1.4\lib\net452\DevExpress.RichEdit.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.SpellChecker.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.SpellChecker.Core.18.2.7\lib\net452\DevExpress.SpellChecker.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.RichEdit.v19.1.Export, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.RichEdit.Export.19.1.4\lib\net452\DevExpress.RichEdit.v19.1.Export.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Spreadsheet.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Spreadsheet.Core.18.2.7\lib\net452\DevExpress.Spreadsheet.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Snap.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Snap.Core.19.1.4\lib\net452\DevExpress.Snap.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Utils.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Utils.18.2.7\lib\net452\DevExpress.Utils.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Sparkline.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Sparkline.Core.19.1.4\lib\net452\DevExpress.Sparkline.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.18.2.7\lib\net452\DevExpress.Web.ASPxHtmlEditor.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.SpellChecker.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.SpellChecker.Core.19.1.4\lib\net452\DevExpress.SpellChecker.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Web.ASPxPivotGrid.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.18.2.7\lib\net452\DevExpress.Web.ASPxPivotGrid.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Spreadsheet.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Spreadsheet.Core.19.1.4\lib\net452\DevExpress.Spreadsheet.v19.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Web.ASPxRichEdit.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.Office.18.2.7\lib\net452\DevExpress.Web.ASPxRichEdit.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Utils.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Utils.19.1.4\lib\net452\DevExpress.Utils.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Web.ASPxSpellChecker.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.18.2.7\lib\net452\DevExpress.Web.ASPxSpellChecker.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxGauges.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Visualization.19.1.4\lib\net452\DevExpress.Web.ASPxGauges.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Web.ASPxThemes.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.Themes.18.2.7\lib\net452\DevExpress.Web.ASPxThemes.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.19.1.4\lib\net452\DevExpress.Web.ASPxHtmlEditor.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Web.ASPxTreeList.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.18.2.7\lib\net452\DevExpress.Web.ASPxTreeList.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxPivotGrid.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.19.1.4\lib\net452\DevExpress.Web.ASPxPivotGrid.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Web.Resources.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.18.2.7\lib\net452\DevExpress.Web.Resources.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxRichEdit.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Office.19.1.4\lib\net452\DevExpress.Web.ASPxRichEdit.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Web.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.18.2.7\lib\net452\DevExpress.Web.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxScheduler.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Scheduler.19.1.4\lib\net452\DevExpress.Web.ASPxScheduler.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpo.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Xpo.18.2.7\lib\net452\DevExpress.Xpo.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxSpellChecker.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.19.1.4\lib\net452\DevExpress.Web.ASPxSpellChecker.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraCharts.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Charts.18.2.7\lib\net452\DevExpress.XtraCharts.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxSpreadsheet.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Office.19.1.4\lib\net452\DevExpress.Web.ASPxSpreadsheet.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraCharts.v18.2.Web, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.Visualization.18.2.7\lib\net452\DevExpress.XtraCharts.v18.2.Web.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxThemes.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Themes.19.1.4\lib\net452\DevExpress.Web.ASPxThemes.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraGauges.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Gauges.Core.18.2.7\lib\net452\DevExpress.XtraGauges.v18.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Web.ASPxTreeList.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.19.1.4\lib\net452\DevExpress.Web.ASPxTreeList.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraPivotGrid.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Win.18.2.7\lib\net452\DevExpress.XtraPivotGrid.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.Resources.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.19.1.4\lib\net452\DevExpress.Web.Resources.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraPrinting.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Win.18.2.7\lib\net452\DevExpress.XtraPrinting.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Web.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.19.1.4\lib\net452\DevExpress.Web.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraReports.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Reporting.Core.18.2.7\lib\net452\DevExpress.XtraReports.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpo.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Xpo.19.1.4\lib\net452\DevExpress.Xpo.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraReports.v18.2.Web, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.Reporting.Common.18.2.7\lib\net452\DevExpress.XtraReports.v18.2.Web.dll</HintPath>
+    <Reference Include="DevExpress.XtraBars.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.19.1.4\lib\net452\DevExpress.XtraBars.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraReports.v18.2.Web.WebForms, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Web.Reporting.18.2.7\lib\net452\DevExpress.XtraReports.v18.2.Web.WebForms.dll</HintPath>
+    <Reference Include="DevExpress.XtraCharts.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Charts.19.1.4\lib\net452\DevExpress.XtraCharts.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraTreeList.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Win.18.2.7\lib\net452\DevExpress.XtraTreeList.v18.2.dll</HintPath>
+    <Reference Include="DevExpress.XtraCharts.v19.1.Web, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Visualization.19.1.4\lib\net452\DevExpress.XtraCharts.v19.1.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.19.1.4\lib\net452\DevExpress.XtraEditors.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGauges.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Gauges.Core.19.1.4\lib\net452\DevExpress.XtraGauges.v19.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Grid.19.1.4\lib\net452\DevExpress.XtraGrid.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Navigation.19.1.4\lib\net452\DevExpress.XtraLayout.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.19.1.4\lib\net452\DevExpress.XtraNavBar.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPivotGrid.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.PivotGrid.19.1.4\lib\net452\DevExpress.XtraPivotGrid.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.Printing.19.1.4\lib\net452\DevExpress.XtraPrinting.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Reporting.Core.19.1.4\lib\net452\DevExpress.XtraReports.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v19.1.Web, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Reporting.Common.19.1.4\lib\net452\DevExpress.XtraReports.v19.1.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v19.1.Web.WebForms, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Web.Reporting.19.1.4\lib\net452\DevExpress.XtraReports.v19.1.Web.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Scheduler.Core.19.1.4\lib\net452\DevExpress.XtraScheduler.v19.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.TreeList.19.1.4\lib\net452\DevExpress.XtraTreeList.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraVerticalGrid.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.VerticalGrid.19.1.4\lib\net452\DevExpress.XtraVerticalGrid.v19.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraWizard.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Win.19.1.4\lib\net452\DevExpress.XtraWizard.v19.1.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.9.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.9.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
@@ -211,6 +253,11 @@
     </Reference>
     <Reference Include="System.DirectoryServices.AccountManagement">
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Services" />
+    <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
     </Reference>
     <Reference Include="System.Management">
       <Private>True</Private>
@@ -289,6 +336,7 @@
     <Content Include="Adev\ConfigD112.aspx" />
     <Content Include="Avs\Aprobare.aspx" />
     <Content Include="Avs\Cereri.aspx" />
+    <Content Include="Avs\Detalii.aspx" />
     <Content Include="Avs\Istoric.aspx" />
     <Content Include="Avs\IstoricModificari.aspx" />
     <Content Include="BP\Aprobare.aspx" />
@@ -327,7 +375,7 @@
     <Content Include="Eval\QuizInit.aspx" />
     <Content Include="Eval\QuizLista.aspx" />
     <Content Include="Eval\ValoriLinii.aspx" />
-    <Content Include="Fisiere\css\login2.css" />
+    <Content Include="FederationMetadata\2007-06\FederationMetadata.xml" />
     <Content Include="Fisiere\css\login.css" />
     <Content Include="Fisiere\css\style.css" />
     <Content Include="Fisiere\css\tactil.css" />
@@ -748,11 +796,10 @@
     <Content Include="Pagini\Istoric.aspx" />
     <Content Include="Pagini\IstoricModificari.aspx" />
     <Content Include="Pagini\MainPage.aspx" />
-    <Content Include="Pagini\Captcha.aspx" />
-    <Content Include="Pagini\SchimbaParolaCaptcha.aspx" />
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
     <Content Include="Personal\Calcul.ascx" />
+    <Content Include="Personal\CentreCost.ascx" />
     <Content Include="Personal\Componente.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
     <Content Include="Personal\Sporuri.ascx" />
@@ -857,6 +904,7 @@
     <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
     <Content Include="WebForm3.aspx" />
+    <Content Include="WebForm4.aspx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -882,6 +930,7 @@
     <Content Include="Generatoare\Reports\Pages\Download.ashx" />
     <Content Include="Organigrama\Diagrama.xlsm" />
     <Content Include="Organigrama\Temp\Diagrama1078.xlsm" />
+    <Content Include="LocalSTS.exe.config" />
     <None Include="NuGet.config" />
     <None Include="Properties\PublishProfiles\Publicat.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -941,6 +990,7 @@
     <Content Include="Web References\SodexoOnline\resultProductList.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
+    <Content Include="Web_adfs.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Absente\Cereri.aspx.cs">
@@ -1132,6 +1182,13 @@
     </Compile>
     <Compile Include="Avs\Cereri.aspx.designer.cs">
       <DependentUpon>Cereri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Avs\Detalii.aspx.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Avs\Detalii.aspx.designer.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Avs\Istoric.aspx.cs">
       <DependentUpon>Istoric.aspx</DependentUpon>
@@ -1537,20 +1594,6 @@
     <Compile Include="Pagini\MainPage.aspx.designer.cs">
       <DependentUpon>MainPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pagini\Captcha.aspx.cs">
-      <DependentUpon>Captcha.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pagini\Captcha.aspx.designer.cs">
-      <DependentUpon>Captcha.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.cs">
-      <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.designer.cs">
-      <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Pagini\VerificareBD.aspx.cs">
       <DependentUpon>VerificareBD.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1571,6 +1614,13 @@
     </Compile>
     <Compile Include="Personal\Calcul.ascx.designer.cs">
       <DependentUpon>Calcul.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\CentreCost.ascx.cs">
+      <DependentUpon>CentreCost.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\CentreCost.ascx.designer.cs">
+      <DependentUpon>CentreCost.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Componente.ascx.cs">
       <DependentUpon>Componente.ascx</DependentUpon>
@@ -2291,6 +2341,13 @@
     <Compile Include="WebForm3.aspx.designer.cs">
       <DependentUpon>WebForm3.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WebForm4.aspx.cs">
+      <DependentUpon>WebForm4.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm4.aspx.designer.cs">
+      <DependentUpon>WebForm4.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WebService\Detalii.aspx.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2414,7 +2471,6 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

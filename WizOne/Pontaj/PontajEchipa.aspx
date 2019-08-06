@@ -20,18 +20,31 @@
 
             var cell = grDate.GetFocusedCell();
             var col = cell.column.fieldName;
+
             if (col.length >= 4 && col.substr(0, 4) == 'Ziua') {
                 if (key == 43)              //tasta plus  
                 {
-                    if (typeof grDate.cp_ZileLucrate[f10003] != "undefined" && grDate.cp_ZileLucrate[f10003] != null && grDate.cp_ZileLucrate[f10003].indexOf(',' + col) >= 0) {
-                        pnlLoading.Show();
-                        grDate.GetRowValues(grDate.GetFocusedRowIndex(), 'IdStare', OnGetRowValues);
-                    }
-                    else {
-                        swal({
-                            title: "Conexiune pierduta !", text: "Listele nu au fost actualizate, va rugam reintrati.",
-                            type: "warning"
-                        });
+                    //Florin 2019.07.19 Begin
+                    var time = <%= Session["Ptj_DataBlocare"] %>;
+                    var luna = txtAnLuna.GetValue();
+
+                    var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
+                    var dtCurr = new Date(luna.getFullYear(), luna.getMonth(), col.replace('Ziua', ''));
+                    //alert(dtCurr);
+                    //alert(dtBlocare);
+                    //Florin 2019.07.19 End
+
+                    if (dtBlocare < dtCurr) {
+                        if (typeof grDate.cp_ZileLucrate[f10003] != "undefined" && grDate.cp_ZileLucrate[f10003] != null && grDate.cp_ZileLucrate[f10003].indexOf(',' + col) >= 0) {
+                            pnlLoading.Show();
+                            grDate.GetRowValues(grDate.GetFocusedRowIndex(), 'IdStare', OnGetRowValues);
+                        }
+                        else {
+                            swal({
+                                title: "Conexiune pierduta !", text: "Listele nu au fost actualizate, va rugam reintrati.",
+                                type: "warning"
+                            });
+                        }
                     }
                 }
             }
@@ -63,6 +76,7 @@
             cmbDept.SetValue(null);
             cmbSubDept.SetValue(null);
             cmbBirou.SetValue(null);
+            cmbCateg.SetValue(null);
 
             pnlCtl.PerformCallback('EmptyFields');
         }
@@ -110,6 +124,7 @@
         //}
 
         function OnModif(s, e) {
+            debugger;
             var texts = "";
             $('#<% =pnlValuri.ID %> input[type="text"]').each(function () {
                 texts += ";" + $(this).attr('id') + "=" + $(this).val();
@@ -217,7 +232,7 @@
                                     <td>
                                         <div style="float:left; padding-right:65px; padding-bottom:10px;">
                                             <label id="lblAnLuna" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Luna/An</label>
-                                             <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
+                                             <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
                                                  <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtAnLuna'); }" />
                                                  <CalendarProperties FirstDayOfWeek="Monday" />
                                             </dx:ASPxDateEdit>

@@ -912,7 +912,7 @@ namespace WizOne.Pontaj
                     ////{
                     for (int i = 0; i < dtModif.Rows.Count; i++)
                     {
-                        if (dtModif.Rows[i]["CuloareValoare"].ToString() != Constante.CuloareModificatManual)
+                        if (Dami.ValoareParam("RecalculCuloare", "0") == "0")
                         {
                             //Florin 2018.05.15
                             //daca este absenta de tip zi nu mai recalculam
@@ -928,6 +928,27 @@ namespace WizOne.Pontaj
 
                                 FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
                                 FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+                            }
+                        }
+                        else
+                        {
+                            if (dtModif.Rows[i]["CuloareValoare"].ToString() != "#e6c8fa" /*|| ctr*/)
+                            {
+                                //Florin 2018.05.15
+                                //daca este absenta de tip zi nu mai recalculam
+                                if (lst.Where(p => p.F10003 == Convert.ToInt32(dtModif.Rows[i]["F10003"]) && p.Ziua == Convert.ToDateTime(dtModif.Rows[i]["Ziua"])).Count() == 0)
+                                {
+                                    string golesteVal = Dami.ValoareParam("GolesteVal");
+                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+
+                                    //Florin 2019.05.02
+                                    FunctiiCeasuri.Calcul.h5 = true;
+
+                                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
+                                    FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+                                }
                             }
                         }
                     }

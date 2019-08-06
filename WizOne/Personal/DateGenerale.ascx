@@ -182,12 +182,13 @@
  			      <fieldset >
 				    <legend id="lgAng" runat="server" class="legend-font-size">Date despre angajare</legend>			
 				    <table width="60%">	
+
 					<tr>				
 						<td >
 							<dx:ASPxLabel  ID="lblStructOrg" runat="server"  Text="Alege structura organizatorica" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsStructOrg"  ID="cmbStructOrg" runat="server"   DropDownStyle="DropDown"  ValueField="IdAuto" ValueType="System.Int32"   AutoPostBack="true">
+							<dx:ASPxComboBox DataSourceID="dsStructOrg"  ID="cmbStructOrg" runat="server"   DropDownStyle="DropDown"  ValueField="IdAuto" ValueType="System.Int32"   AutoPostBack="false" OnInit="cmbStructOrg_Init">
                                 <Columns>
                                     <dx:ListBoxColumn FieldName="F00305" Caption="Subcompanie" Width="130px" />
                                     <dx:ListBoxColumn FieldName="F00304" Caption="IdSubcompanie" Width="130px" Visible="false"/>
@@ -212,7 +213,7 @@
 							<dx:ASPxLabel  ID="lblCompanie" runat="server"  Text="Companie" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F10002") %>' ID="cmbCompanie" runat="server" DropDownStyle="DropDown" TextField="F00204" ValueField="F00202" ValueType="System.Int32" ></dx:ASPxComboBox >
+							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F10002") %>' ID="cmbCompanie" runat="server" DropDownStyle="DropDown" TextField="F00204" ValueField="F00202" ValueType="System.Int32" OnInit="cmbCompanie_Init"></dx:ASPxComboBox >
 						</td>
 					</tr>	
 					<tr>
@@ -220,7 +221,7 @@
 							<dx:ASPxLabel  ID="lblSubcompanie" runat="server"  Text="Subcompanie"></dx:ASPxLabel >	
 						</td>
 						<td>			
-							<dx:ASPxComboBox DataSourceID="dsStructOrg"  Enabled="false" Value='<%#Eval("F10004") %>' ID="cmbSubcompanie" runat="server" DropDownStyle="DropDown" TextField="F00305" ValueField="F00304" ValueType="System.Int32"></dx:ASPxComboBox >					
+							<dx:ASPxComboBox DataSourceID="dsStructOrg"  Enabled="false" Value='<%#Eval("F10004") %>' ID="cmbSubcompanie" runat="server" DropDownStyle="DropDown" TextField="F00305" ValueField="F00304" ValueType="System.Int32" OnInit="cmbSubcompanie_Init"></dx:ASPxComboBox >					
 						</td>
 					</tr>
 					<tr>				
@@ -228,7 +229,7 @@
 							<dx:ASPxLabel  ID="lblFiliala" runat="server" Text="Filiala"></dx:ASPxLabel >	
 						</td>
 						<td>		
-							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false"  Value='<%#Eval("F10005") %>' ID="cmbFiliala" runat="server" DropDownStyle="DropDown" TextField="F00406" ValueField="F00405" ValueType="System.Int32"></dx:ASPxComboBox >						
+							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false"  Value='<%#Eval("F10005") %>' ID="cmbFiliala" runat="server" DropDownStyle="DropDown" TextField="F00406" ValueField="F00405" ValueType="System.Int32" OnInit="cmbFiliala_Init"></dx:ASPxComboBox >						
 						</td>
 					</tr>
 					<tr>				
@@ -236,7 +237,7 @@
 							<dx:ASPxLabel  ID="lblSectie" runat="server"  Text="Sectie"></dx:ASPxLabel >	
 						</td>
 						<td>	
-							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F10006") %>' ID="cmbSectie" runat="server" DropDownStyle="DropDown" TextField="F00507" ValueField="F00506" ValueType="System.Int32"></dx:ASPxComboBox >										
+							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F10006") %>' ID="cmbSectie" runat="server" DropDownStyle="DropDown" TextField="F00507" ValueField="F00506" ValueType="System.Int32" OnInit="cmbSectie_Init"></dx:ASPxComboBox >										
 						</td>
 					</tr>
 					<tr>				
@@ -244,7 +245,7 @@
 							<dx:ASPxLabel  ID="lblDepartament" runat="server"  Text="Departament"></dx:ASPxLabel >	
 						</td>
 						<td>	
-							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F10007") %>' ID="cmbDepartament" runat="server" DropDownStyle="DropDown"  TextField="F00608" ValueField="F00607" ValueType="System.Int32"></dx:ASPxComboBox >										
+							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F10007") %>' ID="cmbDepartament" runat="server" DropDownStyle="DropDown"  TextField="F00608" ValueField="F00607" ValueType="System.Int32" OnInit="cmbDepartament_Init"></dx:ASPxComboBox >										
 						</td>
 					</tr>
                     
@@ -253,7 +254,7 @@
 							<dx:ASPxLabel  ID="lblSubdept" runat="server"  Text="Subdepartament"></dx:ASPxLabel >	
 						</td>
 						<td>	
-							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F100958") %>' ID="cmbSubdept" runat="server" DropDownStyle="DropDown"  TextField="F00709" ValueField="F00708" ValueType="System.Int32"></dx:ASPxComboBox >										
+							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F100958") %>' ID="cmbSubdept" runat="server" DropDownStyle="DropDown"  TextField="F00709" ValueField="F00708" ValueType="System.Int32" OnInit="cmbSubdept_Init"></dx:ASPxComboBox >										
 						</td>
 					</tr>    
 					<tr>				
@@ -261,7 +262,7 @@
 							<dx:ASPxLabel  ID="lblBirouEchipa" runat="server"  Text="Birou/Echipa"></dx:ASPxLabel >	
 						</td>
 						<td>	
-							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F100959") %>' ID="cmbBirouEchipa" runat="server" DropDownStyle="DropDown"  TextField="F00810" ValueField="F00809" ValueType="System.Int32"></dx:ASPxComboBox >										
+							<dx:ASPxComboBox DataSourceID="dsStructOrg" Enabled="false" Value='<%#Eval("F100959") %>' ID="cmbBirouEchipa" runat="server" DropDownStyle="DropDown"  TextField="F00810" ValueField="F00809" ValueType="System.Int32" OnInit="cmbBirouEchipa_Init"></dx:ASPxComboBox >										
 						</td>
 					</tr> 
 					<tr>				
@@ -301,7 +302,7 @@
 							<dx:ASPxLabel  ID="lblTimpPartial"  Width="100" runat="server"  Text="Timp partial" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox DataSourceID="dsTP"  Value='<%#Eval("F10043") %>' ID="cmbTimpPartialDG"  runat="server" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
+							<dx:ASPxComboBox   ID="cmbTimpPartialDG"  runat="server" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
                                 <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerDG(s); }" />
 							</dx:ASPxComboBox>
 						</td>
@@ -326,10 +327,13 @@
 							</dx:ASPxComboBox >
 						</td>
 					</tr>                                                                  
-				    </table>	
-                    <asp:ObjectDataSource runat="server" ID="dsStructOrg" TypeName="WizOne.Module.General" SelectMethod="GetStructOrg"/>   	
-                    <asp:ObjectDataSource runat="server" ID="dsMP" TypeName="WizOne.Module.General" SelectMethod="GetMotivPlecare"/> 
-                    <asp:ObjectDataSource runat="server" ID="dsTP" TypeName="WizOne.Module.General" SelectMethod="GetTimpPartial"/>
+				    </table>	  	
+                    <asp:ObjectDataSource runat="server" ID="dsStructOrg" TypeName="WizOne.Module.General" SelectMethod="GetStructOrgModifGen" > 
+                        <SelectParameters>
+                             <asp:Parameter Name="data"  Type="String" />
+                        </SelectParameters>
+                    </asp:ObjectDataSource>                       
+                    <asp:ObjectDataSource runat="server" ID="dsMP" TypeName="WizOne.Module.General" SelectMethod="GetMotivPlecare"/>                    
                     <asp:ObjectDataSource runat="server" ID="dsN" TypeName="WizOne.Module.General" SelectMethod="GetNorma"/>
                     <asp:ObjectDataSource runat="server" ID="dsCategAng_61"  TypeName="WizOne.Module.General" SelectMethod="GetCategAng_61" />
 			      </fieldset>                  

@@ -27,7 +27,7 @@
 							        <dx:ASPxLabel  ID="lblIBANSal"  Width="100"  runat="server"  Text="IBAN"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxTextBox  ID="txtIBANSal" Width="250"  runat="server" Text='<%# Eval("F10020") %>' AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtIBANSal" Width="250" TabIndex="1"  runat="server" Text='<%# Eval("F10020") %>' AutoPostBack="false" >
                                         <ClientSideEvents TextChanged="function(s,e) { ValidareIBAN(s,e); }" />
 							        </dx:ASPxTextBox>
 						        </td>
@@ -51,7 +51,7 @@
 							        <dx:ASPxLabel  ID="lblNrCard" Width="100" runat="server"  Text="Nr. card"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxTextBox  ID="txtNrCard" Width="250"  runat="server" Text='<%# Eval("F10055") %>' AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtNrCard" Width="250"  runat="server" TabIndex="2" Text='<%# Eval("F10055") %>' AutoPostBack="false" >
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -60,7 +60,7 @@
 							        <dx:ASPxLabel  ID="lblBancaSal" Width="100" runat="server"  Text="Banca" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsBanca" Width="250"  Value='<%#Eval("F10018") %>' ID="cmbBancaSal"   runat="server" DropDownStyle="DropDown"  TextField="F07509" ValueField="F07503" AutoPostBack="false"  ValueType="System.Int32" >
+							        <dx:ASPxComboBox DataSourceID="dsBanca" Width="250"  Value='<%#Eval("F10018") %>' ID="cmbBancaSal" TabIndex="3"  runat="server" DropDownStyle="DropDown"  TextField="F07509" ValueField="F07503" AutoPostBack="false"  ValueType="System.Int32" >
 							            <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerBanca(s); }" />
                                     </dx:ASPxComboBox>
 						        </td>
@@ -70,8 +70,18 @@
 							        <dx:ASPxLabel  ID="lblSucursalaSal" Width="100" runat="server"  Text="Sucursala" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox Width="250" Value='<%#Eval("F10019") %>' ID="cmbSucSal"   runat="server" DropDownStyle="DropDown"  TextField="F07505" ValueField="F07504" AutoPostBack="false"  ValueType="System.Int32" >
+							        <dx:ASPxComboBox Width="250" Value='<%#Eval("F10019") %>' ID="cmbSucSal" TabIndex="4"  runat="server" DropDownStyle="DropDown"  TextField="F07505" ValueField="F07504" AutoPostBack="false"  ValueType="System.Int32" >
 							        </dx:ASPxComboBox>
+						        </td>
+					        </tr>
+					        <tr>
+						        <td >		
+							        <dx:ASPxLabel  ID="lblDataModifSal" runat="server"  Text="Data modificarii"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataModifSal" ClientInstanceName="deDataModifSal" Width="100" runat="server" TabIndex="5" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001040") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
 						        </td>
 					        </tr>
 				        </table>
@@ -85,7 +95,7 @@
 							        <dx:ASPxLabel  ID="lblIBANGar"  Width="100"  runat="server"  Text="IBAN"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxTextBox  ID="txtIBANGar" Width="250"  runat="server" Text='<%# Eval("F1001028") %>' AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtIBANGar" Width="250"  runat="server" Text='<%# Eval("F1001028") %>' TabIndex="6" AutoPostBack="false" >
                                         <ClientSideEvents TextChanged="function(s,e) { ValidareIBAN(s,e); }" />
 							        </dx:ASPxTextBox>
 						        </td>
@@ -109,7 +119,7 @@
 							        <dx:ASPxLabel  ID="lblBancaGar" Width="100" runat="server"  Text="Banca" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsBanca" Width="250"  Value='<%#Eval("F1001026") %>' ID="cmbBancaGar"   runat="server" DropDownStyle="DropDown"  TextField="F07509" ValueField="F07503" AutoPostBack="false"  ValueType="System.Int32" >
+							        <dx:ASPxComboBox DataSourceID="dsBanca" Width="250"  Value='<%#Eval("F1001026") %>' ID="cmbBancaGar" TabIndex="7"  runat="server" DropDownStyle="DropDown"  TextField="F07509" ValueField="F07503" AutoPostBack="false"  ValueType="System.Int32" >
 							            <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerBanca(s); }" />
                                     </dx:ASPxComboBox>
 						        </td>
@@ -119,12 +129,57 @@
 							        <dx:ASPxLabel  ID="lblSucursalaGar" Width="100" runat="server"  Text="Sucursala" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox Width="250" Value='<%#Eval("F1001027") %>' ID="cmbSucGar"   runat="server" DropDownStyle="DropDown"  TextField="F07505" ValueField="F07504" AutoPostBack="false"  ValueType="System.Int32" >
+							        <dx:ASPxComboBox Width="250" Value='<%#Eval("F1001027") %>' ID="cmbSucGar" TabIndex="8"  runat="server" DropDownStyle="DropDown"  TextField="F07505" ValueField="F07504" AutoPostBack="false"  ValueType="System.Int32" >
 							        </dx:ASPxComboBox>
+						        </td>
+					        </tr>
+					        <tr>
+						        <td >		
+							        <dx:ASPxLabel  ID="lblDataModifGar" runat="server"  Text="Data modificarii"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataModifGar" ClientInstanceName="deDataModifGar" Width="100" runat="server" TabIndex="9" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001041") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
 						        </td>
 					        </tr>
 				        </table>
                       <asp:ObjectDataSource runat="server" ID="ObjectDataSource1" TypeName="WizOne.Module.General" SelectMethod="GetBanci"/>
+			        </fieldset>
+			      <fieldset >
+				        <legend class="legend-font-size">Cont tichete</legend>
+				        <table width="60%">	
+					        <tr>				
+						        <td>		
+							        <dx:ASPxLabel  ID="lblIBANTichete"  Width="100"  runat="server"  Text="IBAN"></dx:ASPxLabel >	
+						        </td>
+						        <td>
+							        <dx:ASPxTextBox  ID="txtIBANTichete" Width="250"  runat="server" Text='<%# Eval("F1001121") %>' TabIndex="10" AutoPostBack="false" >
+                                        <ClientSideEvents TextChanged="function(s,e) { ValidareIBAN(s,e); }" />
+							        </dx:ASPxTextBox>
+						        </td>      
+					        </tr>		
+					        <tr>
+						        <td >		
+							        <dx:ASPxLabel  ID="lblDataIncTichete" runat="server"  Text="Data inceput valabilitate"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataIncTichete" ClientInstanceName="deDataIncTichete" Width="100" runat="server" TabIndex="11" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001122") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
+						        </td>
+					        </tr>
+					        <tr>
+						        <td >		
+							        <dx:ASPxLabel  ID="lblDataSfTichete" runat="server"  Text="Data sfarsit valabilitate"></dx:ASPxLabel >	
+						        </td>
+						        <td>			
+							        <dx:ASPxDateEdit  ID="deDataSfTichete" ClientInstanceName="deDataSfTichete" Width="100" runat="server" TabIndex="12" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F1001123") %>'  AutoPostBack="false"  >
+                                        <CalendarProperties FirstDayOfWeek="Monday" />
+							        </dx:ASPxDateEdit>					
+						        </td>
+					        </tr>
+				        </table>
 			        </fieldset>
                  </td> 
                 </tr>      

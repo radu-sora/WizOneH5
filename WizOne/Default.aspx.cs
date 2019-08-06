@@ -14,6 +14,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Diagnostics;
 using ProceseSec;
 using System.Text.RegularExpressions;
+using System.Security.Claims;
 
 namespace WizOne
 {
@@ -59,16 +60,56 @@ namespace WizOne
                 Session["IdLimba"] = Dami.ValoareParam("LimbaStart");
                 if (General.VarSession("IdLimba").ToString() == "") Session["IdLimba"] = "RO";
                 if (Dami.ValoareParam("LinkParolaUitata") != "" && Dami.ValoareParam("LinkParolaUitata") == "0") lnkUitat.Visible = false;
-                
-                string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
-                if (tipVerif == "3" || tipVerif == "4")
-                {
-                    string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
-                    int poz = usrTMP.IndexOf(@"\");
-                    if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
 
-                    Verifica(usrTMP, "");
+
+                //Florin 2019.07.23
+                string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
+                switch (tipVerif)
+                {
+                    case "3":
+                    case "4":
+                        {
+                            string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
+                            int poz = usrTMP.IndexOf(@"\");
+                            if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
+
+                            Verifica(usrTMP, "");
+                        }
+                        break;
+                    case "5":
+                        {
+                            if (Page.User.Identity.IsAuthenticated)
+                            {
+                                var claimsPrincipal = Page.User as ClaimsPrincipal;
+
+                                if (claimsPrincipal != null)
+                                {
+                                    //var q1 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.GivenName).Select(c => c.Value).SingleOrDefault();
+                                    //var upn = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
+                                    //var q3 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+                                    //var q4 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+                                    //var q5 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
+
+                                    string usrTMP = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
+                                    int poz = usrTMP.IndexOf("@");
+                                    if (poz > 0) usrTMP = usrTMP.Remove(poz);
+                                    //MessageBox.Show(usrTMP);
+                                    Verifica(usrTMP, "");
+                                }
+                            }
+                        }
+                        break;
                 }
+
+                //string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
+                //if (tipVerif == "3" || tipVerif == "4")
+                //{
+                //    string usrTMP = System.Web.HttpContext.Current.User.Identity.Name.ToString();
+                //    int poz = usrTMP.IndexOf(@"\");
+                //    if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
+
+                //    Verifica(usrTMP, "");
+                //}
             }
             catch (Exception ex)
             {
@@ -446,6 +487,8 @@ namespace WizOne
 
             try
             {
+                //Florin 2019.07.23
+                //s-a adaugat conditia cu tip 5
                 string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
                 if (tipVerif == "") tipVerif = "1";
 
@@ -453,6 +496,7 @@ namespace WizOne
                 {
                     case "1":
                     case "3":
+                    case "5":
                         {
                             // Mihnea - modificare pt implementare deblocare dupa x minute
                             string strsql = @"SELECT F10003,F70103, F70114, ""Mail"", ""IdLimba"" ,
@@ -495,7 +539,7 @@ namespace WizOne
 
                                     //ProceseSec.CriptDecript sec = new ProceseSec.CriptDecript();
                                     //if (sec.EncryptString("WizOne-2015",entUsr.FirstOrDefault().F70103.ToString(),2) != parola) return 1;
-                                    if (tipVerif == "3")
+                                    if (tipVerif == "3" || tipVerif == "5")
                                     {
                                         stare = "3" + idLimba;
                                     }
@@ -713,6 +757,19 @@ namespace WizOne
                 Session["MP_AreContract"] = "0";
                 Session["MP_DataSfarsit36"] = "01/01/2100";
 
+
+                //Florin 2019.06.21
+                Session["EsteTactil"] = "0";
+                Session["TimeOutSecunde"] = 0;
+
+                //Florin 2019.07.15
+                Session["Filtru_ActeAditionale"] = "";
+
+                //Florin 2019.07.17
+                Session["Filtru_CereriAbs"] = "";
+
+                //Florin 2019.07.19
+                Session["Ptj_DataBlocare"] = "22001231";
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";

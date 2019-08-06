@@ -244,7 +244,7 @@
         <dx:ASPxPopupControl ID="popGen" runat="server" AllowDragging="True" AllowResize="True"
             CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Middle"
             EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="WindowCenter"
-            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="900px" MinHeight="500px"
+            PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="False" Width="900px" MinHeight="600px"
             Height="100%" FooterText=" " CloseOnEscape="false" ClientInstanceName="popGen" EnableHierarchyRecreation="True">
                 <ClientSideEvents CloseUp="function(s, e) { s.PerformCallback(); }" />
                 <ContentCollection>
@@ -345,6 +345,80 @@
         };
 
         accountForm.init();
+
+        /* Timer control */
+        var timerControl = {
+            timerId: null,
+            idleTime: 0,
+            /* Interface */
+            endTime: 0, // In seconds
+            onTime: null,
+            onEndTime: null,
+            init: function (endTime, onTime, onEndTime) {
+                var self = this;
+
+                self.endTime = endTime || self.endTime || 30; // Default to 30 seconds
+                self.onTime = onTime || self.onTime;
+                self.onEndTime = onEndTime || self.onEndTime;
+                $(document).on('click.timercontrol mousemove.timercontrol keypress.timercontrol', function () {
+                    self.onResetIdleTime(self);
+                });
+            },
+            start: function () {
+                var self = this;
+
+                self.timerId = setInterval(function () {
+                    self.onCheckIdleTime(self);
+                }, 1000);
+            },
+            stop: function () {
+                var self = this;
+
+                clearInterval(self.timerId);
+            },
+            reset: function () {
+                var self = this;
+
+                self.onResetIdleTime(self);
+            },
+            release: function () {
+                var self = this;
+
+                self.stop();
+                $(document).off('click.timercontrol mousemove.timercontrol keypress.timercontrol');
+            },
+            /* End interface */
+            onResetIdleTime: function (timer) {
+                timer.idleTime = 0;
+            },
+            onCheckIdleTime: function (timer) {                
+                timer.idleTime++;
+
+                if (timer.endTime && timer.onTime) {
+                    timer.onTime(timer.endTime - timer.idleTime);
+                }
+
+                if (timer.endTime && timer.onEndTime && timer.idleTime >= timer.endTime) {
+                    timer.onResetIdleTime(timer);
+                    timer.onEndTime();
+                }
+            }
+        };
+
+        var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
+
+        if (timeOutSecunde) {
+            timerControl.init(timeOutSecunde, function (timeLeft) {
+                if (timeLeft < 10) {
+                    $("#spanTimeLeft").text(timeLeft).parent().addClass('text-danger');
+                } else {
+                    $("#spanTimeLeft").text(timeLeft).parent().removeClass('text-danger');
+                }
+            }, function () {
+                window.location = "/DefaultTactil.aspx";
+            });
+            timerControl.start();
+        }
 
         /* General */
         var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';  

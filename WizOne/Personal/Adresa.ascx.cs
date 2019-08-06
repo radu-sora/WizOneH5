@@ -19,6 +19,9 @@ namespace WizOne.Personal
             {
                 grDateAdresa.DataBind();
 
+                if (!IsPostBack)
+                    Session["MP_CautaAdresa"] = null;
+
                 btnCauta.Visibility = GridViewCustomButtonVisibility.EditableRow;
 
                 foreach (dynamic c in grDateAdresa.Columns)
@@ -34,6 +37,12 @@ namespace WizOne.Personal
                 grDateAdresa.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
                 grDateAdresa.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
                 grDateAdresa.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+
+                DataTable dtAdr = Session["MP_CautaAdresa"] as DataTable;
+                grDateCautaAdresa.DataSource = dtAdr;
+                grDateCautaAdresa.KeyFieldName = "IdAuto";
+                grDateCautaAdresa.DataBind();
+                
             }
             catch (Exception ex)
             {
@@ -408,9 +417,11 @@ namespace WizOne.Personal
                                 return;
                             }
 
-                            grDateCautaAdresa.DataSource = GetAdresa(txtArt.Text, txtLoc.Text);
+                            DataTable dtAdr = GetAdresa(txtArt.Text, txtLoc.Text);
+                            grDateCautaAdresa.DataSource = dtAdr;
                             grDateCautaAdresa.KeyFieldName = "IdAuto";
                             grDateCautaAdresa.DataBind();
+                            Session["MP_CautaAdresa"] = dtAdr;
                         }
                         break;
                 }

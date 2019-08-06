@@ -13,6 +13,15 @@ namespace WizOne.Eval {
     public partial class EvalDetaliu {
         
         /// <summary>
+        /// pnlSectiune control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlSectiune;
+        
+        /// <summary>
         /// btnLuatCunostinta control.
         /// </summary>
         /// <remarks>
@@ -56,15 +65,6 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
-        /// <summary>
-        /// pnlSectiune control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlSectiune;
         
         /// <summary>
         /// lblEvaluat control.

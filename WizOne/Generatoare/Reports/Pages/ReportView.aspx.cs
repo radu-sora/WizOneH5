@@ -22,7 +22,6 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 using WizOne.Generatoare.Reports.Models;
-using WizOne.Module;
 
 namespace WizOne.Generatoare.Reports.Pages
 {
@@ -312,10 +311,6 @@ namespace WizOne.Generatoare.Reports.Pages
                     ToolbarType = ConfigurationManager.AppSettings["EsteTactil"] == "true" ? // Temp fix until this param can be stored at user group level.
                         reportGroupUser?.ToolbarType ?? 0 : (short)0; // 0 - full items, 1 - only Print, Customize layout & Exit
                     ExportOptions = reportGroupUser?.ExportOptions ?? "*"; // "pdf,image[...]" or "*" to display all options.
-
-                    //Radu 18.06.2019
-                    if (ConfigurationManager.AppSettings["EsteTactil"] == "true")
-                        Session["EsteTactil"] = 1;
 
                     if (report.ReportTypeId == 3) // Cube
                     {
@@ -915,7 +910,6 @@ namespace WizOne.Generatoare.Reports.Pages
                 if (!IsCallback)
                     Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");
             }
-        }
-
+        }       
     }
 }

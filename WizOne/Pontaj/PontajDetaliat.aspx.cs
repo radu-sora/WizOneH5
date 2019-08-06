@@ -410,6 +410,21 @@ namespace WizOne.Pontaj
                 IncarcaGrid();
                 grCC.DataSource = null;
                 grCC.DataBind();
+
+                //Florin 2019.07.19
+                int idRol = Convert.ToInt32(cmbRolAng.Value);
+                if (Convert.ToInt32(General.Nz(Request["tip"], 1)) == 2)
+                    idRol = Convert.ToInt32(cmbRolZi.Value);
+
+                string dataBlocare = "22001231";
+                string strSql = $@"SELECT COALESCE(Ziua,'2200-12-31') FROM Ptj_tblBlocarePontaj WHERE IdRol=@1";
+                if (Constante.tipBD == 2)
+                    strSql = @"SELECT COALESCE(""Ziua"",TO_DATE('31-12-2200','DD-MM-YYYY')) FROM ""Ptj_tblBlocarePontaj"" WHERE ""IdRol""=@1";
+                DataTable dt = General.IncarcaDT(strSql, new object[] { idRol });
+                if (dt != null && dt.Rows.Count > 0 && General.Nz(dt.Rows[0][0], "").ToString() != "" && General.IsDate(dt.Rows[0][0]))
+                    dataBlocare = Convert.ToDateTime(dt.Rows[0][0]).Year + Convert.ToDateTime(dt.Rows[0][0]).Month.ToString().PadLeft(2, '0') + Convert.ToDateTime(dt.Rows[0][0]).Day.ToString().PadLeft(2, '0');
+
+                Session["Ptj_DataBlocare"] = dataBlocare.ToString();
             }
             catch (Exception ex)
             {
@@ -766,7 +781,7 @@ namespace WizOne.Pontaj
                             AND {General.TruncateDateAsString("DD.\"DataInceput\"")} <= {General.TruncateDateAsString("P.\"Ziua\"")} 
                             AND {General.TruncateDateAsString("P.\"Ziua\"")} <=  {General.TruncateDateAsString("DD.\"DataSfarsit\"")}) = 1
                             THEN 1 ELSE 0 END AS ""DrepturiModif"", 
-                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"",
+                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",
                             CASE WHEN 
 							    (SELECT COUNT(*) FROM Ptj_Cereri X
                                 INNER JOIN Ptj_tblAbsente Y ON X.IdAbsenta=Y.Id
@@ -789,7 +804,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
                             LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
-
+                            LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
+                            LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
                             
 
                             WHERE CONVERT(date,P.""Ziua"") <= A.F10023
@@ -859,7 +875,7 @@ namespace WizOne.Pontaj
                             END END END)=1 AND
                             (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDateAsString("FS.\"DataInceput\"")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <=  {General.TruncateDateAsString("FS.\"DataSfarsit\"")}) = 1
                             THEN 1 ELSE 0 END AS ""DrepturiModif"", 
-                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"",
+                            Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",
                             CASE WHEN 
 							    (SELECT COUNT(*) FROM ""Ptj_Cereri"" X
                                 INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
@@ -882,6 +898,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
                             LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
+                            LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
+                            LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
 
                             WHERE CAST(P.""Ziua"" AS date) <= A.F10023
                             {filtru}
@@ -1530,7 +1548,7 @@ namespace WizOne.Pontaj
                     
                     for (int i = 0; i < dtModif.Rows.Count; i++)
                     {
-                        if (dtModif.Rows[i]["CuloareValoare"].ToString() != "#e6c8fa" /*|| ctr*/)
+                        if (Dami.ValoareParam("RecalculCuloare", "0") == "0")
                         {
                             //Florin 2018.05.15
                             //daca este absenta de tip zi nu mai recalculam
@@ -1546,6 +1564,27 @@ namespace WizOne.Pontaj
 
                                 FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
                                 FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+                            }
+                        }
+                        else
+                        {
+                            if (dtModif.Rows[i]["CuloareValoare"].ToString() != "#e6c8fa" /*|| ctr*/)
+                            {
+                                //Florin 2018.05.15
+                                //daca este absenta de tip zi nu mai recalculam
+                                if (lst.Where(p => p.F10003 == Convert.ToInt32(dtModif.Rows[i]["F10003"]) && p.Ziua == Convert.ToDateTime(dtModif.Rows[i]["Ziua"])).Count() == 0)
+                                {
+                                    string golesteVal = Dami.ValoareParam("GolesteVal");
+                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+
+                                    //Florin 2019.05.02
+                                    FunctiiCeasuri.Calcul.h5 = true;
+
+                                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
+                                    FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+                                }
                             }
                         }
                     }
@@ -2400,6 +2439,7 @@ namespace WizOne.Pontaj
                                     c.Width = Unit.Pixel(latime);
                                     c.VisibleIndex = i + 4;
                                     c.ToolTip = tt;
+                                    c.PropertiesTimeEdit.AllowNull = true;
                                     //c.PropertiesTimeEdit.ClientSideEvents.KeyDown = "function(s, e) { TestGigi(s,e) }";
 
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;

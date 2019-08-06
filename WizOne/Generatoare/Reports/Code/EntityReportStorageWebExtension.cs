@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WizOne.Generatoare.Reports.Models;
+using WizOne.Generatoare.Reports.Pages;
 
 namespace WizOne.Generatoare.Reports.Code
 {
@@ -26,7 +27,10 @@ namespace WizOne.Generatoare.Reports.Code
 
         public override Dictionary<string, string> GetUrls()
         {
-            return new Dictionary<string, string>(); // Not permitted to display reports list on designer!
+            var entities = new ReportsEntities();
+            
+            return entities.Reports.Where(r => r.ReportTypeId == 5). // Only subreports for 'Report Source Url' property.
+                ToDictionary(r => r.ReportId.ToString(), r => r.Name);            
         }
 
         public override byte[] GetData(string url)
@@ -60,42 +64,33 @@ namespace WizOne.Generatoare.Reports.Code
         public override string SetNewData(XtraReport xtraReport, string defaultUrl)
         {
             var entities = new ReportsEntities();
-            var sourceReport = entities.Reports.Find(int.Parse((string)xtraReport.Tag ?? "0"));
+            var sourceReport = !string.IsNullOrEmpty((string)xtraReport.Tag) ? // Save as existing report. 
+                entities.Reports.Find(int.Parse((string)xtraReport.Tag)) : (Report)null; // Save new subreport.
+            var report = (Report)null;
 
-            if (sourceReport != null)
+            entities.Reports.Add(report = new Report() {
+                Name = defaultUrl,
+                Description = sourceReport?.Description,
+                ReportTypeId = sourceReport?.ReportTypeId ?? 5, // Subreport
+                RegUserId = sourceReport?.RegUserId
+            });
+            entities.SaveChanges();
+
+            // Update internal data
+            xtraReport.Name = ReportDesign.GetReportName(defaultUrl);
+            xtraReport.DisplayName = defaultUrl;
+            xtraReport.Tag = report.ReportId;
+
+            // Save layout changes
+            using (var memStream = new MemoryStream())
             {
-                var report = new Report()
-                {
-                    Name = defaultUrl,
-                    Description = sourceReport.Description,
-                    ReportTypeId = sourceReport.ReportTypeId,
-                    RegUserId = sourceReport.RegUserId
-                };
-
-                entities.Reports.Add(report);
-                entities.SaveChanges();
-
-                // Update internal data
-                xtraReport.Name = defaultUrl.
-                    Split(' ').
-                    Where(val => val.Length > 0).
-                    Select(val => string.Concat(char.ToUpper(val[0]), val.Substring(1))).
-                    Aggregate((curr, next) => curr + next);
-                xtraReport.DisplayName = defaultUrl;
-                xtraReport.Tag = report.ReportId;
-
-                using (var memStream = new MemoryStream())
-                {
-                    xtraReport.SaveLayoutToXml(memStream);
-                    report.LayoutData = memStream.GetBuffer();
-                }
-
-                entities.SaveChanges();
-
-                return report.ReportId.ToString();
+                xtraReport.SaveLayoutToXml(memStream);
+                report.LayoutData = memStream.GetBuffer();
             }
 
-            return null;
+            entities.SaveChanges();
+            
+            return report.ReportId.ToString();                   
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -194,6 +195,19 @@ namespace WizOne.Absente
                         cmbViz.Items.Add(itm);
                     }
 
+                    //Florin2019.07.17
+                    NameValueCollection lst = HttpUtility.ParseQueryString((Session["Filtru_CereriAbs"] ?? "").ToString());
+                    if (lst.Count > 0)
+                    {
+                        if (General.Nz(lst["Viz"], "").ToString() != "") cmbViz.SelectedIndex = Convert.ToInt32(lst["Viz"])-1;
+                        if (General.Nz(lst["Rol"], "").ToString() != "") cmbRol.Value = Convert.ToInt32(lst["Rol"]);
+                        if (General.Nz(lst["Stare"], "").ToString() != "") cmbStare.Text = lst["Stare"].ToString();
+                        if (General.Nz(lst["DtInc"], "").ToString() != "") txtDtInc.Value = Convert.ToDateTime(lst["DtInc"]);
+                        if (General.Nz(lst["DtSf"], "").ToString() != "") txtDtSf.Value = Convert.ToDateTime(lst["DtSf"]);
+
+                        Session["Filtru_CereriAbs"] = "";
+                    }
+
                     grDate.DataBind();
                 }
 
@@ -227,6 +241,20 @@ namespace WizOne.Absente
         {
             try
             {
+                //Florin 2019.07.17
+                #region Salvam Filtrul
+
+                string req = "";
+                if (cmbViz.Value != null) req += "&Viz=" + cmbViz.Value;
+                if (cmbRol.Value != null) req += "&Rol=" + cmbRol.Value;
+                if (cmbStare.Value != null) req += "&Stare=" + cmbStare.Value;
+                if (txtDtInc.Value != null) req += "&DtInc=" + txtDtInc.Value;
+                if (txtDtSf.Value != null) req += "&DtSf=" + txtDtSf.Value;
+
+                Session["Filtru_CereriAbs"] = req;
+
+                #endregion
+
                 Session["grDate_Filtru"] = "Absente.Lista;" + grDate.FilterExpression;
                 Session["Sablon_CheiePrimara"] = -99;
                 Session["Sablon_TipActiune"] = "New";
@@ -575,33 +603,49 @@ namespace WizOne.Absente
                                                     WHERE ""Id""= " + obj[0];
                                     sqlUp = string.Format(sqlUp, sqlTotal, sqlIdStare, sqlPozitie, sqlCuloare);
 
-                                    string strGen = "BEGIN TRAN " +
-                                        sqlDel + "; " +
-                                        sqlPlf + "; " +
-                                        sqlIst + "; " +
-                                        sqlUp + "; " +
-                                        "COMMIT TRAN";
+                                    //Florin 2019.07.29
+                                    //s-a adaugat si validare
+                                    int idStare = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT TOP 1 ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Pozitie""<>0 AND ""Aprobat""=1 AND ""IdStare""<>4 AND ""IdCerere""={obj[0]} ORDER BY ""IdAuto"" DESC", null), 1));
 
-                                    DataTable dtCer = General.IncarcaDT(strGen, null);
-                                    //General.ExecutaNonQuery(strGen,null);
-
-                                    //trimite in pontaj daca este finalizat
-                                    if (Convert.ToInt32(dtCer.Rows[0]["IdStare"]) == 3)
+                                    string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                    if (msg != "" && msg.Substring(0, 1) == "2")
                                     {
-                                        if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
-                                        {
-                                            General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(General.Nz(obj[0],1)), 5, trimiteLaInlocuitor, Convert.ToInt32(General.Nz(obj[5],0)));
-
-                                            //Se va face cand vom migra GAM
-                                            //TrimiteCerereInF300(Session["UserId"], idCer);
-                                        }
+                                        MessageBox.Show(Dami.TraduCuvant(msg.Substring(2)));
+                                        return;
                                     }
+                                    else
+                                    {
+                                        string strGen = "BEGIN TRAN " +
+                                            sqlDel + "; " +
+                                            sqlPlf + "; " +
+                                            sqlIst + "; " +
+                                            sqlUp + "; " +
+                                            "COMMIT TRAN";
 
-                                    Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT *, 2 AS ""Actiune"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                        DataTable dtCer = General.IncarcaDT(strGen, null);
+                                        //General.ExecutaNonQuery(strGen,null);
 
-                                    grDate.DataBind();
-                                    //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoWarning);
-                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                                        //trimite in pontaj daca este finalizat
+                                        if (Convert.ToInt32(dtCer.Rows[0]["IdStare"]) == 3)
+                                        {
+                                            if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
+                                            {
+                                                General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(General.Nz(obj[0], 1)), 5, trimiteLaInlocuitor, Convert.ToInt32(General.Nz(obj[5], 0)));
+
+                                                //Se va face cand vom migra GAM
+                                                //TrimiteCerereInF300(Session["UserId"], idCer);
+                                            }
+                                        }
+
+                                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+
+                                        grDate.DataBind();
+                                        //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoWarning);
+                                        string strPopUp = "Proces realizat cu succes";
+                                        if (msg != "")
+                                            strPopUp += " " + Dami.TraduCuvant("cu urmatorul avertisment") + Environment.NewLine + msg;
+                                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(strPopUp);
+                                    }
                                 }
                                 #endregion
                             }
@@ -918,6 +962,22 @@ namespace WizOne.Absente
         {
             try
             {
+
+                //Florin 2019.07.17
+                #region Salvam Filtrul
+
+                string req = "";
+                if (cmbViz.Value != null) req += "&Viz=" + cmbViz.Value;
+                if (cmbRol.Value != null) req += "&Rol=" + cmbRol.Value;
+                if (cmbStare.Value != null) req += "&Stare=" + cmbStare.Value;
+                if (txtDtInc.Value != null) req += "&DtInc=" + txtDtInc.Value;
+                if (txtDtSf.Value != null) req += "&DtSf=" + txtDtSf.Value;
+
+                Session["Filtru_CereriAbs"] = req;
+
+                #endregion
+
+
                 object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "F10003", "NumeAngajat" }) as object[];
                 if (obj == null || obj.Count() == 0 || obj[0] == null || obj[1] == null)
                 {
@@ -931,8 +991,6 @@ namespace WizOne.Absente
                     Session["IstoricExtins_Angajat_Marca"] = obj[0];
                     Session["IstoricExtins_Angajat_Nume"] = obj[1];
                 }
-
-                var ert = General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString();
 
                 if (General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString() != "" && General.Nz(Session["IstoricExtins_Angajat_Marca"], "").ToString() != "-99")
                 {
@@ -1167,18 +1225,20 @@ namespace WizOne.Absente
                         btn.Visible = false;
                 }
 
-                if (obj[8] == null || ((int)obj[8] != 1 && (int)obj[8] != 2 && (int)obj[8] != 4))
-                {
-                    txtObs.ReadOnly = true;
-                    txtObs.Enabled = false;
-                    txtCom.ReadOnly = true;
-                    txtCom.Enabled = false;
 
-                    cmbInl.ReadOnly = true;
-                    cmbInl.Enabled = false;
-                    cmbCps.ReadOnly = true;
-                    cmbCps.Enabled = false;
-                }
+                //Florin    2019.06.24
+                //if (obj[8] == null || ((int)obj[8] != 1 && (int)obj[8] != 2 && (int)obj[8] != 4))
+                //{
+                //    txtObs.ReadOnly = true;
+                //    txtObs.Enabled = false;
+                //    txtCom.ReadOnly = true;
+                //    txtCom.Enabled = false;
+
+                //    cmbInl.ReadOnly = true;
+                //    cmbInl.Enabled = false;
+                //    cmbCps.ReadOnly = true;
+                //    cmbCps.Enabled = false;
+                //}
 
 
                 //daca starea cererii este aprobata si rolul este cel de hr afisam campul bifa

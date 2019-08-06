@@ -318,6 +318,76 @@ namespace WizOne.Pagini
                                     grDate.Columns.Add(c);
                                 }
                                 break;
+                            case 8:                             //ComboBox cu coloane multiple
+                                {
+                                    GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
+                                    c.Name = col.ColumnName;
+                                    c.FieldName = col.ColumnName;
+                                    c.Caption = Dami.TraduCuvant(col.ColumnName);
+                                    if (cmp.IndexOf(col.ColumnName.ToUpper() + ",") >= 0)
+                                        c.Visible = false;
+                                    else
+                                        c.Visible = vizibil;
+                                    c.ReadOnly = blocat;
+                                    c.Width = Unit.Pixel(200);
+                                    
+                                    c.PropertiesComboBox.AllowNull = true;
+
+                                    if (dr != null && dr["SursaCombo"].ToString() != "" && c.Visible == true)
+                                    {
+                                        //optimizare - cazul de la Circuite (de ex: Ptj_Circuite)
+                                        //mai multe coloane pot avea aceeasi sursa de date)
+                                        string sursa = (dr["SursaCombo"] ?? "").ToString().Trim();
+                                        DataTable dtCmb = new DataTable();
+
+                                        if (sursa != "" && lst.Where(p => p.SelectStr == sursa).Count() > 0)
+                                        {
+                                            //dtCmb = ds.Tables["dt" + lst.Where(p => p.SelectStr == sursa).FirstOrDefault().Id];
+                                            //dtCmb = ds.Tables[lst.Where(p => p.SelectStr == sursa).FirstOrDefault().NumeCamp];
+
+                                            var ent = lst.Where(p => p.SelectStr == sursa).FirstOrDefault();
+                                            if (ent != null)
+                                            {
+                                                lst.Add(new metaTblNomenConfig_SelectStr { Id = x, SelectStr = sursa, NumeCamp = c.FieldName, NumeCampDuplicat = ent.NumeCamp, dt = null });
+                                                dtCmb = ent.dt as DataTable;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            dtCmb = General.IncarcaDT(sursa, null);
+                                            //dtCmb.TableName = "dt" + x;
+                                            dtCmb.TableName = c.FieldName;
+                                            lst.Add(new metaTblNomenConfig_SelectStr { Id = x, SelectStr = sursa, NumeCamp = c.FieldName, NumeCampDuplicat = "", dt = dtCmb });
+                                            ds.Tables.Add(dtCmb);
+                                            x++;
+                                        }
+
+                                        //DataTable dtCmb = General.IncarcaDT(dr["SursaCombo"].ToString(), null);
+                                        c.PropertiesComboBox.DataSource = dtCmb;
+                                        c.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
+                                        c.PropertiesComboBox.ValueType = dtCmb.Columns[0].GetType();                                        
+                                        switch (dtCmb.Columns.Count)
+                                        {
+                                            case 1:
+                                                c.PropertiesComboBox.TextField = dtCmb.Columns[0].ColumnName;
+                                                break;
+                                            default:
+                                                c.PropertiesComboBox.TextField = dtCmb.Columns[1].ColumnName;
+                                                break;
+                                        }
+
+                                        for (int i = 1; i < dtCmb.Columns.Count; i++)
+                                        {
+                                            ListBoxColumn column = new ListBoxColumn();
+                                            column.FieldName = dtCmb.Columns[i].ColumnName;
+                                            c.PropertiesComboBox.Columns.Add(column);
+                                        }
+
+                                    }
+
+                                    grDate.Columns.Add(c);
+                                }
+                                break;
                         }
                     }
 

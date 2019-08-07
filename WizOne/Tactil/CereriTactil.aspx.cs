@@ -860,6 +860,10 @@ namespace WizOne.Tactil
 
                 if (txtDataSf.Date < txtDataInc.Date && (Session["CereriTactil"].ToString() == "BiletVoie" || Session["CereriTactil"].ToString() == "AbsenteOra"))
                     txtDataSf.Date = txtDataInc.Date;
+
+                if (txtDataSf.Visible == false)
+                    txtDataSf.Date = txtDataInc.Date;
+
                 //daca abs este de tip ore dtinc si datasf trebuie sa fie aceeasi
                 //if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 1)) == 0 && txtDataInc.Date != txtDataSf.Date) strErr += " " + Dami.TraduCuvant("Data inceput si data sfarsit trebuie sa fie aceeasi in cazul acestui tip de absenta");
 

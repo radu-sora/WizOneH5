@@ -115,8 +115,8 @@
             <tr>
             <td  valign="top" width="310">
 			      <fieldset >
-				        <legend class="legend-font-size">Nationalitate</legend>
-				        <table width="60%">	
+				        <legend id="lgNat" runat="server" class="legend-font-size">Nationalitate</legend>
+				        <table id="lgNatTable" runat="server" width="60%">	
 					        <tr>				
 						        <td >
 							        <dx:ASPxLabel  ID="lblTara" Width="100" runat="server"  Text="Tara/Nationalitate" ></dx:ASPxLabel >	
@@ -173,8 +173,8 @@
                       <asp:ObjectDataSource runat="server" ID="dsTAM" TypeName="WizOne.Module.General" SelectMethod="GetTipAutMunca"/>
 			        </fieldset>
 			        <fieldset >
-				    <legend class="legend-font-size">Document identitate</legend>
-				        <table width="60%">	
+				    <legend id="lgDocID" runat="server" class="legend-font-size">Document identitate</legend>
+				        <table id="lgDocIDTable" runat="server" width="60%">	
 					        <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblNumeMama"  Width="100"  runat="server"  Text="Nume mama"></dx:ASPxLabel >	
@@ -269,8 +269,8 @@
                  </td> 
             <td  valign="top" width="310">
 			      <fieldset >
-				        <legend class="legend-font-size">Detalii contract</legend>
-				        <table width="60%">	
+				        <legend id="lgDetCtr" runat="server" class="legend-font-size">Detalii contract</legend>
+				        <table id="lgDetCtrTable" runat="server" width="60%">	
 					        <tr>				
 						        <td >
 							        <dx:ASPxLabel  ID="lblNrPermisMunca" Width="100" runat="server"  Text="Numar permis munca" ></dx:ASPxLabel >	
@@ -320,8 +320,8 @@
 				        </table>
 			        </fieldset>
 			        <fieldset >
-				    <legend class="legend-font-size">Permis auto</legend>
-				        <table width="60%">	
+				    <legend id="lgPermis" runat="server" class="legend-font-size">Permis auto</legend>
+				        <table id="lgPermisTable" runat="server" width="60%">	
 					        <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblCateg"  Width="100"  runat="server"  Text="Categorie"></dx:ASPxLabel >	
@@ -390,8 +390,8 @@
 
             <td  valign="top" >
 			      <fieldset >
-				        <legend></legend>
-				        <table width="60%">	
+				        <legend id="lgStudii" runat="server"></legend>
+				        <table id="lgStudiiTable" runat="server" width="60%">	
 					        <tr>				
 						        <td >
 							        <dx:ASPxLabel  ID="lblStudii" Width="100" runat="server"  Text="Studii" ></dx:ASPxLabel >	
@@ -495,8 +495,8 @@
                       <asp:ObjectDataSource runat="server" ID="dsDedSomaj" TypeName="WizOne.Module.General" SelectMethod="ListaMP_DeduceriSomaj"/>
 			        </fieldset>
 			        <fieldset >
-				    <legend class="legend-font-size">Stagiu militar</legend>
-				        <table width="60%">	
+				    <legend id="lgStagiu" runat="server" class="legend-font-size">Stagiu militar</legend>
+				        <table id="lgStagiuTable" runat="server" width="60%">	
                             <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblLivret" runat="server"  Text="Livret militar(serie/numar)"></dx:ASPxLabel >	

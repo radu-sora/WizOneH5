@@ -193,7 +193,7 @@
                                 <td valign="bottom">
 			                      <fieldset class="fieldset-auto-width">
 				                    <legend id="lgFoto" runat="server" class="legend-font-size">Fotografie</legend>
-				                    <table width="200" height="200"  valign="bottom">
+				                    <table id="lgFotoTable" runat="server" width="200" height="200"  valign="bottom">
                                         <tr>
                                             <td align="left"  valign="bottom">
                                                 <img  Height="180" HorizontalAlignment="Center" ID="img" runat="server"  VerticalAlignment="Center" Width="170" />
@@ -232,7 +232,7 @@
 
 			                        <fieldset class="fieldset-auto-width">
 				                    <legend id="lgIdent" runat="server" class="legend-font-size">Date unice de identificare</legend>
-				                    <table width="40%">	
+				                    <table id="lgIdentTable" runat="server" width="40%">	
 					                    <tr>				
 						                    <td >
 							                    <dx:ASPxLabel  ID="lblMarca" runat="server"  Text="Marca" ></dx:ASPxLabel >	
@@ -275,7 +275,7 @@
 
 			                        <fieldset class="fieldset-auto-width">
 				                    <legend id="lgSex" runat="server" class="legend-font-size">Data nasterii si Sex</legend>
-				                    <table width="60%">	
+				                    <table id="lgSexTable" runat="server" width="60%">	
 					                    <tr>				
 						                    <td>
 							                    <dx:ASPxLabel  ID="lblDataNasterii" Width="100" runat="server"  Text="Data nasterii" ></dx:ASPxLabel>	
@@ -316,7 +316,7 @@
 	
 			                        <fieldset class="fieldset-auto-width">
 				                    <legend id="lgNume" runat="server" class="legend-font-size">Nume si prenume</legend>
-				                    <table width="40%">	
+				                    <table id="lgNumeTable" runat="server" width="40%">	
 					                    <tr>				
 						                    <td>	
 							                    <dx:ASPxLabel  ID="lblNume" runat="server" Text="Nume"></dx:ASPxLabel >	

@@ -31,6 +31,15 @@ namespace WizOne.Personal {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgFoto;
         
         /// <summary>
+        /// lgFotoTable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable lgFotoTable;
+        
+        /// <summary>
         /// img control.
         /// </summary>
         /// <remarks>

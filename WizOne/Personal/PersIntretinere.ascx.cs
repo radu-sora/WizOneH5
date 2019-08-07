@@ -127,7 +127,7 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-
+                bool err = false;
                 object[] row = new object[ds.Tables["F110"].Columns.Count];
                 int x = 0;
                 foreach (DataColumn col in ds.Tables["F110"].Columns)
@@ -145,13 +145,17 @@ namespace WizOne.Personal
                                 else
                                     row[x] = Dami.NextId("F110");
                                 break;
-                            //case "F11012":
-                                //if (!General.VerificaCNP(e.NewValues[col.ColumnName].ToString()))
-                                //    grDatePersIntr.JSProperties["cpAlertMessage"] = "CNP invalid!";
-                                //row[x] = e.NewValues[col.ColumnName];
-                                //break;
+                            case "F11012":
+                                if (e.NewValues["F11012"] == null || e.NewValues["F11012"].ToString().Length <= 0 || !General.VerificaCNP(e.NewValues["F11012"].ToString()))
+                                {
+                                    grDatePersIntr.JSProperties["cpAlertMessage"] = "CNP invalid!";
+                                    err = true;
+                                }
+                                else
+                                    row[x] = e.NewValues[col.ColumnName];
+                                break;
                             case "F11006":
-                                if (General.VerificaCNP(e.NewValues["F11012"].ToString()))                                
+                                if (e.NewValues["F11012"] != null && e.NewValues["F11012"].ToString().Length > 0 && General.VerificaCNP(e.NewValues["F11012"].ToString()))                                
                                     row[x] = General.getDataNasterii(e.NewValues["F11012"].ToString());                                
                                 break;
                             case "USER_NO":
@@ -168,21 +172,20 @@ namespace WizOne.Personal
 
                     x++;
                 }
-
-                ds.Tables["F110"].Rows.Add(row);
                 e.Cancel = true;
                 grDatePersIntr.CancelEdit();
-                grDatePersIntr.DataSource = ds.Tables["F110"];
-                grDatePersIntr.KeyFieldName = "F11007";
-                //grDateBeneficii.AddNewRow();
-                Session["InformatiaCurentaPersonal"] = ds;
-
+                if (!err)
+                {
+                    ds.Tables["F110"].Rows.Add(row);  
+                    grDatePersIntr.DataSource = ds.Tables["F110"];
+                    grDatePersIntr.KeyFieldName = "F11007";                  
+                    Session["InformatiaCurentaPersonal"] = ds;
+                }
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -195,7 +198,7 @@ namespace WizOne.Personal
                 { keys[i] = e.Keys[i]; }
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-
+                bool err = false;
                 DataRow row = ds.Tables["F110"].Rows.Find(keys);
 
                 foreach (DataColumn col in ds.Tables["F110"].Columns)
@@ -207,18 +210,23 @@ namespace WizOne.Personal
                     }
 
                     if (col.ColumnName.ToUpper() == "F11012")
-                        if (!General.VerificaCNP(e.NewValues[col.ColumnName].ToString()))
+                        if (e.NewValues[col.ColumnName] == null || e.NewValues[col.ColumnName].ToString().Length <= 0 || !General.VerificaCNP(e.NewValues[col.ColumnName].ToString()))
+                        {
                             grDatePersIntr.JSProperties["cpAlertMessage"] = "CNP invalid!";
-
+                            err = true;
+                        }
                     if (col.ColumnName.ToUpper() == "F11006")
-                        if (General.VerificaCNP(e.NewValues["F11012"].ToString()))
+                        if (e.NewValues["F11012"] != null && e.NewValues["F11012"].ToString().Length > 0 && General.VerificaCNP(e.NewValues["F11012"].ToString()))
                             row[col.ColumnName] = General.getDataNasterii(e.NewValues["F11012"].ToString());
                 }
 
                 e.Cancel = true;
                 grDatePersIntr.CancelEdit();
-                Session["InformatiaCurentaPersonal"] = ds;
-                grDatePersIntr.DataSource = ds.Tables["F110"];
+                if (!err)
+                {
+                    Session["InformatiaCurentaPersonal"] = ds;
+                    grDatePersIntr.DataSource = ds.Tables["F110"];
+                }
             }
             catch (Exception ex)
             {

@@ -58,11 +58,16 @@ namespace WizOne.Pagini
                 {
                     //Radu 08.05.2019 - sa se afiseze doar utilizatorii de WizOne
                     string cond = "";
+                    //if (Constante.tipBD == 2)
+                    //    cond = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F70102) > 0 then 0  else  1 end ELSE  1   END AS TIP ";
+                    //else
+                    //    cond = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F70102) > 0 then 0  else 1  end  ELSE 1   END  AS TIP ";
                     if (Constante.tipBD == 2)
-                        cond = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F70102) > 0 then 0  else  1 end ELSE  1   END AS TIP ";
+                        cond = "case when (SELECT COUNT(*) AS CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F70102) > 0 or f70102 = 1 then 1 else 0  end  ELSE 0   END  AS TIP  ";
                     else
-                        cond = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F70102) > 0 then 0  else 1  end  ELSE 1   END  AS TIP ";
-                    
+                        cond = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F70102) > 0 or f70102 = 1 then 1 else 0  end  ELSE 0   END  AS TIP  ";
+
+
                     DataTable dt = General.IncarcaDT(@"SELECT * FROM (SELECT A.*, " + cond + " FROM USERS A) B WHERE TIP = 0 ", null);
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["F70102"] };
 

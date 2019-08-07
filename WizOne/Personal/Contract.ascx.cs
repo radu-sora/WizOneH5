@@ -57,6 +57,9 @@ namespace WizOne.Personal
             ASPxCheckBox chkScutitCAS = Contract_DataList.Items[0].FindControl("chkScutitCAS") as ASPxCheckBox;
             ASPxCheckBox chkConstr = Contract_DataList.Items[0].FindControl("chkConstr") as ASPxCheckBox;
 
+            ASPxDateEdit deDeLaData = Contract_DataList.Items[0].FindControl("deDeLaData") as ASPxDateEdit;
+            ASPxDateEdit deLaData = Contract_DataList.Items[0].FindControl("deLaData") as ASPxDateEdit;
+
             ASPxComboBox cmbTipAngajat = Contract_DataList.Items[0].FindControl("cmbTipAng") as ASPxComboBox;
 
             if (ds.Tables[1].Rows[0]["F100643"] != null && ds.Tables[1].Rows[0]["F100643"].ToString().Length >= 4)
@@ -134,6 +137,12 @@ namespace WizOne.Personal
                 {
                     txtNrOre.ClientEnabled = false;
                     txtNrOre.Text = "0";
+                }
+              
+                if (Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
+                {
+                    deDeLaData.ClientEnabled = false;
+                    deLaData.ClientEnabled = false;
                 }
             }
             else

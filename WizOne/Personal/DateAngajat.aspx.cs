@@ -1064,10 +1064,10 @@ namespace WizOne.Personal
                 lstCtr.Add("txtPerProbaZC", "F100975");
                 lstCtr.Add("txtNrZilePreavizDemisie", "F1009742");
                 lstCtr.Add("txtNrZilePreavizConc", "F100931");
-                //lstCtr.Add("deUltimaZiLucr", "F10023");
+                lstCtr.Add("deUltimaZiLucr", "F10023");
                 //lstCtr.Add("deUltimaZiLucr", "F100993");
                 lstCtr.Add("cmbMotivPlecare", "F10025");
-                //lstCtr.Add("deDataPlecarii", "F100993");
+                lstCtr.Add("deDataPlecarii", "F100993");
                 lstCtr.Add("deDataReintegr", "F100930");
                 lstCtr.Add("cmbGradInvalid", "F10027");
                 lstCtr.Add("deDataValabInvalid", "F100271");

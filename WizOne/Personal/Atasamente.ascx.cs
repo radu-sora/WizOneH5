@@ -144,10 +144,15 @@ namespace WizOne.Personal
                 dr["DateAttach"] = txtDataDoc.Value ?? DBNull.Value;
                 dr["DescrAttach"] = txtDesc.Value ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
-                dr["Time"] = DateTime.Now;
+                dr["TIME"] = DateTime.Now;
 
                 metaUploadFile itm = Session["DocUpload_MP_Atasamente"] as metaUploadFile;
-                dr["Attach"] = itm.UploadedFile;
+                if (itm != null)
+                {
+                    dr["Attach"] = itm.UploadedFile;
+                    dr["FisierNume"] = itm.UploadedFileName;
+                    dr["FisierExtensie"] = itm.UploadedFileExtension;
+                }
                 //if (itm != null)
                 //{
                 //    General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
@@ -191,12 +196,14 @@ namespace WizOne.Personal
                 dr["DateAttach"] = txtDataDoc.Value ?? DBNull.Value;
                 dr["DescrAttach"] = txtDesc.Value ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
-                dr["Time"] = DateTime.Now;
+                dr["TIME"] = DateTime.Now;
 
-                metaUploadFile itm = Session["DocUpload_MP_Atasamente"] as metaUploadFile;
-                dr["Attach"] = itm.UploadedFile;
+                metaUploadFile itm = Session["DocUpload_MP_Atasamente"] as metaUploadFile;               
                 if (itm != null)
                 {
+                    dr["Attach"] = itm.UploadedFile;
+                    dr["FisierNume"] = itm.UploadedFileName;
+                    dr["FisierExtensie"] = itm.UploadedFileExtension;
                     //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Atasamente", dr["IdAuto"]);
                     //dr["FisierNume"] = itm.UploadedFileName;
                     //dr["FisierExtensie"] = itm.UploadedFileExtension;

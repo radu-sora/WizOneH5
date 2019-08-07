@@ -197,10 +197,15 @@ namespace WizOne.Avs
                 int nr = 0;
 
                 string criptat = "";
+                //if (Constante.tipBD == 2)
+                //    criptat = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F704.USER_NO) > 0 then 0  else  1 end ELSE  1   END AS CRIPTAT ";
+                //else
+                //    criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F704.USER_NO) > 0 then 0  else 1  end  ELSE 1   END  AS CRIPTAT ";
                 if (Constante.tipBD == 2)
-                    criptat = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F704.USER_NO) > 0 then 0  else  1 end ELSE  1   END AS CRIPTAT ";
+                    criptat = "case when (SELECT COUNT(*) AS CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F704.USER_NO) > 0 or F704.USER_NO = 1 then 1 else 0  end  ELSE 0   END  AS CRIPTAT  ";
                 else
-                    criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F704.USER_NO) > 0 then 0  else 1  end  ELSE 1   END  AS CRIPTAT ";
+                    criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F704.USER_NO) > 0 or F704.USER_NO = 1 then 1 else 0  end  ELSE 0   END  AS CRIPTAT  ";
+
 
 
                 if (Constante.tipBD == 1)

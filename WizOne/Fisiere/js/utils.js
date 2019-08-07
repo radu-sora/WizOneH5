@@ -19,9 +19,13 @@ function ctx(s, e)
      
         debugger;
         if (targ.id == "pnlContent1_ContentPlaceHolder1_ASPxPageControl2") {
-            if (e.srcElement.innerText != "")
-                __reqSec = "IdControl=" + e.srcElement.innerText;
-            else
+            if (e.srcElement.innerText != "") {
+                if ((e.srcElement.id.length >= 3 && e.srcElement.id.substring(0, 3) == "lbl") || (e.srcElement.id.length >= 2 && e.srcElement.id.substring(0, 2) == "lg"))
+                    __reqSec = "IdControl=" + e.srcElement.id;
+                else
+                    __reqSec = "IdControl=" + e.srcElement.innerText;
+            }
+            else           
                 __reqSec = "IdControl=" + e.srcElement.id;
         }
         else

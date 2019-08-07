@@ -226,8 +226,7 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MonthClosing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MonthClosing">
       <HintPath>..\Artifacts\MonthClosing.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -319,6 +318,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Absente\Cereri.aspx" />
+    <Content Include="Absente\CereriAutomate.aspx" />
     <Content Include="Absente\IstoricExtins.aspx" />
     <Content Include="Absente\Lista.aspx" />
     <Content Include="Absente\SetariActiuni.aspx" />
@@ -999,6 +999,13 @@
     </Compile>
     <Compile Include="Absente\Cereri.aspx.designer.cs">
       <DependentUpon>Cereri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Absente\CereriAutomate.aspx.cs">
+      <DependentUpon>CereriAutomate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\CereriAutomate.aspx.designer.cs">
+      <DependentUpon>CereriAutomate.aspx</DependentUpon>
     </Compile>
     <Compile Include="Absente\IstoricExtins.aspx.cs">
       <DependentUpon>IstoricExtins.aspx</DependentUpon>
@@ -2461,6 +2468,7 @@
     <Content Include="App_GlobalResources\General.en.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>General.en.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\General.resx" />
     <Content Include="Absente\App_LocalResources\Cereri.aspx.resx" />
@@ -2471,6 +2479,7 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

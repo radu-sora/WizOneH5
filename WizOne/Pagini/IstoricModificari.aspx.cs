@@ -311,10 +311,14 @@ namespace WizOne.Pagini
             string sql = "";
 
             string criptat = "";
+            //if (Constante.tipBD == 2)
+            //    criptat = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F70102) > 0 then 0  else  1 end ELSE  1   END AS CRIPTAT ";
+            //else
+            //    criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F70102) > 0 then 0  else 1  end  ELSE 1   END  AS CRIPTAT ";
             if (Constante.tipBD == 2)
-                criptat = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = F70102) > 0 then 0  else  1 end ELSE  1   END AS CRIPTAT ";
+                criptat = "case when (SELECT COUNT(*) AS CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F70102) > 0 or f70102 = 1 then 1 else 0  end  ELSE 0   END  AS CRIPTAT  ";
             else
-                criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = F70102) > 0 then 0  else 1  end  ELSE 1   END  AS CRIPTAT ";
+                criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = F70102) > 0 or f70102 = 1 then 1 else 0  end  ELSE 0   END  AS CRIPTAT  ";
 
 
             if (Constante.tipBD == 2)
@@ -372,10 +376,14 @@ namespace WizOne.Pagini
             string sql = "";
 
             string criptat = "";
+            //if (Constante.tipBD == 2)
+            //    criptat = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = USER_WS) > 0 then 0  else  1 end ELSE  1   END AS CRIPTAT ";
+            //else
+            //    criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = USER_WS) > 0 then 0  else 1  end  ELSE 1   END  AS CRIPTAT ";
             if (Constante.tipBD == 2)
-                criptat = "case when (SELECT COUNT(*) CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from \"relGrupUser\" where \"IdUser\" = USER_WS) > 0 then 0  else  1 end ELSE  1   END AS CRIPTAT ";
+                criptat = "case when (SELECT COUNT(*) AS CNT FROM user_tables WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = USER_WS) > 0 or USER_WS = 1 then 1 else 0  end  ELSE 0   END  AS CRIPTAT  ";
             else
-                criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('RELGRUPUSER')) = 1 THEN  case when (select Count(*) from relGrupUser where IdUser = USER_WS) > 0 then 0  else 1  end  ELSE 1   END  AS CRIPTAT ";
+                criptat = "case when (SELECT COUNT(*) AS CNT FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) LIKE UPPER('COMPACC')) = 1 THEN  case when (select Count(*) from compacc where F70203 = USER_WS) > 0 or USER_WS = 1 then 1 else 0  end  ELSE 0   END  AS CRIPTAT  ";
 
 
             if (Constante.tipBD == 2)

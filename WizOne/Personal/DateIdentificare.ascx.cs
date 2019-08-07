@@ -102,7 +102,8 @@ namespace WizOne.Personal
                     txtMarca.BackColor = Color.LightGray;
                 }          
                 General.SecuritatePersonal(DateIdentificare_DataList, Convert.ToInt32(Session["UserId"].ToString()));
-            
+                General.SecuritatePersonal(DateIdentificare_pnlCtl, Convert.ToInt32(Session["UserId"].ToString()));
+
             }
             catch (Exception ex)
             {

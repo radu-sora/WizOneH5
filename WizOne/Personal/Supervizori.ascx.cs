@@ -272,6 +272,11 @@ namespace WizOne.Personal
             }
         }
 
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
         //<dx:GridViewCommandColumn Width = "75px" VisibleIndex="0" ButtonType="Image" ShowEditButton="true" Caption=" " >
         //    <CustomButtons>
         //        <dx:GridViewCommandColumnCustomButton ID = "btnEdit" >

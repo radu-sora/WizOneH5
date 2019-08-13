@@ -127,33 +127,69 @@ namespace WizOne.Avs
                     //    GROUP BY A.Id, A.Denumire
                     //    ORDER BY A.Denumire", new object[] { Session["UserId"], General.Nz(cmbRol.Value,-99) });
 
+
+
+                    //Florin 2019.08.12
+
+                    //if (Session["Marca_atribut"] != null)
+                    //{
+                    //    string[] param = Session["Marca_atribut"].ToString().Split(';');
+                    //    F10003 = Convert.ToInt32(param[0]);
+                    //    for (int i = 0; i < cmbAng.Items.Count; i++)
+                    //        if (cmbAng.Items[i].Value.ToString() == param[0])
+                    //        {
+                    //            cmbAng.SelectedIndex = i;
+                    //            cmbAngFiltru.SelectedIndex = i;
+                    //            break;
+                    //        }
+                    //    cmbAng.Enabled = false;
+                    //    cmbAngFiltru.Enabled = false;
+                    //    for (int i = 0; i < cmbAtribute.Items.Count; i++)
+                    //        if (Convert.ToInt32(cmbAtribute.Items[i].Value) == Convert.ToInt32(param[1]))
+                    //        {
+                    //            cmbAtribute.SelectedIndex = i;
+                    //            break;
+                    //        }
+                    //    cmbAtribute.Enabled = false;
+                    //}
+
+                    if (General.Nz(Session["Marca_atribut"],"").ToString() != "")
+                    {
+                        string[] arr = Session["Marca_atribut"].ToString().Split(';');
+                        if (arr.Length == 3 && arr[0].ToString() != "" && arr[1].ToString() != "" && arr[2].ToString() != "" && General.IsNumeric(arr[0]) && General.IsNumeric(arr[1]))
+                        {
+                            cmbAng.Value = Convert.ToInt32(arr[0]);
+                            cmbAngFiltru.Value = Convert.ToInt32(arr[0]);
+                            cmbAtribute.Value = Convert.ToInt32(arr[1]);
+
+                            cmbAng.Enabled = false;
+                            cmbAngFiltru.Enabled = false;
+                            cmbAtribute.Enabled = false;
+
+                            string[] arrRol = arr[2].Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                            if (arrRol.Length > 0)
+                                cmbRol.Items.Clear();
+
+                            for(int i = 0; i < arrRol.Length; i++)
+                            {
+                                string[] lst = arrRol[i].Split('=');
+                                if (lst.Length == 2)
+                                    cmbRol.Items.Add(new ListEditItem() { Text = General.Nz(lst[1], "").ToString(), Value = -1 * Convert.ToInt32(General.Nz(lst[0], -99)) });  
+                            }
+                            cmbRol.SelectedIndex = 0;
+                            if (cmbRol.Items.Count == 1)
+                                cmbRol.Enabled = false;
+                        }
+                    }
+
+
                     DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                     cmbAtribute.DataSource = dtAtr;
                     cmbAtribute.DataBind();
                     cmbAtributeFiltru.DataSource = dtAtr;
                     cmbAtributeFiltru.DataBind();
 
-                    if (Session["Marca_atribut"] != null)
-                    {
-                        string[] param = Session["Marca_atribut"].ToString().Split(';');
-                        F10003 = Convert.ToInt32(param[0]);
-                        for (int i = 0; i < cmbAng.Items.Count; i++)
-                            if (cmbAng.Items[i].Value.ToString() == param[0])
-                            {
-                                cmbAng.SelectedIndex = i;
-                                cmbAngFiltru.SelectedIndex = i;
-                                break;
-                            }
-                        cmbAng.Enabled = false;
-                        cmbAngFiltru.Enabled = false;
-                        for (int i = 0; i < cmbAtribute.Items.Count; i++)
-                            if (Convert.ToInt32(cmbAtribute.Items[i].Value) == Convert.ToInt32(param[1]))
-                            {
-                                cmbAtribute.SelectedIndex = i;
-                                break;
-                            }
-                        cmbAtribute.Enabled = false;
-                    }
+
                     AscundeCtl();
                     IncarcaDate();
 
@@ -3632,6 +3668,84 @@ namespace WizOne.Avs
 
             return strSql;
 
+        }
+
+        //public static int DamiRol(int f10003, int atribut)
+        //{
+        //    int idRol = -99;
+
+        //    try
+        //    {
+        //        string strSql = $@"SELECT B.Super1 AS Id, COALESCE(S.Alias,S.Denumire) AS Denumire 
+        //            FROM Avs_tblAtribute A
+        //            INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut AND B.Super1=0
+        //            LEFT JOIN tblSupervizori S ON S.Id = (-1 * B.Super1)
+        //            WHERE @1 = @2 AND A.Id=@3
+        //            UNION
+        //            SELECT B.Super1 AS Id, COALESCE(S.Alias,S.Denumire) AS Denumire
+        //            FROM Avs_tblAtribute A
+        //            INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
+        //            INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper
+        //            LEFT JOIN tblSupervizori S ON S.Id = (-1 * B.Super1)
+        //            WHERE C.IdUser=@1 AND A.Id=@3 AND C.F10003=@2
+        //            GROUP BY B.Super1, S.Alias, S.Denumire
+        //            UNION
+        //            SELECT B.Super1 AS Id, COALESCE(S.Alias,S.Denumire) AS Denumire
+        //            FROM Avs_tblAtribute A
+        //            INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut AND B.Super1=@1
+        //            LEFT JOIN tblSupervizori S ON S.Id = (-1 * B.Super1)";
+
+        //        DataTable dt = General.IncarcaDT(strSql, new object[] { HttpContext.Current.Session["User_Marca"], f10003, atribut });
+        //        if (dt.Rows.Count > 0)
+        //            idRol = Convert.ToInt32(General.Nz(dt.Rows[0]["Id"],-99));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Avs.Cereri", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return idRol;
+        //}
+
+
+        public static string DamiRol(int f10003, int atribut)
+        {
+            string str = "";
+
+            try
+            {
+                string strSql = $@"SELECT B.Super1 AS Id, COALESCE(S.Alias,S.Denumire) AS Denumire 
+                    FROM Avs_tblAtribute A
+                    INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut AND B.Super1=0
+                    LEFT JOIN tblSupervizori S ON S.Id = (-1 * B.Super1)
+                    WHERE @4 = @2 AND A.Id=@3
+                    UNION
+                    SELECT B.Super1 AS Id, COALESCE(S.Alias,S.Denumire) AS Denumire
+                    FROM Avs_tblAtribute A
+                    INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut
+                    INNER JOIN F100Supervizori C ON (-1 * B.Super1) = C.IdSuper
+                    LEFT JOIN tblSupervizori S ON S.Id = (-1 * B.Super1)
+                    WHERE C.IdUser=@1 AND A.Id=@3 AND C.F10003=@2
+                    GROUP BY B.Super1, S.Alias, S.Denumire
+                    UNION
+                    SELECT B.Super1 AS Id, COALESCE(S.Alias,S.Denumire) AS Denumire
+                    FROM Avs_tblAtribute A
+                    INNER JOIN Avs_Circuit B ON A.Id=B.IdAtribut AND B.Super1=@1
+                    LEFT JOIN tblSupervizori S ON S.Id = (-1 * B.Super1)";
+
+                DataTable dt = General.IncarcaDT(strSql, new object[] { HttpContext.Current.Session["UserId"], f10003, atribut, HttpContext.Current.Session["User_Marca"] });
+
+                for(int i = 0; i < dt.Rows.Count; i++)
+                {
+                    str += dt.Rows[i]["Id"] + "=" + dt.Rows[i]["Denumire"] + "|";
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Avs.Cereri", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return str;
         }
 
 

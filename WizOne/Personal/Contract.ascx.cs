@@ -1410,14 +1410,25 @@ namespace WizOne.Personal
 
         private void ModifAvans(int atribut)
         {
-            string url = "~/Avs/Cereri.aspx";
-            Session["Marca_Atribut"] = Session["Marca"].ToString() + ";" + atribut.ToString();
-            Session["MP_Avans"] = "true";
-            Session["MP_Avans_Tab"] = "Contract";
-            if (Page.IsCallback)
-                ASPxWebControl.RedirectOnCallback(url);
+            string strRol = Avs.Cereri.DamiRol(Convert.ToInt32(General.Nz(Session["Marca"], -99)), atribut);
+            if (strRol == "")
+            {
+                if (Page.IsCallback)
+                    Contract_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie");
+                else
+                    MessageBox.Show("Nu aveti drepturi pentru aceasta operatie", MessageBox.icoWarning, "Atentie");
+            }
             else
-                Response.Redirect(url, false);
+            {
+                string url = "~/Avs/Cereri.aspx";
+                Session["Marca_Atribut"] = Session["Marca"].ToString() + ";" + atribut.ToString() + ";" + strRol;
+                Session["MP_Avans"] = "true";
+                Session["MP_Avans_Tab"] = "Contract";
+                if (Page.IsCallback)
+                    ASPxWebControl.RedirectOnCallback(url);
+                else
+                    Response.Redirect(url, false);
+            }
         }
 
         private void GoToIstoric(int atribut)

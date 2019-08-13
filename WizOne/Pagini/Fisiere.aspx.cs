@@ -53,7 +53,7 @@ namespace WizOne.Pagini
                                             if (dr != null)
                                             {
                                                 string numeFis = (dr["FisierNume"] ?? "").ToString();
-                                                string ext = (dr["FisierNume"] ?? "txt").ToString();
+                                                string ext = (dr["FisierExtensie"] ?? ".txt").ToString();
                                                 //if (numeFis.LastIndexOf(".") >= 0)
                                                 //    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
                                                 scrieDoc(ext, (byte[])dr["Attach"], numeFis);
@@ -94,7 +94,7 @@ namespace WizOne.Pagini
                                 if (drAt != null)
                                 {
                                     string numeFis = (drAt["FisierNume"] ?? "").ToString();
-                                    string ext = (drAt["FisierNume"] ?? "txt").ToString();
+                                    string ext = (drAt["FisierExtensie"] ?? ".txt").ToString();
                                     //if (numeFis.LastIndexOf(".") >= 0)
                                     //    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
                                     scrieDoc(ext, (byte[])drAt["Attach"], numeFis);

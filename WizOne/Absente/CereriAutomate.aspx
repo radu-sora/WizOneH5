@@ -108,12 +108,14 @@
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblDataInc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:75px; width:80px;">Data inceput</label>
 						                    <dx:ASPxDateEdit  ID="dtDataInc" Width="150" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
+                                               <ClientSideEvents  ValueChanged="function(s, e) { pnlCtl.PerformCallback('dtDataInc' + ';' + s.GetValue()); }"/>
                                                     <CalendarProperties FirstDayOfWeek="Monday" />                                                   
 							                </dx:ASPxDateEdit>
                                          </div>
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblDataSf" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Data sfarsit</label>
 						                    <dx:ASPxDateEdit  ID="dtDataSf" Width="150" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
+                                                 <ClientSideEvents  ValueChanged="function(s, e) { pnlCtl.PerformCallback('dtDataSf' + ';' + s.GetValue()); }"/>
                                                     <CalendarProperties FirstDayOfWeek="Monday" />                                                   
 							                </dx:ASPxDateEdit>
                                          </div>   

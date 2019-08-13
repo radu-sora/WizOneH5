@@ -1312,15 +1312,15 @@ namespace WizOne.Pagini
 
 
                 if (General.Nz(obj[3], "").ToString() == "")
-                {
+                {//Radu 08.08.2019 - am adaugat FisierNume si FisierExtensie in tabela Atasamente, deoarece, fara acestea, fisierele nu pot fi deschise
                     if (Constante.tipBD == 1)
                         strSql = $@"
                             BEGIN
                                 DECLARE @IdAuto TABLE (IdAuto int);
 
-                                INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", USER_NO, TIME) 
+                                INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
                                 OUTPUT inserted.IdAuto INTO @IdAuto
-                                VALUES( @8, {categ}, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()});
+                                VALUES( @8, {categ}, {General.CurrentDate()}, @3, @4, @9, @10, @6, {General.CurrentDate()});
                             
                                 UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=(SELECT IdAuto FROM @IdAuto) WHERE ""IdAuto""=@2;
                             END;";
@@ -1329,8 +1329,8 @@ namespace WizOne.Pagini
                             BEGIN
                                 DECLARE param_IdAuto number;
 
-                                INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", USER_NO, TIME) 
-                                VALUES( @8, {categ}, {General.CurrentDate()}, @3, @4, @6, {General.CurrentDate()})
+                                INSERT INTO ""Atasamente""(""IdEmpl"", ""IdCategory"", ""DateAttach"", ""Attach"", ""DescrAttach"", ""FisierNume"", ""FisierExtensie"", USER_NO, TIME) 
+                                VALUES( @8, {categ}, {General.CurrentDate()}, @3, @4, @9, @10, @6, {General.CurrentDate()})
                                 RETURNING ""IdAuto"" INTO param_IdAuto;
                             
                                 UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=param_IdAuto WHERE ""IdAuto""=@2;
@@ -1340,15 +1340,16 @@ namespace WizOne.Pagini
                 {
                     strSql = $@"
                         BEGIN
-                            UPDATE ""Atasamente"" SET ""Attach""=@3, ""DescrAttach""=@4 WHERE ""IdAuto""=@6;
+                            UPDATE ""Atasamente"" SET ""Attach""=@3, ""DescrAttach""=@4 ,""FisierNume"" = @9, ""FisierExtensie"" = @10 WHERE ""IdAuto""=@6;
                         END;";
                 }
 
 
                 string numeFis = Path.GetFileNameWithoutExtension(e.UploadedFile.FileName);
-                string ext = Path.GetExtension(e.UploadedFile.FileName);
-                string numeComplet = numeFis + "_" + obj[4] + "_" + Convert.ToDateTime(obj[5]).Year + "." + Convert.ToDateTime(obj[5]).Month.ToString().PadLeft(2, '0') + "." + Convert.ToDateTime(obj[5]).Day.ToString().PadLeft(2, '0') + ext;
-                General.ExecutaNonQuery(strSql, new object[] { "Atasamente", obj[0], e.UploadedFile.FileBytes, numeComplet, e.UploadedFile.ContentType, Session["UserId"], obj[3], obj[2] });
+                string extensie = Path.GetExtension(e.UploadedFile.FileName);
+                object ext = e.UploadedFile.ContentType;
+                string numeComplet = numeFis + "_" + obj[4] + "_" + Convert.ToDateTime(obj[5]).Year + "." + Convert.ToDateTime(obj[5]).Month.ToString().PadLeft(2, '0') + "." + Convert.ToDateTime(obj[5]).Day.ToString().PadLeft(2, '0') + extensie;
+                General.ExecutaNonQuery(strSql, new object[] { "Atasamente", obj[0], e.UploadedFile.FileBytes, numeComplet, e.UploadedFile.ContentType, Session["UserId"], obj[3], obj[2], numeFis, ext.ToString() });
 
             }
             catch (Exception ex)

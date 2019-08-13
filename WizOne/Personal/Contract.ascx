@@ -57,11 +57,22 @@
 
                     pnlLoading.Show();
                     pnlCtlContract.PerformCallback(s.name + ";" + s.GetDate());
+                    debugger;
+                    if (cmbDurCtr.GetValue() == 2) {
+                        var dtAng = new Date(deDataAng.GetDate());
+                        var dtTemp = new Date(dtAng.getFullYear(), dtAng.getMonth(), dtAng.getDate(), 0, 0, 0, 0);
+                        deDeLaData.SetValue(dtTemp);
+                        var dateDeLa = new Date(deDeLaData.GetDate());
+                        var dateLa = new Date(deLaData.GetDate());
+                        CalculLuniSiZile(dateDeLa, dateLa);
+                        Validare36Luni();
+                    }
                 }
                 break;
             case "deDeLaData":
             case "deLaData":
                 {
+                    debugger;
                     var dateDeLa = new Date(deDeLaData.GetDate());
                     var dateLa = new Date(deLaData.GetDate());
 
@@ -169,10 +180,39 @@
         txtVechCarteMuncaAni.SetValue(ani);
         txtVechCarteMuncaLuni.SetValue(luni);
         txtVechimeCarte.SetValue(ani + luni);
+
+        CalcGrila(txtGrila.GetValue());
+    }
+    function txtGrila_TextChanged(s) {
+        CalcGrila(s.GetValue());
     }
 
-    function CalcGrila(s) {
-        pnlCtlContract.PerformCallback(s.name + ";" + s.GetValue());
+
+    function CalcGrila(val) {
+        //pnlCtlContract.PerformCallback(s.name + ";" + s.GetValue());  
+        if (val == null || val.length <= 0) {
+            txtZileCOCuvAnCrt.SetValue("");
+            return;
+        }
+        var nrAni = parseInt(txtVechCarteMuncaAni.GetValue());
+        var nrLuni = parseInt(txtVechCarteMuncaLuni.GetValue());
+        //var dif = parseInt("<%=Session["MP_DiferentaLuni"] %>")
+        var vechime = 12 * nrAni + nrLuni; //+ dif;
+
+        var grila = "<%=Session["MP_Grila"] %>";
+        var resG = grila.split(";");
+        for (var i = 0; i < resG.length; i++) {
+            var linieG = resG[i].split(",");
+            if (parseInt(linieG[0]) == parseInt(val)) {
+                var valMin = parseInt(linieG[1]);
+                var valMax = parseInt(linieG[2]);
+                if (valMin <= vechime && vechime <= valMax) {
+                    txtZileCOCuvAnCrt.SetValue(parseInt(linieG[3]));
+                    break;
+                }
+            }
+        }
+
     }
 
     function dateDiffInDays(a, b) {
@@ -378,6 +418,7 @@
                 if (s.GetValue() == 8)
                     cmbDurTimpMunca.SetSelectedIndex(0);
             }
+            VerifSalariu(txtSalariu.GetValue(), s.GetValue());
         }
     }
 
@@ -427,6 +468,7 @@
     }
 
     function Validare36Luni() {
+        debugger;
         if (cmbDurCtr.GetValue() == 1) {
             var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
 
@@ -467,6 +509,7 @@
     }
 
     function cmbPrel_SelectedIndexChanged() {
+        debugger;
         if (cmbPrel.GetValue() == 1) {
             deDeLaData.SetValue(deLaData.GetValue());
         }
@@ -511,6 +554,19 @@
             }
         }
     }
+
+    function txtSalariu_TextChanged(s) {
+        VerifSalariu(s.GetValue(), cmbTimpPartial.GetValue());
+    }
+
+    function VerifSalariu(sal, timp) {
+        if (sal == null || sal.length <= 0)      
+            return;        
+        var salMin = parseInt("<%=Session["MP_SalMin"] %>");
+        if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal))
+            swal({ title: "Atentie !", text: "Salariul introdus este mai mic decat cel minim (raportat la timp partial)!", type: "warning" });
+    }
+
 </script>
 
 <body>
@@ -722,7 +778,7 @@
 						</td>	
 						<td>
 							<dx:ASPxTextBox  ID="txtSalariu"  Width="100" runat="server"  Text='<%# Eval("F100699") %>'  DisplayFormatString="N0" TabIndex="11" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                
+                                <ClientSideEvents TextChanged="function(s,e){ txtSalariu_TextChanged(s); }" />
 							</dx:ASPxTextBox >
 						</td>
                         <td>
@@ -1331,7 +1387,7 @@
                             <td></td>		
 						    <td>
 							    <dx:ASPxTextBox  ID="txtGrila" Width="75"  runat="server" Text='<%# Eval("F10072") %>' TabIndex="57" AutoPostBack="false" >
-                                       <ClientSideEvents TextChanged="function(s,e){ CalcGrila(s); }" />
+                                       <ClientSideEvents TextChanged="function(s,e){ txtGrila_TextChanged(s); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1352,7 +1408,7 @@
 						    </td>
                             <td></td>		
 						    <td>
-							    <dx:ASPxTextBox  ID="txtZileCOAnAnt" Width="75"  runat="server" Text='<%# Eval("F100996") %>' TabIndex="59" AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtZileCOAnAnt" Width="75"  runat="server" Text='<%# Eval("F100996") %>' TabIndex="59" ClientEnabled="false" AutoPostBack="false" >
                                     
 							    </dx:ASPxTextBox>
 						    </td>

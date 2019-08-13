@@ -29,17 +29,15 @@
                         <dx:GridViewDataTextColumn FieldName="NrAutorizatie" Name="NrAutorizatie" Caption="Nr Autorizatie"  Width="250px" VisibleIndex="5" />
                         <dx:GridViewDataTextColumn FieldName="TalonAutorizatie" Name="TalonAutorizatie" Caption="Talon Autorizatie"  Width="250px" VisibleIndex="6" />
                         <dx:GridViewDataTextColumn FieldName="Categorie" Name="Categorie" Caption="Categorie" VisibleIndex="9" Width="100px" >
-                            <PropertiesTextEdit Password="true">
-                            </PropertiesTextEdit>
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" VisibleIndex="1" />						
                         <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" VisibleIndex="2" />
                         <dx:GridViewDataDateColumn Caption="Data Ultima Viza" FieldName="DataUltimaViza" Name="DataUltimaViza" ShowInCustomizationForm="True" VisibleIndex="7" Width="100px">
-                            <PropertiesDateEdit DisplayFormatString="">
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
                             </PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataDateColumn Caption="Data Expirare Talon" FieldName="DataExpirareTalon" Name="DataExpirareTalon" ShowInCustomizationForm="True" VisibleIndex="8" Width="100px">
-                            <PropertiesDateEdit DisplayFormatString="" EnableFocusedStyle="False">
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy" EnableFocusedStyle="False">
                             </PropertiesDateEdit>
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataDateColumn>

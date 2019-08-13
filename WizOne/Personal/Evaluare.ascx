@@ -23,29 +23,19 @@
                         <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="3" ButtonType="Image" Caption=" " />
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" VisibleIndex="0"/>
-                        <dx:GridViewDataComboBoxColumn FieldName="IdTipAutorizatie" Name="IdTipAutorizatie" Caption="Tip autorizatie" Width="100px" VisibleIndex="4" >
-                            <PropertiesComboBox TextField="TipAutorizatie" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
-                        </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="NrAutorizatie" Name="NrAutorizatie" Caption="Nr Autorizatie"  Width="250px" VisibleIndex="5" />
-                        <dx:GridViewDataTextColumn FieldName="TalonAutorizatie" Name="TalonAutorizatie" Caption="Talon Autorizatie"  Width="250px" VisibleIndex="6" />
-                        <dx:GridViewDataTextColumn FieldName="Categorie" Name="Categorie" Caption="Categorie" VisibleIndex="9" Width="100px" >
+                        <dx:GridViewDataTextColumn FieldName="An" Name="An" Caption="An"  Width="75px" VisibleIndex="4" />
+                        <dx:GridViewDataTextColumn FieldName="Punctaj_max" Name="Punctaj_max" Caption="Punctaj maxim"  Width="100px" VisibleIndex="5" />
+                        <dx:GridViewDataTextColumn FieldName="Punctaj" Name="Punctaj" Caption="Punctaj" VisibleIndex="8" Width="100px" >
                             <PropertiesTextEdit Password="true">
                             </PropertiesTextEdit>
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" VisibleIndex="1" />						
                         <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" VisibleIndex="2" />
-                        <dx:GridViewDataDateColumn Caption="Data Ultima Viza" FieldName="DataUltimaViza" Name="DataUltimaViza" VisibleIndex="7" Width="100px">
-                            <PropertiesDateEdit DisplayFormatString="">
-                            </PropertiesDateEdit>
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn Caption="Data Expirare Talon" FieldName="DataExpirareTalon" Name="DataExpirareTalon" VisibleIndex="8" Width="100px">
-                            <PropertiesDateEdit DisplayFormatString="" EnableFocusedStyle="False">
-                            </PropertiesDateEdit>
-                            <HeaderStyle Wrap="True" />
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn Caption="Grupa" FieldName="Grupa" Name="Grupa" VisibleIndex="10" Width="100px">
+                        <dx:GridViewDataTextColumn Caption="Observatii" FieldName="Observatii" Name="Observatii" VisibleIndex="9" Width="250px">
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="Nr Proces Verbal" FieldName="NrProcesVerbal" Name="NrProcesVerbal" VisibleIndex="11" Width="150px">
+                        <dx:GridViewDataTextColumn Caption="Recomandari" FieldName="Recomandari" Name="Recomandari" VisibleIndex="10" Width="250px">
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn Caption="Info" FieldName="Info" Name="Info" VisibleIndex="11" Width="250px">
                         </dx:GridViewDataTextColumn>
                     </Columns>
                     <SettingsCommandButton>

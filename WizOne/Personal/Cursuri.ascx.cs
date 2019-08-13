@@ -185,7 +185,7 @@ namespace WizOne.Personal
 
                 DataRow row = ds.Tables["Admin_Cursuri"].Rows.Find(keys);
 
-                foreach (DataColumn col in ds.Tables["Admin_Atestate"].Columns)
+                foreach (DataColumn col in ds.Tables["Admin_Cursuri"].Columns)
                 {
                     if (!col.AutoIncrement && grDateCursuri.Columns[col.ColumnName].Visible)
                     {

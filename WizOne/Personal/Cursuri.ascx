@@ -28,8 +28,6 @@
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume complet"  Width="250px" VisibleIndex="7" />
                         <dx:GridViewDataTextColumn FieldName="Info" Name="Info" Caption="Info" VisibleIndex="10" Width="150px" >
-                            <PropertiesTextEdit Password="true">
-                            </PropertiesTextEdit>
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" VisibleIndex="1" />						
                         <dx:GridViewDataDateColumn Caption="TIME" FieldName="TIME" Name="TIME" VisibleIndex="2" Width="100px" Visible="False">
@@ -37,7 +35,7 @@
                         <dx:GridViewDataTextColumn Caption="Numar Ore" FieldName="NrOre" Name="NrOre" VisibleIndex="11" Width="100px">
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn Caption="Descriere curs" FieldName="IdDescriereCurs" Name="IdDescriereCurs" VisibleIndex="6" Width="250px" ShowInCustomizationForm="True">
-                            <PropertiesComboBox TextField="DescriereCurs" ValueField="IdAuto">
+                            <PropertiesComboBox TextField="DescriereCurs" ValueField="IdAuto" DropDownStyle="DropDown" ValueType="System.Int32">
                             </PropertiesComboBox>
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn Caption="Nume furnizor" FieldName="NumeFurnizor" Name="NumeFurnizor" VisibleIndex="8" Width="100px" ShowInCustomizationForm="True">
@@ -47,7 +45,7 @@
                             </PropertiesTextEdit>
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn FieldName="DataCurs" Name="DataCurs" Caption="Data curs"  Width="100px" VisibleIndex="12" ShowInCustomizationForm="True" >
-                            <PropertiesDateEdit DisplayFormatString="">
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
                             </PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataTextColumn Caption="Buget" FieldName="Buget" Name="Buget" VisibleIndex="13" Width="100px" ShowInCustomizationForm="True">
@@ -56,6 +54,8 @@
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn Caption="Data Expirare Autorizare" FieldName="AutorizareExpirare" Name="AutorizareExpirare" VisibleIndex="15" Width="100px" ShowInCustomizationForm="True">
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                            </PropertiesDateEdit>
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataTextColumn Caption="Modificabil" FieldName="Modificabil" Name="Modificabil" Visible="False" VisibleIndex="3">

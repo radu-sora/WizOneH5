@@ -72,7 +72,6 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colTipAutorizatie = (grDateAtestate.Columns["IdTipAutorizatie"] as GridViewDataComboBoxColumn);
             colTipAutorizatie.PropertiesComboBox.DataSource = dtTipAutorizatie;
 
-
         }
 
         protected void grDateAtestate_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
@@ -165,7 +164,6 @@ namespace WizOne.Personal
         {
             try
             {
-                string result = "", valoare = "";
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }

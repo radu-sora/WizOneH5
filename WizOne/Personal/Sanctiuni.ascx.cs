@@ -142,6 +142,21 @@ namespace WizOne.Personal
                 ASPxComboBox cmbObi = grDateSanctiuni.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
                 ASPxTextBox txtVal = grDateSanctiuni.FindEditFormTemplateControl("txtVal") as ASPxTextBox;
                 ASPxTextBox txtProc = grDateSanctiuni.FindEditFormTemplateControl("txtProc") as ASPxTextBox;
+                ASPxTextBox txtNrInregSesizare = grDateSanctiuni.FindEditFormTemplateControl("txtNrInregSesizare") as ASPxTextBox;
+                ASPxDateEdit txtDataInregSesizare = grDateSanctiuni.FindEditFormTemplateControl("txtDataInregSesizare") as ASPxDateEdit;
+                ASPxMemo txtMaterialeDoveditoare = grDateSanctiuni.FindEditFormTemplateControl("txtMaterialeDoveditoare") as ASPxMemo;
+                ASPxTextBox txtNrInregComisie = grDateSanctiuni.FindEditFormTemplateControl("txtNrInregComisie") as ASPxTextBox;
+                ASPxDateEdit txtDataInregComisie = grDateSanctiuni.FindEditFormTemplateControl("txtDataInregComisie") as ASPxDateEdit;
+                ASPxTextBox txtNrInregConvocare = grDateSanctiuni.FindEditFormTemplateControl("txtNrInregConvocare") as ASPxTextBox;
+                ASPxDateEdit txtDataInregConvocare = grDateSanctiuni.FindEditFormTemplateControl("txtDataInregConvocare") as ASPxDateEdit;
+                ASPxDateEdit txtDataCercetare = grDateSanctiuni.FindEditFormTemplateControl("txtDataCercetare") as ASPxDateEdit;
+                ASPxTextBox txtNrProcesCercetare = grDateSanctiuni.FindEditFormTemplateControl("txtNrProcesCercetare") as ASPxTextBox;
+                ASPxDateEdit txtDataProcesCercetare = grDateSanctiuni.FindEditFormTemplateControl("txtDataProcesCercetare") as ASPxDateEdit;
+                ASPxTextBox txtNrDecizie = grDateSanctiuni.FindEditFormTemplateControl("txtNrDecizie") as ASPxTextBox;
+                ASPxDateEdit txtDataDecizie = grDateSanctiuni.FindEditFormTemplateControl("txtDataDecizie") as ASPxDateEdit;
+                ASPxTextBox txtComponentaComisie = grDateSanctiuni.FindEditFormTemplateControl("txtComponentaComisie") as ASPxTextBox;
+                ASPxDateEdit txtDataComunicareDecizie = grDateSanctiuni.FindEditFormTemplateControl("txtDataComunicareDecizie") as ASPxDateEdit;
+                ASPxDateEdit txtDataRadiereSanctiune = grDateSanctiuni.FindEditFormTemplateControl("txtDataRadiereSanctiune") as ASPxDateEdit;
 
                 if (Constante.tipBD == 1)
                     dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
@@ -156,6 +171,22 @@ namespace WizOne.Personal
                 dr["ValoareAbsoluta"] = txtVal.Value ?? DBNull.Value;
                 dr["ValoareProcent"] = txtProc.Value ?? DBNull.Value;
                 dr["Descriere"] = txtDesc.Value ?? DBNull.Value;
+                dr["NrInregSesizare"] = txtNrInregSesizare.Value ?? DBNull.Value;
+                dr["DataInregSesizare"] = txtDataInregSesizare.Value ?? DBNull.Value;
+                dr["MaterialeDoveditoare"] = txtMaterialeDoveditoare.Value ?? DBNull.Value;
+                dr["NrInregComisie"] = txtNrInregComisie.Value ?? DBNull.Value;
+                dr["DataInregComisie"] = txtDataInregComisie.Value ?? DBNull.Value;
+                dr["NrInregConvocare"] = txtNrInregConvocare.Value ?? DBNull.Value;
+                dr["DataInregConvocare"] = txtDataInregConvocare.Value ?? DBNull.Value;
+                dr["DataCercetare"] = txtDataCercetare.Value ?? DBNull.Value;
+                dr["NrProcesCercetare"] = txtNrProcesCercetare.Value ?? DBNull.Value;
+                dr["DataProcesCercetare"] = txtDataProcesCercetare.Value ?? DBNull.Value;
+                dr["NrDecizie"] = txtNrDecizie.Value ?? DBNull.Value;
+                dr["DataDecizie"] = txtDataDecizie.Value ?? DBNull.Value;
+                dr["ComponentaComisie"] = txtComponentaComisie.Value ?? DBNull.Value;
+                dr["DataComunicareDecizie"] = txtDataComunicareDecizie.Value ?? DBNull.Value;
+                dr["DataRadiereSanctiune"] = txtDataRadiereSanctiune.Value ?? DBNull.Value;
+
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
@@ -207,6 +238,21 @@ namespace WizOne.Personal
                 ASPxComboBox cmbObi = grDateSanctiuni.FindEditFormTemplateControl("cmbObi") as ASPxComboBox;
                 ASPxTextBox txtVal = grDateSanctiuni.FindEditFormTemplateControl("txtVal") as ASPxTextBox;
                 ASPxTextBox txtProc = grDateSanctiuni.FindEditFormTemplateControl("txtProc") as ASPxTextBox;
+                ASPxTextBox txtNrInregSesizare = grDateSanctiuni.FindEditFormTemplateControl("txtNrInregSesizare") as ASPxTextBox;
+                ASPxDateEdit txtDataInregSesizare = grDateSanctiuni.FindEditFormTemplateControl("txtDataInregSesizare") as ASPxDateEdit;
+                ASPxMemo txtMaterialeDoveditoare = grDateSanctiuni.FindEditFormTemplateControl("txtMaterialeDoveditoare") as ASPxMemo;
+                ASPxTextBox txtNrInregComisie = grDateSanctiuni.FindEditFormTemplateControl("txtNrInregComisie") as ASPxTextBox;
+                ASPxDateEdit txtDataInregComisie = grDateSanctiuni.FindEditFormTemplateControl("txtDataInregComisie") as ASPxDateEdit;
+                ASPxTextBox txtNrInregConvocare = grDateSanctiuni.FindEditFormTemplateControl("txtNrInregConvocare") as ASPxTextBox;
+                ASPxDateEdit txtDataInregConvocare = grDateSanctiuni.FindEditFormTemplateControl("txtDataInregConvocare") as ASPxDateEdit;
+                ASPxDateEdit txtDataCercetare = grDateSanctiuni.FindEditFormTemplateControl("txtDataCercetare") as ASPxDateEdit;
+                ASPxTextBox txtNrProcesCercetare = grDateSanctiuni.FindEditFormTemplateControl("txtNrProcesCercetare") as ASPxTextBox;
+                ASPxDateEdit txtDataProcesCercetare = grDateSanctiuni.FindEditFormTemplateControl("txtDataProcesCercetare") as ASPxDateEdit;
+                ASPxTextBox txtNrDecizie = grDateSanctiuni.FindEditFormTemplateControl("txtNrDecizie") as ASPxTextBox;
+                ASPxDateEdit txtDataDecizie = grDateSanctiuni.FindEditFormTemplateControl("txtDataDecizie") as ASPxDateEdit;
+                ASPxTextBox txtComponentaComisie = grDateSanctiuni.FindEditFormTemplateControl("txtComponentaComisie") as ASPxTextBox;
+                ASPxDateEdit txtDataComunicareDecizie = grDateSanctiuni.FindEditFormTemplateControl("txtDataComunicareDecizie") as ASPxDateEdit;
+                ASPxDateEdit txtDataRadiereSanctiune = grDateSanctiuni.FindEditFormTemplateControl("txtDataRadiereSanctiune") as ASPxDateEdit;
 
                 dr["IdObiect"] = cmbObi.Value ?? DBNull.Value;
                 dr["DataInceput"] = txtDataInc.Value ?? DBNull.Value;
@@ -216,6 +262,21 @@ namespace WizOne.Personal
                 dr["Descriere"] = txtDesc.Value ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
+                dr["NrInregSesizare"] = txtNrInregSesizare.Value ?? DBNull.Value;
+                dr["DataInregSesizare"] = txtDataInregSesizare.Value ?? DBNull.Value;
+                dr["MaterialeDoveditoare"] = txtMaterialeDoveditoare.Value ?? DBNull.Value;
+                dr["NrInregComisie"] = txtNrInregComisie.Value ?? DBNull.Value;
+                dr["DataInregComisie"] = txtDataInregComisie.Value ?? DBNull.Value;
+                dr["NrInregConvocare"] = txtNrInregConvocare.Value ?? DBNull.Value;
+                dr["DataInregConvocare"] = txtDataInregConvocare.Value ?? DBNull.Value;
+                dr["DataCercetare"] = txtDataCercetare.Value ?? DBNull.Value;
+                dr["NrProcesCercetare"] = txtNrProcesCercetare.Value ?? DBNull.Value;
+                dr["DataProcesCercetare"] = txtDataProcesCercetare.Value ?? DBNull.Value;
+                dr["NrDecizie"] = txtNrDecizie.Value ?? DBNull.Value;
+                dr["DataDecizie"] = txtDataDecizie.Value ?? DBNull.Value;
+                dr["ComponentaComisie"] = txtComponentaComisie.Value ?? DBNull.Value;
+                dr["DataComunicareDecizie"] = txtDataComunicareDecizie.Value ?? DBNull.Value;
+                dr["DataRadiereSanctiune"] = txtDataRadiereSanctiune.Value ?? DBNull.Value;
 
                 metaUploadFile itm = Session["DocUpload_MP_Sanctiuni"] as metaUploadFile;
                 if (itm != null)

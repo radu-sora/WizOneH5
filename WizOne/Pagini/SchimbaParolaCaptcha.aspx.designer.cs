@@ -7,72 +7,54 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Personal {
+namespace WizOne.Pagini {
     
     
-    public partial class DateIdentificare {
+    public partial class SchimbaParolaCaptcha {
         
         /// <summary>
-        /// DateIdentificare_pnlCtl control.
+        /// form1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel DateIdentificare_pnlCtl;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// lgFoto control.
+        /// txtPan1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgFoto;
+        protected global::System.Web.UI.WebControls.TextBox txtPan1;
         
         /// <summary>
-        /// lgFotoTable control.
+        /// txtPan2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTable lgFotoTable;
+        protected global::System.Web.UI.WebControls.TextBox txtPan2;
         
         /// <summary>
-        /// img control.
+        /// txtPan3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage img;
+        protected global::System.Web.UI.WebControls.TextBox txtPan3;
         
         /// <summary>
-        /// btnDocUpload control.
+        /// btnOk control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxUploadControl btnDocUpload;
-        
-        /// <summary>
-        /// btnSterge control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSterge;
-        
-        /// <summary>
-        /// DateIdentificare_DataList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList DateIdentificare_DataList;
+        protected global::System.Web.UI.WebControls.Button btnOk;
     }
 }

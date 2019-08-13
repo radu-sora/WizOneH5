@@ -179,7 +179,7 @@ namespace WizOne.Pontaj
 
                     foreach (DictionaryEntry de in upd.NewValues)
                     {
-                        if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >=0)
+                        if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
                         {
                             row[de.Key.ToString()] = upd.NewValues[de.Key.ToString()] ?? DBNull.Value;
                         }
@@ -193,7 +193,7 @@ namespace WizOne.Pontaj
                     General.SalveazaDate(dt, "Ptj_Cumulat");
 
                     string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                    for(int i = 0; i < arr.Length; i++)
+                    for (int i = 0; i < arr.Length; i++)
                     {
                         General.CalculFormuleCumulat(Convert.ToInt32(arr[i]), txtAnLuna.Date.Year, txtAnLuna.Date.Month);
                     }

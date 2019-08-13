@@ -226,8 +226,7 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MonthClosing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MonthClosing">
       <HintPath>..\Artifacts\MonthClosing.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -319,6 +318,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Absente\Cereri.aspx" />
+    <Content Include="Absente\CereriAutomate.aspx" />
     <Content Include="Absente\IstoricExtins.aspx" />
     <Content Include="Absente\Lista.aspx" />
     <Content Include="Absente\SetariActiuni.aspx" />
@@ -786,6 +786,7 @@
     <Content Include="Organigrama\Posturi.aspx" />
     <Content Include="Organigrama\PosturiValidare.aspx" />
     <Content Include="Pagini\ActeAditionale.aspx" />
+    <Content Include="Pagini\Captcha.aspx" />
     <Content Include="Pagini\CodConfirmare.aspx" />
     <Content Include="Pagini\Delegari.aspx" />
     <Content Include="Pagini\Fisiere.aspx" />
@@ -796,11 +797,15 @@
     <Content Include="Pagini\Istoric.aspx" />
     <Content Include="Pagini\IstoricModificari.aspx" />
     <Content Include="Pagini\MainPage.aspx" />
+    <Content Include="Pagini\SchimbaParolaCaptcha.aspx" />
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
+    <Content Include="Personal\Cursuri.ascx" />
+    <Content Include="Personal\Evaluare.ascx" />
     <Content Include="Personal\Calcul.ascx" />
     <Content Include="Personal\CentreCost.ascx" />
     <Content Include="Personal\Componente.ascx" />
+    <Content Include="Personal\Atestate.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
     <Content Include="Personal\Sporuri.ascx" />
     <Content Include="Personal\SporuriTranzactii.ascx" />
@@ -999,6 +1004,13 @@
     </Compile>
     <Compile Include="Absente\Cereri.aspx.designer.cs">
       <DependentUpon>Cereri.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Absente\CereriAutomate.aspx.cs">
+      <DependentUpon>CereriAutomate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\CereriAutomate.aspx.designer.cs">
+      <DependentUpon>CereriAutomate.aspx</DependentUpon>
     </Compile>
     <Compile Include="Absente\IstoricExtins.aspx.cs">
       <DependentUpon>IstoricExtins.aspx</DependentUpon>
@@ -1524,6 +1536,13 @@
     <Compile Include="Pagini\ActeAditionale.aspx.designer.cs">
       <DependentUpon>ActeAditionale.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pagini\Captcha.aspx.cs">
+      <DependentUpon>Captcha.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Captcha.aspx.designer.cs">
+      <DependentUpon>Captcha.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pagini\CodConfirmare.aspx.cs">
       <DependentUpon>CodConfirmare.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1594,6 +1613,13 @@
     <Compile Include="Pagini\MainPage.aspx.designer.cs">
       <DependentUpon>MainPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.cs">
+      <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.designer.cs">
+      <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pagini\VerificareBD.aspx.cs">
       <DependentUpon>VerificareBD.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1607,6 +1633,20 @@
     </Compile>
     <Compile Include="Personal\Activitati.ascx.designer.cs">
       <DependentUpon>Activitati.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Cursuri.ascx.cs">
+      <DependentUpon>Cursuri.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Cursuri.ascx.designer.cs">
+      <DependentUpon>Cursuri.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Evaluare.ascx.cs">
+      <DependentUpon>Evaluare.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Evaluare.ascx.designer.cs">
+      <DependentUpon>Evaluare.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Calcul.ascx.cs">
       <DependentUpon>Calcul.ascx</DependentUpon>
@@ -1628,6 +1668,13 @@
     </Compile>
     <Compile Include="Personal\Componente.ascx.designer.cs">
       <DependentUpon>Componente.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Atestate.ascx.cs">
+      <DependentUpon>Atestate.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Atestate.ascx.designer.cs">
+      <DependentUpon>Atestate.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\LipsaNecesar.ascx.cs">
       <DependentUpon>LipsaNecesar.ascx</DependentUpon>
@@ -2461,6 +2508,7 @@
     <Content Include="App_GlobalResources\General.en.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>General.en.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\General.resx" />
     <Content Include="Absente\App_LocalResources\Cereri.aspx.resx" />
@@ -2471,6 +2519,7 @@
       <LastGenOutput>General.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\AdeverintaGenerala.resx">
       <DependentUpon>AdeverintaGenerala.cs</DependentUpon>
     </EmbeddedResource>

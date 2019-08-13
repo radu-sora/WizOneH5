@@ -29,8 +29,8 @@
 			<div>
 
 			  <fieldset class="fieldset-auto-width">
-				<legend class="legend-font-size">Studii</legend>
-				<table width="80%">	
+				<legend id="lgStud" runat="server" class="legend-font-size">Studii</legend>
+				<table id="lgStudTable" runat="server" width="80%">	
 					<tr>				
 						<td>		
 							<dx:ASPxLabel  ID="lblStudii" Width="100" runat="server"  Text="Studii"></dx:ASPxLabel >	

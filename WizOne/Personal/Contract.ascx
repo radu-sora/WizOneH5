@@ -57,11 +57,22 @@
 
                     pnlLoading.Show();
                     pnlCtlContract.PerformCallback(s.name + ";" + s.GetDate());
+                    debugger;
+                    if (cmbDurCtr.GetValue() == 2) {
+                        var dtAng = new Date(deDataAng.GetDate());
+                        var dtTemp = new Date(dtAng.getFullYear(), dtAng.getMonth(), dtAng.getDate(), 0, 0, 0, 0);
+                        deDeLaData.SetValue(dtTemp);
+                        var dateDeLa = new Date(deDeLaData.GetDate());
+                        var dateLa = new Date(deLaData.GetDate());
+                        CalculLuniSiZile(dateDeLa, dateLa);
+                        Validare36Luni();
+                    }
                 }
                 break;
             case "deDeLaData":
             case "deLaData":
                 {
+                    debugger;
                     var dateDeLa = new Date(deDeLaData.GetDate());
                     var dateLa = new Date(deLaData.GetDate());
 
@@ -169,10 +180,39 @@
         txtVechCarteMuncaAni.SetValue(ani);
         txtVechCarteMuncaLuni.SetValue(luni);
         txtVechimeCarte.SetValue(ani + luni);
+
+        CalcGrila(txtGrila.GetValue());
+    }
+    function txtGrila_TextChanged(s) {
+        CalcGrila(s.GetValue());
     }
 
-    function CalcGrila(s) {
-        pnlCtlContract.PerformCallback(s.name + ";" + s.GetValue());
+
+    function CalcGrila(val) {
+        //pnlCtlContract.PerformCallback(s.name + ";" + s.GetValue());  
+        if (val == null || val.length <= 0) {
+            txtZileCOCuvAnCrt.SetValue("");
+            return;
+        }
+        var nrAni = parseInt(txtVechCarteMuncaAni.GetValue());
+        var nrLuni = parseInt(txtVechCarteMuncaLuni.GetValue());
+        //var dif = parseInt("<%=Session["MP_DiferentaLuni"] %>")
+        var vechime = 12 * nrAni + nrLuni; //+ dif;
+
+        var grila = "<%=Session["MP_Grila"] %>";
+        var resG = grila.split(";");
+        for (var i = 0; i < resG.length; i++) {
+            var linieG = resG[i].split(",");
+            if (parseInt(linieG[0]) == parseInt(val)) {
+                var valMin = parseInt(linieG[1]);
+                var valMax = parseInt(linieG[2]);
+                if (valMin <= vechime && vechime <= valMax) {
+                    txtZileCOCuvAnCrt.SetValue(parseInt(linieG[3]));
+                    break;
+                }
+            }
+        }
+
     }
 
     function dateDiffInDays(a, b) {
@@ -184,24 +224,59 @@
         return Math.floor((utc2 - utc1) / _MS_PER_DAY);
     }
 
-    function CalculLuniSiZile(dtInc, dtSf) {
-        var ani = (dtSf.getFullYear() - dtInc.getFullYear());
-        var luni = (dtSf.getMonth() - dtInc.getMonth());
-        var zile = (dtSf.getDate() - dtInc.getDate());
+    var getDaysInMonth = function (month, year) {       
+        return new Date(year, month + 1, 0).getDate();   
+    };
+
+    //function CalculLuniSiZile(dtInc, dtSf) {    
+    //    var ani = (dtSf.getFullYear() - dtInc.getFullYear());
+    //    var luni = (dtSf.getMonth() - dtInc.getMonth());
+    //    var zile = (dtSf.getDate() - dtInc.getDate());
         
-        if (dtSf.getMonth() < dtInc.getMonth()) {
-            luni = 12 - (dtSf.getMonth() - dtInc.getMonth());
-            ani = ani - 1;
+    //    if (dtSf.getMonth() < dtInc.getMonth()) {
+    //        luni = 12 - (dtSf.getMonth() - dtInc.getMonth());
+    //        ani = ani - 1;
+    //    }
+
+    //    if (dtSf.getDate() < dtInc.getDate()) {
+    //        luni = luni - 1;
+    //        var dtTmp = Date.UTC(dtSf.getFullYear(), dtSf.getMonth() - 1, dtInc.getDate());
+    //        zile = dateDiffInDays(new Date(dtTmp), dtSf);
+    //    }
+
+    //    txtNrLuni.SetValue((ani * 12 + luni).toString());
+    //    txtNrZile.SetValue(zile);
+    //}
+
+    function CalculLuniSiZile(dtInc, dtSf) { 
+        var arNrZileInLuna = [];
+
+        // determin nr zile calendaristice in luna:
+        var odtT1 = new Date(dtInc.getFullYear(), dtInc.getMonth() , dtInc.getDate(), 0, 0, 0, 0);
+        var odtT2 = new Date(dtSf.getFullYear(), dtSf.getMonth(), dtSf.getDate(), 0, 0, 0, 0);
+        for (var odtDt = odtT1; odtDt <= odtT2;)
+        {
+            odtD = new Date(
+                odtDt.getMonth() == 12 ? odtDt.getFullYear() + 1 : odtDt.getFullYear(),
+                odtDt.getMonth() == 12 ? 1 : odtDt.getMonth() + 1, 1, 0, 0, 0, 0);
+
+            arNrZileInLuna.push(getDaysInMonth(odtDt.getMonth(), odtDt.getFullYear()));
+            odtDt = odtD;
         }
 
-        if (dtSf.getDate() < dtInc.getDate()) {
-            luni = luni - 1;
-            var dtTmp = Date.UTC(dtSf.getFullYear(), dtSf.getMonth() - 1, dtInc.getDate());
-            zile = dateDiffInDays(new Date(dtTmp), dtSf);
+        var nrLuni = 0;
+        var nrZile = 0;
+        if (dtSf != new Date(2100, 1, 1, 0, 0, 0, 0) && dtInc != new Date(2100, 1, 1, 0, 0, 0, 0))         
+            nrZile = dateDiffInDays(dtInc, dtSf) + 1;
+
+        for (var nI = 0; nI < arNrZileInLuna.length && nrZile >= arNrZileInLuna[nI]; nI++)
+        {
+            nrZile -= arNrZileInLuna[nI];
+            nrLuni++;
         }
 
-        txtNrLuni.SetValue((ani * 12 + luni).toString());
-        txtNrZile.SetValue(zile);
+        txtNrLuni.SetValue(nrLuni);
+        txtNrZile.SetValue(nrZile);
     }
 
     function SetNorma(s) {      
@@ -332,7 +407,7 @@
             cmbIntRepTimpMunca.SetEnabled(true);        
 
         if (s.name == "cmbTimpPartial") {         
-            //pnlCtlContract.PerformCallback(s.name + ";" + s.GetValue());
+            pnlCtlContract.PerformCallback(s.name + ";" + s.GetValue());
             if (16 <= txtVarsta.GetValue() && txtVarsta.GetValue() < 18)
                 cmbDurTimpMunca.SetSelectedIndex(1);
             else {
@@ -343,6 +418,7 @@
                 if (s.GetValue() == 8)
                     cmbDurTimpMunca.SetSelectedIndex(0);
             }
+            VerifSalariu(txtSalariu.GetValue(), s.GetValue());
         }
     }
 
@@ -392,6 +468,7 @@
     }
 
     function Validare36Luni() {
+        debugger;
         if (cmbDurCtr.GetValue() == 1) {
             var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
 
@@ -432,6 +509,7 @@
     }
 
     function cmbPrel_SelectedIndexChanged() {
+        debugger;
         if (cmbPrel.GetValue() == 1) {
             deDeLaData.SetValue(deLaData.GetValue());
         }
@@ -476,6 +554,19 @@
             }
         }
     }
+
+    function txtSalariu_TextChanged(s) {
+        VerifSalariu(s.GetValue(), cmbTimpPartial.GetValue());
+    }
+
+    function VerifSalariu(sal, timp) {
+        if (sal == null || sal.length <= 0)      
+            return;        
+        var salMin = parseInt("<%=Session["MP_SalMin"] %>");
+        if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal))
+            swal({ title: "Atentie !", text: "Salariul introdus este mai mic decat cel minim (raportat la timp partial)!", type: "warning" });
+    }
+
 </script>
 
 <body>
@@ -499,8 +590,8 @@
             <tr>
              <td>
 			  <fieldset class="fieldset-auto-width">
-				<legend class="legend-font-size">Contract</legend>
-				<table width="60%">	
+				<legend id="lgContract" runat="server" class="legend-font-size">Contract</legend>
+				<table id="lgContractTable" runat="server" width="60%">	
 					<tr>				
 						<td >
 							<dx:ASPxLabel  ID="lblNrCtrInt" Width="100" runat="server"  Text="Nr. ctr. intern" ></dx:ASPxLabel >	
@@ -595,7 +686,7 @@
 							<dx:ASPxLabel  ID="lblDeLaData" runat="server"  Text="De la data"></dx:ASPxLabel>
 						</td>
 						<td>			
-							<dx:ASPxDateEdit  ID="deDeLaData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100933") %>'  TabIndex="6" AutoPostBack="false" ClientEnabled="false" >
+							<dx:ASPxDateEdit  ID="deDeLaData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100933") %>'  TabIndex="6" AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
 							</dx:ASPxDateEdit>					
 						</td>
@@ -605,7 +696,7 @@
 							<dx:ASPxLabel  ID="lblLaData" runat="server"  Text="La data"></dx:ASPxLabel>	
 						</td>
 						<td>	
-							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100934") %>' TabIndex="7" AutoPostBack="false" ClientEnabled="false"  >
+							<dx:ASPxDateEdit  ID="deLaData" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100934") %>' TabIndex="7" AutoPostBack="false"   >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
                                 <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
 							</dx:ASPxDateEdit>										
@@ -687,7 +778,7 @@
 						</td>	
 						<td>
 							<dx:ASPxTextBox  ID="txtSalariu"  Width="100" runat="server"  Text='<%# Eval("F100699") %>'  DisplayFormatString="N0" TabIndex="11" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                
+                                <ClientSideEvents TextChanged="function(s,e){ txtSalariu_TextChanged(s); }" />
 							</dx:ASPxTextBox >
 						</td>
                         <td>
@@ -784,8 +875,8 @@
                 <asp:ObjectDataSource runat="server" ID="dsLocatieInt"  TypeName="WizOne.Module.General" SelectMethod="GetLocatieInt" />
 			  </fieldset>
 			  <fieldset class="fieldset-auto-width">
-				<legend class="legend-font-size">Tip munca</legend>
-				<table width="60%">	
+				<legend id="lgTipM" runat="server" class="legend-font-size">Tip munca</legend>
+				<table id="lgTipMTable" runat="server" width="60%">	
 					<tr>				
 						<td >
 							<dx:ASPxLabel  ID="lblTipAng" Width="100" runat="server"  Text="Tip angajat" ></dx:ASPxLabel >	
@@ -1057,8 +1148,8 @@
             </td>
            <td valign="top" width="310">      
 			      <fieldset >
-				    <legend class="legend-font-size">Perioada</legend>
-				    <table width="60%">	
+				    <legend id="lgPerioada" runat="server"  class="legend-font-size">Perioada</legend>
+				    <table id="lgPerioadaTable" runat="server"  width="60%">	
 					    <tr>				
 						    <td >
 							    <dx:ASPxLabel  ID="lblPerioadaProba" width="125" runat="server"  Text="Perioada de proba" ></dx:ASPxLabel >	
@@ -1076,7 +1167,7 @@
 						    <td >
 							    <dx:ASPxLabel  ID="lblTest1" runat="server"  Text=" " ></dx:ASPxLabel >	
 						    </td>
-						    <td align="right>
+						    <td align="left">
                                 <dx:ASPxLabel  ID="lblZC" runat="server"  Text="zile calendaristice" ></dx:ASPxLabel >
                             </td>
                             <td align="right">
@@ -1108,8 +1199,8 @@
 				    </table>
 			        </fieldset>
 			        <fieldset >
-				    <legend class="legend-font-size">Data incetare</legend>
-				        <table width="60%">	
+				    <legend id="lgDataInc" runat="server" class="legend-font-size">Data incetare</legend>
+				        <table id="lgDataIncTable" runat="server" width="60%">	
 					        <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblUltimaZiLucr" runat="server"  Text="Ultima zi lucrata"></dx:ASPxLabel >	
@@ -1235,8 +1326,8 @@
              </td>
               <td valign="top">   
 			      <fieldset class="fieldset-auto-width">
-				    <legend class="legend-font-size">Situatie CO</legend>
-				    <table width="60%">	
+				    <legend id="lgSitCOCtr" runat="server" class="legend-font-size">Situatie CO</legend>
+				    <table id="lgSitCOCtrTable" runat="server" width="60%">	
 				       <tr>				
 						   <td >
 							    <dx:ASPxLabel  ID="lblVechimeComp" width="150" runat="server"  Text="Vechime in companie" ></dx:ASPxLabel >	
@@ -1296,7 +1387,7 @@
                             <td></td>		
 						    <td>
 							    <dx:ASPxTextBox  ID="txtGrila" Width="75"  runat="server" Text='<%# Eval("F10072") %>' TabIndex="57" AutoPostBack="false" >
-                                       <ClientSideEvents TextChanged="function(s,e){ CalcGrila(s); }" />
+                                       <ClientSideEvents TextChanged="function(s,e){ txtGrila_TextChanged(s); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1317,7 +1408,7 @@
 						    </td>
                             <td></td>		
 						    <td>
-							    <dx:ASPxTextBox  ID="txtZileCOAnAnt" Width="75"  runat="server" Text='<%# Eval("F100996") %>' TabIndex="59" AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtZileCOAnAnt" Width="75"  runat="server" Text='<%# Eval("F100996") %>' TabIndex="59" ClientEnabled="false" AutoPostBack="false" >
                                     
 							    </dx:ASPxTextBox>
 						    </td>

@@ -12,13 +12,13 @@ background-size:cover;
 }
 
 .outer{
-width:407px;
-height:370px;
+width:400px;
+height:362px;
 position: absolute;
 top:8px;
-bottom: 108px;
+bottom: 251px;
 left: 6px;
-right: 763px;
+right: 1075px;
 
 margin: auto;
 text-align:center;
@@ -78,8 +78,8 @@ a
 {
     font-size:18px;
     position:absolute;
-    left:259px;
-    top:300px;
+    left:296px;
+    top:298px;
     width:90px;
     height:36px;
     border:solid 1px #00588a;
@@ -121,23 +121,23 @@ a
 .ssSchimba
 {
     position:absolute;
-    top:122px;
-    left:35px;
-    width:330px;
+    top:114px;
+    left:23px;
+    width:256px;
     
     text-align:left;
     font-size:18px;
     color:#00588a;
-    
-    
+    height: 208px;
 }
      
     .ssSchimba div
     {
-        width:100%;
         display:inline-block;
         margin-bottom:15px;
-    }
+    width: 251px;
+    height: 49px;
+}
      
     .ssSchimba div span
     {
@@ -147,8 +147,6 @@ a
 
     .ssSchimba div #txtPan1, .ssSchimba #txtPan2, .ssSchimba #txtPan3
     {
-        width:170px;
-        height:30px;
         border:solid 1px #00588a;
         font-size:18px;
         font-weight:200;

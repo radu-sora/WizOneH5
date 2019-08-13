@@ -21,6 +21,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
+using System.Web.UI.HtmlControls;
 
 namespace WizOne.Module
 {
@@ -1221,6 +1222,27 @@ namespace WizOne.Module
 
                 if (General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""ParoleUtilizatorIstoric"" WHERE ""Parola""='{pwd}' AND ""IdUser""='{General.Nz(HttpContext.Current.Session["UserId"], "").ToString()}'", null), 0).ToString() != "0")
                     ras += ", a mai fost utilizata";
+
+                //Mihnea - verific daca parola contine portiuni din numele utilizatorului
+                string numecomplet = General.Nz(HttpContext.Current.Session["User_NumeComplet"],USR).ToString().Replace('-',' ');
+                string[] partinume = numecomplet.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                bool continenume = false;
+
+                for(int i=0; i<partinume.Count(); i++)
+                {
+                    if (password.ToUpper().Contains(partinume[i].ToUpper())) continenume = true;
+                }
+
+                if ( continenume )
+                    ras += ", contine o parte din numele utilizatorului ";
+
+                //Mihnea - verific daca parola curenta e inclusa in ultima parola
+                string lastpass = string.Empty;
+                lastpass = General.Nz(General.ExecutaScalar($@"SELECT Parola FROM ""ParoleUtilizatorIstoric"" pui WHERE ""IdUser""='{General.Nz(HttpContext.Current.Session["UserId"], "").ToString()}' AND [time] = (select max(time) from ParoleUtilizatorIstoric pui2 where pui2.IdUser = pui.IdUser) ", null),"").ToString();
+                lastpass = prc.EncryptString(Constante.cheieCriptare, lastpass , 2);
+
+                if( lastpass.ToUpper().Contains(password.ToUpper()))
+                    ras += ", face parte din ultima parola folosita";
 
                 if (ras != "") ras = "parola " + ras.Substring(1);
             }
@@ -5358,17 +5380,17 @@ namespace WizOne.Module
         }
 
         public static void SecuritatePersonal(DataList dtList, int idUser)
-        {
+        {//AND ""IdControl""  like '%_I%'
             List<string> lista = new List<string>();
             string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                 FROM ""Securitate"" A
                                 INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" like '%_I%'
+                                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' 
                                 UNION
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                 FROM ""Securitate"" A
-                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl""  like '%_I%') X
+                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' ) X
                                 GROUP BY X.""IdControl"", X.""IdColoana""";
             strSql = string.Format(strSql, idUser.ToString());
 
@@ -5391,24 +5413,38 @@ namespace WizOne.Module
                     if (ctl != null)
                     {
                         ctl.Visible = vizibil;
-                        ctl.Enabled = !blocat;
+                        ctl.Enabled = !blocat; 
+                    }
+                    else
+                    {
+                        if (param[0].Length >= 2 && param[0].Substring(0, 2) == "lg")
+                        {
+                            HtmlGenericControl ctl1 = dtList.Items[0].FindControl(param[0]) as HtmlGenericControl;
+                            if (ctl1 != null)
+                            {
+                                ctl1.Visible = vizibil;
+                                HtmlTable ctlTable = dtList.Items[0].FindControl(ctl1.ID + "Table") as HtmlTable;
+                                if (ctlTable != null)
+                                    ctlTable.Visible = vizibil;
+                            }
+                        }
                     }
                 }
             }
         }
 
         public static void SecuritatePersonal(ASPxCallbackPanel pnl, int idUser)
-        {
+        {//AND ""IdControl"" like '%_I%'
             List<string> lista = new List<string>();
             string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                 FROM ""Securitate"" A
                                 INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" like '%_I%'
+                                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' 
                                 UNION
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                 FROM ""Securitate"" A
-                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl""  like '%_I%') X
+                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' ) X
                                 GROUP BY X.""IdControl"", X.""IdColoana""";
             strSql = string.Format(strSql, idUser.ToString());
 
@@ -5432,6 +5468,20 @@ namespace WizOne.Module
                     {
                         ctl.Visible = vizibil;
                         ctl.Enabled = !blocat;
+                    }
+                    else
+                    {
+                        if (param[0].Length >= 2 && param[0].Substring(0, 2) == "lg")
+                        {
+                            HtmlGenericControl ctl1 = pnl.FindControl(param[0]) as HtmlGenericControl;
+                            if (ctl1 != null)
+                            {
+                                ctl1.Visible = vizibil;
+                                HtmlTable ctlTable = pnl.FindControl(ctl1.ID + "Table") as HtmlTable;
+                                if (ctlTable != null)
+                                    ctlTable.Visible = vizibil;
+                            }
+                        }
                     }
                 }
             }

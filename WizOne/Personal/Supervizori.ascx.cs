@@ -184,7 +184,7 @@ namespace WizOne.Personal
                                     row[x] = Dami.NextId("F100Supervizori2");
                                 break;
                             case "DATAINCEPUT":
-                                row[x] = DateTime.Now.Date;
+                                row[x] = new DateTime(1900, 1, 1);
                                 break;
                             case "DATASFARSIT":
                                 row[x] = new DateTime(2100, 1, 1);
@@ -270,6 +270,11 @@ namespace WizOne.Personal
                     }
                 }
             }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
         }
 
         //<dx:GridViewCommandColumn Width = "75px" VisibleIndex="0" ButtonType="Image" ShowEditButton="true" Caption=" " >

@@ -261,7 +261,10 @@ namespace WizOne
                 }
                 else
                 {
-                    General.ExecutaNonQuery("UPDATE USERS SET F70114=1 WHERE UPPER(F70104)=@1", new string[] { utilizator.ToUpper() });
+                    if ( Constante.tipBD == 2 )
+                        General.ExecutaNonQuery("UPDATE USERS SET F70114=1,BLOCKTIME = SYSDATE  WHERE UPPER(F70104)=@1", new string[] { utilizator.ToUpper() });
+                    else
+                        General.ExecutaNonQuery("UPDATE USERS SET F70114=1,BLOCKTIME = GETDATE()  WHERE UPPER(F70104)=@1", new string[] { utilizator.ToUpper() });
                     esteBlocat = true;
                 }
             }
@@ -381,19 +384,33 @@ namespace WizOne
                             string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
                             if (tipVerif == "") tipVerif = "1";
 
+                            string redirectpage = string.Empty;
+
+                            switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
+                            {
+                                case 16:
+                                case 26:
+                                    redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
+                                    //redirectpage = "Pagini/SchimbaParola.aspx";
+                                    break;
+                                default:
+                                    redirectpage = "Pagini/SchimbaParola.aspx";
+                                    break;
+                            }
+
                             //Radu 21.03.2018 - daca tipVerif este 2 sau 4, nu mai trebuie sa verificam validitatea parolei
                             if (Convert.ToInt32(General.Nz(drUsr["ResetareParola"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
                             {
                                 General.InregistreazaLogarea(1, txtPan1.Text);
                                 Session["SecApp"] = "OK";
-                                Response.Redirect("Pagini/SchimbaParola.aspx", false);
+                                Response.Redirect(redirectpage, false);
                             }
                             else
                             {
                                 if (Convert.ToInt32(General.Nz(drUsr["ParolaExpirata"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
                                 {
                                     General.InregistreazaLogarea(0, txtPan1.Text, "Parola expirata");
-                                    MessageBox.Show("Parola a expirat", MessageBox.icoWarning,"","Pagini/SchimbaParola.aspx");
+                                    MessageBox.Show("Parola a expirat", MessageBox.icoWarning,"",redirectpage);
                                 }
                                 else
                                 {
@@ -409,7 +426,22 @@ namespace WizOne
                                             Response.Redirect("~/Pagini/CodConfirmare.aspx", false);
                                     }
                                     else
-                                        Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                    {
+                                        switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
+                                        {
+                                            case 16:
+                                            case 26:
+                                                Session["PrevPage"] = "~/Pagini/Default.aspx";
+                                                Session["NextPage"] = "~/Pagini/MainPage.aspx";
+                                                Response.Redirect("~/Pagini/Captcha.aspx", false);
+                                                //Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                                break;
+                                            default:
+                                                Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                                break;
+                                        }
+
+                                    }
                                 }
                             }
                         }
@@ -422,6 +454,10 @@ namespace WizOne
                     case 4:                     //este inactivat in AD
                         General.InregistreazaLogarea(0, txtPan1.Text, "Cont inactiv (inactivat in AD)");
                         MessageBox.Show("Contul este inactivat ! Contactati administratorul de sistem.", MessageBox.icoWarning);
+                        break;
+                    case 5:
+                        General.InregistreazaLogarea(0, txtPan1.Text, "Cont suspendat sau inactiv");
+                        MessageBox.Show("Contul este suspendat sau inactiv ! Contactati administratorul de sistem.", MessageBox.icoWarning);
                         break;
                 }
             }
@@ -441,7 +477,7 @@ namespace WizOne
             //stare = 2             valid si blocat
             //stare = 3             valid si activ
             //stare = 4             disable in AD
-
+            //stare = 5             user suspendat sau inactiv
 
             //optimizare
             //adugam si limba utilizatorului in cazul in care este unul valid dar nu indeplineste restul de conditii pt a putea afisa measjele in limba lui
@@ -462,17 +498,45 @@ namespace WizOne
                     case "3":
                     case "5":
                         {
-                            DataRow dr = General.IncarcaDR(@"SELECT F70103, F70114, ""Mail"", ""IdLimba"" FROM USERS WHERE UPPER(F70104)=@1", new string[] { utilizator.ToUpper() });
+                            // Mihnea - modificare pt implementare deblocare dupa x minute
+                            string strsql = @"SELECT F10003,F70103, F70114, ""Mail"", ""IdLimba"" ,
+                                                            CASE WHEN 
+                                                            COALESCE(CAST((SELECT COALESCE(VALOARE,0) FROM TBLPARAMETRII WHERE NUME = 'NrMinuteDeblocareParola' ) AS INT), 0) >0
+                                                            THEN 
+                                                            CASE WHEN
+                                                            {1} - 
+                                                            COALESCE(CAST((SELECT COALESCE(VALOARE,0) FROM TBLPARAMETRII WHERE NUME = 'NrMinuteDeblocareParola' ) AS INT), 0) > 0 
+                                                            THEN 1 ELSE 0 END
+                                                            ELSE 0 
+                                                            END DEBLOCARE  
+                                                            FROM USERS WHERE UPPER(F70104)='" + utilizator.ToUpper() + "'";
+                            string op = "+";
+                            //string exp = @"CASE WHEN (F70111=1 AND DATEADD(d,f70121,f70122) < GETDATE()) THEN 1 ELSE 0 END AS ""ParolaExpirata"" ";
+                            string exp = $@" DATEDIFF(MINUTE,COALESCE([BLOCKTIME],convert(datetime,'1980-01-01 00:00:00',120)),GETDATE()) ";
+                            if (Constante.tipBD == 2)
+                            {
+                                op = "||";
+                                exp = $@" ( (sysdate - COALESCE(BLOCKTIME,to_date('01/01/1980 00:00:00','dd/MM/rrrr hh24:mi:ss')) )*24*60 ) ";
+                            }
+                            strsql = string.Format(strsql, op, exp);
+
+                            DataRow dr = General.IncarcaDR(strsql,null);
+
                             //DataRow dr = General.IncarcaDR(@"SELECT F70103, F70114, ""Mail"", ""IdLimba"" FROM USERS WHERE UPPER(F70104)='" + utilizator.ToUpper() + "'", null);
                             if (dr == null)
                                 stare = "0" + idLimba;
                             else
                             {
                                 if (dr != null && dr["IdLimba"] != null && dr["IdLimba"].ToString() != "") idLimba = dr["IdLimba"].ToString();
-                                if (dr["F70114"].ToString() == "1")
+                                if (dr["F70114"].ToString() == "1" && dr["DEBLOCARE"].ToString() == "0")
                                     stare = "2" + idLimba;
                                 else
                                 {
+                                    if(dr["F70114"].ToString() == "1" && dr["DEBLOCARE"].ToString() == "1")
+                                    {
+                                        General.ExecutaNonQuery("UPDATE USERS SET F70114=0 WHERE UPPER(F70104)=@1", new string[] { utilizator.ToUpper() });
+                                    }
+
                                     //ProceseSec.CriptDecript sec = new ProceseSec.CriptDecript();
                                     //if (sec.EncryptString("WizOne-2015",entUsr.FirstOrDefault().F70103.ToString(),2) != parola) return 1;
                                     if (tipVerif == "3" || tipVerif == "5")
@@ -488,6 +552,16 @@ namespace WizOne
                                             stare = "1" + idLimba;
                                         else
                                             stare = "3" + idLimba;
+                                    }
+
+                                    //Mihnea adaugat blocare pt useri inactivi / suspendati
+                                    string suspendatinactiv = string.Empty;
+
+                                    suspendatinactiv = General.Nz((General.ExecutaScalar(@"SELECT CASE WHEN F10025 NOT IN (0,999) OR ( F100922 <= GETDATE() AND NOT ( F100924 <= GETDATE() ) ) THEN 1 ELSE 0 END SI FROM F100 WHERE F10003 = @1", new string[] { dr["F10003"].ToString() })).ToString() , "" ).ToString();
+                                   
+                                    if(suspendatinactiv == "1")
+                                    {
+                                        stare = "5" + idLimba;
                                     }
                                 }
                             }
@@ -727,6 +801,11 @@ namespace WizOne
                             Session["SecCriptare"] = arr2[0];
                     }
                 }
+
+                //Mihnea
+                Session["PrevPage"] = "";
+                Session["NextPage"] = "";
+
             }
             catch (Exception ex)
             {

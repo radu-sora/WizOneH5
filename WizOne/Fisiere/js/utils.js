@@ -3,6 +3,7 @@ var __colGrid = "";
 
 function ctx(s, e)
 {
+    debugger;
     if (e.objectType == "header")
     {
         var idCtl = "grDate";

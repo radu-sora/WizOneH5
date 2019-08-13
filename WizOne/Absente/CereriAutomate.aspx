@@ -4,6 +4,21 @@
 
     <script type="text/javascript">
 
+        function EmptyFields(s,e) {
+            cmbAng.SetValue(null);
+            cmbCtr.SetValue(null);
+            cmbStare.SetValue(null);
+
+            cmbSub.SetValue(null);
+            cmbSec.SetValue(null);
+            cmbFil.SetValue(null);
+            cmbDept.SetValue(null);
+            cmbSubDept.SetValue(null);
+            cmbBirou.SetValue(null);
+            cmbCateg.SetValue(null);
+
+            pnlCtl.PerformCallback('EmptyFields');
+        }
 
     </script>
 
@@ -35,6 +50,42 @@
                         <dx:PanelContent>
 
                             <table style="margin-left:15px;">
+                                <tr>
+                                    <td>
+                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <label id="lblAbs" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Tip cerere</label>
+                                            <dx:ASPxComboBox ID="cmbAbs" ClientInstanceName="cmbAbs" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbAbs' + ';' + s.GetValue()); }" />
+                                            </dx:ASPxComboBox>
+                                        </div>
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblDataInc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:75px; width:80px;">Data inceput</label>
+						                    <dx:ASPxDateEdit  ID="dtDataInc" Width="150" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
+                                               <ClientSideEvents  ValueChanged="function(s, e) { pnlCtl.PerformCallback('dtDataInc' + ';' + s.GetValue()); }"/>
+                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
+							                </dx:ASPxDateEdit>
+                                         </div>
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblDataSf" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Data sfarsit</label>
+						                    <dx:ASPxDateEdit  ID="dtDataSf" Width="150" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
+                                                 <ClientSideEvents  ValueChanged="function(s, e) { pnlCtl.PerformCallback('dtDataSf' + ';' + s.GetValue()); }"/>
+                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
+							                </dx:ASPxDateEdit>
+                                         </div>   
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblNr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Nr. zile</label>
+							                <dx:ASPxTextBox ID="txtNr" style="display:inline-block; float:left; width:75px;" runat="server" AutoPostBack="false"  />
+                                        </div>  
+                                         <div style="float:left; padding-right:15px;">
+                                            <dx:ASPxRadioButton ID="rbPrel" runat="server" Text="Preluare manuala"   ClientInstanceName="rbPrel" RepeatDirection="Horizontal" GroupName="Prel1">                                             
+                                             </dx:ASPxRadioButton>
+                                        </div>
+                                        <div style="float:left; padding-right:15px;">
+                                            <dx:ASPxRadioButton ID="rbPrel1" runat="server" Text="Preluare automata" ClientInstanceName="rbPrel1" RepeatDirection="Horizontal" GroupName="Prel1">                                              
+                                             </dx:ASPxRadioButton>
+                                         </div>
+                                      </td>
+                                    </tr>
                                 <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
@@ -97,42 +148,6 @@
                                         </div>                                                                                                                                                            
                                     </td> 
                                  </tr>
-                                <tr>
-                                    <td>
-                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
-                                            <label id="lblAbs" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Tip cerere</label>
-                                            <dx:ASPxComboBox ID="cmbAbs" ClientInstanceName="cmbAbs" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
-                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbAbs' + ';' + s.GetValue()); }" />
-                                            </dx:ASPxComboBox>
-                                        </div>
-                                        <div style="float:left; padding-right:15px;">
-                                            <label id="lblDataInc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:75px; width:80px;">Data inceput</label>
-						                    <dx:ASPxDateEdit  ID="dtDataInc" Width="150" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
-                                               <ClientSideEvents  ValueChanged="function(s, e) { pnlCtl.PerformCallback('dtDataInc' + ';' + s.GetValue()); }"/>
-                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
-							                </dx:ASPxDateEdit>
-                                         </div>
-                                        <div style="float:left; padding-right:15px;">
-                                            <label id="lblDataSf" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Data sfarsit</label>
-						                    <dx:ASPxDateEdit  ID="dtDataSf" Width="150" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy"  AutoPostBack="false"  >
-                                                 <ClientSideEvents  ValueChanged="function(s, e) { pnlCtl.PerformCallback('dtDataSf' + ';' + s.GetValue()); }"/>
-                                                    <CalendarProperties FirstDayOfWeek="Monday" />                                                   
-							                </dx:ASPxDateEdit>
-                                         </div>   
-                                        <div style="float:left; padding-right:15px;">
-                                            <label id="lblNr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Nr. zile</label>
-							                <dx:ASPxTextBox ID="txtNr" style="display:inline-block; float:left; width:75px;" runat="server" AutoPostBack="false"  />
-                                        </div>  
-                                         <div style="float:left; padding-right:15px;">
-                                            <dx:ASPxRadioButton ID="rbPrel" runat="server" Text="Preluare manuala"   ClientInstanceName="rbPrel" RepeatDirection="Horizontal" GroupName="Prel1">                                             
-                                             </dx:ASPxRadioButton>
-                                        </div>
-                                        <div style="float:left; padding-right:15px;">
-                                            <dx:ASPxRadioButton ID="rbPrel1" runat="server" Text="Preluare automata" ClientInstanceName="rbPrel1" RepeatDirection="Horizontal" GroupName="Prel1">                                              
-                                             </dx:ASPxRadioButton>
-                                         </div>
-                                      </td>
-                                    </tr>
                                     <tr>
                                         <td>
                                             <div style="float:left; padding-right:15px; padding-bottom:10px;">
@@ -195,6 +210,14 @@
                 <br />
     
             </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                    <label id="lblLog" runat="server">Log</label>
+                    <dx:ASPxMemo ID="txtLog" runat="server" Width="800px" Height="200px" ReadOnly="true" meta:resourcekey="txtLog"></dx:ASPxMemo>                                        
+                </div>
+            </td> 
         </tr>
     </table>
 

@@ -183,6 +183,12 @@ namespace WizOne.Absente
                 List<int> lstMarci = new List<int>();
                 string[] sablon = new string[11];
 
+                if (cmbAbs.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat tip absenta!"), MessageBox.icoError);
+                    return;
+                }
+
                 if (dtDataInc.Value == null || (dtDataSf.Visible == true && dtDataSf.Value == null))
                 {
                     MessageBox.Show(Dami.TraduCuvant("Lipseste data start/data sfarsit!"), MessageBox.icoError);
@@ -253,7 +259,19 @@ namespace WizOne.Absente
                 #region Construim istoricul
                 DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(marca.ToString()), null);
                 DataRow[] lst = dtAbs.Select("Id=" + General.Nz(cmbAbs.Value, -99));
-                if (lst.Count() == 0) msg = "Nu exista circuit definit pentru acest tip de absenta!";
+                if (lst.Count() == 0)
+                {
+                    if (dtAbs.Rows.Count <= 0)
+                    {
+                        err += "Angajatul cu marca " + marca + " nu are definit contract!\n";
+                        continue;
+                    }
+                    else
+                    {
+                        return "Nu este definit circuit pentru acest tip de absenta!";                       
+                    }
+                    
+                }
                 DataRow drAbs = lst[0];
 
                 string sqlIst;
@@ -380,7 +398,12 @@ namespace WizOne.Absente
 
             }
 
-            return "S-au generat " + x + " cereri!";// + (err.Length > 0 ? "\nS-au intalnit urmatoarele erori:\n" + err : "");
+            if (err.Length > 0)
+                txtLog.Text = "S-au intalnit urmatoarele erori:\n" + err;
+            else
+                txtLog.Text = "";
+
+            return "S-au generat " + x + " cereri!";
 
         }
                  
@@ -399,29 +422,29 @@ namespace WizOne.Absente
             }
         }
 
-        protected void btnFiltruSterge_Click()
-        {
-            try
-            {
-                cmbAng.Value = null;
-                cmbSub.Value = null;
-                cmbSec.Value = null;
-                cmbFil.Value = null;
-                cmbDept.Value = null;
-                cmbSubDept.Value = null;
-                cmbBirou.Value = null;
-                cmbCtr.Value = null;
-                cmbCateg.Value = null;
+        //protected void btnFiltruSterge_Click()
+        //{
+        //    try
+        //    {
+        //        cmbAng.Value = null;
+        //        cmbSub.Value = null;
+        //        cmbSec.Value = null;
+        //        cmbFil.Value = null;
+        //        cmbDept.Value = null;
+        //        cmbSubDept.Value = null;
+        //        cmbBirou.Value = null;
+        //        cmbCtr.Value = null;
+        //        cmbCateg.Value = null;
 
-                cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
-                cmbDept.DataBind();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
+        //        cmbDept.DataBind();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
 
@@ -456,8 +479,14 @@ namespace WizOne.Absente
                         break;
                     case "dtDataInc":
                     case "dtDataSf":
+                        if (dtDataSf.Visible == false)
+                            dtDataSf.Value = dtDataInc.Value;
                         CalcZile();
                         break;
+                    case "EmptyFields":
+                        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
+                        cmbDept.DataBind();
+                        return;
                 }
 
                 if (esteStruc)
@@ -888,9 +917,6 @@ namespace WizOne.Absente
                 string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
                 
 
-     
-
-
                 string valExtra = "";
                 for (int i = 0; i < lstExtra.Count(); i++)
                 {
@@ -904,13 +930,19 @@ namespace WizOne.Absente
                 string strTop = "";
                 if (Constante.tipBD == 1) strTop = "TOP 1";
 
+                string nrZile = "1";
+                if (dtDataSf.Visible != false)
+                    nrZile = txtNr.Text;
+                else
+                    dtDataSf.Value = dtDataInc.Value;
+
                 string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
                 string sqlInloc =  "NULL" ;
                 string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + sqlIdCerere + ")";
                 string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
                 string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
                 string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
-                string sqlNrOre = txtNr.Text == "" ? "NULL" : txtNr.Text;
+                string sqlNrOre = nrZile == "" ? "NULL" : nrZile;
 
                 if (Constante.tipBD == 2)
                 {
@@ -926,7 +958,7 @@ namespace WizOne.Absente
                                 cmbAbs.Value + " AS \"IdAbsenta\", " +
                                 General.ToDataUniv(dtDataInc.Date) + " AS \"DataInceput\", " +
                                 General.ToDataUniv(dtDataSf.Date) + " AS \"DataSfarsit\", " +
-                                (txtNr.Value == null ? "NULL" : txtNr.Value.ToString()) + " AS \"NrZile\", " +
+                                (nrZile == null ? "NULL" : nrZile) + " AS \"NrZile\", " +
                                  "NULL"  + " AS \"NrZileViitor\", " +
                                 (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'") + " AS \"Observatii\", " +
                                 (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + " AS \"IdStare\", " +
@@ -948,7 +980,7 @@ namespace WizOne.Absente
                     cmbAbs.Value + ", " +
                     General.ToDataUniv(dtDataInc.Date) + ", " +
                     General.ToDataUniv(dtDataSf.Date) + ", " +
-                    (txtNr.Value == null ? "NULL" : txtNr.Value.ToString()) + ", " +
+                    (nrZile == null ? "NULL" : nrZile) + ", " +
                     "NULL" + ", " +
                     (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'") + ", " +
                     (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + ", " +

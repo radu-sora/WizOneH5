@@ -12,8 +12,8 @@
             <tr>
             <td  valign="top">
 			      <fieldset >
-				        <legend class="legend-font-size">Detasari</legend>
-				        <table width="60%">	
+				        <legend id="lgDet" runat="server" class="legend-font-size">Detasari</legend>
+				        <table id="lgDetTable" runat="server" width="60%">	
 					        <tr>	
 						        <td>
 							        <dx:ASPxLabel  ID="lblNumeAngajator" runat="server"  Text="Nume angajator" Width="120" ></dx:ASPxLabel >	
@@ -115,8 +115,8 @@
                     <td  valign="top">
 
 			      <fieldset >
-				        <legend class="legend-font-size">Export mutare</legend>
-				        <table width="60%">	
+				        <legend id="lgMutare" runat="server" class="legend-font-size">Export mutare</legend>
+				        <table id="lgMutareTable" runat="server" width="60%">	
 					        <tr>	
 						        <td>	
 							        <dx:ASPxLabel  ID="lblDataMutare" runat="server"  Text="Data mutare" Width="120"></dx:ASPxLabel >	
@@ -165,8 +165,8 @@
                       <asp:ObjectDataSource runat="server" ID="dsTipMutare" TypeName="WizOne.Module.General" SelectMethod="GetF737"/>
 			        </fieldset>
 			      <fieldset >
-				        <legend class="legend-font-size">Preluare mutare</legend>
-				        <table width="60%">	
+				        <legend id="lgPrel" runat="server" class="legend-font-size">Preluare mutare</legend>
+				        <table id="lgPrelTable" runat="server" width="60%">	
 					        <tr>	
 						        <td>	
 							        <dx:ASPxLabel  ID="lblDataPrel" runat="server"  Text="Data preluare" Width="120"></dx:ASPxLabel >	

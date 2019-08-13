@@ -52,10 +52,10 @@ namespace WizOne.Pagini
                                             DataRow dr = dt.Select("IdEmpl = " + (Session["Marca"] ?? "").ToString() + " AND IdAuto = " + id).FirstOrDefault();
                                             if (dr != null)
                                             {
-                                                string numeFis = (dr["DescrAttach"] ?? "").ToString();
-                                                string ext = ".txt";
-                                                if (numeFis.LastIndexOf(".") >= 0)
-                                                    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
+                                                string numeFis = (dr["FisierNume"] ?? "").ToString();
+                                                string ext = (dr["FisierExtensie"] ?? ".txt").ToString();
+                                                //if (numeFis.LastIndexOf(".") >= 0)
+                                                //    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
                                                 scrieDoc(ext, (byte[])dr["Attach"], numeFis);
                                             }
                                             else
@@ -93,10 +93,10 @@ namespace WizOne.Pagini
                                 DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
                                 if (drAt != null)
                                 {
-                                    string numeFis = (drAt["DescrAttach"] ?? "").ToString();
-                                    string ext = ".txt";
-                                    if (numeFis.LastIndexOf(".") >= 0)
-                                        ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
+                                    string numeFis = (drAt["FisierNume"] ?? "").ToString();
+                                    string ext = (drAt["FisierExtensie"] ?? ".txt").ToString();
+                                    //if (numeFis.LastIndexOf(".") >= 0)
+                                    //    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
                                     scrieDoc(ext, (byte[])drAt["Attach"], numeFis);
                                 }
                                 else

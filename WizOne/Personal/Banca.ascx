@@ -20,8 +20,8 @@
             <tr>
             <td  valign="top">
 			      <fieldset >
-				        <legend class="legend-font-size">Cont salariu</legend>
-				        <table width="60%">	
+				        <legend id="lgBancaSal" runat="server" class="legend-font-size">Cont salariu</legend>
+				        <table id="lgBancaSalTable" runat="server" width="60%">	
 					        <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblIBANSal"  Width="100"  runat="server"  Text="IBAN"></dx:ASPxLabel >	
@@ -88,8 +88,8 @@
                       <asp:ObjectDataSource runat="server" ID="dsBanca" TypeName="WizOne.Module.General" SelectMethod="GetBanci"/>
 			        </fieldset>
 			      <fieldset >
-				        <legend class="legend-font-size">Cont garantii</legend>
-				        <table width="60%">	
+				        <legend id="lgBancaGar" runat="server" class="legend-font-size">Cont garantii</legend>
+				        <table id="lgBancaGarTable" runat="server" width="60%">	
 					        <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblIBANGar"  Width="100"  runat="server"  Text="IBAN"></dx:ASPxLabel >	
@@ -147,8 +147,8 @@
                       <asp:ObjectDataSource runat="server" ID="ObjectDataSource1" TypeName="WizOne.Module.General" SelectMethod="GetBanci"/>
 			        </fieldset>
 			      <fieldset >
-				        <legend class="legend-font-size">Cont tichete</legend>
-				        <table width="60%">	
+				        <legend id="lgTichete" runat="server" class="legend-font-size">Cont tichete</legend>
+				        <table id="lgTicheteTable" runat="server" width="60%">	
 					        <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblIBANTichete"  Width="100"  runat="server"  Text="IBAN"></dx:ASPxLabel >	

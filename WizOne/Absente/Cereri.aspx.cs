@@ -2257,7 +2257,7 @@ namespace WizOne.Absente
             return str;
         }
 
-        private string CreazaSelectCuValori(int tip = 1)
+        public string CreazaSelectCuValori(int tip = 1)
         {
             //tip = 1 intoarce un select
             //tip = 2 intoarce ca values; necesar pt Oracle

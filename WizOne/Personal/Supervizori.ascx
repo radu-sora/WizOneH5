@@ -4,7 +4,7 @@
 
 <body>
 
-    <dx:ASPxGridView ID="grDateSupervizori" runat="server" ClientInstanceName="grDateSupervizori" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnDataBinding="grDateSupervizori_DataBinding" OnInitNewRow="grDateSupervizori_InitNewRow"
+    <dx:ASPxGridView ID="grDateSupervizori" runat="server" ClientInstanceName="grDateSupervizori" ClientIDMode="Static" Width="75%" AutoGenerateColumns="false"  OnDataBinding="grDateSupervizori_DataBinding" OnInitNewRow="grDateSupervizori_InitNewRow"
         OnRowInserting="grDateSupervizori_RowInserting" OnRowUpdating="grDateSupervizori_RowUpdating" OnRowDeleting="grDateSupervizori_RowDeleting"  OnCommandButtonInitialize="grDateSupervizori_CommandButtonInitialize">
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
@@ -19,10 +19,16 @@
             <dx:GridViewDataComboBoxColumn FieldName="IdSuper" Name="IdSuper" Caption="Supervizor"  Width="250px" >
                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
             </dx:GridViewDataComboBoxColumn>
-                                                                                        
             <dx:GridViewDataComboBoxColumn FieldName="IdUser" Name="IdUser" Caption="Utilizator"  Width="250px" >
                 <PropertiesComboBox TextField="F70104" ValueField="F70102" ValueType="System.Int32" DropDownStyle="DropDown" />
-            </dx:GridViewDataComboBoxColumn>  
+            </dx:GridViewDataComboBoxColumn> 
+            <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput"  Width="100px" >
+                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+            </dx:GridViewDataDateColumn>
+            <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit"  Width="100px" >  
+                    <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+            </dx:GridViewDataDateColumn>                                                                                      
+ 
             <dx:GridViewDataCheckColumn FieldName="Modificabil" Name="Modificabil" Caption="Modificabil" ReadOnly="true"  Visible="false"  Width="70px"  />
             <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO"  Width="75px" Visible="false"/>
             <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME"  Width="75px" Visible="false"/>                         

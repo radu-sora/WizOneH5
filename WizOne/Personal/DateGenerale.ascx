@@ -43,8 +43,8 @@
               <tr>
                 <td  valign="top">          
 			      <fieldset >
-				    <legend id="lgIdent" runat="server" class="legend-font-size">Date unice de identificare</legend>
-				    <table width="60%">	
+				    <legend id="lgIdentGen" runat="server" class="legend-font-size">Date unice de identificare</legend>
+				    <table id="lgIdentGenTable" runat="server" width="60%">	
 					<tr>				
 						<td >
 							<dx:ASPxLabel  ID="lblMarca" runat="server"  Text="Marca" ></dx:ASPxLabel >	
@@ -96,8 +96,8 @@
 				    </table>
 			      </fieldset>             
 			      <fieldset >
-				    <legend id="lgNume" runat="server" class="legend-font-size">Numele si prenumele</legend>
-				    <table width="60%">	
+				    <legend id="lgNumeGen" runat="server" class="legend-font-size">Numele si prenumele</legend>
+				    <table id="lgNumeGenTable" runat="server" width="60%">	
 					<tr>				
 						<td>	
 							<dx:ASPxLabel  ID="lblNume" runat="server" Text="Nume"></dx:ASPxLabel >	
@@ -144,8 +144,8 @@
                 </td>
                  <td  valign="top"> 
 			      <fieldset>
-				    <legend id="lgSex" runat="server" class="legend-font-size">Data nasterii si Sex</legend>
-				    <table width="60%">	
+				    <legend id="lgSexGen" runat="server" class="legend-font-size">Data nasterii si Sex</legend>
+				    <table id="lgSexGenTable" runat="server" width="60%">	
 					<tr>				
 						<td >
 							<dx:ASPxLabel  ID="lblDataNasterii" Width="100" runat="server"  Text="Data nasterii" ></dx:ASPxLabel >	
@@ -181,7 +181,7 @@
 			      </fieldset>        
  			      <fieldset >
 				    <legend id="lgAng" runat="server" class="legend-font-size">Date despre angajare</legend>			
-				    <table width="60%">	
+				    <table id="lgAngTable" runat="server" width="60%">	
 
 					<tr>				
 						<td >

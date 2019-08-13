@@ -20,8 +20,8 @@
             <tr>  
                 <td  valign="top">         
 			      <fieldset  class="fieldset-auto-width">
-				        <legend class="legend-font-size">Contract</legend>
-				        <table width="60%">	
+				        <legend id="lgCtr" runat="server" class="legend-font-size">Contract</legend>
+				        <table id="lgCtrTable" runat="server" width="60%">	
 				            <tr>				
 					            <td>		
 						            <dx:ASPxLabel  ID="lblData" runat="server"  Text="Data"></dx:ASPxLabel >	
@@ -53,8 +53,8 @@
 				        </table>                    
 			        </fieldset>
 			      <fieldset  class="fieldset-auto-width">
-				        <legend class="legend-font-size">Studii</legend>
-				        <table width="60%">	
+				        <legend id="lgStudiiDiv" runat="server" class="legend-font-size">Studii</legend>
+				        <table id="lgStudiiDivTable" runat="server" width="60%">	
 					        <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblLocNastere"  Width="100"  runat="server"  Text="Locul nasterii"></dx:ASPxLabel >	
@@ -106,8 +106,8 @@
                       <asp:ObjectDataSource runat="server" ID="dsNivel" TypeName="WizOne.Module.General" SelectMethod="GetMeserie"/>
 			        </fieldset>
 			      <fieldset  class="fieldset-auto-width">
-				        <legend class="legend-font-size">Situatie CO</legend>
-				        <table width="60%">	
+				        <legend id="lgSitCODiv" runat="server" class="legend-font-size">Situatie CO</legend>
+				        <table id="lgSitCODivTable" runat="server" width="60%">	
 					        <tr>				
 						        <td>		
 							        <dx:ASPxLabel  ID="lblZileCOFidel"  Width="100"  runat="server"  Text="Zile CO fidelitate"></dx:ASPxLabel >	

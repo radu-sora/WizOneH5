@@ -427,19 +427,28 @@ namespace WizOne
                                     }
                                     else
                                     {
-                                        switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
+                                        if (Dami.ValoareParam("FolosesteCaptcha") == "1")
                                         {
-                                            case 16:
-                                            case 26:
-                                                Session["PrevPage"] = "~/Pagini/Default.aspx";
-                                                Session["NextPage"] = "~/Pagini/MainPage.aspx";
-                                                Response.Redirect("~/Pagini/Captcha.aspx", false);
-                                                //Response.Redirect("~/Pagini/MainPage.aspx", false);
-                                                break;
-                                            default:
-                                                Response.Redirect("~/Pagini/MainPage.aspx", false);
-                                                break;
+                                            Session["PrevPage"] = "~/Pagini/Default.aspx";
+                                            Session["NextPage"] = "~/Pagini/MainPage.aspx";
+                                            Response.Redirect("~/Pagini/Captcha.aspx", false);
                                         }
+                                        else
+                                            Response.Redirect("~/Pagini/MainPage.aspx", false);
+
+                                        //switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
+                                        //{
+                                        //    case 16:
+                                        //    case 26:
+                                        //        Session["PrevPage"] = "~/Pagini/Default.aspx";
+                                        //        Session["NextPage"] = "~/Pagini/MainPage.aspx";
+                                        //        Response.Redirect("~/Pagini/Captcha.aspx", false);
+                                        //        //Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                        //        break;
+                                        //    default:
+                                        //        Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                        //        break;
+                                        //}
 
                                     }
                                 }

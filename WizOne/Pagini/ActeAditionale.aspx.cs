@@ -1349,7 +1349,7 @@ namespace WizOne.Pagini
                 string extensie = Path.GetExtension(e.UploadedFile.FileName);
                 object ext = e.UploadedFile.ContentType;
                 string numeComplet = numeFis + "_" + obj[4] + "_" + Convert.ToDateTime(obj[5]).Year + "." + Convert.ToDateTime(obj[5]).Month.ToString().PadLeft(2, '0') + "." + Convert.ToDateTime(obj[5]).Day.ToString().PadLeft(2, '0') + extensie;
-                General.ExecutaNonQuery(strSql, new object[] { "Atasamente", obj[0], e.UploadedFile.FileBytes, numeComplet, e.UploadedFile.ContentType, Session["UserId"], obj[3], obj[2], numeFis, ext.ToString() });
+                General.ExecutaNonQuery(strSql, new object[] { "Atasamente", obj[0], e.UploadedFile.FileBytes, numeComplet, e.UploadedFile.ContentType, Session["UserId"], obj[3], obj[2], numeComplet, extensie });
 
             }
             catch (Exception ex)

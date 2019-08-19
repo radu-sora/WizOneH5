@@ -12,6 +12,7 @@ using ProceseSec;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Web.UI.HtmlControls;
 
 namespace WizOne.Pagini
 {
@@ -21,7 +22,25 @@ namespace WizOne.Pagini
         {
             //Dami.AccesApp();
 
-            
+            HtmlGenericControl div = new HtmlGenericControl("div");
+            div.Attributes["class"] = "ssSchimba";
+
+            HtmlGenericControl divCap = new HtmlGenericControl("div");
+            divCap.Attributes["class"] = "g-recaptcha";
+            divCap.Attributes["data-sitekey"] = Dami.ValoareParam("Captcha_Site");
+
+            Button btn = new Button();
+            btn.ID = "btnOk";
+            btn.Text = "OK";
+            btn.TabIndex = 3;
+            btn.ValidationGroup = "IntroGrup";
+            btn.Click += btnOk_Click;
+
+            div.Controls.Add(divCap);
+            divOuter.Controls.Add(div);
+            divOuter.Controls.Add(btn);
+
+
         }
 
         protected void btnOk_Click(object sender, EventArgs e)
@@ -54,7 +73,7 @@ namespace WizOne.Pagini
         {
             var result = false;
             var captchaResponse = Request.Form["g-recaptcha-response"];
-            var secretKey = "6Lckrq0UAAAAANS6NOM2-zPpYFfrKuWMq0r48keQ";
+            var secretKey = Dami.ValoareParam("Captcha_Secret");
             var apiUrl = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}";
             var requestUri = string.Format(apiUrl, secretKey, captchaResponse);
             var request = (HttpWebRequest)WebRequest.Create(requestUri);

@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="Fisiere/MsgBox/sweetalert.css" />
     <script src="Fisiere/MsgBox/sweetalert.min.js"></script>
 
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -47,6 +48,9 @@
             <asp:Button ID="btnOk" runat="server" Text="OK" TabIndex="3" 
                 ValidationGroup="IntroGrup" onclick="btnOk_Click" 
                 meta:resourcekey="btnOkResource1" />
+           
+            <div id="divOuter" runat="server" class="captcha">
+		    </div>
 		</div>
 
 

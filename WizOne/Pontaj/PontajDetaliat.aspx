@@ -788,7 +788,7 @@
                                     </dx:GridViewDataComboBoxColumn>
 
                                     <dx:GridViewDataComboBoxColumn FieldName="F06204" Name="F06204" Caption="Centrul de cost" Width="250px" VisibleIndex="2" Visible="false">
-                                        <PropertiesComboBox TextField="F06205" ValueField="F06204" ValueType="System.Int32" DropDownStyle="DropDown" />
+                                        <PropertiesComboBox TextField="F06205" ValueField="F06204" ValueType="System.Int32" DropDownStyle="DropDownList" />
                                     </dx:GridViewDataComboBoxColumn>
 
                                     <dx:GridViewDataComboBoxColumn FieldName="IdProiect" Name="IdProiect" Caption="Proiect" Width="250px" VisibleIndex="3" Visible="false" >
@@ -827,16 +827,16 @@
                                             
                                         </PropertiesTimeEdit>
                                     </dx:GridViewDataTimeEditColumn>
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre1" Name="NrOre1" Caption="NrOre1" Width="100px" Visible="false" VisibleIndex="9" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre2" Name="NrOre2" Caption="NrOre2" Width="100px" Visible="false" VisibleIndex="10" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre3" Name="NrOre3" Caption="NrOre3" Width="100px" Visible="false" VisibleIndex="11" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre4" Name="NrOre4" Caption="NrOre4" Width="100px" Visible="false" VisibleIndex="12" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre5" Name="NrOre5" Caption="NrOre5" Width="100px" Visible="false" VisibleIndex="13" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre6" Name="NrOre6" Caption="NrOre6" Width="100px" Visible="false" VisibleIndex="14" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre7" Name="NrOre7" Caption="NrOre7" Width="100px" Visible="false" VisibleIndex="15" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre8" Name="NrOre8" Caption="NrOre8" Width="100px" Visible="false" VisibleIndex="16" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre9" Name="NrOre9" Caption="NrOre9" Width="100px" Visible="false" VisibleIndex="17" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre10" Name="NrOre10" Caption="NrOre10" Width="100px" Visible="false" VisibleIndex="18" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre1" Name="NrOre1" Caption="NrOre1" Width="100px" Visible="false" VisibleIndex="9" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre2" Name="NrOre2" Caption="NrOre2" Width="100px" Visible="false" VisibleIndex="10" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre3" Name="NrOre3" Caption="NrOre3" Width="100px" Visible="false" VisibleIndex="11" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre4" Name="NrOre4" Caption="NrOre4" Width="100px" Visible="false" VisibleIndex="12" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre5" Name="NrOre5" Caption="NrOre5" Width="100px" Visible="false" VisibleIndex="13" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre6" Name="NrOre6" Caption="NrOre6" Width="100px" Visible="false" VisibleIndex="14" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre7" Name="NrOre7" Caption="NrOre7" Width="100px" Visible="false" VisibleIndex="15" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre8" Name="NrOre8" Caption="NrOre8" Width="100px" Visible="false" VisibleIndex="16" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre9" Name="NrOre9" Caption="NrOre9" Width="100px" Visible="false" VisibleIndex="17" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre10" Name="NrOre10" Caption="NrOre10" Width="100px" Visible="false" VisibleIndex="18" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
 
                                     <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                                     <dx:GridViewDataTextColumn FieldName="Ziua" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

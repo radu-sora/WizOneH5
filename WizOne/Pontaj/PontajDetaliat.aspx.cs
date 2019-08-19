@@ -2725,7 +2725,7 @@ namespace WizOne.Pontaj
                 
 
                 int tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
-                if (tip == 1)
+                if (tip == 1 || tip == 10)
                 {
                     DateTime dtTmp = Convert.ToDateTime(txtAnLuna.Value);
                     lst[1] = new DateTime(dtTmp.Year, dtTmp.Month, Convert.ToInt32(ccValori["cheia"]), 0, 0, 0);

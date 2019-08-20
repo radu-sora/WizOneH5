@@ -786,6 +786,7 @@
     <Content Include="Organigrama\Posturi.aspx" />
     <Content Include="Organigrama\PosturiValidare.aspx" />
     <Content Include="Pagini\ActeAditionale.aspx" />
+    <Content Include="Pagini\Captcha.aspx" />
     <Content Include="Pagini\CodConfirmare.aspx" />
     <Content Include="Pagini\Delegari.aspx" />
     <Content Include="Pagini\Fisiere.aspx" />
@@ -796,11 +797,15 @@
     <Content Include="Pagini\Istoric.aspx" />
     <Content Include="Pagini\IstoricModificari.aspx" />
     <Content Include="Pagini\MainPage.aspx" />
+    <Content Include="Pagini\SchimbaParolaCaptcha.aspx" />
     <Content Include="Pagini\VerificareBD.aspx" />
     <Content Include="Personal\Activitati.ascx" />
+    <Content Include="Personal\Cursuri.ascx" />
+    <Content Include="Personal\Evaluare.ascx" />
     <Content Include="Personal\Calcul.ascx" />
     <Content Include="Personal\CentreCost.ascx" />
     <Content Include="Personal\Componente.ascx" />
+    <Content Include="Personal\Atestate.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
     <Content Include="Personal\Sporuri.ascx" />
     <Content Include="Personal\SporuriTranzactii.ascx" />
@@ -1531,6 +1536,13 @@
     <Compile Include="Pagini\ActeAditionale.aspx.designer.cs">
       <DependentUpon>ActeAditionale.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pagini\Captcha.aspx.cs">
+      <DependentUpon>Captcha.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\Captcha.aspx.designer.cs">
+      <DependentUpon>Captcha.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pagini\CodConfirmare.aspx.cs">
       <DependentUpon>CodConfirmare.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1601,6 +1613,13 @@
     <Compile Include="Pagini\MainPage.aspx.designer.cs">
       <DependentUpon>MainPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.cs">
+      <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\SchimbaParolaCaptcha.aspx.designer.cs">
+      <DependentUpon>SchimbaParolaCaptcha.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pagini\VerificareBD.aspx.cs">
       <DependentUpon>VerificareBD.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1614,6 +1633,20 @@
     </Compile>
     <Compile Include="Personal\Activitati.ascx.designer.cs">
       <DependentUpon>Activitati.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Cursuri.ascx.cs">
+      <DependentUpon>Cursuri.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Cursuri.ascx.designer.cs">
+      <DependentUpon>Cursuri.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Evaluare.ascx.cs">
+      <DependentUpon>Evaluare.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Evaluare.ascx.designer.cs">
+      <DependentUpon>Evaluare.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Calcul.ascx.cs">
       <DependentUpon>Calcul.ascx</DependentUpon>
@@ -1635,6 +1668,13 @@
     </Compile>
     <Compile Include="Personal\Componente.ascx.designer.cs">
       <DependentUpon>Componente.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\Atestate.ascx.cs">
+      <DependentUpon>Atestate.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\Atestate.ascx.designer.cs">
+      <DependentUpon>Atestate.ascx</DependentUpon>
     </Compile>
     <Compile Include="Personal\LipsaNecesar.ascx.cs">
       <DependentUpon>LipsaNecesar.ascx</DependentUpon>

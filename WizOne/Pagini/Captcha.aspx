@@ -16,25 +16,14 @@
     <link rel="stylesheet" type="text/css" href="../Fisiere/MsgBox/sweetalert.css" />
     <script type="text/javascript" src="../Fisiere/MsgBox/sweetalert.min.js"></script>
 
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <form id="form1" runat="server">
 
-        <div class="outer">
-            <div class="ssSchimba">
-                <div class="g-recaptcha" data-sitekey="6Lckrq0UAAAAAPxLQsttj2eMSdjHtMSoq9Mtqsp5"></div>
-		    </div>
-
-
-        <script type="text/javascript" language="javascript">
-            document.getElementById("txtPan1").focus();   
-        </script>
-
-
-            <asp:Button ID="btnOk" runat="server" Text="OK" TabIndex="3" ValidationGroup="IntroGrup" onclick="btnOk_Click" />
-		
+        <div class="outer" id="divOuter" runat="server">
+		</div>
 
     </form>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
 </body>
 </html>

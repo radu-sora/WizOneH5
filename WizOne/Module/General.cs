@@ -1212,37 +1212,66 @@ namespace WizOne.Module
                         }
                 }
 
-                String USR = General.Nz(HttpContext.Current.Session["User"], "").ToString();
-                if (USR.Length > 0 && password.ToUpper().Contains(USR.ToUpper()))
-                    ras += ", contine contul utilizatorului";
 
 
-                CriptDecript prc = new CriptDecript();
-                string pwd = prc.EncryptString(Constante.cheieCriptare, password, 1);
-
-                if (General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""ParoleUtilizatorIstoric"" WHERE ""Parola""='{pwd}' AND ""IdUser""='{General.Nz(HttpContext.Current.Session["UserId"], "").ToString()}'", null), 0).ToString() != "0")
-                    ras += ", a mai fost utilizata";
-
-                //Mihnea - verific daca parola contine portiuni din numele utilizatorului
-                string numecomplet = General.Nz(HttpContext.Current.Session["User_NumeComplet"],USR).ToString().Replace('-',' ');
-                string[] partinume = numecomplet.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                bool continenume = false;
-
-                for(int i=0; i<partinume.Count(); i++)
+                //Florin 2019.08.14
+                if (Dami.ValoareParam("Parola_ContineNumeUser", "0") == "1")
                 {
-                    if (password.ToUpper().Contains(partinume[i].ToUpper())) continenume = true;
+                    String USR = General.Nz(HttpContext.Current.Session["User"], "").ToString();
+                    if (USR.Length > 0 && password.ToUpper().Contains(USR.ToUpper()))
+                        ras += ", contine numele utilizatorului";
                 }
 
-                if ( continenume )
-                    ras += ", contine o parte din numele utilizatorului ";
+                CriptDecript prc = new CriptDecript();
+                int nrMinParole = 0;
+                try
+                {
+                    nrMinParole = Convert.ToInt32(Dami.ValoareParam("Parola_NrMinParole", "0"));
+                }catch (Exception){}
 
-                //Mihnea - verific daca parola curenta e inclusa in ultima parola
-                string lastpass = string.Empty;
-                lastpass = General.Nz(General.ExecutaScalar($@"SELECT Parola FROM ""ParoleUtilizatorIstoric"" pui WHERE ""IdUser""='{General.Nz(HttpContext.Current.Session["UserId"], "").ToString()}' AND [time] = (select max(time) from ParoleUtilizatorIstoric pui2 where pui2.IdUser = pui.IdUser) ", null),"").ToString();
-                lastpass = prc.EncryptString(Constante.cheieCriptare, lastpass , 2);
+                if (nrMinParole > 0)
+                {
+                    string strSql = $@"SELECT COUNT(*) FROM (
+                        SELECT ROW_NUMBER() OVER(ORDER BY Y.""Data"" DESC) AS ""NrCrt"", Y.* FROM ""ParoleUtilizatorIstoric"" Y WHERE Y.""IdUser""=@1) X
+                        WHERE X.""NrCrt"" <= @2 AND ""Parola""=@3";
 
-                if( lastpass.ToUpper().Contains(password.ToUpper()))
-                    ras += ", face parte din ultima parola folosita";
+                    string pwd = prc.EncryptString(Constante.cheieCriptare, password, 1);
+                    if (Convert.ToInt32(General.Nz(General.ExecutaScalar(strSql, new object[] { HttpContext.Current.Session["UserId"] , nrMinParole, pwd}),0)) > 0)
+                        ras += ", a mai fost utilizata";
+                }
+
+                if (Dami.ValoareParam("Parola_ContineUltimaParola", "0") == "1")
+                {
+                    string parola = General.Nz(General.ExecutaScalar("SELECT F70103 FROM USERS WHERE F70102=@1", new object[] { HttpContext.Current.Session["UserId"]  }), "").ToString();
+                    if (parola != "")
+                    {
+                        string pwd = prc.EncryptString(Constante.cheieCriptare, parola, Constante.DECRYPT);
+                        if (password.ToUpper().Contains(pwd.ToUpper()))
+                            ras += ", face parte din ultima parola folosita";
+                    }
+                }
+
+                ////Mihnea - verific daca parola contine portiuni din numele utilizatorului
+                //string numecomplet = General.Nz(HttpContext.Current.Session["User_NumeComplet"],USR).ToString().Replace('-',' ');
+                //string[] partinume = numecomplet.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                //bool continenume = false;
+
+                //for(int i=0; i<partinume.Count(); i++)
+                //{
+                //    if (password.ToUpper().Contains(partinume[i].ToUpper())) continenume = true;
+                //}
+
+                //if ( continenume )
+                //    ras += ", contine o parte din numele utilizatorului ";
+
+
+                ////Mihnea - verific daca parola curenta e inclusa in ultima parola
+                //string lastpass = string.Empty;
+                //lastpass = General.Nz(General.ExecutaScalar($@"SELECT Parola FROM ""ParoleUtilizatorIstoric"" pui WHERE ""IdUser""='{General.Nz(HttpContext.Current.Session["UserId"], "").ToString()}' AND [time] = (select max(time) from ParoleUtilizatorIstoric pui2 where pui2.IdUser = pui.IdUser) ", null),"").ToString();
+                //lastpass = prc.EncryptString(Constante.cheieCriptare, lastpass , 2);
+
+                //if( lastpass.ToUpper().Contains(password.ToUpper()))
+                //    ras += ", face parte din ultima parola folosita";
 
                 if (ras != "") ras = "parola " + ras.Substring(1);
             }

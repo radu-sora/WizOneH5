@@ -241,10 +241,9 @@ namespace WizOne.Personal
                         mesaj += " - COR" + Environment.NewLine;
                     //if (ds.Tables[0].Rows[0]["F10071"] == null || ds.Tables[0].Rows[0]["F10071"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F10071"].ToString() == "0")
                     //    mesaj += " - functie" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F1001063"] == null || ds.Tables[0].Rows[0]["F1001063"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1001063"].ToString() == "0")
-                        mesaj += " - perioada de proba (zile lucratoare)" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100975"] == null || ds.Tables[0].Rows[0]["F100975"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100975"].ToString() == "0")
-                        mesaj += " - perioada de proba (zile calendaristice)" + Environment.NewLine;
+                    if ((ds.Tables[0].Rows[0]["F1001063"] == null || ds.Tables[0].Rows[0]["F1001063"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1001063"].ToString() == "0") 
+                        && (ds.Tables[0].Rows[0]["F100975"] == null || ds.Tables[0].Rows[0]["F100975"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100975"].ToString() == "0"))
+                        mesaj += " - perioada de proba (zile lucratoare sau zile calendaristice)" + Environment.NewLine; 
                     if (ds.Tables[0].Rows[0]["F1009742"] == null || ds.Tables[0].Rows[0]["F1009742"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1009742"].ToString() == "0")
                         mesaj += " - nr zile preaviz demisie" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F100931"] == null || ds.Tables[0].Rows[0]["F100931"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F100931"].ToString() == "0")

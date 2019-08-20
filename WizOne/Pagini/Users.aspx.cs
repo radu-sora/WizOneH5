@@ -141,34 +141,49 @@ namespace WizOne.Pagini
                     e.Cancel = true;
                 }
 
+                bool err = false;
+
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.NewRow();
 
-                dr["F70101"] = e.NewValues["F70101"] ?? 701;
-                dr["F70102"] = e.NewValues["F70102"] ?? DBNull.Value;
-                dr["F70103"] = pwd;
-                dr["F70104"] = e.NewValues["F70104"] ?? DBNull.Value;
-                dr["F70105"] = e.NewValues["F70105"] ?? DBNull.Value;
-                dr["F70111"] = e.NewValues["F70111"] ?? 0;
-                dr["F70112"] = e.NewValues["F70112"] ?? 0;
-                dr["F70113"] = e.NewValues["F70113"] ?? 0;
-                dr["F70114"] = e.NewValues["F70114"] ?? 0;
-                dr["F70121"] = e.NewValues["F70121"] ?? 999;
-                dr["F70122"] = e.NewValues["F70122"] ?? DateTime.Now;
-                dr["F70123"] = e.NewValues["F70123"] ?? DBNull.Value;
+                //Radu 19.08.2019 - verificare sa nu existe alta inregistrare cu marca nou introdusa
+                if (e.NewValues["F10003"] != null)
+                {
+                    DataRow[] rows = dt.Select("F10003 = " + e.NewValues["F10003"].ToString());
+                    if (rows != null && rows.Count() > 0)
+                    {
+                        grDate.JSProperties["cpAlertMessage"] = "Marca selectata este deja alocata altui utilizator!";
+                        err = true;
+                    }
+                }
+                if (!err)
+                {
+                    dr["F70101"] = e.NewValues["F70101"] ?? 701;
+                    dr["F70102"] = e.NewValues["F70102"] ?? DBNull.Value;
+                    dr["F70103"] = pwd;
+                    dr["F70104"] = e.NewValues["F70104"] ?? DBNull.Value;
+                    dr["F70105"] = e.NewValues["F70105"] ?? DBNull.Value;
+                    dr["F70111"] = e.NewValues["F70111"] ?? 0;
+                    dr["F70112"] = e.NewValues["F70112"] ?? 0;
+                    dr["F70113"] = e.NewValues["F70113"] ?? 0;
+                    dr["F70114"] = e.NewValues["F70114"] ?? 0;
+                    dr["F70121"] = e.NewValues["F70121"] ?? 999;
+                    dr["F70122"] = e.NewValues["F70122"] ?? DateTime.Now;
+                    dr["F70123"] = e.NewValues["F70123"] ?? DBNull.Value;
 
-                dr["IdLimba"] = e.NewValues["IdLimba"] ?? "RO";
-                dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
-                dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? DBNull.Value;
-                dr["Mail"] = e.NewValues["Mail"] ?? DBNull.Value;
-                dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
-                dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
-                dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
+                    dr["IdLimba"] = e.NewValues["IdLimba"] ?? "RO";
+                    dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
+                    dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? DBNull.Value;
+                    dr["Mail"] = e.NewValues["Mail"] ?? DBNull.Value;
+                    dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
+                    dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
+                    dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
 
-                dr["USER_NO"] = Session["UserId"];
-                dr["TIME"] = DateTime.Now;
+                    dr["USER_NO"] = Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
 
-                dt.Rows.Add(dr);
+                    dt.Rows.Add(dr);
+                }
                 e.Cancel = true;
                 grDate.CancelEdit();
                 Session["InformatiaCurenta"] = dt;
@@ -189,31 +204,46 @@ namespace WizOne.Pagini
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
 
+                bool err = false;
+
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.Rows.Find(keys);
-                
+
+                //Radu 19.08.2019 - verificare sa nu existe alta inregistrare cu marca nou introdusa
+                if (e.NewValues["F10003"] != null)
+                {
+                    DataRow[] rows = dt.Select("F10003 = " + e.NewValues["F10003"].ToString());
+                    if (rows != null && rows.Count() > 0)
+                    {
+                        grDate.JSProperties["cpAlertMessage"] = "Marca selectata este deja alocata altui utilizator!";
+                        err = true;
+                    }
+                }
+
                 //dr["F70103"] = e.NewValues["F70103"];
-                dr["F70104"] = e.NewValues["F70104"] ?? DBNull.Value;
-                dr["F70105"] = e.NewValues["F70105"] ?? DBNull.Value;
-                dr["F70111"] = e.NewValues["F70111"] ?? 0;
-                dr["F70112"] = e.NewValues["F70112"] ?? 0;
-                dr["F70113"] = e.NewValues["F70113"] ?? 0;
-                dr["F70114"] = e.NewValues["F70114"] ?? 0;
-                dr["F70121"] = e.NewValues["F70121"] ?? 999;
-                dr["F70122"] = e.NewValues["F70122"] ?? DateTime.Now;
-                dr["F70123"] = e.NewValues["F70123"] ?? DBNull.Value;
+                if (!err)
+                {
+                    dr["F70104"] = e.NewValues["F70104"] ?? DBNull.Value;
+                    dr["F70105"] = e.NewValues["F70105"] ?? DBNull.Value;
+                    dr["F70111"] = e.NewValues["F70111"] ?? 0;
+                    dr["F70112"] = e.NewValues["F70112"] ?? 0;
+                    dr["F70113"] = e.NewValues["F70113"] ?? 0;
+                    dr["F70114"] = e.NewValues["F70114"] ?? 0;
+                    dr["F70121"] = e.NewValues["F70121"] ?? 999;
+                    dr["F70122"] = e.NewValues["F70122"] ?? DateTime.Now;
+                    dr["F70123"] = e.NewValues["F70123"] ?? DBNull.Value;
 
-                dr["IdLimba"] = e.NewValues["IdLimba"] ?? "RO";
-                dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
-                dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? DBNull.Value;
-                dr["Mail"] = e.NewValues["Mail"] ?? DBNull.Value;
-                dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
-                dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
-                dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
+                    dr["IdLimba"] = e.NewValues["IdLimba"] ?? "RO";
+                    dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
+                    dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? DBNull.Value;
+                    dr["Mail"] = e.NewValues["Mail"] ?? DBNull.Value;
+                    dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
+                    dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
+                    dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
 
-                dr["USER_NO"] = Session["UserId"];
-                dr["TIME"] = DateTime.Now;
-
+                    dr["USER_NO"] = Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+                }
                 e.Cancel = true;
                 grDate.CancelEdit();
                 Session["InformatiaCurenta"] = dt;

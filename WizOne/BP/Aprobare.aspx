@@ -116,6 +116,25 @@
             }
         }
 
+        function OnTransfera(s, e) {
+            if (grDate.GetSelectedRowCount() > 0) {
+                swal({
+                    title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Vreti sa continuati procesul de transfer?'),
+                    type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        grDate.PerformCallback("btnTransf;");
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: trad_string(limba, "Atentie !"), text: trad_string(limba, "Nu exista linii selectate"),
+                    type: "warning"
+                });
+            }
+        }
+
         function EmptyFields(s, e) {
             cmbAng.SetValue(null);
             cmbAnul.SetValue(null);
@@ -189,6 +208,12 @@
                        OnRespinge(s,e);
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
+                </dx:ASPxButton>
+                <dx:ASPxButton ID="btnTranf" ClientInstanceName="btnTranf" ClientIDMode="Static" runat="server" Text="Transfera" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                       OnTransfera(s,e);
+                    }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/grup.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {

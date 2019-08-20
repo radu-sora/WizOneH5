@@ -1296,7 +1296,7 @@ namespace WizOne.Avs
                             " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.IdAtribut AND X.F70406=A.DataModif),0) AS ActualizatF704, " +
                             " CASE WHEN CHARINDEX('," + General.Nz(cmbRol.Value,-99).ToString() + ",', ',' + (SELECT Valoare FROM tblParametrii WHERE Nume='Avans_IDuriRoluriHR') + ',') > 0 THEN 1 ELSE  " +
                             " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = 76 AND F.IdUser = " + Session["UserId"] + " THEN 1 ELSE " +
-                            " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = F.IdSuper AND F.IdUser= " + Session["UserId"] + " THEN 1 ELSE 0 END END END AS PoateModifica " +
+                            " CASE WHEN -1 * " + General.Nz(cmbRol.Value, -99).ToString() + " = F.IdSuper AND F.IdUser= " + Session["UserId"] + " THEN 1 ELSE 0 END END END AS PoateModifica " +
                             " from Avs_Cereri a  " +
                             " inner join F100 b on a.F10003=b.F10003  " +
                             " inner join Avs_tblAtribute c on a.IdAtribut=c.Id  " +
@@ -1335,7 +1335,7 @@ namespace WizOne.Avs
                             " COALESCE((SELECT COALESCE(X.F70420,0) FROM F704 X WHERE X.F70403=A.F10003 AND X.F70404=A.\"IdAtribut\" AND X.F70406=A.\"DataModif\"),0) AS \"ActualizatF704\", " +
                             " CASE WHEN INSTR(',' + (SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\"='Avans_IDuriRoluriHR') + ',', '," + General.Nz(cmbRol.Value, -99).ToString() + ",') > 0 THEN 1 ELSE  " +
                             " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = 76 AND F.\"IdUser\" = " + Session["UserId"] + " THEN 1 ELSE " +
-                            " CASE WHEN " + General.Nz(cmbRol.Value, -99).ToString() + " = F.\"IdSuper\" AND F.\"IdUser\"= " + Session["UserId"] + " THEN 1 ELSE 0 END END END AS \"PoateModifica\" " +
+                            " CASE WHEN -1 * " + General.Nz(cmbRol.Value, -99).ToString() + " = F.\"IdSuper\" AND F.\"IdUser\"= " + Session["UserId"] + " THEN 1 ELSE 0 END END END AS \"PoateModifica\" " +
                             " from \"Avs_Cereri\" a " +
                             " inner join F100 b on a.F10003=b.F10003 " +
                             " inner join \"Avs_tblAtribute\" c on a.\"IdAtribut\"=c.\"Id\" " +

@@ -271,6 +271,111 @@ namespace WizOne.BP
             }
         }
 
+        protected void btnTransf_Click(object sender, EventArgs e)
+        {
+            List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "Explicatie", "SumaNeta", "SumaBruta", "Luna", "An", "Tip" });
+            if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+
+            int x = 0;
+
+            for (int i = 0; i < lst.Count(); i++)
+            {
+                object[] arr = lst[i] as object[];
+                int idStare = Convert.ToInt32(arr[1].ToString());
+                int id = Convert.ToInt32(arr[0].ToString());
+                if (idStare == 3)
+                {
+                    decimal suma = 0;
+                    int idTranz = 0;
+
+                    DataTable entCer = General.IncarcaDT("SELECT * FROM \"BP_Prime\" WHERE \"Id\" = " + id, null);
+                    DataTable entTip = General.IncarcaDT("SELECT a.*, " + (Constante.tipBD == 1 ? "CONVERT(VARCHAR, \"WizSal_DataPlatii\", 103)" : "TO_CHAR(\"WizSal_DataPlatii\", 'dd/mm/yyyy')") + " AS \"DataPlatii\" FROM \"BP_tblTipPrima\" a WHERE \"Id\" = "
+                        + (entCer != null && entCer.Rows.Count > 0 && entCer.Rows[0]["IdTip"] != null && entCer.Rows[0]["IdTip"].ToString().Length > 0 ? entCer.Rows[0]["IdTip"].ToString() : "-99"), null);
+
+
+                    int WizSal_CodTranzac_Net = 0, WizSal_CodTranzac_Brut = 0;
+                    if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["WizSal_CodTranzac_Net"] != null && entTip.Rows[0]["WizSal_CodTranzac_Net"].ToString().Length > 0)
+                        WizSal_CodTranzac_Net = Convert.ToInt32(entTip.Rows[0]["WizSal_CodTranzac_Net"].ToString());
+                    if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["WizSal_CodTranzac_Brut"] != null && entTip.Rows[0]["WizSal_CodTranzac_Brut"].ToString().Length > 0)
+                        WizSal_CodTranzac_Brut = Convert.ToInt32(entTip.Rows[0]["WizSal_CodTranzac_Brut"].ToString());
+
+                    decimal totalNet = 0, totalBrut = 0;                
+                    if (entCer != null && entCer.Rows.Count > 0 && entCer.Rows[0]["TotalNet"] != null && entCer.Rows[0]["TotalNet"].ToString().Length > 0)
+                        totalNet = Convert.ToDecimal(entCer.Rows[0]["TotalNet"].ToString());
+                    if (entCer != null && entCer.Rows.Count > 0 && entCer.Rows[0]["TotalBrut"] != null && entCer.Rows[0]["TotalBrut"].ToString().Length > 0)
+                        totalBrut = Convert.ToDecimal(entCer.Rows[0]["TotalBrut"].ToString());
+
+                    if (totalNet != 0)
+                    {
+                        suma = totalNet;
+                        idTranz = WizSal_CodTranzac_Net;
+                    }
+
+                    if (totalBrut != 0)
+                    {
+                        suma = totalBrut;
+                        idTranz = WizSal_CodTranzac_Brut;
+                    }
+
+                    DataTable entTipDT = General.IncarcaDT("SELECT b.\"WizSal_LunaCalcul\" FROM \"BP_Prime\" a JOIN \"BP_tblTipPrima\" b ON a.\"IdTip\" = b.\"Id\" WHERE a.\"Id\" = " + id, null);
+
+
+                    int tipData = 1;
+                    if (entTipDT != null && entTipDT.Rows.Count > 0 && entTipDT.Rows[0]["WizSal_LunaCalcul"] != null && entTipDT.Rows[0]["WizSal_LunaCalcul"].ToString().Length > 0)
+                        tipData = Convert.ToInt32(entTipDT.Rows[0]["WizSal_LunaCalcul"].ToString());
+
+
+                    int an = Convert.ToInt32(entCer.Rows[0]["An"].ToString());
+                    int luna = Convert.ToInt32(entCer.Rows[0]["Luna"].ToString());
+
+                    DateTime dt = new DateTime(1900, 1, 1);
+                    if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["DataPlatii"] != null && entTip.Rows[0]["DataPlatii"].ToString().Length > 0)
+                    {
+                        string data = entTip.Rows[0]["DataPlatii"].ToString();
+                        dt = new DateTime(Convert.ToInt32(data.Substring(6, 4)), Convert.ToInt32(data.Substring(3, 2)), Convert.ToInt32(data.Substring(0, 2)));
+                    }
+
+                    int cant = 0;
+                    decimal pro = 0;
+                    if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["WizSal_Cantitate"] != null && entTip.Rows[0]["WizSal_Cantitate"].ToString().Length > 0)
+                        cant = Convert.ToInt32(entTip.Rows[0]["WizSal_Cantitate"].ToString());
+                    if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["WizSal_Procent"] != null && entTip.Rows[0]["WizSal_Procent"].ToString().Length > 0)
+                        pro = Convert.ToDecimal(entTip.Rows[0]["WizSal_Procent"].ToString());
+
+                    int f10003 = 0;
+                    if (entCer != null && entCer.Rows.Count > 0 && entCer.Rows[0]["F10003"] != null && entCer.Rows[0]["F10003"].ToString().Length > 0)
+                        f10003 = Convert.ToInt32(entCer.Rows[0]["F10003"].ToString());
+
+                    if (f10003 != 0 && idTranz != 0 && suma != 0)
+                    {
+                        CreazaTranzacF300(
+                            Convert.ToInt32(Session["UserId"].ToString()),
+                            f10003,
+                            id,
+                            idTranz,
+                            dt,
+                            cant,
+                            pro,
+                            suma,
+                            new DateTime(an, luna, 1),
+                            new DateTime(an, luna, 1),
+                            tipData,
+                            "Prime");
+                    }
+                    else
+                    {
+                        string err = "";
+                        if (f10003 == 0) err += ", angajat";
+                        if (idTranz == 0) err += ", cod tranzactie";
+                        if (suma == 0) err += ", suma";
+                        if (err != "") General.MemoreazaEroarea(err, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                    }
+                    x++;
+                }
+            }
+            grDate.JSProperties["cpAlertMessage"] = (x == 1 ? "S-a efectuat 1 transfer!" : "S-au efectuat " + x + " transferuri!");
+        }
+
         protected void btnRespinge_Click(object sender, EventArgs e)
         {
             try
@@ -380,6 +485,9 @@ namespace WizOne.BP
                             break;
                         case "btnAproba":
                             btnAproba_Click(null, null);
+                            break;
+                        case "btnTransf":
+                            btnTransf_Click(null, null);
                             break;
                     }
                 }
@@ -788,79 +896,7 @@ namespace WizOne.BP
                         General.ExecutaNonQuery(sql, null);
 
                    
-                        if (idStare == 3)
-                        {
-                            decimal suma = 0;
-                            int idTranz = 0;
-
-                            int WizSal_CodTranzac_Net = 0, WizSal_CodTranzac_Brut = 0;
-                            if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["WizSal_CodTranzac_Net"] != null && entTip.Rows[0]["WizSal_CodTranzac_Net"].ToString().Length > 0)
-                                WizSal_CodTranzac_Net = Convert.ToInt32(entTip.Rows[0]["WizSal_CodTranzac_Net"].ToString());
-                            if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["WizSal_CodTranzac_Brut"] != null && entTip.Rows[0]["WizSal_CodTranzac_Brut"].ToString().Length > 0)
-                                WizSal_CodTranzac_Brut = Convert.ToInt32(entTip.Rows[0]["WizSal_CodTranzac_Brut"].ToString());
-
-
-                            if (totalNet != 0)
-                            {
-                                suma = totalNet;
-                                idTranz = WizSal_CodTranzac_Net;
-                            }
-
-                            if (totalBrut != 0)
-                            {
-                                suma = totalBrut;
-                                idTranz = WizSal_CodTranzac_Brut;
-                            }
-
-                            DataTable entTipDT = General.IncarcaDT("SELECT b.\"WizSal_LunaCalcul\" FROM \"BP_Prime\" a JOIN \"BP_tblTipPrima\" b ON a.\"IdTip\" = b.\"Id\" WHERE a.\"Id\" = " + id, null);
-                                             
-
-                            int tipData = 1;
-                            if (entTipDT != null && entTipDT.Rows.Count > 0 && entTipDT.Rows[0]["WizSal_LunaCalcul"] != null && entTipDT.Rows[0]["WizSal_LunaCalcul"].ToString().Length > 0)
-                                tipData = Convert.ToInt32(entTipDT.Rows[0]["WizSal_LunaCalcul"].ToString());
-
-
-                            int an = Convert.ToInt32(entCer.Rows[0]["An"].ToString());
-                            int luna = Convert.ToInt32(entCer.Rows[0]["Luna"].ToString());
-
-                            DateTime dt = new DateTime(1900, 1, 1);
-                            if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["DataPlatii"] != null && entTip.Rows[0]["DataPlatii"].ToString().Length > 0)
-                            {
-                                string data = entTip.Rows[0]["DataPlatii"].ToString();
-                                dt = new DateTime(Convert.ToInt32(data.Substring(6, 4)), Convert.ToInt32(data.Substring(3, 2)), Convert.ToInt32(data.Substring(0, 2)));
-                            }
-
-                            int cant = 0;
-                            decimal pro = 0;
-                            if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["WizSal_Cantitate"] != null && entTip.Rows[0]["WizSal_Cantitate"].ToString().Length > 0)
-                                cant = Convert.ToInt32(entTip.Rows[0]["WizSal_Cantitate"].ToString());
-                            if (entTip != null && entTip.Rows.Count > 0 && entTip.Rows[0]["WizSal_Procent"] != null && entTip.Rows[0]["WizSal_Procent"].ToString().Length > 0)
-                                pro = Convert.ToDecimal(entTip.Rows[0]["WizSal_Procent"].ToString());
-                            if (f10003 != 0 && idTranz != 0 && suma != 0)
-                            {
-                                CreazaTranzacF300(
-                                    Convert.ToInt32(Session["UserId"].ToString()),
-                                    f10003,
-                                    id,
-                                    idTranz,
-                                    dt,
-                                    cant,
-                                    pro,
-                                    suma,
-                                    new DateTime(an, luna, 1),
-                                    new DateTime(an, luna, 1),
-                                    tipData,
-                                    "Prime");
-                            }
-                            else
-                            {
-                                string err = "";
-                                if (f10003 == 0) err += ", angajat";
-                                if (idTranz == 0) err += ", cod tranzactie";
-                                if (suma == 0) err += ", suma";
-                                if (err != "") General.MemoreazaEroarea(err, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-                            }
-                        }
+                        //Radu 19.08.2019 - transferul a fost mutat in functia speciala
 
 
 
@@ -976,8 +1012,10 @@ namespace WizOne.BP
 
                 dtEnd = dt;
 
+                string sql = "DELETE FROM F300 WHERE F30042 = 'WIZONE" + descModul.PadLeft(30, Convert.ToChar("_")) + id.ToString() + "'";
+                General.ExecutaNonQuery(sql, null);
 
-                string sql = "INSERT INTO F300 (F30001, F30002,F30003, F30004, F30005, F30006, F30007, F30010, F30012, F30013, F30014, F30015, F30021, F30022, F30023, F30025, F30035, " 
+                sql = "INSERT INTO F300 (F30001, F30002,F30003, F30004, F30005, F30006, F30007, F30010, F30012, F30013, F30014, F30015, F30021, F30022, F30023, F30025, F30035, " 
                             + " F30011, F30036, F30037, F30038, F30039, F30040, F30041, F30042, F30043, F30044, F30045, F30046, F30050, F30051,  F30053, USER_NO, TIME) "
                             + "VALUES (300, {0}, {1}, {2}, {3}, {4}, {5}, {6}, 0, {7}, {8}, {9}, 0, 0, 0, '', {10}, {11}, {12}, {13}, {14}, 0, 0, 0, '{15}', 0, 0, 0, 0, {16}, 0, 0, 75, {17})";
                 sql = string.Format(sql, idCom, f10003, idSub, idFil, idSec, idDep, idTranz, cantitate, procent.ToString(new CultureInfo("en-US")), suma.ToString(new CultureInfo("en-US")),

@@ -402,6 +402,7 @@ namespace WizOne.Personal
                     SetDurataTimpMunca();
                     break;
                 case "txtGrila":
+                    CalculCO();
                     break;
                 case "cmbTimpPartial":
                     DataTable dtZL = General.IncarcaDT("SELECT * FROM F069", null);
@@ -1495,8 +1496,12 @@ namespace WizOne.Personal
                 ASPxDateEdit deDataAng = Contract_DataList.Items[0].FindControl("deDataAng") as ASPxDateEdit;
                 if (deDataAng == null) return;
 
+                ASPxTextBox txtGrila = Contract_DataList.Items[0].FindControl("txtGrila") as ASPxTextBox;
+                if (txtGrila == null) return;
+
                 int an = DateTime.Now.Year;
                 DateTime f10022 = deDataAng.Date;
+                string f10072 = txtGrila.Text;
 
                 string dtInc = an.ToString() + "-01-01";
                 string dtSf = an.ToString() + "-12-31";
@@ -1504,7 +1509,7 @@ namespace WizOne.Personal
                 string filtruIns = " AND F10003=" + Session["Marca"].ToString();
                 string f10003 = Session["Marca"].ToString();
 
-                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022);
+                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072);
                 General.ExecutaNonQuery(strSql, null);
 
                 DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

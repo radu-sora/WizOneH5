@@ -374,7 +374,11 @@
         }
 
         function onExitButtonClick() {
-            window.history.back();
+            var sessionValue = '<%=Session["PaginaWeb"]%>'
+            if (sessionValue == "Pagini.ActeAditionale")
+                window.location = '<%= ResolveUrl("~/Pagini/ActeAditionale.aspx") %>'
+            else
+                window.history.back();
         }
 
         function saveCustomLayout() {

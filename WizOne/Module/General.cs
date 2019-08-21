@@ -8007,7 +8007,7 @@ namespace WizOne.Module
             }
         }
 
-        public static string SelectCalculCO(int an, string f10003 = "-99", string filtruIns = "", DateTime? F10022 = null)
+        public static string SelectCalculCO(int an, string f10003 = "-99", string filtruIns = "", DateTime? F10022 = null, string f10072 = "")
         {
             string strSql = "";
 
@@ -8020,6 +8020,10 @@ namespace WizOne.Module
                 string strF10022 = "F10022";
                 if (F10022 != null)
                     strF10022 = General.ToDataUniv(F10022);
+
+                string strF10072 = "a.F10072";
+                if (f10072 != "")
+                    strF10072 = f10072;
 
                 if (Constante.tipBD == 1)
                 {
@@ -8074,7 +8078,7 @@ namespace WizOne.Module
                     " left join (select ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,  " +
                     " (select convert(nvarchar(4),F01011) + '-' + convert(nvarchar(4),F01012) + '-01' from F010),'" + dtSf + "' " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma
-                    " left join F026 c on convert(int,a.F10072) = c.F02604 and (convert(int,c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int,c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
+                    " left join F026 c on convert(int," + strF10072 + ") = c.F02604 and (convert(int,c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int,c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
                     " where " + strF10022 + " <= '" + dtSf + "' and '" + dtInc + "' <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " from Ptj_tblZileCO x " +
                     " where x.An=" + an + filtruIns + ";";
@@ -8100,7 +8104,7 @@ namespace WizOne.Module
                     " left join (select ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,  " +
                     " (select convert(nvarchar(4),F01011) + '-' + convert(nvarchar(4),F01012) + '-01' from F010),'" + dtSf + "' " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma
-                    " left join F026 c on convert(int,a.F10072) = c.F02604 and (convert(int,c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int,c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
+                    " left join F026 c on convert(int," + strF10072 + ") = c.F02604 and (convert(int,c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int,c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
                     " where " + strF10022 + " <= '" + dtSf + "' and '" + dtInc + "' <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " from Ptj_tblZileCO x " +
                     " where x.An=" + an + filtruIns + ";";
@@ -8165,7 +8169,7 @@ namespace WizOne.Module
                     " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
                     " (select to_date('01/' ||  F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma + luna de lucru deschisa pt ca functia MONTHS_BETWEEN nu tine cont de ea
-                    " left join F026 c on a.F10072 = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
+                    " left join F026 c on " + strF10072 + " = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
                     " left join ((select F10003, nvl(sum(least(trunc(\"DataSfarsit\"),to_date('31-12-" + an + "','DD-MM-YYYY')-1) - greatest(trunc(\"DataInceput\"),to_date('01-01-" + an + "','DD-MM-YYYY'))+1),0) as cfp from \"Ptj_Cereri\" where \"IdAbsenta\" in (SELECT \"Id\" from \"Ptj_tblAbsente\" where \"AbsenteCFPInCalculCO\"=1) and \"IdStare\"=3 AND (to_Char(\"DataInceput\",'YYYY') ='" + an + "' OR to_Char(\"DataSfarsit\",'YYYY') ='" + an + "') group by f10003)) b on a.F10003 = b.F10003 " +  //se calcuelaza nr de cfp avute in anul de referinta
                     " where " + strF10022 + " <= to_date('31-12-" + an + "','DD-MM-YYYY') and to_date('01-01-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
@@ -8191,7 +8195,7 @@ namespace WizOne.Module
                     " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
                     " (select to_date('01/' || F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma + luna de lucru deschisa pt ca functia MONTHS_BETWEEN nu tine cont de ea
-                    " left join F026 c on a.F10072 = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
+                    " left join F026 c on " + strF10072 + " = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
                     " where " + strF10022 + " <= to_date('31-12-" + an + "','DD-MM-YYYY') and to_date('01-01-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
                     #endregion

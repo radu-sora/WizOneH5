@@ -166,6 +166,50 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
+
+                if (e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                {
+                    try
+                    {
+                        if (Convert.ToDateTime(e.NewValues["DataInceput"]) > Convert.ToDateTime(e.NewValues["DataSfarsit"]))
+                        {
+                            grDateContracte.JSProperties["cpAlertMessage"] = "Data inceput mai mare decat data sfarsit!";
+                            e.Cancel = true;
+                            grDateContracte.CancelEdit();
+                            return;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+                for (int i = 0; i <= grDateContracte.VisibleRowCount - 1; i++)
+                {
+                    object[] obj = grDateContracte.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
+
+                    DateTime dtInc = Convert.ToDateTime(obj[0]);
+                    DateTime dtSf = Convert.ToDateTime(obj[1]);
+
+                    if (dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                    {
+                        try
+                        {
+                            if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                            {
+                                grDateContracte.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
+                                e.Cancel = true;
+                                grDateContracte.CancelEdit();
+                                return;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            
+                        }
+                    }
+                }
+
                 object[] row = new object[ds.Tables["F100Contracte2"].Columns.Count];
                 int x = 0;
                 foreach (DataColumn col in ds.Tables["F100Contracte2"].Columns)
@@ -230,6 +274,50 @@ namespace WizOne.Personal
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
+
+
+                if (e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                {
+                    try
+                    {
+                        if (Convert.ToDateTime(e.NewValues["DataInceput"]) > Convert.ToDateTime(e.NewValues["DataSfarsit"]))
+                        {
+                            grDateContracte.JSProperties["cpAlertMessage"] = "Data inceput este mai mare decat data sfarsit!";
+                            e.Cancel = true;
+                            grDateContracte.CancelEdit();
+                            return;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+                for (int i = 0; i <= grDateContracte.VisibleRowCount - 1; i++)
+                {
+                    object[] obj = grDateContracte.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
+
+                    DateTime dtInc = Convert.ToDateTime(obj[0]);
+                    DateTime dtSf = Convert.ToDateTime(obj[1]);
+
+                    if (grDateContracte.EditingRowVisibleIndex != i && dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                    {
+                        try
+                        {
+                            if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                            {
+                                grDateContracte.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
+                                e.Cancel = true;
+                                grDateContracte.CancelEdit();
+                                return;
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+                }
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 

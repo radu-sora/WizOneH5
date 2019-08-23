@@ -1,6 +1,19 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Cartele.ascx.cs" Inherits="WizOne.Personal.Cartele" %>
 
+<script type="text/javascript">  
 
+ 
+    function OnEndCallbackCartele(s, e) {
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "Atentie !", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
+        }
+    }
+    
+</script>
 
 
 <body>
@@ -12,7 +25,7 @@
                     OnRowInserting="grDateCartele_RowInserting" OnRowUpdating="grDateCartele_RowUpdating" OnRowDeleting="grDateCartele_RowDeleting">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateCartele_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
+                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateCartele_CustomButtonClick(s, e); }" ContextMenu="ctx" EndCallback="OnEndCallbackCartele"/> 
                     <SettingsEditing Mode="Inline" /> 
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>

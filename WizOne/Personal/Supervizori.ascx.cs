@@ -128,6 +128,49 @@ namespace WizOne.Personal
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
 
+                //if (e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                //{
+                //    try
+                //    {
+                //        if (Convert.ToDateTime(e.NewValues["DataInceput"]) > Convert.ToDateTime(e.NewValues["DataSfarsit"]))
+                //        {
+                //            grDateSupervizori.JSProperties["cpAlertMessage"] = "Data inceput este mai mare decat data sfarsit!";
+                //            e.Cancel = true;
+                //            grDateSupervizori.CancelEdit();
+                //            return;
+                //        }
+                //    }
+                //    catch (Exception)
+                //    {
+                //    }
+                //}
+
+                //for (int i = 0; i <= grDateSupervizori.VisibleRowCount - 1; i++)
+                //{
+                //    object[] obj = grDateSupervizori.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
+
+                //    DateTime dtInc = Convert.ToDateTime(obj[0]);
+                //    DateTime dtSf = Convert.ToDateTime(obj[1]);
+
+                //    if (grDateSupervizori.EditingRowVisibleIndex != i && dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                //    {
+                //        try
+                //        {
+                //            if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                //            {
+                //                grDateSupervizori.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
+                //                e.Cancel = true;
+                //                grDateSupervizori.CancelEdit();
+                //                return;
+                //            }
+                //        }
+                //        catch (Exception)
+                //        {
+
+                //        }
+                //    }
+                //}
+
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 
                 DataRow row = ds.Tables["F100Supervizori2"].Rows.Find(keys);
@@ -159,7 +202,50 @@ namespace WizOne.Personal
         {
             try
             {
-                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;                
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+
+                //if (e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                //{
+                //    try
+                //    {
+                //        if (Convert.ToDateTime(e.NewValues["DataInceput"]) > Convert.ToDateTime(e.NewValues["DataSfarsit"]))
+                //        {
+                //            grDateSupervizori.JSProperties["cpAlertMessage"] = "Data inceput este mai mare decat data sfarsit!";
+                //            e.Cancel = true;
+                //            grDateSupervizori.CancelEdit();
+                //            return;
+                //        }
+                //    }
+                //    catch (Exception)
+                //    {
+                //    }
+                //}
+
+                //for (int i = 0; i <= grDateSupervizori.VisibleRowCount - 1; i++)
+                //{
+                //    object[] obj = grDateSupervizori.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
+
+                //    DateTime dtInc = Convert.ToDateTime(obj[0]);
+                //    DateTime dtSf = Convert.ToDateTime(obj[1]);
+
+                //    if (dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
+                //    {
+                //        try
+                //        {
+                //            if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                //            {
+                //                grDateSupervizori.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
+                //                e.Cancel = true;
+                //                grDateSupervizori.CancelEdit();
+                //                return;
+                //            }
+                //        }
+                //        catch (Exception)
+                //        {
+
+                //        }
+                //    }
+                //}
 
                 //string sqlFinal = "SELECT * FROM \"F100Supervizori2\" WHERE F10003 = " + Session["Marca"].ToString();
                 //dt = General.IncarcaDT(sqlFinal, null);

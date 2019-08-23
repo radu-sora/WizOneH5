@@ -124,10 +124,18 @@ namespace WizOne.Pagini
 
                 string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
-                string DB = tmp.Split(';')[0];
+                //tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                //string DB = tmp.Split(';')[0];
                 tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
                 string user = tmp.Split(';')[0];
+                string DB = "";
+                if (Constante.tipBD == 1)
+                {
+                    tmp = Constante.cnnWeb.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                    DB = tmp.Split(';')[0];
+                }
+                else
+                    DB = user;        
                 tmp = Constante.cnnWeb.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 

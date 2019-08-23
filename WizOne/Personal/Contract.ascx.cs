@@ -1182,8 +1182,8 @@ namespace WizOne.Personal
 
             nrLuni = 0;
             nrZile = 0;
-            if (dataSfarsit != new DateTime(2100, 1, 1, 0, 0, 0) && dataStart != new DateTime(2100, 1, 1, 0, 0, 0))
-                nrZile = (int)(dataSfarsit - dataStart).TotalDays + 1;
+            if (dataSfarsit.Date != new DateTime(2100, 1, 1, 0, 0, 0) && dataStart.Date != new DateTime(2100, 1, 1, 0, 0, 0))
+                nrZile = (int)(dataSfarsit.Date - dataStart.Date).TotalDays + 1;
 
             for (int nI = 0; nI < arNrZileInLuna.Count && nrZile >= arNrZileInLuna[nI]; nI++)
             {

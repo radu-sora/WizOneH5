@@ -52,7 +52,8 @@
                             <table style="margin-left:15px;">
                                 <tr>
                                     <td>
-                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+  
+                                        <div style="float:left; padding-right:15px;">
                                             <label id="lblAbs" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Tip cerere</label>
                                             <dx:ASPxComboBox ID="cmbAbs" ClientInstanceName="cmbAbs" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbAbs' + ';' + s.GetValue()); }" />

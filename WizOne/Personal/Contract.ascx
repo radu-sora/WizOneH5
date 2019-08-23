@@ -185,6 +185,9 @@
     }
     function txtGrila_TextChanged(s) {
         CalcGrila(s.GetValue());
+
+        pnlLoading.Show();
+        pnlCtlContract.PerformCallback(s.name + ";" + s.GetValue()); 
     }
 
 

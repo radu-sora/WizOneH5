@@ -811,6 +811,7 @@
     <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\Tarife.ascx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
+    <Content Include="ProgrameLucru\ProgrameOreNoapte.ascx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
     <Content Include="Tactil\Adeverinte.aspx" />
@@ -1710,6 +1711,13 @@
     </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.designer.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOreNoapte.ascx.cs">
+      <DependentUpon>ProgrameOreNoapte.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOreNoapte.ascx.designer.cs">
+      <DependentUpon>ProgrameOreNoapte.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\AdeverintaGenerala.cs">
       <SubType>Component</SubType>

@@ -31,6 +31,15 @@ namespace WizOne.BP {
         protected global::DevExpress.Web.ASPxButton btnRespinge;
         
         /// <summary>
+        /// btnTranf control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnTranf;
+        
+        /// <summary>
         /// btnAproba control.
         /// </summary>
         /// <remarks>

@@ -238,9 +238,15 @@ namespace WizOne.Pagini
             //    Response.End();
 
             Response.AppendHeader("Content-Disposition", "attachment; filename=" + numeFisier);
-            Response.End();
-            Response.Flush();
-            System.Threading.Thread.Sleep(1000);
+
+            HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
+            HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+            HttpContext.Current.ApplicationInstance.CompleteRequest();
+
+
+            //Response.End();
+            //Response.Flush();
+            //System.Threading.Thread.Sleep(1000);
         }
 
 

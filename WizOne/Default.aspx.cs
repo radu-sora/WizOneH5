@@ -15,6 +15,9 @@ using System.Diagnostics;
 using ProceseSec;
 using System.Text.RegularExpressions;
 using System.Security.Claims;
+using System.Web.UI.HtmlControls;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace WizOne
 {
@@ -110,6 +113,29 @@ namespace WizOne
 
                 //    Verifica(usrTMP, "");
                 //}
+
+                if (Dami.ValoareParam("Captcha") == "1")
+                {
+                    //HtmlGenericControl div = new HtmlGenericControl("div");
+                    //div.Attributes["class"] = "ssSchimba";
+
+                    HtmlGenericControl divCap = new HtmlGenericControl("div");
+                    divCap.Attributes["class"] = "g-recaptcha";
+                    divCap.Attributes["data-sitekey"] = Dami.ValoareParam("Captcha_Site");
+
+                    //Button btn = new Button();
+                    //btn.ID = "btnOk";
+                    //btn.Text = "OK";
+                    //btn.TabIndex = 3;
+                    //btn.ValidationGroup = "IntroGrup";
+                    //btn.Click += btnOk_Click;
+
+                    //div.Controls.Add(divCap);
+                    //divOuter.Controls.Add(div);
+                    //divOuter.Controls.Add(btn);
+
+                    divOuter.Controls.Add(divCap);
+                }
             }
             catch (Exception ex)
             {
@@ -122,7 +148,15 @@ namespace WizOne
         {
             try
             {
-                Verifica(General.Strip(txtPan1.Text), txtPan2.Text);
+                if (Dami.ValoareParam("Captcha") == "1")
+                {
+                    if (IsReCaptchValid())
+                        Verifica(General.Strip(txtPan1.Text), txtPan2.Text);
+                    else
+                        MessageBox.Show("Va rugam verificati codul captcha", MessageBox.icoWarning, "Captcha");
+                }
+                else
+                    Verifica(General.Strip(txtPan1.Text), txtPan2.Text);
             }
             catch (Exception ex)
             {
@@ -386,17 +420,23 @@ namespace WizOne
 
                             string redirectpage = string.Empty;
 
-                            switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
-                            {
-                                case 16:
-                                case 26:
-                                    redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
-                                    //redirectpage = "Pagini/SchimbaParola.aspx";
-                                    break;
-                                default:
-                                    redirectpage = "Pagini/SchimbaParola.aspx";
-                                    break;
-                            }
+                            if (Dami.ValoareParam("Captcha") == "1")
+                                redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
+                            else
+                                redirectpage = "Pagini/SchimbaParola.aspx";
+
+
+                            //switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
+                            //{
+                            //    case 16:
+                            //    case 26:
+                            //        redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
+                            //        //redirectpage = "Pagini/SchimbaParola.aspx";
+                            //        break;
+                            //    default:
+                            //        redirectpage = "Pagini/SchimbaParola.aspx";
+                            //        break;
+                            //}
 
                             //Radu 21.03.2018 - daca tipVerif este 2 sau 4, nu mai trebuie sa verificam validitatea parolei
                             if (Convert.ToInt32(General.Nz(drUsr["ResetareParola"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
@@ -427,19 +467,28 @@ namespace WizOne
                                     }
                                     else
                                     {
-                                        switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
-                                        {
-                                            case 16:
-                                            case 26:
-                                                Session["PrevPage"] = "~/Pagini/Default.aspx";
-                                                Session["NextPage"] = "~/Pagini/MainPage.aspx";
-                                                Response.Redirect("~/Pagini/Captcha.aspx", false);
-                                                //Response.Redirect("~/Pagini/MainPage.aspx", false);
-                                                break;
-                                            default:
-                                                Response.Redirect("~/Pagini/MainPage.aspx", false);
-                                                break;
-                                        }
+                                        //if (Dami.ValoareParam("Captcha") == "1")
+                                        //{
+                                        //    Session["PrevPage"] = "~/Pagini/Default.aspx";
+                                        //    Session["NextPage"] = "~/Pagini/MainPage.aspx";
+                                        //    Response.Redirect("~/Pagini/Captcha.aspx", false);
+                                        //}
+                                        //else
+                                            Response.Redirect("~/Pagini/MainPage.aspx", false);
+
+                                        //switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
+                                        //{
+                                        //    case 16:
+                                        //    case 26:
+                                        //        Session["PrevPage"] = "~/Pagini/Default.aspx";
+                                        //        Session["NextPage"] = "~/Pagini/MainPage.aspx";
+                                        //        Response.Redirect("~/Pagini/Captcha.aspx", false);
+                                        //        //Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                        //        break;
+                                        //    default:
+                                        //        Response.Redirect("~/Pagini/MainPage.aspx", false);
+                                        //        break;
+                                        //}
 
                                     }
                                 }
@@ -498,18 +547,21 @@ namespace WizOne
                     case "3":
                     case "5":
                         {
+                            //Florin 2019.08.14
+                            //am adaugat conditia ca deblocarea sa se faca doar pt angajati activi   ->   AND (SELECT COUNT(*) FROM F100 Y WHERE Y.F10003=X.F10003 AND Y.F10025 IN (0,999)) > 0
+                            //s-a schimbat diferenta cu comparatie deoarece se adauga un mimut suplimentar
                             // Mihnea - modificare pt implementare deblocare dupa x minute
                             string strsql = @"SELECT F10003,F70103, F70114, ""Mail"", ""IdLimba"" ,
                                                             CASE WHEN 
-                                                            COALESCE(CAST((SELECT COALESCE(VALOARE,0) FROM TBLPARAMETRII WHERE NUME = 'NrMinuteDeblocareParola' ) AS INT), 0) >0
+                                                            COALESCE(CAST((SELECT COALESCE(VALOARE,0) FROM TBLPARAMETRII WHERE NUME = 'NrMinuteDeblocareParola' ) AS INT), 0) >0  AND (SELECT COUNT(*) FROM F100 Y WHERE Y.F10003=X.F10003 AND Y.F10025 IN (0,999)) > 0
                                                             THEN 
                                                             CASE WHEN
-                                                            {1} - 
-                                                            COALESCE(CAST((SELECT COALESCE(VALOARE,0) FROM TBLPARAMETRII WHERE NUME = 'NrMinuteDeblocareParola' ) AS INT), 0) > 0 
+                                                            {1} >= 
+                                                            COALESCE(CAST((SELECT COALESCE(VALOARE,0) FROM TBLPARAMETRII WHERE NUME = 'NrMinuteDeblocareParola' ) AS INT), 0) 
                                                             THEN 1 ELSE 0 END
                                                             ELSE 0 
                                                             END DEBLOCARE  
-                                                            FROM USERS WHERE UPPER(F70104)='" + utilizator.ToUpper() + "'";
+                                                            FROM USERS X WHERE UPPER(F70104)='" + utilizator.ToUpper() + "'";
                             string op = "+";
                             //string exp = @"CASE WHEN (F70111=1 AND DATEADD(d,f70121,f70122) < GETDATE()) THEN 1 ELSE 0 END AS ""ParolaExpirata"" ";
                             string exp = $@" DATEDIFF(MINUTE,COALESCE([BLOCKTIME],convert(datetime,'1980-01-01 00:00:00',120)),GETDATE()) ";
@@ -557,7 +609,7 @@ namespace WizOne
                                     //Mihnea adaugat blocare pt useri inactivi / suspendati
                                     string suspendatinactiv = string.Empty;
 
-                                    suspendatinactiv = General.Nz((General.ExecutaScalar(@"SELECT CASE WHEN F10025 NOT IN (0,999) OR ( F100922 <= GETDATE() AND NOT ( F100924 <= GETDATE() ) ) THEN 1 ELSE 0 END SI FROM F100 WHERE F10003 = @1", new string[] { dr["F10003"].ToString() })).ToString() , "" ).ToString();
+                                    suspendatinactiv = General.Nz(General.ExecutaScalar(@"SELECT CASE WHEN F10025 NOT IN (0,999) OR ( F100922 <= GETDATE() AND NOT ( F100924 <= GETDATE() ) ) THEN 1 ELSE 0 END SI FROM F100 WHERE F10003 = @1", new object[] { dr["F10003"] }) , "" ).ToString();
                                    
                                     if(suspendatinactiv == "1")
                                     {
@@ -802,9 +854,9 @@ namespace WizOne
                     }
                 }
 
-                //Mihnea
-                Session["PrevPage"] = "";
-                Session["NextPage"] = "";
+                ////Mihnea
+                //Session["PrevPage"] = "";
+                //Session["NextPage"] = "";
 
             }
             catch (Exception ex)
@@ -814,6 +866,35 @@ namespace WizOne
             }
         }
 
+        public bool IsReCaptchValid()
+        {
+            var result = false;
 
+            try
+            {
+                var captchaResponse = Request.Form["g-recaptcha-response"];
+                var secretKey = Dami.ValoareParam("Captcha_Secret");
+                var apiUrl = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}";
+                var requestUri = string.Format(apiUrl, secretKey, captchaResponse);
+                var request = (HttpWebRequest)WebRequest.Create(requestUri);
+
+                using (WebResponse response = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(response.GetResponseStream()))
+                    {
+                        JObject jResponse = JObject.Parse(stream.ReadToEnd());
+                        var isSuccess = jResponse.Value<bool>("success");
+                        result = (isSuccess) ? true : false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return result;
+        }
     }
 }

@@ -7,27 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Pagini {
+namespace WizOne.ProgrameLucru {
     
     
-    public partial class Captcha {
+    public partial class ProgrameOreNoapte {
         
         /// <summary>
-        /// form1 control.
+        /// grDateOreNopate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
-        /// <summary>
-        /// divOuter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOuter;
+        protected global::DevExpress.Web.ASPxGridView grDateOreNopate;
     }
 }

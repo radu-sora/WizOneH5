@@ -51,6 +51,19 @@ namespace WizOne
                 if (General.Nz(Session["UserId"],"").ToString() == "" || !General.IsNumeric(Session["UserId"]))
                     Response.Redirect("../Default.aspx", false);
 
+
+                //Florin 2019.08.19
+                try
+                {
+                    if (Session["tblParam"] == null || ((DataTable)Session["tblParam"]).Rows.Count == 0)
+                        Response.Redirect("../Default.aspx", false);
+                }
+                catch (Exception)
+                {
+                    Response.Redirect("../Default.aspx", false);
+                }
+
+
                 if (!IsPostBack)
                 {
                     //Session["InformatiaCurenta"] = null;

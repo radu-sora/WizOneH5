@@ -183,7 +183,8 @@ namespace WizOne.ProgrameLucru
 
                 General.ExecutaNonQuery("DELETE FROM \"Ptj_Programe\" WHERE \"Id\" = " + id, null);
 
-
+                //Florin 2019.08.21
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_ProgrameOreNoapte\" WHERE \"IdProgram\" = " + id, null);
             }
             catch (Exception ex)
             {

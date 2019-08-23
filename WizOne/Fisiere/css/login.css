@@ -12,13 +12,13 @@ background-size:cover;
 }
 
 .outer{
-width:407px;
-height:370px;
+width:410px;
+height:450px;
 position: absolute;
-top:8px;
-bottom: 108px;
-left: 6px;
-right: 763px;
+top:0;
+bottom: 0;
+left: 0;
+right: 0;
 
 margin: auto;
 text-align:center;
@@ -156,4 +156,6 @@ a
         color:#00588a;
     }
 
-
+.captcha {
+    display:inline-block; bottom:0px; left:50px; position:absolute;
+}

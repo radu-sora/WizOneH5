@@ -45,7 +45,8 @@ namespace WizOne.Adev
                 table.Rows.Add(1, "Grădiniță");
                 table.Rows.Add(2, "Practică");
                 table.Rows.Add(3, "Angajat");
-                table.Rows.Add(4, "Fluturaș");
+                if (Constante.idClient == 18)
+                    table.Rows.Add(4, "Fluturaș");
                 cmbAdev.DataSource = table;
                 cmbAdev.DataBind();
 

@@ -22,6 +22,14 @@
 
         function OnEndCallback(s, e) {
             AdjustSize();
+
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie !", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
         }
 
     </script>

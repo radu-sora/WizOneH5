@@ -13,30 +13,21 @@ namespace WizOne {
     public partial class WebForm1 {
         
         /// <summary>
-        /// btnSave control.
+        /// grCC control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSave;
+        protected global::DevExpress.Web.ASPxGridView grCC;
         
         /// <summary>
-        /// gridB control.
+        /// btnDeleteCC control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView gridB;
-        
-        /// <summary>
-        /// gridA control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView gridA;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDeleteCC;
     }
 }

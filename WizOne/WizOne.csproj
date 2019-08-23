@@ -909,8 +909,6 @@
     <Content Include="Tactil\PontajDetaliatTactil.aspx" />
     <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
-    <Content Include="WebForm3.aspx" />
-    <Content Include="WebForm4.aspx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -2388,20 +2386,6 @@
     </Compile>
     <Compile Include="WebForm2.aspx.designer.cs">
       <DependentUpon>WebForm2.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm3.aspx.cs">
-      <DependentUpon>WebForm3.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm3.aspx.designer.cs">
-      <DependentUpon>WebForm3.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm4.aspx.cs">
-      <DependentUpon>WebForm4.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm4.aspx.designer.cs">
-      <DependentUpon>WebForm4.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebService\Detalii.aspx.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>

@@ -102,9 +102,13 @@ namespace WizOne.Pontaj
                         Session["Ptj_tblAdminCC"] = dtAd;
                         for (int i = 0; i < dtAd.Rows.Count; i++)
                         {
-                            grCC.Columns[dtAd.Rows[i]["Camp"].ToString()].Visible = Convert.ToBoolean(dtAd.Rows[i]["Vizibil"]);
-                            grCC.Columns[dtAd.Rows[i]["Camp"].ToString()].ToolTip = General.Nz(dtAd.Rows[i]["AliasToolTip"],"").ToString();
-                            grCC.Columns[dtAd.Rows[i]["Camp"].ToString()].Caption = General.Nz(dtAd.Rows[i]["Alias"], dtAd.Rows[i]["Camp"]).ToString();
+                            string cmp = dtAd.Rows[i]["Camp"].ToString();
+                            //if (cmp.IndexOf("NrOre") >= 0)
+                            //    cmp = dtAd.Rows[i]["Camp"].ToString() + "_Tmp";
+
+                            grCC.Columns[cmp].Visible = Convert.ToBoolean(dtAd.Rows[i]["Vizibil"]);
+                            grCC.Columns[cmp].ToolTip = General.Nz(dtAd.Rows[i]["AliasToolTip"],"").ToString();
+                            grCC.Columns[cmp].Caption = General.Nz(dtAd.Rows[i]["Alias"], dtAd.Rows[i]["Camp"]).ToString();
                         }
                     }
                 }
@@ -331,10 +335,16 @@ namespace WizOne.Pontaj
                         colDpt.PropertiesComboBox.DataSource = dtDpt;
                     }
 
+
+
                     GridViewDataComboBoxColumn colCC = (grCC.Columns["F06204"] as GridViewDataComboBoxColumn);
                     if (colCC != null)
                     {
-                        DataTable dt = General.IncarcaDT("SELECT * FROM F062", null);
+                        //Florin 2019.08.23
+                        string sqlCC = General.Nz(General.ExecutaScalar(@"SELECT ""SursaCombo"" FROM ""Ptj_tblAdminCC"" WHERE ""Camp""='F06204'", null), "").ToString().Trim();
+                        if (sqlCC == "")
+                            sqlCC = "SELECT F06204 AS Id, F06205 AS Denumire FROM F062";
+                        DataTable dt = General.IncarcaDT(sqlCC, null);
                         colCC.PropertiesComboBox.DataSource = dt;
                     }
 
@@ -365,17 +375,12 @@ namespace WizOne.Pontaj
                         string f10003 = General.Nz(Request.QueryString["f10003"], "").ToString();
                         if (ziua != "" && f10003 != "")
                         {
-                            //IncarcaGrid(ziua);
-
                             DateTime ziTmp = Convert.ToDateTime(txtAnLuna.Value);
-
-                            DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziTmp.Year, ziTmp.Month, Convert.ToInt32(ziua))}", null);
+                            DataTable dt = SursaCC(Convert.ToInt32(f10003), General.ToDataUniv(ziTmp.Year, ziTmp.Month, Convert.ToInt32(ziua)));
                             Session["PtjCC"] = dt;
                             grCC.KeyFieldName = "F10003;Ziua;F06204";
                             dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
 
-                            //grCC.KeyFieldName = "IdAuto";
-                            //dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                             grCC.DataSource = dt;
                             grCC.DataBind();
                         }
@@ -724,10 +729,10 @@ namespace WizOne.Pontaj
                             INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
                             INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
                             WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
-                            (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
-                            ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
-                            ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
-                            COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0)) 
+                            (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0) AND COALESCE(B.ZL,0) <> 0) OR
+                            ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0) AND COALESCE(B.S,0) <> 0) OR
+                            ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0) AND COALESCE(B.D,0) <> 0) OR
+                            (COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0) AND COALESCE(B.SL,0) <> 0)) 
                             GROUP BY A.""OreInVal""
                             ORDER BY A.""OreInVal""
                             FOR XML PATH ('')) AS ""ValActive"",
@@ -740,11 +745,11 @@ namespace WizOne.Pontaj
                             SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
                             FROM ""Securitate"" A
                             INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
                             UNION
                             SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
                             FROM ""Securitate"" A
-                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
                             ) A
                             GROUP BY A.""Coloana""
                             ORDER BY A.""Coloana""
@@ -829,10 +834,10 @@ namespace WizOne.Pontaj
                             FROM(SELECT * FROM ""Ptj_tblAbsente"" ORDER BY ""OreInVal"") a INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
                             INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
                             WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
-                            (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
-                            ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
-                            ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
-                            COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0)) 
+                            (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0) AND COALESCE(B.ZL,0) <> 0) OR
+                            ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0) AND COALESCE(B.S,0) <> 0) OR
+                            ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0) AND COALESCE(B.D,0) <> 0) OR
+                            (COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0) AND COALESCE(B.SL,0) <> 0)) 
                             GROUP BY A.""OreInVal"") AS ""ValActive"",
 
 
@@ -843,11 +848,11 @@ namespace WizOne.Pontaj
                             SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
                             FROM ""Securitate"" A
                             INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
                             UNION
                             SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
                             FROM ""Securitate"" A
-                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajone' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
                             ) A
                             GROUP BY A.""Coloana"") AS ""ValSecuritate"",
 
@@ -2838,22 +2843,13 @@ namespace WizOne.Pontaj
                         case "btnCC":
                             {
                                 lblZiuaCC.Text = "Centrii de cost - Ziua " + Convert.ToDateTime(lst[1]).Day;
-                                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" WHERE F10003={lst[0]} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(lst[1]))}", null);
+                                DataTable dt = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
                                 Session["PtjCC"] = dt;
-                                //grCC.KeyFieldName = "IdAuto";
-                                //dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                                 grCC.KeyFieldName = "F10003;Ziua;F06204";
                                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
 
                                 grCC.DataSource = dt;
                                 grCC.DataBind();
-
-                                //GridViewDataComboBoxColumn colCC = (grCC.Columns["F06204"] as GridViewDataComboBoxColumn);
-                                //if (colCC != null)
-                                //{
-                                //    DataTable dtCC = General.IncarcaDT("SELECT * FROM F062", null);
-                                //    colCC.PropertiesComboBox.DataSource = dtCC;
-                                //}
                             }
                             break;
                         case "btnDeleteCC":
@@ -2868,8 +2864,6 @@ namespace WizOne.Pontaj
                                 Session["PtjCC"] = dt;
                                 grCC.KeyFieldName = "F10003;Ziua;F06204";
                                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
-                                //grCC.KeyFieldName = "IdAuto";
-                                //dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                                 grCC.DataSource = dt;
                                 grCC.DataBind();
                             }
@@ -3216,28 +3210,28 @@ namespace WizOne.Pontaj
             }
         }
 
-        private void LoadCC(ASPxComboBox cmb)
-        {
-            try
-            {
-                List<object> lst = ValoriChei();
+        //private void LoadCC(ASPxComboBox cmb)
+        //{
+        //    try
+        //    {
+        //        List<object> lst = ValoriChei();
 
-                DataTable dt = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatCC"" WHERE F10003={lst[0]} AND {General.TruncateDateAsString("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("\"DataSfarsit\"")}) = 0)
-                                                    SELECT * FROM F062
-                                                    ELSE
-                                                    SELECT B.* FROM ""Ptj_relAngajatCC"" A 
-                                                    INNER JOIN F062 B ON A.F06204 = B.F06204
-                                                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+        //        DataTable dt = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatCC"" WHERE F10003={lst[0]} AND {General.TruncateDateAsString("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("\"DataSfarsit\"")}) = 0)
+        //                                            SELECT * FROM F062
+        //                                            ELSE
+        //                                            SELECT B.* FROM ""Ptj_relAngajatCC"" A 
+        //                                            INNER JOIN F062 B ON A.F06204 = B.F06204
+        //                                            WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
 
-                cmb.DataSource = dt;
-                cmb.DataBind();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        cmb.DataSource = dt;
+        //        cmb.DataBind();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         private void LoadSubPro(ASPxComboBox cmb, int idPro)
         {
@@ -3405,6 +3399,16 @@ namespace WizOne.Pontaj
                     dr["NrOre9"] = upd.NewValues["NrOre9"] ?? DBNull.Value;
                     dr["NrOre10"] = upd.NewValues["NrOre10"] ?? DBNull.Value;
 
+
+                    //for (int x = 1; x <= 10; x++)
+                    //{
+                    //    if (upd.NewValues["NrOre" + i + "_Tmp"] != null)
+                    //        dr["NrOre" + x] = Convert.ToDateTime(upd.NewValues["NrOre" + i + "_Tmp"]).Minute + (Convert.ToDateTime(upd.NewValues["NrOre" + i + "_Tmp"]).Hour * 60);
+                    //    else
+                    //        dr["NrOre" + x] = DBNull.Value;
+                    //}
+
+
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "0")
                         dr["IdStare"] = 3;
                     else
@@ -3448,6 +3452,18 @@ namespace WizOne.Pontaj
                     if (upd.NewValues["NrOre8"] != null) dr["NrOre8"] = upd.NewValues["NrOre8"] ?? DBNull.Value;
                     if (upd.NewValues["NrOre9"] != null) dr["NrOre9"] = upd.NewValues["NrOre9"] ?? DBNull.Value;
                     if (upd.NewValues["NrOre10"] != null) dr["NrOre10"] = upd.NewValues["NrOre10"] ?? DBNull.Value;
+
+                    //for (int x = 1; x <= 10; x++)
+                    //{
+                    //    if (upd.NewValues["NrOre" + i + "_Tmp"] != null)
+                    //    {
+                    //        if (upd.NewValues["NrOre" + i + "_Tmp"] != null)
+                    //            dr["NrOre" + x] = Convert.ToDateTime(upd.NewValues["NrOre" + i + "_Tmp"]).Minute + (Convert.ToDateTime(upd.NewValues["NrOre" + i + "_Tmp"]).Hour * 60);
+                    //        else
+                    //            dr["NrOre" + x] = DBNull.Value;
+                    //    }
+                    //}
+
                     if (upd.NewValues["IdStare"] != null) dr["IdStare"] = upd.NewValues["IdStare"] ?? DBNull.Value;
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
@@ -3477,29 +3493,66 @@ namespace WizOne.Pontaj
                 }
 
                 if (suntModif == true)
-                    btnSaveCC_Click(null, null);
-
-
-                //btnSaveCC_Click(null, null);
-                //General.SalveazaDate(dt, "Ptj_CC");
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        int total = Convert.ToInt32(General.Nz(dt.Compute("Sum(NrOre1)", string.Empty), 0));
+                        if (total > Convert.ToInt32(General.Nz(dt.Rows[0]["Norma"],0)))
+                        {
+                            grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Suma orelor depaseste norma");
+                            //MessageBox.Show("Suma orelor depaseste norma", MessageBox.icoWarning, "Norma depasita");
+                        }
+                        else
+                            btnSaveCC_Click(null, null);
+                    }
+                    else
+                        btnSaveCC_Click(null, null);
+                }
 
                 e.Handled = true;
 
-                DataTable dtCC = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" WHERE F10003={lst[0]} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(lst[1]))}", null);
+                DataTable dtCC = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
+
                 Session["PtjCC"] = dtCC;
                 grCC.KeyFieldName = "F10003;Ziua;F06204";
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
-                //grCC.KeyFieldName = "IdAuto";
-                //dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                 grCC.DataSource = dtCC;
                 grCC.DataBind();
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        private DataTable SursaCC(int f10003, string ziua)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                string strCmp = "";
+                for (int i = 1; i <= 10; i++)
+                {
+                    if (Constante.tipBD == 1)
+                        strCmp += $@",CONVERT(datetime,DATEADD(minute, NrOre{i}, '')) AS NrOre{i}_Tmp ";
+                    else
+                        strCmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + NrOre{i}/1440 AS ""NrOre{i}_Tmp"" ";
+                }
+
+                dt = General.IncarcaDT($@"SELECT A.*, B.""Norma"" {strCmp} 
+                        FROM ""Ptj_CC"" A 
+                        LEFT JOIN ""Ptj_Intrari"" B ON A.F10003=B.F10003 AND A.""Ziua""=B.""Ziua""
+                        WHERE A.F10003={f10003} AND A.""Ziua""={ziua}", null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return dt;
         }
 
     }

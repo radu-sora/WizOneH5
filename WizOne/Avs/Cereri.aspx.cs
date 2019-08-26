@@ -1511,7 +1511,15 @@ namespace WizOne.Avs
                         AscundeCtl();
                         IncarcaDate();
                         string data = "";
+                        int idAtr = Convert.ToInt32(cmbAtribute.Value);
                         SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out data);
+                        if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
+                                || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
+                                idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
+                            if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date)
+                            {
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");                               
+                            }
                         break;
                     case "2":
                         if (e.Parameter.Split(';')[1] == "cmb1Nou")
@@ -1608,6 +1616,14 @@ namespace WizOne.Avs
                         {
                             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii este intr-o zi nelucratoare!");
                         }
+                        idAtr = Convert.ToInt32(cmbAtribute.Value);
+                        if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
+                          || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
+                          idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
+                            if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date)
+                            {
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
+                            }
                         break;
                     case "8":               //cmbRol
                         {
@@ -1862,16 +1878,15 @@ namespace WizOne.Avs
 
                 idAtr = Convert.ToInt32((cmbAtribute.Value ?? -99));
                 SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out dataRev);
-                //Radu 26.08.2019 - multi clienti nu folosesc Revisal-ul de la noi si atunci nu mai este obligatorie conditia de mai jos
-                //if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
-                //        || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
-                //        idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
-                //    if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date && val == 1)
-                //    {
-                //        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");             
-                //        return false;
-                //    }   
-                
+                if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
+                        || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
+                        idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
+                    if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date && val == 1)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
+                        return false;
+                    }
+
                 if (idAtr == (int)Constante.Atribute.Norma && Convert.ToInt32(cmb6Nou.Value) == 3 && (Convert.ToInt32(cmb7Nou.Value ?? - 1) <= 0 || txt1Nou.Text.Length <= 0))
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pentru repartizare inegala trebuie sa completati intervalul si numarul de ore!");

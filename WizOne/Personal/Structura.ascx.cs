@@ -193,6 +193,13 @@ namespace WizOne.Personal
                     txtDept.Value = itm.GetFieldValue("F00608");
                     ds.Tables[0].Rows[0]["F10007"] = itm.GetFieldValue("F00607");
                     ds.Tables[1].Rows[0]["F10007"] = itm.GetFieldValue("F00607");
+                    //Radu 26.08.2019
+                    if (General.Nz(itm.GetFieldValue("CC"), "").ToString() != "0")
+                    {
+                        cmbCC.Value = itm.GetFieldValue("CC");
+                        ds.Tables[0].Rows[0]["F10053"] = itm.GetFieldValue("CC");
+                        ds.Tables[1].Rows[0]["F10053"] = itm.GetFieldValue("CC");
+                    }
                 }
                 else
                 {
@@ -224,6 +231,8 @@ namespace WizOne.Personal
                     ds.Tables[0].Rows[0]["F100959"] = 0;
                     ds.Tables[2].Rows[0]["F100959"] = 0;
                 }
+               
+         
                 DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 " + (Convert.ToInt32(General.Nz(ds.Tables[0].Rows[0]["F100958"], "0")) <= 0 ? ""
                     : " WHERE F00808 = " + Convert.ToInt32(General.Nz(ds.Tables[0].Rows[0]["F100958"], "0"))), null);
                 cmbBir.DataSource = dtBir;

@@ -3945,7 +3945,7 @@ namespace WizOne.Module
                 }
             }
             string strSql = @"SELECT {0} as ""IdAuto"", a.F00204, b.F00305, c.F00406, d.F00507 ,e.F00608, F.F00709, G.F00810,
-                                a.F00202, b.F00304 , c.F00405 , d.F00506, e.F00607, F.F00708 , G.F00809
+                                a.F00202, b.F00304 , c.F00405 , d.F00506, e.F00607, F.F00708 , G.F00809, COALESCE(E.F00615, 0) AS CC
                                 FROM F002 A
                                 LEFT JOIN F003 B ON A.F00202 = B.F00303
                                 LEFT JOIN F004 C ON B.F00304 = C.F00404

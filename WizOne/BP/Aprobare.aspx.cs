@@ -194,10 +194,19 @@ namespace WizOne.BP
                     if (Convert.ToInt32(arr[6].ToString()) == Convert.ToInt32(dt010.Rows[0][0].ToString()) && Convert.ToInt32(arr[5].ToString()) == Convert.ToInt32(dt010.Rows[0][1].ToString()))
                     {
                         DataTable entParam = new DataTable();
+
+                        string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
+                        string sql = "SELECT COUNT(*) FROM \"F100Supervizori\" WHERE \"IdUser\" = {0} AND \"IdSuper\" IN ({1})";
+                        sql = string.Format(sql, Session["UserId"].ToString(), idHR);
+                        DataTable dtHR = General.IncarcaDT(sql, null);
+                        string HR = "";
+                        if (dtHR != null && dtHR.Rows.Count > 0 && dtHR.Rows[0][0] != null && dtHR.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtHR.Rows[0][0].ToString()) > 0)
+                            HR = "HR";
+
                         if (tip == 1)
-                            entParam = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'ZiBlocareIntroducerePrimaAvans'", null);
+                            entParam = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'ZiBlocareIntroducerePrimaAvans" + HR + "'", null);
                         else
-                            entParam = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'ZiBlocareIntroducerePrimaLichidare'", null);
+                            entParam = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'ZiBlocareIntroducerePrimaLichidare" + HR + "'", null);
 
                         if (entParam != null && entParam.Rows.Count > 0 && entParam.Rows[0][0] != null && entParam.Rows[0][0].ToString().Length > 0)
                         {
@@ -207,16 +216,16 @@ namespace WizOne.BP
                                 if (tip == 1)
                                 {
                                     if (Constante.tipBD == 1)
-                                        dtZiBloc = General.IncarcaDT("SELECT CONVERT(VARCHAR, \"ZiBlocareAvans\", 103) FROM \"DataBlocareBonusuri\"", null);
+                                        dtZiBloc = General.IncarcaDT("SELECT CONVERT(VARCHAR, \"ZiBlocareAvans" + HR + "\", 103) FROM \"DataBlocareBonusuri\"", null);
                                     else
-                                        dtZiBloc = General.IncarcaDT("SELECT TO_CHAR(\"ZiBlocareAvans\", 'dd/mm/yyyy') FROM \"DataBlocareBonusuri\"", null);
+                                        dtZiBloc = General.IncarcaDT("SELECT TO_CHAR(\"ZiBlocareAvans" + HR + "\", 'dd/mm/yyyy') FROM \"DataBlocareBonusuri\"", null);
                                 }
                                 else
                                 {
                                     if (Constante.tipBD == 1)
-                                        dtZiBloc = General.IncarcaDT("SELECT CONVERT(VARCHAR, \"ZiBlocareLichidare\", 103) FROM \"DataBlocareBonusuri\"", null);
+                                        dtZiBloc = General.IncarcaDT("SELECT CONVERT(VARCHAR, \"ZiBlocareLichidare" + HR + "\", 103) FROM \"DataBlocareBonusuri\"", null);
                                     else
-                                        dtZiBloc = General.IncarcaDT("SELECT TO_CHAR(\"ZiBlocareLichidare\", 'dd/mm/yyyy') FROM \"DataBlocareBonusuri\"", null);
+                                        dtZiBloc = General.IncarcaDT("SELECT TO_CHAR(\"ZiBlocareLichidare" + HR + "\", 'dd/mm/yyyy') FROM \"DataBlocareBonusuri\"", null);
                                 }
                                 if (dtZiBloc != null && dtZiBloc.Rows.Count > 0 && dtZiBloc.Rows[0][0] != null && dtZiBloc.Rows[0][0].ToString().Length > 0)
                                 {
@@ -475,6 +484,12 @@ namespace WizOne.BP
                                 {
                                 }
 
+                                if (idStare == 3)
+                                {
+                                    string descModul = "Prime";
+                                    string sql = "DELETE FROM F300 WHERE F30042 = 'WIZONE" + descModul.PadLeft(30, Convert.ToChar("_")) + obj[0].ToString() + "'";
+                                    General.ExecutaNonQuery(sql, null);
+                                }
 
                                 grDate.DataBind();
                                 #endregion 
@@ -895,9 +910,14 @@ namespace WizOne.BP
                         sql = string.Format(sql, (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), idStare, culoare, Session["UserId"].ToString(), (idUserInloc == 0 ? "NULL" : idUserInloc.ToString()), id);
                         General.ExecutaNonQuery(sql, null);
 
-                   
-                        //Radu 19.08.2019 - transferul a fost mutat in functia speciala
 
+                        //Radu 19.08.2019 - transferul a fost mutat in functia speciala
+                        if (tipActiune == 2)
+                        {
+                            string descModul = "Prime";
+                            sql = "DELETE FROM F300 WHERE F30042 = 'WIZONE" + descModul.PadLeft(30, Convert.ToChar("_")) + id.ToString() + "'";
+                            General.ExecutaNonQuery(sql, null);
+                        }
 
 
                         #region  Notificare strat

@@ -1,6 +1,19 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Supervizori.ascx.cs" Inherits="WizOne.Personal.Supervizori" %>
 
+<script type="text/javascript">  
 
+ 
+    function OnEndCallbackSupervizori(s, e) {
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "Atentie !", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
+        }
+    }
+    
+</script>
 
 <body>
 
@@ -8,7 +21,7 @@
         OnRowInserting="grDateSupervizori_RowInserting" OnRowUpdating="grDateSupervizori_RowUpdating" OnRowDeleting="grDateSupervizori_RowDeleting"  OnCommandButtonInitialize="grDateSupervizori_CommandButtonInitialize">
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-        <ClientSideEvents CustomButtonClick="function(s, e) { grDateSupervizori_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
+        <ClientSideEvents CustomButtonClick="function(s, e) { grDateSupervizori_CustomButtonClick(s, e); }" ContextMenu="ctx" EndCallback="OnEndCallbackSupervizori"/> 
         <SettingsEditing Mode="Inline" />       
         <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>

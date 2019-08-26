@@ -1,13 +1,26 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="CentreCost.ascx.cs" Inherits="WizOne.Personal.CentreCost" %>
 
+<script type="text/javascript">  
 
+ 
+    function OnEndCallbackCentreCost(s, e) {
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "Atentie !", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
+        }
+    }
+    
+</script>
 
 <body>  
     <dx:ASPxGridView ID="grDateCentreCost" runat="server" ClientInstanceName="grDateCentreCost" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnDataBinding="grDateCentreCost_DataBinding" OnInitNewRow="grDateCentreCost_InitNewRow"
         OnRowInserting="grDateCentreCost_RowInserting" OnRowUpdating="grDateCentreCost_RowUpdating" OnRowDeleting="grDateCentreCost_RowDeleting" OnCommandButtonInitialize="grDateCentreCost_CommandButtonInitialize">
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />   
-        <ClientSideEvents CustomButtonClick="function(s, e) { grDateCentreCost_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
+        <ClientSideEvents CustomButtonClick="function(s, e) { grDateCentreCost_CustomButtonClick(s, e); }" ContextMenu="ctx" EndCallback="OnEndCallbackCentreCost"/> 
         <SettingsEditing Mode="Inline" />        
         <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>

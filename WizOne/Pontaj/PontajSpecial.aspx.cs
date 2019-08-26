@@ -84,10 +84,20 @@ namespace WizOne.Pontaj
                     IncarcaAngajati();
 
                     //General.ExecutaNonQuery("DELETE FROM \"PtjSpecial_Sabloane\" WHERE \"Denumire\" IS NULL", null);                
-                    string sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\", " 
-                        + " NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\" " 
-                        + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION ";
-                    DataTable dt = General.IncarcaDT(sql + " SELECT * FROM \"PtjSpecial_Sabloane\"", null);
+                    string sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
+                        + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
+                        + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
+                        + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
+                        + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
+                        + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL "
+                        + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
+                        + "SELECT  \"Id\",  \"Denumire\", \"IdProgram\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                        + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
+                        + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
+                        + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
+                        + " \"ValZiua11\", \"ValZiua12\",  \"ValZiua13\", \"ValZiua14\", \"ValZiua15\", \"ValZiua16\", \"ValZiua17\", \"ValZiua18\", \"ValZiua19\", \"ValZiua20\", "
+                        + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL FROM \"PtjSpecial_Sabloane\" ";
+                    DataTable dt = General.IncarcaDT(sql, null);
                     cmbSablon.DataSource = dt;
                     cmbSablon.DataBind();
                     Session["PtjSpecial_Sabloane"] = dt;
@@ -122,8 +132,16 @@ namespace WizOne.Pontaj
                             if (tx != null)                            
                                 tx.Visible = true;                                                            
                         }
-                    }
+                    }             
                 }
+
+                DataTable table = new DataTable();
+                table.Columns.Add("Id", typeof(int));
+                table.Columns.Add("Denumire", typeof(string));
+                for (int i = 1; i <= 31; i++)
+                    table.Rows.Add(i, i.ToString());
+                cmbNrZileSablon.DataSource = table;
+                cmbNrZileSablon.DataBind();
 
                 cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003", null);
                 cmbSub.DataBind();
@@ -169,7 +187,13 @@ namespace WizOne.Pontaj
             try
             {
                 List<int> lstMarci = new List<int>();
-                string[] sablon = new string[11];
+                //string[] sablon = new string[11];
+
+                if (cmbSablon.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu a fost specificat sablonul!"), MessageBox.icoError);
+                    return;
+                }
 
                 if (dtDataStart.Value == null || dtDataSfarsit.Value == null)
                 {
@@ -189,12 +213,17 @@ namespace WizOne.Pontaj
                     return;
                 }
 
-                for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
-                {
-                    ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
-                    if (tx != null && tx.Text.Length > 0) sablon[i] = tx.Text;
-                    else sablon[i] = "";
-                }
+                //for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
+                //{
+                //    ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                //    if (tx != null && tx.Text.Length > 0) sablon[i] = tx.Text;
+                //    else sablon[i] = "";
+                //}
+
+
+
+                DataTable table = Session["PtjSpecial_Sabloane"] as DataTable;
+                DataRow sablon = table.Select("Id=" + cmbSablon.Value)[0];
 
 
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
@@ -229,7 +258,7 @@ namespace WizOne.Pontaj
         }
 
 
-        public string InitializarePontajSpecial(DateTime dataStart, DateTime dataSf, int nrZile, string[] sablon, List<int> lstMarci)
+        public string InitializarePontajSpecial(DateTime dataStart, DateTime dataSf, int nrZile, DataRow sablon, List<int> lstMarci)
         {
             string msg = "";
 
@@ -269,6 +298,13 @@ namespace WizOne.Pontaj
                         string dtStr = General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day);
 
                         int nr = dtHolidays.Select("DAY = " + dtStr).Count();
+
+                        if (!chkS.Checked && zi.DayOfWeek == DayOfWeek.Saturday)
+                            continue;
+                        if (!chkD.Checked && zi.DayOfWeek == DayOfWeek.Sunday)
+                            continue;
+                        if (!chkSL.Checked && nr > 0)
+                            continue;
 
                         if (nr > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
                         {
@@ -311,6 +347,7 @@ namespace WizOne.Pontaj
                                 data += " TO_DATE('" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 'dd/mm/yyyy') ";
                         }
                     }
+                                       
 
                     if (Constante.tipBD == 1)
                         cond = " ISNUMERIC(\"ValStr\") = 1 ";
@@ -318,16 +355,40 @@ namespace WizOne.Pontaj
                         cond = " TRIM(TRANSLATE(\"ValStr\",'0123456789', ' ')) is null ";
 
                     string sql = "";
+                    string oraIn = "", oraOut = "";
+
+                    if (sablon["IdProgram"] != null && sablon["IdProgram"].ToString().Length > 0)
+                    {
+                        if (Constante.tipBD == 1)
+                        {
+                            oraIn = "convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram"].ToString() + "), 108), 120)";
+                            oraOut = "convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram"].ToString() + "), 108), 120)";
+                        }
+                        else
+                        {
+                            oraIn = "to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            oraOut = "to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                        }
+                    }
+
+                    string sirVal = "";
+                    if (sablon["ValZiua" + i] != null && sablon["ValZiua" + i].ToString().Length > 0)
+                    {                    
+                        string[] param = sablon["ValZiua" + i].ToString().Split(';');
+                        for (int k = 0; k < param.Length; k++)                        
+                            sirVal += ", \"" + param[k].Split('=')[0] + "\" = " + param[k].Split('=')[1];                        
+                    }
+
                     if (data.Length > 0)
                     {
                         data = data.Substring(1);
 
-                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + sablon[i] + "' WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "', \"In1\" = " + oraIn +" , \"Out1\" = " + oraOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
                     }
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + sablon[i] + "' WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "', \"In1\" = " + oraIn + " , \"Out1\" = " + oraOut + sirVal + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
                     }
                     else
                         sqlFin += sql + ";";
@@ -341,7 +402,13 @@ namespace WizOne.Pontaj
                 //calcul formule cumulat
                 //General.CalculFormuleCumulatToti(1, 1, $@" {General.ToDataUniv(dataStart)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dataSf)} AND F10003 IN ({lista})");
                 //Radu 01.07.2019
-                General.CalculFormuleCumulatToti(dataStart.Year, dataStart.Month, $@" F10003 IN ({lista})");
+
+                DateTime dt = dataStart;
+                while (dt.Year < dataSf.Year || (dt.Year == dataSf.Year && dt.Month <= dataSf.Month))
+                {
+                    General.CalculFormuleCumulatToti(dt.Year, dt.Month, $@" F10003 IN ({lista})");
+                    dt = dt.AddMonths(1);
+                }
 
             }
             catch (Exception ex)
@@ -478,6 +545,9 @@ namespace WizOne.Pontaj
                                                 tx.Text = (dr[0]["Ziua" + i.ToString()] ?? "").ToString();
                                             }
                                         }
+                                    chkS.Checked = Convert.ToInt32(dr[0]["S"] == null ? "0" : dr[0]["S"].ToString()) == 1 ? true : false;
+                                    chkD.Checked = Convert.ToInt32(dr[0]["D"] == null ? "0" : dr[0]["D"].ToString()) == 1 ? true : false;
+                                    chkSL.Checked = Convert.ToInt32(dr[0]["SL"] == null ? "0" : dr[0]["SL"].ToString()) == 1 ? true : false;
                                 }
                             }
                             else
@@ -486,11 +556,21 @@ namespace WizOne.Pontaj
                                 {
                                     string cmp = "ISNULL";
                                     if (Constante.tipBD == 2) cmp = "NVL";
-                                    General.ExecutaNonQuery("INSERT INTO \"PtjSpecial_Sabloane\" (\"Id\") SELECT " + cmp + "(MAX(\"Id\"), 0) + 1 FROM \"PtjSpecial_Sabloane\"", null);                               
-                                    sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\", "
-                                        + " NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\" "
-                                        + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION ";
-                                    DataTable tabela = General.IncarcaDT(sql + " SELECT * FROM \"PtjSpecial_Sabloane\"", null);
+                                    General.ExecutaNonQuery("INSERT INTO \"PtjSpecial_Sabloane\" (\"Id\") SELECT " + cmp + "(MAX(\"Id\"), 0) + 1 FROM \"PtjSpecial_Sabloane\"", null);
+                                    sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
+                                      + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
+                                      + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
+                                      + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
+                                      + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
+                                      + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL "
+                                      + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
+                                      + "SELECT  \"Id\",  \"Denumire\", \"IdProgram\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                                      + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
+                                      + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
+                                      + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
+                                      + " \"ValZiua11\", \"ValZiua12\",  \"ValZiua13\", \"ValZiua14\", \"ValZiua15\", \"ValZiua16\", \"ValZiua17\", \"ValZiua18\", \"ValZiua19\", \"ValZiua20\", "
+                                      + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL FROM \"PtjSpecial_Sabloane\" ";
+                                    DataTable tabela = General.IncarcaDT(sql, null);
                                     //cmbSablon.DataSource = tabela;
                                     //cmbSablon.DataBind();
                                     txtNumeSablon.Text = "";
@@ -511,6 +591,10 @@ namespace WizOne.Pontaj
                         if (cmbNrZileSablon.Value != null)
                         {
                             linii[0]["NrZile"] = Convert.ToInt32(cmbNrZileSablon.Value);
+                            linii[0]["IdProgram"] = cmbProgr.Value ?? DBNull.Value;
+                            linii[0]["S"] = chkS.Checked ? 1 : 0;
+                            linii[0]["D"] = chkD.Checked ? 1 : 0;
+                            linii[0]["SL"] = chkSL.Checked ? 1 : 0;
                             for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
                             {
                                 ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
@@ -518,7 +602,16 @@ namespace WizOne.Pontaj
                                 {
                                     tx.Visible = true;
                                     if (tx.Text.Length > 0)
+                                    {
                                         linii[0]["Ziua" + i.ToString()] = tx.Text;
+                                       
+                                        foreach (var item in txtValuri)
+                                        {                                          
+                                            if (item.Key == "txtZiua" + i.ToString())
+                                                linii[0]["ValZiua" + i.ToString()] = item.Value;
+                                        }
+                                      
+                                    }
                                 }
                             }
                         }
@@ -528,10 +621,21 @@ namespace WizOne.Pontaj
                         cmbSablon.DataBind();
                         break;
                     case "btnSterge":
-                        General.ExecutaNonQuery("DELETE FROM \"PtjSpecial_Sabloane\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value), null);                       
-                        sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\", "
-                            + " NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\" "
-                            + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "; DataTable table = General.IncarcaDT(sql + " SELECT * FROM \"PtjSpecial_Sabloane\"", null);
+                        General.ExecutaNonQuery("DELETE FROM \"PtjSpecial_Sabloane\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value), null);
+                        sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
+                          + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
+                          + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
+                          + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
+                          + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
+                          + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL "
+                          + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
+                          + "SELECT  \"Id\",  \"Denumire\", \"IdProgram\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                          + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
+                          + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
+                          + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
+                          + " \"ValZiua11\", \"ValZiua12\",  \"ValZiua13\", \"ValZiua14\", \"ValZiua15\", \"ValZiua16\", \"ValZiua17\", \"ValZiua18\", \"ValZiua19\", \"ValZiua20\", "
+                          + " \"ValZiua21\", \"ValZiua22\",  \"ValZiua23\", \"ValZiua24\", \"ValZiua25\", \"ValZiua26\", \"ValZiua27\", \"ValZiua28\", \"ValZiua29\", \"ValZiua30\", \"ValZiua31\", S, D, SL FROM \"PtjSpecial_Sabloane\" ";
+                        DataTable table = General.IncarcaDT(sql, null);
                         cmbSablon.DataSource = table;
                         cmbSablon.DataBind();
                         Session["PtjSpecial_Sabloane"] = table;
@@ -905,6 +1009,10 @@ namespace WizOne.Pontaj
                 cmbTipAbs.DataSource = dtAbs;
                 cmbTipAbs.DataBind();
 
+                DataTable dtProgr = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Programe""", null);
+                cmbProgr.DataSource = dtProgr;
+                cmbProgr.DataBind();
+
                 DataTable dtVal = General.IncarcaDT($@"SELECT COALESCE(A.""OreInVal"",'') AS ""ValAbs"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", COALESCE(A.""NrMax"", 23) AS ""NrMax"" 
                         FROM ""Ptj_tblAbsente"" A WHERE  COALESCE(A.""IdTipOre"",1)=0 AND A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' ORDER BY A.""OreInVal"" ", null);
 
@@ -913,8 +1021,8 @@ namespace WizOne.Pontaj
                 for (int i = 0; i < dtVal.Rows.Count; i++)
                 {
                     DataRow dr = dtVal.Rows[i];
-                    //string id = dr["ValAbs"] + "_" + General.Nz(dr["DenumireScurta"], "").ToString().Trim().Replace(" ", "");
-                    string id = General.Nz(dr["DenumireScurta"], "").ToString().Trim().Replace(" ", "");
+                    string id = dr["ValAbs"] + "_" + General.Nz(dr["DenumireScurta"], "").ToString().Trim().Replace(" ", "");
+                    //string id = General.Nz(dr["DenumireScurta"], "").ToString().Trim().Replace(" ", "");
                     if (id == "")
                     {
                         id = pre;

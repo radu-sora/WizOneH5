@@ -1,6 +1,19 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Contracte.ascx.cs" Inherits="WizOne.Personal.Contracte" %>
 
+<script type="text/javascript">  
 
+ 
+    function OnEndCallbackContracte(s, e) {
+        if (s.cpAlertMessage != null) {
+            swal({
+                title: "Atentie !", text: s.cpAlertMessage,
+                type: "warning"
+            });
+            s.cpAlertMessage = null;
+        }
+    }
+    
+</script>
 
 <body>
 
@@ -11,7 +24,7 @@
         OnRowInserting="grDateContracte_RowInserting" OnRowUpdating="grDateContracte_RowUpdating" OnRowDeleting="grDateContracte_RowDeleting" OnCommandButtonInitialize="grDateContracte_CommandButtonInitialize">
         <SettingsBehavior AllowFocusedRow="true" />
         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />   
-        <ClientSideEvents CustomButtonClick="function(s, e) { grDateContracte_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
+        <ClientSideEvents CustomButtonClick="function(s, e) { grDateContracte_CustomButtonClick(s, e); }" ContextMenu="ctx" EndCallback="OnEndCallbackContracte"/> 
         <SettingsEditing Mode="Inline" />        
         <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
         <Columns>

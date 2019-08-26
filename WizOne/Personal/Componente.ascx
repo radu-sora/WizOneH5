@@ -58,7 +58,9 @@
             <dx:GridViewDataComboBoxColumn FieldName="F02104" Name="F02104" Caption="Componenta" Width="250px" >
                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
             </dx:GridViewDataComboBoxColumn>         
-            <dx:GridViewDataTextColumn FieldName="Suma" Name="Suma" Caption="Suma"    Width="100px"  />          
+            <dx:GridViewDataTextColumn FieldName="Suma" Name="Suma" Caption="Suma"    Width="100px"  >          
+                <PropertiesTextEdit  DisplayFormatString="#,###"/>
+            </dx:GridViewDataTextColumn>
               
         </Columns>
         <SettingsCommandButton>

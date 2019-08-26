@@ -553,11 +553,11 @@ namespace WizOne
                             // Mihnea - modificare pt implementare deblocare dupa x minute
                             string strsql = @"SELECT F10003,F70103, F70114, ""Mail"", ""IdLimba"" ,
                                                             CASE WHEN 
-                                                            COALESCE(CAST((SELECT COALESCE(VALOARE,0) FROM TBLPARAMETRII WHERE NUME = 'NrMinuteDeblocareParola' ) AS INT), 0) >0  AND (SELECT COUNT(*) FROM F100 Y WHERE Y.F10003=X.F10003 AND Y.F10025 IN (0,999)) > 0
+                                                            COALESCE(CAST((SELECT COALESCE(""Valoare"",'0') FROM ""tblParametrii"" WHERE ""Nume"" = 'NrMinuteDeblocareParola' ) AS INT), 0) >0  AND (SELECT COUNT(*) FROM F100 Y WHERE Y.F10003=X.F10003 AND Y.F10025 IN (0,999)) > 0
                                                             THEN 
                                                             CASE WHEN
                                                             {1} >= 
-                                                            COALESCE(CAST((SELECT COALESCE(VALOARE,0) FROM TBLPARAMETRII WHERE NUME = 'NrMinuteDeblocareParola' ) AS INT), 0) 
+                                                            COALESCE(CAST((SELECT COALESCE(""Valoare"",'0') FROM ""tblParametrii"" WHERE ""Nume"" = 'NrMinuteDeblocareParola' ) AS INT), 0) 
                                                             THEN 1 ELSE 0 END
                                                             ELSE 0 
                                                             END DEBLOCARE  

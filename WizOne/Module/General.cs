@@ -4330,7 +4330,7 @@ namespace WizOne.Module
                     dt = "SYSDATE";
                     tipData = "NUMBER(9)";
                 }
-
+                                            
                 strSql = @"SELECT * FROM (
                             SELECT CAST(A.F10003 AS {8}) AS ""Marca"",A.F10017 AS ""CNP"",A.F10008 {4} ' ' {4} A.F10009 AS ""NumeComplet"",
                             E.F00204 AS ""Companie"",F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00506 AS ""Sectie"",I.F00607 AS ""Departament"", A.F10022 AS ""DataAngajarii"",
@@ -4343,7 +4343,7 @@ namespace WizOne.Module
                             (CASE WHEN COALESCE(A.F100893,'') = '' THEN '' ELSE ' Et. ' {4} a.F100893 END) {4}
                             (CASE WHEN COALESCE(A.F10081,'') = '' THEN '' ELSE ' Oras. ' {4} a.F10081 END) {4}
                             (CASE WHEN COALESCE(A.F10082,'') = '' THEN '' ELSE ' Sect. ' {4} a.F10082 END) {4}
-                            (CASE WHEN COALESCE(A.F100891,'') = '' THEN '' ELSE ' Judet. ' {4} a.F100891 END) {4}
+                            (CASE WHEN COALESCE(A.F100891,'') = '' THEN '' ELSE CASE WHEN  (UPPER(a.F100891) like '%JUDET%' OR UPPER(a.F100891) like '%MUNICIPIU%') THEN ' ' {4} a.F100891 ELSE  ' Judet. ' {4} a.F100891 END END) {4}
                             (CASE WHEN COALESCE(A.F10087,'') = '' THEN '' ELSE ' Cod Postal. ' {4} a.F10087 END) AS ""AdresaCompleta""
                             {1} {6}
                             FROM F100 A

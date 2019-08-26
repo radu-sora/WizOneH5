@@ -1416,6 +1416,7 @@ namespace WizOne.Pontaj
 
                 string ids = "";
                 bool ctr = false;
+                string sqlCC = "";
 
                 List<metaAbsTipZi> lst = new List<metaAbsTipZi>();
 
@@ -1541,6 +1542,11 @@ namespace WizOne.Pontaj
                     if (General.Nz(upd.NewValues["ValAbs"], "").ToString() != "")
                     {
                         lst.Add(new metaAbsTipZi { F10003 = Convert.ToInt32(row["F10003"]), Ziua = Convert.ToDateTime(row["Ziua"]) });
+
+                        //Florin 2019.08.26
+                        //daca este absenta de tip zi si parametrul PontajCCStergeDacaAbsentaDeTipZi este 1 atunci stergem informatia de pe centri de cost
+                        if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
+                            sqlCC += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(row["F10003"])} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(row["Ziua"]))};";
                     }
                 }
 
@@ -1550,7 +1556,26 @@ namespace WizOne.Pontaj
 
                     General.SalveazaDate(dt, "Ptj_Intrari");
                     General.SalveazaDate(dtVal, "Ptj_IstoricVal");
-                    
+
+                    //Florin 2019.08.26
+                    if (sqlCC != "")
+                    {
+                        try
+                        {
+                            General.ExecutaNonQuery("BEGIN " + sqlCC + " END;", null);
+
+                            DataTable dtCC = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
+
+                            Session["PtjCC"] = dtCC;
+                            grCC.KeyFieldName = "F10003;Ziua;F06204";
+                            dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                            grCC.DataSource = dtCC;
+                            grCC.DataBind();
+                        }
+                        catch (Exception) { }
+                    }
+
+
                     for (int i = 0; i < dtModif.Rows.Count; i++)
                     {
                         if (Dami.ValoareParam("RecalculCuloare", "0") == "0")
@@ -3494,18 +3519,41 @@ namespace WizOne.Pontaj
 
                 if (suntModif == true)
                 {
-                    if (dt.Rows.Count > 0)
+                    bool faraErori = true;
+                    DataTable dtInt = General.IncarcaDT($@"SELECT COALESCE(B.""Norma"",8) AS ""Norma"", CASE WHEN C.""DenumireScurta"" IS NULL THEN 0 ELSE 1 END AS ""EsteAbsenta"" 
+                        FROM ""Ptj_Intrari"" B
+                        LEFT JOIN ""Ptj_tblAbsente"" C ON B.""ValStr""=C.""DenumireScurta""
+                        WHERE B.F10003={lst[0]} AND B.""Ziua""={General.ToDataUniv(Convert.ToDateTime(lst[1]))}", null);
+                    if (dtInt.Rows.Count > 0)
                     {
                         int total = Convert.ToInt32(General.Nz(dt.Compute("Sum(NrOre1)", string.Empty), 0));
-                        if (total > Convert.ToInt32(General.Nz(dt.Rows[0]["Norma"],0)))
+                        if (total > Convert.ToInt32(General.Nz(dtInt.Rows[0]["Norma"], 8)))
                         {
                             grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Suma orelor depaseste norma");
-                            //MessageBox.Show("Suma orelor depaseste norma", MessageBox.icoWarning, "Norma depasita");
+                            faraErori = false;
                         }
-                        else
-                            btnSaveCC_Click(null, null);
+
+                        if (Convert.ToInt32(General.Nz(dtInt.Rows[0]["EsteAbsenta"], 0)) == 1 && Dami.ValoareParam("PontajCCCalculTotalPeZi") == "1")
+                        {
+                            grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate salva deoarece exista absenta de tip zi");
+                            faraErori = false;
+                        }
                     }
-                    else
+
+                    //if (dt.Rows.Count > 0)
+                    //{
+                    //    int total = Convert.ToInt32(General.Nz(dt.Compute("Sum(NrOre1)", string.Empty), 0));
+                    //    if (total > Convert.ToInt32(General.Nz(dt.Rows[0]["Norma"],0)))
+                    //    {
+                    //        grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Suma orelor depaseste norma");
+                    //    }
+                    //    else
+                    //        btnSaveCC_Click(null, null);
+                    //}
+                    //else
+                    //    btnSaveCC_Click(null, null);
+
+                    if (faraErori)
                         btnSaveCC_Click(null, null);
                 }
 
@@ -3541,10 +3589,19 @@ namespace WizOne.Pontaj
                         strCmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + NrOre{i}/1440 AS ""NrOre{i}_Tmp"" ";
                 }
 
-                dt = General.IncarcaDT($@"SELECT A.*, B.""Norma"" {strCmp} 
+                dt = General.IncarcaDT($@"SELECT * {strCmp} 
                         FROM ""Ptj_CC"" A 
-                        LEFT JOIN ""Ptj_Intrari"" B ON A.F10003=B.F10003 AND A.""Ziua""=B.""Ziua""
                         WHERE A.F10003={f10003} AND A.""Ziua""={ziua}", null);
+
+                //dt = General.IncarcaDT($@"SELECT B.F10003, B.""Ziua"", B.""Norma"",
+                //        COALESCE(A.F06204,-99) AS F06204, A.""IdProiect"",A.""IdSubProiect"", A.""IdActivitate"", A.""IdDept"", A.""De"", A.""La"", 
+                //        A.""NrOre1"",A.""NrOre2"",A.""NrOre3"",A.""NrOre4"",A.""NrOre5"",A.""NrOre6"",A.""NrOre7"",A.""NrOre8"",A.""NrOre9"",A.""NrOre10"",A.""IdStare"", 
+                //        A.USER_NO, A.TIME, A.""IdAuto"",
+                //        CASE WHEN C.""DenumireScurta"" IS NULL THEN 0 ELSE 1 END AS ""EsteAbsenta"" {strCmp} 
+                //        FROM ""Ptj_Intrari"" B 
+                //        LEFT JOIN ""Ptj_CC"" A ON A.F10003=B.F10003 AND A.""Ziua""=B.""Ziua""
+                //        LEFT JOIN ""Ptj_tblAbsente"" C ON B.""ValStr""=C.""DenumireScurta""
+                //        WHERE B.F10003={f10003} AND B.""Ziua""={ziua}", null);
             }
             catch (Exception ex)
             {

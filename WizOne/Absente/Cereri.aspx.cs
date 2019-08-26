@@ -1117,6 +1117,13 @@ namespace WizOne.Absente
                             //Se va face cand vom migra GAM
                             //TrimiteCerereInF300(Session["UserId"], idCer);
                         }
+
+                        //Florin 2019.08.26
+                        //daca este absenta de tip zi si parametrul PontajCCStergeDacaAbsentaDeTipZi este 1 atunci stergem informatia de pe centri de cost
+                        if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 && Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
+                        {
+                            General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(cmbAng.Value)} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Text))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Text))} ", null);
+                        }
                     }
 
                     #endregion

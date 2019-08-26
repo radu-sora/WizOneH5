@@ -3059,6 +3059,13 @@ namespace WizOne.Module
                                 //Se va face cand vom migra GAM
                                 //TrimiteCerereInF300(idUser, idCer);
                             }
+
+                            //Florin 2019.08.26
+                            //daca este absenta de tip zi si parametrul PontajCCStergeDacaAbsentaDeTipZi este 1 atunci stergem informatia de pe centri de cost
+                            if (Convert.ToInt32(General.Nz(dr["IdTipOre"], 0)) == 1 && Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
+                            {
+                                General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={dr["F10003"]} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))} ", null);
+                            }
                         }
 
                         //completeaza soldul de ZL; Este numai pt clientul Groupama

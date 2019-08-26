@@ -559,6 +559,7 @@
     }
 
     function txtSalariu_TextChanged(s) {
+        ASPxClientUtils.PreventEvent(e.htmlEvent);
         VerifSalariu(s.GetValue(), cmbTimpPartial.GetValue());
     }
 
@@ -569,6 +570,7 @@
         if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal))
             swal({ title: "Atentie !", text: "Salariul introdus este mai mic decat cel minim (raportat la timp partial)!", type: "warning" });
     }
+
 
 </script>
 
@@ -780,8 +782,8 @@
 							<dx:ASPxLabel  ID="lblSalariu" Width="100" runat="server"  Text="Salariu" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtSalariu"  Width="100" runat="server"  Text='<%# Eval("F100699") %>'  DisplayFormatString="N0" TabIndex="11" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                <ClientSideEvents TextChanged="function(s,e){ txtSalariu_TextChanged(s); }" />
+							<dx:ASPxTextBox  ID="txtSalariu"  Width="100" runat="server"  Text='<%# Eval("F100699") %>'  DisplayFormatString="N0"  TabIndex="11" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
+                                <ClientSideEvents TextChanged="function(s,e){ txtSalariu_TextChanged(s); }" />                                
 							</dx:ASPxTextBox >
 						</td>
                         <td>

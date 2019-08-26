@@ -77,6 +77,9 @@ namespace WizOne.Absente
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
+                txtNr.MinValue = 1;
+                txtNr.MaxValue = 1000;
+
                 if (!IsPostBack)
                 {
                     string sir = "";
@@ -101,18 +104,38 @@ namespace WizOne.Absente
                                     sir += ", ";
                             }
                         }
-                    }
-                    
+                    }      
+
+                    DataTable dtAng = General.IncarcaDT(SelectAngajatiRol(-44), null, "F10003;Rol");
+
+                    DataView view = new DataView(dtAng);
+                    DataTable dtRol = view.ToTable(true, "Rol", "RolDenumire");                  
+                    cmbRol.DataSource = dtRol;
+                    cmbRol.DataBind();
+                    cmbRol.SelectedIndex = 0;
 
                     IncarcaAngajati();
                     DataTable dt = null;
                     if (sir.Length > 0)
-                        dt = General.IncarcaDT("SELECT a.*, c.\"IdAuto\" as \"IdCircuit\" FROM \"Ptj_tblAbsente\" a LEFT JOIN \"Ptj_Circuit\" C ON a.\"IdGrupAbsenta\" = c.\"IdGrupAbsente\" WHERE a.\"Id\" IN (" + sir + ")", null);
-                    
+                        dt = General.IncarcaDT("SELECT a.*, c.\"IdAuto\" as \"IdCircuit\" FROM \"Ptj_tblAbsente\" a LEFT JOIN \"Ptj_Circuit\" C ON a.\"IdGrupAbsenta\" = c.\"IdGrupAbsente\" WHERE a.\"Id\" IN (" + sir + ") AND (c.\"UserIntrod\" = - 1 * " + cmbRol.Value + " OR c.\"UserIntrod\" = " + Session["UserId"].ToString() + ")" , null);
+
                     cmbAbs.DataSource = dt;
                     cmbAbs.DataBind();
                     Session["CereriAut_Absente"] = dt;
+                    Session["CereriAut_Sir"] = sir;
                     AfisareCtl("cmbAbs;0");
+
+                    DataTable dtAngFiltrati = dtAng;
+                    if (cmbRol.Value != null && Convert.ToInt32(cmbRol.Value) != -44 && dtAng != null && dtAng.Rows.Count > 0)
+                        dtAngFiltrati = dtAng.Select("Rol=" + cmbRol.Value).CopyToDataTable();
+
+                    DataTable dtAngActivi = new DataTable();
+                    if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
+                    cmbAng.DataSource = dtAngActivi;
+                    Session["CereriAut_Angajati"] = dtAngActivi;                  
+                    Session["CereriAut_AngajatiToti"] = dtAngFiltrati;
+                    cmbAng.DataBind();
+
                 }
                 else
                 {               
@@ -163,10 +186,9 @@ namespace WizOne.Absente
 
                 cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
                 cmbCtr.DataBind();
+                               
 
-       
 
-    
             }
             catch (Exception ex)
             {
@@ -183,6 +205,12 @@ namespace WizOne.Absente
                 List<int> lstMarci = new List<int>();
                 string[] sablon = new string[11];
 
+                if (txtNr.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numar ore/zile!"), MessageBox.icoError);
+                    return;
+                }
+       
                 if (cmbAbs.Value == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu ati selectat tip absenta!"), MessageBox.icoError);
@@ -487,6 +515,23 @@ namespace WizOne.Absente
                         cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
                         cmbDept.DataBind();
                         return;
+                    case "cmbRol":
+                        DataTable dtAng = General.IncarcaDT(SelectAngajatiRol(Convert.ToInt32(cmbRol.Value ?? -99)), null);
+                        cmbAng.DataSource = dtAng;
+                        Session["CereriAut_Angajati"] = dtAng;
+                        Session["CereriAut_AngajatiToti"] = dtAng;
+                        cmbAng.DataBind();
+                        cmbAng.SelectedIndex = 0;
+
+                        DataTable dt = null;
+                        string sir = Session["CereriAut_Sir"].ToString();
+                        if (sir.Length > 0)
+                            dt = General.IncarcaDT("SELECT a.*, c.\"IdAuto\" as \"IdCircuit\" FROM \"Ptj_tblAbsente\" a LEFT JOIN \"Ptj_Circuit\" C ON a.\"IdGrupAbsenta\" = c.\"IdGrupAbsente\" WHERE a.\"Id\" IN (" + sir + ") AND (c.\"UserIntrod\" = - 1 * " + cmbRol.Value + " OR c.\"UserIntrod\" = " + Session["UserId"].ToString() + ")", null);
+                        cmbAbs.DataSource = dt;
+                        cmbAbs.DataBind();
+                        Session["CereriAut_Absente"] = dt;                     
+                        AfisareCtl("cmbAbs;0");
+                        break;
                 }
 
                 if (esteStruc)
@@ -1039,6 +1084,65 @@ namespace WizOne.Absente
                     break;
                 }
             return ziLibera;
+        }
+
+
+        private string SelectAngajatiRol(int idRol = -44)
+        {
+            // dreptul de aprobare si ce angajati se incarca sunt preluati din baza de date pe baza parametrului DreptSolicitareAbsenta
+            // 0 - se poate face aprobarea pentru toti angajatii asignati supervizorului de pe prima coloana de pe circuit (User Introducere)  
+            // 1 - se poate face aprobarea pentru toti angajatii asignati oricarui supervizor de pe circuit
+
+            string strSql = "";
+
+            try
+            {
+                string cmp = "";
+                string inn1 = "";
+                string inn2 = "";
+                string op = "+";
+                if (Constante.tipBD == 2) op = "||";
+                if (Dami.ValoareParam("DreptSolicitareAbsenta") == "1")
+                {
+                    inn1 = @" OR B.""IdSuper"" = -1 * c.""Super1"" OR B.""IdSuper"" = -1 * c.""Super2"" OR B.""IdSuper"" = -1 * c.""Super3"" OR B.""IdSuper"" = -1 * c.""Super4"" OR B.""IdSuper"" = -1 * c.""Super5"" OR B.""IdSuper"" = -1 * c.""Super6""  OR B.""IdSuper"" = -1 * c.""Super7"" OR B.""IdSuper"" = -1 * c.""Super8"" OR B.""IdSuper"" = -1 * c.""Super9"" OR B.""IdSuper"" = -1 * c.""Super10"" OR B.""IdSuper"" = -1 * c.""Super11"" OR B.""IdSuper"" = -1 * c.""Super12"" OR B.""IdSuper"" = -1 * c.""Super13"" OR B.""IdSuper"" = -1 * c.""Super14"" OR B.""IdSuper"" = -1 * c.""Super15"" OR B.""IdSuper"" = -1 * c.""Super16"" OR B.""IdSuper"" = -1 * c.""Super17"" OR B.""IdSuper"" = -1 * c.""Super18"" OR B.""IdSuper"" = -1 * c.""Super19"" OR B.""IdSuper"" = -1 * c.""Super20"" ";
+                    inn2 = $@" OR c.""Super1"" = {General.VarSession("UserId")}  OR c.""Super2"" = {General.VarSession("UserId")}  OR c.""Super3"" = {General.VarSession("UserId")}  OR c.""Super4"" = {General.VarSession("UserId")}  OR c.""Super5"" = {General.VarSession("UserId")}  OR c.""Super6"" = {General.VarSession("UserId")}  OR c.""Super7"" = {General.VarSession("UserId")}  OR c.""Super8"" = {General.VarSession("UserId")}  OR c.""Super9"" = {General.VarSession("UserId")}  OR c.""Super10"" = {General.VarSession("UserId")} OR c.""Super11"" = {General.VarSession("UserId")} OR c.""Super12"" = {General.VarSession("UserId")}  OR c.""Super13"" = {General.VarSession("UserId")}  OR c.""Super14"" = {General.VarSession("UserId")}  OR c.""Super15"" = {General.VarSession("UserId")}  OR c.""Super16"" = {General.VarSession("UserId")}  OR c.""Super17"" = {General.VarSession("UserId")}  OR c.""Super18"" = {General.VarSession("UserId")}  OR c.""Super19"" = {General.VarSession("UserId")}  OR c.""Super20"" = {General.VarSession("UserId")} ";
+                }
+
+                strSql = $@"SELECT B.""Rol"", B.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", A.F10017 AS CNP, A.F10022 AS ""DataAngajarii"", A.F10023 AS ""DataPlecarii"",
+                        A.F10011 AS ""NrContract"", CAST(A.F10043 AS int) AS ""Norma"",A.F100901, CASE WHEN (A.F10025 = 0 OR A.F10025=999) THEN 1 ELSE 0 END AS ""AngajatActiv"",
+                        X.F71804 AS ""Functia"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"", B.""RolDenumire""  {cmp}
+                        FROM (
+                        SELECT A.F10003, 0 AS ""Rol"", COALESCE((SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""=0),'Angajat') AS ""RolDenumire""
+                        FROM F100 A
+                        WHERE A.F10003 = {General.VarSession("User_Marca")}
+                        UNION
+                        SELECT A.F10003, B.""IdSuper"" AS ""Rol"", CASE WHEN D.""Alias"" IS NOT NULL AND D.""Alias"" <> '' THEN D.""Alias"" ELSE D.""Denumire"" END AS ""RolDenumire""
+                        FROM F100 A
+                        INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
+                        INNER JOIN ""Ptj_Circuit"" C ON B.""IdSuper"" = -1 * c.""UserIntrod"" {inn1}
+                        LEFT JOIN ""tblSupervizori"" D ON D.""Id"" = B.""IdSuper""
+                        WHERE B.""IdUser""= {General.VarSession("UserId")}
+                        UNION
+                        SELECT A.F10003, 76 AS ""Rol"", '{Dami.TraduCuvant("Fara rol")}' AS ""RolDenumire""
+                        FROM F100 A
+                        INNER JOIN ""Ptj_Circuit"" C ON C.""UserIntrod""={General.VarSession("UserId")} {inn2}) B
+                        INNER JOIN F100 A ON A.F10003=B.F10003
+                        LEFT JOIN F718 X ON A.F10071=X.F71802
+                        LEFT JOIN F003 F ON A.F10004 = F.F00304
+                        LEFT JOIN F004 G ON A.F10005 = G.F00405
+                        LEFT JOIN F005 H ON A.F10006 = H.F00506
+                        LEFT JOIN F006 I ON A.F10007 = I.F00607
+                        WHERE 1=1 ";
+
+                if (idRol != -44) strSql += @" AND ""Rol""=" + idRol;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
         }
 
     }

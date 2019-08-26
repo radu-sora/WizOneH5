@@ -232,16 +232,19 @@ namespace WizOne.Personal
                 string dtStart = e.GetListSourceFieldValue("DataPrimire").ToString();
                 string dtSfarsit = e.GetListSourceFieldValue("DataExpirare").ToString();
 
-                dataStart = new DateTime(Convert.ToInt32(dtStart.Substring(6, 4)), Convert.ToInt32(dtStart.Substring(3, 2)), Convert.ToInt32(dtStart.Substring(0, 2)));
-                dataSfarsit = new DateTime(Convert.ToInt32(dtSfarsit.Substring(6, 4)), Convert.ToInt32(dtSfarsit.Substring(3, 2)), Convert.ToInt32(dtSfarsit.Substring(0, 2)));
+                if (dtStart.Length > 0 && dtSfarsit.Length > 0)
+                {
+                    dataStart = new DateTime(Convert.ToInt32(dtStart.Substring(6, 4)), Convert.ToInt32(dtStart.Substring(3, 2)), Convert.ToInt32(dtStart.Substring(0, 2)));
+                    dataSfarsit = new DateTime(Convert.ToInt32(dtSfarsit.Substring(6, 4)), Convert.ToInt32(dtSfarsit.Substring(3, 2)), Convert.ToInt32(dtSfarsit.Substring(0, 2)));
 
-                CalculVechime(dataStart, dataSfarsit, out nrAni, out nrLuni, out nrZile);
+                    CalculVechime(dataStart, dataSfarsit, out nrAni, out nrLuni, out nrZile);
 
-                vechime = string.Format(vechime, (nrAni > 0 ? nrAni.ToString() : ""), (nrAni > 0 ? (nrAni == 1 ? "an" : "ani") : ""),
-                                                 (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
-                                                 (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
+                    vechime = string.Format(vechime, (nrAni > 0 ? nrAni.ToString() : ""), (nrAni > 0 ? (nrAni == 1 ? "an" : "ani") : ""),
+                                                     (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
+                                                     (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
 
-                e.Value = vechime;
+                    e.Value = vechime;
+                }
             }
         }
 

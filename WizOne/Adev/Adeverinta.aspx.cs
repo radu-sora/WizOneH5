@@ -872,11 +872,12 @@ namespace WizOne.Adev
                 sql = "SELECT * FROM F100 WHERE F10003 = " + marca;
                 DataTable dtAng = General.IncarcaDT(sql, null);
 
-                var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/"));
+                //var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/"));
+                var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE"));
                 if (!folder.Exists)
                     folder.Create();
 
-                String msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, adev, Config, folder.ToString(), marca);
+                //String msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, adev, Config, folder.ToString(), marca);
 
 
                 String FileName = "";
@@ -889,37 +890,37 @@ namespace WizOne.Adev
                     case 1:
                         fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        //AdeverintaSanatate(marca, FileName);
+                        AdeverintaSanatate(marca, FileName);
                         break;                        
                     case 2:
                         fisier = dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/") + fisier;
-                        //AdeverintaVenituriAnuale(marca, FileName);
+                        AdeverintaVenituriAnuale(marca, FileName);
                         break;
                     case 3:
                         fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10017"].ToString() + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        //AdeverintaCIC(marca, FileName);
+                        AdeverintaCIC(marca, FileName);
                         break;
                     case 4:
                         fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10017"].ToString() + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        //AdeverintaSomaj(marca, FileName);
+                        AdeverintaSomaj(marca, FileName);
                         break;
                     case 6:
                         fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        //AdeverintaStagiu(marca, FileName);
+                        AdeverintaStagiu(marca, FileName);
                         break;
                     case 7:
                         fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        //AdeverintaVechime(marca, FileName);
+                        AdeverintaVechime(marca, FileName);
                         break;
                 }
 
-                if (msg.Length > 0)
-                    MessageBox.Show(msg, MessageBox.icoError);
+                //if (msg.Length > 0)
+                //    MessageBox.Show(msg, MessageBox.icoError);
 
                 XDocument doc;
                 doc = XDocument.Load(FileName);

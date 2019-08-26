@@ -213,6 +213,14 @@ namespace WizOne.Personal
                         mesaj += " - tip contract munca" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F1009741"] == null || ds.Tables[0].Rows[0]["F1009741"].ToString().Length <= 0 || ds.Tables[0].Rows[0]["F1009741"].ToString() == "0")
                         mesaj += " - durata contract" + Environment.NewLine;
+                    if (ds.Tables[0].Rows[0]["F1009741"] != null && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
+                    {
+                        if (ds.Tables[0].Rows[0]["F100933"] == null || ds.Tables[0].Rows[0]["F100933"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(1900, 1, 1)
+                            || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(2100, 1, 1))
+                            mesaj += " - de la data" + Environment.NewLine;
+                        if (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1))
+                            mesaj += " - la data" + Environment.NewLine;
+                    }
                     if (ds.Tables[0].Rows[0]["F100699"] == null || ds.Tables[0].Rows[0]["F100699"].ToString().Length <= 0 || Convert.ToDouble(ds.Tables[0].Rows[0]["F100699"].ToString()) == 0.0)
                         mesaj += " - salariu" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F10010"] == null || ds.Tables[0].Rows[0]["F10010"].ToString().Length <= 0)
@@ -253,10 +261,7 @@ namespace WizOne.Personal
                     if (ds.Tables[0].Rows[0]["F10022"] == null || ds.Tables[0].Rows[0]["F10022"].ToString().Length <= 0
                         || Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()) == new DateTime(2100, 1, 1) || Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()) == new DateTime(1900, 1, 1))
                         mesaj += " - data angajarii" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100933"] == null || ds.Tables[0].Rows[0]["F100933"].ToString().Length <= 0)
-                        mesaj += " - de la data" + Environment.NewLine;
-                    if (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0)
-                        mesaj += " - la data" + Environment.NewLine;
+
                     
                     if (mesaj.Length > 0)
                     {
@@ -304,6 +309,44 @@ namespace WizOne.Personal
                         MessageBox.Show("Nu ati completat: " + Environment.NewLine + Environment.NewLine + mesajDI + mesajDA + mesajStr + mesajAdr + mesajDoc, MessageBox.icoError, "Atentie!");
                         return;
                     }         
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows[0]["F1009741"] != null && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
+                    {
+                        string mesaj = "Date angajare: " + Environment.NewLine;
+                        bool err = false;
+                        if (ds.Tables[0].Rows[0]["F100933"] == null || ds.Tables[0].Rows[0]["F100933"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(1900, 1, 1)
+                            || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(2100, 1, 1))
+                        {
+                            mesaj += " - de la data" + Environment.NewLine;
+                            err = true;
+                        }
+                        if (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1))
+                        {
+                            mesaj += " - la data" + Environment.NewLine;
+                            err = true;
+                        }
+                        if (err)
+                        {
+                            MessageBox.Show("Nu ati completat: " + Environment.NewLine + Environment.NewLine + mesaj, MessageBox.icoError, "Atentie!");
+                            return;
+                        }
+                    }
+                }
+
+                if (ds.Tables[0].Rows[0]["F1009741"] != null && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
+                {
+                    if (Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()).Date > Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()).Date)
+                    {
+                        MessageBox.Show("Date angajare:" + Environment.NewLine + " - data start contract determinat este mai mare decat data sfarsit!", MessageBox.icoError, "Atentie!");
+                        return;
+                    }
+                    if (Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()).Date < Convert.ToDateTime(ds.Tables[0].Rows[0]["F10022"].ToString()).Date)
+                    {
+                        MessageBox.Show("Date angajare:" + Environment.NewLine + " - data start contract determinat este mai mica decat data angajarii!", MessageBox.icoError, "Atentie!");
+                        return;
+                    }
                 }
 
                 //verificarea se face pe partea de client
@@ -1287,11 +1330,11 @@ namespace WizOne.Personal
                                 DataTable dt = new DataTable();
                                 if (cols1.Contains(colName)) dt = ds.Tables[1];
                                 if (cols2.Contains(colName)) dt = ds.Tables[2];
-                                if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt.Rows[0][colName] = ctl.Value;
+                                if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt.Rows[0][colName] = ctl.Value ?? DBNull.Value;
 
                                 DataTable dt2 = new DataTable();
                                 if (cols3.Contains(colName)) dt2 = ds.Tables[0];
-                                if (ctl != null && General.Nz(dt2.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt2.Rows[0][colName] = ctl.Value;
+                                if (ctl != null && General.Nz(dt2.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt2.Rows[0][colName] = ctl.Value ?? DBNull.Value;
                             }
                             catch (Exception ex)
                             {

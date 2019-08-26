@@ -35,6 +35,7 @@
                          <dx:GridViewDataComboBoxColumn FieldName="EstePrincipal" Name="EstePrincipal" Caption="Principal"  Width="75px" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn> 
+                        <dx:GridViewDataTextColumn FieldName="ValoareString" Name="ValoareString" Caption="ValoareString" Visible="false"  Width="100px" />	
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
                         <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />
                     </Columns>

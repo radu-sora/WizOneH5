@@ -52,7 +52,12 @@
                             <table style="margin-left:15px;">
                                 <tr>
                                     <td>
-  
+                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <label id="lblRol" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Roluri</label>
+                                            <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="Rol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); }" />
+                                            </dx:ASPxComboBox>
+                                        </div>
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblAbs" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Tip cerere</label>
                                             <dx:ASPxComboBox ID="cmbAbs" ClientInstanceName="cmbAbs" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
@@ -75,7 +80,7 @@
                                          </div>   
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblNr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Nr. zile</label>
-							                <dx:ASPxTextBox ID="txtNr" style="display:inline-block; float:left; width:75px;" runat="server" AutoPostBack="false"  />
+                                            <dx:ASPxSpinEdit ID="txtNr" style="display:inline-block; float:left; width:75px;" runat="server" AutoPostBack="false"/>  
                                         </div>  
                                          <div style="float:left; padding-right:15px;">
                                             <dx:ASPxRadioButton ID="rbPrel" runat="server" Text="Preluare manuala"   ClientInstanceName="rbPrel" RepeatDirection="Horizontal" GroupName="Prel1">                                             

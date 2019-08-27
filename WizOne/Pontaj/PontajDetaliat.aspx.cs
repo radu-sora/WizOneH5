@@ -371,7 +371,7 @@ namespace WizOne.Pontaj
 
                     if (tip == 10)
                     {
-                        string ziua = General.Nz(Request.QueryString["ziua"], "").ToString().Replace("Ziua","");
+                        string ziua = General.Nz(Request.QueryString["ziua"], "").ToString().Replace("Ziua", "");
                         string f10003 = General.Nz(Request.QueryString["f10003"], "").ToString();
                         if (ziua != "" && f10003 != "")
                         {
@@ -385,8 +385,11 @@ namespace WizOne.Pontaj
                             grCC.DataBind();
                         }
                     }
-                }
 
+
+                    if (IsPostBack && tip == 1)
+                        IncarcaCC();
+                }
             }
             catch (Exception ex)
             {
@@ -3610,6 +3613,28 @@ namespace WizOne.Pontaj
             }
 
             return dt;
+        }
+
+        private void IncarcaCC()
+        {
+            try
+            {
+                List<object> lst = ValoriChei();
+
+                lblZiuaCC.Text = "Centrii de cost - Ziua " + Convert.ToDateTime(lst[1]).Day;
+                DataTable dt = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
+                Session["PtjCC"] = dt;
+                grCC.KeyFieldName = "F10003;Ziua;F06204";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+
+                grCC.DataSource = dt;
+                grCC.DataBind();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
     }

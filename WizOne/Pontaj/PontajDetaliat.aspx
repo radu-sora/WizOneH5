@@ -798,7 +798,11 @@
                                     </dx:GridViewDataComboBoxColumn>
 
                                     <dx:GridViewDataComboBoxColumn FieldName="F06204" Name="F06204" Caption="Centrul de cost" Width="250px" VisibleIndex="2" Visible="true">
-                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
+                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList">
+                                            <ValidationSettings>
+                                                <RequiredField IsRequired="true" ErrorText="Camp obligatoriu" />
+                                            </ValidationSettings>
+                                        </PropertiesComboBox>
                                     </dx:GridViewDataComboBoxColumn>
 
                                     <dx:GridViewDataComboBoxColumn FieldName="IdProiect" Name="IdProiect" Caption="Proiect" Width="250px" VisibleIndex="3" Visible="false" >

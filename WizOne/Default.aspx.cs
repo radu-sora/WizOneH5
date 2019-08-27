@@ -97,7 +97,9 @@ namespace WizOne
                                     int poz = usrTMP.IndexOf("@");
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
                                     //MessageBox.Show(usrTMP);
+                                    General.MemoreazaEroarea("Gigi " + usrTMP);
                                     Verifica(usrTMP, "");
+                                    
                                 }
                             }
                         }

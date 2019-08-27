@@ -9,7 +9,9 @@
             case "deUltimaZiLucr":
                 {
                     var DateTo = new Date(s.GetDate());
+                    DateTo.setHours(0, 0, 0, 0);
                     var DateAng = new Date(deDataAng.GetDate());
+                    DateAng.setHours(0, 0, 0, 0);
 
                     if (DateTo < DateAng) {
                         swal({
@@ -26,7 +28,9 @@
             case "deDataPlecarii":
                 {
                     var DateTo = new Date(s.GetDate());
+                    DateTo.setHours(0, 0, 0, 0);
                     var DateAng = new Date(deDataAng.GetDate());
+                    DateAng.setHours(0, 0, 0, 0);
 
                     if (DateTo < DateAng) {
                         swal({
@@ -46,7 +50,9 @@
             case "deDataCtrInt":
                 {
                     var DateCtr = new Date(deDataCtrInt.GetDate());
+                    DateCtr.setHours(0, 0, 0, 0);
                     var DateAng = new Date(deDataAng.GetDate());
+                    DateAng.setHours(0, 0, 0, 0);
 
                     if (DateCtr >= DateAng) {
                         swal({
@@ -74,7 +80,9 @@
                 {
                     debugger;
                     var dateDeLa = new Date(deDeLaData.GetDate());
+                    dateDeLa.setHours(0, 0, 0, 0);
                     var dateLa = new Date(deLaData.GetDate());
+                    dateLa.setHours(0, 0, 0, 0);
 
                     if (dateDeLa > dateLa) {
                         swal({

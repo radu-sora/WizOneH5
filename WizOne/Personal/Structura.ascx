@@ -50,6 +50,7 @@
                             <dx:ListBoxColumn FieldName="F00708" Caption="IdSubdepartament" Width="130px" Visible="false"/>
                             <dx:ListBoxColumn FieldName="F00810" Caption="Birou" Width="130px" />
                             <dx:ListBoxColumn FieldName="F00809" Caption="IdBirou" Width="130px" Visible="false"/>
+                            <dx:ListBoxColumn FieldName="CC" Caption="Centru cost" Width="130px" Visible="false"/>
                             <dx:ListBoxColumn FieldName="IdAuto" Caption="NrCrt" Width="130px" Visible="false"/>
                         </Columns>
                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />

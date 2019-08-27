@@ -813,6 +813,7 @@
     <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\Tarife.ascx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
+    <Content Include="ProgrameLucru\ProgrameOreNoapte.ascx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
     <Content Include="Tactil\Adeverinte.aspx" />
@@ -910,8 +911,6 @@
     <Content Include="Tactil\PontajDetaliatTactil.aspx" />
     <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
-    <Content Include="WebForm3.aspx" />
-    <Content Include="WebForm4.aspx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -1713,6 +1712,13 @@
     <Compile Include="Pontaj\PontajSpecial.aspx.designer.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOreNoapte.ascx.cs">
+      <DependentUpon>ProgrameOreNoapte.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProgrameLucru\ProgrameOreNoapte.ascx.designer.cs">
+      <DependentUpon>ProgrameOreNoapte.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\AdeverintaGenerala.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2382,20 +2388,6 @@
     </Compile>
     <Compile Include="WebForm2.aspx.designer.cs">
       <DependentUpon>WebForm2.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm3.aspx.cs">
-      <DependentUpon>WebForm3.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm3.aspx.designer.cs">
-      <DependentUpon>WebForm3.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm4.aspx.cs">
-      <DependentUpon>WebForm4.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm4.aspx.designer.cs">
-      <DependentUpon>WebForm4.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebService\Detalii.aspx.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>

@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
-using System.Data;
-using DevExpress.Web.Data;
-using System.ComponentModel;
-using DevExpress.Web;
 
 namespace WizOne
 {
@@ -17,124 +13,19 @@ namespace WizOne
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            try
-            {
-                if (!IsPostBack)
-                {
-                    DataTable dt1 = General.IncarcaDT("Select * from tblGrupAngajati", null);
-                    gridA.KeyFieldName = "IdAuto";
-                    gridA.DataSource = dt1;
-                    gridA.DataBind();
-                    Session["tbl1"] = dt1;
+            //DataTable dt = General.IncarcaDT($@"SELECT A.F10003, A.Ziua, A.F06204, A.IdProiect, A.IdSubproiect, A.IdActivitate, A.IdDept, A.De, A.La, A.NrOre1, A.NrOre2, A.NrOre3, A.NrOre4, A.NrOre5, A.NrOre6, A.NrOre7, A.NrOre8, A.NrOre9, A.NrOre10, A.IdStare, A.USER_NO, A.TIME, A.IdAuto, 
+            //    B.F10023 ,CONVERT(datetime,DATEADD(minute, NrOre1, '2019-01-01')) AS NrOre1_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre2, '2019-01-01')) AS NrOre2_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre3, '2019-01-01')) AS NrOre3_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre4, '')) AS NrOre4_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre5, '')) AS NrOre5_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre6, '')) AS NrOre6_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre7, '')) AS NrOre7_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre8, '')) AS NrOre8_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre9, '')) AS NrOre9_Tmp ,CONVERT(datetime,DATEADD(minute, NrOre10, '')) AS NrOre10_Tmp 
+            //    FROM Ptj_CC A 
+            //    INNER JOIN F100 B ON A.F10003 = B.F10003
+            //    WHERE A.F10003 = 2403 AND A.Ziua = CONVERT(date, '2019-08-06')", null);
 
-                    DataTable dt2 = General.IncarcaDT("Select * from tblLimbi", null);
-                    gridB.KeyFieldName = "Id";
-                    gridB.DataSource = dt2;
-                    gridB.DataBind();
-                    Session["tbl2"] = dt2;
-                }
-                else
-                {
-                    if (General.Nz(Session["tbl1"], "").ToString() != "")
-                    {
-                        gridA.DataSource = Session["tbl1"];
-                        gridA.DataBind();
-                    }
-                    if (General.Nz(Session["tbl2"], "").ToString() != "")
-                    {
-                        gridB.DataSource = Session["tbl2"];
-                        gridB.DataBind();
-                    }
-                }
+            //grCC.KeyFieldName = "F10003;Ziua;F06204";
+            //dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
 
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
-            }
+            DataTable dt = General.IncarcaDT("SELECT Id, Denumire, Id * 10 as Id_Tmp, CONVERT(datetime,DATEADD(minute, 480 - (10 * Id), '2019-01-01')) AS NrOre1_Tmp, CONVERT(int,480) AS NrOre1 FROM tblGrupUsers", null);
+            grCC.KeyFieldName = "Id";
+            grCC.DataSource = dt;
+            grCC.DataBind();
         }
-
-
-        protected void grid1_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
-        {
-            gridA.CancelEdit();
-
-            DataTable dt = Session["tbl1"] as DataTable;
-
-            for (int x = 0; x < e.UpdateValues.Count; x++)
-            {
-                ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
-                object[] keys = new object[] { upd.Keys[0] };
-
-                DataRow row = dt.Rows.Find(keys);
-                if (row == null) continue;
-
-                if (upd.NewValues["Id"] != null) row["Id"] = upd.NewValues["Id"];
-                if (upd.NewValues["Denumire"] != null) row["Denumire"] = upd.NewValues["Denumire"];
-            }
-
-            General.SalveazaDate(dt, "tblGrupAngajati");
-        }
-
-        protected void grid2_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
-        {
-            gridB.CancelEdit();
-
-            DataTable dt = Session["tbl2"] as DataTable;
-
-            for (int x = 0; x < e.UpdateValues.Count; x++)
-            {
-                ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
-                object[] keys = new object[] { upd.Keys[0] };
-
-                DataRow row = dt.Rows.Find(keys);
-                if (row == null) continue;
-
-                if (upd.NewValues["Id"] != null) row["Id"] = upd.NewValues["Id"];
-                if (upd.NewValues["Denumire"] != null) row["Denumire"] = upd.NewValues["Denumire"];
-            }
-
-            General.SalveazaDate(dt, "tblLimbi");
-        }
-
-        protected void gridA_RowInserting(object sender, ASPxDataInsertingEventArgs e)
-        {
-            CancelEditing(sender, e);
-        }
-
-        protected void gridA_RowUpdating(object sender, ASPxDataUpdatingEventArgs e)
-        {
-            CancelEditing(sender, e);
-        }
-
-        protected void gridA_RowDeleting(object sender, ASPxDataDeletingEventArgs e)
-        {
-            CancelEditing(sender, e);
-        }
-
-        protected void gridB_RowInserting(object sender, ASPxDataInsertingEventArgs e)
-        {
-            CancelEditing(sender, e);
-        }
-
-        protected void gridB_RowUpdating(object sender, ASPxDataUpdatingEventArgs e)
-        {
-            CancelEditing(sender, e);
-        }
-
-        protected void gridB_RowDeleting(object sender, ASPxDataDeletingEventArgs e)
-        {
-
-        }
-
-        protected void CancelEditing(object sender, CancelEventArgs e)
-        {
-            e.Cancel = true;
-            ASPxGridView grid = sender as ASPxGridView;
-            grid.CancelEdit();
-        }
-
-
-
     }
 }

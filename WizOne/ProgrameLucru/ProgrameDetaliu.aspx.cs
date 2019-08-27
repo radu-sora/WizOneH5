@@ -149,9 +149,20 @@ namespace WizOne.ProgrameLucru
                 tabPage3.Controls.Add(ctrl3);
                 this.ASPxPageControl2.TabPages.Add(tabPage3);
 
+
+                //Florin 2019.08.21
+                TabPage tabPage11 = new TabPage();
+                tabPage11.Name = "ProgrameOreNoapte";
+                tabPage11.Text = "Ore Noapte";
+                Control ctrl11 = new Control();
+                ctrl11 = this.LoadControl(tabPage11.Name + ".ascx");
+                tabPage11.Controls.Add(ctrl11);
+                this.ASPxPageControl2.TabPages.Add(tabPage11);
+
+
                 TabPage tabPage4 = new TabPage();
                 tabPage4.Name = "ProgrameAlteOre";
-                tabPage4.Text = "Ore Noapte";
+                tabPage4.Text = "Alte Ore";
                 Control ctrl4 = new Control();
                 ctrl4 = this.LoadControl(tabPage4.Name + ".ascx");
                 tabPage4.Controls.Add(ctrl4);

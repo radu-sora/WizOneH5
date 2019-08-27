@@ -4,11 +4,8 @@
 
 
 <style type="text/css">
-    .auto-style1 {
-        height: 26px;
-    }
     .auto-style2 {
-        height: 26px;
+        height: 44px;
         width: 128px;
     }
     .auto-style3 {
@@ -29,13 +26,6 @@
         height: 44px;
         width: 7px;
     }
-    .auto-style19 {
-        height: 48px;
-        width: 7px;
-    }
-    .auto-style20 {
-        width: 7px;
-    }
     .auto-style22 {
         width: 128px;
         height: 52px;
@@ -50,6 +40,16 @@
     }
     .auto-style26 {
         height: 44px;
+    }
+    .auto-style30 {
+        width: 78px;
+    }
+    .auto-style31 {
+        width: 78px;
+        height: 44px;
+    }
+    .auto-style33 {
+        height: 48px;
     }
 </style>
 
@@ -101,7 +101,7 @@
 <HeaderFilter MinHeight="140px"></HeaderFilter>
 </SettingsPopup>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="3" ButtonType="Image" Caption=" " >
+                        <dx:GridViewCommandColumn Width="100px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="3" ButtonType="Image" Caption=" " >
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnAtasament">
                                     <Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />
@@ -109,7 +109,7 @@
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
 
-                        <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Sanctiune aplicata"  Width="250px" VisibleIndex="4" >
+                        <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Sanctiune aplicata"  Width="280px" VisibleIndex="4" >
                             <PropertiesComboBox TextField="NumeCompus" ValueField="IdObiect" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput" Width="100px" VisibleIndex="5" >
@@ -118,30 +118,30 @@
                         <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit" Width="100px" VisibleIndex="6" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="ValoareAbsoluta" Name="ValoareAbsoluta" Caption="Valoare"  Width="150px" VisibleIndex="7"  />                        
-                        <dx:GridViewDataTextColumn FieldName="ValoareProcent" Name="ValoareProcent" Caption="Valoare %"  Width="150px" VisibleIndex="8"  />  
-                        <dx:GridViewDataMemoColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" VisibleIndex="9" Width="500px"/>
+                        <dx:GridViewDataTextColumn FieldName="ValoareAbsoluta" Name="ValoareAbsoluta" Caption="Valoare"  Width="70px" VisibleIndex="7"  />                        
+                        <dx:GridViewDataTextColumn FieldName="ValoareProcent" Name="ValoareProcent" Caption="Valoare %"  Width="70px" VisibleIndex="8"  />  
+                        <dx:GridViewDataMemoColumn FieldName="Descriere" Name="Descriere" Caption="Descriere" VisibleIndex="9" Width="230px"/>
 
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat" Visible="false" ShowInCustomizationForm="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false" VisibleIndex="0"/>
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" VisibleIndex="1" />
                         <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" VisibleIndex="2" />
-                        <dx:GridViewDataTextColumn Caption="Nr. inreg. sesizare" FieldName="NrInregSesizare" Name="NrInregSesizare" VisibleIndex="10" Width="150px">
+                        <dx:GridViewDataTextColumn Caption="Nr. inreg. sesizare" FieldName="NrInregSesizare" Name="NrInregSesizare" VisibleIndex="10" Width="70px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn Caption="Data Inreg. Sesizare" FieldName="DataInregSesizare" Name="DataInregSesizare" ShowInCustomizationForm="True" VisibleIndex="11" Width="100px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataMemoColumn Caption="Materiale doveditoare" FieldName="MaterialeDoveditoare" Name="MaterialeDoveditoare" ShowInCustomizationForm="True" VisibleIndex="12" Width="500px">
+                        <dx:GridViewDataMemoColumn Caption="Materiale doveditoare" FieldName="MaterialeDoveditoare" Name="MaterialeDoveditoare" ShowInCustomizationForm="True" VisibleIndex="12" Width="200px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataMemoColumn>
-                        <dx:GridViewDataTextColumn Caption="Nr. inreg. comisie" FieldName="NrInregComisie" Name="NrInregComisie" ShowInCustomizationForm="True" VisibleIndex="13" Width="150px">
+                        <dx:GridViewDataTextColumn Caption="Nr. inreg. comisie" FieldName="NrInregComisie" Name="NrInregComisie" ShowInCustomizationForm="True" VisibleIndex="13" Width="70px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn Caption="Data inreg. comisie" FieldName="DataInregComisie" Name="DataInregComisie" ShowInCustomizationForm="True" VisibleIndex="14" Width="100px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn Caption="Nr. inreg. convocare" FieldName="NrInregConvocare" Name="NrInregConvocare" ShowInCustomizationForm="True" VisibleIndex="15" Width="150px">
+                        <dx:GridViewDataTextColumn Caption="Nr. inreg. convocare" FieldName="NrInregConvocare" Name="NrInregConvocare" ShowInCustomizationForm="True" VisibleIndex="15" Width="70px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn Caption="Data inreg. convocare" FieldName="DataInregConvocare" Name="DataInregConvocare" ShowInCustomizationForm="True" VisibleIndex="16" Width="100px">
@@ -150,13 +150,13 @@
                         <dx:GridViewDataDateColumn Caption="Data cercetare" FieldName="DataCercetare" Name="DataCercetare" ShowInCustomizationForm="True" VisibleIndex="17" Width="100px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn Caption="Nr. proces verbal" FieldName="NrProcesCercetare" Name="NrProcesCercetare" ShowInCustomizationForm="True" VisibleIndex="18" Width="150px">
+                        <dx:GridViewDataTextColumn Caption="Nr. proces verbal" FieldName="NrProcesCercetare" Name="NrProcesCercetare" ShowInCustomizationForm="True" VisibleIndex="18" Width="70px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn Caption="Data proces verbal" FieldName="DataProcesCercetare" Name="DataProcesCercetare" ShowInCustomizationForm="True" VisibleIndex="19" Width="100px">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn Caption="Nr. decizie" FieldName="NrDecizie" Name="NrDecizie" ShowInCustomizationForm="True" VisibleIndex="20" Width="150px">
+                        <dx:GridViewDataTextColumn Caption="Nr. decizie" FieldName="NrDecizie" Name="NrDecizie" ShowInCustomizationForm="True" VisibleIndex="20" Width="70px">
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataDateColumn Caption="Data decizie" FieldName="DataDecizie" Name="DataDecizie" ShowInCustomizationForm="True" VisibleIndex="21" Width="100px">
                         </dx:GridViewDataDateColumn>
@@ -209,114 +209,118 @@
                                 <table class="auto-style8">
                                     <tr>
                                         <td style="padding-left:10px;" class="auto-style2">Descriere</td>
-                                        <td style="padding-left:10px;" colspan="2" class="auto-style1">Sanctiune aplicata</td>
-                                        <td style="padding: 10px;" class="auto-style9">Data inceput</td>
-                                        <td class="auto-style9" style="padding:10px;">Data sfarsit</td>
-                                        <td class="auto-style18" style="padding:10px;">Valoare</td>
-                                        <td class="auto-style20">Valoare %</td>
+                                        <td style="padding-left:10px;" colspan="2" class="auto-style26">Sanctiune aplicata</td>
+                                        <td style="padding: 10px !important;" colspan="2">
+                                            <dx:ASPxComboBox ID="cmbObi" runat="server" AutoPostBack="false" DropDownWidth="200" TextField="NumeCompus" Value='<%# Bind("IdObiect") %>' ValueField="IdObiect" ValueType="System.Int32" Width="225px" />
+                                            <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                            <td class="auto-style18" style="padding:10px;">&nbsp;</td>
+                                            <td class="auto-style18">&nbsp;</td>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td rowspan="3" style="vertical-align:top;padding:10px;" class="auto-style3"><dx:ASPxMemo ID="txtDesc" runat="server" Width="500px" Height="150" Text='<%# Bind("Descriere") %>' /></td>
-                                        <td style="padding:10px !important;" colspan="2"><dx:ASPxComboBox ID="cmbObi" runat="server" Width="215px" ValueField="IdObiect" DropDownWidth="200" TextField="NumeCompus" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdObiect") %>' />
-                                    
-                                    <td class="auto-style6" style="padding:10px;">
-                                        <dx:ASPxDateEdit ID="txtDataInc" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInceput") %>' Width="110" />
-                                    </td>
-                                    <td class="auto-style6" style="padding:10px;">
-                                        <dx:ASPxDateEdit ID="txtDataSf" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInceput") %>' Width="110" />
-                                    </td>
-                                    <td class="auto-style19" style="padding:10px;">
-                                        <dx:ASPxTextBox ID="txtVal" runat="server" Value='<%# Bind("ValoareAbsoluta") %>' Width="110" />
-                                    </td>
-                                    <td class="auto-style20" style="padding:10px;">
-                                        <dx:ASPxTextBox ID="txtProc" runat="server" Value='<%# Bind("ValoareProcent") %>' Width="110" />
-                                    </td>
-                                   </tr>
-                                    <tr>
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">&nbsp;</td>
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Data cercetarii</td>
-                                        <td class="auto-style9" style="padding:10px;">Numar inregistrare sesizare</td>
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Data inregistrare sesizare</td>
-                                        <td class="auto-style9" style="padding:10px;">Numar inregistrare comisie</td>
-                                        <td class="auto-style9" style="padding:10px;">Data inregistrare comisie</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            &nbsp;</td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxTextBox ID="txtNrInregSesizare" runat="server" Value='<%# Bind("NrInregSesizare") %>' Width="110px" />
-                                        </td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxDateEdit ID="txtDataInregSesizare" runat="server" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInregSesizare") %>' Width="110px" />
-                                        </td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxTextBox ID="txtNrInregComisie" runat="server" Value='<%# Bind("NrInregComisie") %>' Width="110px" />
-                                        </td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxDateEdit ID="txtDataInregComisie" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInregComisie") %>' Width="110px" />
-                                        </td>
+                                        <td style="padding:10px;" aria-multiline="True" class="auto-style9">Data cercetarii</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataCercetare" runat="server" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataCercetare") %>' Width="110px" />
+                                            </td>
+                                            <td class="auto-style9" style="padding: 10px;">Data inceput</td>
+                                            <td class="auto-style9" style="padding:10px;">
+                                                <dx:ASPxDateEdit ID="txtDataInc" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInceput") %>' Width="110" />
+                                            </td>
+                                            <td class="auto-style9" style="padding:10px;">Data sfarsit</td>
+                                            <td class="auto-style6" style="padding:10px;">
+                                                <dx:ASPxDateEdit ID="txtDataSf" runat="server" EditFormat="Date" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInceput") %>' Width="110" />
+                                            </td>
+                                            <td></td>
+                                   </tr>
+                                    <tr>
+                                        <td aria-multiline="True" class="auto-style31" style="padding:10px;">&nbsp;</td>
+                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style18" style="padding:10px;">Valoare</td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxTextBox ID="txtVal" runat="server" Value='<%# Bind("ValoareAbsoluta") %>' Width="110" />
                                         </td>
+                                        <td class="auto-style18">Valoare%</td>
+                                        <td class="auto-style30" style="padding:10px;">
+                                            <dx:ASPxTextBox ID="txtProc" runat="server" Value='<%# Bind("ValoareProcent") %>' Width="110" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="auto-style25" style="padding:10px;" aria-multiline="True">
+                                            &nbsp;</td>
+                                        <td class="auto-style9" style="padding:10px;" aria-multiline="True">
+                                            &nbsp;</td>
+                                        <td class="auto-style9" style="padding:10px;">
+                                            &nbsp;</td>
+                                        <td class="auto-style9" style="padding:10px;" aria-multiline="True">
+                                            &nbsp;</td>
+                                        <td class="auto-style9" style="padding:10px;">
+                                            &nbsp;</td>
+                                        <td class="auto-style9" style="padding:10px;">
+                                            &nbsp;</td>
                                     </tr>
                                     <tr>
                                         <td aria-multiline="True" class="auto-style22" style="padding:10px;">Materiale doveditoare</td>
-                                        <td aria-multiline="True" class="auto-style25" style="padding:10px;">&nbsp;</td>
-                                        <td aria-multiline="True" class="auto-style25" style="padding:10px;">Componenta&nbsp; comisiei</td>
-                                        <td class="auto-style25" style="padding:10px;">Numar inregistrare convocare</td>
-                                        <td aria-multiline="True" class="auto-style25" style="padding:10px;">Data inregistrare convocare</td>
-                                        <td class="auto-style25" style="padding:10px;">Numar proces verbal</td>
-                                        <td aria-multiline="True" class="auto-style25" style="padding:10px;">Data proces verbal</td>
+                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">Numar inregistrare sesizare</td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxTextBox ID="txtNrInregSesizare" runat="server" Value='<%# Bind("NrInregSesizare") %>' Width="110px" />
+                                        </td>
+                                        <td class="auto-style6" style="padding:10px;">Numar inregistrare convocare</td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxTextBox ID="txtNrInregConvocare" runat="server" Value='<%# Bind("NrInregConvocare") %>' Width="110px" />
+                                        </td>
+                                        <td class="auto-style6" style="padding:10px;">Numar decizie</td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxTextBox ID="txtNrDecizie" runat="server" Value='<%# Bind("NrDecizie") %>' Width="110px" />
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="auto-style23" rowspan="3" style="padding:10px;">
                                             <dx:ASPxMemo ID="txtMaterialeDoveditoare" runat="server" Height="150px" Text='<%# Bind("MaterialeDoveditoare") %>' Width="500px" />
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            &nbsp;</td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxTextBox ID="txtNrInregConvocare" runat="server" Value='<%# Bind("NrInregConvocare") %>' Width="110px" />
+                                        <td class="auto-style25" style="padding:10px;" aria-multiline="True">
+                                            Data inregistrare sesizare</td>
+                                        <td class="auto-style25" style="padding:10px;">
+                                            <dx:ASPxDateEdit ID="txtDataInregSesizare" runat="server" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInregSesizare") %>' Width="110px" />
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">
+                                        <td class="auto-style25" style="padding:10px;">
+                                            Data inregistrare convocare</td>
+                                        <td class="auto-style25" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataInregConvocare" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInregConvocare") %>' Width="110px" />
                                         </td>
+                                        <td class="auto-style25" style="padding:10px;">Data decizie
+                                        </td>
+                                        <td class="auto-style25" style="padding:10px;">
+                                            <dx:ASPxDateEdit ID="txtDataDecizie" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataDecizie") %>' Width="110px" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="auto-style6" style="padding:10px;">Numar inregistrare comisie
+                                        </td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxTextBox ID="txtNrInregComisie" runat="server" Value='<%# Bind("NrInregComisie") %>' Width="110px" />
+                                        </td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            Numar proces verbal</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxTextBox ID="txtNrProcesCercetare" runat="server" Value='<%# Bind("NrProcesCercetare") %>' Width="110px" />
                                         </td>
                                         <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxDateEdit ID="txtDataProcesCercetare" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataProcesCercetare") %>' Width="110px" />
-                                        </td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxTextBox ID="txtComponentaComisie" runat="server" Value='<%# Bind("NrProcesCercetare") %>' Width="110px" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td aria-multiline="True" class="auto-style9" style="padding:10px;">&nbsp;</td>
-                                        <td class="auto-style9" style="padding:10px;">Numar decizie</td>
-                                        <td class="auto-style9" style="padding:10px;">Data decizie</td>
-                                        <td class="auto-style9" style="padding:10px;">Data comunicare decizie</td>
-                                        <td class="auto-style9" style="padding:10px;">Data radiere sanctiune</td>
-                                        <td class="auto-style26"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            &nbsp;</td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxTextBox ID="txtNrDecizie" runat="server" Value='<%# Bind("NrDecizie") %>' Width="110px" />
-                                        </td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxDateEdit ID="txtDataDecizie" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataDecizie") %>' Width="110px" />
-                                        </td>
+                                            Data comunicare decizie</td>
                                         <td class="auto-style6" style="padding:10px;">
                                             <dx:ASPxDateEdit ID="txtDataComunicareDecizie" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataComunicareDecizie") %>' Width="110px" />
                                         </td>
-                                        <td class="auto-style6" style="padding:10px;">
-                                            <dx:ASPxDateEdit ID="txtDataRadiereSanctiune" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataRadiereSanctiune") %>' Width="110px" />
-                                        </td>
-                                        <td>&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="padding:10px !important;">
+                                        <td colspan="1" style="padding:10px;" class="auto-style33">
                                             <label id="lblDoc" runat="server" clientidmode="Static" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">
                                             &nbsp;
                                             </label>
@@ -330,6 +334,29 @@
                                                 <ClientSideEvents FilesUploadStart="StartUpload" FileUploadComplete="function(s,e) { EndUpload(s); }" />
                                             </dx:ASPxUploadControl>
                                         </td>
+                                        <td class="auto-style25" style="padding:10px;">Data inregistrare comisie</td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxDateEdit ID="txtDataInregComisie" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataInregComisie") %>' Width="110px" />
+                                        </td>
+                                        <td class="auto-style9" style="padding:10px;">Data proces verbal</td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxDateEdit ID="txtDataProcesCercetare" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataProcesCercetare") %>' Width="110px" />
+                                        </td>
+                                        <td class="auto-style9" style="padding:10px;">Data radiere sanctiune</td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxDateEdit ID="txtDataRadiereSanctiune" runat="server" EditFormat="Custom" EditFormatString="dd/MM/yyyy" Value='<%# Bind("DataRadiereSanctiune") %>' Width="110px" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="auto-style33" colspan="1" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">Componenta&nbsp; comisiei</td>
+                                        <td class="auto-style6" style="padding:10px;">
+                                            <dx:ASPxTextBox ID="txtComponentaComisie" runat="server" Value='<%# Bind("NrProcesCercetare") %>' Width="110px" />
+                                        </td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
+                                        <td class="auto-style6" style="padding:10px;">&nbsp;</td>
                                     </tr>
                                     <tr>
                                         <td class="auto-style3" style="padding:10px;">

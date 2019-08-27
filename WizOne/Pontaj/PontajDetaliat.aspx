@@ -441,6 +441,16 @@
             }
             return (false);
         }
+
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie !", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
     </script>
 
 
@@ -772,7 +782,7 @@
                                 <SettingsSearchPanel Visible="false" />
                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-                                <ClientSideEvents ContextMenu="ctx" CustomButtonClick="grCC_CustomButtonClick" />
+                                <ClientSideEvents ContextMenu="ctx" CustomButtonClick="grCC_CustomButtonClick" EndCallback="function(s,e) { OnEndCallback(s,e); }"/>
 
                                 <Columns>
                                     <dx:GridViewCommandColumn FixedStyle="Left" ShowEditButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true" >
@@ -787,8 +797,8 @@
                                         <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                                     </dx:GridViewDataComboBoxColumn>
 
-                                    <dx:GridViewDataComboBoxColumn FieldName="F06204" Name="F06204" Caption="Centrul de cost" Width="250px" VisibleIndex="2" Visible="false">
-                                        <PropertiesComboBox TextField="F06205" ValueField="F06204" ValueType="System.Int32" DropDownStyle="DropDownList" />
+                                    <dx:GridViewDataComboBoxColumn FieldName="F06204" Name="F06204" Caption="Centrul de cost" Width="250px" VisibleIndex="2" Visible="true">
+                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
                                     </dx:GridViewDataComboBoxColumn>
 
                                     <dx:GridViewDataComboBoxColumn FieldName="IdProiect" Name="IdProiect" Caption="Proiect" Width="250px" VisibleIndex="3" Visible="false" >
@@ -819,14 +829,13 @@
                                     </dx:GridViewDataComboBoxColumn>
                                     <dx:GridViewDataTimeEditColumn FieldName="De" Name="De" Caption="De" Width="100px" VisibleIndex="7" Visible="false" >
                                         <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm">
-                                            
                                         </PropertiesTimeEdit>
                                     </dx:GridViewDataTimeEditColumn>
                                     <dx:GridViewDataTimeEditColumn FieldName="La" Name="La" Caption="La" Width="100px" VisibleIndex="8" Visible="false" >
                                         <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm">
-                                            
                                         </PropertiesTimeEdit>
                                     </dx:GridViewDataTimeEditColumn>
+
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre1" Name="NrOre1" Caption="NrOre1" Width="100px" Visible="false" VisibleIndex="9" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre2" Name="NrOre2" Caption="NrOre2" Width="100px" Visible="false" VisibleIndex="10" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre3" Name="NrOre3" Caption="NrOre3" Width="100px" Visible="false" VisibleIndex="11" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />

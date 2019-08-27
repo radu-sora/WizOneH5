@@ -5,49 +5,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-
-    <script>
-        function SaveAll()
-        {
-            gridA.UpdateEdit();
-            gridB.UpdateEdit();
-        }
-
-    </script>
-
 </head>
 <body>
     <form id="form1" runat="server">
-    <div>
+        <div>
 
-        <dx:ASPxButton ID="btnSave" runat="server" Text="Salveaza All" AutoPostBack="false">
-            <ClientSideEvents Click="function(s,e) { SaveAll(); }" />
-        </dx:ASPxButton>
+            <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" Visible="true"  >
+                <SettingsEditing Mode="Batch"/>
 
+                <Columns>
+                    <dx:GridViewDataTextColumn FieldName="Id" ReadOnly="false" Visible="true" ShowInCustomizationForm="false" />
+                    <dx:GridViewDataTextColumn FieldName="Denumire" ReadOnly="false" Visible="true" ShowInCustomizationForm="false" />
+                    <dx:GridViewDataTextColumn FieldName="Descriere" UnboundType="String" Width="150px" Caption="test"></dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTimeEditColumn FieldName="NrOre1_Tmp" Name="NrOre1_Tmp" Caption="NrOre2" Width="100px" Visible="true" ReadOnly="false"></dx:GridViewDataTimeEditColumn>
+                    <dx:GridViewDataTextColumn FieldName="Id_Tmp" ReadOnly="false" Visible="true" ShowInCustomizationForm="false" />
+                </Columns>
 
-        <dx:ASPxGridView ID="gridB" ClientInstanceName="gridB" runat="server" AutoGenerateColumns="false" Settings-ShowStatusBar="Hidden"
-            OnBatchUpdate="grid2_BatchUpdate" OnRowInserting="gridB_RowInserting" OnRowUpdating="gridB_RowUpdating" OnRowDeleting="gridB_RowDeleting">
-            <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-            <Columns>
-                <dx:GridViewCommandColumn ShowNewButtonInHeader="true" ShowDeleteButton="true" />
-                <dx:GridViewDataColumn FieldName="Id" Caption="Id" />
-                <dx:GridViewDataColumn FieldName="Denumire" Caption="Denumire" />
-            </Columns>
-
-        </dx:ASPxGridView>
-
-
-        <dx:ASPxGridView ID="gridA" ClientInstanceName="gridA" runat="server" AutoGenerateColumns="false"
-            OnBatchUpdate="grid1_BatchUpdate" OnRowInserting="gridA_RowInserting" OnRowUpdating="gridA_RowUpdating" OnRowDeleting="gridA_RowDeleting">
-            <SettingsEditing Mode="Batch"></SettingsEditing>
-            <Columns>
-                <dx:GridViewCommandColumn ShowNewButtonInHeader="true" ShowDeleteButton="true" />
-                <dx:GridViewDataColumn FieldName="Id" Caption="Id" />
-                <dx:GridViewDataColumn FieldName="Denumire" Caption="Denumire" />
-            </Columns>
-        </dx:ASPxGridView>
-    
-    </div>
+            </dx:ASPxGridView>
+        </div>
     </form>
 </body>
 </html>

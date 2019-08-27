@@ -7,27 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne {
+namespace WizOne.ProgrameLucru {
     
     
-    public partial class WebForm4 {
+    public partial class ProgrameOreNoapte {
         
         /// <summary>
-        /// form1 control.
+        /// grDateOreNopate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
-        /// <summary>
-        /// ASPxScheduler1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxScheduler.ASPxScheduler ASPxScheduler1;
+        protected global::DevExpress.Web.ASPxGridView grDateOreNopate;
     }
 }

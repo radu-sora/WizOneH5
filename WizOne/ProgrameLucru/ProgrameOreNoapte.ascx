@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProgrameAlteOre.ascx.cs" Inherits="WizOne.ProgrameLucru.ProgrameAlteOre" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProgrameOreNoapte.ascx.cs" Inherits="WizOne.ProgrameLucru.ProgrameOreNoapte" %>
 
 
 
@@ -7,12 +7,12 @@
 
     <table width="80%">
      <tr>
-        <th class="legend-font-size">Setari alte ore</th>
-        <dx:ASPxGridView ID="grDateAlteOre" runat="server" ClientInstanceName="grDateAlteOre" ClientIDMode="Static" Width="20%" AutoGenerateColumns="false"  OnDataBinding="grDateAlteOre_DataBinding" OnInitNewRow="grDateAlteOre_InitNewRow"
-                OnRowInserting="grDateAlteOre_RowInserting" OnRowUpdating="grDateAlteOre_RowUpdating" OnRowDeleting="grDateAlteOre_RowDeleting">        
+        <th class="legend-font-size">Setari ore de noapte</th>
+        <dx:ASPxGridView ID="grDateOreNopate" runat="server" ClientInstanceName="grDateOreNopate" ClientIDMode="Static" Width="20%" AutoGenerateColumns="false"  OnDataBinding="grDateOreNopate_DataBinding" OnInitNewRow="grDateOreNopate_InitNewRow"
+                OnRowInserting="grDateOreNopate_RowInserting" OnRowUpdating="grDateOreNopate_RowUpdating" OnRowDeleting="grDateOreNopate_RowDeleting">        
             <SettingsBehavior AllowFocusedRow="true" />
             <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
-            <ClientSideEvents CustomButtonClick="function(s, e) { grDateAlteOre_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
+            <ClientSideEvents CustomButtonClick="function(s, e) { grDateOreNopate_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
             <SettingsEditing Mode="Inline" />                       
             <Columns>
                 <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />

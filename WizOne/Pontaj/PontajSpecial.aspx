@@ -14,8 +14,7 @@
             }
         }
 
-        function OnModif(s, e) {
-            debugger;
+        function OnModif(s, e) {   
             popUpModif.Hide();
             var texts = "";
             if (cmbTipAbs.GetText() != "")
@@ -23,7 +22,7 @@
             else {
                 $('#<% =pnlValuri.ID %> input[type="text"]').each(function () {
                     debugger;
-                    if ($(this).val() != '') {
+                    if ($(this).val() != '' && $(this).val() != '0') {
                         var tmp = $(this).attr('id').replace('_I', '').replace('flo1', '');
                         var lista = tmp.split("_");
                         //texts += "/" + $(this).val() + $(this).attr('id').replace('_I', '').replace('flo1', '');

@@ -227,7 +227,11 @@ namespace WizOne.Pontaj
 
 
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
-                if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
+                    return;
+                }
 
                 for (int i = 0; i < lst.Count(); i++)
                 {
@@ -248,7 +252,8 @@ namespace WizOne.Pontaj
                     else
                         MessageBox.Show(Dami.TraduCuvant("Initializare reusita!"), MessageBox.icoSuccess);
 
-                }
+                }                
+                 
 
             }
             catch (Exception ex)
@@ -288,23 +293,53 @@ namespace WizOne.Pontaj
 
                 string sqlSDSL = "";
                 string cond = "";
+                
                 for (int i = 1; i <= nrZile; i++)
                 {
                     string data = "";
                     sqlSDSL = "";
+
+                    DateTime ziuaPrec = dataStart;
 
                     for (DateTime zi = dataStart.AddDays(i - 1); zi <= dataSf; zi = zi.AddDays(nrZile))
                     {
                         string dtStr = General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day);
 
                         int nr = dtHolidays.Select("DAY = " + dtStr).Count();
+                        int nrZileNel = 0;
+                        if (zi.Date != ziuaPrec.Date)
+                        {//calculam nr de zile nelucratoare intre cele 2 date
+                            for (DateTime k = ziuaPrec; k < zi; k = k.AddDays(1))
+                            {
+                                string dtK = General.ToDataUniv(k.Date.Year, k.Date.Month, k.Date.Day);
 
-                        if (!chkS.Checked && zi.DayOfWeek == DayOfWeek.Saturday)
-                            continue;
-                        if (!chkD.Checked && zi.DayOfWeek == DayOfWeek.Sunday)
-                            continue;
-                        if (!chkSL.Checked && nr > 0)
-                            continue;
+                                int nrK = dtHolidays.Select("DAY = " + dtK).Count();
+
+                                if (!chkS.Checked && k.DayOfWeek == DayOfWeek.Saturday)
+                                    nrZileNel++;
+                                if (!chkD.Checked && k.DayOfWeek == DayOfWeek.Sunday)
+                                    nrZileNel++;
+                                if (!chkSL.Checked && nrK > 0)
+                                    nrZileNel++;
+                            }
+                        }
+
+                        int m = 0;
+                        DateTime dtTemp = zi;
+                        string dtT = General.ToDataUniv(dtTemp.Date.Year, dtTemp.Date.Month, dtTemp.Date.Day);
+                        int nrT = dtHolidays.Select("DAY = " + dtT).Count();
+                        while ((!chkS.Checked && dtTemp.DayOfWeek == DayOfWeek.Saturday) || (!chkD.Checked && dtTemp.DayOfWeek == DayOfWeek.Sunday) || (!chkSL.Checked && nrT > 0))
+                        {
+                            m++;
+                            dtTemp = dtTemp.AddDays(1);
+                            dtT = General.ToDataUniv(dtTemp.Date.Year, dtTemp.Date.Month, dtTemp.Date.Day);
+                            nrT = dtHolidays.Select("DAY = " + dtT).Count();
+                        }
+
+                        zi = zi.AddDays(nrZileNel + m);                     
+
+                        if (zi > dataSf)
+                            break;
 
                         if (nr > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
                         {
@@ -346,6 +381,8 @@ namespace WizOne.Pontaj
                             else
                                 data += " TO_DATE('" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 'dd/mm/yyyy') ";
                         }
+
+                        ziuaPrec = zi;
                     }
                                        
 
@@ -361,13 +398,13 @@ namespace WizOne.Pontaj
                     {
                         if (Constante.tipBD == 1)
                         {
-                            oraIn = "convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram"].ToString() + "), 108), 120)";
-                            oraOut = "convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram"].ToString() + "), 108), 120)";
+                            oraIn = ", \"In1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram"].ToString() + "), 108), 120)";
+                            oraOut = ", \"Out1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram"].ToString() + "), 108), 120)";
                         }
                         else
                         {
-                            oraIn = "to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
-                            oraOut = "to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            oraIn = ", \"In1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            oraOut = ", \"Out1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
                         }
                     }
 
@@ -376,19 +413,19 @@ namespace WizOne.Pontaj
                     {                    
                         string[] param = sablon["ValZiua" + i].ToString().Split(';');
                         for (int k = 0; k < param.Length; k++)                        
-                            sirVal += ", \"" + param[k].Split('=')[0] + "\" = " + param[k].Split('=')[1];                        
+                            sirVal += ", \"" + param[k].Split('=')[0] + "\" = " + param[k].Split('=')[1] + " * 60";                        
                     }
 
                     if (data.Length > 0)
                     {
                         data = data.Substring(1);
 
-                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "', \"In1\" = " + oraIn +" , \"Out1\" = " + oraOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " + oraIn + oraOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
                     }
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "', \"In1\" = " + oraIn + " , \"Out1\" = " + oraOut + sirVal + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" + oraIn + oraOut + sirVal + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
                     }
                     else
                         sqlFin += sql + ";";
@@ -507,6 +544,7 @@ namespace WizOne.Pontaj
                         btnFiltruSterge_Click();
                         return;
                     case "cmbNrZileSablon":
+                        AscundeCtl();
                         for (int i = 1; i <= 10; i++)
                         {
                             ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
@@ -524,6 +562,7 @@ namespace WizOne.Pontaj
                             }
                         break;
                     case "cmbSablon":
+                        AscundeCtl();
                         if (cmbSablon.Value != null)
                         {
                             if (Convert.ToInt32(cmbSablon.Value) > 0)
@@ -601,8 +640,8 @@ namespace WizOne.Pontaj
                                 if (tx != null)
                                 {
                                     tx.Visible = true;
-                                    if (tx.Text.Length > 0)
-                                    {
+                                    //if (tx.Text.Length > 0)
+                                    //{
                                         linii[0]["Ziua" + i.ToString()] = tx.Text;
                                        
                                         foreach (var item in txtValuri)
@@ -611,7 +650,7 @@ namespace WizOne.Pontaj
                                                 linii[0]["ValZiua" + i.ToString()] = item.Value;
                                         }
                                       
-                                    }
+                                    //}
                                 }
                             }
                         }
@@ -985,6 +1024,19 @@ namespace WizOne.Pontaj
             }
         }
 
+
+        private void AscundeCtl()
+        {
+            for (int i = 1; i <= 31; i++)
+            {
+                ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                if (tx != null)
+                {
+                    tx.Visible = false;
+                    tx.Text = "";
+                }
+            }
+        }
             
 
 

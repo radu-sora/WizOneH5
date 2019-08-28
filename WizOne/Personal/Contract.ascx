@@ -566,8 +566,7 @@
         }
     }
 
-    function txtSalariu_TextChanged(s) {
-        ASPxClientUtils.PreventEvent(e.htmlEvent);
+    function txtSalariu_TextChanged(s) {      
         VerifSalariu(s.GetValue(), cmbTimpPartial.GetValue());
     }
 

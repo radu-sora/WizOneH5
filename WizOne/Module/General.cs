@@ -8014,7 +8014,7 @@ namespace WizOne.Module
             }
         }
 
-        public static string SelectCalculCO(int an, string f10003 = "-99", string filtruIns = "", DateTime? F10022 = null, string f10072 = "")
+        public static string SelectCalculCO(int an, string f10003 = "-99", string filtruIns = "", DateTime? F10022 = null, string f10072 = "", string f100644 = "")
         {
             string strSql = "";
 
@@ -8029,8 +8029,16 @@ namespace WizOne.Module
                     strF10022 = General.ToDataUniv(F10022);
 
                 string strF10072 = "a.F10072";
+                string strF100644 = "F100644";
+                string strGrila = "case when a.F100642 is null or a.F100642 = 0 then c.F02615 else a.F100642 end";
+                if (Constante.tipBD == 2)
+                    strGrila = "case when a.F100642 is null or a.F100642 = 0 then c.F02615 else TO_NUMBER(a.F100642) end";
                 if (f10072 != "")
+                {
                     strF10072 = f10072;
+                    strGrila = " c.F02615 ";
+                    strF100644 = "'" + f100644 + "'";
+                }
 
                 if (Constante.tipBD == 1)
                 {
@@ -8063,7 +8071,7 @@ namespace WizOne.Module
                     " group by a.marca, a.de_la_data, a.la_data) " +
                     " update x set x.Cuvenite = (select y.ZileCuvenite from " +
                     " (select a.F10003, " +
-                    " ROUND((case when a.F100642 is null or a.F100642 = 0 then c.F02615 else a.F100642 end " +                                                   //nr zile cuvenite conform grilei
+                    " ROUND(( " + strGrila +                                                   //nr zile cuvenite conform grilei
                     " + (CASE WHEN ISNULL(a.F10027,0)>=2 THEN Convert(int,isnull((select \"Valoare\" from \"tblParametrii\" where \"Nume\"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) ELSE 0 END) " +               //daca este pers. cu dizabilitati mai se adauga 3 zile
 
                     " +  case when dateadd(year,18,f10021) >=CASE WHEN cast(" + strF10022 + " as date) < '" + dtInc + "'  THEN '" + dtInc + "'  ELSE cast(" + strF10022 + " as date) END   " +
@@ -8082,7 +8090,7 @@ namespace WizOne.Module
                     " ) " +
                     " /CONVERT(float,365),0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus
                     " from F100 a " +
-                    " left join (select ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,  " +
+                    " left join (select ISNULL(convert(int,substring(" + strF100644 + ",1,2)),0) * 12 + ISNULL(convert(int,substring(" + strF100644 + ",3,2)),0) + DATEDIFF (MONTH,  " +
                     " (select convert(nvarchar(4),F01011) + '-' + convert(nvarchar(4),F01012) + '-01' from F010),'" + dtSf + "' " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma
                     " left join F026 c on convert(int," + strF10072 + ") = c.F02604 and (convert(int,c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int,c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
@@ -8094,7 +8102,7 @@ namespace WizOne.Module
                     //la fel ca mai sus - fara ponderea cu nr de zile lucrate in an
                     strSql += "update x set x.CuveniteAn = (select y.ZileCuvenite from " +
                     " (select a.F10003, " +
-                    " (case when a.F100642 is null or a.F100642 = 0 then c.F02615 else a.F100642 end " +                                                   //nr zile cuvenite conform grilei
+                    " ( " + strGrila +                                                   //nr zile cuvenite conform grilei
                     " + (CASE WHEN ISNULL(a.F10027,0)>=2 THEN Convert(int,isnull((select \"Valoare\" from \"tblParametrii\" where \"Nume\"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) ELSE 0 END) " +               //daca este pers. cu dizabilitati mai se adauga 3 zile
 
                     " +  case when dateadd(year,18,f10021) >=CASE WHEN cast(" + strF10022 + " as date) < '" + dtInc + "'  THEN '" + dtInc + "'  ELSE cast(" + strF10022 + " as date) END   " +
@@ -8108,13 +8116,22 @@ namespace WizOne.Module
 
                     " ) as ZileCuvenite " +
                     " from F100 a " +
-                    " left join (select ISNULL(convert(int,substring(F100644,1,2)),0) * 12 + ISNULL(convert(int,substring(F100644,3,2)),0) + DATEDIFF (MONTH,  " +
+                    " left join (select ISNULL(convert(int,substring(" + strF100644 + ",1,2)),0) * 12 + ISNULL(convert(int,substring(" + strF100644 + ",3,2)),0) + DATEDIFF (MONTH,  " +
                     " (select convert(nvarchar(4),F01011) + '-' + convert(nvarchar(4),F01012) + '-01' from F010),'" + dtSf + "' " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma
                     " left join F026 c on convert(int," + strF10072 + ") = c.F02604 and (convert(int,c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int,c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
                     " where " + strF10022 + " <= '" + dtSf + "' and '" + dtInc + "' <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " from Ptj_tblZileCO x " +
                     " where x.An=" + an + filtruIns + ";";
+
+                    //if (f10072 != "")
+                    //{
+                    //    strSql += " update F100 set F10072 = '" + f10072 + "', F100642 = (SELECT convert(varchar, convert(int, c.F02615)) FROM F026 c left join (select ISNULL(convert(int,substring(" + strF100644 + ",1,2)),0) * 12 + ISNULL(convert(int,substring(" + strF100644 + ",3,2)),0) + DATEDIFF (MONTH,  " +
+                    //" (select convert(nvarchar(4),F01011) + '-' + convert(nvarchar(4),F01012) + '-01' from F010),'" + dtSf + "' " +
+                    //" ) as CalcLuni , F10003 from F100) d  on convert(int," + strF10072 + ") = c.F02604 AND (convert(int,c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int,c.F02611/100) * 12) WHERE d.f10003 = f100.f10003 )  " + filtruIns.Replace("AND", "WHERE") + ";";
+                    //}
+
+
                     #endregion
                 }
                 else
@@ -8151,7 +8168,7 @@ namespace WizOne.Module
                             " group by a.marca, a.de_la_data, a.la_data) " +
                             " select y.ZileCuvenite from " +
                     " (select a.F10003, " +
-                    " ROUND((case when a.F100642 is null or a.F100642 = 0 then c.F02615 else TO_NUMBER(a.F100642) end " +                                                   //nr zile cuvenite conform grilei
+                    " ROUND(( " + strGrila +                                                   //nr zile cuvenite conform grilei
                     " + (CASE WHEN NVL(a.F10027,0)>=2 THEN to_number(nvl((select \"Valoare\" from \"tblParametrii\" where \"Nume\"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) ELSE 0 END) " +               //daca este pers. cu dizabilitati mai se adauga 3 zile
 
 
@@ -8173,7 +8190,7 @@ namespace WizOne.Module
                     " ) " +
                     " /365,0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus
                     " from F100 a " +
-                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
+                    " left join (select nvl(to_number(substr(" + strF100644 + ",1,2)),0) * 12 + nvl(to_number(substr(" + strF100644 + ",3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
                     " (select to_date('01/' ||  F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma + luna de lucru deschisa pt ca functia MONTHS_BETWEEN nu tine cont de ea
                     " left join F026 c on " + strF10072 + " = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
@@ -8183,7 +8200,7 @@ namespace WizOne.Module
 
                     strSql += "update \"Ptj_tblZileCO\" x set x.\"CuveniteAn\" = (select y.ZileCuvenite from " +
                     " (select a.F10003, " +
-                    " (case when a.F100642 is null or a.F100642 = 0 then c.F02615 else TO_NUMBER(a.F100642) end " +                                                   //nr zile cuvenite conform grilei
+                    " ( " + strGrila +                                                  //nr zile cuvenite conform grilei
                     " + (CASE WHEN NVL(a.F10027,0)>=2 THEN to_number(nvl((select \"Valoare\" from \"tblParametrii\" where \"Nume\"='NrZilePersoanaDizabilitatiSauMaiMica18Ani'),3)) ELSE 0 END) " +               //daca este pers. cu dizabilitati mai se adauga 3 zile
 
 
@@ -8199,12 +8216,19 @@ namespace WizOne.Module
 
                     " ) as ZileCuvenite " +
                     " from F100 a " +
-                    " left join (select nvl(to_number(substr(F100644,1,2)),0) * 12 + nvl(to_number(substr(F100644,3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
+                    " left join (select nvl(to_number(substr(" + strF100644 + ",1,2)),0) * 12 + nvl(to_number(substr(" + strF100644 + ",3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
                     " (select to_date('01/' || F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +  //luam ca data de referinta luna de lucru, pt ca in WizSalary la inchidere de luna, se adauga automat o luna in campul - experienta in firma
                     " ) + 1 ) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003  " +             //se calculeaza nr de luni de experienta cu care a intrat in firma, la care se adauga nr de luni pe care le-a lucrat in firma + luna de lucru deschisa pt ca functia MONTHS_BETWEEN nu tine cont de ea
                     " left join F026 c on " + strF10072 + " = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) " +                                                                                                              //se obtine nr de zile cuenveite din tabela de grile conform vechimei obtinute mai sus
                     " where " + strF10022 + " <= to_date('31-12-" + an + "','DD-MM-YYYY') and to_date('01-01-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
+
+                    //if (f10072 != "")
+                    //{
+                    //    strSql += " update F100 set F10072 = '" + f10072 + "', F100642 = (SELECT TO_CHAR(cast(c.F02615 as INT)) FROM F026 c left join (select nvl(to_number(substr(" + strF100644 + ",1,2)),0) * 12 + nvl(to_number(substr(" + strF100644 + ",3,2)),0) + trunc(MONTHS_BETWEEN (to_date('31-12-" + an + "','DD-MM-YYYY'), " +
+                    //" (select to_date('01/' || F01012 || '/' ||  F01011,'DD-MM-YYYY') from F010) " +
+                    //" ) + 1 ) as CalcLuni, F10003 from F100) d  on " + strF10072 + " = c.F02604 and (to_number(c.F02610/100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611/100) * 12) WHERE d.F10003=F100.F10003 )  " + filtruIns.Replace("AND", "WHERE") + ";";
+                    //}
                     #endregion
                 }
 

@@ -26,6 +26,7 @@ namespace WizOne
         //static int nrIncercari = 0;
         //int paramNrIncercari = 3;
         static string arrIncercari = "";
+        string txtRas = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -97,13 +98,31 @@ namespace WizOne
                                     int poz = usrTMP.IndexOf("@");
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
                                     //MessageBox.Show(usrTMP);
-                                    General.MemoreazaEroarea("Gigi " + usrTMP);
                                     Verifica(usrTMP, "");
                                     
+                                    //if (General.Nz(Session["SecApp"],"").ToString() != "OK")
+                                    //{
+                                    //    divRas.Visible = false;
+                                    //    lblRaspuns.Visible = true;
+                                    //    lblRaspuns.InnerText = "Utilizator inexistent";
+                                    //}
                                 }
                             }
                         }
                         break;
+                    //case "1":
+                    //    {
+                    //        string usrTMP = "asdasda";
+                    //        Verifica(usrTMP, "");
+
+                    //        if (General.Nz(Session["SecApp"], "").ToString() != "OK")
+                    //        {
+                    //            divRas.Visible = false;
+                    //            lblRaspuns.Visible = true;
+                    //            lblRaspuns.InnerText = txtRas;
+                    //        }
+                    //    }
+                    //    break;
                 }
 
                 //string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
@@ -242,15 +261,18 @@ namespace WizOne
                     if (esteBlocat)
                     {
                         MessageBox.Show("Contul este blocat ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                        txtRas = "Contul este blocat ! Contactati administratorul de sistem!";
                     }
                     else
                     {
                         MessageBox.Show("Utilizator/Parola gresita ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                        txtRas = "Utilizator/Parola gresita ! Contactati administratorul de sistem!";
                     }
                 }
                 else
                 {
                     MessageBox.Show("Utilizator/Parola gresita ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                    txtRas = "Utilizator/Parola gresita ! Contactati administratorul de sistem!";
                 }
             }
             catch (Exception ex)
@@ -330,10 +352,12 @@ namespace WizOne
                     case -1:                     //nume Domeniu nu este configurat
                         General.InregistreazaLogarea(0, txtPan1.Text, "Numele de domeniu nu este configurat");
                         MessageBox.Show("Numele de domeniu nu este configurat !", MessageBox.icoWarning);
+                        txtRas = "Numele de domeniu nu este configurat !";
                         break;
                     case 0:                     //user inexistent
                         General.InregistreazaLogarea(0, txtPan1.Text, "Utilizator inexistent");
                         MessageBox.Show("Utilizator inexistent! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                        txtRas = "Utilizator inexistent! Contactati administratorul de sistem!";
                         break;
                     case 1:                     //user existent parola eronata
                         General.InregistreazaLogarea(0, txtPan1.Text, "Introducerea unei parole gresite");
@@ -343,6 +367,7 @@ namespace WizOne
                     case 2:                     //valid si blocat
                         General.InregistreazaLogarea(0, txtPan1.Text, "Cont blocat");
                         MessageBox.Show("Contul este blocat ! Contactati administratorul de sistem", MessageBox.icoWarning);
+                        txtRas = "Contul este blocat ! Contactati administratorul de sistem";
                         break;
                     case 3:                     //valid si activ
                         string op = "+";
@@ -420,12 +445,12 @@ namespace WizOne
                             string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
                             if (tipVerif == "") tipVerif = "1";
 
-                            string redirectpage = string.Empty;
+                            //string redirectpage = string.Empty;
 
-                            if (Dami.ValoareParam("Captcha") == "1")
-                                redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
-                            else
-                                redirectpage = "Pagini/SchimbaParola.aspx";
+                            //if (Dami.ValoareParam("Captcha") == "1")
+                            //    redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
+                            //else
+                            //    redirectpage = "Pagini/SchimbaParola.aspx";
 
 
                             //switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
@@ -445,14 +470,15 @@ namespace WizOne
                             {
                                 General.InregistreazaLogarea(1, txtPan1.Text);
                                 Session["SecApp"] = "OK";
-                                Response.Redirect(redirectpage, false);
+                                //Response.Redirect(redirectpage, false);
+                                Response.Redirect("Pagini/SchimbaParola.aspx", false);
                             }
                             else
                             {
                                 if (Convert.ToInt32(General.Nz(drUsr["ParolaExpirata"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
                                 {
                                     General.InregistreazaLogarea(0, txtPan1.Text, "Parola expirata");
-                                    MessageBox.Show("Parola a expirat", MessageBox.icoWarning,"",redirectpage);
+                                    MessageBox.Show("Parola a expirat", MessageBox.icoWarning,"", "Pagini/SchimbaParola.aspx");
                                 }
                                 else
                                 {
@@ -505,10 +531,12 @@ namespace WizOne
                     case 4:                     //este inactivat in AD
                         General.InregistreazaLogarea(0, txtPan1.Text, "Cont inactiv (inactivat in AD)");
                         MessageBox.Show("Contul este inactivat ! Contactati administratorul de sistem.", MessageBox.icoWarning);
+                        txtRas = "Contul este inactivat ! Contactati administratorul de sistem.";
                         break;
                     case 5:
                         General.InregistreazaLogarea(0, txtPan1.Text, "Cont suspendat sau inactiv");
                         MessageBox.Show("Contul este suspendat sau inactiv ! Contactati administratorul de sistem.", MessageBox.icoWarning);
+                        txtRas = "Contul este suspendat sau inactiv ! Contactati administratorul de sistem.";
                         break;
                 }
             }

@@ -708,6 +708,12 @@ namespace WizOne.Module
             {
                 string strSelect = "";
 
+                for (int i = 0; i < dtSel.Columns.Count; i++)
+                {
+                    str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+                    strSelect = strSelect.Replace("ent." + dtSel.Columns[i], (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+                }
+
                 //cautam daca avem de inserat tabel
                 if (str.ToLower().IndexOf("#$select") >= 0)
                 {
@@ -715,13 +721,6 @@ namespace WizOne.Module
                     strSelect = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$", "");
                     strSelect = WebUtility.HtmlDecode(strSelect);
                     strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
-                }
-
-
-                for (int i = 0; i < dtSel.Columns.Count; i++)
-                {
-                    str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
-                    strSelect = strSelect.Replace("ent." + dtSel.Columns[i], (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
                 }
 
                 //if (str.IndexOf("Link Aproba")>=0)
@@ -1605,38 +1604,52 @@ namespace WizOne.Module
             try
             {
                 string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
-
-                string ert = hostUrl + Environment.NewLine;
-
-
                 var virtualDir = VirtualPathUtility.ToAbsolute("~/");
-                ert += virtualDir + Environment.NewLine;
 
-                if (virtualDir != "" && virtualDir.Substring(virtualDir.Length - 1, 1) == "/")
-                    virtualDir = virtualDir.Substring(0, virtualDir.Length - 1);
-                ert += virtualDir + Environment.NewLine;
+                ////string ert = hostUrl + Environment.NewLine;
 
-                ert += corpAtt.IndexOf("../UploadFiles/Images") + Environment.NewLine;
-                ert += virtualDir + "../UploadFiles/Images" + Environment.NewLine;
-                ert += hostUrl + virtualDir + "../UploadFiles/Images" + Environment.NewLine;
-                ert += corpAtt + Environment.NewLine;
+                ////ert += virtualDir + Environment.NewLine;
 
-                if (corpAtt.IndexOf("../UploadFiles/Images") >= 0)
-                    corpAtt = corpAtt.Replace("../UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
-                else
+                ////if (virtualDir != "" && virtualDir.Substring(virtualDir.Length - 1, 1) == "/")
+                ////    virtualDir = virtualDir.Substring(0, virtualDir.Length - 1);
+                ////ert += virtualDir + Environment.NewLine;
+
+                ////ert += corpAtt.IndexOf("../UploadFiles/Images") + Environment.NewLine;
+                ////ert += virtualDir + "../UploadFiles/Images" + Environment.NewLine;
+                ////ert += hostUrl + virtualDir + "../UploadFiles/Images" + Environment.NewLine;
+                ////ert += corpAtt + Environment.NewLine;
+
+
+
+                //if (corpAtt.IndexOf("../UploadFiles/Images") >= 0)
+                //    corpAtt = corpAtt.Replace("../UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
+                //else
+                //{
+                //    if (corpAtt.IndexOf("/UploadFiles/Images") >= 0)
+                //        corpAtt = corpAtt.Replace("/UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
+                //    else
+                //    {
+                //        if (corpAtt.IndexOf("UploadFiles/Images") >= 0)
+                //            corpAtt = corpAtt.Replace("UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
+                //    }
+
+                //}
+
+
+                int poz = corpAtt.IndexOf("UploadFiles/Images");
+                if (poz >= 0)
                 {
-                    if (corpAtt.IndexOf("/UploadFiles/Images") >= 0)
-                        corpAtt = corpAtt.Replace("/UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
-                    else
+                    int poz1 = corpAtt.Substring(0, poz).LastIndexOf('"');
+                    if (poz - poz1 > 0)
                     {
-                        if (corpAtt.IndexOf("UploadFiles/Images") >= 0)
-                            corpAtt = corpAtt.Replace("UploadFiles/Images", hostUrl + virtualDir + "/UploadFiles/Images");
+                        string txtReplace = corpAtt.Substring(poz1, poz - poz1) + "UploadFiles/Images";
+                        corpAtt = corpAtt.Replace(txtReplace, "\"" + hostUrl + virtualDir + "UploadFiles/Images");
                     }
-                        
                 }
-                    
 
-                
+
+
+
 
                 string txt = @"<!DOCTYPE html>
                                 <html>

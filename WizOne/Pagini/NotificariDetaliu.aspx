@@ -15,12 +15,80 @@
     <script type="text/javascript" src="../Fisiere/MsgBox/sweetalert.min.js"></script>
 
     <script type="text/javascript">
-        function cmbCol_SelectedIndexChanged_Client(s, e) {
+        var cmd = "";
+
+        function OnBeginCallback(s, e) {
+            cmd = e.command;
+            //alert(cmd);
+
+            //if (cmd == "STARTEDIT") {
+            //    var lstCond1 = ["<>", ">", ">=", "<", "<=", "=", "intre", "in", "not in", "fara valoare", "cu valoare"];
+            //    var lstCond2 = ["incepe cu", "contine", "se termina cu"];
+
+            //    cmbCond.ClearItems();
+            //    if (cmbCol.GetSelectedItem().GetColumnText('TipData').toLowerCase() == 'string') {
+            //        for (var i = 0; i < lstCond2.length; ++i) {
+            //            cmbCond.AddItem(lstCond2[i], lstCond2[i]);
+            //        }
+            //    }
+            //    else
+            //        for (var i = 0; i < lstCond1.length; ++i) {
+            //            cmbCond.AddItem(lstCond1[i], lstCond1[i]);
+            //        }
+
+            //    txtVal.SetEnabled(false);
+            //    cmbVal.SetEnabled(false);
+            //    cmbValData.SetEnabled(false);
+            //    txtZile.SetEnabled(false);
+            //    txtVal2.SetEnabled(false);
+            //    cmbVal2.SetEnabled(false);
+            //    cmbValData2.SetEnabled(false);
+            //    txtZile2.SetEnabled(false);
+            //}
+
+        }
+
+        function OnEndCallback(s, e) {
+            if (cmd == "STARTEDIT") {
+                cmbCol_SelectedIndexChanged_Client("nu");
+
+                cmbCond_SelectedIndexChanged_Client();
+
+                //var lstCond1 = ["<>", ">", ">=", "<", "<=", "=", "intre", "in", "not in", "fara valoare", "cu valoare"];
+                //var lstCond2 = ["incepe cu", "contine", "se termina cu"];
+
+                ////cmbCond.ClearItems();
+                //if (cmbCol.GetSelectedItem().GetColumnText('TipData').toLowerCase() == 'string') {
+                //    for (var i = 0; i < lstCond2.length; ++i) {
+                //        cmbCond.AddItem(lstCond2[i], lstCond2[i]);
+                //    }
+                //}
+                //else
+                //    for (var i = 0; i < lstCond1.length; ++i) {
+                //        cmbCond.AddItem(lstCond1[i], lstCond1[i]);
+                //    }
+
+                //txtVal.SetEnabled(false);
+                //cmbVal.SetEnabled(false);
+                //cmbValData.SetEnabled(false);
+                //txtZile.SetEnabled(false);
+                //txtVal2.SetEnabled(false);
+                //cmbVal2.SetEnabled(false);
+                //cmbValData2.SetEnabled(false);
+                //txtZile2.SetEnabled(false);
+
+                cmd = "";
+            }
+        }
+
+
+        function cmbCol_SelectedIndexChanged_Client(fara) {
             var lstCond1 = ["<>", ">", ">=", "<", "<=", "=", "intre", "in", "not in",  "fara valoare", "cu valoare"];
             var lstCond2 = ["incepe cu", "contine", "se termina cu"];
 
-            cmbCond.ClearItems();
-            if (s.GetSelectedItem().GetColumnText('TipData').toLowerCase() == 'string') {
+            if (fara != "nu")
+                cmbCond.ClearItems();
+            if (cmbCol.GetSelectedItem().GetColumnText('TipData').toLowerCase() == 'string') {
                 for (var i = 0; i < lstCond2.length; ++i) {
                         cmbCond.AddItem(lstCond2[i], lstCond2[i]);
                 }
@@ -434,6 +502,7 @@
                             <SettingsBehavior AllowFocusedRow="true" />
                             <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowColumnHeaders="true" />
                             <SettingsSearchPanel Visible="False" />
+                            <ClientSideEvents BeginCallback="OnBeginCallback" EndCallback="OnEndCallback" />
                             <Columns>
                                 <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id" Visible="false" />
                                 <dx:GridViewDataTextColumn FieldName="Coloana" Name="Coloana" Caption="Coloana" Width="90px" />
@@ -489,7 +558,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <dx:ASPxComboBox ID="cmbCol" ClientInstanceName="cmbCol" runat="server" Width="120px" DropDownStyle="DropDownList" ValueField="Id" ValueType="System.Int32" TextFormatString="{0}" >
+                                                    <dx:ASPxComboBox ID="cmbCol" ClientInstanceName="cmbCol" ClientIDMode="Static" runat="server" Width="120px" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" TextFormatString="{0}" EnableCallbackMode="false" >
                                                         <ItemStyle Border-BorderWidth="0px" />
                                                         <ClientSideEvents SelectedIndexChanged="cmbCol_SelectedIndexChanged_Client" />
                                                         <Columns>
@@ -500,60 +569,85 @@
                                                     </dx:ASPxComboBox>
                                                 </td>
                                                 <td>
-                                                    <dx:ASPxComboBox ID="cmbCond" ClientInstanceName="cmbCond" runat="server" AutoPostBack="false" CssClass="cmbTip" Width="140px" >
+                                                    <dx:ASPxComboBox ID="cmbCond" ClientInstanceName="cmbCond" ClientIDMode="Static" runat="server" AutoPostBack="false" CssClass="cmbTip" Width="140px" >
                                                         <ClientSideEvents SelectedIndexChanged="cmbCond_SelectedIndexChanged_Client" />
                                                     </dx:ASPxComboBox>
                                                 </td>
                                                 <td>
-                                                    <div class="div_hor" style="margin-bottom:0;">
-                                                        <dx:ASPxTextBox ID="txtVal" ClientInstanceName="txtVal" runat="server" Width="120px" />
-                                                        <dx:ASPxComboBox ID="cmbVal" runat="server" ClientInstanceName="cmbVal" AutoPostBack="false" CssClass="cmbTip" Width="8px" DropDownStyle="DropDownList" ValueField="Id" ValueType="System.Int32" TextField="Denumire" TextFormatString="{0}" CallbackPageSize="15" EnableCallbackMode="true" >
-                                                            <ClientSideEvents SelectedIndexChanged="cmbVal_SelectedIndexChanged_Client" />
-                                                            <Columns>
-                                                                <dx:ListBoxColumn FieldName="Denumire" Caption="Camp"  />
-                                                                <dx:ListBoxColumn FieldName="TipData" Caption="Tip data" />
-                                                                <dx:ListBoxColumn FieldName="Id" Visible="false"/>
-                                                            </Columns>
-                                                        </dx:ASPxComboBox>
-                                                        <dx:ASPxComboBox ID="cmbValData" ClientInstanceName="cmbValData" DropDownStyle="DropDownList" runat="server" AutoPostBack="false" CssClass="cmbTip" Width="18px">
-                                                            <Items>
-                                                                <dx:ListEditItem Text="ieri" Value="ieri" />
-                                                                <dx:ListEditItem Text="astazi" Value="astazi" />
-                                                                <dx:ListEditItem Text="maine" Value="maine" />
-                                                                <dx:ListEditItem Text="prima zi din saptamana" Value="prima zi din saptamana" />
-                                                                <dx:ListEditItem Text="ultima zi din saptamana" Value="ultima zi din saptamana" />
-                                                                <dx:ListEditItem Text="prima zi din luna" Value="prima zi din luna" />
-                                                                <dx:ListEditItem Text="ultima zi din luna" Value="ultima zi din luna" />
-                                                                <dx:ListEditItem Text="prima zi din an" Value="prima zi din an" />
-                                                                <dx:ListEditItem Text="ultima zi din an" Value="ultima zi din an" />
-                                                            </Items>
-                                                            <ClientSideEvents SelectedIndexChanged="cmbValData_SelectedIndexChanged_Client" />
-                                                        </dx:ASPxComboBox>
-                                                        <dx:ASPxSpinEdit ID="txtZile" ClientInstanceName="txtZile" runat="server" Width="50px" MinValue="-200" MaxValue="200" />
-                                                    </div>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <dx:ASPxTextBox ID="txtVal" ClientInstanceName="txtVal" runat="server" Width="120px" />
+                                                            </td>
+                                                            <td>
+                                                                <dx:ASPxComboBox ID="cmbVal" ClientInstanceName="cmbVal" runat="server" AutoPostBack="false" Width="8px" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" TextFormatString="{0}" EnableCallbackMode="false" CssClass="cmbTip">
+                                                                    <ClientSideEvents SelectedIndexChanged="cmbVal_SelectedIndexChanged_Client" />
+                                                                    <Columns>
+                                                                        <dx:ListBoxColumn FieldName="Denumire" Caption="Camp"  />
+                                                                        <dx:ListBoxColumn FieldName="TipData" Caption="Tip data" />
+                                                                        <dx:ListBoxColumn FieldName="Id" Visible="false"/>
+                                                                    </Columns>
+                                                                </dx:ASPxComboBox>
+                                                            </td>
+                                                            <td>
+                                                                <dx:ASPxComboBox ID="cmbValData" ClientInstanceName="cmbValData" DropDownStyle="DropDownList" runat="server" AutoPostBack="false" CssClass="cmbTip" Width="18px">
+                                                                    <Items>
+                                                                        <dx:ListEditItem Text="ieri" Value="ieri" />
+                                                                        <dx:ListEditItem Text="astazi" Value="astazi" />
+                                                                        <dx:ListEditItem Text="maine" Value="maine" />
+                                                                        <dx:ListEditItem Text="prima zi din saptamana" Value="prima zi din saptamana" />
+                                                                        <dx:ListEditItem Text="ultima zi din saptamana" Value="ultima zi din saptamana" />
+                                                                        <dx:ListEditItem Text="prima zi din luna" Value="prima zi din luna" />
+                                                                        <dx:ListEditItem Text="ultima zi din luna" Value="ultima zi din luna" />
+                                                                        <dx:ListEditItem Text="prima zi din an" Value="prima zi din an" />
+                                                                        <dx:ListEditItem Text="ultima zi din an" Value="ultima zi din an" />
+                                                                    </Items>
+                                                                    <ClientSideEvents SelectedIndexChanged="cmbValData_SelectedIndexChanged_Client" />
+                                                                </dx:ASPxComboBox>
+                                                            </td>
+                                                            <td>
+                                                                <dx:ASPxSpinEdit ID="txtZile" ClientInstanceName="txtZile" runat="server" Width="50px" MinValue="-200" MaxValue="200" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </td>
                                                 <td>
-                                                    <div class="div_hor" style="margin-bottom:0;">
-                                                        <dx:ASPxTextBox ID="txtVal2" ClientInstanceName="txtVal2" runat="server" Width="120px" />
-                                                        <dx:ASPxComboBox ID="cmbVal2" runat="server" ClientInstanceName="cmbVal2" AutoPostBack="false" CssClass="cmbTip" Width="18px" ValueField="Id" ValueType="System.Int32" TextField="Denumire" >
-                                                            <ClientSideEvents SelectedIndexChanged="cmbVal2_SelectedIndexChanged_Client" />
-                                                        </dx:ASPxComboBox>
-                                                        <dx:ASPxComboBox ID="cmbValData2" ClientInstanceName="cmbValData2" runat="server" AutoPostBack="false" CssClass="cmbTip" Width="18px">
-                                                            <Items>
-                                                                <dx:ListEditItem Text="ieri" Value="ieri" />
-                                                                <dx:ListEditItem Text="astazi" Value="astazi" />
-                                                                <dx:ListEditItem Text="maine" Value="maine" />
-                                                                <dx:ListEditItem Text="prima zi din saptamana" Value="prima zi din saptamana" />
-                                                                <dx:ListEditItem Text="ultima zi din saptamana" Value="ultima zi din saptamana" />
-                                                                <dx:ListEditItem Text="prima zi din luna" Value="prima zi din luna" />
-                                                                <dx:ListEditItem Text="ultima zi din luna" Value="ultima zi din luna" />
-                                                                <dx:ListEditItem Text="prima zi din an" Value="prima zi din an" />
-                                                                <dx:ListEditItem Text="ultima zi din an" Value="ultima zi din an" />
-                                                            </Items>
-                                                            <ClientSideEvents SelectedIndexChanged="cmbValData2_SelectedIndexChanged_Client" />
-                                                        </dx:ASPxComboBox>
-                                                        <dx:ASPxSpinEdit ID="txtZile2" ClientInstanceName="txtZile2" runat="server" Width="40px" MinValue="-200" MaxValue="200" />
-                                                    </div>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <dx:ASPxTextBox ID="txtVal2" ClientInstanceName="txtVal2" runat="server" Width="120px" />
+                                                            </td>
+                                                            <td>
+                                                                <dx:ASPxComboBox ID="cmbVal2" ClientInstanceName="cmbVal2" runat="server" AutoPostBack="false" Width="18px" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" TextFormatString="{0}" EnableCallbackMode="false" CssClass="cmbTip" >
+                                                                    <ClientSideEvents SelectedIndexChanged="cmbVal2_SelectedIndexChanged_Client" />
+                                                                    <Columns>
+                                                                        <dx:ListBoxColumn FieldName="Denumire" Caption="Camp"  />
+                                                                        <dx:ListBoxColumn FieldName="TipData" Caption="Tip data" />
+                                                                        <dx:ListBoxColumn FieldName="Id" Visible="false"/>
+                                                                    </Columns>
+                                                                </dx:ASPxComboBox>
+                                                            </td>
+                                                            <td>
+                                                                <dx:ASPxComboBox ID="cmbValData2" ClientInstanceName="cmbValData2" runat="server" AutoPostBack="false" CssClass="cmbTip" Width="18px">
+                                                                    <Items>
+                                                                        <dx:ListEditItem Text="ieri" Value="ieri" />
+                                                                        <dx:ListEditItem Text="astazi" Value="astazi" />
+                                                                        <dx:ListEditItem Text="maine" Value="maine" />
+                                                                        <dx:ListEditItem Text="prima zi din saptamana" Value="prima zi din saptamana" />
+                                                                        <dx:ListEditItem Text="ultima zi din saptamana" Value="ultima zi din saptamana" />
+                                                                        <dx:ListEditItem Text="prima zi din luna" Value="prima zi din luna" />
+                                                                        <dx:ListEditItem Text="ultima zi din luna" Value="ultima zi din luna" />
+                                                                        <dx:ListEditItem Text="prima zi din an" Value="prima zi din an" />
+                                                                        <dx:ListEditItem Text="ultima zi din an" Value="ultima zi din an" />
+                                                                    </Items>
+                                                                    <ClientSideEvents SelectedIndexChanged="cmbValData2_SelectedIndexChanged_Client" />
+                                                                </dx:ASPxComboBox>
+                                                            </td>
+                                                            <td>
+                                                                <dx:ASPxSpinEdit ID="txtZile2" ClientInstanceName="txtZile2" runat="server" Width="40px" MinValue="-200" MaxValue="200" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </td>
                                             </tr>
                                         </table>

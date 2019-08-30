@@ -776,7 +776,8 @@
                         <td colspan="2">
                             <dx:ASPxHiddenField ID="ccValori" runat="server" ClientInstanceName="ccValori" ClientIDMode="Static"></dx:ASPxHiddenField>
                             <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" Visible="true" 
-                                OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" >
+                                OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" 
+                                OnParseValue="grCC_ParseValue" OnCellEditorInitialize="grCC_CellEditorInitialize" OnCustomErrorText="grCC_CustomErrorText" >
                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                 <Settings ShowFilterRow="False" ShowColumnHeaders="true" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" VerticalScrollBarStyle="VirtualSmooth" VerticalScrollableHeight="130" />
                                 <SettingsSearchPanel Visible="false" />
@@ -840,6 +841,8 @@
                                         </PropertiesTimeEdit>
                                     </dx:GridViewDataTimeEditColumn>
 
+
+
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre1" Name="NrOre1" Caption="NrOre1" Width="100px" Visible="false" VisibleIndex="9" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre2" Name="NrOre2" Caption="NrOre2" Width="100px" Visible="false" VisibleIndex="10" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre3" Name="NrOre3" Caption="NrOre3" Width="100px" Visible="false" VisibleIndex="11" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
@@ -850,6 +853,8 @@
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre8" Name="NrOre8" Caption="NrOre8" Width="100px" Visible="false" VisibleIndex="16" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre9" Name="NrOre9" Caption="NrOre9" Width="100px" Visible="false" VisibleIndex="17" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
                                     <dx:GridViewDataSpinEditColumn FieldName="NrOre10" Name="NrOre10" Caption="NrOre10" Width="100px" Visible="false" VisibleIndex="18" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+
+
 
                                     <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                                     <dx:GridViewDataTextColumn FieldName="Ziua" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

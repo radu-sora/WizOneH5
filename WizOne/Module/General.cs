@@ -22,6 +22,8 @@ using System.Text;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
 using System.Web.UI.HtmlControls;
+using System.IdentityModel.Services;
+using System.Web.Configuration;
 
 namespace WizOne.Module
 {
@@ -8309,6 +8311,24 @@ namespace WizOne.Module
 
             return rez;
         }
+
+        public static void SignOut()
+        {
+            try
+            {
+                //WSFederationAuthenticationModule.FederatedSignOut(new Uri("https://adfs.wizrom06.wizrom.ro/adfs/ls/"), new Uri("https://wizrom06prg02.wizrom06.wizrom.ro/WizOne/"));
+                //WebConfigurationManager.AppSettings["configFile"]
+                WSFederationAuthenticationModule.FederatedSignOut(new Uri(WebConfigurationManager.AppSettings["ida:Issuer"]), new Uri(WebConfigurationManager.AppSettings["ADFSRealm"]));
+                FederatedAuthentication.SessionAuthenticationModule.DeleteSessionTokenCookie();
+
+                //FederatedAuthentication.WSFederationAuthenticationModule.CreateSignInRequest("WizONeH5", WebConfigurationManager.AppSettings["ADFSRealm"], true);
+            }
+            catch (Exception)
+            {
+                FederatedAuthentication.SessionAuthenticationModule.DeleteSessionTokenCookie();
+            }
+        }
+
 
     }
 }

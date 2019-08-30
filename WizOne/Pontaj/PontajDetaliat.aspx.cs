@@ -3569,11 +3569,21 @@ namespace WizOne.Pontaj
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
                 grCC.DataSource = dtCC;
                 grCC.DataBind();
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ex.Message);
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                e.Handled = true;
+
+
+                //if (ex.Message.IndexOf("is constrained to be unique") >= 0)
+                //{
+                //    e.Handled = true;
+                //    grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Adaugati valori duplicate in baza de date");
+                //}
             }
         }
 
@@ -3592,7 +3602,14 @@ namespace WizOne.Pontaj
                         strCmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + NrOre{i}/1440 AS ""NrOre{i}_Tmp"" ";
                 }
 
-                dt = General.IncarcaDT($@"SELECT * {strCmp} 
+                //dt = General.IncarcaDT($@"SELECT A.F10003, A.""Ziua"", 
+                //        COALESCE(A.F06204,-99) AS F06204, A.""IdProiect"",A.""IdSubProiect"", A.""IdActivitate"", A.""IdDept"", A.""De"", A.""La"", 
+                //        CONVERT(nvarchar(10),NrOre1 / 60) + ':' + CONVERT(nvarchar(10),NrOre1 % 60) AS ""NrOre1"",A.""NrOre2"",A.""NrOre3"",A.""NrOre4"",A.""NrOre5"",A.""NrOre6"",A.""NrOre7"",A.""NrOre8"",A.""NrOre9"",A.""NrOre10"",A.""IdStare"", 
+                //        A.USER_NO, A.TIME, A.""IdAuto""
+                //        FROM ""Ptj_CC"" A 
+                //        WHERE A.F10003={f10003} AND A.""Ziua""={ziua}", null);
+
+                dt = General.IncarcaDT($@"SELECT * {strCmp}
                         FROM ""Ptj_CC"" A 
                         WHERE A.F10003={f10003} AND A.""Ziua""={ziua}", null);
 
@@ -3637,5 +3654,54 @@ namespace WizOne.Pontaj
             }
         }
 
+        protected void grCC_ParseValue(object sender, ASPxParseValueEventArgs e)
+        {
+            //if (e.FieldName == "NrOre1")
+            //    e.Value = TimeSpanFromString(e.Value);
+        }
+
+        protected void grCC_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            //if (e.Column.FieldName == "NrOre1")
+            //{
+            //    e.Editor.Value = StringFromTimeSpan(e.Value);
+            //    DataTable dt = grCC.DataSource as DataTable;
+
+            //}
+        }
+
+        private Int32 TimeSpanFromString(Object value)
+        {
+            if (value == null || String.IsNullOrEmpty((String)value))
+                return 0;
+
+            return int.Parse((String)value);
+        }
+
+        private String StringFromTimeSpan(Object value)
+        {
+            if (value == null)
+                return String.Empty;
+
+            int nrOre = (int)value;
+
+            return (nrOre / 60).ToString() + ":" + (nrOre % 60).ToString();
+
+            //String str = nrOre.ToString(@"hh\:mm");
+
+            //if (nrOre < 0)
+            //    return String.Format("-0.{0}", str);
+            //else
+            //    return String.Format("0.{0}", str);
+
+
+        }
+
+        protected void grCC_CustomErrorText(object sender, ASPxGridViewCustomErrorTextEventArgs e)
+        {
+            var ert = e.ErrorText;
+            var edc = e.Exception;
+
+        }
     }
 }

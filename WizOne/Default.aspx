@@ -22,7 +22,9 @@
     <form id="form1" runat="server">
 
         <div class="outer">
-            <span id="lblRaspuns" runat="server" visible="false" class="inner" style="text-align:center; margin-top:70px;"></span>
+            <div id="divAd" style="text-align:center;">
+                <span id="lblRaspuns" runat="server" visible="false" class="inner" style="text-align:center; margin-top:70px;"></span>
+            </div>
             <div id="divRas" runat="server">
                 <div class="inner">
                     <span id="lblPan1" runat="server">Utilizator</span>

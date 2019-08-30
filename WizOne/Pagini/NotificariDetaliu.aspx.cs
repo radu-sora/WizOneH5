@@ -1090,9 +1090,13 @@ namespace WizOne.Pagini
                 {
                     cmbCol.DataSource = dtCmp;
                     cmbCol.DataBindItems();
-                    cmbCol.Value = obj[1];
+                    cmbCol.Text = General.Nz(obj[1], "").ToString();
 
-                    this.ClientScript.RegisterStartupScript(this.GetType(), "cmbCol_SelChg", "cmbCol_SelectedIndexChanged_Client();");
+                    DataRow[] arr = dtCmp.Select("Denumire='" + cmbCol.Text + "'");
+                    if (arr.Count() > 0)
+                        cmbCol.Value = Convert.ToInt32(General.Nz(arr[0]["Id"], -1));
+
+                    //this.ClientScript.RegisterStartupScript(this.GetType(), "cmbCol_SelChg", "cmbCol_SelectedIndexChanged_Client();");
                 }
 
                 ASPxComboBox cmbVal = grDateCond.FindEditFormTemplateControl("cmbVal") as ASPxComboBox;
@@ -1100,7 +1104,11 @@ namespace WizOne.Pagini
                 {
                     cmbVal.DataSource = dtCmp;
                     cmbVal.DataBind();
-                    cmbVal.Value = obj[1];
+                    cmbVal.Text = General.Nz(obj[3], "").ToString();
+
+                    DataRow[] arr = dtCmp.Select("Denumire='" + cmbVal.Text + "'");
+                    if (arr.Count() > 0)
+                        cmbVal.Value = Convert.ToInt32(General.Nz(arr[0]["Id"], -1));
                 }
 
                 ASPxComboBox cmbVal2 = grDateCond.FindEditFormTemplateControl("cmbVal2") as ASPxComboBox;
@@ -1108,7 +1116,11 @@ namespace WizOne.Pagini
                 {
                     cmbVal2.DataSource = dtCmp;
                     cmbVal2.DataBind();
-                    cmbVal2.Value = obj[1];
+                    cmbVal2.Text = General.Nz(obj[4], "").ToString();
+
+                    DataRow[] arr = dtCmp.Select("Denumire='" + cmbVal2.Text + "'");
+                    if (arr.Count() > 0)
+                        cmbVal2.Value = Convert.ToInt32(General.Nz(arr[0]["Id"], -1));
                 }
 
                 ASPxComboBox cmbCond = grDateCond.FindEditFormTemplateControl("cmbCond") as ASPxComboBox;

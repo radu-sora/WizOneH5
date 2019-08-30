@@ -26,7 +26,7 @@ namespace WizOne
         //static int nrIncercari = 0;
         //int paramNrIncercari = 3;
         static string arrIncercari = "";
-        string txtRas = "";
+        
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -94,18 +94,23 @@ namespace WizOne
                                     //var q4 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
                                     //var q5 = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault();
 
+
+                                    //<asp:LinkButton ID="lnkOut" runat="server" OnClick="lnkOut_Click" Text="Go To Login Page" Visible="false"></asp:LinkButton>
+
+
                                     string usrTMP = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Upn).Select(c => c.Value).SingleOrDefault();
                                     int poz = usrTMP.IndexOf("@");
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
                                     //MessageBox.Show(usrTMP);
-                                    Verifica(usrTMP, "");
-                                    
-                                    //if (General.Nz(Session["SecApp"],"").ToString() != "OK")
-                                    //{
-                                    //    divRas.Visible = false;
-                                    //    lblRaspuns.Visible = true;
-                                    //    lblRaspuns.InnerText = "Utilizator inexistent";
-                                    //}
+                                    string txtRas = Verifica(usrTMP, "", false);
+
+                                    if (General.Nz(Session["SecApp"], "").ToString() != "OK")
+                                    {
+                                        divRas.Visible = false;
+                                        lblRaspuns.Visible = true;
+                                        //lnkOut.Visible = true;
+                                        lblRaspuns.InnerText = txtRas;
+                                    }
                                 }
                             }
                         }
@@ -113,12 +118,13 @@ namespace WizOne
                     //case "1":
                     //    {
                     //        string usrTMP = "asdasda";
-                    //        Verifica(usrTMP, "");
+                    //        string txtRas = Verifica(usrTMP, "", false);
 
                     //        if (General.Nz(Session["SecApp"], "").ToString() != "OK")
                     //        {
                     //            divRas.Visible = false;
                     //            lblRaspuns.Visible = true;
+                    //            lnkOut.Visible = true;
                     //            lblRaspuns.InnerText = txtRas;
                     //        }
                     //    }
@@ -247,9 +253,9 @@ namespace WizOne
             }
         }
 
-        private bool Blocheaza(string utilizator)
+        private string Blocheaza(string utilizator)
         {
-            bool rasp = false;
+            string txtRas = "";
 
             try
             {
@@ -260,18 +266,18 @@ namespace WizOne
                     bool esteBlocat = BlocheazaUser(utilizator);
                     if (esteBlocat)
                     {
-                        MessageBox.Show("Contul este blocat ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                        //MessageBox.Show("Contul este blocat ! Contactati administratorul de sistem!", MessageBox.icoWarning);
                         txtRas = "Contul este blocat ! Contactati administratorul de sistem!";
                     }
                     else
                     {
-                        MessageBox.Show("Utilizator/Parola gresita ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                        //MessageBox.Show("Utilizator/Parola gresita ! Contactati administratorul de sistem!", MessageBox.icoWarning);
                         txtRas = "Utilizator/Parola gresita ! Contactati administratorul de sistem!";
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Utilizator/Parola gresita ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                    //MessageBox.Show("Utilizator/Parola gresita ! Contactati administratorul de sistem!", MessageBox.icoWarning);
                     txtRas = "Utilizator/Parola gresita ! Contactati administratorul de sistem!";
                 }
             }
@@ -281,8 +287,45 @@ namespace WizOne
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
-            return rasp;
+            return txtRas;
         }
+
+        //private bool Blocheaza(string utilizator)
+        //{
+        //    bool rasp = false;
+
+        //    try
+        //    {
+        //        arrIncercari += utilizator + ";";
+        //        //if (nrIncercari >= Convert.ToInt32(Dami.ValoareParam("NrIncercari", "3")))
+        //        if (Regex.Matches(arrIncercari, utilizator + ";").Count >= Convert.ToInt32(Dami.ValoareParam("Parola_NrIncercSuccNer", "3")))
+        //        {
+        //            bool esteBlocat = BlocheazaUser(utilizator);
+        //            if (esteBlocat)
+        //            {
+        //                MessageBox.Show("Contul este blocat ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+        //                txtRas = "Contul este blocat ! Contactati administratorul de sistem!";
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show("Utilizator/Parola gresita ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+        //                txtRas = "Utilizator/Parola gresita ! Contactati administratorul de sistem!";
+        //            }
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Utilizator/Parola gresita ! Contactati administratorul de sistem!", MessageBox.icoWarning);
+        //            txtRas = "Utilizator/Parola gresita ! Contactati administratorul de sistem!";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return rasp;
+        //}
 
         private Boolean BlocheazaUser(string utilizator)
         {
@@ -335,38 +378,40 @@ namespace WizOne
             return esteBlocat;
         }
 
-        protected void Verifica(string utilizator, string parola)
+        protected string Verifica(string utilizator, string parola, bool cuMesaj = true)
         {
+            string txtRas = "";
+
             try
             {
                 string rasp = VerificaUser(utilizator, parola);
                 if (rasp.Length > 1)
                 {
-                    Session["IdLimba"] = rasp.Substring(rasp.Length-2, 2);                    
+                    Session["IdLimba"] = rasp.Substring(rasp.Length - 2, 2);
                     //rasp = rasp.Substring(0, 1);
-                    rasp = rasp.ToUpper().Replace(General.Nz(Session["IdLimba"],"RO").ToString(), "");
+                    rasp = rasp.ToUpper().Replace(General.Nz(Session["IdLimba"], "RO").ToString(), "");
                 }
 
                 switch (Convert.ToInt32(rasp))
                 {
                     case -1:                     //nume Domeniu nu este configurat
                         General.InregistreazaLogarea(0, txtPan1.Text, "Numele de domeniu nu este configurat");
-                        MessageBox.Show("Numele de domeniu nu este configurat !", MessageBox.icoWarning);
+                        //MessageBox.Show("Numele de domeniu nu este configurat !", MessageBox.icoWarning);
                         txtRas = "Numele de domeniu nu este configurat !";
                         break;
                     case 0:                     //user inexistent
                         General.InregistreazaLogarea(0, txtPan1.Text, "Utilizator inexistent");
-                        MessageBox.Show("Utilizator inexistent! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                        //MessageBox.Show("Utilizator inexistent! Contactati administratorul de sistem!", MessageBox.icoWarning);
                         txtRas = "Utilizator inexistent! Contactati administratorul de sistem!";
                         break;
                     case 1:                     //user existent parola eronata
                         General.InregistreazaLogarea(0, txtPan1.Text, "Introducerea unei parole gresite");
                         //nrIncercari++;
-                        Blocheaza(utilizator);
+                        txtRas = Blocheaza(utilizator);
                         break;
                     case 2:                     //valid si blocat
                         General.InregistreazaLogarea(0, txtPan1.Text, "Cont blocat");
-                        MessageBox.Show("Contul este blocat ! Contactati administratorul de sistem", MessageBox.icoWarning);
+                        //MessageBox.Show("Contul este blocat ! Contactati administratorul de sistem", MessageBox.icoWarning);
                         txtRas = "Contul este blocat ! Contactati administratorul de sistem";
                         break;
                     case 3:                     //valid si activ
@@ -422,7 +467,6 @@ namespace WizOne
 
                         strSql = string.Format(strSql, op, exp);
 
-                        //DataRow drUsr = General.IncarcaDR(strSql, new string[] { utilizator });
                         DataRow drUsr = General.IncarcaDR(strSql, null);
                         if (drUsr != null)
                         {
@@ -433,44 +477,23 @@ namespace WizOne
                             Session["User_Marca"] = Convert.ToInt32(General.Nz(drUsr["Marca"], -99));
                             Session["User_IdDept"] = Convert.ToInt32(General.Nz(drUsr["IdDept"], -99));
                             Session["User_Dept"] = drUsr["Dept"].ToString();
-                            Session["User_NumeComplet"] = General.Nz(drUsr["Nume"],"").ToString() + " " + General.Nz(drUsr["Prenume"],"").ToString();
+                            Session["User_NumeComplet"] = General.Nz(drUsr["Nume"], "").ToString() + " " + General.Nz(drUsr["Prenume"], "").ToString();
                             Session["User_CNP"] = drUsr["CNP"].ToString();
                             Session["EsteAdmin"] = Convert.ToInt32(General.Nz(drUsr["EsteAdmin"], 0));
-                            Session["EsteInGrup99"]= Convert.ToInt32(General.Nz(drUsr["EsteInGrup99"], 0));
+                            Session["EsteInGrup99"] = Convert.ToInt32(General.Nz(drUsr["EsteInGrup99"], 0));
                             Session["ParolaComplexa"] = Convert.ToInt32(General.Nz(drUsr["ParolaComplexa"], 0));
-                            Session["PrimaIntrare"] = General.Nz(drUsr["F70105"],0);
+                            Session["PrimaIntrare"] = General.Nz(drUsr["F70105"], 0);
 
                             General.SetTheme();
 
                             string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
                             if (tipVerif == "") tipVerif = "1";
 
-                            //string redirectpage = string.Empty;
-
-                            //if (Dami.ValoareParam("Captcha") == "1")
-                            //    redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
-                            //else
-                            //    redirectpage = "Pagini/SchimbaParola.aspx";
-
-
-                            //switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
-                            //{
-                            //    case 16:
-                            //    case 26:
-                            //        redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
-                            //        //redirectpage = "Pagini/SchimbaParola.aspx";
-                            //        break;
-                            //    default:
-                            //        redirectpage = "Pagini/SchimbaParola.aspx";
-                            //        break;
-                            //}
-
                             //Radu 21.03.2018 - daca tipVerif este 2 sau 4, nu mai trebuie sa verificam validitatea parolei
                             if (Convert.ToInt32(General.Nz(drUsr["ResetareParola"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
                             {
                                 General.InregistreazaLogarea(1, txtPan1.Text);
                                 Session["SecApp"] = "OK";
-                                //Response.Redirect(redirectpage, false);
                                 Response.Redirect("Pagini/SchimbaParola.aspx", false);
                             }
                             else
@@ -478,46 +501,27 @@ namespace WizOne
                                 if (Convert.ToInt32(General.Nz(drUsr["ParolaExpirata"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
                                 {
                                     General.InregistreazaLogarea(0, txtPan1.Text, "Parola expirata");
-                                    MessageBox.Show("Parola a expirat", MessageBox.icoWarning,"", "Pagini/SchimbaParola.aspx");
+                                    //MessageBox.Show("Parola a expirat", MessageBox.icoWarning, "", "Pagini/SchimbaParola.aspx");
+                                    txtRas = "Parola a expirat";
                                 }
                                 else
                                 {
                                     General.InregistreazaLogarea(1, txtPan1.Text);
                                     Session["SecApp"] = "OK";
-                                    //Response.Redirect(GetRouteUrl("MainPage", null), false);
                                     if (Dami.ValoareParam("2FA", "") == "1")
                                     {
                                         string ras = General.CreazaCod2FA();
                                         if (ras != "")
-                                            MessageBox.Show(ras, MessageBox.icoError, "");
+                                        {
+                                            //MessageBox.Show(ras, MessageBox.icoError, "");
+                                            txtRas = ras;
+                                        }
                                         else
                                             Response.Redirect("~/Pagini/CodConfirmare.aspx", false);
                                     }
                                     else
                                     {
-                                        //if (Dami.ValoareParam("Captcha") == "1")
-                                        //{
-                                        //    Session["PrevPage"] = "~/Pagini/Default.aspx";
-                                        //    Session["NextPage"] = "~/Pagini/MainPage.aspx";
-                                        //    Response.Redirect("~/Pagini/Captcha.aspx", false);
-                                        //}
-                                        //else
-                                            Response.Redirect("~/Pagini/MainPage.aspx", false);
-
-                                        //switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
-                                        //{
-                                        //    case 16:
-                                        //    case 26:
-                                        //        Session["PrevPage"] = "~/Pagini/Default.aspx";
-                                        //        Session["NextPage"] = "~/Pagini/MainPage.aspx";
-                                        //        Response.Redirect("~/Pagini/Captcha.aspx", false);
-                                        //        //Response.Redirect("~/Pagini/MainPage.aspx", false);
-                                        //        break;
-                                        //    default:
-                                        //        Response.Redirect("~/Pagini/MainPage.aspx", false);
-                                        //        break;
-                                        //}
-
+                                        Response.Redirect("~/Pagini/MainPage.aspx", false);
                                     }
                                 }
                             }
@@ -525,27 +529,246 @@ namespace WizOne
                         else
                         {
                             General.InregistreazaLogarea(0, txtPan1.Text, "Utilizator inexistent in aplicatie");
-                            MessageBox.Show("Utilizator inexistent in aplicatie! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                            //MessageBox.Show("Utilizator inexistent in aplicatie! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                            txtRas = "Utilizator inexistent in aplicatie! Contactati administratorul de sistem!";
                         }
                         break;
                     case 4:                     //este inactivat in AD
                         General.InregistreazaLogarea(0, txtPan1.Text, "Cont inactiv (inactivat in AD)");
-                        MessageBox.Show("Contul este inactivat ! Contactati administratorul de sistem.", MessageBox.icoWarning);
+                        //MessageBox.Show("Contul este inactivat ! Contactati administratorul de sistem.", MessageBox.icoWarning);
                         txtRas = "Contul este inactivat ! Contactati administratorul de sistem.";
                         break;
                     case 5:
                         General.InregistreazaLogarea(0, txtPan1.Text, "Cont suspendat sau inactiv");
-                        MessageBox.Show("Contul este suspendat sau inactiv ! Contactati administratorul de sistem.", MessageBox.icoWarning);
+                        //MessageBox.Show("Contul este suspendat sau inactiv ! Contactati administratorul de sistem.", MessageBox.icoWarning);
                         txtRas = "Contul este suspendat sau inactiv ! Contactati administratorul de sistem.";
                         break;
                 }
+
+                if (txtRas != "" && cuMesaj)
+                    MessageBox.Show(txtRas, MessageBox.icoWarning);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+
+            return txtRas;
         }
+
+
+        //protected void Verifica(string utilizator, string parola)
+        //{
+        //    try
+        //    {
+        //        string rasp = VerificaUser(utilizator, parola);
+        //        if (rasp.Length > 1)
+        //        {
+        //            Session["IdLimba"] = rasp.Substring(rasp.Length-2, 2);                    
+        //            //rasp = rasp.Substring(0, 1);
+        //            rasp = rasp.ToUpper().Replace(General.Nz(Session["IdLimba"],"RO").ToString(), "");
+        //        }
+
+        //        switch (Convert.ToInt32(rasp))
+        //        {
+        //            case -1:                     //nume Domeniu nu este configurat
+        //                General.InregistreazaLogarea(0, txtPan1.Text, "Numele de domeniu nu este configurat");
+        //                MessageBox.Show("Numele de domeniu nu este configurat !", MessageBox.icoWarning);
+        //                txtRas = "Numele de domeniu nu este configurat !";
+        //                break;
+        //            case 0:                     //user inexistent
+        //                General.InregistreazaLogarea(0, txtPan1.Text, "Utilizator inexistent");
+        //                MessageBox.Show("Utilizator inexistent! Contactati administratorul de sistem!", MessageBox.icoWarning);
+        //                txtRas = "Utilizator inexistent! Contactati administratorul de sistem!";
+        //                break;
+        //            case 1:                     //user existent parola eronata
+        //                General.InregistreazaLogarea(0, txtPan1.Text, "Introducerea unei parole gresite");
+        //                //nrIncercari++;
+        //                Blocheaza(utilizator);
+        //                break;
+        //            case 2:                     //valid si blocat
+        //                General.InregistreazaLogarea(0, txtPan1.Text, "Cont blocat");
+        //                MessageBox.Show("Contul este blocat ! Contactati administratorul de sistem", MessageBox.icoWarning);
+        //                txtRas = "Contul este blocat ! Contactati administratorul de sistem";
+        //                break;
+        //            case 3:                     //valid si activ
+        //                string op = "+";
+        //                //string exp = @"CASE WHEN (F70111=1 AND DATEADD(d,f70121,f70122) < GETDATE()) THEN 1 ELSE 0 END AS ""ParolaExpirata"" ";
+        //                string exp = $@"CASE WHEN DATEADD(d,COALESCE((SELECT CASE WHEN COALESCE(""Valoare"",99999) = 0 THEN 99999 ELSE COALESCE(""Valoare"",99999) END FROM ""tblParametrii"" WHERE ""Nume""='Parola_VechimeMaxima'),30),(SELECT TOP 1 ""Data"" FROM ""ParoleUtilizatorIstoric"" WHERE ""IdUser""=A.F70102 ORDER BY ""Data"" Desc)) < GetDate() THEN 1 ELSE 0 END AS ""ParolaExpirata"" ";
+        //                if (Constante.tipBD == 2)
+        //                {
+        //                    op = "||";
+        //                    //exp = @"CASE WHEN (F70111=1 AND (f70121+f70122) < SYSDATE) THEN 1 ELSE 0 END AS ""ParolaExpirata"" ";
+        //                    exp = $@"CASE WHEN (COALESCE((SELECT CASE WHEN COALESCE(TO_NUMBER(""Valoare""),30) = 0 THEN 99999 ELSE COALESCE(TO_NUMBER(""Valoare""),99999) END FROM ""tblParametrii"" WHERE ""Nume""='Parola_VechimeMaxima'),30) + d.""Data"") < SYSDATE THEN 1 ELSE 0 END AS ""ParolaExpirata"" ";
+        //                }
+
+        //                string sql_G = @"SELECT CONVERT(nvarchar(10), Camp) + ' ;' + CONVERT(nvarchar(10), Camp) + ',;' + CONVERT(nvarchar(10), Camp) + '+;' + CONVERT(nvarchar(10), Camp) + '||;'   FROM tblCampSec WHERE COALESCE(Criptat,0)=1 FOR XML PATH ('')";
+        //                if (Constante.tipBD == 2)
+        //                    sql_G = @"SELECT LISTAGG(""Camp"" , ' ;' ) WITHIN GROUP (ORDER by ""Camp"")   FROM ""tblCampSec"" WHERE COALESCE(""Criptat"",0)=1 ";
+        //                Constante.campuriGDPR = (General.ExecutaScalar(sql_G, null) ?? "").ToString();
+
+        //                string sql_G_S = @"SELECT CONVERT(nvarchar(10), Camp) + ';'  FROM tblCampSec WHERE COALESCE(Criptat,0)=1 FOR XML PATH ('')";
+        //                if (Constante.tipBD == 2)
+        //                    sql_G_S = @"SELECT LISTAGG(""Camp"" , ';') WITHIN GROUP (ORDER by ""Camp"") FROM ""tblCampSec"" WHERE COALESCE(""Criptat"",0)=1";
+        //                Constante.campuriGDPR_Strip = (General.ExecutaScalar(sql_G_S, null) ?? "").ToString();
+
+
+        //                //CASE WHEN COALESCE(b.F10008,'') = '' THEN a.""NumeComplet"" ELSE (b.F10008 {0} ' ' {0} b.F10009) END AS ""NumeComplet"",
+        //                string strSql = @"SELECT a.F70102 AS ""UtilizatorId"", a.F70104 AS ""Utilizator"", COALESCE(a.""F70113"",0) AS ""ResetareParola"", F70112 AS ""ParolaComplexa"",
+        //                            CRP.F10003 AS ""Marca"", CRP.F10007 AS ""IdDept"",C.F00608 AS ""Dept"",CRP.F10017 AS CNP, A.F70105,
+        //                            CRP.F10008 As ""Nume"", CRP.F10009 AS ""Prenume"", CRP.F10022 AS F10022,
+        //                            (SELECT MAX(""Tema"") FROM ""tblConfigUsers"" WHERE F70102=A.F70102) AS ""Tema"",
+        //                            CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=0)=0 THEN 0 ELSE 1 END AS ""EsteAdmin"",
+        //                            CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=99)=0 THEN 0 ELSE 1 END AS ""EsteInGrup99"",
+        //                            {1}
+        //                            FROM USERS A
+        //                            LEFT JOIN F100 CRP ON A.F10003=CRP.F10003
+        //                            LEFT JOIN F006 C ON CRP.F10007=C.F00607
+        //                            WHERE UPPER(A.F70104)='" + utilizator.ToUpper() + "'";
+
+        //                if (Constante.tipBD == 2)
+        //                {
+        //                    strSql = @"SELECT a.F70102 AS ""UtilizatorId"", a.F70104 AS ""Utilizator"", COALESCE(a.""F70113"",0) AS ""ResetareParola"", F70112 AS ""ParolaComplexa"",
+        //                            CRP.F10003 AS ""Marca"", CRP.F10007 AS ""IdDept"",C.F00608 AS ""Dept"",CRP.F10017 AS CNP, A.F70105,
+        //                            CRP.F10008 As ""Nume"", CRP.F10009 AS ""Prenume"", CRP.F10022 AS F10022,
+        //                            (SELECT MAX(""Tema"") FROM ""tblConfigUsers"" WHERE F70102=A.F70102) AS ""Tema"",
+        //                            CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=0)=0 THEN 0 ELSE 1 END AS ""EsteAdmin"",
+        //                            CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=99)=0 THEN 0 ELSE 1 END AS ""EsteInGrup99"",
+        //                            {1}
+        //                            FROM USERS A
+        //                            LEFT JOIN F100 CRP ON A.F10003=CRP.F10003
+        //                            LEFT JOIN F006 C ON CRP.F10007=C.F00607
+        //                            left JOIN (SELECT ""IdUser"", ""Data"" FROM ""ParoleUtilizatorIstoric"" WHERE rownum = 1  ORDER BY ""Data"" Desc) d on d.""IdUser""=A.F70102 
+        //                            WHERE UPPER(A.F70104)='" + utilizator.ToUpper() + "'";
+        //                }
+
+        //                strSql = string.Format(strSql, op, exp);
+
+        //                //DataRow drUsr = General.IncarcaDR(strSql, new string[] { utilizator });
+        //                DataRow drUsr = General.IncarcaDR(strSql, null);
+        //                if (drUsr != null)
+        //                {
+        //                    var ert = General.Nz(drUsr["Nume"], "").ToString() + " " + General.Nz(drUsr["Prenume"], "").ToString();
+
+        //                    Session["UserId"] = Convert.ToInt32(drUsr["UtilizatorId"]);
+        //                    Session["User"] = drUsr["Utilizator"].ToString();
+        //                    Session["User_Marca"] = Convert.ToInt32(General.Nz(drUsr["Marca"], -99));
+        //                    Session["User_IdDept"] = Convert.ToInt32(General.Nz(drUsr["IdDept"], -99));
+        //                    Session["User_Dept"] = drUsr["Dept"].ToString();
+        //                    Session["User_NumeComplet"] = General.Nz(drUsr["Nume"],"").ToString() + " " + General.Nz(drUsr["Prenume"],"").ToString();
+        //                    Session["User_CNP"] = drUsr["CNP"].ToString();
+        //                    Session["EsteAdmin"] = Convert.ToInt32(General.Nz(drUsr["EsteAdmin"], 0));
+        //                    Session["EsteInGrup99"]= Convert.ToInt32(General.Nz(drUsr["EsteInGrup99"], 0));
+        //                    Session["ParolaComplexa"] = Convert.ToInt32(General.Nz(drUsr["ParolaComplexa"], 0));
+        //                    Session["PrimaIntrare"] = General.Nz(drUsr["F70105"],0);
+
+        //                    General.SetTheme();
+
+        //                    string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
+        //                    if (tipVerif == "") tipVerif = "1";
+
+        //                    //string redirectpage = string.Empty;
+
+        //                    //if (Dami.ValoareParam("Captcha") == "1")
+        //                    //    redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
+        //                    //else
+        //                    //    redirectpage = "Pagini/SchimbaParola.aspx";
+
+
+        //                    //switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
+        //                    //{
+        //                    //    case 16:
+        //                    //    case 26:
+        //                    //        redirectpage = "Pagini/SchimbaParolaCaptcha.aspx";
+        //                    //        //redirectpage = "Pagini/SchimbaParola.aspx";
+        //                    //        break;
+        //                    //    default:
+        //                    //        redirectpage = "Pagini/SchimbaParola.aspx";
+        //                    //        break;
+        //                    //}
+
+        //                    //Radu 21.03.2018 - daca tipVerif este 2 sau 4, nu mai trebuie sa verificam validitatea parolei
+        //                    if (Convert.ToInt32(General.Nz(drUsr["ResetareParola"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
+        //                    {
+        //                        General.InregistreazaLogarea(1, txtPan1.Text);
+        //                        Session["SecApp"] = "OK";
+        //                        //Response.Redirect(redirectpage, false);
+        //                        Response.Redirect("Pagini/SchimbaParola.aspx", false);
+        //                    }
+        //                    else
+        //                    {
+        //                        if (Convert.ToInt32(General.Nz(drUsr["ParolaExpirata"], 0)) == 1 && (tipVerif == "1" || tipVerif == "3"))
+        //                        {
+        //                            General.InregistreazaLogarea(0, txtPan1.Text, "Parola expirata");
+        //                            MessageBox.Show("Parola a expirat", MessageBox.icoWarning,"", "Pagini/SchimbaParola.aspx");
+        //                        }
+        //                        else
+        //                        {
+        //                            General.InregistreazaLogarea(1, txtPan1.Text);
+        //                            Session["SecApp"] = "OK";
+        //                            //Response.Redirect(GetRouteUrl("MainPage", null), false);
+        //                            if (Dami.ValoareParam("2FA", "") == "1")
+        //                            {
+        //                                string ras = General.CreazaCod2FA();
+        //                                if (ras != "")
+        //                                    MessageBox.Show(ras, MessageBox.icoError, "");
+        //                                else
+        //                                    Response.Redirect("~/Pagini/CodConfirmare.aspx", false);
+        //                            }
+        //                            else
+        //                            {
+        //                                //if (Dami.ValoareParam("Captcha") == "1")
+        //                                //{
+        //                                //    Session["PrevPage"] = "~/Pagini/Default.aspx";
+        //                                //    Session["NextPage"] = "~/Pagini/MainPage.aspx";
+        //                                //    Response.Redirect("~/Pagini/Captcha.aspx", false);
+        //                                //}
+        //                                //else
+        //                                    Response.Redirect("~/Pagini/MainPage.aspx", false);
+
+        //                                //switch (Convert.ToInt32(HttpContext.Current.Session["IdClient"]))
+        //                                //{
+        //                                //    case 16:
+        //                                //    case 26:
+        //                                //        Session["PrevPage"] = "~/Pagini/Default.aspx";
+        //                                //        Session["NextPage"] = "~/Pagini/MainPage.aspx";
+        //                                //        Response.Redirect("~/Pagini/Captcha.aspx", false);
+        //                                //        //Response.Redirect("~/Pagini/MainPage.aspx", false);
+        //                                //        break;
+        //                                //    default:
+        //                                //        Response.Redirect("~/Pagini/MainPage.aspx", false);
+        //                                //        break;
+        //                                //}
+
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    General.InregistreazaLogarea(0, txtPan1.Text, "Utilizator inexistent in aplicatie");
+        //                    MessageBox.Show("Utilizator inexistent in aplicatie! Contactati administratorul de sistem!", MessageBox.icoWarning);
+        //                }
+        //                break;
+        //            case 4:                     //este inactivat in AD
+        //                General.InregistreazaLogarea(0, txtPan1.Text, "Cont inactiv (inactivat in AD)");
+        //                MessageBox.Show("Contul este inactivat ! Contactati administratorul de sistem.", MessageBox.icoWarning);
+        //                txtRas = "Contul este inactivat ! Contactati administratorul de sistem.";
+        //                break;
+        //            case 5:
+        //                General.InregistreazaLogarea(0, txtPan1.Text, "Cont suspendat sau inactiv");
+        //                MessageBox.Show("Contul este suspendat sau inactiv ! Contactati administratorul de sistem.", MessageBox.icoWarning);
+        //                txtRas = "Contul este suspendat sau inactiv ! Contactati administratorul de sistem.";
+        //                break;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         private string VerificaUser(string utilizator, string parola)
         {
@@ -925,6 +1148,19 @@ namespace WizOne
             }
 
             return result;
+        }
+
+        protected void lnkOut_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                General.SignOut();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
     }
 }

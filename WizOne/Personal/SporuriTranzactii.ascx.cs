@@ -59,15 +59,18 @@ namespace WizOne.Personal
                 dt.Columns.Add("Id", typeof(int));
                 dt.Columns.Add("Spor", typeof(int));
                 dt.Columns.Add("Cod", typeof(string));
-              
-              
+
+                string tabela = "F1001";
+                if ((Session["esteNou"] ?? "false").ToString() == "true")
+                    tabela = "F0991";
 
                 string cmp = "CONVERT(VARCHAR, ";
                 if (Constante.tipBD == 2)
                     cmp = "TO_CHAR(";
                 for (int i = 80; i <= 99; i++)
                 {
-                    sql += "select " + (i - 79).ToString() + " as \"Id\", f10095" + i + " as \"Spor\", CASE WHEN f10095" + i + " = 0 THEN 'Spor " + (i - 79).ToString() + "' ELSE " + cmp + " f10095" + i + ") END as \"Cod\" from f1001 where f10003 = " + Session["Marca"].ToString();
+                    sql += "select " + (i - 79).ToString() + " as \"Id\", " + tabela.Substring(0, 4) + "95" + i + " as \"Spor\", CASE WHEN " + tabela.Substring(0, 4) + "95" + i + " = 0 THEN 'Spor " + (i - 79).ToString() + "' ELSE " + cmp + " " + tabela.Substring(0, 4) + "95" + i + ") END as \"Cod\" from " + tabela + " where " + tabela.Substring(0, 4) + "03 = " 
+                        + ((Session["esteNou"] ?? "false").ToString() == "true" ? Session["IdSablon"].ToString() : Session["Marca"].ToString());
                     if (i < 99)
                         sql += " UNION ";
                 }

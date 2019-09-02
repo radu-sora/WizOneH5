@@ -405,7 +405,7 @@ namespace WizOne.Personal
                     CalculCO();
                     break;
                 case "cmbTimpPartial":
-                    DataTable dtZL = General.IncarcaDT("SELECT * FROM F069", null);
+                    DataTable dtZL = General.IncarcaDT("SELECT * FROM F069 WHERE F06904 = (SELECT F01011 FROM F010) AND F06905 = (SELECT F01012 FROM F010)", null);
                     DataTable dtTarife = General.IncarcaDT("SELECT * FROM F011", null);
                     int poz = 0, valoare = 0;
                     int zile_lucratoare_luna = Convert.ToInt32(dtZL.Rows[0]["F06907"].ToString());

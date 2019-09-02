@@ -46,40 +46,37 @@ namespace WizOne.Personal
 
         private void IncarcaGrid()
         {
+            string valMin = "100000";
+            DataTable dtParam = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" ='ValMinView'", null);
+            if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
+                valMin = dtParam.Rows[0][0].ToString();
 
-            string sqlFinal = "SELECT * FROM \"F100Cartele\" WHERE F10003 = " + Session["Marca"].ToString();
-            if (Constante.tipBD == 2)
-                sqlFinal = "SELECT " + General.SelectListaCampuriOracle("F100Cartele", "F10003") + " FROM \"F100Cartele\" WHERE F10003 = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"F100Cartele\" a WHERE F10003 = " + Session["Marca"].ToString();
             DataTable dt = new DataTable();
+
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-            if (ds.Tables.Contains("F100Cartele"))
+            if (ds.Tables.Contains("F100Cartele2"))
             {
-                dt = ds.Tables["F100Cartele"];
+                dt = ds.Tables["F100Cartele2"];
             }
             else
             {
                 dt = General.IncarcaDT(sqlFinal, null);
-                dt.TableName = "F100Cartele";
+                dt.TableName = "F100Cartele2";
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                 ds.Tables.Add(dt);
             }
             grDateCartele.KeyFieldName = "IdAuto";
-            grDateCartele.DataSource = dt;
-
-            DataTable dtAng = General.GetF100NumeComplet();
-            GridViewDataComboBoxColumn colAng = (grDateCartele.Columns["F10003"] as GridViewDataComboBoxColumn);
-            colAng.PropertiesComboBox.DataSource = dtAng;
-
-
-
-        }
+            grDateCartele.DataSource = dt;         
+        }        
+        
 
         protected void grDateCartele_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
         {
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                DataTable dt = ds.Tables["F100Cartele"];
+                DataTable dt = ds.Tables["F100Cartele2"];
                 if (Constante.tipBD == 1)
                 {
                     if (dt.Columns["IdAuto"] != null)
@@ -94,7 +91,8 @@ namespace WizOne.Personal
                     }
                 }
                 else
-                    e.NewValues["IdAuto"] = Dami.NextId("F100Cartele");
+                    e.NewValues["IdAuto"] = Dami.NextId("F100Cartele2");
+                e.NewValues["Modificabil"] = 1;
             }
             catch (Exception ex)
             {
@@ -153,9 +151,9 @@ namespace WizOne.Personal
                 //    }
                 //}
 
-                object[] row = new object[ds.Tables["F100Cartele"].Columns.Count];
+                object[] row = new object[ds.Tables["F100Cartele2"].Columns.Count];
                 int x = 0;
-                foreach (DataColumn col in ds.Tables["F100Cartele"].Columns)
+                foreach (DataColumn col in ds.Tables["F100Cartele2"].Columns)
                 {
                     if (!col.AutoIncrement)
                     {
@@ -166,9 +164,9 @@ namespace WizOne.Personal
                                 break;
                             case "IDAUTO":
                                 if (Constante.tipBD == 1)
-                                    row[x] = Convert.ToInt32(General.Nz(ds.Tables["F100Cartele"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                    row[x] = Convert.ToInt32(General.Nz(ds.Tables["F100Cartele2"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                                 else
-                                    row[x]= Dami.NextId("F100Cartele"); 
+                                    row[x]= Dami.NextId("F100Cartele2"); 
                                 break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];
@@ -185,12 +183,11 @@ namespace WizOne.Personal
                     x++;
                 }
 
-                ds.Tables["F100Cartele"].Rows.Add(row);
+                ds.Tables["F100Cartele2"].Rows.Add(row);
                 e.Cancel = true;
                 grDateCartele.CancelEdit();
-                grDateCartele.DataSource = ds.Tables["F100Cartele"];
-                grDateCartele.KeyFieldName = "IdAuto";
-                //grDateBeneficii.AddNewRow();
+                grDateCartele.DataSource = ds.Tables["F100Cartele2"];
+                grDateCartele.KeyFieldName = "IdAuto";            
                 Session["InformatiaCurentaPersonal"] = ds;
 
 
@@ -255,9 +252,9 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
-                DataRow row = ds.Tables["F100Cartele"].Rows.Find(keys);
+                DataRow row = ds.Tables["F100Cartele2"].Rows.Find(keys);
 
-                foreach (DataColumn col in ds.Tables["F100Cartele"].Columns)
+                foreach (DataColumn col in ds.Tables["F100Cartele2"].Columns)
                 {
                     if (!col.AutoIncrement && grDateCartele.Columns[col.ColumnName].Visible)
                     {
@@ -270,7 +267,7 @@ namespace WizOne.Personal
                 e.Cancel = true;
                 grDateCartele.CancelEdit();
                 Session["InformatiaCurentaPersonal"] = ds;
-                grDateCartele.DataSource = ds.Tables["F100Cartele"];
+                grDateCartele.DataSource = ds.Tables["F100Cartele2"];
             }
             catch (Exception ex)
             {
@@ -289,14 +286,14 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
-                DataRow row = ds.Tables["F100Cartele"].Rows.Find(keys);
+                DataRow row = ds.Tables["F100Cartele2"].Rows.Find(keys);
 
                 row.Delete();
 
                 e.Cancel = true;
                 grDateCartele.CancelEdit();
                 Session["InformatiaCurentaPersonal"] = ds;
-                grDateCartele.DataSource = ds.Tables["F100Cartele"];
+                grDateCartele.DataSource = ds.Tables["F100Cartele2"];
 
 
             }
@@ -304,6 +301,27 @@ namespace WizOne.Personal
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateCartele_CommandButtonInitialize(object sender, ASPxGridViewCommandButtonEventArgs e)
+        {
+            if (e.VisibleIndex >= 0)
+            {
+                DataRowView values = grDateCartele.GetRow(e.VisibleIndex) as DataRowView;
+
+                if (values != null)
+                {
+                    string modif = values.Row["Modificabil"].ToString();
+
+                    if (modif == "0")
+                    {
+                        if (e.ButtonType == ColumnCommandButtonType.Edit || e.ButtonType == ColumnCommandButtonType.Delete)
+
+                            e.Visible = false;
+
+                    }
+                }
             }
         }
 

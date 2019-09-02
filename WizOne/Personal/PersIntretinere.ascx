@@ -70,7 +70,7 @@
                         <dx:GridViewDataDateColumn FieldName="F11006" Name="F11006" Caption="Data nasterii"  Width="90px" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="F11007" Name="F11007" Caption="Id"  Width="50px"  />
+                        <dx:GridViewDataTextColumn FieldName="F11007" Name="F11007" Caption="Id"  Width="50px" Visible="false" />
                         <dx:GridViewDataCheckColumn FieldName="F11016" Name="F11016" Caption="Intretinut"  Width="50px"  />
                         <dx:GridViewDataCheckColumn FieldName="F11017" Name="F11017" Caption="Coasigurat"  Width="50px" >
                             <PropertiesCheckEdit ValueChecked="False" ValueUnchecked="True" />

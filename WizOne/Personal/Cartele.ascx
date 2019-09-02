@@ -22,7 +22,7 @@
         <tr>
             <td >
                 <dx:ASPxGridView ID="grDateCartele" runat="server" ClientInstanceName="grDateCartele" ClientIDMode="Static" Width="45%" AutoGenerateColumns="false"  OnDataBinding="grDateCartele_DataBinding"  OnInitNewRow="grDateCartele_InitNewRow"
-                    OnRowInserting="grDateCartele_RowInserting" OnRowUpdating="grDateCartele_RowUpdating" OnRowDeleting="grDateCartele_RowDeleting">
+                    OnRowInserting="grDateCartele_RowInserting" OnRowUpdating="grDateCartele_RowUpdating" OnRowDeleting="grDateCartele_RowDeleting" OnCommandButtonInitialize="grDateCartele_CommandButtonInitialize">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
                     <ClientSideEvents CustomButtonClick="function(s, e) { grDateCartele_CustomButtonClick(s, e); }" ContextMenu="ctx" EndCallback="OnEndCallbackCartele"/> 
@@ -30,9 +30,7 @@
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
-                        <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="250px" Visible="false" >
-                            <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown" />
-                        </dx:GridViewDataComboBoxColumn>
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca"  ReadOnly="true" Width="100px" Visible="false" />     
                         <dx:GridViewDataTextColumn FieldName="Cartela" Name="Cartela" Caption="Cartela"  Width="100px" />
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                         <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput"  Width="100px" >

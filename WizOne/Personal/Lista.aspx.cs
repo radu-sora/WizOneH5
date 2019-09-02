@@ -345,7 +345,7 @@ namespace WizOne.Personal
             try
             {
                 //daca angajatul a fost salvat in arhiva, nu poate fi sters
-                DataTable dtIstoric = General.IncarcaDT("SELECT COUNT(*) FROM F910 WHERE F91003 = " + id, null);
+                DataTable dtIstoric = General.IncarcaDT("SELECT COUNT(*) FROM F910 WHERE F91003 = " + id + " AND F91025 <> 900", null);
                 if (dtIstoric != null && dtIstoric.Rows.Count > 0 && Convert.ToInt32(dtIstoric.Rows[0][0].ToString()) > 0)
                 {
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti sterge angajatul deoarece acesta a fost salvat in arhiva!");
@@ -358,7 +358,7 @@ namespace WizOne.Personal
 
                 General.ExecutaNonQuery("DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = 'F100' AND \"Id\" = " + id, null);
 
-                General.ExecutaNonQuery("DELETE FROM \"F100Cartele\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100Cartele2\" WHERE F10003 = " + id, null);
 
                 General.ExecutaNonQuery("DELETE FROM \"F100Adrese\" WHERE F10003 = " + id, null);
 
@@ -377,6 +377,8 @@ namespace WizOne.Personal
                 General.ExecutaNonQuery("DELETE FROM F100 WHERE F10003 = " + id, null);
 
                 Session["InformatiaCurenta"] = General.GetPersonalRestrans(Convert.ToInt32(Session["UserId"].ToString()), checkComboBoxStare.Text, 1);
+
+                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
 
             }
             catch (Exception ex)

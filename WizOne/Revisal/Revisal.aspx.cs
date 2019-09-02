@@ -351,6 +351,7 @@ namespace WizOne.Revisal
                     ms.WriteTo(Response.OutputStream);
                     Response.End();
                 }
+                File.Delete(fileName);
 
             }
             catch (Exception ex)

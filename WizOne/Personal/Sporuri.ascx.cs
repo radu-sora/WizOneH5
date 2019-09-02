@@ -99,27 +99,30 @@ namespace WizOne.Personal
                     if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
                         val = dtTemp.Rows[0][0].ToString();
 
+                    string tabela = "F100";
+                    if ((Session["esteNou"] ?? "false").ToString() == "true")                  
+                        tabela = "F099";                    
 
                     //Florin 2019.06.20
                     //am inlocuit TOP 1 cu ROWNUM
                     if (Constante.tipBD == 1)
-                        sql += "select " + (i + 1).ToString() + " as \"Id\", f10065" + i + " as F02504, CASE WHEN f10065" + i + " = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT TOP 1 F02505 FROM F025 WHERE F02504 = F10065" + i + ") END as \"Spor\", "
-                            + " case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
-                            + " CASE WHEN(case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                        sql += "select " + (i + 1).ToString() + " as \"Id\", " + tabela + "65" + i + " as F02504, CASE WHEN " + tabela + "65" + i + " = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT TOP 1 F02505 FROM F025 WHERE F02504 = " + tabela + "65" + i + ") END as \"Spor\", "
+                            + " case when " + tabela + "65" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when " + tabela + "65" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
                             + cmp + "((select top 1 f01107 from f025 "
                             + " left join f021 on f02510 = f02104 "
                             + " left join f011 on f02106 = f01104 "
-                            + " where f02504 = f10065" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
-                            + " from f100 where f10003 = " + Session["Marca"].ToString();
+                            + " where f02504 = " + tabela + "65" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "                            
+                            + ((Session["esteNou"] ?? "false").ToString() == "true" ? " from f099 where f09903 = " + Session["IdSablon"].ToString() : " from f100 where f10003 = " + Session["Marca"].ToString());
                     else
-                        sql += "select " + (i + 1).ToString() + " as \"Id\", f10065" + i + " as F02504, CASE WHEN f10065" + i + " = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT F02505 FROM F025 WHERE F02504 = F10065" + i + " AND ROWNUM <= 1) END as \"Spor\", "
-                            + " case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
-                            + " CASE WHEN(case when f10065" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                        sql += "select " + (i + 1).ToString() + " as \"Id\", " + tabela + "65" + i + " as F02504, CASE WHEN " + tabela + "65" + i + " = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT F02505 FROM F025 WHERE F02504 = " + tabela + "65" + i + " AND ROWNUM <= 1) END as \"Spor\", "
+                            + " case when " + tabela + "65" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when " + tabela + "65" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
                             + cmp + "((select f01107 from f025 "
                             + " left join f021 on f02510 = f02104 "
                             + " left join f011 on f02106 = f01104 "
-                            + " where f02504 = f10065" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " AND ROWNUM <= 1), '---')  END as \"Tarif\" "
-                            + " from f100 where f10003 = " + Session["Marca"].ToString();
+                            + " where f02504 = " + tabela + "65" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " AND ROWNUM <= 1), '---')  END as \"Tarif\" "
+                            + ((Session["esteNou"] ?? "false").ToString() == "true" ? " from f099 where f09903 = " + Session["IdSablon"].ToString() : " from f100 where f10003 = " + Session["Marca"].ToString());
 
 
                     if (i < 9)
@@ -170,27 +173,30 @@ namespace WizOne.Personal
                     if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0)
                         val = dtTemp.Rows[0][0].ToString();
 
+                    string tabela = "F100";
+                    if ((Session["esteNou"] ?? "false").ToString() == "true")
+                        tabela = "F099";
 
                     //Florin 2019.06.20
                     //am inlocuit TOP 1 cu ROWNUM
                     if (Constante.tipBD == 1)
-                        sql += "select " + (i + 11).ToString() + " as \"Id\", f10066" + i + " as F02504, CASE WHEN f10066" + i + " = 0 THEN 'Spor " + (i + 11).ToString() + "' ELSE (SELECT TOP 1 F02505 FROM F025 WHERE F02504 = F10066" + i + ") END as \"Spor\", "
-                            + " case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
-                            + " CASE WHEN(case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                        sql += "select " + (i + 11).ToString() + " as \"Id\", " + tabela + "66" + i + " as F02504, CASE WHEN " + tabela + "66" + i + " = 0 THEN 'Spor " + (i + 11).ToString() + "' ELSE (SELECT TOP 1 F02505 FROM F025 WHERE F02504 = " + tabela + "66" + i + ") END as \"Spor\", "
+                            + " case when " + tabela + "66" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when " + tabela + "66" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
                             + cmp + "((select top 1 f01107 from f025 "
                             + " left join f021 on f02510 = f02104 "
                             + " left join f011 on f02106 = f01104 "
-                            + " where f02504 = f10066" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
-                            + " from f100 where f10003 = " + Session["Marca"].ToString();
+                            + " where f02504 = " + tabela + "66" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + "), '---')  END as \"Tarif\" "
+                            + ((Session["esteNou"] ?? "false").ToString() == "true" ? " from f099 where f09903 = " + Session["IdSablon"].ToString() : " from f100 where f10003 = " + Session["Marca"].ToString());
                     else
-                        sql += "select " + (i + 11).ToString() + " as \"Id\", f10066" + i + " as F02504, CASE WHEN f10066" + i + " = 0 THEN 'Spor " + (i + 11).ToString() + "' ELSE (SELECT F02505 FROM F025 WHERE F02504 = F10066" + i + " AND ROWNUM <= 1) END as \"Spor\", "
-                            + " case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
-                            + " CASE WHEN(case when f10066" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
+                        sql += "select " + (i + 11).ToString() + " as \"Id\", " + tabela + "66" + i + " as F02504, CASE WHEN " + tabela + "66" + i + " = 0 THEN 'Spor " + (i + 11).ToString() + "' ELSE (SELECT F02505 FROM F025 WHERE F02504 = " + tabela + "66" + i + " AND ROWNUM <= 1) END as \"Spor\", "
+                            + " case when " + tabela + "66" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end as F01105, "
+                            + " CASE WHEN(case when " + tabela + "66" + i + " = 0 then 0 else " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " end ) = 0 THEN '---' ELSE "
                             + cmp + "((select f01107 from f025 "
                             + " left join f021 on f02510 = f02104 "
                             + " left join f011 on f02106 = f01104 "
-                            + " where f02504 = f10066" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " AND ROWNUM <= 1), '---')  END as \"Tarif\" "
-                            + " from f100 where f10003 = " + Session["Marca"].ToString();
+                            + " where f02504 = " + tabela + "66" + i + " and f01105 = " + (val == "0" ? "0" : sir[Convert.ToInt32(val) - 1].ToString()) + " AND ROWNUM <= 1), '---')  END as \"Tarif\" "
+                            + ((Session["esteNou"] ?? "false").ToString() == "true" ? " from f099 where f09903 = " + Session["IdSablon"].ToString() : " from f100 where f10003 = " + Session["Marca"].ToString());
 
 
                     if (i < 9)

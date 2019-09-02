@@ -102,6 +102,7 @@ namespace WizOne
                                     int poz = usrTMP.IndexOf("@");
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
                                     //MessageBox.Show(usrTMP);
+                                    General.MemoreazaEroarea(usrTMP);
                                     string txtRas = Verifica(usrTMP, "", false);
 
                                     if (General.Nz(Session["SecApp"], "").ToString() != "OK")

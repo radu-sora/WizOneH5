@@ -12,6 +12,7 @@ using System.Web.Hosting;
 using System.Web.UI.WebControls;
 using System.Globalization;
 using DevExpress.Utils;
+using System.Numerics;
 
 namespace WizOne.Avs
 {
@@ -1569,6 +1570,15 @@ namespace WizOne.Avs
                         SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out data);
                         if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Norma)
                             SetNorma(e.Parameter.Split(';')[1]);
+
+                        if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaSalariu || Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaGarantii)
+                        {
+                            if (!IbanValid(txt1Nou.Text))
+                            {
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Cont IBAN invalid!");
+                                txt1Nou.Value = "";
+                            }
+                        }
                         break;
                     case "3":
                         {
@@ -2406,7 +2416,7 @@ namespace WizOne.Avs
                     ListEditItem itm = cmbStructOrgNou.SelectedItem;
                     camp2 = itm.GetFieldValue("F00304") + ",'" + itm.GetFieldValue("F00305") + "'," +
                             itm.GetFieldValue("F00405") + ",'" + itm.GetFieldValue("F00406") + "'," +
-                            itm.GetFieldValue("F00506") + ",'" + itm.GetFieldValue("F00506") + "'," +
+                            itm.GetFieldValue("F00506") + ",'" + itm.GetFieldValue("F00507") + "'," +
                             itm.GetFieldValue("F00607") + ",'" + itm.GetFieldValue("F00608") + "'"; 
                     //ListEditItem linie = cmbStructOrgNou.SelectedItem;
                     //int subc = linie.GetValue("F00304").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00304").ToString()) : -1;
@@ -4987,6 +4997,202 @@ namespace WizOne.Avs
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+
+
+        //Validare IBAN
+        private static string AnulareCaractere(string source)
+        {
+            //_isValid = false;
+            source = source.Replace(" ", "");
+            if (string.IsNullOrEmpty(source)) return source;
+
+            if (source.Length != 24)
+            {
+                return "";
+            }
+
+            int j = 0;
+            int i = 0;
+
+            string test = "";
+            while (i < source.Length)
+            {
+                switch (source[i])
+                {
+                    case 'A':
+                    case 'a':
+                    case 'B':
+                    case 'b':
+                    case 'C':
+                    case 'c':
+                    case 'D':
+                    case 'd':
+                    case 'E':
+                    case 'e':
+                    case 'F':
+                    case 'f':
+                    case 'G':
+                    case 'g':
+                    case 'H':
+                    case 'h':
+                    case 'I':
+                    case 'i':
+                    case 'J':
+                    case 'j':
+                    case 'K':
+                    case 'k':
+                    case 'L':
+                    case 'l':
+                    case 'M':
+                    case 'm':
+                    case 'N':
+                    case 'n':
+                    case 'O':
+                    case 'o':
+                    case 'P':
+                    case 'p':
+                    case 'Q':
+                    case 'q':
+                    case 'R':
+                    case 'r':
+                    case 'S':
+                    case 's':
+                    case 'T':
+                    case 't':
+                    case 'U':
+                    case 'u':
+                    case 'V':
+                    case 'v':
+                    case 'W':
+                    case 'w':
+                    case 'X':
+                    case 'x':
+                    case 'Y':
+                    case 'y':
+                    case 'Z':
+                    case 'z':
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        test += source[i];
+                        i++; break;
+
+                    default:
+                        i++; break;
+                };//	
+            }
+            j = source.Length - test.Length;// nr caractere non alfanumerice
+
+            if (j != 0) //nr caractere non alfa numerice;
+            {
+                return "";
+            }
+
+            source = source.ToUpper();
+            return source;
+
+        }
+
+        private static string Reordonare(string source)
+        {
+            return source.Substring(4) + source.Substring(0, 4);
+        }
+
+        private static string Conversie(string source)
+        {
+            string result = "";
+            for (int i = 0; i < source.Length; i++)
+            {
+                result += Substitutie(source[i]);
+            }
+            return result;
+        }
+
+        private static string Substitutie(char SourceC)
+        {
+            string ResStr = "";
+            switch (SourceC)
+            {
+                case 'A': ResStr = "10"; break;
+                case 'B': ResStr = "11"; break;
+                case 'C': ResStr = "12"; break;
+                case 'D': ResStr = "13"; break;
+                case 'E': ResStr = "14"; break;
+                case 'F': ResStr = "15"; break;
+                case 'G': ResStr = "16"; break;
+                case 'H': ResStr = "17"; break;
+                case 'I': ResStr = "18"; break;
+                case 'J': ResStr = "19"; break;
+                case 'K': ResStr = "20"; break;
+                case 'L': ResStr = "21"; break;
+                case 'M': ResStr = "22"; break;
+                case 'N': ResStr = "23"; break;
+                case 'O': ResStr = "24"; break;
+                case 'P': ResStr = "25"; break;
+                case 'Q': ResStr = "26"; break;
+                case 'R': ResStr = "27"; break;
+                case 'S': ResStr = "28"; break;
+                case 'T': ResStr = "29"; break;
+                case 'U': ResStr = "30"; break;
+                case 'V': ResStr = "31"; break;
+                case 'W': ResStr = "32"; break;
+                case 'X': ResStr = "33"; break;
+                case 'Y': ResStr = "34"; break;
+                case 'Z': ResStr = "35"; break;
+
+                case '0': ResStr = "0"; break;
+                case '1': ResStr = "1"; break;
+                case '2': ResStr = "2"; break;
+                case '3': ResStr = "3"; break;
+                case '4': ResStr = "4"; break;
+                case '5': ResStr = "5"; break;
+                case '6': ResStr = "6"; break;
+                case '7': ResStr = "7"; break;
+                case '8': ResStr = "8"; break;
+                case '9': ResStr = "9"; break;
+            };// 
+            return ResStr;
+        }
+      
+        public bool IbanValid(string source)
+        {
+            bool result = false;
+
+            source = AnulareCaractere(source);
+            if (source.Length != 24)
+            {
+                return false;
+            }
+
+            source = Reordonare(source);
+            if (source.Length != 24)
+            {
+                return false;
+            }
+            source = Conversie(source);
+            result = Validare(source);
+
+            return result;
+
+        }
+
+        private static bool Validare(string source)
+        {
+            BigInteger bigint = new BigInteger();
+            BigInteger.TryParse(source, out bigint);
+            BigInteger rest = BigInteger.Remainder(bigint, new BigInteger(97.0));
+
+            return rest == 1;
+
         }
 
     }

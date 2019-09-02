@@ -2406,7 +2406,7 @@ namespace WizOne.Avs
                     ListEditItem itm = cmbStructOrgNou.SelectedItem;
                     camp2 = itm.GetFieldValue("F00304") + ",'" + itm.GetFieldValue("F00305") + "'," +
                             itm.GetFieldValue("F00405") + ",'" + itm.GetFieldValue("F00406") + "'," +
-                            itm.GetFieldValue("F00506") + ",'" + itm.GetFieldValue("F00506") + "'," +
+                            itm.GetFieldValue("F00506") + ",'" + itm.GetFieldValue("F00507") + "'," +
                             itm.GetFieldValue("F00607") + ",'" + itm.GetFieldValue("F00608") + "'"; 
                     //ListEditItem linie = cmbStructOrgNou.SelectedItem;
                     //int subc = linie.GetValue("F00304").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00304").ToString()) : -1;

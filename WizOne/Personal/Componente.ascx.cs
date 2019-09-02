@@ -45,25 +45,32 @@ namespace WizOne.Personal
 
         private void IncarcaGrid()
         {
-            string sql = " select F02104, f100690 as \"Suma\" from f021 join f100 on f02104 = 4001 and f100690 > 0 and f10003 = " + Session["Marca"].ToString()
+            string tabela = "F100", id = Session["Marca"].ToString();
+            if ((Session["esteNou"] ?? "false").ToString() == "true")
+            {
+                tabela = "F099";
+                id = Session["IdSablon"].ToString();
+            }
+
+            string sql = " select F02104, " + tabela + "690 as \"Suma\" from f021 join " + tabela + " on f02104 = 4001 and " + tabela + "690 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100691 as \"Suma\" from f021 join f100 on f02104 = 4002 and f100691 > 0 and f10003 = " + Session["Marca"].ToString()
+                        + "select F02104, " + tabela + "691 as \"Suma\" from f021 join " + tabela + " on f02104 = 4002 and " + tabela + "691 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100692 as \"Suma\" from f021 join f100 on f02104 = 4003 and f100692 > 0 and f10003 = " + Session["Marca"].ToString()
+                        + "select F02104, " + tabela + "692 as \"Suma\" from f021 join " + tabela + " on f02104 = 4003 and " + tabela + "692 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100693 as \"Suma\" from f021 join f100 on f02104 = 4004 and f100693 > 0 and f10003 = " + Session["Marca"].ToString()
+                        + "select F02104, " + tabela + "693 as \"Suma\" from f021 join " + tabela + " on f02104 = 4004 and " + tabela + "693 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100694 as \"Suma\" from f021 join f100 on f02104 = 4005 and f100694 > 0 and f10003 = " + Session["Marca"].ToString()
+                        + "select F02104, " + tabela + "694 as \"Suma\" from f021 join " + tabela + " on f02104 = 4005 and " + tabela + "694 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100695 as \"Suma\" from f021 join f100 on f02104 = 4006 and f100695 > 0 and f10003 = " + Session["Marca"].ToString()
+                        + "select F02104, " + tabela + "695 as \"Suma\" from f021 join " + tabela + " on f02104 = 4006 and " + tabela + "695 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100696 as \"Suma\" from f021 join f100 on f02104 = 4007 and f100696 > 0 and f10003 = " + Session["Marca"].ToString()
+                        + "select F02104, " + tabela + "696 as \"Suma\" from f021 join " + tabela + " on f02104 = 4007 and " + tabela + "696 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100697 as \"Suma\" from f021 join f100 on f02104 = 4008 and f100697 > 0 and f10003 = " + Session["Marca"].ToString()
+                        + "select F02104, " + tabela + "697 as \"Suma\" from f021 join " + tabela + " on f02104 = 4008 and " + tabela + "697 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100698 as \"Suma\" from f021 join f100 on f02104 = 4009 and f100698 > 0 and f10003 = " + Session["Marca"].ToString()
+                        + "select F02104, " + tabela + "698 as \"Suma\" from f021 join " + tabela + " on f02104 = 4009 and " + tabela + "698 > 0 and " + tabela + "03 = " + id
                         + "union "
-                        + "select F02104, f100699 as \"Suma\" from f021 join f100 on f02104 = 4010 and f100699 > 0 and f10003 = " + Session["Marca"].ToString() + " ORDER BY F02104";
+                        + "select F02104, " + tabela + "699 as \"Suma\" from f021 join " + tabela + " on f02104 = 4010 and " + tabela + "699 > 0 and " + tabela + "03 = " + id + " ORDER BY F02104";
             DataTable dt = new DataTable();
            
             DataSet ds = Session["InformatiaCurentaPersonalCalcul"] as DataSet;

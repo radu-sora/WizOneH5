@@ -350,24 +350,23 @@ namespace WizOne.Personal
                 }
 
                 //verificarea se face pe partea de client
-                //string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'NuPermiteCNPInvalid'";
-                //DataTable dt = General.IncarcaDT(sql, null);
-                //if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)
-                //    if (!General.VerificaCNP(ds.Tables[1].Rows[0]["F10017"].ToString()))
-                //    {
-                //        MessageBox.Show("CNP invalid!", MessageBox.icoError);
-                //        return;
-                //    }
+                //Radu 29.08.2019 - este necesara verificarea si la salvare, pentru ca pot sa ramana valori invalide pe CNP si data nasterii
+                string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'NuPermiteCNPInvalid'";
+                DataTable dt = General.IncarcaDT(sql, null);
+                if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)
+                    if (!General.VerificaCNP(ds.Tables[1].Rows[0]["F10017"].ToString()))
+                    {
+                        MessageBox.Show("CNP invalid!", MessageBox.icoError);
+                        return;
+                    }
+                int varsta = Dami.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
+                if (varsta < 16)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu puteti angaja o persoana cu varsta mai mica de 16 ani!"), MessageBox.icoError);
+                    return;
+                }
 
-                //DateIdentificare dateId = new DateIdentificare();
-                //int varsta = dateId.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
-                //if (varsta < 16)
-                //{
-                //    MessageBox.Show(Dami.TraduCuvant("Nu puteti angaja o persoana cu varsta mai mica de 16 ani!"), MessageBox.icoError);
-                //    return;
-                //}
-
-                int varsta = Dami.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"]));
+                varsta = Dami.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"]));
                 if (varsta >= 16 && varsta < 18 && Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"].ToString()) > 6)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Timp partial invalid (max 6 pentru minori peste 16 ani)!"));
@@ -387,8 +386,8 @@ namespace WizOne.Personal
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                 {
                     int val = 1;
-                    string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TermenDepasireRevisal'";
-                    DataTable dt = General.IncarcaDT(sql, null);
+                    sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TermenDepasireRevisal'";
+                    dt = General.IncarcaDT(sql, null);
                     if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 )
                         val = Convert.ToInt32(dt.Rows[0][0].ToString());
                     if (val == 1)

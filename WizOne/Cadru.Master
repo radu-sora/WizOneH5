@@ -1,5 +1,10 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Cadru.master.cs" Inherits="WizOne.Cadru" %>
-
+    <script type="text/javascript">
+        function onKeyPress(s, e) {
+            if (e.htmlEvent.keyCode == 13)
+                ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
+        }
+    </script>
 
 <!DOCTYPE html>
 
@@ -146,15 +151,25 @@
                                 <li>
                                     <div class="account-form">
                                         <dx:ASPxLabel ID="lblNume" AssociatedControlID="txtNume" runat="server" Text="Utilizator" />
-                                        <dx:ASPxTextBox ID="txtNume" runat="server" Width="150px" Enabled="false" />
+                                        <dx:ASPxTextBox ID="txtNume" runat="server" Width="150px" Enabled="false" >
+                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                        </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblAng" AssociatedControlID="txtAng" runat="server" Text="Angajat" />
-                                        <dx:ASPxTextBox ID="txtAng" runat="server" Width="150px" Enabled="false" />
+                                        <dx:ASPxTextBox ID="txtAng" runat="server" Width="150px" Enabled="false" >
+                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                        </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblLimbi" AssociatedControlID="txtLimba" runat="server" Text="Limba" />
-                                        <dx:ASPxTextBox ID="txtLimba" runat="server" Width="150px" Enabled="false" />
+                                        <dx:ASPxTextBox ID="txtLimba" runat="server" Width="150px" Enabled="false" >
+                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                        </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblParola" AssociatedControlID="txtParola" runat="server" Text="Parola" />
-                                        <dx:ASPxTextBox ID="txtParola" runat="server" Width="150px" Password="true" />
+                                        <dx:ASPxTextBox ID="txtParola" runat="server" Width="150px" Password="true" >
+                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                        </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblConfirma" AssociatedControlID="txtConfirma" runat="server" Text="Confirma parola" />
-                                        <dx:ASPxTextBox ID="txtConfirma" runat="server" Width="150px" Password="true" />
+                                        <dx:ASPxTextBox ID="txtConfirma" runat="server" Width="150px" Password="true" >
+                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                        </dx:ASPxTextBox>
                                     </div>
                                 </li>
                             </ul> 

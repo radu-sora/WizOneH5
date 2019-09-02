@@ -209,10 +209,10 @@ namespace WizOne.Pagini
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.Rows.Find(keys);
 
-                //Radu 19.08.2019 - verificare sa nu existe alta inregistrare cu marca nou introdusa
+                //Radu 19.08.2019 - verificare sa nu existe alta inregistrare cu marca nou introdusa           
                 if (e.NewValues["F10003"] != null)
                 {
-                    DataRow[] rows = dt.Select("F10003 = " + e.NewValues["F10003"].ToString());
+                    DataRow[] rows = dt.Select("F10003 = " + e.NewValues["F10003"].ToString() + " AND F70102 <> " + e.NewValues["F70102"].ToString());
                     if (rows != null && rows.Count() > 0)
                     {
                         grDate.JSProperties["cpAlertMessage"] = "Marca selectata este deja alocata altui utilizator!";

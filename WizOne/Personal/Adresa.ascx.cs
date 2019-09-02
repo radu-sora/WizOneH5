@@ -201,8 +201,17 @@ namespace WizOne.Personal
                     ds.Tables[2].Rows[0]["F1001021"] = e.NewValues["Principal"];
 
                     ds.Tables[1].Rows[0]["F100891"] = e.NewValues["Judet"] ?? DBNull.Value;
-                    ds.Tables[1].Rows[0]["F10081"] = e.NewValues["Oras"] ?? DBNull.Value;
-                    ds.Tables[1].Rows[0]["F100907"] = e.NewValues["Comuna"] ?? DBNull.Value;
+
+                    if (e.NewValues["Oras"] != null && (e.NewValues["Oras"].ToString().IndexOf("ORAS") == 0 || e.NewValues["Oras"].ToString().IndexOf("MUNICIPIU") == 0))
+                    {
+                        ds.Tables[1].Rows[0]["F10081"] = e.NewValues["Oras"] ?? DBNull.Value;
+                        ds.Tables[1].Rows[0]["F100907"] = DBNull.Value;
+                    }
+                    else
+                    {
+                        ds.Tables[1].Rows[0]["F100907"] = e.NewValues["Oras"] ?? DBNull.Value;
+                        ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
+                    }
                     ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10082"] = e.NewValues["Sector"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10083"] = e.NewValues["Strada"] ?? DBNull.Value;
@@ -290,9 +299,18 @@ namespace WizOne.Personal
                     if (e.NewValues.Contains("Judet"))
                         ds.Tables[1].Rows[0]["F100891"] = e.NewValues["Judet"] ?? DBNull.Value;
                     if (e.NewValues.Contains("Oras"))
-                        ds.Tables[1].Rows[0]["F10081"] = e.NewValues["Oras"] ?? DBNull.Value;
-                    if (e.NewValues.Contains("Comuna"))
-                        ds.Tables[1].Rows[0]["F100907"] = e.NewValues["Comuna"] ?? DBNull.Value;
+                    {
+                        if (e.NewValues["Oras"] != null && (e.NewValues["Oras"].ToString().IndexOf("ORAS") == 0 || e.NewValues["Oras"].ToString().IndexOf("MUNICIPIU") == 0))
+                        {
+                            ds.Tables[1].Rows[0]["F10081"] = e.NewValues["Oras"] ?? DBNull.Value;
+                            ds.Tables[1].Rows[0]["F100907"] = DBNull.Value;
+                        }
+                        else    //if (e.NewValues.Contains("Comuna"))
+                        {
+                            ds.Tables[1].Rows[0]["F100907"] = e.NewValues["Oras"] ?? DBNull.Value;
+                            ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
+                        }
+                    }
                     if (e.NewValues.Contains("Strada"))
                         ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
                     if (e.NewValues.Contains("Sector"))

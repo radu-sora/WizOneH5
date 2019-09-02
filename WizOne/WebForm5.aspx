@@ -10,34 +10,39 @@
     <form id="form1" runat="server">
         <div>
 
-    <dx:ASPxScheduler ID="ASPxScheduler1" runat="server" Width="100%" ActiveViewType="Timeline"
-        GroupType="Resource" ClientInstanceName="ASPxClientScheduler1"  Start="2019/8/27">
+    <dx:ASPxScheduler ID="ASPxScheduler1" runat="server" Width="100%" ActiveViewType="Day" GroupType="Resource" ClientInstanceName="ASPxClientScheduler1">
         <Views>
             <DayView ResourcesPerPage="2">
-                <DayViewStyles ScrollAreaHeight="600px" />
+                <WorkTime Start="07:00:00" End="20:00:00" />
             </DayView>
-            <WorkWeekView ResourcesPerPage="2">
-                <WorkWeekViewStyles ScrollAreaHeight="600px" />
-            </WorkWeekView>
-            <WeekView Enabled="False" />
-            <FullWeekView Enabled="false" />
-            <MonthView ResourcesPerPage="2" Enabled="False">
-                <MonthViewStyles>
-                    <DateCellBody Height="100px" />
-                </MonthViewStyles>
-            </MonthView>
-            <TimelineView ResourcesPerPage="4" IntervalCount="19">
-                <TimelineViewStyles>
-                    <TimelineCellBody Height="120px" />
-                </TimelineViewStyles>
-
-            </TimelineView>
+            <WorkWeekView Enabled="false" />
+            <WeekView Enabled="false" />
+            <MonthView Enabled="false" />
+            <TimelineView Enabled="false" />
             <AgendaView Enabled="false" />
         </Views>
-        <Storage enablereminders="false">
-            <Appointments AutoRetrieveId="true" /> 
-        </Storage>
+        <OptionsBehavior ShowViewSelector="false" />
+                <Storage EnableReminders="false">
+                    <Appointments AutoRetrieveId="true">
+                        <Mappings 
+                            AllDay="AllDay" 
+                            AppointmentId="ID" 
+                            Description="Description" 
+                            End="EndTime" 
+                            Label="Label" 
+                            Location="Location" 
+                            RecurrenceInfo="RecurrenceInfo" 
+                            ReminderInfo="ReminderInfo" 
+                            ResourceId="CarId"
+                            Start="StartTime" 
+                            Status="Status" 
+                            Subject="Subject" 
+                            Type="EventType" />
+                    </Appointments>
+                </Storage>
     </dx:ASPxScheduler>
+
+
         </div>
     </form>
 </body>

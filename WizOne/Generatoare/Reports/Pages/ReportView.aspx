@@ -184,9 +184,10 @@
                 </table>
 
                 <!-- Table customization -->
-                <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%">                    
-                    <Settings ShowHeaderFilterButton="true" ShowFilterBar="Auto" VerticalScrollBarMode="Auto" />                    
-                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" AllowEllipsisInText="true" />
+                <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%"
+                    OnFillContextMenuItems="CustomTableGridView_FillContextMenuItems">
+                    <Settings ShowFilterBar="Auto" VerticalScrollBarMode="Auto" HorizontalScrollBarMode="Auto" />                    
+                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" AllowEllipsisInText="true" AllowFixedGroups="true" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live" />
                     <SettingsContextMenu Enabled="true">                        
                         <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" Refresh="false" />
@@ -198,7 +199,14 @@
                     </SettingsPager>
                     <Styles>
                         <Header Font-Bold="true" Wrap="True" />
-                    </Styles>                    
+                    </Styles>  
+                    <ClientSideEvents
+                        ContextMenu="function(s, e) {                            
+                            onCustomTableContextMenu(e.objectType, e.index, e.menu);
+                        }"                        
+                        ContextMenuItemClick="function(s, e) {
+                            onCustomTableContextMenuItemClick(e.item);
+                        }" />
                 </dx:ASPxGridView>
                 <dx:ASPxGridViewExporter ID="CustomTableGridViewExporter" runat="server" GridViewID="CustomTableGridView"
                     TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0">                                
@@ -387,6 +395,44 @@
 
         function onExitButtonClick() {
             window.history.back();
+        }
+
+        function onCustomTableContextMenu(type, index, menu) {
+            if (type == 'header') {
+                customTableGridView.contextMenuColumnIndex = index;
+
+                for (var optionName in customTableGridView.cpContextMenuOptions) {
+                    menu.GetItemByName(optionName).SetChecked(
+                        customTableGridView.cpContextMenuOptions[optionName].indexOf(-1) > -1 || // Grid level
+                        customTableGridView.cpContextMenuOptions[optionName].indexOf(index) > -1); // Column level                    
+                }
+
+                for (var optionName in customTableGridView.cpContextMenuHiddenOptions) {
+                    menu.GetItemByName(optionName).SetVisible(
+                        customTableGridView.cpContextMenuHiddenOptions[optionName].indexOf(index) == -1);
+                }
+            } else {
+                delete customTableGridView.contextMenuColumnIndex;
+            }
+        }
+
+        function onCustomTableContextMenuItemClick(item) {
+            var isCustomItem = JSON.stringify(item.menu.cpItemsCommands).indexOf(item.name) == -1;
+            var isActionItem = item.name[0] != '#'; // No action sign.
+
+            if (isCustomItem && isActionItem) {
+                var itemNameParts = item.name.split(':', 2);
+
+                if (itemNameParts.length == 1) {
+                    itemNameParts.push(item.GetChecked());
+                }
+
+                // Send command to server
+                var commandName = '#menu';
+                var commandParams = { 'ColumnIndex': customTableGridView.contextMenuColumnIndex, 'Option': itemNameParts[0], 'Value': itemNameParts[1] };
+
+                customTableGridView.PerformCallback(commandName + JSON.stringify(commandParams));                
+            }
         }
 
         function saveCustomLayout() {

@@ -1427,6 +1427,7 @@
     <Compile Include="Eval\ValoriLinii.aspx.designer.cs">
       <DependentUpon>ValoriLinii.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Generatoare\Reports\Code\DictionaryExtensions.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportDataSourceWizardConnectionStringsProvider.cs" />
     <Compile Include="Generatoare\Reports\Code\EntityReportStorageWebExtension.cs" />
     <Compile Include="Generatoare\Reports\Models\Report.cs">

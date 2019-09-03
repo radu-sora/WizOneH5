@@ -3430,8 +3430,8 @@ namespace WizOne.Pontaj
 
                     //for (int x = 1; x <= 10; x++)
                     //{
-                    //    if (upd.NewValues["NrOre" + i + "_Tmp"] != null)
-                    //        dr["NrOre" + x] = Convert.ToDateTime(upd.NewValues["NrOre" + i + "_Tmp"]).Minute + (Convert.ToDateTime(upd.NewValues["NrOre" + i + "_Tmp"]).Hour * 60);
+                    //    if (upd.NewValues["NrOre" + x] != null)
+                    //        dr["NrOre" + x] = Convert.ToDateTime(upd.NewValues["NrOre" + x]).Minute + (Convert.ToDateTime(upd.NewValues["NrOre" + x]).Hour * 60);
                     //    else
                     //        dr["NrOre" + x] = DBNull.Value;
                     //}
@@ -3483,13 +3483,10 @@ namespace WizOne.Pontaj
 
                     //for (int x = 1; x <= 10; x++)
                     //{
-                    //    if (upd.NewValues["NrOre" + i + "_Tmp"] != null)
-                    //    {
-                    //        if (upd.NewValues["NrOre" + i + "_Tmp"] != null)
-                    //            dr["NrOre" + x] = Convert.ToDateTime(upd.NewValues["NrOre" + i + "_Tmp"]).Minute + (Convert.ToDateTime(upd.NewValues["NrOre" + i + "_Tmp"]).Hour * 60);
-                    //        else
-                    //            dr["NrOre" + x] = DBNull.Value;
-                    //    }
+                    //    if (upd.NewValues["NrOre" + x] != null)
+                    //        dr["NrOre" + x] = Convert.ToDateTime(upd.NewValues["NrOre" + x]).Minute + (Convert.ToDateTime(upd.NewValues["NrOre" + x]).Hour * 60);
+                    //    else
+                    //        dr["NrOre" + x] = DBNull.Value;
                     //}
 
                     if (upd.NewValues["IdStare"] != null) dr["IdStare"] = upd.NewValues["IdStare"] ?? DBNull.Value;
@@ -3529,8 +3526,9 @@ namespace WizOne.Pontaj
                         WHERE B.F10003={lst[0]} AND B.""Ziua""={General.ToDataUniv(Convert.ToDateTime(lst[1]))}", null);
                     if (dtInt.Rows.Count > 0)
                     {
+                        var ert = dt.Compute("Sum(NrOre1)", string.Empty);
                         int total = Convert.ToInt32(General.Nz(dt.Compute("Sum(NrOre1)", string.Empty), 0));
-                        if (total > Convert.ToInt32(General.Nz(dtInt.Rows[0]["Norma"], 8)))
+                        if (total > (Convert.ToInt32(General.Nz(dtInt.Rows[0]["Norma"], 8)) * 60))
                         {
                             grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Suma orelor depaseste norma");
                             faraErori = false;
@@ -3654,54 +3652,63 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void grCC_ParseValue(object sender, ASPxParseValueEventArgs e)
+        //protected void grCC_ParseValue(object sender, ASPxParseValueEventArgs e)
+        //{
+        //    //if (e.FieldName == "NrOre1")
+        //    //    e.Value = TimeSpanFromString(e.Value);
+        //}
+
+        //protected void grCC_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        //{
+        //    //if (e.Column.FieldName == "NrOre1")
+        //    //{
+        //    //    e.Editor.Value = StringFromTimeSpan(e.Value);
+        //    //    DataTable dt = grCC.DataSource as DataTable;
+
+        //    //}
+        //}
+
+        //private Int32 TimeSpanFromString(Object value)
+        //{
+        //    if (value == null || String.IsNullOrEmpty((String)value))
+        //        return 0;
+
+        //    return int.Parse((String)value);
+        //}
+
+        //private String StringFromTimeSpan(Object value)
+        //{
+        //    if (value == null)
+        //        return String.Empty;
+
+        //    int nrOre = (int)value;
+
+        //    return (nrOre / 60).ToString() + ":" + (nrOre % 60).ToString();
+
+        //    //String str = nrOre.ToString(@"hh\:mm");
+
+        //    //if (nrOre < 0)
+        //    //    return String.Format("-0.{0}", str);
+        //    //else
+        //    //    return String.Format("0.{0}", str);
+
+
+        //}
+
+        //protected void grCC_CustomErrorText(object sender, ASPxGridViewCustomErrorTextEventArgs e)
+        //{
+        //    var ert = e.ErrorText;
+        //    var edc = e.Exception;
+
+        //}
+
+        protected void grCC_CustomColumnDisplayText(object sender, ASPxGridViewColumnDisplayTextEventArgs e)
         {
-            //if (e.FieldName == "NrOre1")
-            //    e.Value = TimeSpanFromString(e.Value);
-        }
-
-        protected void grCC_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
-        {
-            //if (e.Column.FieldName == "NrOre1")
-            //{
-            //    e.Editor.Value = StringFromTimeSpan(e.Value);
-            //    DataTable dt = grCC.DataSource as DataTable;
-
-            //}
-        }
-
-        private Int32 TimeSpanFromString(Object value)
-        {
-            if (value == null || String.IsNullOrEmpty((String)value))
-                return 0;
-
-            return int.Parse((String)value);
-        }
-
-        private String StringFromTimeSpan(Object value)
-        {
-            if (value == null)
-                return String.Empty;
-
-            int nrOre = (int)value;
-
-            return (nrOre / 60).ToString() + ":" + (nrOre % 60).ToString();
-
-            //String str = nrOre.ToString(@"hh\:mm");
-
-            //if (nrOre < 0)
-            //    return String.Format("-0.{0}", str);
-            //else
-            //    return String.Format("0.{0}", str);
-
-
-        }
-
-        protected void grCC_CustomErrorText(object sender, ASPxGridViewCustomErrorTextEventArgs e)
-        {
-            var ert = e.ErrorText;
-            var edc = e.Exception;
-
+            if (e.Column.FieldName.Substring(0,5) == "NrOre")
+            {
+                var ts = TimeSpan.FromMinutes(Convert.ToDouble(General.Nz(e.Value,0)));
+                e.DisplayText = string.Format("{0:00}:{1:00}", (int)ts.TotalHours, ts.Minutes);
+            }
         }
     }
 }

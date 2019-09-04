@@ -99,7 +99,6 @@ function OnItemPressed(s, e) {
             }
             break;
         case "colChooser":
-            
             var tmpDate = document.getElementById("grDate");
             
             if (tmpDate != null) {

@@ -174,11 +174,11 @@
         </tr>
         <tr>
             <td colspan="2"> 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared">
-                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" />
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared">
+                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" EnableCustomizationWindow="true" />
                     <Settings ShowFilterRow="True" ShowGroupPanel="False" />
                     <SettingsSearchPanel Visible="False" />        
-                    <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick"  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }"/>
+                    <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="50px" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>

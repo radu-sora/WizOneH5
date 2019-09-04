@@ -488,95 +488,95 @@ namespace WizOne.Pagini
             }
         }
 
-        protected void grDate_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
-        {
-            try
-            {
-                string strSql = "SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND COLUMN_DEFAULT IS NOT NULL";
-                if (Constante.tipBD == 2)
-                    strSql = "SELECT COLUMN_NAME, DATA_DEFAULT AS COLUMN_DEFAULT FROM COLS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND DATA_DEFAULT IS NOT NULL";
-                DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                //DataTable dtDef = General.IncarcaDT(@"SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @1 AND COLUMN_DEFAULT IS NOT NULL ", new object[] { Session["Sablon_Tabela"] });
-                DataTable dtDef = General.IncarcaDT(strSql, null);
-                object[] row = new object[dt.Columns.Count];
-                int x = 0;
-                foreach (DataColumn col in dt.Columns)
-                {
-                    if (!col.AutoIncrement)
-                    {
-                        if (grDate.Columns[col.ColumnName] == null || grDate.Columns[col.ColumnName].Visible == false)
-                        {
-                            ////punem valoare default daca are
-                            //DataRow[] lst = dtDef.Select("COLUMN_NAME='" + col.ColumnName + "'");
-                            //if (lst.Count() > 0 && General.Nz(lst[0]["COLUMN_DEFAULT"], "").ToString() != "")
-                            //{
-                            //    if (lst[0]["COLUMN_DEFAULT"].ToString().Replace("(", "").Replace(")", "").Replace("N'", "").ToUpper() == "GETDATE")
-                            //        row[x] = DateTime.Now;
-                            //    else
-                            //        row[x] = lst[0]["COLUMN_DEFAULT"].ToString().Replace("(", "").Replace(")", "").Replace("N'", "");
-                            //}
+        //protected void grDate_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        //{
+        //    try
+        //    {
+        //        string strSql = "SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND COLUMN_DEFAULT IS NOT NULL";
+        //        if (Constante.tipBD == 2)
+        //            strSql = "SELECT COLUMN_NAME, DATA_DEFAULT AS COLUMN_DEFAULT FROM COLS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND DATA_DEFAULT IS NOT NULL";
+        //        DataTable dt = Session["InformatiaCurenta"] as DataTable;
+        //        //DataTable dtDef = General.IncarcaDT(@"SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @1 AND COLUMN_DEFAULT IS NOT NULL ", new object[] { Session["Sablon_Tabela"] });
+        //        DataTable dtDef = General.IncarcaDT(strSql, null);
+        //        object[] row = new object[dt.Columns.Count];
+        //        int x = 0;
+        //        foreach (DataColumn col in dt.Columns)
+        //        {
+        //            if (!col.AutoIncrement)
+        //            {
+        //                if (grDate.Columns[col.ColumnName] == null || grDate.Columns[col.ColumnName].Visible == false)
+        //                {
+        //                    ////punem valoare default daca are
+        //                    //DataRow[] lst = dtDef.Select("COLUMN_NAME='" + col.ColumnName + "'");
+        //                    //if (lst.Count() > 0 && General.Nz(lst[0]["COLUMN_DEFAULT"], "").ToString() != "")
+        //                    //{
+        //                    //    if (lst[0]["COLUMN_DEFAULT"].ToString().Replace("(", "").Replace(")", "").Replace("N'", "").ToUpper() == "GETDATE")
+        //                    //        row[x] = DateTime.Now;
+        //                    //    else
+        //                    //        row[x] = lst[0]["COLUMN_DEFAULT"].ToString().Replace("(", "").Replace(")", "").Replace("N'", "");
+        //                    //}
 
-                            switch (col.ColumnName.ToUpper())
-                            {
-                                case "IDAUTO":
-                                    ////row[x] = dt.AsEnumerable().Max(p => p.Field<int>("IdAuto")) + 1;
-                                    //row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                                    row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
-                                    break;
-                                case "USER_NO":
-                                    row[x] = Session["UserId"];
-                                    break;
-                                case "TIME":
-                                    row[x] = DateTime.Now;
-                                    break;
-                                default:
-                                    //suprascriem valoarea default cu id automat daca asa a fost setat
-                                    DataRow dr = General.IncarcaDR(@"SELECT * FROM ""tblNomenConfig"" WHERE ""Tabela"" = @1 AND ""Camp"" = @2 AND COALESCE(""IdAutomat"",0)=1", new object[] { Session["Sablon_Tabela"], col.ColumnName });
-                                    if (General.Nz(dr, "").ToString() != "")
-                                        row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
-                                    else
-                                        row[x] = e.NewValues[col.ColumnName];
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch (col.ColumnName.ToUpper())
-                            {
-                                case "IDAUTO":
-                                    //row[x] = dt.AsEnumerable().Max(p => p.Field<int>("IdAuto")) + 1;
-                                    //row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                                    row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
-                                    break;
-                                case "USER_NO":
-                                    row[x] = Session["UserId"];
-                                    break;
-                                case "TIME":
-                                    row[x] = DateTime.Now;
-                                    break;
-                                default:
-                                    row[x] = e.NewValues[col.ColumnName];
-                                    break;
-                            }
-                        }
-                    }
-                        
-                    x++;
-                }
+        //                    switch (col.ColumnName.ToUpper())
+        //                    {
+        //                        case "IDAUTO":
+        //                            ////row[x] = dt.AsEnumerable().Max(p => p.Field<int>("IdAuto")) + 1;
+        //                            //row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+        //                            row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
+        //                            break;
+        //                        case "USER_NO":
+        //                            row[x] = Session["UserId"];
+        //                            break;
+        //                        case "TIME":
+        //                            row[x] = DateTime.Now;
+        //                            break;
+        //                        default:
+        //                            //suprascriem valoarea default cu id automat daca asa a fost setat
+        //                            DataRow dr = General.IncarcaDR(@"SELECT * FROM ""tblNomenConfig"" WHERE ""Tabela"" = @1 AND ""Camp"" = @2 AND COALESCE(""IdAutomat"",0)=1", new object[] { Session["Sablon_Tabela"], col.ColumnName });
+        //                            if (General.Nz(dr, "").ToString() != "")
+        //                                row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
+        //                            else
+        //                                row[x] = e.NewValues[col.ColumnName];
+        //                            break;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    switch (col.ColumnName.ToUpper())
+        //                    {
+        //                        case "IDAUTO":
+        //                            //row[x] = dt.AsEnumerable().Max(p => p.Field<int>("IdAuto")) + 1;
+        //                            //row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+        //                            row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
+        //                            break;
+        //                        case "USER_NO":
+        //                            row[x] = Session["UserId"];
+        //                            break;
+        //                        case "TIME":
+        //                            row[x] = DateTime.Now;
+        //                            break;
+        //                        default:
+        //                            row[x] = e.NewValues[col.ColumnName];
+        //                            break;
+        //                    }
+        //                }
+        //            }
 
-                dt.Rows.Add(row);
-                e.Cancel = true;
-                grDate.CancelEdit();
-                Session["InformatiaCurenta"] = dt;
-                grDate.DataSource = dt;
-            }
-            catch (Exception ex)
-            {
-                msgError = ex.Message;
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //            x++;
+        //        }
+
+        //        dt.Rows.Add(row);
+        //        e.Cancel = true;
+        //        grDate.CancelEdit();
+        //        Session["InformatiaCurenta"] = dt;
+        //        grDate.DataSource = dt;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        msgError = ex.Message;
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         //protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         //{
@@ -612,6 +612,81 @@ namespace WizOne.Pagini
         //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
         //    }
         //}
+
+        protected void grDate_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            try
+            {
+                string strSql = "SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND COLUMN_DEFAULT IS NOT NULL";
+                if (Constante.tipBD == 2)
+                    strSql = "SELECT COLUMN_NAME, DATA_DEFAULT AS COLUMN_DEFAULT FROM COLS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND DATA_DEFAULT IS NOT NULL";
+
+                DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                DataTable dtDef = General.IncarcaDT(strSql, null);
+                object[] row = new object[dt.Columns.Count];
+                int x = 0;
+                foreach (DataColumn col in dt.Columns)
+                {
+                    if (!col.AutoIncrement)
+                    {
+                        switch (col.ColumnName.ToUpper())
+                        {
+                            case "IDAUTO":
+                                row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
+                                break;
+                            case "USER_NO":
+                                row[x] = Session["UserId"];
+                                break;
+                            case "TIME":
+                                row[x] = DateTime.Now;
+                                break;
+                            default:
+                                {
+                                    //Florin 2019.09.04
+                                    //Punem valoare default (numele tabelei) pt tabelele din WizSalary in campul 01, De exemplu F02601 = 26
+                                    try
+                                    {
+                                        string numeTabela = General.Nz(Session["Sablon_Tabela"], "").ToString();
+                                        if (col.ColumnName.ToUpper() == numeTabela + "01" && numeTabela != "" && numeTabela.Substring(0, 1).ToUpper() == "F" && General.IsNumeric(numeTabela.Substring(1)) && dt.Columns[numeTabela + "01"] != null)
+                                            row[x] = Convert.ToInt32(numeTabela.Substring(1));
+                                        else
+                                        {
+                                            //suprascriem valoarea default cu id automat daca asa a fost setat
+                                            if (grDate.Columns[col.ColumnName] == null || grDate.Columns[col.ColumnName].Visible == false)
+                                            {
+                                                DataRow dr = General.IncarcaDR(@"SELECT * FROM ""tblNomenConfig"" WHERE ""Tabela"" = @1 AND ""Camp"" = @2 AND COALESCE(""IdAutomat"",0)=1", new object[] { Session["Sablon_Tabela"], col.ColumnName });
+                                                if (General.Nz(dr, "").ToString() != "")
+                                                    row[x] = Dami.NextId(Session["Sablon_Tabela"].ToString());
+                                                else
+                                                    row[x] = e.NewValues[col.ColumnName];
+                                            }
+                                            else
+                                                row[x] = e.NewValues[col.ColumnName];
+                                        }
+                                    }
+                                    catch (Exception) { }
+                                }
+                            break;
+                        }
+                    }
+
+                    x++;
+                }
+
+                dt.Rows.Add(row);
+                e.Cancel = true;
+                grDate.CancelEdit();
+                Session["InformatiaCurenta"] = dt;
+                grDate.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                msgError = ex.Message;
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
 
         protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
@@ -659,6 +734,7 @@ namespace WizOne.Pagini
             try
             {
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
+
                 string strSql = "SELECT COLUMN_NAME, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND COLUMN_DEFAULT IS NOT NULL";
                 if (Constante.tipBD == 2)
                     strSql = "SELECT COLUMN_NAME, DATA_DEFAULT AS COLUMN_DEFAULT FROM COLS WHERE TABLE_NAME = '" + Session["Sablon_Tabela"] + "' AND DATA_DEFAULT IS NOT NULL";

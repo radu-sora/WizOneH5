@@ -249,115 +249,125 @@ namespace WizOne.Generatoare.Reports.Pages
 
         private void LoadASPxGridViewLayout(ASPxGridView aspxGridView, object layout, bool partial)
         {
-            if (layout != null && (layout as string).Length > 0)
+            var contextMenuOptions = new Dictionary<string, List<int>>();
+            var contextMenuHiddenOptions = new Dictionary<string, List<int>>();
+
+            if (layout != null && (layout as string).Length > 0) // Set new layout
             {
-                dynamic gridLayout = JObject.Parse(layout as string);
-                var contextMenuOptions = gridLayout.ContextMenuOptions != null ? 
-                    gridLayout.ContextMenuOptions.ToObject<Dictionary<string, List<int>>>() as Dictionary<string, List<int>> : 
-                    new Dictionary<string, List<int>>();
-
-                if (!partial)
+                try
                 {
-                    aspxGridView.SettingsSearchPanel.Visible = gridLayout.SearchPanel;
-                    aspxGridView.Settings.ShowGroupPanel = gridLayout.GroupPanel;                    
-                    aspxGridView.Settings.ShowFilterRow = gridLayout.FilterRow;
-                    aspxGridView.Settings.ShowFilterRowMenu = gridLayout.FilterRowMenu;
-                    aspxGridView.Settings.ShowFooter = gridLayout.Footer;
-                    aspxGridView.LoadClientLayout((string)gridLayout.Layout);
+                    dynamic gridLayout = JObject.Parse(layout as string);
+
+                    if (!partial)
+                    {
+                        aspxGridView.SettingsSearchPanel.Visible = gridLayout.SearchPanel;
+                        aspxGridView.Settings.ShowGroupPanel = gridLayout.GroupPanel;
+                        aspxGridView.Settings.ShowFilterRow = gridLayout.FilterRow;
+                        aspxGridView.Settings.ShowFilterRowMenu = gridLayout.FilterRowMenu;
+                        aspxGridView.Settings.ShowFooter = gridLayout.Footer;
+                        aspxGridView.LoadClientLayout((string)gridLayout.Layout);
+                    }
+
+                    aspxGridView.SettingsBehavior.FilterRowMode = gridLayout.FilterRowMode;
+                    aspxGridView.SettingsBehavior.AllowFixedGroups = gridLayout.FixedGroups;
+                    aspxGridView.SettingsBehavior.MergeGroupsMode = gridLayout.MergeGroups;
+                    aspxGridView.Settings.ShowGroupFooter = gridLayout.GroupFooter;
+                    aspxGridView.Styles.AlternatingRow.Enabled = gridLayout.AlternatingRowColor;
+                    aspxGridView.Settings.GridLines = gridLayout.GridLines;
+
+                    contextMenuOptions = gridLayout.ContextMenuOptions.ToObject<Dictionary<string, List<int>>>() as Dictionary<string, List<int>>;
+
+                    foreach (var option in contextMenuOptions)
+                    {
+                        if (option.Key.StartsWith("GroupByColumn"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).Settings.GroupInterval = (ColumnGroupInterval)Convert.ToInt32(option.Key.Split(':')[1]);
+                            });
+                        }
+
+                        if (option.Key.Equals("HeaderFilter"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).Settings.AllowHeaderFilter = DefaultBoolean.True;
+                            });
+                        }
+
+                        if (option.Key.StartsWith("HeaderFilterMode"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).SettingsHeaderFilter.Mode = (GridHeaderFilterMode)Convert.ToInt32(option.Key.Split(':')[1]);
+                            });
+                        }
+
+                        if (option.Key.Equals("CellMerge"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).Settings.AllowCellMerge = DefaultBoolean.True;
+                            });
+                        }
+
+                        if (option.Key.Equals("FixedColumn"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).FixedStyle = GridViewColumnFixedStyle.Left;
+                            });
+                        }
+                    }
                 }
-
-                aspxGridView.SettingsBehavior.FilterRowMode = gridLayout.FilterRowMode;
-                aspxGridView.SettingsBehavior.AllowFixedGroups = gridLayout.FixedGroups;
-                aspxGridView.SettingsBehavior.MergeGroupsMode = gridLayout.MergeGroups;
-                aspxGridView.Settings.ShowGroupFooter = gridLayout.GroupFooter;
-                aspxGridView.Styles.AlternatingRow.Enabled = gridLayout.AlternatingRowColor;
-                aspxGridView.Settings.GridLines = gridLayout.GridLines;
-
-                foreach (var option in contextMenuOptions)
-                {
-                    if (option.Key.StartsWith("GroupByColumn"))
-                    {
-                        option.Value.ForEach(col =>
-                        {
-                            (aspxGridView.Columns[col] as GridViewDataColumn).Settings.GroupInterval = (ColumnGroupInterval)Convert.ToInt32(option.Key.Split(':')[1]);
-                        });
-                    }
-
-                    if (option.Key.Equals("HeaderFilter"))
-                    {
-                        option.Value.ForEach(col =>
-                        {
-                            (aspxGridView.Columns[col] as GridViewDataColumn).Settings.AllowHeaderFilter = DefaultBoolean.True;
-                        });
-                    }
-
-                    if (option.Key.StartsWith("HeaderFilterMode"))
-                    {
-                        option.Value.ForEach(col => 
-                        {
-                            (aspxGridView.Columns[col] as GridViewDataColumn).SettingsHeaderFilter.Mode = (GridHeaderFilterMode)Convert.ToInt32(option.Key.Split(':')[1]);
-                        });
-                    }                        
-
-                    if (option.Key.Equals("CellMerge"))
-                    {
-                        option.Value.ForEach(col =>
-                        {
-                            (aspxGridView.Columns[col] as GridViewDataColumn).Settings.AllowCellMerge = DefaultBoolean.True;
-                        });
-                    }
-
-                    if (option.Key.Equals("FixedColumn"))
-                    {
-                        option.Value.ForEach(col =>
-                        {
-                            (aspxGridView.Columns[col] as GridViewDataColumn).FixedStyle = GridViewColumnFixedStyle.Left;
-                        });
-                    }                        
-                }
-                
-                // For client side customization                
-                var contextMenuHiddenOptions = new Dictionary<string, List<int>>();
-
-                aspxGridView.Columns.OfType<GridViewDataColumn>().ToList().ForEach(col =>
-                {
-                    if (col.GetType() == typeof(GridViewDataDateColumn))
-                    {
-                        contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Value).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DisplayText).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Alphabetical).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.List).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.CheckedList).Add(col.Index);
-                    }
-                    else
-                    {
-                        contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Date).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateMonth).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateYear).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateRange).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.DateRangePicker).Add(col.Index);
-                        contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.DateRangeCalendar).Add(col.Index);
-                    }                                        
-                });
-
-                contextMenuOptions["ShowFilterRow:" + (int)aspxGridView.SettingsBehavior.FilterRowMode] = new List<int>() { -1 };
-
-                if (aspxGridView.SettingsBehavior.AllowFixedGroups)
-                    contextMenuOptions["FixedGroups"] = new List<int>() { -1 };
-
-                if (aspxGridView.SettingsBehavior.MergeGroupsMode == GridViewMergeGroupsMode.Always)
-                    contextMenuOptions["MergeGroups"] = new List<int>() { -1 };
-
-                contextMenuOptions["GroupFooter:" + (int)aspxGridView.Settings.ShowGroupFooter] = new List<int>() { -1 };
-
-                if (aspxGridView.Styles.AlternatingRow.Enabled == DefaultBoolean.True)
-                    contextMenuOptions["AlternatingRowColor"] = new List<int>() { -1 };
-
-                contextMenuOptions["GridLines:" + (int)aspxGridView.Settings.GridLines] = new List<int>() { -1 };
-
-                aspxGridView.JSProperties["cpContextMenuOptions"] = contextMenuOptions;
-                aspxGridView.JSProperties["cpContextMenuHiddenOptions"] = contextMenuHiddenOptions;
+                catch { } // In case if layout has an old structure, just ignore it.
             }
+            else // Get current layout
+            {
+                dynamic gridLayout = JObject.Parse(SaveASPxGridViewLayout(aspxGridView));
+
+                contextMenuOptions = gridLayout.ContextMenuOptions.ToObject<Dictionary<string, List<int>>>() as Dictionary<string, List<int>>;
+            }
+
+            // For client side customization
+            contextMenuOptions["ShowFilterRow:" + (int)aspxGridView.SettingsBehavior.FilterRowMode] = new List<int>() { -1 };
+
+            if (aspxGridView.SettingsBehavior.AllowFixedGroups)
+                contextMenuOptions["FixedGroups"] = new List<int>() { -1 };
+
+            if (aspxGridView.SettingsBehavior.MergeGroupsMode == GridViewMergeGroupsMode.Always)
+                contextMenuOptions["MergeGroups"] = new List<int>() { -1 };
+
+            contextMenuOptions["GroupFooter:" + (int)aspxGridView.Settings.ShowGroupFooter] = new List<int>() { -1 };
+
+            if (aspxGridView.Styles.AlternatingRow.Enabled == DefaultBoolean.True)
+                contextMenuOptions["AlternatingRowColor"] = new List<int>() { -1 };
+
+            contextMenuOptions["GridLines:" + (int)aspxGridView.Settings.GridLines] = new List<int>() { -1 };
+
+            aspxGridView.Columns.OfType<GridViewDataColumn>().ToList().ForEach(col =>
+            {
+                if (col.GetType() == typeof(GridViewDataDateColumn))
+                {
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Value).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DisplayText).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Alphabetical).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.List).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.CheckedList).Add(col.Index);
+                }
+                else
+                {
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Date).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateMonth).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateYear).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateRange).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.DateRangePicker).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.DateRangeCalendar).Add(col.Index);
+                }
+            });
+
+            aspxGridView.JSProperties["cpContextMenuOptions"] = contextMenuOptions;
+            aspxGridView.JSProperties["cpContextMenuHiddenOptions"] = contextMenuHiddenOptions;
         }
 
         private string GetCallbackCommandName()

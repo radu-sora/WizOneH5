@@ -10,16 +10,7 @@
 namespace WizOne {
     
     
-    public partial class Info {
-        
-        /// <summary>
-        /// txtVers control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTitle txtVers;
+    public partial class WebForm4 {
         
         /// <summary>
         /// form1 control.
@@ -31,12 +22,12 @@ namespace WizOne {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// lblPan1 control.
+        /// ASPxScheduler1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPan1;
+        protected global::DevExpress.Web.ASPxScheduler.ASPxScheduler ASPxScheduler1;
     }
 }

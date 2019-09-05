@@ -401,6 +401,44 @@
             grCC.CancelEdit();
         }
 
+        var timeColumnField = "";
+        function onBatchEditStartEditing(s, e) {
+            
+            timeColumnField = e.focusedColumn.fieldName; 
+
+            if (timeColumnField.substring(0, 5) == "NrOre") {
+                var timeColumn = s.GetColumnByField(timeColumnField);
+                if (!e.rowValues.hasOwnProperty(timeColumn.index))
+                    return;
+                var cellInfo = e.rowValues[timeColumn.index];
+                cellInfo.value = minutesToString(cellInfo.value);
+            }
+        }
+
+        function onBatchEditEndEditing(s, e) {
+            if (timeColumnField.substring(0, 5) == "NrOre") {
+                var timeColumn = s.GetColumnByField(timeColumnField);
+                if (!e.rowValues.hasOwnProperty(timeColumn.index))
+                    return;
+                var cellInfo = e.rowValues[timeColumn.index];
+                cellInfo.value = stringToMinutes(s.GetEditValue(timeColumnField));
+            }
+        }
+
+        function minutesToString(mins) {
+            mins = parseInt(mins);
+            var hours = Math.floor(mins / 60).toString();
+            if (hours.length == 1)
+                hours = "0" + hours;
+            return hours + ":" + mins % 60;
+        }
+
+        function stringToMinutes(s) {
+            var hours = s.split(':')[0];
+            var mins = s.split(':')[1];
+            return parseInt(hours) * 60 + parseInt(mins);
+        }
+
         function OnInitPtj(s, e) {
             popUpInit.Hide();
             pnlLoading.Show();
@@ -776,13 +814,13 @@
                         <td colspan="2">
                             <dx:ASPxHiddenField ID="ccValori" runat="server" ClientInstanceName="ccValori" ClientIDMode="Static"></dx:ASPxHiddenField>
                             <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" Visible="true" 
-                                OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" >
+                                OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" OnCustomColumnDisplayText="grCC_CustomColumnDisplayText" >
                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                 <Settings ShowFilterRow="False" ShowColumnHeaders="true" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" VerticalScrollBarStyle="VirtualSmooth" VerticalScrollableHeight="130" />
                                 <SettingsSearchPanel Visible="false" />
                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-                                <ClientSideEvents ContextMenu="ctx" CustomButtonClick="grCC_CustomButtonClick" EndCallback="function(s,e) { OnEndCallback(s,e); }"/>
+                                <ClientSideEvents ContextMenu="ctx" CustomButtonClick="grCC_CustomButtonClick" BatchEditStartEditing="onBatchEditStartEditing" BatchEditEndEditing="onBatchEditEndEditing" EndCallback="function(s,e) { OnEndCallback(s,e); }" />
 
                                 <Columns>
                                     <dx:GridViewCommandColumn FixedStyle="Left" ShowEditButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true" >
@@ -798,7 +836,11 @@
                                     </dx:GridViewDataComboBoxColumn>
 
                                     <dx:GridViewDataComboBoxColumn FieldName="F06204" Name="F06204" Caption="Centrul de cost" Width="250px" VisibleIndex="2" Visible="true">
-                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" />
+                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList">
+                                            <ValidationSettings>
+                                                <RequiredField IsRequired="true" ErrorText="Camp obligatoriu" />
+                                            </ValidationSettings>
+                                        </PropertiesComboBox>
                                     </dx:GridViewDataComboBoxColumn>
 
                                     <dx:GridViewDataComboBoxColumn FieldName="IdProiect" Name="IdProiect" Caption="Proiect" Width="250px" VisibleIndex="3" Visible="false" >
@@ -836,16 +878,57 @@
                                         </PropertiesTimeEdit>
                                     </dx:GridViewDataTimeEditColumn>
 
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre1" Name="NrOre1" Caption="NrOre1" Width="100px" Visible="false" VisibleIndex="9" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre2" Name="NrOre2" Caption="NrOre2" Width="100px" Visible="false" VisibleIndex="10" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre3" Name="NrOre3" Caption="NrOre3" Width="100px" Visible="false" VisibleIndex="11" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre4" Name="NrOre4" Caption="NrOre4" Width="100px" Visible="false" VisibleIndex="12" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre5" Name="NrOre5" Caption="NrOre5" Width="100px" Visible="false" VisibleIndex="13" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre6" Name="NrOre6" Caption="NrOre6" Width="100px" Visible="false" VisibleIndex="14" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre7" Name="NrOre7" Caption="NrOre7" Width="100px" Visible="false" VisibleIndex="15" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre8" Name="NrOre8" Caption="NrOre8" Width="100px" Visible="false" VisibleIndex="16" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre9" Name="NrOre9" Caption="NrOre9" Width="100px" Visible="false" VisibleIndex="17" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
-                                    <dx:GridViewDataSpinEditColumn FieldName="NrOre10" Name="NrOre10" Caption="NrOre10" Width="100px" Visible="false" VisibleIndex="18" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="24" />
+                                    <dx:GridViewDataTextColumn FieldName="NrOre1" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre2" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre3" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre4" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre5" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre6" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre7" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre8" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre9" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+                                    <dx:GridViewDataTextColumn FieldName="NrOre10" Width="100px">
+                                        <PropertiesTextEdit>
+                                            <MaskSettings Mask="<00..23>:<00..59>"  />
+                                        </PropertiesTextEdit>
+                                    </dx:GridViewDataTextColumn>
+
 
                                     <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                                     <dx:GridViewDataTextColumn FieldName="Ziua" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

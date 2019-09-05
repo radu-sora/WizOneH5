@@ -22,40 +22,45 @@
     <form id="form1" runat="server">
 
         <div class="outer">
-            <div class="inner">
-                <span id="lblPan1" runat="server">Utilizator</span>
-                <asp:TextBox ID="txtPan1" runat="server" TabIndex="1" MaxLength="50" 
-                    meta:resourcekey="txtPan1Resource1"></asp:TextBox>
-                <div class="divRfv">
-                    <asp:RequiredFieldValidator id="rfv1" ControlToValidate="txtPan1" 
-                            ValidationGroup="IntroGrup" ErrorMessage="Lipseste utilizatorul" runat="Server" 
-                            meta:resourcekey="rfv1Resource1" />
-                    <asp:RequiredFieldValidator id="rfv3" 
-                            ControlToValidate="txtPan1" ValidationGroup="lnkGrup" 
-                            ErrorMessage="Lipseste utilizatorul" runat="Server" 
-                            meta:resourcekey="rfv3Resource1" />
-                </div>
-                <span id="lblPan2" runat="server">Parola</span>
-                <asp:TextBox ID="txtPan2" runat="server" TabIndex="2" MaxLength="50" 
-                    TextMode="Password" meta:resourcekey="txtPan2Resource1"></asp:TextBox>
-                <asp:RequiredFieldValidator id="rfv2" ControlToValidate="txtPan2" 
-                    ValidationGroup="IntroGrup" ErrorMessage="Introdu parola" runat="Server" 
-                    meta:resourcekey="rfv2Resource1" />
+            <div id="divAd" style="text-align:center;">
+                <span id="lblRaspuns" runat="server" visible="false" class="inner" style="text-align:center; margin-top:70px;"></span>
             </div>
-            <asp:LinkButton ID="lnkUitat" runat="server"  TabIndex="-1" Width="180px"
-                ValidationGroup="lnkGrup" onclick="lnkUitat_Click"
-                meta:resourcekey="lnkUitatResource1">Am uitat parola</asp:LinkButton>
-            <asp:Button ID="btnOk" runat="server" Text="OK" TabIndex="3" 
-                ValidationGroup="IntroGrup" onclick="btnOk_Click" 
-                meta:resourcekey="btnOkResource1" />
+            <div id="divRas" runat="server">
+                <div class="inner">
+                    <span id="lblPan1" runat="server">Utilizator</span>
+                    <asp:TextBox ID="txtPan1" runat="server" TabIndex="1" MaxLength="50" 
+                        meta:resourcekey="txtPan1Resource1"></asp:TextBox>
+                    <div class="divRfv">
+                        <asp:RequiredFieldValidator id="rfv1" ControlToValidate="txtPan1" 
+                                ValidationGroup="IntroGrup" ErrorMessage="Lipseste utilizatorul" runat="Server" 
+                                meta:resourcekey="rfv1Resource1" />
+                        <asp:RequiredFieldValidator id="rfv3" 
+                                ControlToValidate="txtPan1" ValidationGroup="lnkGrup" 
+                                ErrorMessage="Lipseste utilizatorul" runat="Server" 
+                                meta:resourcekey="rfv3Resource1" />
+                    </div>
+                    <span id="lblPan2" runat="server">Parola</span>
+                    <asp:TextBox ID="txtPan2" runat="server" TabIndex="2" MaxLength="50" 
+                        TextMode="Password" meta:resourcekey="txtPan2Resource1"></asp:TextBox>
+                    <asp:RequiredFieldValidator id="rfv2" ControlToValidate="txtPan2" 
+                        ValidationGroup="IntroGrup" ErrorMessage="Introdu parola" runat="Server" 
+                        meta:resourcekey="rfv2Resource1" />
+                </div>
+                <asp:LinkButton ID="lnkUitat" runat="server"  TabIndex="-1" Width="180px"
+                    ValidationGroup="lnkGrup" onclick="lnkUitat_Click"
+                    meta:resourcekey="lnkUitatResource1">Am uitat parola</asp:LinkButton>
+                <asp:Button ID="btnOk" runat="server" Text="OK" TabIndex="3" 
+                    ValidationGroup="IntroGrup" onclick="btnOk_Click" 
+                    meta:resourcekey="btnOkResource1" />
            
-            <div id="divOuter" runat="server" class="captcha">
-		    </div>
+                <div id="divOuter" runat="server" class="captcha">
+		        </div>
+            </div>
 		</div>
 
-
         <script type="text/javascript">
-            document.getElementById("txtPan1").focus();   
+            if (document.getElementById("txtPan1"))
+                document.getElementById("txtPan1").focus();   
         </script>
 
     </form>

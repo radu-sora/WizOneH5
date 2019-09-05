@@ -1598,32 +1598,44 @@ namespace WizOne.Module
 
 
                 var virtualDir = VirtualPathUtility.ToAbsolute("~/");
-                //ert += virtualDir + Environment.NewLine;
+                ////ert += virtualDir + Environment.NewLine;
 
-                //if (virtualDir != "" && virtualDir.Substring(virtualDir.Length - 1, 1) == "/")
-                //    virtualDir = virtualDir.Substring(0, virtualDir.Length - 1);
-                //ert += virtualDir + Environment.NewLine;
+                ////if (virtualDir != "" && virtualDir.Substring(virtualDir.Length - 1, 1) == "/")
+                ////    virtualDir = virtualDir.Substring(0, virtualDir.Length - 1);
+                ////ert += virtualDir + Environment.NewLine;
 
-                //ert += corpAtt.IndexOf("../UploadFiles/Images") + Environment.NewLine;
-                //ert += virtualDir + "../UploadFiles/Images" + Environment.NewLine;
-                //ert += baseUrl + virtualDir + "../UploadFiles/Images" + Environment.NewLine;
-                //ert += corpAtt + Environment.NewLine;
+                ////ert += corpAtt.IndexOf("../UploadFiles/Images") + Environment.NewLine;
+                ////ert += virtualDir + "../UploadFiles/Images" + Environment.NewLine;
+                ////ert += baseUrl + virtualDir + "../UploadFiles/Images" + Environment.NewLine;
+                ////ert += corpAtt + Environment.NewLine;
 
-                if (corpAtt.IndexOf("../UploadFiles/Images") >= 0)
-                    corpAtt = corpAtt.Replace("../UploadFiles/Images", baseUrl + virtualDir + "/UploadFiles/Images");
-                else
+
+
+                //if (corpAtt.IndexOf("../UploadFiles/Images") >= 0)
+                //    corpAtt = corpAtt.Replace("../UploadFiles/Images", baseUrl + virtualDir + "/UploadFiles/Images");
+                //else
+                //{
+                //    if (corpAtt.IndexOf("/UploadFiles/Images") >= 0)
+                //        corpAtt = corpAtt.Replace("/UploadFiles/Images", baseUrl + virtualDir + "/UploadFiles/Images");
+                //    else
+                //    {
+                //        if (corpAtt.IndexOf("UploadFiles/Images") >= 0)
+                //            corpAtt = corpAtt.Replace("UploadFiles/Images", baseUrl + virtualDir + "/UploadFiles/Images");
+                //    }
+
+                //}
+
+
+                int poz = corpAtt.IndexOf("UploadFiles/Images");
+                if (poz >= 0)
                 {
-                    if (corpAtt.IndexOf("/UploadFiles/Images") >= 0)
-                        corpAtt = corpAtt.Replace("/UploadFiles/Images", baseUrl + virtualDir + "/UploadFiles/Images");
-                    else
+                    int poz1 = corpAtt.Substring(0, poz).LastIndexOf('"');
+                    if (poz - poz1 > 0)
                     {
-                        if (corpAtt.IndexOf("UploadFiles/Images") >= 0)
-                            corpAtt = corpAtt.Replace("UploadFiles/Images", baseUrl + virtualDir + "/UploadFiles/Images");
+                        string txtReplace = corpAtt.Substring(poz1, poz - poz1) + "UploadFiles/Images";
+                        corpAtt = corpAtt.Replace(txtReplace, "\"" + baseUrl + virtualDir + "UploadFiles/Images");
                     }
-                        
                 }
-                    
-
 
 
                 string txt = @"<!DOCTYPE html>

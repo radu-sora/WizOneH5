@@ -1,15 +1,14 @@
-﻿using System;
+﻿using DevExpress.Web;
+using ProceseSec;
+using System;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
 using WizOne.Module;
-using System.IO;
-using DevExpress.Web;
-using System.Diagnostics;
-using ProceseSec;
-using System.Web.Hosting;
 
 namespace WizOne
 {
@@ -444,12 +443,18 @@ namespace WizOne
         {
             try
             {
-                //Radu 20.07.2018 - am inlocuit ../ cu ~/
-                if (Constante.esteTactil)
-                    //Response.Redirect("~/DefaultTactil.aspx", false);
-                    Response.Redirect("~/Tactil/MainTactil.aspx", false);
+                string tipVerif = General.Nz(Dami.ValoareParam("TipVerificareAccesApp"), "1").ToString();
+                if (tipVerif == "5")
+                    General.SignOut();
                 else
-                    Response.Redirect("~/Default.aspx", false);
+                {
+                    //Radu 20.07.2018 - am inlocuit ../ cu ~/
+                    if (Constante.esteTactil)
+                        //Response.Redirect("~/DefaultTactil.aspx", false);
+                        Response.Redirect("~/Tactil/MainTactil.aspx", false);
+                    else
+                        Response.Redirect("~/Default.aspx", false);
+                }
             }
             catch (Exception ex)
             {

@@ -10,33 +10,24 @@
 namespace WizOne {
     
     
-    public partial class Info {
+    public partial class WebForm6 {
         
         /// <summary>
-        /// txtVers control.
+        /// grCC control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTitle txtVers;
+        protected global::DevExpress.Web.ASPxGridView grCC;
         
         /// <summary>
-        /// form1 control.
+        /// btnDeleteCC control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
-        /// <summary>
-        /// lblPan1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPan1;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDeleteCC;
     }
 }

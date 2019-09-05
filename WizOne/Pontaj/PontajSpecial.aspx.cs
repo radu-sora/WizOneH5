@@ -243,8 +243,12 @@ namespace WizOne.Pontaj
 
                 if (lstMarci.Count > 0)
                 {
-                    General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), Convert.ToDateTime(dtDataStart.Value).Year, Convert.ToDateTime(dtDataStart.Value).Month);
-
+                    DateTime dt = Convert.ToDateTime(dtDataStart.Value);
+                    while (dt.Year < Convert.ToDateTime(dtDataSfarsit.Value).Year || (dt.Year == Convert.ToDateTime(dtDataSfarsit.Value).Year && dt.Month <= Convert.ToDateTime(dtDataSfarsit.Value).Month))
+                    {
+                        General.PontajInitGeneral(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month);             
+                        dt = dt.AddMonths(1);
+                    }
                     string msg = InitializarePontajSpecial(Convert.ToDateTime(dtDataStart.Value), Convert.ToDateTime(dtDataSfarsit.Value), Convert.ToInt32(cmbNrZileSablon.Value), sablon, lstMarci);
                   
                     if (msg.Length > 0)

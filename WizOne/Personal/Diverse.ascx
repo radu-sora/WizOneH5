@@ -11,7 +11,7 @@
 	</table>
 				
 
-   <dx:ASPxCallbackPanel ID = "Diverse_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlDiverse" runat="server" OnCallback="pnlCtlDiverse_Callback" SettingsLoadingPanel-Enabled="false">
+   <dx:ASPxCallbackPanel ID = "Diverse_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlDiverse" runat="server"  SettingsLoadingPanel-Enabled="false">
       <PanelCollection>
         <dx:PanelContent>
     <asp:DataList ID="Diverse_DataList" runat="server">
@@ -137,11 +137,11 @@
 					        </tr>
 					        <tr>				
 						        <td >
-							        <dx:ASPxLabel  ID="lblZileCOAnCrt" runat="server"  Text="Zile CO an curent" ></dx:ASPxLabel >	
-						        </td>	
-                                <td></td>	
+							        <dx:ASPxLabel  ID="lblZileCOAnCrt" runat="server" Width="100" Text="Zile CO an curent" ></dx:ASPxLabel >	
+						        </td>
+                           	
 						        <td>
-							        <dx:ASPxTextBox  ID="txtZileCOAnCrt" Width="75"  runat="server" Text='<%# Eval("F100995") %>' AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtZileCOAnCrt" Width="150"  runat="server" Text='<%# Eval("F100995") %>' AutoPostBack="false" >
                                     
 							        </dx:ASPxTextBox>
 						        </td>

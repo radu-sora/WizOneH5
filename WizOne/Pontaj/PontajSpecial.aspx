@@ -110,7 +110,7 @@
                                     <td>
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
                                             <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Angajat</label>
-                                            <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"
+                                            <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" SelectInputTextOnClick="true"
                                                         CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
                                                 <Columns>
                                                     <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />

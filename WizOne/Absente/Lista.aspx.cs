@@ -311,7 +311,7 @@ namespace WizOne.Absente
                     ids.Add(new Module.General.metaCereriRol { Id = Convert.ToInt32(General.Nz(arr[0], 0)), Rol = Convert.ToInt32(General.Nz(arr[5], 0)) });
                 }
 
-                General.MemoreazaEroarea("Vine din Absente Lista");
+                //General.MemoreazaEroarea("Vine din Absente Lista");
                 if (ids.Count != 0) msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), "",  Convert.ToInt32(General.Nz(cmbRol.Value,0)));
                 //MessageBox.Show(msg, MessageBox.icoWarning, "Atentie !");
                 grDate.JSProperties["cpAlertMessage"] = msg;

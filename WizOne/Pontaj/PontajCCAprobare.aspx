@@ -109,7 +109,7 @@
                     </div>
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblAng" runat="server" style="display:inline-block;">Angajat</label>
-                        <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
+                        <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
                                     CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
                             <Columns>
                                 <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />

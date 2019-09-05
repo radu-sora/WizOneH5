@@ -443,7 +443,10 @@
                         <dx:GridViewDataTextColumn FieldName="Actiune" Name="Actiune" Caption="Actiune" ReadOnly="true" Width="150px" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Rol" Name="Rol" Caption="Rol" ReadOnly="true" Width="150px" Visible="false" ShowInCustomizationForm="false" />
 
-                        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="250px" VisibleIndex="5" Settings-AutoFilterCondition="Contains" />
+                        <dx:GridViewDataTextColumn FieldName="F10003" Name="Marca" Caption="Marca" ReadOnly="true" Width="100px" VisibleIndex="3" Settings-AutoFilterCondition="Equals" />
+                        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="NumeAngajat" Caption="Angajat" ReadOnly="true" Width="250px" VisibleIndex="4" Settings-AutoFilterCondition="Contains" />
+                        <dx:GridViewDataTextColumn FieldName="EID" Name="EID" Caption="EID" ReadOnly="true" Width="100px" VisibleIndex="5" Settings-AutoFilterCondition="Equals" />
+
                         <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" ReadOnly="true" Width="250px" VisibleIndex="6">
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                             <Settings FilterMode="DisplayText" />

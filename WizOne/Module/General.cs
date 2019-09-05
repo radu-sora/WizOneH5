@@ -2767,7 +2767,7 @@ namespace WizOne.Module
         public static string MetodeCereri(int tipActiune, List<metaCereriRol> arr, int idUser, int userMarca, string motiv = "", int idRol = 0)
         {
             string log = "";
-            string tmpLog = "A intrat in metoda - tipActiune: " + tipActiune;
+            //string tmpLog = "A intrat in metoda - tipActiune: " + tipActiune;
 
             //actiune  1  - aprobare
             //actiune  2  - respingere
@@ -3091,7 +3091,7 @@ namespace WizOne.Module
             }
             finally
             {
-                General.MemoreazaEroarea(tmpLog);
+                //General.MemoreazaEroarea(tmpLog);
             }
 
             return log;

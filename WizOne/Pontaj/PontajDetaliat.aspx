@@ -573,7 +573,7 @@
                     
                                 <div style="float:left; padding-right:15px;">
                                     <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px;">Angajat</label>
-                                    <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
+                                    <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
                                                 CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" OnButtonClick="cmbAng_ButtonClick" >
                                         <Columns>
                                             <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
@@ -590,10 +590,7 @@
                                                 <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
                                             </dx:EditButton>
                                         </Buttons>
-                                        <ClientSideEvents ButtonClick="function(s, e) {
-                                                                    pnlLoading.Show();
-                                                                    e.processOnServer = true;
-                                                                }" />
+                                        <ClientSideEvents ButtonClick="function(s, e) { pnlLoading.Show(); e.processOnServer = true; }"/>
                                     </dx:ASPxComboBox>
                                 </div>
 
@@ -642,7 +639,7 @@
                                             </div>
                                             <div style="float:left; padding-right:15px;">
                                                 <label id="lblAngZi" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Angajat</label>
-                                                <dx:ASPxComboBox ID="cmbAngZi" ClientInstanceName="cmbAngZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
+                                                <dx:ASPxComboBox ID="cmbAngZi" ClientInstanceName="cmbAngZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
                                                             CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
                                                     <Columns>
                                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />

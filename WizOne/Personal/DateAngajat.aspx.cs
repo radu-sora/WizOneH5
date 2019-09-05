@@ -1137,8 +1137,10 @@ namespace WizOne.Personal
                 lstCtr.Add("txtVechimeCarte", "F100644");
                 lstCtr.Add("txtZileCOAnCrt", "F100995");
 
-                lstCtr.Add("hfNrLuni", "F100935");
-                lstCtr.Add("hfNrAni", "F100936");
+                //lstCtr.Add("hfNrLuni", "F100935");
+                //lstCtr.Add("hfNrAni", "F100936");
+                lstCtr.Add("txtNrLuni", "F100935");
+                lstCtr.Add("txtNrZile", "F100936");
 
                 #endregion
 

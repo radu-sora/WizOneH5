@@ -13,21 +13,12 @@ namespace WizOne {
     public partial class WebForm1 {
         
         /// <summary>
-        /// grCC control.
+        /// lblViz control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grCC;
-        
-        /// <summary>
-        /// btnDeleteCC control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDeleteCC;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblViz;
     }
 }

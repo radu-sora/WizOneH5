@@ -10,18 +10,8 @@
     <form id="form1" runat="server">
         <div>
 
-            <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" Visible="true"  >
-                <SettingsEditing Mode="Batch"/>
+            <label id="lblViz" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Vizualizare</label>
 
-                <Columns>
-                    <dx:GridViewDataTextColumn FieldName="Id" ReadOnly="false" Visible="true" ShowInCustomizationForm="false" />
-                    <dx:GridViewDataTextColumn FieldName="Denumire" ReadOnly="false" Visible="true" ShowInCustomizationForm="false" />
-                    <dx:GridViewDataTextColumn FieldName="Descriere" UnboundType="String" Width="150px" Caption="test"></dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTimeEditColumn FieldName="NrOre1_Tmp" Name="NrOre1_Tmp" Caption="NrOre2" Width="100px" Visible="true" ReadOnly="false"></dx:GridViewDataTimeEditColumn>
-                    <dx:GridViewDataTextColumn FieldName="Id_Tmp" ReadOnly="false" Visible="true" ShowInCustomizationForm="false" />
-                </Columns>
-
-            </dx:ASPxGridView>
         </div>
     </form>
 </body>

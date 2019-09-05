@@ -5,7 +5,7 @@
 
 body {
     font: 13px 'Segoe UI', 'Helvetica Neue', Helvetica, 'Droid Sans', Tahoma, Geneva, sans-serif;
-    color: Gray;
+    /*color: Gray;*/
     background: #FFF;
     height: 100%;
 }
@@ -631,6 +631,14 @@ table#grAnual div.IstEx_Zi
 
 .txtEnabled{
     color:lightgray;
+}
+
+table{
+    font-size:12px;
+}
+
+table label {
+    color:gray;
 }
 
 

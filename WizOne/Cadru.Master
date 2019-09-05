@@ -206,9 +206,9 @@
                 <dx:PanelContent ID="PanelContent1" runat="server">
                     <table width="100%">
                         <tr>
-                            <td style="width:20%; text-align:left;"><span id="txtVers" runat="server"></span></td>
-                            <td style="width:60%; text-align:center;"><span id="txtLunaLucru" runat="server"></span></td>
-                            <td style="width:20%; text-align:right;"><span id="txtUsr" runat="server"></span></td>
+                            <td style="width:40%; text-align:left;"><span id="txtVers" runat="server"></span></td>
+                            <td style="width:20%; text-align:center;"><span id="txtLunaLucru" runat="server"></span></td>
+                            <td style="width:40%; text-align:right;"><span id="txtUsr" runat="server"></span></td>
                         </tr>
                     </table>
                 </dx:PanelContent>

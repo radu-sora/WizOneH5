@@ -188,8 +188,16 @@ namespace WizOne.Personal
                 {
                     object[] obj = grDateContracte.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
 
-                    DateTime dtInc = Convert.ToDateTime(obj[0]);
-                    DateTime dtSf = Convert.ToDateTime(obj[1]);
+                    //DateTime? dtInc = Convert.ToDateTime(obj[0]);
+                    //DateTime? dtSf = Convert.ToDateTime(obj[1]);
+
+                    DateTime? dtInc = null;
+                    if (General.Nz(obj[0], "").ToString() != "")
+                        dtInc = Convert.ToDateTime(obj[0]);
+
+                    DateTime? dtSf = null;
+                    if (General.Nz(obj[1], "").ToString() != "")
+                        dtSf = Convert.ToDateTime(obj[1]);
 
                     if (dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
                     {
@@ -297,8 +305,16 @@ namespace WizOne.Personal
                 {
                     object[] obj = grDateContracte.GetRowValues(i, new string[] { "DataInceput", "DataSfarsit" }) as object[];
 
-                    DateTime dtInc = Convert.ToDateTime(obj[0]);
-                    DateTime dtSf = Convert.ToDateTime(obj[1]);
+                    //DateTime? dtInc = Convert.ToDateTime(obj[0]);
+                    //DateTime? dtSf = Convert.ToDateTime(obj[1]) : null;
+
+                    DateTime? dtInc = null;
+                    if (General.Nz(obj[0], "").ToString() != "")
+                        dtInc = Convert.ToDateTime(obj[0]);
+
+                    DateTime ? dtSf = null;
+                    if (General.Nz(obj[1], "").ToString() != "")
+                        dtSf = Convert.ToDateTime(obj[1]);
 
                     if (grDateContracte.EditingRowVisibleIndex != i && dtInc != null && dtSf != null && e.NewValues["DataInceput"] != null && e.NewValues["DataSfarsit"] != null)
                     {

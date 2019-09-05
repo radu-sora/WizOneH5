@@ -146,12 +146,15 @@ namespace WizOne.Personal
                                     row[x] = Dami.NextId("F110");
                                 break;
                             case "F11012":
-                                if (e.NewValues["F11012"] == null || e.NewValues["F11012"].ToString().Length <= 0 || !General.VerificaCNP(e.NewValues["F11012"].ToString()))
-                                {
-                                    grDatePersIntr.JSProperties["cpAlertMessage"] = "CNP invalid!";
-                                    err = true;
-                                }
-                                else
+                                //Florin 2019.09.05 - nu se mai doreste verificare de cnp; este de ajuns doar mesajul de averitizare de pe partea de client, nu se doreste sa fie blocanta aceasta verificare (venita de la Z pe mail 2019.09.05)
+
+
+                                //if (e.NewValues["F11012"] == null || e.NewValues["F11012"].ToString().Length <= 0 || !General.VerificaCNP(e.NewValues["F11012"].ToString()))
+                                //{
+                                //    grDatePersIntr.JSProperties["cpAlertMessage"] = "CNP invalid!";
+                                //    err = true;
+                                //}
+                                //else
                                     row[x] = e.NewValues[col.ColumnName];
                                 break;
                             case "F11006":
@@ -209,12 +212,16 @@ namespace WizOne.Personal
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
 
-                    if (col.ColumnName.ToUpper() == "F11012")
-                        if (e.NewValues[col.ColumnName] == null || e.NewValues[col.ColumnName].ToString().Length <= 0 || !General.VerificaCNP(e.NewValues[col.ColumnName].ToString()))
-                        {
-                            grDatePersIntr.JSProperties["cpAlertMessage"] = "CNP invalid!";
-                            err = true;
-                        }
+                    //Florin 2019.09.05 - nu se mai doreste verificare de cnp; este de ajuns doar mesajul de averitizare de pe partea de client, nu se doreste sa fie blocanta aceasta verificare (venita de la Z pe mail 2019.09.05)
+
+                    //if (col.ColumnName.ToUpper() == "F11012")
+                    //    if (e.NewValues[col.ColumnName] == null || e.NewValues[col.ColumnName].ToString().Length <= 0 || !General.VerificaCNP(e.NewValues[col.ColumnName].ToString()))
+                    //    {
+                    //        grDatePersIntr.JSProperties["cpAlertMessage"] = "CNP invalid!";
+                    //        err = true;
+                    //    }
+
+
                     if (col.ColumnName.ToUpper() == "F11006")
                         if (e.NewValues["F11012"] != null && e.NewValues["F11012"].ToString().Length > 0 && General.VerificaCNP(e.NewValues["F11012"].ToString()))
                             row[col.ColumnName] = General.getDataNasterii(e.NewValues["F11012"].ToString());

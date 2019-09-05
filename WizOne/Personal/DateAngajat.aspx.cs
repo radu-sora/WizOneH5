@@ -349,16 +349,23 @@ namespace WizOne.Personal
                     }
                 }
 
-                //verificarea se face pe partea de client
-                //Radu 29.08.2019 - este necesara verificarea si la salvare, pentru ca pot sa ramana valori invalide pe CNP si data nasterii
-                string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'NuPermiteCNPInvalid'";
-                DataTable dt = General.IncarcaDT(sql, null);
-                if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)
-                    if (!General.VerificaCNP(ds.Tables[1].Rows[0]["F10017"].ToString()))
-                    {
-                        MessageBox.Show("CNP invalid!", MessageBox.icoError);
-                        return;
-                    }
+
+                string sql = "";
+                DataTable dt = new DataTable();
+
+                //Florin 2019.09.05 - nu se mai doreste verificare de cnp; este de ajuns doar mesajul de averitizare de pe partea de client, nu se doreste sa fie blocanta aceasta verificare (venita de la Z pe mail 2019.09.05)
+
+                ////verificarea se face pe partea de client
+                ////Radu 29.08.2019 - este necesara verificarea si la salvare, pentru ca pot sa ramana valori invalide pe CNP si data nasterii
+                //sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'NuPermiteCNPInvalid'";
+                //dt = General.IncarcaDT(sql, null);
+                //if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dt.Rows[0][0].ToString()) == 1)
+                //    if (!General.VerificaCNP(ds.Tables[1].Rows[0]["F10017"].ToString()))
+                //    {
+                //        MessageBox.Show("CNP invalid!", MessageBox.icoError);
+                //        return;
+                //    }
+
                 int varsta = Dami.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
                 if (varsta < 16)
                 {

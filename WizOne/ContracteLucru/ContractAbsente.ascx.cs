@@ -21,6 +21,25 @@ namespace WizOne.ContracteLucru
             DataList1.DataSource = table;
             DataList1.DataBind();
 
+            //Florin 2019.09.06
+            if (table != null && table.Rows.Count > 0)
+            {
+                if (General.Nz(table.Rows[0]["Afisare"], "").ToString() != "")
+                {
+                    ASPxComboBox cmbAfis = DataList1.Items[0].FindControl("cmbAfis") as ASPxComboBox;
+                    cmbAfis.Value = Convert.ToInt32(table.Rows[0]["Afisare"]);
+                }
+
+                if (General.Nz(table.Rows[0]["TipRaportareOreNoapte"], "").ToString() != "")
+                {
+                    ASPxComboBox cmbRap = DataList1.Items[0].FindControl("cmbRap") as ASPxComboBox;
+                    cmbRap.Value = Convert.ToInt32(table.Rows[0]["TipRaportareOreNoapte"]);
+                }
+
+                //  Value='<%#Eval("Afisare") %>'
+                //  Value='<%#Eval("TipRaportareOreNoapte") %>'
+            }
+
             grDateCtrAbs.DataBind();
 
         }

@@ -57,7 +57,7 @@ namespace WizOne.ContracteLucru
             grDate6.DataBind();
             grDate7.DataBind();
             grDate8.DataBind();
-                      
+
 
             //cmbSchimb_SelectedIndexChanged(0, grDate0, DataList0);
             //cmbSchimb_SelectedIndexChanged(1, grDate1, DataList1);
@@ -68,6 +68,30 @@ namespace WizOne.ContracteLucru
             //cmbSchimb_SelectedIndexChanged(6, grDate6, DataList6);
             //cmbSchimb_SelectedIndexChanged(7, grDate7, DataList7);
             //cmbSchimb_SelectedIndexChanged(8, grDate8, DataList8);
+
+            //Florin 2019.09.06
+            if (table != null && table.Rows.Count > 0)
+            {
+                for (int i = 0; i <= 8; i++)
+                {
+                    ASPxCallbackPanel pnl = FindControl("pnlCtlCtrZilnic" + i) as ASPxCallbackPanel;
+                    if (pnl == null) continue;
+                    DataList dataList = pnl.FindControl("DataList" + i) as DataList;
+                    if (dataList == null) continue;
+
+                    if (General.Nz(table.Rows[0]["TipSchimb" + i], "").ToString() != "")
+                    {
+                        ASPxComboBox cmbSchimb = dataList.Items[0].FindControl("cmbSchimb" + i) as ASPxComboBox;
+                        cmbSchimb.Value = Convert.ToInt32(table.Rows[0]["TipSchimb" + i]);
+                    }
+
+                    if (General.Nz(table.Rows[0]["Program" + i], "").ToString() != "")
+                    {
+                        ASPxComboBox cmbProg = dataList.Items[0].FindControl("cmbProg" + i) as ASPxComboBox;
+                        cmbProg.Value = Convert.ToInt32(table.Rows[0]["Program" + i]);
+                    }
+                }
+            }
 
         }
 

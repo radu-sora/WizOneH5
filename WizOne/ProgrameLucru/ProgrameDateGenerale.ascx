@@ -73,7 +73,7 @@
 							        <dx:ASPxLabel  ID="lblTipPont" runat="server"  Width="120" Text="Tip pontare: " ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsTipPont"  Width="200"  Value='<%#Eval("TipPontare") %>' ID="cmbTipPont"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							        <dx:ASPxComboBox DataSourceID="dsTipPont"  Width="200" ID="cmbTipPont" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerDateGen(s); }" />
 							        </dx:ASPxComboBox >
 						        </td>

@@ -22,7 +22,15 @@ namespace WizOne.ProgrameLucru
             table = ds.Tables[0];
             DataList1.DataSource = table;
             DataList1.DataBind();
-            
+
+            //Florin 2019.09.06
+            if (table != null && table.Rows.Count > 0 && General.Nz(table.Rows[0]["ONRotunjire"], "").ToString() != "")
+            {
+                ASPxComboBox cmbRotunjire = DataList1.Items[0].FindControl("cmbRotunjire") as ASPxComboBox;
+                cmbRotunjire.Value = Convert.ToInt32(table.Rows[0]["ONRotunjire"]);
+
+                //Value='<%#Eval("ONRotunjire") %>'
+            }
         }
 
         protected void pnlCtlOreNormale_Callback(object source, CallbackEventArgsBase e)

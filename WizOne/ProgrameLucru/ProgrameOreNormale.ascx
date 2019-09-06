@@ -24,7 +24,7 @@
 							        <dx:ASPxLabel  ID="lblRotunjire"  Width="100"  runat="server"  Text="Rotunjire: "></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsRotunjire"  Width="200"  Value='<%#Eval("ONRotunjire") %>' ID="cmbRotunjire"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							        <dx:ASPxComboBox DataSourceID="dsRotunjire"  Width="200" ID="cmbRotunjire"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerOreNormale(s); }" />
 							        </dx:ASPxComboBox >
 						        </td>

@@ -80,7 +80,9 @@ namespace WizOne.ProgrameLucru
                                 rowCtr[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 16, 0, 0);
                                 break;
                             case "IDAUTO":
-                                rowCtr[x] = Convert.ToInt32(General.Nz(dtCtr.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                //Florin 2019.09.06
+                                //rowCtr[x] = Convert.ToInt32(General.Nz(dtCtr.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                rowCtr[x] = Convert.ToInt32(General.Nz(dtCtr.Compute("max([IdAuto])", string.Empty), 0)) + 1;
                                 break;
                             case "USER_NO":
                                 rowCtr[x] = Session["UserId"];

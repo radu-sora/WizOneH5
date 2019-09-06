@@ -22,7 +22,16 @@ namespace WizOne.ProgrameLucru
             table = ds.Tables[0];
             DataList1.DataSource = table;
             DataList1.DataBind();
- 
+
+            //Florin 2019.09.06
+            if (table != null && table.Rows.Count > 0 && General.Nz(table.Rows[0]["TipPontare"], "").ToString() != "")
+            {
+                ASPxComboBox cmbTipPont = DataList1.Items[0].FindControl("cmbTipPont") as ASPxComboBox;
+                cmbTipPont.Value = Convert.ToInt32(table.Rows[0]["TipPontare"]);
+
+                //Value='<%#Eval("TipPontare") %>' 
+            }
+
             cmbTipPontare_SelectedIndexChanged(ds.Tables[0].Rows[0]["TipPontare"].ToString() ?? "0");
             chkFlexibil_EditValueChanged(Convert.ToInt32(ds.Tables[0].Rows[0]["Flexibil"].ToString()));
             

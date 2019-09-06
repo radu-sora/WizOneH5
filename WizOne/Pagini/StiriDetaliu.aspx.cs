@@ -81,7 +81,7 @@ namespace WizOne.Pagini
 
                 int id = -99;
                 if (Session["Sablon_TipActiune"].ToString() == "Edit") id = Convert.ToInt32(Session["Sablon_CheiePrimara"]);
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Stiri"" WHERE Id=@1 ", new string[] { id.ToString() });
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Stiri"" WHERE ""Id""=@1 ", new string[] { id.ToString() });
 
                 DataRow dr = dt.NewRow();
 

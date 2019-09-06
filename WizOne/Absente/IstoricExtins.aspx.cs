@@ -342,7 +342,7 @@ namespace WizOne.Absente
                     strSql = "SELECT * " +
                             " FROM " +
                             " ( " +
-                            " SELECT x.F10003 AS \"Marca\", x.F10008 || ' ' || x.F10009 as \"Angajat\", y.\"Zi\", y.\"Culoare\" FROM F100 x LEFT JOIN ( " +
+                            " SELECT x.F10003 AS \"Marca\", x.F10008 || ' ' || x.F10009 as \"NumeComplet\", y.\"Zi\", y.\"Culoare\" FROM F100 x LEFT JOIN ( " +
                             " SELECT a.\"Ziua\" as \"Zi\", x.F10003, x.F10008 || ' ' || x.F10009 as \"NumeComplet\", c.\"Id\" as \"IdAbs\", c.\"Denumire\" as \"DenAbs\", " +
                             " CASE WHEN c.\"Culoare\" IS NOT NULL THEN c.\"Culoare\" ELSE CASE WHEN (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY=y.\"Ziua\") = 1 THEN (CASE WHEN COALESCE((SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\"='CuloareZileLibereLegale'),'#FA8282') = '' THEN '#FA8282' ELSE COALESCE((SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\"='CuloareZileLibereLegale'),'#FA8282') END) ELSE CASE WHEN (1 + TRUNC (Y.\"Ziua\") - TRUNC (Y.\"Ziua\", 'IW')) in (6,7) THEN (CASE WHEN COALESCE((SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\"='CuloareSambataSiDuminica'),'#FF0000') = '' THEN '#FF0000' ELSE COALESCE((SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\"='CuloareSambataSiDuminica'),'#FF0000') END) END END END AS \"Culoare\" " +   
                             " FROM F100 x " +

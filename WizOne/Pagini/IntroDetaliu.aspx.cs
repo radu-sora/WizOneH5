@@ -101,7 +101,7 @@ namespace WizOne.Pagini
                 }
 
                 //adaugam stirile
-                DataTable dtSt = General.IncarcaDT(@"SELECT ""Continut"" FROM ""Stiri"" WHERE ""Activ""=1 AND ""DataInceput""<= GetDate() AND GetDate() <= ""DataSfarsit"" ", null);
+                DataTable dtSt = General.IncarcaDT($@"SELECT ""Continut"" FROM ""Stiri"" WHERE ""Activ""=1 AND ""DataInceput""<= {General.CurrentDate()} AND {General.CurrentDate()} <= ""DataSfarsit"" ", null);
 
                 HtmlGenericControl divStiri = new HtmlGenericControl("div");
 

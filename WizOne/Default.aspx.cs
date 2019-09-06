@@ -863,7 +863,7 @@ namespace WizOne
                                     //Mihnea adaugat blocare pt useri inactivi / suspendati
                                     string suspendatinactiv = string.Empty;
 
-                                    suspendatinactiv = General.Nz(General.ExecutaScalar(@"SELECT CASE WHEN F10025 NOT IN (0,999) OR ( F100922 <= GETDATE() AND NOT ( F100924 <= GETDATE() ) ) THEN 1 ELSE 0 END SI FROM F100 WHERE F10003 = @1", new object[] { dr["F10003"] }) , "" ).ToString();
+                                    suspendatinactiv = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN F10025 NOT IN (0,999) OR ( F100922 <= {General.CurrentDate()} AND NOT ( F100924 <= {General.CurrentDate()} ) ) THEN 1 ELSE 0 END SI FROM F100 WHERE F10003 = @1", new object[] { dr["F10003"] }) , "" ).ToString();
                                    
                                     if(suspendatinactiv == "1")
                                     {

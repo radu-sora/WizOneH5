@@ -116,15 +116,21 @@ namespace WizOne.Personal
             {
                 cmbTimpPartial.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
                 cmbTimpPartial.DataBind();
-                cmbTimpPartial.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"].ToString());
+                //Florin 2019.09.05
+                if (General.Nz(ds.Tables[0].Rows[0]["F10043"],"").ToString() != "")
+                    cmbTimpPartial.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"]);
 
                 cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(ds.Tables[0].Rows[0]["F100926"].ToString());
                 cmbDurTimpMunca.DataBind();
-                cmbDurTimpMunca.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100927"].ToString());
+                //Florin 2019.09.05
+                if (General.Nz(ds.Tables[0].Rows[0]["F100927"], "").ToString() != "")
+                    cmbDurTimpMunca.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100927"]);
 
                 cmbTipNorma.DataSource = General.GetTipNorma(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0 ? "1" : "2");
                 cmbTipNorma.DataBind();
-                cmbTipNorma.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"].ToString());
+                //Florin 2019.09.05
+                if (General.Nz(ds.Tables[0].Rows[0]["F100926"], "").ToString() != "")
+                    cmbTipNorma.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"]);
 
                 if (Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
                 {

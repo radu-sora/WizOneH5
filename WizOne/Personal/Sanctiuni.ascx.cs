@@ -118,7 +118,8 @@ namespace WizOne.Personal
                 else
                     e.NewValues["IdAuto"] = Dami.NextId("Admin_Sanctiuni");
                 e.NewValues["Marca"] = Session["Marca"];
-       
+                e.NewValues["DataInceput"] = DateTime.Now;
+
             }
             catch (Exception ex)
             {

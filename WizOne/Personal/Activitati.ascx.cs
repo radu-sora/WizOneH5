@@ -94,6 +94,8 @@ namespace WizOne.Personal
                 }
                 else                
                     e.NewValues["IdAuto"] = Dami.NextId("Admin_Activitati");
+
+                e.NewValues["DataPrimire"] = DateTime.Now;
             }
             catch (Exception ex)
             {

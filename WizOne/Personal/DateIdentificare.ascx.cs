@@ -90,6 +90,18 @@ namespace WizOne.Personal
                 lgSex.InnerText = Dami.TraduCuvant("Data nasterii si Sex");
                 HtmlGenericControl lgNume = DateIdentificare_DataList.Items[0].FindControl("lgNume") as HtmlGenericControl;
                 lgNume.InnerText = Dami.TraduCuvant("Nume si prenume");
+
+                if (!IsPostBack)
+                {
+                    if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Chimpex)
+                    {
+                        if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                        {
+                            ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;
+                            txtEIDDI.Text = "FMO" + txtMarca.Text;
+                        }
+                    }
+                }
                 
                 if (Dami.ValoareParam("ValidariPersonal") == "1")
                 {
@@ -152,6 +164,14 @@ namespace WizOne.Personal
                             ds.Tables[1].Rows[0]["F100985"] = param[1];
                             Session["Marca"] = param[1];
                             Session["InformatiaCurentaPersonal"] = ds;
+
+                            if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Chimpex)
+                                if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                                {
+                                    ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;
+                                    ASPxTextBox txtMarca = DateIdentificare_DataList.Items[0].FindControl("txtMarcaDI") as ASPxTextBox;
+                                    txtEIDDI.Text = "FMO" + txtMarca.Text;
+                                }
                         }
                         else
                             DateIdentificare_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Marca este deja alocata!");

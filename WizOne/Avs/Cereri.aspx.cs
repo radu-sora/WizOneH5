@@ -1558,12 +1558,27 @@ namespace WizOne.Avs
                         if ((e.Parameter.Split(';')[1] == "cmb1Nou") && (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PrelungireCIM ||
                             Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PrelungireCIM_Vanz))
                         {
+                            if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 0)
+                            {
+                                de1Nou.Value = null;
+                                de2Nou.Value = null;
+                                txt1Nou.Value = "";
+                                txt2Nou.Value = "";
+                            }
                             if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 1)
                             {
                                 de1Nou.Value = new DateTime(2100, 1, 1);
                                 de2Nou.Value = new DateTime(2100, 1, 1);
                                 txt1Nou.Value = "";
                                 txt2Nou.Value = "";
+                            }
+                            if (Convert.ToInt32(e.Parameter.Split(';')[2]) == 2)
+                            {
+                                if (de2Act.Value != null && Convert.ToDateTime(de2Act.Value) != new DateTime(2100, 1, 1))
+                                    de1Nou.Value = Convert.ToDateTime(de2Act.Value).AddDays(1);
+                                else
+                                    de1Nou.Value = null;
+                                de2Nou.Value = null;
                             }
                         }
                         IncarcaDate();

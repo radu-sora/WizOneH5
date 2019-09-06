@@ -2473,7 +2473,7 @@ namespace WizOne.Pontaj
                                 Y.Norma, Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.Denumire AS DescContract, ISNULL(C.OreSup,0) AS OreSup, ISNULL(C.Afisare,1) AS Afisare, 
                                 B.F100958, B.F100959,
-                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"",F10061, F10062,
+                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",F10061, F10062, 
                                 ISNULL(K.Culoare,'#FFFFFFFF') AS Culoare, K.Denumire AS StareDenumire,
                                 A.F10078 AS Angajator, DR.F08903 AS TipContract, 
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
@@ -2498,6 +2498,7 @@ namespace WizOne.Pontaj
                                 LEFT JOIN Ptj_Contracte C on C.Id = Y.IdContract 
                                 LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
                                 LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
+                                LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
                                 {strInner}
 
 							    LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
@@ -2531,7 +2532,7 @@ namespace WizOne.Pontaj
                                 Y.""Norma"", Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.""Denumire"" AS ""DescContract"", NVL(C.""OreSup"",0) AS ""OreSup"", NVL(C.""Afisare"",1) AS ""Afisare"", 
                                 B.F100958, B.F100959,
-                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062,
+                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"", F10061, F10062,
                                 NVL(K.""Culoare"",'#FFFFFFFF') AS ""Culoare"", K.""Denumire"" AS ""StareDenumire"",
                                 A.F10078 AS ""Angajator"", DR.F08903 AS ""TipContract"", 
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
@@ -2555,7 +2556,8 @@ namespace WizOne.Pontaj
                                 LEFT JOIN ""Ptj_tblStariPontaj"" K ON K.""Id"" = NVL(X.""IdStare"",1) 
                                 LEFT JOIN ""Ptj_Contracte"" C on C.""Id"" = Y.""IdContract""
                                 LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
-                                LEFT JOIN F724 CA ON A.F10061 = CA.F72402  
+                                LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
+                                LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
 
 							    LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
 							    LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304

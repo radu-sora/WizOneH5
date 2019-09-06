@@ -102,6 +102,7 @@ namespace WizOne.Personal
                 else
                     e.NewValues["IdAuto"] = Dami.NextId("F100CentreCost2");
                 e.NewValues["Modificabil"] = 1;
+                e.NewValues["DataInceput"] = DateTime.Now;
             }
             catch (Exception ex)
             {

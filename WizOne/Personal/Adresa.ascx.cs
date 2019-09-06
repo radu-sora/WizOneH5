@@ -127,6 +127,8 @@ namespace WizOne.Personal
                     e.NewValues["IdAuto"] = Dami.NextId("F100Adrese");
                 e.NewValues["USER_NO"] = Session["UserId"];
                 e.NewValues["TIME"] = DateTime.Now;
+                e.NewValues["DataModif"] = DateTime.Now;
+
             }
             catch (Exception ex)
             {

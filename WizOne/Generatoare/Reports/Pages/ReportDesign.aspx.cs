@@ -176,7 +176,6 @@ namespace WizOne.Generatoare.Reports.Pages
             {
                 SearchPanel = aspxGridView.SettingsSearchPanel.Visible,
                 GroupPanel = aspxGridView.Settings.ShowGroupPanel,
-                HeaderFilter = aspxGridView.Settings.ShowHeaderFilterButton,
                 FilterRow = aspxGridView.Settings.ShowFilterRow,
                 FilterRowMenu = aspxGridView.Settings.ShowFilterRowMenu,
                 Footer = aspxGridView.Settings.ShowFooter,
@@ -192,7 +191,6 @@ namespace WizOne.Generatoare.Reports.Pages
 
                 aspxGridView.SettingsSearchPanel.Visible = gridLayout.SearchPanel;
                 aspxGridView.Settings.ShowGroupPanel = gridLayout.GroupPanel;
-                aspxGridView.Settings.ShowHeaderFilterButton = gridLayout.HeaderFilter;
                 aspxGridView.Settings.ShowFilterRow = gridLayout.FilterRow;
                 aspxGridView.Settings.ShowFilterRowMenu = gridLayout.FilterRowMenu;
                 aspxGridView.Settings.ShowFooter = gridLayout.Footer;

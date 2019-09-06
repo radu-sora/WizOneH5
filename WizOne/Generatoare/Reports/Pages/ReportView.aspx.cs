@@ -1,4 +1,5 @@
-﻿using DevExpress.DataAccess;
+﻿using DevExpress.Data.PivotGrid;
+using DevExpress.DataAccess;
 using DevExpress.DataAccess.Sql;
 using DevExpress.Utils;
 using DevExpress.Utils.Serializing;
@@ -701,6 +702,11 @@ namespace WizOne.Generatoare.Reports.Pages
                                 // For now, mark as undeleted only                                                        
                             }
                         }
+                        else if (commandName == "menu")
+                        {
+                            if (commandParams.Option == "SummaryType")
+                                CustomCubePivotGrid.Fields[(string)commandParams.FieldId].SummaryType = (PivotSummaryType)commandParams.Value;
+                        }
                         else if (commandName == "print")
                         {
                             try
@@ -715,7 +721,7 @@ namespace WizOne.Generatoare.Reports.Pages
                                 // Log error
                                 // For now, mark as unprinted only                            
                             }
-                        }
+                        }                        
 
                         if (commandName != "delete")
                         {
@@ -1106,6 +1112,29 @@ namespace WizOne.Generatoare.Reports.Pages
             }
         }
 
+        protected void CustomCubePivotGrid_PopupMenuCreated(object sender, PivotPopupMenuCreatedEventArgs e)
+        {
+            if (e.MenuType == PivotGridPopupMenuType.HeaderMenu)
+            {
+                var item = e.Menu.Items.Add("Summary Type", "SummaryType");
+
+                item.BeginGroup = true;
+                item.Items.AddRange(new MenuItem[]
+                {
+                    new MenuItem("Count", item.Name + ":0"),
+                    new MenuItem("Sum", item.Name + ":1"),
+                    new MenuItem("Min", item.Name + ":2"),
+                    new MenuItem("Max", item.Name + ":3"),
+                    new MenuItem("Average", item.Name + ":4"),
+                    new MenuItem("StdDev", item.Name + ":5"),
+                    new MenuItem("StdDevp", item.Name + ":6"),
+                    new MenuItem("Var", item.Name + ":7"),
+                    new MenuItem("Varp", item.Name + ":8")
+                });
+                item.Name = "#" + item.Name; // No action sign.
+            }            
+        }
+
         protected void CustomTableGridView_FillContextMenuItems(object sender, ASPxGridViewContextMenuEventArgs e)
         {
             if (e.MenuType == GridViewContextMenuType.Columns)
@@ -1180,6 +1209,6 @@ namespace WizOne.Generatoare.Reports.Pages
                 });
                 item.Name = "#" + item.Name; // No action sign.
             }
-        }
+        }        
     }
 }

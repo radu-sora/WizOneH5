@@ -125,12 +125,16 @@
                 <table>
                     <tr>
                         <td>
-                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry">
+                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry"
+                                OnPopupMenuCreated="CustomCubePivotGrid_PopupMenuCreated">
                                 <OptionsView DataHeadersDisplayMode="Popup" DataHeadersPopupMinCount="3" />                                
                                 <OptionsFilter NativeCheckBoxes="False" />                                
                                 <OptionsCustomization CustomizationFormStyle="Excel2007" />
                                 <OptionsChartDataSource DataProvideMode="UseCustomSettings" />
                                 <ClientSideEvents
+                                    PopupMenuItemClick="function(s, e) {
+                                        onCustomCubePopupMenuItemClick(e.MenuItemName, e.FieldID);
+                                    }"
                                     EndCallback="function(s, e) { 
                                         if (s.cpRefreshChart) {     
                                             onChartControlInit(s.cpChartOptions);
@@ -333,7 +337,7 @@
             if (parameter.type == 'System.DateTime') {
                 info.editor = { header: 'dx-date-simple' };
             }
-        }
+        }        
 
         function onChartControlInit(chartOptions) {
             initChartOptions(chartOptions ? JSON.parse(chartOptions) : null);
@@ -396,6 +400,24 @@
         function onExitButtonClick() {
             window.history.back();
         }
+
+        function onCustomCubePopupMenuItemClick(itemName, fieldId) {
+            var isActionItem = itemName[0] != '#'; // No action sign.
+
+            if (isActionItem) {
+                var itemNameParts = itemName.split(':', 2);
+
+                if (itemNameParts.length == 1) {
+                    itemNameParts.push(item.GetChecked());
+                }
+
+                // Send command to server
+                var commandName = '#menu';
+                var commandParams = { 'FieldId': fieldId, 'Option': itemNameParts[0], 'Value': itemNameParts[1] };
+
+                customCubePivotGrid.PerformCallback(commandName + JSON.stringify(commandParams));                
+            }
+        }        
 
         function onCustomTableContextMenu(type, index, menu) {
             if (type == 'header') {

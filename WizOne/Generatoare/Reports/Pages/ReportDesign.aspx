@@ -227,8 +227,8 @@
                 <table>
                     <tr>
                         <td>
-                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry">
-                                <OptionsView DataHeadersDisplayMode="Popup" DataHeadersPopupMinCount="3" />                                
+                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry" Width="100%" Height="100%">
+                                <OptionsView DataHeadersDisplayMode="Popup" DataHeadersPopupMinCount="3" VerticalScrollBarMode="Auto" HorizontalScrollBarMode="Auto" />                                
                                 <OptionsFilter NativeCheckBoxes="False" />                                
                                 <OptionsCustomization CustomizationFormStyle="Excel2007" />
                                 <OptionsChartDataSource DataProvideMode="UseCustomSettings" />
@@ -245,7 +245,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <dx:WebChartControl ID="CustomCubeWebChartControl" ClientInstanceName="customCubeWebChartControl" runat="server" Theme="Mulberry" Width="750px"
+                            <dx:WebChartControl ID="CustomCubeWebChartControl" ClientInstanceName="customCubeWebChartControl" runat="server" Theme="Mulberry" Width="750px" Height="200px"
                                 DataSourceID="CustomCubePivotGrid" SeriesDataMember="Series" CrosshairEnabled="True">
                                 <BorderOptions Visibility="False" />
                                 <Legend MaxHorizontalPercentage="30" />                                
@@ -288,11 +288,11 @@
                 <!-- Table customization -->
                 <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%"
                     OnClientLayout="CustomTableGridView_ClientLayout">
-                    <Settings ShowHeaderFilterButton="true" />
-                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />
+                    <Settings VerticalScrollBarMode="Auto" HorizontalScrollBarMode="Auto" />
+                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" AllowEllipsisInText="true" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live" />
                     <SettingsContextMenu Enabled="true">
-                        <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" />
+                        <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" Refresh="false" />
                     </SettingsContextMenu>                                        
                     <Styles>
                         <Header Font-Bold="true" Wrap="True" />
@@ -303,10 +303,10 @@
                 </dx:ASPxGridViewExporter>
             </td>
             <td>
-                <dx:ASPxCallbackPanel ID="ReportDesignerCallbackPanel" ClientInstanceName="reportDesignerCallbackPanel" runat="server" Theme="Mulberry">
+                <dx:ASPxCallbackPanel ID="ReportDesignerCallbackPanel" ClientInstanceName="reportDesignerCallbackPanel" runat="server" Theme="Mulberry" Height="100%">
                     <PanelCollection>
                         <dx:PanelContent runat="server">
-                            <dx:ASPxReportDesigner ID="ReportDesigner" ClientInstanceName="reportDesigner" runat="server" CssClass="pull-right"
+                            <dx:ASPxReportDesigner ID="ReportDesigner" ClientInstanceName="reportDesigner" runat="server" CssClass="pull-right" Height="100%"
                                 OnSaveReportLayout="ReportDesigner_SaveReportLayout">
                                 <ClientSideEvents   
                                     Init="function(s, e) {
@@ -323,6 +323,9 @@
                                     }"
                                     CustomizeSaveAsDialog="function(s, e) { 
                                         onCustomizeSaveAsDialog(e);
+                                    }"                                     
+                                    ReportSaving="function(s, e) {                                        
+                                        onReportSaving(e.Report);
                                     }"
                                     ExitDesigner="function(s, e) {
                                         onExitButtonClick();
@@ -440,6 +443,28 @@
             data.Popup.width(400);
             data.Popup.height(180);
             data.Customize('dxrd-savereport-dialog-content-simple', data.Popup.model());
+        }
+
+        function onReportSaving(report) {
+            if (reportType == 3) { // Cube
+                var reportDataSource = report.dataSource();
+                var reportDataMember = report.dataMember();
+
+                if (reportDataSource && reportDataMember) {
+                    var controls = reportDesigner.designerModel.controls().filter(function (control) {
+                        return control.value && control.value.controlType == 'XRPivotGrid';
+                    });
+
+                    controls.forEach(function (control) {
+                        if (!control.value.dataSource()) {
+                            control.value.dataSource(reportDataSource);
+                            control.value.dataMember(reportDataMember);
+                        }
+                    });
+
+                    //report.dataSource(null);
+                }
+            }
         }
 
         function onChartControlInit(chartOptions) {

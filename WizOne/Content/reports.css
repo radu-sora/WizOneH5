@@ -43,10 +43,14 @@
                 }
         .report-view-template > tbody > tr:first-child > td:last-child > table:nth-child(2) {
             width: 100%;
-            height: 100%;
+            height: calc(100% - (30px + 14px));
         }
-            .report-view-template > tbody > tr:first-child > td:last-child > table:nth-child(2) > tbody > tr > td {
-                height: 50%;
+            .report-view-template > tbody > tr:first-child > td:last-child > table:nth-child(2) > tbody > tr:first-child > td {
+                height: 60%;
+                vertical-align: top;
+            }
+            .report-view-template > tbody > tr:first-child > td:last-child > table:nth-child(2) > tbody > tr:last-child > td {
+                height: 40%;
                 vertical-align: top;
             }
 
@@ -74,12 +78,16 @@
                     padding-right: 6px;
                     min-width: 44px;
                 }
-        .report-design-template > tbody > tr:first-child > td:first-child > table:nth-child(2) {
+        .report-design-template > tbody > tr:first-child > td:first-child > table:nth-child(6) {
             width: 100%;
-            height: 100%;
+            height: calc(100% - (30px + 14px));
         }
-            .report-design-template > tbody > tr:first-child > td:first-child > table:nth-child(2) > tbody > tr > td {
-                height: 50%;
+            .report-design-template > tbody > tr:first-child > td:first-child > table:nth-child(6) > tbody > tr:first-child > td {
+                height: 60%;
+                vertical-align: top;
+            }
+            .report-design-template > tbody > tr:first-child > td:first-child > table:nth-child(6) > tbody > tr:last-child > td {
+                height: 40%;
                 vertical-align: top;
             }
 

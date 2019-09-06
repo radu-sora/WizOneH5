@@ -105,7 +105,8 @@ namespace WizOne.Personal
                     e.NewValues["IdAuto"] = Dami.NextId("F100Contracte2");
 
                 e.NewValues["Modificabil"] = 1;
-      
+                e.NewValues["DataInceput"] = DateTime.Now;
+
             }
             catch (Exception ex)
             {
@@ -182,6 +183,14 @@ namespace WizOne.Personal
                     catch (Exception)
                     {
                     }
+                }
+
+                if (e.NewValues["DataInceput"] == null || e.NewValues["DataSfarsit"] == null)
+                {
+                    grDateContracte.JSProperties["cpAlertMessage"] = "Nu ati completat " + (e.NewValues["DataInceput"] == null ? "data inceput" : "data sfarsit") + "!";
+                    e.Cancel = true;
+                    grDateContracte.CancelEdit();
+                    return;
                 }
 
                 for (int i = 0; i <= grDateContracte.VisibleRowCount - 1; i++)
@@ -291,6 +300,14 @@ namespace WizOne.Personal
                     catch (Exception)
                     {
                     }
+                }
+
+                if (e.NewValues["DataInceput"] == null || e.NewValues["DataSfarsit"] == null)
+                {
+                    grDateContracte.JSProperties["cpAlertMessage"] = "Nu ati completat " + (e.NewValues["DataInceput"] == null ? "data inceput" : "data sfarsit") + "!";
+                    e.Cancel = true;
+                    grDateContracte.CancelEdit();
+                    return;
                 }
 
                 for (int i = 0; i <= grDateContracte.VisibleRowCount - 1; i++)

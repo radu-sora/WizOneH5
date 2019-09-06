@@ -114,7 +114,9 @@ namespace WizOne.Personal
                 if (Constante.tipBD == 1)
                     e.NewValues["IdAuto"] = Convert.ToInt32(General.Nz(ds.Tables["Atasamente"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                 else
-                    e.NewValues["IdAuto"] = Dami.NextId("Atasamente");         
+                    e.NewValues["IdAuto"] = Dami.NextId("Atasamente");
+
+                e.NewValues["DateAttach"] = DateTime.Now;
             }
             catch (Exception ex)
             {

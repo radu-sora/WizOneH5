@@ -287,8 +287,11 @@ namespace WizOne.BP
 
             try
             {
-
-                DataTable dtAng = General.IncarcaDT("SELECT A.* FROM F100 A JOIN \"F100Supervizori\" B ON A.F10003 = B.F10003 AND B.\"IdUser\" = " + Session["UserId"].ToString() + " AND \"IdSuper\" <> 0 AND F10025 IN (0, 999) ORDER BY \"NumeComplet\" ", null);
+                string op = "+";
+                if (Constante.tipBD == 2)
+                    op = "||";
+                DataTable dtAng = General.IncarcaDT("SELECT A.F10003, A.F10008 " + op + " ' ' " + op + " A.F10009 AS NUME FROM F100 A JOIN \"F100Supervizori\" B ON A.F10003 = B.F10003 AND B.\"IdUser\" = " 
+                    + Session["UserId"].ToString() + " AND \"IdSuper\" <> 0 AND F10025 IN (0, 999) GROUP BY A.F10003, A.F10008 " + op + " ' ' " + op + " A.F10009 ORDER BY NUME ", null);
                 DevExpress.Spreadsheet.Workbook book = new DevExpress.Spreadsheet.Workbook();
                 DevExpress.Spreadsheet.Worksheet ws2 = book.Worksheets["Sheet1"];
 

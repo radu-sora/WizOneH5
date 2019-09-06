@@ -144,6 +144,7 @@ namespace WizOne.Personal
                     deDeLaData.ClientEnabled = false;
                     deLaData.ClientEnabled = false;
                 }
+
             }
             else
             {

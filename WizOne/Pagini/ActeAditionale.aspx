@@ -167,6 +167,7 @@
                                 <dx:ListEditItem Text="(Selectie toate)" Value="9" />
                                 <dx:ListEditItem Text="Angajat" Value="0" />
                                 <dx:ListEditItem Text="Candidat" Value="1" />
+                                <dx:ListEditItem Text="Candidat-Angajat" Value="2" />
                             </Items>
                         </dx:ASPxComboBox>
                     </div>

@@ -18,7 +18,9 @@
             <WorkWeekView Enabled="false" />
             <WeekView Enabled="false" />
             <MonthView Enabled="false" />
-            <TimelineView Enabled="false" />
+            <TimelineView Enabled="false">
+
+            </TimelineView>
             <AgendaView Enabled="false" />
         </Views>
         <OptionsBehavior ShowViewSelector="false" />

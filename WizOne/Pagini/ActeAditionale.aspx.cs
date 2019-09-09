@@ -220,7 +220,15 @@ namespace WizOne.Pagini
                 string companie = "";
                 string strSql = "";
                 string filtru = "";
-                if (General.Nz(cmbTip.Value,9).ToString() != "9") filtru = " AND \"Candidat\"= " + cmbTip.Value;
+
+                //Florin 2019.09.09
+                if (General.Nz(cmbTip.Value, 9).ToString() != "9")
+                {
+                    if (General.Nz(cmbTip.Value, 9).ToString() == "2")
+                        filtru = " AND \"CandidatAngajat\"= 1";
+                    else
+                        filtru = " AND \"Candidat\"= " + cmbTip.Value;
+                }
                 if (cmbAng.Value != null) filtru += @" AND ""F10003""= " + cmbAng.Value;
                 if (txtData.Value != null) filtru += " AND \"DataModif\" = " + General.ToDataUniv(Convert.ToDateTime(txtData.Value));
                 if (txtDepasire.Value != null) filtru += " AND \"TermenDepasire\" = " + General.ToDataUniv(Convert.ToDateTime(txtDepasire.Value));
@@ -540,19 +548,21 @@ namespace WizOne.Pagini
                             LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
                             WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
                             GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
-                            FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente
+                            FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
+                            CASE WHEN (COALESCE(J.Revisal,0)=1 AND COALESCE(B.F10025,0) IN (0,999)) THEN 1 ELSE 0 END AS CandidatAngajat
                             FROM Avs_Cereri A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
                             WHERE A.IdStare = 3 AND A.DataModif >= '2019-01-01' {companie} {filtruSup}
-                            GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente
+                            GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, J.Revisal, B.F10025
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 
                             B.F100985, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
-                            B.F10022, B.F100993, J.IdAutoAtasamente
+                            B.F10022, B.F100993, J.IdAutoAtasamente,
+                            CASE WHEN (COALESCE(J.Revisal,0)=1 AND COALESCE(B.F10025,0) IN (0,999)) THEN 1 ELSE 0 END AS CandidatAngajat
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
@@ -781,54 +791,63 @@ namespace WizOne.Pagini
 
                                         if (Convert.ToInt32(General.Nz(obj[2], 0)) == 0)
                                         {
-                                            DataTable dt = new DataTable();
-                                            int id = -99;
-
-                                            if (Constante.tipBD == 1)
+                                            //Florin 2019.09.09
+                                            //exista cazul in care candidatii nu au nr si data document setat in managementul de personal
+                                            if (General.Nz(obj[10], "0").ToString() == "1")
                                             {
-                                                dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                OUTPUT Inserted.IdAuto
-                                                VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
-                                                new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
-
-                                                if (dt.Rows.Count > 0)
-                                                {
-                                                    id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
-                                                    //int id = Convert.ToInt32(dt.Rows[0]["IdAuto"]);
-                                                    //General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { dt.Rows[0][0] });
-                                                }
+                                                msg += "Acest candidat nu are setat numarul si/sau data contract intern in managementul de personal";
                                             }
                                             else
                                             {
-                                                id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                DataTable dt = new DataTable();
+                                                int id = -99;
+
+                                                if (Constante.tipBD == 1)
+                                                {
+                                                    dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                OUTPUT Inserted.IdAuto
+                                                VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
+                                                    new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+
+                                                    if (dt.Rows.Count > 0)
+                                                    {
+                                                        id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
+                                                        //int id = Convert.ToInt32(dt.Rows[0]["IdAuto"]);
+                                                        //General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { dt.Rows[0][0] });
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
                                                 VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
-                                                new object[] { "int", obj[0], Session["UserId"], obj[10] }),0));
+                                                    new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
 
-                                                //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
-                                                //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]).ToUpper(), Session["UserId"], General.ToDataOrcl(obj[11]).ToUpper(), obj[10] });
+                                                    //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
+                                                    //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]).ToUpper(), Session["UserId"], General.ToDataOrcl(obj[11]).ToUpper(), obj[10] });
 
-                                                //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
-                                                //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]), Session["UserId"], General.ToDataOrcl(obj[11]), obj[10] });
+                                                    //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, TO_DATE(@3, 'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5, 'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1",
+                                                    //new object[] { "int", obj[0], General.ToDataOrcl(obj[1]), Session["UserId"], General.ToDataOrcl(obj[11]), obj[10] });
 
-                                                //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},TO_DATE(@3,'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5,'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1;",
-                                                //new object[] { "int", obj[0], General.ToDataUniv(Convert.ToDateTime(obj[1])), Session["UserId"], General.ToDataUniv(Convert.ToDateTime(obj[11])), obj[10] });
+                                                    //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},TO_DATE(@3,'DD-MM-YYYY'), @4, {General.CurrentDate()}, TO_DATE(@5,'DD-MM-YYYY'), @6) RETURNING ""IdAuto"" INTO @out_1;",
+                                                    //new object[] { "int", obj[0], General.ToDataUniv(Convert.ToDateTime(obj[1])), Session["UserId"], General.ToDataUniv(Convert.ToDateTime(obj[11])), obj[10] });
 
-                                                //id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},SYSDATE, @3, {General.CurrentDate()}, SYSDATE, @4) RETURNING ""IdAuto"" INTO @out_1",
-                                                //new object[] { "int",  obj[0], Session["UserId"], obj[10] }),0));
+                                                    //id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()},SYSDATE, @3, {General.CurrentDate()}, SYSDATE, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                    //new object[] { "int",  obj[0], Session["UserId"], obj[10] }),0));
 
+                                                }
+
+                                                if (Convert.ToInt32(General.Nz(id, -99)) != -99)
+                                                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { id });
+
+
+                                                msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
+                                                if (Convert.ToDateTime(General.Nz(obj[1], 0)) < DateTime.Now)
+                                                    msg += Dami.TraduCuvant("Atentie, data modificare este mai mica decat data documentului") + System.Environment.NewLine;
                                             }
-
-                                            if (Convert.ToInt32(General.Nz(id,-99)) != -99)
-                                                General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { id });
-
-
-                                            msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
-                                            if (Convert.ToDateTime(General.Nz(obj[1], 0)) < DateTime.Now)
-                                                msg += Dami.TraduCuvant("Atentie, data modificare este mai mica decat data documentului") + System.Environment.NewLine;
                                         }
                                     }
                                     catch (Exception ex)

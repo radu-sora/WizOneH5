@@ -8005,7 +8005,21 @@ namespace WizOne.Module
 
                 if (cuActualizareInF100)
                 {
-                    string strUpd = "UPDATE a SET  a.F100642 = b.\"CuveniteAn\", a.F100995 = b.\"Cuvenite\", a.F100996 = b.\"SoldAnterior\" FROM F100 a,  \"Ptj_tblZileCO\" b WHERE a.F10003 = B.F10003 AND b.\"An\" =  " + an;
+                    //Florin 2019.09.06
+                    //string strUpd = "UPDATE a SET  a.F100642 = b.\"CuveniteAn\", a.F100995 = b.\"Cuvenite\", a.F100996 = b.\"SoldAnterior\" FROM F100 a,  \"Ptj_tblZileCO\" b WHERE a.F10003 = B.F10003 AND b.\"An\" =  " + an;
+
+                    string strUpd = $@"UPDATE A 
+                        SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
+                        FROM F100 A
+                        INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
+                    if (Constante.tipBD == 2)
+                        strUpd = $@"UPDATE F100 A
+                                    SET (A.F100642, A.F100995, A.F100996) =
+                                      (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
+                                       FROM ""Ptj_tblZileCO"" B
+                                       WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
+                                    WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
+
                     General.ExecutaNonQuery(strUpd, null);
                 }
             }

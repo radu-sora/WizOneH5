@@ -642,6 +642,9 @@ table label {
 }
 
 
-
+.btnMeniuDash {
+    text-decoration: underline !important;
+    border-radius: 15px;
+}
 
 

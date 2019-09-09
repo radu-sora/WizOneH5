@@ -24,7 +24,8 @@
             Chimpex = 26,
             Groupama = 34,
             Zitec = 45,
-            BancaCarpatica = 65
+            BancaCarpatica = 65,
+            Trico = 66
         }
 
 

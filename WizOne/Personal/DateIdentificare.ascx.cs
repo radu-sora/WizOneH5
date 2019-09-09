@@ -93,7 +93,7 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                 {
-                    if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Chimpex)
+                    if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Trico)
                     {
                         if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                         {
@@ -165,7 +165,7 @@ namespace WizOne.Personal
                             Session["Marca"] = param[1];
                             Session["InformatiaCurentaPersonal"] = ds;
 
-                            if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Chimpex)
+                            if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Trico)
                                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                                 {
                                     ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;

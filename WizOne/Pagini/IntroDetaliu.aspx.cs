@@ -10,6 +10,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace WizOne.Pagini
 {
@@ -237,19 +238,25 @@ namespace WizOne.Pagini
                 {
                     for (int i = 0; i < dtMnu.Rows.Count; i++)
                     {
-                        ASPxHyperLink lnk = new ASPxHyperLink();
-                        lnk.Text = (dtMnu.Rows[i]["Nume"] ?? "").ToString();
-                        lnk.Font.Underline = true;
+                        //Florin 2019.09.09
+                        //am schimbat linkurile in butoane
+
+                        //ASPxHyperLink lnk = new ASPxHyperLink();
+                        //lnk.Text = (dtMnu.Rows[i]["Nume"] ?? "").ToString();
+                        //lnk.Font.Underline = true;
+
+                        ASPxButton btn = new ASPxButton();
+                        btn.Text = Dami.TraduCuvant((dtMnu.Rows[i]["Nume"] ?? "").ToString());
+                        btn.CssClass = "btnMeniuDash";
 
                         string strUrl = dtMnu.Rows[i]["Pagina"].ToString();
                         string pag = strUrl;
 
                         if (strUrl.IndexOf("[") >= 0)
-                        {
                             pag = strUrl.Substring(0, strUrl.IndexOf("["));
-                            //HttpContext.Current.Session["Sablon_Tabela"] = strUrl.Replace(pag + "[", "").Replace("]", "");
-                        }
-                        lnk.NavigateUrl = pag + ".aspx";
+                        
+                        //lnk.NavigateUrl = pag + ".aspx";
+                        btn.PostBackUrl = pag + ".aspx";
 
                         ASPxDockPanel pnl = new ASPxDockPanel();
                         string nme = "wdgMnu" + i;
@@ -267,11 +274,14 @@ namespace WizOne.Pagini
                         pnl.ShowShadow = false;
                         pnl.ShowHeader = false;
                         pnl.Styles.Content.Paddings.Padding = 0;
-                        pnl.Controls.Add(lnk);
+                        //pnl.Controls.Add(lnk);
+                        pnl.Controls.Add(btn);
 
                         divPanel.Controls.Add(pnl);
 
-                        widgetNames.Add(new metaWidget { Nume = nme, Eticheta = Dami.TraduCuvant(lnk.Text), RutaImg = "icoWidget2" });
+                        //widgetNames.Add(new metaWidget { Nume = nme, Eticheta = Dami.TraduCuvant(lnk.Text), RutaImg = "icoWidget2" });
+                        widgetNames.Add(new metaWidget { Nume = nme, Eticheta = Dami.TraduCuvant(btn.Text), RutaImg = "icoWidget2" });
+
                     }
                 }
 

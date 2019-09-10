@@ -173,7 +173,7 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["Admin_Experienta"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateExperienta.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateExperienta.Columns[col.ColumnName] != null && grDateExperienta.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;

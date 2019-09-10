@@ -214,7 +214,7 @@ namespace WizOne.Personal
                         ds.Tables[1].Rows[0]["F100907"] = e.NewValues["Oras"] ?? DBNull.Value;
                         ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
                     }
-                    ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
+                    //ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10082"] = e.NewValues["Sector"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10083"] = e.NewValues["Strada"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10084"] = e.NewValues["Numar"] ?? DBNull.Value;
@@ -313,8 +313,8 @@ namespace WizOne.Personal
                             ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
                         }
                     }
-                    if (e.NewValues.Contains("Strada"))
-                        ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
+                    //if (e.NewValues.Contains("Strada"))
+                    //    ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
                     if (e.NewValues.Contains("Sector"))
                         ds.Tables[1].Rows[0]["F10082"] = e.NewValues["Sector"] ?? DBNull.Value;
                     if (e.NewValues.Contains("Strada"))

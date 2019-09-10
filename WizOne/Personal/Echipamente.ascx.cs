@@ -175,7 +175,7 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["Admin_Echipamente"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateEchipamente.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateEchipamente.Columns[col.ColumnName] != null && grDateEchipamente.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;

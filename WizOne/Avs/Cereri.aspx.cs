@@ -3282,8 +3282,11 @@ namespace WizOne.Avs
                             //se doreste acelasi proces ca si la restul atributelor cu diferenta ca totul se face in WizOne fara a folosi tabela F704
                             //ne folosim de procesul de Inchidere luna din WizOne
 
-                            if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
-                            {
+
+                            //Florin 2019.09.10
+                            //se doreste ca aceste modificari sa se duca in F100 indiferent daca sunt sau nu in luna de lucru
+                            //if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
+                            //{
                                 //    act = 1;
                                 //Radu - se salveaza mai intai in F100 si apoi in F095, deoarece contractul vechi exista deja in F095
                                 //                  si apare eroare de violare cheie primara
@@ -3309,7 +3312,7 @@ namespace WizOne.Avs
                                     + " VALUES (95, '" + dtF100.Rows[0]["F10017"].ToString() + "', " + dtF100.Rows[0]["F10003"].ToString() + ", '" + dtF100.Rows[0]["F10011"].ToString() + "', " + data9 + ", " + data10
                                     + ", " + nrLuni.ToString() + ", " + nrZile.ToString() + ", " + dtF100.Rows[0]["F100929"].ToString() + ", 1, " + (Convert.ToInt32(dtCer.Rows[0]["DurataContract"].ToString()) == 1 ? "'Nedeterminat'" : "'Determinat'") + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                                 General.IncarcaDT(sql095, null);
-                            }
+                            //}
 
                             string sqlTmp = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                                 + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", " + Convert.ToInt32(dtCer.Rows[0]["IdAtribut"].ToString()) + ", 'Prelungire CIM', " + data + ", " + dtCer.Rows[0]["MeserieId"].ToString() + ", 'Modificari in avans', '"

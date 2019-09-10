@@ -4777,6 +4777,8 @@ namespace WizOne.Module
             {
                 case '1':
                 case '2':
+                case '7':
+                case '8':
                     an = 1900 + tempAn;
                     break;
 

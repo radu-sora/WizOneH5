@@ -57,7 +57,7 @@
     }
 
     function ValidareCNP(s, e) {
-        if (<%=Session["MP_NuPermiteCNPInvalid"] %> == 1) {
+        
             var cnp = s.GetText();
             if (cnp != "") {
                 if (verifCnp(cnp)) {
@@ -115,7 +115,7 @@
                     swal({ title: "Atentie !", text: "CNP invalid", type: "warning" });
                 }
             }
-        }
+        
     }
 
     function map(fn, arr) {

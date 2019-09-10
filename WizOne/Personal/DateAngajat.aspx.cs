@@ -372,6 +372,8 @@ namespace WizOne.Personal
                         MessageBox.Show("CNP invalid!", MessageBox.icoError);
                         return;
                     }
+
+
                 int varsta = Dami.Varsta(Convert.ToDateTime(ds.Tables[0].Rows[0]["F10021"].ToString()));
                 if (varsta < 16)
                 {

@@ -549,7 +549,7 @@ namespace WizOne.Pagini
                             WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
                             GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
-                            CASE WHEN (COALESCE(J.Revisal,0)=1 AND COALESCE(B.F10025,0) IN (0,999)) THEN 1 ELSE 0 END AS CandidatAngajat
+                            0 AS CandidatAngajat
                             FROM Avs_Cereri A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
@@ -562,7 +562,7 @@ namespace WizOne.Pagini
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
                             B.F10022, B.F100993, J.IdAutoAtasamente,
-                            CASE WHEN (COALESCE(J.Revisal,0)=1 AND COALESCE(B.F10025,0) IN (0,999)) THEN 1 ELSE 0 END AS CandidatAngajat
+                            CASE WHEN COALESCE(B.F10025,0) IN (0,999) THEN 1 ELSE 0 END AS CandidatAngajat
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X

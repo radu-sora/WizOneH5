@@ -20,7 +20,7 @@ namespace WizOne.Generatoare.Reports.Models
         public ReportsEntities()
             : base((new EntityConnectionStringBuilder()
     		{	
-    			Metadata = "res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.msl",
+    			Metadata = WizOne.Module.Constante.tipBD == 1 ? "res://*/Generatoare.Reports.Models.ReportsModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.msl" : "res://*/Generatoare.Reports.Models.ReportsOraModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.msl",
     			Provider = WizOne.Module.Constante.tipBD == 1 ? "System.Data.SqlClient" : "Oracle.ManagedDataAccess.Client",
     			ProviderConnectionString = WizOne.Module.Constante.cnnWeb
     		}).ToString())

@@ -221,14 +221,34 @@ namespace WizOne.Pagini
                 string strSql = "";
                 string filtru = "";
 
-                //Florin 2019.09.09
-                if (General.Nz(cmbTip.Value, 9).ToString() != "9")
+                //Florin 2019.09.11
+                ////Florin 2019.09.09
+                //if (General.Nz(cmbTip.Value, 9).ToString() != "9")
+                //{
+                //    if (General.Nz(cmbTip.Value, 9).ToString() == "2")
+                //        filtru = " AND \"CandidatAngajat\"= 1";
+                //    else
+                //        filtru = " AND \"Candidat\"= " + cmbTip.Value;
+                //}
+
+
+                switch(General.Nz(cmbTip.Value, 9).ToString())
                 {
-                    if (General.Nz(cmbTip.Value, 9).ToString() == "2")
-                        filtru = " AND \"CandidatAngajat\"= 1";
-                    else
-                        filtru = " AND \"Candidat\"= " + cmbTip.Value;
+                    case "0":
+                        filtru = " AND \"Candidat\"= 0";
+                        break;
+                    case "1":
+                        filtru = " AND \"Candidat\"= 1 AND \"CandidatAngajat\"= 0";
+                        break;
+                    case "2":
+                        filtru = " AND \"Candidat\"= 1 AND \"CandidatAngajat\"= 1";
+                        break;
+                    case "9":
+                        //NOP
+                        break;
                 }
+
+
                 if (cmbAng.Value != null) filtru += @" AND ""F10003""= " + cmbAng.Value;
                 if (txtData.Value != null) filtru += " AND \"DataModif\" = " + General.ToDataUniv(Convert.ToDateTime(txtData.Value));
                 if (txtDepasire.Value != null) filtru += " AND \"TermenDepasire\" = " + General.ToDataUniv(Convert.ToDateTime(txtDepasire.Value));
@@ -562,7 +582,7 @@ namespace WizOne.Pagini
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
                             B.F10022, B.F100993, J.IdAutoAtasamente,
-                            CASE WHEN COALESCE(B.F10025,0) IN (0,999) THEN 1 ELSE 0 END AS CandidatAngajat
+                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.Revisal,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X

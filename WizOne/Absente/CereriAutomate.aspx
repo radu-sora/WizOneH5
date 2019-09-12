@@ -20,6 +20,15 @@
             pnlCtl.PerformCallback('EmptyFields');
         }
 
+
+        $(document).ready(function () {
+            bindButton();
+        });
+        function bindButton() {
+            $('#<%=btnGen.ClientID%>').on('click', function () {
+            $('#<%=lblProgres.ClientID%>').html('Procesare...');
+        });
+    }
     </script>
 
 </asp:Content>
@@ -220,11 +229,24 @@
         <tr>
             <td>
                 <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                    <asp:UpdatePanel ID="ProgressUpdatePanel" runat="server" UpdateMode="Conditional" OnUnload="UpdatePanel_Unload">
+                        <ContentTemplate>                       
+                            <asp:Label ID="lblProgres" runat="server" Text="" />
+                        </ContentTemplate>
+                    </asp:UpdatePanel>                                 
+                </div>
+            </td> 
+        </tr>
+        <tr>
+            <td>
+                <div style="float:left; padding-right:15px; padding-bottom:10px;">
                     <label id="lblLog" runat="server">Log</label>
                     <dx:ASPxMemo ID="txtLog" runat="server" Width="800px" Height="200px" ReadOnly="true" meta:resourcekey="txtLog"></dx:ASPxMemo>                                        
                 </div>
             </td> 
         </tr>
     </table>
+    <dx:ASPxLoadingPanel ID="LoadingPanel" runat="server" ClientInstanceName="LoadingPanel"  Modal="True">
+    </dx:ASPxLoadingPanel>
 
 </asp:Content>

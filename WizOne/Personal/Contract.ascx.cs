@@ -186,6 +186,10 @@ namespace WizOne.Personal
                     txtNrOre.ClientEnabled = true;
             }
 
+            ASPxComboBox cmbNivelFunctie = Contract_DataList.Items[0].FindControl("cmbNivelFunctie") as ASPxComboBox;
+            cmbNivelFunctie.DataSource = General.IncarcaDT("SELECT * FROM \"tblNivelFunctie\"", null);
+            cmbNivelFunctie.DataBind();
+
             if (!IsPostBack)
             {
                 DataTable dtDTM = General.IncarcaDT("SELECT * FROM F091", null);
@@ -219,13 +223,23 @@ namespace WizOne.Personal
                 Session["MP_Grila"] = grila;
 
                 CalcGrila(ds.Tables[0].Rows[0]["F10072"].ToString());
-                //string sql = " select DATEDIFF(MONTH, (select convert(nvarchar(4), F01011) + '-' + convert(nvarchar(4), F01012) + '-01' from F010),  '" + DateTime.Now.Year + "-12-31')";
-                //if (Constante.tipBD == 2)
-                //    sql = " select trunc(MONTHS_BETWEEN(to_date('31/12/" + DateTime.Now.Year + "', 'DD/MM/YYYY'),  (select to_date('01/' || F01012 || '/' || F01011, 'DD/MM/YYYY') from F010))  ) FROM DUAL";
-                //DataTable dtDif = General.IncarcaDT(sql, null);
-                //Session["MP_DiferentaLuni"] = dtDif.Rows[0][0].ToString();
+                string sql = " select DATEDIFF(MONTH, (select convert(nvarchar(4), F01011) + '-' + convert(nvarchar(4), F01012) + '-01' from F010),  '" + DateTime.Now.Year + "-12-31')";
+                if (Constante.tipBD == 2)
+                    sql = " select trunc(MONTHS_BETWEEN(to_date('31/12/" + DateTime.Now.Year + "', 'DD/MM/YYYY'),  (select to_date('01/' || F01012 || '/' || F01011, 'DD/MM/YYYY') from F010))  ) FROM DUAL";
+                DataTable dtDif = General.IncarcaDT(sql, null);
+                Session["MP_DiferentaLuni"] = dtDif.Rows[0][0].ToString();
 
                 Session["MP_SalMin"] = Dami.ValoareParam("SAL_MIN", "0");
+
+
+                DataTable dtFunc = General.GetFunctie();
+                if (dtFunc != null && dtFunc.Rows.Count > 0)
+                {
+                    DataRow[] drFunc = dtFunc.Select("F71802 = " + (ds.Tables[0].Rows[0]["F10071"] ?? "0").ToString());
+                    if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
+                        cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
+                }              
+
             }
             
             //SetDurataTimpMunca();

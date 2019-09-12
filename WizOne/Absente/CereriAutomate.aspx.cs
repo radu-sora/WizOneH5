@@ -14,12 +14,13 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Drawing;
+using System.Threading;
 
 namespace WizOne.Absente
 {
     public partial class CereriAutomate : System.Web.UI.Page
     {
-
+        List<int> lstMarciProcesate = new List<int>();
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -186,8 +187,11 @@ namespace WizOne.Absente
 
                 cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
                 cmbCtr.DataBind();
-                               
 
+
+                ProgressUpdatePanel.ContentTemplateContainer.Controls.Add(lblProgres);
+                ProgressUpdatePanel.Update();
+                lblProgres.Text = "";
 
             }
             catch (Exception ex)
@@ -204,6 +208,11 @@ namespace WizOne.Absente
             {
                 List<int> lstMarci = new List<int>();
                 string[] sablon = new string[11];
+                lstMarciProcesate.Clear();
+
+                lblProgres.Text = "";
+                ProgressUpdatePanel.ContentTemplateContainer.Controls.Add(lblProgres);
+                ProgressUpdatePanel.Update();
 
                 if (txtNr.Value == null)
                 {
@@ -239,17 +248,25 @@ namespace WizOne.Absente
                 }
 
                 grDate.Selection.UnselectAll();
-
-
-                if (lstMarci.Count > 0)
+                string msg = "";
+                bool cont = true;
+                while (cont)
                 {
-                    string msg = "";
+                    try
+                    {
 
-                    msg = GenerareCereri(lstMarci);
+                        if (lstMarci.Count > 0)
+                        {   
+                            msg += GenerareCereri(lstMarci);
+                            cont = false;
+                        }
+                    }
+                    catch (Exception exc)
+                    {
 
-                    MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoSuccess);
-
+                    }
                 }
+                MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoSuccess);
 
             }
             catch (Exception ex)
@@ -257,6 +274,7 @@ namespace WizOne.Absente
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
 
         private string GenerareCereri(List<int> lstMarci)
         {
@@ -278,11 +296,23 @@ namespace WizOne.Absente
                 for (int i = 0; i < dtPrel.Rows.Count; i++)
                     lstMarci.Add(Convert.ToInt32(dtPrel.Rows[i]["F10003"].ToString()));
             }
-            int x = 0;
+            int x = 0, y = 1;
+
+            ScriptManager.RegisterClientScriptBlock(Page, typeof(string), "bindButton", "bindButton();", true);      
+
             foreach (int marca in lstMarci)
-            {
-               
+            {              
+                lblProgres.Text = "Procesat " + y + " din " + lstMarci.Count + " angajati...";
+                ProgressUpdatePanel.ContentTemplateContainer.Controls.Add(lblProgres);
+                ProgressUpdatePanel.Update();
+                y++;
+                //System.Threading.Thread.Sleep(1000);
+
+                if (lstMarciProcesate.Contains(marca))
+                    continue;
+
                 #region Salvare in baza
+
 
                 #region Construim istoricul
                 DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(marca.ToString()), null);
@@ -292,6 +322,7 @@ namespace WizOne.Absente
                     if (dtAbs.Rows.Count <= 0)
                     {
                         err += "Angajatul cu marca " + marca + " nu are definit contract!\n";
+                        lstMarciProcesate.Add(marca);
                         continue;
                     }
                     else
@@ -308,13 +339,15 @@ namespace WizOne.Absente
                 int esteActiv = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM F100 WHERE F10003={marca} AND F10022 <= {General.ToDataUniv(Convert.ToDateTime(dtDataInc.Value))} AND {General.ToDataUniv(Convert.ToDateTime(dtDataSf.Value))} <= F10023", null), 0));
                 if (esteActiv == 0)
                 {
-                    err += "In perioada solicitata, angajatul cu marca " + marca + " este inactiv\n";         
+                    err += "In perioada solicitata, angajatul cu marca " + marca + " este inactiv\n";
+                    lstMarciProcesate.Add(marca);
                     continue;
                 }
 
                 if (Convert.ToInt32(General.Nz(marca, -98)) == Convert.ToInt32(General.Nz(Session["User_Marca"], -97)) && Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE F10003=@1", new object[] { marca })) == 0)
                 {
-                    err += "Angajatul cu marca " + marca + " nu are nici un supervizor\n";             
+                    err += "Angajatul cu marca " + marca + " nu are nici un supervizor\n";
+                    lstMarciProcesate.Add(marca);
                     continue;
                 }
 
@@ -327,7 +360,8 @@ namespace WizOne.Absente
 
                 if (intersec > 0)
                 {
-                    err += "Intervalul pentru angajatul cu marca " + marca + " se intersecteaza cu altul deja existent\n";            
+                    err += "Intervalul pentru angajatul cu marca " + marca + " se intersecteaza cu altul deja existent\n";
+                    lstMarciProcesate.Add(marca);
                     continue;
                 }
 
@@ -419,12 +453,17 @@ namespace WizOne.Absente
                     }
                 }
                 x++;
+                lstMarciProcesate.Add(marca);
                 #endregion
-                
+
 
                 #endregion
 
             }
+                   
+            lblProgres.Text = "Procesare terminata!";
+            ProgressUpdatePanel.ContentTemplateContainer.Controls.Add(lblProgres);
+            ProgressUpdatePanel.Update();
 
             if (err.Length > 0)
                 txtLog.Text = "S-au intalnit urmatoarele erori:\n" + err;
@@ -1143,6 +1182,18 @@ namespace WizOne.Absente
             }
 
             return strSql;
+        }
+
+        protected void UpdatePanel_Unload(object sender, EventArgs e)
+        {
+            RegisterUpdatePanel((UpdatePanel)sender);
+        }
+        protected void RegisterUpdatePanel(UpdatePanel panel)
+        {
+            var sType = typeof(ScriptManager);
+            var mInfo = sType.GetMethod("System.Web.UI.IScriptManagerInternal.RegisterUpdatePanel", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (mInfo != null)
+                mInfo.Invoke(ScriptManager.GetCurrent(Page), new object[] { panel });
         }
 
     }

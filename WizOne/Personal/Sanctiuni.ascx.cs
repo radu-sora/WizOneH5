@@ -40,6 +40,9 @@ namespace WizOne.Personal
                 grDateSanctiuni.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
                 grDateSanctiuni.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
                 grDateSanctiuni.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+
+                if (!IsPostBack)
+                    Session["DocUpload_MP_Sanctiuni"] = null;
             }
             catch (Exception ex)
             {

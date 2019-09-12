@@ -39,6 +39,9 @@ namespace WizOne.Personal
                 grDateMedicina.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
                 grDateMedicina.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
                 grDateMedicina.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+
+                if (!IsPostBack)
+                    Session["DocUpload_MP_Medicina"] = null;
             }
             catch (Exception ex)
             {
@@ -96,15 +99,16 @@ namespace WizOne.Personal
         protected void grDateMedicina_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
         {
             try
-            {               
-                DataTable dtGen = Session["Admin_Medicina"] as DataTable;
+            {
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataTable dt = ds.Tables["Admin_Medicina"];
                 if (Constante.tipBD == 1)
                 {
-                    if (dtGen != null && dtGen.Columns["IdAuto"] != null)
+                    if (dt != null && dt.Columns["IdAuto"] != null)
                     {
-                        if (dtGen.Rows.Count > 0)
+                        if (dt.Rows.Count > 0)
                         {
-                            int max = Convert.ToInt32(General.Nz(dtGen.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                            int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                             e.NewValues["IdAuto"] = max;
                         }
                         else

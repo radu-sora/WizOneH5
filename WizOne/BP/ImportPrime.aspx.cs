@@ -303,7 +303,7 @@ namespace WizOne.BP
                 for (int i = 0; i < dtAng.Rows.Count; i++)
                 {
                     ws2.Cells[i + 1, 0].Value = dtAng.Rows[i]["F10003"].ToString();
-                    ws2.Cells[i + 1, 1].Value = dtAng.Rows[i]["F10008"].ToString() + " " + dtAng.Rows[i]["F10009"].ToString();
+                    ws2.Cells[i + 1, 1].Value = dtAng.Rows[i]["NUME"].ToString();
                 }
 
                 ws2.Columns.AutoFit(0, 5000);

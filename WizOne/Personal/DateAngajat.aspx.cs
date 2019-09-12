@@ -569,11 +569,15 @@ namespace WizOne.Personal
 
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
-                    if (ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni")
+                    if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                 }
+
+                //Radu 12.09.2019 - salvare nivel functie in F718
+                if (ds.Tables[1].Rows[0]["F10071"] != null && ds.Tables[1].Rows[0]["F10071"].ToString().Length > 0)
+                    General.ExecutaNonQuery("UPDATE F718 SET F71813 = ?? WHERE F71802 = " + ds.Tables[1].Rows[0]["F10071"].ToString(), null);
 
 
                 //Florin 2018-10-30
@@ -650,6 +654,16 @@ namespace WizOne.Personal
                     General.ExecutaNonQuery(sql, null);
            
                     int idAuto = Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString());
+                    if (tabela == "Admin_Beneficii")
+                    {
+                        Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
+                        if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                        {
+                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                            General.ExecutaNonQuery(sql, null);
+                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                        }
+                    }
                     if (tabela == "Admin_Medicina")
                     {
                         Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
@@ -727,6 +741,12 @@ namespace WizOne.Personal
                             idAuto = Convert.ToInt32(lstOut[0]);
                     }
                     int idAuto1 = Convert.ToInt32(dt.Rows[i]["IdAuto"].ToString());
+                    if (tabela == "Admin_Beneficii")
+                    {
+                        Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
+                        if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
+                            General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
+                    }
                     if (tabela == "Admin_Medicina")
                     {
                         Dictionary<int, Personal.Medicina.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Medicina"] as Dictionary<int, Personal.Medicina.metaUploadFile>;
@@ -743,6 +763,9 @@ namespace WizOne.Personal
 
                 }
             }
+            if (tabela == "Admin_Beneficii")
+                Session["List_DocUpload_MP_Beneficii"] = null;
+
             if (tabela == "Admin_Medicina")
                 Session["List_DocUpload_MP_Medicina"] = null;
             

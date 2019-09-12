@@ -2426,7 +2426,7 @@ namespace WizOne.Module
                         //daca Supervizorul este id de utilizator
                         //Florin 2017.05.19    in loc de IdSuper = F70102 s-a pus IdSuper = - 
                         //if (Convert.ToInt32(lstId[i].ToString()) > 0) strTmp += " UNION " + strUnion + " SELECT " + idx + " AS \"Index\", " + lstId[i].ToString() + " AS \"IdUser\", " + lstId[i].ToString() + " AS \"IdSuper\", 0 AS \"Inlocuitor\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
-                        if (Convert.ToInt32(lstId[i].ToString()) > 0) strTmp += " UNION " + strUnion + " SELECT " + idx + " AS \"Index\", " + lstId[i].ToString() + " AS \"IdUser\", 76 AS \"IdSuper\", 0 AS \"Inlocuitor\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                        if (Convert.ToInt32(lstId[i].ToString()) > 0) strTmp += " UNION " + strUnion + " SELECT " + idx + " AS \"Index\", " + lstId[i].ToString() + " AS \"IdUser\", -76 AS \"IdSuper\", 0 AS \"Inlocuitor\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
 
                         //daca Supervizorul este din nommenclatorul tblSupervizori (este cu minus)
                         //se foloseste union pt a acoperi si cazul in care user-ul logat este deja un superviozr pt acest angajat;

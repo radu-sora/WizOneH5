@@ -730,7 +730,11 @@ namespace WizOne.Absente
 
 
                 //daca abs este de tip ore dtinc si datasf trebuie sa fie aceeasi
-                if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 1)) == 0 && txtDataInc.Date != txtDataSf.Date) strErr += " " + Dami.TraduCuvant("Data inceput si data sfarsit trebuie sa fie aceeasi in cazul acestui tip de absenta");
+
+                //Florin 2019.09.13
+                //s-a adaugat filtrul cu prezenta
+                if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 1)) == 0 && Convert.ToInt32(General.Nz(drAbs["Prezenta"], 1)) == 0 && txtDataInc.Date != txtDataSf.Date)
+                    strErr += " " + Dami.TraduCuvant("Data inceput si data sfarsit trebuie sa fie aceeasi in cazul acestui tip de absenta");
 
                 if (Convert.ToInt32(General.Nz(txtNrZile.Value, -99)) <= 0) strErr += " " + Dami.TraduCuvant("Cerere cu numar de zile 0");
 

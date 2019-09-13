@@ -1174,7 +1174,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Mesaje.it.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Avs\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1434,6 +1433,7 @@
       <DependentUpon>ValoriLinii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Code\DictionaryExtensions.cs" />
+    <Compile Include="Generatoare\Reports\Code\ReportConnectionProviderService.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportDataSourceWizardConnectionStringsProvider.cs" />
     <Compile Include="Generatoare\Reports\Code\EntityReportStorageWebExtension.cs" />
     <Compile Include="Generatoare\Reports\Models\Report.cs">

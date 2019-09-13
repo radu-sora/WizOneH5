@@ -1,6 +1,7 @@
 ﻿using DevExpress.Data.PivotGrid;
 using DevExpress.DataAccess;
 using DevExpress.DataAccess.Sql;
+using DevExpress.DataAccess.Wizard.Services;
 using DevExpress.Utils;
 using DevExpress.Utils.Serializing;
 using DevExpress.Web;
@@ -498,7 +499,10 @@ namespace WizOne.Generatoare.Reports.Pages
                             }
 
                             if (_report.Parameters.Count == 0)
+                            {
+                                _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
                                 _report.FillDataSource();
+                            }
 
                             if (_pivotGrid.Fields.Count == 0)
                                 _pivotGrid.RetrieveFields(); // Retrieve all data source fields into filter area by default. Can be customized later.
@@ -517,7 +521,10 @@ namespace WizOne.Generatoare.Reports.Pages
                             ReportsUsersDataSource.WhereParameters["RegUserId"].DefaultValue = _userId;
 
                             if (_report.Parameters.Count == 0)
+                            {
+                                _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
                                 _report.FillDataSource();
+                            }
 
                             CustomTableGridView.DataSource = _report.DataSource;
                             CustomTableGridView.DataMember = _report.DataMember;

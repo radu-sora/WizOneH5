@@ -17,15 +17,14 @@ namespace WizOne
         protected void Application_Start(object sender, EventArgs e)
         {
             try
-            {
-                //RouteConfig.RegisterRoutes(RouteTable.Routes);
+            {                
+                RouteTable.Routes.EnableFriendlyUrls(new FriendlyUrlSettings()
+                {
+                    AutoRedirectMode = RedirectMode.Permanent
+                });
 
-                RegisterRoutes(RouteTable.Routes);
-
-                DevExpress.XtraReports.Web.ASPxWebDocumentViewer.StaticInitialize();
-
-                DefaultReportDesignerContainer.RegisterDataSourceWizardConnectionStringsProvider<ReportDataSourceWizardConnectionStringsProvider>();
-                DefaultReportDesignerContainer.EnableCustomSql();
+                DefaultReportDesignerContainer.RegisterDataSourceWizardConnectionStringsProvider<ReportDataSourceWizardConnectionStringsProvider>(true);
+                DefaultReportDesignerContainer.EnableCustomSql();                
                 ReportStorageWebExtension.RegisterExtensionGlobal(new EntityReportStorageWebExtension());
 
                 //HttpContext.Current.Session["formatDataSistem"] = CultureInfo.CurrentCulture.ToString();
@@ -144,17 +143,6 @@ namespace WizOne
                 DevExpress.Web.ASPxWebControl.GlobalTheme = HttpUtility.UrlDecode(Request.Cookies[Constante.CurrentThemeCookieKey].Value);
             else
                 DevExpress.Web.ASPxWebControl.GlobalTheme = Constante.DefaultTheme;
-        }
-
-        static void RegisterRoutes(RouteCollection routes)
-        {
-            var settings = new FriendlyUrlSettings();
-
-            settings.AutoRedirectMode = RedirectMode.Permanent;
-            routes.EnableFriendlyUrls(settings);
-        }
-
-
-
+        } 
     }
 }

@@ -5,6 +5,7 @@
 <script type="text/javascript">
 
     function OnTextChangedHandlerCtr(s) {
+        debugger;
         switch (s.name) {
             case "deUltimaZiLucr":
                 {
@@ -98,10 +99,10 @@
                         CalculLuniSiZile(dateDeLa, dateLa);
 
                         deUltimaZiLucr.SetValue(dateLa);
-                        var dtTmp = dateLa;
+                        var dtTmp = new Date(dateLa.getFullYear(), dateLa.getMonth(), dateLa.getDate(), 0, 0, 0, 0);
                         dtTmp.setDate(dtTmp.getDate() + 1);
                         deDataPlecarii.SetValue(dtTmp);
-
+                        
                         Validare36Luni();
                     }
                 }
@@ -476,10 +477,12 @@
             var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
             deDataValabInvalid.SetValue(dtTmp);
         }
+        ValidareZile();
     }
 
     function cmbDurataContract_SelectedIndexChanged() {
         Validare36Luni();
+        ValidareZile();
     }
 
     function Validare36Luni() {
@@ -529,6 +532,8 @@
             deDeLaData.SetValue(deLaData.GetValue());
         }
     }
+
+
 
     function chkFunctieBaza_CheckedChanged(){
         if (chkbx4.GetValue() == 0)
@@ -582,6 +587,80 @@
             swal({ title: "Atentie !", text: "Salariul introdus este mai mic decat cel minim (raportat la timp partial)!", type: "warning" });
     }
 
+    function CompletareZile(s) { 
+        var nvlFunc = "<%=Session["MP_NvlFunc"] %>";
+        var resNF = nvlFunc.split(";");
+        for (var i = 0; i < resNF.length; i++) {
+            var linieNF = resNF[i].split(",");
+            if (parseInt(linieNF[0]) == parseInt(s.GetValue())) {
+                if (linieNF[1].length > 0)
+                    txtPerProbaZL.SetValue(linieNF[1]);
+                else
+                    txtPerProbaZL.SetValue("0");
+                if (linieNF[2].length > 0)
+                    txtPerProbaZC.SetValue(linieNF[2]);
+                else
+                    txtPerProbaZC.SetValue("0");
+                if (linieNF[3].length > 0)
+                    txtNrZilePreavizDemisie.SetValue(linieNF[3]);
+                else
+                    txtNrZilePreavizDemisie.SetValue("0");
+                if (linieNF[4].length > 0)
+                    txtNrZilePreavizConc.SetValue(linieNF[4]);
+                else
+                    txtNrZilePreavizConc.SetValue("0");            
+            }
+        }
+    }
+
+    function ValidareZile() {
+        var mesaj = "";      
+        var conducere = false;
+        var nvlFunc = "<%=Session["MP_NvlFunc"] %>";
+        var resNF = nvlFunc.split(";");
+        if (cmbNivelFunctie.GetValue() != null && cmbNivelFunctie.GetValue() != "")
+            for (var i = 0; i < resNF.length; i++) {
+                var linieNF = resNF[i].split(",");
+                if (parseInt(linieNF[0]) == parseInt(cmbNivelFunctie.GetValue())) {
+                    if (parseInt(linieNF[5]) == 1)
+                        conducere = true;
+                }
+            }
+   
+        if (cmbDurCtr.GetValue() == 2 && txtPerProbaZL.GetValue() != "") {
+            if (txtNrLuni.GetValue() < 3 && parseInt(txtPerProbaZL.GetValue()) > 5) 
+                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 5 zile!\n";                
+            if (txtNrLuni.GetValue() >= 3 && txtNrLuni.GetValue() < 6 && parseInt(txtPerProbaZL.GetValue()) > 15) 
+                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 15 zile!\n";                
+            if (txtNrLuni.GetValue() >= 6 && !conducere && parseInt(txtPerProbaZL.GetValue()) > 30) 
+                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 30 zile!\n";                
+            if (txtNrLuni.GetValue() >= 6 && conducere && parseInt(txtPerProbaZL.GetValue()) > 45) 
+                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 45 zile!\n";                
+        }     
+  
+        if (cmbDurCtr.GetValue() == 1 && txtPerProbaZC.GetValue() != "") {
+            if (!conducere && parseInt(txtPerProbaZC.GetValue()) > 90) 
+                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 90 zile!\n";                
+            if (conducere && parseInt(txtPerProbaZC.GetValue()) > 120) 
+                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 120 zile!\n";                
+            if ((cmbGradInvalid.GetValue() == 2 || cmbGradInvalid.GetValue() == 3) && parseInt(txtPerProbaZC.GetValue()) > 30) 
+                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 30 zile!\n";                
+        }
+     
+        if (cmbDurCtr.GetValue() == 1 && txtNrZilePreavizDemisie.GetValue() != "") {
+            if (!conducere && parseInt(txtNrZilePreavizDemisie.GetValue()) > 20) 
+                mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 20 zile!\n";                
+            if (conducere && parseInt(txtNrZilePreavizDemisie.GetValue()) > 45) 
+                mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 45 zile!\n";                
+        }        
+    
+        if (cmbDurCtr.GetValue() == 1) 
+            if (txtNrZilePreavizConc.GetValue() == null || txtNrZilePreavizConc.GetValue() == "" || parseInt(txtNrZilePreavizConc.GetValue()) < 20) 
+                mesaj += "Numar zile preaviz concediere: - valoarea minima cf. legii este de 20 zile!\n";                            
+        
+        if (mesaj.length > 0)
+            swal({ title: "Atentie !", text: mesaj, type: "warning" });
+    }
 
 </script>
 
@@ -1073,7 +1152,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox  ID="cmbNivelFunctie" Width="130" TabIndex="31" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
-                                
+                                 <ClientSideEvents SelectedIndexChanged="function(s,e){  CompletareZile(s);  ValidareZile(); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr> 
@@ -1184,8 +1263,8 @@
                                 <dx:ASPxLabel  ID="lblZL" runat="server"  Text="zile lucratoare" ></dx:ASPxLabel >
                             </td>
                             <td align="right">
-							    <dx:ASPxTextBox  ID="txtPerProbaZL" Width="20" TabIndex="40" runat="server" Text='<%# Eval("F1001063") %>' AutoPostBack="false" >
-                                    
+							    <dx:ASPxTextBox  ID="txtPerProbaZL" Width="35" TabIndex="40" runat="server" Text='<%# Eval("F1001063") %>' AutoPostBack="false" >
+                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1197,8 +1276,8 @@
                                 <dx:ASPxLabel  ID="lblZC" runat="server"  Text="zile calendaristice" ></dx:ASPxLabel >
                             </td>
                             <td align="right">
-							    <dx:ASPxTextBox  ID="txtPerProbaZC" Width="20"  runat="server" TabIndex="41" Text='<%# Eval("F100975") %>' AutoPostBack="false" >
-                                  
+							    <dx:ASPxTextBox  ID="txtPerProbaZC" Width="35"  runat="server" TabIndex="41" Text='<%# Eval("F100975") %>' AutoPostBack="false" >
+                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1208,7 +1287,7 @@
 						    </td>	
 						    <td>
 							    <dx:ASPxTextBox  ID="txtNrZilePreavizDemisie" Width="75"  runat="server" TabIndex="42" Text='<%# Eval("F1009742") %>' AutoPostBack="false" >
-                                    
+                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1218,7 +1297,7 @@
 						    </td>	
 						    <td>
 							    <dx:ASPxTextBox  ID="txtNrZilePreavizConc" Width="75"  runat="server" TabIndex="43" Text='<%# Eval("F100931") %>' AutoPostBack="false" >
-                                    
+                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>

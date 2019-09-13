@@ -575,11 +575,6 @@ namespace WizOne.Personal
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                 }
 
-                //Radu 12.09.2019 - salvare nivel functie in F718
-                if (ds.Tables[1].Rows[0]["F10071"] != null && ds.Tables[1].Rows[0]["F10071"].ToString().Length > 0)
-                    General.ExecutaNonQuery("UPDATE F718 SET F71813 = ?? WHERE F71802 = " + ds.Tables[1].Rows[0]["F10071"].ToString(), null);
-
-
                 //Florin 2018-10-30
                 //calculam CO daca se modifica data plecare
                 if (calcCO)
@@ -1177,6 +1172,8 @@ namespace WizOne.Personal
                 //lstCtr.Add("hfNrAni", "F100936");
                 lstCtr.Add("txtNrLuni", "F100935");
                 lstCtr.Add("txtNrZile", "F100936");
+                //Radu 12.09.2019 - caz special
+                lstCtr.Add("cmbNivelFunctie", "F71813");
 
                 #endregion
 
@@ -1363,6 +1360,14 @@ namespace WizOne.Personal
                             {
                                 string colName = lst[idCtl];
                                 dynamic ctl = ((dynamic)ASPxPageControl2.TabPages[i].Controls[0].FindControl(numeTab + "_pnlCtl").FindControl(numeTab + "_DataList")).Items[0].FindControl(idCtl);
+
+                                if (colName == "F71813")
+                                {
+                                    //Radu 12.09.2019 - salvare nivel functie in F718
+                                    if (ds.Tables[1].Rows[0]["F10071"] != null && ds.Tables[1].Rows[0]["F10071"].ToString().Length > 0)
+                                        General.ExecutaNonQuery("UPDATE F718 SET F71813 = " + (ctl.Value ?? "NULL") + " WHERE F71802 = " + ds.Tables[1].Rows[0]["F10071"].ToString(), null);
+                                    continue;
+                                }
 
                                 DataTable dt = new DataTable();
                                 if (cols1.Contains(colName)) dt = ds.Tables[1];

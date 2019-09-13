@@ -123,7 +123,7 @@
                     type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
                 }, function (isConfirm) {
                     if (isConfirm) {
-                        grDate.PerformCallback("btnTransf;");
+                        grDate.PerformCallback("btnTransf;1");
                     }
                 });
             }

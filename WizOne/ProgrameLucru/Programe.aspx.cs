@@ -123,9 +123,13 @@ namespace WizOne.ProgrameLucru
                                 }
                             }
                             break;
+                        case "btnDuplica":
+                            DuplicarePrg(Convert.ToInt32(arr[1]));
+                            grDate.DataBind();
+                            break;
                         case "btnSterge":
                             ProgramSterge(Convert.ToInt32(arr[1].ToString()));
-                            IncarcaGrid();
+                            grDate.DataBind();
                             break;
                     }
                 }
@@ -199,10 +203,9 @@ namespace WizOne.ProgrameLucru
                 int val = 0;
                 string sql = "SELECT MAX(\"Id\") FROM \"Ptj_Programe\"";
                 DataTable dt = General.IncarcaDT(sql, null);
-                if (dt != null && dt.Rows. Count > 0)
-                {
+                if (dt != null && dt.Rows. Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)                
                     val = Convert.ToInt32(dt.Rows[0][0].ToString());                    
-                }
+                
                 return (val + 1);
             }
             catch (Exception ex)
@@ -211,6 +214,93 @@ namespace WizOne.ProgrameLucru
                 return 1;
             }
         }
+
+
+        private void DuplicarePrg(int id)
+        {
+
+            int idUrm = ProgramUrmatorulId();
+
+            string[] listaTabele = { "Ptj_Programe", "Ptj_ProgrameAlteOre", "Ptj_ProgramePauza", "Ptj_ProgrameTrepte", "Ptj_ProgrameOreNoapte" };
+
+            foreach (string tabela in listaTabele)
+            {
+                DataTable dtrPrg = General.IncarcaDT("SELECT * FROM \"" + tabela + "\" WHERE " + (tabela == "Ptj_Programe" ? "\"Id\" = " : "\"IdProgram\" = ") + id, null);
+
+                string sqlPrg = "";
+                if (dtrPrg != null && dtrPrg.Rows.Count > 0)
+                {
+                    sqlPrg = "INSERT INTO \"" + tabela + "\" (";
+                    for (int i = 0; i < dtrPrg.Columns.Count; i++)
+                    {
+                        if (dtrPrg.Columns[i].ColumnName != "IdAuto")
+                        {
+                            sqlPrg += "\"" + dtrPrg.Columns[i].ColumnName + "\"";
+                            if (i < dtrPrg.Columns.Count - 1)
+                                sqlPrg += ", ";
+                        }
+                        else
+                            if (sqlPrg.Length > 2 && i == dtrPrg.Columns.Count - 1)
+                            sqlPrg = sqlPrg.Substring(0, sqlPrg.Length - 2);
+                    }
+                    sqlPrg += ") VALUES (";
+                    for (int i = 0; i < dtrPrg.Columns.Count; i++)
+                    {
+                        if (dtrPrg.Columns[i].ColumnName != "IdAuto")
+                        {
+                            switch (dtrPrg.Columns[i].ColumnName)
+                            {
+                                case "Id":
+                                case "IdProgram":
+                                    sqlPrg += idUrm;
+                                    break;
+                                case "Denumire":
+                                    sqlPrg += "'" + dtrPrg.Rows[0]["Denumire"].ToString() + " - Copie'";
+                                    break;
+                                case "USER_NO":
+                                    sqlPrg += Convert.ToInt32(Session["UserId"].ToString());
+                                    break;
+                                case "TIME":
+                                    sqlPrg += (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                                    break;
+                                default:
+                                    if (dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName] == null || dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName].ToString().Length <= 0)
+                                        sqlPrg += "NULL";
+                                    else
+                                    {
+                                        switch (dtrPrg.Columns[i].DataType.ToString())
+                                        {
+                                            case "System.String":
+                                                sqlPrg += "'" + dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName].ToString() + "'";
+                                                break;
+                                            case "System.DateTime":
+                                                DateTime dt = Convert.ToDateTime(General.Nz(dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName], new DateTime(2100, 1, 1)));
+                                                sqlPrg += General.ToDataUniv(dt);
+                                                break;
+                                            default:
+                                                sqlPrg += dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName].ToString();
+                                                break;
+                                        }
+                                    }
+                                    break;
+                            }
+                            if (i < dtrPrg.Columns.Count - 1)
+                                sqlPrg += ", ";
+                        }
+                        else
+                        {
+                            if (sqlPrg.Length > 2 && i == dtrPrg.Columns.Count - 1)
+                                sqlPrg = sqlPrg.Substring(0, sqlPrg.Length - 2);
+                        }
+                    }
+
+                    sqlPrg += ")";
+                }
+                if (sqlPrg.Length > 0)
+                    General.IncarcaDT(sqlPrg, null);
+            }
+        }
+
 
 
 

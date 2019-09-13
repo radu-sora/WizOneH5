@@ -84,7 +84,7 @@
 							            </dx:ASPxTextBox>
 						            </td>
 						            <td >
-							            <dx:ASPxLabel  ID="lblTip" runat="server"  Width="100" Text="Tip contract: " ></dx:ASPxLabel >	
+							            <dx:ASPxLabel  ID="lblTip" runat="server"  Width="70" Text="Tip contract: " ></dx:ASPxLabel >	
 						            </td>	
 						            <td>
 							            <dx:ASPxComboBox DataSourceID="dsTip"  Width="100" Value='<%#Eval("TipContract") %>' ID="cmbTip"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">

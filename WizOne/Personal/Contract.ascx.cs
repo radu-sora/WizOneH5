@@ -216,7 +216,7 @@ namespace WizOne.Personal
                 string grila = "";
                 for (int i = 0; i < dtGrila.Rows.Count; i++)
                 {
-                    grila += dtGrila.Rows[i]["F02604"].ToString() + "," + dtGrila.Rows[i]["F02610"].ToString() + "," + dtGrila.Rows[i]["F02611"].ToString() + "," + dtGrila.Rows[i]["F02615"].ToString();
+                    grila += (dtGrila.Rows[i]["F02604"] ?? "0").ToString() + "," + (dtGrila.Rows[i]["F02610"] ?? "0").ToString() + "," + (dtGrila.Rows[i]["F02611"] ?? "0").ToString() + "," + (dtGrila.Rows[i]["F02615"] ?? "0").ToString();
                     if (i < dtGrila.Rows.Count - 1)
                         grila += ";";
                 }
@@ -237,8 +237,22 @@ namespace WizOne.Personal
                 {
                     DataRow[] drFunc = dtFunc.Select("F71802 = " + (ds.Tables[0].Rows[0]["F10071"] ?? "0").ToString());
                     if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
+                    {
                         cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
-                }              
+                        CompletareZile(Convert.ToInt32(drFunc[0]["F71813"].ToString()));
+                    }
+                }
+
+                DataTable dtNvlFunc = General.IncarcaDT("SELECT \"Id\", \"NrZileLucrProba\", \"NrZileCalProba\", \"NrZileDemisie\", \"NrZileConcediere\", \"Conducere\" FROM \"tblNivelFunctie\"", null);
+                string nvlFunc = "";
+                for (int i = 0; i < dtNvlFunc.Rows.Count; i++)
+                {
+                    nvlFunc += dtNvlFunc.Rows[i]["Id"].ToString() + "," + (dtNvlFunc.Rows[i]["NrZileLucrProba"] ?? "0").ToString() + "," + (dtNvlFunc.Rows[i]["NrZileCalProba"] ?? "0").ToString() + "," 
+                        + (dtNvlFunc.Rows[i]["NrZileDemisie"] ?? "0").ToString() + "," + (dtNvlFunc.Rows[i]["NrZileConcediere"] ?? "0").ToString() + "," + (dtNvlFunc.Rows[i]["Conducere"] ?? "0").ToString();
+                    if (i < dtNvlFunc.Rows.Count - 1)
+                        nvlFunc += ";";
+                }
+                Session["MP_NvlFunc"] = nvlFunc;
 
             }
             
@@ -458,6 +472,9 @@ namespace WizOne.Personal
                     else
                         Contract_pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu a fost gasit tarif corespunzator normei selectate! Setati tariful manual!");
                     break;
+                //case "cmbNivelFunctie":
+                //    CompletareZile(Convert.ToInt32(param[1]));
+                //    break;
                 //case "cmbDurCtr":
                 //    cmbDurataContract_SelectedIndexChanged();
                 //    //ds.Tables[0].Rows[0]["F1009741"] = param[1];
@@ -1563,6 +1580,24 @@ namespace WizOne.Personal
             }
         }
 
+        private void CompletareZile(int nivel)
+        {
+            string sql = "SELECT * FROM \"tblNivelFunctie\" WHERE Id = " + nivel;
+            DataTable dt = General.IncarcaDT(sql, null);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                ASPxTextBox txtPerProbaZL = Contract_DataList.Items[0].FindControl("txtPerProbaZL") as ASPxTextBox;
+                ASPxTextBox txtPerProbaZC = Contract_DataList.Items[0].FindControl("txtPerProbaZC") as ASPxTextBox;
+                ASPxTextBox txtNrZilePreavizDemisie = Contract_DataList.Items[0].FindControl("txtNrZilePreavizDemisie") as ASPxTextBox;
+                ASPxTextBox txtNrZilePreavizConc = Contract_DataList.Items[0].FindControl("txtNrZilePreavizConc") as ASPxTextBox;
+
+                txtPerProbaZL.Text = (dt.Rows[0]["NrZileLucrProba"] ?? "0").ToString();
+                txtPerProbaZC.Text = (dt.Rows[0]["NrZileCalProba"] ?? "0").ToString();
+                txtNrZilePreavizDemisie.Text = (dt.Rows[0]["NrZileDemisie"] ?? "0").ToString();
+                txtNrZilePreavizConc.Text = (dt.Rows[0]["NrZileConcediere"] ?? "0").ToString();
+            }
+        }
 
 
         //private void CalculCO()

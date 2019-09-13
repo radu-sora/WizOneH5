@@ -58,6 +58,15 @@ namespace WizOne.ProgrameLucru {
         protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnEdit;
         
         /// <summary>
+        /// btnDuplica control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnDuplica;
+        
+        /// <summary>
         /// btnSterge control.
         /// </summary>
         /// <remarks>

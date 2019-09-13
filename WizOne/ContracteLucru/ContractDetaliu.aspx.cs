@@ -67,7 +67,8 @@ namespace WizOne.ContracteLucru
                         }
                         x++;
                     }
-                    dtCtr.Rows.RemoveAt(0);
+                    if (dtCtr.Rows.Count > 0)
+                        dtCtr.Rows.RemoveAt(0);
                     dtCtr.Rows.Add(rowCtr);
                     dtCtr.PrimaryKey = new DataColumn[] { dtCtr.Columns["IdAuto"] };
                 }

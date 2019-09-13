@@ -110,7 +110,7 @@ namespace WizOne.Personal
                     e.NewValues["F11007"] = Dami.NextId("F110");
 
                 e.NewValues["F11017"] = 1;
-                e.NewValues["F11014"] = 1;
+                e.NewValues["F11014"] = 1;           
                
             }
             catch (Exception ex)
@@ -136,6 +136,12 @@ namespace WizOne.Personal
                     {
                         switch (col.ColumnName.ToUpper())
                         {
+                            case "F11001":
+                                row[x] = 110;
+                                break;
+                            case "F11002":
+                                row[x] = Convert.ToInt32(ds.Tables[1].Rows[0]["F10002"].ToString());
+                                break;
                             case "F11003":
                                 row[x] = Session["Marca"];
                                 break;
@@ -212,7 +218,7 @@ namespace WizOne.Personal
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
 
-                    //Florin 2019.09.05 - nu se mai doreste verificare de cnp; este de ajuns doar mesajul de averitizare de pe partea de client, nu se doreste sa fie blocanta aceasta verificare (venita de la Z pe mail 2019.09.05)
+                    //Florin 2019.09.05 - nu se mai doreste verificare de cnp; este de ajuns doar mesajul de avertizare de pe partea de client, nu se doreste sa fie blocanta aceasta verificare (venita de la Z pe mail 2019.09.05)
 
                     //if (col.ColumnName.ToUpper() == "F11012")
                     //    if (e.NewValues[col.ColumnName] == null || e.NewValues[col.ColumnName].ToString().Length <= 0 || !General.VerificaCNP(e.NewValues[col.ColumnName].ToString()))
@@ -221,6 +227,11 @@ namespace WizOne.Personal
                     //        err = true;
                     //    }
 
+                    if (col.ColumnName.ToUpper() == "F11001")
+                        row[col.ColumnName] = 110;
+
+                    if (col.ColumnName.ToUpper() == "F11002")
+                        row[col.ColumnName] = Convert.ToInt32(ds.Tables[1].Rows[0]["F10002"].ToString());
 
                     if (col.ColumnName.ToUpper() == "F11006")
                         if (e.NewValues["F11012"] != null && e.NewValues["F11012"].ToString().Length > 0 && General.VerificaCNP(e.NewValues["F11012"].ToString()))

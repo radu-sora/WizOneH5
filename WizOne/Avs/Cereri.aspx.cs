@@ -3295,7 +3295,7 @@ namespace WizOne.Avs
                                 DateTime dtTmp = new DateTime();
                                 DateTime dtf = new DateTime(2100, 1, 1, 0, 0, 0);
                                 if (dtSf != dtf)
-                                    dtTmp = dtSf.AddDays(-1);
+                                    dtTmp = dtSf.AddDays(1);
                                 else
                                     dtTmp = dtSf;
 
@@ -3303,8 +3303,8 @@ namespace WizOne.Avs
                                 ctr.CalculLuniSiZile(Convert.ToDateTime(dtInc.Date), Convert.ToDateTime(dtSf.Date), out nrLuni, out nrZile);
 
                                 sql100Tmp = "UPDATE F100 SET F100933 = " + data9 + ", F100934 = " + data10 + ", F100936 = " + nrZile.ToString() + ", F100935 = "
-                                    + nrLuni.ToString() + ", F100938 = 1, F100993 = " + data10
-                                    + ", F10023 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
+                                    + nrLuni.ToString() + ", F100938 = 1, F10023 = " + data10
+                                    + ", F100993 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 103)"
                                     : "TO_DATE('" + dtTmp.Day.ToString().PadLeft(2, '0') + "/" + dtTmp.Month.ToString().PadLeft(2, '0') + "/" + dtTmp.Year.ToString() + "', 'dd/mm/yyyy')") + ", F1009741 = " + dtCer.Rows[0]["DurataContract"].ToString() + "  WHERE F10003 = " + f10003.ToString();
                                 General.IncarcaDT(sql100Tmp, null);
 

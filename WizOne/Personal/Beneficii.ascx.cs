@@ -12,10 +12,17 @@ namespace WizOne.Personal
 {
     public partial class Beneficii : System.Web.UI.UserControl
     {
+        public class metaUploadFile
+        {
+            public object UploadedFile { get; set; }
+            public object UploadedFileName { get; set; }
+            public object UploadedFileExtension { get; set; }
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             grDateBeneficii.DataBind();
-            //grDateBeneficii.AddNewRow();
 
             foreach (dynamic c in grDateBeneficii.Columns)
             {
@@ -30,6 +37,9 @@ namespace WizOne.Personal
             grDateBeneficii.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
             grDateBeneficii.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
             grDateBeneficii.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+
+            if (!IsPostBack)
+                Session["DocUpload_MP_Beneficii"] = null;
         }
 
         protected void grDateBeneficii_DataBinding(object sender, EventArgs e)
@@ -69,7 +79,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colBen = (grDateBeneficii.Columns["IdObiect"] as GridViewDataComboBoxColumn);
             colBen.PropertiesComboBox.DataSource = dtBen;
 
-
+            Session["InformatiaCurentaPersonal"] = ds;
 
         }
 
@@ -91,10 +101,12 @@ namespace WizOne.Personal
                         else
                             e.NewValues["IdAuto"] = 1;
                     }
+                    else
+                        e.NewValues["IdAuto"] = 1;
                 }
                 else
                     e.NewValues["IdAuto"] = Dami.NextId("Admin_Beneficii");
-
+                e.NewValues["Marca"] = Session["Marca"];
                 e.NewValues["DataPrimire"] = DateTime.Now;
             }
             catch (Exception ex)
@@ -109,47 +121,53 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataTable dt = ds.Tables["Admin_Beneficii"];
+                DataRow dr = dt.NewRow();
 
-                object[] row = new object[ds.Tables["Admin_Beneficii"].Columns.Count];
-                int x = 0;
-                foreach (DataColumn col in ds.Tables["Admin_Beneficii"].Columns)
+                ASPxDateEdit txtDataPrim = grDateBeneficii.FindEditFormTemplateControl("txtDataPrim") as ASPxDateEdit;
+                ASPxDateEdit txtDataExp = grDateBeneficii.FindEditFormTemplateControl("txtDataExp") as ASPxDateEdit;
+                ASPxComboBox cmbNumeBen = grDateBeneficii.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
+                ASPxTextBox txtCaract = grDateBeneficii.FindEditFormTemplateControl("txtCaract") as ASPxTextBox;
+
+                if (Constante.tipBD == 1)
+                    dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                else
+                    dr["IdAuto"] = Dami.NextId("Admin_Beneficii");
+                if (Convert.ToInt32(dr["IdAuto"].ToString()) < 1000000)
+                    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1000000;
+                               
+                dr["Marca"] = Session["Marca"];
+                dr["IdObiect"] = cmbNumeBen.Value ?? DBNull.Value;
+                dr["DataPrimire"] = txtDataPrim.Value ?? DBNull.Value;
+                dr["DataExpirare"] = txtDataExp.Value ?? DBNull.Value;     
+                dr["Caracteristica"] = txtCaract.Value ?? DBNull.Value;
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
+
+                metaUploadFile itm = Session["DocUpload_MP_Beneficii"] as metaUploadFile;
+                if (itm != null)
                 {
-                    if (!col.AutoIncrement)
-                    {
-                        switch (col.ColumnName.ToUpper())
-                        {
-                            case "MARCA":
-                                row[x] = Session["Marca"];
-                                break;
-                            case "IDAUTO":
-                                if (Constante.tipBD == 1)
-                                   row[x] = Convert.ToInt32(General.Nz(ds.Tables["Admin_Beneficii"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                                else
-                                    row[x] = Dami.NextId("Admin_Beneficii");
-                                break;
-                            case "USER_NO":
-                                row[x] = Session["UserId"];
-                                break;
-                            case "TIME":
-                                row[x] = DateTime.Now;
-                                break;
-                            default:
-                                row[x] = e.NewValues[col.ColumnName];
-                                break;
-                        }
-                    }
-
-                    x++;
+                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Medicina", Convert.ToInt32(dr["IdAuto"].ToString()) + (Constante.tipBD == 1 ? 0 : 1));
+                    //if (Constante.tipBD == 2)
+                    //    dr["IdAuto"] = Convert.ToInt32(dr["IdAuto"].ToString()) + 1;
+                    //dr["Fisier"] = itm.UploadedFile;
+                    //dr["FisierNume"] = itm.UploadedFileName;
+                    //dr["FisierExtensie"] = itm.UploadedFileExtension;
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    lstFiles.Add(Convert.ToInt32(dr["IdAuto"].ToString()), itm);
+                    Session["List_DocUpload_MP_Beneficii"] = lstFiles;
                 }
 
-                ds.Tables["Admin_Beneficii"].Rows.Add(row);
+                ds.Tables["Admin_Beneficii"].Rows.Add(dr);
+                Session["DocUpload_MP_Medicina"] = null;
+
                 e.Cancel = true;
                 grDateBeneficii.CancelEdit();
                 grDateBeneficii.DataSource = ds.Tables["Admin_Beneficii"];
                 grDateBeneficii.KeyFieldName = "IdAuto";
-                //grDateBeneficii.AddNewRow();
                 Session["InformatiaCurentaPersonal"] = ds;
-
 
             }
             catch (Exception ex)
@@ -163,28 +181,45 @@ namespace WizOne.Personal
         {
             try
             {
-                object[] keys = new object[e.Keys.Count];
-                for (int i = 0; i < e.Keys.Count; i++)
-                { keys[i] = e.Keys[i]; }
+                var idAuto = e.Keys["IdAuto"];
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
-                DataRow row = ds.Tables["Admin_Beneficii"].Rows.Find(keys);
+                DataRow dr = ds.Tables["Admin_Beneficii"].Rows.Find(idAuto);
 
-                foreach (DataColumn col in ds.Tables["Admin_Beneficii"].Columns)
+                ASPxDateEdit txtDataPrim = grDateBeneficii.FindEditFormTemplateControl("txtDataPrim") as ASPxDateEdit;
+                ASPxDateEdit txtDataExp = grDateBeneficii.FindEditFormTemplateControl("txtDataExp") as ASPxDateEdit;
+                ASPxComboBox cmbNumeBen = grDateBeneficii.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
+                ASPxTextBox txtCaract = grDateBeneficii.FindEditFormTemplateControl("txtCaract") as ASPxTextBox;
+
+                dr["Marca"] = Session["Marca"];
+                dr["IdObiect"] = cmbNumeBen.Value ?? DBNull.Value;
+                dr["DataPrimire"] = txtDataPrim.Value ?? DBNull.Value;
+                dr["DataExpirare"] = txtDataExp.Value ?? DBNull.Value;
+                dr["Caracteristica"] = txtCaract.Value ?? DBNull.Value;
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
+
+                metaUploadFile itm = Session["DocUpload_MP_Beneficii"] as metaUploadFile;
+                if (itm != null)
                 {
-                    if (!col.AutoIncrement && grDateBeneficii.Columns[col.ColumnName].Visible)
-                    {
-                        var edc = e.NewValues[col.ColumnName];
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
-                    }
-
+                    //General.IncarcaFisier(itm.UploadedFileName.ToString(), itm.UploadedFile, "Admin_Medicina", dr["IdAuto"]);
+                    //dr["Fisier"] = itm.UploadedFile;
+                    //dr["FisierNume"] = itm.UploadedFileName;
+                    //dr["FisierExtensie"] = itm.UploadedFileExtension;
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    lstFiles.Add(Convert.ToInt32(idAuto.ToString()), itm);
+                    Session["List_DocUpload_MP_Beneficii"] = lstFiles;
                 }
+                Session["DocUpload_MP_Beneficii"] = null;
 
                 e.Cancel = true;
                 grDateBeneficii.CancelEdit();
                 Session["InformatiaCurentaPersonal"] = ds;
                 grDateBeneficii.DataSource = ds.Tables["Admin_Beneficii"];
+                grDateBeneficii.KeyFieldName = "IdAuto";
             }
             catch (Exception ex)
             {
@@ -205,6 +240,13 @@ namespace WizOne.Personal
 
                 DataRow row = ds.Tables["Admin_Beneficii"].Rows.Find(keys);
 
+                Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, metaUploadFile>;
+                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
+                    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
+                Session["List_DocUpload_MP_Beneficii"] = lstFiles;
+
+                Session["DocUpload_MP_MBeneficii"] = null;
+
                 row.Delete();
 
                 e.Cancel = true;
@@ -213,6 +255,48 @@ namespace WizOne.Personal
                 grDateBeneficii.DataSource = ds.Tables["Admin_Beneficii"];
 
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void btnDocUploadAtas_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+                if (!e.IsValid) return;
+                ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
+
+                metaUploadFile itm = new metaUploadFile();
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+
+                Session["DocUpload_MP_Beneficii"] = itm;
+
+                btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateBeneficii_HtmlEditFormCreated(object sender, ASPxGridViewEditFormEventArgs e)
+        {
+            try
+            {
+                ASPxComboBox cmbCateg = grDateBeneficii.FindEditFormTemplateControl("cmbNumeBen") as ASPxComboBox;
+                if (cmbCateg != null)
+                {
+                    DataTable dtMedicina = General.GetObiecteDinArie("ArieTabBeneficiiDinPersonal");
+                    cmbCateg.DataSource = dtMedicina;
+                    cmbCateg.DataBindItems();
+                }
             }
             catch (Exception ex)
             {

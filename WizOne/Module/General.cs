@@ -5078,7 +5078,7 @@ namespace WizOne.Module
                 table.Columns.Add("Denumire", typeof(string));
 
                 table.Rows.Add(1, "Contract zilnic");
-                table.Rows.Add(2, "Contract ciclic");
+                //table.Rows.Add(2, "Contract ciclic");
 
                 return table;
             }

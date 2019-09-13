@@ -50,14 +50,14 @@
 							        </dx:ASPxTimeEdit>
 						        </td>
                                 <td>
-                                    <dx:ASPxCheckBox ID="chkOreSup"  runat="server" Width="80" Text="Ore sup. ?" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"OreSup").ToString()=="1"%>' ClientInstanceName="chkbx1" >
+                                    <dx:ASPxCheckBox ID="chkOreSup"  runat="server" Width="80" Text="Ore sup. ?" TextAlign="Right" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"OreSup").ToString()=="1"%>' ClientInstanceName="chkbx1" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
                                     </dx:ASPxCheckBox>
                                 </td>
 						        <td >
 							        <dx:ASPxLabel  ID="lblAfis" runat="server"  Width="80" Text="Afisare Ore: " ></dx:ASPxLabel >	
 						        </td>	
-						        <td>
+						        <td colspan="2">
 							        <dx:ASPxComboBox DataSourceID="dsAfis"  Value='<%#Eval("Afisare") %>' ID="cmbAfis"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
 							        </dx:ASPxComboBox >
@@ -70,36 +70,45 @@
 				        <legend class="legend-font-size">Setari</legend>
 				        <table width="60%">	
 					        <tr>				
-                                <td>
-                                    <dx:ASPxCheckBox ID="chkScadeVal0"  runat="server" Width="80" Text="Scade Val0" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"ScadeVal0").ToString()=="1"%>' ClientInstanceName="chkbx2" >
+                                <td >
+                                    <dx:ASPxCheckBox ID="chkScadeVal0"  runat="server" Width="150" Text="Scade ore normale" TextAlign="Right" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"ScadeVal0").ToString()=="1"%>' ClientInstanceName="chkbx2" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
                                     </dx:ASPxCheckBox>
                                 </td>
-                                <td>
-                                    <dx:ASPxCheckBox ID="chkScadeFara"  runat="server" Width="180" Text="Scade fara depasire norma" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"ScadeFaraDepasireNorma").ToString()=="1"%>' ClientInstanceName="chkbx3" >
-                                        <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
+                                <td colspan="2">
+                                    <dx:ASPxCheckBox ID="chkScadeFara"  runat="server" Width="170" Text="Scade fara depasire norma" TextAlign="Right" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"ScadeFaraDepasireNorma").ToString()=="1"%>' ClientInstanceName="chkbx3" >
+                                        <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />                                        
                                     </dx:ASPxCheckBox>
                                 </td>
-						        <td >
-							        <dx:ASPxLabel  ID="lblRap" runat="server"  Width="170" Text="Tip raportare ore noapte: " ></dx:ASPxLabel >	
+						        <td colspan="2">
+							        <dx:ASPxLabel  ID="lblRap" runat="server"  Width="140" Text="Tip raportare ore noapte: " >                                       
+							        </dx:ASPxLabel >	
 						        </td>	
-						        <td>
+						        <td >
 							        <dx:ASPxComboBox DataSourceID="dsRap"  Value='<%#Eval("TipRaportareOreNoapte") %>' ID="cmbRap"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
 							        </dx:ASPxComboBox >
 						        </td>
 					        </tr>
                             <tr>
-                                <td>
-                                    <dx:ASPxCheckBox ID="chkPontareAuto"  runat="server" Width="120" Text="Pontare Automata" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"PontareAutomata").ToString()=="1"%>' ClientInstanceName="chkbx4" >
+                                <td >
+                                    <dx:ASPxCheckBox ID="chkPontareAuto"  runat="server" Width="150" Text="Initializare automata:" TextAlign="Right" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"PontareAutomata").ToString()=="1"%>' ClientInstanceName="chkbx4" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
                                     </dx:ASPxCheckBox>
-                                </td>
+                                </td>                             
+						        <td >
+							        <dx:ASPxLabel  ID="lblOraInInit" runat="server"  Width="70" Text="Ora intrare: " >                                       
+							        </dx:ASPxLabel >	
+						        </td>
                                 <td>
     							    <dx:ASPxTimeEdit  ID="txtInInit" Width="70"  runat="server" Value='<%# Eval("OraInInitializare") %>' AutoPostBack="false"  >
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtrAbs(s); }" />
 							        </dx:ASPxTimeEdit>
-                                </td>
+                                </td>                                
+						        <td >
+							        <dx:ASPxLabel  ID="lblOraOutInit" runat="server"  Width="70" Text="Ora iesire: " >                                        
+							        </dx:ASPxLabel >	
+						        </td>
                                 <td>
     							    <dx:ASPxTimeEdit  ID="txtOutInit" Width="70"  runat="server" Value='<%# Eval("OraOutInitializare") %>' AutoPostBack="false"  >
                                         <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtrAbs(s); }" />
@@ -136,7 +145,7 @@
                 <dx:GridViewDataCheckColumn FieldName="S" Name="S" Caption="Sambata"  Width="60px"  />
                 <dx:GridViewDataCheckColumn FieldName="D" Name="D" Caption="Duminica"  Width="60px"  />
                 <dx:GridViewDataCheckColumn FieldName="SL" Name="SL" Caption="Sarb. Legale"  Width="60px"  />
-                <dx:GridViewDataCheckColumn FieldName="InPontajAnual" Name="InPontajAnual" Caption="Ptj anual"  Width="60px"  />
+                <dx:GridViewDataCheckColumn FieldName="InPontajAnual" Name="InPontajAnual" Caption="Istoric extins"  Width="60px"  />
                 <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>      
                 <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
                 <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />              

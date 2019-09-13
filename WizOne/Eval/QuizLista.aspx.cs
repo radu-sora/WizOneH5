@@ -510,7 +510,7 @@ namespace WizOne.Eval
                         }
                         else
                             if (sqlCircuit.Length > 2 && i == dtOriCircuit.Columns.Count - 1)
-                            sqlCircuit = sqlCircuit.Substring(0, sqlCircuit.Length - 2);
+                                sqlCircuit = sqlCircuit.Substring(0, sqlCircuit.Length - 2);
                     }
                     sqlCircuit += ") VALUES (";
                     for (int i = 0; i < dtOriCircuit.Columns.Count; i++)
@@ -554,7 +554,7 @@ namespace WizOne.Eval
                         }
                         else
                             if (sqlCircuit.Length > 2 && i == dtOriCircuit.Columns.Count - 1)
-                            sqlCircuit = sqlCircuit.Substring(0, sqlCircuit.Length - 2);
+                                sqlCircuit = sqlCircuit.Substring(0, sqlCircuit.Length - 2);
                     }
 
                     sqlCircuit += ")";

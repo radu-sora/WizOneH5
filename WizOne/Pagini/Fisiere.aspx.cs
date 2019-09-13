@@ -127,9 +127,12 @@ namespace WizOne.Pagini
                             case "9":
                                 tbl = "Avs_Cereri";
                                 break;
+                            case "10":
+                                tbl = "Admin_Beneficii"; //Radu 11.09.2019    
+                                break;
                         }
 
-                        if (tbl == "Admin_Medicina" || tbl == "Admin_Sanctiuni" /*|| tbl == "Atasamente"*/)
+                        if (tbl == "Admin_Medicina" || tbl == "Admin_Sanctiuni" || tbl == "Admin_Beneficii")
                         {//Radu 13.06.2019
                             if (tbl == "Admin_Medicina")
                             {
@@ -138,7 +141,7 @@ namespace WizOne.Pagini
                                 {
                                     scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
                                     tbl = "";
-                                }                                                               
+                                }
                             }
                             if (tbl == "Admin_Sanctiuni")
                             {
@@ -147,7 +150,16 @@ namespace WizOne.Pagini
                                 {
                                     scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
                                     tbl = "";
-                                }                                
+                                }
+                            }
+                            if (tbl == "Admin_Beneficii")
+                            {
+                                Dictionary<int, Personal.Beneficii.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Beneficii"] as Dictionary<int, Personal.Beneficii.metaUploadFile>;
+                                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(id)) && lstFiles[Convert.ToInt32(id)] != null)
+                                {
+                                    scrieDoc(lstFiles[Convert.ToInt32(id)].UploadedFileExtension.ToString(), (byte[])lstFiles[Convert.ToInt32(id)].UploadedFile, lstFiles[Convert.ToInt32(id)].UploadedFileName.ToString());
+                                    tbl = "";
+                                }
                             }
                             //if (tbl == "Atasamente")
                             //{

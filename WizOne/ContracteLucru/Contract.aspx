@@ -8,10 +8,12 @@
     <script language="javascript" type="text/javascript">
 
         function grDate_CustomButtonClick(s, e) {
-            switch(e.buttonID)
-            {
+            switch (e.buttonID){
                 case "btnEdit":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToEditMode);
+                    break;
+                case "btnDuplica":
+                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToCloneMode);
                     break;
                 case "btnSterge":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToDeleteMode);
@@ -21,6 +23,10 @@
 
         function GoToEditMode(Value) {
             grDate.PerformCallback("btnEdit;" + Value);
+        }
+
+        function GoToCloneMode(Value) {
+            grDate.PerformCallback("btnDuplica;" + Value);
         }
 
         function GoToDeleteMode(Value) {
@@ -68,6 +74,11 @@
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnEdit">
                                     <Image ToolTip="Modifica" Url="~/Fisiere/Imagini/Icoane/edit.png" />
+                                </dx:GridViewCommandColumnCustomButton>
+                            </CustomButtons>
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnDuplica">
+                                    <Image ToolTip="Duplica" Url="~/Fisiere/Imagini/Icoane/clone.png" />
                                 </dx:GridViewCommandColumnCustomButton>
                             </CustomButtons>
                             <CustomButtons>

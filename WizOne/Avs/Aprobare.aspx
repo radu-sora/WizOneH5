@@ -274,7 +274,8 @@
 					    <dx:GridViewDataDateColumn FieldName="DataModif" Name="DataModif" Caption="Data modificarii" ReadOnly="true"  Width="100px" >
                              <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-					    <dx:GridViewDataTextColumn FieldName="ValoareNoua" Name="ValoareNoua" Caption="Valoare" ReadOnly="true"  Width="150px" />		
+					    <dx:GridViewDataTextColumn FieldName="ValoareNoua" Name="ValoareNoua" Caption="Valoare" ReadOnly="true"  Width="150px" />	
+                        <dx:GridViewDataTextColumn FieldName="SalariulNet" Name="SalariulNet" Caption="Salariul net" ReadOnly="true" Width="100px" />
                         <dx:GridViewDataTextColumn FieldName="Motiv" Name="Motiv" Caption="Motiv" ReadOnly="true" Width="150px" />
                         <dx:GridViewDataTextColumn FieldName="Explicatii" Name="Explicatii" Caption="Explicatii"  Width="200px" />
                         <dx:GridViewDataCheckColumn FieldName="Actualizat" Name="Actualizat" Caption="Actualizat" ReadOnly="true" Width="70px"  />

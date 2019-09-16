@@ -423,9 +423,9 @@
                 }
             } else {
                 for (var action = 0; action < actions.length; action++) {
-                    if (actions[action].id == DevExpress.Designer.Report.ActionId.NewReport ||
-                        actions[action].id == DevExpress.Designer.Report.ActionId.NewReportViaWizard ||
-                        actions[action].id == DevExpress.Designer.Report.ActionId.OpenReport) {
+                    if (actions[action].id == DevExpress.Reporting.Designer.Actions.ActionId.NewReport ||
+                        actions[action].id == DevExpress.Reporting.Designer.Actions.ActionId.NewReportViaWizard ||
+                        actions[action].id == DevExpress.Reporting.Designer.Actions.ActionId.OpenReport) {
                         actions[action].visible = false;
                     }
                 }

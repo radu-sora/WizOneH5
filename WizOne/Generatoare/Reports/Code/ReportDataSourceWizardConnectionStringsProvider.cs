@@ -13,7 +13,7 @@ namespace WizOne.Generatoare.Reports.Code
 
         public DataConnectionParametersBase GetDataConnectionParameters(string name)
         {
-            return new CustomStringConnectionParameters(Module.Constante.tipBD == 1 ? "XpoProvider=MSSqlServer;" : "XpoProvider=ODPManaged;" + Module.Constante.cnnWeb);
+            return new CustomStringConnectionParameters((Module.Constante.tipBD == 1 ? "XpoProvider=MSSqlServer;" : "XpoProvider=ODPManaged;") + Module.Constante.cnnWeb);
         }
     }
 }

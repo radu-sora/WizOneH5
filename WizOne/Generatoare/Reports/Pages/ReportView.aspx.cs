@@ -85,7 +85,7 @@ namespace WizOne.Generatoare.Reports.Pages
         protected short ReportType { get; set; }
         protected short ToolbarType { get; set; }
         protected string ExportOptions { get; set; }
-        protected short ChartStatus { get; set; }
+        protected short ChartStatus { get; set; }        
 
         private void LoadASPxPivotGridLayoutFromXRPivotGrid(ASPxPivotGrid aspxPivotGrid, XRPivotGrid xrPivotGrid)
         {
@@ -417,6 +417,17 @@ namespace WizOne.Generatoare.Reports.Pages
                    !Request["__CALLBACKPARAM"].Contains(":PREFILTER|Hide"); // Native callbacks that do not affect chart display
         }
 
+        private bool IsMobileDevice
+        {
+            get
+            {
+                var userAgent = Request.ServerVariables["HTTP_USER_AGENT"];
+                var devices = new string[] { "iPhone", "iPad", "Android", "Windows Phone" }; // Add more devices
+
+                return devices.Any(d => userAgent.Contains(d));
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -535,13 +546,14 @@ namespace WizOne.Generatoare.Reports.Pages
                     }
 
                     // Customize report viewer UI
+                    WebDocumentViewer.MobileMode = report.ReportTypeId <= 2 ? IsMobileDevice : false; // Mobile mode only for Report & Document type
                     WebDocumentViewer.MenuItems.Add(new WebDocumentViewerMenuItem()
                     {
                         Text = "Exit",
-                        ImageClassName = "dxrd-image-exit",
+                        ImageClassName = WebDocumentViewer.MobileMode ? "dxrd-image-exit mobile" : "dxrd-image-exit",
                         JSClickAction = "function() { onExitButtonClick(); }",
                         Container = MenuItemContainer.Toolbar
-                    });
+                    });                    
 
                     if (_serverPrint) // Send to server default printer & exit
                     {

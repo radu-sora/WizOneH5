@@ -596,14 +596,7 @@
 
                                 <div style="float:left; padding-right:15px; vertical-align:middle; display:inline-block;">
                                     <label id="Label1" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
-                                    <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
-                                        <Items>
-                                            <dx:ListEditItem Text="Toate inregistrarile" Value="1" Selected="true" />
-                                            <dx:ListEditItem Text="Erori" Value="2" />
-                                            <dx:ListEditItem Text="Lipsa pontari" Value="3" />
-                                            <dx:ListEditItem Text="Erori si lipsa pontari" Value="4" />
-                                        </Items>
-                                    </dx:ASPxComboBox>
+                                    <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                 </div>
 
                                 <label ID="txtStare" runat="server" Width="110" style="float:left; margin-right:15px; width:110px; height:26px; text-align:center; border:solid 1px gray; color:#000000;"></label>
@@ -700,14 +693,7 @@
                                             </div>
                                             <div style="float:left; padding-right:15px;">
                                                 <label id="Label2" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
-                                                <dx:ASPxComboBox ID="cmbPtjZi" ClientInstanceName="cmbPtjZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
-                                                    <Items>
-                                                        <dx:ListEditItem Text="Toate inregistrarile" Value="1" Selected="true" />
-                                                        <dx:ListEditItem Text="Erori" Value="2" />
-                                                        <dx:ListEditItem Text="Lipsa pontari" Value="3" />
-                                                        <dx:ListEditItem Text="Erori si lipsa pontari" Value="4" />
-                                                    </Items>
-                                                </dx:ASPxComboBox>
+                                                <dx:ASPxComboBox ID="cmbPtjZi" ClientInstanceName="cmbPtjZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                             </div>                                        
                                         </td>
                                     </tr>

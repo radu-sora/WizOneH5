@@ -118,6 +118,25 @@ namespace WizOne.Pontaj
                     //Florin 2018.09.25
                     grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
                 }
+
+                cmbPtjAng.Items.Add(new ListEditItem { Text = "Toate inregistrarile", Value = 1 });
+                cmbPtjAng.Items.Add(new ListEditItem { Text = "Erori", Value = 2 });
+                cmbPtjAng.Items.Add(new ListEditItem { Text = "Lipsa pontari", Value = 3 });
+                cmbPtjAng.Items.Add(new ListEditItem { Text = "Erori si lipsa pontari", Value = 4 });
+
+                cmbPtjZi.Items.Add(new ListEditItem { Text = "Toate inregistrarile", Value = 1 });
+                cmbPtjZi.Items.Add(new ListEditItem { Text = "Erori", Value = 2 });
+                cmbPtjZi.Items.Add(new ListEditItem { Text = "Lipsa pontari", Value = 3 });
+                cmbPtjZi.Items.Add(new ListEditItem { Text = "Erori si lipsa pontari", Value = 4 });
+
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Filtru"" ", null);
+                for(int i = 0; i < dt.Rows.Count; i++)
+                {
+                    cmbPtjAng.Items.Add(new ListEditItem { Text = General.Nz(dt.Rows[i]["Denumire"],"").ToString(), Value = Convert.ToInt32(General.Nz(dt.Rows[i]["Id"],1)) + 5 });
+                    cmbPtjZi.Items.Add(new ListEditItem { Text = General.Nz(dt.Rows[i]["Denumire"], "").ToString(), Value = Convert.ToInt32(General.Nz(dt.Rows[i]["Id"], 1)) + 5 });
+                }
+
+                
             }
             catch (Exception ex)
             {
@@ -689,6 +708,22 @@ namespace WizOne.Pontaj
                     if (tipInreg == 2) filtru += erori;
                     if (tipInreg == 3) filtru += lipsaPontaj;
                     if (tipInreg == 4) filtru += " AND (" + erori.Substring(4) + " OR " + lipsaPontaj.Substring(4) + ")";
+                    if (tipInreg > 4)
+                    {
+                        try
+                        {
+                            DataTable dtSup = General.IncarcaDT(@"SELECT * FROM ""Ptj_Filtru"" WHERE ""Id""=@1", new object[] { tipInreg - 5 });
+                            if (dtSup != null && dtSup.Rows.Count > 0)
+                            {
+                                filtru += " AND P." + dtSup.Rows[0]["Camp"] + dtSup.Rows[0]["Operator"] + dtSup.Rows[0]["Valoare"];
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+                    }
                 }
 
 

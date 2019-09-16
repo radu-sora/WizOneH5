@@ -56,8 +56,27 @@
             else if (e.buttonIndex == 1) {
                 s.PerformCallback("Toti");
             }
-
         }
+
+        function VerifInterval(s, e) {
+            if (cmbOraInc.GetValue() && cmbOraSf.GetValue()) {
+                var oraInc = Number(cmbOraInc.GetValue().substring(0, 2)) * 60 + Number(cmbOraInc.GetValue().substring(3, 5));
+                var oraSf = Number(cmbOraSf.GetValue().substring(0, 2)) * 60 + Number(cmbOraSf.GetValue().substring(3, 5));
+                if (oraInc >= oraSf) {
+                    s.SetValue("");
+                    swal({
+                        title: "Atentie !", text: "Ora inceput este mai mare decat ora sfarsit",
+                        type: "warning"
+                    });
+                }
+                else {
+                    var dif = (oraSf - oraInc) / 60;
+                    txtNrOre.SetValue(dif.toFixed(4));
+                    txtNrOreInMinute.SetValue(oraSf - oraInc);
+                }
+            }
+        }
+
     </script>
 
 </asp:Content>
@@ -214,7 +233,24 @@
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblNrOre" runat="server" style="display:none;">Nr. ore</label>
-                        <dx:ASPxTextBox ID="txtNrOre" runat="server" Width="70px" Visible="false" meta:resourcekey="txtNrOreResource1" />
+                        <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="70px" Visible="false" MinValue="0" MaxValue="8">
+                            <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
+                        </dx:ASPxSpinEdit>
+                        <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="70px" Visible="false" ClientEnabled="false" />
+                    </div>
+
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblOraInc" runat="server" style="display:none;">Ora Inceput</label>
+                        <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="100px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); }" />
+                        </dx:ASPxComboBox>
+                    </div>
+
+                    <div class="Absente_Cereri_CampuriSup">
+                        <label id="lblOraSf" runat="server" style="display:none;">Ora Sfarsit</label>
+                        <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="100px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e);  }" />
+                        </dx:ASPxComboBox>
                     </div>
 
                     <dx:ASPxTextBox ID="txtNrZileViitor" runat="server" Width="70px" ReadOnly="true" Visible="false" meta:resourcekey="txtNrZileViitorResource1" />

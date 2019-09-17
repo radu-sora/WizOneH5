@@ -559,7 +559,7 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
                             MAX(CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END) AS Motiv,
-                            J.DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+                            CONVERT(nvarchar(10),J.DocNr) AS DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct, 
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas,
                             (SELECT ',' + CONVERT(nvarchar(20),COALESCE(AA.Id, '')) 
@@ -578,7 +578,7 @@ namespace WizOne.Pagini
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                            B.F100985, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
+                            CONVERT(nvarchar(10),B.F100985) AS DocNr, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
                             B.F10022, B.F100993, J.IdAutoAtasamente,
@@ -782,7 +782,7 @@ namespace WizOne.Pagini
                                     try
                                     {
                                         object[] obj = lst[i] as object[];
-                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) != 0)
+                                        if (General.Nz(obj[2], "").ToString() != "")
                                         {
                                             msg += obj[8] + " - " + Dami.TraduCuvant("are deja numar") + System.Environment.NewLine;
                                             continue;
@@ -809,7 +809,7 @@ namespace WizOne.Pagini
                                         }
 
 
-                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 0)
+                                        if (General.Nz(obj[2], "").ToString() == "")
                                         {
                                             //Florin 2019.09.09
                                             //exista cazul in care candidatii nu au nr si data document setat in managementul de personal
@@ -826,7 +826,7 @@ namespace WizOne.Pagini
                                                 {
                                                     dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
                                                 OUTPUT Inserted.IdAuto
-                                                VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
+                                                VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1 AND COALESCE(Candidat,0)=0),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
                                                     new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
 
                                                     if (dt.Rows.Count > 0)
@@ -839,7 +839,7 @@ namespace WizOne.Pagini
                                                 else
                                                 {
                                                     id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2 AND COALESCE(""Candidat"",0)=0),0) + 1, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
                                                     new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
 
                                                     //id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
@@ -895,7 +895,7 @@ namespace WizOne.Pagini
                                     try
                                     {
                                         object[] obj = lst[i] as object[];
-                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 0)
+                                        if (General.Nz(obj[2], "").ToString() == "")
                                         {
                                             msg += obj[8] + " - " + Dami.TraduCuvant("nu exista numar") + System.Environment.NewLine;
                                             continue;
@@ -935,8 +935,13 @@ namespace WizOne.Pagini
                                             {
                                                 DataTable dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
                                                 OUTPUT Inserted.IdAuto
-                                                VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
-                                                new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+                                                VALUES(@1, 0, @6, @2, @3, {General.CurrentDate()}, @4, @5);",
+                                                new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10], obj[1] });
+
+                                                //DataTable dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //OUTPUT Inserted.IdAuto
+                                                //VALUES(@1, COALESCE((SELECT MAX(COALESCE(DocNr,0)) FROM Admin_NrActAd WHERE F10003=@1),0) + 1, {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
+                                                //new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
 
                                                 if (dt.Rows.Count > 0)
                                                     id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
@@ -944,8 +949,12 @@ namespace WizOne.Pagini
                                             else
                                             {
                                                 id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
-                                                new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
+                                                VALUES(@2, 0, @6, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                new object[] { "int", obj[0], Session["UserId"], obj[10], obj[1] }), 0));
+
+                                                //id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //VALUES(@2, COALESCE((SELECT MAX(COALESCE(""DocNr"",0)) FROM ""Admin_NrActAd"" WHERE F10003=@2),0) + 1, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                //new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
                                             }
 
                                             if (Convert.ToInt32(General.Nz(id, -99)) != -99)
@@ -983,7 +992,7 @@ namespace WizOne.Pagini
                                     try
                                     {
                                         object[] obj = lst[i] as object[];
-                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 0)
+                                        if (General.Nz(obj[2], "").ToString() == "")
                                         {
                                             msg += obj[8] + " - " + Dami.TraduCuvant("nu exista numar") + System.Environment.NewLine;
                                             continue;
@@ -1052,7 +1061,7 @@ namespace WizOne.Pagini
                                     try
                                     {
                                         object[] obj = lst[i] as object[];
-                                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 0)
+                                        if (General.Nz(obj[2], "").ToString() == "")
                                         {
                                             msg += obj[8] + " - " + Dami.TraduCuvant("nu exista numar") + System.Environment.NewLine;
                                             continue;

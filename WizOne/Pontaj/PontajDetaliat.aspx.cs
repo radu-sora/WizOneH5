@@ -1219,29 +1219,43 @@ namespace WizOne.Pontaj
                             }
                             break;
                         case 2:
-                            row["ValStr"] = DBNull.Value;
-                            row["Val0"] = DBNull.Value;
-                            row["Val1"] = DBNull.Value;
-                            row["Val2"] = DBNull.Value;
-                            row["Val3"] = DBNull.Value;
-                            row["Val4"] = DBNull.Value;
-                            row["Val5"] = DBNull.Value;
-                            row["Val6"] = DBNull.Value;
-                            row["Val7"] = DBNull.Value;
-                            row["Val8"] = DBNull.Value;
-                            row["Val9"] = DBNull.Value;
-                            row["Val10"] = DBNull.Value;
-                            row["Val11"] = DBNull.Value;
-                            row["Val12"] = DBNull.Value;
-                            row["Val13"] = DBNull.Value;
-                            row["Val14"] = DBNull.Value;
-                            row["Val15"] = DBNull.Value;
-                            row["Val16"] = DBNull.Value;
-                            row["Val17"] = DBNull.Value;
-                            row["Val18"] = DBNull.Value;
-                            row["Val19"] = DBNull.Value;
-                            row["Val20"] = DBNull.Value;
-                            ////este = true;
+                            //Florin 2019.09.17
+                            //verificam daca nu cumva avem o cerere de absenta aprobata
+                            {
+                                DataTable dtCer = General.IncarcaDT(
+                                    $@"SELECT * FROM ""Ptj_Cereri"" A 
+                                    INNER JOIN ""Ptj_tblAbsenta"" B ON A.""IdAbsenta""=B.""Id""
+                                    WHERE A.F10003={row["F10003"]} AND A.""IdStare"" = 3 
+                                    AND {General.TruncateDateAsString(@"A.""DataInceput""")} <= {General.ToDataUniv(Convert.ToDateTime(row["Ziua"]))} 
+                                    AND {General.ToDataUniv(Convert.ToDateTime(row["Ziua"]))} <= {General.TruncateDateAsString(@"A.""DataSfarsit""")}  ", null);
+                                if (dt != null && dtCer.Rows.Count > 0)
+                                {
+
+                                }
+
+                                row["ValStr"] = DBNull.Value;
+                                row["Val0"] = DBNull.Value;
+                                row["Val1"] = DBNull.Value;
+                                row["Val2"] = DBNull.Value;
+                                row["Val3"] = DBNull.Value;
+                                row["Val4"] = DBNull.Value;
+                                row["Val5"] = DBNull.Value;
+                                row["Val6"] = DBNull.Value;
+                                row["Val7"] = DBNull.Value;
+                                row["Val8"] = DBNull.Value;
+                                row["Val9"] = DBNull.Value;
+                                row["Val10"] = DBNull.Value;
+                                row["Val11"] = DBNull.Value;
+                                row["Val12"] = DBNull.Value;
+                                row["Val13"] = DBNull.Value;
+                                row["Val14"] = DBNull.Value;
+                                row["Val15"] = DBNull.Value;
+                                row["Val16"] = DBNull.Value;
+                                row["Val17"] = DBNull.Value;
+                                row["Val18"] = DBNull.Value;
+                                row["Val19"] = DBNull.Value;
+                                row["Val20"] = DBNull.Value;
+                            }
                             break;
                     }
                 }

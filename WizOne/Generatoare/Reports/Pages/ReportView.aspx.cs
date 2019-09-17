@@ -1,5 +1,7 @@
-﻿using DevExpress.DataAccess;
+﻿using DevExpress.Data.PivotGrid;
+using DevExpress.DataAccess;
 using DevExpress.DataAccess.Sql;
+using DevExpress.DataAccess.Wizard.Services;
 using DevExpress.Utils;
 using DevExpress.Utils.Serializing;
 using DevExpress.Web;
@@ -7,6 +9,7 @@ using DevExpress.Web.ASPxPivotGrid;
 using DevExpress.XtraCharts;
 using DevExpress.XtraCharts.Native;
 using DevExpress.XtraCharts.Web;
+using DevExpress.XtraGrid;
 using DevExpress.XtraPivotGrid.Customization;
 using DevExpress.XtraReports.Parameters;
 using DevExpress.XtraReports.UI;
@@ -16,11 +19,13 @@ using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.UI;
+using WizOne.Generatoare.Reports.Code;
 using WizOne.Generatoare.Reports.Models;
 
 namespace WizOne.Generatoare.Reports.Pages
@@ -80,7 +85,7 @@ namespace WizOne.Generatoare.Reports.Pages
         protected short ReportType { get; set; }
         protected short ToolbarType { get; set; }
         protected string ExportOptions { get; set; }
-        protected short ChartStatus { get; set; }
+        protected short ChartStatus { get; set; }        
 
         private void LoadASPxPivotGridLayoutFromXRPivotGrid(ASPxPivotGrid aspxPivotGrid, XRPivotGrid xrPivotGrid)
         {
@@ -186,33 +191,185 @@ namespace WizOne.Generatoare.Reports.Pages
 
         private string SaveASPxGridViewLayout(ASPxGridView aspxGridView)
         {
+            var contextMenuOptions = new Dictionary<string, List<int>>();
+
+            aspxGridView.Columns.OfType<GridViewDataColumn>().ToList().ForEach(col =>
+            {
+                var groupInterval = col.Settings.GroupInterval;
+
+                if (groupInterval == ColumnGroupInterval.Default)
+                {
+                    if (col.GetType() == typeof(GridViewDataDateColumn))
+                        groupInterval = ColumnGroupInterval.Date;
+                    else
+                        groupInterval = ColumnGroupInterval.Value;
+                }
+                                                
+                contextMenuOptions.GetValue("GroupByColumn:" + (int)groupInterval).Add(col.Index);
+
+                if (col.Settings.AllowHeaderFilter == DefaultBoolean.True)
+                    contextMenuOptions.GetValue("HeaderFilter").Add(col.Index);
+
+                var headerFilterMode = col.SettingsHeaderFilter.Mode;
+
+                if (headerFilterMode == GridHeaderFilterMode.Default)
+                {
+                    if (col.GetType() == typeof(GridViewDataDateColumn))
+                        headerFilterMode = GridHeaderFilterMode.DateRangePicker;
+                    else
+                        headerFilterMode = GridHeaderFilterMode.List;
+                }
+                
+                contextMenuOptions.GetValue("HeaderFilterMode:" + (int)headerFilterMode).Add(col.Index);
+
+                if (col.Settings.AllowCellMerge == DefaultBoolean.True)
+                    contextMenuOptions.GetValue("CellMerge").Add(col.Index);
+
+                if (col.FixedStyle == GridViewColumnFixedStyle.Left)
+                    contextMenuOptions.GetValue("FixedColumn").Add(col.Index);
+
+            });
+
             return JsonConvert.SerializeObject(new
             {
                 SearchPanel = aspxGridView.SettingsSearchPanel.Visible,
                 GroupPanel = aspxGridView.Settings.ShowGroupPanel,
-                HeaderFilter = aspxGridView.Settings.ShowHeaderFilterButton,
                 FilterRow = aspxGridView.Settings.ShowFilterRow,
                 FilterRowMenu = aspxGridView.Settings.ShowFilterRowMenu,
+                FilterRowMode = aspxGridView.SettingsBehavior.FilterRowMode,
+                FixedGroups = aspxGridView.SettingsBehavior.AllowFixedGroups,
+                MergeGroups = aspxGridView.SettingsBehavior.MergeGroupsMode,
+                GroupFooter = aspxGridView.Settings.ShowGroupFooter,
+                AlternatingRowColor = aspxGridView.Styles.AlternatingRow.Enabled,
+                GridLines = aspxGridView.Settings.GridLines,
                 Footer = aspxGridView.Settings.ShowFooter,
                 PapeSize = aspxGridView.SettingsPager.PageSize,
-                Layout = aspxGridView.SaveClientLayout()
+                Layout = aspxGridView.SaveClientLayout(),
+                ContextMenuOptions = contextMenuOptions
             });
         }
 
-        private void LoadASPxGridViewLayout(ASPxGridView aspxGridView, object layout)
+        private void LoadASPxGridViewLayout(ASPxGridView aspxGridView, object layout, bool partial)
         {
-            if (layout != null && (layout as string).Length > 0)
-            {
-                dynamic gridLayout = JObject.Parse(layout as string);
+            var contextMenuOptions = new Dictionary<string, List<int>>();
+            var contextMenuHiddenOptions = new Dictionary<string, List<int>>();
 
-                aspxGridView.SettingsSearchPanel.Visible = gridLayout.SearchPanel;
-                aspxGridView.Settings.ShowGroupPanel = gridLayout.GroupPanel;
-                aspxGridView.Settings.ShowHeaderFilterButton = gridLayout.HeaderFilter;
-                aspxGridView.Settings.ShowFilterRow = gridLayout.FilterRow;
-                aspxGridView.Settings.ShowFilterRowMenu = gridLayout.FilterRowMenu;
-                aspxGridView.Settings.ShowFooter = gridLayout.Footer;
-                aspxGridView.LoadClientLayout((string)gridLayout.Layout);
+            if (layout != null && (layout as string).Length > 0) // Set new layout
+            {
+                try
+                {
+                    dynamic gridLayout = JObject.Parse(layout as string);
+
+                    if (!partial)
+                    {
+                        aspxGridView.SettingsSearchPanel.Visible = gridLayout.SearchPanel;
+                        aspxGridView.Settings.ShowGroupPanel = gridLayout.GroupPanel;
+                        aspxGridView.Settings.ShowFilterRow = gridLayout.FilterRow;
+                        aspxGridView.Settings.ShowFilterRowMenu = gridLayout.FilterRowMenu;
+                        aspxGridView.Settings.ShowFooter = gridLayout.Footer;
+                        aspxGridView.LoadClientLayout((string)gridLayout.Layout);
+                    }
+
+                    aspxGridView.SettingsBehavior.FilterRowMode = gridLayout.FilterRowMode;
+                    aspxGridView.SettingsBehavior.AllowFixedGroups = gridLayout.FixedGroups;
+                    aspxGridView.SettingsBehavior.MergeGroupsMode = gridLayout.MergeGroups;
+                    aspxGridView.Settings.ShowGroupFooter = gridLayout.GroupFooter;
+                    aspxGridView.Styles.AlternatingRow.Enabled = gridLayout.AlternatingRowColor;
+                    aspxGridView.Settings.GridLines = gridLayout.GridLines;
+
+                    contextMenuOptions = gridLayout.ContextMenuOptions.ToObject<Dictionary<string, List<int>>>() as Dictionary<string, List<int>>;
+
+                    foreach (var option in contextMenuOptions)
+                    {
+                        if (option.Key.StartsWith("GroupByColumn"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).Settings.GroupInterval = (ColumnGroupInterval)Convert.ToInt32(option.Key.Split(':')[1]);
+                            });
+                        }
+
+                        if (option.Key.Equals("HeaderFilter"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).Settings.AllowHeaderFilter = DefaultBoolean.True;
+                            });
+                        }
+
+                        if (option.Key.StartsWith("HeaderFilterMode"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).SettingsHeaderFilter.Mode = (GridHeaderFilterMode)Convert.ToInt32(option.Key.Split(':')[1]);
+                            });
+                        }
+
+                        if (option.Key.Equals("CellMerge"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).Settings.AllowCellMerge = DefaultBoolean.True;
+                            });
+                        }
+
+                        if (option.Key.Equals("FixedColumn"))
+                        {
+                            option.Value.ForEach(col =>
+                            {
+                                (aspxGridView.Columns[col] as GridViewDataColumn).FixedStyle = GridViewColumnFixedStyle.Left;
+                            });
+                        }
+                    }
+                }
+                catch { } // In case if layout has an old structure, just ignore it.
             }
+            else // Get current layout
+            {
+                dynamic gridLayout = JObject.Parse(SaveASPxGridViewLayout(aspxGridView));
+
+                contextMenuOptions = gridLayout.ContextMenuOptions.ToObject<Dictionary<string, List<int>>>() as Dictionary<string, List<int>>;
+            }
+
+            // For client side customization
+            contextMenuOptions["ShowFilterRow:" + (int)aspxGridView.SettingsBehavior.FilterRowMode] = new List<int>() { -1 };
+
+            if (aspxGridView.SettingsBehavior.AllowFixedGroups)
+                contextMenuOptions["FixedGroups"] = new List<int>() { -1 };
+
+            if (aspxGridView.SettingsBehavior.MergeGroupsMode == GridViewMergeGroupsMode.Always)
+                contextMenuOptions["MergeGroups"] = new List<int>() { -1 };
+
+            contextMenuOptions["GroupFooter:" + (int)aspxGridView.Settings.ShowGroupFooter] = new List<int>() { -1 };
+
+            if (aspxGridView.Styles.AlternatingRow.Enabled == DefaultBoolean.True)
+                contextMenuOptions["AlternatingRowColor"] = new List<int>() { -1 };
+
+            contextMenuOptions["GridLines:" + (int)aspxGridView.Settings.GridLines] = new List<int>() { -1 };
+
+            aspxGridView.Columns.OfType<GridViewDataColumn>().ToList().ForEach(col =>
+            {
+                if (col.GetType() == typeof(GridViewDataDateColumn))
+                {
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Value).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DisplayText).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Alphabetical).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.List).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.CheckedList).Add(col.Index);
+                }
+                else
+                {
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.Date).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateMonth).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateYear).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("GroupByColumn:" + (int)ColumnGroupInterval.DateRange).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.DateRangePicker).Add(col.Index);
+                    contextMenuHiddenOptions.GetValue("HeaderFilterMode:" + (int)GridHeaderFilterMode.DateRangeCalendar).Add(col.Index);
+                }
+            });
+
+            aspxGridView.JSProperties["cpContextMenuOptions"] = contextMenuOptions;
+            aspxGridView.JSProperties["cpContextMenuHiddenOptions"] = contextMenuHiddenOptions;
         }
 
         private string GetCallbackCommandName()
@@ -258,6 +415,17 @@ namespace WizOne.Generatoare.Reports.Pages
                    !Request["__CALLBACKPARAM"].Contains(":FS|") &&
                    !Request["__CALLBACKPARAM"].Contains(":PREFILTER|Show") &&
                    !Request["__CALLBACKPARAM"].Contains(":PREFILTER|Hide"); // Native callbacks that do not affect chart display
+        }
+
+        private bool IsMobileDevice
+        {
+            get
+            {
+                var userAgent = Request.ServerVariables["HTTP_USER_AGENT"];
+                var devices = new string[] { "iPhone", "iPad", "Android", "Windows Phone" }; // Add more devices
+
+                return devices.Any(d => userAgent.Contains(d));
+            }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -342,7 +510,10 @@ namespace WizOne.Generatoare.Reports.Pages
                             }
 
                             if (_report.Parameters.Count == 0)
+                            {
+                                _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
                                 _report.FillDataSource();
+                            }
 
                             if (_pivotGrid.Fields.Count == 0)
                                 _pivotGrid.RetrieveFields(); // Retrieve all data source fields into filter area by default. Can be customized later.
@@ -361,24 +532,28 @@ namespace WizOne.Generatoare.Reports.Pages
                             ReportsUsersDataSource.WhereParameters["RegUserId"].DefaultValue = _userId;
 
                             if (_report.Parameters.Count == 0)
+                            {
+                                _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
                                 _report.FillDataSource();
+                            }
 
                             CustomTableGridView.DataSource = _report.DataSource;
                             CustomTableGridView.DataMember = _report.DataMember;
                             CustomTableGridView.DataBind();
 
-                            LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag);
+                            LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, false);
                         }
                     }
 
                     // Customize report viewer UI
+                    WebDocumentViewer.MobileMode = report.ReportTypeId <= 2 ? IsMobileDevice : false; // Mobile mode only for Report & Document type
                     WebDocumentViewer.MenuItems.Add(new WebDocumentViewerMenuItem()
                     {
                         Text = "Exit",
-                        ImageClassName = "dxrd-image-exit",
+                        ImageClassName = WebDocumentViewer.MobileMode ? "dxrd-image-exit mobile" : "dxrd-image-exit",
                         JSClickAction = "function() { onExitButtonClick(); }",
                         Container = MenuItemContainer.Toolbar
-                    });
+                    });                    
 
                     if (_serverPrint) // Send to server default printer & exit
                     {
@@ -546,6 +721,11 @@ namespace WizOne.Generatoare.Reports.Pages
                                 // For now, mark as undeleted only                                                        
                             }
                         }
+                        else if (commandName == "menu")
+                        {
+                            if (commandParams.Option == "SummaryType")
+                                CustomCubePivotGrid.Fields[(string)commandParams.FieldId].SummaryType = (PivotSummaryType)commandParams.Value;
+                        }
                         else if (commandName == "print")
                         {
                             try
@@ -560,7 +740,7 @@ namespace WizOne.Generatoare.Reports.Pages
                                 // Log error
                                 // For now, mark as unprinted only                            
                             }
-                        }
+                        }                        
 
                         if (commandName != "delete")
                         {
@@ -675,6 +855,7 @@ namespace WizOne.Generatoare.Reports.Pages
                                         RegUserId = _userId
                                     };
 
+                                    LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, true);
                                     _richText.Tag = SaveASPxGridViewLayout(CustomTableGridView);
 
                                     // Save report layout changes
@@ -697,6 +878,7 @@ namespace WizOne.Generatoare.Reports.Pages
 
                                     var report = entities.Reports.Find(_reportId);
 
+                                    LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, true);
                                     _richText.Tag = SaveASPxGridViewLayout(CustomTableGridView);
 
                                     // Save report layout changes
@@ -713,6 +895,7 @@ namespace WizOne.Generatoare.Reports.Pages
                                 {
                                     var reportUser = entities.ReportsUsers.Find(_reportUserId);
 
+                                    LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, true);
                                     _richText.Tag = SaveASPxGridViewLayout(CustomTableGridView);
 
                                     // Save report layout changes
@@ -754,65 +937,101 @@ namespace WizOne.Generatoare.Reports.Pages
                                 // For now, mark as undeleted only                                                        
                             }
                         }
-
-                        if (commandName != "delete")
+                        else if (commandName == "menu")
                         {
-                            // Load layout from XRRichText if available or set data source
-                            if (commandName == "init")
+                            var column = CustomTableGridView.Columns[(int)commandParams.ColumnIndex];
+
+                            LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, true);
+
+                            // Column level
+                            if (commandParams.Option == "GroupByColumn")
+                                (column as GridViewDataColumn).Settings.GroupInterval = (ColumnGroupInterval)commandParams.Value;
+                            else if (commandParams.Option == "HeaderFilter")
+                                (column as GridViewDataColumn).Settings.AllowHeaderFilter = (bool)commandParams.Value ? DefaultBoolean.True : DefaultBoolean.False;
+                            else if (commandParams.Option == "HeaderFilterMode")
+                                (column as GridViewDataColumn).SettingsHeaderFilter.Mode = (GridHeaderFilterMode)commandParams.Value;
+                            else if (commandParams.Option == "CellMerge")
+                                (column as GridViewDataColumn).Settings.AllowCellMerge = (bool)commandParams.Value ? DefaultBoolean.True : DefaultBoolean.False;
+                            else if (commandParams.Option == "FixedColumn")
+                                (column as GridViewDataColumn).FixedStyle = (bool)commandParams.Value ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
+
+                            // Grid level
+                            else if (commandParams.Option == "ShowFilterRow")
+                                CustomTableGridView.SettingsBehavior.FilterRowMode = (GridViewFilterRowMode)commandParams.Value;
+                            else if (commandParams.Option == "FixedGroups")
+                                CustomTableGridView.SettingsBehavior.AllowFixedGroups = commandParams.Value;
+                            else if (commandParams.Option == "MergeGroups")
+                                CustomTableGridView.SettingsBehavior.MergeGroupsMode = (bool)commandParams.Value ? GridViewMergeGroupsMode.Always : GridViewMergeGroupsMode.Disabled;
+                            else if (commandParams.Option == "GroupFooter")
+                                CustomTableGridView.Settings.ShowGroupFooter = (GridViewGroupFooterMode)commandParams.Value;
+                            else if (commandParams.Option == "AlternatingRowColor")
+                                CustomTableGridView.Styles.AlternatingRow.Enabled = (bool)commandParams.Value ? DefaultBoolean.True : DefaultBoolean.False;
+                            else if (commandParams.Option == "GridLines")
+                                CustomTableGridView.Settings.GridLines = (System.Web.UI.WebControls.GridLines)commandParams.Value;
+
+                            _richText.Tag = SaveASPxGridViewLayout(CustomTableGridView);
+                        }
+                        
+                        // Load layout from XRRichText if available or set data source
+                        if (commandName == "init")
+                        {
+                            var layoutData = _reportUserId == 0 ? // Base layout
+                                entities.Reports.Find(_reportId)?.LayoutData : // Load base layout
+                                entities.ReportsUsers.Find(_reportUserId)?.LayoutData; // Load custom user layout
+
+                            if (layoutData == null)
+                                throw new Exception($"No layout found for report id {_reportId} or report user id {_reportUserId}");
+
+                            var report = new XtraReport();
+
+                            using (var memStream = new MemoryStream(layoutData))
+                                report.LoadLayoutFromXml(memStream);
+
+                            var richText = report.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRRichText>().FirstOrDefault();
+
+                            CustomTableGridView.DataSource = _report.DataSource;
+                            CustomTableGridView.DataMember = _report.DataMember;
+
+                            LoadASPxGridViewLayout(CustomTableGridView, richText.Tag, false);
+                        }
+                        else if (commandName == "load")
+                        {
+                            // Set UI params & load data
+                            if (_report.Parameters.Count > 0)
                             {
-                                var layoutData = _reportUserId == 0 ? // Base layout
-                                    entities.Reports.Find(_reportId)?.LayoutData : // Load base layout
-                                    entities.ReportsUsers.Find(_reportUserId)?.LayoutData; // Load custom user layout
-
-                                if (layoutData == null)
-                                    throw new Exception($"No layout found for report id {_reportId} or report user id {_reportUserId}");
-
-                                var report = new XtraReport();
-
-                                using (var memStream = new MemoryStream(layoutData))
-                                    report.LoadLayoutFromXml(memStream);
-
-                                var richText = report.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRRichText>().FirstOrDefault();
-
-                                CustomTableGridView.DataSource = _report.DataSource;
-                                CustomTableGridView.DataMember = _report.DataMember;
-
-                                LoadASPxGridViewLayout(CustomTableGridView, richText.Tag);
-                            }
-                            else if (commandName == "load")
-                            {
-                                // Set UI params & load data
-                                if (_report.Parameters.Count > 0)
+                                if (_reportParams != null)
                                 {
-                                    if (_reportParams != null)
-                                    {
-                                        var oldParams = _report.Parameters.OfType<Parameter>().ToDictionary(p => p.Name, p => p.Value);
+                                    var oldParams = _report.Parameters.OfType<Parameter>().ToDictionary(p => p.Name, p => p.Value);
 
-                                        foreach (var param in _report.Parameters)
-                                            param.Value = _reportParams[param.Name].Value;
+                                    foreach (var param in _report.Parameters)
+                                        param.Value = _reportParams[param.Name].Value;
 
-                                        _report.FillDataSource();
-
-                                        // Restore default params values (for reset params button after print mode)
-                                        foreach (var param in _report.Parameters)
-                                            param.Value = oldParams[param.Name];
-                                    }
-                                }
-                                else
                                     _report.FillDataSource();
 
-                                CustomTableGridView.DataSource = _report.DataSource;
-                                CustomTableGridView.DataMember = _report.DataMember;
-                                CustomTableGridView.DataBind();
+                                    // Restore default params values (for reset params button after print mode)
+                                    foreach (var param in _report.Parameters)
+                                        param.Value = oldParams[param.Name];
+                                }
                             }
-                            else // For save, print and all native callbacks
-                            {
-                                CustomTableGridView.DataSource = _report.DataSource;
-                                CustomTableGridView.DataMember = _report.DataMember;
-                            }
-                        }
+                            else
+                                _report.FillDataSource();
 
-                        // Process command (second part)
+                            CustomTableGridView.DataSource = _report.DataSource;
+                            CustomTableGridView.DataMember = _report.DataMember;
+                            CustomTableGridView.DataBind();
+
+                            LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, true);
+                        }
+                        else if (commandName != "delete") // For save, menu, print, export and all native callbacks
+                        {
+                            CustomTableGridView.DataSource = _report.DataSource;
+                            CustomTableGridView.DataMember = _report.DataMember;
+                            CustomTableGridView.DataBind(); // Only for MergeGroupsMode
+
+                            LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, true);
+                        }
+                                                
+                        // Process command (second part - layout & data dependent)
                         if (commandName == "print")
                         {
                             try
@@ -910,6 +1129,105 @@ namespace WizOne.Generatoare.Reports.Pages
                 if (!IsCallback)
                     Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");
             }
-        }       
+        }
+
+        protected void CustomCubePivotGrid_PopupMenuCreated(object sender, PivotPopupMenuCreatedEventArgs e)
+        {
+            if (e.MenuType == PivotGridPopupMenuType.HeaderMenu)
+            {
+                var item = e.Menu.Items.Add("Summary Type", "SummaryType");
+
+                item.BeginGroup = true;
+                item.Items.AddRange(new MenuItem[]
+                {
+                    new MenuItem("Count", item.Name + ":0"),
+                    new MenuItem("Sum", item.Name + ":1"),
+                    new MenuItem("Min", item.Name + ":2"),
+                    new MenuItem("Max", item.Name + ":3"),
+                    new MenuItem("Average", item.Name + ":4"),
+                    new MenuItem("StdDev", item.Name + ":5"),
+                    new MenuItem("StdDevp", item.Name + ":6"),
+                    new MenuItem("Var", item.Name + ":7"),
+                    new MenuItem("Varp", item.Name + ":8")
+                });
+                item.Name = "#" + item.Name; // No action sign.
+            }            
+        }
+
+        protected void CustomTableGridView_FillContextMenuItems(object sender, ASPxGridViewContextMenuEventArgs e)
+        {
+            if (e.MenuType == GridViewContextMenuType.Columns)
+            {
+                // Column level
+                var item = e.Items[e.Items.IndexOfCommand(GridViewContextMenuCommand.GroupByColumn)];
+
+                item.Items.AddRange(new GridViewContextMenuItem[]
+                {
+                    new GridViewContextMenuItem("Value", item.Name + ":1") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Display Text", item.Name + ":7") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Alphabetical", item.Name + ":6") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Date", item.Name + ":2") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Date Month", item.Name + ":3") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Date Year", item.Name + ":4") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Date Range", item.Name + ":5") { GroupName = item.Name }
+                });                
+
+                item = e.Items.Add("Show Header Filter", "HeaderFilter");
+                item.BeginGroup = true;
+                item.GroupName = item.Name;
+                item.Items.AddRange(new GridViewContextMenuItem[] 
+                {
+                    new GridViewContextMenuItem("List", item.Name + "Mode:1") { GroupName = item.Name + "Mode" },
+                    new GridViewContextMenuItem("Checked List", item.Name + "Mode:2") { GroupName = item.Name + "Mode" },
+                    new GridViewContextMenuItem("Date Range Picker", item.Name + "Mode:3") { GroupName = item.Name + "Mode" },
+                    new GridViewContextMenuItem("Date Range Calendar", item.Name + "Mode:4") { GroupName = item.Name + "Mode" }
+                });
+
+                item = e.Items.Add("Allow Cell Merge", "CellMerge");
+                item.GroupName = item.Name;                
+
+                item = e.Items.Add("Fix This Column", "FixedColumn");
+                item.GroupName = item.Name;                
+
+                // Grid level
+                item = e.Items[e.Items.IndexOfCommand(GridViewContextMenuCommand.ShowFilterRow)];
+                item.Items.AddRange(new GridViewContextMenuItem[]
+                {
+                    new GridViewContextMenuItem("Auto", item.Name + ":0") { GroupName = item.Name },
+                    new GridViewContextMenuItem("On Enter", item.Name + ":1") { GroupName = item.Name }
+                });
+
+                item = e.Items.Add("Allow Fixed Groups", "FixedGroups");
+                item.GroupName = item.Name;
+                item.Visible = false;
+
+                item = e.Items.Add("Allow Merge Groups", "MergeGroups");
+                item.GroupName = item.Name;
+                item.Visible = false;
+
+                item = e.Items.Add("Show Group Footer", "GroupFooter");
+                item.BeginGroup = true;
+                item.Items.AddRange(new GridViewContextMenuItem[]
+                {
+                    new GridViewContextMenuItem("Hidden", item.Name + ":0") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Visible If Expanded", item.Name + ":1") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Visible Always", item.Name + ":2") { GroupName = item.Name }
+                });
+                item.Name = "#" +item.Name; // No action sign.
+
+                item = e.Items.Add("Alternating Row Color", "AlternatingRowColor");
+                item.GroupName = item.Name;
+
+                item = e.Items.Add("Grid Lines", "GridLines");
+                item.Items.AddRange(new GridViewContextMenuItem[]
+                {
+                    new GridViewContextMenuItem("None", item.Name + ":0") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Horizontal", item.Name + ":1") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Vertical", item.Name + ":2") { GroupName = item.Name },
+                    new GridViewContextMenuItem("Both", item.Name + ":3") { GroupName = item.Name }
+                });
+                item.Name = "#" + item.Name; // No action sign.
+            }
+        }        
     }
 }

@@ -8,16 +8,12 @@ namespace WizOne.Generatoare.Reports.Code
     {
         public Dictionary<string, string> GetConnectionDescriptions()
         {
-            Dictionary<string, string> connections = new Dictionary<string, string>();
-
-            connections.Add("ReportsConnection", "Reports Connection");
-
-            return connections;
+            return new Dictionary<string, string>() { { "ReportsConnection", "Reports Connection" } };
         }
 
         public DataConnectionParametersBase GetDataConnectionParameters(string name)
         {
-            return null; // This force the XtraReport to store only connection name with no parameters and thus, connection parameters from web.config will be used.
+            return new CustomStringConnectionParameters((Module.Constante.tipBD == 1 ? "XpoProvider=MSSqlServer;" : "XpoProvider=ODPManaged;") + Module.Constante.cnnWeb);
         }
     }
 }

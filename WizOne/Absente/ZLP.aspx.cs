@@ -240,7 +240,7 @@ namespace WizOne.Absente
             }
         }
 
-        private void CalculZLP()
+        public void CalculZLP()
         {
             try
             {

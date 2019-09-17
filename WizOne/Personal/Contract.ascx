@@ -78,8 +78,7 @@
                 break;
             case "deDeLaData":
             case "deLaData":
-                {
-                    debugger;
+                {                
                     var dateDeLa = new Date(deDeLaData.GetDate());
                     dateDeLa.setHours(0, 0, 0, 0);
                     var dateLa = new Date(deLaData.GetDate());
@@ -105,6 +104,8 @@
                         
                         Validare36Luni();
                     }
+                    CompletareZile(cmbNivelFunctie);
+                    ValidareZile(1);
                 }
                 break;
         }
@@ -477,12 +478,14 @@
             var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
             deDataValabInvalid.SetValue(dtTmp);
         }
-        ValidareZile();
+        CompletareZile(cmbNivelFunctie);
+        ValidareZile(1);
     }
 
     function cmbDurataContract_SelectedIndexChanged() {
         Validare36Luni();
-        ValidareZile();
+        CompletareZile(cmbNivelFunctie);
+        ValidareZile(1);
     }
 
     function Validare36Luni() {
@@ -613,7 +616,7 @@
         }
     }
 
-    function ValidareZile() {
+    function ValidareZile(tip) {
         var mesaj = "";      
         var conducere = false;
         var nvlFunc = "<%=Session["MP_NvlFunc"] %>";
@@ -626,37 +629,66 @@
                         conducere = true;
                 }
             }
-   
-        if (cmbDurCtr.GetValue() == 2 && txtPerProbaZL.GetValue() != "") {
-            if (txtNrLuni.GetValue() < 3 && parseInt(txtPerProbaZL.GetValue()) > 5) 
-                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 5 zile!\n";                
-            if (txtNrLuni.GetValue() >= 3 && txtNrLuni.GetValue() < 6 && parseInt(txtPerProbaZL.GetValue()) > 15) 
-                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 15 zile!\n";                
-            if (txtNrLuni.GetValue() >= 6 && !conducere && parseInt(txtPerProbaZL.GetValue()) > 30) 
-                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 30 zile!\n";                
-            if (txtNrLuni.GetValue() >= 6 && conducere && parseInt(txtPerProbaZL.GetValue()) > 45) 
-                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 45 zile!\n";                
+        debugger;
+        if (cmbDurCtr.GetValue() == 2 && txtPerProbaZL.GetValue() != "" && txtNrLuni.GetValue() != "" && txtNrLuni.GetValue() != "0" && txtNrZile.GetValue() != "" && txtNrZile.GetValue() != "0") {
+            if (txtNrLuni.GetValue() < 3 && parseInt(txtPerProbaZL.GetValue()) > 5) {
+                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 5 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZL.SetValue("5");
+            }
+            if (txtNrLuni.GetValue() >= 3 && txtNrLuni.GetValue() < 6 && parseInt(txtPerProbaZL.GetValue()) > 15) {
+                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 15 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZL.SetValue("15");
+            }
+            if (txtNrLuni.GetValue() >= 6 && !conducere && parseInt(txtPerProbaZL.GetValue()) > 30) {
+                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 30 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZL.SetValue("30");
+            }
+            if (txtNrLuni.GetValue() >= 6 && conducere && parseInt(txtPerProbaZL.GetValue()) > 45) {
+                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 45 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZL.SetValue("45");
+            }
+            txtPerProbaZC.SetValue("0");
         }     
   
         if (cmbDurCtr.GetValue() == 1 && txtPerProbaZC.GetValue() != "") {
-            if (!conducere && parseInt(txtPerProbaZC.GetValue()) > 90) 
-                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 90 zile!\n";                
-            if (conducere && parseInt(txtPerProbaZC.GetValue()) > 120) 
-                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 120 zile!\n";                
-            if ((cmbGradInvalid.GetValue() == 2 || cmbGradInvalid.GetValue() == 3) && parseInt(txtPerProbaZC.GetValue()) > 30) 
-                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 30 zile!\n";                
+            if (!conducere && parseInt(txtPerProbaZC.GetValue()) > 90) {
+                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 90 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZC.SetValue("90");
+            }
+            if (conducere && parseInt(txtPerProbaZC.GetValue()) > 120) {
+                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 120 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZC.SetValue("120");
+            }
+            if ((cmbGradInvalid.GetValue() == 2 || cmbGradInvalid.GetValue() == 3) && parseInt(txtPerProbaZC.GetValue()) > 30) {
+                mesaj += "Perioada de proba (zile calendaristice): - valoarea maxima cf. legii este de 30 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZC.SetValue("30");
+            }
+            txtPerProbaZL.SetValue("0");
         }
      
         if (cmbDurCtr.GetValue() == 1 && txtNrZilePreavizDemisie.GetValue() != "") {
-            if (!conducere && parseInt(txtNrZilePreavizDemisie.GetValue()) > 20) 
-                mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 20 zile!\n";                
-            if (conducere && parseInt(txtNrZilePreavizDemisie.GetValue()) > 45) 
-                mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 45 zile!\n";                
+            if (!conducere && parseInt(txtNrZilePreavizDemisie.GetValue()) > 20) {
+                mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 20 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZL.SetValue("20");
+            }
+            if (conducere && parseInt(txtNrZilePreavizDemisie.GetValue()) > 45) {
+                mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 45 zile!\n";
+                if (tip == 1)
+                    txtPerProbaZL.SetValue("45");
+            }           
         }        
     
         if (cmbDurCtr.GetValue() == 1) 
-            if (txtNrZilePreavizConc.GetValue() == null || txtNrZilePreavizConc.GetValue() == "" || parseInt(txtNrZilePreavizConc.GetValue()) < 20) 
-                mesaj += "Numar zile preaviz concediere: - valoarea minima cf. legii este de 20 zile!\n";                            
+            if (txtNrZilePreavizConc.GetValue() == null || txtNrZilePreavizConc.GetValue() == "" || parseInt(txtNrZilePreavizConc.GetValue()) < 20)
+                mesaj += "Numar zile preaviz concediere: - valoarea minima cf. legii este de 20 zile!\n";  
         
         if (mesaj.length > 0)
             swal({ title: "Atentie !", text: mesaj, type: "warning" });
@@ -783,6 +815,7 @@
 						<td>			
 							<dx:ASPxDateEdit  ID="deDeLaData" Width="100" runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" Value='<%# Eval("F100933") %>'  TabIndex="6" AutoPostBack="false"  >
                                 <CalendarProperties FirstDayOfWeek="Monday" />
+                                 <ClientSideEvents DateChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
 							</dx:ASPxDateEdit>					
 						</td>
 					</tr>
@@ -1152,7 +1185,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox  ID="cmbNivelFunctie" Width="130" TabIndex="31" runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
-                                 <ClientSideEvents SelectedIndexChanged="function(s,e){  CompletareZile(s);  ValidareZile(); }" />
+                                 <ClientSideEvents SelectedIndexChanged="function(s,e){  CompletareZile(s);  ValidareZile(1); }" />
 							</dx:ASPxComboBox >
 						</td>
 					</tr> 
@@ -1264,7 +1297,7 @@
                             </td>
                             <td align="right">
 							    <dx:ASPxTextBox  ID="txtPerProbaZL" Width="35" TabIndex="40" runat="server" Text='<%# Eval("F1001063") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(); }" />
+                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(0); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1277,7 +1310,7 @@
                             </td>
                             <td align="right">
 							    <dx:ASPxTextBox  ID="txtPerProbaZC" Width="35"  runat="server" TabIndex="41" Text='<%# Eval("F100975") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(); }" />
+                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(0); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1287,7 +1320,7 @@
 						    </td>	
 						    <td>
 							    <dx:ASPxTextBox  ID="txtNrZilePreavizDemisie" Width="75"  runat="server" TabIndex="42" Text='<%# Eval("F1009742") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(); }" />
+                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(0); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1297,7 +1330,7 @@
 						    </td>	
 						    <td>
 							    <dx:ASPxTextBox  ID="txtNrZilePreavizConc" Width="75"  runat="server" TabIndex="43" Text='<%# Eval("F100931") %>' AutoPostBack="false" >
-                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(); }" />
+                                    <ClientSideEvents TextChanged="function(s,e){ ValidareZile(0); }" />
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>

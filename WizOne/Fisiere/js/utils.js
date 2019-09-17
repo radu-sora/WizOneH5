@@ -110,6 +110,7 @@ function OnItemPressed(s, e) {
             break;
         case "colHide":
             var tmpDate = document.getElementById("grDate");
+
             if (tmpDate != null && __colGrid != "") {
                 grDate.PerformCallback("colHide;" + __colGrid);
             }

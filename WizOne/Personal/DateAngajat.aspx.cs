@@ -712,8 +712,14 @@ namespace WizOne.Personal
                                 val = dr[k] == null ? "null" : "'" + dr[k].ToString() + "'";
                             if (dr[k].GetType() == typeof(DateTime))
                                 val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
+
+                            //Florin 2019.09.17
+                            //if (val.Length <= 0)
+                            //    val = "''";
                             if (val.Length <= 0)
-                                val = "''";
+                                val = "null";
+
+
                             sir += "," + val;
                         }
                     }

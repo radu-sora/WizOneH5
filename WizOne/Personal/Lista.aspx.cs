@@ -310,6 +310,9 @@ namespace WizOne.Personal
                             TransformaCandidatInAngajat(Convert.ToInt32(arr[1]));
                             btnFiltru_Click(sender, e);
                             break;
+                        case "colHide":
+                            grDate.Columns[arr[1]].Visible = false;
+                            break;
                     }
                 }
             }

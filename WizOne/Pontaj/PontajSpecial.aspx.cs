@@ -567,6 +567,7 @@ namespace WizOne.Pontaj
                         break;
                     case "cmbSablon":
                         AscundeCtl();
+                        txtValuri.Clear();
                         if (cmbSablon.Value != null)
                         {
                             if (Convert.ToInt32(cmbSablon.Value) > 0)

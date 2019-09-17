@@ -398,11 +398,7 @@
         }
 
         function onExitButtonClick() {
-            var sessionValue = '<%=Session["PaginaWeb"]%>'
-            if (sessionValue == "Pagini.ActeAditionale")
-                window.location = '<%= ResolveUrl("~/Pagini/ActeAditionale.aspx") %>'
-            else
-                window.history.back();
+            window.history.back();
         }
 
         function onCustomCubePopupMenuItemClick(itemName, fieldId) {

@@ -7,10 +7,10 @@
     <table class="report-view-template">
         <tr>
             <td>
-                <dx:ASPxCallbackPanel ID="WebDocumentViewerCallbackPanel" ClientInstanceName="webDocumentViewerCallbackPanel" runat="server" Theme="Mulberry">
+                <dx:ASPxCallbackPanel ID="WebDocumentViewerCallbackPanel" ClientInstanceName="webDocumentViewerCallbackPanel" runat="server" Theme="Mulberry" Height="100%">
                     <PanelCollection>
                         <dx:PanelContent runat="server">
-                            <dx:ASPxWebDocumentViewer ID="WebDocumentViewer" ClientInstanceName="webDocumentViewer" runat="server">
+                            <dx:ASPxWebDocumentViewer ID="WebDocumentViewer" ClientInstanceName="webDocumentViewer" runat="server" Height="100%">
                                 <SettingsTabPanel Position="Left" />
                                 <ClientSideEvents    
                                     Init="function(s, e) {
@@ -125,12 +125,16 @@
                 <table>
                     <tr>
                         <td>
-                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry">
+                            <dx:ASPxPivotGrid ID="CustomCubePivotGrid" ClientInstanceName="customCubePivotGrid" runat="server" EncodeHtml="false" Theme="Mulberry"
+                                OnPopupMenuCreated="CustomCubePivotGrid_PopupMenuCreated">
                                 <OptionsView DataHeadersDisplayMode="Popup" DataHeadersPopupMinCount="3" />                                
                                 <OptionsFilter NativeCheckBoxes="False" />                                
                                 <OptionsCustomization CustomizationFormStyle="Excel2007" />
                                 <OptionsChartDataSource DataProvideMode="UseCustomSettings" />
                                 <ClientSideEvents
+                                    PopupMenuItemClick="function(s, e) {
+                                        onCustomCubePopupMenuItemClick(e.MenuItemName, e.FieldID);
+                                    }"
                                     EndCallback="function(s, e) { 
                                         if (s.cpRefreshChart) {     
                                             onChartControlInit(s.cpChartOptions);
@@ -184,19 +188,29 @@
                 </table>
 
                 <!-- Table customization -->
-                <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%">                    
-                    <Settings ShowHeaderFilterButton="true" />                    
-                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" />
+                <dx:ASPxGridView ID="CustomTableGridView" ClientInstanceName="customTableGridView" runat="server" ViewStateMode="Enabled" Theme="Mulberry" Width="100%"
+                    OnFillContextMenuItems="CustomTableGridView_FillContextMenuItems">
+                    <Settings ShowFilterBar="Auto" VerticalScrollBarMode="Auto" HorizontalScrollBarMode="Auto" />                    
+                    <SettingsBehavior EnableRowHotTrack="true" EnableCustomizationWindow="true" AllowEllipsisInText="true" AllowFixedGroups="true" />
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live" />
-                    <SettingsContextMenu Enabled="true">
-                        <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" />
+                    <SettingsContextMenu Enabled="true">                        
+                        <RowMenuItemVisibility NewRow="false" EditRow="false" DeleteRow="false" Refresh="false" />
                     </SettingsContextMenu>
+                    <SettingsCustomizationDialog Enabled="true" />
+                    <SettingsFilterControl ViewMode="VisualAndText" AllowHierarchicalColumns="true" ShowAllDataSourceColumns="true" ShowOperandTypeButton="true" />
                     <SettingsPager PageSize="30">
                         <PageSizeItemSettings Visible="true" />
                     </SettingsPager>
                     <Styles>
                         <Header Font-Bold="true" Wrap="True" />
-                    </Styles>
+                    </Styles>  
+                    <ClientSideEvents
+                        ContextMenu="function(s, e) {                            
+                            onCustomTableContextMenu(e.objectType, e.index, e.menu);
+                        }"                        
+                        ContextMenuItemClick="function(s, e) {
+                            onCustomTableContextMenuItemClick(e.item);
+                        }" />
                 </dx:ASPxGridView>
                 <dx:ASPxGridViewExporter ID="CustomTableGridViewExporter" runat="server" GridViewID="CustomTableGridView"
                     TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0">                                
@@ -226,7 +240,17 @@
             }
 
             // Initialize UI            
-            if (reportType == 3 || reportType == 4) { // For Cube and Table, display custom layout section with the toolbar and hide report client area.
+            if (reportType == 3 || reportType == 4) { // For Cube and Table, display custom layout section with the toolbar and hide report client area.                
+                if (reportType == 4) {
+                    $(window).on('load', function () {
+                        resizeGridView(customTableGridView, 177, true);
+                    });
+
+                    $(window).on('resize', function () {
+                        resizeGridView(customTableGridView, 177, false);
+                    });                    
+                }
+
                 showCustomLayoutSection(true);
             }
         }
@@ -313,7 +337,7 @@
             if (parameter.type == 'System.DateTime') {
                 info.editor = { header: 'dx-date-simple' };
             }
-        }
+        }        
 
         function onChartControlInit(chartOptions) {
             initChartOptions(chartOptions ? JSON.parse(chartOptions) : null);
@@ -379,6 +403,62 @@
                 window.location = '<%= ResolveUrl("~/Pagini/ActeAditionale.aspx") %>'
             else
                 window.history.back();
+        }
+
+        function onCustomCubePopupMenuItemClick(itemName, fieldId) {
+            var isActionItem = itemName[0] != '#'; // No action sign.
+
+            if (isActionItem) {
+                var itemNameParts = itemName.split(':', 2);
+
+                if (itemNameParts.length == 1) {
+                    itemNameParts.push(item.GetChecked());
+                }
+
+                // Send command to server
+                var commandName = '#menu';
+                var commandParams = { 'FieldId': fieldId, 'Option': itemNameParts[0], 'Value': itemNameParts[1] };
+
+                customCubePivotGrid.PerformCallback(commandName + JSON.stringify(commandParams));                
+            }
+        }        
+
+        function onCustomTableContextMenu(type, index, menu) {
+            if (type == 'header') {
+                customTableGridView.contextMenuColumnIndex = index;
+
+                for (var optionName in customTableGridView.cpContextMenuOptions) {
+                    menu.GetItemByName(optionName).SetChecked(
+                        customTableGridView.cpContextMenuOptions[optionName].indexOf(-1) > -1 || // Grid level
+                        customTableGridView.cpContextMenuOptions[optionName].indexOf(index) > -1); // Column level                    
+                }
+
+                for (var optionName in customTableGridView.cpContextMenuHiddenOptions) {
+                    menu.GetItemByName(optionName).SetVisible(
+                        customTableGridView.cpContextMenuHiddenOptions[optionName].indexOf(index) == -1);
+                }
+            } else {
+                delete customTableGridView.contextMenuColumnIndex;
+            }
+        }
+
+        function onCustomTableContextMenuItemClick(item) {
+            var isCustomItem = JSON.stringify(item.menu.cpItemsCommands).indexOf(item.name) == -1;
+            var isActionItem = item.name[0] != '#'; // No action sign.
+
+            if (isCustomItem && isActionItem) {
+                var itemNameParts = item.name.split(':', 2);
+
+                if (itemNameParts.length == 1) {
+                    itemNameParts.push(item.GetChecked());
+                }
+
+                // Send command to server
+                var commandName = '#menu';
+                var commandParams = { 'ColumnIndex': customTableGridView.contextMenuColumnIndex, 'Option': itemNameParts[0], 'Value': itemNameParts[1] };
+
+                customTableGridView.PerformCallback(commandName + JSON.stringify(commandParams));                
+            }
         }
 
         function saveCustomLayout() {
@@ -679,6 +759,32 @@
                     }
                 }
             });
+        }
+
+        function resizeGridView(gridView, offset, init) {
+            var newHeight = getScreenHeight() - offset;
+
+            if (init) {
+                gridView.SetHeight(newHeight);
+            } else {
+                if (gridView.GetHeight() != newHeight) {
+                    gridView.SetHeight(newHeight);
+                }
+            }
+        }
+
+        function getScreenHeight() {
+            var height = 0;
+
+            if (typeof (window.innerWidth) == 'number') {
+                height = window.innerHeight;
+            } else if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
+                height = document.documentElement.clientHeight;
+            } else if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
+                height = document.body.clientHeight;
+            }
+
+            return height;
         }
     </script>    
 

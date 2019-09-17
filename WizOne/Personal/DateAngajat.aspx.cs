@@ -45,6 +45,7 @@ namespace WizOne.Personal
 
                     Initializare(ref ds);
                 }
+                
 
                 if (Session["esteNou"] == null || Session["esteNou"].ToString().Length <= 0 || Session["esteNou"].ToString() == "false")
                 {

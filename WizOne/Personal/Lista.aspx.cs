@@ -284,6 +284,7 @@ namespace WizOne.Personal
                                     ds.Tables.Add(table1);
                                     Session["InformatiaCurentaPersonal"] = ds;
                                     Session["InformatiaCurentaPersonalCalcul"] = null;
+                                    Session["esteNou"] = "false";
 
 
 

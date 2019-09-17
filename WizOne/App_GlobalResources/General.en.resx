@@ -960,4 +960,7 @@
   <data name="Pontajpeangajat" xml:space="preserve">
     <value>Employee timesheet</value>
   </data>
+  <data name="Pontajechipa" xml:space="preserve">
+    <value>Team timesheet</value>
+  </data>  
 </root>

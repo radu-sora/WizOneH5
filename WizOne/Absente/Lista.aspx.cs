@@ -84,6 +84,9 @@ namespace WizOne.Absente
                 btnAtasament.Image.ToolTip = Dami.TraduCuvant("btnAtasament", "Arata Atasament");
                 btnPlanif.Image.ToolTip = Dami.TraduCuvant("btnPlanif", "Transforma in solicitat");
 
+                lblStare.InnerText = Dami.TraduCuvant("Stare");
+                lblDtInc.InnerText = Dami.TraduCuvant("Data Inceput");
+                lblDtSf.InnerText = Dami.TraduCuvant("Data Sfarsit");
 
                 lblViz.InnerText = Dami.TraduCuvant("Vizualizare");
                 lblRol.InnerText = Dami.TraduCuvant("Roluri");

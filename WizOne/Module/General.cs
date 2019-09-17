@@ -8032,7 +8032,7 @@ namespace WizOne.Module
             }
         }
 
-        public static string SelectCalculCO(int an, string f10003 = "-99", string filtruIns = "", DateTime? F10022 = null, string f10072 = "", string f100644 = "")
+        public static string SelectCalculCO(int an, string f10003 = "-99", string filtruIns = "", DateTime? F10022 = null, string f10072 = "", string f100644 = "", bool esteNou = false)
         {
             string strSql = "";
 
@@ -8062,9 +8062,12 @@ namespace WizOne.Module
                 {
                     #region SQL
                     //daca nu exista inseram linie goala si apoi updatam
-                    strSql += "insert into Ptj_tblZileCO(F10003, An, USER_NO, TIME) " +
-                    " select F10003, " + an + ", " + HttpContext.Current.Session["UserId"] + ", GetDate() from F100 where F10003 not in (select F10003 from Ptj_tblZileCO where An=" + an + ") " +
-                    " and " + strF10022 + " <= '" + dtSf + "' and '" + dtInc + "' <= F10023" + filtruIns + ";";
+                    if (!esteNou)
+                        strSql += "insert into Ptj_tblZileCO(F10003, An, USER_NO, TIME) " +
+                        " select F10003, " + an + ", " + HttpContext.Current.Session["UserId"] + ", GetDate() from F100 where F10003 not in (select F10003 from Ptj_tblZileCO where An=" + an + ") " +
+                        " and " + strF10022 + " <= '" + dtSf + "' and '" + dtInc + "' <= F10023" + filtruIns + ";";
+                    else
+                        strSql += "insert into Ptj_tblZileCO(F10003, An, USER_NO, TIME) VALUES (" + f10003 + ", " + an + ", " + HttpContext.Current.Session["UserId"] + ", GetDate());";
 
 
                     strSql += "with xx as " +
@@ -8159,9 +8162,12 @@ namespace WizOne.Module
                     dtSf = "31-12-" + an.ToString();
 
                     //daca nu exista inseram linie goala si apoi updatam
-                    strSql += "insert into \"Ptj_tblZileCO\"(F10003, \"An\", USER_NO, TIME) " +
-                    " select F10003, " + an + ", " + HttpContext.Current.Session["UserId"] + ", SYSDATE from F100 where F10003 not in (select F10003 from \"Ptj_tblZileCO\" where \"An\"=" + an + ") " +
-                    " and " + strF10022 + " <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023" + filtruIns + ";";
+                    if (!esteNou)
+                        strSql += "insert into \"Ptj_tblZileCO\"(F10003, \"An\", USER_NO, TIME) " +
+                        " select F10003, " + an + ", " + HttpContext.Current.Session["UserId"] + ", SYSDATE from F100 where F10003 not in (select F10003 from \"Ptj_tblZileCO\" where \"An\"=" + an + ") " +
+                        " and " + strF10022 + " <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023" + filtruIns + ";";
+                    else
+                        strSql += "insert into \"Ptj_tblZileCO\"(F10003, \"An\", USER_NO, TIME) VALUES (" + f10003 + ", " + an + ", " + HttpContext.Current.Session["UserId"] + ", sysdate);";
 
                     strSql += "update \"Ptj_tblZileCO\" x set x.\"Cuvenite\" = ( " +
                             " with xx as " +

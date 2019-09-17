@@ -1165,8 +1165,22 @@ namespace WizOne.Avs
                 DataTable dtTemp2 = General.IncarcaDT("select F71602 AS \"Id\", F71604 AS \"Denumire\" from F716", null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
 
+                int valMin = 1, valMax = 8;
+                if (cmb1Nou.Value != null)
+                {
+                    if (Convert.ToInt32(cmb1Nou.Value) == 0)
+                    {
+                        valMin = 6;
+                        valMax = 8;
+                    }
+                    if (Convert.ToInt32(cmb1Nou.Value) == 2)
+                    {
+                        valMin = 1;
+                        valMax = 7;
+                    }
+                }
                 dtTemp1 = General.IncarcaDT("select F10043 AS \"Id\", F10043 AS \"Denumire\" from F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
-                dtTemp2 = General.ListaNumere(1, 8);
+                dtTemp2 = General.ListaNumere(valMin, valMax);
                 IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
 
                 dtTemp1 = General.IncarcaDT("select F100973 AS \"Id\", F100973 AS \"Denumire\" from F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
@@ -1707,7 +1721,7 @@ namespace WizOne.Avs
             {
                 case "cmb1Nou":
                     if (Convert.ToInt32(cmb1Nou.Value) == 0)
-                    {
+                    {                    
                         cmb2Nou.Value = 8;
                         cmb3Nou.Value = 8;
                         cmb4Nou.Value = 1;
@@ -1721,7 +1735,7 @@ namespace WizOne.Avs
                         IncarcaDate();
                     }
                     if (Convert.ToInt32(cmb1Nou.Value) == 2)
-                    {
+                    {                   
                         cmb2Nou.Value = 1;
                         cmb3Nou.Value = 8;
                         cmb4Nou.Value = 2;
@@ -1733,7 +1747,7 @@ namespace WizOne.Avs
                         Session["Valoare5Noua"] = "cmb5Nou;5";
                         Session["Valoare6Noua"] = "cmb6Nou;1";
                         IncarcaDate();
-                    }
+                    }    
                     break;
                 case "cmb2Nou":
                     if (Convert.ToInt32(cmb2Nou.Value ?? 1) > Convert.ToInt32(cmb3Nou.Value ?? 8))
@@ -1917,7 +1931,28 @@ namespace WizOne.Avs
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pentru repartizare inegala trebuie sa completati intervalul si numarul de ore!");
                     return false;
                 }
-                    
+
+                //verificare ca salariul sa nu fie mai mic decat cel minim (in functie si de timp partial) la schimbare norma sau salariu
+                if (idAtr == (int)Constante.Atribute.Norma)
+                {
+                    DataTable dtSal = General.IncarcaDT("SELECT COALESCE(F100699, 0) FROM F100 WHERE F10003 = " + F10003, null);
+                    if (!VerificareSalariu(Convert.ToInt32(dtSal.Rows[0][0].ToString()), Convert.ToInt32(cmb2Nou.Value)))
+                    {                       
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!");
+                        return false;
+                    }
+                }
+                if (idAtr == (int)Constante.Atribute.Salariul)
+                {
+                    DataTable dtNorma = General.IncarcaDT("SELECT COALESCE(F10043, 0) FROM F100 WHERE F10003 = " + F10003, null);
+                    if (!VerificareSalariu(Convert.ToInt32(txt1Nou.Text.Length > 0 ? txt1Nou.Text : "0"), Convert.ToInt32(dtNorma.Rows[0][0].ToString())))
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul introdus este mai mic decat cel minim (raportat la timp partial)!");
+                        return false;
+                    }
+                }
+
+
                 if (cmbAng.Value == null) strErr += ", angajat";
                 if (idAtr == -99) strErr += ", atribut";
                 if (txtDataMod.Value == null) strErr += ", data modificare";
@@ -3571,7 +3606,7 @@ namespace WizOne.Avs
         private void IncarcaComboBox(ASPxComboBox cmbAct, ASPxComboBox cmbNou, DataTable dt1, DataTable dt2)
         {
             cmbAct.DataSource = dt1;
-            cmbAct.DataBind();
+            cmbAct.DataBind();            
             cmbNou.DataSource = dt2;
             cmbNou.DataBind();
             cmbAct.SelectedIndex = 0;
@@ -5211,6 +5246,15 @@ namespace WizOne.Avs
 
             return rest == 1;
 
+        }
+
+        private bool VerificareSalariu(int salariu, int timpPartial)
+        {
+            int salMin = Convert.ToInt32(Dami.ValoareParam("SAL_MIN", "0"));
+            if (salMin * timpPartial / 8 > salariu)
+                return false;
+            else
+                return true;
         }
 
     }

@@ -1551,7 +1551,11 @@ namespace WizOne.Personal
                 string filtruIns = " AND F10003=" + Session["Marca"].ToString();
                 string f10003 = Session["Marca"].ToString();
 
-                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, f100644);
+                bool esteNou = false;
+                if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                    esteNou = true;
+
+                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, f100644, esteNou);
                 General.ExecutaNonQuery(strSql, null);
 
                 DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });
@@ -1572,6 +1576,49 @@ namespace WizOne.Personal
                     ASPxTextBox txtZileCOAnAnt = Contract_DataList.Items[0].FindControl("txtZileCOAnAnt") as ASPxTextBox;
                     if (txtZileCOAnAnt != null)
                         txtZileCOAnAnt.Value = General.Nz(dtCO["SoldAnterior"], "").ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+        }
+
+        private void CalculZLP()
+        {
+            try
+            {
+                ASPxDateEdit deDataAng = Contract_DataList.Items[0].FindControl("deDataAng") as ASPxDateEdit;
+                if (deDataAng == null) return;           
+
+                int an = DateTime.Now.Year;
+                DateTime f10022 = deDataAng.Date; 
+             
+                string dtInc = an.ToString() + "-01-01";
+                string dtSf = an.ToString() + "-12-31";
+
+                string filtruIns = " AND F10003=" + Session["Marca"].ToString();
+                string f10003 = Session["Marca"].ToString();
+
+                bool esteNou = false;
+                if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                    esteNou = true;
+
+                Absente.ZLP pagZLP = new Absente.ZLP();
+
+                //string strSql = pagZLP.CalculZLP(an, f10003, filtruIns, f10022);
+               // General.ExecutaNonQuery(strSql, null);
+
+                DataRow dtZLP = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZLP"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });
+                if (dtZLP != null)
+                {                    
+                    ASPxTextBox txtZLP = Contract_DataList.Items[0].FindControl("txtZLP") as ASPxTextBox;
+                    if (txtZLP != null)
+                        txtZLP.Value = General.Nz(dtZLP["Cuvenite"], "").ToString();
+               
+                    ASPxTextBox txtZLPCuv = Contract_DataList.Items[0].FindControl("txtZLPCuv") as ASPxTextBox;
+                    if (txtZLPCuv != null)
+                        txtZLPCuv.Value = General.Nz(dtZLP["CuveniteAn"], "").ToString();          
                 }
             }
             catch (Exception ex)

@@ -60,7 +60,7 @@ namespace WizOne.Absente
 
                 lblRol.InnerText = Dami.TraduCuvant("Rol");
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
-                lblTip.InnerText = Dami.TraduCuvant("Tip Cerere");
+                lblTip.InnerText = Dami.TraduCuvant("Tip Cerere");         
                 lblDataInc.InnerText = Dami.TraduCuvant("Data Inceput");
                 lblDataSf.InnerText = Dami.TraduCuvant("Data Sfarsit");
                 lblInl.InnerText = Dami.TraduCuvant("Inlocuitor");

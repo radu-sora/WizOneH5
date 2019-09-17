@@ -52,6 +52,7 @@
 						        </td>
 						        <td>
 							        <dx:ASPxTextBox  ID="txtNrCard" Width="250"  runat="server" TabIndex="2" Text='<%# Eval("F10055") %>' AutoPostBack="false" >
+                                        <ClientSideEvents TextChanged="function(s,e) { ValidareIBAN(s,e); }" />
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -219,6 +220,9 @@
     }
 
     function ValidareIBAN(s, e) {
+        if (s.name == "txtNrCard" && parseInt("<%=Session["IdClient"] %>") != 66)
+            return;
+
         if (s.GetText().length > 0) {
             if (s.GetText().length != 24) {
                 swal({

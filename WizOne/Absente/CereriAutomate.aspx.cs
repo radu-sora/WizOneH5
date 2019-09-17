@@ -240,12 +240,17 @@ namespace WizOne.Absente
 
 
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
-                if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
+                    return;
+                }
 
                 for (int i = 0; i < lst.Count(); i++)
                 {
                     lstMarci.Add(Convert.ToInt32(General.Nz(lst[i], -99)));
                 }
+        
 
                 grDate.Selection.UnselectAll();
                 string msg = "";

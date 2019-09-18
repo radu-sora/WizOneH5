@@ -598,7 +598,7 @@ namespace WizOne.Module
 
                 if (Constante.tipBD == 2)
                 {
-                    sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", 
+                    sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"",  B.F100901 AS EID,
                                 CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
                                 A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
                                 CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 

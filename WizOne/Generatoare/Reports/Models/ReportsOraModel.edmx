@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WIZONE_H5Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DynReports">
+          <Key>
+            <PropertyRef Name="DynReportId" />
+          </Key>
+          <Property Name="DynReportId" Type="number" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar2" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar2" MaxLength="250" />
+          <Property Name="DynReportTypeId" Type="number" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="LayoutData" Type="blob" />
+          <Property Name="RegUserId" Type="varchar2" MaxLength="128" />
+          <Property Name="UpdUserId" Type="varchar2" MaxLength="128" />
+          <Property Name="RegDate" Type="date" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="UpdDate" Type="date" />
+        </EntityType>
+        <EntityType Name="DynReportsUsers">
+          <Key>
+            <PropertyRef Name="DynReportUserId" />
+          </Key>
+          <Property Name="DynReportUserId" Type="number" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DynReportId" Type="number" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="Name" Type="varchar2" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar2" MaxLength="250" />
+          <Property Name="LayoutData" Type="blob" />
+          <Property Name="RegUserId" Type="varchar2" MaxLength="128" />
+          <Property Name="UpdUserId" Type="varchar2" MaxLength="128" />
+          <Property Name="RegDate" Type="date" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="UpdDate" Type="date" />
+        </EntityType>
+        <EntityType Name="DynReportTypes">
+          <Key>
+            <PropertyRef Name="DynReportTypeId" />
+          </Key>
+          <Property Name="DynReportTypeId" Type="number" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="Name" Type="varchar2" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RapoarteGrupuriUtilizatori">
+          <Key>
+            <PropertyRef Name="IdRaport" />
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdRaport" Type="number" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="IdUser" Type="number" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="ExtensiiPermise" Type="varchar2" MaxLength="100" />
+          <Property Name="MeniuRestrans" Type="number" Precision="5" Scale="0" />
+        </EntityType>
+        <Association Name="FK_DynReports_DynReportTypes">
+          <End Role="DynReportTypes" Type="Self.DynReportTypes" Multiplicity="1" />
+          <End Role="DynReports" Type="Self.DynReports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DynReportTypes">
+              <PropertyRef Name="DynReportTypeId" />
+            </Principal>
+            <Dependent Role="DynReports">
+              <PropertyRef Name="DynReportTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DynReportsUsers_DynReports">
+          <End Role="DynReports" Type="Self.DynReports" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DynReportsUsers" Type="Self.DynReportsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DynReports">
+              <PropertyRef Name="DynReportId" />
+            </Principal>
+            <Dependent Role="DynReportsUsers">
+              <PropertyRef Name="DynReportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WIZONE_H5ModelStoreContainer">
+          <EntitySet Name="DynReports" EntityType="Self.DynReports" store:Type="Tables" />
+          <EntitySet Name="DynReportsUsers" EntityType="Self.DynReportsUsers" store:Type="Tables" />
+          <EntitySet Name="DynReportTypes" EntityType="Self.DynReportTypes" store:Type="Tables" />
+          <EntitySet Name="RapoarteGrupuriUtilizatori" EntityType="Self.RapoarteGrupuriUtilizatori" store:Type="Views">
+            <DefiningQuery>
+              SELECT
+              "RapoarteGrupuriUtilizatori"."IdRaport" AS "IdRaport",
+              "RapoarteGrupuriUtilizatori"."IdUser" AS "IdUser",
+              "RapoarteGrupuriUtilizatori"."ExtensiiPermise" AS "ExtensiiPermise",
+              "RapoarteGrupuriUtilizatori"."MeniuRestrans" AS "MeniuRestrans"
+              FROM "RapoarteGrupuriUtilizatori" "RapoarteGrupuriUtilizatori"
+            </DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_DynReports_DynReportTypes" Association="Self.FK_DynReports_DynReportTypes">
+            <End Role="DynReportTypes" EntitySet="DynReportTypes" />
+            <End Role="DynReports" EntitySet="DynReports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DynReportsUsers_DynReports" Association="Self.FK_DynReportsUsers_DynReports">
+            <End Role="DynReports" EntitySet="DynReports" />
+            <End Role="DynReportsUsers" EntitySet="DynReportsUsers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ReportsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ReportTypeId" Type="Int16" Nullable="false" />
+          <Property Name="LayoutData" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="RegUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UpdUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RegDate" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="UpdDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ReportType" Relationship="Self.FK_DynReports_DynReportTypes" FromRole="DynReports" ToRole="DynReportTypes" />
+          <NavigationProperty Name="ReportUsers" Relationship="Self.FK_DynReportsUsers_DynReports" FromRole="DynReports" ToRole="DynReportsUsers" />
+          <NavigationProperty Name="ReportGroupUsers" Relationship="ReportsModel.ReportReportGroupUser" FromRole="Report" ToRole="ReportGroupUser" />
+        </EntityType>
+        <EntityType Name="ReportUser">
+          <Key>
+            <PropertyRef Name="ReportUserId" />
+          </Key>
+          <Property Name="ReportUserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="LayoutData" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="RegUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UpdUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RegDate" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" a:SetterAccess="Private" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="UpdDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Report" Relationship="Self.FK_DynReportsUsers_DynReports" FromRole="DynReportsUsers" ToRole="DynReports" />
+        </EntityType>
+        <EntityType Name="ReportType">
+          <Key>
+            <PropertyRef Name="ReportTypeId" />
+          </Key>
+          <Property Name="ReportTypeId" Type="Int16" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK_DynReports_DynReportTypes" FromRole="DynReportTypes" ToRole="DynReports" />
+        </EntityType>
+        <Association Name="FK_DynReports_DynReportTypes">
+          <End Role="DynReportTypes" Type="ReportsModel.ReportType" Multiplicity="1" />
+          <End Role="DynReports" Type="ReportsModel.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DynReportTypes">
+              <PropertyRef Name="ReportTypeId" />
+            </Principal>
+            <Dependent Role="DynReports">
+              <PropertyRef Name="ReportTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DynReportsUsers_DynReports">
+          <End Role="DynReports" Type="ReportsModel.Report" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DynReportsUsers" Type="ReportsModel.ReportUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DynReports">
+              <PropertyRef Name="ReportId" />
+            </Principal>
+            <Dependent Role="DynReportsUsers">
+              <PropertyRef Name="ReportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReportsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Reports" EntityType="ReportsModel.Report" />
+          <EntitySet Name="ReportsUsers" EntityType="ReportsModel.ReportUser" />
+          <EntitySet Name="ReportTypes" EntityType="ReportsModel.ReportType" />
+          <AssociationSet Name="FK_DynReports_DynReportTypes" Association="Self.FK_DynReports_DynReportTypes">
+            <End Role="DynReportTypes" EntitySet="ReportTypes" />
+            <End Role="DynReports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DynReportsUsers_DynReports" Association="Self.FK_DynReportsUsers_DynReports">
+            <End Role="DynReports" EntitySet="Reports" />
+            <End Role="DynReportsUsers" EntitySet="ReportsUsers" />
+          </AssociationSet>
+          <EntitySet Name="ReportsGroupUsers" EntityType="ReportsModel.ReportGroupUser" />
+          <AssociationSet Name="ReportReportGroupUser" Association="ReportsModel.ReportReportGroupUser">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="ReportGroupUser" EntitySet="ReportsGroupUsers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ReportGroupUser">
+          <Key>
+            <PropertyRef Name="ReportId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Report" Relationship="ReportsModel.ReportReportGroupUser" FromRole="ReportGroupUser" ToRole="Report" />
+          <Property Name="ExportOptions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ToolbarType" Type="Int16" />
+        </EntityType>
+        <Association Name="ReportReportGroupUser">
+          <End Type="ReportsModel.Report" Role="Report" Multiplicity="1" />
+          <End Type="ReportsModel.ReportGroupUser" Role="ReportGroupUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportId" />
+            </Principal>
+            <Dependent Role="ReportGroupUser">
+              <PropertyRef Name="ReportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WIZONE_H5ModelStoreContainer" CdmEntityContainer="ReportsEntities">
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="ReportsModel.Report">
+              <MappingFragment StoreEntitySet="DynReports">
+                <ScalarProperty Name="ReportId" ColumnName="DynReportId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ReportTypeId" ColumnName="DynReportTypeId" />
+                <ScalarProperty Name="LayoutData" ColumnName="LayoutData" />
+                <ScalarProperty Name="RegUserId" ColumnName="RegUserId" />
+                <ScalarProperty Name="UpdUserId" ColumnName="UpdUserId" />
+                <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportsUsers">
+            <EntityTypeMapping TypeName="ReportsModel.ReportUser">
+              <MappingFragment StoreEntitySet="DynReportsUsers">
+                <ScalarProperty Name="ReportUserId" ColumnName="DynReportUserId" />
+                <ScalarProperty Name="ReportId" ColumnName="DynReportId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LayoutData" ColumnName="LayoutData" />
+                <ScalarProperty Name="RegUserId" ColumnName="RegUserId" />
+                <ScalarProperty Name="UpdUserId" ColumnName="UpdUserId" />
+                <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportTypes">
+            <EntityTypeMapping TypeName="ReportsModel.ReportType">
+              <MappingFragment StoreEntitySet="DynReportTypes">
+                <ScalarProperty Name="ReportTypeId" ColumnName="DynReportTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportsGroupUsers">
+            <EntityTypeMapping TypeName="ReportsModel.ReportGroupUser">
+              <MappingFragment StoreEntitySet="RapoarteGrupuriUtilizatori">
+                <ScalarProperty Name="ToolbarType" ColumnName="MeniuRestrans" />
+                <ScalarProperty Name="ExportOptions" ColumnName="ExtensiiPermise" />
+                <ScalarProperty Name="UserId" ColumnName="IdUser" />
+                <ScalarProperty Name="ReportId" ColumnName="IdRaport" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="5b34f129f3584c3a87b1bac2518ad991" Name="Diagram1">
+        <EntityTypeShape EntityType="ReportsModel.Report" Width="1.5" PointX="2.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportsModel.ReportUser" Width="1.5" PointX="4.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportsModel.ReportType" Width="1.5" PointX="2.5" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportsModel.ReportGroupUser" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <AssociationConnector Association="ReportsModel.FK_DynReports_DynReportTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportsModel.FK_DynReportsUsers_DynReports" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportsModel.ReportReportGroupUser" ManuallyRouted="false" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1565,7 +1565,7 @@ namespace WizOne.Personal
                     //txtZileCOCuvAnCrt
                     ASPxTextBox txtZileCOCuvAnCrt = Contract_DataList.Items[0].FindControl("txtZileCOCuvAnCrt") as ASPxTextBox;
                     if (txtZileCOCuvAnCrt != null)
-                        txtZileCOCuvAnCrt.Value = General.Nz(dtCO["CuveniteAn"], "").ToString();
+                        txtZileCOCuvAnCrt.Value = General.Nz(dtCO["CuveniteAn"], txtZileCOCuvAnCrt.Text).ToString();
                     //F100995
                     //txtZileCOAnCrt
                     ASPxTextBox txtZileCOAnCrt = Contract_DataList.Items[0].FindControl("txtZileCOAnCrt") as ASPxTextBox;

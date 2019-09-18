@@ -1578,7 +1578,7 @@ namespace WizOne.Pagini
 
                 Session["ReportId"] = Convert.ToInt32(idRap);
                 string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;
-                Response.Redirect(url, false);
+                Response.Redirect(url);
 
             }
             catch (Exception ex)

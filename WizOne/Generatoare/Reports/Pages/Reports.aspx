@@ -85,11 +85,11 @@
 
         // Main functions
         $(window).on('load', function () {
-            resizeGridView(reportsGridView, 172, true);
+            resizeGridView(reportsGridView, 170, true);
         });
 
         $(window).on('resize', function () {
-            resizeGridView(reportsGridView, 172, false);
+            resizeGridView(reportsGridView, 170, false);
         });
 
         function onReportNewButtonClick() {

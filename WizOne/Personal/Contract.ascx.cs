@@ -851,7 +851,7 @@ namespace WizOne.Personal
                     + " left join F026 c on convert(int, " + grila + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int, c.F02611 / 100) * 12) "
                     + " where a.f10003 = " + Session["Marca"].ToString();
                 if (Constante.tipBD == 2)
-                    sql = "select a.f10003, TO_NUMBER(F02615, 0)  from F100 a "
+                    sql = "select a.f10003, TO_NUMBER(TRUNC(F02615))  from F100 a "
                        + " left join(select nvl(to_number(substr('" + txtVechimeCarte.Text + "',1,2)),0) *12 + nvl(to_number(substr('" + txtVechimeCarte.Text + "', 3, 2)), 0) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
                        + "  left join F026 c on " + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611 / 100) * 12) where a.f10003 = " + Session["Marca"].ToString();
                 DataTable dtGrila = General.IncarcaDT(sql, null);

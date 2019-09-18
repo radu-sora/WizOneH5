@@ -293,7 +293,7 @@ namespace WizOne.Pagini
                                 {
                                     case "Stiri":
                                         General.ExecutaNonQuery(@"BEGIN
-                                                  DELETE FROM ""relGrupStire"" WHERE IdStire=@1;
+                                                  DELETE FROM ""relGrupStire"" WHERE ""IdStire""=@1;
                                                   DELETE FROM ""Stiri"" WHERE ""Id""=@1;
                                                   END;", new string[] { arr[1] });
                                         break;

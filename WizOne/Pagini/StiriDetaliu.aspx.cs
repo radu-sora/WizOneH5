@@ -38,7 +38,7 @@ namespace WizOne.Pagini
                         case "Edit":
                         case "Clone":
                             {
-                                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Stiri"" WHERE Id=@1 ", new string[] { Session["Sablon_CheiePrimara"].ToString() });
+                                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Stiri"" WHERE ""Id""=@1 ", new string[] { Session["Sablon_CheiePrimara"].ToString() });
                                 if (dt.Rows.Count > 0)
                                 {
                                     if (Session["Sablon_TipActiune"].ToString() == "Edit") txtId.Text = dt.Rows[0]["Id"].ToString();

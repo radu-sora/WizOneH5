@@ -98,6 +98,8 @@ namespace WizOne.ProgrameLucru
                     dtCtr.PrimaryKey = new DataColumn[] { dtCtr.Columns["IdAuto"] };
                 }
 
+                //Florin 2019.09.18 - am adaugat TableName
+                dtCtr.TableName = "Ptj_Programe";
                 ds.Tables.Add(dtCtr);
                 Session["InformatiaCurentaPrograme"] = ds;
             }

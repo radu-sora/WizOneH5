@@ -367,10 +367,15 @@ namespace WizOne.Pagini
                         case "New":
                         case "Clone":
                             {
-                                string dt = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
-                                if (Constante.tipBD == 2) dt = DateTime.Now.ToString("yyyy-MMM-dd hh:mm:ss");
-                                id = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Intro"" ", null), 0)) + 1;
-                                General.ExecutaNonQuery(@"INSERT INTO ""Intro""(""Id"", ""Denumire"", ""Continut"", ""Activ"", USER_NO, TIME) VALUES(@1, @2, @3, @4, @5, @6)", new string[] { id.ToString(), txtDenumire.Text, e.LayoutData, "1", Session["UserId"].ToString(), dt });
+                                //Florin 2019.09.18
+                                //string dt = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+                                //if (Constante.tipBD == 2) dt = DateTime.Now.ToString("yyyy-MMM-dd hh:mm:ss");
+                                //id = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Intro"" ", null), 0)) + 1;
+                                //General.ExecutaNonQuery(@"INSERT INTO ""Intro""(""Id"", ""Denumire"", ""Continut"", ""Activ"", USER_NO, TIME) VALUES(@1, @2, @3, @4, @5, @6)", new string[] { id.ToString(), txtDenumire.Text, e.LayoutData, "1", Session["UserId"].ToString(), dt });
+                                General.ExecutaNonQuery(
+                                    $@"INSERT INTO ""Intro""(""Id"", ""Denumire"", ""Continut"", ""Activ"", USER_NO, TIME) 
+                                    VALUES((SELECT COALESCE(MAX(""Id""),0) FROM ""Intro"") + 1, @2, @3, @4, @5, {General.CurrentDate()})",
+                                    new string[] { id.ToString(), txtDenumire.Text, e.LayoutData, "1", Session["UserId"].ToString() });
                             }
                             break;
                         case "Edit":

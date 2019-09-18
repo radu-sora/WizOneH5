@@ -87,13 +87,14 @@ namespace WizOne.Personal
                     radio.Text = Dami.TraduCuvant(radio.Text);
                 }
 
+                //Florin 2019.09.18 - am adaugat Gen in coada
                 HtmlGenericControl lgAng = DateGenListView.Items[0].FindControl("lgAng") as HtmlGenericControl;
                 lgAng.InnerText = Dami.TraduCuvant("Date despre angajare");
-                HtmlGenericControl lgIdent = DateGenListView.Items[0].FindControl("lgIdent") as HtmlGenericControl;
+                HtmlGenericControl lgIdent = DateGenListView.Items[0].FindControl("lgIdentGen") as HtmlGenericControl;
                 lgIdent.InnerText = Dami.TraduCuvant("Date unice de identificare");
-                HtmlGenericControl lgSex = DateGenListView.Items[0].FindControl("lgSex") as HtmlGenericControl;
+                HtmlGenericControl lgSex = DateGenListView.Items[0].FindControl("lgSexGen") as HtmlGenericControl;
                 lgSex.InnerText = Dami.TraduCuvant("Data nasterii si Sex");
-                HtmlGenericControl lgNume = DateGenListView.Items[0].FindControl("lgNume") as HtmlGenericControl;
+                HtmlGenericControl lgNume = DateGenListView.Items[0].FindControl("lgNumeGen") as HtmlGenericControl;
                 lgNume.InnerText = Dami.TraduCuvant("Nume si prenume");
 
                 General.SecuritatePersonal(DateGenListView, Convert.ToInt32(Session["UserId"].ToString()));

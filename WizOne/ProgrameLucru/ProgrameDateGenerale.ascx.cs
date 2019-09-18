@@ -28,13 +28,17 @@ namespace WizOne.ProgrameLucru
             {
                 ASPxComboBox cmbTipPont = DataList1.Items[0].FindControl("cmbTipPont") as ASPxComboBox;
                 cmbTipPont.Value = Convert.ToInt32(table.Rows[0]["TipPontare"]);
-
-                //Value='<%#Eval("TipPontare") %>' 
+                cmbTipPontare_SelectedIndexChanged(cmbTipPont.Value.ToString());
             }
 
-            cmbTipPontare_SelectedIndexChanged(ds.Tables[0].Rows[0]["TipPontare"].ToString() ?? "0");
-            chkFlexibil_EditValueChanged(Convert.ToInt32(ds.Tables[0].Rows[0]["Flexibil"].ToString()));
-            
+            if (table != null && table.Rows.Count > 0 && General.Nz(table.Rows[0]["Flexibil"], "").ToString() != "")
+            {
+                chkFlexibil_EditValueChanged(Convert.ToInt32(table.Rows[0]["Flexibil"]));
+            }
+
+            //cmbTipPontare_SelectedIndexChanged(ds.Tables[0].Rows[0]["TipPontare"].ToString() ?? "0");
+            //chkFlexibil_EditValueChanged(Convert.ToInt32(ds.Tables[0].Rows[0]["Flexibil"].ToString()));
+
         }
 
         protected void pnlCtlDateGen_Callback(object source, CallbackEventArgsBase e)
@@ -94,7 +98,7 @@ namespace WizOne.ProgrameLucru
         {
             try
             {
-                ASPxDateEdit dePauza = DataList1.Items[0].FindControl("dePauza") as ASPxDateEdit;
+                ASPxTimeEdit dePauza = DataList1.Items[0].FindControl("dePauza") as ASPxTimeEdit;
                 if (Convert.ToInt32(param) == 5)
                 {
                     dePauza.Enabled = true;

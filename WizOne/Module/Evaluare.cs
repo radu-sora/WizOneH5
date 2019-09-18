@@ -1274,15 +1274,15 @@ namespace WizOne.Module
 	                end as ""Expirat"",
 	                {0}(ist.""Aprobat"", 0) as ""Aprobat"",
 	                case 
-		                when {0}(rasLinii.""Super5"", -99) <> -99 and {0}(ist5.""Aprobat"", -99) = 1 then rasLinii.""Super5""
+		                when {0}(to_char(rasLinii.""Super5""), -99) <> -99 and {0}(to_char(ist5.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super5"")
 		                else case
-				                when {0}(rasLinii.""Super4"", -99) <> -99 and {0}(ist4.""Aprobat"", -99) = 1 then rasLinii.""Super4""
+				                when {0}(to_char(rasLinii.""Super4""), -99) <> -99 and {0}(to_char(ist4.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super4"")
 				                else case
-						                when {0}(rasLinii.""Super3"", -99) <> -99 and {0}(ist3.""Aprobat"", -99) = 1 then rasLinii.""Super3""
+						                when {0}(to_char(rasLinii.""Super3""), -99) <> -99 and {0}(to_char(ist3.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super3"")
 						                else case
-								                when {0}(rasLinii.""Super2"", -99) <> -99 and {0}(ist2.""Aprobat"", -99) = 1 then rasLinii.""Super2""
+								                when {0}(to_char(rasLinii.""Super2""), -99) <> -99 and {0}(to_char(ist2.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super2"")
 								                else case
-										                when {0}(rasLinii.""Super1"", -99) <> -99 and {0}(ist1.""Aprobat"", -99) = 1 then rasLinii.""Super1""
+										                when {0}(to_char(rasLinii.""Super1""), -99) <> -99 and {0}(to_char(ist1.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super1"")
 										                else ''
 									                end
 							                end
@@ -1290,25 +1290,25 @@ namespace WizOne.Module
 			                  end
 	                end as ""Rating"",
 	                case
-		                when ist.""Pozitie"" = 1 then rasLinii.""Super1_2""
+		                when to_char(ist.""Pozitie"") = 1 then to_char(rasLinii.""Super1_2"")
 		                else case
-				                when ist.""Pozitie"" = 2 then rasLinii.""Super2_2""
+				                when to_char(ist.""Pozitie"") = 2 then to_char(rasLinii.""Super2_2"")
 				                else case
-						                when ist.""Pozitie"" = 3 then rasLinii.""Super3_2""
+						                when to_char(ist.""Pozitie"") = 3 then to_char(rasLinii.""Super3_2"")
 						                else case 
-								                when ist.""Pozitie"" = 4 then rasLinii.""Super4_2""
+								                when to_char(ist.""Pozitie"") = 4 then to_char(rasLinii.""Super4_2"")
 								                else case
-										                when ist.""Pozitie"" = 5 then rasLinii.""Super5_2""
+										                when to_char(ist.""Pozitie"") = 5 then to_char(rasLinii.""Super5_2"")
 										                else case 
-												                when ist.""Pozitie"" = 6 then rasLinii.""Super6_2""
+												                when to_char(ist.""Pozitie"") = 6 then to_char(rasLinii.""Super6_2"")
 												                else case
-														                when ist.""Pozitie"" = 7 then rasLinii.""Super7_2""
+														                when to_char(ist.""Pozitie"") = 7 then to_char(rasLinii.""Super7_2"")
 														                else case
-																                when ist.""Pozitie"" = 8 then rasLinii.""Super8_2""
+																                when to_char(ist.""Pozitie"") = 8 then to_char(rasLinii.""Super8_2"")
 																                else
 																	                case 
-																		                when ist.""Pozitie"" = 9 then rasLinii.""Super9_2""
-																		                else rasLinii.""Super10_2""
+																		                when to_char(ist.""Pozitie"") = 9 then to_char(rasLinii.""Super9_2"")
+																		                else to_char(rasLinii.""Super10_2"")
 																	                end
 															                end
 													                 end

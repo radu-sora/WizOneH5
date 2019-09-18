@@ -1197,6 +1197,8 @@ namespace WizOne.Pontaj
                     return;
                 }
 
+                DataTable dtModif = dt.Clone();
+
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow row = dt.Rows[i];
@@ -1219,42 +1221,43 @@ namespace WizOne.Pontaj
                             }
                             break;
                         case 2:
-                            //Florin 2019.09.17
-                            //verificam daca nu cumva avem o cerere de absenta aprobata
                             {
+                                //Florin 2019.09.17
+
+                                //stergem toate valurile - o sa le repopulam dupa caz
+                                for (int x = 0; x <= 20; x++)
+                                {
+                                    row["Val" + x] = DBNull.Value;
+                                }
+
+                                //verificam daca nu cumva avem o cerere de absenta aprobata
                                 DataTable dtCer = General.IncarcaDT(
-                                    $@"SELECT * FROM ""Ptj_Cereri"" A 
-                                    INNER JOIN ""Ptj_tblAbsenta"" B ON A.""IdAbsenta""=B.""Id""
+                                    $@"SELECT COALESCE(B.""IdTipOre"",1) AS ""IdTipOre"", ""OreInVal"", COALESCE(""NrOre"",0) AS ""NrOre"" FROM ""Ptj_Cereri"" A 
+                                    INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta""=B.""Id""
                                     WHERE A.F10003={row["F10003"]} AND A.""IdStare"" = 3 
                                     AND {General.TruncateDateAsString(@"A.""DataInceput""")} <= {General.ToDataUniv(Convert.ToDateTime(row["Ziua"]))} 
                                     AND {General.ToDataUniv(Convert.ToDateTime(row["Ziua"]))} <= {General.TruncateDateAsString(@"A.""DataSfarsit""")}  ", null);
-                                if (dt != null && dtCer.Rows.Count > 0)
+                                if (dtCer != null && dtCer.Rows.Count > 0)
                                 {
+                                    //daca este absenta de tip ora mai executam codul
+                                    if (Convert.ToInt32(dtCer.Rows[0]["IdTipOre"]) == 0)
+                                    {
+                                        //golim ValStr
+                                        row["ValStr"] = DBNull.Value;
+                                        //Adaugam valurile din cerere/cereri
+                                        for(int j = 0; j < dtCer.Rows.Count; j++)
+                                        {
+                                            if (General.Nz(dtCer.Rows[j]["OreInVal"],"").ToString() != "")
+                                            {
+                                                row[dtCer.Rows[j]["OreInVal"].ToString()] = Math.Round(Convert.ToDecimal(dtCer.Rows[j]["NrOre"]) * 60);
+                                            }
+                                        }
+                                    }
 
+                                    dtModif.ImportRow(row);
                                 }
-
-                                row["ValStr"] = DBNull.Value;
-                                row["Val0"] = DBNull.Value;
-                                row["Val1"] = DBNull.Value;
-                                row["Val2"] = DBNull.Value;
-                                row["Val3"] = DBNull.Value;
-                                row["Val4"] = DBNull.Value;
-                                row["Val5"] = DBNull.Value;
-                                row["Val6"] = DBNull.Value;
-                                row["Val7"] = DBNull.Value;
-                                row["Val8"] = DBNull.Value;
-                                row["Val9"] = DBNull.Value;
-                                row["Val10"] = DBNull.Value;
-                                row["Val11"] = DBNull.Value;
-                                row["Val12"] = DBNull.Value;
-                                row["Val13"] = DBNull.Value;
-                                row["Val14"] = DBNull.Value;
-                                row["Val15"] = DBNull.Value;
-                                row["Val16"] = DBNull.Value;
-                                row["Val17"] = DBNull.Value;
-                                row["Val18"] = DBNull.Value;
-                                row["Val19"] = DBNull.Value;
-                                row["Val20"] = DBNull.Value;
+                                else
+                                    row["ValStr"] = DBNull.Value;
                             }
                             break;
                     }
@@ -1262,9 +1265,24 @@ namespace WizOne.Pontaj
 
                 General.SalveazaDate(dt, "Ptj_Intrari");
 
-                Session["InformatiaCurenta"] = dt;
-                grDate.DataSource = dt;
-                grDate.DataBind();
+                //Florin 2019.09.17
+                for(int i = 0; i < dtModif.Rows.Count; i++)
+                {
+                    //executam recalculul
+                    string golesteVal = Dami.ValoareParam("GolesteVal");
+                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                    FunctiiCeasuri.Calcul.h5 = true;
+                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"]), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
+                    FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+                }
+
+                //Session["InformatiaCurenta"] = dt;
+                //grDate.DataSource = dt;
+                //grDate.DataBind();
+
+                btnFiltru_Click(null, null);
             }
             catch (Exception ex)
             {

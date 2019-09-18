@@ -251,7 +251,8 @@ namespace WizOne.Personal
                     if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
                     {
                         cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
-                        CompletareZile(Convert.ToInt32(drFunc[0]["F71813"].ToString()));
+                        if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                            CompletareZile(Convert.ToInt32(drFunc[0]["F71813"].ToString()));
                     }
                 }
 

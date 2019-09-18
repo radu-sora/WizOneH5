@@ -297,6 +297,7 @@ namespace WizOne.Pontaj
 
                 string sqlSDSL = "";
                 string cond = "";
+                List<DateTime> lstInit = new List<DateTime>();
                 
                 for (int i = 1; i <= nrZile; i++)
                 {
@@ -313,7 +314,7 @@ namespace WizOne.Pontaj
                         int nrZileNel = 0;
                         if (zi.Date != ziuaPrec.Date)
                         {//calculam nr de zile nelucratoare intre cele 2 date
-                            for (DateTime k = ziuaPrec; k < zi; k = k.AddDays(1))
+                            for (DateTime k = ziuaPrec; k <= zi; k = k.AddDays(1))
                             {
                                 string dtK = General.ToDataUniv(k.Date.Year, k.Date.Month, k.Date.Day);
 
@@ -329,7 +330,7 @@ namespace WizOne.Pontaj
                         }
 
                         int m = 0;
-                        DateTime dtTemp = zi;
+                        DateTime dtTemp = zi.AddDays(nrZileNel);
                         string dtT = General.ToDataUniv(dtTemp.Date.Year, dtTemp.Date.Month, dtTemp.Date.Day);
                         int nrT = dtHolidays.Select("DAY = " + dtT).Count();
                         while ((!chkS.Checked && dtTemp.DayOfWeek == DayOfWeek.Saturday) || (!chkD.Checked && dtTemp.DayOfWeek == DayOfWeek.Sunday) || (!chkSL.Checked && nrT > 0))
@@ -339,13 +340,21 @@ namespace WizOne.Pontaj
                             dtT = General.ToDataUniv(dtTemp.Date.Year, dtTemp.Date.Month, dtTemp.Date.Day);
                             nrT = dtHolidays.Select("DAY = " + dtT).Count();
                         }
+      
 
-                        zi = zi.AddDays(nrZileNel + m);                     
+                        zi = zi.AddDays(nrZileNel + m); 
+                        while (lstInit.Contains(zi))
+                        {
+                            zi = zi.AddDays(1);
+                            while ((!chkS.Checked && zi.DayOfWeek == DayOfWeek.Saturday) || (!chkD.Checked && zi.DayOfWeek == DayOfWeek.Sunday)
+                                || (!chkSL.Checked && dtHolidays.Select("DAY = " + General.ToDataUniv(zi.Date.Year, zi.Date.Month, zi.Date.Day)).Count() > 0))
+                                zi = zi.AddDays(1);
+                        }
 
                         if (zi > dataSf)
                             break;
 
-                        if (nr > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
+                        if (nrT > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
                         {
                             lstMarciSDSL.Clear();
                             lista1 = "";
@@ -371,7 +380,7 @@ namespace WizOne.Pontaj
                                 else
                                     data1 += " TO_DATE('" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 'dd/mm/yyyy') ";
 
-
+                                lstInit.Add(zi);
                                 sqlSDSL += "OR (\"Ziua\" = " + data1 + " AND F10003 IN (" + lista1 + ")) ";
                             
                             }
@@ -384,6 +393,7 @@ namespace WizOne.Pontaj
                                 data += " CONVERT(DATETIME, '" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 103) ";
                             else
                                 data += " TO_DATE('" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 'dd/mm/yyyy') ";
+                            lstInit.Add(zi);
                         }
 
                         ziuaPrec = zi;

@@ -114,11 +114,17 @@ namespace WizOne.Personal
             ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
             if (!IsPostBack)
             {
-                cmbTimpPartial.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
-                cmbTimpPartial.DataBind();
+                //cmbTimpPartial.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
+                //cmbTimpPartial.DataBind();
+
+                //Radu 18.09.2019
+                ObjectDataSource cmbTimpPartialDataSource = cmbTimpPartial.NamingContainer.FindControl("dsTP") as ObjectDataSource;
+                cmbTimpPartialDataSource.SelectParameters.Clear();
+                cmbTimpPartialDataSource.SelectParameters.Add("tip", ds.Tables[0].Rows[0]["F10010"].ToString());
+                cmbTimpPartial.DataBindItems();
                 //Florin 2019.09.05
-                if (General.Nz(ds.Tables[0].Rows[0]["F10043"],"").ToString() != "")
-                    cmbTimpPartial.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"]);
+                //if (General.Nz(ds.Tables[0].Rows[0]["F10043"],"").ToString() != "")
+                //    cmbTimpPartial.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"]);
 
                 cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(ds.Tables[0].Rows[0]["F100926"].ToString());
                 cmbDurTimpMunca.DataBind();
@@ -156,8 +162,14 @@ namespace WizOne.Personal
             {
                 int tipAng = Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString());
                 if (hfTipAngajat.Contains("TipAng")) tipAng = Convert.ToInt32(General.Nz(hfTipAngajat["TipAng"], -1));
-                cmbTimpPartial.DataSource = General.GetTimpPartial(tipAng);
-                cmbTimpPartial.DataBind();
+                //Radu 18.09.2019
+                ObjectDataSource cmbTimpPartialDataSource = cmbTimpPartial.NamingContainer.FindControl("dsTP") as ObjectDataSource;
+                cmbTimpPartialDataSource.SelectParameters.Clear();
+                cmbTimpPartialDataSource.SelectParameters.Add("tip", tipAng.ToString());
+                cmbTimpPartial.DataBindItems();
+
+                //cmbTimpPartial.DataSource = General.GetTimpPartial(tipAng);
+                //cmbTimpPartial.DataBind();
 
                 cmbDurTimpMunca.DataSource = General.GetDurataTimpMunca(tipAng == 0 ? "1" : "2");
                 cmbDurTimpMunca.DataBind();

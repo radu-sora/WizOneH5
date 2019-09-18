@@ -302,7 +302,7 @@
 							<dx:ASPxLabel  ID="lblTimpPartial"  Width="100" runat="server"  Text="Timp partial" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox   ID="cmbTimpPartialDG"  runat="server" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
+							<dx:ASPxComboBox  DataSourceID="dsTP"  ID="cmbTimpPartialDG" Value='<%#Eval("F10043") %>' runat="server" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
                                 <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerDG(s); }" />
 							</dx:ASPxComboBox>
 						</td>
@@ -332,7 +332,12 @@
                         <SelectParameters>
                              <asp:Parameter Name="data"  Type="String" />
                         </SelectParameters>
-                    </asp:ObjectDataSource>                       
+                    </asp:ObjectDataSource>  
+                      <asp:ObjectDataSource runat="server" ID="dsTP" TypeName="WizOne.Module.General" SelectMethod="GetTimpPartial">
+                            <SelectParameters>
+                                    <asp:Parameter Name="tip"  Type="String" />
+                            </SelectParameters>
+                        </asp:ObjectDataSource>                       
                     <asp:ObjectDataSource runat="server" ID="dsMP" TypeName="WizOne.Module.General" SelectMethod="GetMotivPlecare"/>                    
                     <asp:ObjectDataSource runat="server" ID="dsN" TypeName="WizOne.Module.General" SelectMethod="GetNorma"/>
                     <asp:ObjectDataSource runat="server" ID="dsCategAng_61"  TypeName="WizOne.Module.General" SelectMethod="GetCategAng_61" />

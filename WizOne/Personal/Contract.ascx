@@ -630,28 +630,30 @@
                 }
             }
         debugger;
-        if (cmbDurCtr.GetValue() == 2 && txtPerProbaZL.GetValue() != "" && txtNrLuni.GetValue() != "" && txtNrLuni.GetValue() != "0" && txtNrZile.GetValue() != "" && txtNrZile.GetValue() != "0") {
-            if (txtNrLuni.GetValue() < 3 && parseInt(txtPerProbaZL.GetValue()) > 5) {
-                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 5 zile!\n";
-                if (tip == 1)
-                    txtPerProbaZL.SetValue("5");
+        if (cmbDurCtr.GetValue() == 2 && txtPerProbaZL.GetValue() != "" && txtNrLuni.GetValue() != "" && txtNrZile.GetValue() != "") {
+            if (txtNrLuni.GetValue() != "0" || txtNrZile.GetValue() != "0") {
+                if (txtNrLuni.GetValue() < 3 && parseInt(txtPerProbaZL.GetValue()) > 5) {
+                    mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 5 zile!\n";
+                    if (tip == 1)
+                        txtPerProbaZL.SetValue("5");
+                }
+                if (txtNrLuni.GetValue() >= 3 && txtNrLuni.GetValue() < 6 && parseInt(txtPerProbaZL.GetValue()) > 15) {
+                    mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 15 zile!\n";
+                    if (tip == 1)
+                        txtPerProbaZL.SetValue("15");
+                }
+                if (txtNrLuni.GetValue() >= 6 && !conducere && parseInt(txtPerProbaZL.GetValue()) > 30) {
+                    mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 30 zile!\n";
+                    if (tip == 1)
+                        txtPerProbaZL.SetValue("30");
+                }
+                if (txtNrLuni.GetValue() >= 6 && conducere && parseInt(txtPerProbaZL.GetValue()) > 45) {
+                    mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 45 zile!\n";
+                    if (tip == 1)
+                        txtPerProbaZL.SetValue("45");
+                }
+                txtPerProbaZC.SetValue("0");
             }
-            if (txtNrLuni.GetValue() >= 3 && txtNrLuni.GetValue() < 6 && parseInt(txtPerProbaZL.GetValue()) > 15) {
-                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 15 zile!\n";
-                if (tip == 1)
-                    txtPerProbaZL.SetValue("15");
-            }
-            if (txtNrLuni.GetValue() >= 6 && !conducere && parseInt(txtPerProbaZL.GetValue()) > 30) {
-                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 30 zile!\n";
-                if (tip == 1)
-                    txtPerProbaZL.SetValue("30");
-            }
-            if (txtNrLuni.GetValue() >= 6 && conducere && parseInt(txtPerProbaZL.GetValue()) > 45) {
-                mesaj += "Perioada de proba (zile lucratoare): - valoarea maxima cf. legii este de 45 zile!\n";
-                if (tip == 1)
-                    txtPerProbaZL.SetValue("45");
-            }
-            txtPerProbaZC.SetValue("0");
         }     
   
         if (cmbDurCtr.GetValue() == 1 && txtPerProbaZC.GetValue() != "") {
@@ -673,22 +675,24 @@
             txtPerProbaZL.SetValue("0");
         }
      
-        if (cmbDurCtr.GetValue() == 1 && txtNrZilePreavizDemisie.GetValue() != "") {
+        if (txtNrZilePreavizDemisie.GetValue() != "") {
             if (!conducere && parseInt(txtNrZilePreavizDemisie.GetValue()) > 20) {
                 mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 20 zile!\n";
                 if (tip == 1)
-                    txtPerProbaZL.SetValue("20");
+                    txtNrZilePreavizDemisie.SetValue("20");
             }
             if (conducere && parseInt(txtNrZilePreavizDemisie.GetValue()) > 45) {
                 mesaj += "Numar zile preaviz demisie: - valoarea maxima cf. legii este de 45 zile!\n";
                 if (tip == 1)
-                    txtPerProbaZL.SetValue("45");
+                    txtNrZilePreavizDemisie.SetValue("45");
             }           
-        }        
-    
-        if (cmbDurCtr.GetValue() == 1) 
-            if (txtNrZilePreavizConc.GetValue() == null || txtNrZilePreavizConc.GetValue() == "" || parseInt(txtNrZilePreavizConc.GetValue()) < 20)
-                mesaj += "Numar zile preaviz concediere: - valoarea minima cf. legii este de 20 zile!\n";  
+        }    
+       
+        if (txtNrZilePreavizConc.GetValue() == null || txtNrZilePreavizConc.GetValue() == "" || parseInt(txtNrZilePreavizConc.GetValue()) < 20) {
+            mesaj += "Numar zile preaviz concediere: - valoarea minima cf. legii este de 20 zile!\n";
+            if (tip == 1)
+                txtNrZilePreavizConc.SetValue("20");
+        }
         
         if (mesaj.length > 0)
             swal({ title: "Atentie !", text: mesaj, type: "warning" });
@@ -1020,7 +1024,7 @@
 							<dx:ASPxLabel  ID="lblTimpPartial"  Width="100" runat="server"  Text="Timp partial" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxComboBox  ID="cmbTimpPartial" Width="100" TabIndex="20" runat="server" ClientInstanceName="cmbTimpPartial" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
+							<dx:ASPxComboBox  DataSourceID="dsTP"  ID="cmbTimpPartial" Value='<%#Eval("F10043") %>' Width="100" TabIndex="20" runat="server" ClientInstanceName="cmbTimpPartial" TextField="Denumire" ValueField="Id"   AutoPostBack="false" ValueType="System.Int32" >
                                 <ClientSideEvents SelectedIndexChanged="function(s,e){ SetNorma(s); }" />
 							</dx:ASPxComboBox>
 						</td>
@@ -1277,6 +1281,11 @@
 				</table>
                 <asp:ObjectDataSource runat="server" ID="dsTA" TypeName="WizOne.Module.General" SelectMethod="GetTipAngajat" />   
                 <asp:ObjectDataSource runat="server" ID="dsN" TypeName="WizOne.Module.General" SelectMethod="GetNorma"/>
+                <asp:ObjectDataSource runat="server" ID="dsTP" TypeName="WizOne.Module.General" SelectMethod="GetTimpPartial">
+                    <SelectParameters>
+                            <asp:Parameter Name="tip"  Type="String" />
+                    </SelectParameters>
+                </asp:ObjectDataSource>
                 <asp:ObjectDataSource runat="server" ID="dsRTM" TypeName="WizOne.Module.General" SelectMethod="GetRepartizareTimpMunca"/>
                 <asp:ObjectDataSource runat="server" ID="dsIRTM" TypeName="WizOne.Module.General" SelectMethod="GetIntervalRepartizareTimpMunca"/>
                 <asp:ObjectDataSource runat="server" ID="dsCOR" TypeName="WizOne.Module.General" SelectMethod="GetCOR"/>

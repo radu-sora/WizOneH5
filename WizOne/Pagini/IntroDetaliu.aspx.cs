@@ -398,7 +398,7 @@ namespace WizOne.Pagini
                         case "Edit":
                         case "Clone":
                             {
-                                DataTable dt = General.IncarcaDT(@"SELECT * FROM Intro WHERE ""Id""=" + id, null);
+                                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Intro"" WHERE ""Id""=" + id, null);
                                 if (dt.Rows.Count > 0)
                                 {
                                     if (Session["Sablon_TipActiune"].ToString() == "Edit") txtId.Text = dt.Rows[0]["Id"].ToString();

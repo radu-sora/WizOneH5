@@ -4,9 +4,10 @@
 <#
 
 const string inputFile = @"ReportsModel.edmx";
-const string edmxMetadata = "res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.msl";
+const string edmxMetadata = "res://*/Generatoare.Reports.Models.ReportsModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.msl";
+const string edmxOraMetadata = "res://*/Generatoare.Reports.Models.ReportsOraModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.msl";
 const string sqlProvider = "System.Data.SqlClient";
-const string oracleProvider = "Oracle.ManagedDataAccess.Client";
+const string oraProvider = "Oracle.ManagedDataAccess.Client";
 
 var textTransform = DynamicTextTransformation.Create(this);
 var code = new CodeGenerationTools(this);
@@ -64,8 +65,8 @@ using System.Linq;
     public <#=code.Escape(container)#>()
         : base((new EntityConnectionStringBuilder()
 		{	
-			Metadata = "<#=edmxMetadata#>",
-			Provider = WizOne.Module.Constante.tipBD == 1 ? "<#=sqlProvider#>" : "<#=oracleProvider#>",
+			Metadata = WizOne.Module.Constante.tipBD == 1 ? "<#=edmxMetadata#>" : "<#=edmxOraMetadata#>",
+			Provider = WizOne.Module.Constante.tipBD == 1 ? "<#=sqlProvider#>" : "<#=oraProvider#>",
 			ProviderConnectionString = WizOne.Module.Constante.cnnWeb
 		}).ToString())
     {

@@ -1,5 +1,6 @@
 ﻿using DevExpress.DataAccess.Native.Sql;
 using DevExpress.DataAccess.Sql;
+using DevExpress.DataAccess.Wizard.Services;
 using DevExpress.Utils;
 using DevExpress.Utils.Serializing;
 using DevExpress.Web;
@@ -23,6 +24,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.UI;
+using WizOne.Generatoare.Reports.Code;
 using WizOne.Generatoare.Reports.Models;
 
 namespace WizOne.Generatoare.Reports.Pages
@@ -176,7 +178,6 @@ namespace WizOne.Generatoare.Reports.Pages
             {
                 SearchPanel = aspxGridView.SettingsSearchPanel.Visible,
                 GroupPanel = aspxGridView.Settings.ShowGroupPanel,
-                HeaderFilter = aspxGridView.Settings.ShowHeaderFilterButton,
                 FilterRow = aspxGridView.Settings.ShowFilterRow,
                 FilterRowMenu = aspxGridView.Settings.ShowFilterRowMenu,
                 Footer = aspxGridView.Settings.ShowFooter,
@@ -192,7 +193,6 @@ namespace WizOne.Generatoare.Reports.Pages
 
                 aspxGridView.SettingsSearchPanel.Visible = gridLayout.SearchPanel;
                 aspxGridView.Settings.ShowGroupPanel = gridLayout.GroupPanel;
-                aspxGridView.Settings.ShowHeaderFilterButton = gridLayout.HeaderFilter;
                 aspxGridView.Settings.ShowFilterRow = gridLayout.FilterRow;
                 aspxGridView.Settings.ShowFilterRowMenu = gridLayout.FilterRowMenu;
                 aspxGridView.Settings.ShowFooter = gridLayout.Footer;
@@ -847,7 +847,10 @@ namespace WizOne.Generatoare.Reports.Pages
                 _report = null;
 
                 using (var memStream = new MemoryStream(e.ReportLayout))
+                {
                     _report.LoadLayoutFromXml(memStream);
+                    _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource
+                }
 
                 ReportDesigner.JSProperties["cpHasChart"] = _chart != null;
                 ReportDesigner.JSProperties["cpReportLoaded"] = true;

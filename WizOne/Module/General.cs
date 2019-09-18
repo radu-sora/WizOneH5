@@ -3812,7 +3812,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable GetTimpPartial(int tip)
+        public static DataTable GetTimpPartial(string tip)
         {
             DataTable table = new DataTable();
 
@@ -3820,7 +3820,7 @@ namespace WizOne.Module
             table.Columns.Add("Denumire", typeof(string));
 
             int j = 1, k = 7;
-            if (tip == 0)
+            if (Convert.ToInt32(tip) == 0)
             {
                 j = 6;
                 k = 8;

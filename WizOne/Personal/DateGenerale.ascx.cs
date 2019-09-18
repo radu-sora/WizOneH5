@@ -61,9 +61,14 @@ namespace WizOne.Personal
                 if (!IsPostBack)
                 {
                     ASPxComboBox cmbTimpPartialDG = DateGenListView.Items[0].FindControl("cmbTimpPartialDG") as ASPxComboBox;
-                    cmbTimpPartialDG.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
-                    cmbTimpPartialDG.DataBind();
-                    cmbTimpPartialDG.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"].ToString());
+                    //cmbTimpPartialDG.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
+                    //cmbTimpPartialDG.DataBind();
+                    //cmbTimpPartialDG.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F10043"].ToString());
+                    //Radu 18.09.2019
+                    ObjectDataSource cmbTimpPartialDGDataSource = cmbTimpPartialDG.NamingContainer.FindControl("dsTP") as ObjectDataSource;
+                    cmbTimpPartialDGDataSource.SelectParameters.Clear();
+                    cmbTimpPartialDGDataSource.SelectParameters.Add("tip", ds.Tables[0].Rows[0]["F10010"].ToString());
+                    cmbTimpPartialDG.DataBindItems();
                 }
 
                 ASPxTextBox txtMarca = DateGenListView.Items[0].FindControl("txtMarca") as ASPxTextBox;

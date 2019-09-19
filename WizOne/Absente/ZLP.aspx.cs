@@ -240,20 +240,20 @@ namespace WizOne.Absente
             }
         }
 
-        public void CalculZLP()
+        public void CalculZLP(int an = -99, string f10003 = "-99", string filtruIns = "", DateTime? f10022 = null, bool esteNou = false)
         {
             try
             {
-                int an = Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year));
+                if (an == -99)
+                    an = Convert.ToInt32(General.Nz(cmbAn.Value, DateTime.Now.Year));
                     
                 string dtInc = an.ToString() + "-01-01";
                 string dtSf = an.ToString() + "-12-31";
 
                 string strSql = "";
-                string filtruIns = "";
-                string f10003 = "-99";
+                           
 
-                if (cmbAng.Value != null)
+                if (f10003 == "-99" && cmbAng != null && cmbAng.Value != null)
                 {
                     f10003 = cmbAng.Value.ToString();
                     filtruIns = " AND F10003=" + cmbAng.Value;
@@ -263,9 +263,13 @@ namespace WizOne.Absente
                 {
 
                     //daca nu exista inseram linie goala si apoi updatam
-                    strSql += "insert into Ptj_tblZLP(F10003, An, USER_NO, TIME) " +
-                    " select F10003, " + an + ", " + Session["UserId"] + ", GetDate() from F100 where F10003 not in (select F10003 from Ptj_tblZLP where An=" + an + ") " +
-                    " and F10022 <= '" + dtSf + "' and '" + dtInc + "' <= F10023" + filtruIns + ";";
+                    if (!esteNou)
+                        strSql += "insert into Ptj_tblZLP(F10003, An, USER_NO, TIME) " +
+                        " select F10003, " + an + ", " + Session["UserId"] + ", GetDate() from F100 where F10003 not in (select F10003 from Ptj_tblZLP where An=" + an + ") " +
+                        " and F10022 <= '" + dtSf + "' and '" + dtInc + "' <= F10023" + filtruIns + ";";
+                    //else
+                    //    strSql += "insert into Ptj_tblZLP(F10003, An, USER_NO, TIME) VALUES (" + f10003 + ", " + an + ", " + Session["UserId"] + ", GetDate());";
+                    
 
 
                     strSql += "with xx as " +
@@ -301,7 +305,7 @@ namespace WizOne.Absente
                     " /CONVERT(float,365),0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus
                     " from F100 a " +
 
-                    " where F10022 <= '" + dtSf + "' and '" + dtInc + "' <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " where F10022 <= '" + dtSf + "' and '" + dtInc + "' <= F10023 ) y where y.F10003=x.F10003) " +   //se calculeaza totul pt angajatii activi in anul de referinta
                     " from Ptj_tblZLP x " +
                     " where x.An=" + an + filtruIns + ";";
 
@@ -315,7 +319,7 @@ namespace WizOne.Absente
                     " ) as ZileCuvenite " +
                     " from F100 a " +                    
                    
-                    " where F10022 <= '" + dtSf + "' and '" + dtInc + "' <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " where F10022 <= '" + dtSf + "' and '" + dtInc + "' <= F10023 ) y where y.F10003=x.F10003) " +   //se calculeaza totul pt angajatii activi in anul de referinta
                     " from Ptj_tblZLP x " +
                     " where x.An=" + an + filtruIns + ";";
                 }
@@ -325,9 +329,12 @@ namespace WizOne.Absente
                     dtSf = "31-DEC-" + an.ToString();
 
                     //daca nu exista inseram linie goala si apoi updatam
-                    strSql += "insert into \"Ptj_tblZLP\"(F10003, \"An\", USER_NO, TIME) " +
-                    " select F10003, " + an + ", " + Session["UserId"] + ", SYSDATE from F100 where F10003 not in (select F10003 from \"Ptj_tblZLP\" where \"An\"=" + an + ") " +
-                    " and F10022 <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023" + filtruIns + ";";
+                    if (!esteNou)
+                        strSql += "insert into \"Ptj_tblZLP\"(F10003, \"An\", USER_NO, TIME) " +
+                        " select F10003, " + an + ", " + Session["UserId"] + ", SYSDATE from F100 where F10003 not in (select F10003 from \"Ptj_tblZLP\" where \"An\"=" + an + ") " +
+                        " and F10022 <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023" + filtruIns + ";";
+                    //else
+                    //    strSql += "insert into \"Ptj_tblZLP\"(F10003, \"An\", USER_NO, TIME) VALUES (" + f10003 + ", " + an + ", " + Session["UserId"] + ", sysdate);";
 
                     strSql += "update \"Ptj_tblZLP\" x set x.\"Cuvenite\" = ( " +
                             " with xx as " +

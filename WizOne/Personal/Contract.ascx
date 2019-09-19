@@ -1588,8 +1588,7 @@
 						    </td>
                             <td></td>		
 						    <td>
-							    <dx:ASPxTextBox  ID="txtZLP" Width="75"  runat="server" AutoPostBack="false" TabIndex="63" >
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+							    <dx:ASPxTextBox  ID="txtZLP" Width="75"  runat="server" ReadOnly="true" AutoPostBack="false" TabIndex="63" >                                
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>
@@ -1599,8 +1598,7 @@
 						    </td>
                             <td></td>		
 						    <td>
-							    <dx:ASPxTextBox  ID="txtZLPCuv" Width="75"  runat="server"  AutoPostBack="false" TabIndex="64">
-                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandlerCtr(s); }" />
+							    <dx:ASPxTextBox  ID="txtZLPCuv" Width="75"  runat="server" ReadOnly="true" AutoPostBack="false" TabIndex="64">                                   
 							    </dx:ASPxTextBox>
 						    </td>
 					    </tr>

@@ -426,7 +426,7 @@
                     $("#spanTimeLeft").text(timeLeft).parent().removeClass('text-danger');
                 }
             }, function () {
-                window.location = "~/DefaultTactil.aspx";
+                    window.location = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
             });
             timerControl.start();
         }

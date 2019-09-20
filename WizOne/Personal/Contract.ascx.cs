@@ -156,6 +156,7 @@ namespace WizOne.Personal
                     deDeLaData.ClientEnabled = false;
                     deLaData.ClientEnabled = false;
                 }
+                CalculZLP();
 
             }
             else
@@ -1619,24 +1620,35 @@ namespace WizOne.Personal
 
                 Absente.ZLP pagZLP = new Absente.ZLP();
 
-                //string strSql = pagZLP.CalculZLP(an, f10003, filtruIns, f10022);
-               // General.ExecutaNonQuery(strSql, null);
+                pagZLP.CalculZLP(an, f10003, filtruIns, f10022, esteNou);
+
+                int nrZLP = 0;
+                DataTable dtParam = General.IncarcaDT(Constante.tipBD == 1 ? "SELECT ISNULL((SELECT CONVERT(int, Valoare) FROM tblParametrii WHERE Nume = 'NumarZileLiberePlatite'), 0)" 
+                    : "SELECT nvl((SELECT TO_NUMBER(\"Valoare\") FROM \"tblParametrii\" WHERE \"Nume\" = 'NumarZileLiberePlatite'), 0) from dual", null);
+                if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
+                    nrZLP = Convert.ToInt32(dtParam.Rows[0][0].ToString());
 
                 DataRow dtZLP = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZLP"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });
                 if (dtZLP != null)
                 {                    
                     ASPxTextBox txtZLP = Contract_DataList.Items[0].FindControl("txtZLP") as ASPxTextBox;
                     if (txtZLP != null)
-                        txtZLP.Value = General.Nz(dtZLP["Cuvenite"], "").ToString();
+                        txtZLP.Value = General.Nz(dtZLP["Cuvenite"], nrZLP).ToString();
                
                     ASPxTextBox txtZLPCuv = Contract_DataList.Items[0].FindControl("txtZLPCuv") as ASPxTextBox;
                     if (txtZLPCuv != null)
                         txtZLPCuv.Value = General.Nz(dtZLP["CuveniteAn"], "").ToString();          
                 }
+                else
+                {
+                    ASPxTextBox txtZLP = Contract_DataList.Items[0].FindControl("txtZLP") as ASPxTextBox;
+                    if (txtZLP != null)
+                        txtZLP.Value = nrZLP.ToString();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
             }
         }
 

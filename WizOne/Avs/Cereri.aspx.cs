@@ -1333,6 +1333,37 @@ namespace WizOne.Avs
                 ctr.CalculLuniSiZile(Convert.ToDateTime(de1Act.Date), Convert.ToDateTime(de2Act.Date), out nrLuni, out nrZile);
                 txt1Act.Value = nrLuni;
                 txt2Act.Value = nrZile;
+
+                if (cmb1Act != null && cmb1Act.Value != null && Convert.ToInt32(cmb1Act.Value) == 1)
+                {
+                    lblTxt5Act.Visible = false;
+                    lblTxt6Act.Visible = false;
+                    de1Act.Visible = false;
+                    de2Act.Visible = false;
+                }
+                else
+                {
+                    lblTxt5Act.Visible = true;
+                    lblTxt6Act.Visible = true;
+                    de1Act.Visible = true;
+                    de2Act.Visible = true;
+                }
+
+                if (cmb1Nou != null && cmb1Nou.Value != null && Convert.ToInt32(cmb1Nou.Value) == 1)
+                {
+                    lblTxt5Nou.Visible = false;
+                    lblTxt6Nou.Visible = false;
+                    de1Nou.Visible = false;
+                    de2Nou.Visible = false;
+                }
+                else
+                {
+                    lblTxt5Nou.Visible = true;
+                    lblTxt6Nou.Visible = true;
+                    de1Nou.Visible = true;
+                    de2Nou.Visible = true;
+                }
+
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Componente)
@@ -1592,7 +1623,7 @@ namespace WizOne.Avs
                                     de1Nou.Value = Convert.ToDateTime(de2Act.Value).AddDays(1);
                                 else
                                     de1Nou.Value = null;
-                                de2Nou.Value = null;
+                                de2Nou.Value = null;                   
                             }
                         }
                         IncarcaDate();
@@ -1697,6 +1728,8 @@ namespace WizOne.Avs
                             cmbAtributeFiltru.DataBind();
                             Session["AvsCereri"] = null;
                             Session["AvsCereriCalcul"] = null;
+                            AscundeCtl();
+                            cmbAtribute.Value = null;
                         }
                         break;
                     case "10":                //Document

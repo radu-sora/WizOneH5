@@ -292,7 +292,10 @@ namespace WizOne.Personal
                     Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Sanctiuni"] as Dictionary<int, metaUploadFile>;
                     if (lstFiles == null)
                         lstFiles = new Dictionary<int, metaUploadFile>();
-                    lstFiles.Add(Convert.ToInt32(idAuto.ToString()), itm);
+                    if (lstFiles.ContainsKey(Convert.ToInt32(idAuto.ToString())))
+                        lstFiles[Convert.ToInt32(idAuto.ToString())] = itm;
+                    else
+                        lstFiles.Add(Convert.ToInt32(idAuto.ToString()), itm);
                     Session["List_DocUpload_MP_Sanctiuni"] = lstFiles;
                 }
                 Session["DocUpload_MP_Sanctiuni"] = null;

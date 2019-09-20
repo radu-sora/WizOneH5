@@ -522,6 +522,10 @@ namespace WizOne
                                     }
                                     else
                                     {
+                                        //Florin 2019.09.19
+                                        if (Constante.tipBD == 2)
+                                            General.ExecutaNonQuery("alter session set nls_date_format='DD-MM-RRRR'", null);
+
                                         Response.Redirect("~/Pagini/MainPage.aspx", false);
                                     }
                                 }

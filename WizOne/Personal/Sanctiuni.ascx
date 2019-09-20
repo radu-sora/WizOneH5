@@ -83,9 +83,9 @@
     }
 
     function OnValueChanged(s, e) {
-        if (!txtComponentaComisie.GetValue()) {
-            txtComponentaComisie.SetValue(s.GetValue());
-        }
+        //if (!txtComponentaComisie.GetValue()) {
+        //    txtComponentaComisie.SetValue(s.GetValue());
+        //}
     }
 
 </script>

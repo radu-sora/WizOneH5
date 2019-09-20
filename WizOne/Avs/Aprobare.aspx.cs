@@ -1275,7 +1275,7 @@ namespace WizOne.Avs
                             " when 3 then a.CORNume  " +
                             " when 4 then a.MotivNume  " +
                             " when 5 then ''  " +
-                            " when 6 then convert(nvarchar(20),a.Norma)  " +
+                            " when 6 then convert(nvarchar(20),a.TimpPartial)  " +
                             " when 8 then convert(nvarchar(20),a.NrIntern) + ' / ' + convert(nvarchar(20),a.DataIntern,103)  " +
                             " when 9 then convert(nvarchar(20),a.NrITM) + ' / ' + convert(nvarchar(20),a.DataITM,103)  " +
                             " when 10 then convert(nvarchar(20),a.DataAngajarii,103)  " +
@@ -1314,7 +1314,7 @@ namespace WizOne.Avs
                             " when 3 then a.\"CORNume\" " +
                             " when 4 then a.\"MotivNume\" " +
                             " when 5 then '' " +
-                            " when 6 then to_char(a.\"Norma\") " +
+                            " when 6 then to_char(a.\"TimpPartial\") " +
                             " when 8 then to_char(a.\"NrIntern\") || ' / ' || to_char(a.\"DataIntern\",'DD/MM/YYYY') " +
                             " when 9 then to_char(a.\"NrITM\") || ' / ' || to_char(a.\"DataITM\",'DD/MM/YYYY') " +
                             " when 10 then to_char(a.\"DataAngajarii\",'DD/MM/YYYY') " +

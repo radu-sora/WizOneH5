@@ -354,32 +354,137 @@ namespace WizOne.Personal
                 {
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti sterge angajatul deoarece acesta a fost salvat in arhiva!");
                     return;
-                }
-				
-                General.ExecutaNonQuery("DELETE FROM \"relGrupAngajat2\" WHERE F10003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"F100Supervizori2\" WHERE F10003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = 'F100' AND \"Id\" = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"F100Cartele2\" WHERE F10003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"F100Adrese\" WHERE F10003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"F100Contacte\" WHERE F10003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"F100CCTarife\" WHERE F10003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"F100Contracte2\" WHERE F10003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"F100CentreCost2\" WHERE F10003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM F110 WHERE F11003 = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM F1001 WHERE F10003 = " + id, null);
-
+                }       
+                
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Activitati\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_AngajatGrup\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Documente\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Echipamente\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Evolutie\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Experienta\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Limbi\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Medicina\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_NrActAd\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_NrActeAd\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Sanctiuni\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Atasamente\" WHERE \"IdEmpl\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Avs_Cereri\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Avs_IstoricNota\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"AvsXDec_Document\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ben_Beneficii\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ben_Facturi\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ben_tblAprobari\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM BENEFICII WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"BP_Prime\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"BP_relGrupAngajat\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM CO_HISTORY WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM CONTRACTE WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_Anterior\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_Inregistrare\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_relAngajatSkills\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_relAngajatSuper\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_tblGrupuri\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_tblGrupuriAngajati\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM D205_ANGAJATI_CORECTIE WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM D205_ANGAJATI_WS WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM DAILYCHANGES WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"DamiCC_Table\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"DamiDataPlecare_Table\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"DamiDept_Table\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"DamiNorma_Table\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_CompetenteAngajat\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_CompetenteAngajatTemp\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_Invitatie360\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_ObiIndividuale\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_ObiIndividualeTemp\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_QuizIstoric360\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_Raspuns\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_RaspunsIstoric\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_RaspunsLinii\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Eval_relAngajatEvaluator\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM F100 WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F1001 WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F1002 WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100Adrese\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100Cartele2\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100CCTarife\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100CentreCost2\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100Contacte\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100Contracte2\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100Info\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100Rating\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"F100Supervizori2\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F110 WHERE F11003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F111 WHERE F11103 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F112 WHERE F11203 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F113 WHERE F11303 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F200 WHERE F20003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F201 WHERE F20103 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F203 WHERE F20303 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F210 WHERE F21003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F300 WHERE F30003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F300_CM_AVANS WHERE F30003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F400 WHERE F40003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F401 WHERE F40103 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F501 WHERE F50103 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F502 WHERE F50203 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F700 WHERE F70003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F704 WHERE F70403 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F705 WHERE F70503 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F706 WHERE F70603 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F9_D112ASIGURAT WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F9_ISTORICVENITURI WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F910 WHERE F91003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F911 WHERE F91103 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F9101 WHERE F91003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F9102 WHERE F91003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F920 WHERE F92003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F921 WHERE F92103 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F930 WHERE F93003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F940 WHERE F94003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM F941 WHERE F94103 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"MP_Cereri\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"MP_FluxSalarii\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_Date\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateGenerale\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_relPostAngajat\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_relPostAngajatMarcaAuto\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"ParoleFluturasIstoric\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM PENSIE_F WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM POZE WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_CC\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_Cereri_import\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_Cumulat\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_CumulatIstoric\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_Intrari\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_Intrari_import\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_Intrari2\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_IstoricVal\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_Planificare\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_Pontaj\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_relAngajatCC\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_relAngajatProiect\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_relAngajatSuper\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_tblInlocuitori\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_tblZileCO\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_tblZLP\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_tmpCeasuri\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_tmpCeasuriPeLinie\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM REGISTRU_VECHIME WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"relAngajatInlocuitor\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"relAngajatObiective\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"relAngajatProiect\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"relGrupAngajat2\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM SPORURI WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = 'F100' AND \"Id\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"tblFluturasLog\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM TMP_ADEVERINTA WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM TRANSPRJ WHERE MARCA = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"ZileHand\" WHERE MARCA = " + id, null);
 
+                General.ExecutaNonQuery("UPDATE USERS SET F70114 = 1 WHERE F10003 = " + id, null);
                 Session["InformatiaCurenta"] = General.GetPersonalRestrans(Convert.ToInt32(Session["UserId"].ToString()), checkComboBoxStare.Text, 1);
 
                 grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");

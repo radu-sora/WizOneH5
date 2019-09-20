@@ -343,7 +343,7 @@ namespace WizOne.Pontaj
                 cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
                 cmbBirou.DataBind();
 
-                cmbCateg.DataSource = General.IncarcaDT("SELECT F72402, F72404 FROM F724", null);
+                cmbCateg.DataSource = General.IncarcaDT("SELECT \"Id\", \"Denumire\" FROM \"viewCategoriePontaj\"", null);
                 cmbCateg.DataBind();
 
                 cmbStare.DataSource = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblStariPontaj"" ", null);

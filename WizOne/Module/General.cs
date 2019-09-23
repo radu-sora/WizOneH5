@@ -2643,9 +2643,9 @@ namespace WizOne.Module
                 //    dt = General.IncarcaDT(@"SELECT A.""An"" AS ""Anul"", A.""RamaseAnterior"" AS ""Ramase Anterior"", A.""Cuvenite"", A.""Total"" AS ""Total Cuvenite"", A.""Aprobate"", A.""Ramase"" AS ""Ramase curent"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" AS ""Ramase De Planificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=(SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdAbsentaCO')", new object[] { F10003 });
 
                 if (an != 1900)
-                    dt = General.IncarcaDT(@"SELECT A.""An"", A.""RamaseAnterior"", A.""Cuvenite"", A.""Total"", A.""Aprobate"", A.""Ramase"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=(SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdAbsentaCO') AND An=@2", new object[] { F10003, an });
+                    dt = General.IncarcaDT(@"SELECT A.""An"", A.""RamaseAnterior"" AS ""Ramase An Anterior"", A.""Cuvenite"" AS ""Cuvenite An Curent"", A.""Total"" AS ""Total An Curent"", A.""Aprobate"", A.""Ramase"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=(SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdAbsentaCO') AND An=@2", new object[] { F10003, an });
                 else
-                    dt = General.IncarcaDT(@"SELECT A.""An"", A.""RamaseAnterior"", A.""Cuvenite"", A.""Total"", A.""Aprobate"", A.""Ramase"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=(SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdAbsentaCO')", new object[] { F10003 });
+                    dt = General.IncarcaDT(@"SELECT A.""An"", A.""RamaseAnterior"" AS ""Ramase An Anterior"", A.""Cuvenite"" AS ""Cuvenite An Curent"", A.""Total"" AS ""Total An Curent"", A.""Aprobate"", A.""Ramase"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=(SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdAbsentaCO')", new object[] { F10003 });
 
             }
             catch (Exception ex)
@@ -2663,9 +2663,9 @@ namespace WizOne.Module
             try
             {
                 if (an != 1900)
-                    dt = General.IncarcaDT(@"SELECT A.""An"" AS ""Anul"", A.""RamaseAnterior"" AS ""Ramase Anterior"", A.""Cuvenite"", A.""Total"" AS ""Total Cuvenite"", A.""Aprobate"", A.""Ramase"" AS ""Ramase curent"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" AS ""Ramase De Planificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=@2 AND An=@3", new object[] { F10003, idAbs, an });
+                    dt = General.IncarcaDT(@"SELECT A.""An"" AS ""Anul"", A.""RamaseAnterior"" AS ""Ramase An Anterior"", A.""Cuvenite"" ""Cuvenite An Curent"", A.""Total"" AS AS ""Total An Curent"", A.""Aprobate"", A.""Ramase"" AS ""Ramase curent"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" AS ""Ramase De Planificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=@2 AND An=@3", new object[] { F10003, idAbs, an });
                 else
-                    dt = General.IncarcaDT(@"SELECT A.""An"" AS ""Anul"", A.""RamaseAnterior"" AS ""Ramase Anterior"", A.""Cuvenite"", A.""Total"" AS ""Total Cuvenite"", A.""Aprobate"", A.""Ramase"" AS ""Ramase curent"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" AS ""Ramase De Planificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=@2", new object[] { F10003, idAbs });
+                    dt = General.IncarcaDT(@"SELECT A.""An"" AS ""Anul"", A.""RamaseAnterior"" AS ""Ramase An Anterior"", A.""Cuvenite"" ""Cuvenite An Curent"", A.""Total"" AS AS ""Total An Curent"", A.""Aprobate"", A.""Ramase"" AS ""Ramase curent"", A.""Solicitate"", A.""Planificate"", A.""RamaseDePlanificat"" AS ""Ramase De Planificat"" FROM ""SituatieZileAbsente"" A WHERE A.F10003=@1 AND A.""IdAbsenta""=@2", new object[] { F10003, idAbs });
             }
             catch (Exception ex)
             {

@@ -134,6 +134,7 @@ namespace WizOne.Organigrama
                         txtId.Value = dr["Id"];
                         txtDen.Text = General.Nz(dr["Denumire"],"").ToString();
                         //dr["F10002"] = 1;
+                        cmbCmp.Value = dr["F10002"];
                         cmbSub.Value = dr["F10004"];
                         cmbFil.Value = dr["F10005"];
                         cmbSec.Value = dr["F10006"];
@@ -197,6 +198,8 @@ namespace WizOne.Organigrama
 
 
                 //incarcam structura organizatorica
+                cmbCmp.DataSource = General.IncarcaDT(@"SELECT F00202 AS ""IdCompanie"", F00204 AS ""Companie"" FROM F002", null);
+                cmbCmp.DataBind();
                 cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003", null);
                 cmbSub.DataBind();
                 cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99), null);
@@ -254,6 +257,7 @@ namespace WizOne.Organigrama
                 string strErr = "";
 
                 if (txtDen.Visible == true && txtDen.Value == null) strErr += ", " + Dami.TraduCuvant("denumire");
+                if (cmbCmp.Visible == true && cmbCmp.Value == null) strErr += ", " + Dami.TraduCuvant("companie");
                 if (cmbSub.Visible == true && cmbSub.Value == null) strErr += ", " + Dami.TraduCuvant("subcompanie");
                 if (cmbFil.Visible == true && cmbFil.Value == null) strErr += ", " + Dami.TraduCuvant("filiala");
                 if (cmbSec.Visible == true && cmbSec.Value == null) strErr += ", " + Dami.TraduCuvant("sectie");
@@ -342,7 +346,7 @@ namespace WizOne.Organigrama
                 int idAuto = Convert.ToInt32(General.Nz(Session["IdAuto"],-97));
 
                 object[] objs = new object[] {
-                    Session["IdAuto"], id, txtDen.Text, dtInc, dtSf, 1, cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, 1, cmbSup.Value, cmbSupFunc.Value,
+                    Session["IdAuto"], id, txtDen.Text, dtInc, dtSf, General.Nz(cmbCmp.Value,1), cmbSub.Value, cmbFil.Value, cmbSec.Value, cmbDept.Value, 1, cmbSup.Value, cmbSupFunc.Value,
                     hfNivelIer.Contains("val") && General.Nz(hfNivelIer["val"],"").ToString() != "" ? hfNivelIer["val"] : "N",
                     General.Nz(txtPlan.Text,"").ToString() == "" ? "null" : txtPlan.Text,
                     cmbHay.Value, txtSalMin.Value, txtSalMed.Value, txtSalMax.Value,
@@ -1052,6 +1056,13 @@ namespace WizOne.Organigrama
             {
                 switch (e.Parameter)
                 {
+                    case "cmbCmp":
+                        cmbSub.Value = null;
+                        cmbFil.Value = null;
+                        cmbSec.Value = null;
+                        cmbDept.Value = null;
+                        //cmbSubDept.Value = null;
+                        break;
                     case "cmbSub":
                         cmbFil.Value = null;
                         cmbSec.Value = null;
@@ -1083,6 +1094,8 @@ namespace WizOne.Organigrama
                         break;
                 }
 
+                cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003 WHERE F00303=" + General.Nz(cmbCmp.Value, -99), null);
+                cmbSub.DataBind();
                 cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99), null);
                 cmbFil.DataBind();
                 cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99), null);

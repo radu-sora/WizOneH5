@@ -299,7 +299,7 @@ namespace WizOne.Personal
                 ASPxLabel lbl = Contract_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
                 lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
             }
-
+            
             string[] bife = new string[9] { "chkFunctieBaza",  "chkScutitImp", "chkBifaPensionar", "chkBifaDetasat", "chkCalcDed", "chkScutitCAS", "chkSalMin", "chkConstr", "chkCotaForfetara"};
             for (int i = 0; i < bife.Count(); i++)
             {

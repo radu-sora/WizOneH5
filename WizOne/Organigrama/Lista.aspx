@@ -161,7 +161,7 @@
                         <dx:TreeListDataColumn FieldName="Id" Name="Cod" Caption="Cod" ReadOnly="true" Width="150px" VisibleIndex="2" />
                         <dx:TreeListCheckColumn FieldName="Activ" Caption="Activ" Width="50px" VisibleIndex="3" />
 
-                        <dx:TreeListDataColumn FieldName="Comapnie" Name="Comapnie" Caption="Comapnie" ReadOnly="true" Width="250px" VisibleIndex="5" Visible="false" />
+                        <dx:TreeListDataColumn FieldName="Companie" Name="Companie" Caption="Companie" ReadOnly="true" Width="250px" VisibleIndex="5"/>
                         <dx:TreeListDataColumn FieldName="Subcompanie" Name="Subcompanie" Caption="Subcompanie" ReadOnly="true" Width="250px" VisibleIndex="6" />
                         <dx:TreeListDataColumn FieldName="Filiala" Name="Filiala" Caption="Filiala" ReadOnly="true" Width="250px" VisibleIndex="7" />
                         <dx:TreeListDataColumn FieldName="Sectie" Name="Sectie" Caption="Sectie" ReadOnly="true" Width="250px" VisibleIndex="8" />

@@ -301,6 +301,24 @@ namespace WizOne.Organigrama {
         protected global::DevExpress.Web.ASPxTextBox txtGrupEN;
         
         /// <summary>
+        /// lblCmp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCmp;
+        
+        /// <summary>
+        /// cmbCmp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCmp;
+        
+        /// <summary>
         /// lblSub control.
         /// </summary>
         /// <remarks>
@@ -578,6 +596,33 @@ namespace WizOne.Organigrama {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtHCAProbat;
+        
+        /// <summary>
+        /// divExtra control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divExtra;
+        
+        /// <summary>
+        /// lblAnLuna control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAnLuna;
+        
+        /// <summary>
+        /// txtAnLuna control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDateEdit txtAnLuna;
         
         /// <summary>
         /// lblAtr control.

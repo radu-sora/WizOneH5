@@ -100,7 +100,7 @@
                     <div style="float:left; padding-right:15px;">
                         <dx:ASPxTextBox ID="txtCodBuget" runat="server" Width="120px" />
                     </div>
-                    <div style="float:left; padding-right:15px;">      
+                    <div style="float:left; padding-right:15px;">
                         <table>
                             <tr>
                                 <td style="padding-right:10px;">
@@ -146,11 +146,11 @@
                     </div>        
 		            <label id="lblDtInc" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Inceput</label>
                     <div style="float:left; padding-right:10px;">
-                        <dx:ASPxDateEdit ID="txtDtInc" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" Enabled="false" />
+                        <dx:ASPxDateEdit ID="txtDtInc" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" />
                     </div>
 		            <label id="lblDtSf" runat="server" style="display:inline-block; float:left; padding-right:15px;">Data Sfarsit</label>
                     <div style="float:left; padding-right:10px;">
-                        <dx:ASPxDateEdit ID="txtDtSf" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" Enabled="false" />
+                        <dx:ASPxDateEdit ID="txtDtSf" runat="server" Width="95px" DisplayFormatString="dd/MM/yyyy" EditFormat="Date" EditFormatString="dd/MM/yyyy" />
                     </div>
                 </div>
 
@@ -179,30 +179,39 @@
                 </div>
 
                 <div class="Absente_divOuter margin_top15">
+                    <label id="lblCmp" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Companie</label>
+                    <div style="float:left; padding-right:15px;">    
+                        <dx:ASPxComboBox ID="cmbCmp" ClientInstanceName="cmbCmp" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdCompanie" TextField="Companie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbCmp'); }" />
+                        </dx:ASPxComboBox>
+                    </div>
+
                     <label id="lblSub" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Subcomp.</label>
                     <div style="float:left; padding-right:15px;">    
                         <dx:ASPxComboBox ID="cmbSub" ClientInstanceName="cmbSub" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdSubcompanie" TextField="Subcompanie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSub'); }" />
                         </dx:ASPxComboBox>
                     </div>
-        
-                    <label id="lblFil" runat="server" style="display:inline-block; float:left; padding-right:15px; width:85px;">Filiala</label>
+                </div>
+
+                <div class="Absente_divOuter margin_top15">
+                    <label id="lblFil" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Filiala</label>
                     <div style="float:left; padding-right:15px;">    
                         <dx:ASPxComboBox ID="cmbFil" ClientInstanceName="cmbFil" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdFiliala" TextField="Filiala" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbFil'); }" />
                         </dx:ASPxComboBox>
                     </div>
-                </div>
 
-                <div class="Absente_divOuter margin_top15">
                     <label id="lblSec" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Sectie</label>
                     <div style="float:left; padding-right:15px;">    
                         <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
                         </dx:ASPxComboBox>
                     </div>
-        
-                    <label id="lblDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:85px;">Dept.</label>
+                </div>
+
+                <div class="Absente_divOuter margin_top15">
+                    <label id="lblDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:100px;">Dept.</label>
                     <div style="float:left; padding-right:15px;">    
                         <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="300px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
@@ -303,7 +312,22 @@
                 	<label id="lblHCAprobat" runat="server" style="display:inline-block; float:left; padding-right:15px;">HC Aprobat</label>
                     <div style="float:left; padding-right:15px;">
                         <dx:ASPxTextBox ID="txtHCAProbat" runat="server" Width="60px"/>
-                    </div></div>
+                    </div>
+                </div>
+
+                <div id="divExtra" runat="server">
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;">
+                            <label id="lblAnLuna" runat="server">Luna/An</label><br />
+                            <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
+                                <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtAnLuna'); }" />
+                                <CalendarProperties FirstDayOfWeek="Monday" />
+                            </dx:ASPxDateEdit>
+                        </div>
+                    </div>
+
+
+                </div>
 
                 <div class="Absente_divOuter margin_top15">
 		            <label id="lblAtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:100px;">Atribute speciale</label>

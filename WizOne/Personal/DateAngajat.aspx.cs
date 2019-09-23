@@ -463,6 +463,10 @@ namespace WizOne.Personal
                             if (ds.Tables[1].Rows[0]["F10017"].ToString().Length >= 4)
                                 pass = ds.Tables[1].Rows[0]["F10017"].ToString().Substring(ds.Tables[1].Rows[0]["F10017"].ToString().Length - 4);
                             break;
+                        case 2:             //parola este ultimele 6 caractere din CNP
+                            if (pass.Length >= 6)
+                                pass = pass.Substring(pass.Length - 6);
+;                            break;
                         default:
                             //parola este cnp-ul
                             break;
@@ -591,6 +595,9 @@ namespace WizOne.Personal
                     catch (Exception) { }
                 }
 
+
+                //Florin 2019.09.23
+                GolireVariabile();
 
                 //Florin 2018.11.22
                 //trimitem la lista de angajati
@@ -1402,6 +1409,54 @@ namespace WizOne.Personal
                     //dynamic ctl4 = ((dynamic)tab.Controls[0].FindControl("pnlCtlDateIdent").FindControl("DateIdentListView")).Items[0].FindControl("deDataModifNume");
                     //if (ctl4 != null) ds.Tables[0].Rows[0]["F100906"] = ctl4.Value;
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void GolireVariabile()
+        {
+            try
+            {
+                Session["Marca"] = null;
+                Session["InformatiaCurentaPersonal"] = null;
+                Session["MP_CautaAdresa"] = null;
+                Session["DocUpload_MP_Atasamente"] = null;
+                Session["Marca_Atribut"] = null;
+                Session["MP_Avans"] = null;
+                Session["MP_Avans_Tab"] = null;
+                Session["DocUpload_MP_Beneficii"] = null;
+                Session["List_DocUpload_MP_Beneficii"] = null;
+                Session["DocUpload_MP_Medicina"] = null;
+                Session["List_DocUpload_MP_Medicina"] = null;
+                Session["DocUpload_MP_Sanctiuni"] = null;
+                Session["List_DocUpload_MP_Sanctiuni"] = null;
+                Session["AdresaSelectata"] = null;
+                Session["CodCORSelectat"] = null;
+                Session["esteNou"] = null;
+                Session["IdSablon"] = "";
+                Session["InformatiaCurentaPersonalCalcul"] = null;
+                Session["MP_DiferentaLuni"] = "";
+                Session["MP_Grila"] = "";
+                Session["MP_ComboTN"] = "";
+                Session["MP_ComboDTM"] = "";
+                Session["MP_AreContract"] = "";
+                Session["MP_DataSfarsit36"] = "";
+                Session["MP_SalMin"] = "";
+                Session["MP_NvlFunc"] = "";
+                Session["AdresaCompusa"] = null;
+                Session["AdresaSelectata"] = null;
+                Session["MP_NuPermiteCNPInvalid"] = null;
+                Session["MP_Candidat"] = null;
+                Session["PreluareDate"] = null;
+                Session["DateIdentificare_Fisier"] = null;
+                Session["MP_ComboTipDoc"] = null;
+                Session["Admin_Sanctiuni"] = null;
+                Session["Sporuri_cmbMaster1"] = null;
+                Session["Tarife_cmbMaster"] = null;
             }
             catch (Exception ex)
             {

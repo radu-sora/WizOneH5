@@ -1230,7 +1230,7 @@
 					</tr>  
                     <tr>
                         <td>
-                            <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" TabIndex="34" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10032").ToString()=="1"%>' ClientInstanceName="chkbx4" >
+                            <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" TabIndex="34" Checked='<%#Convert.ToInt32(DataBinder.GetPropertyValue(Container.DataItem,"F10032"))==1%>' ClientInstanceName="chkbx4" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkFunctieBaza_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>
@@ -1238,7 +1238,7 @@
 				    </tr>         
                    <tr>
                         <td>
-                            <dx:ASPxCheckBox ID="chkCalcDed"  runat="server" Width="150" Text="Calcul deduceri FB" TextAlign="Left" TabIndex="35" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10048").ToString()=="1"%>' ClientInstanceName="chkbx5" >
+                            <dx:ASPxCheckBox ID="chkCalcDed"  runat="server" Width="150" Text="Calcul deduceri FB" TextAlign="Left" TabIndex="35" Checked='<%#Convert.ToInt32(DataBinder.GetPropertyValue(Container.DataItem,"F10048"))==1%>' ClientInstanceName="chkbx5" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkCalcDed_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>
@@ -1246,7 +1246,7 @@
 				    </tr>   
                         <tr>
                             <td>
-                                <dx:ASPxCheckBox ID="chkScutitImp" runat="server" Width="150" Text="Scutit impozit" TextAlign="Left" TabIndex="36" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10026").ToString()=="1"%>' ClientInstanceName="chkbx1">
+                                <dx:ASPxCheckBox ID="chkScutitImp" runat="server" Width="150" Text="Scutit impozit" TextAlign="Left" TabIndex="36" Checked='<%#Convert.ToInt32(DataBinder.GetPropertyValue(Container.DataItem,"F10026"))==1%>' ClientInstanceName="chkbx1">
                                     <ClientSideEvents CheckedChanged="function(s,e){ chkScutitImp_CheckedChanged(s); }" />
                                 </dx:ASPxCheckBox>
                             </td>

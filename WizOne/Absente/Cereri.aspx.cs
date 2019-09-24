@@ -1220,6 +1220,7 @@ namespace WizOne.Absente
                     lblNrOre.Style["display"] = "inline-block";
                     txtNrOre.Visible = true;
                     txtNrOre.DecimalPlaces = 0;
+                    txtNrOre.NumberType = SpinEditNumberType.Integer;
 
                     if (folosesteInterval == 1)
                     {
@@ -1237,6 +1238,7 @@ namespace WizOne.Absente
 
                         txtNrOre.ClientEnabled = false;
                         txtNrOre.DecimalPlaces = 4;
+                        txtNrOre.NumberType = SpinEditNumberType.Float;
                         txtNrOre.ClientVisible = false;
 
                         txtNrOreInMinute.Visible = true;

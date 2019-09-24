@@ -485,10 +485,11 @@ namespace WizOne.Module
                 // 77  -  Drepturi depline
                 // 76  -  Fara supervizor (cazul cand pe circuit, in loc de id supervizor, se pune codul de user (F70102)
 
-
+                //Florin 2019.09.24 - s-a adaugat interval ora - variabila cmpOra
                 string op = "+";
                 if (Constante.tipBD == 2)
                     op = "||";
+  
                 string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
                 string selectInloc = "-99";
                 if (Dami.ValoareParam("InlocuitorulVedeCererile", "0") == "1")
@@ -582,7 +583,13 @@ namespace WizOne.Module
                                 CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) + '=' + ""CampExtra17"" + '; ' ELSE '' END +
                                 CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) + '=' + ""CampExtra18"" + '; ' ELSE '' END +
                                 CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) + '=' + ""CampExtra19"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) + '=' + ""CampExtra20"" + '; ' ELSE '' END AS ""DateConcatenate"",
+                                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) + '=' + ""CampExtra20"" + '; ' ELSE '' END +
+                                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")) + ':' +
+                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")) + ' - ' +
+                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")) + ':' +
+                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END                                 
+                                AS ""DateConcatenate"",
                                 (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_Valoare,
                                 (SELECT TOP 1 NrZile FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_NrZile,
                                 COALESCE(A.""CampBifa"",0) AS ""CampBifa""
@@ -626,7 +633,10 @@ namespace WizOne.Module
                                 CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) {1} '=' {1} ""CampExtra17"" {1} '; ' ELSE '' END {1}
                                 CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) {1} '=' {1} ""CampExtra18"" {1} '; ' ELSE '' END {1}
                                 CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {1} '=' {1} ""CampExtra19"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {1} '=' {1} ""CampExtra20"" {1} '; ' ELSE '' END AS ""DateConcatenate"",
+                                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {1} '=' {1} ""CampExtra20"" {1} '; ' ELSE '' END {1} 
+                                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+                                TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END
+                                AS ""DateConcatenate"",
                                 V.""Valoare""  AS Anulare_Valoare,
                                 Z.""NrZile""  AS Anulare_NrZile,
                                 COALESCE(A.""CampBifa"",0) AS ""CampBifa""

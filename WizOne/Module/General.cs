@@ -6679,7 +6679,7 @@ namespace WizOne.Module
 
                 //verificam data blocare pontaj
                 DateTime dtBlc = new DateTime(2200, 1, 1);
-                DataRow entBlc = General.IncarcaDR("SELECT * FROM DataBlocare", null);
+                DataRow entBlc = General.IncarcaDR(@"SELECT * FROM ""DataBlocare"" ", null);
 
                 if (entBlc != null)
                 {
@@ -6763,7 +6763,10 @@ namespace WizOne.Module
 
                 #region Istoric aprobare pontaj
 
-                DataTable dtIst = General.IncarcaDT(@"SELECT TOP 0 * FROM ""Ptj_CumulatIstoric"" ", null);
+                string sqlCum = @"SELECT TOP 0 * FROM ""Ptj_CumulatIstoric"" ";
+                if (Constante.tipBD == 2)
+                    sqlCum = @"SELECT * FROM ""Ptj_CumulatIstoric"" WHERE ROWNUM <= 0 ";
+                DataTable dtIst = General.IncarcaDT(sqlCum, null);
                 DataRow drIst = dtIst.NewRow();
                 drIst["F10003"] = Convert.ToInt32(drCum["F10003"]);
                 drIst["An"] = an;

@@ -613,6 +613,10 @@ namespace WizOne.Absente
                 if (txtDataInc.Text == "") strErr += ", " + Dami.TraduCuvant("data inceput");
                 if (txtDataSf.Text == "") strErr += ", " + Dami.TraduCuvant("data sfarsit");
 
+                //Florin 2019.09.25
+                if (cmbOraInc.Visible == true && cmbOraInc.Text == "") strErr += ", " + Dami.TraduCuvant("ora inceput");
+                if (cmbOraSf.Visible == true && cmbOraSf.Text == "") strErr += ", " + Dami.TraduCuvant("ora sfarsit");
+
                 if (strErr != "")
                 {
                     if (tip == 1)
@@ -1218,7 +1222,7 @@ namespace WizOne.Absente
                 if (idOre == "0")
                 {
                     lblNrOre.Style["display"] = "inline-block";
-                    txtNrOre.Visible = true;
+                    txtNrOre.ClientVisible = true;
                     txtNrOre.DecimalPlaces = 0;
                     txtNrOre.NumberType = SpinEditNumberType.Integer;
 
@@ -1241,20 +1245,22 @@ namespace WizOne.Absente
                         txtNrOre.NumberType = SpinEditNumberType.Float;
                         txtNrOre.ClientVisible = false;
 
-                        txtNrOreInMinute.Visible = true;
+                        txtNrOreInMinute.ClientVisible = true;
                     }
                 }
                 else
                 {
                     lblNrOre.Style["display"] = "none";
-                    txtNrOre.Visible = false;
+                    txtNrOre.ClientVisible = false;
                     txtNrOre.Value = null;
 
                     lblOraInc.Style["display"] = "none";
                     cmbOraInc.Visible = false;
+                    cmbOraInc.Value = null;
 
                     lblOraSf.Style["display"] = "none";
                     cmbOraSf.Visible = false;
+                    cmbOraSf.Value = null;
                 }
 
                 AfiseazaCtlExtra();
@@ -2511,6 +2517,7 @@ namespace WizOne.Absente
                 List<Module.Dami.metaGeneral2> list = new List<Module.Dami.metaGeneral2>();
 
                 DateTime ziua = new DateTime(2200, 1, 1, 0, 0, 0);
+                DateTime ziuaPlus = ziua.AddDays(1);
 
                 do
                 {
@@ -2518,7 +2525,7 @@ namespace WizOne.Absente
                     string str = ziua.Hour.ToString().PadLeft(2, '0') + ":" + ziua.Minute.ToString().PadLeft(2, '0');
                     list.Add(new Module.Dami.metaGeneral2() { Id = str, Denumire = str });
                 }
-                while (ziua < ziua.AddDays(1));
+                while (ziua < ziuaPlus);
 
                 return list;
             }

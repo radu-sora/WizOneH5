@@ -485,10 +485,6 @@ namespace WizOne.Module
                 // 77  -  Drepturi depline
                 // 76  -  Fara supervizor (cazul cand pe circuit, in loc de id supervizor, se pune codul de user (F70102)
 
-                //Florin 2019.09.24 - s-a adaugat interval ora - variabila cmpOra
-                string op = "+";
-                if (Constante.tipBD == 2)
-                    op = "||";
   
                 string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
                 string selectInloc = "-99";
@@ -554,93 +550,155 @@ namespace WizOne.Module
                                FROM ""Ptj_Cereri"" A
                                INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idHR}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
 
+                //Florin 2019.09.25 - optimizare
+                //Anulare_Valoare, Anulare_NrZile se transforma din subselecturi in LEFT JOIN
+                //s-a modificat filtrarea dupa sirul vid pt oracle
 
-                sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
-                                CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
-                                A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
-                                CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
-                                CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
-                                A.""Observatii"", D.F10008 {1} ' ' {1} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
-                                CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
-                                A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
-                                M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
-                                CASE WHEN ""CampExtra1"" IS NOT NULL AND ""CampExtra1"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) + '=' + ""CampExtra1"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra2"" IS NOT NULL AND ""CampExtra2"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) + '=' + ""CampExtra2"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra3"" IS NOT NULL AND ""CampExtra3"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) + '=' + ""CampExtra3"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra4"" IS NOT NULL AND ""CampExtra4"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) + '=' + ""CampExtra4"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra5"" IS NOT NULL AND ""CampExtra5"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) + '=' + ""CampExtra5"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra6"" IS NOT NULL AND ""CampExtra6"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) + '=' + ""CampExtra6"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra7"" IS NOT NULL AND ""CampExtra7"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) + '=' + ""CampExtra7"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra8"" IS NOT NULL AND ""CampExtra8"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) + '=' + ""CampExtra8"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra9"" IS NOT NULL AND ""CampExtra9"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) + '=' + ""CampExtra9"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra10"" IS NOT NULL AND ""CampExtra10"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) + '=' + ""CampExtra10"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra11"" IS NOT NULL AND ""CampExtra11"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) + '=' + ""CampExtra11"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra12"" IS NOT NULL AND ""CampExtra12"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) + '=' + ""CampExtra12"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra13"" IS NOT NULL AND ""CampExtra13"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) + '=' + ""CampExtra13"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra14"" IS NOT NULL AND ""CampExtra14"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) + '=' + ""CampExtra14"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra15"" IS NOT NULL AND ""CampExtra15"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) + '=' + ""CampExtra15"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra16"" IS NOT NULL AND ""CampExtra16"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) + '=' + ""CampExtra16"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) + '=' + ""CampExtra17"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) + '=' + ""CampExtra18"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) + '=' + ""CampExtra19"" + '; ' ELSE '' END +
-                                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) + '=' + ""CampExtra20"" + '; ' ELSE '' END +
+                string campIntervalOrar = $@"
                                 CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
                                 SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")) + ':' +
                                 SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")) + ' - ' +
                                 SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")) + ':' +
-                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END                                 
-                                AS ""DateConcatenate"",
-                                (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_Valoare,
-                                (SELECT TOP 1 NrZile FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_NrZile,
-                                COALESCE(A.""CampBifa"",0) AS ""CampBifa""
-                                FROM ({0}) A
-                                INNER JOIN F100 B ON A.F10003 = B.F10003
-                                INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
-                                LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
-                                LEFT JOIN ""Ptj_tblAbsente"" N ON C.""CompensarePlata"" = N.""Id""
-                                LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
-                                LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
-                                LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
-                                WHERE 1=1 ";
-
+                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END";
                 if (Constante.tipBD == 2)
-                {
-                    sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"",  B.F100901 AS EID,
+                    campIntervalOrar = $@"
+                                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+                                TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END";
+
+                #region OLD
+
+                //sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
+                //                CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
+                //                A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
+                //                CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
+                //                CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
+                //                A.""Observatii"", D.F10008 {1} ' ' {1} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
+                //                CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
+                //                A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
+                //                M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
+                //                CASE WHEN ""CampExtra1"" IS NOT NULL AND ""CampExtra1"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) + '=' + ""CampExtra1"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra2"" IS NOT NULL AND ""CampExtra2"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) + '=' + ""CampExtra2"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra3"" IS NOT NULL AND ""CampExtra3"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) + '=' + ""CampExtra3"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra4"" IS NOT NULL AND ""CampExtra4"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) + '=' + ""CampExtra4"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra5"" IS NOT NULL AND ""CampExtra5"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) + '=' + ""CampExtra5"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra6"" IS NOT NULL AND ""CampExtra6"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) + '=' + ""CampExtra6"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra7"" IS NOT NULL AND ""CampExtra7"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) + '=' + ""CampExtra7"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra8"" IS NOT NULL AND ""CampExtra8"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) + '=' + ""CampExtra8"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra9"" IS NOT NULL AND ""CampExtra9"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) + '=' + ""CampExtra9"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra10"" IS NOT NULL AND ""CampExtra10"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) + '=' + ""CampExtra10"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra11"" IS NOT NULL AND ""CampExtra11"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) + '=' + ""CampExtra11"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra12"" IS NOT NULL AND ""CampExtra12"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) + '=' + ""CampExtra12"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra13"" IS NOT NULL AND ""CampExtra13"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) + '=' + ""CampExtra13"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra14"" IS NOT NULL AND ""CampExtra14"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) + '=' + ""CampExtra14"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra15"" IS NOT NULL AND ""CampExtra15"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) + '=' + ""CampExtra15"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra16"" IS NOT NULL AND ""CampExtra16"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) + '=' + ""CampExtra16"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) + '=' + ""CampExtra17"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) + '=' + ""CampExtra18"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) + '=' + ""CampExtra19"" + '; ' ELSE '' END +
+                //                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) + '=' + ""CampExtra20"" + '; ' ELSE '' END +
+                //                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+                //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")) + ':' +
+                //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")) + ' - ' +
+                //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")) + ':' +
+                //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END                                 
+                //                AS ""DateConcatenate"",
+                //                (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_Valoare,
+                //                (SELECT TOP 1 NrZile FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_NrZile,
+                //                COALESCE(A.""CampBifa"",0) AS ""CampBifa""
+                //                FROM ({0}) A
+                //                INNER JOIN F100 B ON A.F10003 = B.F10003
+                //                INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
+                //                LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
+                //                LEFT JOIN ""Ptj_tblAbsente"" N ON C.""CompensarePlata"" = N.""Id""
+                //                LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
+                //                LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
+                //                LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
+                //                WHERE 1=1 ";
+
+                //if (Constante.tipBD == 2)
+                //{
+                //    sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"",  B.F100901 AS EID,
+                //                CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
+                //                A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
+                //                CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
+                //                CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
+                //                A.""Observatii"", D.F10008 {1} ' ' {1} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
+                //                CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
+                //                A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
+                //                M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
+                //                CASE WHEN ""CampExtra1"" IS NOT NULL AND ""CampExtra1"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) {1} '=' {1} ""CampExtra1"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra2"" IS NOT NULL AND ""CampExtra2"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) {1} '=' {1} ""CampExtra2"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra3"" IS NOT NULL AND ""CampExtra3"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) {1} '=' {1} ""CampExtra3"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra4"" IS NOT NULL AND ""CampExtra4"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) {1} '=' {1} ""CampExtra4"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra5"" IS NOT NULL AND ""CampExtra5"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) {1} '=' {1} ""CampExtra5"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra6"" IS NOT NULL AND ""CampExtra6"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) {1} '=' {1} ""CampExtra6"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra7"" IS NOT NULL AND ""CampExtra7"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) {1} '=' {1} ""CampExtra7"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra8"" IS NOT NULL AND ""CampExtra8"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) {1} '=' {1} ""CampExtra8"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra9"" IS NOT NULL AND ""CampExtra9"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) {1} '=' {1} ""CampExtra9"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra10"" IS NOT NULL AND ""CampExtra10"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) {1} '=' {1} ""CampExtra10"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra11"" IS NOT NULL AND ""CampExtra11"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) {1} '=' {1} ""CampExtra11"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra12"" IS NOT NULL AND ""CampExtra12"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) {1} '=' {1} ""CampExtra12"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra13"" IS NOT NULL AND ""CampExtra13"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) {1} '=' {1} ""CampExtra13"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra14"" IS NOT NULL AND ""CampExtra14"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) {1} '=' {1} ""CampExtra14"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra15"" IS NOT NULL AND ""CampExtra15"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) {1} '=' {1} ""CampExtra15"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra16"" IS NOT NULL AND ""CampExtra16"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) {1} '=' {1} ""CampExtra16"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) {1} '=' {1} ""CampExtra17"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) {1} '=' {1} ""CampExtra18"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {1} '=' {1} ""CampExtra19"" {1} '; ' ELSE '' END {1}
+                //                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {1} '=' {1} ""CampExtra20"" {1} '; ' ELSE '' END {1} 
+                //                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+                //                TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END
+                //                AS ""DateConcatenate"",
+                //                V.""Valoare""  AS Anulare_Valoare,
+                //                Z.""NrZile""  AS Anulare_NrZile,
+                //                COALESCE(A.""CampBifa"",0) AS ""CampBifa""
+                //                FROM ({0}) A
+                //                INNER JOIN F100 B ON A.F10003 = B.F10003
+                //                INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
+                //                LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
+                //                LEFT JOIN ""Ptj_tblAbsente"" N ON C.""CompensarePlata"" = N.""Id""
+                //                LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
+                //                LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
+                //                LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
+                //                left join  (SELECT * FROM ""Ptj_CereriDrepturi"" DR WHERE  ROWNUM = 1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC ) V on (V.""IdAbs"" = A.""IdAbsenta"" OR V.""IdAbs"" = -13) AND (V.""IdStare"" = A.""IdStare"" OR V.""IdStare"" = -13) AND (V.""IdRol"" = A.""Rol"" OR V.""IdRol"" = -13) AND (V.""IdActiune"" = 3 OR V.""IdActiune"" = -13)  
+                //                left join  (SELECT * FROM ""Ptj_CereriDrepturi"" DR WHERE  ROWNUM = 1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC ) Z on (Z.""IdAbs"" = A.""IdAbsenta"" OR Z.""IdAbs"" = -13) AND (Z.""IdStare"" = A.""IdStare"" OR Z.""IdStare"" = -13) AND (Z.""IdRol"" = A.""Rol"" OR Z.""IdRol"" = -13) AND (Z.""IdActiune"" = 3 OR Z.""IdActiune"" = -13)
+                //                WHERE 1 =1 ";
+                //}								
+
+                #endregion
+
+                sqlFinal = $@"SELECT A.""Id"", B.F10003, B.F10008 {Dami.Operator()} ' ' {Dami.Operator()} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
                                 CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
                                 A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
                                 CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
                                 CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
-                                A.""Observatii"", D.F10008 {1} ' ' {1} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
+                                A.""Observatii"", D.F10008 {Dami.Operator()} ' ' {Dami.Operator()} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
                                 CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
                                 A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
                                 M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
-                                CASE WHEN ""CampExtra1"" IS NOT NULL AND ""CampExtra1"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) {1} '=' {1} ""CampExtra1"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra2"" IS NOT NULL AND ""CampExtra2"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) {1} '=' {1} ""CampExtra2"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra3"" IS NOT NULL AND ""CampExtra3"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) {1} '=' {1} ""CampExtra3"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra4"" IS NOT NULL AND ""CampExtra4"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) {1} '=' {1} ""CampExtra4"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra5"" IS NOT NULL AND ""CampExtra5"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) {1} '=' {1} ""CampExtra5"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra6"" IS NOT NULL AND ""CampExtra6"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) {1} '=' {1} ""CampExtra6"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra7"" IS NOT NULL AND ""CampExtra7"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) {1} '=' {1} ""CampExtra7"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra8"" IS NOT NULL AND ""CampExtra8"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) {1} '=' {1} ""CampExtra8"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra9"" IS NOT NULL AND ""CampExtra9"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) {1} '=' {1} ""CampExtra9"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra10"" IS NOT NULL AND ""CampExtra10"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) {1} '=' {1} ""CampExtra10"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra11"" IS NOT NULL AND ""CampExtra11"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) {1} '=' {1} ""CampExtra11"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra12"" IS NOT NULL AND ""CampExtra12"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) {1} '=' {1} ""CampExtra12"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra13"" IS NOT NULL AND ""CampExtra13"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) {1} '=' {1} ""CampExtra13"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra14"" IS NOT NULL AND ""CampExtra14"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) {1} '=' {1} ""CampExtra14"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra15"" IS NOT NULL AND ""CampExtra15"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) {1} '=' {1} ""CampExtra15"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra16"" IS NOT NULL AND ""CampExtra16"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) {1} '=' {1} ""CampExtra16"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) {1} '=' {1} ""CampExtra17"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) {1} '=' {1} ""CampExtra18"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {1} '=' {1} ""CampExtra19"" {1} '; ' ELSE '' END {1}
-                                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {1} '=' {1} ""CampExtra20"" {1} '; ' ELSE '' END {1} 
-                                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
-                                TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END
-                                AS ""DateConcatenate"",
-                                V.""Valoare""  AS Anulare_Valoare,
-                                Z.""NrZile""  AS Anulare_NrZile,
-                                COALESCE(A.""CampBifa"",0) AS ""CampBifa""
-                                FROM ({0}) A
+                                CASE WHEN ""CampExtra1"" IS NOT NULL {General.FiltrulGol("CampExtra1")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra1"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra2"" IS NOT NULL {General.FiltrulGol("CampExtra2")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra2"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra3"" IS NOT NULL {General.FiltrulGol("CampExtra3")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra3"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra4"" IS NOT NULL {General.FiltrulGol("CampExtra4")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra4"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra5"" IS NOT NULL {General.FiltrulGol("CampExtra5")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra5"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra6"" IS NOT NULL {General.FiltrulGol("CampExtra6")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra6"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra7"" IS NOT NULL {General.FiltrulGol("CampExtra7")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra7"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra8"" IS NOT NULL {General.FiltrulGol("CampExtra8")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra8"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra9"" IS NOT NULL {General.FiltrulGol("CampExtra9")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra9"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra10"" IS NOT NULL {General.FiltrulGol("CampExtra10")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra10"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra11"" IS NOT NULL {General.FiltrulGol("CampExtra11")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra11"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra12"" IS NOT NULL {General.FiltrulGol("CampExtra12")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra12"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra13"" IS NOT NULL {General.FiltrulGol("CampExtra13")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra13"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra14"" IS NOT NULL {General.FiltrulGol("CampExtra14")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra14"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra15"" IS NOT NULL {General.FiltrulGol("CampExtra15")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra15"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra16"" IS NOT NULL {General.FiltrulGol("CampExtra16")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra16"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra17"" IS NOT NULL {General.FiltrulGol("CampExtra17")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra17"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra18"" IS NOT NULL {General.FiltrulGol("CampExtra18")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra18"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra19"" IS NOT NULL {General.FiltrulGol("CampExtra19")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra19"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+                                CASE WHEN ""CampExtra20"" IS NOT NULL {General.FiltrulGol("CampExtra20")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra20"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()} 
+                                {campIntervalOrar}
+                                AS ""DateConcatenate"", DR.""Valoare"" AS Anulare_Valoare, DR.""NrZile"" AS Anulare_NrZile, COALESCE(A.""CampBifa"",0) AS ""CampBifa""
+                                FROM ({strSql}) A
                                 INNER JOIN F100 B ON A.F10003 = B.F10003
                                 INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
                                 LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
@@ -648,17 +706,8 @@ namespace WizOne.Module
                                 LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
                                 LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
                                 LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
- 
-                                left join  (SELECT * FROM ""Ptj_CereriDrepturi"" DR WHERE  ROWNUM = 1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC ) V on (V.""IdAbs"" = A.""IdAbsenta"" OR V.""IdAbs"" = -13) AND (V.""IdStare"" = A.""IdStare"" OR V.""IdStare"" = -13) AND (V.""IdRol"" = A.""Rol"" OR V.""IdRol"" = -13) AND (V.""IdActiune"" = 3 OR V.""IdActiune"" = -13)  
-                                left join  (SELECT * FROM ""Ptj_CereriDrepturi"" DR WHERE  ROWNUM = 1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC ) Z on (Z.""IdAbs"" = A.""IdAbsenta"" OR Z.""IdAbs"" = -13) AND (Z.""IdStare"" = A.""IdStare"" OR Z.""IdStare"" = -13) AND (Z.""IdRol"" = A.""Rol"" OR Z.""IdRol"" = -13) AND (Z.""IdActiune"" = 3 OR Z.""IdActiune"" = -13)
-
-
-
-                                WHERE 1 =1 ";
-                }								
-
-                sqlFinal = string.Format(sqlFinal, strSql, op);
-
+                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = A.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 3 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
+                                WHERE 1=1 ";
             }
             catch (Exception ex)
             {

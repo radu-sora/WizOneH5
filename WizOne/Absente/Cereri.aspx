@@ -138,7 +138,7 @@
                         <label id="lblTip" runat="server" style="display:inline-block;">Tip Cerere</label>
                         <dx:ASPxComboBox ID="cmbAbs" runat="server" ClientInstanceName="cmbAbs" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbAbsResource1" >
-                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback(2); }" />
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { txtNrOre.SetValue(); txtNrOreInMinute.SetValue(); pnlCtl.PerformCallback(2); }" />
                         </dx:ASPxComboBox>
                     </div>
 
@@ -233,10 +233,10 @@
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblNrOre" runat="server" style="display:none;">Nr. ore</label>
-                        <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="70px" Visible="false" MinValue="0" MaxValue="8">
+                        <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="70px" ClientVisible="false" MinValue="0" MaxValue="8">
                             <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                         </dx:ASPxSpinEdit>
-                        <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="70px" Visible="false" ClientEnabled="false" />
+                        <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="70px" ClientVisible="false" ClientEnabled="false" />
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">

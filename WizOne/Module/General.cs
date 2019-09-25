@@ -2841,8 +2841,7 @@ namespace WizOne.Module
                                                                                                                     SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDateAsString("\"DataInceput\"")} <= {TruncateDateAsString()} AND {TruncateDateAsString()} <= {TruncateDateAsString("\"DataSfarsit\"")})
                                 LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
                                 LEFT JOIN F100 G ON A.F10003=G.F10003
-                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"" ORDER BY W.""IdAbs"", W.""IdRol"" DESC, W.""IdStare"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON
-                                (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 1 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
+                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 1 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
 
                                 WHERE 1=1 ";
 
@@ -8377,6 +8376,22 @@ namespace WizOne.Module
             }
         }
 
+        public static string FiltrulGol(string camp)
+        {
+            string str = "";
+
+            try
+            {
+                if (Constante.tipBD == 1 && camp != "")
+                    str = $@" AND ""{camp}"" <> '' "; 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+
+            return str;
+        }
 
     }
 }

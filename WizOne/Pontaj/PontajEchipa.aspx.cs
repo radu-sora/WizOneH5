@@ -2029,6 +2029,15 @@ namespace WizOne.Pontaj
                 cmbTipAbs.SelectedIndex = -1;
                 pnlValuri.Controls.Clear();
 
+
+                string strGol = "";
+                string strGol1 = "";
+                if (Constante.tipBD == 1)
+                {
+                    strGol = @"AND X.""DenumireScurta"" <> '' ";
+                    strGol1 = @"AND A.""OreInVal"" <> '' ";
+                }
+
                 //incarcam combo absente
                 //ne folosim de datele din pontaj (Contract, ziSapt, ziLibera) pt ca sunt deja determinate
                 string sqlAbs = $@"SELECT X.""Id"", X.""DenumireScurta"", X.""Denumire"", P.""ValStr"", CASE WHEN P.""ValStr""=X.""DenumireScurta"" THEN 1 ELSE 0 END AS ""Exista"" from ( 
@@ -2039,7 +2048,7 @@ namespace WizOne.Pontaj
                             WHERE A.""IdTipOre"" = 1
                             group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"") x
                             INNER JOIN(SELECT * FROM ""Ptj_Intrari"" Y WHERE {General.ToDataUniv(ziua)} <= CAST(Y.""Ziua"" AS DATE) AND CAST(Y.""Ziua"" AS DATE) <= {General.ToDataUniv(ziua)} AND Y.F10003 = {f10003}) P ON 1 = 1
-                            WHERE COALESCE(X.""DenumireScurta"", '') <> '' AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {cmbRol.Value} AND
+                            WHERE X.""DenumireScurta"" IS NOT NULL {strGol} AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {cmbRol.Value} AND
                             (
                                 (COALESCE(X.""ZileSapt"",0) <> 0 AND COALESCE(X.""ZileSapt"",0) = (CASE WHEN P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0 THEN 1 ELSE 0 END))
                                 OR
@@ -2074,7 +2083,7 @@ namespace WizOne.Pontaj
                         INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
                         INNER JOIN(SELECT * FROM ""Ptj_Intrari"" Y WHERE {General.ToDataUniv(ziua)} <= CAST(Y.""Ziua"" AS DATE) AND CAST(Y.""Ziua"" AS DATE) <= {General.ToDataUniv(ziua)} AND Y.F10003 = {f10003}) P ON 1 = 1
                         LEFT JOIN ""Ptj_Contracte"" D ON B.""IdContract"" = D.""Id""
-                        WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
+                        WHERE A.""OreInVal"" IS NOT NULL {strGol1} AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
                         (
                         (COALESCE(B.ZL,0)<> 0 AND (CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
                         (COALESCE(B.S,0) <> 0 AND (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0)) OR
@@ -2240,7 +2249,7 @@ namespace WizOne.Pontaj
                                     //salvam val-urile
                                     try
                                     {
-                                        cmp += "," + str[0] + "=" + Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60)).ToString();
+                                        cmp += ",\"" + str[0] + "\"=" + Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60)).ToString();
                                         if (str[2] == "1") nrMin += Convert.ToInt32(Convert.ToDecimal(arrAtr[1]) * 60);
                                     }
                                     catch (Exception ex) { var ert55 = ex.Message; }
@@ -2251,12 +2260,12 @@ namespace WizOne.Pontaj
                                     {
                                         if (drMd == null)
                                         {
-                                            cmpModif += "," + str[0].Replace("Val", "ValModif") + "=4";
+                                            cmpModif += ",\"" + str[0].Replace("Val", "ValModif") + "\"=4";
                                         }
                                         else
                                         {
                                             if (drMd[str[0]].ToString() != arrAtr[1].ToString())
-                                                cmpModif += "," + str[0].Replace("Val", "ValModif") + "=4";
+                                                cmpModif += ",\"" + str[0].Replace("Val", "ValModif") + "\"=4";
                                         }
                                     }
                                     catch (Exception) { }
@@ -2544,7 +2553,7 @@ namespace WizOne.Pontaj
                                 Y.""Norma"", Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.""Denumire"" AS ""DescContract"", NVL(C.""OreSup"",0) AS ""OreSup"", NVL(C.""Afisare"",1) AS ""Afisare"", 
                                 B.F100958, B.F100959,
-                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.""Denumire"" AS ""Categorie1"", CB.""Denumire"" AS ""Categorie2"", F10061, F10062,
+                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062,
                                 NVL(K.""Culoare"",'#FFFFFFFF') AS ""Culoare"", K.""Denumire"" AS ""StareDenumire"",
                                 A.F10078 AS ""Angajator"", DR.F08903 AS ""TipContract"", 
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
@@ -2567,7 +2576,6 @@ namespace WizOne.Pontaj
                                 LEFT JOIN ""Ptj_tblStariPontaj"" K ON K.""Id"" = NVL(X.""IdStare"",1) 
                                 LEFT JOIN ""Ptj_Contracte"" C on C.""Id"" = Y.""IdContract""
                                 LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
-                                {strInner}
 
 							    LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
 							    LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304

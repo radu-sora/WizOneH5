@@ -2455,8 +2455,8 @@ namespace WizOne.Absente
                     (sqlPozitie == null ? "NULL" : sqlPozitie) + ", " +
                     " NULL, " +
                     (sqlNrOre == null ? "NULL" : sqlNrOre) + ", " +
-                    sqlOraInc + " AS \"OraInceput\", " +
-                    sqlOraSf + " AS \"OraSfarsit\", " +
+                    sqlOraInc + ", " +
+                    sqlOraSf + ", " +
                     areAtas + "" +
                     valExtra + ")";
             }
@@ -2510,7 +2510,7 @@ namespace WizOne.Absente
             {
                 List<Module.Dami.metaGeneral2> list = new List<Module.Dami.metaGeneral2>();
 
-                DateTime ziua = new DateTime(2200, 1, 1, 7, 0, 0);
+                DateTime ziua = new DateTime(2200, 1, 1, 0, 0, 0);
 
                 do
                 {
@@ -2518,7 +2518,7 @@ namespace WizOne.Absente
                     string str = ziua.Hour.ToString().PadLeft(2, '0') + ":" + ziua.Minute.ToString().PadLeft(2, '0');
                     list.Add(new Module.Dami.metaGeneral2() { Id = str, Denumire = str });
                 }
-                while (ziua.Hour <= 18);
+                while (ziua < ziua.AddDays(1));
 
                 return list;
             }

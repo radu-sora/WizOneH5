@@ -1,17 +1,12 @@
 ﻿using DevExpress.Web;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
-using System.Diagnostics;
-using System.Collections;
 
 namespace WizOne.Pagini
 {
@@ -95,13 +90,13 @@ namespace WizOne.Pagini
                     DataTable dtCond = new DataTable();
                     if (Request["tip"].ToString() == "Clone")
                     {
-                        if (Session["TipNotificare"].ToString() == "1" || Session["TipNotificare"].ToString() == "3") dtMail = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE Id=@1 ", new string[] { "-99" });
-                        dtCond = General.IncarcaDT(@"SELECT * FROM ""Ntf_Conditii"" WHERE Id=@1 ", new string[] { "-99" });
+                        if (Session["TipNotificare"].ToString() == "1" || Session["TipNotificare"].ToString() == "3") dtMail = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE ""Id""=@1 ", new string[] { "-99" });
+                        dtCond = General.IncarcaDT(@"SELECT * FROM ""Ntf_Conditii"" WHERE ""Id""=@1 ", new string[] { "-99" });
                     }
                     else
                     {
-                        if (Session["TipNotificare"].ToString() == "1" || Session["TipNotificare"].ToString() == "3") dtMail = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE Id=@1 ", new string[] { id.ToString() });
-                        dtCond = General.IncarcaDT(@"SELECT * FROM ""Ntf_Conditii"" WHERE Id=@1 ", new string[] { id.ToString() });
+                        if (Session["TipNotificare"].ToString() == "1" || Session["TipNotificare"].ToString() == "3") dtMail = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE ""Id""=@1 ", new string[] { id.ToString() });
+                        dtCond = General.IncarcaDT(@"SELECT * FROM ""Ntf_Conditii"" WHERE ""Id""=@1 ", new string[] { id.ToString() });
                     }
 
 
@@ -114,7 +109,7 @@ namespace WizOne.Pagini
                         case "Clone":
                             {
                                 //incarcam header-ul
-                                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Ntf_Setari"" WHERE Id=@1 ", new string[] { id.ToString() });
+                                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Ntf_Setari"" WHERE ""Id""=@1 ", new string[] { id.ToString() });
                                 if (dtHead.Rows.Count > 0)
                                 {
                                     txtId.Text = dtHead.Rows[0]["Id"].ToString();
@@ -145,7 +140,7 @@ namespace WizOne.Pagini
                                     if (Session["TipNotificare"].ToString() == "1" || Session["TipNotificare"].ToString() == "3")
                                     {
                                         //incarcam mailurile
-                                        DataTable dtOri = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE Id=@1", new string[] { id.ToString() });
+                                        DataTable dtOri = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE ""Id""=@1", new string[] { id.ToString() });
                                         foreach (DataRow dr in dtOri.Rows)
                                         {
                                             DataRow drDes = dtMail.NewRow();
@@ -162,7 +157,7 @@ namespace WizOne.Pagini
                                     }
 
                                     //incarcam conditiile
-                                    DataTable dtOriCond = General.IncarcaDT(@"SELECT * FROM ""Ntf_Conditii"" WHERE Id=@1", new string[] { id.ToString() });
+                                    DataTable dtOriCond = General.IncarcaDT(@"SELECT * FROM ""Ntf_Conditii"" WHERE ""Id""=@1", new string[] { id.ToString() });
                                     foreach (DataRow dr in dtOriCond.Rows)
                                     {
                                         DataRow drDes = dtCond.NewRow();
@@ -228,7 +223,7 @@ namespace WizOne.Pagini
 
                 int id = Convert.ToInt32(Request["id"]);
 
-                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Ntf_Setari"" WHERE Id=@1 ", new string[] { id.ToString() });
+                DataTable dtHead = General.IncarcaDT(@"SELECT * FROM ""Ntf_Setari"" WHERE ""Id""=@1 ", new string[] { id.ToString() });
                 DataTable dtMail = Session["Ntf_Mailuri"] as DataTable;
                 DataTable dtCond = Session["Ntf_Conditii"] as DataTable;
 
@@ -509,10 +504,10 @@ namespace WizOne.Pagini
                             if (Constante.tipBD == 2) strSql = @"SELECT F10003 AS ""Id"", F10008 || ' ' || F10009 AS ""Denumire"" FROM F100";
                             break;
                         case 3:
-                            strSql = @"SELECT ""Id"", ""Denumire"" FROM tblGrupUsers";
+                            strSql = @"SELECT ""Id"", ""Denumire"" FROM ""tblGrupUsers""";
                             break;
                         case 4:
-                            strSql = @"SELECT ""Id"", ""Denumire"" FROM tblGrupAngajati";
+                            strSql = @"SELECT ""Id"", ""Denumire"" FROM ""tblGrupAngajati""";
                             break;
                         case 5:
                             {

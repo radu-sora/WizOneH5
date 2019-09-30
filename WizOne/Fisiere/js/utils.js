@@ -17,7 +17,7 @@ function ctx(s, e)
         if (targ.nodeType == 3) targ = targ.parentNode;
         e.preventDefault();
      
-        debugger;
+        
 
         var sir = ["IdControl", ""];
         if (__reqSec.length > 0)

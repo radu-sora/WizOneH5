@@ -466,18 +466,16 @@
                </tr>
                 <tr>
                     <dx:ASPxGridView ID="grDateComponente" runat="server" ClientInstanceName="grDateComponente" ClientIDMode="Static" Width="30%" AutoGenerateColumns="false"  OnDataBinding="grDateComponente_DataBinding" 
-                          OnRowInserting="grDateComponente_RowInserting" OnRowUpdating="grDateComponente_RowUpdating" OnCellEditorInitialize="grDateComponente_CellEditorInitialize">        
+                        OnRowUpdating="grDateComponente_RowUpdating" OnCellEditorInitialize="grDateComponente_CellEditorInitialize">        
                         <SettingsBehavior AllowFocusedRow="true" />
                         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />  
                         <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackComp"/> 
                         <SettingsEditing Mode="Inline" />       
                         <Columns>
-                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />          
-                            <dx:GridViewDataComboBoxColumn FieldName="F02104" Name="F02104" Caption="Componenta" Width="250px" >
-                                <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            </dx:GridViewDataComboBoxColumn>         
-                            <dx:GridViewDataTextColumn FieldName="Suma" Name="Suma" Caption="Suma"    Width="100px"  />          
-              
+                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />          
+                            <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Componenta" Width="250px" ReadOnly="true"  /> 
+                            <dx:GridViewDataTextColumn FieldName="Suma" Name="Suma" Caption="Suma" Width="100px"  />    
+                            <dx:GridViewDataTextColumn FieldName="F02104" Name="F02104" Caption="F02104" Width="100px" Visible="false" ShowInCustomizationForm="false"  /> 
                         </Columns>
                         <SettingsCommandButton>
                             <UpdateButton ButtonType="Link" Text="Actualizeaza">

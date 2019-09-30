@@ -21,7 +21,7 @@
                 texts = cmbTipAbs.GetText();
             else {
                 $('#<% =pnlValuri.ID %> input[type="text"]').each(function () {
-                    debugger;
+                    
                     if ($(this).val() != '' && $(this).val() != '0') {
                         var tmp = $(this).attr('id').replace('_I', '').replace('flo1', '');
                         var lista = tmp.split("_");

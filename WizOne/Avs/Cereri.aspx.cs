@@ -2821,7 +2821,7 @@ namespace WizOne.Avs
             //Florin 2019.07.29
             //s-a adaugat si parametrul cu id-uri excluse
             string idExcluse = "," + Dami.ValoareParam("IdExcluseCircuitDoc") + ",";
-            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idUrm + ",") >=0)))
+            if (idStare == 3 && (Dami.ValoareParam("FinalizareCuActeAditionale") == "0" || (Dami.ValoareParam("FinalizareCuActeAditionale") == "1" && idExcluse.IndexOf("," + idAtr + ",") >=0)))
             {
                 TrimiteInF704(idUrm);
                 if (idAtr == 2)
@@ -3423,7 +3423,7 @@ namespace WizOne.Avs
                             camp2 += dtCer.Rows[0]["Comp" + i].ToString().Replace(',', '.') + ", ";
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70420, USER_NO, TIME) "
-                        + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 27, 'Componente', " + data + ", 0, 'Modificari in avans', '"
+                        + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 19, 'Componente', " + data + ", 0, 'Modificari in avans', '"
                         + dtCer.Rows[0]["Explicatii"].ToString() + "', " + camp2 + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         break;
                     case (int)Constante.Atribute.Tarife:
@@ -3879,6 +3879,9 @@ namespace WizOne.Avs
 
         private void IncarcaGridComp()
         {
+            //Florin 2019.09.26
+            //se afiseaza toate componentele, deoarece componenta F70450 trebuie afisata oricum
+
             DataSet ds = Session["AvsCereri"] as DataSet;
             DataTable dt = new DataTable();
             if (ds == null)
@@ -3897,27 +3900,49 @@ namespace WizOne.Avs
                 ds.Tables.Add(dt);
             }
 
+            //Florin 2019.09.26
+            //string sql = " select F02104, f100690 as \"Suma\" from f021 join f100 on f02104 = 4001 and f100690 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100691 as \"Suma\" from f021 join f100 on f02104 = 4002 and f100691 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100692 as \"Suma\" from f021 join f100 on f02104 = 4003 and f100692 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100693 as \"Suma\" from f021 join f100 on f02104 = 4004 and f100693 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100694 as \"Suma\" from f021 join f100 on f02104 = 4005 and f100694 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100695 as \"Suma\" from f021 join f100 on f02104 = 4006 and f100695 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100696 as \"Suma\" from f021 join f100 on f02104 = 4007 and f100696 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100697 as \"Suma\" from f021 join f100 on f02104 = 4008 and f100697 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100698 as \"Suma\" from f021 join f100 on f02104 = 4009 and f100698 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+            //            + "union "
+            //            + "select F02104, f100699 as \"Suma\" from f021 join f100 on f02104 = 4010 and f100699 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " ORDER BY F02104";
 
-            string sql = " select F02104, f100690 as \"Suma\" from f021 join f100 on f02104 = 4001 and f100690 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100691 as \"Suma\" from f021 join f100 on f02104 = 4002 and f100691 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100692 as \"Suma\" from f021 join f100 on f02104 = 4003 and f100692 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100693 as \"Suma\" from f021 join f100 on f02104 = 4004 and f100693 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100694 as \"Suma\" from f021 join f100 on f02104 = 4005 and f100694 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100695 as \"Suma\" from f021 join f100 on f02104 = 4006 and f100695 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100696 as \"Suma\" from f021 join f100 on f02104 = 4007 and f100696 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100697 as \"Suma\" from f021 join f100 on f02104 = 4008 and f100697 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100698 as \"Suma\" from f021 join f100 on f02104 = 4009 and f100698 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
-                        + "union "
-                        + "select F02104, f100699 as \"Suma\" from f021 join f100 on f02104 = 4010 and f100699 > 0 and f10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " ORDER BY F02104";
-           
+            string sql = $@"
+                SELECT X.F02104, Y.F02105 AS ""Denumire"", X.""Suma"" FROM (
+                SELECT 4001 AS F02104, F100690 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4002 AS F02104, F100691 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4003 AS F02104, F100692 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4004 AS F02104, F100693 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4005 AS F02104, F100694 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4006 AS F02104, F100695 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4007 AS F02104, F100696 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4008 AS F02104, F100697 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4009 AS F02104, F100698 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}
+                UNION
+                SELECT 4010 AS F02104, F100699 AS ""Suma"" FROM F100 WHERE F10003 = {cmbAng.Value}) X
+                LEFT JOIN F021 Y ON X.F02104 = Y.F02104";
 
             DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
             if (dsCalcul != null && dsCalcul.Tables.Contains("Componente"))
@@ -3938,122 +3963,150 @@ namespace WizOne.Avs
             grDateComponente.KeyFieldName = "F02104";
             grDateComponente.DataSource = dt;
 
-            sql = @"SELECT F02104 AS Id, CONVERT(VARCHAR, F02104) + ' - ' + F02105 as Denumire FROM F021 WHERE F02104 BETWEEN 4001 AND 4010";
-            if (Constante.tipBD == 2)
-                sql = @"SELECT F02104 AS ""Id"", F02104 || ' - ' || F02105 as ""Denumire"" FROM F021 WHERE F02104 BETWEEN 4001 AND 4010";
-            DataTable dtGrup = General.IncarcaDT(sql, null);
-            GridViewDataComboBoxColumn colComp = (grDateComponente.Columns["F02104"] as GridViewDataComboBoxColumn);
-            colComp.PropertiesComboBox.DataSource = dtGrup;
+            //sql = @"SELECT F02104 AS Id, CONVERT(VARCHAR, F02104) + ' - ' + F02105 as Denumire FROM F021 WHERE F02104 BETWEEN 4001 AND 4010";
+            //if (Constante.tipBD == 2)
+            //    sql = @"SELECT F02104 AS ""Id"", F02104 || ' - ' || F02105 as ""Denumire"" FROM F021 WHERE F02104 BETWEEN 4001 AND 4010";
+            //DataTable dtGrup = General.IncarcaDT(sql, null);
+            //GridViewDataComboBoxColumn colComp = (grDateComponente.Columns["F02104"] as GridViewDataComboBoxColumn);
+            //colComp.PropertiesComboBox.DataSource = dtGrup;
 
             Session["AvsCereri"] = ds;
             Session["AvsCereriCalcul"] = dsCalcul;
 
         }
 
+        //Florin 2019.09.26
+        //protected void grDateComponente_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        //{
+        //    try
+        //    {
 
-        protected void grDateComponente_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
-        {
-            try
-            {
+        //        DataSet ds = Session["AvsCereri"] as DataSet;   
+        //        DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
 
-                DataSet ds = Session["AvsCereri"] as DataSet;   
-                DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+        //        object[] rowComp = new object[dsCalcul.Tables["Componente"].Columns.Count];
+        //        int x = 0;
 
-                object[] rowComp = new object[dsCalcul.Tables["Componente"].Columns.Count];
-                int x = 0;
+        //        bool dublura = false;
+        //        for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
+        //        {
+        //            if (dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
+        //            {
+        //                dublura = true;
+        //                break;
+        //            }
+        //        }
 
-                bool dublura = false;
-                for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
-                {
-                    if (dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
-                    {
-                        dublura = true;
-                        break;
-                    }
-                }
+        //        if (dublura)
+        //        {
+        //            grDateComponente.JSProperties["cpAlertMessage"] = "Codul a mai fost deja atribuit acestui angajat!";
+        //        }
+        //        else
+        //        {
+        //            foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
+        //            {
+        //                switch (col.ColumnName.ToUpper())
+        //                {
+        //                    case "SUMA":
+        //                        rowComp[x] = e.NewValues[col.ColumnName];
+        //                        ds.Tables[0].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
+        //                        break;
+        //                    default:
+        //                        rowComp[x] = e.NewValues[col.ColumnName];
+        //                        break;
+        //                }
+        //                x++;
+        //            }
+        //            dsCalcul.Tables["Componente"].Rows.Add(rowComp);
+        //        }
 
-                if (dublura)
-                {
-                    grDateComponente.JSProperties["cpAlertMessage"] = "Codul a mai fost deja atribuit acestui angajat!";
-                }
-                else
-                {
-                    foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
-                    {
-                        switch (col.ColumnName.ToUpper())
-                        {
-                            case "SUMA":
-                                rowComp[x] = e.NewValues[col.ColumnName];
-                                ds.Tables[0].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
-                                break;
-                            default:
-                                rowComp[x] = e.NewValues[col.ColumnName];
-                                break;
-                        }
-                        x++;
-                    }
-                    dsCalcul.Tables["Componente"].Rows.Add(rowComp);
-                }
+        //        e.Cancel = true;
+        //        grDateComponente.CancelEdit();
+        //        grDateComponente.DataSource = dsCalcul.Tables["Componente"];
+        //        grDateComponente.KeyFieldName = "F02104";
 
-                e.Cancel = true;
-                grDateComponente.CancelEdit();
-                grDateComponente.DataSource = dsCalcul.Tables["Componente"];
-                grDateComponente.KeyFieldName = "F02104";
+        //        Session["AvsCereri"] = ds;
+        //        Session["AvsCereriCalcul"] = dsCalcul;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+        //    }
+        //}
 
-                Session["AvsCereri"] = ds;
-                Session["AvsCereriCalcul"] = dsCalcul;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
-            }
-        }
+        //protected void grDateComponente_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        //{
+        //    try
+        //    {
+        //        object[] keys = new object[e.Keys.Count];
+        //        for (int i = 0; i < e.Keys.Count; i++)
+        //        { keys[i] = e.Keys[i]; }
+
+        //        bool dublura = false;
+
+        //        DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
+
+        //        DataSet ds = Session["AvsCereri"] as DataSet;  
+        //        DataRow rowComp = dsCalcul.Tables["Componente"].Rows.Find(keys);
+
+        //        for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
+        //        {
+        //            if (grDateComponente.EditingRowVisibleIndex != i && dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == General.Nz(e.NewValues["F02104"], "").ToString())
+        //            {
+        //                dublura = true;
+        //                break;
+        //            }
+        //        }
+
+
+        //        if (dublura)
+        //        {
+        //            grDateComponente.JSProperties["cpAlertMessage"] = "Codul a mai fost deja atribuit acestui angajat!";
+        //        }
+        //        else
+        //        {
+        //            foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
+        //            {
+        //                if (col.ColumnName.ToUpper() == "SUMA")
+        //                {
+        //                    col.ReadOnly = false;
+        //                    var edc = e.NewValues[col.ColumnName];
+        //                    rowComp[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
+        //                    ds.Tables[0].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
+        //                }
+        //            }
+        //        }
+
+        //        e.Cancel = true;
+        //        grDateComponente.CancelEdit();
+        //        Session["AvsCereri"] = ds;
+        //        Session["AvsCereriCalcul"] = dsCalcul;
+        //        grDateComponente.DataSource = dsCalcul.Tables["Componente"];
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+        //    }
+        //}
 
         protected void grDateComponente_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             try
             {
-
                 object[] keys = new object[e.Keys.Count];
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
 
-                bool dublura = false;
-
-     
+                DataSet ds = Session["AvsCereri"] as DataSet;
                 DataSet dsCalcul = Session["AvsCereriCalcul"] as DataSet;
-
-                DataSet ds = Session["AvsCereri"] as DataSet;  
+                
                 DataRow rowComp = dsCalcul.Tables["Componente"].Rows.Find(keys);
 
-                for (int i = 0; i < dsCalcul.Tables["Componente"].Rows.Count; i++)
-                {
-                    if (grDateComponente.EditingRowVisibleIndex != i && dsCalcul.Tables["Componente"].Rows[i]["F02104"].ToString() == e.NewValues["F02104"].ToString())
-                    {
-                        dublura = true;
-                        break;
-                    }
-                }
-
-
-                if (dublura)
-                {
-                    grDateComponente.JSProperties["cpAlertMessage"] = "Codul a mai fost deja atribuit acestui angajat!";
-                }
-                else
-                {
-                    foreach (DataColumn col in dsCalcul.Tables["Componente"].Columns)
-                    {
-                        if (col.ColumnName.ToUpper() == "SUMA")
-                        {
-                            col.ReadOnly = false;
-                            var edc = e.NewValues[col.ColumnName];
-                            rowComp[col.ColumnName] = e.NewValues[col.ColumnName] ?? 0;
-                            ds.Tables[0].Rows[0]["F10069" + (Convert.ToInt32(e.NewValues["F02104"].ToString().Substring(2)) - 1).ToString()] = e.NewValues[col.ColumnName];
-                        }
-
-                    }
-                }
+                DataColumn col = dsCalcul.Tables["Componente"].Columns["Suma"];
+                int nr = Convert.ToInt32(General.Nz(e.Keys[0],"1").ToString().Replace("40",""));
+                col.ReadOnly = false;
+                rowComp["Suma"] = e.NewValues["Suma"];
+                ds.Tables[0].Rows[0]["F10069" + (nr-1)] = e.NewValues["Suma"];
 
                 e.Cancel = true;
                 grDateComponente.CancelEdit();
@@ -4066,6 +4119,7 @@ namespace WizOne.Avs
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
         }
+
 
         protected void grDateComponente_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
         {

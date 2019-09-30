@@ -63,6 +63,8 @@ namespace WizOne.Module
         public const string CuloareDinCalcul = "#c8dcfa";                   //albastru pal
         public const string CuloareModificatManual = "#e6c8fa";             //mov pal
 
+        //Florin 2019.09.26
+        //am modificat Componente = 27 in Componente = 19 ca in wizsalary
 
         //Radu
         public enum Atribute : int
@@ -85,7 +87,7 @@ namespace WizOne.Module
             Meserie = 22,
             PrelungireCIM = 25,
             PrelungireCIM_Vanz = 26,
-            Componente = 27,
+            Componente = 19,
             Tarife = 28,
             NumePrenume = 101,
             CASS = 102,

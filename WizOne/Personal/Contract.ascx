@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
     function OnTextChangedHandlerCtr(s) {
-        debugger;
+        
         switch (s.name) {
             case "deUltimaZiLucr":
                 {
@@ -64,7 +64,7 @@
 
                     pnlLoading.Show();
                     pnlCtlContract.PerformCallback(s.name + ";" + s.GetDate());
-                    debugger;
+                    
                     if (cmbDurCtr.GetValue() == 2) {
                         var dtAng = new Date(deDataAng.GetDate());
                         var dtTemp = new Date(dtAng.getFullYear(), dtAng.getMonth(), dtAng.getDate(), 0, 0, 0, 0);
@@ -301,7 +301,7 @@
             cmbTimpPartial.ClearItems();
             hfTipAngajat.Set('TipAng', s.GetValue());
         }      
-        debugger;
+        
         switch (cmbTipAng.GetSelectedItem().value) {
             case 0:                 //angajat permanent
                 {        
@@ -489,7 +489,7 @@
     }
 
     function Validare36Luni() {
-        debugger;
+        
         if (cmbDurCtr.GetValue() == 1) {
             var dtTmp = new Date(2100, 1, 1, 0, 0, 0, 0)
 
@@ -530,7 +530,7 @@
     }
 
     function cmbPrel_SelectedIndexChanged() {
-        debugger;
+        
         if (cmbPrel.GetValue() == 1) {
             deDeLaData.SetValue(deLaData.GetValue());
         }
@@ -544,7 +544,7 @@
     }
 
     function chkScutitImp_CheckedChanged() {
-        debugger;
+        
         if (chkbx1.GetValue() == 0) {
             cmbMotivScutit.SetEnabled(false);
             cmbMotivScutit.SetValue(0);
@@ -591,6 +591,7 @@
     }
 
     function CompletareZile(s) { 
+        debugger;
         var nvlFunc = "<%=Session["MP_NvlFunc"] %>";
         var resNF = nvlFunc.split(";");
         for (var i = 0; i < resNF.length; i++) {
@@ -629,7 +630,7 @@
                         conducere = true;
                 }
             }
-        debugger;
+        
         if (cmbDurCtr.GetValue() == 2 && txtPerProbaZL.GetValue() != "" && txtNrLuni.GetValue() != "" && txtNrZile.GetValue() != "") {
             if (txtNrLuni.GetValue() != "0" || txtNrZile.GetValue() != "0") {
                 if (txtNrLuni.GetValue() < 3 && parseInt(txtPerProbaZL.GetValue()) > 5) {
@@ -652,7 +653,7 @@
                     if (tip == 1)
                         txtPerProbaZL.SetValue("45");
                 }
-                txtPerProbaZC.SetValue("0");
+                //txtPerProbaZC.SetValue("0");
             }
         }     
   
@@ -672,7 +673,7 @@
                 if (tip == 1)
                     txtPerProbaZC.SetValue("30");
             }
-            txtPerProbaZL.SetValue("0");
+            //txtPerProbaZL.SetValue("0");
         }
      
         if (txtNrZilePreavizDemisie.GetValue() != "") {

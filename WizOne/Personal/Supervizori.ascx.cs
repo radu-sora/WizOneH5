@@ -111,8 +111,17 @@ namespace WizOne.Personal
                 }
                 else
                     e.NewValues["IdAuto"] = Dami.NextId("F100Supervizori2");
+
                 e.NewValues["Modificabil"] = 1;
                 e.NewValues["DataInceput"] = DateTime.Now;
+
+                //Florin 2019.09.26
+                DataTable dtF100 = ds.Tables["F100"];
+                if (dtF100 != null && dtF100.Rows.Count > 0)
+                {
+                    e.NewValues["DataInceput"] = dtF100.Rows[0]["F10022"];
+                    e.NewValues["DataSfarsit"] = new DateTime(2100, 1, 1);
+                }
             }
             catch (Exception ex)
             {

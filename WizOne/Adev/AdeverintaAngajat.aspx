@@ -5,7 +5,7 @@
 
     <script type="text/javascript">
         function OnValueChangedHandler(s) {
-            debugger;
+            
             pnlCtl.PerformCallback();
         }
     </script>

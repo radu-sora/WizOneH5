@@ -909,7 +909,9 @@ namespace WizOne.Pontaj
                 {
                     //Florin 2019.07.19
                     //am adaugat filtru    AND CodF300 IS NOT NULL 
-                    DataTable entFor = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"",0) = 1 AND ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' AND CodF300 IS NOT NULL ORDER BY ""Ordine"" ", null);
+                    //Florin 2019.09.30
+                    //am scos conditia cu vizibil
+                    DataTable entFor = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' AND CodF300 IS NOT NULL ORDER BY ""Ordine"" ", null);
                     if (entFor == null || entFor.Rows.Count == 0)
                     {
                         rez = 0;

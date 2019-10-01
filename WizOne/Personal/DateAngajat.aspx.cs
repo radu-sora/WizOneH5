@@ -1376,7 +1376,7 @@ namespace WizOne.Personal
                             {
                                 string colName = lst[idCtl];
                                 dynamic ctl = ((dynamic)ASPxPageControl2.TabPages[i].Controls[0].FindControl(numeTab + "_pnlCtl").FindControl(numeTab + "_DataList")).Items[0].FindControl(idCtl);
-
+  
                                 if (colName == "F71813")
                                 {
                                     //Radu 12.09.2019 - salvare nivel functie in F718
@@ -1388,11 +1388,29 @@ namespace WizOne.Personal
                                 DataTable dt = new DataTable();
                                 if (cols1.Contains(colName)) dt = ds.Tables[1];
                                 if (cols2.Contains(colName)) dt = ds.Tables[2];
-                                if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString())
+                                {
+                                    if (dt.Rows[0][colName].GetType() == typeof(DateTime))
+                                    {
+                                        DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
+                                        dt.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
+                                    }
+                                    else
+                                        dt.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                }
 
                                 DataTable dt2 = new DataTable();
                                 if (cols3.Contains(colName)) dt2 = ds.Tables[0];
-                                if (ctl != null && General.Nz(dt2.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString()) dt2.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                if (ctl != null && General.Nz(dt2.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString())
+                                {
+                                    if (dt2.Rows[0][colName].GetType() == typeof(DateTime))
+                                    {
+                                        DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
+                                        dt2.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
+                                    }
+                                    else
+                                        dt2.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                }
                             }
                             catch (Exception ex)
                             {

@@ -1336,6 +1336,10 @@ namespace WizOne.Avs
 
                 if (cmb1Act != null && cmb1Act.Value != null && Convert.ToInt32(cmb1Act.Value) == 1)
                 {
+                    lblTxt1Act.Visible = false;
+                    lblTxt2Act.Visible = false;
+                    txt1Act.Visible = false;
+                    txt2Act.Visible = false;
                     lblTxt5Act.Visible = false;
                     lblTxt6Act.Visible = false;
                     de1Act.Visible = false;
@@ -1343,6 +1347,10 @@ namespace WizOne.Avs
                 }
                 else
                 {
+                    lblTxt1Act.Visible = true;
+                    lblTxt2Act.Visible = true;
+                    txt1Act.Visible = true;
+                    txt2Act.Visible = true;
                     lblTxt5Act.Visible = true;
                     lblTxt6Act.Visible = true;
                     de1Act.Visible = true;
@@ -1351,13 +1359,23 @@ namespace WizOne.Avs
 
                 if (cmb1Nou != null && cmb1Nou.Value != null && Convert.ToInt32(cmb1Nou.Value) == 1)
                 {
+                    lblTxt1Nou.Visible = false;
+                    lblTxt2Nou.Visible = false;
+                    txt1Nou.Visible = false;
+                    txt2Nou.Visible = false;
                     lblTxt5Nou.Visible = false;
                     lblTxt6Nou.Visible = false;
                     de1Nou.Visible = false;
                     de2Nou.Visible = false;
+                    de1Nou.Value = new DateTime(2100, 1, 1);
+                    de2Nou.Value = new DateTime(2100, 1, 1);
                 }
                 else
                 {
+                    lblTxt1Nou.Visible = true;
+                    lblTxt2Nou.Visible = true;
+                    txt1Nou.Visible = true;
+                    txt2Nou.Visible = true;
                     lblTxt5Nou.Visible = true;
                     lblTxt6Nou.Visible = true;
                     de1Nou.Visible = true;
@@ -2045,7 +2063,7 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.PrelungireCIM:
                     case (int)Constante.Atribute.PrelungireCIM_Vanz:
-                        if (de1Nou.Value == null || de2Nou.Value == null) strErr += ", date prelungire CIM";
+                        if ((cmb1Nou.Value == null || Convert.ToInt32(cmb1Nou.Value) != 1) && (de1Nou.Value == null || de2Nou.Value == null)) strErr += ", date prelungire CIM";
                         DataTable dtTemp = General.IncarcaDT("SELECT F1009741 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                         if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString() == "1")
                             strErr += ", prelungirea se face doar pt. contractele pe perioada determinata";

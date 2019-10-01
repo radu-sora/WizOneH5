@@ -5551,7 +5551,7 @@ namespace WizOne.Module
                     }
                     else
                     {
-                        if (param[0].Length >= 2 && param[0].Substring(0, 2) == "lg")
+                        if ((param[0].Length >= 2 && param[0].Substring(0, 2) == "lg") || (param[0].Length >= 3 && param[0].Substring(0, 3) == "lbl"))
                         {
                             HtmlGenericControl ctl1 = pnl.FindControl(param[0]) as HtmlGenericControl;
                             if (ctl1 != null)

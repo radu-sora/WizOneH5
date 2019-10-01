@@ -149,6 +149,19 @@
                 </div>	
 
                 <div style="width:100%; margin-bottom:10px;">
+                    <label id="lblLocatie" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Locatie munca</label>
+                    <table>
+                        <tr>
+                            <td>
+				                <dx:ASPxComboBox ID="cmbLocatie" runat="server" DropDownStyle="DropDown" TabIndex="10" TextField="LOCATIE_MUNCA" ValueField="ID_LOCATIE" ValueType="System.Int32" Width="200">
+                                    <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
+				                </dx:ASPxComboBox>
+                            </td>               
+                        </tr>
+                    </table>
+                </div>	
+
+                <div style="width:100%; margin-bottom:10px;">
                     <label id="lblCAEN" runat="server" style="display:inline-block; float:left; padding:0px 15px; width:150px;">Cod CAEN</label>
                     <table>
                         <tr>

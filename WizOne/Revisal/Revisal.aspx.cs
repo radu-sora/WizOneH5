@@ -108,7 +108,22 @@ namespace WizOne.Revisal
                 else
                     lista = Session["ListaParamRevisal"] as Dictionary<string, string>;
 
-                
+
+                rbModif1.ClientEnabled = false;
+                rbModif2.ClientEnabled = false;
+
+
+                if (rbSporuri2.Checked)
+                {
+                    rbSporuriAngNoi1.ClientEnabled = false;
+                    rbSporuriAngNoi2.ClientEnabled = false;
+                }
+                else
+                {
+                    rbSporuriAngNoi1.ClientEnabled = true;
+                    rbSporuriAngNoi2.ClientEnabled = true;
+                }
+
             }
             catch (Exception ex)
             {
@@ -162,11 +177,31 @@ namespace WizOne.Revisal
                         if (!lista.ContainsKey("REVISAL_SPORURI_CALCULATE_CUVENITE"))
                             lista.Add("REVISAL_SPORURI_CALCULATE_CUVENITE", "");
                         lista["REVISAL_SPORURI_CALCULATE_CUVENITE"] = param[1] == "true" ? "0" : "1";
+                        if (rbSporuri2.Checked)
+                        {
+                            rbSporuriAngNoi1.ClientEnabled = false;
+                            rbSporuriAngNoi2.ClientEnabled = false;
+                        }
+                        else
+                        {
+                            rbSporuriAngNoi1.ClientEnabled = true;
+                            rbSporuriAngNoi2.ClientEnabled = true;
+                        }
                         break;
                     case "rbSporuri2":
                         if (!lista.ContainsKey("REVISAL_SPORURI_CALCULATE_CUVENITE"))
                             lista.Add("REVISAL_SPORURI_CALCULATE_CUVENITE", "");
                         lista["REVISAL_SPORURI_CALCULATE_CUVENITE"] = param[1] == "true" ? "1" : "0";
+                        if (rbSporuri2.Checked)
+                        {
+                            rbSporuriAngNoi1.ClientEnabled = false;
+                            rbSporuriAngNoi2.ClientEnabled = false;
+                        }
+                        else
+                        {
+                            rbSporuriAngNoi1.ClientEnabled = true;
+                            rbSporuriAngNoi2.ClientEnabled = true;
+                        }
                         break;
                     case "rbModif1":
                         if (!lista.ContainsKey("REVISAL_INTERVAL_MODIFICARI"))

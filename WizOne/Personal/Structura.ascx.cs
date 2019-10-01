@@ -72,6 +72,13 @@ namespace WizOne.Personal
                 cmbPL.DataSource = dtPL;
                 cmbPL.DataBind();
 
+                sql = @"SELECT * FROM LOCATIE_MUNCA";
+                if (Constante.tipBD == 2)
+                    sql = General.SelectOracle("LOCATIE_MUNCA", "ID_LOCATIE");
+                DataTable dtLoc = General.IncarcaDT(sql, null);
+                cmbLocatie.DataSource = dtLoc;
+                cmbLocatie.DataBind();
+
                 DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 WHERE 1=1 " + (Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0")) <= 0 
                     ? (Constante.tipBD == 1 ? " AND F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00815" : " AND F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00815")
                     : " AND F00808 = " + Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0"))
@@ -110,6 +117,7 @@ namespace WizOne.Personal
                         cmbBir.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F100959"], "0"));
                         cmbCC.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10053"], "0"));
                         cmbPL.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F10079"], "0"));
+                        cmbLocatie.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001046"], "0"));
                         cmbCAEN.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001095"], "0"));
                         cmbUnitStat.Value = Convert.ToInt32(General.Nz(table.Rows[0]["F1001097"], "0"));
                     }
@@ -119,8 +127,7 @@ namespace WizOne.Personal
                 {
                     cmbStru.BackColor = Color.LightGray;
                     //cmbPL.BackColor = Color.LightGray;
-                }
-
+                }           
                 General.SecuritatePersonal(pnlCtlStruct, Convert.ToInt32(Session["UserId"].ToString()));
             }
             catch (Exception ex)
@@ -263,6 +270,11 @@ namespace WizOne.Personal
                 case "cmbPL":
                     ds.Tables[0].Rows[0]["F10079"] = param[1];
                     ds.Tables[1].Rows[0]["F10079"] = param[1];
+                    Session["InformatiaCurentaPersonal"] = ds;
+                    break;
+                case "cmbLocatie":
+                    ds.Tables[0].Rows[0]["F1001046"] = param[1];
+                    ds.Tables[2].Rows[0]["F1001046"] = param[1];
                     Session["InformatiaCurentaPersonal"] = ds;
                     break;
                 case "cmbCAEN":

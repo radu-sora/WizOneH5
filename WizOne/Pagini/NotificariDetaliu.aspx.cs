@@ -1012,6 +1012,8 @@ namespace WizOne.Pagini
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
+                dr["IdAuto"] = Convert.ToInt32(General.Nz(dt.Compute("MAX(IdAuto)", "[IdAuto] IS NOT NULL"), 0)) + 1;
+
                 dt.Rows.Add(dr);
                 e.Cancel = true;
                 grDateCond.CancelEdit();

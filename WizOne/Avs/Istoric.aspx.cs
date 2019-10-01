@@ -342,8 +342,19 @@ namespace WizOne.Avs
                     tabelaC = "F100";
                     tabelaI = "F910";
                     nr = 4;
-                    campV = "(select F09804 from F098, F721 where f09802=F72106 and F72102=\"ValV\")";
-                    campN = "(select F09804 from F098, F721 where f09802=F72106 and F72102=\"ValN\")";
+                    //Florin 2019.09.30
+
+                    //campV = "(select F09804 from F098, F721 where f09802=F72106 and F72102=\"ValV\")";
+                    //campN = "(select F09804 from F098, F721 where f09802=F72106 and F72102=\"ValN\")";
+
+                    campV = "(select TOP 1 F09804 from F098, F721 where f09802=F72106 and F72102=\"ValV\")";
+                    campN = "(select TOP 1 F09804 from F098, F721 where f09802=F72106 and F72102=\"ValN\")";
+                    if (Constante.tipBD == 2)
+                    {
+                        campV = "(select F09804 from F098, F721 where ROWNUM <= 1 AND f09802=F72106 and F72102=\"ValV\")";
+                        campN = "(select F09804 from F098, F721 where ROWNUM <= 1 AND f09802=F72106 and F72102=\"ValN\")";
+                    }
+
                     numeAtr = "Motiv plecare";
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
                         camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString());

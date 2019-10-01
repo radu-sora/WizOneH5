@@ -405,7 +405,7 @@
 
 
                         <dx:GridViewDataTextColumn FieldName="Culoare" Caption="Stare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                        
+                        <dx:GridViewDataTextColumn FieldName="ZileGri" Caption="ZileGri" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
 
 
                     </Columns>

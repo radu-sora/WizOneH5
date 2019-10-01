@@ -162,8 +162,10 @@ namespace WizOne.Pagini
                                         <span class='badge'>{0}</span>
                                     </div>
                                     <h3>{2}</h3>";
-                    object nr = General.ExecutaScalar("SELECT COUNT(*) FROM (" + ele.StringSelect + ") X", null);
-                    str = string.Format(str, nr.ToString(), ele.Pagina, ele.Eticheta, ele.RutaImg);
+
+                    //Florin 2019.09.30 - am transformat nr din object in int
+                    int nr = Convert.ToInt32(General.Nz(General.ExecutaScalar("SELECT COUNT(*) FROM (" + ele.StringSelect + ") X", null),0));
+                    str = string.Format(str, nr, ele.Pagina, ele.Eticheta, ele.RutaImg);
 
                     HtmlGenericControl divBadge = new HtmlGenericControl("div");
                     divBadge.Attributes["class"] = "badgeContainer";

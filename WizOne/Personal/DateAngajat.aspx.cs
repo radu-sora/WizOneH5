@@ -572,14 +572,15 @@ namespace WizOne.Personal
                     if (dataModif != Convert.ToDateTime(ds.Tables[1].Rows[0]["F10023"]))
                         calcCO = true;
                 }
-
-
+                    
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
+                    {  
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
+                    }
                 }
 
                 //Florin 2018-10-30
@@ -600,7 +601,7 @@ namespace WizOne.Personal
                 GolireVariabile();
 
                 //Florin 2018.11.22
-                //trimitem la lista de angajati
+                //trimitem la lista de angajati        
                 Response.Redirect("~/Personal/Lista.aspx", false);
 
             }
@@ -902,6 +903,29 @@ namespace WizOne.Personal
         {
             try
             {
+                int marcaInit = -99;
+                int marcaFin = -99;
+              
+                marcaInit = Convert.ToInt32(dt100.Rows[0]["F10003"].ToString());
+                marcaFin = marcaInit;
+
+                string strSQL = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'MP_MarcaFaraSecventa'";
+                DataTable dtSec = General.IncarcaDT(strSQL, null);
+                if (dtSec != null && dtSec.Rows.Count > 0 && dtSec.Rows[0][0] != null && dtSec.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtSec.Rows[0][0].ToString()) == 1)
+                {
+                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100", null);
+                    if (dtMarca != null && dtMarca.Rows.Count > 0 && dtMarca.Rows[0][0] != null && dtMarca.Rows[0][0].ToString().Length > 0)
+                        marcaFin = Convert.ToInt32(dtMarca.Rows[0][0].ToString());
+                    if (marcaInit != marcaFin)
+                    {
+                        dt100.Rows[0]["F10003"] = marcaFin;
+                        Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
+                    }
+                }
+               
+                dt1001.Rows[0]["F10003"] = marcaFin;               
+
+
                 General.SalveazaDate(dt100, "F100");
                 General.SalveazaDate(dt1001, "F1001");
             }
@@ -919,53 +943,63 @@ namespace WizOne.Personal
 
             try
             {
-
-                if (Constante.tipBD == 1)                   //SQL
-                {
-                    string vers = "2008";
-                    string sql = "SELECT Valoare FROM tblParametrii WHERE Nume = 'VersiuneSQL'";
-                    DataTable dt = General.IncarcaDT(sql, null);
-                    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
-                        vers = dt.Rows[0][0].ToString();
-
-                    if (vers == "2012")
-                    {
-                        //secventa  SQL
-                        sql = "SELECT NEXT VALUE FOR F100MARCA;";
-                        dt = General.IncarcaDT(sql, null);
-
-                        id = Convert.ToInt32(dt.Rows[0][0].ToString());
-                    }
-                    else
-                    {
-                        sql = "SELECT * FROM tblConfig WHERE Id = 1";
-                        dt = General.IncarcaDT(sql, null);
-                        if (dt.Rows[0]["NextMarca"] != null && dt.Rows[0]["NextMarca"].ToString().Length > 0)
-                        {
-                            id = Convert.ToInt32(dt.Rows[0]["NextMarca"].ToString()) + 1;
-                        }
-                        dt.Rows[0]["NextMarca"] = id;
-                        SqlDataAdapter da = new SqlDataAdapter();
-                        SqlCommandBuilder cb = new SqlCommandBuilder();
-                        da = new SqlDataAdapter();
-                        da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM tblConfig", null);
-                        cb = new SqlCommandBuilder(da);
-                        da.Update(dt);
-                        da.Dispose();
-                        da = null;
-
-                    }
+                string strSQL = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'MP_MarcaFaraSecventa'";
+                DataTable dtSec = General.IncarcaDT(strSQL, null);
+                if (dtSec != null && dtSec.Rows.Count > 0 && dtSec.Rows[0][0] != null && dtSec.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtSec.Rows[0][0].ToString()) == 1)
+                {//se va lua max + 1 din F100
+                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100", null);
+                    if (dtMarca != null && dtMarca.Rows.Count > 0 && dtMarca.Rows[0][0] != null && dtMarca.Rows[0][0].ToString().Length > 0)
+                        id = Convert.ToInt32(dtMarca.Rows[0][0].ToString());                    
                 }
-                else                                   //Oracle
-                {
-                    try
+                else
+                {//se va citi din secventa
+                    if (Constante.tipBD == 1)                   //SQL
                     {
-                        string sql = "select F100MARCA.nextval from dual";
+                        string vers = "2008";
+                        string sql = "SELECT Valoare FROM tblParametrii WHERE Nume = 'VersiuneSQL'";
                         DataTable dt = General.IncarcaDT(sql, null);
-                        id = Convert.ToInt32(dt.Rows[0][0].ToString());
+                        if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
+                            vers = dt.Rows[0][0].ToString();
+
+                        if (vers == "2012")
+                        {
+                            //secventa  SQL
+                            sql = "SELECT NEXT VALUE FOR F100MARCA;";
+                            dt = General.IncarcaDT(sql, null);
+
+                            id = Convert.ToInt32(dt.Rows[0][0].ToString());
+                        }
+                        else
+                        {
+                            sql = "SELECT * FROM tblConfig WHERE Id = 1";
+                            dt = General.IncarcaDT(sql, null);
+                            if (dt.Rows[0]["NextMarca"] != null && dt.Rows[0]["NextMarca"].ToString().Length > 0)
+                            {
+                                id = Convert.ToInt32(dt.Rows[0]["NextMarca"].ToString()) + 1;
+                            }
+                            dt.Rows[0]["NextMarca"] = id;
+                            SqlDataAdapter da = new SqlDataAdapter();
+                            SqlCommandBuilder cb = new SqlCommandBuilder();
+                            da = new SqlDataAdapter();
+                            da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM tblConfig", null);
+                            cb = new SqlCommandBuilder(da);
+                            da.Update(dt);
+                            da.Dispose();
+                            da = null;
+
+                        }
                     }
-                    catch (Exception)
+                    else                                   //Oracle
                     {
+                        try
+                        {
+                            string sql = "select F100MARCA.nextval from dual";
+                            DataTable dt = General.IncarcaDT(sql, null);
+                            id = Convert.ToInt32(dt.Rows[0][0].ToString());
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 }
             }

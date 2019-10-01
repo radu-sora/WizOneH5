@@ -59,6 +59,12 @@ namespace WizOne.Personal
                     IncarcaGrid();
                     //btnNew.Attributes.Add("onclick", "window.open('Sablon.aspx', null,'height=300,width=500,left='+(window.outerWidth / 2 + window.screenX - 150)+', top=' + (window.outerHeight / 2 + window.screenY - 100));");
                     if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
+
+                    if (Session["MP_Mesaj"] != null)
+                    {
+                        MessageBox.Show(Session["MP_Mesaj"].ToString(), MessageBox.icoInfo, "Atentie !");
+                        Session["MP_Mesaj"] = null;
+                    }
                 }
                 else
                 {

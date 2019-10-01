@@ -42,6 +42,10 @@
             </td>
             <td align="right">  
                 <dx:ASPxButton ID="btnGen" ClientInstanceName="btnGen" ClientIDMode="Static" runat="server" Text="Generare" AutoPostBack="true" OnClick="btnGen_Click" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function(s, e) {
+                        pnlLoading.Show();
+                        e.processOnServer = true;
+                    }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >

@@ -867,6 +867,14 @@ namespace WizOne.Pontaj
                 {
                     if (arrZL.Length > 0 && arrZL.IndexOf(e.DataColumn.FieldName + ";") >= 0)
                         e.Cell.BackColor = System.Drawing.Color.Aquamarine;
+                    
+
+                    string val = General.Nz(grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri"), "").ToString();
+                    if (val != "" && (val + ",").IndexOf(e.DataColumn.FieldName) >= 0)
+                    {
+                        e.Cell.BackColor = Color.DarkGray;
+                        e.Cell.Enabled = false;
+                    }
                 }
 
 
@@ -911,7 +919,7 @@ namespace WizOne.Pontaj
                     //am adaugat filtru    AND CodF300 IS NOT NULL 
                     //Florin 2019.09.30
                     //am scos conditia cu vizibil
-                    DataTable entFor = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' AND CodF300 IS NOT NULL ORDER BY ""Ordine"" ", null);
+                    DataTable entFor = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE 1=1 {General.FiltrulCuNull("CampSelect")} AND ""CodF300"" IS NOT NULL ORDER BY ""Ordine"" ", null);
                     if (entFor == null || entFor.Rows.Count == 0)
                     {
                         rez = 0;
@@ -2492,7 +2500,12 @@ namespace WizOne.Pontaj
                                 FROM F100 X
                                 INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
                                 WHERE X.F10003=A.F10003
-                                FOR XML PATH ('')) AS ZileLucrate
+                                FOR XML PATH ('')) AS ZileLucrate,
+                                (SELECT ',Ziua' + CASE WHEN Y.Zi < CONVERT(date,X.F10022) OR CONVERT(date,X.F10023) < Y.Zi THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
+                                FROM F100 X
+                                INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
+                                WHERE X.F10003=A.F10003
+                                FOR XML PATH ('')) AS ZileGri
                                 FROM (
                                 SELECT TOP 100 PERCENT COALESCE({idRol},1) AS IdRol, st.Denumire AS StarePontaj, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate, A.F100901, CAST({dtInc} AS datetime) AS ZiuaInc, 
                                 CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, CONVERT(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit,  A.F10008 + ' ' + A.F10009 AS AngajatNume, C.Id AS IdContract, 
@@ -2548,7 +2561,12 @@ namespace WizOne.Pontaj
                                 FROM F100 X
                                 INNER JOIN ""tblZile"" Y ON {dtInc} <= Y.""Zi"" AND Y.""Zi"" <= {dtSf}
                                 WHERE X.F10003 = A.F10003
-                                ) AS ""ZileLucrate""
+                                ) AS ""ZileLucrate"",
+                                (SELECT LISTAGG(',Ziua' || CASE WHEN Y.""Zi"" < TRUNC(F10022) OR TRUNC(X.F10023) < Y.""Zi"" THEN TO_CHAR(EXTRACT(DAY FROM Y.""Zi"")) END) WITHIN GROUP (ORDER BY X.F10003)
+                                FROM F100 X
+                                INNER JOIN ""tblZile"" Y ON {dtInc} <= Y.""Zi"" AND Y.""Zi"" <= {dtSf}
+                                WHERE X.F10003 = A.F10003
+                                ) AS ""ZileGri""
                                 FROM (
                                 SELECT COALESCE({idRol},1) AS ""IdRol"", st.""Denumire"" AS ""StarePontaj"", nvl(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"", A.F100901, {dtInc}  AS ""ZiuaInc"", 
                                 TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"",  A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", C.""Id"" AS ""IdContract"", 
@@ -2929,6 +2947,30 @@ WHERE D.""IdUser"" =100 AND C.""IdRol""=3 GROUP BY B.F10003) X   INNER JOIN F100
                 throw;
             }
         }
+
+        protected void grDate_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            try
+            {
+                if (e.KeyValue != null && e.Column.FieldName.Length >= 4 && e.Column.FieldName.Substring(0, 4) == "Ziua")
+                {
+                    object ert = grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri");
+
+                    //string val = General.Nz(grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri"),"").ToString();
+                    //if (val != "" && (val + ",").IndexOf(e.Column.FieldName) >= 0)
+                    //{
+                    //    e.Editor.DisabledStyle.BackColor = Color.LightGray;
+                    //    e.Editor.ClientEnabled = false;
+                    //}
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
 
     }
 }

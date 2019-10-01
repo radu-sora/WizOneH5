@@ -8377,6 +8377,33 @@ namespace WizOne.Module
             }
         }
 
+        public static string FiltrulCuNull(string camp)
+        {
+            string str = "";
+
+            try
+            {
+                if (camp != "")
+                {
+                    if (camp.IndexOf(".") >= 0)
+                        camp = camp.Replace(".", ".\"");
+                    else
+                        camp = "\"" + camp;
+
+                    camp = camp + "\"";
+                    str = " AND " + camp + " IS NOT NULL ";
+                    if (Constante.tipBD == 1)
+                        str += $@" AND {camp} <> '' ";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+
+            return str;
+        }
+
 
     }
 }

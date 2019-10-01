@@ -166,15 +166,6 @@ namespace WizOne.Revisal {
         protected global::DevExpress.Web.ASPxRadioButton rbDataSf2;
         
         /// <summary>
-        /// rbSporuri1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxRadioButton rbSporuri1;
-        
-        /// <summary>
         /// rbSporuri2 control.
         /// </summary>
         /// <remarks>
@@ -184,6 +175,24 @@ namespace WizOne.Revisal {
         protected global::DevExpress.Web.ASPxRadioButton rbSporuri2;
         
         /// <summary>
+        /// rbSporuri1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRadioButton rbSporuri1;
+        
+        /// <summary>
+        /// lblTest1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblTest1;
+        
+        /// <summary>
         /// lblSpor control.
         /// </summary>
         /// <remarks>
@@ -191,6 +200,15 @@ namespace WizOne.Revisal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblSpor;
+        
+        /// <summary>
+        /// lblTest2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblTest2;
         
         /// <summary>
         /// rbSporuriAngNoi1 control.

@@ -121,12 +121,12 @@ namespace WizOne.Personal
         {
             try
             {
-                if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
-                {
-                    e.Cancel = true;
-                    grDateGrupuri.CancelEdit();
-                    return;
-                }
+                //if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                //{
+                //    e.Cancel = true;
+                //    grDateGrupuri.CancelEdit();
+                //    return;
+                //}
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 

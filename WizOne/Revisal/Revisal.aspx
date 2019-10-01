@@ -15,6 +15,9 @@
         pnlCtl.PerformCallback(s.name + ";" + s.GetValue());
     }
 
+    function OnValueChangedHandler(s) {
+        pnlCtl.PerformCallback(s.name + ";" + s.GetValue());
+    }
 
     function OnEndCallback(s, e) {
         pnlLoading.Hide();
@@ -79,6 +82,7 @@
                         <tr>
                             <td align="left">                             
                                     <dx:ASPxCheckBox ID="chkInactivi"  runat="server" Width="120"  Text="Inclusiv inactivi" TextAlign="Left" ClientInstanceName="chkInactivi" >
+                                        <ClientSideEvents CheckedChanged="function(s,e){ OnTextChangedHandler(s); }" />
                                     </dx:ASPxCheckBox>   
                              </td>                    
 						    <td >
@@ -115,6 +119,7 @@
                         <tr>
 	                        <td align="left">                             
                                 <dx:ASPxCheckBox ID="chkCalc"  runat="server" Width="100"  Text="Calculul e final" TextAlign="Left" ClientInstanceName="chkCalc" >
+                                    <ClientSideEvents CheckedChanged="function(s,e){ OnTextChangedHandler(s); }" />
                                 </dx:ASPxCheckBox>   
                              </td>  	
                             <td align="left">
@@ -133,11 +138,11 @@
                     <table width="10%" >
                         <tr>
                             <td>                              
-                                <dx:ASPxRadioButton ID="rbDataSf1" Width="300" runat="server" RepeatDirection="Vertical"  Text="Data sfarsit contract = Data incetare" Enabled="true"  ClientInstanceName="rbDataSf1"
+                                <dx:ASPxRadioButton ID="rbDataSf1" Width="300" runat="server" RepeatDirection="Vertical"  Text="Data sfarsit contract = Data incetare" ClientEnabled="true"  ClientInstanceName="rbDataSf1"
                                      GroupName="DataSfarsit"> 
                                     <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                    
                                 </dx:ASPxRadioButton>
-                                <dx:ASPxRadioButton ID="rbDataSf2"  Width="300" runat="server" RepeatDirection="Vertical"  Text="Data sfarsit contract = Data incetare - 1 zi" Enabled="true" ClientInstanceName="rbDataSf2" 
+                                <dx:ASPxRadioButton ID="rbDataSf2"  Width="300" runat="server" RepeatDirection="Vertical"  Text="Data sfarsit contract = Data incetare - 1 zi" ClientEnabled="true" ClientInstanceName="rbDataSf2" 
                                      GroupName="DataSfarsit">
                                     <ClientSideEvents  CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                  
                                 </dx:ASPxRadioButton>
@@ -149,30 +154,38 @@
                     <legend class="legend-font-size">Configurare Sporuri</legend> 
                     <table width="10%" >
                         <tr>
-                            <td>                              
-                                <dx:ASPxRadioButton ID="rbSporuri1" Width="300" runat="server" RepeatDirection="Vertical"  Text="Sporuri calculate" Enabled="true"  ClientInstanceName="rbSporuri1"
-                                     GroupName="SporuriCalcCuv"> 
-                                    <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                    
-                                </dx:ASPxRadioButton>
-                                <dx:ASPxRadioButton ID="rbSporuri2"  Width="300" runat="server" RepeatDirection="Vertical"  Text="Sporuri cuvenite" Enabled="true" ClientInstanceName="rbSporuri2" 
+                            <td>             
+                                <dx:ASPxRadioButton ID="rbSporuri2"  Width="100" runat="server" RepeatDirection="Vertical"  Text="Sporuri cuvenite" ClientEnabled="true" ClientInstanceName="rbSporuri2" 
                                      GroupName="SporuriCalcCuv">
                                     <ClientSideEvents  CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                  
+                                </dx:ASPxRadioButton>                                
+                                <dx:ASPxRadioButton ID="rbSporuri1" Width="100" runat="server" RepeatDirection="Vertical"  Text="Sporuri calculate" ClientEnabled="true"  ClientInstanceName="rbSporuri1"
+                                     GroupName="SporuriCalcCuv"> 
+                                    <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                    
                                 </dx:ASPxRadioButton>
                             </td>	
                         </tr>
                         <tr>
-                            <dx:ASPxLabel ID="lblSpor" runat="server" Text="Angajati noi" >  </dx:ASPxLabel>
+                            <td>
+                                <dx:ASPxLabel ID="lblTest1" runat="server"  >  </dx:ASPxLabel> 
+                            </td>
+                            <td>     
+                                  <dx:ASPxLabel ID="lblSpor" runat="server" Text="Angajati noi" >  </dx:ASPxLabel>                                
+                            </td>
                         </tr>
                        <tr>
-                            <td>                              
-                                <dx:ASPxRadioButton ID="rbSporuriAngNoi1" Width="300" runat="server" RepeatDirection="Vertical"  Text="Sporuri cuvenite" Enabled="true"  ClientInstanceName="rbSporuriAngNoi1"
-                                     GroupName="SporuriCalcCuvAng"> 
-                                    <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                    
+                            <td>
+                                <dx:ASPxLabel ID="lblTest2" runat="server"  >  </dx:ASPxLabel> 
+                            </td>
+                            <td>                                    
+                                <dx:ASPxRadioButton ID="rbSporuriAngNoi1" Width="100" runat="server" RepeatDirection="Vertical"  Text="Sporuri cuvenite" ClientEnabled="true"  ClientInstanceName="rbSporuriAngNoi1"
+                                        GroupName="SporuriCalcCuvAng">          
+                                       <ClientSideEvents CheckedChanged="function(s,e){ OnTextChangedHandler(s); }" />
                                 </dx:ASPxRadioButton>
-                                <dx:ASPxRadioButton ID="rbSporuriAngNoi2"  Width="300" runat="server" RepeatDirection="Vertical"  Text="Spor nedeclarat 0" Enabled="true" ClientInstanceName="rbSporuriAngNoi2" 
-                                     GroupName="SporuriCalcCuvAng">
-                                    <ClientSideEvents  CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                  
-                                </dx:ASPxRadioButton>
+                                <dx:ASPxRadioButton ID="rbSporuriAngNoi2"  Width="100" runat="server" RepeatDirection="Vertical"  Text="Spor nedeclarat 0" ClientEnabled="true" ClientInstanceName="rbSporuriAngNoi2" 
+                                        GroupName="SporuriCalcCuvAng"> 
+                                       <ClientSideEvents CheckedChanged="function(s,e){ OnTextChangedHandler(s); }" />
+                                </dx:ASPxRadioButton>                            
                             </td>	
                         </tr>                                                         
                     </table>
@@ -182,13 +195,11 @@
                     <table width="10%" >
                         <tr>
                             <td>                              
-                                <dx:ASPxRadioButton ID="rbModif1" Width="300" runat="server" RepeatDirection="Vertical"  Text="Modificarile in intervalul [DeLa ; La]" Enabled="true"  ClientInstanceName="rbModif1"
-                                     GroupName="ModifAvans"> 
-                                    <ClientSideEvents   CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                    
+                                <dx:ASPxRadioButton ID="rbModif1" Width="300" runat="server" RepeatDirection="Vertical"  Text="Modificarile in intervalul [DeLa ; La]"   ClientInstanceName="rbModif1"
+                                     GroupName="ModifAvans">                                                                      
                                 </dx:ASPxRadioButton>
-                                <dx:ASPxRadioButton ID="rbModif2"  Width="300" runat="server" RepeatDirection="Vertical"  Text="Modificarile in intervalul [DeLa ; DeLa + 19 zile]" Enabled="true" ClientInstanceName="rbModif2" 
-                                     GroupName="ModifAvans">
-                                    <ClientSideEvents  CheckedChanged="function(s,e){ OnValueChangedHandler(s); }" />                                  
+                                <dx:ASPxRadioButton ID="rbModif2"  Width="300" runat="server" RepeatDirection="Vertical"  Text="Modificarile in intervalul [DeLa ; DeLa + 19 zile]"  ClientInstanceName="rbModif2" 
+                                     GroupName="ModifAvans">                                                             
                                 </dx:ASPxRadioButton>
                             </td>	
                         </tr>                   

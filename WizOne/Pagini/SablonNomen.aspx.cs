@@ -88,6 +88,7 @@ namespace WizOne.Pagini
                         }
 
                         dt.PrimaryKey = keys;
+                        dt.TableName = Session["Sablon_Tabela"].ToString();
                     }
 
                     Session["InformatiaCurenta"] = dt;

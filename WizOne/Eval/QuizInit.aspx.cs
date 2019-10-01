@@ -73,7 +73,7 @@ namespace WizOne.Eval
                 strSQL = $@"select fnume.F10003, fnume.F10008 {Dami.Operator()} ' ' {Dami.Operator()} fnume.F10009 as ""NumeComplet"",
 		                            fil.F00406 as ""Filiala"", sec.F00507 as ""Sectie"", dep.F00608 as ""Departament""
                             from F100 fnume
-                            left join F002 as comp on fnume.F10002 = comp.F00202
+                            left join F002 comp on fnume.F10002 = comp.F00202
                             left join F003 subComp on fnume.F10004 = subComp.F00304
                             left join F004 fil on fnume.F10005 = fil.F00405
                             left join F005 sec on fnume.F10006 = sec.F00506

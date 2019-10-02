@@ -367,6 +367,7 @@
 
         function EmptyFields(s, e) {
             cmbAng.SetValue(null);
+            cmbAngZi.SetValue(null);
             cmbCtr.SetValue(null);
             cmbStare.SetValue(null);
 
@@ -618,10 +619,7 @@
                                                             <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
                                                         </dx:EditButton>
                                                     </Buttons>
-                                                    <ClientSideEvents ButtonClick="function(s, e) {
-                                                                    pnlLoading.Show();
-                                                                    e.processOnServer = true;
-                                                                }" />
+                                                    <ClientSideEvents ButtonClick="function(s, e) {pnlLoading.Show();e.processOnServer = true;}" ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtZiua'); }"  />
                                                 </dx:ASPxDateEdit>
                                             </div>
                                             <div style="float:left; padding-right:15px;">

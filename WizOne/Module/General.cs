@@ -7043,7 +7043,11 @@ namespace WizOne.Module
             {
                 string strSql = "";
                 //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"",0) = 1 AND CampSelect IS NOT NULL AND COALESCE(CampSelect,'') <> '' ORDER BY ""Ordine"" ", null);
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' ORDER BY ""Ordine"" ", null);
+
+                //Florin 2019.10.01 - am pus filtrul null
+                //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' ORDER BY ""Ordine"" ", null);
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE 1=1 {General.FiltrulCuNull("CampSelect")} ORDER BY ""Ordine"" ", null);
+
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow row = dt.Rows[i];

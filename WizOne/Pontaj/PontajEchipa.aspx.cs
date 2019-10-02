@@ -2481,12 +2481,13 @@ namespace WizOne.Pontaj
                     zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}_Tmp""";
                 }
 
-                strInner += 
-                    $@"OUTER APPLY dbo.DamiNorma(X.F10003, {dtSf}) dn 
-                    OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
+
                 if (Dami.ValoareParam("TipCalculDate") == "2")
                     strInner += $@"LEFT JOIN DamiNorma_Table dn ON dn.F10003=X.F10003 AND dn.dt={dtSf}
 								LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
+                else
+                    strInner += $@"OUTER APPLY dbo.DamiNorma(X.F10003, {dtSf}) dn 
+                                OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
 
 
                 //Florin 2019.09.23 s-a scos de mai jos LEFT JOIN F724 etc.
@@ -2743,12 +2744,13 @@ namespace WizOne.Pontaj
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003";
 
 
-                strInner +=
-                    $@"OUTER APPLY dbo.DamiNorma(X.F10003, {dtSf}) dn 
-                    OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
+
                 if (Dami.ValoareParam("") == "2")
                     strInner += $@"LEFT JOIN DamiNorma_Table dn ON dn.F10003=X.F10003 AND dn.dt={dtSf}
 								LEFT JOIN DamiDataPlecare_Table dd ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
+                else
+                    strInner += $@"OUTER APPLY dbo.DamiNorma(X.F10003, {dtSf}) dn 
+                                OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
 
                 //Radu 19.09.2019 - am inlocuit F724 cu viewCategoriePontaj
                 //LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
@@ -2846,29 +2848,6 @@ namespace WizOne.Pontaj
             return strSql;
         }
 
-
-        protected void grDate_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
-        {
-            try
-            {
-                if (e.KeyValue != null && e.Column.FieldName.Length >= 4 && e.Column.FieldName.Substring(0, 4) == "Ziua")
-                {
-                    object ert = grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri");
-
-                    //string val = General.Nz(grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri"),"").ToString();
-                    //if (val != "" && (val + ",").IndexOf(e.Column.FieldName) >= 0)
-                    //{
-                    //    e.Editor.DisabledStyle.BackColor = Color.LightGray;
-                    //    e.Editor.ClientEnabled = false;
-                    //}
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
 
 
     }

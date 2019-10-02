@@ -122,6 +122,8 @@ namespace WizOne.Eval
                                     DataTable table2 = General.IncarcaDT(@"select * from ""Eval_Drepturi"" where ""IdQuiz"" = " + arr[1], null);
 
                                     DataSet ds = new DataSet();
+                                    table.TableName = "Eval_Quiz";
+                                    table.PrimaryKey = new DataColumn[] { table.Columns["Id"] };
                                     ds.Tables.Add(table);
                                     table0.TableName = "Eval_QuizIntrebari";
                                     table0.PrimaryKey = new DataColumn[] { table0.Columns["Id"] };

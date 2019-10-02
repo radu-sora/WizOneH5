@@ -126,6 +126,7 @@ namespace WizOne.Eval
                     sqlQuery = "select * from \"Eval_ListaObiectivDet\" where \"IdLista\" ={0}";
                     sqlQuery = string.Format(sqlQuery, IdListaObiective);
                     DataTable dt = General.IncarcaDT(sqlQuery, null);
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
 
                     DataColumn[] keys = dt.PrimaryKey;
                     for (int i = 0; i < keys.Count(); i++)
@@ -338,12 +339,12 @@ namespace WizOne.Eval
                 DataRow row = dt.NewRow();
                 int x = Dami.NextId("Eval_ListaObiectivDet");
                 row["Id"] = x;
-                row["IdObiectiv"] = e.NewValues["IdObiectiv"];
+                row["IdObiectiv"] = e.NewValues["IdObiectiv"] ?? DBNull.Value;
                 row["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
-                row["IdSetAngajat"] = e.NewValues["IdSetAngajat"];
-                row["Target"] = e.NewValues["Target"];
-                row["Ordine"] = e.NewValues["Ordine"];
-                row["Vizibil"] = e.NewValues["Vizibil"];
+                row["IdSetAngajat"] = e.NewValues["IdSetAngajat"] ?? DBNull.Value;
+                row["Target"] = e.NewValues["Target"] ?? DBNull.Value;
+                row["Ordine"] = e.NewValues["Ordine"] ?? DBNull.Value;
+                row["Vizibil"] = e.NewValues["Vizibil"] ?? DBNull.Value;
                 row["TIME"] = DateTime.Now;
                 row["USER_NO"] = Session["UserId"];
 

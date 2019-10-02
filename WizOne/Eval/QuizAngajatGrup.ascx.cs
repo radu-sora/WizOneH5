@@ -186,6 +186,7 @@ namespace WizOne.Eval
                 else
                 {
                     dt = General.IncarcaDT(strSQL, null);
+                    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                     dt.TableName = "Eval_relGrupAngajatQuiz";
                     ds.Tables.Add(dt);
                 }

@@ -3661,7 +3661,7 @@ namespace WizOne.Avs
                 //procesul acesta s-a mutat din ActeAditionale aici
                 //marcam campul Actualizat din Avs_Cereri cand se duce in F100
                 if (act == 1)
-                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { "Id" });
+                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { id });
 
             }
             catch (Exception ex)

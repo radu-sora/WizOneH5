@@ -56,28 +56,28 @@ namespace WizOne.Pontaj
             {
                 if (txtDataInc.Value == null || txtDataSf.Value == null || txtMarcaInc.Value == null || txtMarcaSf.Value == null || (chkCtr.Checked == false && chkStr.Checked == false && chkNrm.Checked == false && chkPerAng.Checked == false && chkRecalc.Checked == false && chkCC.Checked == false))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoError, "");
                     return;
                 }
 
                 if (Convert.ToInt32(txtMarcaInc.Value) > Convert.ToInt32(txtMarcaSf.Value))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Marca inceput este mai mare decat marca sfarsit !"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Marca inceput este mai mare decat marca sfarsit !"), MessageBox.icoError, "");
                     return;
                 }
 
                 if (Convert.ToDateTime(txtDataInc.Value) > Convert.ToDateTime(txtDataSf.Value))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Data inceput este mai mare decat data sfarsit !"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Data inceput este mai mare decat data sfarsit !"), MessageBox.icoError, "");
                     return;
                 }
 
                 if (ActualizeazaDateGenerale(Convert.ToInt32(Session["UserId"]), Convert.ToInt32(txtMarcaInc.Value), Convert.ToInt32(txtMarcaSf.Value), 
                     Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToBoolean(chkCtr.Checked), 
                     Convert.ToBoolean(chkNrm.Checked), Convert.ToBoolean(chkStr.Checked), Convert.ToBoolean(chkPerAng.Checked), Convert.ToBoolean(chkRecalc.Checked), Convert.ToBoolean(chkCC.Checked)))
-                    MessageBox.Show(Dami.TraduCuvant("Proces finalizat cu succes !"), MessageBox.icoSuccess, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Proces finalizat cu succes !"), MessageBox.icoSuccess, "");
                 else
-                    MessageBox.Show(Dami.TraduCuvant("Eroare in proces!"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Eroare in proces!"), MessageBox.icoError, "");
 
             }
             catch (Exception ex)

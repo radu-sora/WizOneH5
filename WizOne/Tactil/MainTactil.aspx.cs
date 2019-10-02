@@ -64,7 +64,7 @@ namespace WizOne.Tactil
             {
                 //if (VerificaFluturasLog() == 0)
                 //{
-                //    MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "Atentie !");
+                //    MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "");
                 //}
                 //else
                 //{
@@ -72,7 +72,7 @@ namespace WizOne.Tactil
 
                 if (!VerifLuna(Convert.ToInt32(spnLuna.Value), Convert.ToInt32(spnAnul.Value)))
                 {
-                    MessageBox.Show("Luna selectata este ulterioara lunii de lucru!", MessageBox.icoWarning, "Atentie !");
+                    MessageBox.Show("Luna selectata este ulterioara lunii de lucru!", MessageBox.icoWarning, "");
                     return;
                 }
 
@@ -105,7 +105,7 @@ namespace WizOne.Tactil
             {              
                 if (!VerifLuna(Convert.ToInt32(spnLuna.Value), Convert.ToInt32(spnAnul.Value)))
                 {
-                    MessageBox.Show("Luna selectata este ulterioara lunii de lucru!", MessageBox.icoWarning, "Atentie !");
+                    MessageBox.Show("Luna selectata este ulterioara lunii de lucru!", MessageBox.icoWarning, "");
                     return;
                 }
 
@@ -120,7 +120,7 @@ namespace WizOne.Tactil
                 {
                     if (VerificaFluturasLog() == 0)
                     {
-                        MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "");
                     }
                     else
                     {

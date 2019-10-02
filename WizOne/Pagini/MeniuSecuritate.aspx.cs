@@ -68,7 +68,7 @@ namespace WizOne.Pagini
             {
                 if (cmbGr.Value == null)
                 {
-                    MessageBox.Show("Nu exista grup de utilizatori selectat", MessageBox.icoInfo, "Atentie !");
+                    MessageBox.Show("Nu exista grup de utilizatori selectat", MessageBox.icoInfo, "");
                     return;
                 }
 

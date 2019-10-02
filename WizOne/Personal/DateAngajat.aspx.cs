@@ -426,7 +426,7 @@ namespace WizOne.Personal
                             var ert = Convert.ToInt32(General.Nz(ds.Tables[1].Rows[0]["F10025"], 0));
                             if (Convert.ToInt32(General.Nz(ds.Tables[1].Rows[0]["F10025"],0)) == 999  && Convert.ToDateTime(ds.Tables[1].Rows[0]["F10022"]) < General.DamiDataLucru().AddMonths(1))
                             {
-                                MessageBox.Show("Data angajarii este mai mica decat luna de salarizare", MessageBox.icoError, "Atentie !");
+                                MessageBox.Show("Data angajarii este mai mica decat luna de salarizare", MessageBox.icoError, "");
                                 return;
                             }
                         }

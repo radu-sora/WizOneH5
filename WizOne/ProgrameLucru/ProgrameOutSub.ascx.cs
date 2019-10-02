@@ -198,7 +198,7 @@ namespace WizOne.ProgrameLucru
                     Session["InformatiaCurentaPrograme"] = ds;
                 }
                 else
-                    MessageBox.Show(errMsg, MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(errMsg, MessageBox.icoError, "");
 
 
             }
@@ -262,7 +262,7 @@ namespace WizOne.ProgrameLucru
                     grDateOutSub.DataSource = dtProgTrepte;
                 }
                 else
-                    MessageBox.Show(errMsg, MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(errMsg, MessageBox.icoError, "");
             }
             catch (Exception ex)
             {

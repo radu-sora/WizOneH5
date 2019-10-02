@@ -14,7 +14,7 @@
     function OnEndCallbackDoc(s, e) {
         if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: s.cpAlertMessage,
+                title: "", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;
@@ -26,7 +26,7 @@
         var dtSf = new Date(deDataSf.GetDate());
 
         if (dtSf < dtInc) {
-            swal({title: "Atentie !", text: "Data start este ulterioara celei de final!",type: "warning"});
+            swal({title: "", text: "Data start este ulterioara celei de final!",type: "warning"});
         }
     }
 
@@ -45,7 +45,7 @@
         }
 
         if (msg != "")
-            swal({ title: "Atentie !", text: msg, type: "warning" });
+            swal({ title: "", text: msg, type: "warning" });
     }
 
     function dtPermis_DateChanged(s) {
@@ -53,7 +53,7 @@
         var dtSf = new Date(deDataExpirare.GetDate());
 
         if (dtSf < dtInc) {
-            swal({ title: "Atentie !", text: "Data expirarii este anterioara datei emiterii!", type: "warning" });
+            swal({ title: "", text: "Data expirarii este anterioara datei emiterii!", type: "warning" });
         }
     }
 
@@ -62,7 +62,7 @@
         var dtSf = new Date(deLaDataLivMil.GetDate());
 
         if (dtSf < dtInc) {
-            swal({ title: "Atentie !", text: "Data start este ulterioara celei de final!", type: "warning" });
+            swal({ title: "", text: "Data start este ulterioara celei de final!", type: "warning" });
         }
     }
 

@@ -342,7 +342,7 @@ namespace WizOne.Pagini
 
                 if (folder.GetFiles().Count() <= 0)
                 {
-                    MessageBox.Show("Nu ati incarcat niciun fisier!", MessageBox.icoError, "Atentie !");
+                    MessageBox.Show("Nu ati incarcat niciun fisier!", MessageBox.icoError, "");
                     return;
                 }
 
@@ -451,7 +451,7 @@ namespace WizOne.Pagini
             {
                 string msg = Notif.TrimiteNotificare("Pagini.ImportValori", (int)Constante.TipNotificare.Notificare, "SELECT 1 " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                 if (msg != "")
-                    MessageBox.Show(msg, MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(msg, MessageBox.icoError, "");
                 else
                     MessageBox.Show("Notificare trimisa cu succes!", MessageBox.icoSuccess);                
             }

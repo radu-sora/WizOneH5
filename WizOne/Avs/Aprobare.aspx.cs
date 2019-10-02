@@ -210,7 +210,7 @@ namespace WizOne.Avs
         //        //General.MemoreazaEroarea("Vine din Avs Aprobare");
         //        if (ids.Count != 0) MetodeCereri(1);
         //        //msg += General.MetodeCereri(1, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
-        //        //MessageBox.Show(msg, MessageBox.icoWarning, "Atentie !");
+        //        //MessageBox.Show(msg, MessageBox.icoWarning, "");
         //        //grDate.DataBind();
         //        IncarcaGrid();
         //        grDate.Selection.UnselectAll();
@@ -259,7 +259,7 @@ namespace WizOne.Avs
         //        //General.MemoreazaEroarea("Vine din Avs Aprobare");
         //        if (ids.Count != 0) MetodeCereri(2);
         //        //msg += General.MetodeCereri(2, ids, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
-        //        //MessageBox.Show(msg, MessageBox.icoWarning, "Atentie !");
+        //        //MessageBox.Show(msg, MessageBox.icoWarning, "");
         //        //grDate.DataBind();
         //        IncarcaGrid();
 
@@ -561,7 +561,7 @@ namespace WizOne.Avs
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     if (tipMsg == 0)
-                        MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
                     else
                         grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
                     return;
@@ -648,7 +648,7 @@ namespace WizOne.Avs
                     if (msg.Length <= 0)
                     {
                         if (tipMsg == 0)
-                            MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "Atentie !");
+                            MessageBox.Show("Nu exista date selectate", MessageBox.icoWarning, "");
                         else
                             grDate.JSProperties["cpAlertMessage"] = "Nu exista date selectate";
 
@@ -656,7 +656,7 @@ namespace WizOne.Avs
                     else
                     {
                         if (tipMsg == 0)
-                            MessageBox.Show(msg, MessageBox.icoWarning, "Atentie !");
+                            MessageBox.Show(msg, MessageBox.icoWarning, "");
                         else
                             grDate.JSProperties["cpAlertMessage"] = msg;
                     }
@@ -667,7 +667,7 @@ namespace WizOne.Avs
                 //grDate.JSProperties["cpAlertMessage"] = msg;
                 //Session["Avs_Grid"] = null;
                 if (tipMsg == 0)
-                    MessageBox.Show(msg, MessageBox.icoWarning, "Atentie !");
+                    MessageBox.Show(msg, MessageBox.icoWarning, "");
                 else
                     grDate.JSProperties["cpAlertMessage"] = msg;
 
@@ -1087,7 +1087,7 @@ namespace WizOne.Avs
         //    }
         //    catch (Exception ex)
         //    {
-        //        //ArataMesaj("Atentie !");
+        //        //ArataMesaj("");
         //        //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
         //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
         //    }

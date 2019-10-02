@@ -457,7 +457,7 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    MessageBox.Show("Nu s-a selectat nici un angajat", MessageBox.icoInfo, "Atentie !");
+                    MessageBox.Show("Nu s-a selectat nici un angajat", MessageBox.icoInfo, "");
                 }
             }
             catch (Exception ex)
@@ -506,7 +506,7 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    MessageBox.Show("Nu s-a selectat nici o zi", MessageBox.icoInfo, "Atentie !");
+                    MessageBox.Show("Nu s-a selectat nici o zi", MessageBox.icoInfo, "");
                 }
             }
             catch (Exception ex)
@@ -1949,9 +1949,9 @@ namespace WizOne.Pontaj
                 {
                     //grDate.ShowLoadingPanel = false;
                     if (select == 0)
-                        MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate !"), MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate !"), MessageBox.icoWarning, "");
                     else
-                        MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoWarning, "");
                 }
 
 

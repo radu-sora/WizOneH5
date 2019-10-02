@@ -407,7 +407,7 @@ namespace WizOne.Organigrama
         //        //    Response.Redirect("~/Organigrama/Posturi", false);
         //        //}
         //        //else
-        //        //    MessageBox.Show("Nu s-a selectat nici un post", MessageBox.icoInfo, "Atentie !");
+        //        //    MessageBox.Show("Nu s-a selectat nici un post", MessageBox.icoInfo, "");
         //    }
         //    catch (Exception ex)
         //    {
@@ -428,7 +428,7 @@ namespace WizOne.Organigrama
                     Response.Redirect("~/Organigrama/Posturi", false);
                 }
                 else
-                    MessageBox.Show("Nu s-a selectat nici un post", MessageBox.icoInfo, "Atentie !");
+                    MessageBox.Show("Nu s-a selectat nici un post", MessageBox.icoInfo, "");
             }
             catch (Exception ex)
             {

@@ -30,7 +30,7 @@ function trad_string(idLimba, expresie)
         case "Renunta":
             if (idLimba == "EN") rez = "Dissmis";
             break;
-        case "Atentie !":
+        case "":
             if (idLimba == "EN") rez = "Attention !";
             break;
         case "Se pot diviza numai cererile in starea aprobat":

@@ -257,7 +257,7 @@ namespace WizOne.WebService
             catch (Exception ex)
             {
                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(ex.ToString());
-                //ArataMesaj("Atentie !");
+                //ArataMesaj("");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }

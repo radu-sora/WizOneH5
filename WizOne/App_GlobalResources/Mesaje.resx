@@ -121,7 +121,7 @@
     <value>Adresa de mail nu exista</value>
   </data>
   <data name="Atentie" xml:space="preserve">
-    <value>Atentie !</value>
+    <value></value>
   </data>
   <data name="ContulesteblocatContactatiadministratoruldesistem" xml:space="preserve">
     <value>Contul este blocat ! Contactati administratorul de sistem</value>

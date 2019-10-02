@@ -50,7 +50,7 @@
             pnlLoading.Hide();
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -105,7 +105,7 @@
         function OnEndCallbackComp(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -116,7 +116,7 @@
             var val = s.GetValue();
             if (val < 0) {
                 swal({
-                    title: "Atentie !", text: "Suma nu poate fi negativa!",
+                    title: "", text: "Suma nu poate fi negativa!",
                     type: "warning"
                 });
                 var tb = grDateComponente.GetEditor("Suma");
@@ -137,7 +137,7 @@
     function OnEndCallbackTarife(s, e) {
         if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: s.cpAlertMessage,
+                title: "", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;
@@ -165,7 +165,7 @@
         function OnEndCallbackSporuri(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -175,7 +175,7 @@
         function OnEndCallbackSpTr(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;

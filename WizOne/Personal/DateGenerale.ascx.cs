@@ -107,7 +107,7 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-                ////MessageBox.Show(this, ex, MessageBox.icoError, "Atentie !");
+                ////MessageBox.Show(this, ex, MessageBox.icoError, "");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
 

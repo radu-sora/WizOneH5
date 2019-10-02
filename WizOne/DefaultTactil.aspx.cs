@@ -28,7 +28,7 @@ namespace WizOne
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex,MessageBox.icoError, "Atentie !");
+                MessageBox.Show(ex,MessageBox.icoError, "");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -74,7 +74,7 @@ namespace WizOne
                 //{
                 if (txtPan1.Value.Trim().Length > max)
                 {
-                    MessageBox.Show("Cod invalid! Va rugam apropiati din nou cardul de cititor", MessageBox.icoWarning, "Atentie !");
+                    MessageBox.Show("Cod invalid! Va rugam apropiati din nou cardul de cititor", MessageBox.icoWarning, "");
                     txtPan1.Value = null;
                     txtPan1.Focus();
                 }
@@ -83,7 +83,7 @@ namespace WizOne
                     string msg = PermisiuneConectare();
                     if (msg != "")
                     {
-                        MessageBox.Show(msg, MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show(msg, MessageBox.icoWarning, "");
                         txtPan1.Focus();
                     }
                     else

@@ -37,7 +37,7 @@
         pnlLoading.Hide();
         if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: s.cpAlertMessage,
+                title: "", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;
@@ -94,7 +94,7 @@
                     rbSex.SetValue(idSex);
 
                     if (varsta < 16) {
-                        swal({ title: "Atentie !", text: "Nu puteti angaja o persoana cu varsta mai mica de 16 ani!", type: "warning" });
+                        swal({ title: "", text: "Nu puteti angaja o persoana cu varsta mai mica de 16 ani!", type: "warning" });
                     }
                     else {
                         cmbNorma.SetEnabled(true);
@@ -112,7 +112,7 @@
                     }
                 }
                 else {
-                    swal({ title: "Atentie !", text: "CNP invalid", type: "warning" });
+                    swal({ title: "", text: "CNP invalid", type: "warning" });
                 }
             }
         

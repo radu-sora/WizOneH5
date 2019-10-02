@@ -37,7 +37,7 @@
         
         if (s.cp_Mesaj != null) {
             swal({
-                title: "Atentie !", text: s.cp_Mesaj,
+                title: "", text: s.cp_Mesaj,
                 type: "warning"
             });
             s.cp_Mesaj = null;

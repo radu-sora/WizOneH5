@@ -33,7 +33,7 @@
             pnlLoading.Hide();
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;

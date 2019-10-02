@@ -39,7 +39,7 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex,MessageBox.icoError, "Atentie !");
+                MessageBox.Show(ex,MessageBox.icoError, "");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }

@@ -211,7 +211,7 @@
 
         if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: s.cpAlertMessage,
+                title: "", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;
@@ -226,13 +226,13 @@
         if (s.GetText().length > 0) {
             if (s.GetText().length != 24) {
                 swal({
-                    title: "Atentie !", text: "Lungime cont IBAN invalida",
+                    title: "", text: "Lungime cont IBAN invalida",
                     type: "warning"
                 });
             }
             else {
                 if (!IBAN.isValid(s.GetValue().toUpperCase()))
-                    swal({ title: "Atentie !", text: "Cont IBAN invalid", type: "warning" });
+                    swal({ title: "", text: "Cont IBAN invalid", type: "warning" });
             }
         }
     }

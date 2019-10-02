@@ -274,7 +274,7 @@ namespace WizOne.Organigrama
 
                 if (strErr != "")
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoError, "");
                     return;
                 }
 
@@ -422,7 +422,7 @@ namespace WizOne.Organigrama
 
         //        if (strErr != "")
         //        {
-        //            MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoError, "Atentie !");
+        //            MessageBox.Show(Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1), MessageBox.icoError, "");
         //            //pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date") + ":" + strErr.Substring(1);
         //            return;
         //        }

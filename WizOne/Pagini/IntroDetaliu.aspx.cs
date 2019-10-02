@@ -360,7 +360,7 @@ namespace WizOne.Pagini
 
                     if (strErr != "")
                     {
-                        MessageBox.Show("Lipsesc date:" + strErr.Substring(1), MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show("Lipsesc date:" + strErr.Substring(1), MessageBox.icoWarning, "");
                         return;
                     }
 

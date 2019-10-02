@@ -216,7 +216,7 @@ namespace WizOne.Pontaj
 
                     IncarcaRoluri();
 
-                    if (tip == 1) IncarcaAngajati();
+                    if (tip == 1 || tip == 2) IncarcaAngajati();
 
                     if (tip == 10)
                     {
@@ -305,7 +305,10 @@ namespace WizOne.Pontaj
                     cmbAng.DataSource = Session["Pontaj_Angajati"];
                     cmbAng.DataBind();
 
-                    var ert = Session["InformatiaCurenta"];
+                    cmbAngZi.DataSource = null;
+                    cmbAngZi.Items.Clear();
+                    cmbAngZi.DataSource = Session["Pontaj_Angajati"];
+                    cmbAngZi.DataBind();
 
                     if (Session["InformatiaCurenta"] != null)
                     {
@@ -1105,6 +1108,16 @@ namespace WizOne.Pontaj
 
                 DateTime zi = Convert.ToDateTime(txtAnLuna.Value);
 
+                //Florin 2019.10.01
+                string dtInc = General.ToDataUniv(zi.Year, zi.Month, 1);
+                string dtSf = General.ToDataUniv(zi.Year, zi.Month, 99);
+                tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
+                if (tip == 2 || tip == 20)
+                {
+                    dtInc = General.ToDataUniv(txtZiua.Date);
+                    dtSf = General.ToDataUniv(txtZiua.Date);
+                }
+
                 string strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* FROM (
                                 SELECT B.F10003 AS F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
                                 A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
@@ -1136,11 +1149,11 @@ namespace WizOne.Pontaj
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
                                 WHERE J.""IdUser"" = {Session["UserId"]} ) X 
-                                WHERE X.""IdRol""={(cmbRolAng.Value ?? -99)} AND X.F10022 <= {General.ToDataUniv(zi.Year, zi.Month, 99)} AND {General.ToDataUniv(zi.Year, zi.Month, 1)} <= X.F10023
+                                WHERE X.""IdRol""={(cmbRolAng.Value ?? -99)} AND {General.TruncateDateAsString("X.F10022")} <= {dtSf} AND {dtInc} <= {General.TruncateDateAsString("X.F10023")}
                                 ORDER BY X.""NumeComplet"" ";
 
                 DataTable dt = General.IncarcaDT(strSql, null);
-
+                
                 cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
                 cmbAng.DataBind();
@@ -2253,6 +2266,7 @@ namespace WizOne.Pontaj
                     case "cmbRolAng":
                     case "cmbRolZi":
                     case "txtAnLuna":
+                    case "txtZiua":
                         IncarcaAngajati();
                         esteStruc = false;
                         break;

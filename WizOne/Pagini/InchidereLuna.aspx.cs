@@ -131,7 +131,7 @@ namespace WizOne.Pagini
                 string DB = "";
                 if (Constante.tipBD == 1)
                 {
-                    tmp = Constante.cnnWeb.Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                    tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
                     DB = tmp.Split(';')[0];
                 }
                 else

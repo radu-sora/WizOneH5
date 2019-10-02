@@ -2869,6 +2869,11 @@ namespace WizOne.Eval
                     Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
                 }
 
+                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 21)
+                {//CLAIM
+
+                }
+
                 e.Cancel = true;
 
                 grid.CancelEdit();

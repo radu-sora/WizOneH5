@@ -1274,15 +1274,15 @@ namespace WizOne.Module
 	                end as ""Expirat"",
 	                {0}(ist.""Aprobat"", 0) as ""Aprobat"",
 	                case 
-		                when {0}(to_char(rasLinii.""Super5""), -99) <> -99 and {0}(to_char(ist5.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super5"")
+		                when {0}({13}rasLinii.""Super5""), -99) <> -99 and {0}({13}ist5.""Aprobat""), -99) = 1 then {13}rasLinii.""Super5"")
 		                else case
-				                when {0}(to_char(rasLinii.""Super4""), -99) <> -99 and {0}(to_char(ist4.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super4"")
+				                when {0}({13}rasLinii.""Super4""), -99) <> -99 and {0}({13}ist4.""Aprobat""), -99) = 1 then {13}rasLinii.""Super4"")
 				                else case
-						                when {0}(to_char(rasLinii.""Super3""), -99) <> -99 and {0}(to_char(ist3.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super3"")
+						                when {0}({13}rasLinii.""Super3""), -99) <> -99 and {0}({13}ist3.""Aprobat""), -99) = 1 then {13}rasLinii.""Super3"")
 						                else case
-								                when {0}(to_char(rasLinii.""Super2""), -99) <> -99 and {0}(to_char(ist2.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super2"")
+								                when {0}({13}rasLinii.""Super2""), -99) <> -99 and {0}({13}ist2.""Aprobat""), -99) = 1 then {13}rasLinii.""Super2"")
 								                else case
-										                when {0}(to_char(rasLinii.""Super1""), -99) <> -99 and {0}(to_char(ist1.""Aprobat""), -99) = 1 then to_char(rasLinii.""Super1"")
+										                when {0}({13}rasLinii.""Super1""), -99) <> -99 and {0}({13}ist1.""Aprobat""), -99) = 1 then {13}rasLinii.""Super1"")
 										                else ''
 									                end
 							                end
@@ -1290,25 +1290,25 @@ namespace WizOne.Module
 			                  end
 	                end as ""Rating"",
 	                case
-		                when to_char(ist.""Pozitie"") = 1 then to_char(rasLinii.""Super1_2"")
+		                when {13}ist.""Pozitie"") = 1 then {13}rasLinii.""Super1_2"")
 		                else case
-				                when to_char(ist.""Pozitie"") = 2 then to_char(rasLinii.""Super2_2"")
+				                when {13}ist.""Pozitie"") = 2 then {13}rasLinii.""Super2_2"")
 				                else case
-						                when to_char(ist.""Pozitie"") = 3 then to_char(rasLinii.""Super3_2"")
+						                when {13}ist.""Pozitie"") = 3 then {13}rasLinii.""Super3_2"")
 						                else case 
-								                when to_char(ist.""Pozitie"") = 4 then to_char(rasLinii.""Super4_2"")
+								                when {13}ist.""Pozitie"") = 4 then {13}rasLinii.""Super4_2"")
 								                else case
-										                when to_char(ist.""Pozitie"") = 5 then to_char(rasLinii.""Super5_2"")
+										                when {13}ist.""Pozitie"") = 5 then {13}rasLinii.""Super5_2"")
 										                else case 
-												                when to_char(ist.""Pozitie"") = 6 then to_char(rasLinii.""Super6_2"")
+												                when {13}ist.""Pozitie"") = 6 then {13}rasLinii.""Super6_2"")
 												                else case
-														                when to_char(ist.""Pozitie"") = 7 then to_char(rasLinii.""Super7_2"")
+														                when {13}ist.""Pozitie"") = 7 then {13}rasLinii.""Super7_2"")
 														                else case
-																                when to_char(ist.""Pozitie"") = 8 then to_char(rasLinii.""Super8_2"")
+																                when {13}ist.""Pozitie"") = 8 then {13}rasLinii.""Super8_2"")
 																                else
 																	                case 
-																		                when to_char(ist.""Pozitie"") = 9 then to_char(rasLinii.""Super9_2"")
-																		                else to_char(rasLinii.""Super10_2"")
+																		                when {13}ist.""Pozitie"") = 9 then {13}rasLinii.""Super9_2"")
+																		                else {13}rasLinii.""Super10_2"")
 																	                end
 															                end
 													                 end
@@ -1446,6 +1446,12 @@ namespace WizOne.Module
                     rolFiltru = Constante.tipBD == 1 ? string.Format(rolFiltru, "isnull", HttpContext.Current.Session["UserId"].ToString()) : string.Format(rolFiltru, "nvl", HttpContext.Current.Session["UserId"].ToString());
                 }
 
+                string conversie = "";
+                if (Constante.tipBD == 1)
+                    conversie = "convert(varchar, ";
+                else
+                    conversie = "to_char(";
+
                 //Florin 2019.01.04
                 //daca este HR vede toate chestionarele
                 string filtruHR = " LEFT ";
@@ -1455,9 +1461,9 @@ namespace WizOne.Module
                 if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) == 0) filtruHR = " INNER ";
 
                 if (Constante.tipBD == 1) //SQL
-                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, sqlCoordonator, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR);
+                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, sqlCoordonator, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
                 else                      //ORACLE
-                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, sqlCoordonator, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR);
+                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, sqlCoordonator, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
 
                 //Florin  2018.07.05
                 strSQL = strSQL.Replace("@1", Dami.TraduCuvant("Evaluare angajat"));

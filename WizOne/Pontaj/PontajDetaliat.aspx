@@ -464,7 +464,7 @@
             });
         }
         function AdjustSize() {
-            var height = Math.max(0, document.documentElement.clientHeight) - 250;
+            var height = Math.max(0, document.documentElement.clientHeight) - 330;
             if (<%=Session["PontajulAreCC"] %> == 1) 
                 var height = Math.max(0, document.documentElement.clientHeight) - 450;
 

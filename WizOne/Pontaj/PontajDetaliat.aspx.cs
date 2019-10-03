@@ -1531,7 +1531,13 @@ namespace WizOne.Pontaj
                     if (upd.NewValues["F06204Default"] != null) row["F06204Default"] = upd.NewValues["F06204Default"];
 
                     if (upd.NewValues["IdContract"] != null) row["IdContract"] = upd.NewValues["IdContract"];
-                    if (upd.NewValues["IdProgram"] != null) row["IdProgram"] = upd.NewValues["IdProgram"];
+
+                    //Florin 2019.10.03
+                    if (upd.NewValues["IdProgram"] != null)
+                    {
+                        row["IdProgram"] = upd.NewValues["IdProgram"];
+                        row["ModifProgram"] = 1;
+                    }
                     if (upd.NewValues["Norma"] != null) row["Norma"] = upd.NewValues["Norma"];
 
 

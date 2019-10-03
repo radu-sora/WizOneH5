@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Atentie !.
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Atentie {
             get {

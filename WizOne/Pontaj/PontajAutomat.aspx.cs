@@ -54,13 +54,13 @@ namespace WizOne.Pontaj
 
                 if (txtCtrInc.Value == null || txtCtrSf.Value == null || txtZiua.Value == null || cmbAbs.Value == null)
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoError, "");
                     return;
                 }
 
                 if (Convert.ToInt32(txtCtrInc.Value) > Convert.ToInt32(txtCtrSf.Value))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Contract inceput este mai mare decat contract sfarsit !"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Contract inceput este mai mare decat contract sfarsit !"), MessageBox.icoError, "");
                     return;
                 }
 
@@ -81,13 +81,13 @@ namespace WizOne.Pontaj
 
                 if (txtCtrInc.Value == null || txtCtrSf.Value == null || txtZiua.Value == null || cmbAbs.Value == null)
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoError, "");
                     return;
                 }
 
                 if (Convert.ToInt32(txtCtrInc.Value) > Convert.ToInt32(txtCtrSf.Value))
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Contract inceput este mai mare decat contract sfarsit !"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Contract inceput este mai mare decat contract sfarsit !"), MessageBox.icoError, "");
                     return;
                 }
 
@@ -109,9 +109,9 @@ namespace WizOne.Pontaj
                 //2  -  sterge absenta
 
                 if (PonteazaAbsenta(Convert.ToInt32(Session["UserId"]), tip, Convert.ToInt32(txtCtrInc.Value), Convert.ToInt32(txtCtrSf.Value), Convert.ToDateTime(txtZiua.Value), Convert.ToInt32(cmbAbs.Value), "#FFFFFF"))
-                    MessageBox.Show(Dami.TraduCuvant("Proces finalizat cu succes !"), MessageBox.icoSuccess, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Proces finalizat cu succes !"), MessageBox.icoSuccess, "");
                 else
-                    MessageBox.Show(Dami.TraduCuvant("Eroare in proces!"), MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(Dami.TraduCuvant("Eroare in proces!"), MessageBox.icoError, "");
             }
             catch (Exception ex)
             {

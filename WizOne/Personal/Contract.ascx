@@ -16,7 +16,7 @@
 
                     if (DateTo < DateAng) {
                         swal({
-                            title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
+                            title: "", text: "Data plecarii este mai mica decat data angajarii",
                             type: "warning"
                         });
                     }
@@ -35,7 +35,7 @@
 
                     if (DateTo < DateAng) {
                         swal({
-                            title: "Atentie !", text: "Data plecarii este mai mica decat data angajarii",
+                            title: "", text: "Data plecarii este mai mica decat data angajarii",
                             type: "warning"
                         });
                     }
@@ -57,7 +57,7 @@
 
                     if (DateCtr >= DateAng) {
                         swal({
-                            title: "Atentie !", text: "Data contract intern trebuie sa fie anterioara datei angajarii!",
+                            title: "", text: "Data contract intern trebuie sa fie anterioara datei angajarii!",
                             type: "warning"
                         });
                     }
@@ -86,7 +86,7 @@
 
                     if (dateDeLa > dateLa) {
                         swal({
-                            title: "Atentie !", text: "Data start este ulterioara celei de final!",
+                            title: "", text: "Data start este ulterioara celei de final!",
                             type: "warning"
                         });
                     }
@@ -139,7 +139,7 @@
     function OnEndCallbackCtr(s, e) {
         if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: s.cpAlertMessage,
+                title: "", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;
@@ -318,7 +318,7 @@
                     if (cmbTimpPartial.GetValue() == "")
                         cmbTimpPartial.SetValue(cmbNorma.GetValue());
                     if (cmbNorma.GetValue() < cmbTimpPartial.GetValue()) {
-                        swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
+                        swal({ title: "", text: "Timpul partial este mai mare decat norma!", type: "warning" });
                         cmbTimpPartial.SetValue(cmbNorma.GetValue());
                     }
 
@@ -378,7 +378,7 @@
                     if (cmbTimpPartial.GetValue() == "")
                         cmbTimpPartial.SetValue(cmbNorma.GetValue() - 1);   
                     if (cmbNorma.GetValue() <= cmbTimpPartial.GetValue()) {
-                        swal({ title: "Atentie !", text: "Timpul partial este mai mare decat norma!", type: "warning" });
+                        swal({ title: "", text: "Timpul partial este mai mare decat norma!", type: "warning" });
                         cmbTimpPartial.SetValue(cmbNorma.GetValue() - 1);
                     }
 
@@ -441,20 +441,20 @@
 
     function ValidareNrOre(s) {
         if (cmbDurTimpMunca.GetValue() == 2 && txtNrOre.GetValue() > 30)
-            swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 30)!", type: "warning" });
+            swal({ title: "", text: "Numar invalid de ore pe luna/saptamana (max 30)!", type: "warning" });
 
         if (cmbDurTimpMunca.GetValue() == 1 && txtNrOre.GetValue() > 40)
-            swal({ title: "Atentie !", text: "Numar invalid de ore pe luna/saptamana (max 40)!", type: "warning" });     
+            swal({ title: "", text: "Numar invalid de ore pe luna/saptamana (max 40)!", type: "warning" });     
 
         if (s.name == "cmbTipNorma") {
             cmbDurTimpMunca.SetValue(null);
             if (cmbTipAng.GetSelectedItem().value == 0 && cmbTipNorma.GetSelectedItem().value == 2) {
-                swal({ title: "Atentie !", text: "Pentru un angajat permanent, tipul de norma nu poate fi 'Cu timp partial'!", type: "warning" });
+                swal({ title: "", text: "Pentru un angajat permanent, tipul de norma nu poate fi 'Cu timp partial'!", type: "warning" });
                 cmbTipNorma.SetValue(1);
                 pnlCtlContract.PerformCallback("cmbTipNorma;1");
             }
             if (cmbTipAng.GetSelectedItem().value == 2 && cmbTipNorma.GetSelectedItem().value == 1) {
-                swal({ title: "Atentie !", text: "Pentru un angajat cu timp partial, tipul de norma nu poate fi 'intreaga'!", type: "warning" });
+                swal({ title: "", text: "Pentru un angajat cu timp partial, tipul de norma nu poate fi 'intreaga'!", type: "warning" });
                 cmbTipNorma.SetValue(2);
                 pnlCtlContract.PerformCallback("cmbTipNorma;2");
             }
@@ -518,12 +518,12 @@
 
             if (deDeLaData.GetValue() != "" && deLaData.GetValue() != "") {
                 if (txtNrLuni.GetValue() > 36 || (txtNrLuni.GetValue() == 36 && txtNrZile.GetValue() > 0)) {
-                    swal({ title: "Atentie !", text: "Durata maxima a unui contract pe perioada determinata nu poate depasi 36 de luni", type: "warning" });
+                    swal({ title: "", text: "Durata maxima a unui contract pe perioada determinata nu poate depasi 36 de luni", type: "warning" });
                 }
                 else {
                     var ds36 = new Date("<%=Session["MP_DataSfarsit36"] %>");
                     if (ds36 < deLaData.GetValue())
-                        swal({ title: "Atentie !", text: "Nu puteti prelungi un contract pe perioada determinata mai mult de 36 luni. Mai puteti prelungi contractul pana la data de " + ds36, type: "warning" });
+                        swal({ title: "", text: "Nu puteti prelungi un contract pe perioada determinata mai mult de 36 luni. Mai puteti prelungi contractul pana la data de " + ds36, type: "warning" });
                 }
             }
         }
@@ -554,7 +554,7 @@
                 cmbMotivScutit.SetEnabled(true);
             else {
                 chkbx1.SetValue(0);
-                swal({ title: "Atentie !", text: "Mai intai debifati Calcul deduceri FB!", type: "warning" });
+                swal({ title: "", text: "Mai intai debifati Calcul deduceri FB!", type: "warning" });
             }
         }
     }
@@ -573,7 +573,7 @@
         if (chkbx5.GetValue() == 1) {
             if (chkbx1.GetValue() == 1) {
                 chkbx5.SetValue(0);
-                swal({ title: "Atentie !", text: "Angajatul este scutit de impozit, nu i se pot calcula deduceri!", type: "warning" });
+                swal({ title: "", text: "Angajatul este scutit de impozit, nu i se pot calcula deduceri!", type: "warning" });
             }
         }
     }
@@ -587,7 +587,7 @@
             return;        
         var salMin = parseInt("<%=Session["MP_SalMin"] %>");
         if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal))
-            swal({ title: "Atentie !", text: "Salariul introdus este mai mic decat cel minim (raportat la timp partial)!", type: "warning" });
+            swal({ title: "", text: "Salariul introdus este mai mic decat cel minim (raportat la timp partial)!", type: "warning" });
     }
 
     function CompletareZile(s) { 
@@ -696,7 +696,7 @@
         }
         
         if (mesaj.length > 0)
-            swal({ title: "Atentie !", text: mesaj, type: "warning" });
+            swal({ title: "", text: mesaj, type: "warning" });
     }
 
 </script>

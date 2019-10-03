@@ -31,7 +31,7 @@
             pnlLoading.Hide();
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -65,7 +65,7 @@
                 if (oraInc >= oraSf) {
                     s.SetValue("");
                     swal({
-                        title: "Atentie !", text: "Ora inceput este mai mare decat ora sfarsit",
+                        title: "", text: "Ora inceput este mai mare decat ora sfarsit",
                         type: "warning"
                     });
                 }

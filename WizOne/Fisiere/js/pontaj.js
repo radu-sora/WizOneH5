@@ -235,7 +235,7 @@ function OnPtjEchipa(s, e) {
     /*
     if (grDate.batchEditApi.HasChanges()) {
         swal({
-            title: "Atentie !", text: "Aveti date nesalvate.",
+            title: "", text: "Aveti date nesalvate.",
             type: "warning"
         });
         e.processOnServer = false;
@@ -261,7 +261,7 @@ function OnClickCC(s, e) {
     }
     else {
         swal({
-            title: "Atentie !", text: "Nu exista linie selectata",
+            title: "", text: "Nu exista linie selectata",
             type: "warning"
         });
     }

@@ -276,7 +276,7 @@ namespace WizOne.Eval
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message, MessageBox.icoError, "Atentie !");
+                MessageBox.Show(ex.Message, MessageBox.icoError, "");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -310,7 +310,7 @@ namespace WizOne.Eval
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message, MessageBox.icoError, "Atentie !");
+                MessageBox.Show(ex.Message, MessageBox.icoError, "");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }

@@ -403,7 +403,7 @@ namespace WizOne.Avs
         //    }
         //    catch (Exception ex)
         //    {
-        //        //ArataMesaj("Atentie !");
+        //        //ArataMesaj("");
         //        //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
         //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
         //    }
@@ -419,7 +419,7 @@ namespace WizOne.Avs
             }
             catch (Exception ex)
             {
-                //ArataMesaj("Atentie !");
+                //ArataMesaj("");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -433,7 +433,7 @@ namespace WizOne.Avs
             }
             catch (Exception ex)
             {
-                //ArataMesaj("Atentie !");
+                //ArataMesaj("");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -470,7 +470,7 @@ namespace WizOne.Avs
         //      }
         //      catch (Exception ex)
         //      {
-        //          //ArataMesaj("Atentie !");
+        //          //ArataMesaj("");
         //          //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
         //          General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
         //      }
@@ -520,7 +520,7 @@ namespace WizOne.Avs
             }
             catch (Exception ex)
             {
-                //ArataMesaj("Atentie !");
+                //ArataMesaj("");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -1760,7 +1760,7 @@ namespace WizOne.Avs
             }
             catch (Exception ex)
             {
-                //ArataMesaj("Atentie !");
+                //ArataMesaj("");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -2113,7 +2113,7 @@ namespace WizOne.Avs
             }
             catch (Exception ex)
             {
-                //ArataMesaj("Atentie !");
+                //ArataMesaj("");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
                 return false;
@@ -3050,7 +3050,7 @@ namespace WizOne.Avs
             }
             catch (Exception ex)
             {
-                //ArataMesaj("Atentie !");
+                //ArataMesaj("");
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }

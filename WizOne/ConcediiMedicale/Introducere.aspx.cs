@@ -1832,7 +1832,7 @@ namespace WizOne.ConcediiMedicale
             }
             catch (Exception ex)
             {
-                //ArataMesaj("Atentie !");
+                //ArataMesaj("");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }

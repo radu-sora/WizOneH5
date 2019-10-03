@@ -383,7 +383,7 @@
             
             if (grDate.batchEditApi.HasChanges()) {
                 swal({
-                    title: "Atentie !", text: "Aveti date nesalvate.",
+                    title: "", text: "Aveti date nesalvate.",
                     type: "warning"
                 });
                 e.processOnServer = false;
@@ -484,7 +484,7 @@
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;

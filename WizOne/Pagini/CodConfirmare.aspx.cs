@@ -40,12 +40,12 @@ namespace WizOne.Pagini
                     int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(strSql, null),0));
 
                     if (cnt == 0)
-                        MessageBox.Show("Cod eronat", MessageBox.icoError, "Atentie !");
+                        MessageBox.Show("Cod eronat", MessageBox.icoError, "");
                     else
                         Response.Redirect("~/Pagini/MainPage.aspx", false);
                 }
                 else
-                    MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "Atentie !");
+                    MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "");
             }
             catch (Exception ex)
             {

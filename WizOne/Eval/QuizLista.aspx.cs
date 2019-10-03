@@ -368,132 +368,145 @@ namespace WizOne.Eval
 
                 General.IncarcaDT(sqlQuiz, null);
 
-                int idRoot = 0, idSec = 0, idParinte = 0;
-                Hashtable rel = new Hashtable();
-                
-                //Florin 2019.01.07
-                int idUrmLinii = 10000;
-                //idUrmLinii = Dami.NextId("Eval_QuizIntrebari", dtOriLinii.Columns.Count);
-                //idUrmLinii = idUrmLinii - dtOriLinii.Columns.Count + 1;
-                idUrmLinii = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Eval_QuizIntrebari"" ", null),0)) + 1;
+
+
+                //Florin 2019.10.02
+                #region OLD QuizIntrebari
+
+                //int idRoot = 0, idSec = 0, idParinte = 0;
+                //Hashtable rel = new Hashtable();
+
+                ////Florin 2019.01.07
+                //int idUrmLinii = 10000;
+                ////idUrmLinii = Dami.NextId("Eval_QuizIntrebari", dtOriLinii.Columns.Count);
+                ////idUrmLinii = idUrmLinii - dtOriLinii.Columns.Count + 1;
+                //idUrmLinii = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Eval_QuizIntrebari"" ", null), 0)) + 1;
 
 
 
-                string sqlQuizLinii = "";
-                if (dtOriLinii != null && dtOriLinii.Rows.Count > 0)
-                {
-                    for (int j = 0; j < dtOriLinii.Rows.Count; j++)
-                    {
-                        sqlQuizLinii = "INSERT INTO \"Eval_QuizIntrebari\" (";
-                        for (int i = 0; i < dtOriLinii.Columns.Count; i++)
-                        {
-                            sqlQuizLinii += "\"" + dtOriLinii.Columns[i].ColumnName + "\"";
-                            if (i < dtOriLinii.Columns.Count - 1)
-                                sqlQuizLinii += ", ";
-                        }
-                        sqlQuizLinii += ") VALUES (";
-                        for (int i = 0; i < dtOriLinii.Columns.Count; i++)
-                        {
-                            switch (dtOriLinii.Columns[i].ColumnName)
-                            {
-                                case "Ordine":
-                                    string[] param = dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString().Split('-');
-                                    if (param.Length == 3)
-                                    {
-                                        if (rel[param[1]] != null)
-                                            idRoot = Convert.ToInt32(rel[param[1]]);
-                                        else
-                                        {
-                                            idRoot = idUrmLinii;
-                                            rel[param[1]] = idRoot;
-                                        }
-                                    }
-                                    if (param.Length == 4)
-                                    {
-                                        if (rel[param[2]] != null)
-                                            idSec = Convert.ToInt32(rel[param[2]]);
-                                        else
-                                        {
-                                            idSec = idUrmLinii;
-                                            rel[param[2]] = idSec;
-                                        }
-                                        idParinte = idRoot;
-                                    }
-                                    if (param.Length == 5)
-                                    {
-                                        if (rel[param[2]] != null)
-                                            idSec = Convert.ToInt32(rel[param[2]]);
-                                        else
-                                        {
-                                            idSec = idUrmLinii;
-                                            rel[param[2]] = idSec;
-                                        }
-                                        idParinte = idSec;
-                                    }
-                                    sqlQuizLinii += "'";
-                                    for (int k = 1; k < param.Length - 1; k++)
-                                    {
-                                        if (k == 1)
-                                            sqlQuizLinii += "-" + idRoot;
-                                        if (k == 2)
-                                            sqlQuizLinii += "-" + idSec;
-                                        if (k == 3)
-                                            sqlQuizLinii += "-" + idUrmLinii;
-                                        if (k == param.Length - 2)
-                                            sqlQuizLinii += "-";
-                                    }
-                                    sqlQuizLinii += "'";
-                                    break;
-                                case "Parinte":
-                                    sqlQuizLinii += idParinte;
-                                    break;
-                                case "Id":
-                                    sqlQuizLinii += idUrmLinii;
-                                    break;
-                                case "IdQuiz":
-                                    sqlQuizLinii += idUrm;
-                                    break;
-                                case "TemplateIdObiectiv":
-                                case "TemplateIdCompetenta":
-                                    sqlQuizLinii += "NULL";
-                                    break;
-                                case "USER_NO":
-                                    sqlQuizLinii += idUser;
-                                    break;
-                                case "TIME":
-                                    sqlQuizLinii += (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
-                                    break;
-                                default:
-                                    if (dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName] == null || dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString().Length <= 0)
-                                        sqlQuizLinii += "NULL";
-                                    else
-                                    {
-                                        switch (dtOriLinii.Columns[i].DataType.ToString())
-                                        {
-                                            case "System.String":
-                                                sqlQuizLinii += "'" + dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString() + "'";
-                                                break;
-                                            case "System.DateTime":
-                                                DateTime dt = Convert.ToDateTime(General.Nz(dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName], new DateTime(2100, 1, 1)));
-                                                sqlQuizLinii += General.ToDataUniv(dt);
-                                                break;
-                                            default:
-                                                sqlQuizLinii += dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString();
-                                                break;
-                                        }
-                                    }
-                                    break;
-                            }
-                            if (i < dtOriLinii.Columns.Count - 1)
-                                sqlQuizLinii += ", ";
-                        }
-                        sqlQuizLinii += ")";
-                        General.IncarcaDT(sqlQuizLinii, null);
-                        idUrmLinii++;
+                //string sqlQuizLinii = "";
+                //if (dtOriLinii != null && dtOriLinii.Rows.Count > 0)
+                //{
+                //    for (int j = 0; j < dtOriLinii.Rows.Count; j++)
+                //    {
+                //        sqlQuizLinii = "INSERT INTO \"Eval_QuizIntrebari\" (";
+                //        for (int i = 0; i < dtOriLinii.Columns.Count; i++)
+                //        {
+                //            sqlQuizLinii += "\"" + dtOriLinii.Columns[i].ColumnName + "\"";
+                //            if (i < dtOriLinii.Columns.Count - 1)
+                //                sqlQuizLinii += ", ";
+                //        }
+                //        sqlQuizLinii += ") VALUES (";
+                //        for (int i = 0; i < dtOriLinii.Columns.Count; i++)
+                //        {
+                //            switch (dtOriLinii.Columns[i].ColumnName)
+                //            {
+                //                case "Ordine":
+                //                    string[] param = dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString().Split('-');
+                //                    if (param.Length == 3)
+                //                    {
+                //                        if (rel[param[1]] != null)
+                //                            idRoot = Convert.ToInt32(rel[param[1]]);
+                //                        else
+                //                        {
+                //                            idRoot = idUrmLinii;
+                //                            rel[param[1]] = idRoot;
+                //                        }
+                //                    }
+                //                    if (param.Length == 4)
+                //                    {
+                //                        if (rel[param[2]] != null)
+                //                            idSec = Convert.ToInt32(rel[param[2]]);
+                //                        else
+                //                        {
+                //                            idSec = idUrmLinii;
+                //                            rel[param[2]] = idSec;
+                //                        }
+                //                        idParinte = idRoot;
+                //                    }
+                //                    if (param.Length == 5)
+                //                    {
+                //                        if (rel[param[2]] != null)
+                //                            idSec = Convert.ToInt32(rel[param[2]]);
+                //                        else
+                //                        {
+                //                            idSec = idUrmLinii;
+                //                            rel[param[2]] = idSec;
+                //                        }
+                //                        idParinte = idSec;
+                //                    }
+                //                    sqlQuizLinii += "'";
+                //                    for (int k = 1; k < param.Length - 1; k++)
+                //                    {
+                //                        if (k == 1)
+                //                            sqlQuizLinii += "-" + idRoot;
+                //                        if (k == 2)
+                //                            sqlQuizLinii += "-" + idSec;
+                //                        if (k == 3)
+                //                            sqlQuizLinii += "-" + idUrmLinii;
+                //                        if (k == param.Length - 2)
+                //                            sqlQuizLinii += "-";
+                //                    }
+                //                    sqlQuizLinii += "'";
+                //                    break;
+                //                case "Parinte":
+                //                    sqlQuizLinii += idParinte;
+                //                    break;
+                //                case "Id":
+                //                    sqlQuizLinii += idUrmLinii;
+                //                    break;
+                //                case "IdQuiz":
+                //                    sqlQuizLinii += idUrm;
+                //                    break;
+                //                case "TemplateIdObiectiv":
+                //                case "TemplateIdCompetenta":
+                //                    sqlQuizLinii += "NULL";
+                //                    break;
+                //                case "USER_NO":
+                //                    sqlQuizLinii += idUser;
+                //                    break;
+                //                case "TIME":
+                //                    sqlQuizLinii += (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                //                    break;
+                //                default:
+                //                    if (dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName] == null || dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString().Length <= 0)
+                //                        sqlQuizLinii += "NULL";
+                //                    else
+                //                    {
+                //                        switch (dtOriLinii.Columns[i].DataType.ToString())
+                //                        {
+                //                            case "System.String":
+                //                                sqlQuizLinii += "'" + dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString() + "'";
+                //                                break;
+                //                            case "System.DateTime":
+                //                                DateTime dt = Convert.ToDateTime(General.Nz(dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName], new DateTime(2100, 1, 1)));
+                //                                sqlQuizLinii += General.ToDataUniv(dt);
+                //                                break;
+                //                            default:
+                //                                sqlQuizLinii += dtOriLinii.Rows[j][dtOriLinii.Columns[i].ColumnName].ToString();
+                //                                break;
+                //                        }
+                //                    }
+                //                    break;
+                //            }
+                //            if (i < dtOriLinii.Columns.Count - 1)
+                //                sqlQuizLinii += ", ";
+                //        }
+                //        sqlQuizLinii += ")";
+                //        General.IncarcaDT(sqlQuizLinii, null);
+                //        idUrmLinii++;
 
-                    }
-                }
+                //    }
+                //}
 
+                #endregion
+
+                int idUrmLinii = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Eval_QuizIntrebari"" ", null), 0)) + 1;
+                General.ExecutaNonQuery($@"
+                INSERT INTO ""Eval_QuizIntrebari""(""Id"",                ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", ""IdQuiz"", ""Orientare"", ""Obligatoriu"", ""Parinte"",                ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", ""TIME"", ""USER_NO"")
+                                            SELECT ""Id"" + {idUrmLinii}, ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", {idUrm},    ""Orientare"", ""Obligatoriu"", ""Parinte"" + {idUrmLinii}, ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", SYSDATE, {Session["UserId"]} FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = {id}", null);
+
+                //End Florin 2019.10.02
 
                 int idUrmCirc = 2;
                 idUrmCirc = Dami.NextId("Eval_Circuit");

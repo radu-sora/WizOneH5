@@ -251,13 +251,13 @@ namespace WizOne
             {
                 if (txtParola.Text == "" || txtConfirma.Text == "")
                 {
-                    MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "Atentie !");
+                    MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "");
                 }
                 else
                 {
                     if (txtParola.Text != txtConfirma.Text)
                     {
-                        MessageBox.Show("Parola nu coincide !", MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show("Parola nu coincide !", MessageBox.icoWarning, "");
                     }
                     else
                     {

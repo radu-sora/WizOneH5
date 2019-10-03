@@ -94,7 +94,7 @@
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: trad_string(limba, "Atentie !"), text: s.cpAlertMessage,
+                    title: trad_string(limba, ""), text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -129,7 +129,7 @@
         function OKDivideClick(s, e) {
             if (txtDataDivide.GetDate() == null) {
                 swal({
-                    title: trad_string(limba, "Atentie !"), text: trad_string(limba, "Lipseste data cu care se divide cererea"),
+                    title: trad_string(limba, ""), text: trad_string(limba, "Lipseste data cu care se divide cererea"),
                     type: "warning"
                 });
             }
@@ -146,7 +146,7 @@
                 else
                 {
                     swal({
-                        title: trad_string(limba, "Atentie !"), text: trad_string(limba, "Data nu este in intervalul din cerere"),
+                        title: trad_string(limba, ""), text: trad_string(limba, "Data nu este in intervalul din cerere"),
                         type: "warning"
                     });
 
@@ -186,7 +186,7 @@
             else
             {
                 swal({
-                    title: trad_string(limba, "Atentie !"), text: trad_string(limba, "Nu exista linii selectate"),
+                    title: trad_string(limba, ""), text: trad_string(limba, "Nu exista linii selectate"),
                     type: "warning"
                 });
             }
@@ -205,7 +205,7 @@
             }
             else {
                 swal({
-                    title: trad_string(limba, "Atentie !"), text: trad_string(limba, "Nu exista linii selectate"),
+                    title: trad_string(limba, ""), text: trad_string(limba, "Nu exista linii selectate"),
                     type: "warning"
                 });
             }

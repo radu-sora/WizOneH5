@@ -267,7 +267,7 @@ namespace WizOne.Pontaj
                 string filtru = "";
 
                 DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
-                filtru = $@" AND {General.ToDataUniv(ziua.Year, ziua.Month)} <= {General.TruncateDateAsString("A.\"Ziua\"")} AND {General.TruncateDateAsString("A.\"Ziua\"")} <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}";
+                filtru = $@" AND {General.ToDataUniv(ziua.Year, ziua.Month)} <= {General.TruncateDate("A.Ziua")} AND {General.TruncateDate("A.Ziua")} <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}";
                 if (cmbAng.Value != null) filtru += " AND A.F10003=" + Convert.ToInt32(cmbAng.Value ?? -99);
                 if (cmbCC.Value != null) filtru += " AND A.F06204=" + Convert.ToInt32(cmbCC.Value ?? -99);
                 if (cmbDpt.Value != null) filtru += " AND A.IdDept=" + Convert.ToInt32(cmbDpt.Value ?? -99);

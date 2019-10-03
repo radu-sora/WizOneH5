@@ -58,7 +58,7 @@ namespace WizOne.Organigrama
                         LEFT JOIN F004 D ON A.F10005 = D.F00405
                         LEFT JOIN F005 E ON A.F10006 = E.F00506
                         LEFT JOIN F006 F ON A.F10007 = F.F00607
-                        WHERE {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")}  ";
+                        WHERE {General.TruncateDate("A.DataInceput")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDate("A.DataSfarsit")}  ";
 
                     DataTable dtPost = General.IncarcaDT(sqlPost, null);
                     cmbSup.DataSource = dtPost;

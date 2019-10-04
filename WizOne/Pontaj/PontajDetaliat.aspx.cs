@@ -1532,12 +1532,11 @@ namespace WizOne.Pontaj
 
                     if (upd.NewValues["IdContract"] != null) row["IdContract"] = upd.NewValues["IdContract"];
 
-                    //Florin 2019.10.03
-                    if (upd.NewValues["IdProgram"] != null)
-                    {
-                        row["IdProgram"] = upd.NewValues["IdProgram"];
-                        row["ModifProgram"] = 1;
-                    }
+                    row["IdProgram"] = upd.NewValues["IdProgram"];
+
+                    //Florin 2019.10.04
+                    if (upd.NewValues["ModifProgram"] != null) row["ModifProgram"] = upd.NewValues["ModifProgram"];
+
                     if (upd.NewValues["Norma"] != null) row["Norma"] = upd.NewValues["Norma"];
 
 

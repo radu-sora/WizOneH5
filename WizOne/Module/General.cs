@@ -2070,12 +2070,6 @@ namespace WizOne.Module
                         //strSql = "BEGIN\n" + strSql + "END;\n";
                         ExecutaNonQuery(strSql, null);
 
-                        DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {TruncateDate("Ziua")} AND {TruncateDate("Ziua")} <= @3", new object[] { dr["F10003"], dr["DataInceput"], dr["DataSfarsit"] });
-                        for(int i = 0; i < dtRun.Rows.Count; i++)
-                        {
-
-                        }
-
                         CalculFormuleCumulat(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]).Date.Year, Convert.ToDateTime(dr["DataInceput"]).Date.Month);
                     }
 
@@ -3127,6 +3121,19 @@ namespace WizOne.Module
                             if (Convert.ToInt32(General.Nz(dr["IdTipOre"], 0)) == 1 && Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                             {
                                 General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={dr["F10003"]} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))} ", null);
+                            }
+
+                            //Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
+                            DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { Convert.ToDateTime(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), Convert.ToDateTime(dr["DataSfarsit"]) });
+                            for (int i = 0; i < dtRun.Rows.Count; i++)
+                            {
+                                string golesteVal = Dami.ValoareParam("GolesteVal");
+                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                                FunctiiCeasuri.Calcul.h5 = true;
+                                FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                                FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
                             }
                         }
 

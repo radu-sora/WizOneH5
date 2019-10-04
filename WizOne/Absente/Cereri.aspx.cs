@@ -1129,6 +1129,20 @@ namespace WizOne.Absente
                         {
                             General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(cmbAng.Value)} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Text))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Text))} ", null);
                         }
+
+
+                        //Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
+                        DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { cmbAng.Value, txtDataInc.Date, txtDataSf.Date });
+                        for (int i = 0; i < dtRun.Rows.Count; i++)
+                        {
+                            string golesteVal = Dami.ValoareParam("GolesteVal");
+                            FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                            FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                            FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                            FunctiiCeasuri.Calcul.h5 = true;
+                            FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                            FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
+                        }
                     }
 
                     #endregion
@@ -1221,6 +1235,7 @@ namespace WizOne.Absente
                     txtNrOre.Visible = true;
                     txtNrOre.DecimalPlaces = 0;
                     txtNrOre.NumberType = SpinEditNumberType.Integer;
+                    
 
                     if (folosesteInterval == 1)
                     {
@@ -1242,6 +1257,8 @@ namespace WizOne.Absente
                         txtNrOre.ClientVisible = false;
 
                         txtNrOreInMinute.Visible = true;
+
+                        lblNrOre.InnerText = Dami.TraduCuvant("Nr. minute");
                     }
                 }
                 else
@@ -2511,6 +2528,7 @@ namespace WizOne.Absente
                 List<Module.Dami.metaGeneral2> list = new List<Module.Dami.metaGeneral2>();
 
                 DateTime ziua = new DateTime(2200, 1, 1, 0, 0, 0);
+                DateTime ziUrm = ziua.AddDays(1);
 
                 do
                 {
@@ -2518,7 +2536,7 @@ namespace WizOne.Absente
                     string str = ziua.Hour.ToString().PadLeft(2, '0') + ":" + ziua.Minute.ToString().PadLeft(2, '0');
                     list.Add(new Module.Dami.metaGeneral2() { Id = str, Denumire = str });
                 }
-                while (ziua < ziua.AddDays(1));
+                while (ziua < ziUrm);
 
                 return list;
             }

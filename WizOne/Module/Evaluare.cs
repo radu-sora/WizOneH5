@@ -1218,6 +1218,10 @@ namespace WizOne.Module
             return dt;
         }
 
+
+        //Florin 2019.10.04
+        //am scos conditia AND rasp.F10003 = {10} din when {0}(istPoz.""IdSuper"", -99) = 0 AND rasp.F10003 = {10} then '@1' de la coloana Stare
+
         //Florin 2018.12.17
         //functia returneaza string in loc de DataTable
         //Florin 2019.02.01
@@ -1232,7 +1236,7 @@ namespace WizOne.Module
                 //Radu 20.02.2019 - am inlocuit Finalizat si PoateModifica
                 //Radu 07.05.2019 - am eliminat conditia de CategorieQuiz pentru Culoare       (COALESCE(chest.""CategorieQuiz"",0)=1 OR COALESCE(chest.""CategorieQuiz"",0)=2) AND 
                 strSQL = @"
-                select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS DenumireCategorie, chest.""CategorieQuiz"",
+                select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS ""DenumireCategorie"", chest.""CategorieQuiz"",
 	                chest.""DataInceput"", chest.""DataSfarsit"", {0}(fnume.""F10009"", '') {1} ' ' {1} {0}(fnume.""F10008"", '') as ""Utilizator"",
 	                CASE WHEN COALESCE((SELECT COALESCE(""Aprobat"",0) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz"" = rasp.""IdQuiz"" AND ""IdUser"" = {11}),0)=1 THEN '#FFE18030' ELSE '#FFFFFF00' END AS ""Culoare"",
 	                case
@@ -1249,7 +1253,7 @@ namespace WizOne.Module
 						                      when {2} {3}) not between {2} chest.""DataInceput"") and {2} chest.""DataSfarsit"") then 'Evaluare expirata'
 						                      else CASE WHEN COALESCE(chest.""CategorieQuiz"",0)=1 THEN 'Evaluare 360' ELSE
                                                    case
-									                    when {0}(istPoz.""IdSuper"", -99) = 0 AND rasp.F10003 = {10} then '@1'
+									                    when {0}(istPoz.""IdSuper"", -99) = 0 then '@1'
 									                    else case
 											                    when {0}(istPoz.""IdSuper"", -99) > 0 then 'Evaluare ' {1} usSuper.""F70104""
 											                    else super.""Alias""

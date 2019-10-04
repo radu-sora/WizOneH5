@@ -309,7 +309,7 @@ namespace WizOne.Pontaj
                 strSql = $@"SELECT * FROM ""Ptj_Cumulat"" C
                             INNER JOIN F100 A ON C.F10003=A.F10003
                             INNER JOIN F1001 B ON A.F10003=B.F10003
-                            LEFT JOIN (SELECT X.F10003, MAX(X.""IdContract"") AS ""IdContract"" FROM ""F100Contracte"" X WHERE {General.TruncateDateAsString("X.\"DataInceput\"")} <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= {General.TruncateDateAsString("X.\"DataSfarsit\"")} GROUP BY X.F10003) D ON A.F10003=D.F10003
+                            LEFT JOIN (SELECT X.F10003, MAX(X.""IdContract"") AS ""IdContract"" FROM ""F100Contracte"" X WHERE {General.TruncateDate("X.DataInceput")} <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= {General.TruncateDate("X.DataSfarsit")} GROUP BY X.F10003) D ON A.F10003=D.F10003
                             WHERE 1=1 {strFiltru}";
             }
             catch (Exception ex)

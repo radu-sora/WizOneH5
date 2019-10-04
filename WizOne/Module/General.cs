@@ -1529,25 +1529,56 @@ namespace WizOne.Module
         }
 
 
-        public static string TruncateDateAsString(string txt = "")
+        //Florin 2019.10.03
+
+        //public static string TruncateDate(string txt = "")
+        //{
+        //    string rez = txt;
+
+        //    try
+        //    {
+        //        if (txt == "")
+        //        {
+        //            if (Constante.tipBD == 1)
+        //                txt = "GetDate()";
+        //            else
+        //                txt = "SYSDATE";
+        //        }
+
+        //        if (Constante.tipBD == 1)
+        //            rez = "CONVERT(date," + txt + ")";
+        //        else
+        //            rez = "TRUNC(" + txt + ")";
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MemoreazaEroarea(ex.ToString(), "General", "TruncateTime");
+        //    }
+
+        //    return rez;
+        //}
+
+        public static string TruncateDate(string camp)
         {
-            string rez = txt;
+            string rez = camp;
 
             try
             {
-                if (txt == "")
+                if (camp != "")
                 {
-                    if (Constante.tipBD == 1)
-                        txt = "GetDate()";
+                    if (camp.IndexOf(".") >= 0)
+                        camp = camp.Replace(".", ".\"");
                     else
-                        txt = "SYSDATE";
-                }
+                        camp = "\"" + camp;
 
-                if (Constante.tipBD == 1)
-                    rez = "CONVERT(date," + txt + ")";
-                else
-                    rez = "TRUNC(" + txt + ")";
-                
+                    camp = camp + "\"";
+
+                    if (Constante.tipBD == 1)
+                        rez = "CONVERT(date," + camp + ")";
+                    else
+                        rez = "TRUNC(" + camp + ")";
+                }
             }
             catch (Exception ex)
             {
@@ -2512,7 +2543,7 @@ namespace WizOne.Module
                         if (idCerere == -99) strCer = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"")";
 
                         //Florin 2018.11.15
-                        //sqlIst = string.Format(sqlIst, idCircuit, HttpContext.Current.Session["UserId"], General.TruncateDateAsString(), strPozitie, strSql.Substring((" UNION " + strUnion).Length), General.CurrentDate(), estePlanificare, strCer);
+                        //sqlIst = string.Format(sqlIst, idCircuit, HttpContext.Current.Session["UserId"], General.CurrentDate(), strPozitie, strSql.Substring((" UNION " + strUnion).Length), General.CurrentDate(), estePlanificare, strCer);
                         sqlIst = string.Format(sqlIst, idCircuit, HttpContext.Current.Session["UserId"], General.CurrentDate(), strPozitie, strSql.Substring((" UNION " + strUnion).Length), General.CurrentDate(), estePlanificare, strCer);
 
 
@@ -2809,9 +2840,9 @@ namespace WizOne.Module
                 //                (D.""Pozitie"" = (A.""Pozitie"" + 1) OR (COALESCE(E.""RespectaOrdinea"",0)=0 AND D.""Pozitie"" > (A.""Pozitie"" + 1))) AND
                 //                A.""Id""=D.""IdCerere"" AND (D.""IdSuper"" = -1 * RL.""Rol""  OR RL.""Rol"" = 78) AND D.""IdUser"" IN (SELECT Y.F70102 FROM ""Ptj_Cereri"" X
                 //                                                                                                    INNER JOIN USERS Y ON X.F10003=Y.F10003
-                //                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDateAsString("X.\"DataInceput\"")} <= {TruncateDateAsString()} AND {TruncateDateAsString()} <= {TruncateDateAsString("X.\"DataSfarsit\"")}
+                //                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.\"DataInceput\"")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("X.\"DataSfarsit\"")}
                 //                                                                                                    UNION
-                //                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDateAsString("\"DataInceput\"")} <= {TruncateDateAsString()} AND {TruncateDateAsString()} <= {TruncateDateAsString("\"DataSfarsit\"")})
+                //                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("\"DataInceput\"")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("\"DataSfarsit\"")})
                 //                LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
                 //                LEFT JOIN F100 G ON A.F10003=G.F10003
                 //                WHERE 1=1 ";
@@ -2836,9 +2867,9 @@ namespace WizOne.Module
                                 (D.""Pozitie"" = (A.""Pozitie"" + 1) OR (COALESCE(E.""RespectaOrdinea"",0)=0 AND D.""Pozitie"" > (A.""Pozitie"" + 1))) AND
                                 A.""Id""=D.""IdCerere"" AND (D.""IdSuper"" = -1 * RL.""Rol""  OR RL.""Rol"" = 78) AND D.""IdUser"" IN (SELECT Y.F70102 FROM ""Ptj_Cereri"" X
                                                                                                                     INNER JOIN USERS Y ON X.F10003=Y.F10003
-                                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDateAsString("X.\"DataInceput\"")} <= {TruncateDateAsString()} AND {TruncateDateAsString()} <= {TruncateDateAsString("X.\"DataSfarsit\"")}
+                                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.DataInceput")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("X.DataSfarsit")}
                                                                                                                     UNION
-                                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDateAsString("\"DataInceput\"")} <= {TruncateDateAsString()} AND {TruncateDateAsString()} <= {TruncateDateAsString("\"DataSfarsit\"")})
+                                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("DataInceput")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("DataSfarsit")})
                                 LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
                                 LEFT JOIN F100 G ON A.F10003=G.F10003
                                 LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 1 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
@@ -3089,6 +3120,19 @@ namespace WizOne.Module
                             if (Convert.ToInt32(General.Nz(dr["IdTipOre"], 0)) == 1 && Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                             {
                                 General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={dr["F10003"]} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))} ", null);
+                            }
+
+                            //Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
+                            DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { Convert.ToDateTime(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), Convert.ToDateTime(dr["DataSfarsit"]) });
+                            for (int i = 0; i < dtRun.Rows.Count; i++)
+                            {
+                                string golesteVal = Dami.ValoareParam("GolesteVal");
+                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                                FunctiiCeasuri.Calcul.h5 = true;
+                                FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                                FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
                             }
                         }
 
@@ -6293,7 +6337,7 @@ namespace WizOne.Module
                 strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"", 
                                         A.F100901, C.F71804 AS ""Functia"",
                                         A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"", A.F10023 AS ""DataPlecarii"", A.F10011 AS ""NrContract"", 
-                                        CASE WHEN ({General.TruncateDateAsString("A.F10022")} <= {General.TruncateDateAsString()} AND {General.TruncateDateAsString()} <= {General.TruncateDateAsString("A.F10023")}) THEN 1 ELSE 0 END AS ""Stare"", A.F100699 AS ""SalariulBrut"", A.F10025, A.F100571 AS ""Regiune"",
+                                        CASE WHEN A.F10022 <= {CurrentDate()} AND {CurrentDate()} <= A.F10023 THEN 1 ELSE 0 END AS ""Stare"", A.F100699 AS ""SalariulBrut"", A.F10025, A.F100571 AS ""Regiune"",
                                         (SELECT MIN(Z.F70102) FROM USERS Z WHERE Z.F10003=A.F10003) AS ""IdUser""
                                         FROM ""InlocuitoriAngajat"" B
                                         INNER JOIN F100 A ON B.""F10003Inlocuitor"" = A.F10003
@@ -6350,7 +6394,7 @@ namespace WizOne.Module
                             else
                             {
                                 if (dtINc == null || dtSf == null) return strSql;
-                                string strLst = $@"SELECT A.F10003 FROM ""Ptj_Cereri"" WHERE {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(dtSf)} AND {General.ToDataUniv(dtINc)} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} AND A.""IdStare"" IN (1,2,3)";
+                                string strLst = $@"SELECT A.F10003 FROM ""Ptj_Cereri"" WHERE {TruncateDate("A.DataInceput")} <= {ToDataUniv(dtSf)} AND {ToDataUniv(dtINc)} <= {TruncateDate("A.DataSfarsit")} AND A.""IdStare"" IN (1,2,3)";
                                 strSql += $@" AND A.F10003 NOT IN ({strLst}) ORDER BY A.F10008, A.F10009";
                             }
                         }
@@ -6950,16 +6994,16 @@ namespace WizOne.Module
                                 CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                                 CASE WHEN C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                                 dn.Norma AS ""Norma"", 
-                                (SELECT MAX(P.""IdContract"") FROM ""F100Contracte"" P WHERE P.F10003 = B.F10003 AND {General.TruncateDateAsString("P.\"DataInceput\"")} <= {General.TruncateDateAsString("A.\"Zi\"")}  AND {General.TruncateDateAsString("A.\"Zi\"")}  <= {General.TruncateDateAsString("P.\"DataSfarsit\"")} ) AS ""IdContract"", 
+                                (SELECT MAX(P.""IdContract"") FROM ""F100Contracte"" P WHERE P.F10003 = B.F10003 AND {TruncateDate("P.DataInceput")} <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= {TruncateDate("P.DataSfarsit")} ) AS ""IdContract"", 
                                 G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007,
-                                {HttpContext.Current.Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME,
+                                {HttpContext.Current.Session["UserId"]} AS USER_NO, {CurrentDate()} AS TIME,
 
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.Zi AND  A.Zi <= C.""DataSfarsit"") IS NULL THEN 
                                 CASE WHEN COALESCE(dc.CC, 9999) <> 9999 THEN dc.CC ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = dd.Dept) END 
                                 ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <=  A.Zi AND  A.Zi <= C.""DataSfarsit"") END AS ""F06204Default""
 
                                 FROM ""tblZile"" A
-                                INNER JOIN F100 B ON 1=1 AND {General.TruncateDateAsString("B.\"F10022\"")}  <= {General.TruncateDateAsString("A.\"Zi\"")}  AND {General.TruncateDateAsString("A.\"Zi\"")}  <= {General.TruncateDateAsString("B.\"F10023\"")} 
+                                INNER JOIN F100 B ON 1=1 AND B.F10022 <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
                                 LEFT JOIN HOLIDAYS C on A.""Zi""=C.DAY
                                 LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {General.FunctiiData("X.\"Ziua\"", "A")}={an} AND {General.FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""
                                 {strInner}                                
@@ -6971,15 +7015,15 @@ namespace WizOne.Module
                                 CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                                 CASE WHEN C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                                 ""DamiNorma""(B.F10003, A.""Zi"") AS ""Norma"", 
-                                (SELECT MAX(P.""IdContract"") FROM ""F100Contracte"" P WHERE P.F10003 = B.F10003 AND {General.TruncateDateAsString("P.\"DataInceput\"")} <= {General.TruncateDateAsString("A.\"Zi\"")}  AND {General.TruncateDateAsString("A.\"Zi\"")}  <= {General.TruncateDateAsString("P.\"DataSfarsit\"")} ) AS ""IdContract"", 
+                                (SELECT MAX(P.""IdContract"") FROM ""F100Contracte"" P WHERE P.F10003 = B.F10003 AND {TruncateDate("P.DataInceput")} <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= {TruncateDate("P.DataSfarsit")} ) AS ""IdContract"", 
                                 G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007,
                                 {HttpContext.Current.Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME
                                 FROM ""tblZile"" A
-                                INNER JOIN F100 B ON 1=1 AND {General.TruncateDateAsString("B.\"F10022\"")}  <= {General.TruncateDateAsString("A.\"Zi\"")}  AND {General.TruncateDateAsString("A.\"Zi\"")}  <= {General.TruncateDateAsString("B.\"F10023\"")} 
+                                INNER JOIN F100 B ON 1=1 AND B.F10022  <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
                                 LEFT JOIN HOLIDAYS C on A.""Zi""=C.DAY
-                                LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {General.FunctiiData("X.\"Ziua\"", "A")}={an} AND {General.FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""                                                                   
+                                LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {FunctiiData("X.\"Ziua\"", "A")}={an} AND {FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""                                                                   
                                 LEFT JOIN F006 G ON G.F00607 = ""DamiDept""(B.F10003, A.""Zi"")
-                                WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {General.FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0;";
+                                WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0;";
 								
 								
                 //initializam Ptj_Cumulat

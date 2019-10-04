@@ -550,6 +550,21 @@ namespace WizOne.Absente
                                 }
                                 if (idStare == 3) StergeInPontaj(Convert.ToInt32(obj[0]), idTipOre, oreInVal, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]), Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)));
 
+
+                                //Florin 2019.10.03
+                                DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { obj[1], obj[4], obj[6] });
+                                for (int i = 0; i < dtRun.Rows.Count; i++)
+                                {
+                                    string golesteVal = Dami.ValoareParam("GolesteVal");
+                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                                    FunctiiCeasuri.Calcul.h5 = true;
+                                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                                    FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
+                                }
+
+
                                 General.CalculFormuleCumulat(Convert.ToInt32(obj[1]), Convert.ToDateTime(obj[4]).Year, Convert.ToDateTime(obj[4]).Month);
 
                                 General.SituatieZLOperatii(Convert.ToInt32(General.Nz(obj[1],-99)), Convert.ToDateTime(General.Nz(obj[4],new DateTime(2100,1,1))), 3, Convert.ToInt32(General.Nz(obj[5],0)));

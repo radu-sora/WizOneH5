@@ -264,7 +264,8 @@ namespace WizOne.Generatoare.Reports.Pages
                 resultDataSource.LoadFromXml((dataSource as SqlDataSource).SaveToXml());
                 resultDataSource.Queries.Clear();
                 resultDataSource.Queries.Add(new CustomSqlQuery(dataMember.Length > 0 ? dataMember : "Query", sql));
-                resultDataSource.Fill();
+                resultDataSource.ConnectionParameters = new ReportDataSourceWizardConnectionStringsProvider().GetDataConnectionParameters(resultDataSource.ConnectionName);
+                resultDataSource.Fill();                
 
                 return resultDataSource;
             }

@@ -3467,7 +3467,7 @@ namespace WizOne.Avs
                             sql100 = "UPDATE F100 SET F10067 = '" + dtCer.Rows[0]["Tarife"].ToString() + "' WHERE F10003 = " + f10003.ToString();
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70467, F70420, USER_NO, TIME) "
-                        + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 8, 'Tarife', " + data + ", 0, 'Modificari in avans', '"
+                        + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 28, 'Tarife', " + data + ", 0, 'Modificari in avans', '"
                         + dtCer.Rows[0]["Explicatii"].ToString() + "','" + dtCer.Rows[0]["Tarife"].ToString() + "' ," + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         break;
                     case (int)Constante.Atribute.Sporuri:

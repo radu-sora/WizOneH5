@@ -4,7 +4,15 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
     <script type="text/javascript">
-
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie !", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
     </script>
 
 </asp:Content>
@@ -39,7 +47,7 @@
                     </td>
         </table>
 
-       <dx:ASPxCallbackPanel ID = "pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
+       <dx:ASPxCallbackPanel ID = "pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" ClientSideEvents-EndCallback="OnEndCallback" SettingsLoadingPanel-Enabled="false">
           <PanelCollection>
             <dx:PanelContent>
 

@@ -2443,7 +2443,7 @@ namespace WizOne.Pontaj
                 //if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
                 if (General.Nz(cmbCateg.Value,"").ToString() != "")
                 {
-                    filtruPlus += " AND CTG.Denumire = '" + cmbCateg.Value + "'";
+                    filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
                     strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                     strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                     //strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
@@ -2673,7 +2673,7 @@ namespace WizOne.Pontaj
                 //if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
                 if (General.Nz(cmbCateg.Value, "").ToString() != "")
                 {
-                    filtruPlus += " AND CTG.Denumire = '" + cmbCateg.Value + "'";
+                    filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
                     strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                     strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                     //strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";

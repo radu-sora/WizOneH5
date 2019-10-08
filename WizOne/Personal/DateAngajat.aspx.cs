@@ -918,8 +918,12 @@ namespace WizOne.Personal
                         marcaFin = Convert.ToInt32(dtMarca.Rows[0][0].ToString());
                     if (marcaInit != marcaFin)
                     {
-                        dt100.Rows[0]["F10003"] = marcaFin;
-                        Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
+                        int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar("SELECT COUNT(*) FROM F100 WHERE F10003 =@1", new object[] { marcaInit }), 0));
+                        if (cnt != 0)
+                        {
+                            dt100.Rows[0]["F10003"] = marcaFin;
+                            Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
+                        }
                     }
                 }
                

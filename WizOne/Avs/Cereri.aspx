@@ -730,6 +730,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>
+                        <label id="lblDocument" runat="server">Document</label>
+                        <dx:ASPxTextBox ID="txtDocument" runat="server"  Width="250px" Height="21px" ></dx:ASPxTextBox>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="3">
                         <label id="lblDoc" clientidmode="Static" runat="server" style="display:inline-block; margin-bottom:0px; margin-top:4px; padding:0; height:22px; line-height:22px; vertical-align:text-bottom;">&nbsp; </label>
                     </td>

@@ -98,7 +98,7 @@ namespace WizOne.Personal
                         if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                         {
                             ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;
-                            txtEIDDI.Text = "FMO" + txtMarca.Text;
+                            txtEIDDI.Text = "FM0" + txtMarca.Text;
                         }
                     }
                 }
@@ -170,7 +170,7 @@ namespace WizOne.Personal
                                 {
                                     ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;
                                     ASPxTextBox txtMarca = DateIdentificare_DataList.Items[0].FindControl("txtMarcaDI") as ASPxTextBox;
-                                    txtEIDDI.Text = "FMO" + txtMarca.Text;
+                                    txtEIDDI.Text = "FM0" + txtMarca.Text;
                                 }
                         }
                         else

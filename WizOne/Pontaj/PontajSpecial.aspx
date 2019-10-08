@@ -281,6 +281,13 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <dx:ASPxCheckBox ID="chkDecalare"  runat="server" style="display:inline-block; float:left; font-weight:bold;   width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Decalare pontaj"  TextAlign="Left" ClientInstanceName="chkbx4" />                                    
+                                       </div>
+                                    </td>
+                                </tr>
                             </table>
                         </dx:PanelContent>
                     </PanelCollection>

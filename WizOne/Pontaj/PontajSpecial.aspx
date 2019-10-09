@@ -15,7 +15,8 @@
         }
 
         function OnModif(s, e) {   
-            popUpModif.Hide();
+            popUpModif.Hide();      
+            txtValuri.Set(__name_text_box, "");
             var texts = "";
             if (cmbTipAbs.GetText() != "")
                 texts = cmbTipAbs.GetText();
@@ -27,8 +28,8 @@
                         var lista = tmp.split("_");
                         //texts += "/" + $(this).val() + $(this).attr('id').replace('_I', '').replace('flo1', '');
                         texts += "/" + $(this).val() + lista[1]; 
-                        var valoare = txtValuri.Get(__name_text_box);
-                        if (typeof valoare !== "undefined")
+                        var valoare = txtValuri.Get(__name_text_box);                     
+                        if (valoare.length > 0)
                             valoare = valoare + ";";
                         else
                             valoare = "";
@@ -88,6 +89,9 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">  
+                <dx:ASPxButton ID="btnPtjEch" ClientInstanceName="btnPtjEch" ClientIDMode="Static" runat="server" Text="Pontajul echipei" AutoPostBack="true" PostBackUrl="../Pontaj/PontajEchipa.aspx" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/preluare.png"></Image>
+                </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnInit" ClientInstanceName="btnInit" ClientIDMode="Static" runat="server" Text="Initializare" AutoPostBack="true" OnClick="btnInit_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>  

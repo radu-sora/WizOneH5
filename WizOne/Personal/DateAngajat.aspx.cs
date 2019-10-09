@@ -913,7 +913,7 @@ namespace WizOne.Personal
                 DataTable dtSec = General.IncarcaDT(strSQL, null);
                 if (dtSec != null && dtSec.Rows.Count > 0 && dtSec.Rows[0][0] != null && dtSec.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtSec.Rows[0][0].ToString()) == 1)
                 {
-                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100", null);
+                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100 where f10003 <= coalesce((select cast(\"Valoare\" as integer) from \"tblParametrii\" where \"Nume\" = 'MP_LimitaMaximaMarca') , 10000000)", null);
                     if (dtMarca != null && dtMarca.Rows.Count > 0 && dtMarca.Rows[0][0] != null && dtMarca.Rows[0][0].ToString().Length > 0)
                         marcaFin = Convert.ToInt32(dtMarca.Rows[0][0].ToString());
                     if (marcaInit != marcaFin)
@@ -951,7 +951,7 @@ namespace WizOne.Personal
                 DataTable dtSec = General.IncarcaDT(strSQL, null);
                 if (dtSec != null && dtSec.Rows.Count > 0 && dtSec.Rows[0][0] != null && dtSec.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtSec.Rows[0][0].ToString()) == 1)
                 {//se va lua max + 1 din F100
-                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100", null);
+                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100 where f10003 <= coalesce((select cast(\"Valoare\" as integer) from \"tblParametrii\" where \"Nume\" = 'MP_LimitaMaximaMarca') , 10000000)", null);
                     if (dtMarca != null && dtMarca.Rows.Count > 0 && dtMarca.Rows[0][0] != null && dtMarca.Rows[0][0].ToString().Length > 0)
                         id = Convert.ToInt32(dtMarca.Rows[0][0].ToString());                    
                 }

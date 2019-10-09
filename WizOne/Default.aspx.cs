@@ -77,7 +77,7 @@ namespace WizOne
                             int poz = usrTMP.IndexOf(@"\");
                             if (poz > 0) usrTMP = usrTMP.Remove(0, poz + 1);
 
-                            Verifica(usrTMP, "");
+                            Verifica(usrTMP, "", false);
                         }
                         break;
                     case "5":
@@ -103,7 +103,7 @@ namespace WizOne
                                     if (poz > 0) usrTMP = usrTMP.Remove(poz);
                                     //MessageBox.Show(usrTMP);
                                     General.MemoreazaEroarea(usrTMP);
-                                    string txtRas = Verifica(usrTMP, "", false);
+                                    string txtRas = Verifica(usrTMP, "", false, false);
 
                                     if (General.Nz(Session["SecApp"], "").ToString() != "OK")
                                     {
@@ -179,12 +179,12 @@ namespace WizOne
                 if (Dami.ValoareParam("Captcha") == "1")
                 {
                     if (IsReCaptchValid())
-                        Verifica(General.Strip(txtPan1.Text), txtPan2.Text);
+                        Verifica(General.Strip(txtPan1.Text), txtPan2.Text, true);
                     else
                         MessageBox.Show("Va rugam verificati codul captcha", MessageBox.icoWarning, "Captcha");
                 }
                 else
-                    Verifica(General.Strip(txtPan1.Text), txtPan2.Text);
+                    Verifica(General.Strip(txtPan1.Text), txtPan2.Text, true);
             }
             catch (Exception ex)
             {
@@ -379,13 +379,13 @@ namespace WizOne
             return esteBlocat;
         }
 
-        protected string Verifica(string utilizator, string parola, bool cuMesaj = true)
+        protected string Verifica(string utilizator, string parola, bool dinButon, bool cuMesaj = true)
         {
             string txtRas = "";
 
             try
             {
-                string rasp = VerificaUser(utilizator, parola);
+                string rasp = VerificaUser(utilizator, parola, dinButon);
                 if (rasp.Length > 1)
                 {
                     Session["IdLimba"] = rasp.Substring(rasp.Length - 2, 2);
@@ -775,7 +775,7 @@ namespace WizOne
         //    }
         //}
 
-        private string VerificaUser(string utilizator, string parola)
+        private string VerificaUser(string utilizator, string parola, bool dinButon)
         {
 
             //stare = -1            domeniul nu este configurat
@@ -798,6 +798,15 @@ namespace WizOne
                 //s-a adaugat conditia cu tip 5
                 string tipVerif = Dami.ValoareParam("TipVerificareAccesApp");
                 if (tipVerif == "") tipVerif = "1";
+
+                //Radu 09.10.2019 - daca VerificaUser este apelata de la butonul de logare, se ignora SSO (cazul 3 devine 1, cazul 4 devine 2)
+                if (dinButon)
+                {
+                    if (tipVerif == "3")
+                        tipVerif = "1";
+                    if (tipVerif == "4")
+                        tipVerif = "2";
+                }
 
                 switch (tipVerif)
                 {

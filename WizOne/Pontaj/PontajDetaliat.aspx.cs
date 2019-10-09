@@ -3771,7 +3771,7 @@ namespace WizOne.Pontaj
 
         protected void grCC_CustomColumnDisplayText(object sender, ASPxGridViewColumnDisplayTextEventArgs e)
         {
-            if (e.Column.FieldName.Substring(0,5) == "NrOre")
+            if (e != null && e.Column != null && e.Column.FieldName != null & e.Column.FieldName.ToString().Length >= 5 && e.Column.FieldName.Substring(0,5) == "NrOre")
             {
                 var ts = TimeSpan.FromMinutes(Convert.ToDouble(General.Nz(e.Value,0)));
                 e.DisplayText = string.Format("{0:00}:{1:00}", (int)ts.TotalHours, ts.Minutes);

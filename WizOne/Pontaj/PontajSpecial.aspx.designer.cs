@@ -22,6 +22,15 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
         
         /// <summary>
+        /// btnPtjEch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnPtjEch;
+        
+        /// <summary>
         /// btnInit control.
         /// </summary>
         /// <remarks>

@@ -589,8 +589,7 @@ namespace WizOne.Pontaj
                             }
                         break;
                     case "cmbSablon":
-                        AscundeCtl();
-                        txtValuri.Clear();
+                        AscundeCtl();                    
                         if (cmbSablon.Value != null)
                         {
                             if (Convert.ToInt32(cmbSablon.Value) > 0)
@@ -678,7 +677,7 @@ namespace WizOne.Pontaj
                                         {                                          
                                             if (item.Key == "txtZiua" + i.ToString())
                                                 linii[0]["ValZiua" + i.ToString()] = item.Value;
-                                        }
+                                        }                         
                                       
                                     //}
                                 }

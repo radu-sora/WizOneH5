@@ -219,14 +219,23 @@ namespace WizOne.Pagini
 
                 if (dtRap.Rows.Count > 0)
                 {
+                    //Radu 09.10.2019
+                    ASPxCallbackPanel pnlMain = new ASPxCallbackPanel();
+                    pnlMain.Callback += new CallbackEventHandlerBase(pnlMain_OnCallback);                    
+                    pnlMain.ClientInstanceName = "pnlMain";
+
                     for (int i = 0; i < dtRap.Rows.Count; i++)
                     {
                         ASPxButton btn = new ASPxButton();
                         btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] ?? "").ToString());
                         //btn.PostBackUrl = "RapDetaliu.aspx?id=" + dtRap.Rows[i]["DynReportId"];
-                        Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
-                        btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx";
-
+                        //Radu 09.10.2019 - Id-ul raportului nu poate fi stocat in Session["ReportId"] in acest moment (deoarece ramane ultimul din iteratie); 
+                        //                  la apasarea butonului se va apela o functie care se seta corect Session["ReportId"]
+                        //Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
+                        //btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx";
+                        btn.ClientSideEvents.Click = string.Format("function(s,e) {{ pnlMain.PerformCallback('{0}');  window.open(getAbsoluteUrl + 'Generatoare/Reports/Pages/ReportView.aspx', '_blank '); }}", dtRap.Rows[i]["DynReportId"].ToString());
+                                                
+    
                         ASPxDockPanel pnl = new ASPxDockPanel();
                         string nme = "wdgRap" + i;
                         pnl.ID = nme;
@@ -245,10 +254,12 @@ namespace WizOne.Pagini
                         pnl.Styles.Content.Paddings.Padding = 0;
                         pnl.Controls.Add(btn);
 
-                        divPanel.Controls.Add(pnl);
+                        //divPanel.Controls.Add(pnl);
+                        pnlMain.Controls.Add(pnl);
 
                         //widgetNames.Add(new metaWidget { Nume = nme, Eticheta = btn.Text, RutaImg = "pnlWidget4" });
                     }
+                    divPanel.Controls.Add(pnlMain);
                 }
 
 
@@ -358,6 +369,12 @@ namespace WizOne.Pagini
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        //Radu 09.10.2019
+        void pnlMain_OnCallback(object source, CallbackEventArgsBase e)
+        {
+            Session["ReportId"] = Convert.ToInt32(e.Parameter.ToString());        
         }
 
         protected void dockManager_ClientLayout(object sender, DevExpress.Web.ASPxClientLayoutArgs e)

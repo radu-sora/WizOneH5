@@ -100,7 +100,7 @@
                 else
                 {
                     swal({
-                        title: "Atentie !", text: "Trebuie sa selectati o coloana care afiseaza ziua",
+                        title: "", text: "Trebuie sa selectati o coloana care afiseaza ziua",
                         type: "warning"
                     });
                     e.processOnServer = false;
@@ -109,7 +109,7 @@
             else
             {
                 swal({
-                    title: "Atentie !", text: "Nu exista celula selectata",
+                    title: "", text: "Nu exista celula selectata",
                     type: "warning"
                 });
                 e.processOnServer = false;

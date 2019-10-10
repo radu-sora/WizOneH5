@@ -312,7 +312,7 @@ namespace WizOne.CereriDiverse
                                 if (obj == null || obj.Count() == 0)
                                 {
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata");
-                                    //MessageBox.Show(Dami.TraduCuvant("Nu exista linie selectata"), MessageBox.icoWarning, "Atentie !");
+                                    //MessageBox.Show(Dami.TraduCuvant("Nu exista linie selectata"), MessageBox.icoWarning, "");
                                     return;
                                 }
 
@@ -328,7 +328,7 @@ namespace WizOne.CereriDiverse
                                 if (idStare == 0)
                                 {
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti anula o cerere respinsa");
-                                    //MessageBox.Show(Dami.TraduCuvant("Nu puteti anula o cerere respinsa"), MessageBox.icoWarning, "Atentie !");
+                                    //MessageBox.Show(Dami.TraduCuvant("Nu puteti anula o cerere respinsa"), MessageBox.icoWarning, "");
                                     return;
                                 }
 
@@ -340,14 +340,14 @@ namespace WizOne.CereriDiverse
                                 //        if (General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() != "D1" && General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() != "D2")
                                 //        {
                                 //            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Puteti anula numai cerereile cu tip de absenta Delegatie");
-                                //            //MessageBox.Show(Dami.TraduCuvant("Puteti anula numai cerereile cu tip de absenta Delegatie"), MessageBox.icoWarning, "Atentie !");
+                                //            //MessageBox.Show(Dami.TraduCuvant("Puteti anula numai cerereile cu tip de absenta Delegatie"), MessageBox.icoWarning, "");
                                 //            return;
                                 //        }
 
                                 //        if (General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() == "CO" && Convert.ToInt32(drAbs["CampBifa1"]) == 1)
                                 //        {
                                 //            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti anula o cerere pentru care s-a cerut prima");
-                                //            //MessageBox.Show(Dami.TraduCuvant("Nu puteti anula o cerere pentru care s-a cerut prima"), MessageBox.icoWarning, "Atentie !");
+                                //            //MessageBox.Show(Dami.TraduCuvant("Nu puteti anula o cerere pentru care s-a cerut prima"), MessageBox.icoWarning, "");
                                 //            return;
                                 //        }
                                 //    }
@@ -355,14 +355,14 @@ namespace WizOne.CereriDiverse
                                 //    if ((obj[1] ?? -99).ToString() == General.VarSession("User_Marca").ToString() && Convert.ToInt32(General.Nz(drAbs["Anulare"], 0)) == 0 && idStare != 4)
                                 //    {
                                 //        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Angajatul nu are drepturi pentru a anula acest tip de absenta");
-                                //        //MessageBox.Show(Dami.TraduCuvant("Angajatul nu are drepturi pentru a anula acest tip de absenta"), MessageBox.icoWarning, "Atentie !");
+                                //        //MessageBox.Show(Dami.TraduCuvant("Angajatul nu are drepturi pentru a anula acest tip de absenta"), MessageBox.icoWarning, "");
                                 //        return;
                                 //    }
 
                                 //    if ((obj[1] ?? -99).ToString() == General.VarSession("User_Marca").ToString() && Convert.ToInt32(General.Nz(drAbs["AnulareAltii"], 0)) == 0)
                                 //    {
                                 //        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Persoanele din circuit nu au dreptul de a anula acest tip de absenta");
-                                //        //MessageBox.Show(Dami.TraduCuvant("Persoanele din circuit nu au dreptul de a anula acest tip de absenta"), MessageBox.icoWarning, "Atentie !");
+                                //        //MessageBox.Show(Dami.TraduCuvant("Persoanele din circuit nu au dreptul de a anula acest tip de absenta"), MessageBox.icoWarning, "");
                                 //        return;
                                 //    }
                                 //}
@@ -587,7 +587,7 @@ namespace WizOne.CereriDiverse
                 e.Cancel = true;
                 grDate.CancelEdit();
 
-                //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoSuccess, "Atentie !");
+                //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoSuccess, "");
             }
             catch (Exception ex)
             {

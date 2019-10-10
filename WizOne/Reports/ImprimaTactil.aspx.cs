@@ -71,7 +71,7 @@ namespace WizOne.Reports
                 {
                     if (VerificaFluturasLog() == 0)
                     {
-                        MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show("Ati atins numarul maxim de imprimari pentru acest tip de fluturas si pentru luna si anul selectate!", MessageBox.icoWarning, "");
                     }
                     else
                     {

@@ -35,7 +35,7 @@
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: trad_string(limba, "Atentie !"), text: s.cpAlertMessage,
+                    title: trad_string(limba, ""), text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;

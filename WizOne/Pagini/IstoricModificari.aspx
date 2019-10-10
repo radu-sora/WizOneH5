@@ -13,7 +13,7 @@
             pnlLoading.Hide();
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -24,7 +24,7 @@
         {
             if (cmbTabela.GetValue() == null) {
                 swal({
-                    title: "Atentie !", text: "Nu ati selectat tabela!",
+                    title: "", text: "Nu ati selectat tabela!",
                     type: "warning"
                 });
                 return;

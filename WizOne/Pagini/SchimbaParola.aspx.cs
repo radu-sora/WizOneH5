@@ -32,7 +32,7 @@ namespace WizOne.Pagini
 
                 if (txtPan1.Text == "" || txtPan2.Text == "" || txtPan3.Text == "")
                 {
-                    MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "Atentie !");
+                    MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "");
                 }
                 else
                 {
@@ -41,13 +41,13 @@ namespace WizOne.Pagini
 
                     if (dr == null || parolaDinBaza != txtPan1.Text)
                     {
-                        MessageBox.Show("Parola actuala eronata", MessageBox.icoWarning, "Atentie !");
+                        MessageBox.Show("Parola actuala eronata", MessageBox.icoWarning, "");
                     }
                     else
                     {
                         if (txtPan2.Text != txtPan3.Text)
                         {
-                            MessageBox.Show("Parola nu coincide !", MessageBox.icoWarning, "Atentie !");
+                            MessageBox.Show("Parola nu coincide !", MessageBox.icoWarning, "");
                         }
                         else
                         {

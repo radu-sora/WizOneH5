@@ -37,7 +37,7 @@
     //function OnCallbackSp1(value) {
     //    if (value == newItem) {
     //        swal({
-    //            title: "Atentie !", text: "Acest spor a mai fost deja atribuit acestui angajat!",
+    //            title: "", text: "Acest spor a mai fost deja atribuit acestui angajat!",
     //            type: "warning"
     //        });
     //        var tb = grDateSporuri1.GetEditor("Spor");
@@ -48,7 +48,7 @@
     //function OnCallbackSp2(value) {
     //    if (value == newItem) {
     //        swal({
-    //            title: "Atentie !", text: "Acest spor a mai fost deja atribuit acestui angajat!",
+    //            title: "", text: "Acest spor a mai fost deja atribuit acestui angajat!",
     //            type: "warning"
     //        });
     //        var tb = grDateSporuri2.GetEditor("Spor");
@@ -59,7 +59,7 @@
     function OnEndCallbackSporuri(s, e) {
         if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: s.cpAlertMessage,
+                title: "", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;

@@ -308,7 +308,7 @@ namespace WizOne.Pontaj
                 DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
                 int idRol = Convert.ToInt32(cmbRolAng.Value);
 
-                filtru = $@" AND {General.ToDataUniv(ziua.Year, ziua.Month)} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)} AND A.F10003=" + Convert.ToInt32(cmbAng.Value ?? -99);
+                filtru = $@" AND {General.ToDataUniv(ziua.Year, ziua.Month)} <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)} AND A.F10003=" + Convert.ToInt32(cmbAng.Value ?? -99);
                 cheia = General.FunctiiData("P.\"Ziua\"", "Z");
 
                 //2018.02.09 Imbunatatire
@@ -331,7 +331,7 @@ namespace WizOne.Pontaj
                             {cheia} AS ""Cheia"", 
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"", Y.F00709 AS ""Subdept"", Z.F00810 AS ""Birou"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS DescProgram, COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
-                            CASE WHEN {General.TruncateDateAsString("A.F10022")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <= {General.TruncateDateAsString("A.F10023")} THEN 1 ELSE 0 END AS ""Activ"",  
+                            CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 THEN 1 ELSE 0 END AS ""Activ"",  
                             COALESCE(J.""IdStare"",1) AS ""IdStare"", K.""Culoare"" AS ""CuloareStare"", K.""Denumire"" AS ""NumeStare"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""Ptj_Cereri"" Z 
                             INNER JOIN ""Ptj_tblAbsente"" Y ON Z.""IdAbsenta"" = Y.""Id""
@@ -413,7 +413,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
                             WHERE CONVERT(date,P.""Ziua"") <= A.F10023
                             {filtru}
-                            ORDER BY A.F10003, {General.TruncateDateAsString("P.\"Ziua\"")}";
+                            ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
 
                 dt = General.IncarcaDT(strSql, null);
 
@@ -1931,12 +1931,12 @@ namespace WizOne.Pontaj
                     {
                         case "btnCC":
                             {
-                                //DataTable dtPro = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatProiect"" WHERE F10003={lst[0]} AND {General.TruncateDateAsString("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("\"DataSfarsit\"")}) = 0)
+                                //DataTable dtPro = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatProiect"" WHERE F10003={lst[0]} AND {General.TruncateDate("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("\"DataSfarsit\"")}) = 0)
                                 //                    SELECT * FROM ""tblProiecte""
                                 //                    ELSE
                                 //                    SELECT B.* FROM ""Ptj_relAngajatProiect"" A 
                                 //                    INNER JOIN ""tblProiecte"" B ON A.""IdProiect"" = B.""Id""
-                                //                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+                                //                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDate("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.\"DataSfarsit\"")} ", null);
                                 //GridViewDataComboBoxColumn colPro = (grCC.Columns["IdProiect"] as GridViewDataComboBoxColumn);
                                 //colPro.PropertiesComboBox.DataSource = dtPro;
                                 //Session["PtjCC_Proiecte"] = dtPro;
@@ -1951,12 +1951,12 @@ namespace WizOne.Pontaj
                                 //colAct.PropertiesComboBox.DataSource = dtAct;
                                 //Session["PtjCC_Activitati"] = dtAct;
 
-                                //DataTable dtCC = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatCC"" WHERE F10003={lst[0]} AND {General.TruncateDateAsString("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("\"DataSfarsit\"")}) = 0)
+                                //DataTable dtCC = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatCC"" WHERE F10003={lst[0]} AND {General.TruncateDate("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("\"DataSfarsit\"")}) = 0)
                                 //                    SELECT * FROM F062
                                 //                    ELSE
                                 //                    SELECT B.* FROM ""Ptj_relAngajatCC"" A 
                                 //                    INNER JOIN F062 B ON A.F06204 = B.F06204
-                                //                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+                                //                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDate("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.\"DataSfarsit\"")} ", null);
                                 //GridViewDataComboBoxColumn colCC = (grCC.Columns["F06204"] as GridViewDataComboBoxColumn);
                                 //colCC.PropertiesComboBox.DataSource = dtCC;
                                 //Session["PtjCC_CentruCost"] = dtCC;
@@ -1982,14 +1982,14 @@ namespace WizOne.Pontaj
                                                         INNER JOIN tblProiecte B ON A.IdProiect = B.Id
                                                         INNER JOIN relProSubAct C ON B.Id = C.IdProiect
                                                         INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
-                                                        WHERE A.IdProiect={arr[1]} AND A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ) = 0)
+                                                        WHERE A.IdProiect={arr[1]} AND A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ) = 0)
                                                         SELECT * FROM tblSubProiecte
                                                         ELSE
                                                         SELECT DISTINCT D.* FROM Ptj_relAngajatProiect A
                                                         INNER JOIN tblProiecte B ON A.IdProiect = B.Id
                                                         INNER JOIN relProSubAct C ON B.Id = C.IdProiect
                                                         INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
-                                                        WHERE A.IdProiect={arr[1]} AND A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+                                                        WHERE A.IdProiect={arr[1]} AND A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ", null);
 
                                     cmbSubPro.DataSource = dt;
                                     cmbSubPro.DataBind();
@@ -2016,7 +2016,7 @@ namespace WizOne.Pontaj
                                                         INNER JOIN relProSubAct C ON B.Id = C.IdProiect
                                                         INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
                                                         INNER JOIN tblActivitati E ON C.IdActivitate=E.Id
-                                                        WHERE A.IdProiect={arr[1]} AND C.IdSubproiect={arr[2]} AND A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ) = 0)
+                                                        WHERE A.IdProiect={arr[1]} AND C.IdSubproiect={arr[2]} AND A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ) = 0)
                                                         SELECT * FROM tblSubProiecte
                                                         ELSE
                                                         SELECT DISTINCT E.* FROM Ptj_relAngajatProiect A
@@ -2024,7 +2024,7 @@ namespace WizOne.Pontaj
                                                         INNER JOIN relProSubAct C ON B.Id = C.IdProiect
                                                         INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
                                                         INNER JOIN tblActivitati E ON C.IdActivitate=E.Id
-                                                        WHERE A.IdProiect={arr[1]} AND C.IdSubproiect={arr[2]} AND A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+                                                        WHERE A.IdProiect={arr[1]} AND C.IdSubproiect={arr[2]} AND A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ", null);
 
                                     cmbAct.DataSource = dt;
                                     cmbAct.DataBind();
@@ -2217,14 +2217,14 @@ namespace WizOne.Pontaj
         //                                                INNER JOIN tblProiecte B ON A.IdProiect = B.Id
         //                                                INNER JOIN relProSubAct C ON B.Id = C.IdProiect
         //                                                INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
-        //                                                WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ) = 0)
+        //                                                WHERE A.F10003 = {lst[0]} AND {General.TruncateDate("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.\"DataSfarsit\"")} ) = 0)
         //                                                SELECT * FROM tblSubProiecte
         //                                                ELSE
         //                                                SELECT D.* FROM Ptj_relAngajatProiect A
         //                                                INNER JOIN tblProiecte B ON A.IdProiect = B.Id
         //                                                INNER JOIN relProSubAct C ON B.Id = C.IdProiect
         //                                                INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
-        //                                                WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+        //                                                WHERE A.F10003 = {lst[0]} AND {General.TruncateDate("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.\"DataSfarsit\"")} ", null);
 
         //        cmbSubPro.DataSource = dtPro;
         //        cmbSubPro.DataBind();
@@ -2267,12 +2267,12 @@ namespace WizOne.Pontaj
         //    try
         //    {
         //        //List<object> lst = ValoriChei();
-        //        //DataTable dtPro = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatProiect"" WHERE F10003={lst[0]} AND {General.TruncateDateAsString("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("\"DataSfarsit\"")}) = 0)
+        //        //DataTable dtPro = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatProiect"" WHERE F10003={lst[0]} AND {General.TruncateDate("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("\"DataSfarsit\"")}) = 0)
         //        //                                        SELECT * FROM ""tblProiecte""
         //        //                                        ELSE
         //        //                                        SELECT B.* FROM ""Ptj_relAngajatProiect"" A 
         //        //                                        INNER JOIN ""tblProiecte"" B ON A.""IdProiect"" = B.""Id""
-        //        //                                        WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+        //        //                                        WHERE A.F10003 = {lst[0]} AND {General.TruncateDate("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.\"DataSfarsit\"")} ", null);
 
         //        //ASPxComboBox cmb = sender as ASPxComboBox;
         //        //if (cmb != null)
@@ -2347,12 +2347,12 @@ namespace WizOne.Pontaj
             {
                 List<object> lst = ValoriChei();
 
-                DataTable dt = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatProiect"" WHERE F10003={lst[0]} AND {General.TruncateDateAsString("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("\"DataSfarsit\"")}) = 0)
+                DataTable dt = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatProiect"" WHERE F10003={lst[0]} AND {General.TruncateDate("DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("DataSfarsit")}) = 0)
                                                     SELECT * FROM ""tblProiecte""
                                                     ELSE
                                                     SELECT B.* FROM ""Ptj_relAngajatProiect"" A 
                                                     INNER JOIN ""tblProiecte"" B ON A.""IdProiect"" = B.""Id""
-                                                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+                                                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ", null);
 
                 cmb.DataSource = dt;
                 cmb.DataBind();
@@ -2370,12 +2370,12 @@ namespace WizOne.Pontaj
             {
                 List<object> lst = ValoriChei();
 
-                DataTable dt = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatCC"" WHERE F10003={lst[0]} AND {General.TruncateDateAsString("\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("\"DataSfarsit\"")}) = 0)
+                DataTable dt = General.IncarcaDT($@"IF((SELECT COUNT(*) FROM ""Ptj_relAngajatCC"" WHERE F10003={lst[0]} AND {General.TruncateDate("DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("DataSfarsit")}) = 0)
                                                     SELECT * FROM F062
                                                     ELSE
                                                     SELECT B.* FROM ""Ptj_relAngajatCC"" A 
                                                     INNER JOIN F062 B ON A.F06204 = B.F06204
-                                                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+                                                    WHERE A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ", null);
 
                 cmb.DataSource = dt;
                 cmb.DataBind();
@@ -2398,14 +2398,14 @@ namespace WizOne.Pontaj
                                                         INNER JOIN tblProiecte B ON A.IdProiect = B.Id
                                                         INNER JOIN relProSubAct C ON B.Id = C.IdProiect
                                                         INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
-                                                        WHERE A.IdProiect={idPro} AND A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ) = 0)
+                                                        WHERE A.IdProiect={idPro} AND A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ) = 0)
                                                         SELECT * FROM tblSubProiecte
                                                         ELSE
                                                         SELECT DISTINCT D.* FROM Ptj_relAngajatProiect A
                                                         INNER JOIN tblProiecte B ON A.IdProiect = B.Id
                                                         INNER JOIN relProSubAct C ON B.Id = C.IdProiect
                                                         INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
-                                                        WHERE A.IdProiect={idPro} AND A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+                                                        WHERE A.IdProiect={idPro} AND A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ", null);
 
                 cmb.DataSource = dt;
                 cmb.DataBind();
@@ -2428,7 +2428,7 @@ namespace WizOne.Pontaj
                                                         INNER JOIN relProSubAct C ON B.Id = C.IdProiect
                                                         INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
                                                         INNER JOIN tblActivitati E ON C.IdActivitate=E.Id
-                                                        WHERE A.IdProiect={idPro} AND C.IdSubproiect={idSub} AND A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ) = 0)
+                                                        WHERE A.IdProiect={idPro} AND C.IdSubproiect={idSub} AND A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ) = 0)
                                                         SELECT * FROM tblSubProiecte
                                                         ELSE
                                                         SELECT DISTINCT E.* FROM Ptj_relAngajatProiect A
@@ -2436,7 +2436,7 @@ namespace WizOne.Pontaj
                                                         INNER JOIN relProSubAct C ON B.Id = C.IdProiect
                                                         INNER JOIN tblSubProiecte D ON C.IdSubproiect=D.Id
                                                         INNER JOIN tblActivitati E ON C.IdActivitate=E.Id
-                                                        WHERE A.IdProiect={idPro} AND C.IdSubproiect={idSub} AND A.F10003 = {lst[0]} AND {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} ", null);
+                                                        WHERE A.IdProiect={idPro} AND C.IdSubproiect={idSub} AND A.F10003 = {lst[0]} AND {General.TruncateDate("A.DataInceput")} <= {General.ToDataUniv(Convert.ToDateTime(lst[1]))} AND {General.ToDataUniv(Convert.ToDateTime(lst[1]))} <= {General.TruncateDate("A.DataSfarsit")} ", null);
 
                 cmb.DataSource = dt;
                 cmb.DataBind();

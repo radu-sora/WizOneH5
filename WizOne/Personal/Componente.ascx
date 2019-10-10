@@ -6,7 +6,7 @@
     function OnEndCallbackComp(s, e) {
         if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: s.cpAlertMessage,
+                title: "", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;
@@ -25,7 +25,7 @@
     //function OnCallbackComp(value) {
     //    if (value == newItem) {
     //        swal({
-    //            title: "Atentie !", text: "Codul a mai fost deja atribuit acestui angajat!",
+    //            title: "", text: "Codul a mai fost deja atribuit acestui angajat!",
     //            type: "warning"
     //        });
     //        var cb = grDateComponente.GetEditor("F02104"); 
@@ -37,7 +37,7 @@
         var val = s.GetValue();
         if (val < 0) {
             swal({
-                title: "Atentie !", text: "Suma nu poate fi negativa!",
+                title: "", text: "Suma nu poate fi negativa!",
                 type: "warning"
             });       
             var tb = grDateComponente.GetEditor("Suma"); 

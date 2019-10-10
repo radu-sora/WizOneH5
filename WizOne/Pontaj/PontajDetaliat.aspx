@@ -367,6 +367,7 @@
 
         function EmptyFields(s, e) {
             cmbAng.SetValue(null);
+            cmbAngZi.SetValue(null);
             cmbCtr.SetValue(null);
             cmbStare.SetValue(null);
 
@@ -382,7 +383,7 @@
             
             if (grDate.batchEditApi.HasChanges()) {
                 swal({
-                    title: "Atentie !", text: "Aveti date nesalvate.",
+                    title: "", text: "Aveti date nesalvate.",
                     type: "warning"
                 });
                 e.processOnServer = false;
@@ -463,7 +464,7 @@
             });
         }
         function AdjustSize() {
-            var height = Math.max(0, document.documentElement.clientHeight) - 250;
+            var height = Math.max(0, document.documentElement.clientHeight) - 330;
             if (<%=Session["PontajulAreCC"] %> == 1) 
                 var height = Math.max(0, document.documentElement.clientHeight) - 450;
 
@@ -483,7 +484,7 @@
         function OnEndCallback(s, e) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -618,10 +619,7 @@
                                                             <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
                                                         </dx:EditButton>
                                                     </Buttons>
-                                                    <ClientSideEvents ButtonClick="function(s, e) {
-                                                                    pnlLoading.Show();
-                                                                    e.processOnServer = true;
-                                                                }" />
+                                                    <ClientSideEvents ButtonClick="function(s, e) {pnlLoading.Show();e.processOnServer = true;}" ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtZiua'); }"  />
                                                 </dx:ASPxDateEdit>
                                             </div>
                                             <div style="float:left; padding-right:15px;">

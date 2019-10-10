@@ -157,7 +157,7 @@ namespace WizOne.ContracteLucru
                     Session["InformatiaCurentaContracte"] = ds;
                 }
                 else
-                    MessageBox.Show(errMsg, MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(errMsg, MessageBox.icoError, "");
 
 
             }
@@ -218,7 +218,7 @@ namespace WizOne.ContracteLucru
                     grDateCtrVal.DataSource = ds.Tables["Ptj_ContracteVal"];
                 }
                 else
-                    MessageBox.Show(errMsg, MessageBox.icoError, "Atentie !");
+                    MessageBox.Show(errMsg, MessageBox.icoError, "");
             }
             catch (Exception ex)
             {

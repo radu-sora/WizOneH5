@@ -39,7 +39,7 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex,MessageBox.icoError, "Atentie !");
+                MessageBox.Show(ex,MessageBox.icoError, "");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -54,7 +54,7 @@ namespace WizOne.Personal
 
                 if (txtArtera.Text.Length == 0 && txtLocalitate.Text.Length == 0)
                 {
-                    //MessageBox.Show("Nu ati introdus nici artera, nici localitatea!", MessageBox.icoWarning, "Atentie !");
+                    //MessageBox.Show("Nu ati introdus nici artera, nici localitatea!", MessageBox.icoWarning, "");
                     ArataMesaj("Nu ati introdus nici artera, nici localitatea!");
                     return;
                 }
@@ -62,14 +62,14 @@ namespace WizOne.Personal
 
                 if (txtArtera.Text.Length > 0 && txtArtera.Text.Length < 3)
                 {
-                    //MessageBox.Show("Introduceti minim 3 caractere la numele arterei!", MessageBox.icoWarning, "Atentie !");
+                    //MessageBox.Show("Introduceti minim 3 caractere la numele arterei!", MessageBox.icoWarning, "");
                     ArataMesaj("Introduceti minim 3 caractere la numele arterei!");
                     return;
                 }
 
                 if (txtLocalitate.Text.Length > 0 && txtLocalitate.Text.Length < 3)
                 {
-                    //MessageBox.Show("Introduceti minim 3 caractere la numele localitatii!", MessageBox.icoWarning, "Atentie !");
+                    //MessageBox.Show("Introduceti minim 3 caractere la numele localitatii!", MessageBox.icoWarning, "");
                     ArataMesaj("Introduceti minim 3 caractere la numele localitatii!");
                     return;
                 } 

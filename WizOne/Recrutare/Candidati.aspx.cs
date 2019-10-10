@@ -67,14 +67,14 @@ namespace WizOne.Recrutare
 
                 if (General.Nz(Session["InformatiaCurenta"], "").ToString() == "")
                 {
-                    MessageBox.Show("Eroare la salvare", MessageBox.icoError, "Atentie !");
+                    MessageBox.Show("Eroare la salvare", MessageBox.icoError, "");
                     return;
                 }
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 if (dt.Rows.Count == 0)
                 {
-                    MessageBox.Show("Eroare la salvare", MessageBox.icoError, "Atentie !");
+                    MessageBox.Show("Eroare la salvare", MessageBox.icoError, "");
                     return;
                 }
 

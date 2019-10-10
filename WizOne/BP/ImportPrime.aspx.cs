@@ -202,19 +202,19 @@ namespace WizOne.BP
 
                 if (folder.GetFiles().Count() <= 0)
                 {
-                    MessageBox.Show("Nu ati incarcat niciun fisier!", MessageBox.icoError, "Atentie !");
+                    MessageBox.Show("Nu ati incarcat niciun fisier!", MessageBox.icoError, "");
                     return;
                 }
 
                 if (cmbPrima.Value == null)
                 {
-                    MessageBox.Show("Nu ati selectat niciun tip de prima!", MessageBox.icoError, "Atentie !");
+                    MessageBox.Show("Nu ati selectat niciun tip de prima!", MessageBox.icoError, "");
                     return;
                 }
 
                 if (cmbAn.Value == null || cmbLuna.Value == null)
                 {
-                    MessageBox.Show("Nu ati selectat luna/anul!", MessageBox.icoError, "Atentie !");
+                    MessageBox.Show("Nu ati selectat luna/anul!", MessageBox.icoError, "");
                     return;
                 }
 
@@ -223,7 +223,7 @@ namespace WizOne.BP
                 if (Convert.ToInt32(cmbAn.Value) < Convert.ToInt32(dt010.Rows[0][0].ToString())
                     || (Convert.ToInt32(cmbAn.Value) == Convert.ToInt32(dt010.Rows[0][0].ToString()) && Convert.ToInt32(cmbLuna.Value) < Convert.ToInt32(dt010.Rows[0][1].ToString())))
                 {
-                    MessageBox.Show("Nu se pot introduce bonusuri pentru o luna anterioara lunii de salarizare curente!", MessageBox.icoError, "Atentie !");
+                    MessageBox.Show("Nu se pot introduce bonusuri pentru o luna anterioara lunii de salarizare curente!", MessageBox.icoError, "");
                     return;
                 }
 

@@ -325,7 +325,7 @@ namespace WizOne.Tactil
 
                 //if (General.Nz(Request.QueryString["Tip"], "").ToString() == "1" || General.Nz(Request.QueryString["Tip"], "").ToString() == "10")
                 //{
-                    filtru = $@" AND {General.ToDataUniv(ziua.Year, ziua.Month)} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)} AND A.F10003=" + Convert.ToInt32(Session["User_Marca"].ToString());
+                    filtru = $@" AND {General.ToDataUniv(ziua.Year, ziua.Month)} <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)} AND A.F10003=" + Convert.ToInt32(Session["User_Marca"].ToString());
                     cheia = General.FunctiiData("P.\"Ziua\"", "Z");
 
                     //2018.02.09 Imbunatatire
@@ -340,7 +340,7 @@ namespace WizOne.Tactil
                 //    idRol = Convert.ToInt32(cmbRolZi.Value);
 
                 //    cheia = "P.F10003";
-                //    filtru = $@" AND {General.TruncateDateAsString("P.\"Ziua\"")} = {General.ToDataUniv(ziua.Year, ziua.Month, ziua.Day)}";
+                //    filtru = $@" AND {General.TruncateDate("P.\"Ziua\"")} = {General.ToDataUniv(ziua.Year, ziua.Month, ziua.Day)}";
 
                 //}
 
@@ -416,7 +416,7 @@ namespace WizOne.Tactil
                             {cheia} AS ""Cheia"",                           
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS DescProgram, COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
-                            CASE WHEN {General.TruncateDateAsString("A.F10022")} <= {General.TruncateDateAsString("P.\"Ziua\"")} AND {General.TruncateDateAsString("P.\"Ziua\"")} <= {General.TruncateDateAsString("A.F10023")} THEN 1 ELSE 0 END AS ""Activ"",  
+                            CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 THEN 1 ELSE 0 END AS ""Activ"",  
                             COALESCE(J.""IdStare"",1) AS ""IdStare"", K.""Culoare"" AS ""CuloareStare"", K.""Denumire"" AS ""NumeStare"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""Ptj_Cereri"" Z 
                             INNER JOIN ""Ptj_tblAbsente"" Y ON Z.""IdAbsenta"" = Y.""Id""
@@ -497,7 +497,7 @@ namespace WizOne.Tactil
                             LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
                             WHERE CONVERT(date,P.""Ziua"") <= A.F10023
                             {filtru}
-                            ORDER BY A.F10003, {General.TruncateDateAsString("P.\"Ziua\"")}";
+                            ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
 
 
                 //LEFT JOIN ""Ptj_Cereri"" M ON A.F10003=M.F10003 AND M.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= M.""DataSfarsit"" AND M.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1)

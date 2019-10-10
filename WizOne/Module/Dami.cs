@@ -537,13 +537,13 @@ namespace WizOne.Module
                                 (
                                 {selectInloc}
                                 )
-                                WHERE {General.TruncateDateAsString("A.\"DataInceput\"")} <= {General.TruncateDateAsString()} AND {General.TruncateDateAsString()} <= {General.TruncateDateAsString("A.\"DataSfarsit\"")} {condSuplim}
+                                WHERE {General.TruncateDate("A.DataInceput")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDate("A.DataSfarsit")} {condSuplim}
                                 UNION
                                 SELECT A.*, 78 AS Rol,
                                 CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
                                 FROM ""Ptj_Cereri"" A
                                 INNER JOIN ""Ptj_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""IdSuper"" <> 0 AND B.""IdStare"" <> -1 AND B.""Pozitie"" <> 0 AND B.""IdUser"" IN 
-                                (SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={HttpContext.Current.Session["UserId"]} AND ""DataInceput"" <= {General.TruncateDateAsString()} AND {General.TruncateDateAsString()} <= ""DataSfarsit"") {condSuplim}";
+                                (SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={HttpContext.Current.Session["UserId"]} AND ""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= ""DataSfarsit"") {condSuplim}";
 
                 if (totiAngajatii == 3)
                     strSql = $@"SELECT DISTINCT A.*, 77 AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""

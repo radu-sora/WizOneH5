@@ -31,7 +31,7 @@
             pnlLoading.Hide();
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
+                    title: "", text: s.cpAlertMessage,
                     type: "warning"
                 });
                 s.cpAlertMessage = null;
@@ -62,18 +62,36 @@
             if (cmbOraInc.GetValue() && cmbOraSf.GetValue()) {
                 var oraInc = Number(cmbOraInc.GetValue().substring(0, 2)) * 60 + Number(cmbOraInc.GetValue().substring(3, 5));
                 var oraSf = Number(cmbOraSf.GetValue().substring(0, 2)) * 60 + Number(cmbOraSf.GetValue().substring(3, 5));
-                if (oraInc >= oraSf) {
+                //if (oraInc >= oraSf) {
+                //    s.SetValue("");
+                //    swal({
+                //        title: "", text: "Ora inceput este mai mare decat ora sfarsit",
+                //        type: "warning"
+                //    });
+                //}
+                //else {
+                //    var dif = (oraSf - oraInc) / 60;
+                //    txtNrOre.SetValue(dif.toFixed(4));
+                //    txtNrOreInMinute.SetValue(oraSf - oraInc);
+                //}
+
+                if (oraInc == oraSf) {
                     s.SetValue("");
                     swal({
-                        title: "Atentie !", text: "Ora inceput este mai mare decat ora sfarsit",
+                        title: "", text: "Ora inceput este egala cu ora sfarsit",
                         type: "warning"
                     });
                 }
-                else {
-                    var dif = (oraSf - oraInc) / 60;
-                    txtNrOre.SetValue(dif.toFixed(4));
-                    txtNrOreInMinute.SetValue(oraSf - oraInc);
-                }
+
+                var dif = 0;
+                if (oraInc < oraSf)
+                    diff = oraSf - oraInc;
+                else
+                    diff = ((24 * 60) - oraInc) + oraSf;
+
+                var rez = diff/60;
+                txtNrOre.SetValue(rez.toFixed(4));
+                txtNrOreInMinute.SetValue(diff);
             }
         }
 

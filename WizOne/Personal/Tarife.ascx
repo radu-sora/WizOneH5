@@ -23,7 +23,7 @@
     //function OnCallbackTar(value) {
     //    if (value == newItem) {
     //        swal({
-    //            title: "Atentie !", text: "Aceasta categorie a mai fost deja atribuita acestui angajat!",
+    //            title: "", text: "Aceasta categorie a mai fost deja atribuita acestui angajat!",
     //            type: "warning"
     //        }); 
     //        var tb = grDateTarife.GetEditor("DenCateg");
@@ -34,7 +34,7 @@
     function OnEndCallbackTarife(s, e) {
         if (s.cpAlertMessage != null) {
             swal({
-                title: "Atentie !", text: s.cpAlertMessage,
+                title: "", text: s.cpAlertMessage,
                 type: "warning"
             });
             s.cpAlertMessage = null;

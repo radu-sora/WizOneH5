@@ -1680,7 +1680,7 @@ namespace WizOne.Pagini
 
         //        if (strSql != "")
         //        {
-        //            MessageBox.Show("Proces realizat cu succes", MessageBox.icoWarning, "Atentie !");
+        //            MessageBox.Show("Proces realizat cu succes", MessageBox.icoWarning, "");
         //            //grDate.JSProperties["cpAlertMessage"] = msg;
         //            grDate.DataBind();
 

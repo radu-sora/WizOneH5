@@ -123,7 +123,7 @@ namespace WizOne.Pontaj
                     DataTable dt = Session["PtjSpecial_Sabloane"] as DataTable;
                     cmbSablon.DataSource = dt;
                     cmbSablon.DataBind();
-
+                    
                     if (cmbNrZileSablon.Value != null)
                     {
                         for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
@@ -131,6 +131,12 @@ namespace WizOne.Pontaj
                             ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
                             if (tx != null)                            
                                 tx.Visible = true;                                                            
+                        }
+                        for (int i = Convert.ToInt32(cmbNrZileSablon.Value) + 1; i <= 31; i++)
+                        {
+                            ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                            if (tx != null)
+                                tx.Visible = false;
                         }
                     }             
                 }
@@ -434,13 +440,31 @@ namespace WizOne.Pontaj
                             oraOut = ", \"Out1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
                         }
                     }
+                    else
+                    {
+                        oraIn = ", NULL ";
+                        oraOut = ", NULL ";
+                    }
 
                     string sirVal = "";
+                    List<string> listaVal = new List<string>();
                     if (sablon["ValZiua" + i] != null && sablon["ValZiua" + i].ToString().Length > 0)
                     {                    
                         string[] param = sablon["ValZiua" + i].ToString().Split(';');
-                        for (int k = 0; k < param.Length; k++)                        
-                            sirVal += ", \"" + param[k].Split('=')[0] + "\" = " + param[k].Split('=')[1] + " * 60";                        
+                        for (int k = 0; k < param.Length; k++)
+                        {
+                            sirVal += ", \"" + param[k].Split('=')[0] + "\" = " + param[k].Split('=')[1] + " * 60";
+                            listaVal.Add(param[k].Split('=')[0]);
+                        }
+                    }
+
+                    for (int k = 0; k <= 20; k++)
+                    {
+                        string val = "Val" + k;
+                        if (!listaVal.Contains(val))
+                        {
+                            sirVal += ", \"" + val + "\" = NULL";
+                        }
                     }
 
                     if (data.Length > 0)
@@ -687,6 +711,8 @@ namespace WizOne.Pontaj
 
                         cmbSablon.DataSource = tbl;
                         cmbSablon.DataBind();
+
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Sablon salvat cu succes!");
                         break;
                     case "btnSterge":
                         General.ExecutaNonQuery("DELETE FROM \"PtjSpecial_Sabloane\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value), null);

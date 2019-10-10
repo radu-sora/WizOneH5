@@ -213,13 +213,7 @@ namespace WizOne.Absente
                 lblProgres.Text = "";
                 ProgressUpdatePanel.ContentTemplateContainer.Controls.Add(lblProgres);
                 ProgressUpdatePanel.Update();
-
-                if (txtNr.Value == null)
-                {
-                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numar ore/zile!"), MessageBox.icoError);
-                    return;
-                }
-       
+                                      
                 if (cmbAbs.Value == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu ati selectat tip absenta!"), MessageBox.icoError);
@@ -235,6 +229,12 @@ namespace WizOne.Absente
                 if (dtDataSf.Visible == true && Convert.ToDateTime(dtDataSf.Value) < Convert.ToDateTime(dtDataInc.Value))
                 {
                     MessageBox.Show(Dami.TraduCuvant("Data de sfarsit este anterioara datei de start!"), MessageBox.icoError);
+                    return;
+                }
+
+                if (txtNr.Value == null)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numarul de ore!"), MessageBox.icoError);
                     return;
                 }
 
@@ -644,11 +644,13 @@ namespace WizOne.Absente
                         lblDataSf.Visible = true;
                         dtDataSf.Visible = true;
                         lblNr.InnerText = "Nr. zile";
+                        lblNr.Visible = false;
                         rbPrel.Visible = false;
                         rbPrel1.Visible = false;
                         txtNr.ClientEnabled = false;
                         if (Session["CereriAut_NrZile"] != null)                        
-                            txtNr.Text = Session["CereriAut_NrZile"].ToString();                   
+                            txtNr.Text = Session["CereriAut_NrZile"].ToString();
+                        txtNr.Visible = false;
                         
                     }
                     else
@@ -657,6 +659,8 @@ namespace WizOne.Absente
                         lblDataSf.Visible = false;
                         dtDataSf.Visible = false;
                         lblNr.InnerText = "Nr. ore";
+                        lblNr.Visible = true;
+                        txtNr.Visible = true;
                         rbPrel.Visible = true;
                         rbPrel1.Visible = true;
                         rbPrel.Checked = true;
@@ -676,6 +680,8 @@ namespace WizOne.Absente
                     lblDataSf.Visible = true;
                     dtDataSf.Visible = true;
                     lblNr.InnerText = "Nr. zile";
+                    lblNr.Visible = false;
+                    txtNr.Visible = false;
                     rbPrel.Visible = false;
                     rbPrel1.Visible = false;
                 }
@@ -686,6 +692,8 @@ namespace WizOne.Absente
                 lblDataSf.Visible = true;
                 dtDataSf.Visible = true;
                 lblNr.InnerText = "Nr. zile";
+                lblNr.Visible = false;
+                txtNr.Visible = false;
                 rbPrel.Visible = false;
                 rbPrel1.Visible = false;
             }

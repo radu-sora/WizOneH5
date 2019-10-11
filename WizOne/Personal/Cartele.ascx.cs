@@ -266,7 +266,7 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["F100Cartele2"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateCartele.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateCartele.Columns[col.ColumnName] != null && grDateCartele.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;

@@ -201,7 +201,7 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["relGrupAngajat2"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateGrupuri.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateGrupuri.Columns[col.ColumnName] != null && grDateGrupuri.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;

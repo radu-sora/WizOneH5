@@ -28,7 +28,33 @@
             $('#<%=btnGen.ClientID%>').on('click', function () {
             $('#<%=lblProgres.ClientID%>').html('Procesare...');
         });
-    }
+        }
+
+
+        function VerifInterval(s, e) {
+            if (cmbOraInc.GetValue() && cmbOraSf.GetValue()) {
+                var oraInc = Number(cmbOraInc.GetValue().substring(0, 2)) * 60 + Number(cmbOraInc.GetValue().substring(3, 5));
+                var oraSf = Number(cmbOraSf.GetValue().substring(0, 2)) * 60 + Number(cmbOraSf.GetValue().substring(3, 5));
+   
+                if (oraInc == oraSf) {
+                    s.SetValue("");
+                    swal({
+                        title: "", text: "Ora inceput este egala cu ora sfarsit",
+                        type: "warning"
+                    });
+                }
+
+                var dif = 0;
+                if (oraInc < oraSf)
+                    diff = oraSf - oraInc;
+                else
+                    diff = ((24 * 60) - oraInc) + oraSf;
+
+                var rez = diff / 60;
+                txtNrOre.SetValue(rez.toFixed(4));
+                txtNrOreInMinute.SetValue(diff);
+            }
+        }
     </script>
 
 </asp:Content>
@@ -95,6 +121,30 @@
                                             <label id="lblNr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Nr. zile</label>
                                             <dx:ASPxSpinEdit ID="txtNr" style="display:inline-block; float:left; width:75px;" runat="server" AutoPostBack="false"/>  
                                         </div>  
+
+
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblNrOre" runat="server" style="display:none;">Nr. ore</label>
+                                            <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" style="display:inline-block; float:left; width:75px;" ClientVisible="false" MinValue="0" MaxValue="999">
+                                                <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
+                                            </dx:ASPxSpinEdit>
+                                            <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" style="display:inline-block; float:left; width:75px;" ClientVisible="false" ClientEnabled="false" />
+                                        </div>
+
+                                       <div style="float:left; padding-right:15px;">
+                                            <label id="lblOraInc" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:75px; width:90px;">Ora Inceput</label>
+                                            <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="75px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); }" />
+                                            </dx:ASPxComboBox>
+                                        </div>
+
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblOraSf" runat="server" style="display:inline-block; float:left; padding-right:15px; width:90px;">Ora Sfarsit</label>
+                                            <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="75px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
+                                                <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e);  }" />
+                                            </dx:ASPxComboBox>
+                                        </div>
+
                                          <div style="float:left; padding-right:15px;">
                                             <dx:ASPxRadioButton ID="rbPrel" runat="server" Text="Preluare manuala"   ClientInstanceName="rbPrel" RepeatDirection="Horizontal" GroupName="Prel1">                                             
                                              </dx:ASPxRadioButton>

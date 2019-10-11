@@ -45,7 +45,24 @@ namespace WizOne.Personal
 
                     Initializare(ref ds);
                 }
-                
+
+                if (!IsPostBack)
+                {
+                    string culoare = General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume"" = 'MP_CuloareCampObligatoriu' ", null).ToString();
+                    if (culoare != null && culoare.Length == 7 && culoare[0] == '#')
+                    {
+                        int r = int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[2].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255 
+                            : int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        int g = int.Parse(culoare[3].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[4].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255
+                            : int.Parse(culoare[3].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[4].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        int b = int.Parse(culoare[5].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[6].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255
+                            : int.Parse(culoare[5].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[6].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        List<int> lst = new List<int>();
+                        lst.Add(r); lst.Add(g); lst.Add(b);
+                        Session["MP_CuloareCampOblig"] = lst;
+                    }
+                }
+
 
                 if (Session["esteNou"] == null || Session["esteNou"].ToString().Length <= 0 || Session["esteNou"].ToString() == "false")
                 {

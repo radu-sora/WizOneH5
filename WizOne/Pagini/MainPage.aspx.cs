@@ -232,10 +232,12 @@ namespace WizOne.Pagini
                         //Radu 09.10.2019 - Id-ul raportului nu poate fi stocat in Session["ReportId"] in acest moment (deoarece ramane ultimul din iteratie); 
                         //                  la apasarea butonului se va apela o functie care se seta corect Session["ReportId"]
                         //Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
+                        btn.AutoPostBack = true;
                         //btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx";
-                        btn.ClientSideEvents.Click = string.Format("function(s,e) {{ pnlMain.PerformCallback('{0}');  window.open(getAbsoluteUrl + 'Generatoare/Reports/Pages/ReportView.aspx', '_blank '); }}", dtRap.Rows[i]["DynReportId"].ToString());
-                                                
-    
+                        btn.Click += new EventHandler(btnRap_Click); 
+                        //btn.ClientSideEvents.Click = string.Format("function(s,e) {{ pnlMain.PerformCallback('{0}');  window.open(getAbsoluteUrl + 'Generatoare/Reports/Pages/ReportView.aspx', '_blank '); }}", dtRap.Rows[i]["DynReportId"].ToString());
+                        btn.ClientSideEvents.Click = string.Format("function(s,e) {{ pnlMain.PerformCallback('{0}'); e.processOnServer = true; }}", dtRap.Rows[i]["DynReportId"].ToString());
+
                         ASPxDockPanel pnl = new ASPxDockPanel();
                         string nme = "wdgRap" + i;
                         pnl.ID = nme;
@@ -374,8 +376,14 @@ namespace WizOne.Pagini
         //Radu 09.10.2019
         void pnlMain_OnCallback(object source, CallbackEventArgsBase e)
         {
-            Session["ReportId"] = Convert.ToInt32(e.Parameter.ToString());        
+            Session["ReportId"] = Convert.ToInt32(e.Parameter.ToString());       
         }
+        void btnRap_Click(object sender, EventArgs e)
+        {        
+            Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx", false);
+        }
+
+
 
         protected void dockManager_ClientLayout(object sender, DevExpress.Web.ASPxClientLayoutArgs e)
         {

@@ -232,12 +232,22 @@ namespace WizOne.Absente
                     return;
                 }
 
-                if (txtNr.Value == null)
+                //if (txtNr.Value == null)
+                //{
+                //    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numarul de ore!"), MessageBox.icoError);
+                //    return;
+                //}
+
+                if (cmbOraInc.Visible == true && cmbOraInc.Text == "")
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numarul de ore!"), MessageBox.icoError);
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat ora inceput!"), MessageBox.icoError);
+                    return;              
+                }
+                if (cmbOraSf.Visible == true && cmbOraSf.Text == "")
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat ora sfarsit!"), MessageBox.icoError);
                     return;
                 }
-
 
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
@@ -245,6 +255,9 @@ namespace WizOne.Absente
                     MessageBox.Show(Dami.TraduCuvant("Nu ati selectat niciun angajat!"), MessageBox.icoError);
                     return;
                 }
+
+                //if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 1)) == 0 && txtNrOre.Value == null) strErr += ", " + Dami.TraduCuvant("nr. ore");
+
 
                 for (int i = 0; i < lst.Count(); i++)
                 {
@@ -451,7 +464,8 @@ namespace WizOne.Absente
                 {
                     if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
                     {
-                        General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCer, 5, trimiteLaInlocuitor, Convert.ToInt32(txtNr.Value ?? 0));
+                        int nr = Convert.ToInt32(dtDataSf.Visible == false ? txtNrOre.Value ?? 0: txtNr.Value ?? 0);
+                        General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCer, 5, trimiteLaInlocuitor, nr);
 
                         //Se va face cand vom migra GAM
                         //TrimiteCerereInF300(Session["UserId"], idCer);
@@ -633,12 +647,18 @@ namespace WizOne.Absente
         private void AfisareCtl(string param)
         {
             DataTable dt = Session["CereriAut_Absente"] as DataTable;
-            if (dt != null)
+            int folosesteInterval = 0;
+            int perioada = 0;
+            if (dt != null && dt.Rows.Count > 0)
             {
-                DataRow[] dr = dt.Select("Id = " + param.Split(';')[1]);
-                if (dr != null && dr.Count() > 0)
+                DataRow[] arr = dt.Select("Id=" + General.Nz(cmbAbs.Value, "-99"));
+
+                if (arr.Count() > 0)
                 {
-                    if (Convert.ToInt32(dr[0]["IdTipOre"].ToString()) == 1)
+                    DataRow dr = arr[0];
+                    folosesteInterval = Convert.ToInt32(General.Nz(dr["AbsentaTipOraFolosesteInterval"], 0));
+                    perioada = Convert.ToInt32(General.Nz(dr["AbsentaTipOraPerioada"], 0));
+                    if (Convert.ToInt32(dr["IdTipOre"].ToString()) == 1)
                     {//tip zi
                         lblDataInc.InnerText = "Data inceput";
                         lblDataSf.Visible = true;
@@ -651,16 +671,62 @@ namespace WizOne.Absente
                         if (Session["CereriAut_NrZile"] != null)                        
                             txtNr.Text = Session["CereriAut_NrZile"].ToString();
                         txtNr.Visible = false;
-                        
+
+                        lblNrOre.Visible = false;
+                        txtNrOre.ClientVisible = false;
+                        txtNrOre.Value = null;
+
+                        lblOraInc.Visible = false;
+                        cmbOraInc.Visible = false;
+                        cmbOraInc.Value = null;
+
+                        lblOraSf.Visible = false;
+                        cmbOraSf.Visible = false;
+                        cmbOraSf.Value = null;
+
                     }
                     else
                     {//tip ora
-                        lblDataInc.InnerText = "Data";
-                        lblDataSf.Visible = false;
-                        dtDataSf.Visible = false;
+                        //lblNrOre.Style["display"] = "inline-block";
+                        txtNrOre.ClientVisible = true;
+                        txtNrOre.DecimalPlaces = 0;
+                        txtNrOre.NumberType = SpinEditNumberType.Integer;
+
                         lblNr.InnerText = "Nr. ore";
                         lblNr.Visible = true;
-                        txtNr.Visible = true;
+
+                        if (folosesteInterval == 1)
+                        {
+                            List<Module.Dami.metaGeneral2> lst = ListaInterval(perioada);
+
+                            //lblOraInc.Style["display"] = "inline-block";
+                            lblOraInc.Visible = true;
+                            cmbOraInc.Visible = true;
+                            cmbOraInc.DataSource = lst;
+                            cmbOraInc.DataBind();
+
+                            //lblOraSf.Style["display"] = "inline-block";
+                            lblOraSf.Visible = true;
+                            cmbOraSf.Visible = true;
+                            cmbOraSf.DataSource = lst;
+                            cmbOraSf.DataBind();
+
+                            txtNrOre.ClientEnabled = false;
+                            txtNrOre.DecimalPlaces = 4;
+                            txtNrOre.NumberType = SpinEditNumberType.Float;
+                            txtNrOre.ClientVisible = false;
+
+                            txtNrOreInMinute.ClientVisible = true;
+
+                            //lblNrOre.InnerText = Dami.TraduCuvant("Nr. minute");
+                            lblNr.InnerText = Dami.TraduCuvant("Nr. minute");
+                        }
+
+
+                        lblDataInc.InnerText = "Data";
+                        lblDataSf.Visible = false;
+                        dtDataSf.Visible = false;                     
+                        txtNr.Visible = false;
                         rbPrel.Visible = true;
                         rbPrel1.Visible = true;
                         rbPrel.Checked = true;
@@ -670,7 +736,7 @@ namespace WizOne.Absente
                             rbPrel1.Enabled = true;
                         else
                             rbPrel1.Enabled = false;
-                        txtNr.ClientEnabled = true;
+                        //txtNr.ClientEnabled = true;
                         Session["CereriAut_NrZile"] = null;
                     }
                 }
@@ -684,6 +750,18 @@ namespace WizOne.Absente
                     txtNr.Visible = false;
                     rbPrel.Visible = false;
                     rbPrel1.Visible = false;
+
+                    lblNrOre.Visible = false;
+                    txtNrOre.ClientVisible = false;
+                    txtNrOre.Value = null;
+
+                    lblOraInc.Visible = false;
+                    cmbOraInc.Visible = false;
+                    cmbOraInc.Value = null;
+
+                    lblOraSf.Visible = false;
+                    cmbOraSf.Visible = false;
+                    cmbOraSf.Value = null;
                 }
             }
             else
@@ -696,6 +774,44 @@ namespace WizOne.Absente
                 txtNr.Visible = false;
                 rbPrel.Visible = false;
                 rbPrel1.Visible = false;
+
+                lblNrOre.Visible = false;
+                txtNrOre.ClientVisible = false;
+                txtNrOre.Value = null;
+
+                lblOraInc.Visible = false;
+                cmbOraInc.Visible = false;
+                cmbOraInc.Value = null;
+
+                lblOraSf.Visible = false;
+                cmbOraSf.Visible = false;
+                cmbOraSf.Value = null;
+            }
+        }
+
+        private List<Module.Dami.metaGeneral2> ListaInterval(int perioada)
+        {
+            try
+            {
+                List<Module.Dami.metaGeneral2> list = new List<Module.Dami.metaGeneral2>();
+
+                DateTime ziua = new DateTime(2200, 1, 1, 0, 0, 0);
+                DateTime ziuaPlus = ziua.AddDays(1);
+
+                do
+                {
+                    ziua = ziua.AddMinutes(perioada);
+                    string str = ziua.Hour.ToString().PadLeft(2, '0') + ":" + ziua.Minute.ToString().PadLeft(2, '0');
+                    list.Add(new Module.Dami.metaGeneral2() { Id = str, Denumire = str });
+                }
+                while (ziua < ziuaPlus);
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                return null;
             }
         }
 

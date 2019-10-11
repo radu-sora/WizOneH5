@@ -188,7 +188,7 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["F100Supervizori2"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateSupervizori.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateSupervizori.Columns[col.ColumnName] != null && grDateSupervizori.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;

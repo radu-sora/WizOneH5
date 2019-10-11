@@ -162,7 +162,7 @@ namespace WizOne.Module
                                 ctl.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
                             }
                             else
-                            {
+                            {                                      
                                 //verificam daca nu cumva se gaseste intr-un container de tip ASPxCallbackPanel
                                 foreach (ASPxCallbackPanel pnlCtl in pag.Controls.OfType<ASPxCallbackPanel>())
                                 {
@@ -172,10 +172,21 @@ namespace WizOne.Module
                                         ctl2.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
                                         ctl2.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
                                     }
+                                    else
+                                    {
+                                        if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+                                        {
+                                            HtmlGenericControl ctl1 = pnlCtl.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
+                                            if (ctl1 != null)
+                                            {
+                                                ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            }
+                                        }
+                                    }
 
                                 }
                                 //var wsx = pag.Controls.OfType<ASPxCallbackPanel>();
-                                //var xcv = pag.Controls.OfType<ASPxCallbackPanel>().Where(p => p.ID.ToLower().Contains("pnlCtl"));
+                                //var xcv = pag.Controls.OfType<ASPxCallbackPanel>().Where(p => p.ID.ToLower().Contains("pnlCtl"));                                
                             }
                         }
                         else
@@ -516,7 +527,7 @@ namespace WizOne.Module
                     idStare = "(1, 2, 3)";
                     condSuplim = $@" AND A.""IdStare"" IN (1, 2, 3) ";
                 }
-
+                //Radu 10.10.2019 - am scos conditia {General.TruncateDate("A.DataInceput")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDate("A.DataSfarsit")} si am inlocuit cu 1 = 1
                 string strSql = $@"SELECT A.*, 0 AS ""Rol"",
                                 CASE WHEN (A.""IdStare"" IN (-1, 0, 3) OR B.""IdCerere"" IS NULL) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
                                 FROM ""Ptj_Cereri"" A
@@ -537,7 +548,7 @@ namespace WizOne.Module
                                 (
                                 {selectInloc}
                                 )
-                                WHERE {General.TruncateDate("A.DataInceput")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDate("A.DataSfarsit")} {condSuplim}
+                                WHERE 1 = 1  {condSuplim}
                                 UNION
                                 SELECT A.*, 78 AS Rol,
                                 CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""

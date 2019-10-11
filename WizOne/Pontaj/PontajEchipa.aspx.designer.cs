@@ -121,6 +121,15 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
         
         /// <summary>
+        /// pnlFiltrare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRoundPanel pnlFiltrare;
+        
+        /// <summary>
         /// lblAnLuna control.
         /// </summary>
         /// <remarks>

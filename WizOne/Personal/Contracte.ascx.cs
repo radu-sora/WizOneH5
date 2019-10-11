@@ -365,7 +365,7 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["F100Contracte2"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateContracte.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateContracte.Columns[col.ColumnName] != null && grDateContracte.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;

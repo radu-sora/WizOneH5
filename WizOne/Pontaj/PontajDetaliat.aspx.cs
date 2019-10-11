@@ -1532,7 +1532,7 @@ namespace WizOne.Pontaj
 
                     if (upd.NewValues["IdContract"] != null) row["IdContract"] = upd.NewValues["IdContract"];
 
-                    row["IdProgram"] = upd.NewValues["IdProgram"];
+                    row["IdProgram"] = upd.NewValues["IdProgram"] ?? DBNull.Value;
 
                     //Florin 2019.10.04
                     if (upd.NewValues["ModifProgram"] != null) row["ModifProgram"] = upd.NewValues["ModifProgram"];
@@ -2900,7 +2900,7 @@ namespace WizOne.Pontaj
                         DataRow dr = dtAdm.Rows[i];
                         if (General.Nz(dr["Destinatie"], "").ToString() != "" && dr["Camp"].ToString().Substring(0, 5) == "NrOre")
                         {
-                            cmp += ", " + dr["Destinatie"] + "=(SELECT SUM(" + dr["Camp"] + ") * 60 FROM \"Ptj_CC\" WHERE F10003=@1 AND Ziua=@2)";
+                            cmp += ", " + dr["Destinatie"] + "=(SELECT SUM(" + dr["Camp"] + ")  FROM \"Ptj_CC\" WHERE F10003=@1 AND Ziua=@2)";
                         }
                     }
 

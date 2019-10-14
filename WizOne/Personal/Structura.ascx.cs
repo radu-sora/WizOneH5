@@ -125,7 +125,10 @@ namespace WizOne.Personal
 
                 if (Dami.ValoareParam("ValidariPersonal") == "1")
                 {
-                    cmbStru.BackColor = Color.LightGray;
+                    List<int> lst = new List<int>();
+                    if (Session["MP_CuloareCampOblig"] != null)
+                        lst = Session["MP_CuloareCampOblig"] as List<int>;
+                    cmbStru.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                     //cmbPL.BackColor = Color.LightGray;
                 }           
                 General.SecuritatePersonal(pnlCtlStruct, Convert.ToInt32(Session["UserId"].ToString()));

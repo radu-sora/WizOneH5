@@ -323,14 +323,20 @@ namespace WizOne.Personal
                 for (int i = 0; i < lstTextBox.Count(); i++)
                 {
                     ASPxTextBox txt = Contract_DataList.Items[0].FindControl(lstTextBox[i]) as ASPxTextBox;
-                    txt.BackColor = Color.LightGray;
+                    List<int> lst = new List<int>();
+                    if (Session["MP_CuloareCampOblig"] != null)
+                        lst = Session["MP_CuloareCampOblig"] as List<int>;
+                    txt.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }
 
                 string[] lstDateEdit = new string[4] { "deDataCtrInt", "deDataAng", "deDeLaData", "deLaData" };
                 for (int i = 0; i < lstDateEdit.Count(); i++)
                 {
                     ASPxDateEdit de = Contract_DataList.Items[0].FindControl(lstDateEdit[i]) as ASPxDateEdit;
-                    de.BackColor = Color.LightGray;
+                    List<int> lst = new List<int>();
+                    if (Session["MP_CuloareCampOblig"] != null)
+                        lst = Session["MP_CuloareCampOblig"] as List<int>;
+                    de.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }
 
 
@@ -339,7 +345,10 @@ namespace WizOne.Personal
                 for (int i = 0; i < lstComboBox.Count(); i++)
                 {
                     ASPxComboBox cmb = Contract_DataList.Items[0].FindControl(lstComboBox[i]) as ASPxComboBox;
-                    cmb.BackColor = Color.LightGray;
+                    List<int> lst = new List<int>();
+                    if (Session["MP_CuloareCampOblig"] != null)
+                        lst = Session["MP_CuloareCampOblig"] as List<int>;
+                    cmb.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }
 
 

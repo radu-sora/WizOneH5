@@ -15,7 +15,8 @@
         }
 
         function OnModif(s, e) {   
-            popUpModif.Hide();
+            popUpModif.Hide();      
+            txtValuri.Set(__name_text_box, "");
             var texts = "";
             if (cmbTipAbs.GetText() != "")
                 texts = cmbTipAbs.GetText();
@@ -27,8 +28,8 @@
                         var lista = tmp.split("_");
                         //texts += "/" + $(this).val() + $(this).attr('id').replace('_I', '').replace('flo1', '');
                         texts += "/" + $(this).val() + lista[1]; 
-                        var valoare = txtValuri.Get(__name_text_box);
-                        if (typeof valoare !== "undefined")
+                        var valoare = txtValuri.Get(__name_text_box);                     
+                        if (valoare.length > 0)
                             valoare = valoare + ";";
                         else
                             valoare = "";
@@ -76,6 +77,17 @@
             pnlCtl.PerformCallback('EmptyFields');
         }
 
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "Atentie !", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+            pnlLoading.Hide();
+        }
+
     </script>
 
 </asp:Content>
@@ -88,6 +100,9 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">  
+                <dx:ASPxButton ID="btnPtjEch" ClientInstanceName="btnPtjEch" ClientIDMode="Static" runat="server" Text="Pontajul echipei" AutoPostBack="true" PostBackUrl="../Pontaj/PontajEchipa.aspx" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/preluare.png"></Image>
+                </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnInit" ClientInstanceName="btnInit" ClientIDMode="Static" runat="server" Text="Initializare" AutoPostBack="true" OnClick="btnInit_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>  
@@ -101,7 +116,7 @@
                 <br /><br />
 
                 <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
-                    <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
+                    <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
 
@@ -279,6 +294,13 @@
                                             <dx:ASPxCheckBox ID="chkD"  runat="server" style="display:inline-block; float:left;  width:100px; padding-bottom:10px; vertical-align:text-bottom;" Text="Duminca"  TextAlign="Left" ClientInstanceName="chkbx2" />   
                                             <dx:ASPxCheckBox ID="chkSL"  runat="server" style="display:inline-block; float:left;  width:200px; padding-bottom:10px; vertical-align:text-bottom;" Text="Sarbatori legale"  TextAlign="Left" ClientInstanceName="chkbx3" />   
                                         </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                            <dx:ASPxCheckBox ID="chkDecalare"  runat="server" style="display:inline-block; float:left; font-weight:bold;   width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Decalare pontaj"  TextAlign="Left" ClientInstanceName="chkbx4" />                                    
+                                       </div>
                                     </td>
                                 </tr>
                             </table>

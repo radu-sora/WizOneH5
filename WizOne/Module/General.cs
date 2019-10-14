@@ -204,8 +204,8 @@ namespace WizOne.Module
         //}
 
         public static DataTable IncarcaDT(string strSql, object[] lstParam, string primaryKey = "")
-        {
-            DataTable dt = new DataTable();
+        {          
+            DataTable dt = new DataTable();           
 
             try
             {
@@ -220,7 +220,8 @@ namespace WizOne.Module
                         {
                             cols[i] = dt.Columns[lst[i]];
                         }
-                        dt.PrimaryKey = cols;
+
+                        dt.PrimaryKey = cols;               
                     }
                     
                     //new DataColumn[] { dtAng.Columns["F10003"], dtAng.Columns["Rol"] }
@@ -231,7 +232,7 @@ namespace WizOne.Module
                     SqlDataAdapter da = new SqlDataAdapter();
                     da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                     da.SelectCommand = DamiSqlCommand(strSql, lstParam, 0);
-                    da.SelectCommand.CommandTimeout = 600;
+                    da.SelectCommand.CommandTimeout = 600;       
                     da.Fill(dt);
                     da.Dispose();
                     da = null;
@@ -254,7 +255,6 @@ namespace WizOne.Module
                     MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
                 }
             }
-
             return dt;
         }
 
@@ -3124,7 +3124,7 @@ namespace WizOne.Module
                             }
 
                             //Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
-                            DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { Convert.ToDateTime(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), Convert.ToDateTime(dr["DataSfarsit"]) });
+                            DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), Convert.ToDateTime(dr["DataSfarsit"]) });
                             for (int i = 0; i < dtRun.Rows.Count; i++)
                             {
                                 string golesteVal = Dami.ValoareParam("GolesteVal");

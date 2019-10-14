@@ -43,7 +43,8 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                ArataMesaj(ex.ToString());
+                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
+                //ArataMesaj(ex.ToString());
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -71,7 +72,7 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                ArataMesaj(ex.ToString());
+                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -85,7 +86,8 @@ namespace WizOne.Pagini
 
             btnClose.Enabled = true;
             btnSave.Enabled = true;
-            ArataMesaj(Dami.TraduCuvant(mesaj));
+            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
+            //ArataMesaj(Dami.TraduCuvant(mesaj));
 
             General.InitSessionVariables();
             
@@ -195,7 +197,7 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                ArataMesaj(ex.ToString());
+                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
@@ -210,7 +212,7 @@ namespace WizOne.Pagini
 
             btnClose.Enabled = true;
             btnSave.Enabled = true;
-            ArataMesaj(Dami.TraduCuvant(mesaj));
+            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
 
         }
 
@@ -323,23 +325,23 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                ArataMesaj(ex.ToString());
+                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return mesaj;
         }
 
-        private void ArataMesaj(string mesaj)
-        {
-            pnlCtl.Controls.Add(new LiteralControl());
-            WebControl script = new WebControl(HtmlTextWriterTag.Script);
-            pnlCtl.Controls.Add(script);
-            script.Attributes["id"] = "dxss_123456";
-            script.Attributes["type"] = "text/javascript";
-            script.Controls.Add(new LiteralControl("var str = '" + mesaj + "'; alert(str);"));
+        //private void ArataMesaj(string mesaj)
+        //{
+        //    pnlCtl.Controls.Add(new LiteralControl());
+        //    WebControl script = new WebControl(HtmlTextWriterTag.Script);
+        //    pnlCtl.Controls.Add(script);
+        //    script.Attributes["id"] = "dxss_123456";
+        //    script.Attributes["type"] = "text/javascript";
+        //    script.Controls.Add(new LiteralControl("var str = '" + mesaj + "'; alert(str);"));
 
-        }
+        //}
 
 
 

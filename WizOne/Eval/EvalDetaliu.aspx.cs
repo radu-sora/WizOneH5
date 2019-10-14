@@ -2184,7 +2184,10 @@ namespace WizOne.Eval
 
                     lst.Add(clsNew);
                 }
-
+                int sumaClaim = 0;
+                int marca = -99;
+                int idQuiz = -99;
+           
                 for (int x = 0; x < e.UpdateValues.Count; x++)
                 {
                     ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
@@ -2196,6 +2199,9 @@ namespace WizOne.Eval
 
                     clsUpd.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
                     clsUpd.TIME = DateTime.Now;
+
+                    marca = clsUpd.F10003;
+                    idQuiz = clsUpd.IdQuiz;              
 
                     foreach (DictionaryEntry de in ins.NewValues)
                     {
@@ -2404,6 +2410,45 @@ namespace WizOne.Eval
 
                             }
                             break;
+                        case "21":      //CLAIM                          
+                            if (clsUpd.IdQuiz != 8 && clsUpd.IdQuiz != 11 && clsUpd.IdQuiz != 24)
+                            {                             
+                                //foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
+                                //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
+                                    sumaClaim += Convert.ToInt32(General.Nz(clsUpd.IdCalificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
+                            }                            
+                            break;
+                    }
+                }
+
+                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 21)
+                {
+                    Eval_QuizIntrebari txtSumaOb = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("NOTE FOR INDIVIDUAL OBJECTIVES") && p.IdQuiz == idQuiz).FirstOrDefault();
+                    if (txtSumaOb != null)
+                    {
+                        Eval_RaspunsLinii linieSumaOb = lstEval_RaspunsLinii.Where(p => p.Id == txtSumaOb.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
+                        PropertyInfo val = linieSumaOb.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                        if (val != null)
+                            val.SetValue(linieSumaOb, sumaClaim.ToString(), null);
+                    }
+
+                    double notaFinala = sumaClaim;
+                    Eval_QuizIntrebari txtNotaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("FINAL NOTE") && p.IdQuiz == idQuiz).FirstOrDefault();
+                    if (txtNotaFinala != null)
+                    {
+                        Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == txtNotaFinala.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
+                        PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                        if (val != null)
+                        {
+                            string s = val.GetValue(linieNotaFinala, null).ToString();
+                            if (s.Length > 0)
+                            {
+                                double rez = 0;
+                                double.TryParse(s, out rez);
+                                notaFinala += rez;
+                            }
+                            val.SetValue(linieNotaFinala, notaFinala.ToString(), null);
+                        }
                     }
                 }
 
@@ -2489,7 +2534,10 @@ namespace WizOne.Eval
 
                     lst.Add(clsNew);
                 }
-
+                int sumaClaim = 0;
+                int marca = -99;
+                int idQuiz = -99;
+                string categComp = "";
                 for (int x = 0; x < e.UpdateValues.Count; x++)
                 {
                     ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
@@ -2501,6 +2549,10 @@ namespace WizOne.Eval
 
                     clsUpd.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
                     clsUpd.TIME = DateTime.Now;
+
+                    marca = clsUpd.F10003;
+                    idQuiz = clsUpd.IdQuiz;
+                    categComp = clsUpd.CategCompetenta;
 
                     foreach (DictionaryEntry de in ins.NewValues)
                     {
@@ -2596,6 +2648,53 @@ namespace WizOne.Eval
 
                             }
                             break;
+                        case "21":  //CLAIM
+                            if (clsUpd.IdQuiz != 8 && clsUpd.IdQuiz != 11 && clsUpd.IdQuiz != 24)
+                            {                               
+                                //foreach (Eval_CompetenteAngajatTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
+                                //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
+                                    sumaClaim += Convert.ToInt32(General.Nz(clsUpd.IdCalificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
+
+                            }
+                            break;
+                    }
+                }
+
+                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 21)
+                {
+                    string tipComp = "";
+                    if (categComp.ToUpper().Contains("PROFESSIONAL") || categComp.ToUpper().Contains("PROFESIONALE"))
+                        tipComp = "NOTE FOR PROFESSIONAL COMPETENCES";
+                    if (categComp.ToUpper().Contains("PERSONAL"))
+                        tipComp = "NOTE FOR PERSONAL COMPETENCES";
+
+                    Eval_QuizIntrebari txtSumaComp = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains(tipComp) && p.IdQuiz == idQuiz).FirstOrDefault();
+                    if (txtSumaComp != null)
+                    {
+                        Eval_RaspunsLinii linieSumaComp = lstEval_RaspunsLinii.Where(p => p.Id == txtSumaComp.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
+                        PropertyInfo val = linieSumaComp.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                        if (val != null)
+                            val.SetValue(linieSumaComp, sumaClaim.ToString(), null);
+                    }
+
+
+                    double notaFinala = sumaClaim;
+                    Eval_QuizIntrebari txtNotaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("FINAL NOTE") && p.IdQuiz == idQuiz).FirstOrDefault();
+                    if (txtNotaFinala != null)
+                    {
+                        Eval_RaspunsLinii linieNotaFinala = lstEval_RaspunsLinii.Where(p => p.Id == txtNotaFinala.Id && p.F10003 == marca && p.IdQuiz == idQuiz).FirstOrDefault();
+                        PropertyInfo val = linieNotaFinala.GetType().GetProperty("Super" + Session["Eval_ActiveTab"].ToString());
+                        if (val != null)
+                        {
+                            string s = val.GetValue(linieNotaFinala, null).ToString();
+                            if (s.Length > 0)
+                            {
+                                double rez = 0;
+                                double.TryParse(s, out rez);
+                                notaFinala += rez;
+                            }
+                            val.SetValue(linieNotaFinala, notaFinala.ToString(), null);
+                        }
                     }
                 }
 
@@ -2867,11 +2966,6 @@ namespace WizOne.Eval
                     }
 
                     Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
-                }
-
-                if (Convert.ToInt32(Convert.ToInt32(General.Nz(Session["IdClient"], 1))) == 21)
-                {//CLAIM
-
                 }
 
                 e.Cancel = true;
@@ -3163,9 +3257,14 @@ namespace WizOne.Eval
                 grDateCompetente.Settings.ShowGroupPanel = false;
                 grDateCompetente.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
                 grDateCompetente.SettingsSearchPanel.Visible = false;
+                grDateCompetente.AutoGenerateColumns = false;
 
                 grDateCompetente.ClientSideEvents.ContextMenu = "ctx";
                 grDateCompetente.SettingsEditing.Mode = GridViewEditingMode.Inline;
+
+                grDateCompetente.SettingsBehavior.ConfirmDelete = true;
+                grDateCompetente.SettingsText.ConfirmDelete = "Confirmati operatia de stergere?";
+              
 
                 //grDateCompetente.RowDeleting += GrDateCompetente_RowDeleting;
                 //grDateCompetente.AutoFilterCellEditorInitialize += GrDateCompetente_AutoFilterCellEditorInitialize;
@@ -3173,7 +3272,10 @@ namespace WizOne.Eval
                 //grDateCompetente.RowUpdating += GrDateCompetente_RowUpdating;
                 grDateCompetente.InitNewRow += GrDateCompetente_InitNewRow;
 
-
+                grDateCompetente.SettingsEditing.Mode = GridViewEditingMode.Batch;
+                grDateCompetente.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Cell;
+                grDateCompetente.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+                grDateCompetente.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
 
                 //Florin 2019.06.26
                 grDateCompetente.BatchUpdate += GrDateCompetente_BatchUpdate;
@@ -3378,9 +3480,21 @@ namespace WizOne.Eval
 
                 #region Grid Command Buttons
 
-                grDateCompetente.SettingsCommandButton.EditButton.Image.Url = "../Fisiere/Imagini/Icoane/edit.png";
-                grDateCompetente.SettingsCommandButton.EditButton.Image.AlternateText = "Edit";
-                grDateCompetente.SettingsCommandButton.EditButton.Image.ToolTip = "Edit";
+                //grDateCompetente.SettingsCommandButton.EditButton.Image.Url = "../Fisiere/Imagini/Icoane/edit.png";
+                //grDateCompetente.SettingsCommandButton.EditButton.Image.AlternateText = "Edit";
+                //grDateCompetente.SettingsCommandButton.EditButton.Image.ToolTip = "Edit";
+
+                //grDateCompetente.SettingsCommandButton.UpdateButton.Image.Url = "../Fisiere/Imagini/Icoane/salveaza.png";
+                //grDateCompetente.SettingsCommandButton.UpdateButton.Image.AlternateText = "Save";
+                //grDateCompetente.SettingsCommandButton.UpdateButton.Image.ToolTip = "Actualizeaza";
+
+                //grDateCompetente.SettingsCommandButton.CancelButton.Image.Url = "../Fisiere/Imagini/Icoane/renunta.png";
+                //grDateCompetente.SettingsCommandButton.CancelButton.Image.AlternateText = "Renunta";
+                //grDateCompetente.SettingsCommandButton.CancelButton.Image.ToolTip = "Renunta";
+
+
+                //grDateCompetente.SettingsCommandButton.NewButton.Image.ToolTip = "Rand nou";
+                //grDateCompetente.SettingsCommandButton.NewButton.Image.Url = "~/Fisiere/Imagini/Icoane/New.png";
 
                 grDateCompetente.SettingsCommandButton.UpdateButton.Image.Url = "../Fisiere/Imagini/Icoane/salveaza.png";
                 grDateCompetente.SettingsCommandButton.UpdateButton.Image.AlternateText = "Save";
@@ -3390,9 +3504,23 @@ namespace WizOne.Eval
                 grDateCompetente.SettingsCommandButton.CancelButton.Image.AlternateText = "Renunta";
                 grDateCompetente.SettingsCommandButton.CancelButton.Image.ToolTip = "Renunta";
 
+                //if (clsEval_ConfigCompTemplate.PoateAdauga == 1)
+                //{
+                //    grDateCompetente.SettingsCommandButton.NewButton.Image.ToolTip = "Rand nou";
+                //    grDateCompetente.SettingsCommandButton.NewButton.Image.Url = "~/Fisiere/Imagini/Icoane/New.png";
+                //}
 
-                grDateCompetente.SettingsCommandButton.NewButton.Image.ToolTip = "Rand nou";
-                grDateCompetente.SettingsCommandButton.NewButton.Image.Url = "~/Fisiere/Imagini/Icoane/New.png";
+                //if (clsEval_ConfigCompTemplate.PoateSterge == 1)
+                //{
+                //    grDateCompetente.SettingsCommandButton.DeleteButton.Image.ToolTip = "Sterge";
+                //    grDateCompetente.SettingsCommandButton.DeleteButton.Image.Url = "~/Fisiere/Imagini/Icoane/sterge.png";
+                //}
+
+                //if (clsEval_ConfigCompTemplate.PoateModifica == 1)
+                //{
+                //    grDateCompetente.SettingsCommandButton.EditButton.Image.ToolTip = "Modifica";
+                //    grDateCompetente.SettingsCommandButton.EditButton.Image.Url = "~/Fisiere/Imagini/Icoane/edit.png";
+                //}
 
                 #endregion
 
@@ -3507,7 +3635,7 @@ namespace WizOne.Eval
                     }
 
                     Session["lstEval_RaspunsLinii"] = lstEval_RaspunsLinii;
-                }
+                }        
 
 
                 e.Cancel = true;

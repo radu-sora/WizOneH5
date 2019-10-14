@@ -269,7 +269,7 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["F100CentreCost2"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateCentreCost.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateCentreCost.Columns[col.ColumnName] != null && grDateCentreCost.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;

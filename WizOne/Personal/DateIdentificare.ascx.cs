@@ -98,7 +98,7 @@ namespace WizOne.Personal
                         if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                         {
                             ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;
-                            txtEIDDI.Text = "FMO" + txtMarca.Text;
+                            txtEIDDI.Text = "FM0" + txtMarca.Text;
                         }
                     }
                 }
@@ -108,10 +108,14 @@ namespace WizOne.Personal
                     ASPxTextBox txtCNPDI = DateIdentificare_DataList.Items[0].FindControl("txtCNPDI") as ASPxTextBox;
                     ASPxTextBox txtNume = DateIdentificare_DataList.Items[0].FindControl("txtNume") as ASPxTextBox;
                     ASPxTextBox txtPrenume = DateIdentificare_DataList.Items[0].FindControl("txtPrenume") as ASPxTextBox;
-                    txtCNPDI.BackColor = Color.LightGray;
-                    txtNume.BackColor = Color.LightGray;
-                    txtPrenume.BackColor = Color.LightGray;
-                    txtMarca.BackColor = Color.LightGray;
+                    List<int> lst = new List<int>();
+                    if (Session["MP_CuloareCampOblig"] != null)
+                        lst = Session["MP_CuloareCampOblig"] as List<int>;
+
+                    txtCNPDI.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
+                    txtNume.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
+                    txtPrenume.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
+                    txtMarca.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }          
                 General.SecuritatePersonal(DateIdentificare_DataList, Convert.ToInt32(Session["UserId"].ToString()));
                 General.SecuritatePersonal(DateIdentificare_pnlCtl, Convert.ToInt32(Session["UserId"].ToString()));
@@ -170,7 +174,7 @@ namespace WizOne.Personal
                                 {
                                     ASPxTextBox txtEIDDI = DateIdentificare_DataList.Items[0].FindControl("txtEIDDI") as ASPxTextBox;
                                     ASPxTextBox txtMarca = DateIdentificare_DataList.Items[0].FindControl("txtMarcaDI") as ASPxTextBox;
-                                    txtEIDDI.Text = "FMO" + txtMarca.Text;
+                                    txtEIDDI.Text = "FM0" + txtMarca.Text;
                                 }
                         }
                         else

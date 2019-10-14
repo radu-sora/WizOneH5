@@ -251,7 +251,7 @@
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblNrOre" runat="server" style="display:none;">Nr. ore</label>
-                        <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="70px" ClientVisible="false" MinValue="0" MaxValue="8">
+                        <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="70px" ClientVisible="false" MinValue="0" MaxValue="999">
                             <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                         </dx:ASPxSpinEdit>
                         <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="70px" ClientVisible="false" ClientEnabled="false" />

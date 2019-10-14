@@ -45,7 +45,24 @@ namespace WizOne.Personal
 
                     Initializare(ref ds);
                 }
-                
+
+                if (!IsPostBack)
+                {
+                    string culoare = General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume"" = 'MP_CuloareCampObligatoriu' ", null).ToString();
+                    if (culoare != null && culoare.Length == 7 && culoare[0] == '#')
+                    {
+                        int r = int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[2].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255 
+                            : int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        int g = int.Parse(culoare[3].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[4].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255
+                            : int.Parse(culoare[3].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[4].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        int b = int.Parse(culoare[5].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[6].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255
+                            : int.Parse(culoare[5].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[6].ToString(), System.Globalization.NumberStyles.HexNumber);
+                        List<int> lst = new List<int>();
+                        lst.Add(r); lst.Add(g); lst.Add(b);
+                        Session["MP_CuloareCampOblig"] = lst;
+                    }
+                }
+
 
                 if (Session["esteNou"] == null || Session["esteNou"].ToString().Length <= 0 || Session["esteNou"].ToString() == "false")
                 {
@@ -913,13 +930,17 @@ namespace WizOne.Personal
                 DataTable dtSec = General.IncarcaDT(strSQL, null);
                 if (dtSec != null && dtSec.Rows.Count > 0 && dtSec.Rows[0][0] != null && dtSec.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtSec.Rows[0][0].ToString()) == 1)
                 {
-                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100", null);
+                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100 where f10003 <= coalesce((select cast(\"Valoare\" as integer) from \"tblParametrii\" where \"Nume\" = 'MP_LimitaMaximaMarca') , 10000000)", null);
                     if (dtMarca != null && dtMarca.Rows.Count > 0 && dtMarca.Rows[0][0] != null && dtMarca.Rows[0][0].ToString().Length > 0)
                         marcaFin = Convert.ToInt32(dtMarca.Rows[0][0].ToString());
                     if (marcaInit != marcaFin)
                     {
-                        dt100.Rows[0]["F10003"] = marcaFin;
-                        Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
+                        int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar("SELECT COUNT(*) FROM F100 WHERE F10003 =@1", new object[] { marcaInit }), 0));
+                        if (cnt != 0)
+                        {
+                            dt100.Rows[0]["F10003"] = marcaFin;
+                            Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
+                        }
                     }
                 }
                
@@ -947,7 +968,7 @@ namespace WizOne.Personal
                 DataTable dtSec = General.IncarcaDT(strSQL, null);
                 if (dtSec != null && dtSec.Rows.Count > 0 && dtSec.Rows[0][0] != null && dtSec.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtSec.Rows[0][0].ToString()) == 1)
                 {//se va lua max + 1 din F100
-                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100", null);
+                    DataTable dtMarca = General.IncarcaDT("SELECT MAX(F10003) + 1 FROM F100 where f10003 <= coalesce((select cast(\"Valoare\" as integer) from \"tblParametrii\" where \"Nume\" = 'MP_LimitaMaximaMarca') , 10000000)", null);
                     if (dtMarca != null && dtMarca.Rows.Count > 0 && dtMarca.Rows[0][0] != null && dtMarca.Rows[0][0].ToString().Length > 0)
                         id = Convert.ToInt32(dtMarca.Rows[0][0].ToString());                    
                 }

@@ -40,7 +40,10 @@ namespace WizOne.Personal
                
                 cmbTipDoc.Value = Convert.ToInt32(table.Rows[0]["F100983"] == DBNull.Value ? "0" : table.Rows[0]["F100983"].ToString());
 
-                DataTable dtTipDoc = General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\", F73302, F73306 from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 ", null);
+                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))"; 
+                if (Constante.tipBD == 2) cmp = "CAST(ROWNUM AS INT) ";
+
+                DataTable dtTipDoc = General.IncarcaDT("select " + cmp + " AS \"IdAuto\", CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\", F73302, F73306 from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 ", null, "IdAuto");
                 string tipDoc = "";
                 for (int i = 0; i < dtTipDoc.Rows.Count; i++)
                 {
@@ -74,14 +77,20 @@ namespace WizOne.Personal
                 for (int i = 0; i < lstTextBox.Count(); i++)
                 {
                     ASPxTextBox txt = Documente_DataList.Items[0].FindControl(lstTextBox[i]) as ASPxTextBox;
-                    txt.BackColor = Color.LightGray;
+                    List<int> lst = new List<int>();
+                    if (Session["MP_CuloareCampOblig"] != null)
+                        lst = Session["MP_CuloareCampOblig"] as List<int>;
+                    txt.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }
 
                 string[] lstDateEdit = new string[2] { "deDataElib", "deDataExp" };
                 for (int i = 0; i < lstDateEdit.Count(); i++)
                 {
                     ASPxDateEdit de = Documente_DataList.Items[0].FindControl(lstDateEdit[i]) as ASPxDateEdit;
-                    de.BackColor = Color.LightGray;
+                    List<int> lst = new List<int>();
+                    if (Session["MP_CuloareCampOblig"] != null)
+                        lst = Session["MP_CuloareCampOblig"] as List<int>;
+                    de.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }
 
 
@@ -89,7 +98,10 @@ namespace WizOne.Personal
                 for (int i = 0; i < lstComboBox.Count(); i++)
                 {
                     ASPxComboBox cmb = Documente_DataList.Items[0].FindControl(lstComboBox[i]) as ASPxComboBox;
-                    cmb.BackColor = Color.LightGray;
+                    List<int> lst = new List<int>();
+                    if (Session["MP_CuloareCampOblig"] != null)
+                        lst = Session["MP_CuloareCampOblig"] as List<int>;
+                    cmb.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }
 
             }

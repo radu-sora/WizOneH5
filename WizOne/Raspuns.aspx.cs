@@ -50,7 +50,7 @@ namespace WizOne
                             {
                                 string sqlUsr = $@"SELECT F70102 FROM USERS WHERE ""Mail""=@1
                                                 UNION
-                                                SELECT F70102 FROM USERS WHERE F10003 = (SELECT F10003 FROM F100 WHERE F100894=@1)";
+                                                SELECT F70102 FROM USERS WHERE F10003 IN (SELECT F10003 FROM F100 WHERE F100894=@1)";       //Radu 10.10.2019 - am pus "F10003 IN "  in loc de "F10003 = "  deoarece pot fi mai multe marci cu acelasi e-mail in F100
 
                                 int idUsr = Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlUsr, new object[] { mail }), -99));
 

@@ -892,7 +892,7 @@ namespace WizOne.BP
 
                         #region Validare start
 
-                        msg = Notif.TrimiteNotificare("BP.Aprobare", 2, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" WHERE ""Id""=" + id, "", id, Convert.ToInt32(Session["UserId"].ToString()), f10003);
+                        msg = Notif.TrimiteNotificare("BP.Aprobare", 2, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" Z WHERE ""Id""=" + id, "", id, Convert.ToInt32(Session["UserId"].ToString()), f10003);
 
                         if (msg != "" && msg.Substring(0, 1) == "2")
                         {
@@ -925,7 +925,7 @@ namespace WizOne.BP
 
                         HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
                         {
-                            NotifAsync.TrimiteNotificare("BP.Aprobare", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" WHERE ""Id""=" + id, "", id, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
+                            NotifAsync.TrimiteNotificare("BP.Aprobare", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" Z WHERE ""Id""=" + id, "", id, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
                         });
                         //Notif.TrimiteNotificare("BP.Aprobare", 1, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" WHERE ""Id""=" + id, "", id, Convert.ToInt32(Session["UserId"].ToString()), f10003);
                         #endregion

@@ -120,7 +120,7 @@ namespace WizOne.Pagini
                 else
                 {
                     General.SalveazaDate(dt, "Stiri");
-                    Notif.TrimiteNotificare("tbl.Stiri", (int)Constante.TipNotificare.Notificare, @"SELECT * FROM ""Stiri"" WHERE ""Id""=" + id, "Stiri", id, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    Notif.TrimiteNotificare("tbl.Stiri", (int)Constante.TipNotificare.Notificare, @"SELECT Z.* FROM ""Stiri"" Z WHERE ""Id""=" + id, "Stiri", id, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                     if (msg == "") Iesire();
                 }
             }

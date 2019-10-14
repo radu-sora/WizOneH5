@@ -809,7 +809,8 @@ namespace WizOne.Module
             OracleConnection conn = new OracleConnection(Constante.cnnWeb);
             conn.Open();
 
-            strSql = strSql.Replace("GLOBAL.IDUSER", (HttpContext.Current.Session["UserId"] ?? "").ToString()).Replace("GLOBAL.MARCA", (HttpContext.Current.Session["User_Marca"] ?? "").ToString());
+            //Florin 2019.10.11 - da eroare cand e asincron
+            //strSql = strSql.Replace("GLOBAL.IDUSER", (HttpContext.Current.Session["UserId"] ?? "").ToString()).Replace("GLOBAL.MARCA", (HttpContext.Current.Session["User_Marca"] ?? "").ToString());
 
             OracleCommand cmd = new OracleCommand(strSql, conn);
 
@@ -3067,7 +3068,7 @@ namespace WizOne.Module
                                         WHERE ""IdAuto""={idIst}";
 
 
-                    string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                    string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
                     //if (msg != "" && msg == Constante.MesajeValidari.MesajDeEroare.ToString())
                     if (msg != "" && msg.Substring(0,1) == "2")
                     {
@@ -3139,7 +3140,7 @@ namespace WizOne.Module
                         //completeaza soldul de ZL; Este numai pt clientul Groupama
                         if (tipActiune == 2) General.SituatieZLOperatii(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), 2, Convert.ToInt32(General.Nz(dr["NrZile"], 1)));
 
-                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + dr["Id"], "Ptj_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "Ptj_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
 
 
                         //log += "#$Id " + dr["Id"] + " - proces realizat cu succes \n";
@@ -3399,7 +3400,7 @@ namespace WizOne.Module
                                         WHERE ""IdAuto""={idIst}";
 
 
-                    string msg = Notif.TrimiteNotificare("CereriDiverse.Lista", 2, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""MP_Cereri"" WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                    string msg = Notif.TrimiteNotificare("CereriDiverse.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""MP_Cereri"" Z WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
                     //if (msg != "" && msg == Constante.MesajeValidari.MesajDeEroare.ToString())
                     if (msg != "" && msg.Substring(0, 1) == "2")
                     {
@@ -3437,7 +3438,7 @@ namespace WizOne.Module
                         }
 
 
-                        Notif.TrimiteNotificare("CereriDiverse.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""MP_Cereri"" WHERE ""Id""=" + dr["Id"], "MP_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                        Notif.TrimiteNotificare("CereriDiverse.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""MP_Cereri"" Z WHERE ""Id""=" + dr["Id"], "MP_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
 
 
                         //log += "#$Id " + dr["Id"] + " - proces realizat cu succes \n";
@@ -6019,7 +6020,7 @@ namespace WizOne.Module
 
 
 
-            Notif.TrimiteNotificare("BP.CrearePrime", 1, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" WHERE ""Id""=" + idUrm, "", idUrm, idUser, f10003);
+            Notif.TrimiteNotificare("BP.CrearePrime", 1, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" Z WHERE ""Id""=" + idUrm, "", idUrm, idUser, f10003);
             return "";
 
         }
@@ -7862,7 +7863,11 @@ namespace WizOne.Module
 
                     General.SalveazaDate(dt, "Org_relPostAngajat");
 
-                    Notif.TrimiteNotificare("PosturiNomen.PosturiLista", (int)Constante.TipNotificare.Notificare, "SELECT TOP 1 * FROM Org_Posturi WHERE Id=" + id, "Org_Posturi", -99, Convert.ToInt32(HttpContext.Current.Session["UserId"]), Convert.ToInt32(HttpContext.Current.Session["User_Marca"]));
+                    //Florin 2019.10.11
+                    string sqlOrg = $@"SELECT TOP 1 * FROM Org_Posturi WHERE Id = " + id;
+                    if (Constante.tipBD == 2)
+                        sqlOrg = $@"SELECT Z.* FROM ""Org_Posturi"" Z WHERE ROWNUM <=1 AND ""Id"" = " + id;
+                    Notif.TrimiteNotificare("PosturiNomen.PosturiLista", (int)Constante.TipNotificare.Notificare, sqlOrg, "Org_Posturi", -99, Convert.ToInt32(HttpContext.Current.Session["UserId"]), Convert.ToInt32(HttpContext.Current.Session["User_Marca"]));
                 }
             }
             catch (Exception ex)

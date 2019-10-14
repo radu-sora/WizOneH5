@@ -484,8 +484,11 @@ namespace WizOne.Module
                 
                 for (int i = 0; i < dtCmp.Rows.Count; i++)
                 {
+                    //Florin 2019.10.11
+                    //if ((dtCmp.Rows[i]["CampSelect"] ?? "").ToString() != "" && (dtCmp.Rows[i]["Alias"] ?? "").ToString() != "")
+                    //    strCamp += ", (" + dtCmp.Rows[i]["CampSelect"] + ") AS '" + dtCmp.Rows[i]["Alias"] + "'";
                     if ((dtCmp.Rows[i]["CampSelect"] ?? "").ToString() != "" && (dtCmp.Rows[i]["Alias"] ?? "").ToString() != "")
-                        strCamp += ", (" + dtCmp.Rows[i]["CampSelect"] + ") AS '" + dtCmp.Rows[i]["Alias"] + "'";
+                        strCamp += ", (" + dtCmp.Rows[i]["CampSelect"] + ") AS \"" + dtCmp.Rows[i]["Alias"] + "\"";
                 }
 
                 if (strCamp != "") strCamp = strCamp.Substring(1);
@@ -605,7 +608,10 @@ namespace WizOne.Module
 
             try
             {
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE ""Id""=@1 AND ""MailTip"" IS NOT NULL AND ""MailTip"" <> '' AND ""MailAdresaId"" IS NOT NULL AND ""MailAdresaId"" <> ''  ", new string[] { id.ToString() });
+                //Florin 2019.10.11
+                //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ntf_Mailuri"" WHERE ""Id""=@1 AND ""MailTip"" IS NOT NULL AND ""MailTip"" <> '' AND ""MailAdresaId"" IS NOT NULL AND ""MailAdresaId"" <> ''  ", new string[] { id.ToString() });
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ntf_Mailuri"" WHERE ""Id""=@1 {General.FiltrulCuNull("MailTip")} {General.FiltrulCuNull("MailAdresaId")} ", new string[] { id.ToString() });
+
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     try

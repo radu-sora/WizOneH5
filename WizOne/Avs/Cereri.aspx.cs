@@ -2851,7 +2851,7 @@ namespace WizOne.Avs
 
             HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
             {
-                NotifAsync.TrimiteNotificare("Avs.Cereri", (int)Constante.TipNotificare.Notificare, @"SELECT *, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Avs_Cereri"" WHERE ""Id""=" + idUrm, "Avs_Cereri", idUrm, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
+                NotifAsync.TrimiteNotificare("Avs.Cereri", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Avs_Cereri"" Z WHERE ""Id""=" + idUrm, "Avs_Cereri", idUrm, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
             });
 
             Session["AvsCereri"] = null;

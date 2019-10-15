@@ -4405,6 +4405,12 @@ namespace WizOne.Module
                     dt = "SYSDATE";
                     tipData = "NUMBER(9)";
                 }
+
+                //Radu 14.10.2019 - am refacut interogarea pt a aduce mai frumos nivelurile 1, 2 si 3
+                //(CASE WHEN COALESCE(A.F10081,'') = '' THEN '' ELSE ' Oras. ' {4} a.F10081 END) {4}
+                //(CASE WHEN COALESCE(A.F10082,'') = '' THEN '' ELSE ' Sect. ' {4} a.F10082 END) {4}
+                //(CASE WHEN COALESCE(A.F100891,'') = '' THEN '' ELSE CASE WHEN  (UPPER(a.F100891) like '%JUDET%' OR UPPER(a.F100891) like '%MUNICIPIU%') THEN ' ' {4} a.F100891 ELSE  ' Judet. ' {4} a.F100891 END END) {4}
+
                                             
                 strSql = @"SELECT * FROM (
                             SELECT CAST(A.F10003 AS {8}) AS ""Marca"",A.F10017 AS ""CNP"",A.F10008 {4} ' ' {4} A.F10009 AS ""NumeComplet"",
@@ -4416,9 +4422,18 @@ namespace WizOne.Module
                             (CASE WHEN COALESCE(A.F10085,'') = '' THEN '' ELSE ' Bloc. ' {4} a.F10085 END) {4}
                             (CASE WHEN COALESCE(A.F100892,'') = '' THEN '' ELSE ' Sc. ' {4} a.F100892 END) {4}
                             (CASE WHEN COALESCE(A.F100893,'') = '' THEN '' ELSE ' Et. ' {4} a.F100893 END) {4}
-                            (CASE WHEN COALESCE(A.F10081,'') = '' THEN '' ELSE ' Oras. ' {4} a.F10081 END) {4}
-                            (CASE WHEN COALESCE(A.F10082,'') = '' THEN '' ELSE ' Sect. ' {4} a.F10082 END) {4}
-                            (CASE WHEN COALESCE(A.F100891,'') = '' THEN '' ELSE CASE WHEN  (UPPER(a.F100891) like '%JUDET%' OR UPPER(a.F100891) like '%MUNICIPIU%') THEN ' ' {4} a.F100891 ELSE  ' Judet. ' {4} a.F100891 END END) {4}
+
+                            (CASE WHEN a.F100897 is null or a.F100897 = 0 THEN '' ELSE case when niv3.tip in (11, 19, 22, 23) then ' sat ' {4} niv3.denloc else
+                            case when niv3.tip = 6 and upper(niv3.denloc) not like '%SECTOR%' then ' sector ' {4} niv3.DENLOC else ' ' {4} niv3.denloc end END end) {4}
+
+                            (case when a.F100914 is null or a.F100914 = 0 THEN '' else case when niv2.tip in (1, 4) and UPPER(niv2.DENLOC) not like '%MUNICIPIU%' then ' municipiul ' {4} niv2.DENLOC else
+                            case when niv2.tip = 2 and UPPER(niv2.DENLOC) not like '%ORAS%' then ' orasul ' {4} niv2.DENLOC else 
+                            case when niv2.TIP = 3 and upper(niv2.DENLOC) not like '%COMUNA%' then ' comuna ' {4} niv2.DENLOC else ' ' {4} niv2.denloc end end end end ) {4}
+
+                            (CASE WHEN a.F100921 is null or a.F100921 = 0 THEN '' ELSE case when upper(niv1.denloc) like '%JUDET%' or upper(niv1.denloc)  like '%MUNICIPIU%' then ' ' {4} niv1.DENLOC else
+                             case when upper(niv1.denloc) like '%BUCURESTI%' then ' municipiul ' {4} niv1.DENLOC else ' judetul ' {4} niv1.denloc end end END) {4}
+                            
+
                             (CASE WHEN COALESCE(A.F10087,'') = '' THEN '' ELSE ' Cod Postal. ' {4} a.F10087 END) AS ""AdresaCompleta""
                             {1} {6}
                             FROM F100 A
@@ -4427,6 +4442,9 @@ namespace WizOne.Module
                             LEFT JOIN F004 G ON A.F10005 = G.F00405 
                             LEFT JOIN F005 H ON A.F10006 = H.F00506 
                             LEFT JOIN F006 I ON A.F10007 = I.F00607 
+                            left join Localitati niv1 on niv1.SIRUTA = a.F100921
+                            left join Localitati niv2 on niv2.SIRUTA = a.F100914
+                            left join Localitati niv3 on niv3.SIRUTA = a.F100897
                             {2} {7}
                             WHERE 1=1 {3}
                             ) X WHERE 1=1 {0}

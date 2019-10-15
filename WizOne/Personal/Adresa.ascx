@@ -8,7 +8,7 @@
         switch (e.buttonID) {
             case "btnGasit":
                 pnlLoading.Show();
-                grDateCautaAdresa.GetRowValues(e.visibleIndex, 'Artera;SirutaJudet;Judet;SirutaOras;MunOraCom;SirutaSat;LocSatSect', OnClickGasit);
+                grDateCautaAdresa.GetRowValues(e.visibleIndex, 'Artera;SirutaNivel1;NumeNivel1;SirutaNivel2;NumeNivel2;SirutaNivel3;NumeNivel3', OnClickGasit);
                 break;
         }
     }
@@ -16,13 +16,13 @@
     function OnClickGasit(values)
     {
         grDateAdresa.SetEditValue("Strada", values[0]);
-        grDateAdresa.SetEditValue("Judet", values[2]);
-        grDateAdresa.SetEditValue("Oras", values[4]);
-        grDateAdresa.SetEditValue("Sat", values[6]);
+        grDateAdresa.SetEditValue("NumeNivel1", values[2]);
+        grDateAdresa.SetEditValue("NumeNivel2", values[4]);
+        grDateAdresa.SetEditValue("NumeNivel3", values[6]);
 
-        hfSiruta.Set("SirutaJudet", values[1]);
-        hfSiruta.Set("SirutaOras", values[3]);
-        hfSiruta.Set("SirutaSat", values[5]);
+        hfSiruta.Set("SirutaNivel1", values[1]);
+        hfSiruta.Set("SirutaNivel2", values[3]);
+        hfSiruta.Set("SirutaNivel3", values[5]);
 
         pnlLoading.Hide();
         popUpCauta.Hide();
@@ -81,13 +81,13 @@
                         
                     </dx:GridViewCommandColumn>
                     <dx:GridViewDataTextColumn FieldName="IdTipStrada" Name="IdTipStrada" Caption="Tip artera" Visible="false" Width="150px" />
-                    <dx:GridViewDataTextColumn FieldName="Judet" Name="Judet" Caption="Judet"  ReadOnly="true" Width="100px" />
-                    <dx:GridViewDataTextColumn FieldName="SirutaJudet" Name="SirutaJudet" Caption="Judet" Visible="false" Width="200px" />
-                    <dx:GridViewDataTextColumn FieldName="Oras" Name="Oras" Caption="Mun/Oras/Comuna" ReadOnly="true" Width="150px" />
-                    <dx:GridViewDataTextColumn FieldName="SirutaOras" Name="SirutaOras" Caption="Oras" Visible="false" Width="200px" />
-                    <dx:GridViewDataTextColumn FieldName="Sat" Name="Sat" Caption="Localitate/Sector" ReadOnly="true" Width="150px" />
-                    <dx:GridViewDataTextColumn FieldName="SirutaSat" Name="SirutaSat" Caption="Sat" Visible="false" Width="200px" />
-                    <dx:GridViewDataTextColumn FieldName="Strada" Name="Strada" Caption="Strada" Width="150px" />
+                    <dx:GridViewDataTextColumn FieldName="NumeNivel1" Name="NumeNivel1" Caption="Judet"  ReadOnly="true" Width="100px" />
+                    <dx:GridViewDataTextColumn FieldName="SirutaNivel1" Name="SirutaNivel1" Caption="Judet" Visible="false" Width="200px" />
+                    <dx:GridViewDataTextColumn FieldName="NumeNivel2" Name="NumeNivel2" Caption="Mun/Oras/Comuna" ReadOnly="true" Width="150px" />
+                    <dx:GridViewDataTextColumn FieldName="SirutaNivel2" Name="SirutaNivel2" Caption="Oras" Visible="false" Width="200px" />
+                    <dx:GridViewDataTextColumn FieldName="NumeNivel3" Name="NumeNivel3" Caption="Localitate/Sector" ReadOnly="true" Width="150px" />
+                    <dx:GridViewDataTextColumn FieldName="SirutaNivel3" Name="SirutaNivel3" Caption="Sat" Visible="false" Width="200px" />
+                    <dx:GridViewDataTextColumn FieldName="Strada" Name="Strada" Caption="Artera" Width="150px" />
                     <dx:GridViewDataTextColumn FieldName="Numar" Name="Numar" Caption="Numar" Width="50px" />
                     <dx:GridViewDataTextColumn FieldName="Bloc" Name="Bloc" Caption="Bloc" Width="50px" />
                     <dx:GridViewDataTextColumn FieldName="Scara" Name="Scara" Caption="Scara" Width="50px" />
@@ -156,18 +156,24 @@
 
             <div class="row">
                 <div class="col-md-1">
+                    <dx:ASPxLabel ID="lblJud" runat="server" Text="Judet" />	
+                </div>
+                <div class="col-md-2">
+                    <dx:ASPxTextBox ID="txtJud" runat="server" ClientInstanceName="txtJud" ClientIDMode="Static" Width="125" AutoPostBack="false" />
+                </div>
+                <div class="col-md-1">
                     <dx:ASPxLabel ID="lblLoc" runat="server" Text="Localitate" />	
                 </div>
-                <div class="col-md-4">
-                    <dx:ASPxTextBox ID="txtLoc" runat="server" ClientInstanceName="txtLoc" ClientIDMode="Static" Width="200" AutoPostBack="false" />
+                <div class="col-md-2">
+                    <dx:ASPxTextBox ID="txtLoc" runat="server" ClientInstanceName="txtLoc" ClientIDMode="Static" Width="125" AutoPostBack="false" />
                 </div>
                  <div class="col-md-1">
                     <dx:ASPxLabel ID="lblArt" runat="server" Text="Artera" />
                 </div>
-                <div class="col-md-4">
-                    <dx:ASPxTextBox ID="txtArt" runat="server" ClientInstanceName="txtArt" ClientIDMode="Static" Width="200" AutoPostBack="false" />
+                <div class="col-md-2">
+                    <dx:ASPxTextBox ID="txtArt" runat="server" ClientInstanceName="txtArt" ClientIDMode="Static" Width="125" AutoPostBack="false" />
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-3">
                     <dx:ASPxButton ID="btnFiltruAdresa" runat="server" AutoPostBack="false">
                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                         <ClientSideEvents Click="function(s, e){ popUpCauta.PerformWindowCallback(popUpCauta.GetWindow(0),'Filtru') }" />
@@ -187,14 +193,14 @@
                             </dx:GridViewCommandColumnCustomButton>
                         </CustomButtons>
                     </dx:GridViewCommandColumn>
-                    <dx:GridViewDataTextColumn FieldName="Judet" Name="Judet" Caption="Judet" Width="200" />
-                    <dx:GridViewDataTextColumn FieldName="MunOraCom" Name="MunOraCom" Caption="Mun/Oras/Com" Width="200" />
-                    <dx:GridViewDataTextColumn FieldName="LocSatSect" Name="LocSatSect" Caption="Localitate" Width="200" />
+                    <dx:GridViewDataTextColumn FieldName="NumeNivel1" Name="NumeNivel1" Caption="Judet" Width="200" />
+                    <dx:GridViewDataTextColumn FieldName="NumeNivel2" Name="NumeNivel2" Caption="Mun/Oras/Com" Width="200" />
+                    <dx:GridViewDataTextColumn FieldName="NumeNivel3" Name="NumeNivel3" Caption="Localitate" Width="200" />
                     <dx:GridViewDataTextColumn FieldName="Artera" Name="Artera" Caption="Artera" Width="200" />
 
-                    <dx:GridViewDataTextColumn FieldName="SirutaSat" Name="SirutaSat" Caption="SirutaSat"  Width="125px"  Visible="false"/>
-                    <dx:GridViewDataTextColumn FieldName="SirutaOras" Name="SirutaOras" Caption="SirutaOras"  Width="125px" Visible="false"/>
-                    <dx:GridViewDataTextColumn FieldName="SirutaJudet" Name="SirutaJudet" Caption="SirutaJudet"  Width="125px"  Visible="false"/>
+                    <dx:GridViewDataTextColumn FieldName="SirutaNivel3" Name="SirutaNivel3" Caption="Siruta Nivel 3"  Width="125px"  Visible="false"/>
+                    <dx:GridViewDataTextColumn FieldName="SirutaNivel2" Name="SirutaNivel2" Caption="Siruta Nivel 2"  Width="125px" Visible="false"/>
+                    <dx:GridViewDataTextColumn FieldName="SirutaNivel1" Name="SirutaNivel1" Caption="Siruta Nivel 1"  Width="125px"  Visible="false"/>
                     <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="125px"  Visible="false"/>
                 </Columns>
             </dx:ASPxGridView>

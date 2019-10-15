@@ -153,6 +153,13 @@ namespace WizOne.Pagini
                 //Invitatie 360
                 lstBadges.Add(new metaBadge { StringSelect = "SELECT * FROM USERS WHERE 1=2", Pagina = "../Eval/Invitatie.aspx", Eticheta = "Feedback", RutaImg = "bdgEvl.jpg" });
 
+                //Florin 2019.10.15
+                //Solicitari absente
+                lstBadges.Add(new metaBadge { StringSelect = @"SELECT * FROM ""Ptj_Cereri"" WHERE 1=2", Pagina = "../Absente/Cereri.aspx", Eticheta = Dami.TraduCuvant("Solicitari absente"), RutaImg = "bdgCer.jpg" });
+                //Solicitari diverse
+                lstBadges.Add(new metaBadge { StringSelect = @"SELECT * FROM ""Ptj_Cereri"" WHERE 1=2", Pagina = "../CereriDiverse/Cereri.aspx", Eticheta = Dami.TraduCuvant("Solicitari diverse"), RutaImg = "bdgCer.jpg" });
+
+
                 int j = 0;
 
                 foreach (var ele in lstBadges)

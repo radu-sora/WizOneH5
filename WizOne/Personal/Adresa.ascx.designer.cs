@@ -76,6 +76,24 @@ namespace WizOne.Personal {
         protected global::DevExpress.Web.ASPxButton btnCloseCautaAdr;
         
         /// <summary>
+        /// lblJud control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblJud;
+        
+        /// <summary>
+        /// txtJud control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtJud;
+        
+        /// <summary>
         /// lblLoc control.
         /// </summary>
         /// <remarks>

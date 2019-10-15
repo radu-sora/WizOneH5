@@ -48,7 +48,7 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                 {
-                    string culoare = General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume"" = 'MP_CuloareCampObligatoriu' ", null).ToString();
+                    string culoare = (General.ExecutaScalar(@"SELECT COALESCE(""Valoare"",'') FROM ""tblParametrii"" WHERE ""Nume"" = 'MP_CuloareCampObligatoriu' ", null) ?? "").ToString();
                     if (culoare != null && culoare.Length == 7 && culoare[0] == '#')
                     {
                         int r = int.Parse(culoare[1].ToString(), System.Globalization.NumberStyles.HexNumber) * 16 + int.Parse(culoare[2].ToString(), System.Globalization.NumberStyles.HexNumber) > 255 ? 255 

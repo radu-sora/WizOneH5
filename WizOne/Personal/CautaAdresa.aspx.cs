@@ -23,6 +23,7 @@ namespace WizOne.Personal
         {
             try
             {
+                lblJudet.Text = Dami.TraduCuvant(lblJudet.Text);
                 lblLocalitate.Text = Dami.TraduCuvant(lblLocalitate.Text);
                 lblArtera.Text = Dami.TraduCuvant(lblArtera.Text);
                 btnOK.Text = Dami.TraduCuvant(btnOK.Text);
@@ -72,8 +73,15 @@ namespace WizOne.Personal
                     //MessageBox.Show("Introduceti minim 3 caractere la numele localitatii!", MessageBox.icoWarning, "");
                     ArataMesaj("Introduceti minim 3 caractere la numele localitatii!");
                     return;
-                } 
-                               
+                }
+
+                if (txtJudet.Text.Length > 0 && txtJudet.Text.Length < 3)
+                {
+                    //MessageBox.Show("Introduceti minim 3 caractere la numele localitatii!", MessageBox.icoWarning, "");
+                    ArataMesaj("Introduceti minim 3 caractere la numele judetului!");
+                    return;
+                }
+
                 grDateCautaAdresa.DataSource = GetAdresa(txtArtera.Text, txtLocalitate.Text);
                 grDateCautaAdresa.KeyFieldName = "IdAuto";
                 grDateCautaAdresa.DataBind();

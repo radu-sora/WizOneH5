@@ -20,7 +20,10 @@ namespace WizOne.Personal
                 grDateAdresa.DataBind();
 
                 if (!IsPostBack)
+                {
                     Session["MP_CautaAdresa"] = null;
+                    Session["MP_TipArtera"] = General.IncarcaDT("SELECT * FROM \"tblTipStrada\"", null);               
+                }
 
                 btnCauta.Visibility = GridViewCustomButtonVisibility.EditableRow;
 
@@ -93,7 +96,11 @@ namespace WizOne.Personal
                 colTipAdr.PropertiesComboBox.DataSource = dtTipAdr;
 
                 if (!IsPostBack)
+                {
                     lblAdresa.Text = DamiAdresa(dt);
+                    DataTable dtLoc = General.IncarcaDT("SELECT * FROM LOCALITATI", null);
+                    Session["MP_AdresaLocalitati"] = dtLoc;
+                }
             }
             catch (Exception ex)
             {
@@ -141,9 +148,11 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataTable dtLoc = Session["MP_AdresaLocalitati"] as DataTable;
                 int idAuto = 0;
                 object[] row = new object[ds.Tables["F100Adrese"].Columns.Count];
                 int x = 0;
+                int tipArtera = 0;
 
                 if (Convert.ToInt32(e.NewValues["IdTipAdresa"].ToString()) == 1)
                     e.NewValues["Principal"] = 1;
@@ -159,17 +168,41 @@ namespace WizOne.Personal
                             case "F10003":
                                 row[x] = Session["Marca"];
                                 break;
-                            case "SIRUTAJUDET":
-                                if (hfSiruta.Contains("SirutaJudet"))
-                                    row[x] = Convert.ToInt32(General.Nz(hfSiruta["SirutaJudet"], -99));
+                            case "IDTIPSTRADA":
+                                DataTable dtArtera = Session["MP_TipArtera"] as DataTable;
+                                if (dtArtera != null && dtArtera.Rows.Count > 0)
+                                {
+                                    for (int i = 0; i < dtArtera.Rows.Count; i++)
+                                    {
+                                        if (e.NewValues["Strada"].ToString().ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
+                                        {
+                                            row[x] = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
+                                            tipArtera = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
+                                            break;
+                                        }
+                                    }
+                                }
                                 break;
-                            case "SIRUTAORAS":
-                                if (hfSiruta.Contains("SirutaOras"))
-                                    row[x] = Convert.ToInt32(General.Nz(hfSiruta["SirutaOras"], -99));
+                            case "SIRUTANIVEL1":
+                                if (hfSiruta.Contains("SirutaNivel1"))
+                                    row[x] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel1"], -99));
                                 break;
-                            case "SIRUTASAT":
-                                if (hfSiruta.Contains("SirutaSat"))
-                                    row[x] = Convert.ToInt32(General.Nz(hfSiruta["SirutaSat"], -99));
+                            case "TIPNIVEL1":
+                                row[x] = Convert.ToInt32(dtLoc.Select("SIRUTA=" + General.Nz(hfSiruta["SirutaNivel1"], -99))[0]["TIP"].ToString());
+                                break;
+                            case "SIRUTANIVEL2":
+                                if (hfSiruta.Contains("SirutaNivel2"))
+                                    row[x] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel2"], -99));
+                                break;
+                            case "TIPNIVEL2":
+                                row[x] = Convert.ToInt32(dtLoc.Select("SIRUTA=" + General.Nz(hfSiruta["SirutaNivel2"], -99))[0]["TIP"].ToString());
+                                break;
+                            case "SIRUTANIVEL3":
+                                if (hfSiruta.Contains("SirutaNivel3"))
+                                    row[x] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel3"], -99));
+                                break;
+                            case "TIPNIVEL3":
+                                row[x] = Convert.ToInt32(dtLoc.Select("SIRUTA=" + General.Nz(hfSiruta["SirutaNivel3"], -99))[0]["TIP"].ToString());
                                 break;
                             case "PRINCIPAL":
                                 row[x] = e.NewValues[col.ColumnName] ?? 0;
@@ -200,22 +233,22 @@ namespace WizOne.Personal
 
                 if (General.Nz(e.NewValues["Principal"], 0).ToString() == "1")
                 {
-                    ds.Tables[2].Rows[0]["F1001021"] = e.NewValues["Principal"];
+                    ds.Tables[2].Rows[0]["F1001021"] = tipArtera;
 
-                    ds.Tables[1].Rows[0]["F100891"] = e.NewValues["Judet"] ?? DBNull.Value;
+                    ds.Tables[1].Rows[0]["F100891"] = e.NewValues["NumeNivel1"] ?? DBNull.Value;
 
-                    if (e.NewValues["Oras"] != null && (e.NewValues["Oras"].ToString().IndexOf("ORAS") == 0 || e.NewValues["Oras"].ToString().IndexOf("MUNICIPIU") == 0))
+                    if (e.NewValues["NumeNivel2"] != null && (e.NewValues["NumeNivel2"].ToString().IndexOf("ORAS") == 0 || e.NewValues["NumeNivel2"].ToString().IndexOf("MUNICIPIU") == 0))
                     {
-                        ds.Tables[1].Rows[0]["F10081"] = e.NewValues["Oras"] ?? DBNull.Value;
+                        ds.Tables[1].Rows[0]["F10081"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
                         ds.Tables[1].Rows[0]["F100907"] = DBNull.Value;
                     }
                     else
                     {
-                        ds.Tables[1].Rows[0]["F100907"] = e.NewValues["Oras"] ?? DBNull.Value;
+                        ds.Tables[1].Rows[0]["F100907"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
                         ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
                     }
                     //ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
-                    ds.Tables[1].Rows[0]["F10082"] = e.NewValues["Sector"] ?? DBNull.Value;
+                    ds.Tables[1].Rows[0]["F10082"] = e.NewValues["NumeNivel3"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10083"] = e.NewValues["Strada"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10084"] = e.NewValues["Numar"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10085"] = e.NewValues["Bloc"] ?? DBNull.Value;
@@ -224,12 +257,12 @@ namespace WizOne.Personal
                     ds.Tables[1].Rows[0]["F100893"] = e.NewValues["Etaj"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10087"] = e.NewValues["CodPostal"] ?? DBNull.Value;
 
-                    if (hfSiruta.Contains("SirutaJudet"))
-                        ds.Tables[1].Rows[0]["F100921"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaJudet"], -99));
-                    if (hfSiruta.Contains("SirutaOras"))
-                        ds.Tables[1].Rows[0]["F100914"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaOras"], -99));
-                    if (hfSiruta.Contains("SirutaSat"))
-                        ds.Tables[1].Rows[0]["F100897"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaSat"], -99));
+                    if (hfSiruta.Contains("SirutaNivel1"))
+                        ds.Tables[1].Rows[0]["F100921"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel1"], -99));
+                    if (hfSiruta.Contains("SirutaNivel2"))
+                        ds.Tables[1].Rows[0]["F100914"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel2"], -99));
+                    if (hfSiruta.Contains("SirutaNivel3"))
+                        ds.Tables[1].Rows[0]["F100897"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel3"], -99));
 
                     for (int i = 0; i < ds.Tables["F100Adrese"].Rows.Count; i++)
                     {
@@ -262,6 +295,8 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataRow row = ds.Tables["F100Adrese"].Rows.Find(keys);
+                DataTable dtLoc = Session["MP_AdresaLocalitati"] as DataTable;
+                int tipArtera = 0;
 
                 if (Convert.ToInt32(e.NewValues["IdTipAdresa"].ToString()) == 1)
                     e.NewValues["Principal"] = 1;
@@ -274,17 +309,41 @@ namespace WizOne.Personal
                     {
                         switch (col.ColumnName.ToUpper())
                         {
-                            case "SIRUTAJUDET":
-                                if (hfSiruta.Contains("SirutaJudet"))
-                                    row[col.ColumnName] = Convert.ToInt32(General.Nz(hfSiruta["SirutaJudet"], -99));
+                            case "SIRUTANIVEL1":
+                                if (hfSiruta.Contains("SirutaNivel1"))
+                                    row[col.ColumnName] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel1"], -99));
                                 break;
-                            case "SIRUTAORAS":
-                                if (hfSiruta.Contains("SirutaOras"))
-                                    row[col.ColumnName] = Convert.ToInt32(General.Nz(hfSiruta["SirutaOras"], -99));
+                            case "TIPNIVEL1":
+                                row[col.ColumnName] = Convert.ToInt32(dtLoc.Select("SIRUTA=" + General.Nz(hfSiruta["SirutaNivel1"], -99))[0]["TIP"].ToString());
+                                break;                
+                            case "SIRUTANIVEL2":
+                                if (hfSiruta.Contains("SirutaNivel2"))
+                                    row[col.ColumnName] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel2"], -99));
                                 break;
-                            case "SIRUTASAT":
-                                if (hfSiruta.Contains("SirutaSat"))
-                                    row[col.ColumnName] = Convert.ToInt32(General.Nz(hfSiruta["SirutaSat"], -99));
+                            case "TIPNIVEL2":
+                                row[col.ColumnName] = Convert.ToInt32(dtLoc.Select("SIRUTA=" + General.Nz(hfSiruta["SirutaNivel2"], -99))[0]["TIP"].ToString());
+                                break;                          
+                            case "SIRUTANIVEL3":
+                                if (hfSiruta.Contains("SirutaNivel3"))
+                                    row[col.ColumnName] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel3"], -99));
+                                break;
+                            case "TIPNIVEL3":
+                                row[col.ColumnName] = Convert.ToInt32(dtLoc.Select("SIRUTA=" + General.Nz(hfSiruta["SirutaNivel3"], -99))[0]["TIP"].ToString());
+                                break;
+                            case "IDTIPSTRADA":
+                                DataTable dtArtera = Session["MP_TipArtera"] as DataTable;
+                                if (dtArtera != null && dtArtera.Rows.Count > 0)
+                                {
+                                    for (int i = 0; i < dtArtera.Rows.Count; i++)
+                                    {
+                                        if (e.NewValues["Strada"].ToString().ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
+                                        {
+                                            row[col.ColumnName] = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
+                                            tipArtera = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString()); 
+                                            break;
+                                        }
+                                    }
+                                }
                                 break;
                             default:
                                 row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
@@ -295,27 +354,27 @@ namespace WizOne.Personal
 
                 if (General.Nz(e.NewValues["Principal"],0).ToString() == "1")
                 {
-                    if (e.NewValues.Contains("Principal"))
-                        ds.Tables[2].Rows[0]["F1001021"] = e.NewValues["Principal"];
+                    //if (e.NewValues.Contains("Principal"))
+                        ds.Tables[2].Rows[0]["F1001021"] = tipArtera;
 
-                    if (e.NewValues.Contains("Judet"))
-                        ds.Tables[1].Rows[0]["F100891"] = e.NewValues["Judet"] ?? DBNull.Value;
-                    if (e.NewValues.Contains("Oras"))
+                    if (e.NewValues.Contains("NumeNivel1"))
+                        ds.Tables[1].Rows[0]["F100891"] = e.NewValues["NumeNivel1"] ?? DBNull.Value;
+                    if (e.NewValues.Contains("NumeNivel2"))
                     {
-                        if (e.NewValues["Oras"] != null && (e.NewValues["Oras"].ToString().IndexOf("ORAS") == 0 || e.NewValues["Oras"].ToString().IndexOf("MUNICIPIU") == 0))
+                        if (e.NewValues["NumeNivel2"] != null && (e.NewValues["NumeNivel2"].ToString().IndexOf("ORAS") == 0 || e.NewValues["NumeNivel2"].ToString().IndexOf("MUNICIPIU") == 0))
                         {
-                            ds.Tables[1].Rows[0]["F10081"] = e.NewValues["Oras"] ?? DBNull.Value;
+                            ds.Tables[1].Rows[0]["F10081"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
                             ds.Tables[1].Rows[0]["F100907"] = DBNull.Value;
                         }
                         else    //if (e.NewValues.Contains("Comuna"))
                         {
-                            ds.Tables[1].Rows[0]["F100907"] = e.NewValues["Oras"] ?? DBNull.Value;
+                            ds.Tables[1].Rows[0]["F100907"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
                             ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
                         }
                     }
                     //if (e.NewValues.Contains("Strada"))
                     //    ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
-                    if (e.NewValues.Contains("Sector"))
+                    if (e.NewValues.Contains("NumeNivel3"))
                         ds.Tables[1].Rows[0]["F10082"] = e.NewValues["Sector"] ?? DBNull.Value;
                     if (e.NewValues.Contains("Strada"))
                         ds.Tables[1].Rows[0]["F10083"] = e.NewValues["Strada"] ?? DBNull.Value;
@@ -333,12 +392,12 @@ namespace WizOne.Personal
                         ds.Tables[1].Rows[0]["F10087"] = e.NewValues["CodPostal"] ?? DBNull.Value;
 
 
-                    if (hfSiruta.Contains("SirutaJudet"))
-                        ds.Tables[1].Rows[0]["F100921"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaJudet"], -99));
-                    if (hfSiruta.Contains("SirutaOras"))
-                        ds.Tables[1].Rows[0]["F100914"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaOras"], -99));
-                    if (hfSiruta.Contains("SirutaSat"))
-                        ds.Tables[1].Rows[0]["F100897"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaSat"], -99));
+                    if (hfSiruta.Contains("SirutaNivel1"))
+                        ds.Tables[1].Rows[0]["F100921"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel1"], -99));
+                    if (hfSiruta.Contains("SirutaNivel2"))
+                        ds.Tables[1].Rows[0]["F100914"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel2"], -99));
+                    if (hfSiruta.Contains("SirutaNivel3"))
+                        ds.Tables[1].Rows[0]["F100897"] = Convert.ToInt32(General.Nz(hfSiruta["SirutaNivel3"], -99));
 
                     for (int i = 0; i < ds.Tables["F100Adrese"].Rows.Count; i++)
                     {
@@ -427,17 +486,23 @@ namespace WizOne.Personal
 
                             if (txtArt.Text.Trim() != "" && txtArt.Text.Trim().Length < 3)
                             {
-                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele arterei");
+                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele arterei!");
                                 return;
                             }
 
                             if (txtLoc.Text.Trim() != "" && txtLoc.Text.Trim().Length < 3)
                             {
-                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele localitatii");
+                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele localitatii!");
                                 return;
                             }
 
-                            DataTable dtAdr = GetAdresa(txtArt.Text, txtLoc.Text);
+                            if (txtJud.Text.Trim() != "" && txtJud.Text.Trim().Length < 3)
+                            {
+                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele judetului!");
+                                return;
+                            }
+
+                            DataTable dtAdr = GetAdresa(txtArt.Text, txtLoc.Text, txtJud.Text);
                             grDateCautaAdresa.DataSource = dtAdr;
                             grDateCautaAdresa.KeyFieldName = "IdAuto";
                             grDateCautaAdresa.DataBind();
@@ -452,7 +517,7 @@ namespace WizOne.Personal
             }
         }
 
-        public DataTable GetAdresa(string artera, string localitate)
+        public DataTable GetAdresa(string artera, string localitate, string judet)
         {
             DataTable dt = new DataTable();
             DataTable dt1 = new DataTable();
@@ -484,11 +549,11 @@ namespace WizOne.Personal
             if (artera == "" || nr == 0)
             {
                 string strSql = "SELECT ROW_NUMBER() over(order by a.DENLOC, b.DENLOC, c.DENLOC) AS \"IdAuto\", " +
-                         " ' ' AS \"Artera\", a.DENLOC AS \"LocSatSect\", MAX(a.SIRUTA) AS \"SirutaSat\", " +
-                         " b.DENLOC AS \"MunOraCom\", MAX(b.SIRUTA) AS \"SirutaOras\", c.DENLOC AS \"Judet\", MAX(c.SIRUTA) AS \"SirutaJudet\" from LOCALITATI a, LOCALITATI b, LOCALITATI c " +
+                         " ' ' AS \"Artera\", a.DENLOC AS \"NumeNivel3\", MAX(a.SIRUTA) AS \"SirutaNivel3\", " +
+                         " b.DENLOC AS \"NumeNivel2\", MAX(b.SIRUTA) AS \"SirutaNivel2\", c.DENLOC AS \"NumeNivel1\", MAX(c.SIRUTA) AS \"SirutaNivel1\" from LOCALITATI a, LOCALITATI b, LOCALITATI c " +
                          " WHERE UPPER(a.DENLOC) LIKE UPPER('%" + localitate + "%') AND a.NIV = 3 AND a.SIRSUP = b.SIRUTA AND " +
-                         " b.NIV = 2 AND b.SIRSUP = c.SIRUTA AND c.NIV = 1 GROUP BY a.DENLOC, b.DENLOC, " +
-                         " c.DENLOC ORDER BY \"Judet\", \"MunOraCom\", \"LocSatSect\", \"Artera\"";
+                         " b.NIV = 2 AND b.SIRSUP = c.SIRUTA AND c.NIV = 1 AND UPPER(c.DENLOC) LIKE UPPER('%" + judet + "%') GROUP BY a.DENLOC, b.DENLOC, " +
+                         " c.DENLOC ORDER BY \"NumeNivel1\", \"NumeNivel2\", \"NumeNivel3\", \"Artera\"";
 
                 dt = General.IncarcaDT(strSql, null);
             }
@@ -498,16 +563,20 @@ namespace WizOne.Personal
                 if (localitate != "")
                     cityName = " AND UPPER(CITY_NAME) LIKE UPPER('%" + localitate + "%') ";
 
+                string numeJudet = "";
+                if (judet != "")
+                    numeJudet = " AND UPPER(c.DENLOC) LIKE UPPER('%" + judet + "%') ";
+
                 string op = " + ";
                 if (Constante.tipBD == 2) op = " || ";
 
 
-                string strSql = "SELECT MAX(\"IdAuto\") AS \"IdAuto\", STREET_I_T AS \"Artera\", a.DENLOC AS \"LocSatSect\", MAX(a.SIRUTA) AS \"SirutaSat\", b.DENLOC AS \"MunOraCom\", " +
-                                "MAX(b.SIRUTA) AS \"SirutaOras\", c.DENLOC AS \"Judet\", MAX(c.SIRUTA) AS \"SirutaJudet\" from CODURIPOSTALE, LOCALITATI a, LOCALITATI b, LOCALITATI c WHERE UPPER(STREET_I_T) LIKE UPPER('%" + artera + "%') AND a.NIV = 3 " +
+                string strSql = "SELECT MAX(\"IdAuto\") AS \"IdAuto\", STREET_I_T AS \"Artera\", a.DENLOC AS \"NumeNivel3\", MAX(a.SIRUTA) AS \"SirutaNivel3\", b.DENLOC AS \"NumeNivel2\", " +
+                                "MAX(b.SIRUTA) AS \"SirutaNivel2\", c.DENLOC AS \"NumeNivel1\", MAX(c.SIRUTA) AS \"SirutaNivel1\" from CODURIPOSTALE, LOCALITATI a, LOCALITATI b, LOCALITATI c WHERE UPPER(STREET_I_T) LIKE UPPER('%" + artera + "%') AND a.NIV = 3 " +
                                 "AND a.SIRSUP = b.SIRUTA AND b.NIV = 2 AND b.SIRSUP = c.SIRUTA AND c.NIV = 1 AND CITY_NAME = " +
-                                "a.DENLOC " + cityName + " AND (c.DENLOC = 'JUDETUL ' " + op + " REGION_NAM OR c.DENLOC = 'MUN ' " + op + " REGION_NAM OR c.DENLOC = 'MUNICIPIUL ' " + op + " REGION_NAM) " +
+                                "a.DENLOC " + cityName + " AND (c.DENLOC = 'JUDETUL ' " + op + " REGION_NAM OR c.DENLOC = 'MUN ' " + op + " REGION_NAM OR c.DENLOC = 'MUNICIPIUL ' " + op + " REGION_NAM) " + numeJudet +
                                 "GROUP BY  STREET_I_T, a.DENLOC, b.DENLOC, c.DENLOC " +
-                                "ORDER BY \"Judet\", \"MunOraCom\", \"LocSatSect\", \"Artera\"";
+                                "ORDER BY \"NumeNivel1\", \"NumeNivel2\", \"NumeNivel3\", \"Artera\"";
 
                 dt = General.IncarcaDT(strSql, null);
             }
@@ -519,23 +588,95 @@ namespace WizOne.Personal
         {
             string txt = "";
 
+            List<int> lstSate = new List<int> { 11, 19, 22, 23 };
             try
             {
                 DataRow[] arr = dt.Select("Principal=1");
                 if (arr.Length > 0)
                 {
-                    txt =
-                    ((General.Nz(arr[0]["Strada"], "").ToString() != "" && General.Nz(arr[0]["Strada"], "").ToString() != "0") ? "str. " + General.Nz(arr[0]["Strada"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Numar"], "").ToString() != "" && General.Nz(arr[0]["Numar"], "").ToString() != "0") ? "nr. " + General.Nz(arr[0]["Numar"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Bloc"], "").ToString() != "" && General.Nz(arr[0]["Bloc"], "").ToString() != "0") ? "bloc " + General.Nz(arr[0]["Bloc"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Scara"], "").ToString() != "" && General.Nz(arr[0]["Scara"], "").ToString() != "0") ? "sc. " + General.Nz(arr[0]["Scara"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Etaj"], "").ToString() != "" && General.Nz(arr[0]["Etaj"], "").ToString() != "0") ? "etaj " + General.Nz(arr[0]["Etaj"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Apartament"], "").ToString() != "" && General.Nz(arr[0]["Apartament"], "").ToString() != "0") ? "ap. " + General.Nz(arr[0]["Apartament"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Comuna"], "").ToString() != "" && General.Nz(arr[0]["Comuna"], "").ToString() != "0") ? General.Nz(arr[0]["Comuna"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Sat"], "").ToString() != "" && General.Nz(arr[0]["Sat"], "").ToString() != "0") ? General.Nz(arr[0]["Sat"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Oras"], "").ToString() != "" && General.Nz(arr[0]["Oras"], "").ToString() != "0") ? General.Nz(arr[0]["Oras"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Sector"], "").ToString() != "" && General.Nz(arr[0]["Sector"], "").ToString() != "0") ? General.Nz(arr[0]["Sector"], "").ToString() + ", " : "") +
-                    ((General.Nz(arr[0]["Judet"], "").ToString() != "" && General.Nz(arr[0]["Judet"], "").ToString() != "0") ? General.Nz(arr[0]["Judet"], "").ToString() + ", " : "");
+                    DataTable dtArtera = Session["MP_TipArtera"] as DataTable;
+                    string strada = General.Nz(arr[0]["Strada"], "").ToString() != "" ? General.Nz(arr[0]["Strada"], "").ToString() : "";
+                    if (dtArtera != null && dtArtera.Rows.Count > 0 && strada.Length > 0)
+                    {
+                        bool gasit = false;
+                        for (int i = 0; i < dtArtera.Rows.Count; i++)
+                        {
+                            if (strada.ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
+                            {
+                                gasit = true;
+                                break;
+                            }
+                        }
+                        if (!gasit)
+                            strada = "str. " + strada;
+                    }
+                    string numar = (General.Nz(arr[0]["Numar"], "").ToString() != "") ? " nr. " + General.Nz(arr[0]["Numar"], "").ToString() + "," : "";
+                    string bloc = (General.Nz(arr[0]["Bloc"], "").ToString() != "" ) ? " bloc " + General.Nz(arr[0]["Bloc"], "").ToString() + "," : "";
+                    string scara = (General.Nz(arr[0]["Scara"], "").ToString() != "") ? " sc. " + General.Nz(arr[0]["Scara"], "").ToString() + "," : "";
+                    string etaj = "";
+                    if (General.Nz(arr[0]["Etaj"], "").ToString() != "") {
+                        etaj = " etaj " + General.Nz(arr[0]["Etaj"], "").ToString() + ",";
+                        if (General.Nz(arr[0]["Etaj"], "").ToString() == "0")
+                            etaj = " parter,";
+                        if (General.Nz(arr[0]["Etaj"], "").ToString().Any(x => char.IsLetter(x)))
+                            etaj = General.Nz(arr[0]["Etaj"], "").ToString() + ","; 
+                        if (General.Nz(arr[0]["Etaj"], "").ToString().Contains("-"))
+                            etaj = " subsol" + General.Nz(arr[0]["Etaj"], "").ToString().Replace('-', ' ') + ",";
+                    }
+                    string apartament = (General.Nz(arr[0]["Apartament"], "").ToString() != "") ? " ap. " + General.Nz(arr[0]["Apartament"], "").ToString() + "," : "";
+                    string nivel3 = "";
+                    if (General.Nz(arr[0]["NumeNivel3"], "").ToString() != "")
+                    {
+                        if (General.Nz(arr[0]["TipNivel3"], "").ToString() != "" && lstSate.Contains(Convert.ToInt32(General.Nz(arr[0]["TipNivel3"], "").ToString())))
+                            nivel3 = " sat " + General.Nz(arr[0]["NumeNivel3"], "").ToString() + ",";
+                        else if (General.Nz(arr[0]["TipNivel3"], "").ToString() != "" && General.Nz(arr[0]["TipNivel3"], "").ToString() == "6" && !General.Nz(arr[0]["NumeNivel3"], "").ToString().ToUpper().Contains("SECTOR"))
+                            nivel3 = " sector " + General.Nz(arr[0]["NumeNivel3"], "").ToString() + ",";
+                        else
+                            nivel3 = " " + General.Nz(arr[0]["NumeNivel3"], "").ToString() + ", ";
+                    }
+                    string nivel2 = "";
+                    if (General.Nz(arr[0]["NumeNivel2"], "").ToString() != "")
+                    {
+                        if (General.Nz(arr[0]["TipNivel2"], "").ToString() != "" && (General.Nz(arr[0]["TipNivel2"], "").ToString() == "1" || General.Nz(arr[0]["TipNivel2"], "").ToString() == "4") 
+                            && !General.Nz(arr[0]["NumeNivel2"], "").ToString().ToUpper().Contains("MUNICIPIU"))
+                            nivel2 = " municipiul " + General.Nz(arr[0]["NumeNivel2"], "").ToString() + ",";
+                        else if (General.Nz(arr[0]["TipNivel2"], "").ToString() != "" && General.Nz(arr[0]["TipNivel2"], "").ToString() == "2" && !General.Nz(arr[0]["NumeNivel2"], "").ToString().ToUpper().Contains("ORAS"))
+                            nivel2 = " orasul " + General.Nz(arr[0]["NumeNivel2"], "").ToString() + ",";
+                        else if (General.Nz(arr[0]["TipNivel2"], "").ToString() != "" && General.Nz(arr[0]["TipNivel2"], "").ToString() == "3" && !General.Nz(arr[0]["NumeNivel2"], "").ToString().ToUpper().Contains("COMUNA"))
+                            nivel2 = " comuna " + General.Nz(arr[0]["NumeNivel2"], "").ToString() + ",";
+                        else
+                            nivel2 = " " + General.Nz(arr[0]["NumeNivel2"], "").ToString() + ", ";
+                    }
+                    string nivel1 = "";
+                    if (General.Nz(arr[0]["NumeNivel1"], "").ToString() != "")
+                    {
+                        if (!General.Nz(arr[0]["NumeNivel1"], "").ToString().ToUpper().Contains("MUNICIPIU") && !General.Nz(arr[0]["NumeNivel1"], "").ToString().ToUpper().Contains("JUDET"))
+                        {
+                            if (General.Nz(arr[0]["NumeNivel1"], "").ToString().ToUpper().Contains("BUCURESTI"))
+                                nivel1 = " municipiul " + General.Nz(arr[0]["NumeNivel1"], "").ToString();
+                            else
+                                nivel1 = " judetul " + General.Nz(arr[0]["NumeNivel1"], "").ToString();
+                        }
+                        else
+                            nivel1 = " " + General.Nz(arr[0]["NumeNivel1"], "").ToString();
+                    }
+
+
+                    txt = strada + numar + bloc + scara + etaj + apartament + nivel3 + nivel2 + nivel1;
+                    //((General.Nz(arr[0]["Strada"], "").ToString() != "" && General.Nz(arr[0]["Strada"], "").ToString() != "0") ? "str. " + General.Nz(arr[0]["Strada"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Numar"], "").ToString() != "" && General.Nz(arr[0]["Numar"], "").ToString() != "0") ? "nr. " + General.Nz(arr[0]["Numar"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Bloc"], "").ToString() != "" && General.Nz(arr[0]["Bloc"], "").ToString() != "0") ? "bloc " + General.Nz(arr[0]["Bloc"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Scara"], "").ToString() != "" && General.Nz(arr[0]["Scara"], "").ToString() != "0") ? "sc. " + General.Nz(arr[0]["Scara"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Etaj"], "").ToString() != "" && General.Nz(arr[0]["Etaj"], "").ToString() != "0") ? "etaj " + General.Nz(arr[0]["Etaj"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Apartament"], "").ToString() != "" && General.Nz(arr[0]["Apartament"], "").ToString() != "0") ? "ap. " + General.Nz(arr[0]["Apartament"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["NumeNivel3"], "").ToString() != "" && General.Nz(arr[0]["NumeNivel3"], "").ToString() != "0") ?
+                    //    (General.Nz(arr[0]["TipNivel3"], "").ToString() != "" && General.Nz(arr[0]["TipNivel3"], "").ToString() != "0" && lstSate.Contains(Convert.ToInt32(General.Nz(arr[0]["TipNivel3"], "").ToString()))) ? "sat " + General.Nz(arr[0]["NumeNivel3"], "").ToString() + ", " : General.Nz(arr[0]["NumeNivel3"], "").ToString() + ", " : "");
+
+                    //((General.Nz(arr[0]["Comuna"], "").ToString() != "" && General.Nz(arr[0]["Comuna"], "").ToString() != "0") ? General.Nz(arr[0]["Comuna"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Sat"], "").ToString() != "" && General.Nz(arr[0]["Sat"], "").ToString() != "0") ? General.Nz(arr[0]["Sat"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Oras"], "").ToString() != "" && General.Nz(arr[0]["Oras"], "").ToString() != "0") ? General.Nz(arr[0]["Oras"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Sector"], "").ToString() != "" && General.Nz(arr[0]["Sector"], "").ToString() != "0") ? General.Nz(arr[0]["Sector"], "").ToString() + ", " : "") +
+                    //((General.Nz(arr[0]["Judet"], "").ToString() != "" && General.Nz(arr[0]["Judet"], "").ToString() != "0") ? General.Nz(arr[0]["Judet"], "").ToString() + ", " : "");
                 }
             }
             catch (Exception ex)

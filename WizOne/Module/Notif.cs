@@ -468,10 +468,12 @@ namespace WizOne.Module
                             case "=":
                                 {
                                     string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (arr[1] == "2")
-                                        strCond += " AND ((" + col + ")" + dr["Operator"] + "('" + arr[0] + "'))";
-                                    else
-                                        strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
+                                    //Florin 2019.10.15
+                                    strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
+                                    //if (arr[1] == "2")
+                                    //    strCond += " AND ((" + col + ")" + dr["Operator"] + "('" + arr[0] + "'))";
+                                    //else
+                                    //    strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
                                 }
                                 break;
                         }
@@ -571,8 +573,9 @@ namespace WizOne.Module
                             break;
                     }
 
+                    //Florin 2019.10.15 s-au adaugat apostroafele la data de pe sql
                     if (Constante.tipBD == 1)
-                        str[0] = dt.Year + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Day.ToString().PadLeft(2, '0');
+                        str[0] = "'" + dt.Year + "/" + dt.Month.ToString().PadLeft(2, '0') + "/" + dt.Day.ToString().PadLeft(2, '0') + "'";
                     else
                         str[0] = "to_date('" + dt.Day.ToString().PadLeft(2, '0') + "-" + Dami.NumeLuna(dt.Month, 1, "EN").ToUpper() + "-" + dt.Year.ToString() + "','DD-MM-YYYY')";
 

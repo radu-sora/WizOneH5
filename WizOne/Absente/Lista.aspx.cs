@@ -561,7 +561,8 @@ namespace WizOne.Absente
                                     FunctiiCeasuri.Calcul.golesteVal = golesteVal;
                                     FunctiiCeasuri.Calcul.h5 = true;
                                     FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
-                                    FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
+                                    DataRow drInt = dtRun.Rows[i];
+                                    FunctiiCeasuri.Calcul.CalculInOut(drInt, true, true);
                                 }
 
 

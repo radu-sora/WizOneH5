@@ -442,8 +442,8 @@ namespace WizOne.Pontaj
                     }
                     else
                     {
-                        oraIn = ", NULL ";
-                        oraOut = ", NULL ";
+                        oraIn = ", \"In1\" = NULL ";
+                        oraOut = ", \"Out1\" = NULL ";
                     }
 
                     string sirVal = "";

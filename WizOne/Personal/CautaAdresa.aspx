@@ -18,6 +18,14 @@
         <form id="form1" runat="server">
 			<tr>				
 				<td >
+					<dx:ASPxLabel  ID="lblJudet" runat="server"  Text="Judet" ></dx:ASPxLabel >	
+
+					<dx:ASPxTextBox  ID="txtJudet" Width="125"  runat="server" AutoPostBack="false" >                        
+					</dx:ASPxTextBox>
+				</td>
+			</tr>
+			<tr>				
+				<td >
 					<dx:ASPxLabel  ID="lblLocalitate" runat="server"  Text="Localitate" ></dx:ASPxLabel >	
 
 					<dx:ASPxTextBox  ID="txtLocalitate" Width="125"  runat="server" AutoPostBack="false" >                        

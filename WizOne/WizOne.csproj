@@ -840,7 +840,6 @@
     <Content Include="Personal\Banca.ascx" />
     <Content Include="Personal\Beneficii.ascx" />
     <Content Include="Personal\Cartele.ascx" />
-    <Content Include="Personal\CautaAdresa.aspx" />
     <Content Include="Personal\CautaCOR.aspx" />
     <Content Include="Personal\Contacte.ascx" />
     <Content Include="Personal\Contract.ascx" />
@@ -1928,13 +1927,6 @@
     </Compile>
     <Compile Include="Personal\Cartele.ascx.designer.cs">
       <DependentUpon>Cartele.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Personal\CautaAdresa.aspx.cs">
-      <DependentUpon>CautaAdresa.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Personal\CautaAdresa.aspx.designer.cs">
-      <DependentUpon>CautaAdresa.aspx</DependentUpon>
     </Compile>
     <Compile Include="Personal\CautaCOR.aspx.cs">
       <DependentUpon>CautaCOR.aspx</DependentUpon>

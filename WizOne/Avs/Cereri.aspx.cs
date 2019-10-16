@@ -2479,7 +2479,7 @@ namespace WizOne.Avs
 
             sql = "SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = 1";
             dtTemp = General.IncarcaDT(sql, null);
-            string culoare = (dtTemp.Rows[0][0] ?? "#FFFFFFFF").ToString();
+            string culoare = (dtTemp.Rows[0][0] as string ?? "#FFFFFFFF").ToString();
 
 
             //Adaugare in Avs_Cereri

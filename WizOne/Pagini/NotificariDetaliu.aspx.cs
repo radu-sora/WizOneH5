@@ -115,8 +115,8 @@ namespace WizOne.Pagini
                                     txtId.Text = dtHead.Rows[0]["Id"].ToString();
                                     txtDenumire.Text = (dtHead.Rows[0]["Denumire"]).ToString();
                                     chkActiv.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["Activ"], 0));
-                                    txtSubiect.Text = (dtHead.Rows[0]["Subiect"] ?? "").ToString();
-                                    txtContinut.Html = (dtHead.Rows[0]["ContinutMail"] ?? "").ToString();
+                                    txtSubiect.Text = (dtHead.Rows[0]["Subiect"] as string ?? "").ToString();
+                                    txtContinut.Html = (dtHead.Rows[0]["ContinutMail"] as string ?? "").ToString();
                                     cmbValid.SelectedIndex = Convert.ToInt32(General.Nz(dtHead.Rows[0]["ValidTip"], 0));
                                     //cmbValidValoare.SelectedItem.Value = Convert.ToInt32(General.Nz(dtHead.Rows[0]["ValidVal"], -99));
                                     cmbValid_SelectedIndexChanged(sender, e);
@@ -124,14 +124,14 @@ namespace WizOne.Pagini
                                         cmbValidValoare.SelectedIndex = -1;
                                     else
                                         cmbValidValoare.Value = Convert.ToInt32(General.Nz(dtHead.Rows[0]["ValidVal"], -99));
-                                    txtNume.Text = (dtHead.Rows[0]["NumeAtasament"] ?? "").ToString();   //.Replace("&lt;","<").Replace("&gt;", ">");
+                                    txtNume.Text = (dtHead.Rows[0]["NumeAtasament"] as string ?? "").ToString();   //.Replace("&lt;","<").Replace("&gt;", ">");
                                     chkDisc.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["SalveazaInDisc"], 0));
                                     chkBaza.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["SalveazaInBaza"], 0));
                                     chkTrimite.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["TrimitePeMail"], 0));
-                                    txtAtt.Html = (dtHead.Rows[0]["ContinutAtasament"] ?? "").ToString();
-                                    cmbMesaj.Value = (dtHead.Rows[0]["Mesaj"] ?? "").ToString();
+                                    txtAtt.Html = (dtHead.Rows[0]["ContinutAtasament"] as string ?? "").ToString();
+                                    cmbMesaj.Value = (dtHead.Rows[0]["Mesaj"] as string ?? "").ToString();
                                     chkExcel.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["TrimiteXLS"], 0));
-                                    txtExcel.Value = (dtHead.Rows[0]["SelectXLS"] ?? "").ToString();
+                                    txtExcel.Value = (dtHead.Rows[0]["SelectXLS"] as string ?? "").ToString();
                                 }
 
 
@@ -241,7 +241,7 @@ namespace WizOne.Pagini
                             if (Session["PaginaWeb"].ToString().ToLower().IndexOf("sablon") >= 0) pag = "tbl." + Session["Sablon_Tabela"].ToString();
                             drHead["Pagina"] = pag;
 
-                            drHead["TipNotificare"] = Convert.ToInt32(Session["TipNotificare"] ?? 1);
+                            drHead["TipNotificare"] = Convert.ToInt32(Session["TipNotificare"] as int? ?? 1);
                             drHead["Activ"] = chkActiv.Checked;
                             drHead["Subiect"] = txtSubiect.Text;
                             drHead["ContinutMail"] = txtContinut.Html;

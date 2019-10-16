@@ -121,9 +121,9 @@ namespace WizOne.WebService
                             {
                                 CriptDecript prc = new CriptDecript();
                                 if (dtParam.Rows[i]["Nume"].ToString() == "WebService_Utilizator")
-                                    user = prc.EncryptString("WizOne2016", (dtParam.Rows[i]["Valoare"] ?? "").ToString(), 2);
+                                    user = prc.EncryptString("WizOne2016", (dtParam.Rows[i]["Valoare"] as string ?? "").ToString(), 2);
                                 else
-                                    pwd = prc.EncryptString("WizOne2016", (dtParam.Rows[i]["Valoare"] ?? "").ToString(), 2);
+                                    pwd = prc.EncryptString("WizOne2016", (dtParam.Rows[i]["Valoare"] as string ?? "").ToString(), 2);
                             }
                         }
                     }

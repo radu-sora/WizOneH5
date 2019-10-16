@@ -106,7 +106,7 @@ namespace WizOne.Pagini
                             dr = dtCfg.Select("Camp='" + col.ColumnName + "'")[0];
                             tipCamp = Convert.ToInt32(dr["TipCamp"]);
                             if (dr != null && tipCamp == 2 && dr["SursaCombo"].ToString() == "") tipCamp = 0;
-                            if (vizibil) vizibil = Convert.ToInt32(dr["Vizibil"] ?? 0) == 1 ? true : false;
+                            if (vizibil) vizibil = Convert.ToInt32(dr["Vizibil"] as int? ?? 0) == 1 ? true : false;
                         }
 
                         
@@ -169,7 +169,7 @@ namespace WizOne.Pagini
                                     {
                                         //optimizare - cazul de la Circuite (de ex: Ptj_Circuite)
                                         //mai multe coloane pot avea aceeasi sursa de date)
-                                        string sursa = (dr["SursaCombo"] ?? "").ToString().Trim();
+                                        string sursa = (dr["SursaCombo"] as string ?? "").ToString().Trim();
                                         DataTable dtCmb = new DataTable();
 
                                         if (sursa != "" && lst.Where(p => p.SelectStr == sursa).Count() > 0)

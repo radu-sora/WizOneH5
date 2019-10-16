@@ -1192,7 +1192,7 @@ namespace WizOne.Pontaj
                 int idStare = 1;
 
                 DataRow dr = dt.Rows[0];
-                idStare = Convert.ToInt32(dr["IdStare"] ?? 1);
+                idStare = Convert.ToInt32(dr["IdStare"] as int? ?? 1);
 
                 if (!VerifDrepturi(idRol, idStare))
                 {
@@ -2402,7 +2402,7 @@ namespace WizOne.Pontaj
 
                                     if (dr != null && dr["SursaCombo"].ToString() != "" && c.Visible == true)
                                     {
-                                        string sursa = (dr["SursaCombo"] ?? "").ToString().Trim();
+                                        string sursa = (dr["SursaCombo"] as string ?? "").ToString().Trim();
                                         DataTable dtCmb = General.IncarcaDT(sursa, null);
                                         dtCmb.TableName = colField;
                                         ds.Tables.Add(dtCmb);

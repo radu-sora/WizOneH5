@@ -206,7 +206,8 @@ namespace WizOne.Eval
                 //Florin 2019.02.27
                 if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
                 {
-                    MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
+                    //MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
+                    pnlSectiune.JSProperties["cpAlertMessage"] = "Nu aveti drepturi pentru aceasta operatie!;
                     return;
                 }
 
@@ -475,7 +476,9 @@ namespace WizOne.Eval
                 if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && idCateg == "0")
                     PreluareDateAutomat(pozitie);
 
-                MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
+
+                //MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
+                pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
             }
             catch (Exception ex)
             {
@@ -2468,6 +2471,8 @@ namespace WizOne.Eval
                 }
 
                 Session["lstEval_ObiIndividualeTemp"] = lst;
+
+                e.Handled = true;
             }
             catch (Exception ex)
             {

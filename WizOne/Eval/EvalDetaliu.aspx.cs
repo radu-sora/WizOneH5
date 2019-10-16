@@ -207,7 +207,7 @@ namespace WizOne.Eval
                 if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
                 {
                     //MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
-                    pnlSectiune.JSProperties["cpAlertMessage"] = "Nu aveti drepturi pentru aceasta operatie!;
+                    pnlSectiune.JSProperties["cpAlertMessage"] = "Nu aveti drepturi pentru aceasta operatie!";
                     return;
                 }
 

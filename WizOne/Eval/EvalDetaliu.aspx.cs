@@ -2115,7 +2115,7 @@ namespace WizOne.Eval
                         {
                             case "IdObiectiv":
                                 clsNew.IdObiectiv = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colObiectiv != null)
+                                if (colObiectiv != null && colObiectiv.PropertiesComboBox.Items.Count > 0)
                                     clsNew.Obiectiv = colObiectiv.PropertiesComboBox.Items.FindByValue(clsNew.IdObiectiv).Text;
                                 break;
                             case "Obiectiv":
@@ -2209,7 +2209,7 @@ namespace WizOne.Eval
                         {
                             case "IdObiectiv":
                                 clsUpd.IdObiectiv = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colObiectiv != null)
+                                if (colObiectiv != null && colObiectiv.PropertiesComboBox.Items.Count > 0)
                                     clsUpd.Obiectiv = colObiectiv.PropertiesComboBox.Items.FindByValue(clsUpd.IdObiectiv).Text;
                                 break;
                             case "Obiectiv":
@@ -2758,7 +2758,7 @@ namespace WizOne.Eval
 
                 if (e.NewValues.Contains("Obiectiv"))
                 {
-                    clsObiIndividual.Obiectiv = (colObiectiv != null ? colObiectiv.PropertiesComboBox.Items.FindByValue(clsObiIndividual.IdObiectiv).Text : (e.NewValues["Obiectiv"] ?? "").ToString()).Replace("'", "");
+                    clsObiIndividual.Obiectiv = ((colObiectiv != null && colObiectiv.PropertiesComboBox.Items.Count > 0) ? colObiectiv.PropertiesComboBox.Items.FindByValue(clsObiIndividual.IdObiectiv).Text : (e.NewValues["Obiectiv"] ?? "").ToString()).Replace("'", "");
                 }
 
                 if (e.NewValues.Contains("IdActivitate"))
@@ -3003,7 +3003,7 @@ namespace WizOne.Eval
                 clsNew.Pozitie = poz;
                 clsNew.IdQuiz = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
                 clsNew.IdObiectiv = e.NewValues["IdObiectiv"] == null ? -99 : Convert.ToInt32(e.NewValues["IdObiectiv"]);
-                clsNew.Obiectiv = (colObiectiv != null ? colObiectiv.PropertiesComboBox.Items.FindByValue(clsNew.IdObiectiv).Text : (e.NewValues["Obiectiv"] ?? "").ToString()).Replace("'", "");
+                clsNew.Obiectiv = ((colObiectiv != null && colObiectiv.PropertiesComboBox.Items.Count > 0) ? colObiectiv.PropertiesComboBox.Items.FindByValue(clsNew.IdObiectiv).Text : (e.NewValues["Obiectiv"] ?? "").ToString()).Replace("'", "");
                 clsNew.IdActivitate = e.NewValues["IdActivitate"] == null ? -99 : Convert.ToInt32(e.NewValues["IdActivitate"]);
 
                 if (Session["feedEval_ObiectivActivitate"] == null)

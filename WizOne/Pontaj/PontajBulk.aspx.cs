@@ -135,7 +135,7 @@ namespace WizOne.Pontaj
                 Session["InformatiaCurenta"] = dt;
                 grCC.DataSource = dt;
 
-                string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] ?? -99), Convert.ToDateTime(dr["Ziua"]));
+                string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
                 if (txt != "")
                 {
                     msgError = txt;
@@ -192,7 +192,7 @@ namespace WizOne.Pontaj
                 Session["InformatiaCurenta"] = dt;
                 grCC.DataSource = dt;
 
-                string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] ?? -99), Convert.ToDateTime(dr["Ziua"]));
+                string txt = SalveazaDate(Convert.ToInt32(dr["F10003"] as int? ?? -99), Convert.ToDateTime(dr["Ziua"]));
                 if (txt != "")
                 {
                     msgError = txt;
@@ -240,7 +240,7 @@ namespace WizOne.Pontaj
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.Rows.Find(keys);
-                int f10003 = Convert.ToInt32(dr["F10003"] ?? -99);
+                int f10003 = Convert.ToInt32(dr["F10003"] as int? ?? -99);
                 DateTime ziua = Convert.ToDateTime(dr["Ziua"]);
                 dr.Delete();
 

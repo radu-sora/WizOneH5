@@ -229,7 +229,7 @@ namespace WizOne.Personal
                 string grila = "";
                 for (int i = 0; i < dtGrila.Rows.Count; i++)
                 {
-                    grila += (dtGrila.Rows[i]["F02604"] ?? "0").ToString() + "," + (dtGrila.Rows[i]["F02610"] ?? "0").ToString() + "," + (dtGrila.Rows[i]["F02611"] ?? "0").ToString() + "," + (dtGrila.Rows[i]["F02615"] ?? "0").ToString();
+                    grila += (dtGrila.Rows[i]["F02604"] as int? ?? 0).ToString() + "," + (dtGrila.Rows[i]["F02610"] as decimal? ?? 0).ToString() + "," + (dtGrila.Rows[i]["F02611"] as decimal? ?? 0).ToString() + "," + (dtGrila.Rows[i]["F02615"] as decimal? ?? 0).ToString();
                     if (i < dtGrila.Rows.Count - 1)
                         grila += ";";
                 }
@@ -248,7 +248,7 @@ namespace WizOne.Personal
                 DataTable dtFunc = General.GetFunctie();
                 if (dtFunc != null && dtFunc.Rows.Count > 0)
                 {
-                    DataRow[] drFunc = dtFunc.Select("F71802 = " + (ds.Tables[0].Rows[0]["F10071"] ?? "0").ToString());
+                    DataRow[] drFunc = dtFunc.Select("F71802 = " + (ds.Tables[0].Rows[0]["F10071"] as int? ?? 0).ToString());
                     if (drFunc != null && drFunc.Count() > 0 && drFunc[0]["F71813"] != null && drFunc[0]["F71813"].ToString().Length > 0)
                     {
                         cmbNivelFunctie.Value = Convert.ToInt32(drFunc[0]["F71813"].ToString());
@@ -261,8 +261,8 @@ namespace WizOne.Personal
                 string nvlFunc = "";
                 for (int i = 0; i < dtNvlFunc.Rows.Count; i++)
                 {
-                    nvlFunc += dtNvlFunc.Rows[i]["Id"].ToString() + "," + (dtNvlFunc.Rows[i]["NrZileLucrProba"] ?? "0").ToString() + "," + (dtNvlFunc.Rows[i]["NrZileCalProba"] ?? "0").ToString() + "," 
-                        + (dtNvlFunc.Rows[i]["NrZileDemisie"] ?? "0").ToString() + "," + (dtNvlFunc.Rows[i]["NrZileConcediere"] ?? "0").ToString() + "," + (dtNvlFunc.Rows[i]["Conducere"] ?? "0").ToString();
+                    nvlFunc += dtNvlFunc.Rows[i]["Id"].ToString() + "," + (dtNvlFunc.Rows[i]["NrZileLucrProba"] as int? ?? 0).ToString() + "," + (dtNvlFunc.Rows[i]["NrZileCalProba"] as int? ?? 0).ToString() + "," 
+                        + (dtNvlFunc.Rows[i]["NrZileDemisie"] as int? ?? 0).ToString() + "," + (dtNvlFunc.Rows[i]["NrZileConcediere"] as int? ?? 0).ToString() + "," + (dtNvlFunc.Rows[i]["Conducere"] as int? ?? 0).ToString();
                     if (i < dtNvlFunc.Rows.Count - 1)
                         nvlFunc += ";";
                 }
@@ -1673,10 +1673,10 @@ namespace WizOne.Personal
                 ASPxTextBox txtNrZilePreavizDemisie = Contract_DataList.Items[0].FindControl("txtNrZilePreavizDemisie") as ASPxTextBox;
                 ASPxTextBox txtNrZilePreavizConc = Contract_DataList.Items[0].FindControl("txtNrZilePreavizConc") as ASPxTextBox;
 
-                txtPerProbaZL.Text = (dt.Rows[0]["NrZileLucrProba"] ?? "0").ToString();
-                txtPerProbaZC.Text = (dt.Rows[0]["NrZileCalProba"] ?? "0").ToString();
-                txtNrZilePreavizDemisie.Text = (dt.Rows[0]["NrZileDemisie"] ?? "0").ToString();
-                txtNrZilePreavizConc.Text = (dt.Rows[0]["NrZileConcediere"] ?? "0").ToString();
+                txtPerProbaZL.Text = (dt.Rows[0]["NrZileLucrProba"] as int? ?? 0).ToString();
+                txtPerProbaZC.Text = (dt.Rows[0]["NrZileCalProba"] as int? ?? 0).ToString();
+                txtNrZilePreavizDemisie.Text = (dt.Rows[0]["NrZileDemisie"] as int? ?? 0).ToString();
+                txtNrZilePreavizConc.Text = (dt.Rows[0]["NrZileConcediere"] as int? ?? 0).ToString();
             }
         }
 

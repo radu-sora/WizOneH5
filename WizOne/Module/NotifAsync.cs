@@ -84,8 +84,8 @@ namespace WizOne.Module
 
                                         if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["SalveazaInDisc"],0)) == 1 || Convert.ToInt32(General.Nz(dtReg.Rows[i]["SalveazaInBaza"],0)) == 1 || Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimitePeMail"],0)) == 1)
                                         {
-                                            corpAtt = InlocuiesteCampuri((dtReg.Rows[i]["ContinutAtasament"] ?? "").ToString(), dtSel, userId, userMarca);
-                                            numeAtt = InlocuiesteCampuri((dtReg.Rows[i]["NumeAtasament"] ?? "").ToString(), dtSel, userId, userMarca) + ".html";
+                                            corpAtt = InlocuiesteCampuri((dtReg.Rows[i]["ContinutAtasament"] as string ?? "").ToString(), dtSel, userId, userMarca);
+                                            numeAtt = InlocuiesteCampuri((dtReg.Rows[i]["NumeAtasament"] as string ?? "").ToString(), dtSel, userId, userMarca) + ".html";
 
                                             if (Convert.ToInt32(dtReg.Rows[i]["SalveazaInBaza"]) == 1)
                                             {
@@ -111,9 +111,9 @@ namespace WizOne.Module
                                             }
                                         }
 
-                                        if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)) == 1 || (dtReg.Rows[i]["TrimiteXLS"] ?? "").ToString() != "")
+                                        if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)) == 1 || (dtReg.Rows[i]["TrimiteXLS"] as string ?? "").ToString() != "")
                                         {
-                                            selectXls = InlocuiesteCampuri((dtReg.Rows[i]["SelectXLS"] ?? "").ToString(),dtSel, userId, userMarca);
+                                            selectXls = InlocuiesteCampuri((dtReg.Rows[i]["SelectXLS"] as string ?? "").ToString(),dtSel, userId, userMarca);
                                         }
 
                                         List<metaAdreseMail> lstAdrese = CreazaAdreseMail(Convert.ToInt32(dtReg.Rows[i]["Id"]), dtSel);
@@ -131,19 +131,19 @@ namespace WizOne.Module
 
                                         if (lstAdrese.Count > 0)
                                         {
-                                            string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] ?? "").ToString(), dtSel, userId, userMarca);
+                                            string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] as string ?? "").ToString(), dtSel, userId, userMarca);
 
                                             //Florin 2018.05.09
                                             if (lstAdrese.Where(p => p.IncludeLinkAprobare == 1).Count() == 0)
                                             {
-                                                string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id);
+                                                string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] as string ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id);
                                                 TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls);
                                             }
                                             else
                                             {
                                                 for (int j = 0; j < lstAdrese.Count(); j++)
                                                 {
-                                                    string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id, lstAdrese[j].Mail, lstAdrese[j].IncludeLinkAprobare);
+                                                    string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] as string ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id, lstAdrese[j].Mail, lstAdrese[j].IncludeLinkAprobare);
                                                     TrimiteMail(lstAdrese[j].Mail, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls);
                                                 }
                                             }
@@ -156,11 +156,11 @@ namespace WizOne.Module
                                     break;
                                 case 2:                                 //Validare
                                     {
-                                        string corpMsg = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca);
+                                        string corpMsg = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] as string ?? "").ToString(), dtSel, userId, userMarca);
                                         if (corpMsg != "")
                                         {
                                             
-                                            if ((dtReg.Rows[i]["mesaj"] ?? "avertisment").ToString() == "avertisment")
+                                            if ((dtReg.Rows[i]["mesaj"] as string ?? "avertisment").ToString() == "avertisment")
                                             {
                                                 rez = Constante.MesajeValidari.Avertisment.ToString();
                                                 //MessageBox.ShowProba2(corpMsg, MessageBox.icoWarning, (dtReg.Rows[i]["Subiect"] ?? "").ToString());
@@ -207,7 +207,7 @@ namespace WizOne.Module
                                                 //Page pagina = HttpContext.Current.Handler as Page;
                                                 //pagina.Page.ClientScript.RegisterStartupScript(pagina.GetType(), "MessageBox", txt);
 
-                                                string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] ?? "").ToString(), dtSel, userId, userMarca);
+                                                string subiect = InlocuiesteCampuri((dtReg.Rows[i]["Subiect"] as string ?? "").ToString(), dtSel, userId, userMarca);
                                                 MessageBox.Show(corpMsg, MessageBox.icoError, subiect);
                                             }
                                         }
@@ -248,16 +248,16 @@ namespace WizOne.Module
                 DataTable dtCmp = General.IncarcaDT(@"SELECT * FROM ""Ntf_tblCampuri"" WHERE ""Pagina""=@1", new string[] { numePagina });
                 foreach (DataRow dr in dtCond.Rows)
                 {
-                    if ((dr["Coloana"] ?? "").ToString() != "" && (dr["Operator"] ?? "").ToString() != "")
+                    if ((dr["Coloana"] as string ?? "").ToString() != "" && (dr["Operator"] as string ?? "").ToString() != "")
                     {
                         DataRow[] lstTip = dtCmp.Select("Alias='" + dr["Coloana"] + "'");
                         if (lstTip.Count() == 0) continue;
-                        string col = (lstTip[0]["CampSelect"] ?? "").ToString();
+                        string col = (lstTip[0]["CampSelect"] as string ?? "").ToString();
                         if (col == "") continue;
                         string tipData = "string";
-                        if ((lstTip[0]["TipData"] ?? "").ToString() != "") tipData = (lstTip[0]["TipData"] ?? "").ToString();
+                        if ((lstTip[0]["TipData"] as string ?? "").ToString() != "") tipData = (lstTip[0]["TipData"] as string ?? "").ToString();
 
-                        if (dr["Operator"].ToString() != "fara valoare" && dr["Operator"].ToString() != "cu valoare" && (dr["Valoare1"] ?? "").ToString() == "") continue;
+                        if (dr["Operator"].ToString() != "fara valoare" && dr["Operator"].ToString() != "cu valoare" && (dr["Valoare1"] as string ?? "").ToString() == "") continue;
 
 
                         switch (dr["Operator"].ToString())
@@ -282,7 +282,7 @@ namespace WizOne.Module
                                 break;
                             case "intre":
                                 {
-                                    if ((dr["Valoare1"] ?? "").ToString() != "" && (dr["Valoare2"] ?? "").ToString() != "")
+                                    if ((dr["Valoare1"] as string ?? "").ToString() != "" && (dr["Valoare2"] as string ?? "").ToString() != "")
                                     {
                                         string[] arr1 = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
                                         string[] arr2 = AflaValoarea(dr["Valoare2"].ToString(), dtCmp);
@@ -293,9 +293,9 @@ namespace WizOne.Module
                                             if (tipData == "datetime")
                                             {
                                                 if (Constante.tipBD == 1)
-                                                    strCond += " AND CONVERT(date,(DATEADD(d," + (dr["NrZile1"] ?? "0").ToString() + ",(" + arr1[0] + "))) <= CONVERT(date,(" + col + ")) AND CONVERT(date,(" + col + ")) <= CONVERT(date,DATEADD(d," + (dr["NrZile2"] ?? "0").ToString() + ",(" + arr2[0] + "))))";
+                                                    strCond += " AND CONVERT(date,(DATEADD(d," + (dr["NrZile1"] as int? ?? 0).ToString() + ",(" + arr1[0] + "))) <= CONVERT(date,(" + col + ")) AND CONVERT(date,(" + col + ")) <= CONVERT(date,DATEADD(d," + (dr["NrZile2"] as int? ?? 0).ToString() + ",(" + arr2[0] + "))))";
                                                 else
-                                                    strCond += " AND ((TRUNC(" + arr1[0] + ") + " + (dr["NrZile1"] ?? "0").ToString() + ") <= (" + col + ") AND (" + col + ") <= (TRUNC(" + arr2[0] + ") + " + (dr["NrZile2"] ?? "0").ToString() + "))";
+                                                    strCond += " AND ((TRUNC(" + arr1[0] + ") + " + (dr["NrZile1"] as int? ?? 0).ToString() + ") <= (" + col + ") AND (" + col + ") <= (TRUNC(" + arr2[0] + ") + " + (dr["NrZile2"] as int? ?? 0).ToString() + "))";
                                             }
                                         }
                                     }
@@ -355,7 +355,7 @@ namespace WizOne.Module
                     //Florin 2019.10.11
                     //if ((dtCmp.Rows[i]["CampSelect"] ?? "").ToString() != "" && (dtCmp.Rows[i]["Alias"] ?? "").ToString() != "")
                     //    strCamp += ", (" + dtCmp.Rows[i]["CampSelect"] + ") AS '" + dtCmp.Rows[i]["Alias"] + "'";
-                    if ((dtCmp.Rows[i]["CampSelect"] ?? "").ToString() != "" && (dtCmp.Rows[i]["Alias"] ?? "").ToString() != "")
+                    if ((dtCmp.Rows[i]["CampSelect"] as string ?? "").ToString() != "" && (dtCmp.Rows[i]["Alias"] as string ?? "").ToString() != "")
                         strCamp += ", (" + dtCmp.Rows[i]["CampSelect"] + ") AS \"" + dtCmp.Rows[i]["Alias"] + "\"";
                 }
 
@@ -592,7 +592,7 @@ namespace WizOne.Module
                     DataRow[] lst = dtCmp.Select("Alias='" + camp + "'");
                     if (lst.Count() > 0 && lst[0]["CampSelect"] != null && lst[0]["CampSelect"].ToString() != "")
                     {
-                        str[0] = (lst[0]["CampSelect"] ?? "").ToString();
+                        str[0] = (lst[0]["CampSelect"] as string ?? "").ToString();
                         str[1] = "3";
                     }
                     else
@@ -678,7 +678,7 @@ namespace WizOne.Module
                                 break;
                             case "coloana tabel":
                                 {
-                                    string str = (dtSel.Rows[0][dt.Rows[i]["MailAdresaText"].ToString()] ?? "").ToString();
+                                    string str = (dtSel.Rows[0][dt.Rows[i]["MailAdresaText"].ToString()] as string ?? "").ToString();
                                     string[] lstMail = str.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                                     for(int x = 0; x < lstMail.Count(); x++)
                                     {
@@ -737,8 +737,8 @@ namespace WizOne.Module
 
                 for (int i = 0; i < dtSel.Columns.Count; i++)
                 {
-                    str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
-                    strSelect = strSelect.Replace("ent." + dtSel.Columns[i], (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+                    str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] as string ?? "").ToString());
+                    strSelect = strSelect.Replace("ent." + dtSel.Columns[i], (dtSel.Rows[0][dtSel.Columns[i]] as string ?? "").ToString());
                 }
 
                 if (str.IndexOf("#$Link") >= 0)

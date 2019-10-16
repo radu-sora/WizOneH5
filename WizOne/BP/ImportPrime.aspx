@@ -101,6 +101,8 @@
                                                 </dx:GridViewDataTextColumn>
                                                 <dx:GridViewDataTextColumn FieldName="Suma" Name="Suma" Caption="Suma neta" Width="100px">
                                                 </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataTextColumn FieldName="Explicatie" Name="Explicatie" Caption="Explicatie" Width="200px">
+                                                </dx:GridViewDataTextColumn>
                                                 <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Width="75px" Visible="false" />
                                             </Columns>
                                         </dx:ASPxGridView>

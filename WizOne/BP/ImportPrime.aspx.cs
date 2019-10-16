@@ -42,6 +42,7 @@ namespace WizOne.BP
                         dt.Columns.Add("Marca", typeof(int));
                         dt.Columns.Add("Nume", typeof(string));
                         dt.Columns.Add("Suma", typeof(int));
+                        dt.Columns.Add("Explicatie", typeof(string));
                         dt.Columns.Add("IdAuto", typeof(int));
                     }
                     else
@@ -61,6 +62,7 @@ namespace WizOne.BP
                     dt.Columns.Add("Marca", typeof(int));
                     dt.Columns.Add("Nume", typeof(string));
                     dt.Columns.Add("Suma", typeof(int));
+                    dt.Columns.Add("Explicatie", typeof(string));
                     dt.Columns.Add("IdAuto", typeof(int));   
                     
                     grDate.DataSource = dt;                 
@@ -131,6 +133,7 @@ namespace WizOne.BP
                 table.Columns.Add("Marca", typeof(int));
                 table.Columns.Add("Nume", typeof(string));
                 table.Columns.Add("Suma", typeof(int));
+                table.Columns.Add("Explicatie", typeof(string));
                 table.Columns.Add("IdAuto", typeof(int));
 
                 DataTable dtAng =  Session["ImportPrime_Ang"] as DataTable;
@@ -145,10 +148,8 @@ namespace WizOne.BP
                         {
                             DataTable dt = General.IncarcaDT("SELECT A.* FROM \"F100Supervizori\" A JOIN F100 B ON A.F10003 = B.F10003 WHERE A.F10003 = " + ws2.Cells[i, 0].Value + " AND \"IdUser\" = " + Session["UserId"].ToString() + " AND \"IdSuper\" <> 0 AND F10025 IN (0, 999) ORDER BY \"NumeComplet\" ", null);
                             if (dt != null && dt.Rows.Count > 0)
-                                table.Rows.Add(Convert.ToInt32(ws2.Cells[i, 0].Value.ToString()), dr.ElementAt(0)["F10008"].ToString() + " " + dr.ElementAt(0)["F10009"].ToString(), ws2.Cells[i, 2].Value.ToString(), i);
-
+                                table.Rows.Add(Convert.ToInt32(ws2.Cells[i, 0].Value.ToString()), dr.ElementAt(0)["F10008"].ToString() + " " + dr.ElementAt(0)["F10009"].ToString(), ws2.Cells[i, 2].Value.ToString(), ws2.Cells[i, 3].Value.ToString(), i);
                         }
-
                     }
                     i++;
                 }
@@ -245,7 +246,7 @@ namespace WizOne.BP
                         //General.ExecutaNonQuery(sql, null);
 
                         string msg = General.AdaugaCerere(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(obj["Marca"].ToString()), Convert.ToInt32(cmbAn.Value), Convert.ToInt32(cmbLuna.Value), Convert.ToInt32(cmbPrima.Value ?? -99),
-                            Convert.ToDecimal(obj["Suma"].ToString()), 0, 1, Convert.ToDecimal(obj["Suma"].ToString()), Convert.ToInt32(cmbAvs.Value ?? 2), "");
+                            Convert.ToDecimal(obj["Suma"].ToString()), 0, 1, Convert.ToDecimal(obj["Suma"].ToString()), Convert.ToInt32(cmbAvs.Value ?? 2), (obj["Explicatie"] ?? "").ToString());
 
                         if (msg != "")
                         {
@@ -263,6 +264,7 @@ namespace WizOne.BP
                 dt.Columns.Add("Marca", typeof(int));
                 dt.Columns.Add("Nume", typeof(string));
                 dt.Columns.Add("Suma", typeof(int));
+                dt.Columns.Add("Explicatie", typeof(string));
                 dt.Columns.Add("IdAuto", typeof(int));
 
                 grDate.DataSource = dt;
@@ -299,6 +301,7 @@ namespace WizOne.BP
                 ws2.Cells[0, 0].Value = "Marca";
                 ws2.Cells[0, 1].Value = "Nume si prenume";
                 ws2.Cells[0, 2].Value = "Suma";
+                ws2.Cells[0, 3].Value = "Explicatie";
 
                 for (int i = 0; i < dtAng.Rows.Count; i++)
                 {

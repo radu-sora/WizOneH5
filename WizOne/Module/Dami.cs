@@ -1222,7 +1222,7 @@ namespace WizOne.Module
                     dtProfile = General.IncarcaDT(strSql, new object[] { General.Nz(HttpContext.Current.Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
                 }
 
-                if (dtProfile.Rows.Count != 0 && (dtProfile.Rows[0]["Continut"] ?? "").ToString() != "" ) rez = dtProfile.Rows[0]["Continut"].ToString();
+                if (dtProfile.Rows.Count != 0 && (dtProfile.Rows[0]["Continut"] as string ?? "").ToString() != "" ) rez = dtProfile.Rows[0]["Continut"].ToString();
             }
             catch (Exception ex)
             {
@@ -1272,13 +1272,13 @@ namespace WizOne.Module
 
                 //DataRow dr = dt.Rows[0];
 
-                if (dr["Criptat"].ToString() != "" && Convert.ToInt32(dr["Criptat"] ?? 0) == 1)
+                if (dr["Criptat"].ToString() != "" && Convert.ToInt32(dr["Criptat"] as int? ?? 0) == 1)
                 {
                     CriptDecript prc = new CriptDecript();
-                    rez = prc.EncryptString("WizOne2016", (dr["Valoare"] ?? "").ToString(), 2);
+                    rez = prc.EncryptString("WizOne2016", (dr["Valoare"] as string ?? "").ToString(), 2);
                 }
                 else
-                    rez = (dr["Valoare"] ?? "").ToString();
+                    rez = (dr["Valoare"] as string ?? "").ToString();
 
                 if (rez.Trim() == "" && replaceValue != "") rez = replaceValue;
 

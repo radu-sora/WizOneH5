@@ -202,7 +202,7 @@
                         </dx:ASPxTextBox> 
                     </td> 
                     <td>
-                        <label id="lblExpl" runat="server" style="display:inline-block;">Explicatii</label>
+                        <label id="lblExpl" runat="server" style="display:inline-block;">Explicatie</label>
                         <dx:ASPxMemo ID="txtExpl" runat="server" Width="350px"  Height="60" ></dx:ASPxMemo>
                     </td>
                </tr>

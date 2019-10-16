@@ -269,7 +269,7 @@ namespace WizOne.Revisal
                     else
                     {
                         CriptDecript prc = new CriptDecript();
-                        pwd = prc.EncryptString("WizOne2016", (dtParam.Rows[0][0] ?? "").ToString(), 2);
+                        pwd = prc.EncryptString("WizOne2016", (dtParam.Rows[0][0] as string ?? "").ToString(), 2);
                     }
                 }
 
@@ -349,7 +349,7 @@ namespace WizOne.Revisal
                     else
                     {
                         CriptDecript prc = new CriptDecript();
-                        pwd = prc.EncryptString("WizOne2016", (dtParam.Rows[0][0] ?? "").ToString(), 2);
+                        pwd = prc.EncryptString("WizOne2016", (dtParam.Rows[0][0] as string ?? "").ToString(), 2);
                     }
                 }
 

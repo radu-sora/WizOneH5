@@ -844,7 +844,7 @@ namespace WizOne.Tactil
 
                                     if (dr != null && dr["SursaCombo"].ToString() != "" && c.Visible == true)
                                     {
-                                        string sursa = (dr["SursaCombo"] ?? "").ToString().Trim();
+                                        string sursa = (dr["SursaCombo"] as string ?? "").ToString().Trim();
                                         DataTable dtCmb = General.IncarcaDT(sursa, null);
                                         dtCmb.TableName = colField;
                                         ds.Tables.Add(dtCmb);

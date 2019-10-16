@@ -45,7 +45,7 @@ namespace WizOne.Pagini
                                     txtDenumire.Text = dt.Rows[0]["Denumire"].ToString();
                                     if (dt.Rows[0]["DataInceput"].ToString() != "") txtDataInc.Date = Convert.ToDateTime(dt.Rows[0]["DataInceput"]);
                                     if (dt.Rows[0]["DataSfarsit"].ToString() != "") txtDataSf.Date = Convert.ToDateTime(dt.Rows[0]["DataSfarsit"]);
-                                    chkActiv.Checked = Convert.ToBoolean(dt.Rows[0]["Activ"] ?? true);
+                                    chkActiv.Checked = Convert.ToBoolean(dt.Rows[0]["Activ"] as int? ?? 1);
                                     txtContinut.Html = dt.Rows[0]["Continut"].ToString();
                                     cmbLimbi.Value = dt.Rows[0]["IdLimba"].ToString();
                                 }

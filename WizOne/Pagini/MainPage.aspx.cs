@@ -60,7 +60,7 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dt.Columns.Count; i++)
                     {
                         Label lbl = new Label();
-                        lbl.Text = Dami.TraduCuvant((dt.Rows[0][i] ?? "").ToString());
+                        lbl.Text = Dami.TraduCuvant((dt.Rows[0][i] as string ?? "").ToString());
 
                         ASPxDockPanel pnl = new ASPxDockPanel();
                         string nme = "wdgView" + i;
@@ -234,7 +234,7 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dtRap.Rows.Count; i++)
                     {
                         ASPxButton btn = new ASPxButton();
-                        btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] ?? "").ToString());
+                        btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] as string ?? "").ToString());
                         //btn.PostBackUrl = "RapDetaliu.aspx?id=" + dtRap.Rows[i]["DynReportId"];
                         //Radu 09.10.2019 - Id-ul raportului nu poate fi stocat in Session["ReportId"] in acest moment (deoarece ramane ultimul din iteratie); 
                         //                  la apasarea butonului se va apela o functie care se seta corect Session["ReportId"]
@@ -287,7 +287,7 @@ namespace WizOne.Pagini
                         //lnk.Font.Underline = true;
 
                         ASPxButton btn = new ASPxButton();
-                        btn.Text = Dami.TraduCuvant((dtMnu.Rows[i]["Nume"] ?? "").ToString());
+                        btn.Text = Dami.TraduCuvant((dtMnu.Rows[i]["Nume"] as string ?? "").ToString());
                         btn.CssClass = "btnMeniuDash";
 
                         string strUrl = dtMnu.Rows[i]["Pagina"].ToString();
@@ -333,9 +333,9 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dtLnk.Rows.Count; i++)
                     {
                         ASPxHyperLink lnk = new ASPxHyperLink();
-                        lnk.Text = Dami.TraduMeniu((dtLnk.Rows[i]["Denumire"] ?? "").ToString());
+                        lnk.Text = Dami.TraduMeniu((dtLnk.Rows[i]["Denumire"] as string ?? "").ToString());
                         lnk.Font.Underline = true;
-                        lnk.NavigateUrl = (dtLnk.Rows[i]["Link"] ?? "").ToString();
+                        lnk.NavigateUrl = (dtLnk.Rows[i]["Link"] as string ?? "").ToString();
                         lnk.Target = "_blank";
                         lnk.Wrap = DevExpress.Utils.DefaultBoolean.True;
 

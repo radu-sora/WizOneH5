@@ -1775,7 +1775,7 @@ namespace WizOne.Module
                 switch (tipOperatie)
                 {
                     case 1:
-                        if (dt.Rows.Count > 0) zlDisp = (Convert.ToInt32(dt.Rows[0][0] ?? 0) * 2) / norma;
+                        if (dt.Rows.Count > 0) zlDisp = (Convert.ToInt32(dt.Rows[0][0] as int? ?? 0) * 2) / norma;
                         break;
                     case 2:
                         int nrRec = (norma * nrZile) / 2;
@@ -1788,7 +1788,7 @@ namespace WizOne.Module
                                 int dif = 0;
                                 if (nrRec <= 0) break;
 
-                                int val = Convert.ToInt32((dt.Rows[i]["ValStr"] ?? "").ToString().Replace("R", "")) - Convert.ToInt32(dt.Rows[i]["F30"] ?? 0);
+                                int val = Convert.ToInt32((dt.Rows[i]["ValStr"] as string ?? "").ToString().Replace("R", "")) - Convert.ToInt32(dt.Rows[i]["F30"] ?? 0);
                                 if (nrRec >= val)
                                     dif = val;
                                 else
@@ -1815,7 +1815,7 @@ namespace WizOne.Module
                                 int? dif = 0;
                                 if (nrDel <= 0) break;
 
-                                int val = Convert.ToInt32(dt.Rows[i]["F30"] ?? 0);
+                                int val = Convert.ToInt32(dt.Rows[i]["F30"] as int? ?? 0);
                                 if (nrDel >= val)
                                     dif = null;
                                 else
@@ -1979,11 +1979,11 @@ namespace WizOne.Module
                         //if (dtHoll.Rows.Count > 0 && dtHoll.Select("DAY=" + dtStr).Count() > 0) ziLibLeg = 1;
                         //if (ziLibLeg == 1 || zi.DayOfWeek.ToString().ToUpper() == "SATURDAY" || zi.DayOfWeek.ToString().ToUpper() == "SUNDAY") ziLib = 1;
 
-                        string valStr = (dr["ValStr"] ?? "").ToString();
+                        string valStr = (dr["ValStr"] as string ?? "").ToString();
 
                         if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)
                         {
-                            string sqlIns = "INSERT INTO \"Ptj_Intrari\"(F10003, \"Ziua\", \"ZiSapt\", \"ZiLibera\", \"ZiLiberaLegala\", \"IdContract\", \"Norma\", F10002, F10004, F10005, F10006, F10007, F06204, \"ValStr\", USER_NO, TIME" + ((dr["ValPentruOre"] ?? "").ToString() == "" ? "" : "," + (dr["ValPentruOre"] ?? "").ToString()) + ") \n" +
+                            string sqlIns = "INSERT INTO \"Ptj_Intrari\"(F10003, \"Ziua\", \"ZiSapt\", \"ZiLibera\", \"ZiLiberaLegala\", \"IdContract\", \"Norma\", F10002, F10004, F10005, F10006, F10007, F06204, \"ValStr\", USER_NO, TIME" + ((dr["ValPentruOre"] as string ?? "").ToString() == "" ? "" : "," + (dr["ValPentruOre"] ?? "").ToString()) + ") \n" +
                                 "SELECT " +
                                 dr["F10003"] + ", " +
                                 General.ToDataUniv(zi.Date) + ", " +
@@ -2001,13 +2001,13 @@ namespace WizOne.Module
                                 "'" + valStr + "', " +
                                 idUser + ", " +
                                 General.CurrentDate() +
-                                ((dr["ValPentruOre"] ?? "").ToString() == "" ? "" : ", " + (nrOre * 60).ToString())
+                                ((dr["ValPentruOre"] as string ?? "").ToString() == "" ? "" : ", " + (nrOre * 60).ToString())
                                 + (Constante.tipBD == 1 ? "" : " FROM DUAL");
 
                             //trimte orele in Val indicat in tabela Ptj_tblAbsente - numai pt cererile de tip ore
                             string sqlUp = "";
                             string sqlIst = "";
-                            if ((dr["ValPentruOre"] ?? "").ToString() == "")
+                            if ((dr["ValPentruOre"] as string ?? "").ToString() == "")
                             {
                                 sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"='" + valStr + "', \"Val0\"=null, \"Val1\"=null, \"Val2\"=null, \"Val3\"=null, \"Val4\"=null, \"Val5\"=null, \"Val6\"=null, \"Val7\"=null, \"Val8\"=null, \"Val9\"=null, \"Val10\"=null, \"Val11\"=null, \"Val12\"=null, \"Val13\"=null, \"Val14\"=null, \"Val15\"=null, \"Val16\"=null, \"Val17\"=null, \"Val18\"=null, \"Val19\"=null, \"Val20\"=null" +
                                         " WHERE F10003 = " + dr["F10003"] + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date);
@@ -2019,9 +2019,9 @@ namespace WizOne.Module
                             {
                                 //Florin 2019.03.05
                                 //am scos apostroafele de la ValStr, si in update si in insert
-                                valStr = CalculValStr((int)dr["F10003"], zi.Date, "", (dr["ValPentruOre"] ?? "").ToString(), (int)(nrOre * 60));
+                                valStr = CalculValStr((int)dr["F10003"], zi.Date, "", (dr["ValPentruOre"] as string ?? "").ToString(), (int)(nrOre * 60));
                                 sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"=" + valStr + "," +
-                                        (dr["ValPentruOre"] ?? "").ToString() + "=" + (nrOre * 60).ToString() +
+                                        (dr["ValPentruOre"] as string ?? "").ToString() + "=" + (nrOre * 60).ToString() +
                                         "WHERE  F10003=" + dr["F10003"] + " AND \"Ziua\"=" + General.ToDataUniv(zi.Date);
 
                                 sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
@@ -4744,7 +4744,7 @@ namespace WizOne.Module
                         HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.ASCII;
 
 
-                        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + (dt.Rows[0]["FisierNume"] ?? "").ToString());
+                        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + (dt.Rows[0]["FisierNume"] as string ?? "").ToString());
                         HttpContext.Current.Response.Buffer = true;
                         ms.WriteTo(HttpContext.Current.Response.OutputStream);
                     }
@@ -5417,7 +5417,7 @@ namespace WizOne.Module
                         byte[] fis = (byte[])dr["Fisier"];
                         MemoryStream stream = new MemoryStream(fis);
                         extensie = dr["FisierExtensie"].ToString();
-                        numeFisier = (dt.Rows[0]["FisierNume"] ?? "").ToString();
+                        numeFisier = (dt.Rows[0]["FisierNume"] as string ?? "").ToString();
                         return fis;
                     }
 

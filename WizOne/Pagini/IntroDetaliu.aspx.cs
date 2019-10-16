@@ -210,7 +210,7 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dtRap.Rows.Count; i++)
                     {
                         ASPxButton btn = new ASPxButton();
-                        btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] ?? "").ToString());
+                        btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] as string ?? "").ToString());
                         //btn.PostBackUrl = "RapDetaliu.aspx?id=" + dtRap.Rows[i]["DynReportId"];
                         Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
                         btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx";
@@ -255,7 +255,7 @@ namespace WizOne.Pagini
                         //lnk.Font.Underline = true;
 
                         ASPxButton btn = new ASPxButton();
-                        btn.Text = Dami.TraduCuvant((dtMnu.Rows[i]["Nume"] ?? "").ToString());
+                        btn.Text = Dami.TraduCuvant((dtMnu.Rows[i]["Nume"] as string ?? "").ToString());
                         btn.CssClass = "btnMeniuDash";
 
                         string strUrl = dtMnu.Rows[i]["Pagina"].ToString();
@@ -304,9 +304,9 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dtLnk.Rows.Count; i++)
                     {
                         ASPxHyperLink lnk = new ASPxHyperLink();
-                        lnk.Text = (dtLnk.Rows[i]["Denumire"] ?? "").ToString();
+                        lnk.Text = (dtLnk.Rows[i]["Denumire"] as string ?? "").ToString();
                         lnk.Font.Underline = true;
-                        lnk.NavigateUrl = (dtLnk.Rows[i]["Link"] ?? "").ToString();
+                        lnk.NavigateUrl = (dtLnk.Rows[i]["Link"] as string ?? "").ToString();
                         lnk.Target = "_blank";
                         lnk.Wrap = DevExpress.Utils.DefaultBoolean.True;
 

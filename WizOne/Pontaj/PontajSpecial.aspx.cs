@@ -632,7 +632,7 @@ namespace WizOne.Pontaj
                                             if (tx != null)
                                             {
                                                 tx.Visible = true;
-                                                tx.Text = (dr[0]["Ziua" + i.ToString()] ?? "").ToString();
+                                                tx.Text = (dr[0]["Ziua" + i.ToString()] as string ?? "").ToString();
                                             }
                                         }
                                     chkS.Checked = Convert.ToInt32(dr[0]["S"] == null ? "0" : dr[0]["S"].ToString()) == 1 ? true : false;

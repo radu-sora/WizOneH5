@@ -56,8 +56,25 @@ namespace WizOne.Personal
             string sqlFinal = "SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + Session["Marca"].ToString() + " ORDER BY \"An\" ";
             DataTable dt = new DataTable();
             dt = General.IncarcaDT(sqlFinal, null);
+                       
             grDateSituatieCO.KeyFieldName = "F10003;An";
             grDateSituatieCO.DataSource = dt;
+
+            foreach (DataColumn col in dt.Columns)
+            {  
+                GridViewDataColumn c = new GridViewDataColumn();
+                c.Name = col.ColumnName;
+                c.FieldName = col.ColumnName;
+                c.Caption = Dami.TraduCuvant(col.ColumnName);
+                c.ReadOnly = true;
+                c.Width = 75;
+                if (col.ColumnName.Length >= 12)
+                    c.Width = 120;
+                c.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
+                if (col.ColumnName == "IdAbsenta" || col.ColumnName == "COPlanificat" || col.ColumnName == "F10003")
+                    c.Visible = false;  
+                grDateSituatieCO.Columns.Add(c);                
+            }
 
         }
 
@@ -259,4 +276,19 @@ namespace WizOne.Personal
         }
 
     }
+
+            //<Columns>            
+            //    <dx:GridViewDataTextColumn FieldName = "F10003" Name="F10003" Caption="Marca"  Width="75px" Visible="false"/>
+            //    <dx:GridViewDataTextColumn FieldName = "An" Name="An" Caption="Anul"  Width="75px" />
+            //    <dx:GridViewDataTextColumn FieldName = "RamaseAnterior" Name="RamaseAnterior" Caption="Ramase anterior"  Width="75px"  HeaderStyle-Wrap="True" />
+            //    <dx:GridViewDataTextColumn FieldName = "Cuvenite" Name="Cuvenite" Caption="Cuvenite"  Width="75px"  HeaderStyle-Wrap="True"/>
+            //    <dx:GridViewDataTextColumn FieldName = "Total" Name="Total" Caption="Total cuvenite"  Width="75px"  HeaderStyle-Wrap="True"/>
+            //    <dx:GridViewDataTextColumn FieldName = "Aprobate" Name="Aprobate" Caption="Aprobate"  Width="75px"  HeaderStyle-Wrap="True"/>
+            //    <dx:GridViewDataTextColumn FieldName = "Ramase" Name="Ramase" Caption="Ramase curent"  Width="75px"  HeaderStyle-Wrap="True"/>
+            //    <dx:GridViewDataTextColumn FieldName = "Solicitate" Name="Solicitate" Caption="Solicitate"  Width="75px"  HeaderStyle-Wrap="True"/>
+            //    <dx:GridViewDataTextColumn FieldName = "Planificate" Name="Planificate" Caption="Planificate"  Width="75px"  HeaderStyle-Wrap="True"/>
+            //    <dx:GridViewDataTextColumn FieldName = "RamaseDePlanificat" Name="RamaseDePlanificat" Caption="Ramase de planificat"  Width="75px"  HeaderStyle-Wrap="True"/>
+            //</Columns>
+
+
 }

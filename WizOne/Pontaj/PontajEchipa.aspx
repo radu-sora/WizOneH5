@@ -157,7 +157,8 @@
             });
         }
         function AdjustSize() {
-            var height = Math.max(0, document.documentElement.clientHeight) - 420;
+            var randuri = parseInt("<%=Session["Ptj_NrRanduri"] %>");
+            var height = Math.max(0, document.documentElement.clientHeight) - ((100 / randuri) * 50);   // - 420
             grDate.SetHeight(height);
         }
 

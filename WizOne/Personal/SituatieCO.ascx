@@ -16,18 +16,7 @@
             <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
             <Settings ShowFilterRow="False" HorizontalScrollBarMode="Auto"  />    
             <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
-                <Columns>            
-                    <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca"  Width="75px" Visible="false"/>
-                    <dx:GridViewDataTextColumn FieldName="An" Name="An" Caption="Anul"  Width="75px" />
-                    <dx:GridViewDataTextColumn FieldName="RamaseAnterior" Name="RamaseAnterior" Caption="Ramase anterior"  Width="75px"  HeaderStyle-Wrap="True" />
-                    <dx:GridViewDataTextColumn FieldName="Cuvenite" Name="Cuvenite" Caption="Cuvenite"  Width="75px"  HeaderStyle-Wrap="True"/>
-                    <dx:GridViewDataTextColumn FieldName="Total" Name="Total" Caption="Total cuvenite"  Width="75px"  HeaderStyle-Wrap="True"/>
-                    <dx:GridViewDataTextColumn FieldName="Aprobate" Name="Aprobate" Caption="Aprobate"  Width="75px"  HeaderStyle-Wrap="True"/>
-                    <dx:GridViewDataTextColumn FieldName="Ramase" Name="Ramase" Caption="Ramase curent"  Width="75px"  HeaderStyle-Wrap="True"/>
-                    <dx:GridViewDataTextColumn FieldName="Solicitate" Name="Solicitate" Caption="Solicitate"  Width="75px"  HeaderStyle-Wrap="True"/>
-                    <dx:GridViewDataTextColumn FieldName="Planificate" Name="Planificate" Caption="Planificate"  Width="75px"  HeaderStyle-Wrap="True"/>
-                    <dx:GridViewDataTextColumn FieldName="RamaseDePlanificat" Name="RamaseDePlanificat" Caption="Ramase de planificat"  Width="75px"  HeaderStyle-Wrap="True"/>
-                </Columns>
+
         </dx:ASPxGridView>
         </tr>
     </td>

@@ -160,7 +160,7 @@ namespace WizOne.Pontaj
                 {
                     grDate.Attributes.Add("onkeypress", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
                     grDate.Attributes.Add("onclick", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
-
+                    Session["Ptj_NrRanduri"] = 10;
 
                     //Adaugam f-urile
                     DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"",0) = 1 ORDER BY COALESCE(""OrdineAfisare"",999999) ", null);
@@ -189,7 +189,9 @@ namespace WizOne.Pontaj
                 //if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
                 //    grDate.SettingsPager.PageSize = Convert.ToInt32(dtParam.Rows[0][0].ToString());
 
-                grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ","10"));
+                int nrRanduri = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
+                grDate.SettingsPager.PageSize = nrRanduri;
+                Session["Ptj_NrRanduri"] = nrRanduri;
             }
             catch (Exception ex)
             {

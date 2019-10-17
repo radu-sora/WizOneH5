@@ -79,8 +79,9 @@ namespace WizOne.Tactil
                 if (Session["FluturasGeneral"] != null && Session["FluturasGeneral"].ToString().Length > 0)
                 {
                     Session["ReportId"] = Convert.ToInt32(Session["FluturasGeneral"].ToString());
-                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + "&An="
-                        + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")), false);
+                    //Florin 2019.10.17
+                    //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + "&An=" + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")), false);
+                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["User_Marca"].ToString() + "&An=" + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"))), false);
                 }
                 else
                 {
@@ -113,8 +114,9 @@ namespace WizOne.Tactil
                 if (Session["FluturasGeneral"] != null && Session["FluturasGeneral"].ToString().Length > 0)
                 {
                     Session["ReportId"] = Convert.ToInt32(Session["FluturasGeneral"].ToString());
-                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + "&An="
-                        + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")) + "&PrintareAutomata=1", false);
+                    //Florin 2019.10.17
+                    //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + "&An=" + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")), false);
+                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["User_Marca"].ToString() + "&An=" + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"))), false);
                 }
                 else
                 {

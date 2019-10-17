@@ -34,16 +34,12 @@ namespace WizOne.Pagini
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
-                //2017.05.25 - Nu preia corect valoarea in variabila de sesiune - intotdeauna este MainPage si profilele din Cadru.Master nu se mai incarca
-                //Session["PaginaWeb"] = "Pagini.MainPage";
-
                 //Radu 09.01.2018
                 Session["Avs_MarcaFiltru"] = null;
                 Session["Avs_AtributFiltru"] = null;
 
                 if (General.Nz(Session["PrimaIntrare"],"0").ToString() == "1")
                 {
-                    //pnlMsgWelcome.Visible = true;
                     pnlMsgWelcome.Style["display"] = "inline-block";
                     General.ExecutaNonQuery("UPDATE USERS SET F70105=0 WHERE F70102=@1", new object[] { Session["UserId"] });
                 }
@@ -79,8 +75,6 @@ namespace WizOne.Pagini
                         pnl.Controls.Add(lbl);
 
                         divPanel.Controls.Add(pnl);
-
-                        //widgetNames.Add(new metaWidget { Nume = nme, Eticheta = dt.Columns[i].ColumnName, RutaImg = "pnlWidget1" });
                     }
                 }
 
@@ -133,13 +127,9 @@ namespace WizOne.Pagini
                     pnl.Controls.Add(divStiri);
 
                     divPanel.Controls.Add(pnl);
-
-                    //widgetNames.Add(new metaWidget { Nume = nme, Eticheta = "Stiri", RutaImg = "pnlWidget2" });
                 }
 
                 string strFiltru = "";
-                //strFiltru = @"AND A.""Rol"" IN (SELECT TOP 1 A.""IdSuper"" FROM ""F100Supervizori"" A WHERE A.""IdUser"" = 2 GROUP BY A.""IdSuper"")";
-                //if (Constante.tipBD == 2) strFiltru = @"AND A.""Rol"" IN (SELECT A.""IdSuper"" FROM ""F100Supervizori"" A WHERE A.""IdUser"" = 2 AND ROWNUM <= 1 GROUP BY A.""IdSuper"")";
 
                 //adaugam badge-urile
                 List <metaBadge> lstBadges = new List<metaBadge>();
@@ -165,19 +155,6 @@ namespace WizOne.Pagini
                 lstBadges.Add(new metaBadge { StringSelect = @"SELECT * FROM ""Ptj_Cereri"" WHERE 1=2", Pagina = "../Absente/Cereri.aspx", Eticheta = Dami.TraduCuvant("Solicitari absente"), RutaImg = "bdgCer.jpg" });
                 //Solicitari diverse
                 lstBadges.Add(new metaBadge { StringSelect = @"SELECT * FROM ""Ptj_Cereri"" WHERE 1=2", Pagina = "../CereriDiverse/Cereri.aspx", Eticheta = Dami.TraduCuvant("Solicitari diverse"), RutaImg = "bdgCer.jpg" });
-
-
-                ////pontaj
-                ////lstBadges.Add(new metaBadge { StringSelect = Dami.SelectPontaj(), Pagina = "../Pontaj/PontajPeAng.aspx?tip=1", Eticheta = "Pontaj pe angajat", RutaImg = "bdgPtj.jpg" });
-                //lstBadges.Add(new metaBadge { StringSelect = Dami.SelectPontaj(), Pagina = "../Pontaj/PontajDetaliat.aspx?tip=1", Eticheta = "Pontaj pe angajat", RutaImg = "bdgPtj.jpg" });
-                ////cereri
-                //lstBadges.Add(new metaBadge { StringSelect = Dami.SelectCereri() + $@" AND A.""Actiune"" = 1 AND A.""IdStare"" IN (1,2) " + strFiltru, Pagina = "../Absente/Lista.aspx?pp=1", Eticheta = "Cereri", RutaImg = "bdgCer.jpg" });
-                ////evaluare
-                //lstBadges.Add(new metaBadge { StringSelect = Dami.SelectEvaluare(), Pagina = "../Eval/EvalLista.aspx", Eticheta = "Evaluari", RutaImg = "bdgEvl.jpg" });
-                ////decont
-                //lstBadges.Add(new metaBadge { StringSelect = Dami.SelectDecont(), Pagina = "WebForm1.aspx", Eticheta = "Decont", RutaImg = "bdgDec.jpg" });
-                ////Cursuri
-                //lstBadges.Add(new metaBadge { StringSelect = Dami.SelectCurs(), Pagina = "WebForm1.aspx", Eticheta = "Cursuri", RutaImg = "bdgCrs.jpg" });
 
                 int j = 0;
 
@@ -215,35 +192,19 @@ namespace WizOne.Pagini
                     divPanel.Controls.Add(pnl);
 
                     j++;
-                    //widgetNames.Add(new metaWidget { Nume = nme, Eticheta = ele.Eticheta, RutaImg = "pnlWidget3" });
-
                 }
 
 
                 //adaugam rapoartele
-                //DataTable dtRap = General.IncarcaDT(@"SELECT * FROM ""Rap_Rapoarte"" WHERE COALESCE(""Activ"",0)=1", null);
                 DataTable dtRap = General.IncarcaDT(@"SELECT * FROM ""DynReports""", null);
 
                 if (dtRap.Rows.Count > 0)
                 {
-                    //Radu 09.10.2019
-                    ASPxCallbackPanel pnlMain = new ASPxCallbackPanel();
-                    pnlMain.Callback += new CallbackEventHandlerBase(pnlMain_OnCallback);                    
-                    pnlMain.ClientInstanceName = "pnlMain";
-
                     for (int i = 0; i < dtRap.Rows.Count; i++)
                     {
                         ASPxButton btn = new ASPxButton();
                         btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] as string ?? "").ToString());
-                        //btn.PostBackUrl = "RapDetaliu.aspx?id=" + dtRap.Rows[i]["DynReportId"];
-                        //Radu 09.10.2019 - Id-ul raportului nu poate fi stocat in Session["ReportId"] in acest moment (deoarece ramane ultimul din iteratie); 
-                        //                  la apasarea butonului se va apela o functie care se seta corect Session["ReportId"]
-                        //Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
-                        btn.AutoPostBack = true;
-                        //btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx";
-                        btn.Click += new EventHandler(btnRap_Click); 
-                        //btn.ClientSideEvents.Click = string.Format("function(s,e) {{ pnlMain.PerformCallback('{0}');  window.open(getAbsoluteUrl + 'Generatoare/Reports/Pages/ReportView.aspx', '_blank '); }}", dtRap.Rows[i]["DynReportId"].ToString());
-                        btn.ClientSideEvents.Click = string.Format("function(s,e) {{ pnlMain.PerformCallback('{0}'); e.processOnServer = true; }}", dtRap.Rows[i]["DynReportId"].ToString());
+                        btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + dtRap.Rows[i]["DynReportId"]);
 
                         ASPxDockPanel pnl = new ASPxDockPanel();
                         string nme = "wdgRap" + i;
@@ -263,12 +224,8 @@ namespace WizOne.Pagini
                         pnl.Styles.Content.Paddings.Padding = 0;
                         pnl.Controls.Add(btn);
 
-                        //divPanel.Controls.Add(pnl);
-                        pnlMain.Controls.Add(pnl);
-
-                        //widgetNames.Add(new metaWidget { Nume = nme, Eticheta = btn.Text, RutaImg = "pnlWidget4" });
+                        divPanel.Controls.Add(pnl);
                     }
-                    divPanel.Controls.Add(pnlMain);
                 }
 
 
@@ -279,13 +236,6 @@ namespace WizOne.Pagini
                 {
                     for (int i = 0; i < dtMnu.Rows.Count; i++)
                     {
-                        //Florin 2019.09.09
-                        //am schimbat linkurile in butoane
-
-                        //ASPxHyperLink lnk = new ASPxHyperLink();
-                        //lnk.Text = Dami.TraduMeniu((dtMnu.Rows[i]["Nume"] ?? "").ToString());
-                        //lnk.Font.Underline = true;
-
                         ASPxButton btn = new ASPxButton();
                         btn.Text = Dami.TraduCuvant((dtMnu.Rows[i]["Nume"] as string ?? "").ToString());
                         btn.CssClass = "btnMeniuDash";
@@ -296,7 +246,6 @@ namespace WizOne.Pagini
                         if (strUrl.IndexOf("[") >= 0)
                             pag = strUrl.Substring(0, strUrl.IndexOf("["));
 
-                        //lnk.NavigateUrl = "~/" + pag + ".aspx";
                         btn.PostBackUrl = "~/" + pag + ".aspx";
 
                         ASPxDockPanel pnl = new ASPxDockPanel();
@@ -315,12 +264,10 @@ namespace WizOne.Pagini
                         pnl.ShowShadow = false;
                         pnl.ShowHeader = false;
                         pnl.Styles.Content.Paddings.Padding = 0;
-                        //pnl.Controls.Add(lnk);
+
                         pnl.Controls.Add(btn);
 
                         divPanel.Controls.Add(pnl);
-
-                        //widgetNames.Add(new metaWidget { Nume = nme, Eticheta = lnk.Text, RutaImg = "pnlWidget5" });
                     }
                 }
 
@@ -358,18 +305,8 @@ namespace WizOne.Pagini
                         pnl.Controls.Add(lnk);
 
                         divPanel.Controls.Add(pnl);
-
-                        //widgetNames.Add(new metaWidget { Nume = nme, Eticheta = lnk.Text, RutaImg = "pnlWidget5" });
                     }
                 }
-
-
-
-                //var src = widgetNames.Where(p => p.Nume.Contains("wdgBadges"));
-                //lst.DataSource = src;
-                //lst.DataBind();
-
-
 
                 #endregion
             }
@@ -379,18 +316,6 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-        //Radu 09.10.2019
-        void pnlMain_OnCallback(object source, CallbackEventArgsBase e)
-        {
-            Session["ReportId"] = Convert.ToInt32(e.Parameter.ToString());       
-        }
-        void btnRap_Click(object sender, EventArgs e)
-        {        
-            Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx", false);
-        }
-
-
 
         protected void dockManager_ClientLayout(object sender, DevExpress.Web.ASPxClientLayoutArgs e)
         {
@@ -416,8 +341,6 @@ namespace WizOne.Pagini
                                     WHERE ""Activ"" = 1 AND C.""IdUser"" = {idUser}
                                     ORDER BY D.""Prioritate"" DESC, A.TIME DESC) X
                                     WHERE ROWNUM <= 1";
-
-                    //strSql = string.Format(strSql, General.Nz(Session["UserId"],-99));
 
                     DataTable dt = General.IncarcaDT(strSql, null);
                     if (dt.Rows.Count > 0 && dt.Rows[0]["Continut"] != null) e.LayoutData = dt.Rows[0]["Continut"].ToString();

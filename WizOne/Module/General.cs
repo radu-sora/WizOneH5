@@ -8477,5 +8477,46 @@ namespace WizOne.Module
             return str;
         }
 
+        public static string URLEncode(string expresie)
+        {
+            string rez = "";
+
+            try
+            {
+                CriptDecript prc = new CriptDecript();
+
+                string txt = prc.EncryptString(Constante.cheieCriptare, expresie, Constante.ENCRYPT);
+                byte[] stream = Encoding.Unicode.GetBytes(txt);
+                rez = HttpServerUtility.UrlTokenEncode(stream);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "URLEncode");
+            }
+
+            return rez;
+        }
+
+        public static string URLDecode(string expresie)
+        {
+            string rez = "";
+
+            try
+            {
+                CriptDecript prc = new CriptDecript();
+
+                byte[] stream = HttpServerUtility.UrlTokenDecode(expresie);
+                string txt = Encoding.Unicode.GetString(stream);
+                rez = prc.EncryptString(Constante.cheieCriptare, txt, Constante.DECRYPT);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "URLDecode");
+            }
+
+            return rez;
+        }
+
+
     }
 }

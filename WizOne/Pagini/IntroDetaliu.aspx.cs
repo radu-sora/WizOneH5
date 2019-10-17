@@ -212,7 +212,7 @@ namespace WizOne.Pagini
                         ASPxButton btn = new ASPxButton();
                         btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] as string ?? "").ToString());
                         //btn.PostBackUrl = "RapDetaliu.aspx?id=" + dtRap.Rows[i]["DynReportId"];
-                        Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
+                        //Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
                         btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx";
 
                         ASPxDockPanel pnl = new ASPxDockPanel();

@@ -94,6 +94,12 @@
             deDataSf.SetEnabled(false);
         }
     }
+
+    function OnClickDoc(s) {
+        pnlLoading.Show();
+        Documente_pnlCtl.PerformCallback(s.name);
+    }
+
 </script>
 <body>
     <table width="100%">
@@ -105,7 +111,7 @@
 	</table>
 				
 
-   <dx:ASPxCallbackPanel ID = "Documente_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlDocumente" runat="server" OnCallback="Documente_pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
+   <dx:ASPxCallbackPanel ID = "Documente_pnlCtl" ClientIDMode="Static" ClientInstanceName="Documente_pnlCtl" runat="server" OnCallback="Documente_pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
        <ClientSideEvents EndCallback="function (s,e) { OnEndCallbackDoc(s,e); }" />
       <PanelCollection>
         <dx:PanelContent>
@@ -203,12 +209,14 @@
 						        </td>
                                 <td>
                                     <dx:ASPxButton ID="btnDocId" ClientInstanceName="btnDocId"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"   RenderMode="Link" ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                        <ClientSideEvents Click="function(s,e){ OnClickDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
                                         <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                                     </dx:ASPxButton>
                                 </td>
                                 <td>
                                     <dx:ASPxButton ID="btnDocIdIst" ClientInstanceName="btnDocIdIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                         <ClientSideEvents Click="function(s,e){ GoToIstoricDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
                                         <Paddings PaddingLeft="10px"/>
                                     </dx:ASPxButton>
@@ -332,12 +340,14 @@
 						        </td>
                                 <td>
                                     <dx:ASPxButton ID="btnPermis" ClientInstanceName="btnPermis"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                         <ClientSideEvents Click="function(s,e){ OnClickDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
                                         <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                                     </dx:ASPxButton>
                                 </td>
                                 <td>
                                     <dx:ASPxButton ID="btnPermisIst" ClientInstanceName="btnPermisIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                         <ClientSideEvents Click="function(s,e){ GoToIstoricDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
                                         <Paddings PaddingLeft="10px"/>
                                     </dx:ASPxButton>
@@ -402,12 +412,14 @@
 						        </td>
                                 <td>
                                     <dx:ASPxButton ID="btnStudii" ClientInstanceName="btnStudii"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                         <ClientSideEvents Click="function(s,e){ OnClickDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
                                         <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                                     </dx:ASPxButton>
                                 </td>
                                 <td>
                                     <dx:ASPxButton ID="btnStudiiIst" ClientInstanceName="btnStudiiIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                         <ClientSideEvents Click="function(s,e){ GoToIstoricDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
                                         <Paddings PaddingLeft="10px"/>
                                     </dx:ASPxButton>
@@ -441,12 +453,14 @@
 						        </td>
                                 <td>
                                     <dx:ASPxButton ID="btnTitluAcad" ClientInstanceName="btnTitluAcad"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link"  ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                         <ClientSideEvents Click="function(s,e){ OnClickDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
                                         <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                                     </dx:ASPxButton>
                                 </td>
                                 <td>
                                     <dx:ASPxButton ID="btnTitluAcadIst" ClientInstanceName="btnTitluAcadIst"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px" RenderMode="Link" ToolTip="Istoric modificari" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                         <ClientSideEvents Click="function(s,e){ GoToIstoricDoc(s); }" />
                                         <Image Url="../Fisiere/Imagini/Icoane/istoric.png"></Image>
                                         <Paddings PaddingLeft="10px"/>
                                     </dx:ASPxButton>

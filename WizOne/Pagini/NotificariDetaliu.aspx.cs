@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using DevExpress.Web.ASPxHtmlEditor;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -244,7 +245,20 @@ namespace WizOne.Pagini
                             drHead["TipNotificare"] = Convert.ToInt32(Session["TipNotificare"] as int? ?? 1);
                             drHead["Activ"] = chkActiv.Checked;
                             drHead["Subiect"] = txtSubiect.Text;
-                            drHead["ContinutMail"] = txtContinut.Html;
+
+                            //Florin 2019.10.17 - daca este validare sau alerta ne trebuie plain text, pt notificare ne trebuie Html
+                            if (General.Nz(drHead["TipNotificare"],1).ToString() == "1")
+                                drHead["ContinutMail"] = txtContinut.Html;
+                            else
+                            {
+                                using (MemoryStream mStream = new MemoryStream())
+                                {
+                                    txtContinut.Export(HtmlEditorExportFormat.Txt, mStream);
+                                    string plainText = System.Text.Encoding.UTF8.GetString(mStream.ToArray());
+                                    drHead["ContinutMail"] = plainText;
+                                }
+                            }
+
                             if (cmbMesaj.SelectedItem == null)
                                 drHead["Mesaj"] = DBNull.Value;
                             else
@@ -284,7 +298,20 @@ namespace WizOne.Pagini
                             dtHead.Rows[0]["Denumire"] = txtDenumire.Text;
                             dtHead.Rows[0]["Activ"] = chkActiv.Checked;
                             dtHead.Rows[0]["Subiect"] = txtSubiect.Text;
-                            dtHead.Rows[0]["ContinutMail"] = txtContinut.Html;
+
+                            //Florin 2019.10.17 - daca este validare sau alerta ne trebuie plain text, pt notificare ne trebuie Html
+                            if (General.Nz(dtHead.Rows[0]["TipNotificare"], 1).ToString() == "1")
+                                dtHead.Rows[0]["ContinutMail"] = txtContinut.Html;
+                            else
+                            {
+                                using (MemoryStream mStream = new MemoryStream())
+                                {
+                                    txtContinut.Export(HtmlEditorExportFormat.Txt, mStream);
+                                    string plainText = System.Text.Encoding.UTF8.GetString(mStream.ToArray());
+                                    dtHead.Rows[0]["ContinutMail"] = plainText;
+                                }
+                            }
+
                             if (cmbMesaj.SelectedItem == null)
                                 dtHead.Rows[0]["Mesaj"] = DBNull.Value;
                             else

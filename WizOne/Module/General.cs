@@ -6518,6 +6518,9 @@ namespace WizOne.Module
                 //Florin 2019.07.19
                 HttpContext.Current.Session["Ptj_DataBlocare"] = "22001231";
 
+                //Florin 2019.10.16
+                HttpContext.Current.Session["Json_Programe"] = "";
+
 
 
 

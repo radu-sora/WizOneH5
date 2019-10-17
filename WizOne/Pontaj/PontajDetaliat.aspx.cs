@@ -2439,6 +2439,33 @@ namespace WizOne.Pontaj
                                         //        lstCol.Width = 250;
                                         //    c.PropertiesComboBox.Columns.Add(lstCol);
                                         //}
+
+
+                                        if (c.FieldName == "IdContract")
+                                        {
+                                            c.PropertiesComboBox.ClientInstanceName = "cmbContract";
+                                            c.PropertiesComboBox.ClientSideEvents.SelectedIndexChanged = "cmbContract_SelectedIndexChanged_Client";
+                                        }
+
+                                        if (c.FieldName == "IdProgram")
+                                        {
+                                            c.PropertiesComboBox.ClientInstanceName = "cmbProgram";
+                                            DataTable dtPrg = General.IncarcaDT(
+                                                $@"SELECT A.IdContract, A.IdProgram, B.Denumire AS Program
+                                                FROM Ptj_ContracteSchimburi A
+                                                INNER JOIN Ptj_Programe B ON A.IdProgram=B.Id
+                                                ORDER BY B.Denumire", null);
+                                            if (dtPrg != null && dtPrg.Rows.Count > 0)
+                                            {
+                                                string jsonPrg = "";
+                                                for(int g = 0; g < dtPrg.Rows.Count; g++)
+                                                {
+                                                    jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + dtPrg.Rows[g]["Program"] + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + " }";
+                                                }
+                                                if (jsonPrg.Length > 0)
+                                                    Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";
+                                            }
+                                        }
                                     }
 
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")

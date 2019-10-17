@@ -477,8 +477,39 @@ namespace WizOne.Eval
                     PreluareDateAutomat(pozitie);
 
 
+
+                //Florin 2019.10.16
+                if (General.Nz(Session["NumeGriduri"], "").ToString() != "")
+                {
+                    string[] arr = Session["NumeGriduri"].ToString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        ASPxGridView grDate = grIntrebari.FindControl(arr[i]) as ASPxGridView;
+                        if (grDate != null)
+                        {
+                            int idLinieQuiz = Convert.ToInt32(grDate.ID.Split('_')[grDate.ID.Split('_').Count() - 1]);
+
+                            if (grDate.ID.IndexOf("grDateObiective") >= 0)
+                            {
+                                List<Eval_ObiIndividualeTemp> lst = Session["lstEval_ObiIndividualeTemp"] as List<Eval_ObiIndividualeTemp>;
+                                grDate.DataSource = lst.Where(p => p.IdLinieQuiz == idLinieQuiz && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"]) && p.IdQuiz == Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))).ToList();
+                            }
+
+                            if (grDate.ID.IndexOf("grDateCompetente") >= 0)
+                            {
+                                List<Eval_CompetenteAngajatTemp> lst = Session["lstEval_CompetenteAngajatTemp"] as List<Eval_CompetenteAngajatTemp>;
+                                grDate.DataSource = lst.Where(p => p.IdLinieQuiz == idLinieQuiz && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"])).ToList();
+                            }
+
+                            grDate.KeyFieldName = "IdAuto";
+                            grDate.DataBind();
+                        }
+                    }
+                }
+
                 //MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
                 pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
+
             }
             catch (Exception ex)
             {
@@ -2719,6 +2750,8 @@ namespace WizOne.Eval
                 }
 
                 Session["lstEval_CompetenteAngajatTemp"] = lst;
+
+                e.Handled = true;
             }
             catch (Exception ex)
             {

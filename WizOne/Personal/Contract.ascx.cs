@@ -854,23 +854,26 @@ namespace WizOne.Personal
         {
             ASPxTextBox txtVechimeCarte = Contract_DataList.Items[0].FindControl("txtVechimeCarte") as ASPxTextBox;
             ASPxTextBox txtZileCOCuvAnCrt = Contract_DataList.Items[0].FindControl("txtZileCOCuvAnCrt") as ASPxTextBox;
+            string vechime = "0000";
             if (txtVechimeCarte.Text != null && txtVechimeCarte.Text.Length >= 4)
             {
-                string sql = "select a.f10003, Convert(int, F02615) from f100 a left join "
-                    + " (select ISNULL(convert(int, substring('" + txtVechimeCarte.Text + "', 1, 2)), 0) * 12 + ISNULL(convert(int, substring('" + txtVechimeCarte.Text + "', 3, 2)), 0)  as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
-                    + " left join F026 c on convert(int, " + grila + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int, c.F02611 / 100) * 12) "
-                    + " where a.f10003 = " + Session["Marca"].ToString();
-                if (Constante.tipBD == 2)
-                    sql = "select a.f10003, TO_NUMBER(TRUNC(F02615))  from F100 a "
-                       + " left join(select nvl(to_number(substr('" + txtVechimeCarte.Text + "',1,2)),0) *12 + nvl(to_number(substr('" + txtVechimeCarte.Text + "', 3, 2)), 0) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
-                       + "  left join F026 c on " + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611 / 100) * 12) where a.f10003 = " + Session["Marca"].ToString();
-                DataTable dtGrila = General.IncarcaDT(sql, null);
-                if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][1] != null && dtGrila.Rows[0][1].ToString().Length > 0)
-                    txtZileCOCuvAnCrt.Text = dtGrila.Rows[0][1].ToString();
-                else
-                    txtZileCOCuvAnCrt.Text = "";
+                vechime = txtVechimeCarte.Text;
             }
+            string sql = "select a.f10003, Convert(int, F02615) from f100 a left join "
+                + " (select ISNULL(convert(int, substring('" + vechime + "', 1, 2)), 0) * 12 + ISNULL(convert(int, substring('" + vechime + "', 3, 2)), 0)  as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
+                + " left join F026 c on convert(int, " + grila + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int, c.F02611 / 100) * 12) "
+                + " where a.f10003 = " + Session["Marca"].ToString();
+            if (Constante.tipBD == 2)
+                sql = "select a.f10003, TO_NUMBER(TRUNC(F02615))  from F100 a "
+                   + " left join(select nvl(to_number(substr('" + vechime + "',1,2)),0) *12 + nvl(to_number(substr('" + vechime + "', 3, 2)), 0) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
+                   + "  left join F026 c on " + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611 / 100) * 12) where a.f10003 = " + Session["Marca"].ToString();
+            DataTable dtGrila = General.IncarcaDT(sql, null);
+            if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][1] != null && dtGrila.Rows[0][1].ToString().Length > 0)
+                txtZileCOCuvAnCrt.Text = dtGrila.Rows[0][1].ToString();
+            else
+                txtZileCOCuvAnCrt.Text = "";
         }
+        
 
 
         protected void SetDurataTimpMunca()

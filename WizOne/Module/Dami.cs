@@ -183,8 +183,32 @@ namespace WizOne.Module
                                             }
                                         }
                                     }
+                                    //verificam daca nu cumva se gaseste intr-un container de tip ASPxRoundPanel
+                                    foreach (ASPxRoundPanel pnlCtl2 in pnlCtl.Controls.OfType<ASPxRoundPanel>())
+                                    {
+                                        WebControl ctl3 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as WebControl;
+                                        if (ctl3 != null)
+                                        {
+                                            ctl3.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            ctl3.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+                                        }
+                                        else
+                                        {
+                                            if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+                                            {
+                                                HtmlGenericControl ctl1 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
+                                                if (ctl1 != null)
+                                                {
+                                                    ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                                }
+                                            }
+                                        }
+                                    }
 
                                 }
+
+
+
                                 //var wsx = pag.Controls.OfType<ASPxCallbackPanel>();
                                 //var xcv = pag.Controls.OfType<ASPxCallbackPanel>().Where(p => p.ID.ToLower().Contains("pnlCtl"));                                
                             }

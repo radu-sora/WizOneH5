@@ -26,7 +26,7 @@
         var dtSf = new Date(deDataSf.GetDate());
 
         if (dtSf < dtInc) {
-            swal({title: "", text: "Data start este ulterioara celei de final!",type: "warning"});
+            swal({ title: "", text: "Data start este ulterioara celei de final!", type: "warning" });
         }
     }
 
@@ -75,7 +75,7 @@
         var res = tipDoc.split(";");
         for (var i = 0; i < res.length; i++) {
             var linie = res[i].split(",");
-            if (linie[2] == cmbTara.GetValue()) {         
+            if (linie[2] == cmbTara.GetValue()) {
                 cmbTipDoc.AddItem(linie[1], Number(linie[0]));
                 tara = Number(linie[3]);
             }

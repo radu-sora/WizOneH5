@@ -6740,7 +6740,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        public static string ActiuniExec(int actiune, int f10003, int idRol, int idStare, int an, int luna, string pagina, int userId, int userMarca)
+        public static string ActiuniExec(int actiune, int f10003, int idRol, int idStare, int an, int luna, string pagina, int userId, int userMarca, string motiv = "")
         {
             //    Actiune
             // 1   -  aprobat
@@ -6845,6 +6845,7 @@ namespace WizOne.Module
                 }
 
                 drCum["IdStare"] = idStare;
+                drCum["Comentarii"] = motiv;
 
                 #endregion
 

@@ -156,6 +156,8 @@ namespace WizOne.Pontaj
                 System.Threading.Thread.CurrentThread.CurrentCulture = newCulture;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = newCulture;
 
+                grDate.JSProperties["cpParamMotiv"] = Dami.ValoareParam("AfisareMotivLaRespingereCerere", "0");
+
                 if (!IsPostBack)
                 {
                     grDate.Attributes.Add("onkeypress", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
@@ -1591,6 +1593,9 @@ namespace WizOne.Pontaj
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;
                             break;
+                        case "btnRespinge":
+                            Actiuni(0, arr[1].Trim());                   
+                            break;
                     }
                 }
             }
@@ -1879,18 +1884,18 @@ namespace WizOne.Pontaj
         }
 
 
-        protected void btnRespins_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Actiuni(0);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //protected void btnRespins_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        Actiuni(0);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
         protected void btnAproba_Click(object sender, EventArgs e)
@@ -1908,7 +1913,7 @@ namespace WizOne.Pontaj
 
 
 
-        private void Actiuni(int actiune)
+        private void Actiuni(int actiune, string motiv = "")
         {
             try
             {
@@ -1921,7 +1926,10 @@ namespace WizOne.Pontaj
                 if (cmbRol.Value != null) idRol = Convert.ToInt32(cmbRol.Value);
                 if ((idRol == 1 && actiune == 0) || idRol == 4 || idRol == -99)
                 {
-                    MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoError, "Eroare !");
+                    if (actiune != 0)
+                        MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoError, "Eroare !");
+                    else
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie.");
                     return;
                 }
 
@@ -1941,33 +1949,49 @@ namespace WizOne.Pontaj
                 if (ids.Count > 0)
                 {
                     DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
-                    string rez = AprobaPontaj(Convert.ToInt32(General.Nz(Session["UserId"], -99)), ziua.Year, ziua.Month, ids, Convert.ToInt32(cmbRol.Value ?? -99), actiune, "Pontaj.Pontaj");
+                    string rez = AprobaPontaj(Convert.ToInt32(General.Nz(Session["UserId"], -99)), ziua.Year, ziua.Month, ids, Convert.ToInt32(cmbRol.Value ?? -99), actiune, "Pontaj.Pontaj", motiv);
 
                     //grDate.ShowLoadingPanel = false;
-                    MessageBox.Show(Dami.TraduCuvant(rez), MessageBox.icoWarning, "Pontajul echipei");
+                    if (actiune != 0)
+                        MessageBox.Show(Dami.TraduCuvant(rez), MessageBox.icoWarning, "Pontajul echipei");
+                    else
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(rez);
                     btnFiltru_Click(null, null);
                 }
                 else
                 {
                     //grDate.ShowLoadingPanel = false;
                     if (select == 0)
-                        MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate !"), MessageBox.icoWarning, "");
+                    {
+                        if (actiune != 0)
+                            MessageBox.Show(Dami.TraduCuvant("Nu exista date selectate !"), MessageBox.icoWarning, "");
+                        else
+                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista date selectate !");
+                    }
                     else
-                        MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoWarning, "");
+                    {
+                        if (actiune != 0)
+                            MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoWarning, "");
+                        else
+                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie.");
+                    }
                 }
 
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                if (actiune != 0)
+                    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                else
+                    grDate.JSProperties["cpAlertMessage"] = ex;
+               General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
 
         //public static string ActiuniExec(int actiune, int f10003, int idRol, int idStare, int an, int luna, string pagina)
-        public string AprobaPontaj(int idUser, int an, int luna, List<metaActiuni> ids, int idRol, int actiune, string pagina)
+        public string AprobaPontaj(int idUser, int an, int luna, List<metaActiuni> ids, int idRol, int actiune, string pagina, string motiv = "")
         {
             //    Actiune
             // 1   -  aprobat
@@ -1980,12 +2004,15 @@ namespace WizOne.Pontaj
             {
                 foreach (var l in ids)
                 {
-                    msg += General.ActiuniExec(actiune, l.F10003, idRol, l.IdStare, Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, "Pontaj.PontajEchipa", Convert.ToInt32(Session["UserId"]), Convert.ToInt32(Session["User_Marca"])) + System.Environment.NewLine;
+                    msg += General.ActiuniExec(actiune, l.F10003, idRol, l.IdStare, Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, "Pontaj.PontajEchipa", Convert.ToInt32(Session["UserId"]), Convert.ToInt32(Session["User_Marca"]), motiv) + System.Environment.NewLine;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                if (actiune != 0)
+                    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                else
+                    grDate.JSProperties["cpAlertMessage"] = ex;
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 

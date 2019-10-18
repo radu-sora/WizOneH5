@@ -4,6 +4,7 @@
 
     <script type="text/javascript">
 
+        var limba = "<%= Session["IdLimba"] %>";
 
         function eventKeyPress(evt, s) {
             var cell = grDate.GetFocusedCell();
@@ -149,6 +150,14 @@
             //document.getElementById("gridContainer").style.visibility = "";
         }
         function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: trad_string(limba, ""), text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+
             AdjustSize();
         }
         function OnControlsInitialized(s, e) {
@@ -160,6 +169,42 @@
             var randuri = parseInt("<%=Session["Ptj_NrRanduri"] %>");
             var height = Math.max(0, document.documentElement.clientHeight) - ((100 / randuri) * 50);   // - 420
             grDate.SetHeight(height);
+        }
+
+        function OnRespinge(s, e) {
+            if (grDate.GetSelectedRowCount() > 0) {
+                swal({
+                    title: trad_string(limba, 'Sunteti sigur/a ?'), text: trad_string(limba, 'Vreti sa continuati procesul de respingere ?'),
+                    type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: trad_string(limba, 'Da, continua!'), cancelButtonText: trad_string(limba, 'Renunta'), closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        if (grDate.cpParamMotiv == "1")
+                            popUpMotiv.Show();
+                        else
+                            grDate.PerformCallback("btnRespinge; ");
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: trad_string(limba, ""), text: trad_string(limba, "Nu exista linii selectate"),
+                    type: "warning"
+                });
+            }
+        }
+
+        function OnMotivRespingere(s, e) {
+            if (ASPxClientUtils.Trim(txtMtv.GetText()) == '') {
+                swal({
+                    title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Pentru a putea respinge este nevoie de un motiv"),
+                    type: "warning"
+                });
+            }
+            else {
+                popUpMotiv.Hide();
+                grDate.PerformCallback('btnRespinge;' + txtMtv.GetText());
+                txtMtv.SetText('');
+            }
         }
 
     </script>
@@ -181,12 +226,11 @@
                 <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="true" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="true" OnClick="btnRespins_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
-                    <ClientSideEvents Click="function (s,e) { 
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                     }" />
+                    <ClientSideEvents Click="function(s, e) {
+                       OnRespinge(s,e);
+                    }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="true" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
@@ -568,6 +612,38 @@
                                 <br />
                                 <dx:ASPxCheckBox ID="chkLinie" ClientInstanceName="chkLinie" runat="server" Text="afisare pe o singura linie" TextAlign="Right" />
                                 <br />
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
+    <dx:ASPxPopupControl ID="popUpMotiv" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpMotivArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="650px" Height="200px" HeaderText="Motiv respingere"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpMotiv" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel4" runat="server">
+                    <table>
+                        <tr>
+                            <td align="right">
+                                <dx:ASPxButton ID="btnRespingeMtv" runat="server" Text="Respinge" AutoPostBack="false" >
+                                    <ClientSideEvents Click="function(s, e) {
+                                        OnMotivRespingere(s,e);
+                                    }" />
+                                    <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
+                                </dx:ASPxButton>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
+                                <dx:ASPxMemo ID="txtMtv" runat="server" ClientIDMode="Static" ClientInstanceName="txtMtv" Width="630px" Height="180px"></dx:ASPxMemo>
                             </td>
                         </tr>
                     </table>

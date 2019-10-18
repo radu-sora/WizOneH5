@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using ProceseSec;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -211,7 +212,7 @@ namespace WizOne.Pagini
                             btn.AutoPostBack = false;
                         }
                         else
-                            btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + dtRap.Rows[i]["DynReportId"] + "&Angajat=" + General.Nz(Session["User_MArca"], -99).ToString());
+                            btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + dtRap.Rows[i]["DynReportId"] + "&Angajat=" + General.Nz(Session["User_Marca"], -99).ToString());
 
                         ASPxDockPanel pnl = new ASPxDockPanel();
                         string nme = "wdgRap" + i;
@@ -364,13 +365,35 @@ namespace WizOne.Pagini
         {
             try
             {
+                if (txtRapPass.Text.Trim() == "")
+                {
+                    MessageBox.Show("Lipsesc date", MessageBox.icoWarning, "Atentie !");
+                    return;
+                }
+
                 string numeRap = "";
                 if (hfRap.Contains("NumeRap"))
                     numeRap = General.Nz(hfRap["NumeRap"], "").ToString();
 
                 if (numeRap != "")
                 {
+                    string idRap = numeRap.Substring(numeRap.LastIndexOf("_") + 1);
+                    if (General.IsNumeric(idRap))
+                    {
+                        string parola = General.Nz(General.ExecutaScalar(@"SELECT ""Parola"" FROM USERS WHERE F70102=@1", new object[] { Session["UserId"] }),"").ToString();
+                        CriptDecript prc = new CriptDecript();
+                        parola = prc.EncryptString(Constante.cheieCriptare, parola, Constante.DECRYPT);
+                        if (parola == txtRapPass.Text)
+                        {
+                            string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + idRap + "&Angajat=" + General.Nz(Session["User_Marca"], -99).ToString());
 
+                            Response.Redirect(url);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Parola nu este corecta", MessageBox.icoWarning, "Atentie !");
+                        }
+                    }
                 }
             }
             catch (Exception ex)

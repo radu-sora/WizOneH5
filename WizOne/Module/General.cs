@@ -6519,7 +6519,7 @@ namespace WizOne.Module
                 HttpContext.Current.Session["Ptj_DataBlocare"] = "22001231";
 
                 //Florin 2019.10.16
-                HttpContext.Current.Session["Json_Programe"] = "";
+                HttpContext.Current.Session["Json_Programe"] = "[]";
 
 
 

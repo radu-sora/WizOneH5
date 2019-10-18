@@ -859,17 +859,28 @@ namespace WizOne.Personal
             {
                 vechime = txtVechimeCarte.Text;
             }
-            string sql = "select a.f10003, Convert(int, F02615) from f100 a left join "
-                + " (select ISNULL(convert(int, substring('" + vechime + "', 1, 2)), 0) * 12 + ISNULL(convert(int, substring('" + vechime + "', 3, 2)), 0)  as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
-                + " left join F026 c on convert(int, " + grila + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int, c.F02611 / 100) * 12) "
-                + " where a.f10003 = " + Session["Marca"].ToString();
+            //string sql = "select a.f10003, Convert(int, F02615) from f100 a left join "
+            //    + " (select ISNULL(convert(int, substring('" + vechime + "', 1, 2)), 0) * 12 + ISNULL(convert(int, substring('" + vechime + "', 3, 2)), 0)  as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
+            //    + " left join F026 c on convert(int, " + grila + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (convert(int, c.F02611 / 100) * 12) "
+            //    + " where a.f10003 = " + Session["Marca"].ToString();
+            //if (Constante.tipBD == 2)
+            //    sql = "select a.f10003, TO_NUMBER(TRUNC(F02615))  from F100 a "
+            //       + " left join(select nvl(to_number(substr('" + vechime + "',1,2)),0) *12 + nvl(to_number(substr('" + vechime + "', 3, 2)), 0) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
+            //       + "  left join F026 c on " + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611 / 100) * 12) where a.f10003 = " + Session["Marca"].ToString();
+
+            string calcLuni = "ISNULL(convert(int, substring('" + vechime + "', 1, 2)), 0) * 12 + ISNULL(convert(int, substring('" + vechime + "', 3, 2)), 0)";
             if (Constante.tipBD == 2)
-                sql = "select a.f10003, TO_NUMBER(TRUNC(F02615))  from F100 a "
-                   + " left join(select nvl(to_number(substr('" + vechime + "',1,2)),0) *12 + nvl(to_number(substr('" + vechime + "', 3, 2)), 0) as CalcLuni, F10003 from F100) d on a.F10003 = d.F10003 "
-                   + "  left join F026 c on " + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= d.CALCLUNI and d.CALCLUNI < (to_number(c.F02611 / 100) * 12) where a.f10003 = " + Session["Marca"].ToString();
+                calcLuni = "nvl(to_number(substr('" + vechime + "',1,2)),0) *12 + nvl(to_number(substr('" + vechime + "', 3, 2)), 0)";
+
+            string sql = "select  Convert(int, F02615) from  "
+                + " F026 c where convert(int, " + grila + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (convert(int, c.F02611 / 100) * 12) ";               
+            if (Constante.tipBD == 2)
+                sql = "select TO_NUMBER(TRUNC(F02615))  from  "
+                   + " F026 c where" + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (to_number(c.F02611 / 100) * 12) ";
+
             DataTable dtGrila = General.IncarcaDT(sql, null);
-            if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][1] != null && dtGrila.Rows[0][1].ToString().Length > 0)
-                txtZileCOCuvAnCrt.Text = dtGrila.Rows[0][1].ToString();
+            if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][0] != null && dtGrila.Rows[0][0].ToString().Length > 0)
+                txtZileCOCuvAnCrt.Text = dtGrila.Rows[0][0].ToString();
             else
                 txtZileCOCuvAnCrt.Text = "";
         }
@@ -1603,6 +1614,8 @@ namespace WizOne.Personal
                     if (txtZileCOAnAnt != null)
                         txtZileCOAnAnt.Value = General.Nz(dtCO["SoldAnterior"], "").ToString();
                 }
+                else
+                    CalcGrila(f10072);
             }
             catch (Exception ex)
             {

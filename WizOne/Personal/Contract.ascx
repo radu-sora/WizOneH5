@@ -215,6 +215,7 @@
             nrAni++;
             nrLuniFinal -= 12;
         }
+        var gasit = 0;
         var vechime = 100 * nrAni + nrLuniFinal;
         var grila = "<%=Session["MP_Grila"] %>";
         var resG = grila.split(";");
@@ -225,11 +226,13 @@
                 var valMax = parseInt(linieG[2]);
                 if (valMin <= vechime && vechime <= valMax) {
                     txtZileCOCuvAnCrt.SetValue(parseInt(linieG[3]));
+                    gasit = 1;
                     break;
                 }
             }
         }
-
+        if (gasit == 0)
+            txtZileCOCuvAnCrt.SetValue("");
     }
 
     function dateDiffInDays(a, b) {

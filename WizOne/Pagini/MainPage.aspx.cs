@@ -361,40 +361,46 @@ namespace WizOne.Pagini
             }
         }
 
-        protected void btnRapPass_Click(object sender, EventArgs e)
+        protected void popUpPass_WindowCallback(object source, PopupWindowCallbackArgs e)
         {
             try
             {
-                if (txtRapPass.Text.Trim() == "")
+                if (txtRapPass.Text.Trim() != "")
                 {
-                    MessageBox.Show("Lipsesc date", MessageBox.icoWarning, "Atentie !");
-                    return;
-                }
+                    string numeRap = "";
+                    if (hfRap.Contains("NumeRap"))
+                        numeRap = General.Nz(hfRap["NumeRap"], "").ToString();
 
-                string numeRap = "";
-                if (hfRap.Contains("NumeRap"))
-                    numeRap = General.Nz(hfRap["NumeRap"], "").ToString();
-
-                if (numeRap != "")
-                {
-                    string idRap = numeRap.Substring(numeRap.LastIndexOf("_") + 1);
-                    if (General.IsNumeric(idRap))
+                    if (numeRap != "")
                     {
-                        string parola = General.Nz(General.ExecutaScalar(@"SELECT ""Parola"" FROM USERS WHERE F70102=@1", new object[] { Session["UserId"] }),"").ToString();
-                        CriptDecript prc = new CriptDecript();
-                        parola = prc.EncryptString(Constante.cheieCriptare, parola, Constante.DECRYPT);
-                        if (parola == txtRapPass.Text)
+                        string idRap = numeRap.Substring(numeRap.LastIndexOf("_") + 1);
+                        if (General.IsNumeric(idRap))
                         {
-                            string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + idRap + "&Angajat=" + General.Nz(Session["User_Marca"], -99).ToString());
+                            string parola = General.Nz(General.ExecutaScalar(@"SELECT ""Parola"" FROM USERS WHERE F70102=@1", new object[] { Session["UserId"] }), "").ToString();
+                            CriptDecript prc = new CriptDecript();
+                            parola = prc.EncryptString(Constante.cheieCriptare, parola, Constante.DECRYPT);
+                            if (parola == txtRapPass.Text)
+                            {
+                                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + idRap + "&Angajat=" + General.Nz(Session["User_Marca"], -99).ToString());
 
-                            Response.Redirect(url);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Parola nu este corecta", MessageBox.icoWarning, "Atentie !");
+                                //Response.Redirect(url);
+                                ASPxPopupControl.RedirectOnCallback(url);
+                            }
+                            else
+                            {
+                                //MessageBox.Show("Parola nu este corecta", MessageBox.icoWarning, "Atentie !");
+                                popUpPass.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Parola nu este corecta");
+                            }
                         }
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Lipsesc date", MessageBox.icoWarning, "Atentie !");
+                }
+
+                txtRapPass.Text = "";
+                hfRap.Remove("NumeRap");
             }
             catch (Exception ex)
             {

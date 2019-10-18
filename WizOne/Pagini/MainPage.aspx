@@ -8,6 +8,17 @@
             popUpPass.Show();
             hfRap.Set('NumeRap', s.name); 
         }
+
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
+
     </script>
 </asp:Content>
 
@@ -54,21 +65,22 @@
 
 
     <dx:ASPxPopupControl ID="popUpPass" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
-        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
-        EnableViewState="False" PopupElementID="popUpPassArea" PopupHorizontalAlign="WindowCenter"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top" OnWindowCallback="popUpPass_WindowCallback"
+        EnableViewState="False" PopupElementID="popUpPassArea" PopupHorizontalAlign="WindowCenter" SettingsLoadingPanel-Enabled="true"
         PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="350px" Height="150px" HeaderText="Parola Raport"
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpPass" EnableHierarchyRecreation="false">
+        <ClientSideEvents EndCallback="OnEndCallback" />
         <ContentCollection>
             <dx:PopupControlContentControl runat="server">
                 <asp:Panel ID="Panel1" runat="server">
                     <table style="width:100%;">
                         <tr>
                             <td align="right">
-                                <dx:ASPxButton ID="btnRapPass" runat="server" Text="Afisare" AutoPostBack="true" OnClick="btnRapPass_Click" >
+                                <dx:ASPxButton ID="btnRapPass" runat="server" Text="Afisare" AutoPostBack="false" >
                                     <ClientSideEvents Click="function(s, e) {
+                                        e.processOnServer = false;
                                         if (txtRapPass.GetText() == '')
                                         {
-                                        e.processOnServer = false;
                                             swal({
                                                 title: 'Atentie !', text: 'Lipsesc date',
                                                 type: 'warning'
@@ -78,7 +90,7 @@
                                         {
                                             popUpPass.Hide();
                                             pnlLoading.Show();
-                                            e.processOnServer = true;
+                                            popUpPass.PerformCallback();
                                         }
                                     }" />
                                     <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>

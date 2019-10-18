@@ -131,7 +131,7 @@ namespace WizOne.Pagini
                             dr = dtCfg.Select("Camp='" + col.ColumnName + "'")[0];
                             tipCamp = Convert.ToInt32(dr["TipCamp"] == DBNull.Value ? 0 : dr["TipCamp"]);
                             if (dr != null && tipCamp == 2 && dr["SursaCombo"].ToString() == "") tipCamp = 0;
-                            if (vizibil) vizibil = Convert.ToInt32(dr["Vizibil"] as int? ?? 0) == 1 ? true : false;
+                            if (vizibil) vizibil = Convert.ToInt32(General.Nz(dr["Vizibil"],0)) == 1 ? true : false;
                         }
 
                         

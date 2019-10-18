@@ -92,7 +92,8 @@ namespace WizOne
                 lblLimbi.Text = Dami.TraduCuvant("Limba");
                 lblParola.Text = Dami.TraduCuvant("Parola");
                 lblConfirma.Text = Dami.TraduCuvant("ConfirmaParola");
-
+                lblParolaRap.Text = Dami.TraduCuvant("Parola rapoarte");
+                lblConfirmaRap.Text = Dami.TraduCuvant("ConfirmaParolaRapoarte");
 
                 #endregion
 
@@ -249,11 +250,9 @@ namespace WizOne
         {
             try
             {
-                if (txtParola.Text == "" || txtConfirma.Text == "")
-                {
-                    MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "");
-                }
-                else
+                bool modif = false;
+
+                if (txtParola.Text != "" && txtConfirma.Text != "")
                 {
                     if (txtParola.Text != txtConfirma.Text)
                     {
@@ -279,9 +278,42 @@ namespace WizOne
                         string strSql = @"UPDATE USERS SET F70103=@1 WHERE F70102=@2";
                         General.ExecutaNonQuery(strSql, new string[] { parola, Session["UserId"].ToString() });
 
-                        MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+                        modif = true;
                     }
                 }
+
+                if (txtParolaRap.Text != "" && txtConfirmaRap.Text != "")
+                {
+                    if (txtParolaRap.Text != txtConfirmaRap.Text)
+                    {
+                        MessageBox.Show("Parola nu coincide !", MessageBox.icoWarning, "");
+                    }
+                    else
+                    {
+                        if (General.VarSession("ParolaComplexa").ToString() == "1")
+                        {
+                            var ras = General.VerificaComplexitateParola(txtParolaRap.Text);
+                            if (ras != "")
+                            {
+                                MessageBox.Show(ras, MessageBox.icoWarning, "Parola invalida");
+                                return;
+                            }
+                        }
+
+                        CriptDecript prc = new CriptDecript();
+                        string parola = prc.EncryptString(Constante.cheieCriptare, txtParolaRap.Text, 1);
+
+                        General.AddUserIstoric(2);
+
+                        string strSql = @"UPDATE USERS SET ""Parola""=@1 WHERE F70102=@2";
+                        General.ExecutaNonQuery(strSql, new string[] { parola, Session["UserId"].ToString() });
+
+                        modif = true;
+                    }
+                }
+
+                if (modif)
+                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
             }
             catch (Exception ex)
             {

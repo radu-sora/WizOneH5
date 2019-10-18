@@ -170,6 +170,14 @@
                                         <dx:ASPxTextBox ID="txtConfirma" runat="server" Width="150px" Password="true" >
                                             <ClientSideEvents KeyPress="onKeyPress" />
                                         </dx:ASPxTextBox>
+                                        <dx:ASPxLabel ID="lblParolaRap" AssociatedControlID="txtParolaRap" runat="server" Text="Parola rapoarte" />
+                                        <dx:ASPxTextBox ID="txtParolaRap" runat="server" Width="150px" Password="true" >
+                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxLabel ID="lblConfirmaRap" AssociatedControlID="txtConfirmaRap" runat="server" Text="Confirma parola rapoarte" />
+                                        <dx:ASPxTextBox ID="txtConfirmaRap" runat="server" Width="150px" Password="true" >
+                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                        </dx:ASPxTextBox>
                                     </div>
                                 </li>
                             </ul> 

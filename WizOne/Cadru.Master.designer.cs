@@ -274,6 +274,42 @@ namespace WizOne {
         protected global::DevExpress.Web.ASPxTextBox txtConfirma;
         
         /// <summary>
+        /// lblParolaRap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblParolaRap;
+        
+        /// <summary>
+        /// txtParolaRap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtParolaRap;
+        
+        /// <summary>
+        /// lblConfirmaRap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblConfirmaRap;
+        
+        /// <summary>
+        /// txtConfirmaRap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtConfirmaRap;
+        
+        /// <summary>
         /// lnkOut control.
         /// </summary>
         /// <remarks>

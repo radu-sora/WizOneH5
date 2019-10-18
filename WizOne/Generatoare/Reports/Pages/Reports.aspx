@@ -57,7 +57,6 @@
                     </ValidationSettings>
                 </PropertiesComboBox>
             </dx:GridViewDataComboBoxColumn>
-            <dx:GridViewDataCheckColumn FieldName="HasPassword" Caption="Are Parola" VisibleIndex="4" />
             <dx:GridViewDataTextColumn FieldName="ReportId" Visible="false" VisibleIndex="5" ShowInCustomizationForm="false" />
         </Columns>
         <ClientSideEvents

@@ -3,8 +3,15 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
-
+    <script>
+        function OnClickRapButton(s) {
+            alert(s.name);
+            popUpPass.Show();
+            hfRap.Set('NumeRap', s.name); 
+        }
+    </script>
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <dx:ASPxGlobalEvents ID="glob" runat="server">
@@ -45,6 +52,42 @@
             </div>
         </div>
     </div>
+
+
+    <dx:ASPxPopupControl ID="popUpPass" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpPassArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="350px" Height="220px" HeaderText="Parola Raport"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpPass" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel1" runat="server">
+                    <table style="width:100%;">
+                        <tr>
+                            <td align="right">
+                                <dx:ASPxButton ID="btnRapPass" runat="server" Text="Afisare" AutoPostBack="true" OnClick="btnRapPass_Click" >
+                                    <ClientSideEvents Click="function(s, e) {
+                                        popUpPass.Hide();
+                                        pnlLoading.Show();
+                                        e.processOnServer = true;
+                                    }" />
+                                    <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
+                                </dx:ASPxButton>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:100%; padding-left:70px;">
+                                <dx:ASPxTextBox ID="txtRapPass" ClientInstanceName="txtRapPass" runat="server" Width="150" />
+                                <dx:ASPxHiddenField ID="hfRap" runat="server" />
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
 
 
 </asp:Content>

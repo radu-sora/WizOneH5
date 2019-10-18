@@ -203,8 +203,15 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dtRap.Rows.Count; i++)
                     {
                         ASPxButton btn = new ASPxButton();
-                        btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] as string ?? "").ToString());
-                        btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + dtRap.Rows[i]["DynReportId"]);
+                        btn.ID = "btn_Rap_" + dtRap.Rows[i]["DynReportId"];
+                        btn.Text = Dami.TraduCuvant(General.Nz(dtRap.Rows[i]["Name"],"").ToString());
+                        if (Convert.ToInt32(General.Nz(dtRap.Rows[i]["HasPassword"], 0)) == 1)
+                        {
+                            btn.ClientSideEvents.Click = "function(s, e){ OnClickRapButton(s); }";
+                            btn.AutoPostBack = false;
+                        }
+                        else
+                            btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + dtRap.Rows[i]["DynReportId"] + "&Angajat=" + General.Nz(Session["User_MArca"], -99).ToString());
 
                         ASPxDockPanel pnl = new ASPxDockPanel();
                         string nme = "wdgRap" + i;
@@ -353,6 +360,24 @@ namespace WizOne.Pagini
             }
         }
 
+        protected void btnRapPass_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string numeRap = "";
+                if (hfRap.Contains("NumeRap"))
+                    numeRap = General.Nz(hfRap["NumeRap"], "").ToString();
 
+                if (numeRap != "")
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

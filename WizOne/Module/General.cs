@@ -7713,13 +7713,21 @@ namespace WizOne.Module
         }
 
 
-        public static void AddUserIstoric()
+        public static void AddUserIstoric(int tip = 1)
         {
+            //tip
+            //tip = 1 se salveaza istoric parola logare
+            //tip = 2 se salveaza istoric parola fluturas
+
             try
             {
                 string idUser = General.Nz(HttpContext.Current.Session["UserId"],-99).ToString();
                 string strSql = $@"INSERT INTO ""ParoleUtilizatorIstoric""(""IdUser"", ""Parola"", ""Data"", USER_NO, TIME)
                         SELECT F70102, F70103, {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""Users"" WHERE F70102={idUser}";
+                if (tip == 2)
+                    strSql = $@"INSERT INTO ""ParoleFluturasIstoric""(""F10003"", ""Parola"", ""Data"", USER_NO, TIME)
+                        SELECT F10003, Parola, {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""Users"" WHERE F70102={idUser} AND F10003 IS NOT NULL AND F10003 <> -99";
+
                 General.ExecutaNonQuery(strSql, null);
             }
             catch (Exception ex)

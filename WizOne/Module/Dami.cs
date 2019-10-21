@@ -741,7 +741,7 @@ namespace WizOne.Module
                                 LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
                                 LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
                                 LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
-                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = A.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 3 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
+                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"", W.""IdActiune"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC, W.""IdActiune"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = A.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 3 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
                                 WHERE 1=1 ";
             }
             catch (Exception ex)

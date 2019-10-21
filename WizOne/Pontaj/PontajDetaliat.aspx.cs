@@ -1587,8 +1587,8 @@ namespace WizOne.Pontaj
                         {
                             if (upd.NewValues["ValTmp" + i] != null)
                                 row["Val" + i] = Convert.ToDateTime(upd.NewValues["ValTmp" + i]).Minute + (Convert.ToDateTime(upd.NewValues["ValTmp" + i]).Hour * 60);
-                            else
-                                row["Val" + i] = DBNull.Value;
+                            //else
+                            //    row["Val" + i] = DBNull.Value;
 
                             //salvam ValModif -urile
                             if (Convert.ToDateTime(General.Nz(upd.NewValues["ValTmp" + i], DateTime.Now)) != Convert.ToDateTime(General.Nz(upd.OldValues["ValTmp" + i], DateTime.Now))) row["ValModif" + i] = Constante.TipModificarePontaj.ModificatManual;

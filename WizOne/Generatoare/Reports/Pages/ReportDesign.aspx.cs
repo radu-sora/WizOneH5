@@ -250,21 +250,23 @@ namespace WizOne.Generatoare.Reports.Pages
             if (dataSource != null && (dataSource as SqlDataSource).Queries.Count > 0 && dataMember != null)
             {
                 var resultDataSource = new SqlDataSource();
-                var sql = "SELECT ";
+                var sql = "SELECT";
                 var resultSet = (dataSource as IListSource).GetList() as ResultSet;
                 var resultTable = dataMember.Length > 0 ? resultSet.Tables.First(tbl => tbl.TableName == dataMember) : resultSet.Tables.First();
 
                 resultTable.Columns.ForEach(col =>
                 {
-                    sql += $"0 AS [{col.Name}], ";
+                    sql += sql.Length == 6 ? $" 0 AS [{col.Name}]" : $", 0 AS [{col.Name}]";
                 });
 
-                sql = sql.TrimEnd(new char[] { ',', ' ' });
-
                 resultDataSource.LoadFromXml((dataSource as SqlDataSource).SaveToXml());
-                resultDataSource.Queries.Clear();
-                resultDataSource.Queries.Add(new CustomSqlQuery(dataMember.Length > 0 ? dataMember : "Query", sql));
                 resultDataSource.ConnectionParameters = new ReportDataSourceWizardConnectionStringsProvider().GetDataConnectionParameters(resultDataSource.ConnectionName);
+
+                if (resultDataSource.Connection.ConnectionString.Contains("ODPManaged"))
+                    sql = sql.Replace('[', '"').Replace(']', '"') + " FROM dual";
+                
+                resultDataSource.Queries.Clear();
+                resultDataSource.Queries.Add(new CustomSqlQuery(dataMember.Length > 0 ? dataMember : "Query", sql));                
                 resultDataSource.Fill();                
 
                 return resultDataSource;

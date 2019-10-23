@@ -499,30 +499,34 @@
         }
 
         function DamiPrograme(e) {
-            currentEditableVisibleIndex = e.visibleIndex;
-            var idCtr = grDate.batchEditApi.GetCellValue(currentEditableVisibleIndex, "IdContract");
-            var idPrg = grDate.batchEditApi.GetCellValue(currentEditableVisibleIndex, "IdProgram");
-            LoadPrograme(idCtr);
+            if (typeof cmbProgram !== "undefined" && ASPxClientUtils.IsExists(cmbProgram)) {
+                currentEditableVisibleIndex = e.visibleIndex;
+                var idCtr = grDate.batchEditApi.GetCellValue(currentEditableVisibleIndex, "IdContract");
+                var idPrg = grDate.batchEditApi.GetCellValue(currentEditableVisibleIndex, "IdProgram");
+                LoadPrograme(idCtr);
 
-            if (cmbProgram.FindItemByValue(idPrg))
-                cmbProgram.SetSelectedItem(cmbProgram.FindItemByValue(idPrg));
-            else {
-                cmbProgram.SetSelectedIndex(-1);
-                
-                cmbProgram.SetText("");
-                cmbProgram.SetValue(null);
+                if (cmbProgram.FindItemByValue(idPrg))
+                    cmbProgram.SetSelectedItem(cmbProgram.FindItemByValue(idPrg));
+                else {
+                    cmbProgram.SetSelectedIndex(-1);
+
+                    cmbProgram.SetText("");
+                    cmbProgram.SetValue(null);
+                }
             }
         }
 
         function LoadPrograme(idCtr) {
-            let programe = <%=Session["Json_Programe"] %>;
-            var arr = programe.filter(function (item) { return item.idContract == idCtr });
+            if (typeof cmbProgram !== "undefined" && ASPxClientUtils.IsExists(cmbProgram)) {
+                let programe = <%=Session["Json_Programe"] %>;
+                var arr = programe.filter(function (item) { return item.idContract == idCtr });
 
-            cmbProgram.ClearItems();
+                cmbProgram.ClearItems();
 
-            var rez = "";
-            for (var i = 0; i < arr.length; i++) {
-                cmbProgram.AddItem(arr[i].program, Number(arr[i].idProgram));
+                var rez = "";
+                for (var i = 0; i < arr.length; i++) {
+                    cmbProgram.AddItem(arr[i].program, Number(arr[i].idProgram));
+                }
             }
         }
 

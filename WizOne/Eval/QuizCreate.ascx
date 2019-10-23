@@ -263,7 +263,7 @@
                                                                                     <td>&nbsp;&nbsp;&nbsp;</td>
                                                                                     <td style="margin-left:50px;">
                                                                                         <dx:ASPxCheckBox ID="chkQuizActiv" runat="server" Text="Activ" TextAlign="Left"
-                                                                                            Checked='<%#DataBinder.GetPropertyValue(Container.DataItem, "Activ").ToString()=="1" %>'
+                                                                                            Checked='<%#  Eval("Activ") == DBNull.Value ? false : Convert.ToBoolean(Eval("Activ"))%>'
                                                                                             ClientInstanceName="chkQuizActiv" ClientIDMode="Static">
                                                                                             <ClientSideEvents ValueChanged="function(s, e){ OnValueChanged(s); }" />
                                                                                         </dx:ASPxCheckBox>
@@ -356,7 +356,7 @@
                                                                                     <td>&nbsp;&nbsp;&nbsp;</td> 
                                                                                     <td>
                                                                                         <dx:ASPxCheckBox ID="chkPreluareAutomataRaspunsuri" Width="220" runat="server" Text="Preluare automata a raspunsurilor"
-                                                                                            TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem, "Preluare").ToString()=="1" %>'
+                                                                                            TextAlign="Left" Checked='<%#  Eval("Preluare") == DBNull.Value ? false : Convert.ToBoolean(Eval("Preluare"))%>'
                                                                                             ClientInstanceName="chkPreluareAutomataRaspunsuri" ClientIDMode="Static">
                                                                                             <ClientSideEvents ValueChanged="function(s, e){ OnValueChanged(s); }" />
                                                                                         </dx:ASPxCheckBox>
@@ -368,7 +368,7 @@
                                                                                 <tr>
                                                                                    <td>
                                                                                         <dx:ASPxCheckBox ID="chkLuatLaCunostinta" Width="120" runat="server" Text="Luat la cunostinta"
-                                                                                            TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem, "LuatLaCunostinta").ToString()=="1" %>'
+                                                                                            TextAlign="Left" Checked='<%#  Eval("LuatLaCunostinta") == DBNull.Value ? false : Convert.ToBoolean(Eval("LuatLaCunostinta"))%>'
                                                                                             ClientInstanceName="chkLuatLaCunostinta" ClientIDMode="Static">
                                                                                             <ClientSideEvents ValueChanged="function(s, e){ OnValueChanged(s); }" />
                                                                                         </dx:ASPxCheckBox>

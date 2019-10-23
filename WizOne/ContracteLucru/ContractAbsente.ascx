@@ -50,7 +50,7 @@
 							        </dx:ASPxTimeEdit>
 						        </td>
                                 <td>
-                                    <dx:ASPxCheckBox ID="chkOreSup"  runat="server" Width="80" Text="Ore sup. ?" TextAlign="Right" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"OreSup").ToString()=="1"%>' ClientInstanceName="chkbx1" >
+                                    <dx:ASPxCheckBox ID="chkOreSup"  runat="server" Width="80" Text="Ore sup. ?" TextAlign="Right"  Checked='<%#  Eval("OreSup") == DBNull.Value ? false : Convert.ToBoolean(Eval("OreSup"))%>' ClientInstanceName="chkbx1" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
                                     </dx:ASPxCheckBox>
                                 </td>
@@ -71,12 +71,12 @@
 				        <table width="60%">	
 					        <tr>				
                                 <td >
-                                    <dx:ASPxCheckBox ID="chkScadeVal0"  runat="server" Width="150" Text="Scade ore normale" TextAlign="Right" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"ScadeVal0").ToString()=="1"%>' ClientInstanceName="chkbx2" >
+                                    <dx:ASPxCheckBox ID="chkScadeVal0"  runat="server" Width="150" Text="Scade ore normale" TextAlign="Right"  Checked='<%#  Eval("ScadeVal0") == DBNull.Value ? false : Convert.ToBoolean(Eval("ScadeVal0"))%>' ClientInstanceName="chkbx2" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
                                     </dx:ASPxCheckBox>
                                 </td>
                                 <td colspan="2">
-                                    <dx:ASPxCheckBox ID="chkScadeFara"  runat="server" Width="170" Text="Scade fara depasire norma" TextAlign="Right" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"ScadeFaraDepasireNorma").ToString()=="1"%>' ClientInstanceName="chkbx3" >
+                                    <dx:ASPxCheckBox ID="chkScadeFara"  runat="server" Width="170" Text="Scade fara depasire norma" TextAlign="Right"  Checked='<%#  Eval("ScadeFaraDepasireNorma") == DBNull.Value ? false : Convert.ToBoolean(Eval("ScadeFaraDepasireNorma"))%>' ClientInstanceName="chkbx3" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />                                        
                                     </dx:ASPxCheckBox>
                                 </td>
@@ -92,7 +92,7 @@
 					        </tr>
                             <tr>
                                 <td >
-                                    <dx:ASPxCheckBox ID="chkPontareAuto"  runat="server" Width="150" Text="Initializare automata:" TextAlign="Right" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"PontareAutomata").ToString()=="1"%>' ClientInstanceName="chkbx4" >
+                                    <dx:ASPxCheckBox ID="chkPontareAuto"  runat="server" Width="150" Text="Initializare automata:" TextAlign="Right"  Checked='<%#  Eval("PontareAutomata") == DBNull.Value ? false : Convert.ToBoolean(Eval("PontareAutomata"))%>' ClientInstanceName="chkbx4" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerCtrAbs(s); }" />
                                     </dx:ASPxCheckBox>
                                 </td>                             

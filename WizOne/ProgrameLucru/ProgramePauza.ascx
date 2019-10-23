@@ -35,7 +35,7 @@
 							        </dx:ASPxTimeEdit>
 						        </td>
                                 <td>
-                                    <dx:ASPxCheckBox ID="chkPauzaDedusa"  runat="server" Width="100" Text="Pauza dedusa" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"PauzaDedusa").ToString()=="1"%>' ClientInstanceName="chkbx1" >                                     
+                                    <dx:ASPxCheckBox ID="chkPauzaDedusa"  runat="server" Width="100" Text="Pauza dedusa" TextAlign="Left" Checked='<%#  Eval("PauzaDedusa") == DBNull.Value ? false : Convert.ToBoolean(Eval("PauzaDedusa"))%>' ClientInstanceName="chkbx1" >                                     
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerPtjPauza(s); }" />
                                     </dx:ASPxCheckBox>
                                 </td>

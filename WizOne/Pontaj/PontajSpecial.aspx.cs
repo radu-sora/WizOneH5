@@ -84,14 +84,19 @@ namespace WizOne.Pontaj
                     IncarcaAngajati();
 
                     //General.ExecutaNonQuery("DELETE FROM \"PtjSpecial_Sabloane\" WHERE \"Denumire\" IS NULL", null);                
-                    string sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
+                    string sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram1\",  NULL AS \"IdProgram2\", NULL AS \"IdProgram3\", NULL AS \"IdProgram4\", NULL AS \"IdProgram5\", NULL AS \"IdProgram6\", NULL AS \"IdProgram7\", NULL AS \"IdProgram8\", NULL AS \"IdProgram9\", NULL AS \"IdProgram10\","
+                        + " NULL AS \"IdProgram11\",  NULL AS \"IdProgram12\", NULL AS \"IdProgram13\", NULL AS \"IdProgram14\", NULL AS \"IdProgram15\", NULL AS \"IdProgram16\", NULL AS \"IdProgram17\", NULL AS \"IdProgram18\", NULL AS \"IdProgram19\", NULL AS \"IdProgram20\","
+                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\","
+                        + " NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
                         + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
                         + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
                         + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
                         + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
                         + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\" "
                         + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
-                        + "SELECT  \"Id\",  \"Denumire\", \"IdProgram\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                        + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
+                        + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
+                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
                         + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
                         + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
                         + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
@@ -427,17 +432,17 @@ namespace WizOne.Pontaj
                     string sql = "";
                     string oraIn = "", oraOut = "";
 
-                    if (sablon["IdProgram"] != null && sablon["IdProgram"].ToString().Length > 0)
+                    if (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0)
                     {
                         if (Constante.tipBD == 1)
                         {
-                            oraIn = ", \"In1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram"].ToString() + "), 108), 120)";
-                            oraOut = ", \"Out1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram"].ToString() + "), 108), 120)";
+                            oraIn = ", \"In1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+                            oraOut = ", \"Out1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
                         }
                         else
                         {
-                            oraIn = ", \"In1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
-                            oraOut = ", \"Out1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram"].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            oraIn = ", \"In1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            oraOut = ", \"Out1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
                         }
                     }
                     else
@@ -648,14 +653,18 @@ namespace WizOne.Pontaj
                                     string cmp = "ISNULL";
                                     if (Constante.tipBD == 2) cmp = "NVL";
                                     General.ExecutaNonQuery("INSERT INTO \"PtjSpecial_Sabloane\" (\"Id\") SELECT " + cmp + "(MAX(\"Id\"), 0) + 1 FROM \"PtjSpecial_Sabloane\"", null);
-                                    sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
+                                    sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram1\",  NULL AS \"IdProgram2\", NULL AS \"IdProgram3\", NULL AS \"IdProgram4\", NULL AS \"IdProgram5\", NULL AS \"IdProgram6\", NULL AS \"IdProgram7\", NULL AS \"IdProgram8\", NULL AS \"IdProgram9\", NULL AS \"IdProgram10\","
+                        + " NULL AS \"IdProgram11\",  NULL AS \"IdProgram12\", NULL AS \"IdProgram13\", NULL AS \"IdProgram14\", NULL AS \"IdProgram15\", NULL AS \"IdProgram16\", NULL AS \"IdProgram17\", NULL AS \"IdProgram18\", NULL AS \"IdProgram19\", NULL AS \"IdProgram20\","
+                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
                                       + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
                                       + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
                                       + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
                                       + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
                                       + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\" "
                                       + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
-                                      + "SELECT  \"Id\",  \"Denumire\", \"IdProgram\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                                      + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
+                        + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
+                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
                                       + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
                                       + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
                                       + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "
@@ -682,7 +691,7 @@ namespace WizOne.Pontaj
                         if (cmbNrZileSablon.Value != null)
                         {
                             linii[0]["NrZile"] = Convert.ToInt32(cmbNrZileSablon.Value);
-                            linii[0]["IdProgram"] = cmbProgr.Value ?? DBNull.Value;
+                            //linii[0]["IdProgram"] = cmbProgr.Value ?? DBNull.Value;
                             linii[0]["S"] = chkS.Checked ? 1 : 0;
                             linii[0]["D"] = chkD.Checked ? 1 : 0;
                             linii[0]["SL"] = chkSL.Checked ? 1 : 0;
@@ -701,6 +710,8 @@ namespace WizOne.Pontaj
                                         {                                          
                                             if (item.Key == "txtZiua" + i.ToString())
                                                 linii[0]["ValZiua" + i.ToString()] = item.Value;
+                                            if (item.Key == "IdProgram_" + "txtZiua" + i.ToString())
+                                                linii[0]["IdProgram" + i.ToString()] = item.Value ?? DBNull.Value;
                                         }                         
                                       
                                     //}
@@ -716,14 +727,18 @@ namespace WizOne.Pontaj
                         break;
                     case "btnSterge":
                         General.ExecutaNonQuery("DELETE FROM \"PtjSpecial_Sabloane\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value), null);
-                        sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
+                        sql = "SELECT 0 AS \"Id\", '---' AS \"Denumire\", NULL AS \"IdProgram1\",  NULL AS \"IdProgram2\", NULL AS \"IdProgram3\", NULL AS \"IdProgram4\", NULL AS \"IdProgram5\", NULL AS \"IdProgram6\", NULL AS \"IdProgram7\", NULL AS \"IdProgram8\", NULL AS \"IdProgram9\", NULL AS \"IdProgram10\","
+                        + " NULL AS \"IdProgram11\",  NULL AS \"IdProgram12\", NULL AS \"IdProgram13\", NULL AS \"IdProgram14\", NULL AS \"IdProgram15\", NULL AS \"IdProgram16\", NULL AS \"IdProgram17\", NULL AS \"IdProgram18\", NULL AS \"IdProgram19\", NULL AS \"IdProgram20\","
+                        + " NULL AS \"IdProgram21\",  NULL AS \"IdProgram22\", NULL AS \"IdProgram23\", NULL AS \"IdProgram24\", NULL AS \"IdProgram25\", NULL AS \"IdProgram26\", NULL AS \"IdProgram27\", NULL AS \"IdProgram28\", NULL AS \"IdProgram29\", NULL AS \"IdProgram30\", NULL AS \"IdProgram31\", NULL as \"NrZile\", NULL as \"Ziua1\", NULL as \"Ziua2\",  NULL as \"Ziua3\", NULL as \"Ziua4\", NULL as \"Ziua5\", NULL as \"Ziua6\", NULL as \"Ziua7\", NULL as \"Ziua8\", NULL as \"Ziua9\", NULL as \"Ziua10\", "
                           + " NULL as \"Ziua11\", NULL as \"Ziua12\",  NULL as \"Ziua13\", NULL as \"Ziua14\", NULL as \"Ziua15\", NULL as \"Ziua16\", NULL as \"Ziua17\", NULL as \"Ziua18\", NULL as \"Ziua19\", NULL as \"Ziua20\", "
                           + " NULL as \"Ziua21\", NULL as \"Ziua22\",  NULL as \"Ziua23\", NULL as \"Ziua24\", NULL as \"Ziua25\", NULL as \"Ziua26\", NULL as \"Ziua27\", NULL as \"Ziua28\", NULL as \"Ziua29\", NULL as \"Ziua30\", NULL as \"Ziua31\","
                           + " NULL as \"ValZiua1\", NULL as \"ValZiua2\",  NULL as \"ValZiua3\", NULL as \"ValZiua4\", NULL as \"ValZiua5\", NULL as \"ValZiua6\", NULL as \"ValZiua7\", NULL as \"ValZiua8\", NULL as \"ValZiua9\", NULL as \"ValZiua10\", "
                           + " NULL as \"ValZiua11\", NULL as \"ValZiua12\",  NULL as \"ValZiua13\", NULL as \"ValZiua14\", NULL as \"ValZiua15\", NULL as \"ValZiua16\", NULL as \"ValZiua17\", NULL as \"ValZiua18\", NULL as \"ValZiua19\", NULL as \"ValZiua20\", "
                           + " NULL as \"ValZiua21\", NULL as \"ValZiua22\",  NULL as \"ValZiua23\", NULL as \"ValZiua24\", NULL as \"ValZiua25\", NULL as \"ValZiua26\", NULL as \"ValZiua27\", NULL as \"ValZiua28\", NULL as \"ValZiua29\", NULL as \"ValZiua30\", NULL as \"ValZiua31\", 0 AS S, 0 AS D, 0 AS SL, 0 AS \"Decalare\" "
                           + (Constante.tipBD == 2 ? " FROM DUAL " : "") + " UNION "
-                          + "SELECT  \"Id\",  \"Denumire\", \"IdProgram\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
+                          + "SELECT  \"Id\",  \"Denumire\", \"IdProgram1\", \"IdProgram2\", \"IdProgram3\",  \"IdProgram4\",  \"IdProgram5\",  \"IdProgram6\",  \"IdProgram7\",  \"IdProgram8\",  \"IdProgram9\",  \"IdProgram10\","
+                        + "  \"IdProgram11\",   \"IdProgram12\",  \"IdProgram13\",  \"IdProgram14\",  \"IdProgram15\",  \"IdProgram16\",  \"IdProgram17\",  \"IdProgram18\",  \"IdProgram19\",  \"IdProgram20\","
+                        + "  \"IdProgram21\",   \"IdProgram22\",  \"IdProgram23\",  \"IdProgram24\",  \"IdProgram25\",  \"IdProgram26\",  \"IdProgram27\",  \"IdProgram28\",  \"IdProgram29\",  \"IdProgram30\",  \"IdProgram31\", \"NrZile\", \"Ziua1\", \"Ziua2\",  \"Ziua3\", \"Ziua4\", \"Ziua5\", \"Ziua6\", \"Ziua7\", \"Ziua8\", \"Ziua9\", \"Ziua10\", "
                           + " \"Ziua11\", \"Ziua12\",  \"Ziua13\", \"Ziua14\", \"Ziua15\", \"Ziua16\", \"Ziua17\", \"Ziua18\", \"Ziua19\", \"Ziua20\", "
                           + " \"Ziua21\", \"Ziua22\",  \"Ziua23\", \"Ziua24\", \"Ziua25\", \"Ziua26\", \"Ziua27\", \"Ziua28\", \"Ziua29\", \"Ziua30\", \"Ziua31\","
                           + " \"ValZiua1\", \"ValZiua2\",  \"ValZiua3\", \"ValZiua4\", \"ValZiua5\", \"ValZiua6\", \"ValZiua7\", \"ValZiua8\", \"ValZiua9\", \"ValZiua10\", "

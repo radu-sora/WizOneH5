@@ -584,13 +584,14 @@
     function txtSalariu_TextChanged(s) {      
         VerifSalariu(s.GetValue(), cmbTimpPartial.GetValue());
     }
-
+ 
     function VerifSalariu(sal, timp) {
         if (sal == null || sal.length <= 0)      
             return;        
         var salMin = parseInt("<%=Session["MP_SalMin"] %>");
-        if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal))
-            swal({ title: "", text: "Salariul introdus este mai mic decat cel minim (raportat la timp partial)!", type: "warning" });
+        if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal) && cmbIntRepTimpMunca.GetValue() <= 1 && (cmbTipCtrMunca.GetValue() == 1 || cmbTipCtrMunca.GetValue() == 2
+            || cmbTipCtrMunca.GetValue() == 3 || cmbTipCtrMunca.GetValue() == 4  || cmbTipCtrMunca.GetValue() == 33 || cmbTipCtrMunca.GetValue() == 34))
+            swal({ title: "", text: "Salariul introdus este mai mic decat cel minim raportat la norma si conditiile salariale ale angajatului!", type: "warning" });
     }
 
     function CompletareZile(s) { 
@@ -985,7 +986,7 @@
 					</tr>
                         <tr>
                             <td colspan="2">
-                                <dx:ASPxCheckBox ID="chkSalMin"  runat="server" Width="150" Text="Salariu minim conform studii superioare"  TextAlign="Left" TabIndex="17" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F1001117").ToString()=="1"%>' ClientInstanceName="chkbx7" >
+                                <dx:ASPxCheckBox ID="chkSalMin"  runat="server" Width="150" Text="Salariu minim conform studii superioare"  TextAlign="Left" TabIndex="17"  Checked='<%#  Eval("F1001117") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001117"))%>'  ClientInstanceName="chkbx7" >
                                     
                                 </dx:ASPxCheckBox>
                             </td>
@@ -993,7 +994,7 @@
 				        </tr>
                        <tr>
                             <td colspan="2">
-                                <dx:ASPxCheckBox ID="chkConstr"  runat="server" Width="150" Text="Calcul activitate constructii (indiferent de venit)" TextAlign="Left" TabIndex="18" Enabled="false" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F1001118").ToString()=="1"%>' ClientInstanceName="chkbx8" >
+                                <dx:ASPxCheckBox ID="chkConstr"  runat="server" Width="150" Text="Calcul activitate constructii (indiferent de venit)" TextAlign="Left" TabIndex="18" Enabled="false"  Checked='<%#  Eval("F1001118") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001118"))%>' ClientInstanceName="chkbx8" >
                                     
                                 </dx:ASPxCheckBox>
                             </td>
@@ -1234,7 +1235,7 @@
 					</tr>  
                     <tr>
                         <td>
-                            <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" TabIndex="34" Checked='<%#Convert.ToInt32(DataBinder.GetPropertyValue(Container.DataItem,"F10032"))==1%>' ClientInstanceName="chkbx4" >
+                            <dx:ASPxCheckBox ID="chkFunctieBaza"  runat="server" Width="150" Text="Functie de baza" TextAlign="Left" TabIndex="34"  Checked='<%#  Eval("F10032") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10032"))%>' ClientInstanceName="chkbx4" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkFunctieBaza_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>
@@ -1242,7 +1243,7 @@
 				    </tr>         
                    <tr>
                         <td>
-                            <dx:ASPxCheckBox ID="chkCalcDed"  runat="server" Width="150" Text="Calcul deduceri FB" TextAlign="Left" TabIndex="35" Checked='<%#Convert.ToInt32(DataBinder.GetPropertyValue(Container.DataItem,"F10048"))==1%>' ClientInstanceName="chkbx5" >
+                            <dx:ASPxCheckBox ID="chkCalcDed"  runat="server" Width="150" Text="Calcul deduceri FB" TextAlign="Left" TabIndex="35"  Checked='<%#  Eval("F10048") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10048"))%>' ClientInstanceName="chkbx5" >
                                 <ClientSideEvents CheckedChanged="function(s,e){ chkCalcDed_CheckedChanged(s); }" />
                             </dx:ASPxCheckBox>
                         </td>
@@ -1250,7 +1251,7 @@
 				    </tr>   
                         <tr>
                             <td>
-                                <dx:ASPxCheckBox ID="chkScutitImp" runat="server" Width="150" Text="Scutit impozit" TextAlign="Left" TabIndex="36" Checked='<%#Convert.ToInt32(DataBinder.GetPropertyValue(Container.DataItem,"F10026"))==1%>' ClientInstanceName="chkbx1">
+                                <dx:ASPxCheckBox ID="chkScutitImp" runat="server" Width="150" Text="Scutit impozit" TextAlign="Left" TabIndex="36"  Checked='<%#  Eval("F10026") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10026"))%>' ClientInstanceName="chkbx1">
                                     <ClientSideEvents CheckedChanged="function(s,e){ chkScutitImp_CheckedChanged(s); }" />
                                 </dx:ASPxCheckBox>
                             </td>
@@ -1309,7 +1310,7 @@
                                 <dx:ASPxLabel  ID="lblZL" runat="server"  Text="zile lucratoare" ></dx:ASPxLabel >
                             </td>
                             <td align="right">
-							    <dx:ASPxTextBox  ID="txtPerProbaZL" Width="35" TabIndex="40" runat="server" Text='<%# Eval("F1001063") %>' AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtPerProbaZL" Width="35" TabIndex="40" runat="server" Text='<%# Eval("F100975") %>' AutoPostBack="false" >
                                     <ClientSideEvents TextChanged="function(s,e){ ValidareZile(0); }" />
 							    </dx:ASPxTextBox>
 						    </td>
@@ -1322,7 +1323,7 @@
                                 <dx:ASPxLabel  ID="lblZC" runat="server"  Text="zile calendaristice" ></dx:ASPxLabel >
                             </td>
                             <td align="right">
-							    <dx:ASPxTextBox  ID="txtPerProbaZC" Width="35"  runat="server" TabIndex="41" Text='<%# Eval("F100975") %>' AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtPerProbaZC" Width="35"  runat="server" TabIndex="41" Text='<%# Eval("F1001063") %>' AutoPostBack="false" >
                                     <ClientSideEvents TextChanged="function(s,e){ ValidareZile(0); }" />
 							    </dx:ASPxTextBox>
 						    </td>
@@ -1432,7 +1433,7 @@
 					        </tr>
                         <tr>
                             <td colspan="2">
-                                <dx:ASPxCheckBox ID="chkBifaPensionar" runat="server" Width="150" Text="Pensionar" TextAlign="Left" TabIndex="50" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F10037").ToString()=="1"%>' ClientInstanceName="chkbx2" >
+                                <dx:ASPxCheckBox ID="chkBifaPensionar" runat="server" Width="150" Text="Pensionar" TextAlign="Left" TabIndex="50"  Checked='<%#  Eval("F10037") == DBNull.Value ? false : Convert.ToBoolean(Eval("F10037"))%>' ClientInstanceName="chkbx2" >
                                     
                                 </dx:ASPxCheckBox>
                             </td>
@@ -1440,7 +1441,7 @@
 				        </tr>
                         <tr>
                             <td colspan="2">
-                                <dx:ASPxCheckBox ID="chkCotaForfetara" runat="server" Width="150" Text="Cota forfetara" TextAlign="Left" TabIndex="51" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F1001069").ToString()=="1"%>' ClientInstanceName="chkbx9" >
+                                <dx:ASPxCheckBox ID="chkCotaForfetara" runat="server" Width="150" Text="Cota forfetara" TextAlign="Left" TabIndex="51"  Checked='<%#  Eval("F1001069") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001069"))%>' ClientInstanceName="chkbx9" >
                                     
                                 </dx:ASPxCheckBox>
                             </td>
@@ -1448,7 +1449,7 @@
 				        </tr>
                         <tr>
                             <td colspan="2">
-                                <dx:ASPxCheckBox ID="chkBifaDetasat"  runat="server" Width="150" Text="Detasat de la alt angajator" TextAlign="Left" TabIndex="52" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"F100954").ToString()=="1"%>' ClientInstanceName="chkbx3" >
+                                <dx:ASPxCheckBox ID="chkBifaDetasat"  runat="server" Width="150" Text="Detasat de la alt angajator" TextAlign="Left" TabIndex="52"  Checked='<%#  Eval("F100954") == DBNull.Value ? false : Convert.ToBoolean(Eval("F100954"))%>' ClientInstanceName="chkbx3" >
                                     
                                 </dx:ASPxCheckBox>
                             </td>

@@ -3944,7 +3944,7 @@ namespace WizOne.Eval
 
                 General.ExecutaNonQuery(tmpSql, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), General.Nz(ent.Rows[0]["Pozitie"],1), General.Nz(ent.Rows[0]["Culoare"], "#FFFFFF00"), General.Nz(ent.Rows[0]["Finalizat"],0) });
 
-                //competenta
+              
                 if (ent.Rows[0]["Finalizat"].ToString() != "1")
                 {
                     if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1")
@@ -3992,6 +3992,25 @@ namespace WizOne.Eval
                     //        General.IncarcaDT(sql, new object[] { Convert.ToInt32(ent.Rows[0]["Pozitie"].ToString()), dtCompetente.Rows[i][0].ToString(), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), Convert.ToInt32(ent.Rows[0]["Pozitie"].ToString()) - 1, Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) });
                     //    }
                     //}
+                }
+                else
+                {//Radu 23.10.2019 - se transfera in EvalObiIndividuale si Eval_CompetenteAngajat
+                    string sqlOC =
+                            $@"BEGIN
+
+                            INSERT INTO ""Eval_ObiIndividuale"" (""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"")
+                            SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = @1), F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2""
+                            FROM ""Eval_ObiIndividualeTemp"" 
+                            WHERE ""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
+
+                            INSERT INTO ""Eval_CompetenteAngajat"" (""IdPeriod"", F10003, ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"",  ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""Explicatii"")
+                            SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = @1), F10003, ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""Explicatii""
+                            FROM ""Eval_CompetenteAngajatTemp"" 
+                            WHERE  ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
+
+                            END; ";
+                    General.ExecutaNonQuery(sqlOC, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+
                 }
 
                 if (entQz != null && entQz.Rows.Count > 0 && Convert.ToInt32(entQz.Rows[0]["Preluare"] != DBNull.Value ? entQz.Rows[0]["Preluare"].ToString() : "0") == 1 && Convert.ToInt32(entIst.Rows[0]["Pozitie"] != DBNull.Value ? entIst.Rows[0]["Pozitie"].ToString() : "-99") < Convert.ToInt32(ent.Rows[0]["TotalCircuit"].ToString()))

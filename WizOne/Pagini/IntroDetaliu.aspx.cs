@@ -159,6 +159,10 @@ namespace WizOne.Pagini
                 //Solicitari diverse
                 lstBadges.Add(new metaBadge { StringSelect = @"SELECT * FROM ""Ptj_Cereri"" WHERE 1=2", Pagina = "../CereriDiverse/Cereri.aspx", Eticheta = Dami.TraduCuvant("Solicitari diverse"), RutaImg = "bdgCer.jpg" });
 
+                //Florin 2019.10.23
+                //evaluare - filtrare questionare 360 sau proiect si care trebuie completate
+                lstBadges.Add(new metaBadge { StringSelect = Dami.SelectEvaluare(), Pagina = "../Eval/EvalLista.aspx?q=34", Eticheta = Dami.TraduCuvant("Evaluari 360"), RutaImg = "bdgEvl.jpg" });
+
 
                 int j = 0;
 

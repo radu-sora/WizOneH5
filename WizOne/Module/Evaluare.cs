@@ -1339,7 +1339,8 @@ namespace WizOne.Module
 	                case
 		                when {0}(dr.""PozitieVizibila"", -99) = 0  then 1
 		                else 0
-	                end as ""FaraDrepturi"", per.""DenPerioada""
+	                end as ""FaraDrepturi"", per.""DenPerioada"",
+                CASE WHEN (SELECT COUNT(*) FROM ""Eval_RaspunsIstoric"" Z WHERE Z.""IdQuiz"" = rasp.""IdQuiz"" AND ""IdUser"" = {11}) <> 0 THEN 1 ELSE 0 END AS ""Quiz360Completat""
                 from ""Eval_Raspuns"" rasp
                 join ""Eval_Quiz"" chest on rasp.""IdQuiz"" = chest.""Id""
                 join ""F100"" fnume on rasp.""F10003"" = fnume.""F10003""

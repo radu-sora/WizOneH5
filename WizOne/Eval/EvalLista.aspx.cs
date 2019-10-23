@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -103,6 +104,48 @@ namespace WizOne.Eval
                 //string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
                 //string sqlHr = $@"SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"" ";
                 //if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) != 0) btnModif.Visible = true;
+
+                //Florin 2019.10.23
+                //aplicam filtrele
+                if (!IsPostBack)
+                {
+                    string q = General.Nz(Request.QueryString["q"], "").ToString();
+                    switch(q)
+                    {
+                        case "12":
+                            grDate.FilterExpression = "[Stare] NOT LIKE '%finalizat%' AND [CategorieQuiz] = 0";
+                            break;
+                        case "34":
+                            grDate.FilterExpression = "[Quiz360Completat] = 0 AND [CategorieQuiz] <> 0";
+                            break;
+                        case "56":
+                            {
+                                if (General.Nz(Session["EvalLista_FiltrulGrid"], "").ToString() != "")
+                                    grDate.FilterExpression = General.Nz(Session["EvalLista_FiltrulGrid"],"").ToString();
+
+                                if (General.Nz(Session["EvalLista_FiltrulCmb"], "").ToString() != "")
+                                {
+                                    NameValueCollection lst = HttpUtility.ParseQueryString((Session["EvalLista_FiltrulCmb"] ?? "").ToString());
+                                    if (lst.Count > 0)
+                                    {
+                                        if (General.Nz(lst["Quiz"], "").ToString() != "") cmbQuiz.Value = Convert.ToInt32(lst["Quiz"]);
+                                        if (General.Nz(lst["Angajat"], "").ToString() != "") cmbAngajat.Value = Convert.ToInt32(lst["Angajat"]);
+                                        if (General.Nz(lst["Nivel"], "").ToString() != "") cmbNivel.Value = Convert.ToInt32(lst["Nivel"]);
+                                        if (General.Nz(lst["Roluri"], "").ToString() != "") cmbRoluri.Value = Convert.ToInt32(lst["Roluri"]);
+
+                                        if (General.Nz(lst["DataInc"], "").ToString() != "") dtDataInceput.Value = Convert.ToDateTime(lst["DataInc"]);
+                                        if (General.Nz(lst["DataSf"], "").ToString() != "") dtDataSfarsit.Value = Convert.ToDateTime(lst["DataSf"]);
+                                    }
+
+                                    btnFiltru_Click(null, null);
+                                }
+                            }
+                            break;
+                    }
+
+                    Session["EvalLista_FiltrulCmb"] = "";
+                    Session["EvalLista_FiltrulGrid"] = "";
+                }
             }
             catch (Exception ex)
             {
@@ -231,6 +274,22 @@ namespace WizOne.Eval
                                 //Florin 2019.06.27
                                 Session["lstEval_ObiIndividualeTemp_Sterse"] = null;
                                 Session["lstEval_CompetenteAngajatTemp_Sterse"] = null;
+
+                                //Florin 2019.10.23 - retinem filtrul
+                                #region Salvam Filtrul
+
+                                string req = "";
+                                if (cmbQuiz.Value != null) req += "&Quiz=" + cmbQuiz.Value;
+                                if (cmbAngajat.Value != null) req += "&Angajat=" + cmbAngajat.Value;
+                                if (cmbNivel.Value != null) req += "&Nivel=" + cmbNivel.Value;
+                                if (cmbRoluri.Value != null) req += "&Roluri=" + cmbRoluri.Value;
+                                if (dtDataInceput.Value != null) req += "&DataInc=" + dtDataInceput.Value;
+                                if (dtDataSfarsit.Value != null) req += "&DataSf=" + dtDataSfarsit.Value;
+
+                                Session["EvalLista_FiltrulCmb"] = req;
+                                Session["EvalLista_FiltrulGrid"] = grDate.FilterExpression;
+
+                                #endregion
 
                                 if (Page.IsCallback)
                                     ASPxWebControl.RedirectOnCallback("~/Eval/EvalDetaliu.aspx");

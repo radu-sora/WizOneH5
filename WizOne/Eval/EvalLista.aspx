@@ -142,7 +142,7 @@
                     OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true"
                         ColumnResizeMode="NextColumn" />
-                    <Settings ShowFilterRow="true" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" />
+                    <Settings ShowFilterRow="false" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" ShowFilterBar="Visible" />
                     <SettingsEditing Mode="EditFormAndDisplayRow" />
                     <SettingsSearchPanel Visible="true" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />

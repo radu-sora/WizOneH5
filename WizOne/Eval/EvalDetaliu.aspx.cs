@@ -1053,11 +1053,31 @@ namespace WizOne.Eval
                         ert = Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1));
                         ert = Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1));
 
-                        //Radu 11.02.2019 - am adaugat conditia idCateg = 0
-                        if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                        ////Radu 11.02.2019 - am adaugat conditia idCateg = 0
+                        //if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                        //    ctl.Enabled = false;
+                        ////ctl.ReadOnly = true;
+                        ////ctl.Enabled = false;
+                        
+                        //Florin 2019.10.23 - s-a rescris functia de mai sus pentru a tine cont si de respecta ordinea
+                        if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
                             ctl.Enabled = false;
-                        //ctl.ReadOnly = true;
-                        //ctl.Enabled = false;
+
+                        int respectaOrdinea = 0;
+                        DataTable entCir = General.IncarcaDT(@"SELECT * FROM ""Eval_Circuit"" WHERE ""IdQuiz"" = @1", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) });
+                        if (entCir != null && entCir.Rows.Count > 0) respectaOrdinea = Convert.ToInt32(entCir.Rows[0]["RespectaOrdinea"] != DBNull.Value ? entCir.Rows[0]["RespectaOrdinea"].ToString() : "0");
+
+                        if (respectaOrdinea == 1)
+                        {
+                            if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                                ctl.Enabled = false;
+                        }
+                        else
+                        {
+                            //NOP
+                        }
+                        //Florin 2019.10.23  END
+
 
                         if (ent.TipData == 9 || ent.TipData == 16 || ent.TipData == 24) //este eticheta sau rating global
                         {
@@ -3853,7 +3873,7 @@ namespace WizOne.Eval
 				if (msg.Length > 0)                    
 					General.CreazaLog(msg);   
 				
-                string url = "~/Eval/EvalLista.aspx";
+                string url = "~/Eval/EvalLista.aspx?q=56";
                 if (Page.IsCallback)
                     ASPxWebControl.RedirectOnCallback(url);
                 else

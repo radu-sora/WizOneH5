@@ -1208,8 +1208,8 @@ namespace WizOne.Personal
                 lstCtr.Add("cmbMeserie", "F10029");
                 lstCtr.Add("chkFunctieBaza", "F10032");
                 lstCtr.Add("chkCalcDed", "F10048");
-                lstCtr.Add("txtPerProbaZL", "F1001063");
-                lstCtr.Add("txtPerProbaZC", "F100975");
+                lstCtr.Add("txtPerProbaZL", "F100975");
+                lstCtr.Add("txtPerProbaZC", "F1001063");
                 lstCtr.Add("txtNrZilePreavizDemisie", "F1009742");
                 lstCtr.Add("txtNrZilePreavizConc", "F100931");
                 lstCtr.Add("deUltimaZiLucr", "F10023");
@@ -1289,6 +1289,12 @@ namespace WizOne.Personal
                 lstDS.Add("deDataInceputDet", "F100915");
                 lstDS.Add("deDataSfarsitDet", "F100916");
                 lstDS.Add("deDataIncetareDet", "F100917");
+
+                lstDS.Add("chk1", "F1001125");
+                lstDS.Add("chk2", "F1001126");
+                lstDS.Add("chk3", "F1001127");
+                lstDS.Add("chk4", "F1001128");
+                lstDS.Add("chk5", "F1001129");
                 #endregion
 
                 //Diverse

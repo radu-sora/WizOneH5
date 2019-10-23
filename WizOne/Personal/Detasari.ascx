@@ -1,5 +1,18 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Detasari.ascx.cs" Inherits="WizOne.Personal.Detasari" %>
 
+<script type="text/javascript">
+    function chkDet_CheckedChanged(s) {  
+        if (s.name == "chk2") {
+            if (s.GetValue() == 1)
+                chk3.SetValue(0);
+        }
+        if (s.name == "chk3") {
+            if (s.GetValue() == 1)
+                chk2.SetValue(0);
+        }
+    }
+</script>
+
 <body>
 
    <dx:ASPxCallbackPanel ID = "Detasari_pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtlDet" runat="server" SettingsLoadingPanel-Enabled="false">
@@ -67,7 +80,34 @@
 							        </dx:ASPxDateEdit>					
 						        </td>
 					        </tr>
-
+                            <tr>
+                                <td colspan="2">
+                                    <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajatorul la care e detasat (DA/NU)" TextAlign="Left" Checked='<%#  Eval("F1001125") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001125"))%>'   ClientInstanceName="chk1" >                                     
+                                    </dx:ASPxCheckBox>
+                                </td>
+                                <td colspan="3">
+                                    <dx:ASPxCheckBox ID="chk2"  runat="server" Width="200" Text="Detasat in Romania din state UE/NON UE" TextAlign="Left" Checked='<%#  Eval("F1001126") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001126"))%>'  ClientInstanceName="chk2" >
+                                        <ClientSideEvents CheckedChanged="function(s,e){ chkDet_CheckedChanged(s); }" />
+                                    </dx:ASPxCheckBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <dx:ASPxCheckBox ID="chk4"  runat="server" Width="200" Text="Formular A1" TextAlign="Left" Checked='<%#  Eval("F1001128") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001128"))%>'  ClientInstanceName="chk4" >                         
+                                    </dx:ASPxCheckBox>
+                                </td>
+                                <td colspan="3">
+                                    <dx:ASPxCheckBox ID="chk3"  runat="server" Width="200" Text="Detasat din Romania in state UE/NON UE" TextAlign="Left"  Checked='<%#  Eval("F1001127") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001127"))%>'  ClientInstanceName="chk3" >
+                                        <ClientSideEvents CheckedChanged="function(s,e){ chkDet_CheckedChanged(s); }" />
+                                    </dx:ASPxCheckBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <dx:ASPxCheckBox ID="chk5"  runat="server" Width="200" Text="Acord de securitate sociala" TextAlign="Left"  Checked='<%#  Eval("F1001129") == DBNull.Value ? false : Convert.ToBoolean(Eval("F1001129"))%>' ClientInstanceName="chk5" >                                       
+                                    </dx:ASPxCheckBox>
+                                </td>         
+                            </tr>
 				        </table>
                       <asp:ObjectDataSource runat="server" ID="dsNationalitate" TypeName="WizOne.Module.General" SelectMethod="GetF733"/>
 			        </fieldset>

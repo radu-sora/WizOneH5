@@ -9,6 +9,7 @@
             case "btnGasit":
                 pnlLoading.Show();
                 grDateCautaAdresa.GetRowValues(e.visibleIndex, 'Artera;SirutaNivel1;NumeNivel1;SirutaNivel2;NumeNivel2;SirutaNivel3;NumeNivel3', OnClickGasit);
+                popUpCauta.PerformWindowCallback(popUpCauta.GetWindow(0), 'Stergere');
                 break;
         }
     }
@@ -31,6 +32,13 @@
     function DamiAdresa()
     {
         lblAdresa.SetText(grDateAdresa.cp_AdresaCurenta);
+    }
+
+    function ClearData() {
+        
+        txtJud.SetValue('');
+        txtLoc.SetValue('');
+        txtArt.SetValue('');            
     }
 
     function OnEndCallback(s, e) {
@@ -62,7 +70,7 @@
                 OnRowInserting="grDateAdresa_RowInserting" OnRowUpdating="grDateAdresa_RowUpdating" OnRowDeleting="grDateAdresa_RowDeleting">
                 <SettingsBehavior AllowFocusedRow="true" />
                 <Settings ShowFilterRow="False" ShowColumnHeaders="true" />
-                <ClientSideEvents ContextMenu="ctx" CustomButtonClick="function(s,e){ popUpCauta.Show(); }" EndCallback="DamiAdresa" />
+                <ClientSideEvents ContextMenu="ctx" CustomButtonClick="function(s,e){ ClearData(); popUpCauta.Show(); }" EndCallback="DamiAdresa" />
                 <SettingsEditing Mode="Inline" />
                 <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                 <Columns>
@@ -146,7 +154,7 @@
                 <div class="col-md-12">
                     <div style="display:inline-table; float:right;">
                         <dx:ASPxButton ID="btnCloseCautaAdr" ClientInstanceName="btnCloseCautaAdr" ClientIDMode="Static" runat="server" Text="Inchide" AutoPostBack="false">
-                            <ClientSideEvents Click="function(s, e){ popUpCauta.Hide();}" />
+                            <ClientSideEvents Click="function(s, e){  popUpCauta.Hide();  popUpCauta.PerformWindowCallback(popUpCauta.GetWindow(0), 'Stergere');  }" />
                             <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                         </dx:ASPxButton>
                         <br /><br />

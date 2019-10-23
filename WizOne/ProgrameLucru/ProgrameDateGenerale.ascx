@@ -98,7 +98,7 @@
 				        <table width="60%">	
                             <tr>
                                 <td>
-                                    <dx:ASPxCheckBox ID="chkNoapte"  runat="server" Width="100" Text="De noapte ?" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"DeNoapte").ToString()=="1"%>' ClientInstanceName="chkNoapte" >
+                                    <dx:ASPxCheckBox ID="chkNoapte"  runat="server" Width="100" Text="De noapte ?" TextAlign="Left" Checked='<%#  Eval("DeNoapte") == DBNull.Value ? false : Convert.ToBoolean(Eval("DeNoapte"))%>' ClientInstanceName="chkNoapte" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerDateGen(s); }" />
                                     </dx:ASPxCheckBox>
                                 </td>
@@ -110,7 +110,7 @@
 				        <table width="60%">	
                             <tr>
                                 <td>
-                                    <dx:ASPxCheckBox ID="chkFlex"  runat="server" Width="100" Text="Flexibil ?" TextAlign="Left" Checked='<%#DataBinder.GetPropertyValue(Container.DataItem,"Flexibil").ToString()=="1"%>' ClientInstanceName="chkFlex" >
+                                    <dx:ASPxCheckBox ID="chkFlex"  runat="server" Width="100" Text="Flexibil ?" TextAlign="Left" Checked='<%#  Eval("Flexibil") == DBNull.Value ? false : Convert.ToBoolean(Eval("Flexibil"))%>' ClientInstanceName="chkFlex" >
                                         <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandlerDateGen(s); }" />
                                     </dx:ASPxCheckBox>
                                 </td>

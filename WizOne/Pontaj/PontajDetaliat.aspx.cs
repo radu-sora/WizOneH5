@@ -503,7 +503,8 @@ namespace WizOne.Pontaj
                 tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
                 if (tip == 1 || tip == 10)
                 {
-                    Session["PrintParametrii"] = cmbAng.Value + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month + ";" + Convert.ToDateTime(txtAnLuna.Value).Day + ";" + tip;
+                    Session["PrintParametrii"] = cmbAng.Value + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month + ";" 
+                        + (tip == 1 || tip == 10 ? Convert.ToDateTime(txtAnLuna.Value).Day : Convert.ToDateTime(txtZiua.Value).Day) + ";" + tip;        //Radu 22.10.2019
                 }
                 else
                 {
@@ -514,7 +515,8 @@ namespace WizOne.Pontaj
                         ids += "," + dt.Rows[i]["F10003"];
                     }
                     if (ids != "") ids = ids.Substring(1);
-                    Session["PrintParametrii"] = ids + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month + ";" + Convert.ToDateTime(txtAnLuna.Value).Day + ";" + tip;
+                    Session["PrintParametrii"] = ids + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month + ";" 
+                        + (tip == 1 || tip == 10 ? Convert.ToDateTime(txtAnLuna.Value).Day : Convert.ToDateTime(txtZiua.Value).Day) + ";" + tip;        //Radu 22.10.2019
                 }
 
                 Response.Redirect("~/Reports/Imprima.aspx?tip=" + tip, false);

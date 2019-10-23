@@ -478,9 +478,29 @@ namespace WizOne.Personal
                 {
                     case "Filtru":
                         {
+                            if (txtJud.Text.Trim() != "" && txtJud.Text.Trim().Length < 3)
+                            {
+                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele judetului!");
+                                return;
+                            }
+
                             if (txtLoc.Text.Trim() == "" && txtArt.Text.Trim() == "")
                             {
-                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Lipsesc date");
+                                if (txtJud.Text.Trim() != "")
+                                {
+                                    popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere si la numele localitatii pentru o cautare mai rapida!");
+                                    return;
+                                }
+                                else
+                                {
+                                    popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele judetului si al localitatii!");
+                                    return;
+                                }
+                            }
+
+                            if (txtLoc.Text.Trim() == "" && txtJud.Text.Trim() == "")
+                            {
+                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele judetului si al localitatii!");
                                 return;
                             }
 
@@ -496,11 +516,6 @@ namespace WizOne.Personal
                                 return;
                             }
 
-                            if (txtJud.Text.Trim() != "" && txtJud.Text.Trim().Length < 3)
-                            {
-                                popUpCauta.JSProperties["cp_Mesaj"] = Dami.TraduCuvant("Introduceti minim 3 caractere la numele judetului!");
-                                return;
-                            }
 
                             DataTable dtAdr = GetAdresa(txtArt.Text, txtLoc.Text, txtJud.Text);
                             grDateCautaAdresa.DataSource = dtAdr;
@@ -508,6 +523,10 @@ namespace WizOne.Personal
                             grDateCautaAdresa.DataBind();
                             Session["MP_CautaAdresa"] = dtAdr;
                         }
+                        break;
+                    case "Stergere":
+                        grDateCautaAdresa.DataSource = null;
+                        grDateCautaAdresa.DataBind();
                         break;
                 }
             }

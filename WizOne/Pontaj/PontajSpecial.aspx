@@ -36,7 +36,7 @@
                         txtValuri.Set(__name_text_box, valoare + lista[0] + "=" + $(this).val());
                     }
                 });
-
+                txtValuri.Set("IdProgram_" + __name_text_box, cmbProgr.GetValue());
                 if (texts != "")
                     texts = texts.substring(1);               
                     
@@ -49,8 +49,8 @@
             //}
             __name_text_box = "";
             EmptyVal();
-            cmbTipAbs.SetText(null);
-            cmbProgr.SetText(null);
+            cmbTipAbs.SetValue(null);
+            cmbProgr.SetValue(null);
         }
 
         function EmptyVal() {

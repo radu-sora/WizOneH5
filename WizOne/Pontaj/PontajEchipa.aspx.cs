@@ -186,6 +186,11 @@ namespace WizOne.Pontaj
                 }
 
 
+                //Radu 22.10.2019
+                DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStariPontaj"" ", null);
+                GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
+                colStari.PropertiesComboBox.DataSource = dtStari;
+
                 //Florin 2018.09.25
                 //DataTable dtParam = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'NrRanduriPePaginaPTJ'", null);
                 //if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
@@ -861,7 +866,7 @@ namespace WizOne.Pontaj
             try
             {
 
-                if (e.DataColumn.FieldName == "StareDenumire")
+                if (e.DataColumn.FieldName == "IdStare")
                 {
                     object col = grDate.GetRowValues(e.VisibleIndex, "Culoare");
                     if (col != null) e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(col.ToString());
@@ -2881,7 +2886,8 @@ namespace WizOne.Pontaj
         }
 
 
-
+        //  <dx:GridViewDataComboBoxColumn FieldName="StareDenumire" Name="StareDenumire" Caption="Stare" ReadOnly="true" Width="100px" FixedStyle="Left" VisibleIndex="1" CellStyle-HorizontalAlign="Center" />
+        //   <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="Id Stare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
     }
 }
  

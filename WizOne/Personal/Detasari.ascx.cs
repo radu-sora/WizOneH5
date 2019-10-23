@@ -93,4 +93,6 @@ namespace WizOne.Personal
 
     
     }
+
+    //Checked='<%#Convert.ToInt32(DataBinder.GetPropertyValue(Container.DataItem,"F1001125"))==1%>'
 }

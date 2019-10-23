@@ -171,8 +171,9 @@
     <Reference Include="DevExpress.XtraPrinting.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Win.Printing.19.1.4\lib\net452\DevExpress.XtraPrinting.v19.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.XtraReports.v19.1, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <HintPath>..\packages\DevExpress.Reporting.Core.19.1.4\lib\net452\DevExpress.XtraReports.v19.1.dll</HintPath>
+    <Reference Include="DevExpress.XtraReports.v19.1, Version=19.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DLL\19.1.4\DevExpress.XtraReports.v19.1.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.XtraReports.v19.1.Web, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Web.Reporting.Common.19.1.4\lib\net452\DevExpress.XtraReports.v19.1.Web.dll</HintPath>
@@ -204,8 +205,7 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FunctiiCeasuri, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="FunctiiCeasuri">
       <HintPath>..\Artifacts\FunctiiCeasuri.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">

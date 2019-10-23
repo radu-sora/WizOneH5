@@ -159,22 +159,39 @@
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="Id" VisibleIndex="0" Width="50px" ReadOnly="true" />
-                        <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" VisibleIndex="1" Width="450px" ReadOnly="true" />
-                        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" Width="250px" ReadOnly="true" VisibleIndex="2" />
-                        <dx:GridViewDataTextColumn FieldName="Utilizator" Name="Utilizator" Caption="Utilizator" VisibleIndex="3" Width="200px" ReadOnly="true"/>
-                        <dx:GridViewDataTextColumn FieldName="DenumireCategorie" Name="DenumireCategorie" Caption="Categorie" Width="150px" ReadOnly="true" Visible="true" VisibleIndex="4" />
-                        <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data Inceput" VisibleIndex="5" Width="100px" ReadOnly="true">
-                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy" />
-                        </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data Sfarsit" VisibleIndex="6" Width="100px" ReadOnly="true">
-                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy" />
-                        </dx:GridViewDataDateColumn>
+                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="Id" VisibleIndex="0" Width="50px" ReadOnly="true">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" VisibleIndex="1" Width="450px" ReadOnly="true">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" Width="250px" ReadOnly="true" VisibleIndex="2">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Utilizator" Name="Utilizator" Caption="Utilizator" VisibleIndex="3" Width="200px" ReadOnly="true">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="DenumireCategorie" Name="DenumireCategorie" Caption="Categorie" Width="150px" ReadOnly="true" Visible="true" VisibleIndex="4">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="DenPerioada" Name="DenPerioada" Caption="Interval" Width="150px" ReadOnly="true" Visible="true" VisibleIndex="5">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="Rating" Name="Rating" Caption="Rating" VisibleIndex="7" ReadOnly="true">
                             <PropertiesComboBox TextField="Denumire" ValueField="Nota" ValueType="System.Int32" DropDownStyle="DropDown"/>
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" Width="250px" VisibleIndex="8" ReadOnly="true">
                             <EditFormSettings Visible="False" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="IdQuiz" Name="IdQuiz" Caption="IdQuiz" Visible="false" Width="50px" ReadOnly="true" />   
                         <dx:GridViewDataTextColumn FieldName="Culoare" Name="Culoare" Caption="Culoare" ReadOnly="true" Visible="false" />

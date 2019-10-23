@@ -590,7 +590,7 @@
             return;        
         var salMin = parseInt("<%=Session["MP_SalMin"] %>");
         if (parseInt(salMin) * parseInt(timp) / 8 > parseInt(sal) && cmbIntRepTimpMunca.GetValue() <= 1 && (cmbTipCtrMunca.GetValue() == 1 || cmbTipCtrMunca.GetValue() == 2
-            || cmbTipCtrMunca.GetValue() == 3 || cmbTipCtrMunca.GetValue() == 4 || cmbTipCtrMunca.GetValue() == 9 || cmbTipCtrMunca.GetValue() == 33 || cmbTipCtrMunca.GetValue() == 34))
+            || cmbTipCtrMunca.GetValue() == 3 || cmbTipCtrMunca.GetValue() == 4  || cmbTipCtrMunca.GetValue() == 33 || cmbTipCtrMunca.GetValue() == 34))
             swal({ title: "", text: "Salariul introdus este mai mic decat cel minim raportat la norma si conditiile salariale ale angajatului!", type: "warning" });
     }
 

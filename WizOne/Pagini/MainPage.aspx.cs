@@ -206,6 +206,7 @@ namespace WizOne.Pagini
                         ASPxButton btn = new ASPxButton();
                         btn.ID = "btn_Rap_" + dtRap.Rows[i]["DynReportId"];
                         btn.Text = Dami.TraduCuvant(General.Nz(dtRap.Rows[i]["Name"],"").ToString());
+                        btn.UseSubmitBehavior = false;
                         if (Convert.ToInt32(General.Nz(dtRap.Rows[i]["HasPassword"], 0)) == 1)
                         {
                             btn.ClientSideEvents.Click = "function(s, e){ OnClickRapButton(s); }";

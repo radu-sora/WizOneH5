@@ -1599,13 +1599,14 @@ namespace WizOne.Module
             try
             {
                 List<metaGeneral2> list = new List<metaGeneral2>();
-                list.Add(new metaGeneral2() { Id = "RO", Denumire = "Romana" });
+                list.Add(new metaGeneral2() { Id = "RO", Denumire = "Română" });
                 list.Add(new metaGeneral2() { Id = "EN", Denumire = "English" });
                 list.Add(new metaGeneral2() { Id = "FR", Denumire = "Français" });
                 list.Add(new metaGeneral2() { Id = "ES", Denumire = "Español" });
                 list.Add(new metaGeneral2() { Id = "DE", Denumire = "Deutsch" });
                 list.Add(new metaGeneral2() { Id = "IT", Denumire = "Italiano" });
-                list.Add(new metaGeneral2() { Id = "BG", Denumire = "Bulgarian" });
+                list.Add(new metaGeneral2() { Id = "BG", Denumire = "български" });
+                list.Add(new metaGeneral2() { Id = "RU", Denumire = "русский" });
 
                 return list;
             }

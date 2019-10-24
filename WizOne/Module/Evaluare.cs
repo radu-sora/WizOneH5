@@ -353,6 +353,8 @@ namespace WizOne.Module
         public int OrdineInt { get; set; }
         public int TemplateIdObiectiv { get; set; }
         public int TemplateIdCompetenta { get; set; }
+        public int IdPeriod { get; set; }
+        public int IdPeriodComp { get; set; }
 
         public Eval_QuizIntrebari() { }
 
@@ -376,6 +378,9 @@ namespace WizOne.Module
             OrdineInt = columns.Contains("OrdineInt") == true ? Convert.ToInt32(dr["OrdineInt"].ToString() == string.Empty ? "-99" : dr["OrdineInt"].ToString()) : -99;
             TemplateIdObiectiv = columns.Contains("TemplateIdObiectiv") == true ? Convert.ToInt32(dr["TemplateIdObiectiv"].ToString() == string.Empty ? "-99" : dr["TemplateIdObiectiv"].ToString()) : -99;
             TemplateIdCompetenta = columns.Contains("TemplateIdCompetenta") == true ? Convert.ToInt32(dr["TemplateIdCompetenta"].ToString() == string.Empty ? "-99" : dr["TemplateIdCompetenta"].ToString()) : -99;
+            IdPeriod = columns.Contains("IdPeriod") == true ? Convert.ToInt32(dr["IdPeriod"].ToString() == string.Empty ? "-99" : dr["IdPeriod"].ToString()) : -99;
+            IdPeriodComp = columns.Contains("IdPeriodComp") == true ? Convert.ToInt32(dr["IdPeriodComp"].ToString() == string.Empty ? "-99" : dr["IdPeriodComp"].ToString()) : -99;
+
         }
     }
 
@@ -812,6 +817,7 @@ namespace WizOne.Module
 
     public class Eval_ObiIndividualeTemp
     {
+        public int IdPeriod { get; set; }
         public decimal? Pondere { get; set; }
         public decimal? Target { get; set; }
         public int? Realizat { get; set; }
@@ -876,7 +882,7 @@ namespace WizOne.Module
             ColoanaSuplimentara2 = columns.Contains("ColoanaSuplimentara2") == true ? dr["ColoanaSuplimentara2"].ToString() : "";
             ColoanaSuplimentara3 = columns.Contains("ColoanaSuplimentara3") == true ? dr["ColoanaSuplimentara3"].ToString() : "";
             ColoanaSuplimentara4 = columns.Contains("ColoanaSuplimentara4") == true ? dr["ColoanaSuplimentara4"].ToString() : "";
-
+            IdPeriod = columns.Contains("IdPeriod") == true ? Convert.ToInt32(dr["IdPeriod"].ToString() == string.Empty ? "-99" : dr["IdPeriod"].ToString()) : -99;
             IdUnic = columns.Contains("IdUnic") == true ? Convert.ToInt32(dr["IdUnic"].ToString() == string.Empty ? "-99" : dr["IdUnic"].ToString()) : -99;
             USER_NO = columns.Contains("USER_NO") == true ? (General.IsNumeric(dr["USER_NO"]) ? (int?)dr["USER_NO"] : null) : null;
             TIME = columns.Contains("TIME") == true ? (dr["TIME"] != DBNull.Value ? (DateTime?)dr["TIME"] : null) : null;
@@ -1019,6 +1025,7 @@ namespace WizOne.Module
 
     public class Eval_CompetenteAngajatTemp
     {
+        public int IdPeriod { get; set; }
         public int IdCategCompetenta { get; set; }
         public string CategCompetenta { get; set; }
         public int IdCompetenta { get; set; }
@@ -1060,7 +1067,7 @@ namespace WizOne.Module
             Id = columns.Contains("Id") == true ? Convert.ToInt32(dr["Id"].ToString() == string.Empty ? "-99" : dr["Id"].ToString()) : -99;
             IdAuto = columns.Contains("IdAuto") == true ? Convert.ToInt32(dr["IdAuto"].ToString() == string.Empty ? "-99" : dr["IdAuto"].ToString()) : -99;
             IdLinieQuiz = columns.Contains("IdLinieQuiz") == true ? Convert.ToInt32(dr["IdLinieQuiz"].ToString() == string.Empty ? "-99" : dr["IdLinieQuiz"].ToString()) : -99;
-
+            IdPeriod = columns.Contains("IdPeriod") == true ? Convert.ToInt32(dr["IdPeriod"].ToString() == string.Empty ? "-99" : dr["IdPeriod"].ToString()) : -99;
             IdUnic = columns.Contains("IdUnic") == true ? Convert.ToInt32(dr["IdUnic"].ToString() == string.Empty ? "-99" : dr["IdUnic"].ToString()) : -99;
             USER_NO = columns.Contains("USER_NO") == true ? (General.IsNumeric(dr["USER_NO"]) ? (int?)dr["USER_NO"] : null) : null;
             TIME = columns.Contains("TIME") == true ? (dr["TIME"] != DBNull.Value ? (DateTime?)dr["TIME"] : null) : null;
@@ -2023,9 +2030,9 @@ namespace WizOne.Module
                                         nextId = General.Nz(General.ExecutaScalar(@"SELECT ""ObiIndividuale_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
                                     string sqlTemp =
-                                        $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                        SELECT ob.""IdObiectiv"",TO_CHAR(ob.""Obiectiv""), act.""IdActivitate"", TO_CHAR(act.""Activitate""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
-                                        FROM ""Eval_ListaObiectiv"" lista
+                                        $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"",TO_CHAR(ob.""Obiectiv""), act.""IdActivitate"", TO_CHAR(act.""Activitate""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        FROM ""Eval_ListaObiectiv"" lista                                        
                                         JOIN ""Eval_ListaObiectivDet"" listaOb on listaOb.""IdLista"" = lista.""IdLista""
                                         JOIN ""Eval_Obiectiv"" ob ON listaOb.""IdObiectiv"" = ob.""IdObiectiv""
                                         JOIN ""Eval_ObiectivXActivitate"" act on listaOb.""IdObiectiv"" = act.""IdObiectiv"" and listaob.""IdActivitate"" = act.""IdActivitate""
@@ -2046,8 +2053,8 @@ namespace WizOne.Module
                                         string sqlInsertObi = "";
                                         string sqlSablon =
                                             @"INSERT INTO ""Eval_ObiIndividualeTemp"" 
-                                                  (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                  (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                            SELECT ""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                         DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                         for (int x = 0; x < dtIst.Rows.Count; x++)
                                         {
@@ -2071,8 +2078,8 @@ namespace WizOne.Module
                                             nextId = General.Nz(General.ExecutaScalar(@"SELECT ""ObiIndividuale_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
                                         string sqlTemp =
-                                            $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT ob.""IdObiectiv"", TO_CHAR(ob.""Obiectiv""), ob.""IdActivitate"", TO_CHAR(ob.""Activitate""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                            $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                            SELECT ob.""IdPeriod"", ob.""IdObiectiv"", TO_CHAR(ob.""Obiectiv""), ob.""IdActivitate"", TO_CHAR(ob.""Activitate""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                             FROM ""Eval_ObiIndividuale"" ob
                                             WHERE ob.""IdPeriod"" = @1 AND ob.F10003 = @2
                                             group by ob.""IdObiectiv"", TO_CHAR(ob.""Obiectiv""), ob.""IdActivitate"", TO_CHAR(ob.""Activitate"") ";
@@ -2086,8 +2093,8 @@ namespace WizOne.Module
                                             string sqlInsertObi = "";
                                             string sqlSablon =
                                                 @"INSERT INTO ""Eval_ObiIndividualeTemp"" 
-                                                      (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                                SELECT ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                      (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                                SELECT ""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                             DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                             for (int x = 0; x < dtIst.Rows.Count; x++)
                                             {
@@ -2137,8 +2144,8 @@ namespace WizOne.Module
                                         nextId = General.Nz(General.ExecutaScalar(@"SELECT ""CompetenteAng_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
                                     string sqlTemp =
-                                        $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                        SELECT comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtCompetente.Rows[i]["IdQuiz"].ToString()}), comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                         FROM ""Eval_CategCompetente"" comp
                                         JOIN ""Eval_CategCompetenteDet"" compDet on compDet.""IdCategorie"" = comp.""IdCategorie""
                                         JOIN ""Eval_CompXSetAng"" compDetAng on compDetAng.""IdCategorie"" = comp.""IdCategorie""
@@ -2159,8 +2166,8 @@ namespace WizOne.Module
                                         string sqlInsertObi = "";
                                         string sqlSablon =
                                             @"INSERT INTO ""Eval_CompetenteAngajatTemp"" 
-                                                  (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, @4         , ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                  (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                            SELECT ""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, @4         , ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                         DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                         for (int x = 0; x < dtIst.Rows.Count; x++)
                                         {
@@ -2185,8 +2192,8 @@ namespace WizOne.Module
                                             nextId = General.Nz(General.ExecutaScalar(@"SELECT ""CompetenteAng_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
                                         string sqlTemp =
-                                            $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT comp.""IdCategCompetenta"", comp.""CategCompetenta"", comp.""IdCompetenta"", comp.""Competenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, { dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                            $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                            SELECT comp.""IdPeriod"", comp.""IdCategCompetenta"", comp.""CategCompetenta"", comp.""IdCompetenta"", comp.""Competenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, { dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                             FROM ""Eval_CompetenteAngajat"" comp
                                             WHERE comp.""IdPeriod"" = @1 AND comp.F10003 = @2
                                             GROUP BY comp.""IdCategCompetenta"", comp.""CategCompetenta"", comp.""IdCompetenta"", comp.""Competenta"" ";
@@ -2201,8 +2208,8 @@ namespace WizOne.Module
                                             string sqlInsertObi = "";
                                             string sqlSablon =
                                                 @"INSERT INTO ""Eval_CompetenteAngajatTemp"" 
-                                                  (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, @4         , ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                  (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                            SELECT ""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, @4         , ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                             DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                             for (int x = 0; x < dtIst.Rows.Count; x++)
                                             {

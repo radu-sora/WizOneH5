@@ -328,8 +328,8 @@ namespace WizOne.Eval
                                 (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", 
                                 ""Pondere"", ""Descriere"", ""Target"", ""Realizat"", ""IdCalificativ"",
                                 ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", ""F10003"", ""Pozitie"",
-                                ""Id"", ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", ""IdUnic"", USER_NO, TIME)
-                                values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@20,@21,@idUnic,@22,@23);";
+                                ""Id"", ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", ""IdUnic"", USER_NO, TIME, ""IdPeriod"")
+                                values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@20,@21,@idUnic,@22,@23,@24);";
 
                         string tgv = "";
 
@@ -350,7 +350,7 @@ namespace WizOne.Eval
                                 General.ExecutaNonQuery(sqlObi, new object[] { clsObiIndividuale.IdObiectiv, clsObiIndividuale.Obiectiv, clsObiIndividuale.IdActivitate, General.Nz(clsObiIndividuale.Activitate, "").ToString().Replace(",", "."),
                                                                             General.Nz(clsObiIndividuale.Pondere, "0").ToString().Replace(",", "."), clsObiIndividuale.Descriere, General.Nz(clsObiIndividuale.Target, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.Realizat, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.IdCalificativ, "0").ToString().Replace(",", "."),
                                                                             clsObiIndividuale.Calificativ, clsObiIndividuale.ExplicatiiCalificativ, clsObiIndividuale.IdQuiz, clsObiIndividuale.F10003, clsObiIndividuale.Pozitie,
-                                                                            clsObiIndividuale.Id, clsObiIndividuale.IdLinieQuiz, clsObiIndividuale.ColoanaSuplimentara1, clsObiIndividuale.ColoanaSuplimentara2, clsObiIndividuale.ColoanaSuplimentara3, clsObiIndividuale.ColoanaSuplimentara4, clsObiIndividuale.IdAuto, General.Nz(clsObiIndividuale.USER_NO, Session["UserId"]), General.Nz(clsObiIndividuale.TIME, DateTime.Now) });
+                                                                            clsObiIndividuale.Id, clsObiIndividuale.IdLinieQuiz, clsObiIndividuale.ColoanaSuplimentara1, clsObiIndividuale.ColoanaSuplimentara2, clsObiIndividuale.ColoanaSuplimentara3, clsObiIndividuale.ColoanaSuplimentara4, clsObiIndividuale.IdAuto, General.Nz(clsObiIndividuale.USER_NO, Session["UserId"]), General.Nz(clsObiIndividuale.TIME, DateTime.Now), clsObiIndividuale.IdPeriod });
                             }
                             catch (Exception ex)
                             {
@@ -407,8 +407,8 @@ namespace WizOne.Eval
                         string sqlDeleteCompAngajat = @"DELETE FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdAuto""=@15;";
                         string sqlInsertCompAngajat = @"insert into ""Eval_CompetenteAngajatTemp""(""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"",
                                                                                       ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", 
-                                                                                      ""Explicatii"", ""IdQuiz"", ""F10003"", ""Pozitie"", ""Id"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                                                                        values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@idUnic,@16,@17)";
+                                                                                      ""Explicatii"", ""IdQuiz"", ""F10003"", ""Pozitie"", ""Id"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdPeriod"")
+                                                                                        values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@idUnic,@16,@17,@18)";
 
                         string tgv = "";
 
@@ -428,7 +428,7 @@ namespace WizOne.Eval
                                 tgv += sqlCmp + Environment.NewLine;
                                 General.ExecutaNonQuery(sqlCmp, new object[] { clsCompetenta.IdCategCompetenta, clsCompetenta.CategCompetenta, clsCompetenta.IdCompetenta, clsCompetenta.Competenta,
                                                                         General.Nz(clsCompetenta.Pondere, "0").ToString().Replace(",", "."), clsCompetenta.IdCalificativ, clsCompetenta.Calificativ, clsCompetenta.ExplicatiiCalificativ,
-                                                                        clsCompetenta.Explicatii, clsCompetenta.IdQuiz, clsCompetenta.F10003, clsCompetenta.Pozitie, clsCompetenta.Id, clsCompetenta.IdLinieQuiz, clsCompetenta.IdAuto, General.Nz(clsCompetenta.USER_NO, Session["UserId"]), General.Nz(clsCompetenta.TIME, DateTime.Now) });
+                                                                        clsCompetenta.Explicatii, clsCompetenta.IdQuiz, clsCompetenta.F10003, clsCompetenta.Pozitie, clsCompetenta.Id, clsCompetenta.IdLinieQuiz, clsCompetenta.IdAuto, General.Nz(clsCompetenta.USER_NO, Session["UserId"]), General.Nz(clsCompetenta.TIME, DateTime.Now), clsCompetenta.IdPeriod });
                             }
                             catch (Exception ex)
                             {
@@ -2106,8 +2106,11 @@ namespace WizOne.Eval
                     clsNew.IdQuiz = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
                     clsNew.IdLinieQuiz = Convert.ToInt32(grid.ID.Split('_')[grid.ID.Split('_').Count() - 1]);
 
+                    //Radu 24.10.2019
+                    clsNew.IdPeriod = lstEval_QuizIntrebari.Where(p => p.Id == clsNew.IdLinieQuiz).FirstOrDefault().IdPeriod;
+
                     clsNew.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
-                    clsNew.TIME = DateTime.Now;
+                    clsNew.TIME = DateTime.Now;                                      
 
                     foreach (DictionaryEntry de in ins.NewValues)
                     {
@@ -2511,6 +2514,9 @@ namespace WizOne.Eval
 
                     clsNew.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
                     clsNew.TIME = DateTime.Now;
+
+                    //Radu 24.10.2019
+                    clsNew.IdPeriod = lstEval_QuizIntrebari.Where(p => p.Id == clsNew.IdLinieQuiz).FirstOrDefault().IdPeriodComp;
 
                     foreach (DictionaryEntry de in ins.NewValues)
                     {
@@ -3976,15 +3982,15 @@ namespace WizOne.Eval
                             $@"BEGIN
                             DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))};
 
-                            INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                            SELECT ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))}, ""IdLinieQuiz"", ""IdUnic"", {Session["UserId"]}, {General.CurrentDate()} 
+                            INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                            SELECT ""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))}, ""IdLinieQuiz"", ""IdUnic"", {Session["UserId"]}, {General.CurrentDate()} 
                             FROM ""Eval_ObiIndividualeTemp"" 
                             WHERE ""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
 
                             DELETE FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"],1))};
 
-                            INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003,  ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                            SELECT ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"],1))}, ""IdLinieQuiz"", ""IdUnic"", {Session["UserId"]}, {General.CurrentDate()}
+                            INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003,  ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                            SELECT ""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"],1))}, ""IdLinieQuiz"", ""IdUnic"", {Session["UserId"]}, {General.CurrentDate()}
                             FROM ""Eval_CompetenteAngajatTemp"" 
                             WHERE  ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
 
@@ -4013,21 +4019,21 @@ namespace WizOne.Eval
                 }
                 else
                 {//Radu 23.10.2019 - se transfera in EvalObiIndividuale si Eval_CompetenteAngajat
-                    //string sqlOC =
-                    //        $@"BEGIN
+                    string sqlOC =
+                            $@"BEGIN
 
-                    //        INSERT INTO ""Eval_ObiIndividuale"" (""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"")
-                    //        SELECT ""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4""
-                    //        FROM ""Eval_ObiIndividualeTemp"" 
-                    //        WHERE ""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
+                            INSERT INTO ""Eval_ObiIndividuale"" (""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"")
+                            SELECT ""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4""
+                            FROM ""Eval_ObiIndividualeTemp"" 
+                            WHERE ""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
 
-                    //        INSERT INTO ""Eval_CompetenteAngajat"" (""IdPeriod"", F10003, ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"",  ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""Explicatii"")
-                    //        SELECT ""IdPeriod"", F10003, ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""Explicatii""
-                    //        FROM ""Eval_CompetenteAngajatTemp"" 
-                    //        WHERE  ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
+                            INSERT INTO ""Eval_CompetenteAngajat"" (""IdPeriod"", ""IdPeriod"", F10003, ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"",  ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""Explicatii"")
+                            SELECT ""IdPeriod"", ""IdPeriod"", F10003, ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""Explicatii""
+                            FROM ""Eval_CompetenteAngajatTemp"" 
+                            WHERE  ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
 
-                    //        END; ";
-                    //General.ExecutaNonQuery(sqlOC, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                            END; ";
+                    General.ExecutaNonQuery(sqlOC, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
 
                 }
 
@@ -4099,14 +4105,14 @@ namespace WizOne.Eval
                     WHERE ""IdQuiz""=@1 AND F10003=@2 AND (""Super{poz + 1}"" is null OR RTRIM(LTRIM(""Super{poz + 1}""))='') AND ""Super{poz}"" is not null;
 
                     UPDATE B
-                    SET B.""Pondere"" = A.""Pondere"", B.""IdCalificativ"" = A.""IdCalificativ"", B.""Calificativ"" = A.""Calificativ"", 
+                    SET  B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere"" = A.""Pondere"", B.""IdCalificativ"" = A.""IdCalificativ"", B.""Calificativ"" = A.""Calificativ"", 
                     B.""ExplicatiiCalificativ"" = A.""ExplicatiiCalificativ"", B.""Explicatii"" = A.""Explicatii"", B.""Id"" = A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
                     FROM ""Eval_CompetenteAngajatTemp"" B
                     LEFT JOIN ""Eval_CompetenteAngajatTemp"" A ON A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" = {poz}
                     WHERE B.""IdQuiz"" = @1 AND B.F10003 = @2 AND B.""Pozitie"" = {poz + 1};
 
                     UPDATE B
-                    SET B.""Pondere""=A.""Pondere"", B.""Descriere""=A.""Descriere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"",
+                    SET B.""IdPeriod"" = A.""IdPeriod"", B.""Pondere""=A.""Pondere"", B.""Descriere""=A.""Descriere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"",
                     B.""IdCalificativ""=A.""IdCalificativ"", B.""Calificativ""=A.""Calificativ"", B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", 
                     B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""Id""=A.""Id"", TIME = {General.CurrentDate()}, USER_NO = {Session["UserId"]}
                     FROM ""Eval_ObiIndividualeTemp"" B
@@ -4265,13 +4271,13 @@ namespace WizOne.Eval
                     {sqlUpd}
 
                     UPDATE B
-                    SET B.""Obiectiv""=A.""Obiectiv"", B.""Activitate""=A.""Activitate"", B.""Descriere""=A.""Descriere"", B.""Pondere""=A.""Pondere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"", B.""IdCalificativ""=A.""IdCalificativ"", B.""Calificativ""=A.""Calificativ"",  B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4""
+                    SET B.""IdPeriod"" = A.""IdPeriod"", B.""Obiectiv""=A.""Obiectiv"", B.""Activitate""=A.""Activitate"", B.""Descriere""=A.""Descriere"", B.""Pondere""=A.""Pondere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"", B.""IdCalificativ""=A.""IdCalificativ"", B.""Calificativ""=A.""Calificativ"",  B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4""
                     FROM ""Eval_ObiIndividualeTemp"" A
                     INNER JOIN ""Eval_ObiIndividualeTemp"" B ON A.""IdUnic""=B.""IdUnic"" AND A.""Pozitie""<>B.""Pozitie""
                     WHERE A.""IdQuiz"" = @1 AND A.F10003 = @2 AND A.""Pozitie""=@3;
                     
-                    INSERT INTO ""Eval_ObiIndividualeTemp""(""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", F10003,  ""Pozitie"", ""Id"",  ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", ""IdUnic"", USER_NO, TIME)
-                    SELECT ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", A.""IdQuiz"", A.F10003,  B.""Pozitie"", ""Id"",  ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", ""IdUnic"", A.USER_NO, A.TIME
+                    INSERT INTO ""Eval_ObiIndividualeTemp""(""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", F10003,  ""Pozitie"", ""Id"",  ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", ""IdUnic"", USER_NO, TIME)
+                    SELECT ""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", A.""IdQuiz"", A.F10003,  B.""Pozitie"", ""Id"",  ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", ""IdUnic"", A.USER_NO, A.TIME
                     FROM ""Eval_ObiIndividualeTemp"" A
                     INNER JOIN ""Eval_RaspunsIstoric"" B ON A.""IdQuiz""=B.""IdQuiz"" AND A.F10003=B.F10003 AND B.""Pozitie""<>@3
                     WHERE A.""IdQuiz"" = @1 AND A.F10003 = @2 AND A.""Pozitie""=@3 AND

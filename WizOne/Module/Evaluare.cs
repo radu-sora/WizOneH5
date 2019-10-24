@@ -779,6 +779,8 @@ namespace WizOne.Module
         public int IdAuto { get; set; }
         public string ColoanaSuplimentara1 { get; set; }
         public string ColoanaSuplimentara2 { get; set; }
+        public string ColoanaSuplimentara3 { get; set; }
+        public string ColoanaSuplimentara4 { get; set; }
 
         public Eval_ObiIndividuale() { }
 
@@ -803,6 +805,8 @@ namespace WizOne.Module
             IdAuto = columns.Contains("IdAuto") == true ? Convert.ToInt32(dr["IdAuto"].ToString() == string.Empty ? "-99" : dr["IdAuto"].ToString()) : -99;
             ColoanaSuplimentara1 = columns.Contains("ColoanaSuplimentara1") == true ? dr["ColoanaSuplimentara1"].ToString() : "";
             ColoanaSuplimentara2 = columns.Contains("ColoanaSuplimentara2") == true ? dr["ColoanaSuplimentara2"].ToString() : "";
+            ColoanaSuplimentara3 = columns.Contains("ColoanaSuplimentara3") == true ? dr["ColoanaSuplimentara3"].ToString() : "";
+            ColoanaSuplimentara4 = columns.Contains("ColoanaSuplimentara4") == true ? dr["ColoanaSuplimentara4"].ToString() : "";
         }
     }
 
@@ -831,7 +835,8 @@ namespace WizOne.Module
         public int IdLinieQuiz { get; set; }
         public string ColoanaSuplimentara1 { get; set; }
         public string ColoanaSuplimentara2 { get; set; }
-
+        public string ColoanaSuplimentara3 { get; set; }
+        public string ColoanaSuplimentara4 { get; set; }
         public int IdUnic { get; set; }
         public int? USER_NO { get; set; }
         public DateTime? TIME { get; set; }
@@ -869,6 +874,8 @@ namespace WizOne.Module
 
             ColoanaSuplimentara1 = columns.Contains("ColoanaSuplimentara1") == true ? dr["ColoanaSuplimentara1"].ToString() : "";
             ColoanaSuplimentara2 = columns.Contains("ColoanaSuplimentara2") == true ? dr["ColoanaSuplimentara2"].ToString() : "";
+            ColoanaSuplimentara3 = columns.Contains("ColoanaSuplimentara3") == true ? dr["ColoanaSuplimentara3"].ToString() : "";
+            ColoanaSuplimentara4 = columns.Contains("ColoanaSuplimentara4") == true ? dr["ColoanaSuplimentara4"].ToString() : "";
 
             IdUnic = columns.Contains("IdUnic") == true ? Convert.ToInt32(dr["IdUnic"].ToString() == string.Empty ? "-99" : dr["IdUnic"].ToString()) : -99;
             USER_NO = columns.Contains("USER_NO") == true ? (General.IsNumeric(dr["USER_NO"]) ? (int?)dr["USER_NO"] : null) : null;
@@ -2134,7 +2141,8 @@ namespace WizOne.Module
                                         SELECT comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                         FROM ""Eval_CategCompetente"" comp
                                         JOIN ""Eval_CategCompetenteDet"" compDet on compDet.""IdCategorie"" = comp.""IdCategorie""
-                                        JOIN ""Eval_SetAngajati"" setAng ON setAng.""CodSet"" = comp.""CodCategorie""
+                                        JOIN ""Eval_CompXSetAng"" compDetAng on compDetAng.""IdCategorie"" = comp.""IdCategorie""
+                                        JOIN ""Eval_SetAngajati"" setAng ON setAng.""IdSetAng"" = compDetAng.""IdSetAng""
                                         JOIN ""Eval_SetAngajatiDetail"" setAngDet ON   setAng.""IdSetAng"" = setAngDet.""IdSetAng""
                                         JOIN ""Eval_ConfigCompTemplateDetail"" tmpl ON  1=1
                                         WHERE setAngDet.""Id"" = @1 AND comp.""IdCategorie"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2

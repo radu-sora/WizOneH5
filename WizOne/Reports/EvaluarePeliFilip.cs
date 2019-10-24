@@ -148,7 +148,7 @@ namespace WizOne.Reports
 
                 //Floirn 2018.12.10
                 //s-a adaugat order by
-                string sqlEval_ObiIndividuale = @"select ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", {0}, ""Descriere"", {1}, ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", F10003, ""Pozitie"", ""Id"", ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"" from ""Eval_ObiIndividualeTemp"" where ""IdQuiz"" = {2}  ORDER BY ""Obiectiv"", ""Activitate"" ";
+                string sqlEval_ObiIndividuale = @"select ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", {0}, ""Descriere"", {1}, ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", F10003, ""Pozitie"", ""Id"", ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"" from ""Eval_ObiIndividualeTemp"" where ""IdQuiz"" = {2}  ORDER BY ""Obiectiv"", ""Activitate"" ";
                 sqlEval_ObiIndividuale = string.Format(sqlEval_ObiIndividuale, (Constante.tipBD == 1 ? "FORMAT(Pondere, 'N2') as Pondere" : "ROUND(\"Pondere\", 2)"), (Constante.tipBD == 1 ? "FORMAT(Target, 'N2') as Target" : "ROUND(\"Target\", 2)"), idQuiz);
                 DataTable dtObiIndividuale = General.IncarcaDT(sqlEval_ObiIndividuale, null);
 

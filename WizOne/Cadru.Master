@@ -69,13 +69,14 @@
                                     </div>            
                                 </li>
                                 <li role="separator" class="divider"></li>
-                                <li><asp:LinkButton ID="aRo" runat="server" OnClick="btnLang_Click" title="RO"><img src="~/Fisiere/Imagini/Drapele/ro.png" alt="" runat="server" />Romana</asp:LinkButton></li>
+                                <li><asp:LinkButton ID="aRo" runat="server" OnClick="btnLang_Click" title="RO"><img src="~/Fisiere/Imagini/Drapele/ro.png" alt="" runat="server" />Română</asp:LinkButton></li>
                                 <li><asp:LinkButton ID="aEn" runat="server" OnClick="btnLang_Click" title="EN"><img src="~/Fisiere/Imagini/Drapele/gb.png" alt="" runat="server" />English</asp:LinkButton></li>
                                 <li><asp:LinkButton ID="aFr" runat="server" OnClick="btnLang_Click" title="FR"><img src="~/Fisiere/Imagini/Drapele/fr.png" alt="" runat="server" />Français</asp:LinkButton></li>        
                                 <li><asp:LinkButton ID="aEs" runat="server" OnClick="btnLang_Click" title="ES"><img src="~/Fisiere/Imagini/Drapele/es.png" alt="" runat="server" />Español</asp:LinkButton></li>
                                 <li><asp:LinkButton ID="aDe" runat="server" OnClick="btnLang_Click" title="DE"><img src="~/Fisiere/Imagini/Drapele/de.png" alt="" runat="server" />Deutsch</asp:LinkButton></li>        
                                 <li><asp:LinkButton ID="aIt" runat="server" OnClick="btnLang_Click" title="IT"><img src="~/Fisiere/Imagini/Drapele/it.png" alt="" runat="server" />Italiano</asp:LinkButton></li>        
-                                <li><asp:LinkButton ID="aBg" runat="server" OnClick="btnLang_Click" title="BG"><img src="~/Fisiere/Imagini/Drapele/bg.png" alt="" runat="server" />Bulgarian</asp:LinkButton></li>                                        
+                                <li><asp:LinkButton ID="aBg" runat="server" OnClick="btnLang_Click" title="BG"><img src="~/Fisiere/Imagini/Drapele/bg.png" alt="" runat="server" />български</asp:LinkButton></li>                                        
+                                <li><asp:LinkButton ID="aRu" runat="server" OnClick="btnLang_Click" title="RU"><img src="~/Fisiere/Imagini/Drapele/ru.png" alt="" runat="server" />русский</asp:LinkButton></li>    
                             </ul>                            
                         </div>
 

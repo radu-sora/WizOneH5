@@ -568,6 +568,7 @@ namespace WizOne.Pagini
                             LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
                             LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
                             WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
+                            AND COALESCE((SELECT CHARINDEX(',' + CAST(AA.IdAtribut AS nvarchar(20)) + ',', ',' + Valoare + ',') FROM tblParametrii WHERE Nume='IdExcluseCircuitDoc'),0) = 0                            
                             GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
                             0 AS CandidatAngajat
@@ -630,6 +631,7 @@ namespace WizOne.Pagini
                             LEFT JOIN ""Admin_NrActAd"" JJ ON AA.""IdActAd""=JJ.""IdAuto""
                             WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) 
                             AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
+                            AND COALESCE((SELECT INSTR(',' || CAST(AA.""IdAtribut"" AS varchar2(20)) || ',', ',' || ""Valoare"" || ',') FROM ""tblParametrii"" WHERE ""Nume"" ='IdExcluseCircuitDoc'),0) = 0
                             ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente""
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003

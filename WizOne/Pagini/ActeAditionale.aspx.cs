@@ -1691,7 +1691,21 @@ namespace WizOne.Pagini
 
                 Session["ReportId"] = Convert.ToInt32(idRap);
 
-                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("ids=" + ids.Substring(1));
+                int idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR tmpIdPrint_Id_SEQ", null));
+                if (Constante.tipBD == 2)
+                    idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""tmpIdPrint_Id_SEQ"".NEXTVAL FROM DUAL", null));
+
+                string sqlSes = "";
+                string[] arrIds = ids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                for(int k = 0; k < arrIds.Length; k++)
+                {
+                    sqlSes += $"UNION SELECT {idSesiune}, {arrIds[k]} " + (Constante.tipBD == 2 ? " FROM DUAL" : "");
+                }
+
+                if (sqlSes != "")
+                    General.ExecutaNonQuery(@"INSERT INTO ""tmpIdPrint""(""IdSesiune"", ""Id"") " + sqlSes.Substring(6), null);
+
+                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("idSesiune=" + idSesiune);
 
                 Response.Redirect(url);
 

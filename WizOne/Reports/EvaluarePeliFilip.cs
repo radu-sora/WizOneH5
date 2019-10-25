@@ -496,6 +496,35 @@ namespace WizOne.Reports
                             }
                     }
 
+
+                //Florin 2019.10.25 - adaugam toti cei care au avut comentarii in chest 360 sau proiect
+                string coment = "";
+                DataTable dtComent = General.IncarcaDT($@"
+                    SELECT DISTINCT COALESCE(D.""NumeComplet"", D.F70104) AS""Nume""
+                    FROM ""Eval_ObiIndividualeTemp"" A
+                    INNER JOIN ""Eval_Quiz"" B ON A.""IdQuiz""=B.""Id""
+                    INNER JOIN ""Eval_RaspunsIstoric"" C ON A.""IdQuiz""=C.""IdQuiz"" AND A.F10003=C.F10003 AND A.""Pozitie""=C.""Pozitie""
+                    INNER JOIN USERS D ON C.""IdUser""=D.F70102
+                    INNER JOIN ""Eval_QuizIntrebari"" E ON A.""IdQuiz""=E.""IdQuiz"" AND E.""Id""=A.""IdLinieQuiz""
+                    WHERE A.F10003=@2 AND 
+                    COALESCE(B.""CategorieQuiz"",0) IN (1,2) AND (A.""Obiectiv"" IS NOT NULL OR A.""Activitate"" IS NOT NULL)
+                    AND B.""Anul"" =(SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" =@1)", new object[] { idQuiz, f10003 });
+                if (dtComent != null)
+                {
+                    for (int k = 0; k < dtComent.Rows.Count; k++)
+                    {
+                        coment += dtComent.Rows[k]["Nume"] + "\r\n";
+                    }
+                }
+                if (coment != "")
+                {
+                    XRLabel lbl360 = CreeazaEticheta("Feedback:" + "\r\n" + coment, 0, true);
+                    lbl360.SizeF = new System.Drawing.SizeF(720F, 20F);
+                    lbl360.LocationF = new PointF(60, pozY);
+                    Detail.Controls.Add(lbl360);
+                }
+
+
                 DateTime dt = DateTime.Now.Date;
                 //la sfarsit de tot punem semnaturile
                 string semn = "";

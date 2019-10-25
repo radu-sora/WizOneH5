@@ -52,9 +52,9 @@ namespace WizOne.Pagini
                                 if (dtHead.Rows.Count > 0)
                                 {
                                     txtId.Text = dtHead.Rows[0]["Id"].ToString();
-                                    txtDenumire.Text = (dtHead.Rows[0]["Denumire"] as string ?? "").ToString();
-                                    chkActiv.Checked = Convert.ToBoolean(dtHead.Rows[0]["Activ"] as int? ?? 0);
-                                    chkImplicit.Checked = Convert.ToBoolean(dtHead.Rows[0]["Implicit"] as int? ?? 0);
+                                    txtDenumire.Text = (dtHead.Rows[0]["Denumire"] ?? "").ToString();
+                                    chkActiv.Checked = Convert.ToBoolean(dtHead.Rows[0]["Activ"] ?? 0);
+                                    chkImplicit.Checked = Convert.ToBoolean(dtHead.Rows[0]["Implicit"] ?? 0);
                                 }
 
                                 //incarcam liniile

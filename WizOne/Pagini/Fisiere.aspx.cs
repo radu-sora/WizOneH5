@@ -52,8 +52,8 @@ namespace WizOne.Pagini
                                             DataRow dr = dt.Select("IdEmpl = " + (Session["Marca"] ?? "").ToString() + " AND IdAuto = " + id).FirstOrDefault();
                                             if (dr != null)
                                             {
-                                                string numeFis = (dr["FisierNume"] as string ?? "").ToString();
-                                                string ext = (dr["FisierExtensie"] as string ?? ".txt").ToString();
+                                                string numeFis = (dr["FisierNume"] ?? "").ToString();
+                                                string ext = (dr["FisierExtensie"] ?? ".txt").ToString();
                                                 //if (numeFis.LastIndexOf(".") >= 0)
                                                 //    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
                                                 scrieDoc(ext, (byte[])dr["Attach"], numeFis);
@@ -93,8 +93,8 @@ namespace WizOne.Pagini
                                 DataRow drAt = dtAt.Select("IdAuto = " + id).FirstOrDefault();
                                 if (drAt != null)
                                 {
-                                    string numeFis = (drAt["FisierNume"] as string ?? "").ToString();
-                                    string ext = (drAt["FisierExtensie"] as string ?? ".txt").ToString();
+                                    string numeFis = (drAt["FisierNume"] ?? "").ToString();
+                                    string ext = (drAt["FisierExtensie"] ?? ".txt").ToString();
                                     //if (numeFis.LastIndexOf(".") >= 0)
                                     //    ext = numeFis.Substring(numeFis.LastIndexOf(".") + 1);
                                     scrieDoc(ext, (byte[])drAt["Attach"], numeFis);
@@ -184,7 +184,7 @@ namespace WizOne.Pagini
 
                             if (dt.Rows.Count != 0)
                             {
-                                scrieDoc((dt.Rows[0]["FisierExtensie"] as string ?? "").ToString(), (byte[])dt.Rows[0]["Fisier"], (dt.Rows[0]["FisierNume"] as string ?? "").ToString());
+                                scrieDoc((dt.Rows[0]["FisierExtensie"] ?? "").ToString(), (byte[])dt.Rows[0]["Fisier"], (dt.Rows[0]["FisierNume"] as string ?? "").ToString());
                             }
                             else
                             {

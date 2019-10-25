@@ -142,7 +142,7 @@ namespace WizOne
                             }
                             else
                             {
-                                prof = (dtPro.Rows[0]["Continut"] as string ?? "").ToString();
+                                prof = (dtPro.Rows[0]["Continut"] ?? "").ToString();
                                 cmbProfile.Value = dtPro.Rows[0]["Id"];
                             }
 
@@ -398,7 +398,7 @@ namespace WizOne
                 {
                     NavBarGroup modul = new NavBarGroup();
                     modul.Name = "meniul" + dr["IdMeniu"].ToString();
-                    modul.Text = Dami.TraduMeniu((dr["Nume"] as string ?? "").ToString());
+                    modul.Text = Dami.TraduMeniu((dr["Nume"] ?? "").ToString());
                     modul.Expanded = false;
                     modul.HeaderImage.Url = "Fisiere/Imagini/Icoane/" + dr["Imagine"];
 
@@ -539,7 +539,7 @@ namespace WizOne
                 foreach (DataRow drGr in arrGr)
                 {
                     NavBarGroup gr = new NavBarGroup();
-                    gr.Text = Dami.TraduMeniu((drGr["Nume"] as string ?? "").ToString());
+                    gr.Text = Dami.TraduMeniu((drGr["Nume"] ?? "").ToString());
                     gr.Expanded = false;
                     gr.HeaderImage.Url = "Fisiere/Imagini/Icoane/" + drGr["Imagine"];
                     gr.HeaderImage.Width = Unit.Pixel(16);
@@ -552,7 +552,7 @@ namespace WizOne
                     foreach (DataRow drIt in arrIt)
                     {
                         NavBarItem it = new NavBarItem();
-                        it.Text = Dami.TraduMeniu((drIt["Nume"] as string ?? "").ToString());
+                        it.Text = Dami.TraduMeniu((drIt["Nume"] ?? "").ToString());
                         it.Image.Width = Unit.Pixel(16);
                         it.Image.Height = Unit.Pixel(16);
                         it.Image.Url = "Fisiere/Imagini/Icoane/" + drIt["Imagine"];

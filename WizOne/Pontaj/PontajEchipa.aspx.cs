@@ -1124,7 +1124,7 @@ namespace WizOne.Pontaj
                                             ent.F30015 = 0;
 
                                             ent.F30010 = (short?)Convert.ToInt32(entFor.Rows[j]["CodF300"].ToString());
-                                            switch (Convert.ToInt32((entFor.Rows[j]["SursaF300"] as int? ?? 1).ToString()))
+                                            switch (Convert.ToInt32((entFor.Rows[j]["SursaF300"] ?? 1).ToString()))
                                             {
                                                 case 1:
                                                     ent.F30013 = val;

@@ -194,7 +194,7 @@ namespace WizOne.Pagini
                                     {
                                         //optimizare - cazul de la Circuite (de ex: Ptj_Circuite)
                                         //mai multe coloane pot avea aceeasi sursa de date)
-                                        string sursa = (dr["SursaCombo"] as string ?? "").ToString().Trim();
+                                        string sursa = (dr["SursaCombo"] ?? "").ToString().Trim();
                                         DataTable dtCmb = new DataTable();
 
                                         if (sursa != "" && lst.Where(p => p.SelectStr == sursa).Count() > 0)
@@ -338,7 +338,7 @@ namespace WizOne.Pagini
                                     {
                                         //optimizare - cazul de la Circuite (de ex: Ptj_Circuite)
                                         //mai multe coloane pot avea aceeasi sursa de date)
-                                        string sursa = (dr["SursaCombo"] as string ?? "").ToString().Trim();
+                                        string sursa = (dr["SursaCombo"] ?? "").ToString().Trim();
                                         DataTable dtCmb = new DataTable();
 
                                         if (sursa != "" && lst.Where(p => p.SelectStr == sursa).Count() > 0)

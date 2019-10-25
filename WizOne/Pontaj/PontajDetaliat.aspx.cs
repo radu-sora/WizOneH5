@@ -1194,7 +1194,7 @@ namespace WizOne.Pontaj
                 int idStare = 1;
 
                 DataRow dr = dt.Rows[0];
-                idStare = Convert.ToInt32(dr["IdStare"] as int? ?? 1);
+                idStare = Convert.ToInt32(dr["IdStare"] ?? 1);
 
                 if (!VerifDrepturi(idRol, idStare))
                 {

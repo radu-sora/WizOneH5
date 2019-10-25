@@ -658,7 +658,7 @@ namespace WizOne.Pontaj
                     if (General.Nz(cmbCtr.Value, "").ToString() != "") filtru += " AND P.\"IdContract\"=" + cmbCtr.Value;
                     if (General.Nz(cmbStare.Value, "").ToString() != "") filtru += " AND J.\"IdStare\"=" + cmbStare.Value;
                     if (General.Nz(cmbAngZi.Value, "").ToString() != "")
-                        filtru += " AND P.F10004=" + cmbAngZi.Value;
+                        filtru += " AND P.F10003=" + cmbAngZi.Value;
                     else
                         filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day);
 

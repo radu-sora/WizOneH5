@@ -45,7 +45,7 @@ namespace WizOne.Pagini
                                     txtDenumire.Text = dt.Rows[0]["Denumire"].ToString();
                                     if (dt.Rows[0]["DataInceput"].ToString() != "") txtDataInc.Date = Convert.ToDateTime(dt.Rows[0]["DataInceput"]);
                                     if (dt.Rows[0]["DataSfarsit"].ToString() != "") txtDataSf.Date = Convert.ToDateTime(dt.Rows[0]["DataSfarsit"]);
-                                    chkActiv.Checked = Convert.ToBoolean(dt.Rows[0]["Activ"] as int? ?? 1);
+                                    chkActiv.Checked = Convert.ToBoolean(dt.Rows[0]["Activ"] ?? 1);
                                     txtContinut.Html = dt.Rows[0]["Continut"].ToString();
                                     cmbLimbi.Value = dt.Rows[0]["IdLimba"].ToString();
                                 }
@@ -120,7 +120,7 @@ namespace WizOne.Pagini
                 else
                 {
                     General.SalveazaDate(dt, "Stiri");
-                    Notif.TrimiteNotificare("tbl.Stiri", (int)Constante.TipNotificare.Notificare, @"SELECT * FROM ""Stiri"" WHERE ""Id""=" + id, "Stiri", id, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    Notif.TrimiteNotificare("tbl.Stiri", (int)Constante.TipNotificare.Notificare, @"SELECT Z.* FROM ""Stiri"" Z WHERE ""Id""=" + id, "Stiri", id, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                     if (msg == "") Iesire();
                 }
             }

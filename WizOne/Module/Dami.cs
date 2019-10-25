@@ -732,7 +732,7 @@ namespace WizOne.Module
                                 CASE WHEN ""CampExtra19"" IS NOT NULL {General.FiltrulCuNull("CampExtra19")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra19"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
                                 CASE WHEN ""CampExtra20"" IS NOT NULL {General.FiltrulCuNull("CampExtra20")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra20"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()} 
                                 {campIntervalOrar}
-                                AS ""DateConcatenate"", DR.""Valoare"" AS Anulare_Valoare, DR.""NrZile"" AS Anulare_NrZile, COALESCE(A.""CampBifa"",0) AS ""CampBifa""
+                                AS ""DateConcatenate"", DR.""Valoare"" AS ""Anulare_Valoare"", DR.""NrZile"" AS ""Anulare_NrZile"", COALESCE(A.""CampBifa"",0) AS ""CampBifa""
                                 FROM ({strSql}) A
                                 INNER JOIN F100 B ON A.F10003 = B.F10003
                                 INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
@@ -741,7 +741,7 @@ namespace WizOne.Module
                                 LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
                                 LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
                                 LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
-                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = A.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 3 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
+                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"", W.""IdActiune"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC, W.""IdActiune"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = A.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 3 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
                                 WHERE 1=1 ";
             }
             catch (Exception ex)
@@ -1246,7 +1246,7 @@ namespace WizOne.Module
                     dtProfile = General.IncarcaDT(strSql, new object[] { General.Nz(HttpContext.Current.Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
                 }
 
-                if (dtProfile.Rows.Count != 0 && (dtProfile.Rows[0]["Continut"] as string ?? "").ToString() != "" ) rez = dtProfile.Rows[0]["Continut"].ToString();
+                if (dtProfile.Rows.Count != 0 && (dtProfile.Rows[0]["Continut"] ?? "").ToString() != "" ) rez = dtProfile.Rows[0]["Continut"].ToString();
             }
             catch (Exception ex)
             {
@@ -1296,13 +1296,13 @@ namespace WizOne.Module
 
                 //DataRow dr = dt.Rows[0];
 
-                if (dr["Criptat"].ToString() != "" && Convert.ToInt32(dr["Criptat"] as int? ?? 0) == 1)
+                if (dr["Criptat"].ToString() != "" && Convert.ToInt32(dr["Criptat"] ?? 0) == 1)
                 {
                     CriptDecript prc = new CriptDecript();
-                    rez = prc.EncryptString("WizOne2016", (dr["Valoare"] as string ?? "").ToString(), 2);
+                    rez = prc.EncryptString("WizOne2016", (dr["Valoare"] ?? "").ToString(), 2);
                 }
                 else
-                    rez = (dr["Valoare"] as string ?? "").ToString();
+                    rez = (dr["Valoare"] ?? "").ToString();
 
                 if (rez.Trim() == "" && replaceValue != "") rez = replaceValue;
 
@@ -1599,13 +1599,14 @@ namespace WizOne.Module
             try
             {
                 List<metaGeneral2> list = new List<metaGeneral2>();
-                list.Add(new metaGeneral2() { Id = "RO", Denumire = "Romana" });
+                list.Add(new metaGeneral2() { Id = "RO", Denumire = "Română" });
                 list.Add(new metaGeneral2() { Id = "EN", Denumire = "English" });
                 list.Add(new metaGeneral2() { Id = "FR", Denumire = "Français" });
                 list.Add(new metaGeneral2() { Id = "ES", Denumire = "Español" });
                 list.Add(new metaGeneral2() { Id = "DE", Denumire = "Deutsch" });
                 list.Add(new metaGeneral2() { Id = "IT", Denumire = "Italiano" });
-                list.Add(new metaGeneral2() { Id = "BG", Denumire = "Bulgarian" });
+                list.Add(new metaGeneral2() { Id = "BG", Denumire = "български" });
+                list.Add(new metaGeneral2() { Id = "RU", Denumire = "русский" });
 
                 return list;
             }

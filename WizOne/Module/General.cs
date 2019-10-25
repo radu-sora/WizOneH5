@@ -809,7 +809,8 @@ namespace WizOne.Module
             OracleConnection conn = new OracleConnection(Constante.cnnWeb);
             conn.Open();
 
-            strSql = strSql.Replace("GLOBAL.IDUSER", (HttpContext.Current.Session["UserId"] ?? "").ToString()).Replace("GLOBAL.MARCA", (HttpContext.Current.Session["User_Marca"] ?? "").ToString());
+            //Florin 2019.10.11 - da eroare cand e asincron
+            //strSql = strSql.Replace("GLOBAL.IDUSER", (HttpContext.Current.Session["UserId"] ?? "").ToString()).Replace("GLOBAL.MARCA", (HttpContext.Current.Session["User_Marca"] ?? "").ToString());
 
             OracleCommand cmd = new OracleCommand(strSql, conn);
 
@@ -1774,7 +1775,7 @@ namespace WizOne.Module
                 switch (tipOperatie)
                 {
                     case 1:
-                        if (dt.Rows.Count > 0) zlDisp = (Convert.ToInt32(dt.Rows[0][0] as int? ?? 0) * 2) / norma;
+                        if (dt.Rows.Count > 0) zlDisp = (Convert.ToInt32(dt.Rows[0][0] ?? 0) * 2) / norma;
                         break;
                     case 2:
                         int nrRec = (norma * nrZile) / 2;
@@ -1787,7 +1788,7 @@ namespace WizOne.Module
                                 int dif = 0;
                                 if (nrRec <= 0) break;
 
-                                int val = Convert.ToInt32((dt.Rows[i]["ValStr"] as string ?? "").ToString().Replace("R", "")) - Convert.ToInt32(dt.Rows[i]["F30"] ?? 0);
+                                int val = Convert.ToInt32((dt.Rows[i]["ValStr"] ?? "").ToString().Replace("R", "")) - Convert.ToInt32(dt.Rows[i]["F30"] ?? 0);
                                 if (nrRec >= val)
                                     dif = val;
                                 else
@@ -1814,7 +1815,7 @@ namespace WizOne.Module
                                 int? dif = 0;
                                 if (nrDel <= 0) break;
 
-                                int val = Convert.ToInt32(dt.Rows[i]["F30"] as int? ?? 0);
+                                int val = Convert.ToInt32(dt.Rows[i]["F30"] ?? 0);
                                 if (nrDel >= val)
                                     dif = null;
                                 else
@@ -1978,11 +1979,11 @@ namespace WizOne.Module
                         //if (dtHoll.Rows.Count > 0 && dtHoll.Select("DAY=" + dtStr).Count() > 0) ziLibLeg = 1;
                         //if (ziLibLeg == 1 || zi.DayOfWeek.ToString().ToUpper() == "SATURDAY" || zi.DayOfWeek.ToString().ToUpper() == "SUNDAY") ziLib = 1;
 
-                        string valStr = (dr["ValStr"] as string ?? "").ToString();
+                        string valStr = (dr["ValStr"] ?? "").ToString();
 
                         if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)
                         {
-                            string sqlIns = "INSERT INTO \"Ptj_Intrari\"(F10003, \"Ziua\", \"ZiSapt\", \"ZiLibera\", \"ZiLiberaLegala\", \"IdContract\", \"Norma\", F10002, F10004, F10005, F10006, F10007, F06204, \"ValStr\", USER_NO, TIME" + ((dr["ValPentruOre"] as string ?? "").ToString() == "" ? "" : "," + (dr["ValPentruOre"] ?? "").ToString()) + ") \n" +
+                            string sqlIns = "INSERT INTO \"Ptj_Intrari\"(F10003, \"Ziua\", \"ZiSapt\", \"ZiLibera\", \"ZiLiberaLegala\", \"IdContract\", \"Norma\", F10002, F10004, F10005, F10006, F10007, F06204, \"ValStr\", USER_NO, TIME" + ((dr["ValPentruOre"] ?? "").ToString() == "" ? "" : "," + (dr["ValPentruOre"] ?? "").ToString()) + ") \n" +
                                 "SELECT " +
                                 dr["F10003"] + ", " +
                                 General.ToDataUniv(zi.Date) + ", " +
@@ -2000,13 +2001,13 @@ namespace WizOne.Module
                                 "'" + valStr + "', " +
                                 idUser + ", " +
                                 General.CurrentDate() +
-                                ((dr["ValPentruOre"] as string ?? "").ToString() == "" ? "" : ", " + (nrOre * 60).ToString())
+                                ((dr["ValPentruOre"] ?? "").ToString() == "" ? "" : ", " + (nrOre * 60).ToString())
                                 + (Constante.tipBD == 1 ? "" : " FROM DUAL");
 
                             //trimte orele in Val indicat in tabela Ptj_tblAbsente - numai pt cererile de tip ore
                             string sqlUp = "";
                             string sqlIst = "";
-                            if ((dr["ValPentruOre"] as string ?? "").ToString() == "")
+                            if ((dr["ValPentruOre"] ?? "").ToString() == "")
                             {
                                 sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"='" + valStr + "', \"Val0\"=null, \"Val1\"=null, \"Val2\"=null, \"Val3\"=null, \"Val4\"=null, \"Val5\"=null, \"Val6\"=null, \"Val7\"=null, \"Val8\"=null, \"Val9\"=null, \"Val10\"=null, \"Val11\"=null, \"Val12\"=null, \"Val13\"=null, \"Val14\"=null, \"Val15\"=null, \"Val16\"=null, \"Val17\"=null, \"Val18\"=null, \"Val19\"=null, \"Val20\"=null" +
                                         " WHERE F10003 = " + dr["F10003"] + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date);
@@ -2018,9 +2019,9 @@ namespace WizOne.Module
                             {
                                 //Florin 2019.03.05
                                 //am scos apostroafele de la ValStr, si in update si in insert
-                                valStr = CalculValStr((int)dr["F10003"], zi.Date, "", (dr["ValPentruOre"] as string ?? "").ToString(), (int)(nrOre * 60));
+                                valStr = CalculValStr((int)dr["F10003"], zi.Date, "", (dr["ValPentruOre"] ?? "").ToString(), (int)(nrOre * 60));
                                 sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"=" + valStr + "," +
-                                        (dr["ValPentruOre"] as string ?? "").ToString() + "=" + (nrOre * 60).ToString() +
+                                        (dr["ValPentruOre"] ?? "").ToString() + "=" + (nrOre * 60).ToString() +
                                         "WHERE  F10003=" + dr["F10003"] + " AND \"Ziua\"=" + General.ToDataUniv(zi.Date);
 
                                 sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
@@ -2867,12 +2868,12 @@ namespace WizOne.Module
                                 (D.""Pozitie"" = (A.""Pozitie"" + 1) OR (COALESCE(E.""RespectaOrdinea"",0)=0 AND D.""Pozitie"" > (A.""Pozitie"" + 1))) AND
                                 A.""Id""=D.""IdCerere"" AND (D.""IdSuper"" = -1 * RL.""Rol""  OR RL.""Rol"" = 78) AND D.""IdUser"" IN (SELECT Y.F70102 FROM ""Ptj_Cereri"" X
                                                                                                                     INNER JOIN USERS Y ON X.F10003=Y.F10003
-                                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.DataInceput")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("X.DataSfarsit")}
+                                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.DataInceput")} <= {CurrentDate(true)} AND {CurrentDate(true)} <= {TruncateDate("X.DataSfarsit")}
                                                                                                                     UNION
-                                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("DataInceput")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("DataSfarsit")})
+                                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("DataInceput")} <= {CurrentDate(true)} AND {CurrentDate(true)} <= {TruncateDate("DataSfarsit")})
                                 LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
                                 LEFT JOIN F100 G ON A.F10003=G.F10003
-                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 1 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
+                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"", W.""IdActiune"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC, W.""IdActiune"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = RL.""Rol"" OR DR.""IdRol"" = -13 OR (RL.""Rol""=78 AND DR.""IdRol""=(D.""IdSuper"" * -1)) OR (RL.""Rol""=78 AND DR.""IdRol"" IN (76, -13) AND D.""IdSuper"" > 0)) AND (DR.""IdActiune"" = 1 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
 
                                 WHERE 1=1 ";
 
@@ -3067,7 +3068,7 @@ namespace WizOne.Module
                                         WHERE ""IdAuto""={idIst}";
 
 
-                    string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                    string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
                     //if (msg != "" && msg == Constante.MesajeValidari.MesajDeEroare.ToString())
                     if (msg != "" && msg.Substring(0,1) == "2")
                     {
@@ -3139,7 +3140,7 @@ namespace WizOne.Module
                         //completeaza soldul de ZL; Este numai pt clientul Groupama
                         if (tipActiune == 2) General.SituatieZLOperatii(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), 2, Convert.ToInt32(General.Nz(dr["NrZile"], 1)));
 
-                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + dr["Id"], "Ptj_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + dr["Id"], "Ptj_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
 
 
                         //log += "#$Id " + dr["Id"] + " - proces realizat cu succes \n";
@@ -3399,7 +3400,7 @@ namespace WizOne.Module
                                         WHERE ""IdAuto""={idIst}";
 
 
-                    string msg = Notif.TrimiteNotificare("CereriDiverse.Lista", 2, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""MP_Cereri"" WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                    string msg = Notif.TrimiteNotificare("CereriDiverse.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""MP_Cereri"" Z WHERE ""Id""=" + dr["Id"], "", Convert.ToInt32(dr["Id"]), idUser, userMarca);
                     //if (msg != "" && msg == Constante.MesajeValidari.MesajDeEroare.ToString())
                     if (msg != "" && msg.Substring(0, 1) == "2")
                     {
@@ -3437,7 +3438,7 @@ namespace WizOne.Module
                         }
 
 
-                        Notif.TrimiteNotificare("CereriDiverse.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""MP_Cereri"" WHERE ""Id""=" + dr["Id"], "MP_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
+                        Notif.TrimiteNotificare("CereriDiverse.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""MP_Cereri"" Z WHERE ""Id""=" + dr["Id"], "MP_Cereri", Convert.ToInt32(dr["Id"]), idUser, userMarca);
 
 
                         //log += "#$Id " + dr["Id"] + " - proces realizat cu succes \n";
@@ -4743,7 +4744,7 @@ namespace WizOne.Module
                         HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.ASCII;
 
 
-                        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + (dt.Rows[0]["FisierNume"] as string ?? "").ToString());
+                        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + (dt.Rows[0]["FisierNume"] ?? "").ToString());
                         HttpContext.Current.Response.Buffer = true;
                         ms.WriteTo(HttpContext.Current.Response.OutputStream);
                     }
@@ -5416,7 +5417,7 @@ namespace WizOne.Module
                         byte[] fis = (byte[])dr["Fisier"];
                         MemoryStream stream = new MemoryStream(fis);
                         extensie = dr["FisierExtensie"].ToString();
-                        numeFisier = (dt.Rows[0]["FisierNume"] as string ?? "").ToString();
+                        numeFisier = (dt.Rows[0]["FisierNume"] ?? "").ToString();
                         return fis;
                     }
 
@@ -6037,7 +6038,7 @@ namespace WizOne.Module
 
 
 
-            Notif.TrimiteNotificare("BP.CrearePrime", 1, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" WHERE ""Id""=" + idUrm, "", idUrm, idUser, f10003);
+            Notif.TrimiteNotificare("BP.CrearePrime", 1, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""BP_Prime"" Z WHERE ""Id""=" + idUrm, "", idUrm, idUser, f10003);
             return "";
 
         }
@@ -6516,6 +6517,9 @@ namespace WizOne.Module
 
                 //Florin 2019.07.19
                 HttpContext.Current.Session["Ptj_DataBlocare"] = "22001231";
+
+                //Florin 2019.10.16
+                HttpContext.Current.Session["Json_Programe"] = "[]";
 
 
 
@@ -7710,13 +7714,21 @@ namespace WizOne.Module
         }
 
 
-        public static void AddUserIstoric()
+        public static void AddUserIstoric(int tip = 1)
         {
+            //tip
+            //tip = 1 se salveaza istoric parola logare
+            //tip = 2 se salveaza istoric parola fluturas
+
             try
             {
                 string idUser = General.Nz(HttpContext.Current.Session["UserId"],-99).ToString();
                 string strSql = $@"INSERT INTO ""ParoleUtilizatorIstoric""(""IdUser"", ""Parola"", ""Data"", USER_NO, TIME)
                         SELECT F70102, F70103, {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""Users"" WHERE F70102={idUser}";
+                if (tip == 2)
+                    strSql = $@"INSERT INTO ""ParoleFluturasIstoric""(""F10003"", ""Parola"", ""Data"", USER_NO, TIME)
+                        SELECT F10003, Parola, {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""Users"" WHERE F70102={idUser} AND F10003 IS NOT NULL AND F10003 <> -99";
+
                 General.ExecutaNonQuery(strSql, null);
             }
             catch (Exception ex)
@@ -7881,7 +7893,11 @@ namespace WizOne.Module
 
                     General.SalveazaDate(dt, "Org_relPostAngajat");
 
-                    Notif.TrimiteNotificare("PosturiNomen.PosturiLista", (int)Constante.TipNotificare.Notificare, "SELECT TOP 1 * FROM Org_Posturi WHERE Id=" + id, "Org_Posturi", -99, Convert.ToInt32(HttpContext.Current.Session["UserId"]), Convert.ToInt32(HttpContext.Current.Session["User_Marca"]));
+                    //Florin 2019.10.11
+                    string sqlOrg = $@"SELECT TOP 1 * FROM Org_Posturi WHERE Id = " + id;
+                    if (Constante.tipBD == 2)
+                        sqlOrg = $@"SELECT Z.* FROM ""Org_Posturi"" Z WHERE ROWNUM <=1 AND ""Id"" = " + id;
+                    Notif.TrimiteNotificare("PosturiNomen.PosturiLista", (int)Constante.TipNotificare.Notificare, sqlOrg, "Org_Posturi", -99, Convert.ToInt32(HttpContext.Current.Session["UserId"]), Convert.ToInt32(HttpContext.Current.Session["User_Marca"]));
                 }
             }
             catch (Exception ex)
@@ -8469,6 +8485,47 @@ namespace WizOne.Module
 
             return str;
         }
+
+        public static string URLEncode(string expresie)
+        {
+            string rez = "";
+
+            try
+            {
+                CriptDecript prc = new CriptDecript();
+
+                string txt = prc.EncryptString(Constante.cheieCriptare, expresie, Constante.ENCRYPT);
+                byte[] stream = Encoding.Unicode.GetBytes(txt);
+                rez = HttpServerUtility.UrlTokenEncode(stream);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "URLEncode");
+            }
+
+            return rez;
+        }
+
+        public static string URLDecode(string expresie)
+        {
+            string rez = "";
+
+            try
+            {
+                CriptDecript prc = new CriptDecript();
+
+                byte[] stream = HttpServerUtility.UrlTokenDecode(expresie);
+                string txt = Encoding.Unicode.GetString(stream);
+                rez = prc.EncryptString(Constante.cheieCriptare, txt, Constante.DECRYPT);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "URLDecode");
+            }
+
+            return rez;
+        }
+
 
     }
 }

@@ -3,8 +3,25 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
+    <script>
+        function OnClickRapButton(s) {
+            popUpPass.Show();
+            hfRap.Set('NumeRap', s.name); 
+        }
 
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
+
+    </script>
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <dx:ASPxGlobalEvents ID="glob" runat="server">
@@ -45,6 +62,55 @@
             </div>
         </div>
     </div>
+
+
+    <dx:ASPxPopupControl ID="popUpPass" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static" Modal="true"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top" OnWindowCallback="popUpPass_WindowCallback"
+        EnableViewState="False" PopupElementID="popUpPassArea" PopupHorizontalAlign="WindowCenter" SettingsLoadingPanel-Enabled="true"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="350px" Height="150px" HeaderText="Parola Raport"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpPass" EnableHierarchyRecreation="false">
+        <ClientSideEvents EndCallback="OnEndCallback" />
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel1" runat="server">
+                    <table style="width:100%;">
+                        <tr>
+                            <td align="right">
+                                <dx:ASPxButton ID="btnRapPass" runat="server" Text="Afisare" AutoPostBack="false" >
+                                    <ClientSideEvents Click="function(s, e) {
+                                        e.processOnServer = false;
+                                        if (txtRapPass.GetText() == '')
+                                        {
+                                            swal({
+                                                title: 'Atentie !', text: 'Lipsesc date',
+                                                type: 'warning'
+                                            });
+                                        }
+                                        else
+                                        {
+                                            popUpPass.Hide();
+                                            pnlLoading.Show();
+                                            popUpPass.PerformCallback();
+                                        }
+                                    }" />
+                                    <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
+                                </dx:ASPxButton>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:100%; padding-left:20px;">
+                                <dx:ASPxLabel ID="lblRap" runat="server"  Text="Introduceti parola raport"/>
+                                <dx:ASPxTextBox ID="txtRapPass" ClientInstanceName="txtRapPass" runat="server" Width="280" Password="true" />
+                                <dx:ASPxHiddenField ID="hfRap" runat="server" />
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
 
 
 </asp:Content>

@@ -372,7 +372,7 @@ namespace WizOne.Tactil
                                     }
                                 }
 
-                                string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT *, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                                 if (msg != "" && msg.Substring(0, 1) == "2")
                                 {
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));
@@ -420,7 +420,7 @@ namespace WizOne.Tactil
 
                                 General.SituatieZLOperatii(Convert.ToInt32(General.Nz(obj[1],-99)), Convert.ToDateTime(General.Nz(obj[4],new DateTime(2100,1,1))), 3, Convert.ToInt32(General.Nz(obj[5],0)));
 
-                                Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                                 grDate.DataBind();
                                 #endregion 
@@ -494,7 +494,7 @@ namespace WizOne.Tactil
                                         }
                                     }
 
-                                    Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT *, 2 AS ""Actiune"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                    Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 2 AS ""Actiune"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                                     grDate.DataBind();
                                     //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoWarning);

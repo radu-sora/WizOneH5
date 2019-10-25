@@ -1194,7 +1194,7 @@ namespace WizOne.Pontaj
                 int idStare = 1;
 
                 DataRow dr = dt.Rows[0];
-                idStare = Convert.ToInt32(dr["IdStare"] as int? ?? 1);
+                idStare = Convert.ToInt32(dr["IdStare"] ?? 1);
 
                 if (!VerifDrepturi(idRol, idStare))
                 {
@@ -1589,8 +1589,8 @@ namespace WizOne.Pontaj
                         {
                             if (upd.NewValues["ValTmp" + i] != null)
                                 row["Val" + i] = Convert.ToDateTime(upd.NewValues["ValTmp" + i]).Minute + (Convert.ToDateTime(upd.NewValues["ValTmp" + i]).Hour * 60);
-                            else
-                                row["Val" + i] = DBNull.Value;
+                            //else
+                            //    row["Val" + i] = DBNull.Value;
 
                             //salvam ValModif -urile
                             if (Convert.ToDateTime(General.Nz(upd.NewValues["ValTmp" + i], DateTime.Now)) != Convert.ToDateTime(General.Nz(upd.OldValues["ValTmp" + i], DateTime.Now))) row["ValModif" + i] = Constante.TipModificarePontaj.ModificatManual;
@@ -2441,6 +2441,33 @@ namespace WizOne.Pontaj
                                         //        lstCol.Width = 250;
                                         //    c.PropertiesComboBox.Columns.Add(lstCol);
                                         //}
+
+
+                                        if (c.FieldName == "IdContract")
+                                        {
+                                            c.PropertiesComboBox.ClientInstanceName = "cmbContract";
+                                            c.PropertiesComboBox.ClientSideEvents.SelectedIndexChanged = "cmbContract_SelectedIndexChanged_Client";
+                                        }
+
+                                        if (c.FieldName == "IdProgram")
+                                        {
+                                            c.PropertiesComboBox.ClientInstanceName = "cmbProgram";
+                                            DataTable dtPrg = General.IncarcaDT(
+                                                $@"SELECT A.IdContract, A.IdProgram, B.Denumire AS Program
+                                                FROM Ptj_ContracteSchimburi A
+                                                INNER JOIN Ptj_Programe B ON A.IdProgram=B.Id
+                                                ORDER BY B.Denumire", null);
+                                            if (dtPrg != null && dtPrg.Rows.Count > 0)
+                                            {
+                                                string jsonPrg = "";
+                                                for(int g = 0; g < dtPrg.Rows.Count; g++)
+                                                {
+                                                    jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + dtPrg.Rows[g]["Program"] + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + " }";
+                                                }
+                                                if (jsonPrg.Length > 0)
+                                                    Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";
+                                            }
+                                        }
                                     }
 
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")

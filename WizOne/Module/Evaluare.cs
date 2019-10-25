@@ -2266,7 +2266,7 @@ namespace WizOne.Module
 
                 for (int i = 0; i < arr.Count; i++)
                 {
-                    string msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT *, 1 AS ""Actiune"" FROM ""Eval_Raspuns"" WHERE ""IdQuiz""=" + arr[i].IdQuiz.ToString() + @"AND F10003 = " + arr[i].F10003.ToString(), "", -99, idUser, userMarca);
+                    string msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"" FROM ""Eval_Raspuns"" Z WHERE ""IdQuiz""=" + arr[i].IdQuiz.ToString() + @"AND F10003 = " + arr[i].F10003.ToString(), "", -99, idUser, userMarca);
                     if (msg.Length > 0)
                         General.CreazaLog(msg);
                 }

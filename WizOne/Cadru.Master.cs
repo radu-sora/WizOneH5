@@ -92,7 +92,8 @@ namespace WizOne
                 lblLimbi.Text = Dami.TraduCuvant("Limba");
                 lblParola.Text = Dami.TraduCuvant("Parola");
                 lblConfirma.Text = Dami.TraduCuvant("ConfirmaParola");
-
+                lblParolaRap.Text = Dami.TraduCuvant("Parola rapoarte");
+                lblConfirmaRap.Text = Dami.TraduCuvant("ConfirmaParolaRapoarte");
 
                 #endregion
 
@@ -141,7 +142,7 @@ namespace WizOne
                             }
                             else
                             {
-                                prof = (dtPro.Rows[0]["Continut"] as string ?? "").ToString();
+                                prof = (dtPro.Rows[0]["Continut"] ?? "").ToString();
                                 cmbProfile.Value = dtPro.Rows[0]["Id"];
                             }
 
@@ -249,11 +250,9 @@ namespace WizOne
         {
             try
             {
-                if (txtParola.Text == "" || txtConfirma.Text == "")
-                {
-                    MessageBox.Show("Lipsesc date !", MessageBox.icoWarning, "");
-                }
-                else
+                bool modif = false;
+
+                if (txtParola.Text != "" && txtConfirma.Text != "")
                 {
                     if (txtParola.Text != txtConfirma.Text)
                     {
@@ -279,9 +278,42 @@ namespace WizOne
                         string strSql = @"UPDATE USERS SET F70103=@1 WHERE F70102=@2";
                         General.ExecutaNonQuery(strSql, new string[] { parola, Session["UserId"].ToString() });
 
-                        MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+                        modif = true;
                     }
                 }
+
+                if (txtParolaRap.Text != "" && txtConfirmaRap.Text != "")
+                {
+                    if (txtParolaRap.Text != txtConfirmaRap.Text)
+                    {
+                        MessageBox.Show("Parola nu coincide !", MessageBox.icoWarning, "");
+                    }
+                    else
+                    {
+                        if (General.VarSession("ParolaComplexa").ToString() == "1")
+                        {
+                            var ras = General.VerificaComplexitateParola(txtParolaRap.Text);
+                            if (ras != "")
+                            {
+                                MessageBox.Show(ras, MessageBox.icoWarning, "Parola invalida");
+                                return;
+                            }
+                        }
+
+                        CriptDecript prc = new CriptDecript();
+                        string parola = prc.EncryptString(Constante.cheieCriptare, txtParolaRap.Text, 1);
+
+                        General.AddUserIstoric(2);
+
+                        string strSql = @"UPDATE USERS SET ""Parola""=@1 WHERE F70102=@2";
+                        General.ExecutaNonQuery(strSql, new string[] { parola, Session["UserId"].ToString() });
+
+                        modif = true;
+                    }
+                }
+
+                if (modif)
+                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
             }
             catch (Exception ex)
             {
@@ -366,7 +398,7 @@ namespace WizOne
                 {
                     NavBarGroup modul = new NavBarGroup();
                     modul.Name = "meniul" + dr["IdMeniu"].ToString();
-                    modul.Text = Dami.TraduMeniu((dr["Nume"] as string ?? "").ToString());
+                    modul.Text = Dami.TraduMeniu((dr["Nume"] ?? "").ToString());
                     modul.Expanded = false;
                     modul.HeaderImage.Url = "Fisiere/Imagini/Icoane/" + dr["Imagine"];
 
@@ -507,7 +539,7 @@ namespace WizOne
                 foreach (DataRow drGr in arrGr)
                 {
                     NavBarGroup gr = new NavBarGroup();
-                    gr.Text = Dami.TraduMeniu((drGr["Nume"] as string ?? "").ToString());
+                    gr.Text = Dami.TraduMeniu((drGr["Nume"] ?? "").ToString());
                     gr.Expanded = false;
                     gr.HeaderImage.Url = "Fisiere/Imagini/Icoane/" + drGr["Imagine"];
                     gr.HeaderImage.Width = Unit.Pixel(16);
@@ -520,7 +552,7 @@ namespace WizOne
                     foreach (DataRow drIt in arrIt)
                     {
                         NavBarItem it = new NavBarItem();
-                        it.Text = Dami.TraduMeniu((drIt["Nume"] as string ?? "").ToString());
+                        it.Text = Dami.TraduMeniu((drIt["Nume"] ?? "").ToString());
                         it.Image.Width = Unit.Pixel(16);
                         it.Image.Height = Unit.Pixel(16);
                         it.Image.Url = "Fisiere/Imagini/Icoane/" + drIt["Imagine"];

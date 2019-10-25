@@ -307,7 +307,7 @@ namespace WizOne.Eval
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
                     IncarcaGrid();
 
-                    Notif.TrimiteNotificare("Eval.Invitatie", (int)Constante.TipNotificare.Notificare, $@"SELECT *, -99 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Eval_Invitatie360"" WHERE ""IdUser""={idUsr} AND F10003={f10003} AND ""IdQuiz""={idQuiz}", "Eval_Invitatie360", 1, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    Notif.TrimiteNotificare("Eval.Invitatie", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, -99 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Eval_Invitatie360"" Z WHERE ""IdUser""={idUsr} AND F10003={f10003} AND ""IdQuiz""={idQuiz}", "Eval_Invitatie360", 1, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                 }
                 else
                 {
@@ -700,7 +700,7 @@ namespace WizOne.Eval
                                 if (tip == 3) txt = "aprobata";
                                 msg += "Cererea pt " + arr[4] + " - " + Dami.TraduCuvant("a fost " + txt) + System.Environment.NewLine;
 
-                                Notif.TrimiteNotificare("Eval.Invitatie", (int)Constante.TipNotificare.Notificare, $@"SELECT *, {tip} AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Eval_Invitatie360"" WHERE ""IdUser""={arr[0]} AND F10003={arr[1]} AND ""IdQuiz""={arr[2]}", "Eval_Invitatie360", 1, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                Notif.TrimiteNotificare("Eval.Invitatie", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, {tip} AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Eval_Invitatie360"" Z WHERE ""IdUser""={arr[0]} AND F10003={arr[1]} AND ""IdQuiz""={arr[2]}", "Eval_Invitatie360", 1, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                             }
                             break;
                     }

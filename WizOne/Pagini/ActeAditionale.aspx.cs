@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using ProceseSec;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -1577,7 +1578,12 @@ namespace WizOne.Pagini
 
 
                 Session["ReportId"] = Convert.ToInt32(idRap);
-                string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;
+
+                //Florin 2019.10.17
+                //string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;
+                string q = General.URLEncode("Angajat=" + obj[0] + param);
+                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + q;
+
                 Response.Redirect(url);
 
             }

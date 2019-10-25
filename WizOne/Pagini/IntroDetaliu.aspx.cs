@@ -153,6 +153,13 @@ namespace WizOne.Pagini
                 //Invitatie 360
                 lstBadges.Add(new metaBadge { StringSelect = "SELECT * FROM USERS WHERE 1=2", Pagina = "../Eval/Invitatie.aspx", Eticheta = "Feedback", RutaImg = "bdgEvl.jpg" });
 
+                //Florin 2019.10.15
+                //Solicitari absente
+                lstBadges.Add(new metaBadge { StringSelect = @"SELECT * FROM ""Ptj_Cereri"" WHERE 1=2", Pagina = "../Absente/Cereri.aspx", Eticheta = Dami.TraduCuvant("Solicitari absente"), RutaImg = "bdgCer.jpg" });
+                //Solicitari diverse
+                lstBadges.Add(new metaBadge { StringSelect = @"SELECT * FROM ""Ptj_Cereri"" WHERE 1=2", Pagina = "../CereriDiverse/Cereri.aspx", Eticheta = Dami.TraduCuvant("Solicitari diverse"), RutaImg = "bdgCer.jpg" });
+
+
                 int j = 0;
 
                 foreach (var ele in lstBadges)
@@ -203,9 +210,9 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dtRap.Rows.Count; i++)
                     {
                         ASPxButton btn = new ASPxButton();
-                        btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] as string ?? "").ToString());
+                        btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] ?? "").ToString());
                         //btn.PostBackUrl = "RapDetaliu.aspx?id=" + dtRap.Rows[i]["DynReportId"];
-                        Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
+                        //Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
                         btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx";
 
                         ASPxDockPanel pnl = new ASPxDockPanel();
@@ -248,7 +255,7 @@ namespace WizOne.Pagini
                         //lnk.Font.Underline = true;
 
                         ASPxButton btn = new ASPxButton();
-                        btn.Text = Dami.TraduCuvant((dtMnu.Rows[i]["Nume"] as string ?? "").ToString());
+                        btn.Text = Dami.TraduCuvant((dtMnu.Rows[i]["Nume"] ?? "").ToString());
                         btn.CssClass = "btnMeniuDash";
 
                         string strUrl = dtMnu.Rows[i]["Pagina"].ToString();
@@ -297,9 +304,9 @@ namespace WizOne.Pagini
                     for (int i = 0; i < dtLnk.Rows.Count; i++)
                     {
                         ASPxHyperLink lnk = new ASPxHyperLink();
-                        lnk.Text = (dtLnk.Rows[i]["Denumire"] as string ?? "").ToString();
+                        lnk.Text = (dtLnk.Rows[i]["Denumire"] ?? "").ToString();
                         lnk.Font.Underline = true;
-                        lnk.NavigateUrl = (dtLnk.Rows[i]["Link"] as string ?? "").ToString();
+                        lnk.NavigateUrl = (dtLnk.Rows[i]["Link"] ?? "").ToString();
                         lnk.Target = "_blank";
                         lnk.Wrap = DevExpress.Utils.DefaultBoolean.True;
 

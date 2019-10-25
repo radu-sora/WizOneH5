@@ -506,7 +506,7 @@ namespace WizOne.Absente
                                     }
                                 }
 
-                                string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT *, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                string msg = Notif.TrimiteNotificare("Absente.Lista", 2, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                                 if (msg != "" && msg.Substring(0, 1) == "2")
                                 {
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));
@@ -561,7 +561,8 @@ namespace WizOne.Absente
                                     FunctiiCeasuri.Calcul.golesteVal = golesteVal;
                                     FunctiiCeasuri.Calcul.h5 = true;
                                     FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
-                                    FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
+                                    DataRow drInt = dtRun.Rows[i];
+                                    FunctiiCeasuri.Calcul.CalculInOut(drInt, true, true);
                                 }
 
 
@@ -569,7 +570,7 @@ namespace WizOne.Absente
 
                                 General.SituatieZLOperatii(Convert.ToInt32(General.Nz(obj[1],-99)), Convert.ToDateTime(General.Nz(obj[4],new DateTime(2100,1,1))), 3, Convert.ToInt32(General.Nz(obj[5],0)));
 
-                                Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                                 grDate.DataBind();
                                 #endregion 
@@ -625,7 +626,7 @@ namespace WizOne.Absente
                                     //s-a adaugat si validare
                                     int idStare = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT TOP 1 ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Pozitie""<>0 AND ""Aprobat""=1 AND ""IdStare""<>4 AND ""IdCerere""={obj[0]} ORDER BY ""IdAuto"" DESC", null), 1));
 
-                                    string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                    string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                                     if (msg != "" && msg.Substring(0, 1) == "2")
                                     {
                                         MessageBox.Show(Dami.TraduCuvant(msg.Substring(2)));
@@ -655,7 +656,7 @@ namespace WizOne.Absente
                                             }
                                         }
 
-                                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT *, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                                        Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                                         grDate.DataBind();
                                         //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoWarning);
@@ -828,7 +829,7 @@ namespace WizOne.Absente
                 //stergem cererea veche din baza de date
                 General.ExecutaNonQuery(@"DELETE ""tblFisiere"" WHERE ""Tabela""='Ptj_Cereri' AND ""Id""=@1", new object[] { obj[0] });
 
-                Notif.TrimiteNotificare("Absente.Lista", 1, $@"SELECT *, 6 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" WHERE ""IdCerereDivizata""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                Notif.TrimiteNotificare("Absente.Lista", 1, $@"SELECT Z.*, 6 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""IdCerereDivizata""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                 //Page.ClientScript.RegisterStartupScript(this.GetType(), "ANY_KEY13", "CloseDeferedWindow();", true);
                 //popUpDivide.ShowOnPageLoad = false;

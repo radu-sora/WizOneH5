@@ -27,6 +27,7 @@ using System.Text;
 using System.Web.UI;
 using WizOne.Generatoare.Reports.Code;
 using WizOne.Generatoare.Reports.Models;
+using WizOne.Module;
 
 namespace WizOne.Generatoare.Reports.Pages
 {
@@ -42,7 +43,34 @@ namespace WizOne.Generatoare.Reports.Pages
             {
                 int reportId;
 
-                return int.TryParse(Request.QueryString["ReportId"], out reportId) ? reportId : Session["ReportId"] as int? ?? 0;
+                reportId = int.TryParse(Request.QueryString["ReportId"], out reportId) ? reportId : Session["ReportId"] as int? ?? 0;
+
+                //verificam daca s-a trimis si id-ul raportului
+                if (reportId == 0)
+                {
+                    string strUrl = "";
+                    string[] arrQ = null;
+                    if (!string.IsNullOrEmpty(Request.QueryString["q"]))
+                    {
+                        strUrl = General.URLDecode(Request.QueryString["q"]);
+                        arrQ = strUrl.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
+                    }
+
+                    if (strUrl.IndexOf("IdRaportDyn") >= 0)
+                    {
+                        string item = arrQ.Where(p => p.IndexOf("IdRaportDyn") >= 0).Select(p => p).FirstOrDefault();
+                        if (item != "")
+                        {
+                            string[] vals = item.Split('=');
+                            if (vals.Length == 2)
+                            {
+                                reportId = Convert.ToInt32(vals[1]);
+                            }
+                        }
+                    }
+                }
+
+                return reportId;
             }
         }
         private bool _serverPrint
@@ -461,10 +489,43 @@ namespace WizOne.Generatoare.Reports.Pages
                         SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
                         Where(p => p.Type != typeof(Expression));
 
+
+                    //Florin 2019.10.17
+
+                    //foreach (var param in parameters)
+                    //{
+                    //    var name = param.Name.TrimStart('@');
+                    //    var value = Request.QueryString[name] ?? Session[name];
+
+                    //    if (value != null)
+                    //        param.Value = Convert.ChangeType(value, param.Type);
+                    //}
+
+                    string strUrl = "";
+                    string[] arrQ = null;
+                    if (!string.IsNullOrEmpty(Request.QueryString["q"]))
+                    {
+                        strUrl = General.URLDecode(Request.QueryString["q"]);
+                        arrQ = strUrl.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
+                    }
+
                     foreach (var param in parameters)
                     {
                         var name = param.Name.TrimStart('@');
-                        var value = Request.QueryString[name] ?? Session[name];
+                        var value = Session[name];
+
+                        if (strUrl.IndexOf(name) >= 0)
+                        {
+                            string item = arrQ.Where(p => p.IndexOf(name) >= 0).Select(p => p).FirstOrDefault();
+                            if (item != "")
+                            {
+                                string[] vals = item.Split('=');
+                                if (vals.Length == 2)
+                                {
+                                    value = vals[1];
+                                }
+                            }
+                        }
 
                         if (value != null)
                             param.Value = Convert.ChangeType(value, param.Type);                        

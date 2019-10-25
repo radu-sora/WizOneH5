@@ -1090,6 +1090,9 @@ namespace WizOne
                 //Florin 2019.07.19
                 Session["Ptj_DataBlocare"] = "22001231";
 
+                //Florin 2019.10.16
+                Session["Json_Programe"] = "[]";
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

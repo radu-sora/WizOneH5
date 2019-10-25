@@ -206,7 +206,8 @@ namespace WizOne.Eval
                 //Florin 2019.02.27
                 if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
                 {
-                    MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
+                    //MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
+                    pnlSectiune.JSProperties["cpAlertMessage"] = "Nu aveti drepturi pentru aceasta operatie!";
                     return;
                 }
 
@@ -475,7 +476,40 @@ namespace WizOne.Eval
                 if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && idCateg == "0")
                     PreluareDateAutomat(pozitie);
 
-                MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
+
+
+                //Florin 2019.10.16
+                if (General.Nz(Session["NumeGriduri"], "").ToString() != "")
+                {
+                    string[] arr = Session["NumeGriduri"].ToString().Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        ASPxGridView grDate = grIntrebari.FindControl(arr[i]) as ASPxGridView;
+                        if (grDate != null)
+                        {
+                            int idLinieQuiz = Convert.ToInt32(grDate.ID.Split('_')[grDate.ID.Split('_').Count() - 1]);
+
+                            if (grDate.ID.IndexOf("grDateObiective") >= 0)
+                            {
+                                List<Eval_ObiIndividualeTemp> lst = Session["lstEval_ObiIndividualeTemp"] as List<Eval_ObiIndividualeTemp>;
+                                grDate.DataSource = lst.Where(p => p.IdLinieQuiz == idLinieQuiz && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"]) && p.IdQuiz == Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1))).ToList();
+                            }
+
+                            if (grDate.ID.IndexOf("grDateCompetente") >= 0)
+                            {
+                                List<Eval_CompetenteAngajatTemp> lst = Session["lstEval_CompetenteAngajatTemp"] as List<Eval_CompetenteAngajatTemp>;
+                                grDate.DataSource = lst.Where(p => p.IdLinieQuiz == idLinieQuiz && p.F10003 == Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) && p.Pozitie == Convert.ToInt32(Session["Eval_ActiveTab"])).ToList();
+                            }
+
+                            grDate.KeyFieldName = "IdAuto";
+                            grDate.DataBind();
+                        }
+                    }
+                }
+
+                //MessageBox.Show("Proces realizat cu succes!", MessageBox.icoSuccess);
+                pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
+
             }
             catch (Exception ex)
             {
@@ -2118,7 +2152,7 @@ namespace WizOne.Eval
                         {
                             case "IdObiectiv":
                                 clsNew.IdObiectiv = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colObiectiv != null)
+                                if (colObiectiv != null && colObiectiv.PropertiesComboBox.Items.Count > 0)
                                     clsNew.Obiectiv = colObiectiv.PropertiesComboBox.Items.FindByValue(clsNew.IdObiectiv).Text;
                                 break;
                             case "Obiectiv":
@@ -2218,7 +2252,7 @@ namespace WizOne.Eval
                         {
                             case "IdObiectiv":
                                 clsUpd.IdObiectiv = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
-                                if (colObiectiv != null)
+                                if (colObiectiv != null && colObiectiv.PropertiesComboBox.Items.Count > 0)
                                     clsUpd.Obiectiv = colObiectiv.PropertiesComboBox.Items.FindByValue(clsUpd.IdObiectiv).Text;
                                 break;
                             case "Obiectiv":
@@ -2483,6 +2517,8 @@ namespace WizOne.Eval
                 }
 
                 Session["lstEval_ObiIndividualeTemp"] = lst;
+
+                e.Handled = true;
             }
             catch (Exception ex)
             {
@@ -2732,6 +2768,8 @@ namespace WizOne.Eval
                 }
 
                 Session["lstEval_CompetenteAngajatTemp"] = lst;
+
+                e.Handled = true;
             }
             catch (Exception ex)
             {
@@ -2776,7 +2814,7 @@ namespace WizOne.Eval
 
                 if (e.NewValues.Contains("Obiectiv"))
                 {
-                    clsObiIndividual.Obiectiv = (colObiectiv != null ? colObiectiv.PropertiesComboBox.Items.FindByValue(clsObiIndividual.IdObiectiv).Text : (e.NewValues["Obiectiv"] ?? "").ToString()).Replace("'", "");
+                    clsObiIndividual.Obiectiv = ((colObiectiv != null && colObiectiv.PropertiesComboBox.Items.Count > 0) ? colObiectiv.PropertiesComboBox.Items.FindByValue(clsObiIndividual.IdObiectiv).Text : (e.NewValues["Obiectiv"] ?? "").ToString()).Replace("'", "");
                 }
 
                 if (e.NewValues.Contains("IdActivitate"))
@@ -3025,7 +3063,7 @@ namespace WizOne.Eval
                 clsNew.Pozitie = poz;
                 clsNew.IdQuiz = Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1));
                 clsNew.IdObiectiv = e.NewValues["IdObiectiv"] == null ? -99 : Convert.ToInt32(e.NewValues["IdObiectiv"]);
-                clsNew.Obiectiv = (colObiectiv != null ? colObiectiv.PropertiesComboBox.Items.FindByValue(clsNew.IdObiectiv).Text : (e.NewValues["Obiectiv"] ?? "").ToString()).Replace("'", "");
+                clsNew.Obiectiv = ((colObiectiv != null && colObiectiv.PropertiesComboBox.Items.Count > 0) ? colObiectiv.PropertiesComboBox.Items.FindByValue(clsNew.IdObiectiv).Text : (e.NewValues["Obiectiv"] ?? "").ToString()).Replace("'", "");
                 clsNew.IdActivitate = e.NewValues["IdActivitate"] == null ? -99 : Convert.ToInt32(e.NewValues["IdActivitate"]);
 
                 if (Session["feedEval_ObiectivActivitate"] == null)
@@ -3835,7 +3873,7 @@ namespace WizOne.Eval
                     return;                                    
                 }
 				
-				msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT *, 1 AS ""Actiune"" FROM ""Eval_Raspuns"" WHERE ""IdQuiz""=" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + @"AND F10003 = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+				msg = Notif.TrimiteNotificare("Eval.EvalLista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"" FROM ""Eval_Raspuns"" Z WHERE ""IdQuiz""=" + Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) + @"AND F10003 = " + Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 				if (msg.Length > 0)                    
 					General.CreazaLog(msg);   
 				

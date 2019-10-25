@@ -18,6 +18,10 @@
                 s.cpAlertMessage = null;
             }
         }
+        function onKeyPress(s, e) {
+            if (e.htmlEvent.keyCode == 13)
+                ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
+        }
 
     </script>
 </asp:Content>
@@ -102,7 +106,9 @@
                         <tr>
                             <td style="width:100%; padding-left:20px;">
                                 <dx:ASPxLabel ID="lblRap" runat="server"  Text="Introduceti parola raport"/>
-                                <dx:ASPxTextBox ID="txtRapPass" ClientInstanceName="txtRapPass" runat="server" Width="280" Password="true" />
+                                <dx:ASPxTextBox ID="txtRapPass" ClientInstanceName="txtRapPass" runat="server" Width="280" Password="true" >
+                                    <ClientSideEvents KeyPress="onKeyPress" />
+                                 </dx:ASPxTextBox>
                                 <dx:ASPxHiddenField ID="hfRap" runat="server" />
                             </td>
                         </tr>

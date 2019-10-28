@@ -152,7 +152,7 @@
                         }" />
                     <Image Url="../Fisiere/Imagini/Icoane/salveaza.png" />
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" PostBackUrl="EvalLista.aspx">
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" PostBackUrl="EvalLista.aspx?q=56">
                     <Image Url="../Fisiere/Imagini/Icoane/iesire.png" />
                 </dx:ASPxButton>
             </td>

@@ -231,15 +231,26 @@
 
 						<dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" Width="250px" VisibleIndex="2" >
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataComboBoxColumn>
 
-                        <dx:GridViewDataTextColumn FieldName="Evaluat" Name="Evaluat" Caption="Evaluat" ReadOnly="true" Width="250px" VisibleIndex="3" Settings-AutoFilterCondition="Contains" />
-
-                        <dx:GridViewDataTextColumn FieldName="Quiz" Name="Quiz" Caption="Categorie feedback" ReadOnly="true" Width="250px" VisibleIndex="4" />
-
-                        <dx:GridViewDataTextColumn FieldName="User" Name="User" Caption="Evaluator" ReadOnly="true" Width="250px" VisibleIndex="5" Settings-AutoFilterCondition="Contains" />
-						
-                        <dx:GridViewDataTextColumn FieldName="Tip" Name="Tip" Caption="Tip" ReadOnly="true" Width="200px" VisibleIndex="6" />
+                        <dx:GridViewDataTextColumn FieldName="Evaluat" Name="Evaluat" Caption="Evaluat" ReadOnly="true" Width="250px" VisibleIndex="3" Settings-AutoFilterCondition="Contains">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Quiz" Name="Quiz" Caption="Categorie feedback" ReadOnly="true" Width="250px" VisibleIndex="4">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="User" Name="User" Caption="Evaluator" ReadOnly="true" Width="250px" VisibleIndex="5" Settings-AutoFilterCondition="Contains">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>						
+                        <dx:GridViewDataTextColumn FieldName="Tip" Name="Tip" Caption="Tip" ReadOnly="true" Width="200px" VisibleIndex="6">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
                     </Columns>
                     
                 </dx:ASPxGridView>

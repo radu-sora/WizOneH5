@@ -876,7 +876,7 @@ namespace WizOne.Personal
                 + " F026 c where convert(int, " + grila + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (convert(int, c.F02611 / 100) * 12) ";               
             if (Constante.tipBD == 2)
                 sql = "select TO_NUMBER(TRUNC(F02615))  from  "
-                   + " F026 c where" + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (to_number(c.F02611 / 100) * 12) ";
+                   + " F026 c where " + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (to_number(c.F02611 / 100) * 12) ";
 
             DataTable dtGrila = General.IncarcaDT(sql, null);
             if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][0] != null && dtGrila.Rows[0][0].ToString().Length > 0)

@@ -52,7 +52,7 @@ namespace WizOne.Personal
             if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null)
                 valMin = dtParam.Rows[0][0].ToString();
 
-            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"Admin_Cursuri_VIEW\" a WHERE Marca = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT a.*, CASE WHEN a.\"IdAuto\" < " + valMin + " THEN 1 ELSE 0 END AS \"Modificabil\" FROM \"Admin_Cursuri_VIEW\" a WHERE \"Marca\" = " + Session["Marca"].ToString();
             DataTable dt = new DataTable();
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("Admin_Cursuri"))

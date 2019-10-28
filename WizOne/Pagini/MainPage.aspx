@@ -19,8 +19,25 @@
             }
         }
         function onKeyPress(s, e) {
-            if (e.htmlEvent.keyCode == 13)
+            if (e.htmlEvent.keyCode == 13) {
                 ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
+                OnClickAfis();
+            }
+        }
+
+        function OnClickAfis() {
+            popUpPass.processOnServer = false;
+            if (txtRapPass.GetText() == '') {
+                swal({
+                    title: 'Atentie !', text: 'Lipsesc date',
+                    type: 'warning'
+                });
+            }
+            else {
+                popUpPass.Hide();
+                pnlLoading.Show();
+                popUpPass.PerformCallback();
+            }
         }
 
     </script>
@@ -80,22 +97,9 @@
                     <table style="width:100%;">
                         <tr>
                             <td align="right">
-                                <dx:ASPxButton ID="btnRapPass" runat="server" Text="Afisare" AutoPostBack="false" >
+                                <dx:ASPxButton ID="btnRapPass" ClientInstanceName="btnRapPass" runat="server" Text="Afisare" AutoPostBack="false" >
                                     <ClientSideEvents Click="function(s, e) {
-                                        e.processOnServer = false;
-                                        if (txtRapPass.GetText() == '')
-                                        {
-                                            swal({
-                                                title: 'Atentie !', text: 'Lipsesc date',
-                                                type: 'warning'
-                                            });
-                                        }
-                                        else
-                                        {
-                                            popUpPass.Hide();
-                                            pnlLoading.Show();
-                                            popUpPass.PerformCallback();
-                                        }
+                                        OnClickAfis();
                                     }" />
                                     <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
                                 </dx:ASPxButton>

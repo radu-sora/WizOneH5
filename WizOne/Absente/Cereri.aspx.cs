@@ -495,6 +495,9 @@ namespace WizOne.Absente
                         AfiseazaCtl();
 
                         break;
+                    case "8":
+                        AfiseazaCtl();
+                        break;
                 }
             }
             catch (Exception ex)

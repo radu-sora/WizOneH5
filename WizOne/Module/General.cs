@@ -850,6 +850,7 @@ namespace WizOne.Module
                 }
                 cmd.CommandText = strSql;
                 cmd.BindByName = true;
+                cmd.CommandType = CommandType.Text;
                 if (executa == 1 || areOut == true) cmd.ExecuteNonQuery();
             }
             catch (Exception ex)

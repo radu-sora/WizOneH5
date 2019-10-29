@@ -325,8 +325,8 @@ namespace WizOne.Absente
                 }
                 else
                 {
-                    dtInc = "01-JAN-" + an.ToString();
-                    dtSf = "31-DEC-" + an.ToString();
+                    dtInc = "01-01-" + an.ToString();
+                    dtSf = "31-12-" + an.ToString();
 
                     //daca nu exista inseram linie goala si apoi updatam
                     if (!esteNou)
@@ -365,15 +365,15 @@ namespace WizOne.Absente
                     " ROUND((SELECT nvl((SELECT TO_NUMBER(\"Valoare\") FROM \"tblParametrii\" WHERE \"Nume\" = 'NumarZileLiberePlatite'), 0) from dual) " +               
                     
                     " * " +                                                                 //aceste zile cuvenite se inmultesc cu ce urmeaza
-                    " (least(trunc(f10023),to_date('31-DEC-" + an + "','DD-MM-YYYY') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
-                    " ) - greatest(trunc(f10022),to_date('01-JAN-" + an + "','DD-MM-YYYY'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta                   
-                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('31-DEC-" + an + "','DD-MM-YYYY')) - greatest(trunc(f11105),to_date('01-JAN-" + an + "','DD-MM-YYYY')) + 1),0) from f111 A where f11103=" + f10003 + " and F11105 <= F11107 AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')) " +
+                    " (least(trunc(f10023),to_date('" + dtSf + "','DD-MM-YYYY') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
+                    " ) - greatest(trunc(f10022),to_date('" + dtInc + "','DD-MM-YYYY'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta                   
+                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('" + dtSf + "','DD-MM-YYYY')) - greatest(trunc(f11105),to_date('" + dtInc + "','DD-MM-YYYY')) + 1),0) from f111 A where f11103=" + f10003 + " and F11105 <= F11107 AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')) " +
                     
                     " ) " +
                     " /365,0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus
                     " from F100 a " +                    
                   
-                    " where F10022 <= to_date('31-DEC-" + an + "','DD-MM-YYYY') and to_date('01-JAN-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " where F10022 <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
 
                     strSql += "update \"Ptj_tblZLP\" x set x.\"CuveniteAn\" = (select y.ZileCuvenite from " +
@@ -381,10 +381,10 @@ namespace WizOne.Absente
 
                     " (SELECT nvl((SELECT TO_NUMBER(\"Valoare\") FROM \"tblParametrii\" WHERE \"Nume\" = 'NumarZileLiberePlatite'), 0) from dual) " +               
                     
-                    " ) as ZileCuvenite " +
+                    "as ZileCuvenite " +
                     " from F100 a " +
                   
-                    " where F10022 <= to_date('31-DEC-" + an + "','DD-MM-YYYY') and to_date('01-JAN-" + an + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
+                    " where F10022 <= to_date('" + dtSf + "','DD-MM-YYYY') and to_date('" + dtInc + "','DD-MM-YYYY') <= F10023 ) y where y.F10003=x.F10003) " +   //se calcuelaza totul pt angajatii activi in anul de referinta
                     " where x.\"An\"=" + an + filtruIns + ";";
 
                 }

@@ -88,7 +88,7 @@ namespace WizOne.Personal
             grDateSporTran.DataSource = dt;
             grDateSporTran.SettingsPager.PageSize = 20;
 
-
+            
             //Florin 2019.10.28 - am comentat partea de Oracle deoarece este acelasi select si pe sql si pe oracle
             sql = $@"SELECT 0 as F02104, '---' AS F02105 {(Constante.tipBD == 2 ? " FROM DUAL" : "")} UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
             //if (Constante.tipBD == 2)

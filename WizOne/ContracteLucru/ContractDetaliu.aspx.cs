@@ -73,6 +73,9 @@ namespace WizOne.ContracteLucru
                     dtCtr.PrimaryKey = new DataColumn[] { dtCtr.Columns["IdAuto"] };
                 }
 
+                //Florin 2019.10.28
+                dtCtr.TableName = "Ptj_Contracte";
+                //
                 ds.Tables.Add(dtCtr);
                 Session["InformatiaCurentaContracte"] = ds;
             }

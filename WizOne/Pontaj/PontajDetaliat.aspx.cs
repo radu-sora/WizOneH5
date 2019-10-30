@@ -822,19 +822,19 @@ namespace WizOne.Pontaj
                             CASE WHEN ({idRol} = 1 AND(COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
                             END END END)=1 AND
                             (SELECT COUNT(*)
-                            FROM Ptj_relGrupSuper BB
-                            INNER JOIN relGrupAngajat CC ON BB.IdGrup  = CC.IdGrup 
-                            INNER JOIN F100Supervizori DD ON CC.F10003 = DD.F10003 AND (-1 * BB.IdSuper)= DD.IdSuper 
-                            WHERE DD.F10003=P.F10003 AND BB.IdRol={idRol} AND DD.IdUser={Session["UserId"]}
+                            FROM ""Ptj_relGrupSuper"" BB
+                            INNER JOIN ""relGrupAngajat"" CC ON BB.""IdGrup""  = CC.""IdGrup"" 
+                            INNER JOIN ""F100Supervizori"" DD ON CC.F10003 = DD.F10003 AND (-1 * BB.""IdSuper"")= DD.""IdSuper""
+                            WHERE DD.F10003=P.F10003 AND BB.""IdRol""={idRol} AND DD.""IdUser""={Session["UserId"]}
                             AND {General.TruncateDate("DD.DataInceput")} <= {General.TruncateDate("P.Ziua")} 
-                            AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("DD.DataSfarsit")}) = 1
+                            AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("DD.DataSfarsit")}) >= 1                            
                             THEN 1 ELSE 0 END AS ""DrepturiModif"", 
                             Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",
                             CASE WHEN 
-							    (SELECT COUNT(*) FROM Ptj_Cereri X
-                                INNER JOIN Ptj_tblAbsente Y ON X.IdAbsenta=Y.Id
-                                WHERE X.DataInceput <= P.Ziua AND P.Ziua <= X.DataSfarsit AND Y.DenumireScurta=P.ValStr AND
-                                X.F10003=P.F10003 AND X.IdStare=3 AND Y.IdTipOre=1 AND COALESCE(Y.NuTrimiteInPontaj,0) != 1) = 0
+							    (SELECT COUNT(*) FROM ""Ptj_Cereri"" X
+                                INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
+                                WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta""=P.""ValStr"" AND
+                                X.F10003=P.F10003 AND X.""IdStare""=3 AND Y.""IdTipOre""=1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
                             THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
@@ -855,8 +855,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
                             
-
-                            WHERE CONVERT(date,P.""Ziua"") <= A.F10023
+                            WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}
                             ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
                 else
@@ -874,7 +873,8 @@ namespace WizOne.Pontaj
                             AND Z.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre"" = 1) AND COALESCE(Y.""NuTrimiteInPontaj"", 0) = 0) = 0 THEN 0 ELSE 1 END AS ""VineDinCereri"", 
                             A.F10022, A.F10023,
                             (SELECT LISTAGG(A.""OreInVal"", ',') WITHIN GROUP (ORDER BY A.""OreInVal"") || ';' AS ""OreInVal""
-                            FROM(SELECT * FROM ""Ptj_tblAbsente"" ORDER BY ""OreInVal"") a INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
+                            FROM(SELECT * FROM ""Ptj_tblAbsente"" ORDER BY ""OreInVal"") a 
+                            INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
                             INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
                             WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
                             (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0) AND COALESCE(B.ZL,0) <> 0) OR
@@ -900,7 +900,7 @@ namespace WizOne.Pontaj
                             GROUP BY A.""Coloana"") AS ""ValSecuritate"",
 
 
-	                        (select  LISTAGG(X.""DenumireScurta"" + '=' + X.""Denumire"", ',') WITHIN GROUP (ORDER BY X.""Id"") from ( 
+	                        (select  LISTAGG(X.""DenumireScurta"" + '=' + X.""Denumire"", ',') WITHIN GROUP (ORDER BY X.""Id"", X.""DenumireScurta"", X.""Denumire"") from ( 
                             select a.""Id"", b.""IdContract"", c.""IdRol"", a.""Id"" as ""IdAbsenta"" , b.ZL as ""ZileSapt"", b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"", 0 AS ""Tip"" 
                             from ""Ptj_tblAbsente"" a
                             inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
@@ -921,7 +921,13 @@ namespace WizOne.Pontaj
                             CASE WHEN ({idRol} = 2 AND ((COALESCE(J.""IdStare"",1)=1 OR COALESCE(J.""IdStare"",1) = 2 OR COALESCE(J.""IdStare"",1) = 4 OR COALESCE(J.""IdStare"",1) = 6))) THEN 1 ELSE 
                             CASE WHEN ({idRol} = 1 AND(COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
                             END END END)=1 AND
-                            (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDate("FS.DataInceput")} <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("FS.DataSfarsit")}) = 1
+                            (SELECT COUNT(*)
+                            FROM ""Ptj_relGrupSuper"" BB
+                            INNER JOIN ""relGrupAngajat"" CC ON BB.""IdGrup""  = CC.""IdGrup"" 
+                            INNER JOIN ""F100Supervizori"" DD ON CC.F10003 = DD.F10003 AND (-1 * BB.""IdSuper"")= DD.""IdSuper""
+                            WHERE DD.F10003=P.F10003 AND BB.""IdRol""={idRol} AND DD.""IdUser""={Session["UserId"]}
+                            AND {General.TruncateDate("DD.DataInceput")} <= {General.TruncateDate("P.Ziua")} 
+                            AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("DD.DataSfarsit")}) >= 1                            
                             THEN 1 ELSE 0 END AS ""DrepturiModif"", 
                             Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",
                             CASE WHEN 
@@ -949,7 +955,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
 
-                            WHERE CAST(P.""Ziua"" AS date) <= A.F10023
+                            WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}
                             ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
 
@@ -2307,9 +2313,9 @@ namespace WizOne.Pontaj
                 if (Constante.tipBD == 2)
                     cmp = "SUBSTR";
                 DataTable dtCol = General.IncarcaDT($@"SELECT A.*, 
-                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' AND COALESCE(B.""DenumireScurta"",'') <> '' THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
-                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' AND COALESCE(B.""DenumireScurta"",'') <> '' THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
-                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' AND COALESCE(B.""Denumire"",'') <> '' THEN B.""Denumire"" ELSE (CASE WHEN COALESCE(A.""AliasToolTip"",'') <> '' THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
+                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
+                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
+                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
                                 COALESCE(B.""DenumireScurta"",'') AS ""ColScurta""
                                 FROM ""Ptj_tblAdmin"" A
                                 LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
@@ -2453,10 +2459,10 @@ namespace WizOne.Pontaj
                                         {
                                             c.PropertiesComboBox.ClientInstanceName = "cmbProgram";
                                             DataTable dtPrg = General.IncarcaDT(
-                                                $@"SELECT A.IdContract, A.IdProgram, B.Denumire AS Program
-                                                FROM Ptj_ContracteSchimburi A
-                                                INNER JOIN Ptj_Programe B ON A.IdProgram=B.Id
-                                                ORDER BY B.Denumire", null);
+                                                $@"SELECT A.""IdContract"", A.""IdProgram"", B.""Denumire"" AS ""Program""
+                                                FROM ""Ptj_ContracteSchimburi"" A
+                                                INNER JOIN ""Ptj_Programe"" B ON A.""IdProgram""=B.""Id""
+                                                ORDER BY B.""Denumire"" ", null);
                                             if (dtPrg != null && dtPrg.Rows.Count > 0)
                                             {
                                                 string jsonPrg = "";

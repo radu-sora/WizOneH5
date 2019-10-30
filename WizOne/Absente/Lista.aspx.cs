@@ -555,14 +555,20 @@ namespace WizOne.Absente
                                 DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { obj[1], obj[4], obj[6] });
                                 for (int i = 0; i < dtRun.Rows.Count; i++)
                                 {
-                                    string golesteVal = Dami.ValoareParam("GolesteVal");
-                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                                    FunctiiCeasuri.Calcul.h5 = true;
-                                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
-                                    DataRow drInt = dtRun.Rows[i];
-                                    FunctiiCeasuri.Calcul.CalculInOut(drInt, true, true);
+                                    try
+                                    {
+                                        string golesteVal = Dami.ValoareParam("GolesteVal");
+                                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                                        FunctiiCeasuri.Calcul.h5 = true;
+                                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                                        DataRow drInt = dtRun.Rows[i];
+                                        FunctiiCeasuri.Calcul.CalculInOut(drInt, true, true);
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
                                 }
 
 

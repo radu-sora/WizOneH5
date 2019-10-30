@@ -850,7 +850,7 @@ namespace WizOne.Module
                 }
                 cmd.CommandText = strSql;
                 cmd.BindByName = true;
-                cmd.CommandType = CommandType.Text;
+                
                 if (executa == 1 || areOut == true) cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -3039,7 +3039,15 @@ namespace WizOne.Module
 
                     if (HR)
                     {
-                        DataRow drUlt = General.IncarcaDR($"SELECT TOP 1 * FROM Ptj_CereriIstoric WHERE IdCerere={dr["Id"]} ORDER BY Pozitie DESC", null);
+                        //Florin 2019.10.30
+                        //DataRow drUlt = General.IncarcaDR($"SELECT TOP 1 * FROM Ptj_CereriIstoric WHERE IdCerere={dr["Id"]} ORDER BY Pozitie DESC", null);
+                        DataRow drUlt = General.IncarcaDR(
+                            $@"SELECT * FROM (
+                            SELECT W.*, ROW_NUMBER() OVER(ORDER BY W.""Pozitie"" DESC) AS ""IdRow"" 
+                            FROM ""Ptj_CereriIstoric"" W
+                            WHERE ""IdCerere"" = @1) W
+                            WHERE ""IdRow"" <= 1", new object[] { dr["Id"] });
+
                         if (drUlt != null && drUlt["IdCerere"] != null)
                         {
                             pozitieIstoric = Convert.ToInt32(General.Nz(drUlt["Pozitie"], -99));

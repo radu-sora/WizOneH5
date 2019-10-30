@@ -1901,24 +1901,93 @@ namespace WizOne.Module
                 }
 
                 #region insert Eval_RaspunsLinii
-                string cteManageri = @"with cteManageri as (select fnume.F10003, max(man.F10003) as ""F10003Manager"",
-                                                                    case when fnume.""IdSuper"" = 1 then 1 else 2 end as ""Pozitie""
+                //Radu 29.10.2019
+                //@"cteManageri as (select fnume.F10003, max(man.F10003) as ""F10003Manager"",
+                //                                                    case when fnume.""IdSuper"" = 1 then 1 else 2 end as ""Pozitie""
+                //                                            from ""F100Supervizori"" fnume
+                //                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                //                                                                    and ( {0} )
+                //                                            join USERS us on fnume.""IdUser"" = us.F70102
+                //                                            join F100 man on us.F10003 = man.F10003
+                //                                            where fnume.""IdSuper"" in (1, 5)
+                //                                            group by fnume.F10003, case when fnume.""IdSuper"" = 1 then 1 else 2 end)";
+
+                //@"              left join cteManageri man1 on fnume.F10003 = man1.F10003
+                //                                                        and 1 = man1.""Pozitie""";
+
+                string cteManageri = @"with cteManageri1 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
                                                             from ""F100Supervizori"" fnume
                                                             join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
                                                                                     and ( {0} )
                                                             join USERS us on fnume.""IdUser"" = us.F70102
                                                             join F100 man on us.F10003 = man.F10003
-                                                            where fnume.""IdSuper"" in (1, 5)
-                                                            group by fnume.F10003, case when fnume.""IdSuper"" = 1 then 1 else 2 end) ";
+                                                            where fnume.""IdSuper"" = 1
+                                                            group by fnume.F10003, fnume.""IdSuper""), 
+
+                                            cteManageri2 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 2
+                                                            group by fnume.F10003, fnume.""IdSuper""),
+
+                                            cteManageri3 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 3
+                                                            group by fnume.F10003, fnume.""IdSuper""), 
+
+                                            cteManageri4 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 4
+                                                            group by fnume.F10003, fnume.""IdSuper""), 
+
+                                            cteManageri5 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 5
+                                                            group by fnume.F10003, fnume.""IdSuper""),
+
+                                            cteManageri6 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 6
+                                                            group by fnume.F10003, fnume.""IdSuper"")";
                 cteManageri = string.Format(cteManageri, strSelectIdQuizXF10003);
 
                 string cteF100 = @", cteF100 as (select fnume.F10003, fnume.F10008 {0} ' ' {0} fnume.F10009 as ""NumeComplet"",
                                                         {1}(c.F00305, '') {0} '/' {0} {1}(d.F00406, '') {0} '/' {0} {1}(e.F00507, '') {0} '/' {0} {1}(f.F00608, '') as ""Structura"",
                                                         post.""Denumire"" as ""Post"",
-                                                        {1}(fnumeMan1.F10008, '') {0} ' ' {0} {1}(fnumeMan1.F10009, '') as ""NumeManager"",
-                                                        postMan1.""Denumire"" as ""PostManager"", 
-                                                        {1}(fnumeMan2.F10008, '') {0} ' ' {0} {1}(fnumeMan2.F10009, '') as ""NumeManager2"",
-                                                        postMan2.""Denumire"" as ""PostManager2"",
+                                                        {1}(fnumeMan1.F10008, '') {0} ' ' {0} {1}(fnumeMan1.F10009, '') as ""NumeSupervizor1"",
+                                                        postMan1.""Denumire"" as ""PostSupervizor1"", 
+                                                        {1}(fnumeMan2.F10008, '') {0} ' ' {0} {1}(fnumeMan2.F10009, '') as ""NumeSupervizor2"",
+                                                        postMan2.""Denumire"" as ""PostSupervizor2"",
+
+                                                        {1}(fnumeMan3.F10008, '') {0} ' ' {0} {1}(fnumeMan3.F10009, '') as ""NumeSupervizor3"",
+                                                        postMan3.""Denumire"" as ""PostSupervizor3"", 
+                                                        {1}(fnumeMan4.F10008, '') {0} ' ' {0} {1}(fnumeMan4.F10009, '') as ""NumeSupervizor4"",
+                                                        postMan4.""Denumire"" as ""PostSupervizor4"",
+
+                                                        {1}(fnumeMan5.F10008, '') {0} ' ' {0} {1}(fnumeMan5.F10009, '') as ""NumeSupervizor5"",
+                                                        postMan5.""Denumire"" as ""PostSupervizor5"", 
+                                                        {1}(fnumeMan6.F10008, '') {0} ' ' {0} {1}(fnumeMan6.F10009, '') as ""NumeSupervizor6"",
+                                                        postMan6.""Denumire"" as ""PostSupervizor6"",
+
                                                         rasp.""IdQuiz"" as ""IdQuiz""
                                                 from F100 fnume
                                                 join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
@@ -1931,18 +2000,42 @@ namespace WizOne.Module
                                                 left join ""Org_relPostAngajat"" relPost on fnume.F10003 = relPost.F10003
                                                                                 and {3} between relPost.""DataInceput"" and relPost.""DataSfarsit""
                                                 left join ""Org_Posturi"" post on relPost.""IdPost"" = post.""Id""
-                                                left join cteManageri man1 on fnume.F10003 = man1.F10003
-                                                                        and 1 = man1.""Pozitie""
+                                                left join cteManageri1 man1 on fnume.F10003 = man1.F10003                                                                       
                                                 left join F100 fnumeMan1 on man1.""F10003Manager"" = fnumeMan1.F10003
                                                 left join ""Org_relPostAngajat"" relPostMan1 on fnumeMan1.F10003 = relPostMan1.F10003
                                                                                         and {3} between relPostMan1.""DataInceput"" and relPostMan1.""DataSfarsit""
                                                 left join ""Org_Posturi"" postMan1 on relPostMan1.""IdPost"" = postMan1.""Id""
-                                                left join cteManageri man2 on fnume.F10003 = man2.F10003
-                                                                        and 2 = man2.""Pozitie""
+
+                                                left join cteManageri2 man2 on fnume.F10003 = man2.F10003                                                                       
                                                 left join F100 fnumeMan2 on man2.""F10003Manager"" = fnumeMan2.F10003
                                                 left join ""Org_relPostAngajat"" relPostMan2 on fnumeMan2.F10003 = relPostMan2.F10003
                                                                                         and {3} between relPostMan2.""DataInceput"" and relPostMan2.""DataSfarsit""
                                                 left join ""Org_Posturi"" postMan2 on relPostMan2.""IdPost"" = postMan2.""Id""
+
+                                                left join cteManageri3 man3 on fnume.F10003 = man3.F10003                                                                       
+                                                left join F100 fnumeMan3 on man3.""F10003Manager"" = fnumeMan3.F10003
+                                                left join ""Org_relPostAngajat"" relPostMan3 on fnumeMan3.F10003 = relPostMan3.F10003
+                                                                                        and {3} between relPostMan3.""DataInceput"" and relPostMan3.""DataSfarsit""
+                                                left join ""Org_Posturi"" postMan3 on relPostMan3.""IdPost"" = postMan3.""Id""
+
+                                                left join cteManageri4 man4 on fnume.F10003 = man4.F10003                                                                       
+                                                left join F100 fnumeMan4 on man4.""F10003Manager"" = fnumeMan4.F10003
+                                                left join ""Org_relPostAngajat"" relPostMan4 on fnumeMan4.F10003 = relPostMan4.F10003
+                                                                                        and {3} between relPostMan4.""DataInceput"" and relPostMan4.""DataSfarsit""
+                                                left join ""Org_Posturi"" postMan4 on relPostMan4.""IdPost"" = postMan4.""Id""
+
+                                                left join cteManageri5 man5 on fnume.F10003 = man5.F10003                                                                       
+                                                left join F100 fnumeMan5 on man5.""F10003Manager"" = fnumeMan5.F10003
+                                                left join ""Org_relPostAngajat"" relPostMan5 on fnumeMan5.F10003 = relPostMan5.F10003
+                                                                                        and {3} between relPostMan5.""DataInceput"" and relPostMan5.""DataSfarsit""
+                                                left join ""Org_Posturi"" postMan5 on relPostMan5.""IdPost"" = postMan5.""Id""
+
+                                                left join cteManageri6 man6 on fnume.F10003 = man6.F10003                                                                       
+                                                left join F100 fnumeMan6 on man6.""F10003Manager"" = fnumeMan6.F10003
+                                                left join ""Org_relPostAngajat"" relPostMan6 on fnumeMan6.F10003 = relPostMan6.F10003
+                                                                                        and {3} between relPostMan6.""DataInceput"" and relPostMan6.""DataSfarsit""
+                                                left join ""Org_Posturi"" postMan6 on relPostMan6.""IdPost"" = postMan6.""Id""
+                                                
                                                 )";
                 switch (Constante.tipBD)
                 {
@@ -1963,10 +2056,21 @@ namespace WizOne.Module
                                             when 13 then fnume.""NumeComplet""
                                             when 14 then fnume.""Structura""
                                             when 15 then fnume.""Post""
-                                            when 18 then fnume.""NumeManager""
-                                            when 19 then fnume.""PostManager""
-                                            when 20 then fnume.""NumeManager2""
-                                            when 21 then fnume.""PostManager2""
+                                            when 18 then fnume.""NumeSupervizor1""
+                                            when 19 then fnume.""PostSupervizor1""
+                                            when 20 then fnume.""NumeSupervizor2""
+                                            when 21 then fnume.""PostSupervizor2""
+
+                                            when 60 then fnume.""NumeSupervizor3""
+                                            when 61 then fnume.""PostSupervizor3""
+                                            when 62 then fnume.""NumeSupervizor4""
+                                            when 63 then fnume.""PostSupervizor4""
+
+                                            when 64 then fnume.""NumeSupervizor5""
+                                            when 65 then fnume.""PostSupervizor5""
+                                            when 66 then fnume.""NumeSupervizor6""
+                                            when 67 then fnume.""PostSupervizor6""
+
                                             else null
                                         end as Super{0}";
                     super = string.Format(super, i);
@@ -2030,8 +2134,8 @@ namespace WizOne.Module
                                         nextId = General.Nz(General.ExecutaScalar(@"SELECT ""ObiIndividuale_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
                                     string sqlTemp =
-                                        $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"",TO_CHAR(ob.""Obiectiv""), act.""IdActivitate"", TO_CHAR(act.""Activitate""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"",TO_CHAR(ob.""Obiectiv""), act.""IdActivitate"", TO_CHAR(act.""Activitate""), ob.""Pondere"", {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                         FROM ""Eval_ListaObiectiv"" lista                                        
                                         JOIN ""Eval_ListaObiectivDet"" listaOb on listaOb.""IdLista"" = lista.""IdLista""
                                         JOIN ""Eval_Obiectiv"" ob ON listaOb.""IdObiectiv"" = ob.""IdObiectiv""
@@ -2144,8 +2248,8 @@ namespace WizOne.Module
                                         nextId = General.Nz(General.ExecutaScalar(@"SELECT ""CompetenteAng_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
                                     string sqlTemp =
-                                        $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtCompetente.Rows[i]["IdQuiz"].ToString()}), comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtCompetente.Rows[i]["IdQuiz"].ToString()}), comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"", compDet.""Pondere"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                         FROM ""Eval_CategCompetente"" comp
                                         JOIN ""Eval_CategCompetenteDet"" compDet on compDet.""IdCategorie"" = comp.""IdCategorie""
                                         JOIN ""Eval_CompXSetAng"" compDetAng on compDetAng.""IdCategorie"" = comp.""IdCategorie""

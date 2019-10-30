@@ -1574,13 +1574,23 @@ namespace WizOne.Personal
                 ASPxTextBox txtGrila = Contract_DataList.Items[0].FindControl("txtGrila") as ASPxTextBox;
                 ASPxTextBox txtVechCarteMuncaAni = Contract_DataList.Items[0].FindControl("txtVechCarteMuncaAni") as ASPxTextBox;
                 ASPxTextBox txtVechCarteMuncaLuni = Contract_DataList.Items[0].FindControl("txtVechCarteMuncaLuni") as ASPxTextBox;
+                ASPxTextBox txtVechCompAni = Contract_DataList.Items[0].FindControl("txtVechCompAni") as ASPxTextBox;
+                ASPxTextBox txtVechCompLuni = Contract_DataList.Items[0].FindControl("txtVechCompLuni") as ASPxTextBox;
                 if (txtGrila == null) return;
 
                 int an = DateTime.Now.Year;
                 DateTime f10022 = deDataAng.Date;
-                string f10072 = txtGrila.Text;                
+                string f10072 = txtGrila.Text;
 
-                string f100644 = (txtVechCarteMuncaAni.Text.Length > 0 ? txtVechCarteMuncaAni.Text.PadLeft(2, '0') : "00") + (txtVechCarteMuncaLuni.Text.Length > 0 ? txtVechCarteMuncaLuni.Text.PadLeft(2, '0') : "00"); ;
+                string vechime = "";
+
+                string paramVechime = Dami.ValoareParam("MP_VechimeCalculCO", "1");
+
+                if (paramVechime == "1")
+                    vechime = (txtVechCarteMuncaAni.Text.Length > 0 ? txtVechCarteMuncaAni.Text.PadLeft(2, '0') : "00") + (txtVechCarteMuncaLuni.Text.Length > 0 ? txtVechCarteMuncaLuni.Text.PadLeft(2, '0') : "00"); ;
+                else
+                    vechime = (txtVechCompAni.Text.Length > 0 ? txtVechCompAni.Text.PadLeft(2, '0') : "00") + (txtVechCompLuni.Text.Length > 0 ? txtVechCompLuni.Text.PadLeft(2, '0') : "00"); ;
+
 
                 string dtInc = an.ToString() + "-01-01";
                 string dtSf = an.ToString() + "-12-31";
@@ -1592,7 +1602,7 @@ namespace WizOne.Personal
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                     esteNou = true;
 
-                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, f100644, esteNou);
+                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, vechime, esteNou);
                 General.ExecutaNonQuery(strSql, null);
 
                 DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

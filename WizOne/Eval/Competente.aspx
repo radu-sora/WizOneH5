@@ -70,6 +70,7 @@
                         <dx:GridViewDataTextColumn FieldName="IdCompetenta" Name="IdCompetenta" Caption="IdCompetenta" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="CodCompetenta" Name="CodCompetenta" Caption="Cod" Visible="true" Width="250px" VisibleIndex="1" />
                         <dx:GridViewDataTextColumn FieldName="DenCompetenta" Name="DenCompetenta" Caption="Denumire" Visible="true" Width="250px" VisibleIndex="2" />
+                        <dx:GridViewDataTextColumn FieldName="Pondere" Name="Pondere" Caption="Pondere" Visible="true" VisibleIndex="3"/>
                         <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" />
                     </Columns>

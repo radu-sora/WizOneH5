@@ -813,8 +813,8 @@ namespace WizOne.Eval
                                 lblPrelObi.Visible = true;
                                 chkNomenclator.Visible = true;
                                 chkObiective.Visible = true;
-                                lblPerioadaObi.Visible = chkObiective.Checked == true ? true : false;
-                                cmbPerioadaObi.Visible = chkObiective.Checked == true ? true : false;
+                                lblPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
+                                cmbPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
                             }
                             #endregion
 
@@ -834,8 +834,8 @@ namespace WizOne.Eval
                                 lblPrelComp.Visible = true;
                                 chkNomenclatorComp.Visible = true;
                                 chkCompetente.Visible = true;
-                                lblPerioadaComp.Visible = chkCompetente.Checked == true ? true : false;
-                                cmbPerioadaComp.Visible = chkCompetente.Checked == true ? true : false;
+                                lblPerioadaComp.Visible = true; //chkCompetente.Checked == true ? true : false;
+                                cmbPerioadaComp.Visible = true; //chkCompetente.Checked == true ? true : false;
                             }
                             #endregion
 
@@ -1052,8 +1052,8 @@ namespace WizOne.Eval
                         lblPrelObi.Visible = true;
                         chkNomenclator.Visible = true;
                         chkObiective.Visible = true;
-                        lblPerioadaObi.Visible = chkObiective.Checked == true ? true : false;
-                        cmbPerioadaObi.Visible = chkObiective.Checked == true ? true : false;
+                        lblPerioadaObi.Visible = true; //chkObiective.Checked == true ? true : false;
+                        cmbPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
                         return;
                     }
                     #endregion
@@ -1081,8 +1081,8 @@ namespace WizOne.Eval
                         chkNomenclatorComp.Visible = true;
                         chkCompetente.Visible = true;
                         chkCompetente.Text = "Competente";
-                        lblPerioadaComp.Visible = chkCompetente.Checked == true ? true : false;
-                        cmbPerioadaComp.Visible = chkCompetente.Checked == true ? true : false;
+                        lblPerioadaComp.Visible = true; // chkCompetente.Checked == true ? true : false;
+                        cmbPerioadaComp.Visible = true; // chkCompetente.Checked == true ? true : false;
                         return;
                     }
                     #endregion
@@ -1142,8 +1142,8 @@ namespace WizOne.Eval
                                 lblPrelObi.Visible = IdTipObiect == 23 ? true : false;
                                 chkNomenclator.Visible = IdTipObiect == 23 ? true : false;
                                 chkObiective.Visible = IdTipObiect == 23 ? true : false;
-                                lblPerioadaObi.Visible = chkObiective.Checked == true ? true : false;
-                                cmbPerioadaObi.Visible = chkObiective.Checked == true ? true : false;
+                                lblPerioadaObi.Visible = IdTipObiect == 23 ? true : false;// chkObiective.Checked == true ? true : false;
+                                cmbPerioadaObi.Visible = IdTipObiect == 23 ? true : false; //chkObiective.Checked == true ? true : false;
 
                                 int TemplateId;
                                 TemplateId = rwIntrebare["TemplateIdObiectiv"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigObTemplate", 1) :
@@ -1178,8 +1178,8 @@ namespace WizOne.Eval
                                 Session["isEditingCompetenteTemplate"] = IdTipObiectCompetente == 5 ? 1 : 0;
                                 chkNomenclatorComp.Visible = IdTipObiectCompetente == 5 ? true : false;
                                 chkCompetente.Visible = IdTipObiectCompetente == 5 ? true : false;
-                                lblPerioadaComp.Visible = chkCompetente.Checked == true ? true : false;
-                                cmbPerioadaComp.Visible = chkCompetente.Checked == true ? true : false;
+                                lblPerioadaComp.Visible = IdTipObiectCompetente == 5 ? true : false; //chkCompetente.Checked == true ? true : false;
+                                cmbPerioadaComp.Visible = IdTipObiectCompetente == 5 ? true : false; //chkCompetente.Checked == true ? true : false;
 
                                 int TemplateId;
                                 TemplateId = rwIntrebare["TemplateIdCompetenta"].ToString() == string.Empty ? Dami.NextId("Eval_ConfigCompTemplate", 1) :
@@ -1206,8 +1206,8 @@ namespace WizOne.Eval
                                 lblPrelObi.Visible = true;
                                 chkNomenclator.Visible = true;
                                 chkObiective.Visible = true;
-                                lblPerioadaObi.Visible = chkObiective.Checked == true ? true : false;
-                                cmbPerioadaObi.Visible = chkObiective.Checked == true ? true : false;
+                                lblPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
+                                cmbPerioadaObi.Visible = true; // chkObiective.Checked == true ? true : false;
                                 Session["isEditingObiectivTemplate"] = 1;
                                 Session["isEditingCompetenteTemplate"] = null;
 
@@ -1231,8 +1231,8 @@ namespace WizOne.Eval
                                 chkNomenclatorComp.Visible = true;
                                 chkCompetente.Visible = true;
                                 chkObiective.Text = "Competente";
-                                lblPerioadaComp.Visible = chkCompetente.Checked == true ? true : false;
-                                cmbPerioadaComp.Visible = chkCompetente.Checked == true ? true : false;
+                                lblPerioadaComp.Visible = true; // chkCompetente.Checked == true ? true : false;
+                                cmbPerioadaComp.Visible = true; // chkCompetente.Checked == true ? true : false;
                                 Session["isEditingObiectivTemplate"] = null;
                                 Session["isEditingCompetenteTemplate"] = 1;
 
@@ -1325,17 +1325,17 @@ namespace WizOne.Eval
                                 return;
                             rwIntrebare["PreluareObiective"] = arr[1] == "true" ? 0 : 1;
                             Session["InformatiaCurentaEvalQuiz"] = ds;
-                            if (chkObiective.Checked == true)
-                            {
-                                lblPerioadaObi.Visible = true;
-                                cmbPerioadaObi.Visible = true;
-                                cmbPerioadaObi.Value = (rwIntrebare["IdPeriod"] == null || rwIntrebare["IdPeriod"].ToString().Length <= 0) ? -1 : Convert.ToInt32(rwIntrebare["IdPeriod"].ToString());
-                            }
-                            else
-                            {
-                                lblPerioadaObi.Visible = false;
-                                cmbPerioadaObi.Visible = false;
-                            }
+                            //if (chkObiective.Checked == true)
+                            //{
+                            //    lblPerioadaObi.Visible = true;
+                            //    cmbPerioadaObi.Visible = true;
+                            //    cmbPerioadaObi.Value = (rwIntrebare["IdPeriod"] == null || rwIntrebare["IdPeriod"].ToString().Length <= 0) ? -1 : Convert.ToInt32(rwIntrebare["IdPeriod"].ToString());
+                            //}
+                            //else
+                            //{
+                            //    lblPerioadaObi.Visible = false;
+                            //    cmbPerioadaObi.Visible = false;
+                            //}
                             break;
                         case "chkNomenclatorComp":
                             if (rwIntrebare["EsteSectiune"].ToString() == "1")
@@ -1343,34 +1343,34 @@ namespace WizOne.Eval
                             rwIntrebare["PreluareCompetente"] = arr[1] == "true" ? 0 : 1;
 
                             Session["InformatiaCurentaEvalQuiz"] = ds;
-                            if (chkCompetente.Checked == true)
-                            {
-                                lblPerioadaComp.Visible = true;
-                                cmbPerioadaComp.Visible = true;
-                                cmbPerioadaComp.Value = (rwIntrebare["IdPeriodComp"] == null || rwIntrebare["IdPeriodComp"].ToString().Length <= 0) ? -1 : Convert.ToInt32(rwIntrebare["IdPeriodComp"].ToString());
-                            }
-                            else
-                            {
-                                lblPerioadaComp.Visible = false;
-                                cmbPerioadaComp.Visible = false;
-                            }
+                            //if (chkCompetente.Checked == true)
+                            //{
+                            //    lblPerioadaComp.Visible = true;
+                            //    cmbPerioadaComp.Visible = true;
+                            //    cmbPerioadaComp.Value = (rwIntrebare["IdPeriodComp"] == null || rwIntrebare["IdPeriodComp"].ToString().Length <= 0) ? -1 : Convert.ToInt32(rwIntrebare["IdPeriodComp"].ToString());
+                            //}
+                            //else
+                            //{
+                            //    lblPerioadaComp.Visible = false;
+                            //    cmbPerioadaComp.Visible = false;
+                            //}
                             break;
                         case "chkObiective":
                             if (rwIntrebare["EsteSectiune"].ToString() == "1")
                                 return;
                             rwIntrebare["PreluareObiective"] = arr[1] == "true" ? 1 : 0;
                             Session["InformatiaCurentaEvalQuiz"] = ds;
-                            if (arr[1] == "true")
-                            {
-                                lblPerioadaObi.Visible = true;
-                                cmbPerioadaObi.Visible = true;
-                                cmbPerioadaObi.Value = rwIntrebare["IdPeriod"] == null ? -1 : Convert.ToInt32(rwIntrebare["IdPeriod"].ToString());
-                            }
-                            else
-                            {
-                                lblPerioadaObi.Visible = false;
-                                cmbPerioadaObi.Visible = false;
-                            }
+                            //if (arr[1] == "true")
+                            //{
+                            //    lblPerioadaObi.Visible = true;
+                            //    cmbPerioadaObi.Visible = true;
+                            //    cmbPerioadaObi.Value = rwIntrebare["IdPeriod"] == null ? -1 : Convert.ToInt32(rwIntrebare["IdPeriod"].ToString());
+                            //}
+                            //else
+                            //{
+                            //    lblPerioadaObi.Visible = false;
+                            //    cmbPerioadaObi.Visible = false;
+                            //}
                             break;
                         case "chkCompetente":
                             if (rwIntrebare["EsteSectiune"].ToString() == "1")
@@ -1378,17 +1378,17 @@ namespace WizOne.Eval
                             rwIntrebare["PreluareCompetente"] = arr[1] == "true" ? 1 : 0;
 
                             Session["InformatiaCurentaEvalQuiz"] = ds;
-                            if (arr[1] == "true")
-                            {
-                                lblPerioadaComp.Visible = true;
-                                cmbPerioadaComp.Visible = true;
-                                cmbPerioadaComp.Value = (rwIntrebare["IdPeriodComp"] == null || rwIntrebare["IdPeriodComp"].ToString().Length <= 0) ? -1 : Convert.ToInt32(rwIntrebare["IdPeriodComp"].ToString());
-                            }
-                            else
-                            {
-                                lblPerioadaComp.Visible = false;
-                                cmbPerioadaComp.Visible = false;
-                            }
+                            //if (arr[1] == "true")
+                            //{
+                            //    lblPerioadaComp.Visible = true;
+                            //    cmbPerioadaComp.Visible = true;
+                            //    cmbPerioadaComp.Value = (rwIntrebare["IdPeriodComp"] == null || rwIntrebare["IdPeriodComp"].ToString().Length <= 0) ? -1 : Convert.ToInt32(rwIntrebare["IdPeriodComp"].ToString());
+                            //}
+                            //else
+                            //{
+                            //    lblPerioadaComp.Visible = false;
+                            //    cmbPerioadaComp.Visible = false;
+                            //}
                             break;
                         case "cmbPerioadaObi":
                             if (rwIntrebare["EsteSectiune"].ToString() == "1")

@@ -233,7 +233,7 @@ namespace WizOne.Pagini
 
                 foreach (DataColumn col in dt.Columns)
                 {
-                    if (!col.AutoIncrement && grDate.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
                     {
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
 
@@ -365,6 +365,60 @@ namespace WizOne.Pagini
                     }
                 }
 
+                //Radu 29.10.2016 -  daca doar una dintre coloanele IdCalificativ si Calificativ este prezenta in sablon, cea absenta se va completa in functie de cea prezenta
+                int y = 0, z = 0;
+                bool calif = false, idCalif = false, necesitaCompletare = false;
+                string campAbsent = "", campPrezent = "";
+                for (int i = 0; i < grDate.VisibleRowCount; i++)
+                {
+                    DataRowView obj = grDate.GetRow(i) as DataRowView;
+                    if (obj["ColoanaBD"].ToString() == "IdCalificativ")
+                    {
+                        while (!ws2.Cells[0, y].Value.IsEmpty)
+                        {
+                            if (ws2.Cells[0, y].Value.ToString() == obj["ColoanaFisier"].ToString())
+                            {
+                                idCalif = true;
+                                break;                               
+                            }
+                            y++;
+                        }
+                    }
+                    if (obj["ColoanaBD"].ToString() == "Calificativ")
+                    {
+                        while (!ws2.Cells[0, z].Value.IsEmpty)
+                        {
+                            if (ws2.Cells[0, z].Value.ToString() == obj["ColoanaFisier"].ToString())
+                            {
+                                calif = true;
+                                break;                               
+                            }
+                            z++;
+                        }
+                    }
+                }    
+                if ((!idCalif && calif) || (idCalif && !calif))
+                {
+                    necesitaCompletare = true;
+                    if (!idCalif)
+                    {
+                        campAbsent = ", \"IdCalificativ\" = (SELECT \"IdCalificativ\" FROM \"Eval_SetCalificativDet\" WHERE UPPER(\"Denumire\") = '{0}')";
+                        campPrezent = "Calificativ";
+                    }
+                    if (!calif)
+                    {
+                        campAbsent = ", \"Calificativ\" = (SELECT \"Denumire\" FROM \"Eval_SetCalificativDet\" WHERE \"IdCalificativ\" = {0})";
+                        campPrezent = "IdCalificativ";
+                    }
+                }
+                
+
+                if (x == 0)
+                {
+                    MessageBox.Show("Nu ati specificat coloana pentru marca!", MessageBox.icoError, "");
+                    return;
+                }
+
                 for (int i = 0; i < grDate.VisibleRowCount; i++)
                 {
                     DataRowView obj = grDate.GetRow(i) as DataRowView;
@@ -378,24 +432,28 @@ namespace WizOne.Pagini
                                 break;
                             k++;
                         }
-
+                                               
                         int j = 1;
                         while (!ws2.Cells[j, k].Value.IsEmpty)
                         {
+                            string cmp = "";
+                            if (necesitaCompletare && obj["ColoanaBD"].ToString() == campPrezent)                            
+                                cmp = string.Format(campAbsent, ws2.Cells[j, k].Value.ToString());                            
+
                             string sql = "";
                             if (rbTip1.Checked)
                             {
                                 if (obj["Tip"].ToString() == "String")
-                                    sql = "UPDATE \"Eval_ObiIndividualeTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = '" + ws2.Cells[j, k].Value.ToString() + "' WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbObiectiv.Value == null ? "" : " AND \"IdObiectiv\" = " + cmbObiectiv.Value.ToString());
+                                    sql = "UPDATE \"Eval_ObiIndividualeTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = '" + ws2.Cells[j, k].Value.ToString() + "' " + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbObiectiv.Value == null ? "" : " AND \"IdObiectiv\" = " + cmbObiectiv.Value.ToString());
                                 else
-                                    sql = "UPDATE \"Eval_ObiIndividualeTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = " + ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US")) + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbObiectiv.Value == null ? "" : " AND \"IdObiectiv\" = " + cmbObiectiv.Value.ToString());
+                                    sql = "UPDATE \"Eval_ObiIndividualeTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = " + ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US")) + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbObiectiv.Value == null ? "" : " AND \"IdObiectiv\" = " + cmbObiectiv.Value.ToString());
                             }
                             else
                             {
                                 if (obj["Tip"].ToString() == "String")
-                                    sql = "UPDATE \"Eval_CompetenteAngajatTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = '" + ws2.Cells[j, k].Value.ToString() + "' WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbComp.Value == null ? "" : " AND \"IdCompetenta\" = " + cmbComp.Value.ToString());
+                                    sql = "UPDATE \"Eval_CompetenteAngajatTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = '" + ws2.Cells[j, k].Value.ToString() + "' " + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbComp.Value == null ? "" : " AND \"IdCompetenta\" = " + cmbComp.Value.ToString());
                                 else
-                                    sql = "UPDATE \"Eval_CompetenteAngajatTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = " + ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US")) + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbComp.Value == null ? "" : " AND \"IdCompetenta\" = " + cmbComp.Value.ToString());
+                                    sql = "UPDATE \"Eval_CompetenteAngajatTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = " + ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US")) + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbComp.Value == null ? "" : " AND \"IdCompetenta\" = " + cmbComp.Value.ToString());
 
                             }
                             General.ExecutaNonQuery(sql, null);

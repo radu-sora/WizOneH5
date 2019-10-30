@@ -253,6 +253,7 @@ namespace WizOne.Eval
                 rw["IdCompetenta"] = Dami.NextId("Eval_CategCompetenteDet");
                 rw["CodCompetenta"] = e.NewValues["CodCompetenta"];
                 rw["DenCompetenta"] = e.NewValues["DenCompetenta"];
+                rw["Pondere"] = e.NewValues["Pondere"] ?? DBNull.Value; //Radu 29.10.2019
                 rw["TIME"] = DateTime.Now;
                 rw["USER_NO"] = Session["UserId"];
 

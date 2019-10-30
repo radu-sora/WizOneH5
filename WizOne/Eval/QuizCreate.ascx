@@ -523,6 +523,27 @@
                                                                     </td>
                                                                     <td>&nbsp;&nbsp;&nbsp;</td>
                                                                     <td>
+                                                                        <dx:ASPxLabel ID="lblPerioadaObi" Width="70" runat="server" Text="Perioada:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <dx:ASPxComboBox ID="cmbPerioadaObi" runat="server"
+                                                                            DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"
+                                                                            ValueType="System.Int32" ClientInstanceName="cmbPerioadaObi" >
+                                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
+                                                                        </dx:ASPxComboBox>
+                                                                    </td>
+                                                                    <td>
+                                                                        <dx:ASPxLabel ID="lblPerioadaComp" Width="70" runat="server" Text="Perioada:" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <dx:ASPxComboBox ID="cmbPerioadaComp" runat="server"
+                                                                            DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"
+                                                                            ValueType="System.Int32" ClientInstanceName="cmbPerioadaComp" >
+                                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
+                                                                        </dx:ASPxComboBox>
+                                                                    </td>
+                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td>
                                                                         <dx:ASPxLabel ID="lblOrientare" runat="server" Text="Orientare" Width="70" />
                                                                     </td>
                                                                     <td>
@@ -583,17 +604,7 @@
                                                                             <ClientSideEvents CheckedChanged="function(s, e){ 
                                                                                                                     OnCHKChanged(s); }" />
                                                                         </dx:ASPxRadioButton>
-                                                                    </td>
-                                                                    <td>
-                                                                        <dx:ASPxLabel ID="lblPerioadaObi" Width="70" runat="server" Text="Perioada:" />
-                                                                    </td>
-                                                                    <td>
-                                                                        <dx:ASPxComboBox ID="cmbPerioadaObi" runat="server"
-                                                                            DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"
-                                                                            ValueType="System.Int32" ClientInstanceName="cmbPerioadaObi" >
-                                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
-                                                                        </dx:ASPxComboBox>
-                                                                    </td>
+                                                                    </td>         
 
                                                                      <td>
                                                                         <dx:ASPxLabel ID="lblPrelComp" runat="server" Text="Preluare competente:" Width="120" />
@@ -609,17 +620,7 @@
                                                                             <ClientSideEvents CheckedChanged="function(s, e){ 
                                                                                                                     OnCHKChanged(s); }" />
                                                                         </dx:ASPxRadioButton>
-                                                                    </td>
-                                                                    <td>
-                                                                        <dx:ASPxLabel ID="lblPerioadaComp" Width="70" runat="server" Text="Perioada:" />
-                                                                    </td>
-                                                                    <td>
-                                                                        <dx:ASPxComboBox ID="cmbPerioadaComp" runat="server"
-                                                                            DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"
-                                                                            ValueType="System.Int32" ClientInstanceName="cmbPerioadaComp" >
-                                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
-                                                                        </dx:ASPxComboBox>
-                                                                    </td>
+                                                                    </td>              
 
                                                                 </tr>
                                                             </table>

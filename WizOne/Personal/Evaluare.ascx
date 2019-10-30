@@ -25,9 +25,7 @@
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" VisibleIndex="0"/>
                         <dx:GridViewDataTextColumn FieldName="An" Name="An" Caption="An"  Width="75px" VisibleIndex="4" />
                         <dx:GridViewDataTextColumn FieldName="Punctaj_max" Name="Punctaj_max" Caption="Punctaj maxim"  Width="100px" VisibleIndex="5" />
-                        <dx:GridViewDataTextColumn FieldName="Punctaj" Name="Punctaj" Caption="Punctaj" VisibleIndex="8" Width="100px" >
-              
-                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Punctaj" Name="Punctaj" Caption="Punctaj" VisibleIndex="8" Width="100px" />                        
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" VisibleIndex="1" />						
                         <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" VisibleIndex="2" />
                         <dx:GridViewDataTextColumn Caption="Observatii" FieldName="Observatii" Name="Observatii" VisibleIndex="9" Width="250px">

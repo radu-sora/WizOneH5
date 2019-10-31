@@ -568,6 +568,7 @@ namespace WizOne.Pagini
                             LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
                             LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
                             WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
+                            AND COALESCE((SELECT CHARINDEX(',' + CAST(AA.IdAtribut AS nvarchar(20)) + ',', ',' + Valoare + ',') FROM tblParametrii WHERE Nume='IdExcluseCircuitDoc'),0) = 0                            
                             GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
                             0 AS CandidatAngajat
@@ -630,6 +631,7 @@ namespace WizOne.Pagini
                             LEFT JOIN ""Admin_NrActAd"" JJ ON AA.""IdActAd""=JJ.""IdAuto""
                             WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) 
                             AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
+                            AND COALESCE((SELECT INSTR(',' || CAST(AA.""IdAtribut"" AS varchar2(20)) || ',', ',' || ""Valoare"" || ',') FROM ""tblParametrii"" WHERE ""Nume"" ='IdExcluseCircuitDoc'),0) = 0
                             ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente""
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
@@ -1469,81 +1471,202 @@ namespace WizOne.Pagini
         //    }
         //}
 
+        //protected void btnPrint_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        //Session["ReportId"] = 1;
+        //        //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&F10003=460&Validate=0", false);
+        //        //return;
+
+        //        string param = "";
+        //        string paramRaport = "";
+        //        List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat" });
+
+        //        if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+
+        //        object[] obj = lst[0] as object[];
+
+        //        //if(Convert.ToInt32(General.Nz(lst[1],0)) == 1)
+        //        //{
+        //        //    Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_Incetare");
+        //        //    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&NrDecizie=" + lst[10] + "&DataDecizie=" + lst[11]);
+        //        //}
+        //        //else
+        //        //{
+        //        //    if (Convert.ToInt32(General.Nz(lst[2], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 0)) == 1)
+        //        //    {
+        //        //        Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_CIM");
+        //        //        Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + lst[0] + "&F10003=" + lst[0] + "&Validate=0");
+        //        //    }
+        //        //    else
+        //        //    {
+        //        //        if (Convert.ToInt32(General.Nz(lst[4], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 5)) == 1 ||
+        //        //            Convert.ToInt32(General.Nz(lst[6], 0)) == 1 || Convert.ToInt32(General.Nz(lst[7], 5)) == 1 ||
+        //        //            Convert.ToInt32(General.Nz(lst[8], 0)) == 1 || Convert.ToInt32(General.Nz(lst[9], 5)) == 1)
+        //        //        {
+        //        //            Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_ModificariCIM");
+        //        //            Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&DataModificare=" + lst[12]);
+        //        //        }
+        //        //    }
+        //        //}
+
+
+        //        if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
+        //        {
+        //            MessageBox.Show("Nu exista numar si data document", MessageBox.icoWarning, "Operatie anulata");
+        //            return;
+        //        }
+
+
+        //        if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
+        //        {
+        //            DateTime ziua = Convert.ToDateTime(obj[11]);
+        //            paramRaport = "RaportActeAditionale_Incetare";
+        //            param = "&NrDecizie=" + obj[10] + "&DataDecizie=" + +ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
+        //        }
+        //        else
+        //        {
+        //            if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+        //            {
+        //                paramRaport = "RaportActeAditionale_CIM";
+        //                param = "&F10003=" + obj[0] + "&Validate=0";
+        //            }
+        //            else
+        //            {
+        //                if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
+        //                {
+        //                    if (General.Nz(obj[12], "").ToString() == "")
+        //                    {
+        //                        MessageBox.Show("Nu exista data modificare", MessageBox.icoWarning, "Operatie anulata");
+        //                        return;
+        //                    }
+        //                    DateTime ziua = Convert.ToDateTime(obj[12]);
+        //                    paramRaport = "RaportActeAditionale_ModificariCIM";
+        //                    param = "&DataModificare=" + ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2,'0');
+        //                }
+        //            }
+        //        }
+
+        //        string idRap = Dami.ValoareParam(paramRaport);
+        //        if (idRap == "")
+        //        {
+        //            MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
+        //            return;
+        //        }
+
+        //        if (param == "")
+        //        {
+        //            MessageBox.Show("Nu exista parametrii", MessageBox.icoWarning, "Operatie anulata");
+        //            return;
+        //        }
+
+
+        //        //Florin 2019.07.15
+        //        #region Salvam Filtrul
+
+        //        string req = "";
+        //        if (cmbCmp.Value != null) req += "&Cmp=" + cmbCmp.Value;
+        //        if (cmbTip.Value != null) req += "&Tip=" + cmbTip.Value;
+        //        if (cmbAng.Value != null) req += "&Ang=" + cmbAng.Value;
+        //        if (cmbStatus.Value != null) req += "&Status=" + cmbStatus.Value;
+        //        if (txtData.Value != null) req += "&Data=" + txtData.Value;
+        //        if (txtDepasire.Value != null) req += "&Depasire=" + txtDepasire.Value;
+
+        //        Session["Filtru_ActeAditionale"] = req;
+
+        //        #endregion
+
+
+
+        //        Session["ReportId"] = Convert.ToInt32(idRap);
+
+        //        //Florin 2019.10.17
+        //        //string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;
+        //        string q = General.URLEncode("Angajat=" + obj[0] + param);
+        //        string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + q;
+
+        //        Response.Redirect(url);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+
+        //Florin 2019.10.21
         protected void btnPrint_Click(object sender, EventArgs e)
         {
             try
             {
-                //Session["ReportId"] = 1;
-                //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&F10003=460&Validate=0", false);
-                //return;
-
-                string param = "";
                 string paramRaport = "";
-                List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat" });
+                string paramRaport_tmp = "";
+                string msg = "";
+                string ids = "";
+
+                List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct" });
 
                 if (lst == null || lst.Count() == 0 || lst[0] == null) return;
 
-                object[] obj = lst[0] as object[];
-
-                //if(Convert.ToInt32(General.Nz(lst[1],0)) == 1)
-                //{
-                //    Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_Incetare");
-                //    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&NrDecizie=" + lst[10] + "&DataDecizie=" + lst[11]);
-                //}
-                //else
-                //{
-                //    if (Convert.ToInt32(General.Nz(lst[2], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 0)) == 1)
-                //    {
-                //        Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_CIM");
-                //        Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + lst[0] + "&F10003=" + lst[0] + "&Validate=0");
-                //    }
-                //    else
-                //    {
-                //        if (Convert.ToInt32(General.Nz(lst[4], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 5)) == 1 ||
-                //            Convert.ToInt32(General.Nz(lst[6], 0)) == 1 || Convert.ToInt32(General.Nz(lst[7], 5)) == 1 ||
-                //            Convert.ToInt32(General.Nz(lst[8], 0)) == 1 || Convert.ToInt32(General.Nz(lst[9], 5)) == 1)
-                //        {
-                //            Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_ModificariCIM");
-                //            Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&DataModificare=" + lst[12]);
-                //        }
-                //    }
-                //}
-
-
-                if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
+                for (int i = 0; i < lst.Count(); i++)
                 {
-                    MessageBox.Show("Nu exista numar si data document", MessageBox.icoWarning, "Operatie anulata");
-                    return;
-                }
+                    object[] obj = lst[i] as object[];
 
-
-                if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
-                {
-                    DateTime ziua = Convert.ToDateTime(obj[11]);
-                    paramRaport = "RaportActeAditionale_Incetare";
-                    param = "&NrDecizie=" + obj[10] + "&DataDecizie=" + +ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
-                }
-                else
-                {
-                    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                    if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
                     {
-                        paramRaport = "RaportActeAditionale_CIM";
-                        param = "&F10003=" + obj[0] + "&Validate=0";
+                        msg = "Exista inregistrare fara numar si data document";
+                        break;
+                    }
+
+
+                    if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_Incetare";
                     }
                     else
                     {
-                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
+                        if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                         {
-                            if (General.Nz(obj[12], "").ToString() == "")
+                            paramRaport = "RaportActeAditionale_CIM";
+                        }
+                        else
+                        {
+                            if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
                             {
-                                MessageBox.Show("Nu exista data modificare", MessageBox.icoWarning, "Operatie anulata");
-                                return;
+                                if (General.Nz(obj[12], "").ToString() == "")
+                                {
+                                    msg = "Nu exista data modificare";
+                                    break;
+                                }
+                                paramRaport = "RaportActeAditionale_ModificariCIM";
                             }
-                            DateTime ziua = Convert.ToDateTime(obj[12]);
-                            paramRaport = "RaportActeAditionale_ModificariCIM";
-                            param = "&DataModificare=" + ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2,'0');
                         }
                     }
+
+                    if (paramRaport_tmp != "" && paramRaport != paramRaport_tmp)
+                    {
+                        msg = "Trebuie sa selectati inregistrari care au acelasi tip de modificare";
+                        break;
+                    }
+
+                    paramRaport_tmp = paramRaport;
+                    if (General.Nz(obj[14],"").ToString() != "")
+                        ids += "," + obj[14];
+                }
+
+                if (msg != "")
+                {
+                    MessageBox.Show(msg, MessageBox.icoWarning, "Operatie anulata");
+                    return;
+                }
+
+                if (ids == "")
+                {
+                    MessageBox.Show("Nu exista inregistrari selectate", MessageBox.icoWarning, "Operatie anulata");
+                    return;
                 }
 
                 string idRap = Dami.ValoareParam(paramRaport);
@@ -1552,13 +1675,6 @@ namespace WizOne.Pagini
                     MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
                     return;
                 }
-
-                if (param == "")
-                {
-                    MessageBox.Show("Nu exista parametrii", MessageBox.icoWarning, "Operatie anulata");
-                    return;
-                }
-
 
                 //Florin 2019.07.15
                 #region Salvam Filtrul
@@ -1575,14 +1691,23 @@ namespace WizOne.Pagini
 
                 #endregion
 
-
-
                 Session["ReportId"] = Convert.ToInt32(idRap);
 
-                //Florin 2019.10.17
-                //string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;
-                string q = General.URLEncode("Angajat=" + obj[0] + param);
-                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + q;
+                int idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR tmpIdPrint_Id_SEQ", null));
+                if (Constante.tipBD == 2)
+                    idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""tmpIdPrint_Id_SEQ"".NEXTVAL FROM DUAL", null));
+
+                string sqlSes = "";
+                string[] arrIds = ids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                for(int k = 0; k < arrIds.Length; k++)
+                {
+                    sqlSes += $"UNION SELECT {idSesiune}, {arrIds[k]} " + (Constante.tipBD == 2 ? " FROM DUAL" : "");
+                }
+
+                if (sqlSes != "")
+                    General.ExecutaNonQuery(@"INSERT INTO ""tmpIdPrint""(""IdSesiune"", ""Id"") " + sqlSes.Substring(6), null);
+
+                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("idSesiune=" + idSesiune);
 
                 Response.Redirect(url);
 
@@ -1593,6 +1718,7 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
 
         protected void cmbTip_ValueChanged(object sender, EventArgs e)
         {

@@ -57,6 +57,7 @@
                     </ValidationSettings>
                 </PropertiesComboBox>
             </dx:GridViewDataComboBoxColumn>
+            
             <dx:GridViewDataTextColumn FieldName="ReportId" Visible="false" VisibleIndex="5" ShowInCustomizationForm="false" />
         </Columns>
         <ClientSideEvents

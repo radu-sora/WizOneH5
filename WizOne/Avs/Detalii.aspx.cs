@@ -110,9 +110,11 @@ namespace WizOne.Avs
                     break;
                 case (int)Constante.Atribute.SporTranzactii:                   
                     sql = "";
+                    //Florin 2019.10.28 - am comentat partea de Oracle deoarece este acelasi select si pe sql si pe oracle
+                    sql = $@"SELECT 0 as F02104, '---' AS F02105 {(Constante.tipBD == 2 ? " FROM DUAL" : "")} UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
                     string tabela = @"SELECT 0 as F02104, '---' AS F02105 UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
-                    if (Constante.tipBD == 2)
-                        tabela = "SELECT 0 as F02104, '---' AS F02105 FROM DUAL UNION " + General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
+                    //if (Constante.tipBD == 2)
+                    //    tabela = "SELECT 0 as F02104, '---' AS F02105 FROM DUAL UNION " + General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
                     for (int i = 0; i <= 19; i++)
                     {
                         sql += "select " + i.ToString() + " as \"Coloana0\", \"SporTran" + i + "\" as \"Coloana1\", CASE WHEN \"SporTran" + i + "\" = 0 THEN 'Spor " + (i + 1).ToString() + "' ELSE (SELECT F02105 FROM (" + tabela + ") a WHERE F02104 = \"SporTran" + i + "\") END as \"Coloana2\" from \"Avs_Cereri\" where f10003 = " 

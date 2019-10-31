@@ -198,6 +198,8 @@
         function OnBatchEditEndEditing(s, e) {
             //grIsEditing = true;
 
+            if (!s.batchEditApi.GetEditCellInfo().column) return;
+
             var col = s.batchEditApi.GetEditCellInfo().column.fieldName;
             var arr = "In1,In2,In3,In4,In5,In6,In7,In8,In9,In10,In11,In12,In13,In14,In15,In16,In17,In18,In19,In20,Out1,Out2,Out3,Out4,Out5,Out6,Out7,Out8,Out9,Out10,Out11,Out12,Out13,Out14,Out15,Out16,Out17,Out18,Out19,Out20,";
 

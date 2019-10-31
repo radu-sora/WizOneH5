@@ -48,7 +48,7 @@ namespace WizOne.Personal
         private void IncarcaGrid()
         {
 
-            string sqlFinal = "SELECT * FROM \"Admin_Evaluare\" WHERE Marca = " + Session["Marca"].ToString();
+            string sqlFinal = "SELECT * FROM \"Admin_Evaluare\" WHERE \"Marca\" = " + Session["Marca"].ToString();
             DataTable dt = new DataTable();
             DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             if (ds.Tables.Contains("Admin_Evaluare"))

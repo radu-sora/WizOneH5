@@ -495,6 +495,9 @@ namespace WizOne.Absente
                         AfiseazaCtl();
 
                         break;
+                    case "8":
+                        AfiseazaCtl();
+                        break;
                 }
             }
             catch (Exception ex)
@@ -2256,6 +2259,34 @@ namespace WizOne.Absente
                                 }
                             }
                             ctlDiv.Controls.Add(chk);
+                            break;
+                        case "2":                   //combobox
+                            ASPxComboBox cmb = new ASPxComboBox();
+                            cmb.ID = ctlId;
+                            cmb.ClientIDMode = ClientIDMode.Static;
+                            cmb.ClientInstanceName = "ctlDinamic" + i;
+                            cmb.Width = Unit.Pixel(200);
+                            cmb.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
+                            try
+                            {
+                                if (General.Nz(dr["Sursa"], "").ToString() != "")
+                                {
+                                    string sel = InlocuiesteCampuri(dr["Sursa"].ToString());
+                                    if (sel != "")
+                                    {
+                                        DataTable dtCmb = General.IncarcaDT(sel, null);
+                                        cmb.ValueField = dtCmb.Columns[0].ColumnName;
+                                        cmb.TextField = dtCmb.Columns[1].ColumnName;
+                                        cmb.DataSource = dtCmb;
+                                        cmb.DataBind();
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), "Incarcare combobox camp extra");
+                            }
+                            ctlDiv.Controls.Add(cmb);
                             break;
                         case "3":                   //dateTime
                             ASPxDateEdit dte = new ASPxDateEdit();

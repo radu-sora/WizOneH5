@@ -260,14 +260,14 @@
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblOraInc" runat="server" style="display:none;">Ora Inceput</label>
                         <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="100px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
-                            <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); }" />
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
                         </dx:ASPxComboBox>
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblOraSf" runat="server" style="display:none;">Ora Sfarsit</label>
                         <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="100px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList">
-                            <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e);  }" />
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(8); }" />
                         </dx:ASPxComboBox>
                     </div>
 

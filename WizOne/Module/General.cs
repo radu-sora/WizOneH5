@@ -352,6 +352,7 @@ namespace WizOne.Module
                     OracleDataAdapter da = new OracleDataAdapter();
                     da.SelectCommand = General.DamiOleDbCommand(strSql, null);
                     OracleCommandBuilder cb = new OracleCommandBuilder(da);
+                    var ert = cb.GetUpdateCommand();
                     da.Update(dt);
 
                     //Radu 2017.11.01

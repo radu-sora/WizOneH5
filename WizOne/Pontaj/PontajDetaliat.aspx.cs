@@ -1498,6 +1498,7 @@ namespace WizOne.Pontaj
             }
         }
 
+        //Florin 2019.10.31 - am refacut intreaga functie
 
         protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
         {
@@ -1505,250 +1506,155 @@ namespace WizOne.Pontaj
             {
                 grDate.CancelEdit();
 
-                string ids = "";
-                bool ctr = false;
-                string sqlCC = "";
-
-                List<metaAbsTipZi> lst = new List<metaAbsTipZi>();
+                //List<metaAbsTipZi> lst = new List<metaAbsTipZi>();
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                DataTable dtVal = Session["Ptj_IstoricVal"] as DataTable;
+                //DataTable dtVal = Session["Ptj_IstoricVal"] as DataTable;
 
-                for (int x = 0; x < e.UpdateValues.Count; x++)
+                ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
+                object[] keys = new object[] { upd.Keys[0] };
+
+                DataRow row = dt.Rows.Find(keys);
+                if (row == null) return;
+
+                bool absentaDeTipZi = false;
+                int f10003 = Convert.ToInt32(row["F10003"]);
+                DateTime ziua = Convert.ToDateTime(row["Ziua"]);
+                string cmp = "";
+                string strSql = "";
+                var dic = upd.NewValues.Cast<DictionaryEntry>().OrderBy(r => r.Key).ToDictionary(c => c.Key, d => d.Value);
+
+                foreach (var l in dic)
                 {
-                    ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
-                    object[] keys = new object[] { upd.Keys[0] };
-
-                    DataRow row = dt.Rows.Find(keys);
-                    if (row == null) continue;
-
-                    if (upd.OldValues["ValStr"] != upd.NewValues["ValStr"])
+                    string numeCol = l.Key.ToString();
+                    dynamic oldValue = upd.OldValues[numeCol];
+                    dynamic newValue = upd.NewValues[numeCol];
+                    if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
+                        oldValue = null;
+                       
+                    if (oldValue != newValue)
                     {
-                        if (tip == 1 || tip == 10)
-                            ids = (cmbAng.Value ?? -99) + ";";
-                        else
-                            ids += row["F10003"] + ";";
-                    }
-
-                    row["ValStr"] = upd.NewValues["ValStr"] ?? DBNull.Value;
-                    row["USER_NO"] = Session["UserId"];
-                    row["TIME"] = DateTime.Now;
-
-                    if (upd.NewValues["Observatii"] != null) row["Observatii"] = upd.NewValues["Observatii"];
-                    if (upd.NewValues["Observatii2"] != null) row["Observatii2"] = upd.NewValues["Observatii2"];
-                    if (upd.NewValues["F06204Default"] != null) row["F06204Default"] = upd.NewValues["F06204Default"];
-
-                    if (upd.NewValues["IdContract"] != null) row["IdContract"] = upd.NewValues["IdContract"];
-
-                    row["IdProgram"] = upd.NewValues["IdProgram"] ?? DBNull.Value;
-
-                    //Florin 2019.10.04
-                    if (upd.NewValues["ModifProgram"] != null) row["ModifProgram"] = upd.NewValues["ModifProgram"];
-
-                    if (upd.NewValues["Norma"] != null) row["Norma"] = upd.NewValues["Norma"];
-
-
-                    DateTime zi = Convert.ToDateTime(row["Ziua"]);
-                    for (int i = 0; i <= 60; i++)
-                    {
-                        //salvam In Out -urile
-                        if (i >= 1 && i <= 20)
+                        //daca sunt valorile temporare ValTmp
+                        if (numeCol.Length >= 5 && numeCol.Substring(0,6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
                         {
-                            if (upd.NewValues["In" + i] != null)
-                            {
-                                DateTime inOut = Convert.ToDateTime(upd.NewValues["In" + i]);
-                                //Florin 2018.08.29
-                                row["In" + i] = new DateTime(zi.Year, zi.Month, zi.Day, inOut.Hour, inOut.Minute, inOut.Second);
-                                try
-                                {
-                                    if (row["Out" + (i - 1)] != null && Convert.ToDateTime(row["Out" + (i - 1)]) > Convert.ToDateTime(row["In" + i]))
-                                        row["In" + i] = Convert.ToDateTime(row["In" + i]).AddDays(1);
-                                }
-                                catch (Exception){}
-                            }
-                            else
-                            {
-                                row["In" + i] = DBNull.Value;
-                            }
-
-
-                            if (upd.NewValues["Out" + i] != null)
-                            {
-                                DateTime inOut = Convert.ToDateTime(upd.NewValues["Out" + i]);
-                                //Florin 2018.08.29
-                                row["Out" + i] = new DateTime(zi.Year, zi.Month, zi.Day, inOut.Hour, inOut.Minute, inOut.Second);
-                                try
-                                {
-                                    if (row["In" + i] != null && Convert.ToDateTime(row["In" + i]) > Convert.ToDateTime(row["Out" + i]))
-                                        row["Out" + i] = Convert.ToDateTime(row["Out" + i]).AddDays(1);
-                                }
-                                catch (Exception){}
-                            }
-                            else
-                            {
-                                row["Out" + i] = DBNull.Value;
-                            }
+                            string i = numeCol.Replace("ValTmp", "");
+                            cmp += @", ""CuloareValoare""='" + Constante.CuloareModificatManual + "'";
+                            cmp += $@", ""ValModif{i}""=" + Constante.TipModificarePontaj.ModificatManual;
+                            cmp += $@", ""Val{i}""=" + Convert.ToDateTime(newValue).Minute + (Convert.ToDateTime(newValue).Hour * 60);
+                            continue;
                         }
 
-                        //salvam Val-urile
-                        if (i >= 0 && i <= 20)
+                        //daca sunt In-uri
+                        if (newValue != null && numeCol.Length >= 2 && numeCol.Substring(0,2).ToLower() == "in" && General.IsNumeric(numeCol.Replace("In", "")))
                         {
-                            if (upd.NewValues["ValTmp" + i] != null)
-                                row["Val" + i] = Convert.ToDateTime(upd.NewValues["ValTmp" + i]).Minute + (Convert.ToDateTime(upd.NewValues["ValTmp" + i]).Hour * 60);
-                            //else
-                            //    row["Val" + i] = DBNull.Value;
-
-                            //salvam ValModif -urile
-                            if (Convert.ToDateTime(General.Nz(upd.NewValues["ValTmp" + i], DateTime.Now)) != Convert.ToDateTime(General.Nz(upd.OldValues["ValTmp" + i], DateTime.Now))) row["ValModif" + i] = Constante.TipModificarePontaj.ModificatManual;
-
-                            //Radu 31.10.2017
-                            //Florin 2018.09.03 rescris codul de mai jos
-
-                            //var ert = upd.NewValues["ValTmp" + i];
-                            //var ert1 = upd.OldValues["ValTmp" + i];
-                            //if (ert != ert1 && ((ert != null && ert.ToString().Length > 0) || (ert1 != null && ert1.ToString().Length > 0)))
-                            //    row["CuloareValoare"] = Constante.CuloareModificatManual;
+                            int i = Convert.ToInt32(numeCol.ToLower().Replace("in", ""));
+                            DateTime inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
                             try
                             {
-                                var tmpNew = Convert.ToDateTime(General.Nz(upd.NewValues["ValTmp" + i], new DateTime(1900,1,1)));
-                                var tmpOld = Convert.ToDateTime(General.Nz(upd.OldValues["ValTmp" + i], new DateTime(1900, 1, 1)));
-                                if (tmpNew != tmpOld)
-                                    row["CuloareValoare"] = Constante.CuloareModificatManual;
+                                if (i > 1 && row["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(row["Out" + (i - 1)]) > inOut)
+                                    row[numeCol] = inOut.AddDays(1);
+                                else
+                                    row[numeCol] = inOut;
+
+                                cmp += $@", ""{numeCol}""=" + General.ToDataUniv(Convert.ToDateTime(row[numeCol]), true);
                             }
-                            catch (Exception){}
-                        }
-
-                        //salvam F-urile
-                        if (i > 0) row["F" + i] = upd.NewValues["F" + i] ?? DBNull.Value;
-                    }
-
-                    //adaugam istoricul modificarilor de val-uri
-                    DataRow drVal = dtVal.NewRow();
-                    drVal["F10003"] = row["F10003"];
-                    drVal["Ziua"] = row["Ziua"];
-                    drVal["ValStr"] = upd.NewValues["ValStr"];
-                    drVal["ValStrOld"] = upd.OldValues["ValStr"];
-                    drVal["IdUser"] = Session["UserId"];
-                    drVal["DataModif"] = DateTime.Now;
-                    drVal["USER_NO"] = Session["UserId"];
-                    drVal["TIME"] = DateTime.Now;
-                    drVal["Observatii"] = "Pontajul Meu";
-                    dtVal.Rows.Add(drVal);
-
-                    if (General.Nz(upd.NewValues["ValAbs"], "").ToString() != "")
-                    {
-                        lst.Add(new metaAbsTipZi { F10003 = Convert.ToInt32(row["F10003"]), Ziua = Convert.ToDateTime(row["Ziua"]) });
-
-                        //Florin 2019.08.26
-                        //daca este absenta de tip zi si parametrul PontajCCStergeDacaAbsentaDeTipZi este 1 atunci stergem informatia de pe centri de cost
-                        if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
-                            sqlCC += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(row["F10003"])} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(row["Ziua"]))};";
-                    }
-                }
-
-                if (dt.GetChanges() != null && ((DataTable)dt.GetChanges()).Rows.Count > 0)
-                {
-                    DataTable dtModif = ((DataTable)dt.GetChanges());
-
-                    General.SalveazaDate(dt, "Ptj_Intrari");
-                    General.SalveazaDate(dtVal, "Ptj_IstoricVal");
-
-                    //Florin 2019.08.26
-                    if (sqlCC != "")
-                    {
-                        try
-                        {
-                            General.ExecutaNonQuery("BEGIN " + sqlCC + " END;", null);
-
-                            DataTable dtCC = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
-
-                            Session["PtjCC"] = dtCC;
-                            grCC.KeyFieldName = "F10003;Ziua;F06204";
-                            dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
-                            grCC.DataSource = dtCC;
-                            grCC.DataBind();
-                        }
-                        catch (Exception) { }
-                    }
-
-
-                    for (int i = 0; i < dtModif.Rows.Count; i++)
-                    {
-                        if (Dami.ValoareParam("RecalculCuloare", "0") == "0")
-                        {
-                            //Florin 2018.05.15
-                            //daca este absenta de tip zi nu mai recalculam
-                            if (lst.Where(p => p.F10003 == Convert.ToInt32(dtModif.Rows[i]["F10003"]) && p.Ziua == Convert.ToDateTime(dtModif.Rows[i]["Ziua"])).Count() == 0)
+                            catch (Exception ex)
                             {
-                                string golesteVal = Dami.ValoareParam("GolesteVal");
-                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-
-                                //Florin 2019.05.02
-                                FunctiiCeasuri.Calcul.h5 = true;
-
-                                FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
-                                FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+                                string edc = ex.Message;
                             }
+
+                            continue;
                         }
+
+                        //daca sunt Out-uri
+                        if (newValue != null && numeCol.Length >= 3 && numeCol.Substring(0,3).ToLower() == "out" && General.IsNumeric(numeCol.Replace("Out", "")))
+                        {
+                            int i = Convert.ToInt32(numeCol.ToLower().Replace("out", ""));
+                            DateTime inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
+                            try
+                            {
+                                var ert = row["In" + i];
+                                if (row["In" + i] != DBNull.Value && Convert.ToDateTime(row["In" + i]) > inOut)
+                                    row[numeCol] = inOut.AddDays(1);
+                                else
+                                    row[numeCol] = inOut;
+
+                                cmp += $@", ""{numeCol}""=" + General.ToDataUniv(Convert.ToDateTime(row[numeCol]), true);
+                            }
+                            catch (Exception ex)
+                            {
+                                string edc = ex.Message;
+                            }
+                            continue;
+                        }
+
+                        //daca este valstr inseram in istoric
+                        if (numeCol.ToLower() == "valstr")
+                        {
+                            strSql += $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                            VALUES({f10003}, {General.ToDataUniv(ziua)}, '{newValue}', '{oldValue}', {Session["UserID"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()});" + Environment.NewLine;
+                        }
+
+                        //daca este ValAbs, stergem pontajul pe centrii de cost
+                        if (newValue != null && numeCol.ToLower() == "valabs")
+                        {
+                            absentaDeTipZi = true;
+                            if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
+                                    strSql += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
+                        }
+
+                        //daca sunt restul campurilor
+                        if (newValue == null)
+                            cmp += $@", ""{numeCol}""={newValue}";
                         else
                         {
-                            if (dtModif.Rows[i]["CuloareValoare"].ToString() != "#e6c8fa" /*|| ctr*/)
+                            switch (row.Table.Columns[numeCol].DataType.ToString())
                             {
-                                //Florin 2018.05.15
-                                //daca este absenta de tip zi nu mai recalculam
-                                if (lst.Where(p => p.F10003 == Convert.ToInt32(dtModif.Rows[i]["F10003"]) && p.Ziua == Convert.ToDateTime(dtModif.Rows[i]["Ziua"])).Count() == 0)
-                                {
-                                    string golesteVal = Dami.ValoareParam("GolesteVal");
-                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-
-                                    //Florin 2019.05.02
-                                    FunctiiCeasuri.Calcul.h5 = true;
-
-                                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
-                                    FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
-                                }
+                                case "System.String":
+                                    cmp += $@", ""{numeCol}""='{newValue}'";
+                                    break;
+                                case "System.DateTime":
+                                    cmp += $@", ""{numeCol}""={General.ToDataUniv(newValue)}";
+                                    break;
+                                default:
+                                    cmp += $@", ""{numeCol}""={newValue}";
+                                    break;
                             }
                         }
                     }
-
-                    for (int i = 0; i < dtModif.Rows.Count; i++)
-                    {
-                        if (dtModif.Rows[i]["CuloareValoare"].ToString() != Constante.CuloareModificatManual)
-                        {
-                            for (int j = 0; j < dt.Rows.Count; j++)
-                                if (dt.Rows[j]["F10003"].ToString() == dtModif.Rows[i]["F10003"].ToString() && dt.Rows[j]["Ziua"].ToString() == dtModif.Rows[i]["Ziua"].ToString())
-                                {
-                                    dt.Rows[j]["ValStr"] = dtModif.Rows[i]["ValStr"];
-                                    break;
-                                }
-                            for (int k = 0; k < dt.Rows.Count; k++)
-                                if (dtVal.Rows[k]["F10003"].ToString() == dtModif.Rows[i]["F10003"].ToString() && dtVal.Rows[k]["Ziua"].ToString() == dtModif.Rows[i]["Ziua"].ToString())
-                                {
-                                    dtVal.Rows[k]["ValStr"] = dtModif.Rows[i]["ValStr"];
-                                    break;
-                                }
-                        }
-                    }
-
-                    //Session["InformatiaCurenta"] = dt;
-                    //grDate.DataSource = dt;
-                    //grDate.DataBind();
-
-                    //Florin 2019.05.03
-                    //nu mai este nevoie deoarece se face in ProceseCeasuri
-                    //ExecCalcul(ids);
-
-                    IncarcaGrid();
-
-                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
                 }
-                else
-                    MessageBox.Show("Nu exista modificari", MessageBox.icoInfo);
 
+                if (cmp != "")
+                    strSql += $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
+
+                if (strSql != "")
+                    General.ExecutaNonQuery(
+                        "BEGIN " + Environment.NewLine +
+                        strSql + Environment.NewLine +
+                        "END;", null);
+
+                if (Dami.ValoareParam("RecalculCuloare", "0") == "0" || row["CuloareValoare"].ToString() != "#e6c8fa")
+                {
+                    //Florin 2018.05.15
+                    //daca este absenta de tip zi nu mai recalculam
+                    if (absentaDeTipZi)
+                    {
+                        string golesteVal = Dami.ValoareParam("GolesteVal");
+                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+
+                        //Florin 2019.05.02
+                        FunctiiCeasuri.Calcul.h5 = true;
+
+                        FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
+                        FunctiiCeasuri.Calcul.CalculInOut(row, true, true);
+                    }
+                }
+
+                IncarcaGrid();
+
+                MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -1759,6 +1665,270 @@ namespace WizOne.Pontaj
         }
 
 
+
+        //OLD2
+        //protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        //{
+        //    try
+        //    {
+        //        grDate.CancelEdit();
+
+        //        string ids = "";
+        //        bool ctr = false;
+        //        string sqlCC = "";
+
+        //        List<metaAbsTipZi> lst = new List<metaAbsTipZi>();
+
+        //        DataTable dt = Session["InformatiaCurenta"] as DataTable;
+        //        DataTable dtVal = Session["Ptj_IstoricVal"] as DataTable;
+
+        //        for (int x = 0; x < e.UpdateValues.Count; x++)
+        //        {
+        //            ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
+        //            object[] keys = new object[] { upd.Keys[0] };
+
+        //            DataRow row = dt.Rows.Find(keys);
+        //            if (row == null) continue;
+
+        //            if (upd.OldValues["ValStr"] != upd.NewValues["ValStr"])
+        //            {
+        //                if (tip == 1 || tip == 10)
+        //                    ids = (cmbAng.Value ?? -99) + ";";
+        //                else
+        //                    ids += row["F10003"] + ";";
+        //            }
+
+        //            row["ValStr"] = upd.NewValues["ValStr"] ?? DBNull.Value;
+        //            row["USER_NO"] = Session["UserId"];
+        //            row["TIME"] = DateTime.Now;
+
+        //            if (upd.NewValues["Observatii"] != null) row["Observatii"] = upd.NewValues["Observatii"];
+        //            if (upd.NewValues["Observatii2"] != null) row["Observatii2"] = upd.NewValues["Observatii2"];
+        //            if (upd.NewValues["F06204Default"] != null) row["F06204Default"] = upd.NewValues["F06204Default"];
+
+        //            if (upd.NewValues["IdContract"] != null) row["IdContract"] = upd.NewValues["IdContract"];
+
+        //            row["IdProgram"] = upd.NewValues["IdProgram"] ?? DBNull.Value;
+
+        //            //Florin 2019.10.04
+        //            if (upd.NewValues["ModifProgram"] != null) row["ModifProgram"] = upd.NewValues["ModifProgram"];
+
+        //            if (upd.NewValues["Norma"] != null) row["Norma"] = upd.NewValues["Norma"];
+
+
+        //            DateTime zi = Convert.ToDateTime(row["Ziua"]);
+        //            for (int i = 0; i <= 60; i++)
+        //            {
+        //                //salvam In Out -urile
+        //                if (i >= 1 && i <= 20)
+        //                {
+        //                    if (upd.NewValues["In" + i] != null)
+        //                    {
+        //                        DateTime inOut = Convert.ToDateTime(upd.NewValues["In" + i]);
+        //                        //Florin 2018.08.29
+        //                        row["In" + i] = new DateTime(zi.Year, zi.Month, zi.Day, inOut.Hour, inOut.Minute, inOut.Second);
+        //                        try
+        //                        {
+        //                            if (row["Out" + (i - 1)] != null && Convert.ToDateTime(row["Out" + (i - 1)]) > Convert.ToDateTime(row["In" + i]))
+        //                                row["In" + i] = Convert.ToDateTime(row["In" + i]).AddDays(1);
+        //                        }
+        //                        catch (Exception){}
+        //                    }
+        //                    else
+        //                    {
+        //                        row["In" + i] = DBNull.Value;
+        //                    }
+
+
+        //                    if (upd.NewValues["Out" + i] != null)
+        //                    {
+        //                        DateTime inOut = Convert.ToDateTime(upd.NewValues["Out" + i]);
+        //                        //Florin 2018.08.29
+        //                        row["Out" + i] = new DateTime(zi.Year, zi.Month, zi.Day, inOut.Hour, inOut.Minute, inOut.Second);
+        //                        try
+        //                        {
+        //                            if (row["In" + i] != null && Convert.ToDateTime(row["In" + i]) > Convert.ToDateTime(row["Out" + i]))
+        //                                row["Out" + i] = Convert.ToDateTime(row["Out" + i]).AddDays(1);
+        //                        }
+        //                        catch (Exception){}
+        //                    }
+        //                    else
+        //                    {
+        //                        row["Out" + i] = DBNull.Value;
+        //                    }
+        //                }
+
+        //                //salvam Val-urile
+        //                if (i >= 0 && i <= 20)
+        //                {
+        //                    if (upd.NewValues["ValTmp" + i] != null)
+        //                        row["Val" + i] = Convert.ToDateTime(upd.NewValues["ValTmp" + i]).Minute + (Convert.ToDateTime(upd.NewValues["ValTmp" + i]).Hour * 60);
+        //                    //else
+        //                    //    row["Val" + i] = DBNull.Value;
+
+        //                    //salvam ValModif -urile
+        //                    if (Convert.ToDateTime(General.Nz(upd.NewValues["ValTmp" + i], DateTime.Now)) != Convert.ToDateTime(General.Nz(upd.OldValues["ValTmp" + i], DateTime.Now))) row["ValModif" + i] = Constante.TipModificarePontaj.ModificatManual;
+
+        //                    //Radu 31.10.2017
+        //                    //Florin 2018.09.03 rescris codul de mai jos
+
+        //                    //var ert = upd.NewValues["ValTmp" + i];
+        //                    //var ert1 = upd.OldValues["ValTmp" + i];
+        //                    //if (ert != ert1 && ((ert != null && ert.ToString().Length > 0) || (ert1 != null && ert1.ToString().Length > 0)))
+        //                    //    row["CuloareValoare"] = Constante.CuloareModificatManual;
+        //                    try
+        //                    {
+        //                        var tmpNew = Convert.ToDateTime(General.Nz(upd.NewValues["ValTmp" + i], new DateTime(1900,1,1)));
+        //                        var tmpOld = Convert.ToDateTime(General.Nz(upd.OldValues["ValTmp" + i], new DateTime(1900, 1, 1)));
+        //                        if (tmpNew != tmpOld)
+        //                            row["CuloareValoare"] = Constante.CuloareModificatManual;
+        //                    }
+        //                    catch (Exception){}
+        //                }
+
+        //                //salvam F-urile
+        //                if (i > 0) row["F" + i] = upd.NewValues["F" + i] ?? DBNull.Value;
+        //            }
+
+        //            //adaugam istoricul modificarilor de val-uri
+        //            DataRow drVal = dtVal.NewRow();
+        //            drVal["F10003"] = row["F10003"];
+        //            drVal["Ziua"] = row["Ziua"];
+        //            drVal["ValStr"] = upd.NewValues["ValStr"];
+        //            drVal["ValStrOld"] = upd.OldValues["ValStr"];
+        //            drVal["IdUser"] = Session["UserId"];
+        //            drVal["DataModif"] = DateTime.Now;
+        //            drVal["USER_NO"] = Session["UserId"];
+        //            drVal["TIME"] = DateTime.Now;
+        //            drVal["Observatii"] = "Pontajul Meu";
+        //            dtVal.Rows.Add(drVal);
+
+        //            if (General.Nz(upd.NewValues["ValAbs"], "").ToString() != "")
+        //            {
+        //                lst.Add(new metaAbsTipZi { F10003 = Convert.ToInt32(row["F10003"]), Ziua = Convert.ToDateTime(row["Ziua"]) });
+
+        //                //Florin 2019.08.26
+        //                //daca este absenta de tip zi si parametrul PontajCCStergeDacaAbsentaDeTipZi este 1 atunci stergem informatia de pe centri de cost
+        //                if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
+        //                    sqlCC += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(row["F10003"])} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(row["Ziua"]))};";
+        //            }
+        //        }
+
+        //        if (dt.GetChanges() != null && ((DataTable)dt.GetChanges()).Rows.Count > 0)
+        //        {
+        //            DataTable dtModif = ((DataTable)dt.GetChanges());
+
+        //            General.SalveazaDate(dt, "Ptj_Intrari");
+        //            General.SalveazaDate(dtVal, "Ptj_IstoricVal");
+
+        //            //Florin 2019.08.26
+        //            if (sqlCC != "")
+        //            {
+        //                try
+        //                {
+        //                    General.ExecutaNonQuery("BEGIN " + sqlCC + " END;", null);
+
+        //                    DataTable dtCC = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
+
+        //                    Session["PtjCC"] = dtCC;
+        //                    grCC.KeyFieldName = "F10003;Ziua;F06204";
+        //                    dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+        //                    grCC.DataSource = dtCC;
+        //                    grCC.DataBind();
+        //                }
+        //                catch (Exception) { }
+        //            }
+
+
+        //            for (int i = 0; i < dtModif.Rows.Count; i++)
+        //            {
+        //                if (Dami.ValoareParam("RecalculCuloare", "0") == "0")
+        //                {
+        //                    //Florin 2018.05.15
+        //                    //daca este absenta de tip zi nu mai recalculam
+        //                    if (lst.Where(p => p.F10003 == Convert.ToInt32(dtModif.Rows[i]["F10003"]) && p.Ziua == Convert.ToDateTime(dtModif.Rows[i]["Ziua"])).Count() == 0)
+        //                    {
+        //                        string golesteVal = Dami.ValoareParam("GolesteVal");
+        //                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+        //                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+        //                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+
+        //                        //Florin 2019.05.02
+        //                        FunctiiCeasuri.Calcul.h5 = true;
+
+        //                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
+        //                        FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    if (dtModif.Rows[i]["CuloareValoare"].ToString() != "#e6c8fa" /*|| ctr*/)
+        //                    {
+        //                        //Florin 2018.05.15
+        //                        //daca este absenta de tip zi nu mai recalculam
+        //                        if (lst.Where(p => p.F10003 == Convert.ToInt32(dtModif.Rows[i]["F10003"]) && p.Ziua == Convert.ToDateTime(dtModif.Rows[i]["Ziua"])).Count() == 0)
+        //                        {
+        //                            string golesteVal = Dami.ValoareParam("GolesteVal");
+        //                            FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+        //                            FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+        //                            FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+
+        //                            //Florin 2019.05.02
+        //                            FunctiiCeasuri.Calcul.h5 = true;
+
+        //                            FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtModif.Rows[i]["Ziua"]));
+        //                            FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+        //                        }
+        //                    }
+        //                }
+        //            }
+
+        //            for (int i = 0; i < dtModif.Rows.Count; i++)
+        //            {
+        //                if (dtModif.Rows[i]["CuloareValoare"].ToString() != Constante.CuloareModificatManual)
+        //                {
+        //                    for (int j = 0; j < dt.Rows.Count; j++)
+        //                        if (dt.Rows[j]["F10003"].ToString() == dtModif.Rows[i]["F10003"].ToString() && dt.Rows[j]["Ziua"].ToString() == dtModif.Rows[i]["Ziua"].ToString())
+        //                        {
+        //                            dt.Rows[j]["ValStr"] = dtModif.Rows[i]["ValStr"];
+        //                            break;
+        //                        }
+        //                    for (int k = 0; k < dt.Rows.Count; k++)
+        //                        if (dtVal.Rows[k]["F10003"].ToString() == dtModif.Rows[i]["F10003"].ToString() && dtVal.Rows[k]["Ziua"].ToString() == dtModif.Rows[i]["Ziua"].ToString())
+        //                        {
+        //                            dtVal.Rows[k]["ValStr"] = dtModif.Rows[i]["ValStr"];
+        //                            break;
+        //                        }
+        //                }
+        //            }
+
+        //            //Session["InformatiaCurenta"] = dt;
+        //            //grDate.DataSource = dt;
+        //            //grDate.DataBind();
+
+        //            //Florin 2019.05.03
+        //            //nu mai este nevoie deoarece se face in ProceseCeasuri
+        //            //ExecCalcul(ids);
+
+        //            IncarcaGrid();
+
+        //            MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+        //        }
+        //        else
+        //            MessageBox.Show("Nu exista modificari", MessageBox.icoInfo);
+
+        //        e.Handled = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+
+
+        //OLD 1
         //protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
         //{
         //    try

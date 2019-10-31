@@ -213,7 +213,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <table width="100%">
+    <table width="100%">       
         <tr>
             <td align="left">
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
@@ -398,7 +398,7 @@
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" AutoFilterCondition="Contains" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" />
-                    <ClientSideEvents ContextMenu="ctx" RowDblClick="function(s, e) { OnClickDetaliat(s, e); }" Init="OnInit" EndCallback="OnEndCallback" />
+                    <ClientSideEvents ContextMenu="ctx" RowDblClick="function(s, e) { OnClickDetaliat(s, e); }" Init="OnInit" EndCallback="OnEndCallback" />                    
                     <Columns>
                         
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" FixedStyle="Left" SelectAllCheckboxMode="AllPages" />

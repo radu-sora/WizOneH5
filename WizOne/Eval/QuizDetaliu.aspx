@@ -1,8 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="QuizDetaliu.aspx.cs" Inherits="WizOne.Eval.QuizDetaliu" %>
 
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">    
 
 
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <table width="100%">
         <tr>
             <td align="left" />
@@ -22,17 +22,20 @@
     </table>
 
     <div>
-        <dx:ASPxPageControl SkinID="None" Width="100%" EnableViewState="false" ID="ASPxPageControl2"
-            runat="server" ActiveTabIndex="0" TabSpacing="0px" CssClass="pcTemplates" EnableHierarchyRecreation="true">
-            <TabPages>
 
-            </TabPages>
 
-            <Paddings Padding="0px" PaddingLeft="12px" />
-            <ContentStyle Font-Names="Tahoma" Font-Overline="False" Font-Size="11px">
-                <Paddings Padding="0px" />
-                <Border BorderColor="#6DA0E7" BorderStyle="Solid" BorderWidth="1px" />
-            </ContentStyle>
-        </dx:ASPxPageControl>
+    <dx:ASPxPageControl SkinID="None" Width="100%"  EnableViewState="false" ID="ASPxPageControl2"
+        runat="server" ActiveTabIndex="0" TabSpacing="0px" CssClass="pcTemplates" EnableHierarchyRecreation="true">
+        <TabPages>
+
+        </TabPages>
+
+        <Paddings Padding="30px" PaddingLeft="12px" />
+        <ContentStyle Font-Names="Tahoma" Font-Overline="False" Font-Size="11px">
+            <Paddings Padding="30px" />
+            <Border BorderColor="#6DA0E7" BorderStyle="Solid" BorderWidth="1px" />
+        </ContentStyle>
+    </dx:ASPxPageControl>
+   
     </div>
 </asp:Content>

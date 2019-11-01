@@ -324,13 +324,21 @@ namespace WizOne.Eval
 
                     if (lstObiIndividuale != null && lstObiIndividuale.Count != 0)
                     {
-                        string sqlDeleteObiIndividuale = @"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdAuto"" = @19;";
-                        string sqlInsertObiIndividuale = $@"insert into ""Eval_ObiIndividualeTemp""
-                                (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", 
-                                ""Pondere"", ""Descriere"", ""Target"", ""Realizat"", ""IdCalificativ"",
-                                ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", ""F10003"", ""Pozitie"",
-                                ""Id"", ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", ""IdUnic"", USER_NO, TIME, ""IdPeriod"")
-                                values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@20,@21,@idUnic,@22,@23,@24);";
+                        string sqlDeleteObiIndividuale = @"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdAuto"" = @1;";
+                        string sqlInsertObiIndividuale = 
+                            $@"INSERT INTO ""Eval_ObiIndividualeTemp""
+                            (""IdUnic"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", 
+                            ""Pondere"", ""Descriere"", ""Target"", ""Realizat"", ""IdCalificativ"",
+                            ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", ""F10003"", ""Pozitie"",
+                            ""Id"", ""IdLinieQuiz"", 
+                            ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"", 
+                            USER_NO, TIME, ""IdPeriod"")
+                            VALUES(@idUnic,@2,@3,@4,@5,
+                            @6,@7,@8,@9,@10,
+                            @11,@12,@13,@14,@15,
+                            @16,@17,
+                            @18,@19,@20,@21,
+                            @22,@23,@24);";
 
                         string tgv = "";
 
@@ -348,10 +356,13 @@ namespace WizOne.Eval
                                 
                                 sqlObi = sqlObi.Replace("@idUnic", clsObiIndividuale.IdUnic <= 0 ? "NEXT VALUE FOR ObiIndividuale_SEQ" : clsObiIndividuale.IdUnic.ToString());
                                 tgv += sqlObi + Environment.NewLine;
-                                General.ExecutaNonQuery(sqlObi, new object[] { clsObiIndividuale.IdObiectiv, clsObiIndividuale.Obiectiv, clsObiIndividuale.IdActivitate, General.Nz(clsObiIndividuale.Activitate, "").ToString().Replace(",", "."),
-                                                                            General.Nz(clsObiIndividuale.Pondere, "0").ToString().Replace(",", "."), clsObiIndividuale.Descriere, General.Nz(clsObiIndividuale.Target, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.Realizat, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.IdCalificativ, "0").ToString().Replace(",", "."),
-                                                                            clsObiIndividuale.Calificativ, clsObiIndividuale.ExplicatiiCalificativ, clsObiIndividuale.IdQuiz, clsObiIndividuale.F10003, clsObiIndividuale.Pozitie,
-                                                                            clsObiIndividuale.Id, clsObiIndividuale.IdLinieQuiz, clsObiIndividuale.ColoanaSuplimentara1, clsObiIndividuale.ColoanaSuplimentara2, clsObiIndividuale.ColoanaSuplimentara3, clsObiIndividuale.ColoanaSuplimentara4, clsObiIndividuale.IdAuto, General.Nz(clsObiIndividuale.USER_NO, Session["UserId"]), General.Nz(clsObiIndividuale.TIME, DateTime.Now), clsObiIndividuale.IdPeriod });
+                                General.ExecutaNonQuery(sqlObi, new object[] {
+                                    clsObiIndividuale.IdAuto, clsObiIndividuale.IdObiectiv, clsObiIndividuale.Obiectiv, clsObiIndividuale.IdActivitate, General.Nz(clsObiIndividuale.Activitate, "").ToString().Replace(",", "."),
+                                    General.Nz(clsObiIndividuale.Pondere, "0").ToString().Replace(",", "."), clsObiIndividuale.Descriere, General.Nz(clsObiIndividuale.Target, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.Realizat, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.IdCalificativ, "0").ToString().Replace(",", "."),
+                                    clsObiIndividuale.Calificativ, clsObiIndividuale.ExplicatiiCalificativ, clsObiIndividuale.IdQuiz, clsObiIndividuale.F10003, clsObiIndividuale.Pozitie,
+                                    clsObiIndividuale.Id, clsObiIndividuale.IdLinieQuiz,
+                                    clsObiIndividuale.ColoanaSuplimentara1, clsObiIndividuale.ColoanaSuplimentara2, clsObiIndividuale.ColoanaSuplimentara3, clsObiIndividuale.ColoanaSuplimentara4,
+                                    General.Nz(clsObiIndividuale.USER_NO, Session["UserId"]), General.Nz(clsObiIndividuale.TIME, DateTime.Now), clsObiIndividuale.IdPeriod });
                             }
                             catch (Exception ex)
                             {

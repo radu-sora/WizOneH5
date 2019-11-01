@@ -138,8 +138,9 @@ namespace WizOne.Pagini
                 lstBadges.Add(new metaBadge { StringSelect = Dami.SelectPontaj(), Pagina = "../Pontaj/PontajEchipa.aspx", Eticheta = Dami.TraduCuvant("Pontaj Echipa"), RutaImg = "bdgPtj.jpg" });
                 //cereri
                 lstBadges.Add(new metaBadge { StringSelect = Dami.SelectCereri() + $@" AND A.""Actiune"" = 1 AND A.""IdStare"" IN (1,2) " + strFiltru, Pagina = "../Absente/Lista.aspx", Eticheta = Dami.TraduCuvant("Cereri"), RutaImg = "bdgCer.jpg" });
-                //evaluare - filtrare questionare nefinalizate si care nu sunt 360 sau proiect
-                lstBadges.Add(new metaBadge { StringSelect = Dami.SelectEvaluare(), Pagina = "../Eval/EvalLista.aspx?q=12", Eticheta = Dami.TraduCuvant("Evaluari"), RutaImg = "bdgEvl.jpg" });
+                //Florin 2019.11.01
+                //evaluare - filtrare chestionare nefinalizate si care nu sunt 360 sau proiect
+                lstBadges.Add(new metaBadge { StringSelect = "SELECT * FROM (" + Dami.SelectEvaluare() + ") X WHERE Stare NOT LIKE '%finalizat%' AND CategorieQuiz = 0", Pagina = "../Eval/EvalLista.aspx?q=12", Eticheta = Dami.TraduCuvant("Evaluari"), RutaImg = "bdgEvl.jpg" });
                 //pontaj pe zi
                 lstBadges.Add(new metaBadge { StringSelect = Dami.SelectPontaj(), Pagina = "../Pontaj/PontajDetaliat.aspx?tip=2", Eticheta = Dami.TraduCuvant("Pontaj pe zi"), RutaImg = "bdgPtj.jpg" });
                 //pontaj pe angajat

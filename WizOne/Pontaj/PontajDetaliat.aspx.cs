@@ -1517,6 +1517,7 @@ namespace WizOne.Pontaj
                 DataRow row = dt.Rows.Find(keys);
                 if (row == null) return;
 
+                bool adaugat = false;
                 bool absentaDeTipZi = false;
                 int f10003 = Convert.ToInt32(row["F10003"]);
                 DateTime ziua = Convert.ToDateTime(row["Ziua"]);
@@ -1538,9 +1539,13 @@ namespace WizOne.Pontaj
                         if (numeCol.Length >= 5 && numeCol.Substring(0,6).ToLower() == "valtmp" && General.IsNumeric(numeCol.Replace("ValTmp", "")))
                         {
                             string i = numeCol.Replace("ValTmp", "");
-                            cmp += @", ""CuloareValoare""='" + Constante.CuloareModificatManual + "'";
-                            cmp += $@", ""ValModif{i}""=" + Constante.TipModificarePontaj.ModificatManual;
-                            cmp += $@", ""Val{i}""=" + Convert.ToDateTime(newValue).Minute + (Convert.ToDateTime(newValue).Hour * 60);
+                            if (!adaugat)
+                            {
+                                cmp += @", ""CuloareValoare""='" + Constante.CuloareModificatManual + "'";
+                                adaugat = true;
+                            }
+                            cmp += $@", ""ValModif{i}""=" + (int)Constante.TipModificarePontaj.ModificatManual;
+                            cmp += $@", ""Val{i}""=" + (Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60))).ToString();
                             continue;
                         }
 
@@ -1601,6 +1606,7 @@ namespace WizOne.Pontaj
                             absentaDeTipZi = true;
                             if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                                     strSql += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
+                            continue;
                         }
 
                         //daca sunt restul campurilor

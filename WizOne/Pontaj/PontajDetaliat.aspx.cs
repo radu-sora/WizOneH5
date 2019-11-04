@@ -3825,7 +3825,8 @@ namespace WizOne.Pontaj
                     {
                         var ert = dt.Compute("Sum(NrOre1)", string.Empty);
                         int total = Convert.ToInt32(General.Nz(dt.Compute("Sum(NrOre1)", string.Empty), 0));
-                        if (total > (Convert.ToInt32(General.Nz(dtInt.Rows[0]["Norma"], 8)) * 60))
+                        //Florin 2019.11.04 - am adaugat parametrul PontajCCVerificareDepasireNorma
+                        if (General.Nz(Dami.ValoareParam("PontajCCVerificareDepasireNorma"), 0).ToString() == "1" && total > (Convert.ToInt32(General.Nz(dtInt.Rows[0]["Norma"], 8)) * 60))
                         {
                             grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Suma orelor depaseste norma");
                             faraErori = false;

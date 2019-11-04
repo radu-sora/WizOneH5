@@ -65,6 +65,18 @@ namespace WizOne.Personal
                 cmbCC.DataSource = dtCC;
                 cmbCC.DataBind();
 
+                if (!IsPostBack)
+                {//Radu 01.11.2019                   
+                    string centreCost = "";
+                    for (int i = 0; i < dtCC.Rows.Count; i++)
+                    {
+                        centreCost += dtCC.Rows[i]["F06204"].ToString() + "," + dtCC.Rows[i]["F06205"].ToString();
+                        if (i < dtCC.Rows.Count - 1)
+                            centreCost += ";";
+                    }
+                    Session["MP_ComboCC"] = centreCost;
+                }
+
                 sql = @"SELECT * FROM F080 WHERE F08020 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F08021";
                 if (Constante.tipBD == 2)
                     sql = General.SelectOracle("F080", "F08002") + " WHERE F08020 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F08021 ";

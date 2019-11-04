@@ -8,8 +8,25 @@
     function OnValueChangedHandlerStruct(s) {
         if (s.name != "cmbStructOrg")
             pnlCtlStruct.PerformCallback(s.name + ";" + s.GetValue());
-        else
+        else {
             pnlCtlStruct.PerformCallback(s.name);
+            debugger;
+            var item = cmbCC.GetSelectedItem();
+
+            cmbCC.ClearItems();
+            var tipCC = "<%=Session["MP_ComboCC"] %>";
+            var resCC = tipCC.split(";");
+            for (var i = 0; i < resCC.length; i++) {
+                if (item.GetColumnText("CC") == "9999")
+                    cmbCC.AddItem(linieN[1], Number(linieN[0]));
+                else {
+                    var linieCC = resCC[i].split(",");
+                    if (linieCC[0] == Number(item.GetColumnText("CC")) {
+                        cmbCC.AddItem(linieN[1], Number(linieN[0]));
+                    }
+                }       
+            }
+        }
     }
     function OnClickStr(s) {
         pnlLoading.Show();

@@ -24,6 +24,8 @@
                         DateTo.setDate(DateTo.getDate() + 1);
                         deDataPlecarii.SetDate(DateTo);
                     }
+
+                    CalcGrila(txtGrila.GetValue());
                 }
                 break;
             case "deDataPlecarii":

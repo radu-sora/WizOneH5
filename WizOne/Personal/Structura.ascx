@@ -5,27 +5,26 @@
 <script type="text/javascript">
 
 
-    function OnValueChangedHandlerStruct(s) {
-        if (s.name != "cmbStructOrg")
+    function OnValueChangedHandlerStruct(s) {    
+        if (s.name != "cmbStru")
             pnlCtlStruct.PerformCallback(s.name + ";" + s.GetValue());
-        else {
-            pnlCtlStruct.PerformCallback(s.name);
-            debugger;
-            var item = cmbCC.GetSelectedItem();
-
+        else {                     
+            var item = cmbStru.GetSelectedItem();        
+            hfCC.Set('CC', item.GetColumnText("CC"));
             cmbCC.ClearItems();
             var tipCC = "<%=Session["MP_ComboCC"] %>";
             var resCC = tipCC.split(";");
             for (var i = 0; i < resCC.length; i++) {
+                var linieCC = resCC[i].split(",");
                 if (item.GetColumnText("CC") == "9999")
-                    cmbCC.AddItem(linieN[1], Number(linieN[0]));
-                else {
-                    var linieCC = resCC[i].split(",");
-                    if (linieCC[0] == Number(item.GetColumnText("CC")) {
-                        cmbCC.AddItem(linieN[1], Number(linieN[0]));
-                    }
-                }       
+                    cmbCC.AddItem(linieCC[1], Number(linieCC[0]));
+                else {                    
+                    if (linieCC[0] == Number(item.GetColumnText("CC"))) 
+                        cmbCC.AddItem(linieCC[1], Number(linieCC[0]));
+                }
             }
+            pnlCtlStruct.PerformCallback(s.name);   
+
         }
     }
     function OnClickStr(s) {
@@ -67,7 +66,7 @@
                             <dx:ListBoxColumn FieldName="F00708" Caption="IdSubdepartament" Width="130px" Visible="false"/>
                             <dx:ListBoxColumn FieldName="F00810" Caption="Birou" Width="130px" />
                             <dx:ListBoxColumn FieldName="F00809" Caption="IdBirou" Width="130px" Visible="false"/>
-                            <dx:ListBoxColumn FieldName="CC" Caption="Centru cost" Width="130px" Visible="false"/>
+                            <dx:ListBoxColumn FieldName="CC" Caption="Centru cost" Width="130px"/>
                             <dx:ListBoxColumn FieldName="IdAuto" Caption="NrCrt" Width="130px" Visible="false"/>
                         </Columns>
                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerStruct(s); }" />
@@ -207,3 +206,4 @@
         </PanelCollection>
     </dx:ASPxCallbackPanel>	
 
+  <dx:ASPxHiddenField runat="server" ID="hfCC" ClientInstanceName="hfCC" />

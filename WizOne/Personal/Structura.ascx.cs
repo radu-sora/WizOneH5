@@ -58,15 +58,20 @@ namespace WizOne.Personal
                 cmbStru.DataBind();
 
                 string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
-                string sql = @"SELECT * FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F06209";
-                if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F062", "F06204") + " WHERE F06208 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F06209 ";
-                DataTable dtCC = General.IncarcaDT(sql, null);
-                cmbCC.DataSource = dtCC;
-                cmbCC.DataBind();
-
+                string sql = "";         
                 if (!IsPostBack)
-                {//Radu 01.11.2019                   
+                {//Radu 01.11.2019 
+                    DataRow[] drCC = dtSrc.Select("F00607=" + table.Rows[0]["F10007"].ToString());
+                    int cc = (drCC != null && drCC.Count() > 0 && drCC[0]["CC"] != null && drCC[0]["CC"].ToString().Length > 0 ? Convert.ToInt32(drCC[0]["CC"].ToString()) : 9999);
+                    sql = @"SELECT * FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F06209 " +
+                        (cc != 9999 ? " AND F06204 = " + cc  : "" );
+                    if (Constante.tipBD == 2)
+                        sql = General.SelectOracle("F062", "F06204") + " WHERE F06208 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F06209 " +
+                            (cc != 9999 ? " AND F06204 = " + cc : ""); ;
+                    DataTable dtCC = General.IncarcaDT(sql, null);
+                    cmbCC.DataSource = dtCC;
+                    cmbCC.DataBind();
+
                     string centreCost = "";
                     for (int i = 0; i < dtCC.Rows.Count; i++)
                     {
@@ -75,6 +80,21 @@ namespace WizOne.Personal
                             centreCost += ";";
                     }
                     Session["MP_ComboCC"] = centreCost;
+                }
+                else
+                {
+                    int dep = Convert.ToInt32(ds.Tables[0].Rows[0]["F10007"].ToString());                    
+                    DataRow[] drCC = dtSrc.Select("F00607=" + dep);
+                    int cc = (drCC != null && drCC.Count() > 0 && drCC[0]["CC"] != null && drCC[0]["CC"].ToString().Length > 0 ? Convert.ToInt32(drCC[0]["CC"].ToString()) : 9999);
+                    if (hfCC.Contains("CC")) cc = Convert.ToInt32(General.Nz(hfCC["CC"], 9999));
+                    sql = @"SELECT * FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F06209 " +
+                        (cc != 9999 ? " AND F06204 = " + cc : "");
+                    if (Constante.tipBD == 2)
+                        sql = General.SelectOracle("F062", "F06204") + " WHERE F06208 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F06209 " +
+                            (cc != 9999 ? " AND F06204 = " + cc : ""); ;
+                    DataTable dtCC = General.IncarcaDT(sql, null);
+                    cmbCC.DataSource = dtCC;
+                    cmbCC.DataBind();
                 }
 
                 sql = @"SELECT * FROM F080 WHERE F08020 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F08021";
@@ -345,3 +365,10 @@ namespace WizOne.Personal
 
     }
 }
+
+
+
+
+
+
+

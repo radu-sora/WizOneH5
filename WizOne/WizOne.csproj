@@ -789,6 +789,7 @@
     <Content Include="Organigrama\Posturi.aspx" />
     <Content Include="Organigrama\PosturiValidare.aspx" />
     <Content Include="Pagini\ActeAditionale.aspx" />
+    <Content Include="Pagini\ActualizareDate.aspx" />
     <Content Include="Pagini\Captcha.aspx" />
     <Content Include="Pagini\CodConfirmare.aspx" />
     <Content Include="Pagini\Delegari.aspx" />
@@ -1547,6 +1548,13 @@
     </Compile>
     <Compile Include="Pagini\ActeAditionale.aspx.designer.cs">
       <DependentUpon>ActeAditionale.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\ActualizareDate.aspx.cs">
+      <DependentUpon>ActualizareDate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\ActualizareDate.aspx.designer.cs">
+      <DependentUpon>ActualizareDate.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pagini\Captcha.aspx.cs">
       <DependentUpon>Captcha.aspx</DependentUpon>

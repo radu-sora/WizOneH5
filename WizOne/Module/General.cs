@@ -6679,7 +6679,9 @@ namespace WizOne.Module
                     strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MM-RRRR'))>=0";
                     if (zi > 0 && zi <= 31)
                     {
-                        string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
+                        //Florin 2019.11.07
+                        //string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
+                        string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, '0') + "-" + an.ToString().Substring(2);
                         strSql = " AND TRUNC(to_date('" + dt + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MM-RRRR'))>=0";
                     }
 

@@ -38,12 +38,16 @@ namespace WizOne.Reports
                     if (tip == 1 || tip == 10)
                     {
                         filtru = " AND A.F10003 IN (@1) AND YEAR(A.Ziua)=@2 AND MONTH(A.Ziua)=@3";
-                        if (Constante.tipBD == 2) strSql = @" AND F10003=@1 AND to_char(""Ziua"",'MM/yyyy') = '@2/@3' ";
+                        //Florin 2019.11.07
+                        //if (Constante.tipBD == 2) strSql = @" AND F10003=@1 AND to_char(""Ziua"",'MM/yyyy') = '@2/@3' ";
+                        if (Constante.tipBD == 2) filtru = @" AND F10003=@1 AND TO_NUMBER(TO_CHAR(""Ziua"",'YYYY')) = @2 AND TO_NUMBER(TO_CHAR(""Ziua"",'MM')) = @3 ";
                     }
                     else
                     {
                         filtru = " AND A.F10003 IN (@1) AND YEAR(A.Ziua)=@2 AND MONTH(A.Ziua)=@3 AND DAY(A.Ziua)=@4";
-                        if (Constante.tipBD == 2) strSql = @" AND F10003=@1 AND to_char(""Ziua"",'DD/MM/yyyy') = '@4/@3/@2' ";
+                        //Florin 2019.11.07
+                        //if (Constante.tipBD == 2) strSql = @" AND F10003=@1 AND to_char(""Ziua"",'DD/MM/yyyy') = '@4/@3/@2' ";
+                        if (Constante.tipBD == 2) filtru = @" AND F10003=@1 AND TO_NUMBER(TO_CHAR(""Ziua"",'YYYY')) = @2 AND TO_NUMBER(TO_CHAR(""Ziua"",'MM')) = @3 AND TO_NUMBER(TO_CHAR(""Ziua"",'DD')) = @4 ";
                     }
                     for (int i=0;i<lst.Length;i++)
                     {

@@ -82,7 +82,7 @@
 
         function OnBatchEditStartEditing(s, e) {
             //alert(s.batchEditApi.HasChanges());
-
+           
             var keyIndex = s.GetColumnByField("Cheia").index;
             var key = e.rowValues[keyIndex].value;
 
@@ -162,7 +162,6 @@
             }            
             if (col.length >= 6 && col.substr(0, 6) == 'ValAbs')
             {
-
                 var cmb = grDate.GetEditor('ValAbs');
                 if (cmb) {
                     cmb.ClearItems();
@@ -381,6 +380,9 @@
             cmbDept.SetValue(null);
             cmbSubDept.SetValue(null);
             cmbBirou.SetValue(null);
+            cmbCateg.SetValue(null);
+
+            pnlCtl.PerformCallback('EmptyFields');
         }
 
         function OnPtjEchipa(s, e) {
@@ -718,7 +720,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div style="float:left; padding-right:15px;">
+                                            <div style="float:left; padding-right:15px;padding-bottom:10px;">
                                                 <label id="lblDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Dept.</label>
                                                 <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
@@ -735,7 +737,15 @@
                                             <div style="float:left; padding-right:15px;">
                                                 <label id="Label2" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
                                                 <dx:ASPxComboBox ID="cmbPtjZi" ClientInstanceName="cmbPtjZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
-                                            </div>                                        
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="float:left; padding-right:15px;">
+                                                <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Categorie</label>
+                                                <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>

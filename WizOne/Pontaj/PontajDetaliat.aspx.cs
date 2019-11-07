@@ -325,20 +325,59 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003", null);
+                    //Florin 2019.11.07 - am adaugat data inceput si sfarsit la fel cum a adaugat Radu in Pontajul echipei 
+                    //+ am modificat ca departamentul sa nu tina cont de structura 
+                    //+ am adaugat categorie
+
+                    //cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003", null);
+                    //cmbSub.DataBind();
+                    //cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99), null);
+                    //cmbFil.DataBind();
+                    //cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99), null);
+                    //cmbSec.DataBind();
+                    //cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99), null);
+                    //cmbDept.DataBind();
+                    //cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99), null);
+                    //cmbSubDept.DataBind();
+                    //cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
+                    //cmbBirou.DataBind();
+                    //cmbBirou.DataSource = General.IncarcaDT("select F00809, F00810 from F008", null);
+                    //cmbBirou.DataBind();
+
+                    string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
+                    cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003 " +
+                        (Constante.tipBD == 1 ? " WHERE F00310 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00311" : " WHERE  F00310 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00311"), null);
                     cmbSub.DataBind();
-                    cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99), null);
+                    cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99) +
+                        (Constante.tipBD == 1 ? " AND F00411 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00412" : " AND F00411 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00412"), null);
                     cmbFil.DataBind();
-                    cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99), null);
+                    cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99) +
+                        (Constante.tipBD == 1 ? " AND F00513 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00514" : " AND F00513 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00514"), null);
                     cmbSec.DataBind();
-                    cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99), null);
-                    cmbDept.DataBind();
-                    cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99), null);
+                    if (cmbSub.Value == null && cmbFil.Value == null && cmbSec.Value == null)
+                    {
+                        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE " +
+                            (Constante.tipBD == 1 ? "F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : "F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
+                        cmbDept.DataBind();
+                    }
+                    else
+                    {
+                        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99) +
+                             (Constante.tipBD == 1 ? " AND F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : " AND F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
+                        cmbDept.DataBind();
+                    }
+                    cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99) +
+                        (Constante.tipBD == 1 ? " AND F00714 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00715" : " AND F00714 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00715"), null);
                     cmbSubDept.DataBind();
-                    cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
+                    cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008 WHERE " +
+                        (Constante.tipBD == 1 ? "F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00815" : "F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00815 "), null);
                     cmbBirou.DataBind();
-                    cmbBirou.DataSource = General.IncarcaDT("select F00809, F00810 from F008", null);
-                    cmbBirou.DataBind();
+
+                    cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
+                    cmbCateg.DataBind();
+
+                    //Florin 2019.11.07 - End
+
 
                     cmbStare.DataSource = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblStariPontaj"" ", null);
                     cmbStare.DataBind();
@@ -474,6 +513,7 @@ namespace WizOne.Pontaj
                 cmbDept.Value = null;
                 cmbSubDept.Value = null;
                 cmbBirou.Value = null;
+                cmbCateg.Value = null;
             }
             catch (Exception ex)
             {
@@ -625,6 +665,7 @@ namespace WizOne.Pontaj
                 string filtru = "";
                 string cheia = "";
                 int tipInreg = 1;
+                string strLeg = "";
 
                 DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
                 int idRol = Convert.ToInt32(cmbRolAng.Value);
@@ -663,6 +704,13 @@ namespace WizOne.Pontaj
                         filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day);
 
                     tipInreg = Convert.ToInt32(General.Nz(cmbPtjZi.Value, 1));
+
+                    //Florin 2019.11.07
+                    if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                    {
+                        filtru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+                        strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
+                    }
                 }
 
 
@@ -751,6 +799,8 @@ namespace WizOne.Pontaj
                 //s-a inlocuit in DpreturiModif codul de mai jos
                 //(SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDate("FS.\"DataInceput\"")} <= {General.TruncateDate("P.\"Ziua\"")} AND {General.TruncateDate("P.\"Ziua\"")} <=  {General.TruncateDate("FS.\"DataSfarsit\"")}) = 1
 
+                //Florin 2019.11.07
+                //de pe partea de oracle am scos grou by de la taote ListAgg
 
                 string strSql = "";
                 if (Constante.tipBD == 1)
@@ -852,9 +902,9 @@ namespace WizOne.Pontaj
                             LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
                             LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
-                            LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
-                            LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
-                            
+                            LEFT JOIN F724 CA ON A.F10061 = CA.F72402
+                            LEFT JOIN F724 CB ON A.F10062 = CB.F72402
+                            {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}
                             ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
@@ -872,19 +922,19 @@ namespace WizOne.Pontaj
                             WHERE Z.F10003 = P.F10003 AND Z.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= Z.""DataSfarsit"" AND Z.""IdStare"" = 3
                             AND Z.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre"" = 1) AND COALESCE(Y.""NuTrimiteInPontaj"", 0) = 0) = 0 THEN 0 ELSE 1 END AS ""VineDinCereri"", 
                             A.F10022, A.F10023,
-                            (SELECT LISTAGG(A.""OreInVal"", ',') WITHIN GROUP (ORDER BY A.""OreInVal"") || ';' AS ""OreInVal""
+                            (SELECT LISTAGG(A.""OreInVal"", ';') WITHIN GROUP (ORDER BY A.""OreInVal"") || ';' AS ""OreInVal""
                             FROM(SELECT * FROM ""Ptj_tblAbsente"" ORDER BY ""OreInVal"") a 
                             INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
                             INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
-                            WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
+                            WHERE A.""OreInVal"" IS NOT NULL AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
                             (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0) AND COALESCE(B.ZL,0) <> 0) OR
                             ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0) AND COALESCE(B.S,0) <> 0) OR
                             ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0) AND COALESCE(B.D,0) <> 0) OR
                             (COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0) AND COALESCE(B.SL,0) <> 0)) 
-                            GROUP BY A.""OreInVal"") AS ""ValActive"",
+                            ) AS ""ValActive"",
 
 
-							(SELECT LISTAGG(A.""Coloana"", ',') WITHIN GROUP (ORDER BY A.""Coloana"") || ';'
+							(SELECT LISTAGG(A.""Coloana"", ';') WITHIN GROUP (ORDER BY A.""Coloana"") || ';'
                             FROM(
                             SELECT ""Coloana"" FROM ""Ptj_tblAdmin"" WHERE SUBSTR(""Coloana"", 1, 3) = 'Val' AND ""Coloana"" NOT IN('ValAbs', 'ValStr') AND COALESCE(""Blocat"", 0) = 1
                             UNION
@@ -897,10 +947,10 @@ namespace WizOne.Pontaj
                             FROM ""Securitate"" A
                             WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
                             ) A
-                            GROUP BY A.""Coloana"") AS ""ValSecuritate"",
+                            ) AS ""ValSecuritate"",
 
 
-	                        (select  LISTAGG(X.""DenumireScurta"" + '=' + X.""Denumire"", ',') WITHIN GROUP (ORDER BY X.""Id"", X.""DenumireScurta"", X.""Denumire"") from ( 
+	                        (select  ',' || LISTAGG(X.""DenumireScurta"" || '=' || X.""Denumire"", ',') WITHIN GROUP (ORDER BY X.""Id"", X.""DenumireScurta"", X.""Denumire"") from ( 
                             select a.""Id"", b.""IdContract"", c.""IdRol"", a.""Id"" as ""IdAbsenta"" , b.ZL as ""ZileSapt"", b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"", 0 AS ""Tip"" 
                             from ""Ptj_tblAbsente"" a
                             inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
@@ -908,12 +958,11 @@ namespace WizOne.Pontaj
                             WHERE A.""IdTipOre"" = 1
                             group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal""
                             ) x
-                            WHERE COALESCE(X.""DenumireScurta"",'') <> '' AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {idRol} AND
+                            WHERE X.""DenumireScurta"" IS NOT NULL AND X.""IdContract"" = P.""IdContract"" AND X.""IdRol"" = {idRol} AND
                             ( (COALESCE(X.""ZileSapt"",0)=(CASE WHEN P.""ZiSapt""<6 AND P.""ZiLibera""=0 THEN 1 ELSE 0 END) AND COALESCE(X.""ZileSapt"",0) <> 0)
                             OR (COALESCE(X.S,0) = (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) AND COALESCE(X.S,0) <> 0)
                             OR (COALESCE(X.D,0) = (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) AND COALESCE(X.D,0) <> 0)
 							OR (COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND COALESCE(P.""ZiLiberaLegala"",0) = 1 THEN 1 ELSE 0 END) AND COALESCE(X.SL,0) <> 0))
-                            GROUP BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
                             ) AS ""ValAbsente"",
 
                             CASE WHEN (
@@ -954,7 +1003,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
-
+                            {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}
                             ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
@@ -1611,7 +1660,7 @@ namespace WizOne.Pontaj
 
                         //daca sunt restul campurilor
                         if (newValue == null)
-                            cmp += $@", ""{numeCol}""={newValue}";
+                            cmp += $@", ""{numeCol}"" = NULL";
                         else
                         {
                             switch (row.Table.Columns[numeCol].DataType.ToString())
@@ -1639,11 +1688,13 @@ namespace WizOne.Pontaj
                         strSql + Environment.NewLine +
                         "END;", null);
 
-                if (Dami.ValoareParam("RecalculCuloare", "0") == "0" || row["CuloareValoare"].ToString() != "#e6c8fa")
+
+                DataRow dr = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+                if (dr != null && (Dami.ValoareParam("RecalculCuloare", "0") == "0" || dr["CuloareValoare"].ToString() != "#e6c8fa"))
                 {
                     //Florin 2018.05.15
                     //daca este absenta de tip zi nu mai recalculam
-                    if (absentaDeTipZi)
+                    if (!absentaDeTipZi)
                     {
                         string golesteVal = Dami.ValoareParam("GolesteVal");
                         FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
@@ -1654,7 +1705,7 @@ namespace WizOne.Pontaj
                         FunctiiCeasuri.Calcul.h5 = true;
 
                         FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
-                        FunctiiCeasuri.Calcul.CalculInOut(row, true, true);
+                        FunctiiCeasuri.Calcul.CalculInOut(dr, true, true);
                     }
                 }
 
@@ -2431,7 +2482,7 @@ namespace WizOne.Pontaj
             try
             {
                 bool esteStruc = true;
-
+                string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
                 switch (e.Parameter)
                 {
                     case "cmbSub":
@@ -2452,6 +2503,11 @@ namespace WizOne.Pontaj
                     case "cmbDept":
                         cmbSubDept.Value = null;
                         break;
+                    case "EmptyFields":
+                        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE " +
+                            (Constante.tipBD == 1 ? "F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : "F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
+                        cmbDept.DataBind();
+                        return;
                     case "cmbRolAng":
                     case "cmbRolZi":
                     case "txtAnLuna":
@@ -2463,13 +2519,38 @@ namespace WizOne.Pontaj
 
                 if (esteStruc)
                 {
-                    cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99), null);
+                    //Florin 2019.11.07 - la fel ca in ptj echipei
+
+                    //cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99), null);
+                    //cmbFil.DataBind();
+                    //cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99), null);
+                    //cmbSec.DataBind();
+                    //cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99), null);
+                    //cmbDept.DataBind();
+                    //cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99), null);
+                    //cmbSubDept.DataBind();
+
+
+                    cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99) +
+                        (Constante.tipBD == 1 ? " AND F00411 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00412" : " AND F00411 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00412"), null);
                     cmbFil.DataBind();
-                    cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99), null);
+                    cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99) +
+                        (Constante.tipBD == 1 ? " AND F00513 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00514" : " AND F00513 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00514"), null);
                     cmbSec.DataBind();
-                    cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99), null);
-                    cmbDept.DataBind();
-                    cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99), null);
+                    if (cmbSub.Value == null && cmbFil.Value == null && cmbSec.Value == null)
+                    {
+                        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE " +
+                            (Constante.tipBD == 1 ? "F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : "F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
+                        cmbDept.DataBind();
+                    }
+                    else
+                    {
+                        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99) +
+                             (Constante.tipBD == 1 ? " AND F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : " AND F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
+                        cmbDept.DataBind();
+                    }
+                    cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99) +
+                        (Constante.tipBD == 1 ? " AND F00714 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00715" : " AND F00714 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00715"), null);
                     cmbSubDept.DataBind();
                 }
             }

@@ -719,7 +719,7 @@ namespace WizOne.Avs
             btnDocSterge.Visible = false;
         }
 
-        private void ArataCtl(int nr, string text1, string text2, string text3, string text4, string text5, string text6, string text7, string text8, string text9, string text10)
+        private void ArataCtl(int nr, string text1, string text2, string text3, string text4, string text5, string text6, string text7, string text8, string text9, string text10, string text11 = "")
         {
             if (nr == 1)
             {// 1 x TB
@@ -1098,6 +1098,26 @@ namespace WizOne.Avs
                 lblTxt12Nou.Text = text2;
                 cmbStructOrgNou.Visible = true;
                 cmbStructOrgNou.Enabled = true;
+            }
+            if (nr == 14)
+            {// 0.5 x CB + 3 x 0.5 x DE
+                lbl1Nou.Visible = true;
+                lblTxt3Nou.Visible = true;
+                lblTxt3Nou.Text = text1;
+                cmb1Nou.Visible = true;
+                cmb1Nou.Enabled = true;
+           
+                lblTxt5Nou.Visible = true;
+                lblTxt5Nou.Text = text8;
+                de1Nou.Visible = true;
+        
+                lblTxt6Nou.Visible = true;
+                lblTxt6Nou.Text = text10;
+                de2Nou.Visible = true;
+
+                lblTxt13Nou.Visible = true;
+                lblTxt13Nou.Text = text11;
+                de3Nou.Visible = true;
             }
 
         }
@@ -1559,6 +1579,39 @@ namespace WizOne.Avs
                     de1Nou.Date = DateTime.Now;
                     de1Nou.Enabled = false;
                 }
+            }
+
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Suspendare)
+            {
+                ArataCtl(14, "Motiv suspendare", "", "", "", "", "", "Data inceput", "", "Data sfarsit estimata", "Data incetare");
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09003 AS \"Denumire\" from f090 ", null);        
+                IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
+            }
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.RevenireSuspendare)
+            {
+                ArataCtl(14, "Motiv suspendare", "", "", "", "", "", "Data inceput", "", "Data sfarsit estimata", "Data incetare");
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09003 AS \"Denumire\" from f090 ", null);
+                IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
+                de1Nou.ClientEnabled = false;
+                DataTable dtTempRev = General.IncarcaDT("select * from f111 Where F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = " 
+                            + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") ORDER BY F11105", null);
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11105"] != null && dtTempRev.Rows[0]["F11105"].ToString().Length > 0)
+                    de1Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11105"].ToString());
+                else
+                    de1Nou.Value = new DateTime(2100, 1, 1);
+
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11106"] != null && dtTempRev.Rows[0]["F11106"].ToString().Length > 0)
+                    de2Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11106"].ToString());
+                else
+                    de2Nou.Value = new DateTime(2100, 1, 1);
+            }
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Detasare)
+            {
+
+            }
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.RevenireDetasare)
+            {
+
             }
         }
 

@@ -442,6 +442,13 @@
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>
+                    <td id="lbl13Nou" runat="server">
+                        <dx:ASPxLabel  ID="lblTxt13Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
+                        <dx:ASPxDateEdit ID="de3Nou" runat="server" Width="130px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                            <ClientSideEvents ValueChanged="function(s,e){ OnValueChangedHandler(s); }" />
+                            <CalendarProperties FirstDayOfWeek="Monday" />
+                        </dx:ASPxDateEdit>
+                    </td>
                     <td id="lbl12Nou" runat="server">
                         <dx:ASPxLabel  ID="lblTxt12Nou" runat="server"  style="display:inline-block;" Visible="false"></dx:ASPxLabel >
 						<dx:ASPxComboBox ID="cmbStructOrgNou" runat="server" ClientInstanceName="cmbStructOrgStrNou" ClientIDMode="Static" Width="600px"  ValueField="IdAuto"  ValueType="System.Int32"  AutoPostBack="false" >

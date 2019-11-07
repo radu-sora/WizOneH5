@@ -947,13 +947,11 @@ namespace WizOne.Personal
                         if (cnt != 0)
                         {
                             dt100.Rows[0]["F10003"] = marcaFin;
+                            dt1001.Rows[0]["F10003"] = marcaFin;
                             Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
                         }
                     }
-                }
-               
-                dt1001.Rows[0]["F10003"] = marcaFin;               
-
+                }   
 
                 General.SalveazaDate(dt100, "F100");
                 General.SalveazaDate(dt1001, "F1001");

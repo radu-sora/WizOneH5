@@ -1528,8 +1528,17 @@ namespace WizOne.Pontaj
                     row["USER_NO"] = Session["UserId"];
                     row["TIME"] = DateTime.Now;
 
-                    if (upd.NewValues["Observatii"] != null) row["Observatii"] = upd.NewValues["Observatii"];
-                    if (upd.NewValues["Observatii2"] != null) row["Observatii2"] = upd.NewValues["Observatii2"];
+                    //Radu 08.11.2019 - chiar daca noile valori sunt nule, ele trebuie salvate
+                    if (upd.NewValues["Observatii"] != null)
+                        row["Observatii"] = upd.NewValues["Observatii"];
+                    else
+                        row["Observatii"] = DBNull.Value;
+                    if (upd.NewValues["Observatii2"] != null) 
+                        row["Observatii2"] = upd.NewValues["Observatii2"];
+                    else
+                        row["Observatii2"] = DBNull.Value;
+                    //end Radu
+
                     if (upd.NewValues["F06204Default"] != null) row["F06204Default"] = upd.NewValues["F06204Default"];
 
                     if (upd.NewValues["IdContract"] != null) row["IdContract"] = upd.NewValues["IdContract"];

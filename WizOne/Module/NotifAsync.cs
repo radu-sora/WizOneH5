@@ -304,28 +304,59 @@ namespace WizOne.Module
                             case "incepe cu":
                                 {
                                     string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (arr[1] == "3")
-                                        strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") + '%')";
+                                    if (Constante.tipBD == 1)
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") + '%')";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' + '%')";
+                                    }
                                     else
-                                        strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' + '%')";
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") || '%')";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' || '%')";
+                                    }
                                 }
                                 break;
                             case "contine":
                                 {
                                     string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (arr[1] == "3")
-                                        strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + ") + '%')";
+                                    if (Constante.tipBD == 1)
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + ") + '%')";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "' + '%')";
+                                    }
                                     else
-                                        strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "' + '%')";
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE '%' || (" + arr[0] + ") || '%')";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '%' || '" + arr[0] + "' || '%')";
+
+                                    }
                                 }
                                 break;
                             case "se termina cu":
                                 {
                                     string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (arr[1] == "3")
-                                        strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + "))";
+                                    if (Constante.tipBD == 1)
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + "))";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "')";
+                                    }
                                     else
-                                        strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "')";
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE '%' || (" + arr[0] + "))";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '%' || '" + arr[0] + "')";
+                                    }
                                 }
                                 break;
                             case "<>":

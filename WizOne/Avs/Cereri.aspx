@@ -191,6 +191,18 @@
             lblDoc.innerText = s.cpDocUploadName;
             s.cpDocUploadName = null;
         }
+
+        function chkDet_CheckedChanged(s) {
+            if (s.name == "chk2") {
+                if (s.GetValue() == 1)
+                    chk3.SetValue(0);
+            }
+            if (s.name == "chk3") {
+                if (s.GetValue() == 1)
+                    chk2.SetValue(0);
+            }
+        }
+
     </script>
 
 </asp:Content>
@@ -470,8 +482,36 @@
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
 						</dx:ASPxComboBox >
                     </td>
-               </tr>
-                <tr>
+                  </tr>
+                    <tr>
+                        <td colspan="2">
+                            <dx:ASPxCheckBox ID="chk1"  runat="server" Width="200" Text="Platit de angajatorul la care e detasat (DA/NU)" TextAlign="Left"   ClientInstanceName="chk1" >                                     
+                            </dx:ASPxCheckBox>
+                        </td>
+                        <td colspan="3">
+                            <dx:ASPxCheckBox ID="chk2"  runat="server" Width="200" Text="Detasat in Romania din state UE/NON UE" TextAlign="Left"  ClientInstanceName="chk2" >
+                                <ClientSideEvents CheckedChanged="function(s,e){ chkDet_CheckedChanged(s); }" />
+                            </dx:ASPxCheckBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <dx:ASPxCheckBox ID="chk4"  runat="server" Width="200" Text="Formular A1" TextAlign="Left"  ClientInstanceName="chk4" >                         
+                            </dx:ASPxCheckBox>
+                        </td>
+                        <td colspan="3">
+                            <dx:ASPxCheckBox ID="chk3"  runat="server" Width="200" Text="Detasat din Romania in state UE/NON UE" TextAlign="Left"   ClientInstanceName="chk3" >
+                                <ClientSideEvents CheckedChanged="function(s,e){ chkDet_CheckedChanged(s); }" />
+                            </dx:ASPxCheckBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <dx:ASPxCheckBox ID="chk5"  runat="server" Width="200" Text="Acord de securitate sociala" TextAlign="Left"   ClientInstanceName="chk5" >                                       
+                            </dx:ASPxCheckBox>
+                        </td>         
+                    </tr>
+                   <tr>
                     <dx:ASPxGridView ID="grDateComponente" runat="server" ClientInstanceName="grDateComponente" ClientIDMode="Static" Width="30%" AutoGenerateColumns="false"  OnDataBinding="grDateComponente_DataBinding" 
                         OnRowUpdating="grDateComponente_RowUpdating" OnCellEditorInitialize="grDateComponente_CellEditorInitialize">        
                         <SettingsBehavior AllowFocusedRow="true" />

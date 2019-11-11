@@ -31,8 +31,7 @@
                         <dx:GridViewDataDateColumn FieldName="DataExpirare" Name="DataExpirare" Caption="Data expirare"  Width="100px" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="DurataUtil" Name="DurataUtil" Caption="Durata utilizare" ReadOnly="true"  Width="175px" UnboundType="String" />    
-                        <dx:GridViewDataTextColumn FieldName="DurataUtilizare" Name="DurataUtilizare" Caption="DurataUtilizare" Visible="false"  Width="100px" />		
+                        <dx:GridViewDataTextColumn FieldName="DurataUtil" Name="DurataUtil" Caption="Durata utilizare" ReadOnly="true"  Width="175px" UnboundType="String" />   
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
                         <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />                                              
                     </Columns>

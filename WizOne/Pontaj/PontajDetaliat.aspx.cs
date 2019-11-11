@@ -539,27 +539,46 @@ namespace WizOne.Pontaj
         {
             try
             {
+                //Florin 2019.11.11
+
                 Session["PrintDocument"] = "PontajDetaliat";
                 tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
-                if (tip == 1 || tip == 10)
+
+                string first = General.Nz(cmbAng.Value,-99).ToString();
+                DateTime dt = Convert.ToDateTime(txtAnLuna.Value);
+                if (tip == 2 || tip == 20)
                 {
-                    Session["PrintParametrii"] = cmbAng.Value + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month + ";" 
-                        + (tip == 1 || tip == 10 ? Convert.ToDateTime(txtAnLuna.Value).Day : Convert.ToDateTime(txtZiua.Value).Day) + ";" + tip;        //Radu 22.10.2019
-                }
-                else
-                {
-                    string ids = "";
-                    DataTable dt = grDate.DataSource as DataTable;
-                    for(int i =0; i < dt.Rows.Count; i++)
-                    {
-                        ids += "," + dt.Rows[i]["F10003"];
-                    }
-                    if (ids != "") ids = ids.Substring(1);
-                    Session["PrintParametrii"] = ids + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month + ";" 
-                        + (tip == 1 || tip == 10 ? Convert.ToDateTime(txtAnLuna.Value).Day : Convert.ToDateTime(txtZiua.Value).Day) + ";" + tip;        //Radu 22.10.2019
+                    first = "SELECT X.F10003 FROM (" + SelectPontaj() + ") X";
+                    dt = Convert.ToDateTime(txtZiua.Value);
                 }
 
-                Response.Redirect("~/Reports/Imprima.aspx?tip=" + tip, false);
+                Session["PrintParametrii"] = first + "#$" + dt.Year + "#$" + dt.Month + "#$" + dt.Day + "#$" + tip;
+
+                Response.Redirect("~/Reports/Imprima.aspx", false);
+
+
+
+                //Session["PrintDocument"] = "PontajDetaliat";
+                //tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
+                //if (tip == 1 || tip == 10)
+                //{
+                //    Session["PrintParametrii"] = cmbAng.Value + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month + ";" 
+                //        + (tip == 1 || tip == 10 ? Convert.ToDateTime(txtAnLuna.Value).Day : Convert.ToDateTime(txtZiua.Value).Day) + ";" + tip;        //Radu 22.10.2019
+                //}
+                //else
+                //{
+                //    string ids = "";
+                //    DataTable dt = grDate.DataSource as DataTable;
+                //    for(int i =0; i < dt.Rows.Count; i++)
+                //    {
+                //        ids += "," + dt.Rows[i]["F10003"];
+                //    }
+                //    if (ids != "") ids = ids.Substring(1);
+                //    Session["PrintParametrii"] = ids + ";" + Convert.ToDateTime(txtAnLuna.Value).Year + ";" + Convert.ToDateTime(txtAnLuna.Value).Month + ";" 
+                //        + (tip == 1 || tip == 10 ? Convert.ToDateTime(txtAnLuna.Value).Day : Convert.ToDateTime(txtZiua.Value).Day) + ";" + tip;        //Radu 22.10.2019
+                //}
+
+                //Response.Redirect("~/Reports/Imprima.aspx?tip=" + tip, false);
             }
             catch (Exception ex)
             {
@@ -642,10 +661,399 @@ namespace WizOne.Pontaj
         }
 
 
+        //Florin 2019.11.11
+
+        //OLD 1
 
         //public DataTable PontajCuInOut(int F10003, DateTime ziua, int idUser, int idRol, int subComp, int filiala, int sectie, int dept, int idSubdept, int idBirou, int tip = 1)
-        public DataTable PontajCuInOut()
+
+
+            //OLD 2
+
+        // public DataTable PontajCuInOut()
+        // {
+        //     //tip  =  1    pontaj pe angajat
+        //     //tip  =  2    pontaj pe zi
+
+
+        //     //Florin 2019.02.19
+        //     //tblRoluri_PoateModifica
+        //     //-55  -  nu este cazul sa facem verificarea - nu este absenta de tip zi
+        //     //-33  -  nu are drepturi pt a sterge - valoarea din coloana PoateModifica este 0
+        //     // 1   -  poate sterge
+        //     // 2   -  poate sterge dar apare o avertizare
+        //     // 3   -  nu poate sterge, apare un mesaj blocant
+
+        //     DataTable dt = new DataTable();
+
+        //     try
+        //     {
+        //         string filtru = "";
+        //         string cheia = "";
+        //         int tipInreg = 1;
+        //         string strLeg = "";
+
+        //         DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
+        //         int idRol = Convert.ToInt32(cmbRolAng.Value);
+
+        //         if (General.Nz(Request.QueryString["Tip"], "").ToString() == "1" || General.Nz(Request.QueryString["Tip"], "").ToString() == "10")
+        //         {
+        //             filtru = $@" AND {General.ToDataUniv(ziua.Year, ziua.Month)} <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)} AND A.F10003=" + Convert.ToInt32(cmbAng.Value ?? -99);
+        //             cheia = General.FunctiiData("P.\"Ziua\"", "Z");
+
+        //             //2018.02.09 Imbunatatire
+        //             if (General.Nz(Request.QueryString["Ziua"], "").ToString() != "")
+        //                 filtru += @" AND P.""Ziua""=" + General.ToDataUniv(ziua.Year, ziua.Month, Convert.ToInt32(Request.QueryString["Ziua"].Replace("Ziua", "")));
+
+        //             tipInreg = Convert.ToInt32(General.Nz(cmbPtjAng.Value,1));
+        //         }
+        //         else
+        //         {
+        //             ziua = Convert.ToDateTime(txtZiua.Value);
+        //             idRol = Convert.ToInt32(cmbRolZi.Value);
+
+        //             cheia = "P.F10003";
+        //             filtru = $@" AND {General.TruncateDate("P.Ziua")} = {General.ToDataUniv(ziua.Year, ziua.Month, ziua.Day)}";
+
+        //             if (General.Nz(cmbSub.Value,"").ToString() != "") filtru += " AND P.F10004=" + cmbSub.Value;
+        //             if (General.Nz(cmbFil.Value, "").ToString() != "") filtru += " AND P.F10005=" + cmbFil.Value;
+        //             if (General.Nz(cmbSec.Value, "").ToString() != "") filtru += " AND P.F10006=" + cmbSec.Value;
+        //             if (General.Nz(cmbDept.Value, "").ToString() != "") filtru += " AND P.F10007=" + cmbDept.Value;
+        //             if (General.Nz(cmbSubDept.Value, "").ToString() != "") filtru += " AND C.F100958 = " + cmbSubDept.Value;
+        //             if (General.Nz(cmbBirou.Value, "").ToString() != "") filtru += " AND C.F100959 = " + cmbBirou.Value;
+
+        //             if (General.Nz(cmbCtr.Value, "").ToString() != "") filtru += " AND P.\"IdContract\"=" + cmbCtr.Value;
+        //             if (General.Nz(cmbStare.Value, "").ToString() != "") filtru += " AND J.\"IdStare\"=" + cmbStare.Value;
+        //             if (General.Nz(cmbAngZi.Value, "").ToString() != "")
+        //                 filtru += " AND P.F10003=" + cmbAngZi.Value;
+        //             else
+        //                 filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day);
+
+        //             tipInreg = Convert.ToInt32(General.Nz(cmbPtjZi.Value, 1));
+
+        //             //Florin 2019.11.07
+        //             if (General.Nz(cmbCateg.Value, "").ToString() != "")
+        //             {
+        //                 filtru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+        //                 strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
+        //             }
+        //         }
+
+
+        //         //Florin 2018.08.27
+        //         if (tipInreg != 1)
+        //         {
+        //             string conditie = " P.\"ValStr\" not like '%[0-9]%' AND P.\"ValStr\" != '' ";
+        //             if (Constante.tipBD == 2) conditie = " NOT REGEXP_LIKE(P.\"ValStr\", '[[:digit:]]') ";
+
+        //             string erori = " AND (((P.\"In1\" IS NULL AND P.\"Out1\" IS NOT NULL) OR (P.\"In1\" IS NOT NULL AND P.\"Out1\" IS NULL)) "
+        //                             + "OR ((P.\"In2\" IS NULL AND P.\"Out2\" IS NOT NULL) OR (P.\"In2\" IS NOT NULL AND P.\"Out2\" IS NULL)) "
+        //                             + "OR ((P.\"In3\" IS NULL AND P.\"Out3\" IS NOT NULL) OR (P.\"In3\" IS NOT NULL AND P.\"Out3\" IS NULL)) "
+        //                             + "OR ((P.\"In4\" IS NULL AND P.\"Out4\" IS NOT NULL) OR (P.\"In4\" IS NOT NULL AND P.\"Out4\" IS NULL)) "
+        //                             + "OR ((P.\"In5\" IS NULL AND P.\"Out5\" IS NOT NULL) OR (P.\"In5\" IS NOT NULL AND P.\"Out5\" IS NULL)) "
+        //                             + "OR ((P.\"In6\" IS NULL AND P.\"Out6\" IS NOT NULL) OR (P.\"In6\" IS NOT NULL AND P.\"Out6\" IS NULL)) "
+        //                             + "OR ((P.\"In7\" IS NULL AND P.\"Out7\" IS NOT NULL) OR (P.\"In7\" IS NOT NULL AND P.\"Out7\" IS NULL)) "
+        //                             + "OR ((P.\"In8\" IS NULL AND P.\"Out8\" IS NOT NULL) OR (P.\"In8\" IS NOT NULL AND P.\"Out8\" IS NULL)) "
+        //                             + "OR ((P.\"In9\" IS NULL AND P.\"Out9\" IS NOT NULL) OR (P.\"In9\" IS NOT NULL AND P.\"Out9\" IS NULL)) "
+        //                             + "OR ((P.\"In10\" IS NULL AND P.\"Out10\" IS NOT NULL) OR (P.\"In10\" IS NOT NULL AND P.\"Out10\" IS NULL)) "
+        //                             + "OR ((P.\"In11\" IS NULL AND P.\"Out11\" IS NOT NULL) OR (P.\"In11\" IS NOT NULL AND P.\"Out11\" IS NULL)) "
+        //                             + "OR ((P.\"In12\" IS NULL AND P.\"Out12\" IS NOT NULL) OR (P.\"In12\" IS NOT NULL AND P.\"Out12\" IS NULL)) "
+        //                             + "OR ((P.\"In13\" IS NULL AND P.\"Out13\" IS NOT NULL) OR (P.\"In13\" IS NOT NULL AND P.\"Out13\" IS NULL)) "
+        //                             + "OR ((P.\"In14\" IS NULL AND P.\"Out14\" IS NOT NULL) OR (P.\"In14\" IS NOT NULL AND P.\"Out14\" IS NULL)) "
+        //                             + "OR ((P.\"In15\" IS NULL AND P.\"Out15\" IS NOT NULL) OR (P.\"In15\" IS NOT NULL AND P.\"Out15\" IS NULL)) "
+        //                             + "OR ((P.\"In16\" IS NULL AND P.\"Out16\" IS NOT NULL) OR (P.\"In16\" IS NOT NULL AND P.\"Out16\" IS NULL)) "
+        //                             + "OR ((P.\"In17\" IS NULL AND P.\"Out17\" IS NOT NULL) OR (P.\"In17\" IS NOT NULL AND P.\"Out17\" IS NULL)) "
+        //                             + "OR ((P.\"In18\" IS NULL AND P.\"Out18\" IS NOT NULL) OR (P.\"In18\" IS NOT NULL AND P.\"Out18\" IS NULL)) "
+        //                             + "OR ((P.\"In19\" IS NULL AND P.\"Out19\" IS NOT NULL) OR (P.\"In19\" IS NOT NULL AND P.\"Out19\" IS NULL)) "
+        //                             + "OR ((P.\"In20\" IS NULL AND P.\"Out20\" IS NOT NULL) OR (P.\"In20\" IS NOT NULL AND P.\"Out20\" IS NULL)) "
+
+        //                             + "OR ((P.\"In1\" is not null OR P.\"In2\" is not null OR P.\"In3\" is not null OR P.\"In4\" is not null OR P.\"In5\" is not null OR "
+        //                             + "P.\"In6\" is not null OR P.\"In7\" is not null OR P.\"In8\" is not null OR P.\"In9\" is not null OR P.\"In10\" is not null OR "
+        //                             + "P.\"In11\" is not null OR P.\"In12\" is not null OR P.\"In13\" is not null OR P.\"In14\" is not null OR P.\"In15\" is not null OR "
+        //                             + "P.\"In16\" is not null OR P.\"In17\" is not null OR P.\"In18\" is not null OR P.\"In19\" is not null OR P.\"In20\" is not null) "
+        //                             + "AND " + conditie + " AND P.\"ValStr\" IS NOT NULL) ) ";
+
+        //             string lipsaPontaj = " AND (P.\"In1\" IS NULL AND P.\"Out1\" IS NULL AND P.\"In2\" IS NULL AND P.\"Out2\" IS NULL AND " +
+        //                                 " P.\"In3\" IS NULL AND P.\"Out3\" IS NULL AND P.\"In4\" IS NULL AND P.\"Out4\" IS NULL AND " +
+        //                                 " P.\"In5\" IS NULL AND P.\"Out5\" IS NULL AND P.\"In6\" IS NULL AND P.\"Out6\" IS NULL AND " +
+        //                                 " P.\"In7\" IS NULL AND P.\"Out7\" IS NULL AND P.\"In8\" IS NULL AND P.\"Out8\" IS NULL AND " +
+        //                                 " P.\"In9\" IS NULL AND P.\"Out9\" IS NULL AND P.\"In10\" IS NULL AND P.\"Out10\" IS NULL AND " +
+        //                                 " P.\"In11\" IS NULL AND P.\"Out11\" IS NULL AND P.\"In12\" IS NULL AND P.\"Out12\" IS NULL AND " +
+        //                                 " P.\"In13\" IS NULL AND P.\"Out13\" IS NULL AND P.\"In14\" IS NULL AND P.\"Out14\" IS NULL AND " +
+        //                                 " P.\"In15\" IS NULL AND P.\"Out15\" IS NULL AND P.\"In16\" IS NULL AND P.\"Out16\" IS NULL AND " +
+        //                                 " P.\"In17\" IS NULL AND P.\"Out17\" IS NULL AND P.\"In18\" IS NULL AND P.\"Out18\" IS NULL AND " +
+        //                                 " P.\"In19\" IS NULL AND P.\"Out19\" IS NULL AND P.\"In20\" IS NULL AND P.\"Out20\" IS NULL AND (\"ValStr\" IS NULL OR \"ValStr\" = '') ) ";
+
+        //             if (tipInreg == 2) filtru += erori;
+        //             if (tipInreg == 3) filtru += lipsaPontaj;
+        //             if (tipInreg == 4) filtru += " AND (" + erori.Substring(4) + " OR " + lipsaPontaj.Substring(4) + ")";
+        //             if (tipInreg > 4)
+        //             {
+        //                 try
+        //                 {
+        //                     DataTable dtSup = General.IncarcaDT(@"SELECT * FROM ""Ptj_Filtru"" WHERE ""Id""=@1", new object[] { tipInreg - 5 });
+        //                     if (dtSup != null && dtSup.Rows.Count > 0)
+        //                     {
+        //                         filtru += " AND P." + dtSup.Rows[0]["Camp"] + dtSup.Rows[0]["Operator"] + dtSup.Rows[0]["Valoare"];
+        //                     }
+        //                 }
+        //                 catch (Exception)
+        //                 {
+
+        //                     throw;
+        //                 }
+        //             }
+        //         }
+
+
+
+
+        //         string valTmp = "";
+        //         string[] arrVal = Constante.lstValuri.Split(new char[] { ';' },StringSplitOptions.RemoveEmptyEntries);
+        //         for(int i = 0; i < arrVal.Length - 1; i++)
+        //         {
+        //             if (Constante.tipBD == 1)
+        //                 valTmp += $@",CONVERT(datetime,DATEADD(minute, P.""{arrVal[i]}"", '')) AS ""ValTmp{arrVal[i].Replace("Val","")}"" ";
+        //             else
+        //                 valTmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + P.""{arrVal[i]}""/1440 AS ""ValTmp{arrVal[i].Replace("Val", "")}"" ";
+        //         }
+
+        //         string op = "+";
+        //         if (Constante.tipBD == 2) op = "||";
+
+        //         //Florin 2019.05.15
+        //         //s-a inlocuit in DpreturiModif codul de mai jos
+        //         //(SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDate("FS.\"DataInceput\"")} <= {General.TruncateDate("P.\"Ziua\"")} AND {General.TruncateDate("P.\"Ziua\"")} <=  {General.TruncateDate("FS.\"DataSfarsit\"")}) = 1
+
+        //         //Florin 2019.11.07
+        //         //de pe partea de oracle am scos grou by de la taote ListAgg
+
+        //         string strSql = "";
+        //         if (Constante.tipBD == 1)
+        //             strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
+        //                     {cheia} AS ""Cheia"", 
+        //                     E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
+        //                     L.""Denumire"" AS ""DescContract"", P.""IdContract"", M.""Denumire"" AS DescProgram, P.""IdProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
+        //                     CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 AND
+        //                     (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDate("FS.DataInceput")} <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("FS.DataSfarsit")}) = 1
+        //                     THEN 1 ELSE 0 END AS ""Activ"",  
+        //                     COALESCE(J.""IdStare"",1) AS ""IdStare"", K.""Culoare"" AS ""CuloareStare"", K.""Denumire"" AS ""NumeStare"", 
+        //                     CASE WHEN (SELECT COUNT(*) FROM ""Ptj_Cereri"" Z 
+        //                     INNER JOIN ""Ptj_tblAbsente"" Y ON Z.""IdAbsenta"" = Y.""Id""
+        //                     WHERE Z.F10003 = P.F10003 AND Z.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= Z.""DataSfarsit"" AND Z.""IdStare"" = 3
+        //                     AND Z.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre"" = 1) AND COALESCE(Y.""NuTrimiteInPontaj"", 0) = 0) = 0 THEN 0 ELSE 1 END AS ""VineDinCereri"", 
+        //                     A.F10022, A.F10023,
+        //                     (SELECT COALESCE(A.""OreInVal"",'') + ';'
+        //                     FROM ""Ptj_tblAbsente"" a
+        //                     INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
+        //                     INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
+        //                     WHERE A.""OreInVal"" IS NOT NULL AND RTRIM(LTRIM(A.""OreInVal"")) <> '' AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
+        //                     (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0) AND COALESCE(B.ZL,0) <> 0) OR
+        //                     ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0) AND COALESCE(B.S,0) <> 0) OR
+        //                     ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0) AND COALESCE(B.D,0) <> 0) OR
+        //                     (COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0) AND COALESCE(B.SL,0) <> 0)) 
+        //                     GROUP BY A.""OreInVal""
+        //                     ORDER BY A.""OreInVal""
+        //                     FOR XML PATH ('')) AS ""ValActive"",
+
+
+        //(SELECT COALESCE(A.""Coloana"",'') + ';'
+        //                     FROM(
+        //                     SELECT ""Coloana"" FROM ""Ptj_tblAdmin"" WHERE SUBSTRING(""Coloana"", 1, 3) = 'Val' AND ""Coloana"" NOT IN('ValAbs', 'ValStr') AND COALESCE(""Blocat"", 0) = 1
+        //                     UNION
+        //                     SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
+        //                     FROM ""Securitate"" A
+        //                     INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+        //                     WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+        //                     UNION
+        //                     SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
+        //                     FROM ""Securitate"" A
+        //                     WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+        //                     ) A
+        //                     GROUP BY A.""Coloana""
+        //                     ORDER BY A.""Coloana""
+        //                     FOR XML PATH('')) AS ""ValSecuritate"",
+
+
+        //                  (select ',' + X.""DenumireScurta"" + '=' + X.""Denumire"" from ( 
+        //                     select a.""Id"", b.""IdContract"", c.""IdRol"", a.""Id"" as ""IdAbsenta"" , b.ZL as ""ZileSapt"", b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"", 0 AS ""Tip"" 
+        //                     from ""Ptj_tblAbsente"" a
+        //                     inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
+        //                     inner join ""Ptj_relRolAbsenta"" c on a.""Id"" = c.""IdAbsenta""
+        //                     WHERE A.""IdTipOre"" = 1 
+        //                     group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal""
+        //                     ) x
+        //                     WHERE COALESCE(X.DenumireScurta,'') <> '' AND X.""IdContract"" = P.""IdContract"" and X.""IdRol"" = {idRol} AND
+        //                     ( (COALESCE(X.""ZileSapt"",0)=(CASE WHEN P.""ZiSapt""<6 AND P.""ZiLibera""=0 THEN 1 ELSE 0 END) AND COALESCE(X.""ZileSapt"",0) <> 0)
+        //                     OR (COALESCE(X.S,0) = (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) AND COALESCE(X.S,0) <> 0)
+        //                     OR (COALESCE(X.D,0) = (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) AND COALESCE(X.D,0) <> 0)
+        //OR (COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND COALESCE(P.""ZiLiberaLegala"",0) = 1 THEN 1 ELSE 0 END) AND COALESCE(X.SL,0) <> 0))
+        //                     GROUP BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
+        //                     ORDER BY X.""Id"", X.""DenumireScurta"", X.""Denumire""
+        //                     FOR XML PATH ('')) AS ""ValAbsente"",
+
+        //                     CASE WHEN (
+        //                     CASE WHEN {idRol} = 3 THEN 1 ELSE 
+        //                     CASE WHEN ({idRol} = 2 AND ((COALESCE(J.""IdStare"",1)=1 OR COALESCE(J.""IdStare"",1) = 2 OR COALESCE(J.""IdStare"",1) = 4 OR COALESCE(J.""IdStare"",1) = 6))) THEN 1 ELSE 
+        //                     CASE WHEN ({idRol} = 1 AND(COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
+        //                     END END END)=1 AND
+        //                     (SELECT COUNT(*)
+        //                     FROM ""Ptj_relGrupSuper"" BB
+        //                     INNER JOIN ""relGrupAngajat"" CC ON BB.""IdGrup""  = CC.""IdGrup"" 
+        //                     INNER JOIN ""F100Supervizori"" DD ON CC.F10003 = DD.F10003 AND (-1 * BB.""IdSuper"")= DD.""IdSuper""
+        //                     WHERE DD.F10003=P.F10003 AND BB.""IdRol""={idRol} AND DD.""IdUser""={Session["UserId"]}
+        //                     AND {General.TruncateDate("DD.DataInceput")} <= {General.TruncateDate("P.Ziua")} 
+        //                     AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("DD.DataSfarsit")}) >= 1                            
+        //                     THEN 1 ELSE 0 END AS ""DrepturiModif"", 
+        //                     Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",
+        //                     CASE WHEN 
+        //    (SELECT COUNT(*) FROM ""Ptj_Cereri"" X
+        //                         INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
+        //                         WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta""=P.""ValStr"" AND
+        //                         X.F10003=P.F10003 AND X.""IdStare""=3 AND Y.""IdTipOre""=1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
+        //                     THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
+        //                     FROM ""Ptj_Intrari"" P
+        //                     LEFT JOIN F100 A ON A.F10003 = P.F10003
+        //                     LEFT JOIN F1001 C ON A.F10003=C.F10003
+        //                     LEFT JOIN F002 E ON P.F10002 = E.F00202
+        //                     LEFT JOIN F003 F ON P.F10004 = F.F00304
+        //                     LEFT JOIN F004 G ON P.F10005 = G.F00405
+        //                     LEFT JOIN F005 H ON P.F10006 = H.F00506
+        //                     LEFT JOIN F006 I ON P.F10007 = I.F00607
+        //                     LEFT JOIN ""Ptj_Cumulat"" J ON J.F10003=A.F10003 AND J.""An""={General.FunctiiData("P.\"Ziua\"", "A")} AND J.""Luna""={General.FunctiiData("P.\"Ziua\"", "L")}
+        //                     LEFT JOIN ""Ptj_tblStariPontaj"" K ON COALESCE(J.""IdStare"",1) = K.""Id""
+        //                     LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""
+        //                     LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
+
+        //                     LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
+        //                     LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
+        //                     LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
+        //                     LEFT JOIN F724 CA ON A.F10061 = CA.F72402
+        //                     LEFT JOIN F724 CB ON A.F10062 = CB.F72402
+        //                     {strLeg}
+        //                     WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
+        //                     {filtru}
+        //                     ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
+        //         else
+        //             strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
+        //                     {cheia} AS ""Cheia"", 
+        //                     E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
+        //                     L.""Denumire"" AS ""DescContract"", P.""IdContract"", M.""Denumire"" AS ""DescProgram"", P.""IdProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
+        //                     CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 AND
+        //                     (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDate("FS.DataInceput")} <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("FS.DataSfarsit")}) = 1
+        //                     THEN 1 ELSE 0 END AS ""Activ"",  
+        //                     COALESCE(J.""IdStare"",1) AS ""IdStare"", K.""Culoare"" AS ""CuloareStare"", K.""Denumire"" AS ""NumeStare"", 
+        //                     CASE WHEN (SELECT COUNT(*) FROM ""Ptj_Cereri"" Z 
+        //                     INNER JOIN ""Ptj_tblAbsente"" Y ON Z.""IdAbsenta"" = Y.""Id""
+        //                     WHERE Z.F10003 = P.F10003 AND Z.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= Z.""DataSfarsit"" AND Z.""IdStare"" = 3
+        //                     AND Z.""IdAbsenta"" IN (SELECT ""Id"" FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre"" = 1) AND COALESCE(Y.""NuTrimiteInPontaj"", 0) = 0) = 0 THEN 0 ELSE 1 END AS ""VineDinCereri"", 
+        //                     A.F10022, A.F10023,
+        //                     (SELECT LISTAGG(A.""OreInVal"", ';') WITHIN GROUP (ORDER BY A.""OreInVal"") || ';' AS ""OreInVal""
+        //                     FROM(SELECT * FROM ""Ptj_tblAbsente"" ORDER BY ""OreInVal"") a 
+        //                     INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
+        //                     INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
+        //                     WHERE A.""OreInVal"" IS NOT NULL AND B.""IdContract""=P.""IdContract"" AND C.""IdRol""={idRol} AND 
+        //                     (((CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0) AND COALESCE(B.ZL,0) <> 0) OR
+        //                     ((CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) = COALESCE(B.S,0) AND COALESCE(B.S,0) <> 0) OR
+        //                     ((CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0) AND COALESCE(B.D,0) <> 0) OR
+        //                     (COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0) AND COALESCE(B.SL,0) <> 0)) 
+        //                     ) AS ""ValActive"",
+
+
+        //(SELECT LISTAGG(A.""Coloana"", ';') WITHIN GROUP (ORDER BY A.""Coloana"") || ';'
+        //                     FROM(
+        //                     SELECT ""Coloana"" FROM ""Ptj_tblAdmin"" WHERE SUBSTR(""Coloana"", 1, 3) = 'Val' AND ""Coloana"" NOT IN('ValAbs', 'ValStr') AND COALESCE(""Blocat"", 0) = 1
+        //                     UNION
+        //                     SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
+        //                     FROM ""Securitate"" A
+        //                     INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+        //                     WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+        //                     UNION
+        //                     SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
+        //                     FROM ""Securitate"" A
+        //                     WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTR(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+        //                     ) A
+        //                     ) AS ""ValSecuritate"",
+
+
+        //                  (select  ',' || LISTAGG(X.""DenumireScurta"" || '=' || X.""Denumire"", ',') WITHIN GROUP (ORDER BY X.""Id"", X.""DenumireScurta"", X.""Denumire"") from ( 
+        //                     select a.""Id"", b.""IdContract"", c.""IdRol"", a.""Id"" as ""IdAbsenta"" , b.ZL as ""ZileSapt"", b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal"", 0 AS ""Tip"" 
+        //                     from ""Ptj_tblAbsente"" a
+        //                     inner join ""Ptj_ContracteAbsente"" b on a.""Id"" = b.""IdAbsenta""
+        //                     inner join ""Ptj_relRolAbsenta"" c on a.""Id"" = c.""IdAbsenta""
+        //                     WHERE A.""IdTipOre"" = 1
+        //                     group by b.""IdContract"", c.""IdRol"", a.""Id"", b.ZL, b.S, b.D, b.SL, a.""Denumire"", a.""DenumireScurta"", c.""IdAbsentePermise"", A.""OreInVal""
+        //                     ) x
+        //                     WHERE X.""DenumireScurta"" IS NOT NULL AND X.""IdContract"" = P.""IdContract"" AND X.""IdRol"" = {idRol} AND
+        //                     ( (COALESCE(X.""ZileSapt"",0)=(CASE WHEN P.""ZiSapt""<6 AND P.""ZiLibera""=0 THEN 1 ELSE 0 END) AND COALESCE(X.""ZileSapt"",0) <> 0)
+        //                     OR (COALESCE(X.S,0) = (CASE WHEN P.""ZiSapt"" = 6 THEN 1 ELSE 0 END) AND COALESCE(X.S,0) <> 0)
+        //                     OR (COALESCE(X.D,0) = (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) AND COALESCE(X.D,0) <> 0)
+        //OR (COALESCE(X.SL,0) = (CASE WHEN P.""ZiSapt"" < 6 AND COALESCE(P.""ZiLiberaLegala"",0) = 1 THEN 1 ELSE 0 END) AND COALESCE(X.SL,0) <> 0))
+        //                     ) AS ""ValAbsente"",
+
+        //                     CASE WHEN (
+        //                     CASE WHEN {idRol} = 3 THEN 1 ELSE 
+        //                     CASE WHEN ({idRol} = 2 AND ((COALESCE(J.""IdStare"",1)=1 OR COALESCE(J.""IdStare"",1) = 2 OR COALESCE(J.""IdStare"",1) = 4 OR COALESCE(J.""IdStare"",1) = 6))) THEN 1 ELSE 
+        //                     CASE WHEN ({idRol} = 1 AND(COALESCE(J.""IdStare"", 1) = 1 OR COALESCE(J.""IdStare"", 1) = 4)) THEN 1 ELSE 0
+        //                     END END END)=1 AND
+        //                     (SELECT COUNT(*)
+        //                     FROM ""Ptj_relGrupSuper"" BB
+        //                     INNER JOIN ""relGrupAngajat"" CC ON BB.""IdGrup""  = CC.""IdGrup"" 
+        //                     INNER JOIN ""F100Supervizori"" DD ON CC.F10003 = DD.F10003 AND (-1 * BB.""IdSuper"")= DD.""IdSuper""
+        //                     WHERE DD.F10003=P.F10003 AND BB.""IdRol""={idRol} AND DD.""IdUser""={Session["UserId"]}
+        //                     AND {General.TruncateDate("DD.DataInceput")} <= {General.TruncateDate("P.Ziua")} 
+        //                     AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("DD.DataSfarsit")}) >= 1                            
+        //                     THEN 1 ELSE 0 END AS ""DrepturiModif"", 
+        //                     Fct.F71804 AS ""Functie"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", CA.F72404 AS ""Categorie1"", CB.F72404 AS ""Categorie2"",
+        //                     CASE WHEN 
+        //    (SELECT COUNT(*) FROM ""Ptj_Cereri"" X
+        //                         INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
+        //                         WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta""=P.""ValStr"" AND
+        //                         X.F10003=P.F10003 AND X.""IdStare""=3 AND Y.""IdTipOre""=1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
+        //                     THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
+        //                     FROM ""Ptj_Intrari"" P
+        //                     LEFT JOIN F100 A ON A.F10003 = P.F10003
+        //                     LEFT JOIN F1001 C ON A.F10003=C.F10003
+        //                     LEFT JOIN F002 E ON P.F10002 = E.F00202
+        //                     LEFT JOIN F003 F ON P.F10004 = F.F00304
+        //                     LEFT JOIN F004 G ON P.F10005 = G.F00405
+        //                     LEFT JOIN F005 H ON P.F10006 = H.F00506
+        //                     LEFT JOIN F006 I ON P.F10007 = I.F00607
+        //                     LEFT JOIN ""Ptj_Cumulat"" J ON J.F10003=A.F10003 AND J.""An""={General.FunctiiData("P.\"Ziua\"", "A")} AND J.""Luna""={General.FunctiiData("P.\"Ziua\"", "L")}
+        //                     LEFT JOIN ""Ptj_tblStariPontaj"" K ON COALESCE(J.""IdStare"",1) = K.""Id""
+        //                     LEFT JOIN ""Ptj_Contracte"" L ON P.""IdContract""=L.""Id""
+        //                     LEFT JOIN ""Ptj_Programe"" M ON P.""IdProgram""=M.""Id""
+
+        //                     LEFT JOIN F007 S7 ON C.F100958 = S7.F00708
+        //                     LEFT JOIN F008 S8 ON C.F100959 = S8.F00809
+        //                     LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
+        //                     LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
+        //                     LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
+        //                     {strLeg}
+        //                     WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
+        //                     {filtru}
+        //                     ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
+
+
+
+        //         dt = General.IncarcaDT(strSql, null);
+
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //         General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //     }
+
+        //     return dt;
+        // }
+
+            
+        private string SelectPontaj()
         {
+            //Florin 2019.11.11
+
+
             //tip  =  1    pontaj pe angajat
             //tip  =  2    pontaj pe zi
 
@@ -658,7 +1066,7 @@ namespace WizOne.Pontaj
             // 2   -  poate sterge dar apare o avertizare
             // 3   -  nu poate sterge, apare un mesaj blocant
 
-            DataTable dt = new DataTable();
+            string strSql = "";
 
             try
             {
@@ -679,7 +1087,7 @@ namespace WizOne.Pontaj
                     if (General.Nz(Request.QueryString["Ziua"], "").ToString() != "")
                         filtru += @" AND P.""Ziua""=" + General.ToDataUniv(ziua.Year, ziua.Month, Convert.ToInt32(Request.QueryString["Ziua"].Replace("Ziua", "")));
 
-                    tipInreg = Convert.ToInt32(General.Nz(cmbPtjAng.Value,1));
+                    tipInreg = Convert.ToInt32(General.Nz(cmbPtjAng.Value, 1));
                 }
                 else
                 {
@@ -689,7 +1097,7 @@ namespace WizOne.Pontaj
                     cheia = "P.F10003";
                     filtru = $@" AND {General.TruncateDate("P.Ziua")} = {General.ToDataUniv(ziua.Year, ziua.Month, ziua.Day)}";
 
-                    if (General.Nz(cmbSub.Value,"").ToString() != "") filtru += " AND P.F10004=" + cmbSub.Value;
+                    if (General.Nz(cmbSub.Value, "").ToString() != "") filtru += " AND P.F10004=" + cmbSub.Value;
                     if (General.Nz(cmbFil.Value, "").ToString() != "") filtru += " AND P.F10005=" + cmbFil.Value;
                     if (General.Nz(cmbSec.Value, "").ToString() != "") filtru += " AND P.F10006=" + cmbSec.Value;
                     if (General.Nz(cmbDept.Value, "").ToString() != "") filtru += " AND P.F10007=" + cmbDept.Value;
@@ -783,11 +1191,11 @@ namespace WizOne.Pontaj
 
 
                 string valTmp = "";
-                string[] arrVal = Constante.lstValuri.Split(new char[] { ';' },StringSplitOptions.RemoveEmptyEntries);
-                for(int i = 0; i < arrVal.Length - 1; i++)
+                string[] arrVal = Constante.lstValuri.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < arrVal.Length - 1; i++)
                 {
                     if (Constante.tipBD == 1)
-                        valTmp += $@",CONVERT(datetime,DATEADD(minute, P.""{arrVal[i]}"", '')) AS ""ValTmp{arrVal[i].Replace("Val","")}"" ";
+                        valTmp += $@",CONVERT(datetime,DATEADD(minute, P.""{arrVal[i]}"", '')) AS ""ValTmp{arrVal[i].Replace("Val", "")}"" ";
                     else
                         valTmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + P.""{arrVal[i]}""/1440 AS ""ValTmp{arrVal[i].Replace("Val", "")}"" ";
                 }
@@ -802,7 +1210,7 @@ namespace WizOne.Pontaj
                 //Florin 2019.11.07
                 //de pe partea de oracle am scos grou by de la taote ListAgg
 
-                string strSql = "";
+                
                 if (Constante.tipBD == 1)
                     strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
                             {cheia} AS ""Cheia"", 
@@ -1007,9 +1415,24 @@ namespace WizOne.Pontaj
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}
                             ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
 
+            return strSql;
+        }
 
+        //Florin 2019.11.11
+        public DataTable PontajCuInOut()
+        {
+            DataTable dt = new DataTable();
 
+            try
+            {
+                string strSql = SelectPontaj();
                 dt = General.IncarcaDT(strSql, null);
 
             }

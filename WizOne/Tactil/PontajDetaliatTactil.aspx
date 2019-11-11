@@ -60,7 +60,7 @@
             </tr>
         </table>
 
-    <table width="67%"  >
+    <table width="60%"  >
         <tr>
             <td  align="center" valign="top" width="675">               
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>

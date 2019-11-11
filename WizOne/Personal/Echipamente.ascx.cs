@@ -135,6 +135,15 @@ namespace WizOne.Personal
                             case "TIME":
                                 row[x] = DateTime.Now;
                                 break;
+                            case "DURATAUTILIZARE":
+                                int nrAni = 0, nrLuni = 0, nrZile = 0;
+                                CalculVechime(Convert.ToDateTime(e.NewValues["DataPrimire"]).Date, Convert.ToDateTime(e.NewValues["DataExpirare"]).Date, out nrAni, out nrLuni, out nrZile);
+                                string vechime = " {0} {1} {2} {3} {4} {5} ";
+                                vechime = string.Format(vechime, (nrAni > 0 ? nrAni.ToString() : ""), (nrAni > 0 ? (nrAni == 1 ? "an" : "ani") : ""),
+                                                                 (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
+                                                                 (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
+                                row[x] = vechime;
+                                break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;
@@ -142,7 +151,7 @@ namespace WizOne.Personal
                     }
 
                     x++;
-                }
+                }         
 
                 ds.Tables["Admin_Echipamente"].Rows.Add(row);
                 e.Cancel = true;
@@ -175,10 +184,20 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["Admin_Echipamente"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateEchipamente.Columns[col.ColumnName] != null && grDateEchipamente.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateEchipamente.Columns[col.ColumnName] != null)
                     {
                         var edc = e.NewValues[col.ColumnName];
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;  
+                        if (col.ColumnName.ToUpper() == "DURATAUTILIZARE")
+                        {
+                            int nrAni = 0, nrLuni = 0, nrZile = 0;
+                            CalculVechime(Convert.ToDateTime(e.NewValues["DataPrimire"]).Date, Convert.ToDateTime(e.NewValues["DataExpirare"]).Date, out nrAni, out nrLuni, out nrZile);
+                            string vechime = " {0} {1} {2} {3} {4} {5} ";
+                            vechime = string.Format(vechime, (nrAni > 0 ? nrAni.ToString() : ""), (nrAni > 0 ? (nrAni == 1 ? "an" : "ani") : ""),
+                                                             (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
+                                                             (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
+                            row[col.ColumnName] = vechime;
+                        }
                     }
 
                 }
@@ -245,7 +264,7 @@ namespace WizOne.Personal
                                                      (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
                                                      (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
 
-                    e.Value = vechime;
+                    e.Value = vechime;                 
                 }
             }
         }

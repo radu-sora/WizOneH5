@@ -345,7 +345,7 @@ namespace WizOne.Pagini
                     }
                 }
 
-                General.AddUserIstoric();
+                General.AddUserIstoric(kp);
 
                 dr["F70103"] = pwd;
                 Session["InformatiaCurenta"] = dt;

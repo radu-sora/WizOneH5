@@ -75,7 +75,8 @@ namespace WizOne.Pagini
                                 }
                             }
 
-                            General.AddUserIstoric();
+                            string idUser = General.Nz(HttpContext.Current.Session["UserId"], -99).ToString();
+                            General.AddUserIstoric(idUser);
 
                             string parolaCriptata = prc.EncryptString(Constante.cheieCriptare, txtPan2.Text, 1);
 

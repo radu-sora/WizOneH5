@@ -273,7 +273,8 @@ namespace WizOne
                         CriptDecript prc = new CriptDecript();
                         string parola = prc.EncryptString(Constante.cheieCriptare, txtParola.Text, 1);
 
-                        General.AddUserIstoric();
+                        string idUser = General.Nz(HttpContext.Current.Session["UserId"], -99).ToString();
+                        General.AddUserIstoric(idUser);
 
                         string strSql = @"UPDATE USERS SET F70103=@1 WHERE F70102=@2";
                         General.ExecutaNonQuery(strSql, new string[] { parola, Session["UserId"].ToString() });
@@ -303,7 +304,8 @@ namespace WizOne
                         CriptDecript prc = new CriptDecript();
                         string parola = prc.EncryptString(Constante.cheieCriptare, txtParolaRap.Text, 1);
 
-                        General.AddUserIstoric(2);
+                        string idUser = General.Nz(HttpContext.Current.Session["UserId"], -99).ToString();
+                        General.AddUserIstoric(idUser, 2);
 
                         string strSql = @"UPDATE USERS SET ""Parola""=@1 WHERE F70102=@2";
                         General.ExecutaNonQuery(strSql, new string[] { parola, Session["UserId"].ToString() });

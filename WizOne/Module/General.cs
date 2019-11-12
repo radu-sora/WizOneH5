@@ -7726,15 +7726,14 @@ namespace WizOne.Module
         }
 
 
-        public static void AddUserIstoric(int tip = 1)
-        {
+        public static void AddUserIstoric(string idUser, int tip = 1)
+        {//Radu 11.11.2019 - idUser se transmite ca parametru
             //tip
             //tip = 1 se salveaza istoric parola logare
             //tip = 2 se salveaza istoric parola fluturas
 
             try
-            {
-                string idUser = General.Nz(HttpContext.Current.Session["UserId"],-99).ToString();
+            {                
                 string strSql = $@"INSERT INTO ""ParoleUtilizatorIstoric""(""IdUser"", ""Parola"", ""Data"", USER_NO, TIME)
                         SELECT F70102, F70103, {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""Users"" WHERE F70102={idUser}";
                 if (tip == 2)

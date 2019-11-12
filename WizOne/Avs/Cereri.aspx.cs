@@ -1987,7 +1987,7 @@ namespace WizOne.Avs
                 if (idAtr == (int)Constante.Atribute.Norma)
                 {
                     DataTable dtSal = General.IncarcaDT("SELECT COALESCE(F100699, 0) FROM F100 WHERE F10003 = " + F10003, null);
-                    if (!VerificareSalariu(Convert.ToInt32(dtSal.Rows[0][0].ToString()), Convert.ToInt32(cmb2Nou.Value)))
+                    if (!VerificareSalariu(Convert.ToInt32(Convert.ToDouble(dtSal.Rows[0][0].ToString())), Convert.ToInt32(cmb2Nou.Value)))
                     {                       
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!");
                         return false;

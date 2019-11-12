@@ -140,11 +140,11 @@ namespace WizOne.Module
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                 FROM ""Securitate"" A
                                 INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                WHERE B.""IdUser"" = @2 AND A.""IdForm"" = @1 {0}
+                                WHERE B.""IdUser"" = @2 AND LOWER(A.""IdForm"") = @1 {0}
                                 UNION
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                 FROM ""Securitate"" A
-                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = @1 {0}) X
+                                WHERE A.""IdGrup"" = -1 AND LOWER(A.""IdForm"") = @1 {0}) X
                                 GROUP BY X.""IdControl"", X.""IdColoana""";
                 strSql = string.Format(strSql, filtru);
                 DataTable dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });

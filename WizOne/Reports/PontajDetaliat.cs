@@ -73,7 +73,7 @@ namespace WizOne.Reports
                 }
             }
 
-            this.DataSource = General.IncarcaDT(strSql + filtru, null);
+            this.DataSource = General.IncarcaDT(strSql + filtru + @" ORDER BY B.F10008, B.F10009, A.""Ziua"" ", null);
         }
 
     }

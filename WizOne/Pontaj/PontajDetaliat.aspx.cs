@@ -554,7 +554,7 @@ namespace WizOne.Pontaj
 
                 Session["PrintParametrii"] = first + "#$" + dt.Year + "#$" + dt.Month + "#$" + dt.Day + "#$" + tip;
 
-                Response.Redirect("~/Reports/Imprima.aspx", false);
+                Response.Redirect("~/Reports/Imprima.aspx?tip=" + tip, false);
 
 
 
@@ -1212,10 +1212,10 @@ namespace WizOne.Pontaj
 
                 
                 if (Constante.tipBD == 1)
-                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
+                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
                             {cheia} AS ""Cheia"", 
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
-                            L.""Denumire"" AS ""DescContract"", P.""IdContract"", M.""Denumire"" AS DescProgram, P.""IdProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
+                            L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS DescProgram, COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
                             CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 AND
                             (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDate("FS.DataInceput")} <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("FS.DataSfarsit")}) = 1
                             THEN 1 ELSE 0 END AS ""Activ"",  
@@ -1314,13 +1314,12 @@ namespace WizOne.Pontaj
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402
                             {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
-                            {filtru}
-                            ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
+                            {filtru}";
                 else
-                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", P.""Ziua"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
+                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
                             {cheia} AS ""Cheia"", 
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
-                            L.""Denumire"" AS ""DescContract"", P.""IdContract"", M.""Denumire"" AS ""DescProgram"", P.""IdProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
+                            L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS ""DescProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
                             CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 AND
                             (SELECT COUNT(*) FROM ""F100Supervizori"" FS WHERE FS.F10003=P.F10003 AND FS.""IdSuper""={idRol} AND FS.""IdUser""={Session["UserId"]} AND {General.TruncateDate("FS.DataInceput")} <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <=  {General.TruncateDate("FS.DataSfarsit")}) = 1
                             THEN 1 ELSE 0 END AS ""Activ"",  
@@ -1413,8 +1412,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
                             {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
-                            {filtru}
-                            ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
+                            {filtru}";
             }
             catch (Exception ex)
             {
@@ -1432,7 +1430,7 @@ namespace WizOne.Pontaj
 
             try
             {
-                string strSql = SelectPontaj();
+                string strSql = SelectPontaj() + $@" ORDER BY A.F10003, {General.TruncateDate("P.Ziua")}";
                 dt = General.IncarcaDT(strSql, null);
 
             }
@@ -3148,7 +3146,7 @@ namespace WizOne.Pontaj
                                                 string jsonPrg = "";
                                                 for(int g = 0; g < dtPrg.Rows.Count; g++)
                                                 {
-                                                    jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + dtPrg.Rows[g]["Program"] + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + " }";
+                                                    jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + General.Nz(dtPrg.Rows[g]["Program"],"").ToString().Trim().Replace("\n","").Replace("\r","") + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + " }";
                                                 }
                                                 if (jsonPrg.Length > 0)
                                                     Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";

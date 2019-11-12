@@ -470,9 +470,14 @@
             });
         }
         function AdjustSize() {
-            var height = Math.max(0, document.documentElement.clientHeight) - 330;
+            var dif = 230;
+            var div = document.getElementById('divPeAng');
+            var style = window.getComputedStyle(div);
+            if (style.display === 'none')
+                dif = 340;
+            var height = Math.max(0, document.documentElement.clientHeight) - dif;
             if (<%=Session["PontajulAreCC"] %> == 1) 
-                var height = Math.max(0, document.documentElement.clientHeight) - 450;
+                var height = Math.max(0, document.documentElement.clientHeight) - 470;
 
             grDate.SetHeight(height);
         }
@@ -777,7 +782,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <br /><br />
+                <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" 
                     OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlRowPrepared="grDate_HtmlRowPrepared" 

@@ -250,9 +250,11 @@ namespace WizOne.Pagini
         {
             try
             {
-                e.NewValues["IdGrup"] = -1;
-                e.NewValues["Vizibil"] = 1;
-                e.NewValues["Blocat"] = 0;
+                DataTable dt = Session["SecuritateDate"] as DataTable;
+
+                e.NewValues["IdGrup"] = Convert.ChangeType(-1, dt.Columns["IdGrup"].DataType);
+                e.NewValues["Vizibil"] = Convert.ChangeType(1, dt.Columns["Vizibil"].DataType);
+                e.NewValues["Blocat"] = Convert.ChangeType(0, dt.Columns["Blocat"].DataType);
             }
             catch (Exception ex)
             {

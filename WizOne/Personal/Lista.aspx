@@ -108,7 +108,23 @@
                 });
                 s.cpAlertMessage = null;
             }
-        }		
+
+            AdjustSize();
+        }
+
+        function OnInitGrid(s, e) {
+            AdjustSize();
+        }
+        function OnControlsInitialized(s, e) {
+            ASPxClientUtils.AttachEventToElement(window, "resize", function (evt) {
+                AdjustSize();
+            });
+        }
+        function AdjustSize() {
+            
+            var height = Math.max(0, document.documentElement.clientHeight) - 200;
+            grDate.SetHeight(height);
+        }
 
 
     </script>
@@ -175,10 +191,10 @@
         <tr>
             <td colspan="2"> 
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared">
-                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" EnableCustomizationWindow="true" />
-                    <Settings ShowFilterRow="True" ShowGroupPanel="False" />
+                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" EnableCustomizationWindow="true"  ColumnResizeMode="Control" />
+                    <Settings ShowFilterRow="True" ShowGroupPanel="false" HorizontalScrollBarMode="Auto" ShowFilterRowMenu="true" VerticalScrollBarMode="Visible" />
                     <SettingsSearchPanel Visible="False" />        
-                    <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }"/>
+                    <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick" ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" Init="OnInitGrid"/>
                     <Columns>
                         <dx:GridViewCommandColumn Width="50px" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>
@@ -257,5 +273,9 @@
         </dx:PopupControlContentControl>
     </ContentCollection>
 </dx:ASPxPopupControl>
+
+    <dx:ASPxGlobalEvents ID="ge" runat="server">
+        <ClientSideEvents ControlsInitialized="OnControlsInitialized" />
+    </dx:ASPxGlobalEvents>
 
 </asp:Content>

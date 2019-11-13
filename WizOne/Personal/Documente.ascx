@@ -430,7 +430,7 @@
 							        <dx:ASPxLabel  ID="lblCalif1" Width="100" runat="server"  Text="Calificare 1" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxTextBox  ID="txtCalif1" Width="150"  runat="server" Text='<%# Eval("F100903") %>' TabIndex="24" AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCalif1" Width="150"  runat="server" Text='<%# Eval("F1001132") %>' TabIndex="24" AutoPostBack="false" >
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>
@@ -439,7 +439,7 @@
 							        <dx:ASPxLabel  ID="lblCalif2" Width="100" runat="server"  Text="Calificare 2" ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxTextBox  ID="txtCalif2" Width="150"  runat="server" Text='<%# Eval("F100904") %>' TabIndex="25" AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtCalif2" Width="150"  runat="server" Text='<%# Eval("F1001133") %>' TabIndex="25" AutoPostBack="false" >
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>

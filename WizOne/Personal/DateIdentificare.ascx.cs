@@ -561,9 +561,7 @@ namespace WizOne.Personal
                         ds.Tables[i].Rows[0]["F100942"] = dt100.Rows[0]["F100942"];
                         ds.Tables[i].Rows[0]["F10028"] = dt100.Rows[0]["F10028"];
                         ds.Tables[i].Rows[0]["F10024"] = dt100.Rows[0]["F10024"];
-                        ds.Tables[i].Rows[0]["F10050"] = dt100.Rows[0]["F10050"];
-                        ds.Tables[i].Rows[0]["F100903"] = dt100.Rows[0]["F100903"];
-                        ds.Tables[i].Rows[0]["F100904"] = dt100.Rows[0]["F100904"];
+                        ds.Tables[i].Rows[0]["F10050"] = dt100.Rows[0]["F10050"];           
                         ds.Tables[i].Rows[0]["F10051"] = dt100.Rows[0]["F10051"];
                         ds.Tables[i].Rows[0]["F10073"] = dt100.Rows[0]["F10073"];
                         ds.Tables[i].Rows[0]["F100571"] = dt100.Rows[0]["F100571"];
@@ -584,6 +582,8 @@ namespace WizOne.Personal
                             ds.Tables[i].Rows[0]["F1001001"] = dt1001.Rows[0]["F1001001"];
                             ds.Tables[i].Rows[0]["F1001002"] = dt1001.Rows[0]["F1001002"];
                             ds.Tables[i].Rows[0]["F100963"] = dt1001.Rows[0]["F100963"];
+                            ds.Tables[i].Rows[0]["F1001132"] = dt1001.Rows[0]["F1001132"];
+                            ds.Tables[i].Rows[0]["F1001133"] = dt1001.Rows[0]["F1001133"];
                         }
                     }
 

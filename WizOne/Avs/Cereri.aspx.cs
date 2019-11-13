@@ -3520,7 +3520,7 @@ namespace WizOne.Avs
                                     sql1001 = "UPDATE F1001 SET F100955 = " + data + ", F100964 = " + dtCer.Rows[0]["NrOreLuna"].ToString() + "  WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70421, F70422, F70423, F70424, F70425, F70426, F70427, F70428, USER_NO, TIME) "
-                            + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 6, 'Norma Contract', " + data + ", " + dtCer.Rows[0]["Norma"].ToString() + ", 'Modificari in avans', '"
+                            + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 6, 'Norma Contract', " + data + ", " + dtCer.Rows[0]["TimpPartial"].ToString() + ", 'Modificari in avans', '"
                             + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", " + dtCer.Rows[0]["TipAngajat"].ToString() + ", " + dtCer.Rows[0]["TimpPartial"].ToString() + ", "
                             + dtCer.Rows[0]["Norma"].ToString() + ", " + dtCer.Rows[0]["TipNorma"].ToString() + ", " + dtCer.Rows[0]["DurataTimpMunca"].ToString() + ", " + dtCer.Rows[0]["RepartizareTimpMunca"].ToString()
                             + ", " + dtCer.Rows[0]["IntervalRepartizare"].ToString() + ", " + General.Nz(dtCer.Rows[0]["NrOreLuna"],"0").ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";

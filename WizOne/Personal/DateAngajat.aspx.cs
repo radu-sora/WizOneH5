@@ -1306,7 +1306,7 @@ namespace WizOne.Personal
                 lstDV.Add("deData", "FX1");
                 lstDV.Add("txtLocNastere", "F100980");
                 lstDV.Add("cmbStudiiDiv", "F10050");
-                lstDV.Add("txtStudiiDet", "F100902");
+                lstDV.Add("txtStudiiDet", "F1001131");
                 lstDV.Add("cmbFunctieDiv", "F10071");
                 lstDV.Add("cmbNivel", "F10029");
                 lstDV.Add("txtZileCOFidel", "F100640");
@@ -1346,8 +1346,8 @@ namespace WizOne.Personal
                 lstDO.Add("txtNr", "F1001001");
                 lstDO.Add("txtPermisEmisDe", "F1001002");
                 lstDO.Add("cmbStudiiDoc", "F10050");
-                lstDO.Add("txtCalif1", "F100903");
-                lstDO.Add("txtCalif2", "F100904");
+                lstDO.Add("txtCalif1", "F1001132");
+                lstDO.Add("txtCalif2", "F1001133");
                 lstDO.Add("cmbTitluAcademic", "F10051");
                 lstDO.Add("cmbDedSomaj", "F10073");
                 lstDO.Add("txtNrCarteMunca", "F10012");

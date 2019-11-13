@@ -105,6 +105,9 @@ namespace WizOne.Reports
                                             ziLibera = true;
                                             break;
                                         }
+                                    col.WordWrap = true;
+                                    col.CanGrow = false;
+
                                     if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) col.BackColor = Color.FromArgb(217, 243, 253);
                                     Detail.Controls.Add(col);
 
@@ -148,6 +151,8 @@ namespace WizOne.Reports
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["TextAfisare"].ToString() + " " + strZiua;
                                 lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
+                                lblSemnatura.WordWrap = true;
+                                lblSemnatura.CanGrow = false;
                                 break;
                             case 3:                     //semnatura
                                 act = true;
@@ -155,7 +160,8 @@ namespace WizOne.Reports
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["Camp"].ToString();
                                 lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
-
+                                lblSemnatura.WordWrap = true;
+                                lblSemnatura.CanGrow = false;
                                 break;
                             case 4:                     //antet
                                 string txt = "";
@@ -169,9 +175,13 @@ namespace WizOne.Reports
                                 lblAntet.Text = txt;
                                 //lblAntet.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
                                 lblAntet.Font = new Font("Calibri", 10);
+                                lblAntet.WordWrap = true;
+                                lblAntet.CanGrow = false;
                                 break;
                             default:                    //restul
                                 lbl = CreazaCamp(dtPrint.Rows[k]["TextAfisare"].ToString(), pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()));
+                                lbl.WordWrap = true;
+                                lbl.CanGrow = false;
                                 TopMargin.Controls.Add(lbl);
 
                                 col = CreazaCamp("[" + dtPrint.Rows[k]["Camp"].ToString() + "]", pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()), 2);
@@ -188,8 +198,10 @@ namespace WizOne.Reports
                                     col.XlsxFormatString = "#,##0";
                                 }
 
-                                col.WordWrap = false;
+                                col.WordWrap = true;                         
+                                col.CanGrow = false;                              
                                 col.TextAlignment = TextAlignment.MiddleLeft;
+                                
 
                                 pozX = pozX + lbl.WidthF;
                                 if (pozX >= this.PageWidth) this.PageWidth = (int)pozX;

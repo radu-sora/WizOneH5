@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Tactil {
-    
-    
-    public partial class PontajDetaliatTactil {
-        
+namespace WizOne.Tactil
+{
+
+
+    public partial class PontajDetaliatTactil
+    {
+
         /// <summary>
         /// btnBack control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnBack;
-        
+
         /// <summary>
         /// lblMarca control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblMarca;
-        
+
         /// <summary>
         /// lblNume control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblNume;
-        
+
         /// <summary>
         /// btnLogOut control.
         /// </summary>
@@ -47,25 +49,16 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnLogOut;
-        
+
         /// <summary>
-        /// cmbLuna control.
+        /// txtAnLuna control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbLuna;
-        
-        /// <summary>
-        /// cmbAn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAn;
-        
+        protected global::DevExpress.Web.ASPxDateEdit txtAnLuna;
+
         /// <summary>
         /// btnFiltru control.
         /// </summary>
@@ -74,7 +67,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-        
+
         /// <summary>
         /// hfRowIndex control.
         /// </summary>
@@ -83,7 +76,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField hfRowIndex;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -92,7 +85,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-        
+
         /// <summary>
         /// grDateTotaluri control.
         /// </summary>
@@ -101,7 +94,7 @@ namespace WizOne.Tactil {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateTotaluri;
-        
+
         /// <summary>
         /// ge control.
         /// </summary>

@@ -3505,7 +3505,7 @@ namespace WizOne.Avs
                                 + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
 
                             //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO                          
-                            General.CalculCO(Convert.ToDateTime(data1).Year, f10003);
+                            General.CalculCO(dtModif.Year, f10003);
                         }
                         break;
                     case (int)Constante.Atribute.Norma:
@@ -3668,7 +3668,7 @@ namespace WizOne.Avs
 
 
                             //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO                          
-                            General.CalculCO(Convert.ToDateTime(data10).Year, f10003);
+                            General.CalculCO(dtSf.Year, f10003);
                         }
                         break;
                     case (int)Constante.Atribute.Organigrama:

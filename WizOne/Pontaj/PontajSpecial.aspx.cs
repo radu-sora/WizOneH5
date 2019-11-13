@@ -41,7 +41,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp();             
 
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
@@ -106,6 +106,9 @@ namespace WizOne.Pontaj
                     cmbSablon.DataSource = dt;
                     cmbSablon.DataBind();
                     Session["PtjSpecial_Sabloane"] = dt;
+
+                    DataTable dtProgr = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Programe""", null);
+                    Session["PtjSpecial_Programe"] = dtProgr;
                 }
                 else
                 {
@@ -134,14 +137,20 @@ namespace WizOne.Pontaj
                         for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
                         {
                             ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                            ASPxLabel lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxLabel;
                             if (tx != null)                            
-                                tx.Visible = true;                                                            
+                                tx.Visible = true;
+                            if (lx != null)
+                                lx.Visible = true;
                         }
                         for (int i = Convert.ToInt32(cmbNrZileSablon.Value) + 1; i <= 31; i++)
                         {
                             ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                            ASPxLabel lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxLabel;
                             if (tx != null)
                                 tx.Visible = false;
+                            if (lx != null)
+                                lx.Visible = false;
                         }
                     }             
                 }
@@ -604,17 +613,26 @@ namespace WizOne.Pontaj
                         for (int i = 1; i <= 10; i++)
                         {
                             ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                            ASPxLabel lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxLabel;
                             if (tx != null)
                             {
                                 tx.Visible = false;
                                 tx.Text = "";
+                            }
+                            if (lx != null)
+                            {
+                                lx.Visible = false;
+                                lx.Text = "";
+                                lx.ToolTip = "";
                             }
                         }
                         if (cmbNrZileSablon.Value != null)
                             for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
                             {
                                 ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                                ASPxLabel lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxLabel;
                                 if (tx != null) tx.Visible = true;
+                                if (lx != null) lx.Visible = true;
                             }
                         break;
                     case "cmbSablon":
@@ -625,6 +643,7 @@ namespace WizOne.Pontaj
                             {//sablon existent
                                 DataTable dt = Session["PtjSpecial_Sabloane"] as DataTable;
                                 DataRow[] dr = dt.Select("Id = " + Convert.ToInt32(cmbSablon.Value));
+                                DataTable dtProgr = Session["PtjSpecial_Programe"]as DataTable;
                                 if (dr != null && dr.Count() > 0)
                                 {
                                     Session["PtjSpecial_Id"] = dr[0]["Id"].ToString();                                   
@@ -634,10 +653,18 @@ namespace WizOne.Pontaj
                                         for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
                                         {
                                             ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
+                                            ASPxLabel lx = FindControlRecursive(this, "lblZiua" + i.ToString()) as ASPxLabel;
                                             if (tx != null)
                                             {
                                                 tx.Visible = true;
                                                 tx.Text = (dr[0]["Ziua" + i.ToString()] as string ?? "").ToString();
+                                            }
+                                            if (lx != null)
+                                            {
+                                                lx.Visible = true;
+                                                lx.Text = (dr[0]["IdProgram" + i.ToString()] as string ?? "").ToString();
+                                                if (dtProgr != null && dtProgr.Rows.Count > 0)
+                                                    lx.ToolTip = dtProgr.Select("Id=" + lx.Text)[0]["Denumire"] as string ?? "";
                                             }
                                         }
                                     chkS.Checked = Convert.ToInt32(dr[0]["S"] == null ? "0" : dr[0]["S"].ToString()) == 1 ? true : false;

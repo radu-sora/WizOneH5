@@ -249,6 +249,22 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        <div style="float:left; padding-right:15px;" >
+                                            <dx:ASPxLabel ID="lblZiua1" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua2" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua3" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua4" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua5" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua6" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua7" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua8" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua9" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua10" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         <div style="float:left; padding-right:15px;padding-bottom:10px;" >
 							                <dx:ASPxTextBox ID="txtZiua11" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua12" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
@@ -261,6 +277,22 @@
                                             <dx:ASPxTextBox ID="txtZiua19" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua20" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                        </div>
+                                    </td>
+                                </tr>
+                               <tr>
+                                    <td>
+                                        <div style="float:left; padding-right:15px;" >
+                                            <dx:ASPxLabel ID="lblZiua11" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua12" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua13" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua14" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua15" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua16" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua17" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua18" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua19" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua20" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -278,6 +310,23 @@
                                             <dx:ASPxTextBox ID="txtZiua30" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                             <dx:ASPxTextBox ID="txtZiua31" ReadOnly="true" style="display:inline-block; float:left; width:75px;" runat="server" Visible="false" AutoPostBack="false" ClientSideEvents-KeyDown="function(s, e) { ArataPopUp(s,e) }" />
                                        </div>                                   
+                                    </td>
+                                </tr>
+                               <tr>
+                                    <td>
+                                        <div style="float:left; padding-right:15px;" >
+                                            <dx:ASPxLabel ID="lblZiua21" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua22" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua23" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua24" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua25" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua26" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua27" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua28" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua29" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua30" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                            <dx:ASPxLabel ID="lblZiua31" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>

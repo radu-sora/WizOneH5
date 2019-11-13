@@ -40,10 +40,20 @@ namespace WizOne.Personal
                
                 cmbTipDoc.Value = Convert.ToInt32(table.Rows[0]["F100983"] == DBNull.Value ? "0" : table.Rows[0]["F100983"].ToString());
 
-                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))"; 
-                if (Constante.tipBD == 2) cmp = "CAST(ROWNUM AS INT) ";
 
-                DataTable dtTipDoc = General.IncarcaDT("select " + cmp + " AS \"IdAuto\", CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\", F73302, F73306 from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 ", null, "IdAuto");
+                //Florin 2019.11.13
+
+                //string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))"; 
+                //if (Constante.tipBD == 2) cmp = "CAST(ROWNUM AS INT) ";
+                //DataTable dtTipDoc = General.IncarcaDT("select " + cmp + " AS \"IdAuto\", a.F08502 AS \"Id\", a.F08503 as \"Denumire\", F73302, F73306 from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 ", null, "IdAuto");
+
+                DataTable dtTipDoc = General.IncarcaDT(
+                    $@"SELECT A.F08502 AS ""Id"", A.F08503 AS ""Denumire"", F73302, F73306 
+                    FROM F733 D
+                    INNER JOIN F732 C ON c.F73202 = d.F73306
+                    INNER JOIN F086 B ON b.F08602 = c.F73202
+                    INNER JOIN F085 A ON a.F08502 = b.F08603", null);
+
                 string tipDoc = "";
                 for (int i = 0; i < dtTipDoc.Rows.Count; i++)
                 {

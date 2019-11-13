@@ -2448,7 +2448,9 @@ namespace WizOne.Module
                     // 2 - (se rezolva scotand particula ALL din UNION) user-ul se salveaza doar o singura data indiferent de cate ori este pe circuit sau pe ce pozitie este;  ex: circuit -> 3;  3;  8;   3;   9;  rezulta -> 3;  8;  9;
                     string paramCumul = Dami.ValoareParam("CumulareAcelasiSupervizor", "0");
                     string strUnion = "ALL";
-                    if (paramCumul == "2") strUnion = "";
+
+                    //Florin - 2019.11.13 nu mai e nevoie de ea; trebuie stearsa;
+                    //if (paramCumul == "2") strUnion = "";
 
                     for (int i = 1; i < lstId.Count(); i++)
                     {
@@ -2498,25 +2500,28 @@ namespace WizOne.Module
                         }
                     }
 
-                    //Florin - dezactivat de moment; nu cred ca il foloseste nimeni
-                    //if (paramCumul == "1")
-                    //{
-                    //    string sqlNou = "";
-                    //    DataTable dtSql = General.IncarcaDT(strSql.Substring((" UNION " + strUnion).Length), null);
 
-                    //    string iduserCalc = "-99";
-                    //    for (int i = 0; i < dtSql.Rows.Count; i++)
-                    //    {
-                    //        if (iduserCalc != dtSql.Rows[i]["IdUser"].ToString())
-                    //        {
-                    //            sqlNou += lstSql[i];
-                    //        }
+                    //Florin - 2019.11.13
+                    if (paramCumul == "1" || paramCumul == "2")
+                    {
+                        DataTable dtSql = General.IncarcaDT(strSql.Substring((" UNION " + strUnion).Length), null);
 
-                    //        iduserCalc = dtSql.Rows[i]["IdUser"].ToString();
-                    //    }
+                        string sqlNou = "";
+                        int[] arr = new int[dtSql.Rows.Count];
+                        
+                        for (int i = 0; i < dtSql.Rows.Count; i++)
+                        {
+                            int idUsr = Convert.ToInt32(General.Nz(dtSql.Rows[i]["IdUser"], 0));
+                            if (i == 0 || (paramCumul == "1" && i > 0 && Convert.ToInt32(arr[i - 1]) != idUsr) || (paramCumul == "2" && !arr.Contains(idUsr)))
+                            {
+                                sqlNou += lstSql[i];
+                                arr[i] = idUsr;
+                            }
+                        }
 
-                    //    if (sqlNou != "") strSql = sqlNou;
-                    //}
+                        if (sqlNou != "") strSql = sqlNou;
+                    }
+
 
                     //daca este cerere de tip planificata se duce in starea 4 indiferent de pozitie
                     if (strSql != "")

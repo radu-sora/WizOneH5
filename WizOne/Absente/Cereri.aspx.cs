@@ -1138,18 +1138,23 @@ namespace WizOne.Absente
                             General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(cmbAng.Value)} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Text))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Text))} ", null);
                         }
 
-                        //Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
-                        DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { cmbAng.Value, txtDataInc.Date, txtDataSf.Date });
-                        for (int i = 0; i < dtRun.Rows.Count; i++)
-                        {
-                            string golesteVal = Dami.ValoareParam("GolesteVal");
-                            FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                            FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                            FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                            FunctiiCeasuri.Calcul.h5 = true;
-                            FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
-                            FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
-                        }
+
+                        //Florin 2019.11.13 - calcul formule si formule cumulat
+                        General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {txtDataInc.Date} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {txtDataSf.Date}");
+
+
+                        ////Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
+                        //DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { cmbAng.Value, txtDataInc.Date, txtDataSf.Date });
+                        //for (int i = 0; i < dtRun.Rows.Count; i++)
+                        //{
+                        //    string golesteVal = Dami.ValoareParam("GolesteVal");
+                        //    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                        //    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                        //    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                        //    FunctiiCeasuri.Calcul.h5 = true;
+                        //    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                        //    FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
+                        //}
                     }
 
                     #endregion

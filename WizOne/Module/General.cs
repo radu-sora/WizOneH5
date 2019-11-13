@@ -36,6 +36,12 @@ namespace WizOne.Module
             public int Rol { get; set; }
         }
 
+        public class metaPontaj
+        {
+            public int F10003 { get; set; }
+            public int Luna { get; set; }
+            public int An { get; set; }
+        }
 
         public static void MemoreazaEroarea(Exception ex, string varPagina = "", string varEvenimentul = "")
         {
@@ -3138,18 +3144,23 @@ namespace WizOne.Module
                                 General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={dr["F10003"]} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))} ", null);
                             }
 
-                            //Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
-                            DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), Convert.ToDateTime(dr["DataSfarsit"]) });
-                            for (int i = 0; i < dtRun.Rows.Count; i++)
-                            {
-                                string golesteVal = Dami.ValoareParam("GolesteVal");
-                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                                FunctiiCeasuri.Calcul.h5 = true;
-                                FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
-                                FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
-                            }
+
+                            //Florin 2019.11.13 - calcul formule si formule cumulat
+                            General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dr["F10003"])} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))}");
+
+
+                            ////Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
+                            //DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]), Convert.ToDateTime(dr["DataSfarsit"]) });
+                            //for (int i = 0; i < dtRun.Rows.Count; i++)
+                            //{
+                            //    string golesteVal = Dami.ValoareParam("GolesteVal");
+                            //    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                            //    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                            //    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                            //    FunctiiCeasuri.Calcul.h5 = true;
+                            //    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                            //    FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
+                            //}
                         }
 
                         //completeaza soldul de ZL; Este numai pt clientul Groupama
@@ -7169,7 +7180,9 @@ namespace WizOne.Module
                 string ziSf = ToDataUniv(an, luna, 99);
 
                 string strSql = "";
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' ORDER BY ""Ordine"" ", null);
+                //Florin 2019.11.13 - am pus filtrul null
+                //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' ORDER BY ""Ordine"" ", null);
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE 1=1 {General.FiltrulCuNull("CampSelect")} ORDER BY ""Ordine"" ", null);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow row = dt.Rows[i];
@@ -8546,6 +8559,162 @@ namespace WizOne.Module
             }
 
             return rez;
+        }
+
+        public static void CalculFormule(int f10003, DateTime ziua)
+        {
+            try
+            {
+                string strSql = "";
+                DataTable dt = IncarcaDT(@"SELECT * FROM ""Ptj_tblFormule"" WHERE ""Pagina"" = 'Pontaj.PontajPeAng' AND ""Control"" = 'grDate' " + FiltrulCuNull("FormulaSql") + FiltrulCuNull("Coloana") + @" ORDER BY ""Ordine"" ", null);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow row = dt.Rows[i];
+                    if (row["FormulaSql"].ToString().ToLower().IndexOf("delete") >= 0 || row["FormulaSql"].ToString().ToLower().IndexOf("insert") >= 0 || row["FormulaSql"].ToString().ToLower().IndexOf("update") >= 0 || row["FormulaSql"].ToString().ToLower().IndexOf("drop") >= 0)
+                    {
+                        TrimiteMailSys();
+                        continue;
+                    }
+
+                    if (Constante.tipBD == 1)
+                        strSql += @"UPDATE ent
+                        SET ent.{0}=({1})
+                        FROM Ptj_Intrari ent
+                        WHERE ent.F10003={2} AND Ziua={3};" + Environment.NewLine;
+                    else
+                        strSql += @"UPDATE ""Ptj_Intrari"" ent 
+                        SET ent.""{0}""=({1}) 
+                        WHERE ent.F10003={2} AND ent.""Ziua""={3};" + Environment.NewLine;
+
+                    strSql = string.Format(strSql, row["Coloana"].ToString(), row["FormulaSql"].ToString(), f10003, ToDataUniv(ziua));
+                }
+
+                if (strSql != "")
+                {
+                    string sqlCum = "BEGIN" + "\n\r" + strSql + "\n\r" + "END;";
+                    ExecutaNonQuery(sqlCum, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "Calcul", "CalculFormule");
+            }
+        }
+
+        private static string TrimiteMailSys()
+        {
+            string strErr = "";
+            string strMsg = "";
+            SmtpClient smtp = new SmtpClient();
+
+            try
+            {
+                string folosesteCred = Dami.ValoareParam("TrimiteMailCuCredentiale");
+                string cuSSL = Dami.ValoareParam("TrimiteMailCuSSL", "false");
+
+                string smtpMailFrom = Dami.ValoareParam("SmtpMailFrom");
+                string smtpServer = Dami.ValoareParam("SmtpServer");
+                string smtpPort = Dami.ValoareParam("SmtpPort");
+                string smtpMail = Dami.ValoareParam("SmtpMail");
+                string smtpParola = Dami.ValoareParam("SmtpParola");
+
+                if (smtpMailFrom == "") strMsg += ", mail from";
+                if (smtpServer == "") strMsg += ", serverul de smtp";
+                if (smtpPort == "") strMsg += ", smtp port";
+                if (folosesteCred == "1" || folosesteCred == "2")
+                {
+                    if (smtpMail == "") strMsg += ", smtp mail";
+                    if (smtpParola == "") strMsg += ", smtp parola";
+                }
+
+                if (strMsg != "")
+                {
+                    strErr = "Nu exista date despre " + strMsg.Substring(2);
+                    return strErr;
+                }
+
+                MailMessage mm = new MailMessage();
+                mm.From = new MailAddress(smtpMailFrom);
+                
+                string strSql = @"SELECT TOP 1 Mail FROM USERS A
+                    LEFT JOIN F100 B ON A.F10003=B.F10003
+                    INNER JOIN relGrupUser C ON A.F70102=C.IdUser
+                    WHERE COALESCE(A.F70114,0)=0 AND COALESCE(Mail,'') <> '' AND C.IdGrup=0";
+                if (Constante.tipBD == 2)
+                    strSql = @"SELECT ""Mail"" FROM ""USERS"" A
+                        LEFT JOIN F100 B ON A.F10003=B.F10003
+                        INNER JOIN ""relGrupUser"" C ON A.F70102=C.""IdUser""
+                        WHERE COALESCE(A.F70114,0)=0 AND COALESCE(""Mail"",'') <> '' AND C.""IdGrup""=0 AND ROWNUM<=1";
+                DataTable dtMail = IncarcaDT(strSql, null);
+                for (int i = 0; i < dtMail.Rows.Count; i++)
+                {
+                    mm.To.Add(new MailAddress(Nz(dtMail.Rows[i]["Mail"], "").ToString()));
+                }
+                mm.Bcc.Add("tehnic@WizRom.ro");
+
+                mm.Subject = "WizOne - Important !";
+                mm.Body = "Exista o neconcordanta privind securitatea datelor din baza. Va rugam sa luati de urgenta contactul cu administratorul aplicatiei.";
+                mm.IsBodyHtml = true;
+
+                smtp = new SmtpClient(smtpServer);
+                smtp.Port = Convert.ToInt32(smtpPort);
+                smtp.Host = smtpServer;
+
+                if (folosesteCred == "1" || folosesteCred == "2")
+                {
+                    NetworkCredential basicCred = new NetworkCredential(smtpMail, smtpParola);
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = basicCred;
+                }
+                else
+                {
+                    smtp.UseDefaultCredentials = true;
+                }
+
+                smtp.EnableSsl = cuSSL == "1" ? true : false;
+
+                ServicePointManager.ServerCertificateValidationCallback += (o, c, ch, er) => true;
+
+                smtp.Send(mm);
+
+                strErr = "";
+
+                smtp.Dispose();
+            }
+            catch (Exception ex)
+            {
+                strErr = "Mailul nu a fost trimis.";
+            }
+
+            return strErr;
+        }
+
+        public static void CalcFormuleAll(string strSql)
+        {
+            try
+            {
+                List<metaPontaj> lst = new List<metaPontaj>();
+
+                //calcul formule
+                DataTable dt = General.IncarcaDT(strSql, null);
+                for(int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow dr = dt.Rows[i];
+                    CalculFormule(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["Ziua"]));
+                    if (!lst.Contains(new metaPontaj { F10003 = Convert.ToInt32(dr["F10003"]), An = Convert.ToDateTime(dr["Ziua"]).Year, Luna = Convert.ToDateTime(dr["Ziua"]).Month }))
+                        lst.Add(new metaPontaj() { F10003 = Convert.ToInt32(dr["F10003"]), An = Convert.ToDateTime(dr["Ziua"]).Year, Luna = Convert.ToDateTime(dr["Ziua"]).Month });
+                }
+
+                //calcul formule cumulat
+                foreach (var l in lst)
+                {
+                    CalculFormuleCumulat(l.F10003, l.An, l.Luna);
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "Calcul", "CalculFormule");
+            }
         }
 
 

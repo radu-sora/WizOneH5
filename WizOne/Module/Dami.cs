@@ -851,8 +851,8 @@ namespace WizOne.Module
                                 CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
                                 TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END";
                     strDrepturi = $@"
-                        (SELECT ""Valoare"" FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (A.""Rol"", -13) AND DR.""IdActiune"" IN (3, -13) AND ROWNUM <=1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC) AS ""Anulare_Valoare"",
-                        (SELECT ""NrZile""  FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (A.""Rol"", -13) AND DR.""IdActiune"" IN (3, -13) AND ROWNUM <=1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC) AS ""Anulare_NrZile"" ";
+                        (SELECT ""Valoare"" FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (A.""Rol"", -13) AND DR.""IdActiune"" IN (3, -13) AND ROWNUM <=1) AS ""Anulare_Valoare"",
+                        (SELECT ""NrZile""  FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (A.""Rol"", -13) AND DR.""IdActiune"" IN (3, -13) AND ROWNUM <=1) AS ""Anulare_NrZile"" ";
                 }
 
                 sqlFinal = $@"SELECT A.""Id"", B.F10003, B.F10008 {Dami.Operator()} ' ' {Dami.Operator()} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,

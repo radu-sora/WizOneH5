@@ -426,7 +426,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua1;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua1;
 
         /// <summary>
         /// lblZiua2 control.
@@ -435,7 +435,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua2;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua2;
 
         /// <summary>
         /// lblZiua3 control.
@@ -444,7 +444,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua3;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua3;
 
         /// <summary>
         /// lblZiua4 control.
@@ -453,7 +453,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua4;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua4;
 
         /// <summary>
         /// lblZiua5 control.
@@ -462,7 +462,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua5;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua5;
 
         /// <summary>
         /// lblZiua6 control.
@@ -471,7 +471,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua6;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua6;
 
         /// <summary>
         /// lblZiua7 control.
@@ -480,7 +480,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua7;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua7;
 
         /// <summary>
         /// lblZiua8 control.
@@ -489,7 +489,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua8;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua8;
 
         /// <summary>
         /// lblZiua9 control.
@@ -498,7 +498,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua9;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua9;
 
         /// <summary>
         /// lblZiua10 control.
@@ -507,7 +507,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua10;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua10;
 
         /// <summary>
         /// txtZiua11 control.
@@ -606,7 +606,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua11;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua11;
 
         /// <summary>
         /// lblZiua12 control.
@@ -615,7 +615,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua12;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua12;
 
         /// <summary>
         /// lblZiua13 control.
@@ -624,7 +624,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua13;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua13;
 
         /// <summary>
         /// lblZiua14 control.
@@ -633,7 +633,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua14;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua14;
 
         /// <summary>
         /// lblZiua15 control.
@@ -642,7 +642,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua15;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua15;
 
         /// <summary>
         /// lblZiua16 control.
@@ -651,7 +651,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua16;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua16;
 
         /// <summary>
         /// lblZiua17 control.
@@ -660,7 +660,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua17;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua17;
 
         /// <summary>
         /// lblZiua18 control.
@@ -669,7 +669,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua18;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua18;
 
         /// <summary>
         /// lblZiua19 control.
@@ -678,7 +678,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua19;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua19;
 
         /// <summary>
         /// lblZiua20 control.
@@ -687,7 +687,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua20;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua20;
 
         /// <summary>
         /// txtZiua21 control.
@@ -795,7 +795,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua21;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua21;
 
         /// <summary>
         /// lblZiua22 control.
@@ -804,7 +804,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua22;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua22;
 
         /// <summary>
         /// lblZiua23 control.
@@ -813,7 +813,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua23;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua23;
 
         /// <summary>
         /// lblZiua24 control.
@@ -822,7 +822,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua24;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua24;
 
         /// <summary>
         /// lblZiua25 control.
@@ -831,7 +831,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua25;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua25;
 
         /// <summary>
         /// lblZiua26 control.
@@ -840,7 +840,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua26;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua26;
 
         /// <summary>
         /// lblZiua27 control.
@@ -849,7 +849,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua27;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua27;
 
         /// <summary>
         /// lblZiua28 control.
@@ -858,7 +858,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua28;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua28;
 
         /// <summary>
         /// lblZiua29 control.
@@ -867,7 +867,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua29;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua29;
 
         /// <summary>
         /// lblZiua30 control.
@@ -876,7 +876,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua30;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua30;
 
         /// <summary>
         /// lblZiua31 control.
@@ -885,7 +885,7 @@ namespace WizOne.Pontaj
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblZiua31;
+        protected global::DevExpress.Web.ASPxTextBox lblZiua31;
 
         /// <summary>
         /// lblBife control.

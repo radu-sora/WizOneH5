@@ -5,12 +5,14 @@
     <script type="text/javascript">
 
         var __name_text_box = "";
+        var __name_label = "";
 
         function ArataPopUp(s, e) {
             if (e.htmlEvent.keyCode == 24 || e.htmlEvent.keyCode == 107 || e.htmlEvent.keyCode == 187) {
                 popUpModif.Show();
                 ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
                 __name_text_box = s.name;
+                __name_label = s.name.replace("txt", "lbl");
             }
         }
 
@@ -36,6 +38,7 @@
                         txtValuri.Set(__name_text_box, valoare + lista[0] + "=" + $(this).val());
                     }
                 });
+             
                 txtValuri.Set("IdProgram_" + __name_text_box, cmbProgr.GetValue());
                 if (texts != "")
                     texts = texts.substring(1);               
@@ -45,9 +48,30 @@
             //if (texts != "")
             //{
                 var txt = ASPxClientControl.GetControlCollection().GetByName(__name_text_box);
-                txt.SetText(texts);
+                txt.SetText(texts);             
+                var lbl = ASPxClientControl.GetControlCollection().GetByName(__name_label);
+               
+                if (cmbProgr.GetValue() == null) {
+                    lbl.SetText("-");
+                    lbl.GetMainElement().title = "";
+                }
+                else {
+                    lbl.SetText(cmbProgr.GetValue());
+                    var tipProgr = "<%=Session["PtjSpecial_ProgrameJS"] %>";
+                    var resProgr = tipProgr.split(";");
+                    for (var i = 0; i < resProgr.length; i++) {
+                        var linieProgr = resProgr[i].split(",");
+                        if (linieProgr[0] == cmbProgr.GetValue()) {
+                            lbl.GetMainElement().title = linieProgr[1];
+                        }
+                }
+
+
+            }
+
             //}
             __name_text_box = "";
+            __name_label = "";
             EmptyVal();
             cmbTipAbs.SetValue(null);
             cmbProgr.SetValue(null);
@@ -92,7 +116,14 @@
 
 </asp:Content>
 
+ 
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <style type="text/css">  
+        .centerText input {  
+            text-align: center;  
+        }  
+    </style>
 
     <table width="100%">
         <tr>
@@ -250,16 +281,16 @@
                                 <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px;" >
-                                            <dx:ASPxLabel ID="lblZiua1" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua2" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua3" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua4" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua5" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua6" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua7" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua8" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua9" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua10" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+							                <dx:ASPxTextBox ID="lblZiua1" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua2" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua3" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />                                           
+							                <dx:ASPxTextBox ID="lblZiua4" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua5" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua6" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua7" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua8" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua9" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua10" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
                                         </div>
                                     </td>
                                 </tr>
@@ -282,16 +313,16 @@
                                <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px;" >
-                                            <dx:ASPxLabel ID="lblZiua11" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua12" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua13" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua14" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua15" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua16" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua17" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua18" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua19" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua20" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+							                <dx:ASPxTextBox ID="lblZiua11" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua12" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua13" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />                                           
+							                <dx:ASPxTextBox ID="lblZiua14" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua15" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua16" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua17" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua18" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua19" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua20" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
                                         </div>
                                     </td>
                                 </tr>
@@ -315,17 +346,18 @@
                                <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px;" >
-                                            <dx:ASPxLabel ID="lblZiua21" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua22" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua23" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua24" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua25" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua26" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua27" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua28" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua29" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua30" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
-                                            <dx:ASPxLabel ID="lblZiua31" runat="server" Text="" style="display:inline-block; float:left; width:75px;" Visible="false" />
+							                <dx:ASPxTextBox ID="lblZiua21" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua22" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua23" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />                                           
+							                <dx:ASPxTextBox ID="lblZiua24" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua25" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua26" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua27" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua28" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua29" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua30" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+							                <dx:ASPxTextBox ID="lblZiua31" ReadOnly="true" Text="" Border-BorderStyle="None" style="display:inline-block; float:left; width:75px;" CssClass="centerText" runat="server" Visible="false" AutoPostBack="false"  />
+
                                         </div>
                                     </td>
                                 </tr>

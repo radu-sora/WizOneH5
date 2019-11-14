@@ -2151,17 +2151,54 @@ namespace WizOne.Avs
                 //verificare ca salariul sa nu fie mai mic decat cel minim (in functie si de timp partial) la schimbare norma sau salariu
                 if (idAtr == (int)Constante.Atribute.Norma)
                 {
-                    DataTable dtSal = General.IncarcaDT("SELECT COALESCE(F100699, 0) FROM F100 WHERE F10003 = " + F10003, null);
-                    if (!VerificareSalariu(Convert.ToInt32(Convert.ToDouble(dtSal.Rows[0][0].ToString())), Convert.ToInt32(cmb2Nou.Value)))
+                    //DataTable dtSal = General.IncarcaDT("SELECT COALESCE(F100699, 0) FROM F100 WHERE F10003 = " + F10003, null);
+                    sql = "select f100.f10003 as Marca, case when f100991 is null or f100991 = convert(datetime, '01/01/2100', 103) then  "
+                                            + "  convert(datetime, '01/' + convert(varchar, f01012) + '/' + convert(varchar, f01011), 103) "
+                                            + " else f100991 end as Data, COALESCE(F100699, 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                                            + " union "
+                                            + " select f70403 as Marca, f70406 as Data, COALESCE(F70407, 0) as Valoare from f704 where f70404 = 1 and f70420 = 0 "
+                                            + " union "
+                                            + " select f10003 as Marca, datamodif as Data, COALESCE(SalariulBrut, 0) as Valoare from Avs_Cereri where IdAtribut = 1 and IdStare in (1, 2, 3)";
+                    if (Constante.tipBD == 2)
+                        sql = "select f100.f10003 as \"Marca\", case when f100991 is null or f100991 = TO_DATE('01/01/2100', 'dd/mm/yyyy') then  "
+                            + "  TO_DATE('01/' ||  f01012 || '/' || F01011, 'dd/mm/yyyy') "
+                            + " else f100991 end as \"Data\", COALESCE(F100699, 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                            + " union "
+                            + " select f70403 as \"Marca\", f70406 as \"Data\", COALESCE(F70407, 0) as \"Valoare\" from f704 where f70404 = 1 and f70420 = 0 "
+                            + " union "
+                            + " select f10003 as \"Marca\", \"DataModif\" as \"Data\", COALESCE(\"SalariulBrut\", 0) as \"Valoare\" from \"Avs_Cereri\" where \"IdAtribut\" = 1 and \"IdStare\" in (1, 2, 3)";
+                    DataTable dtSal = General.IncarcaDT(sql, null);
+                    string dtModif = General.ToDataUniv(Convert.ToDateTime(txtDataMod.Value).Year, Convert.ToDateTime(txtDataMod.Value).Month, Convert.ToDateTime(txtDataMod.Value).Day);
+                    DataRow[] drSal = dtSal.Select("Marca = " + F10003 + " AND Data <= " + dtModif, "Data DESC");
+
+                    if (!VerificareSalariu(Convert.ToInt32(Convert.ToDouble(drSal[0]["Valoare"].ToString())), Convert.ToInt32(cmb2Nou.Value)))
                     {                       
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!");
-                        return false;
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!\nVa rugam sa efectuati o cerere de modificare salariu in concordanta cu noul Timp partial!\n\n");
+                        //return false;
                     }
                 }
                 if (idAtr == (int)Constante.Atribute.Salariul)
                 {
-                    DataTable dtNorma = General.IncarcaDT("SELECT COALESCE(F10043, 0) FROM F100 WHERE F10003 = " + F10003, null);
-                    if (!VerificareSalariu(Convert.ToInt32(txt1Nou.Text.Length > 0 ? txt1Nou.Text : "0"), Convert.ToInt32(dtNorma.Rows[0][0].ToString())))
+                    //DataTable dtNorma = General.IncarcaDT("SELECT COALESCE(F10043, 0) FROM F100 WHERE F10003 = " + F10003, null);
+                    sql = "select f100.f10003 as Marca, case when f100955 is null or f100955 = convert(datetime, '01/01/2100', 103) then  "
+                    + "  convert(datetime, '01/' + convert(varchar, f01012) + '/' + convert(varchar, f01011), 103) "
+                    + " else f100955 end as Data, COALESCE(f10043, 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                    + " union "
+                    + " select f70403 as Marca, f70406 as Data, COALESCE(f70422, 0) as Valoare from f704 where f70404 = 6 and f70420 = 0 "
+                    + " union "
+                    + " select f10003 as Marca, datamodif as Data, COALESCE(TimpPartial, 0) as Valoare from Avs_Cereri where IdAtribut = 6 and IdStare in (1, 2, 3)";
+                    if (Constante.tipBD == 2)
+                        sql = "select f100.f10003 as \"Marca\", case when f100955 is null or f100955 = TO_DATE('01/01/2100', 'dd/mm/yyyy') then  "
+                            + "  TO_DATE('01/' ||  f01012 || '/' || F01011, 'dd/mm/yyyy') "
+                            + " else f100955 end as \"Data\", COALESCE(f10043, 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                            + " union "
+                            + " select f70403 as \"Marca\", f70406 as \"Data\", COALESCE(f70422, 0) as \"Valoare\" from f704 where f70404 = 6 and f70420 = 0 "
+                            + " union "
+                            + " select f10003 as \"Marca\", \"DataModif\" as \"Data\", COALESCE(\"TimpPartial\", 0) as \"Valoare\" from \"Avs_Cereri\" where \"IdAtribut\" = 6 and \"IdStare\" in (1, 2, 3)";
+                    DataTable dtNorma = General.IncarcaDT(sql, null);
+                    string dtModif = General.ToDataUniv(Convert.ToDateTime(txtDataMod.Value).Year, Convert.ToDateTime(txtDataMod.Value).Month, Convert.ToDateTime(txtDataMod.Value).Day);
+                    DataRow[] drNorma = dtNorma.Select("Marca = " + F10003 + " AND Data <= " + dtModif, "Data DESC");
+                    if (!VerificareSalariu(Convert.ToInt32(txt1Nou.Text.Length > 0 ? txt1Nou.Text : "0"), Convert.ToInt32(drNorma[0]["Valoare"].ToString())))
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul introdus este mai mic decat cel minim (raportat la timp partial)!");
                         return false;
@@ -3060,7 +3097,7 @@ namespace WizOne.Avs
             Session["Avs_Cereri_Date"] = null;
 
             //ArataMesaj("Proces finalizat cu succes!");
-            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes!");
+            pnlCtl.JSProperties["cpAlertMessage"] += Dami.TraduCuvant("Proces finalizat cu succes!");
             AscundeCtl();
             txtExpl.Text = "";
             cmbAtribute.Value = null;
@@ -3909,7 +3946,8 @@ namespace WizOne.Avs
                         sql100 = "UPDATE F100 SET F100924 = " + data13 + (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10077 = " + data13 : "") + " WHERE F10003 = " + f10003.ToString();
                         sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + " + 1 WHERE F10003 = " + f10003.ToString();
                         //sql1001 = "UPDATE F1001 SET F1001102 = " + data11 + " WHERE F10003 = " + f10003.ToString();   01/01/2100
-                        //sql111 ??
+                        sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data1;
+                        General.IncarcaDT(sql111, null);
                         break;
                     case (int)Constante.Atribute.Detasare:
                         dtLuc = General.DamiDataLucru();
@@ -3923,7 +3961,8 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.RevenireDetasare:
                         sql100 = "UPDATE F100 SET F100917 = " + data13 + " WHERE F10003 = " + f10003.ToString();
-                        //sql112 ??
+                        sql112 = "UPDATE F112 SET F11209 = " + data16 + " WHERE F11203 = " + f10003 + " AND F11207 = " + data14;
+                        General.IncarcaDT(sql112, null);
                         break;
                     default:
                         return;

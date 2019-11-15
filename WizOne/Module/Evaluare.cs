@@ -2137,7 +2137,7 @@ namespace WizOne.Module
 
                                     string sqlTemp =
                                         $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"",ob.""Obiectiv"", act.""IdActivitate"", act.""Activitate"", MAX(ob.""Pondere""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"", TO_CHAR(ob.""Obiectiv""), act.""IdActivitate"", TO_CHAR(act.""Activitate""), MAX(ob.""Pondere""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                         FROM ""Eval_ListaObiectiv"" lista                                        
                                         JOIN ""Eval_ListaObiectivDet"" listaOb on listaOb.""IdLista"" = lista.""IdLista""
                                         JOIN ""Eval_Obiectiv"" ob ON listaOb.""IdObiectiv"" = ob.""IdObiectiv""
@@ -2146,7 +2146,7 @@ namespace WizOne.Module
                                         JOIN ""Eval_ConfigObTemplateDetail"" tmpl ON  1=1
                                         WHERE setAng.""Id"" = @1 AND lista.""IdLista"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2
                                         AND tmpl.""ColumnName"" = 'Obiectiv'
-                                        group by ob.""IdObiectiv"", ob.""Obiectiv"", act.""IdActivitate"", act.""Activitate"" " + Environment.NewLine;
+                                        group by ob.""IdObiectiv"", TO_CHAR(ob.""Obiectiv""), act.""IdActivitate"", TO_CHAR(act.""Activitate"") " + Environment.NewLine;
 
                                     //inseram pt pozitia 1 si pentru id linie tip camp
                                     General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });

@@ -3008,8 +3008,8 @@ namespace WizOne.Avs
                 }
             }
 
-            sql = "INSERT INTO \"Avs_Cereri\" (\"Id\", F10003, \"IdAtribut\", \"IdCircuit\", \"Explicatii\", \"Motiv\", \"DataModif\", \"DataConsemnare\", \"Corectie\", \"Actualizat\", \"UserIntrod\", USER_NO, TIME, \"IdStare\", \"Culoare\", \"TotalCircuit\", \"Pozitie\", {0}) "
-                + "VALUES (" + idUrm.ToString() + ", " + F10003.ToString() + ", " + idAtr.ToString() + ", " + idCircuit.ToString() + ", '" + txtExpl.Text + "', '', " + dataModif + ", null, 0, 0, " + Session["UserId"].ToString() + ", "
+            sql = "INSERT INTO \"Avs_Cereri\" (\"Id\", F10003, \"IdAtribut\", \"IdCircuit\", \"Explicatii\", \"Document\", \"Motiv\", \"DataModif\", \"DataConsemnare\", \"Corectie\", \"Actualizat\", \"UserIntrod\", USER_NO, TIME, \"IdStare\", \"Culoare\", \"TotalCircuit\", \"Pozitie\", {0}) "
+                + "VALUES (" + idUrm.ToString() + ", " + F10003.ToString() + ", " + idAtr.ToString() + ", " + idCircuit.ToString() + ", '" + txtExpl.Text + "', '" + txtDocument.Text + "', '', " + dataModif + ", null, 0, 0, " + Session["UserId"].ToString() + ", "
                 + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", " + idStare.ToString() + ", (SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare.ToString() + "), " + total.ToString() + ", " + pozUser.ToString() + ",  {1})";
 
 
@@ -3938,7 +3938,7 @@ namespace WizOne.Avs
                         DateTime dtLuc = General.DamiDataLucru();
                         sql100 = "UPDATE F100 SET F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + ", F100922 = " + data11 + ", F100923 = " + data12 +
                              (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10076 = " + data11 + ", F10077 = " + data12 : "") + " WHERE F10003 = " + f10003.ToString();
-                        sql1001 = "UPDATE F1001 SET F1001102 = " + data11 + " WHERE F10003 = " + f10003.ToString();
+                        sql1001 = "UPDATE F1001 SET F1001102 = " + data11 + " + 1 WHERE F10003 = " + f10003.ToString();
                         string sql111 = $@"INSERT INTO F111 (F11101, F11102, F11103, F11104, F11105, F11106, F11107, YEAR, MONTH, USER_NO, TIME)
                                VALUES (111, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, {dtCer.Rows[0]["MotivSuspId"].ToString()},{data11}, {data12}, {data13},
                                {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
@@ -3946,8 +3946,7 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.RevenireSuspendare:
                         sql100 = "UPDATE F100 SET F100924 = " + data13 + (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10077 = " + data13 : "") + " WHERE F10003 = " + f10003.ToString();
-                        sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + " + 1 WHERE F10003 = " + f10003.ToString();
-                        //sql1001 = "UPDATE F1001 SET F1001102 = " + data11 + " WHERE F10003 = " + f10003.ToString();   01/01/2100
+                        sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();                      
                         sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data1;
                         General.IncarcaDT(sql111, null);
                         break;

@@ -77,8 +77,8 @@ namespace WizOne.Tactil
                 }
                 else
                 {
-                    luna = Convert.ToInt32(cmbLuna.Value);
-                    an = Convert.ToInt32(cmbAn.Value);
+                    luna = Convert.ToDateTime(txtAnLuna.Value).Month;
+                    an = Convert.ToDateTime(txtAnLuna.Value).Year;
                 }
 
                 if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
@@ -112,10 +112,10 @@ namespace WizOne.Tactil
             {
                 Dami.AccesTactil();
 
-                cmbAn.DataSource = General.ListaNumere(2015, 2022);
-                cmbAn.DataBind();
-                cmbLuna.DataSource = General.ListaLuniDesc();
-                cmbLuna.DataBind();
+                //cmbAn.DataSource = General.ListaNumere(2015, 2022);
+                //cmbAn.DataBind();
+                //cmbLuna.DataSource = General.ListaLuniDesc();
+                //cmbLuna.DataBind();
                 //DataTable dt010 = General.IncarcaDT($@"SELECT F01011, F01012 FROM F010 ", null);
 
                 if (!IsPostBack)
@@ -124,18 +124,19 @@ namespace WizOne.Tactil
                     {
                         //cmbLuna.Value = Convert.ToInt32(dt010.Rows[0][1].ToString());
                         //cmbAn.Value = Convert.ToInt32(dt010.Rows[0][0].ToString());
-                        cmbLuna.Value = DateTime.Now.Month;
-                        cmbAn.Value = DateTime.Now.Year;
+                        //cmbLuna.Value = DateTime.Now.Month;
+                        //cmbAn.Value = DateTime.Now.Year;
+                        txtAnLuna.Value = DateTime.Now;
                     }
                     catch (Exception) { }
 
-                    an = Convert.ToInt32(cmbAn.Value ?? DateTime.Now.Year);
-                    luna = Convert.ToInt32(cmbLuna.Value ?? DateTime.Now.Month);
+                    an = Convert.ToDateTime(txtAnLuna.Value ?? DateTime.Now.Year).Year;
+                    luna = Convert.ToDateTime(txtAnLuna.Value ?? DateTime.Now.Month).Month;           
                 }
                 else
-                {
-                    luna = Convert.ToInt32(cmbLuna.Value);
-                    an = Convert.ToInt32(cmbAn.Value);
+                { 
+                    luna = Convert.ToDateTime(txtAnLuna.Value).Month;
+                    an = Convert.ToDateTime(txtAnLuna.Value).Year;
                 }
 
                 lblMarca.InnerText = "MARCA: " + Session["User_Marca"].ToString();

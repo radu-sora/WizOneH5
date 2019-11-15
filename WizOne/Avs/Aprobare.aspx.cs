@@ -543,6 +543,15 @@ namespace WizOne.Avs
                 return false;
         }
 
+        private bool VerificareSalariu(int salariu, int timpPartial)
+        {
+            int salMin = Convert.ToInt32(Dami.ValoareParam("SAL_MIN", "0"));
+            if (salMin * timpPartial / 8 > salariu)
+                return false;
+            else
+                return true;
+        }
+
 
         private void MetodeCereri(int tipActiune, int tipMsg = 0)
         {
@@ -557,7 +566,7 @@ namespace WizOne.Avs
                 string comentarii = "";
                 string msg = "";
 
-                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal", "Actualizat", "PoateModifica" });
+                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id", "IdStare", "IdAtribut", "NumeAngajat", "DataModif", "F10003", "Revisal", "Actualizat", "PoateModifica", "ValoareNoua" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null)
                 {
                     if (tipMsg == 0)
@@ -622,9 +631,66 @@ namespace WizOne.Avs
                         continue;
                     }
 
+                    //Radu 14.11.2019 - verificare norma si salariu
+                    if ((Convert.ToInt32(General.Nz(arr[2], 0)) == (int)Constante.Atribute.Norma || Convert.ToInt32(General.Nz(arr[2], 0)) == (int)Constante.Atribute.Salariul) && (tipActiune == 2 || tipActiune == 3))
+                    {
+                        string sql = "select f100.f10003 as Marca, case when f100991 is null or f100991 = convert(datetime, '01/01/2100', 103) then  "
+                        + "  convert(datetime, '01/' + convert(varchar, f01012) + '/' + convert(varchar, f01011), 103) "
+                        + " else f100991 end as Data, COALESCE(F100699, 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                        + " union "
+                        + " select f70403 as Marca, f70406 as Data, COALESCE(F70407, 0) as Valoare from f704 where f70404 = 1 and f70420 = 0 "
+                        + " union "
+                        + " select f10003 as Marca, datamodif as Data, COALESCE(SalariulBrut, 0) as Valoare from Avs_Cereri where IdAtribut = 1 and IdStare in (1, 2, 3)";
+                        if (Constante.tipBD == 2)
+                            sql = "select f100.f10003 as \"Marca\", case when f100991 is null or f100991 = TO_DATE('01/01/2100', 'dd/mm/yyyy') then  "
+                                + "  TO_DATE('01/' ||  f01012 || '/' || F01011, 'dd/mm/yyyy') "
+                                + " else f100991 end as \"Data\", COALESCE(F100699, 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                                + " union "
+                                + " select f70403 as \"Marca\", f70406 as \"Data\", COALESCE(F70407, 0) as \"Valoare\" from f704 where f70404 = 1 and f70420 = 0 "
+                                + " union "
+                                + " select f10003 as \"Marca\", \"DataModif\" as \"Data\", COALESCE(\"SalariulBrut\", 0) as \"Valoare\" from \"Avs_Cereri\" where \"IdAtribut\" = 1 and \"IdStare\" in (1, 2, 3)";
+                        DataTable dtSal = General.IncarcaDT(sql, null);
+                        string dtModif = General.ToDataUniv(Convert.ToDateTime(data).Year, Convert.ToDateTime(data).Month, Convert.ToDateTime(data).Day);                  
 
+                        sql = "select f100.f10003 as Marca, case when f100955 is null or f100955 = convert(datetime, '01/01/2100', 103) then  "
+                        + "  convert(datetime, '01/' + convert(varchar, f01012) + '/' + convert(varchar, f01011), 103) "
+                        + " else f100955 end as Data, COALESCE(f10043, 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                        + " union "
+                        + " select f70403 as Marca, f70406 as Data, COALESCE(f70422, 0) as Valoare from f704 where f70404 = 6 and f70420 = 0 "
+                        + " union "
+                        + " select f10003 as Marca, datamodif as Data, COALESCE(TimpPartial, 0) as Valoare from Avs_Cereri where IdAtribut = 6 and IdStare in (1, 2, 3)";
+                        if (Constante.tipBD == 2)
+                            sql = "select f100.f10003 as \"Marca\", case when f100955 is null or f100955 = TO_DATE('01/01/2100', 'dd/mm/yyyy') then  "
+                                + "  TO_DATE('01/' ||  f01012 || '/' || F01011, 'dd/mm/yyyy') "
+                                + " else f100955 end as \"Data\", COALESCE(f10043, 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                                + " union "
+                                + " select f70403 as \"Marca\", f70406 as \"Data\", COALESCE(f70422, 0) as \"Valoare\" from f704 where f70404 = 6 and f70420 = 0 "
+                                + " union "
+                                + " select f10003 as \"Marca\", \"DataModif\" as \"Data\", COALESCE(\"TimpPartial\", 0) as \"Valoare\" from \"Avs_Cereri\" where \"IdAtribut\" = 6 and \"IdStare\" in (1, 2, 3)";
+                        DataTable dtNorma = General.IncarcaDT(sql, null);                          
+                        
+                        if (Convert.ToInt32(General.Nz(arr[2], 0)) == (int)Constante.Atribute.Norma)
+                        {
+                            DataRow[] drSal = dtSal.Select("Marca = " + arr[5] + " AND Data <= " + dtModif, "Data DESC");
+                            DataRow[] drNorma = dtNorma.Select("Marca = " + arr[5] + " AND Data < " + dtModif, "Data DESC");
+                            if (!VerificareSalariu(Convert.ToInt32(Convert.ToDouble(drSal[0]["Valoare"].ToString())), Convert.ToInt32(drNorma[0]["Valoare"].ToString())))
+                            {
+                                msg += Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!\nVa rugam sa anulati mai intai cererea de modificare salariu in concordanta cu acest Timp partial!\n");
+                                continue;
+                            }
+                        }
+                        if (Convert.ToInt32(General.Nz(arr[2], 0)) == (int)Constante.Atribute.Salariul)
+                        {
+                            DataRow[] drSal = dtSal.Select("Marca = " + arr[5] + " AND Data < " + dtModif, "Data DESC");
+                            DataRow[] drNorma = dtNorma.Select("Marca = " + arr[5] + " AND Data <= " + dtModif, "Data DESC");
+                            if (!VerificareSalariu(Convert.ToInt32(Convert.ToDouble(drSal[0]["Valoare"].ToString())), Convert.ToInt32(drNorma[0]["Valoare"].ToString())))
+                            {
+                                msg += Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!\nVa rugam sa anulati si cererea de modificare norma contract in concordanta cu acest salariu!\n");                             
+                            }
+                        }              
+                    }               
 
-
+                    
                     if (Convert.ToInt32(General.Nz(arr[1], 0)) == 1 || Convert.ToInt32(General.Nz(arr[1], 0)) == 2 
                     || (Convert.ToInt32(General.Nz(arr[1], 0)) == 3 && !EsteActualizata(arr[5].ToString(), arr[2].ToString(), data.Value.Day.ToString().PadLeft(2, '0') + "/" + data.Value.Month.ToString().PadLeft(2, '0') + "/" + data.Value.Year.ToString())))
                     {

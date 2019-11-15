@@ -30,8 +30,16 @@
 							        <dx:ASPxLabel  ID="lblRotunjire" runat="server"  Width="70" Text="Rotunjire: " ></dx:ASPxLabel >	
 						        </td>	
 						        <td>
-							        <dx:ASPxComboBox DataSourceID="dsOSRotunjire"  Width="150"  Value='<%#Eval("OSRotunjire") %>' ID="cmbOSRotunjire"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							        <dx:ASPxComboBox ID="cmbOSRotunjire" runat="server" Width="150" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                         <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerOreSup(s); }" />
+                                        <Items>
+                                            <dx:ListEditItem Text = "rotunjire la minute" Value = "1" />
+                                            <dx:ListEditItem Text = "rotunjire la ora" Value = "2" />
+                                            <dx:ListEditItem Text = "trunchiere la ora" Value = "3" />
+                                            <dx:ListEditItem Text = "rotunjire la 45 minute" Value = "4" />
+                                            <dx:ListEditItem Text = "rotunjire la 10 minut" Value = "5" />
+                                            <dx:ListEditItem Text = "rotunjire la 5 minute" Value = "6" />
+                                        </Items>
 							        </dx:ASPxComboBox >
 						        </td>
 					        </tr>
@@ -56,7 +64,6 @@
 						        </td>
 					        </tr>
 				        </table>
-                      <asp:ObjectDataSource runat="server" ID="dsOSRotunjire" TypeName="WizOne.Module.General" SelectMethod="ListaRotunjirePrgLucru" />
 			        </fieldset>
                 </td>
                 <td  valign="top">

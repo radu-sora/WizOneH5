@@ -15,13 +15,28 @@ namespace WizOne.ProgrameLucru
     {
         protected void Page_Init(object sender, EventArgs e)
         {
+            try
+            {
+                DataTable table = new DataTable();
 
-            DataTable table = new DataTable();
+                DataSet ds = Session["InformatiaCurentaPrograme"] as DataSet;
+                table = ds.Tables[0];
+                DataList1.DataSource = table;
+                DataList1.DataBind();
 
-            DataSet ds = Session["InformatiaCurentaPrograme"] as DataSet;
-            table = ds.Tables[0];
-            DataList1.DataSource = table;
-            DataList1.DataBind();            
+                //Florin 2019.09.06
+                if (table != null && table.Rows.Count > 0 && General.Nz(table.Rows[0]["OSRotunjire"], "").ToString() != "")
+                {
+                    ASPxComboBox cmbRotunjire = DataList1.Items[0].FindControl("cmbOSRotunjire") as ASPxComboBox;
+                    cmbRotunjire.Value = Convert.ToInt32(table.Rows[0]["OSRotunjire"]);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         protected void pnlCtlOreSup_Callback(object source, CallbackEventArgsBase e)

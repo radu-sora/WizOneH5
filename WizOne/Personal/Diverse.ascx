@@ -78,7 +78,7 @@
 							        <dx:ASPxLabel  ID="lblStudiiDet"  Width="100"  runat="server"  Text="Studii detaliate"></dx:ASPxLabel >	
 						        </td>
 						        <td>
-							        <dx:ASPxTextBox  ID="txtStudiiDet" Width="150"  runat="server" Text='<%# Eval("F100902") %>' AutoPostBack="false" >
+							        <dx:ASPxTextBox  ID="txtStudiiDet" Width="150"  runat="server" Text='<%# Eval("F1001131") %>' AutoPostBack="false" >
 							        </dx:ASPxTextBox>
 						        </td>
 					        </tr>

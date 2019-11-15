@@ -434,6 +434,13 @@ namespace WizOne.Personal
                         }
                     }
 
+                    //Radu 15.11.2019 -  nr si data contract intern se salveaza si pe nr si data contract ITM
+                    ds.Tables[1].Rows[0]["F10011"] = ds.Tables[1].Rows[0]["F100985"];
+                    ds.Tables[1].Rows[0]["FX1"] = ds.Tables[1].Rows[0]["F100986"];
+
+                    //Radu 15.11.2019 - data angajarii se salveaza si pe data modif. struct. org.
+                    ds.Tables[1].Rows[0]["F100910"] = ds.Tables[1].Rows[0]["F10022"];
+
                     //Florin 2018.11.23
                     //daca este nou verificam ca data angajarii sa fie mai mare decat luna de lucru
                     if (ds != null && ds.Tables.Count > 1 && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0 && ds.Tables[1].Rows[0]["F10022"] != DBNull.Value)
@@ -951,9 +958,7 @@ namespace WizOne.Personal
                             Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
                         }
                     }
-                }              
-                              
-
+                }   
 
                 General.SalveazaDate(dt100, "F100");
                 General.SalveazaDate(dt1001, "F1001");
@@ -1308,7 +1313,7 @@ namespace WizOne.Personal
                 lstDV.Add("deData", "FX1");
                 lstDV.Add("txtLocNastere", "F100980");
                 lstDV.Add("cmbStudiiDiv", "F10050");
-                lstDV.Add("txtStudiiDet", "F100902");
+                lstDV.Add("txtStudiiDet", "F1001131");
                 lstDV.Add("cmbFunctieDiv", "F10071");
                 lstDV.Add("cmbNivel", "F10029");
                 lstDV.Add("txtZileCOFidel", "F100640");
@@ -1348,8 +1353,8 @@ namespace WizOne.Personal
                 lstDO.Add("txtNr", "F1001001");
                 lstDO.Add("txtPermisEmisDe", "F1001002");
                 lstDO.Add("cmbStudiiDoc", "F10050");
-                lstDO.Add("txtCalif1", "F100903");
-                lstDO.Add("txtCalif2", "F100904");
+                lstDO.Add("txtCalif1", "F1001132");
+                lstDO.Add("txtCalif2", "F1001133");
                 lstDO.Add("cmbTitluAcademic", "F10051");
                 lstDO.Add("cmbDedSomaj", "F10073");
                 lstDO.Add("txtNrCarteMunca", "F10012");
@@ -1458,28 +1463,29 @@ namespace WizOne.Personal
                                 if (cols1.Contains(colName)) dt = ds.Tables[1];
                                 if (cols2.Contains(colName)) dt = ds.Tables[2];
                                 if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString())
+                                {                
+                                    dt.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                }
+
+                                if (dt.Rows[0][colName].GetType() == typeof(DateTime))
                                 {
-                                    if (dt.Rows[0][colName].GetType() == typeof(DateTime))
-                                    {
-                                        DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
-                                        dt.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
-                                    }
-                                    else
-                                        dt.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                    DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
+                                    dt.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
                                 }
 
                                 DataTable dt2 = new DataTable();
                                 if (cols3.Contains(colName)) dt2 = ds.Tables[0];
                                 if (ctl != null && General.Nz(dt2.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString())
                                 {
-                                    if (dt2.Rows[0][colName].GetType() == typeof(DateTime))
-                                    {
-                                        DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
-                                        dt2.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
-                                    }
-                                    else
-                                        dt2.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                    dt2.Rows[0][colName] = ctl.Value ?? DBNull.Value;
                                 }
+
+                                if (dt2.Rows[0][colName].GetType() == typeof(DateTime))
+                                {
+                                    DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
+                                    dt2.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
+                                }
+
                             }
                             catch (Exception ex)
                             {

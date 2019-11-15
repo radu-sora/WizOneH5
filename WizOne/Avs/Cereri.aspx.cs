@@ -2173,7 +2173,8 @@ namespace WizOne.Avs
 
                     if (!VerificareSalariu(Convert.ToInt32(Convert.ToDouble(drSal[0]["Valoare"].ToString())), Convert.ToInt32(cmb2Nou.Value)))
                     {                       
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!\nVa rugam sa efectuati o cerere de modificare salariu in concordanta cu noul Timp partial!\n\n");
+                        Session["Avs_MesajNorma"] = Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!\nVa rugam sa efectuati o cerere de modificare salariu in concordanta cu noul Timp partial!\n\n");
+                        //pnlCtl.JSProperties["cpAlertMessage"]
                         //return false;
                     }
                 }
@@ -3097,7 +3098,8 @@ namespace WizOne.Avs
             Session["Avs_Cereri_Date"] = null;
 
             //ArataMesaj("Proces finalizat cu succes!");
-            pnlCtl.JSProperties["cpAlertMessage"] += Dami.TraduCuvant("Proces finalizat cu succes!");
+            pnlCtl.JSProperties["cpAlertMessage"] = (Session["Avs_MesajNorma"] != null ? Session["Avs_MesajNorma"].ToString() : "") + Dami.TraduCuvant("Proces finalizat cu succes!");
+            Session["Avs_MesajNorma"] = null;
             AscundeCtl();
             txtExpl.Text = "";
             cmbAtribute.Value = null;

@@ -881,9 +881,13 @@ namespace WizOne.Tactil
 
 
                 if (Session["CereriTactil"].ToString() == "BiletVoie" || Session["CereriTactil"].ToString() == "AbsenteOra")
+                {
                     if (Convert.ToInt32(General.Nz(txtNrOre.Value, -99)) <= 0) strErr += " " + Dami.TraduCuvant("Cerere cu numar de ore 0");
-                    else
+                }
+                else
+                {
                     if (Convert.ToInt32(General.Nz(txtNrZile.Value, -99)) <= 0) strErr += " " + Dami.TraduCuvant("Cerere cu numar de zile 0");
+                }
 
                 if (strErr != "")
                 {

@@ -39,12 +39,13 @@ namespace WizOne.Pagini
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 string sqlLimba = @"SELECT ""Id"", ""Denumire"" FROM ""tblLimbi"" ORDER BY ""Denumire"" ";
-                string sqlAng = @"SELECT F10003 AS ""Marca"", F10008 + ' ' + F10009 AS ""NumeComplet"" FROM ""F100"" ";
 
-                if (Constante.tipBD == 2)
-                {
-                    sqlAng = @"SELECT F10003 AS ""Marca"", F10008 & ' ' & F10009 AS ""NumeComplet"" FROM ""F100"" ";
-                }
+                //Florin 2019.11.18
+                string sqlAng = $@"SELECT F10003 AS ""Marca"", F10008 {Dami.Operator()} ' ' {Dami.Operator()} F10009 AS ""NumeComplet"" FROM ""F100"" ";
+                //if (Constante.tipBD == 2)
+                //{
+                //    sqlAng = @"SELECT F10003 AS ""Marca"", F10008 & ' ' & F10009 AS ""NumeComplet"" FROM ""F100"" ";
+                //}
 
                 DataTable dtLmb = General.IncarcaDT(sqlLimba, null);
                 GridViewDataComboBoxColumn colLmb = (grDate.Columns["IdLimba"] as GridViewDataComboBoxColumn);
@@ -129,22 +130,32 @@ namespace WizOne.Pagini
         {
             try
             {
+                //Florin 2019.11.18
                 string pwd = "";
+                object parola = DBNull.Value;
+                object pin = DBNull.Value;
+                CriptDecript prc = new CriptDecript();
 
                 if (e.NewValues["F70103"] != null)
                 {
-                    CriptDecript prc = new CriptDecript();
                     pwd = prc.EncryptString(Constante.cheieCriptare, e.NewValues["F70103"].ToString(), 1);
                 }
                 else
                 {
                     e.Cancel = true;
                 }
+               
+                if (e.NewValues["Parola"] != null)
+                    parola = prc.EncryptString(Constante.cheieCriptare, e.NewValues["Parola"].ToString(), 1);
+                if (e.NewValues["PINInfoChiosc"] != null)
+                    pin = prc.EncryptString(Constante.cheieCriptare, e.NewValues["PINInfoChiosc"].ToString(), 1);
 
                 bool err = false;
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.NewRow();
+                object numeComplet = DBNull.Value;
+
 
                 //Radu 19.08.2019 - verificare sa nu existe alta inregistrare cu marca nou introdusa
                 if (e.NewValues["F10003"] != null)
@@ -155,11 +166,21 @@ namespace WizOne.Pagini
                         grDate.JSProperties["cpAlertMessage"] = "Marca selectata este deja alocata altui utilizator!";
                         err = true;
                     }
+
+                    //Florin 2019.11.18
+                    GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
+                    DataTable dtCmbAng = colAng.PropertiesComboBox.DataSource as DataTable;
+                    DataRow[] arr = dtCmbAng.Select("Marca=" + (e.NewValues["F10003"] ?? -99));
+                    if (arr.Count() > 0 && General.Nz(arr[0]["NumeComplet"], "").ToString() != "")
+                        numeComplet = General.Nz(arr[0]["NumeComplet"], "").ToString();
                 }
+
                 if (!err)
                 {
                     dr["F70101"] = e.NewValues["F70101"] ?? 701;
-                    dr["F70102"] = e.NewValues["F70102"] ?? DBNull.Value;
+                    //Florin 2019.11.18
+                    //dr["F70102"] = e.NewValues["F70102"] ?? DBNull.Value;
+                    dr["F70102"] = Dami.NextId("USERS");
                     dr["F70103"] = pwd;
                     dr["F70104"] = e.NewValues["F70104"] ?? DBNull.Value;
                     dr["F70105"] = e.NewValues["F70105"] ?? DBNull.Value;
@@ -173,14 +194,16 @@ namespace WizOne.Pagini
 
                     dr["IdLimba"] = e.NewValues["IdLimba"] ?? "RO";
                     dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
-                    dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? DBNull.Value;
                     dr["Mail"] = e.NewValues["Mail"] ?? DBNull.Value;
                     dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
-                    dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
-                    dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
+                    dr["Parola"] = parola;
+                    dr["PINInfoChiosc"] = pin;
 
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
+
+                    //Florin 20149.11.18
+                    dr["NumeComplet"] = numeComplet;
 
                     dt.Rows.Add(dr);
                 }
@@ -208,17 +231,30 @@ namespace WizOne.Pagini
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.Rows.Find(keys);
+                object numeComplet = DBNull.Value;
 
                 //Radu 19.08.2019 - verificare sa nu existe alta inregistrare cu marca nou introdusa           
                 if (e.NewValues["F10003"] != null)
                 {
-                    DataRow[] rows = dt.Select("F10003 = " + e.NewValues["F10003"].ToString() + " AND F70102 <> " + e.NewValues["F70102"].ToString());
+                    //Florin 2019.11.18 - schimbat din e.NewValues["F70102"] in keys[0]
+                    string filtru = "F10003 = " + e.NewValues["F10003"].ToString() + " AND F70102 <> " + keys[0];
+                    DataRow[] rows = dt.Select("F10003 = " + e.NewValues["F10003"].ToString() + " AND F70102 <> " + keys[0]);
                     if (rows != null && rows.Count() > 0)
                     {
                         grDate.JSProperties["cpAlertMessage"] = "Marca selectata este deja alocata altui utilizator!";
                         err = true;
                     }
+
+                    //Florin 2019.11.18
+                    GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
+                    DataTable dtCmbAng = colAng.PropertiesComboBox.DataSource as DataTable;
+                    DataRow[] arr = dtCmbAng.Select("Marca=" + (e.NewValues["F10003"] ?? -99));
+                    if (arr.Count() > 0 && General.Nz(arr[0]["NumeComplet"], "").ToString() != "")
+                        numeComplet = General.Nz(arr[0]["NumeComplet"],"").ToString();
                 }
+
+
+
 
                 //dr["F70103"] = e.NewValues["F70103"];
                 if (!err)
@@ -235,14 +271,16 @@ namespace WizOne.Pagini
 
                     dr["IdLimba"] = e.NewValues["IdLimba"] ?? "RO";
                     dr["F10003"] = e.NewValues["F10003"] ?? DBNull.Value;
-                    dr["NumeComplet"] = e.NewValues["NumeComplet"] ?? DBNull.Value;
                     dr["Mail"] = e.NewValues["Mail"] ?? DBNull.Value;
                     dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
-                    dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
-                    dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
+                    //dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
+                    //dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
 
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
+
+                    //Florin 20149.11.18
+                    dr["NumeComplet"] = numeComplet;
                 }
                 e.Cancel = true;
                 grDate.CancelEdit();
@@ -260,7 +298,8 @@ namespace WizOne.Pagini
         {
             try
             {
-                e.NewValues["F70102"] = Dami.NextId("Users");
+                //Florin 2019.11.18
+                //e.NewValues["F70102"] = Dami.NextId("USERS");
             }
             catch (Exception ex)
             {
@@ -311,20 +350,16 @@ namespace WizOne.Pagini
 
         protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
+            //Florin - 2019.11.18
+            //tip
+            //1 - se modifica parola user F70103
+            //2 - se modifica parola fluturas - Parola
+            //3 - se modifica pin infochiosc - 
             try
             {
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void confirmButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
+                //Florin - 2019.11.18
+                int tip = -99;
+                if (hfStatus.Contains("Id")) tip = Convert.ToInt32(General.Nz(hfStatus["Id"], -99));
 
                 CriptDecript prc = new CriptDecript();
                 string pwd = prc.EncryptString(Constante.cheieCriptare, cnpsw.Text, 1);
@@ -335,7 +370,7 @@ namespace WizOne.Pagini
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.Rows.Find(kp);
 
-                if (General.VarSession("ParolaComplexa").ToString() == "1")
+                if (tip != 3 && General.VarSession("ParolaComplexa").ToString() == "1")
                 {
                     var ras = General.VerificaComplexitateParola(cnpsw.Text);
                     if (ras != "")
@@ -345,9 +380,22 @@ namespace WizOne.Pagini
                     }
                 }
 
-                General.AddUserIstoric();
+                //Florin - 2019.11.18
+                switch (tip)
+                {
+                    case 1:
+                        General.AddUserIstoric();
 
-                dr["F70103"] = pwd;
+                        dr["F70103"] = pwd;
+                        break;
+                    case 2:
+                        dr["Parola"] = pwd;
+                        break;
+                    case 3:
+                        dr["PINInfoChiosc"] = pwd;
+                        break;
+                }
+
                 Session["InformatiaCurenta"] = dt;
                 ASPxPopupControl1.ShowOnPageLoad = false;
 
@@ -358,6 +406,66 @@ namespace WizOne.Pagini
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        protected void confirmButton_Click(object sender, EventArgs e)
+        {
+            ////Florin - 2019.11.18
+            ////tip
+            ////1 - se modifica parola user F70103
+            ////2 - se modifica parola fluturas - Parola
+            ////3 - se modifica pin infochiosc - 
+            //try
+            //{
+            //    //Florin - 2019.11.18
+            //    int tip = -99;
+            //    if (hfStatus.Contains("Id")) tip = Convert.ToInt32(General.Nz(hfStatus["Id"], -99));
+
+            //    CriptDecript prc = new CriptDecript();
+            //    string pwd = prc.EncryptString(Constante.cheieCriptare, cnpsw.Text, 1);
+
+            //    int index = grDate.EditingRowVisibleIndex;
+            //    string kp = grDate.GetRowValues(index, "F70102").ToString();
+
+            //    DataTable dt = Session["InformatiaCurenta"] as DataTable;
+            //    DataRow dr = dt.Rows.Find(kp);
+
+            //    if (tip != 3 && General.VarSession("ParolaComplexa").ToString() == "1")
+            //    {
+            //        var ras = General.VerificaComplexitateParola(cnpsw.Text);
+            //        if (ras != "")
+            //        {
+            //            MessageBox.Show(ras, MessageBox.icoWarning, "Parola invalida");
+            //            return;
+            //        }
+            //    }
+
+            //    //Florin - 2019.11.18
+            //    switch (tip)
+            //    {
+            //        case 1:
+            //            General.AddUserIstoric();
+
+            //            dr["F70103"] = pwd;
+            //            break;
+            //        case 2:
+            //            dr["Parola"] = pwd;
+            //            break;
+            //        case 3:
+            //            dr["PINInfoChiosc"] = pwd;
+            //            break;
+            //    }
+
+            //    Session["InformatiaCurenta"] = dt;
+            //    ASPxPopupControl1.ShowOnPageLoad = false;
+
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            //    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            //}
         }
 
         //protected void UpdatePasswordField(string newPassword)

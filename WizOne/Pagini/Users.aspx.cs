@@ -384,7 +384,7 @@ namespace WizOne.Pagini
                 switch (tip)
                 {
                     case 1:
-                        General.AddUserIstoric();
+                        General.AddUserIstoric(General.Nz(Session["UserId"], -99).ToString());
 
                         dr["F70103"] = pwd;
                         break;

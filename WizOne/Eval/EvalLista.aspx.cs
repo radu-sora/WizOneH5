@@ -48,7 +48,10 @@ namespace WizOne.Eval
                 }
                 #endregion
 
-                txtTitlu.Text = General.VarSession("Titlu").ToString();
+                if (Request["pp"] != null)
+                    txtTitlu.Text = "Prima Pagina - Evaluare";
+                else
+                    txtTitlu.Text = General.VarSession("Titlu").ToString();
                 grDate.DataBind();
 
                 #region ChestionarBind

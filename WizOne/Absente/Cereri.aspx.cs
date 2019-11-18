@@ -75,7 +75,10 @@ namespace WizOne.Absente
 
                 if (!IsPostBack)
                 {
-                    txtTitlu.Text = General.VarSession("Titlu").ToString();
+                    if (Request["pp"] != null)
+                        txtTitlu.Text = "Prima Pagina - Cereri";
+                    else
+                        txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                     txtDataInc.Date = DateTime.Now;
                     txtDataSf.Date = DateTime.Now;

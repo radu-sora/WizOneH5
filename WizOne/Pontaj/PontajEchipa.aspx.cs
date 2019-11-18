@@ -211,7 +211,10 @@ namespace WizOne.Pontaj
         {
             try
             {
-                //test();
+                if (Request["pp"] != null)
+                    txtTitlu.Text = "Prima Pagina - Pontaj";
+                else
+                    txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 Dami.AccesApp();
 
@@ -257,8 +260,6 @@ namespace WizOne.Pontaj
                 }
 
                 #endregion
-
-                txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 if (!IsPostBack)
                 {

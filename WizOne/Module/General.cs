@@ -6792,6 +6792,8 @@ namespace WizOne.Module
                     return Dami.TraduCuvant("Marca") + " " + f10003 + ": " + Dami.TraduCuvant("nu aveti drepturi pentru aceasta operatie");
                 }
 
+                //Florin 2019.11.18
+                if (idRol == 3 && idStare == 1 && actiune == 0) return Dami.TraduCuvant("nu puteti respinge un pontaj in stare initiat");
 
                 //verificam data blocare pontaj
                 DateTime dtBlc = new DateTime(2200, 1, 1);
@@ -7753,10 +7755,10 @@ namespace WizOne.Module
             try
             {                
                 string strSql = $@"INSERT INTO ""ParoleUtilizatorIstoric""(""IdUser"", ""Parola"", ""Data"", USER_NO, TIME)
-                        SELECT F70102, F70103, {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""Users"" WHERE F70102={idUser}";
+                        SELECT F70102, F70103, {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""USERS"" WHERE F70102={idUser}";
                 if (tip == 2)
                     strSql = $@"INSERT INTO ""ParoleFluturasIstoric""(""F10003"", ""Parola"", ""Data"", USER_NO, TIME)
-                        SELECT F10003, Parola, {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""Users"" WHERE F70102={idUser} AND F10003 IS NOT NULL AND F10003 <> -99";
+                        SELECT F10003, ""Parola"", {General.CurrentDate()}, {idUser}, {General.CurrentDate()} FROM ""USERS"" WHERE F70102={idUser} AND F10003 IS NOT NULL AND F10003 <> -99";
 
                 General.ExecutaNonQuery(strSql, null);
             }

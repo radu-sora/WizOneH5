@@ -2496,7 +2496,7 @@ namespace WizOne.Absente
                                 sqlOraInc + " AS \"OraInceput\", " +
                                 sqlOraSf + " AS \"OraSfarsit\", " +
                                 areAtas + " AS \"AreAtas\"" +
-                                valExtra + ", " + Session["UserId"] + " AS USER_NO, " + General.CurrentDate() + " AS TINE, null AS \"IdCerereDivizata\", null AS \"Comentarii\", 0 AS \"CampBifa\"";
+                                valExtra + ", " + Session["UserId"] + " AS USER_NO, " + General.CurrentDate() + " AS TIME, null AS \"IdCerereDivizata\", null AS \"Comentarii\", 0 AS \"CampBifa\"";
                 if (tip == 2)
                     sqlCer = @"VALUES(" +
                     sqlIdCerere + ", " +

@@ -273,6 +273,7 @@
                                 <dx:GridViewDataCheckColumn FieldName="Norma" Name="Norma" Caption="Norma" ReadOnly="true" Width="80px" />
                                 <dx:GridViewDataCheckColumn FieldName="Salariul" Name="Salariu" Caption="Salariu" ReadOnly="true" Width="80px" />
                                 <dx:GridViewDataCheckColumn FieldName="Spor" Name="Spor" Caption="Spor" ReadOnly="true" Width="80px" />
+                                <dx:GridViewDataCheckColumn FieldName="SporVechime" Name="SporVechime" Caption="Spor Vechime" ReadOnly="true" Width="80px" />
                                 <dx:GridViewDataCheckColumn FieldName="Structura" Name="Structura" Caption="Structura" ReadOnly="true" Width="80px"  />
                                 <dx:GridViewDataCheckColumn FieldName="CIMDet" Name="CIMDet" Caption="CIM det." ReadOnly="true" Width="80px"  />
                                 <dx:GridViewDataCheckColumn FieldName="CIMNed" Name="CIMNed" Caption="CIM nedet." ReadOnly="true" Width="80px"  />

@@ -572,7 +572,7 @@ namespace WizOne.Pagini
                             GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
                             0 AS CandidatAngajat, 
-                            (SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
+                            COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
                             B5.F02504 IS NOT NULL OR B6.F02504 IS NOT NULL OR B7.F02504 IS NOT NULL OR B8.F02504 IS NOT NULL OR B9.F02504 IS NOT NULL THEN 1 ELSE 0 END) AS SporVechime
                             FROM F704 FA
                             LEFT JOIN F025 B0 ON FA.F704660 = B0.F02504 AND B0.F02504 > 10 AND B0.F02520 IN ('F100643','F100644') AND B0.F02521 > 0
@@ -585,10 +585,10 @@ namespace WizOne.Pagini
                             LEFT JOIN F025 B7 ON FA.F704667 = B7.F02504 AND B7.F02504 > 10 AND B7.F02520 IN ('F100643','F100644') AND B7.F02521 > 0
                             LEFT JOIN F025 B8 ON FA.F704668 = B8.F02504 AND B8.F02504 > 10 AND B8.F02520 IN ('F100643','F100644') AND B8.F02521 > 0
                             LEFT JOIN F025 B9 ON FA.F704669 = B9.F02504 AND B9.F02504 > 10 AND B9.F02520 IN ('F100643','F100644') AND B9.F02521 > 0
-                            WHERE FA.F70404=11 AND FA.F70410='Automat-grila' AND FA.F70403=A.F10003
+                            WHERE FA.F70404=11 AND FA.F70410='Automat - grila' AND FA.F70403=A.F10003
 							AND CAST((SELECT CONVERT(nvarchar(10),F01011) + '-' + CONVERT(nvarchar(10),F01012) + '-01' FROM F010) AS DATE) <= FA.F70406
 							AND FA.F70406 < DATEADD(m,3,CAST((SELECT CONVERT(nvarchar(10),F01011) + '-' + CONVERT(nvarchar(10),F01012) + '-01' FROM F010) AS DATE))
-							) AS SporVechime
+							),0) AS SporVechime
                             FROM Avs_Cereri A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
@@ -651,7 +651,7 @@ namespace WizOne.Pagini
                             AND COALESCE((SELECT INSTR(',' || CAST(AA.""IdAtribut"" AS varchar2(20)) || ',', ',' || ""Valoare"" || ',') FROM ""tblParametrii"" WHERE ""Nume"" ='IdExcluseCircuitDoc'),0) = 0
                             ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente"",
                             0 AS ""CandidatAngajat"", 
-                            (SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
+                            COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
                             B5.F02504 IS NOT NULL OR B6.F02504 IS NOT NULL OR B7.F02504 IS NOT NULL OR B8.F02504 IS NOT NULL OR B9.F02504 IS NOT NULL THEN 1 ELSE 0 END) AS ""SporVechime""
                             FROM F704 FA
                             LEFT JOIN F025 B0 ON FA.F704660 = B0.F02504 AND B0.F02504 > 10 AND B0.F02520 IN ('F100643','F100644') AND B0.F02521 > 0
@@ -664,10 +664,10 @@ namespace WizOne.Pagini
                             LEFT JOIN F025 B7 ON FA.F704667 = B7.F02504 AND B7.F02504 > 10 AND B7.F02520 IN ('F100643','F100644') AND B7.F02521 > 0
                             LEFT JOIN F025 B8 ON FA.F704668 = B8.F02504 AND B8.F02504 > 10 AND B8.F02520 IN ('F100643','F100644') AND B8.F02521 > 0
                             LEFT JOIN F025 B9 ON FA.F704669 = B9.F02504 AND B9.F02504 > 10 AND B9.F02520 IN ('F100643','F100644') AND B9.F02521 > 0
-                            WHERE FA.F70404=11 AND FA.F70410='Automat-grila' AND FA.F70403=A.F10003
+                            WHERE FA.F70404=11 AND FA.F70410='Automat - grila' AND FA.F70403=A.F10003
                             AND TO_DATE((SELECT '01-' || F01012 || '-' || F01011 FROM F010), 'DD-MM-YYYY') <= FA.F70406
                             AND FA.F70406 < ADD_MONTHS(TO_DATE((SELECT '01-' || F01012 || '-' || F01011 FROM F010), 'DD-MM-YYYY'),3)
-							) AS ""SporVechime""
+							),0) AS ""SporVechime""
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""

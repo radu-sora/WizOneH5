@@ -338,13 +338,13 @@ namespace WizOne.Absente
 
                     strSql += "update \"Ptj_tblZLP\" x set x.\"Cuvenite\" = ( " +
                             " with xx as " +
-                            " (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end la_data from f111 inner join  " +
-                            " (select a.f11103, a.f11105, case when a.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) timp from F111 a inner join f111 b " +
-                            " on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end  " +
-                            " and b.f11105 <= case when a.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end) " +
-                            " group by a.f11103, a.f11105, case when a.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end, a.time) t " +
+                            " (select f111.f11103 Marca, f111.f11105 de_la_data, case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end la_data from f111 inner join  " +
+                            " (select a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end f11107, a.time, max(b.time) timp from F111 a inner join f111 b " +
+                            " on a.F11103 = b.F11103 and  (a.f11105 <= case when b.f11107=to_date('01-01-2100','DD-MM-YYYY') then b.f11106 else b.f11107 end  " +
+                            " and b.f11105 <= case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end) " +
+                            " group by a.f11103, a.f11105, case when a.f11107=to_date('01-01-2100','DD-MM-YYYY') then a.f11106 else a.f11107 end, a.time) t " +
                             " on f111.f11103 = t.f11103 and f111.f11105 = t.f11105 and  " +
-                            " case when f111.f11107=to_date('01-JAN-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 and f111.time = t.timp " +
+                            " case when f111.f11107=to_date('01-01-2100','DD-MM-YYYY') then f111.f11106 else f111.f11107 end = t.f11107 and f111.time = t.timp " +
                             " union all " +
 
                             " select f10003 Marca, \"DataInceput\" de_la_data, \"DataSfarsit\" la_data " +

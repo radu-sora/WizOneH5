@@ -1435,7 +1435,7 @@ namespace WizOne.Module
             try
             {
                 if (General.Nz(obj, "").ToString() == "")
-                    rez = "01-JAN-1900";
+                    rez = "01-01-1900";
                 else
                 {
                     DateTime dt = Convert.ToDateTime(obj);
@@ -2828,12 +2828,40 @@ namespace WizOne.Module
                     strSelect += " UNION SELECT " + arr[i].Id + " AS \"Id\", " + arr[i].Rol + " AS \"Rol\" " + (Constante.tipBD == 2 ? " FROM DUAL " : "");
                 }
 
-                //Florin 2019.09.25
-                ////am modificat subselecturile Dretprui_Valoare si Drepturi_NrZile in LEFT JOIN
+                #region Old
 
+                ////Florin 2019.09.25
+                //////am modificat subselecturile Dretprui_Valoare si Drepturi_NrZile in LEFT JOIN
 
-                //left join D este pt a aduce cererile in cazul in care este inlocuitor
-                //
+                ////left join D este pt a aduce cererile in cazul in care este inlocuitor
+                ////
+                ////string strSql = $@"SELECT A.*, G.F10008 {Dami.Operator()} ' ' {Dami.Operator()} G.F10009 AS ""NumeComplet"",
+                ////                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""IdCerere"" ELSE B.""IdCerere"" END AS ""IdCerere"",
+                ////                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""Pozitie"" ELSE B.""Pozitie"" END AS ""PozitieIstoric"",
+                ////                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""Aprobat"" ELSE B.""Aprobat"" END AS ""Aprobat"",
+                ////                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""IdUser"" ELSE B.""IdUser"" END AS ""IdUser"",
+                ////                CASE WHEN D.""IdAuto"" IS NOT NULL THEN D.""IdAuto"" ELSE B.""IdAuto"" END AS ""IdIst"",
+                ////                COALESCE(F.""IdStare"",1) AS ""IdStareCumulat"", COALESCE(C.""IdTipOre"",0) AS ""IdTipOre"",
+                ////                COALESCE(C.""Compensare"",0) AS ""Compensare"", 
+                ////                COALESCE(C.""OreInVal"",'') AS ""OreInVal"", COALESCE(""NuTrimiteInPontaj"",0) AS ""NuTrimiteInPontaj"", E.""RespectaOrdinea"", RL.""Rol"",
+                ////                (SELECT {strTOP} ""Valoare"" FROM ""Ptj_CereriDrepturi"" DR WHERE (DR.""IdAbs""=A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare""=A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol""=RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune""={tipActiune} OR DR.""IdActiune"" = -13) {strROW} ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC) AS ""Drepturi_Valoare"",
+                ////                (SELECT {strTOP} ""NrZile"" FROM ""Ptj_CereriDrepturi"" DR WHERE (DR.""IdAbs""=A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare""=A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol""=RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune""={tipActiune} OR DR.""IdActiune"" = -13) {strROW} ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC) AS ""Drepturi_NrZile""
+                ////                FROM({strSelect.Substring(6)}) RL
+                ////                INNER JOIN ""Ptj_Cereri"" A ON RL.""Id"" = A.""Id""
+                ////                LEFT JOIN ""Ptj_CereriIstoric"" B ON A.""Id""=B.""IdCerere"" AND B.""IdSuper"" = -1 * RL.""Rol"" AND B.""IdUser""={idUser}
+                ////                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta""=C.""Id""
+                ////                LEFT JOIN ""Ptj_Circuit"" E ON A.""IdCircuit""=E.""IdAuto""
+                ////                LEFT JOIN ""Ptj_CereriIstoric"" D ON 
+                ////                (D.""Pozitie"" = (A.""Pozitie"" + 1) OR (COALESCE(E.""RespectaOrdinea"",0)=0 AND D.""Pozitie"" > (A.""Pozitie"" + 1))) AND
+                ////                A.""Id""=D.""IdCerere"" AND (D.""IdSuper"" = -1 * RL.""Rol""  OR RL.""Rol"" = 78) AND D.""IdUser"" IN (SELECT Y.F70102 FROM ""Ptj_Cereri"" X
+                ////                                                                                                    INNER JOIN USERS Y ON X.F10003=Y.F10003
+                ////                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.\"DataInceput\"")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("X.\"DataSfarsit\"")}
+                ////                                                                                                    UNION
+                ////                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("\"DataInceput\"")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("\"DataSfarsit\"")})
+                ////                LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
+                ////                LEFT JOIN F100 G ON A.F10003=G.F10003
+                ////                WHERE 1=1 ";
+
                 //string strSql = $@"SELECT A.*, G.F10008 {Dami.Operator()} ' ' {Dami.Operator()} G.F10009 AS ""NumeComplet"",
                 //                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""IdCerere"" ELSE B.""IdCerere"" END AS ""IdCerere"",
                 //                CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""Pozitie"" ELSE B.""Pozitie"" END AS ""PozitieIstoric"",
@@ -2843,9 +2871,9 @@ namespace WizOne.Module
                 //                COALESCE(F.""IdStare"",1) AS ""IdStareCumulat"", COALESCE(C.""IdTipOre"",0) AS ""IdTipOre"",
                 //                COALESCE(C.""Compensare"",0) AS ""Compensare"", 
                 //                COALESCE(C.""OreInVal"",'') AS ""OreInVal"", COALESCE(""NuTrimiteInPontaj"",0) AS ""NuTrimiteInPontaj"", E.""RespectaOrdinea"", RL.""Rol"",
-                //                (SELECT {strTOP} ""Valoare"" FROM ""Ptj_CereriDrepturi"" DR WHERE (DR.""IdAbs""=A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare""=A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol""=RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune""={tipActiune} OR DR.""IdActiune"" = -13) {strROW} ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC) AS ""Drepturi_Valoare"",
-                //                (SELECT {strTOP} ""NrZile"" FROM ""Ptj_CereriDrepturi"" DR WHERE (DR.""IdAbs""=A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare""=A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol""=RL.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune""={tipActiune} OR DR.""IdActiune"" = -13) {strROW} ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC) AS ""Drepturi_NrZile""
-                //                FROM({strSelect.Substring(6)}) RL
+                //                DR.""Valoare"" AS ""Drepturi_Valoare"",
+                //                DR.""NrZile"" AS ""Drepturi_NrZile""
+                //                FROM ({strSelect.Substring(6)}) RL
                 //                INNER JOIN ""Ptj_Cereri"" A ON RL.""Id"" = A.""Id""
                 //                LEFT JOIN ""Ptj_CereriIstoric"" B ON A.""Id""=B.""IdCerere"" AND B.""IdSuper"" = -1 * RL.""Rol"" AND B.""IdUser""={idUser}
                 //                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta""=C.""Id""
@@ -2854,12 +2882,24 @@ namespace WizOne.Module
                 //                (D.""Pozitie"" = (A.""Pozitie"" + 1) OR (COALESCE(E.""RespectaOrdinea"",0)=0 AND D.""Pozitie"" > (A.""Pozitie"" + 1))) AND
                 //                A.""Id""=D.""IdCerere"" AND (D.""IdSuper"" = -1 * RL.""Rol""  OR RL.""Rol"" = 78) AND D.""IdUser"" IN (SELECT Y.F70102 FROM ""Ptj_Cereri"" X
                 //                                                                                                    INNER JOIN USERS Y ON X.F10003=Y.F10003
-                //                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.\"DataInceput\"")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("X.\"DataSfarsit\"")}
+                //                                                                                                    WHERE X.""Inlocuitor""=(SELECT G.F10003 FROM USERS G WHERE G.F70102={idUser}) AND {TruncateDate("X.DataInceput")} <= {CurrentDate(true)} AND {CurrentDate(true)} <= {TruncateDate("X.DataSfarsit")}
                 //                                                                                                    UNION
-                //                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("\"DataInceput\"")} <= {CurrentDate()} AND {CurrentDate()} <= {TruncateDate("\"DataSfarsit\"")})
+                //                                                                                                    SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("DataInceput")} <= {CurrentDate(true)} AND {CurrentDate(true)} <= {TruncateDate("DataSfarsit")})
                 //                LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
                 //                LEFT JOIN F100 G ON A.F10003=G.F10003
+                //                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"", W.""IdActiune"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC, W.""IdActiune"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = RL.""Rol"" OR DR.""IdRol"" = -13 OR (RL.""Rol""=78 AND DR.""IdRol""=(D.""IdSuper"" * -1)) OR (RL.""Rol""=78 AND DR.""IdRol"" IN (76, -13) AND D.""IdSuper"" > 0)) AND (DR.""IdActiune"" = 1 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
                 //                WHERE 1=1 ";
+                #endregion
+
+                string strDrepturi = $@"
+                    (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE DR.IdAbs IN (A.IdAbsenta,-13) AND DR.IdStare IN (A.IdStare, -13) AND DR.IdRol IN (RL.Rol, -13) AND DR.IdActiune IN ({tipActiune}, -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Drepturi_Valoare,
+                    (SELECT TOP 1 NrZile  FROM Ptj_CereriDrepturi DR WHERE DR.IdAbs IN (A.IdAbsenta,-13) AND DR.IdStare IN (A.IdStare, -13) AND DR.IdRol IN (RL.Rol, -13) AND DR.IdActiune IN ({tipActiune}, -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Drepturi_NrZile";
+
+                if (Constante.tipBD == 2)
+                    strDrepturi = $@"
+                        (SELECT ""Valoare"" FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (RL.""Rol"", -13) AND DR.""IdActiune"" IN ({tipActiune}, -13) AND ROWNUM <=1) AS ""Drepturi_Valoare"",
+                        (SELECT ""NrZile""  FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (RL.""Rol"", -13) AND DR.""IdActiune"" IN ({tipActiune}, -13) AND ROWNUM <=1) AS ""Drepturi_NrZile"" ";
+
 
                 string strSql = $@"SELECT A.*, G.F10008 {Dami.Operator()} ' ' {Dami.Operator()} G.F10009 AS ""NumeComplet"",
                                 CASE WHEN D.""IdCerere"" IS NOT NULL THEN D.""IdCerere"" ELSE B.""IdCerere"" END AS ""IdCerere"",
@@ -2870,8 +2910,7 @@ namespace WizOne.Module
                                 COALESCE(F.""IdStare"",1) AS ""IdStareCumulat"", COALESCE(C.""IdTipOre"",0) AS ""IdTipOre"",
                                 COALESCE(C.""Compensare"",0) AS ""Compensare"", 
                                 COALESCE(C.""OreInVal"",'') AS ""OreInVal"", COALESCE(""NuTrimiteInPontaj"",0) AS ""NuTrimiteInPontaj"", E.""RespectaOrdinea"", RL.""Rol"",
-                                DR.""Valoare"" AS ""Drepturi_Valoare"",
-                                DR.""NrZile"" AS ""Drepturi_NrZile""
+                                {strDrepturi}
                                 FROM ({strSelect.Substring(6)}) RL
                                 INNER JOIN ""Ptj_Cereri"" A ON RL.""Id"" = A.""Id""
                                 LEFT JOIN ""Ptj_CereriIstoric"" B ON A.""Id""=B.""IdCerere"" AND B.""IdSuper"" = -1 * RL.""Rol"" AND B.""IdUser""={idUser}
@@ -2886,8 +2925,6 @@ namespace WizOne.Module
                                                                                                                     SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={idUser} AND {TruncateDate("DataInceput")} <= {CurrentDate(true)} AND {CurrentDate(true)} <= {TruncateDate("DataSfarsit")})
                                 LEFT JOIN ""Ptj_Cumulat"" F ON A.F10003=F.F10003 AND F.""An""={General.FunctiiData("A.\"DataInceput\"", "A")} AND F.""Luna""={General.FunctiiData("A.\"DataInceput\"", "L")}
                                 LEFT JOIN F100 G ON A.F10003=G.F10003
-                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"", W.""IdActiune"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC, W.""IdActiune"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = RL.""Rol"" OR DR.""IdRol"" = -13 OR (RL.""Rol""=78 AND DR.""IdRol""=(D.""IdSuper"" * -1)) OR (RL.""Rol""=78 AND DR.""IdRol"" IN (76, -13) AND D.""IdSuper"" > 0)) AND (DR.""IdActiune"" = 1 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
-
                                 WHERE 1=1 ";
 
                 DataTable dt = General.IncarcaDT(strSql, null);
@@ -7499,7 +7536,7 @@ namespace WizOne.Module
                                         FROM ""Ptj_Intrari"" A
                                         INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                         ) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-JAN-2100','DD-MM-YYYY'));";
+                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));";
 
                         strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;
@@ -7509,7 +7546,7 @@ namespace WizOne.Module
                                         WHERE ""IdAuto"" IN 
                                         (SELECT A.""IdAuto""
                                         FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {1} AND TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1});";
+                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {1} AND TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1});";
 
                         strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;

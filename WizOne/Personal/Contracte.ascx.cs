@@ -144,7 +144,7 @@ namespace WizOne.Personal
                                 SET X.""IdContract"" = (SELECT A.""IdContract"" FROM ""F100Contracte"" A WHERE A.F10003=X.F10003 AND TRUNC(A.""DataInceput"") <= TRUNC(X.""Ziua"") 
                                 AND TRUNC(X.""Ziua"") <= TRUNC(A.""DataSfarsit""))
                                 WHERE X.F10003={0}
-                                AND TRUNC(X.""Ziua"") >= (select to_date('01-' || case F01012 when 1 then 'JAN' when 2 then 'FEB' when 3 then 'MAR' when 4 then 'APR' when 5 then 'MAY' when 6 then 'JUN' when 7 then 'JUL' when 8 then 'AUG' when 9 then 'SEP' when 10 then 'OCT' when 11 then 'NOV' when 12 then 'DEC' end || '-' ||  F01011,'DD-MM-YYYY') from F010)
+                                AND TRUNC(X.""Ziua"") >= (select to_date('01-' ||  F01012 || '-' ||  F01011,'DD-MM-YYYY') from F010)
                                 AND (SELECT COUNT(*) FROM ""Ptj_Cumulat"" C WHERE X.F10003=C.F10003 
                                 AND C.""An"" = TO_NUMBER(TO_CHAR(X.""Ziua"",'YYYY')) AND C.""Luna"" = TO_NUMBER(TO_CHAR(X.""Ziua"",'mm')) AND C.""IdStare"" <> 5 AND C.""IdStare"" <> 7) <> 0";
                 }

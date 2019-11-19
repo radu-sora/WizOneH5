@@ -162,9 +162,9 @@ namespace WizOne.Personal
                 }
                 else
                 {
-                    data = "COALESCE(A.F11105,TO_DATE('01-JAN-2100', 'DD-MM-YYYY')) AS F11105, "
-                         + "COALESCE(A.F11106,TO_DATE('01-JAN-2100', 'DD-MM-YYYY')) AS F11106, "
-                         + "COALESCE(A.F11107,TO_DATE('01-JAN-2100', 'DD-MM-YYYY')) AS F11107 ";
+                    data = "COALESCE(A.F11105,TO_DATE('01-01-2100', 'DD-MM-YYYY')) AS F11105, "
+                         + "COALESCE(A.F11106,TO_DATE('01-01-2100', 'DD-MM-YYYY')) AS F11106, "
+                         + "COALESCE(A.F11107,TO_DATE('01-01-2100', 'DD-MM-YYYY')) AS F11107 ";
                 }
 
                 DataTable dt = General.IncarcaDT("SELECT " + data + ", a.* FROM F111 a WHERE F11103 = " + Session["Marca"].ToString() + " ORDER BY TIME DESC", null);

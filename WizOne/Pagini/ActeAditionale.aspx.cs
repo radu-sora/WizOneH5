@@ -560,6 +560,10 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
                             MAX(CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END) AS Motiv,
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 30 THEN 1 ELSE 0 END) AS ""Suspendare"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 31 THEN 1 ELSE 0 END) AS ""SuspendareRev"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 32 THEN 1 ELSE 0 END) AS ""Detasare"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
                             CONVERT(nvarchar(10),J.DocNr) AS DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct, 
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas,
@@ -596,7 +600,7 @@ namespace WizOne.Pagini
                             GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, J.Revisal, B.F10025
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             CONVERT(nvarchar(10),B.F100985) AS DocNr, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
@@ -639,6 +643,10 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 2 THEN 1 ELSE 0 END) AS ""CIMDet"",
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 1 THEN 1 ELSE 0 END) AS ""CIMNed"",
                             MAX(CASE WHEN COALESCE(""MotivId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Motiv"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 30 THEN 1 ELSE 0 END) AS ""Suspendare"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 31 THEN 1 ELSE 0 END) AS ""SuspendareRev"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 32 THEN 1 ELSE 0 END) AS ""Detasare"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
                             CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
@@ -675,7 +683,7 @@ namespace WizOne.Pagini
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente""
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             A.F100985, A.F100986, COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"",
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
@@ -773,7 +781,7 @@ namespace WizOne.Pagini
                     //    return;
                     //}
 
-                    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData", "Candidat", "TermenDepasire", "Motiv" });
+                    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData", "Candidat", "TermenDepasire", "Motiv", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev" });
                     if (General.Nz(arr[0], "").ToString() != "btnDocUpload" && General.Nz(arr[0], "").ToString() != "btnSterge")
                     {
                         if (lst == null || lst.Count() == 0 || lst[0] == null) return;
@@ -841,7 +849,7 @@ namespace WizOne.Pagini
                                             msg += obj[8] + " - " + Dami.TraduCuvant("este finalizata") + System.Environment.NewLine;
                                             continue;
                                         }
-                                        if (Convert.ToInt32(General.Nz(obj[12], 0)) != 0)
+                                        if (Convert.ToInt32(General.Nz(obj[12], 0)) != 0 || Convert.ToInt32(General.Nz(obj[13], 0)) != 0 || Convert.ToInt32(General.Nz(obj[14], 0)) != 0 || Convert.ToInt32(General.Nz(obj[15], 0)) != 0 || Convert.ToInt32(General.Nz(obj[16], 0)) != 0)
                                         {
                                             msg += obj[8] + " - " + Dami.TraduCuvant("atribuirea de numar se face doar prin editare") + System.Environment.NewLine;
                                             continue;
@@ -1643,7 +1651,7 @@ namespace WizOne.Pagini
                 string msg = "";
                 string ids = "";
 
-                List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct" });
+                List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct", "SporVechime", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev" });
 
                 if (lst == null || lst.Count() == 0 || lst[0] == null) return;
 
@@ -1657,30 +1665,70 @@ namespace WizOne.Pagini
                         break;
                     }
 
+                    //Florin 2019.11.19
+
+                    //if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
+                    //{
+                    //    paramRaport = "RaportActeAditionale_Incetare";
+                    //}
+                    //else
+                    //{
+                    //    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                    //    {
+                    //        paramRaport = "RaportActeAditionale_CIM";
+                    //    }
+                    //    else
+                    //    {
+                    //        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1)
+                    //        {
+                    //            if (General.Nz(obj[12], "").ToString() == "")
+                    //            {
+                    //                msg = "Nu exista data modificare";
+                    //                break;
+                    //            }
+                    //            paramRaport = "RaportActeAditionale_ModificariCIM";
+                    //        }
+                    //    }
+                    //}
+
 
                     if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
                     {
                         paramRaport = "RaportActeAditionale_Incetare";
                     }
-                    else
+
+                    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                     {
-                        if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
-                        {
-                            paramRaport = "RaportActeAditionale_CIM";
-                        }
-                        else
-                        {
-                            if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
-                            {
-                                if (General.Nz(obj[12], "").ToString() == "")
-                                {
-                                    msg = "Nu exista data modificare";
-                                    break;
-                                }
-                                paramRaport = "RaportActeAditionale_ModificariCIM";
-                            }
-                        }
+                        paramRaport = "RaportActeAditionale_CIM";
                     }
+
+                    if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1)
+                    {
+                        if (General.Nz(obj[12], "").ToString() == "")
+                        {
+                            msg = "Nu exista data modificare";
+                            break;
+                        }
+                        paramRaport = "RaportActeAditionale_ModificariCIM";
+                    }
+
+                    if (Convert.ToInt32(General.Nz(obj[16], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_Suspendare";
+                    }
+                    if (Convert.ToInt32(General.Nz(obj[17], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_SuspendareRevenire";
+                    }
+                    if (Convert.ToInt32(General.Nz(obj[18], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_Detasare";
+                    }
+                    if (Convert.ToInt32(General.Nz(obj[19], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_DetasareRevenire";
+                    }
+
 
                     if (paramRaport_tmp != "" && paramRaport != paramRaport_tmp)
                     {

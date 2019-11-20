@@ -184,28 +184,52 @@ namespace WizOne.Pagini
                 //adaugam automat linie in modificari in avans pentru spor vechime
                 if (rez)
                 {
-                    string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
-                    if (Constante.tipBD == 2)
-                        cmp = "ROWNUM";
+                    //string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+                    //if (Constante.tipBD == 2)
+                    //    cmp = "ROWNUM";
 
-                    string strSql = 
-                        $@"BEGIN
-                        INSERT INTO ""Avs_CereriIstoric""(""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", USER_NO, TIME, ""IdSuper"")
-                        SELECT (COALESCE((SELECT MAX(COALESCE(""Id"",0)) FROM ""Avs_Cereri""),0)) + {cmp}, 1, -89, 3, 1, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id""=3), 1, {General.CurrentDate()}, -89, {General.CurrentDate()}, -89
+                    //string strSql = 
+                    //    $@"BEGIN
+                    //    INSERT INTO ""Avs_CereriIstoric""(""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", USER_NO, TIME, ""IdSuper"")
+                    //    SELECT (COALESCE((SELECT MAX(COALESCE(""Id"",0)) FROM ""Avs_Cereri""),0)) + {cmp}, 1, -89, 3, 1, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id""=3), 1, {General.CurrentDate()}, -89, {General.CurrentDate()}, -89
+                    //    FROM F704 A
+                    //    LEFT JOIN ""Avs_Cereri"" B ON A.F70403=B.F10003 AND A.F70404=B.""IdAtribut"" AND A.F70406=B.""DataModif""
+                    //    WHERE A.F70404=11 AND F70410='Automat - grila' AND B.""IdAtribut"" IS NULL;
+
+                    //    INSERT INTO ""Avs_Cereri""(""Id"", F10003, ""IdAtribut"", ""IdCircuit"", ""Pozitie"", ""TotalCircuit"", ""Culoare"", ""IdStare"", ""Explicatii"", ""DataModif"", ""Actualizat"", USER_NO, TIME, 
+                    //    ""SporTran10"",""SporTran11"",""SporTran12"",""SporTran13"",""SporTran14"",""SporTran15"",""SporTran16"",""SporTran17"",""SporTran18"",""SporTran19"")
+                    //    SELECT (COALESCE((SELECT MAX(COALESCE(""Id"",0)) FROM ""Avs_Cereri""),0)) + {cmp}, F70403, F70404, 1, 1, 1, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id""=3), 3, 'Adaugata automat', F70406, 1, -89, {General.CurrentDate()},
+                    //    F704660,F704661,F704662,F704663,F704664,F704665,F704666,F704667,F704668,F704669
+                    //    FROM F704 A
+                    //    LEFT JOIN ""Avs_Cereri"" B ON A.F70403=B.F10003 AND A.F70404=B.""IdAtribut"" AND A.F70406=B.""DataModif""
+                    //    WHERE A.F70404=11 AND F70410='Automat - grila' AND B.""IdAtribut"" IS NULL;
+                    //    END;";
+
+                    DataTable dt = General.IncarcaDT($@" SELECT F70403, F70404, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id""=3) AS ""Culoare"", F70406, F704660,F704661,F704662,F704663,F704664,F704665,F704666,F704667,F704668,F704669
                         FROM F704 A
                         LEFT JOIN ""Avs_Cereri"" B ON A.F70403=B.F10003 AND A.F70404=B.""IdAtribut"" AND A.F70406=B.""DataModif""
-                        WHERE A.F70404=11 AND F70410='Automat - grila' AND B.""IdAtribut"" IS NULL;
+                        WHERE A.F70404=11 AND F70410='Automat - grila' AND B.""IdAtribut"" IS NULL", null);
+
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        int id = Dami.NextId("Avs_Cereri");
+                        DataRow dr = dt.Rows[i];
+
+                        string strSql =
+                        $@"BEGIN
+                        INSERT INTO ""Avs_CereriIstoric""(""Id"", ""IdCircuit"", ""IdUser"", ""IdStare"", ""Pozitie"", ""Culoare"", ""Aprobat"", ""DataAprobare"", USER_NO, TIME, ""IdSuper"")
+                        VALUES( {id}, 1, -89, 3, 1, '{dr["Culoare"] ?? null}', 1, {General.CurrentDate()}, -89, {General.CurrentDate()}, -89);
 
                         INSERT INTO ""Avs_Cereri""(""Id"", F10003, ""IdAtribut"", ""IdCircuit"", ""Pozitie"", ""TotalCircuit"", ""Culoare"", ""IdStare"", ""Explicatii"", ""DataModif"", ""Actualizat"", USER_NO, TIME, 
                         ""SporTran10"",""SporTran11"",""SporTran12"",""SporTran13"",""SporTran14"",""SporTran15"",""SporTran16"",""SporTran17"",""SporTran18"",""SporTran19"")
-                        SELECT (COALESCE((SELECT MAX(COALESCE(""Id"",0)) FROM ""Avs_Cereri""),0)) + {cmp}, F70403, F70404, 1, 1, 1, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id""=3), 3, 'Adaugata automat', F70406, 1, -89, {General.CurrentDate()},
-                        F704660,F704661,F704662,F704663,F704664,F704665,F704666,F704667,F704668,F704669
-                        FROM F704 A
-                        LEFT JOIN ""Avs_Cereri"" B ON A.F70403=B.F10003 AND A.F70404=B.""IdAtribut"" AND A.F70406=B.""DataModif""
-                        WHERE A.F70404=11 AND F70410='Automat - grila' AND B.""IdAtribut"" IS NULL;
+                        VALUES ({id}, {dr["F70403"]}, {dr["F70404"]}, 1, 1, 1, '{dr["Culoare"] ?? null}', 3, 'Adaugata automat', {General.ToDataUniv(Convert.ToDateTime(dr["F70406"]))}, 1, -89, {General.CurrentDate()},
+                        {dr["F704660"] ?? null},{dr["F704661"] ?? null},{dr["F704662"] ?? null},{dr["F704663"] ?? null},{dr["F704664"] ?? null},{dr["F704665"] ?? null},{dr["F704666"] ?? null},{dr["F704667"] ?? null},{dr["F704668"]},{dr["F704669"] ?? null});
                         END;";
+                        General.ExecutaNonQuery(strSql, null);
+                    }
 
-                    General.ExecutaNonQuery(strSql, null);
+
+                    
                 }
             }
             catch (Exception ex)

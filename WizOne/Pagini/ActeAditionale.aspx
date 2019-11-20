@@ -278,6 +278,10 @@
                                 <dx:GridViewDataCheckColumn FieldName="CIMDet" Name="CIMDet" Caption="CIM det." ReadOnly="true" Width="80px"  />
                                 <dx:GridViewDataCheckColumn FieldName="CIMNed" Name="CIMNed" Caption="CIM nedet." ReadOnly="true" Width="80px"  />
                                 <dx:GridViewDataCheckColumn FieldName="Motiv" Name="Motiv" Caption="Motiv plecare" ReadOnly="true" Width="80px"  />
+                                <dx:GridViewDataCheckColumn FieldName="Suspendare" Name="Suspendare" Caption="Suspendare" ReadOnly="true" Width="80px"  />
+                                <dx:GridViewDataCheckColumn FieldName="SuspendareRev" Name="SuspendareRev" Caption="Revenire Suspendare" ReadOnly="true" Width="80px"  />
+                                <dx:GridViewDataCheckColumn FieldName="Detasare" Name="Detasare" Caption="Detasare" ReadOnly="true" Width="80px"  />
+                                <dx:GridViewDataCheckColumn FieldName="DetasareRev" Name="Detasare" Caption="Revenire Detasare" ReadOnly="true" Width="80px"  />
                             </Columns>
                         </dx:GridViewBandColumn>
 

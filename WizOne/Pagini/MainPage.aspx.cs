@@ -209,7 +209,7 @@ namespace WizOne.Pagini
                         btn.UseSubmitBehavior = false;
                         if (Convert.ToInt32(General.Nz(dtRap.Rows[i]["HasPassword"], 0)) == 1)
                         {
-                            btn.ClientSideEvents.Click = "function(s, e){ OnClickRapButton(s); }";
+                            btn.ClientSideEvents.Click = "function(s, e) { onRapButtonClick(s); }";
                             btn.AutoPostBack = false;
                         }
                         else

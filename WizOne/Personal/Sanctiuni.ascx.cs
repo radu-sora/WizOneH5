@@ -43,6 +43,8 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                     Session["DocUpload_MP_Sanctiuni"] = null;
+
+                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateSanctiuni);
             }
             catch (Exception ex)
             {

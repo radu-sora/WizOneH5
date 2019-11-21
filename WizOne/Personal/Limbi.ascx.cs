@@ -29,6 +29,8 @@ namespace WizOne.Personal
             grDateLimbi.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
             grDateLimbi.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
             grDateLimbi.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateLimbi);
         }
 
         protected void grDateLimbi_DataBinding(object sender, EventArgs e)

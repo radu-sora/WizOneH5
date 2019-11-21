@@ -51,7 +51,7 @@
         <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackTarife"/> 
         <SettingsEditing Mode="Inline" />     
         <Columns>
-            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />  
+            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" "  Name="butoaneGrid"/>  
 			<dx:GridViewDataTextColumn FieldName="DenCateg" Caption="Categorie" VisibleIndex="1">
 				<EditItemTemplate>
 					<dx:ASPxComboBox ID="cmbMaster" runat="server" DataSourceID="adsMaster" ValueType="System.Int32" ValueField="F01104" TextField="F01107" OnInit="cmbMaster_Init">

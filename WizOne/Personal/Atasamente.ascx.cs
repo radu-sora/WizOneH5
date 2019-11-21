@@ -40,6 +40,8 @@ namespace WizOne.Personal
                 grDateAtasamente.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
                 grDateAtasamente.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
                 grDateAtasamente.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+
+                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateAtasamente);
             }
             catch (Exception ex)
             {

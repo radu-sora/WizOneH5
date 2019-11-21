@@ -329,7 +329,7 @@
                                                 <dx:ASPxButton ID="btnNume" ClientInstanceName="btnNume"  ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  ToolTip="Modificari contract"  RenderMode="Link" oncontextMenu="ctx(this,event)" AutoPostBack="false">
                                                     <ClientSideEvents Click="function(s,e){ OnClickDI(s); }" />
                                                     <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
-                                                    <Paddings PaddingLeft="10px"/>
+                                                    <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                                                 </dx:ASPxButton>
                                             </td>
                                             <td>
@@ -349,10 +349,10 @@
 							                    </dx:ASPxTextBox >										
 						                    </td>
                                             <td>
-                                                <dx:ASPxButton ID="btnPrenume" ClientInstanceName="btnPrenume" ClientIDMode="Static"  Width="20" Height="20" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false">
+                                                <dx:ASPxButton ID="btnPrenume" ClientInstanceName="btnPrenume" ClientIDMode="Static"  Width="5" Height="5" runat="server" Font-Size="1px"  RenderMode="Link" ToolTip="Modificari contract" oncontextMenu="ctx(this,event)" AutoPostBack="false">
                                                     <ClientSideEvents Click="function(s,e){ OnClickDI(s); }" />
                                                     <Image Url="../Fisiere/Imagini/Icoane/edit.png"></Image>
-                                                    <Paddings PaddingLeft="10px"/>
+                                                    <Paddings PaddingLeft="10px" PaddingRight="10px"/>
                                                 </dx:ASPxButton>
                                             </td>
                                             <td>

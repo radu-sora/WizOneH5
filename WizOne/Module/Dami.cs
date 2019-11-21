@@ -366,6 +366,13 @@ namespace WizOne.Module
                 Page pag = grDate.Page;
                 string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
 
+                //Radu 20.11.2019
+                if (nume.ToLower() == "personal.dateangajat")
+                {
+                    Control parent = grDate.Parent;
+                    nume = parent.TemplateControl.ToString().Replace("ASP.", "").Replace("_ascx", "").Replace("_", ".");
+                }
+
                 if (nume.ToLower() == "sablon")
                 {
                     nume = "tbl." + HttpContext.Current.Session["Sablon_Tabela"];
@@ -404,7 +411,7 @@ namespace WizOne.Module
                                 else
                                 {
                                     //verificam daca sunt butoane in interiorul gridului
-                                    GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
+                                    GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;                                
                                     GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
                                     if (button != null)
                                     {
@@ -421,7 +428,13 @@ namespace WizOne.Module
                                         {
                                             column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
                                         }
+                                        if (dr["IdColoana"].ToString().ToLower() == "btnsterge")
+                                        {
+                                            column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                        }
                                     }
+                                    
+                            
                                 }
                             }
                         }

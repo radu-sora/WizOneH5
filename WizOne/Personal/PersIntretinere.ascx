@@ -63,7 +63,7 @@
                     <SettingsEditing Mode="Inline" />         
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
                         <dx:GridViewDataTextColumn FieldName="F11010" Name="F11010" Caption="Nume"  Width="150px" />
                         <dx:GridViewDataTextColumn FieldName="F11005" Name="F11005" Caption="Prenume"  Width="150px" />
                         <dx:GridViewDataTextColumn FieldName="F11012" Name="F11012" Caption="CNP"  Width="120px" />

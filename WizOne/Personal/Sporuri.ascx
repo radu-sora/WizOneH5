@@ -78,7 +78,7 @@
         <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackSporuri"/> 
         <SettingsEditing Mode="Inline" />         
         <Columns>
-            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
+            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>  
 			<dx:GridViewDataTextColumn FieldName="Spor" Caption="Spor" VisibleIndex="1">
 				<EditItemTemplate>
 					<dx:ASPxComboBox ID="cmbMaster1" runat="server" DataSourceID="adsMaster1" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster1_Init">
@@ -133,7 +133,7 @@
         <ClientSideEvents  ContextMenu="ctx" EndCallback="OnEndCallbackSporuri"/> 
         <SettingsEditing Mode="Inline" />                       
         <Columns>
-            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " />  
+            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>  
 			<dx:GridViewDataTextColumn FieldName="Spor" Caption="Spor" VisibleIndex="1">
 				<EditItemTemplate>
 					<dx:ASPxComboBox ID="cmbMaster2" runat="server" DataSourceID="adsMaster2" ValueType="System.Int32" ValueField="F02504" TextField="F02505" OnInit="cmbMaster2_Init">

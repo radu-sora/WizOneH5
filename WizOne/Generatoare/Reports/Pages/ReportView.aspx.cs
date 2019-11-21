@@ -618,8 +618,10 @@ namespace WizOne.Generatoare.Reports.Pages
 
                     if (_serverPrint) // Send to server default printer & exit
                     {
+                        Session["PrintareAutomata"] = 0;
+                        _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
                         new ReportPrintTool(_report).Print();
-                        Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");
+                        Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");                    
                     }
                     else // Open the report
                         WebDocumentViewer.OpenReport(_report);

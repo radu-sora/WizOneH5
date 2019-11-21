@@ -167,6 +167,8 @@ namespace WizOne.Tactil
 
                                 //Florin 2019.10.17
                                 //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + param, false);
+                                if (nume.ToLower().Contains("print"))
+                                    Session["PrintareAutomata"] = 1;
                                 Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["User_Marca"].ToString() + param), false);
                             }
                         }

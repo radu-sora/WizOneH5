@@ -28,6 +28,8 @@ namespace WizOne.Personal
             grDateSporTran.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
             grDateSporTran.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
 
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateSporTran);
+
         }
 
         protected void grDateSporTran_DataBinding(object sender, EventArgs e)

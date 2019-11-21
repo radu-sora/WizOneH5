@@ -34,6 +34,10 @@ namespace WizOne.Personal
 
                 #endregion
 
+                Response.Cache.SetNoStore();
+                Response.AppendHeader("Pragma", "no-cache");
+                Response.Expires = 0;
+
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 string marca = Session["Marca"] as string;
                 if (ds == null && marca == null)
@@ -1122,32 +1126,35 @@ namespace WizOne.Personal
             {
                 ASPxPageControl ctl = sender as ASPxPageControl;
                 if (ctl == null) return;
-                TabPage tab = ctl.ActiveTabPage;
+                //TabPage tab = ctl.ActiveTabPage;
                 
-                if (Session["PreluareDate"] != null && Session["PreluareDate"].ToString() == "1")
-                {
-                    Session["PreluareDate"] = 0;
-                    for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
-                    {
-                        if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
-                        {
-                            ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
-                            for (int k = 0; k < cb.Controls.Count; k++)
-                            {
-                                if (cb.Controls[k].GetType() == typeof(DataList))
-                                {
-                                    DataList dl = cb.Controls[k] as DataList;
-                                    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                                    DataTable table = ds.Tables[0];
-                                    dl.DataSource = table;
-                                    dl.DataBind();
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
+                //if (Session["PreluareDate"] != null && Session["PreluareDate"].ToString() == "1")
+                //{
+                //    Session["PreluareDate"] = 0;
+                //    foreach (TabPage tab in ctl.TabPages)
+                //    {
+                //        for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
+                //        {
+                //            if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
+                //            {
+                //                ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
+                //                for (int k = 0; k < cb.Controls.Count; k++)
+                //                {
+                //                    if (cb.Controls[k].GetType() == typeof(DataList))
+                //                    {
+                //                        DataList dl = cb.Controls[k] as DataList;
+                //                        DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                //                        DataTable table = ds.Tables[0];
+                //                        dl.DataSource = table;
+                //                        dl.DataBind();
+                //                        break;
+                //                    }
+                //                }
+                //                break;
+                //            }
+                //        }
+                //    }
+                //}
             }
             catch (Exception ex)
             {

@@ -107,7 +107,7 @@
 <HeaderFilter MinHeight="140px"></HeaderFilter>
 </SettingsPopup>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="100px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="3" ButtonType="Image" Caption=" " >
+                        <dx:GridViewCommandColumn Width="100px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="3" ButtonType="Image" Caption=" " Name="butoaneGrid">
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnAtasament">
                                     <Image ToolTip="Arata atasamentul" Url="~/Fisiere/Imagini/Icoane/view.png" />

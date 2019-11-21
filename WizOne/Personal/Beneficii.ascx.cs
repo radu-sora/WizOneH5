@@ -40,6 +40,8 @@ namespace WizOne.Personal
 
             if (!IsPostBack)
                 Session["DocUpload_MP_Beneficii"] = null;
+
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateBeneficii);
         }
 
         protected void grDateBeneficii_DataBinding(object sender, EventArgs e)

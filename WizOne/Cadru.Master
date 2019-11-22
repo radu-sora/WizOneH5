@@ -1,10 +1,4 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Cadru.master.cs" Inherits="WizOne.Cadru" %>
-    <script type="text/javascript">
-        function onKeyPress(s, e) {
-            if (e.htmlEvent.keyCode == 13)
-                ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
-        }
-    </script>
 
 <!DOCTYPE html>
 
@@ -153,31 +147,31 @@
                                     <div class="account-form">
                                         <dx:ASPxLabel ID="lblNume" AssociatedControlID="txtNume" runat="server" Text="Utilizator" />
                                         <dx:ASPxTextBox ID="txtNume" runat="server" Width="150px" Enabled="false" >
-                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblAng" AssociatedControlID="txtAng" runat="server" Text="Angajat" />
                                         <dx:ASPxTextBox ID="txtAng" runat="server" Width="150px" Enabled="false" >
-                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblLimbi" AssociatedControlID="txtLimba" runat="server" Text="Limba" />
                                         <dx:ASPxTextBox ID="txtLimba" runat="server" Width="150px" Enabled="false" >
-                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblParola" AssociatedControlID="txtParola" runat="server" Text="Parola" />
                                         <dx:ASPxTextBox ID="txtParola" runat="server" Width="150px" Password="true" >
-                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblConfirma" AssociatedControlID="txtConfirma" runat="server" Text="Confirma parola" />
                                         <dx:ASPxTextBox ID="txtConfirma" runat="server" Width="150px" Password="true" >
-                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblParolaRap" AssociatedControlID="txtParolaRap" runat="server" Text="Parola rapoarte" />
                                         <dx:ASPxTextBox ID="txtParolaRap" runat="server" Width="150px" Password="true" >
-                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                         <dx:ASPxLabel ID="lblConfirmaRap" AssociatedControlID="txtConfirmaRap" runat="server" Text="Confirma parola rapoarte" />
                                         <dx:ASPxTextBox ID="txtConfirmaRap" runat="server" Width="150px" Password="true" >
-                                            <ClientSideEvents KeyPress="onKeyPress" />
+                                            <ClientSideEvents KeyPress="function(s, e) { onAccountFormKeyPress(e); }" />
                                         </dx:ASPxTextBox>
                                     </div>
                                 </li>
@@ -311,7 +305,7 @@
         <input type="hidden" runat="server" name="__TEME" id="__TEME" value="" />
     </form>
 
-    <script type="text/javascript">
+    <script>
         /* Theme selector control */
         var themeSelector = {
             currentThemeCookieKey: 'DXCurrentTheme',
@@ -353,7 +347,7 @@
             }
         };
 
-        themeSelector.init();
+        
 
         /* Account form control */
         var accountForm = {
@@ -364,7 +358,7 @@
             }
         };
 
-        accountForm.init();
+        
 
         /* Timer control */
         var timerControl = {
@@ -424,33 +418,41 @@
                 }
             }
         };
+        /* Globals */
+        var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';
 
-        var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
-
-        if (timeOutSecunde) {
-            timerControl.init(timeOutSecunde, function (timeLeft) {
-                if (timeLeft < 10) {
-                    $("#spanTimeLeft").text(timeLeft).parent().addClass('text-danger');
-                } else {
-                    $("#spanTimeLeft").text(timeLeft).parent().removeClass('text-danger');
-                }
-            }, function () {
-                    window.location = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
-            });
-            timerControl.start();
-        }
-
-        /* General */
-        var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';  
-        
-        if ('<%= Session["PrimaIntrare"] %>' == "1")
-            $("#myModal").modal("show");
-
+        /* Main functions */
         $(window).on('load', function () {
+            var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
+            var firstLoad = <%= Session["PrimaIntrare"] %> === 1;
+            var myModal = $("#myModal");
             var anunt = $('#anunt');
 
-            anunt.length && anunt.modal('show');            
+            themeSelector.init();
+            accountForm.init();
+
+            if (timeOutSecunde) {
+                var timeLeftInfo = $("#spanTimeLeft");
+
+                timerControl.init(timeOutSecunde, function (timeLeft) {
+                    if (timeLeft < 10) {
+                        timeLeftInfo.text(timeLeft).parent().addClass('text-danger');
+                    } else {
+                        timeLeftInfo.text(timeLeft).parent().removeClass('text-danger');
+                    }
+                }, function () {
+                    window.location = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+                    });
+                timerControl.start();
+            }
+
+            firstLoad && myModal.length && myModal.modal('show');
+            anunt.length && anunt.modal('show');
         });
+
+        function onAccountFormKeyPress(e) {
+            e.htmlEvent.keyCode === 13 && ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
+        }
     </script>    
 </body>
 </html>

@@ -221,7 +221,9 @@ namespace WizOne.ContracteLucru
                                 row[x] = 0;
                                 break;
                             case "IDAUTO":
-                                row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteSchimburi"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                //Florin 2019.11.22
+                                //row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteSchimburi"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteSchimburi"].Compute("max([IdAuto])", string.Empty), 0)) + 1;
                                 break;
                             case "ORAINCEPUT":  
                                 GridViewDataComboBoxColumn colPrg = (grDate0.Columns["IdProgram"] as GridViewDataComboBoxColumn);

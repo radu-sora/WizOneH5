@@ -382,7 +382,7 @@ namespace WizOne.Pontaj
                                         WHERE {General.ToDataUniv(ziua.Year, ziua.Month,1)} <= A.Zi AND A.Zi <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}
                                         FOR XML PATH ('')", null), "").ToString();
                 else
-                    arrZL = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") 
+                    arrZL = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") || ';'
                                         FROM ""tblZile"" A
                                         LEFT JOIN HOLIDAYS B ON A.""Zi""=B.DAY
                                         WHERE {General.ToDataUniv(ziua.Year, ziua.Month, 1)} <= A.""Zi"" AND A.""Zi"" <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}", null), "").ToString();
@@ -2237,7 +2237,9 @@ namespace WizOne.Pontaj
                                 }
                                 else
                                 {
-                                    txt.Text = (min / 60).ToString() + "," + (min % 60).ToString();
+                                    string valoare = (min / 60).ToString() + "." + (min % 60).ToString();
+                                    txt.Text = valoare;
+                                    txt.Value = Convert.ToDecimal(valoare);
                                 }
                             }
                             catch (Exception) { }

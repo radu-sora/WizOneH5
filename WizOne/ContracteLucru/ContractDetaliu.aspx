@@ -15,12 +15,12 @@
         if (s.name == "cmbTip") {
             if (s.GetValue() == 1) {
                 ASPxPageControl2.GetTab(0).SetVisible(true);
-                ASPxPageControl2.GetTab(3).SetVisible(true);
+                //ASPxPageControl2.GetTab(3).SetVisible(true);
                 ASPxPageControl2.GetTab(1).SetVisible(false);
             }
             if (s.GetValue() == 2) {
                 ASPxPageControl2.GetTab(0).SetVisible(false);
-                ASPxPageControl2.GetTab(3).SetVisible(false);
+                //ASPxPageControl2.GetTab(3).SetVisible(false);
                 ASPxPageControl2.GetTab(1).SetVisible(true);
             }
 
@@ -54,7 +54,7 @@
     <div>
 
     <dx:ASPxCallbackPanel ID ="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
-        <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" />
+        <ClientSideEvents CallbackError="function (s,e) { pnlLoading.Hide(); }" />
         <PanelCollection>
             <dx:PanelContent>
             <asp:DataList ID="DataList1" runat="server">
@@ -87,14 +87,17 @@
 							            <dx:ASPxLabel  ID="lblTip" runat="server"  Width="70" Text="Tip contract: " ></dx:ASPxLabel >	
 						            </td>	
 						            <td>
-							            <dx:ASPxComboBox DataSourceID="dsTip"  Width="100" Value='<%#Eval("TipContract") %>' ID="cmbTip"   runat="server" DropDownStyle="DropDown"  TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							            <dx:ASPxComboBox ID="cmbTip" runat="server" Value='<%# Eval("TipContract") %>' Width="150" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" ClientEnabled="false">
                                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandlerCtrDet(s); }" />
-							            </dx:ASPxComboBox >
+                                            <Items>
+                                                <dx:ListEditItem Text = "Contract zilnic" Value = "1" Selected = "true" />
+                                            </Items>
+							            </dx:ASPxComboBox>
 						            </td>
 
                                 </tr>
                                 </table>
-                      <asp:ObjectDataSource runat="server" ID="dsTip" TypeName="WizOne.Module.General" SelectMethod="ListaTipContract"/>
+                      
 			        </fieldset>
                  </td> 
                 </tr>      

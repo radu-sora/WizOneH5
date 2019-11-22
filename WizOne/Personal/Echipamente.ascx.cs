@@ -153,7 +153,7 @@ namespace WizOne.Personal
                     }
 
                     x++;
-                }         
+                }
 
                 ds.Tables["Admin_Echipamente"].Rows.Add(row);
                 e.Cancel = true;
@@ -186,8 +186,8 @@ namespace WizOne.Personal
 
                 foreach (DataColumn col in ds.Tables["Admin_Echipamente"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateEchipamente.Columns[col.ColumnName] != null)
-                    {        
+                    if (!col.AutoIncrement)
+                    {      
                         if (col.ColumnName.ToUpper() == "DURATAUTILIZARE")
                         {
                             int nrAni = 0, nrLuni = 0, nrZile = 0;
@@ -269,7 +269,7 @@ namespace WizOne.Personal
                                                      (nrLuni > 0 ? nrLuni.ToString() : ""), (nrLuni > 0 ? (nrLuni == 1 ? "luna" : "luni") : ""),
                                                      (nrZile > 0 ? nrZile.ToString() : ""), (nrZile > 0 ? (nrZile == 1 ? "zi" : "zile") : ""));
 
-                    e.Value = vechime;                 
+                    e.Value = vechime;
                 }
             }
         }

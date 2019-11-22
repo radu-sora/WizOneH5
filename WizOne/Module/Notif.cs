@@ -436,28 +436,59 @@ namespace WizOne.Module
                             case "incepe cu":
                                 {
                                     string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (arr[1] == "3")
-                                        strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") + '%')";
+                                    if (Constante.tipBD == 1)
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") + '%')";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' + '%')";
+                                    }
                                     else
-                                        strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' + '%')";
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") || '%')";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' || '%')";
+                                    }
                                 }
                                 break;
                             case "contine":
                                 {
                                     string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (arr[1] == "3")
-                                        strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + ") + '%')";
+                                    if (Constante.tipBD == 1)
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + ") + '%')";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "' + '%')";
+                                    }
                                     else
-                                        strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "' + '%')";
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE '%' || (" + arr[0] + ") || '%')";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '%' || '" + arr[0] + "' || '%')";
+
+                                    }
                                 }
                                 break;
                             case "se termina cu":
                                 {
                                     string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (arr[1] == "3")
-                                        strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + "))";
+                                    if (Constante.tipBD == 1)
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + "))";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "')";
+                                    }
                                     else
-                                        strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "')";
+                                    {
+                                        if (arr[1] == "3")
+                                            strCond += " AND ((" + col + ") LIKE '%' || (" + arr[0] + "))";
+                                        else
+                                            strCond += " AND ((" + col + ") LIKE '%' || '" + arr[0] + "')";
+                                    }
                                 }
                                 break;
                             case "<>":
@@ -709,44 +740,30 @@ namespace WizOne.Module
 
         }
 
-        private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina="", int id=-99, string lstAdr = "", int inlocLinkAprobare = 0)
+        private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
         {
             string str = text;
 
             try
             {
                 string strSelect = "";
-
-                for (int i = 0; i < dtSel.Columns.Count; i++)
-                {
-                    str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
-                    strSelect = strSelect.Replace("ent." + dtSel.Columns[i], (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
-                }
+                string strOriginal = "";
 
                 //cautam daca avem de inserat tabel
                 if (str.ToLower().IndexOf("#$select") >= 0)
                 {
                     int start = str.ToLower().IndexOf("#$select");
                     strSelect = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$", "");
+                    strOriginal = strSelect;
                     strSelect = WebUtility.HtmlDecode(strSelect);
                     strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
                 }
 
-                //if (str.IndexOf("Link Aproba")>=0)
-                //{
-                //    if (numePagina.IndexOf("Absente.Lista") >= 0 && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
-                //    {
-                //        string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + Session["IdClient"].ToString().PadLeft(8,'0');
-
-                //        string rsp = General.Encrypt_QueryString(arg);
-
-                //        string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-                //        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + Dami.TraduCuvant("Aproba") + "</a>";
-                //        str = str.Replace("#$Link Aproba$#", lnk).ToString();
-                //    }
-                //    else
-                //        str = str.Replace("#$Link Aproba$#", "").ToString();
-                //}
+                for (int i = 0; i < dtSel.Columns.Count; i++)
+                {
+                    str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+                    strSelect = strSelect.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+                }
 
                 if (str.IndexOf("#$Link") >= 0)
                 {
@@ -757,8 +774,7 @@ namespace WizOne.Module
                     {
                         string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
 
-                        string rsp = General.Encrypt_QueryString(arg);                        
-
+                        string rsp = General.Encrypt_QueryString(arg);
                         string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
                         string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
                         str = str.Replace("#$Link " + cuv + "$#", lnk).ToString();
@@ -775,7 +791,6 @@ namespace WizOne.Module
                         string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
 
                         string rsp = General.Encrypt_QueryString(arg);
-
                         string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
                         string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + Dami.TraduCuvant("Respinge") + "</a>";
                         str = str.Replace("#$Link Respinge$#", lnk).ToString();
@@ -786,13 +801,9 @@ namespace WizOne.Module
 
 
                 //cautam daca avem de inserat tabel
-                if(str.ToLower().IndexOf("#$select") >= 0)
+                if (str.ToLower().IndexOf("#$select") >= 0)
                 {
-                    //int start = str.ToLower().IndexOf("#$select");
-                    //string strSql = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$","");
-                    //strSql = WebUtility.HtmlDecode(strSql);
-                    //strSql = strSql.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
-                    DataTable dtTbl = General.IncarcaDT(strSelect, null);
+                    DataTable dtTbl = General.IncarcaDT(WebUtility.HtmlDecode(strSelect), null);
                     string tbl = "";
                     tbl += @"<table style=""border: solid 1px #ccc; width:100%;"">" + Environment.NewLine;
 
@@ -824,7 +835,7 @@ namespace WizOne.Module
 
                     tbl += "</table>" + Environment.NewLine;
 
-                    str = str.Replace("#$" + strSelect + "$#", tbl);
+                    str = str.Replace("#$" + strOriginal + "$#", tbl);
                 }
             }
             catch (Exception ex)
@@ -834,6 +845,7 @@ namespace WizOne.Module
 
             return str;
         }
+
 
         private static void TrimiteMail(string mail, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls)
         {

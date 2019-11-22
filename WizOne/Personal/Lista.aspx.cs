@@ -203,9 +203,12 @@ namespace WizOne.Personal
                     //adugam coloanele
                     foreach (DataColumn col in dt.Columns)
                     {
+                        dynamic c = new GridViewDataColumn();
+
                         if (col.ColumnName == "Sectie" || col.ColumnName == "Departament")
                         {
-                            GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
+                            //GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
+                            c = new GridViewDataComboBoxColumn();
                             c.Name = col.ColumnName;
                             c.FieldName = col.ColumnName;
                             c.Caption = Dami.TraduCuvant(col.ColumnName);
@@ -226,7 +229,8 @@ namespace WizOne.Personal
                         }
                         else
                         {
-                            GridViewDataColumn c = new GridViewDataColumn();
+                            //GridViewDataColumn c = new GridViewDataColumn();
+                            c = new GridViewDataColumn();
                             c.Name = col.ColumnName;
                             c.FieldName = col.ColumnName;
                             c.Caption = Dami.TraduCuvant(col.ColumnName);
@@ -234,6 +238,43 @@ namespace WizOne.Personal
                             if (col.ColumnName == "Culoare")
                                 c.Visible = false;
                             grDate.Columns.Add(c);
+                        }
+
+                        switch(col.ColumnName.ToLower())
+                        {
+                            case "marca":
+                                c.Width = Unit.Pixel(100);
+                                break;
+                            case "cnp":
+                                c.Width = Unit.Pixel(130);
+                                break;
+                            case "numecomplet":
+                                c.Width = Unit.Pixel(200);
+                                break;
+                            case "companie":
+                                c.Width = Unit.Pixel(150);
+                                break;
+                            case "subcompanie":
+                                c.Width = Unit.Pixel(150);
+                                break;
+                            case "filiala":
+                                c.Width = Unit.Pixel(150);
+                                break;
+                            case "sectie":
+                                c.Width = Unit.Pixel(150);
+                                break;
+                            case "departament":
+                                c.Width = Unit.Pixel(350);
+                                break;
+                            case "dataangajarii":
+                                c.Width = Unit.Pixel(100);
+                                break;
+                            case "stare":
+                                c.Width = Unit.Pixel(100);
+                                break;
+                            case "adresacompleta":
+                                c.Width = Unit.Pixel(800);
+                                break;
                         }
                     }
 

@@ -12,6 +12,7 @@
                 });
                 s.cpAlertMessage = null;
             }
+            pnlLoading.Hide();
         }
     </script>
 
@@ -24,7 +25,8 @@
             title: 'Sunteti sigur/a ?', text: 'Vreti sa continuati procesul?',
             type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: 'Da, continua!', cancelButtonText: 'Renunta', closeOnConfirm: true
         }, function (isConfirm) {
-            if (isConfirm) {
+                if (isConfirm) {
+                    pnlLoading.Show();
                 pnlCtl.PerformCallback(s.name);
             }
         });

@@ -45,7 +45,10 @@ namespace WizOne.CereriDiverse
 
                 #endregion
 
-                txtTitlu.Text = General.VarSession("Titlu").ToString();
+                if (Request["pp"] != null)
+                    txtTitlu.Text = "Prima Pagina - Cereri Diverse";
+                else
+                    txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 DataTable dtTip = General.IncarcaDT($@"SELECT ""Id"", ""Denumire"" FROM ""MP_tblTipCerere""", null);
                 cmbTip.DataSource = dtTip;

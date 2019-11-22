@@ -82,7 +82,7 @@
 
         function OnBatchEditStartEditing(s, e) {
             //alert(s.batchEditApi.HasChanges());
-
+           
             var keyIndex = s.GetColumnByField("Cheia").index;
             var key = e.rowValues[keyIndex].value;
 
@@ -162,7 +162,6 @@
             }            
             if (col.length >= 6 && col.substr(0, 6) == 'ValAbs')
             {
-
                 var cmb = grDate.GetEditor('ValAbs');
                 if (cmb) {
                     cmb.ClearItems();
@@ -381,6 +380,9 @@
             cmbDept.SetValue(null);
             cmbSubDept.SetValue(null);
             cmbBirou.SetValue(null);
+            cmbCateg.SetValue(null);
+
+            pnlCtl.PerformCallback('EmptyFields');
         }
 
         function OnPtjEchipa(s, e) {
@@ -468,9 +470,14 @@
             });
         }
         function AdjustSize() {
-            var height = Math.max(0, document.documentElement.clientHeight) - 330;
+            var dif = 230;
+            var div = document.getElementById('divPeAng');
+            var style = window.getComputedStyle(div);
+            if (style.display === 'none')
+                dif = 340;
+            var height = Math.max(0, document.documentElement.clientHeight) - dif;
             if (<%=Session["PontajulAreCC"] %> == 1) 
-                var height = Math.max(0, document.documentElement.clientHeight) - 450;
+                var height = Math.max(0, document.documentElement.clientHeight) - 470;
 
             grDate.SetHeight(height);
         }
@@ -718,7 +725,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div style="float:left; padding-right:15px;">
+                                            <div style="float:left; padding-right:15px;padding-bottom:10px;">
                                                 <label id="lblDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Dept.</label>
                                                 <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
@@ -735,7 +742,15 @@
                                             <div style="float:left; padding-right:15px;">
                                                 <label id="Label2" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
                                                 <dx:ASPxComboBox ID="cmbPtjZi" ClientInstanceName="cmbPtjZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
-                                            </div>                                        
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="float:left; padding-right:15px;">
+                                                <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Categorie</label>
+                                                <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -767,7 +782,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <br /><br />
+                <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" 
                     OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlRowPrepared="grDate_HtmlRowPrepared" 

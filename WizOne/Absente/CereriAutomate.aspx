@@ -21,15 +21,6 @@
         }
 
 
-        $(document).ready(function () {
-            bindButton();
-        });
-        function bindButton() {
-            $('#<%=btnGen.ClientID%>').on('click', function () {
-            $('#<%=lblProgres.ClientID%>').html('Procesare...');
-        });
-        }
-
 
         function VerifInterval(s, e) {
             if (cmbOraInc.GetValue() && cmbOraSf.GetValue()) {

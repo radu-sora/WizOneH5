@@ -166,8 +166,9 @@
             });
         }
         function AdjustSize() {
-            var randuri = parseInt("<%=Session["Ptj_NrRanduri"] %>");
-            var height = Math.max(0, document.documentElement.clientHeight) - ((100 / randuri) * 50);   // - 420
+<%--            var randuri = parseInt("<%=Session["Ptj_NrRanduri"] %>");
+            var height = Math.max(0, document.documentElement.clientHeight) - ((100 / randuri) * 50);   // - 420--%>
+            var height = Math.max(0, document.documentElement.clientHeight) - 200 - pnlFiltrare.GetHeight();
             grDate.SetHeight(height);
         }
 
@@ -272,8 +273,9 @@
                     <PanelCollection>
                         <dx:PanelContent>
 
-                          <dx:ASPxRoundPanel ID="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20" >
-                            <HeaderStyle Font-Bold="true" />
+                          <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20">
+                              <HeaderStyle Font-Bold="true" />
+                              <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                             <PanelCollection>
                                 <dx:PanelContent>
 

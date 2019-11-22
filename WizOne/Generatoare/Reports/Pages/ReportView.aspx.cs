@@ -505,7 +505,7 @@ namespace WizOne.Generatoare.Reports.Pages
                     string[] arrQ = null;
                     if (!string.IsNullOrEmpty(Request.QueryString["q"]))
                     {
-                        strUrl = General.URLDecode(Request.QueryString["q"]);
+                        strUrl = General.URLDecode(Request.QueryString["q"]).ToLower();
                         arrQ = strUrl.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
                     }
 
@@ -514,9 +514,9 @@ namespace WizOne.Generatoare.Reports.Pages
                         var name = param.Name.TrimStart('@');
                         var value = Session[name];
 
-                        if (strUrl.IndexOf(name) >= 0)
+                        if (strUrl.IndexOf(name.ToLower()) >= 0)
                         {
-                            string item = arrQ.Where(p => p.IndexOf(name) >= 0).Select(p => p).FirstOrDefault();
+                            string item = arrQ.Where(p => p.IndexOf(name.ToLower()) >= 0).Select(p => p).FirstOrDefault();
                             if (item != "")
                             {
                                 string[] vals = item.Split('=');

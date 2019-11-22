@@ -32,6 +32,10 @@
             }
         }
 
+        function OnMarcaChanged(s) {
+            //grDate.GetEditor('NumeComplet').SetValue(item.GetColumnText('F10003'));
+        }
+
     </script>
 
 </asp:Content>
@@ -75,7 +79,7 @@
                                 <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowClearFilterButton="true" VisibleIndex="0" SelectAllCheckboxMode="AllPages" />
 
                                 <dx:GridViewDataTextColumn FieldName="F70101" Name="F70101" Caption="Nr. tabela" VisibleIndex="1" Visible="false" ShowInCustomizationForm="false"/>
-                                <dx:GridViewDataTextColumn FieldName="F70102" Name="F70102" Caption="Id" VisibleIndex="2"/>
+                                <dx:GridViewDataTextColumn FieldName="F70102" Name="F70102" Caption="Id" VisibleIndex="2" Visible="false" ShowInCustomizationForm="false"/>
                                 <dx:GridViewDataTextColumn FieldName="F70104" Name="F70104" Caption="Nume" VisibleIndex="3" Settings-AutoFilterCondition="Contains"/>
                                 <dx:GridViewDataTextColumn FieldName="F70103" Name="F70103" Caption="Parola" VisibleIndex="4"  Width="90">
                                     <PropertiesTextEdit Password="True" ClientInstanceName="psweditor" />
@@ -83,7 +87,7 @@
                                         <dx:ASPxTextBox ID="pswtextbox"  Width="85" runat="server" Text='<%# Bind("F70103") %>' Visible='<%# grDate.IsNewRowEditing %>' Password="True">
                                             <ClientSideEvents Validation="function(s,e){e.isValid = s.GetText().length>5;}" />
                                         </dx:ASPxTextBox>
-                                        <asp:LinkButton ID="LinkButton1" runat="server" OnClientClick="popup.ShowAtElement(this); return false;" Visible='<%#!grDate.IsNewRowEditing%>'>Edit parola</asp:LinkButton>
+                                        <asp:LinkButton ID="LinkButton1" runat="server" OnClientClick="popup.ShowAtElement(this); hfStatus.Set('Id', 1); return false;" Visible='<%#!grDate.IsNewRowEditing%>'>Edit parola</asp:LinkButton>
                                     </EditItemTemplate>
                                 </dx:GridViewDataTextColumn>
                                 <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" VisibleIndex="5">
@@ -92,9 +96,10 @@
                                             <dx:ListBoxColumn FieldName="Marca" Caption="Marca" Width="50px" />
                                             <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />                
                                         </Columns> 
+                                        <ClientSideEvents SelectedIndexChanged="function(s,e){ OnMarcaChanged(); }" />
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>
-                                <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume Complet" VisibleIndex="6" ReadOnly="false" Settings-AutoFilterCondition="Contains"/>
+                                <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume Complet" VisibleIndex="6" ReadOnly="false" Settings-AutoFilterCondition="Contains" Visible="false" ShowInCustomizationForm="false"/>
 
                                 <dx:GridViewDataTextColumn FieldName="F70105" Name="F70105" Caption="Id" VisibleIndex="7"/>
                                 <dx:GridViewDataCheckColumn FieldName="F70111" Name="F70111" Caption="Parola Expira" VisibleIndex="8"/>
@@ -110,8 +115,24 @@
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>
                                 <dx:GridViewDataCheckColumn FieldName="SchimbaParola" Name="SchimbaParola" Caption="Schimba Parola" VisibleIndex="16"/>
-                                <dx:GridViewDataTextColumn FieldName="Parola" Name="Parola" Caption="Parola" VisibleIndex="17"/>
-                                <dx:GridViewDataTextColumn FieldName="PINInfoChiosc" Name="PINInfoChiosc" Caption="PINInfoChiosc" VisibleIndex="18"/>
+                                <dx:GridViewDataTextColumn FieldName="Parola" Name="Parola" Caption="Parola" VisibleIndex="17">
+                                    <PropertiesTextEdit Password="True" ClientInstanceName="psweditor" />
+                                    <EditItemTemplate>
+                                        <dx:ASPxTextBox ID="pswtextbox"  Width="85" runat="server" Text='<%# Bind("Parola") %>' Visible='<%# grDate.IsNewRowEditing %>' Password="True">
+                                            <ClientSideEvents Validation="function(s,e){e.isValid = s.GetText().length>5;}" />
+                                        </dx:ASPxTextBox>
+                                        <asp:LinkButton ID="LinkButton1" runat="server" OnClientClick="popup.ShowAtElement(this); hfStatus.Set('Id', 2); return false;" Visible='<%#!grDate.IsNewRowEditing%>'>Edit parola</asp:LinkButton>
+                                    </EditItemTemplate>
+                                </dx:GridViewDataTextColumn>
+                                <dx:GridViewDataTextColumn FieldName="PINInfoChiosc" Name="PINInfoChiosc" Caption="PINInfoChiosc" VisibleIndex="18">
+                                    <PropertiesTextEdit Password="True" ClientInstanceName="psweditor" />
+                                    <EditItemTemplate>
+                                        <dx:ASPxTextBox ID="pswtextbox"  Width="85" runat="server" Text='<%# Bind("PINInfoChiosc") %>' Visible='<%# grDate.IsNewRowEditing %>' Password="True">
+                                            <ClientSideEvents Validation="function(s,e){e.isValid = s.GetText().length=4;}" />
+                                        </dx:ASPxTextBox>
+                                        <asp:LinkButton ID="LinkButton1" runat="server" OnClientClick="popup.ShowAtElement(this); hfStatus.Set('Id', 3); return false;" Visible='<%#!grDate.IsNewRowEditing%>'>Edit parola</asp:LinkButton>
+                                    </EditItemTemplate>
+                                </dx:GridViewDataTextColumn>
 
                                 <dx:GridViewDataTextColumn FieldName="F70122" Name="F70122" Caption="Data editare" VisibleIndex="19" Visible="false" ShowInCustomizationForm="false"/>
                                 <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" VisibleIndex="20" Visible="false" ShowInCustomizationForm="false"/>
@@ -147,6 +168,7 @@
                 </tr>
             </table>
 
+            <dx:ASPxHiddenField ID="hfStatus" ClientInstanceName="hfStatus" runat="server" />
             <dx:ASPxPopupControl ID="ASPxPopupControl1" runat="server" HeaderText="Edit parola" ClientInstanceName="popup">
                 <ClientSideEvents CloseUp="function(s, e) {
                     npsw.SetText('');
@@ -175,7 +197,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2"><dx:ASPxButton ID="confirmButton" runat="server" Text="Ok" AutoPostBack="False" OnClick="confirmButton_Click" /></td>
+                                <td colspan="2">
+                                    <dx:ASPxButton ID="confirmButton" runat="server" Text="Ok" AutoPostBack="False">
+                                        <ClientSideEvents Click="function(s, e) {grDate.PerformCallback();popup.Hide();}" />
+                                    </dx:ASPxButton>
+                                </td>
                             </tr>
                         </table>
 

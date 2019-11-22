@@ -83,7 +83,10 @@ namespace WizOne.Eval
 
                 #endregion
 
-                txtTitlu.Text = General.VarSession("Titlu").ToString();
+                if (Request["pp"] != null)
+                    txtTitlu.Text = "Prima Pagina - Evaluare 360";
+                else
+                    txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
                 int esteHr = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper"" IN ({idHR})", null), 0));

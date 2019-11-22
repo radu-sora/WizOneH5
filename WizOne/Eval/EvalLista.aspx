@@ -179,7 +179,7 @@
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
                             <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="DenPerioada" Name="DenPerioada" Caption="Interval" Width="150px" ReadOnly="true" Visible="true" VisibleIndex="5">
+                        <dx:GridViewDataTextColumn FieldName="DenPerioada" Name="DenPerioada" Caption="Interval" Width="170px" ReadOnly="true" Visible="true" VisibleIndex="5">
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
                             <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataTextColumn>

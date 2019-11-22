@@ -456,14 +456,6 @@
             AdjustSize();
         }
 
-        function OnBeginCallback(s,e)
-        {
-            //pnlLoading.Show();
-        }
-        function OnEndCallback(s, e) {
-            AdjustSize();
-            //pnlLoading.Hide();
-        }
         function OnControlsInitialized(s, e) {
             ASPxClientUtils.AttachEventToElement(window, "resize", function (evt) {
                 AdjustSize();
@@ -493,6 +485,7 @@
         }
 
         function OnEndCallback(s, e) {
+            AdjustSize();
             if (s.cpAlertMessage != null) {
                 swal({
                     title: "", text: s.cpAlertMessage,

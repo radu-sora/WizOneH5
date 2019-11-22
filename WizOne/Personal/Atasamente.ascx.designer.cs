@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Personal {
-    
-    
-    public partial class Atasamente {
-        
+namespace WizOne.Personal
+{
+
+
+    public partial class Atasamente
+    {
+
         /// <summary>
         /// grDateAtasamente control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateAtasamente;
-        
+
         /// <summary>
         /// btnAtasament control.
         /// </summary>

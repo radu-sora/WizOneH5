@@ -818,6 +818,7 @@
     <Content Include="Pontaj\PontajSpecial.aspx" />
     <Content Include="ProgrameLucru\ProgrameOreNoapte.ascx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
+    <Content Include="Revisal\RapoarteRevisal.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -1775,6 +1776,13 @@
     </Compile>
     <Compile Include="Reports\PrintImage.Designer.cs">
       <DependentUpon>PrintImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Revisal\RapoarteRevisal.aspx.cs">
+      <DependentUpon>RapoarteRevisal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Revisal\RapoarteRevisal.aspx.designer.cs">
+      <DependentUpon>RapoarteRevisal.aspx</DependentUpon>
     </Compile>
     <Compile Include="Revisal\Revisal.aspx.cs">
       <DependentUpon>Revisal.aspx</DependentUpon>

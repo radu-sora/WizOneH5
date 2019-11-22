@@ -29,7 +29,7 @@ namespace WizOne.Personal
             grDateTarife.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
             grDateTarife.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
-
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateTarife);
 
         }
 

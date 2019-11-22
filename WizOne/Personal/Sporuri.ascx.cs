@@ -28,6 +28,8 @@ namespace WizOne.Personal
             grDateSporuri1.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
             grDateSporuri1.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
 
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateSporuri1);
+
             grDateSporuri2.DataBind();
             foreach (dynamic c in grDateSporuri2.Columns)
             {
@@ -39,6 +41,8 @@ namespace WizOne.Personal
             }
             grDateSporuri2.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
             grDateSporuri2.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
+
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateSporuri2);
         }
 
         protected void grDateSporuri1_DataBinding(object sender, EventArgs e)

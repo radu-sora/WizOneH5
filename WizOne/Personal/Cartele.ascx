@@ -29,7 +29,7 @@
                     <SettingsEditing Mode="Inline" /> 
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
                         <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca"  ReadOnly="true" Width="100px" Visible="false" />     
                         <dx:GridViewDataTextColumn FieldName="Cartela" Name="Cartela" Caption="Cartela"  Width="100px" />
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>

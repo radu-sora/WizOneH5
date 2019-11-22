@@ -111,7 +111,7 @@
 	</table>
 				
 
-   <dx:ASPxCallbackPanel ID = "Documente_pnlCtl" ClientIDMode="Static" ClientInstanceName="Documente_pnlCtl" runat="server" OnCallback="Documente_pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
+   <dx:ASPxCallbackPanel ID = "Documente_pnlCtl" ClientIDMode="Static" ClientInstanceName="Documente_pnlCtl" runat="server"  OnCallback="Documente_pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
        <ClientSideEvents EndCallback="function (s,e) { OnEndCallbackDoc(s,e); }" />
       <PanelCollection>
         <dx:PanelContent>

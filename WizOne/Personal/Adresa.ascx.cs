@@ -45,7 +45,9 @@ namespace WizOne.Personal
                 grDateCautaAdresa.DataSource = dtAdr;
                 grDateCautaAdresa.KeyFieldName = "IdAuto";
                 grDateCautaAdresa.DataBind();
-                
+
+                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateCautaAdresa);
+
             }
             catch (Exception ex)
             {

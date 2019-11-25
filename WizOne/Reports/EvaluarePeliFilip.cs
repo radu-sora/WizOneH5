@@ -518,7 +518,7 @@ namespace WizOne.Reports
                 }
                 if (coment != "")
                 {
-                    XRLabel lbl360 = CreeazaEticheta("Feedback:" + "\r\n" + coment, 0, true);
+                    XRLabel lbl360 = CreeazaEticheta("Colegi care au oferit feedback:" + "\r\n" + coment, 0, true);
                     lbl360.SizeF = new System.Drawing.SizeF(720F, 20F);
                     lbl360.LocationF = new PointF(60, pozY);
                     Detail.Controls.Add(lbl360);

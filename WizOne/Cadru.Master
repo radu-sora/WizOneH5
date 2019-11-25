@@ -217,7 +217,7 @@
             <BorderTop BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
         </dx:ASPxPanel>
 
-        <dx:ASPxPanel ID="pnlContent1" runat="server" Width="100%" Height="100%" Paddings-Padding="10px" >
+        <dx:ASPxPanel ID="pnlContent1" runat="server" Width="100%" Height="100%" Paddings-Padding="10px" ScrollBars="Auto" >
             <PanelCollection>
                 <dx:PanelContent runat="server">
                

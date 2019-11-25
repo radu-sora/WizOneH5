@@ -146,8 +146,12 @@ namespace WizOne.Eval
                             break;
                     }
 
+                    if (General.Nz(Session["EvalLista_FiltrulRowIndex"],"").ToString() != "" && General.IsNumeric(Session["EvalLista_FiltrulRowIndex"]))
+                        grDate.FocusedRowIndex = Convert.ToInt32(Session["EvalLista_FiltrulRowIndex"]);
+
                     Session["EvalLista_FiltrulCmb"] = "";
                     Session["EvalLista_FiltrulGrid"] = "";
+                    Session["EvalLista_FiltrulRowIndex"] = "";
                 }
             }
             catch (Exception ex)
@@ -291,6 +295,7 @@ namespace WizOne.Eval
 
                                 Session["EvalLista_FiltrulCmb"] = req;
                                 Session["EvalLista_FiltrulGrid"] = grDate.FilterExpression;
+                                Session["EvalLista_FiltrulRowIndex"] = grDate.FocusedRowIndex;
 
                                 #endregion
 

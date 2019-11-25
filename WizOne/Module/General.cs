@@ -1172,7 +1172,8 @@ namespace WizOne.Module
 
             try
             {
-                if (valoare != null && valoare != DBNull.Value && valoare.ToString() != "")
+                //Florin 2019.11.25 - am adaugat si conditia cu NULL ca string
+                if (valoare != null && valoare != DBNull.Value && valoare.ToString() != "" && valoare.ToString().ToLower().Trim() != "null")
                     rez = valoare;
                 else
                     rez = inloc;

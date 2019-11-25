@@ -683,7 +683,7 @@ namespace WizOne.Personal
                             if (dr[k].GetType() == typeof(DateTime))
                                 val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
                             if (val.Length <= 0)
-                                val = "''";
+                                val = "null";
                             sir += ",\"" + dt.Columns[k].ColumnName + "\" = " + val;
                         }
                     }

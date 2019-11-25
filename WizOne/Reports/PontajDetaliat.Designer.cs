@@ -168,7 +168,7 @@
             this.xrLabel6,
             this.xrLabel4,
             this.xrLabel3});
-            this.Detail.HeightF = 33.00001F;
+            this.Detail.HeightF = 23F;
             this.Detail.Name = "Detail";
             this.Detail.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.Detail.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;

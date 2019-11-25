@@ -38,7 +38,32 @@
                 });
                 s.cpAlertMessage = null;
             }
-        }
+         }
+
+         function VerifInterval(s, e) {
+             if (cmbOraInc.GetValue() && cmbOraSf.GetValue()) {
+                 var oraInc = Number(cmbOraInc.GetValue().substring(0, 2)) * 60 + Number(cmbOraInc.GetValue().substring(3, 5));
+                 var oraSf = Number(cmbOraSf.GetValue().substring(0, 2)) * 60 + Number(cmbOraSf.GetValue().substring(3, 5));
+
+                 if (oraInc == oraSf) {
+                     s.SetValue("");
+                     swal({
+                         title: "", text: "Ora inceput este egala cu ora sfarsit",
+                         type: "warning"
+                     });
+                 }
+
+                 var dif = 0;
+                 if (oraInc < oraSf)
+                     diff = oraSf - oraInc;
+                 else
+                     diff = ((24 * 60) - oraInc) + oraSf;
+
+                 var rez = diff / 60;
+                 txtNrOre.SetValue(rez.toFixed(4));
+                 txtNrOreInMinute.SetValue(diff);
+             }
+         }
     </script>
 
     <table style="width:100%;">
@@ -121,7 +146,7 @@
                         </div>
 
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="badgeTactil">
                                 <h3>Data Inceput</h3>                           
 
@@ -129,7 +154,7 @@
                             </div>
                         </div>
                     
-                        <div class="col-sm-4"  id="lblDataSf" runat="server">
+                        <div class="col-sm-3"  id="lblDataSf" runat="server">
                             <div class="badgeTactil">
                                 <h3>Data Sfarsit</h3>
                                 
@@ -138,11 +163,21 @@
                             </div>
                         </div>    
                     
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="badgeTactil" id="lblNrOre" runat="server" visible="false">
                                 <h3  id ="H3" runat="server">Nr. ore</h3>
                            </div>
-                        </div>                                      
+                        </div>   
+                        <div class="col-sm-3">
+                            <div class="badgeTactil" id="lblOraInc" runat="server" visible="false">
+                                <h3  id ="H4" runat="server">Ora inceput</h3>
+                           </div>
+                        </div>  
+                        <div class="col-sm-3">
+                            <div class="badgeTactil" id="lblOraSf" runat="server" visible="false">
+                                <h3  id ="H5" runat="server">Ora sfarsit</h3>
+                           </div>
+                        </div>                          
 
                     </div>
                 </div>
@@ -163,7 +198,7 @@
 
                                     </dx:ASPxDateEdit> 
                         </td>
-                        <td width="120"></td>
+                        <td width="200"></td>
                         <td width="300" align="left" id="tdDataSf" runat="server">
                                     <dx:ASPxDateEdit ID="txtDataSf" runat="server"  style="font-size:30px;" Width="250px" HorizontalAlign="Center"     ButtonStyle-Width="75" Height="75"  DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataSfResource1" >
                                
@@ -176,9 +211,22 @@
                                         </CalendarProperties>                               
                                     </dx:ASPxDateEdit>  
                         </td>
-                        <td width="250" align="right"  id="tdNrOre" runat="server"  visible="false">
+                        <td width="300" align="right"  id="tdNrOre" runat="server"  visible="false">
                                     <dx:ASPxSpinEdit ID="txtNrOre" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  Visible="false"/>                                    
  
+                        </td>
+
+                          <td width="100" align="right"  id="tdOraInc" runat="server"  visible="false">                          
+                            <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="200px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList"  DropDownWidth="100" DropDownHeight="200"  style="font-size:30px;" Height="75"  ButtonStyle-Width="75">
+                                <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); }" />
+                                <ItemStyle Font-Size="XX-Large" />
+                            </dx:ASPxComboBox>
+                          </td>                                        
+                         <td width="450" align="right"  id="tdOraSf" runat="server"  visible="false">                           
+                            <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="200px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList" DropDownWidth="100" DropDownHeight="200"  style="font-size:30px;" Height="75" ButtonStyle-Width="75">
+                                <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e);  }" />
+                                <ItemStyle Font-Size="XX-Large" />
+                            </dx:ASPxComboBox>
                         </td>
                         <td width="100"></td>
                     </tr>

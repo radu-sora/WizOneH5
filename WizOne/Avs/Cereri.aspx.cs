@@ -1641,13 +1641,19 @@ namespace WizOne.Avs
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Suspendare)
             {
                 ArataCtl(14, "Motiv suspendare", "", "", "", "", "", "", "Data inceput", "", "Data sfarsit estimata", "Data incetare");
-                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09003 AS \"Denumire\" from f090 ", null);        
+                string op = "+";
+                if (Constante.tipBD == 2)
+                    op = "||";
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 ", null);        
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
             }
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.RevenireSuspendare)
             {
                 ArataCtl(14, "Motiv suspendare", "", "", "", "", "", "", "Data inceput", "", "Data sfarsit estimata", "Data incetare");
-                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09003 AS \"Denumire\" from f090 ", null);
+                string op = "+";
+                if (Constante.tipBD == 2)
+                    op = "||";
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 ", null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
                 de1Nou.ClientEnabled = false;
                 DataTable dtTempRev = General.IncarcaDT("select * from f111 Where F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = " 
@@ -3952,7 +3958,7 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.Detasare:
                         dtLuc = General.DamiDataLucru();
-                        sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data13 + " WHERE F10003 = " + f10003.ToString();
+                        sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data13 + ", F100917 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();
                         sql1001 = "UPDATE F1001 SET F1001125 = " + (chk1.Checked ? "1" : "0") + ", F1001126 = " + (chk2.Checked ? "1" : "0") + ", F1001127 = " + (chk3.Checked ? "1" : "0") 
                             + ", F1001128 = " + (chk4.Checked ? "1" : "0") + ", F1001129 = " + (chk5.Checked ? "1" : "0") + " WHERE F10003 = " + f10003.ToString();
                         string sql112 = $@"INSERT INTO F112 (F11201, F11202, F11203, F11204, F11205, F11206, F11207, F11208, F11209, YEAR, MONTH, USER_NO, TIME)

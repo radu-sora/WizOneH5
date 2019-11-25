@@ -235,7 +235,9 @@ namespace WizOne.Personal
                 }
                 Session["MP_Grila"] = grila;
 
-                CalcGrila((ds.Tables[0].Rows[0]["F10072"] as int? ?? 0).ToString());
+                string gr = (ds.Tables[0].Rows[0]["F10072"] as string ?? "0").ToString();
+                CalcGrila(gr.Length <= 0 ? "0" : gr);
+
                 string sql = " select DATEDIFF(MONTH, (select convert(nvarchar(4), F01011) + '-' + convert(nvarchar(4), F01012) + '-01' from F010),  '" + DateTime.Now.Year + "-12-31')";
                 if (Constante.tipBD == 2)
                     sql = " select trunc(MONTHS_BETWEEN(to_date('31/12/" + DateTime.Now.Year + "', 'DD/MM/YYYY'),  (select to_date('01/' || F01012 || '/' || F01011, 'DD/MM/YYYY') from F010))  ) FROM DUAL";

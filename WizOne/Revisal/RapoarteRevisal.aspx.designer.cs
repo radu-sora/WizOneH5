@@ -15,6 +15,15 @@ namespace WizOne.Revisal
     {
 
         /// <summary>
+        /// btnExit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnExit;
+
+        /// <summary>
         /// pnlCtl control.
         /// </summary>
         /// <remarks>
@@ -49,6 +58,33 @@ namespace WizOne.Revisal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnRapSal;
+
+        /// <summary>
+        /// grAng control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl grAng;
+
+        /// <summary>
+        /// legAng control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl legAng;
+
+        /// <summary>
+        /// cmbAng control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbAng;
 
         /// <summary>
         /// btnCont control.

@@ -1749,7 +1749,11 @@ namespace WizOne.Pagini
 
                 if (ids == "")
                 {
-                    MessageBox.Show("Nu exista inregistrari selectate", MessageBox.icoWarning, "Operatie anulata");
+                    object[] obj = lst[0] as object[];
+                    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                        MessageBox.Show("Inainte de a imprima trebuie sa efectuati cel putin o operatie", MessageBox.icoWarning, "Operatie anulata");
+                    else
+                        MessageBox.Show("Nu exista inregistrari selectate", MessageBox.icoWarning, "Operatie anulata");
                     return;
                 }
 

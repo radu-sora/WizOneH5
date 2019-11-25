@@ -59,7 +59,7 @@ namespace WizOne.Tactil
                 //btnBack.Text = Dami.TraduCuvant("btnBack", "Inapoi");
                 #endregion
 
-
+                
                 lblRol.Visible = false;
                 cmbRol.Visible = false;
                 cmbRol.Value = 0;
@@ -84,7 +84,7 @@ namespace WizOne.Tactil
                             txtNrOre.Visible = true;
                             txtNrOre.MinValue = 1;
                             txtNrOre.MaxValue = 8;
-                            tdNrOre.Align = "left";
+                            tdNrOre.Align = "left";    
 
                             txtNrZile.Visible = false;
                             lblZile.Visible = false;
@@ -108,11 +108,11 @@ namespace WizOne.Tactil
                             break;
                         case "PlanificareCO":
                             denumire = "COP";
-                            tdDataSf.Width = "550";
+                            tdDataSf.Width = "1200";
                             break;
                         case "CerereCO":
                             denumire = "CO";
-                            tdDataSf.Width = "550";
+                            tdDataSf.Width = "1200";
                             break;
                     }
 
@@ -131,12 +131,13 @@ namespace WizOne.Tactil
                 lblMarca.InnerText = "MARCA: " + Session["User_Marca"].ToString();
                 lblNume.InnerText = "NUME: " + Session["User_NumeComplet"].ToString();
 
-                DataTable dtAbs = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" LIKE '" + denumire + "'", null);
+                DataTable dtAbs = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" LIKE '" + denumire + "'", null);               
+
 
                 cmbAbs.DataSource = dtAbs;
                 if (dtAbs != null && dtAbs.Rows.Count > 0)
                     cmbAbs.Value = Convert.ToInt32(dtAbs.Rows[0]["Id"].ToString());
-
+             
                 DataTable dtZile = General.IncarcaDT("SELECT * FROM \"SituatieZileAbsente\" WHERE F10003 = " + General.Nz(General.VarSession("User_Marca"), -99).ToString() + " AND \"An\" = " + DateTime.Now.Year, null);
 
                 if (dtZile != null && dtZile.Rows.Count > 0)
@@ -195,6 +196,7 @@ namespace WizOne.Tactil
                         AfiseazaCtl();
 
                     }
+                    //AfiseazaCtl();
 
                     DataRow[] dtRowAbs = null;
                     if (Session["CereriTactil"].ToString() == "AbsenteOra")
@@ -250,6 +252,7 @@ namespace WizOne.Tactil
 
                         }
                     }
+                    AfiseazaCtl();
 
                 }
                 else
@@ -964,15 +967,25 @@ namespace WizOne.Tactil
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi sa creati acest tip de absenta");
 
                     return;
-                }
+                } 
 
                 DateTime ziDrp = Dami.DataDrepturi(valoare, nrZile, Convert.ToDateTime(txtDataInc.Value), Convert.ToInt32(General.VarSession("User_Marca") ?? -99));
-                if (txtDataInc.Date < ziDrp)
+                if (txtDataInc.Date < ziDrp.Date)
                 {
-                    if (tip == 1)
-                        MessageBox.Show(Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat " + ziDrp.Date.ToShortDateString()), MessageBox.icoWarning);
+                    if (valoare == 13)
+                    {
+                        if (tip == 1)
+                            MessageBox.Show(Dami.TraduCuvant("Pontajul a fost aprobat pentru aceasta perioada"), MessageBox.icoWarning);
+                        else
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pontajul a fost aprobat pentru aceasta perioada");
+                    }
                     else
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat " + ziDrp.Date.ToShortDateString());
+                    {
+                        if (tip == 1)
+                            MessageBox.Show(Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat " + ziDrp.Date.ToShortDateString()), MessageBox.icoWarning);
+                        else
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data inceput trebuie sa fie mai mare sau egala decat " + ziDrp.Date.ToShortDateString());
+                    }
 
                     return;
                 }
@@ -1377,7 +1390,8 @@ namespace WizOne.Tactil
 
                 if (dtAbs != null && dtAbs.Rows.Count > 0)
                 {
-                    DataRow[] arr = dtAbs.Select("Id=" + General.Nz(General.VarSession("User_Marca"), "-99"));
+                    //DataRow[] arr = dtAbs.Select("Id=" + General.Nz(General.VarSession("User_Marca"), "-99"));
+                    DataRow[] arr = dtAbs.Select("Id=" + General.Nz(cmbSelAbs.Value, "-99"));
                     if (arr.Count() > 0)
                     {
                         DataRow dr = arr[0];
@@ -1385,10 +1399,37 @@ namespace WizOne.Tactil
                         arataInloc = General.Nz(dr["ArataInlocuitor"], "1").ToString();
                         arataAtas = General.Nz(dr["ArataAtasament"], "1").ToString();
                         idOre = General.Nz(dr["IdTipOre"], "1").ToString();
+
+                        int folosesteInterval = 0;
+                        int perioada = 0;
+                        idOre = General.Nz(dr["IdTipOre"], "1").ToString();
+                        folosesteInterval = Convert.ToInt32(General.Nz(dr["AbsentaTipOraFolosesteInterval"], 0));
+                        perioada = Convert.ToInt32(General.Nz(dr["AbsentaTipOraPerioada"], 0));
+                        if (perioada <= 0) perioada = 60;
+                        if (perioada > 60) perioada = 60;
+
+                        if (idOre == "0")
+                        {
+                            if (folosesteInterval == 1)
+                            {
+                                List<Module.Dami.metaGeneral2> lst = ListaInterval(perioada);
+
+                                lblOraInc.Visible = true;
+                                lblOraSf.Visible = true;
+                                tdOraInc.Visible = true;
+                                cmbOraInc.Visible = true;
+                                cmbOraInc.DataSource = lst;
+                                cmbOraInc.DataBind();
+                                tdOraSf.Visible = true;
+                                cmbOraSf.Visible = true;
+                                cmbOraSf.DataSource = lst;
+                                cmbOraSf.DataBind();
+                            }
+                            else
+                                tdNrOre.Width = "1200";
+                        }
                     }
-                }
-
-
+                }   
 
                 if (idOre == "0")
                 {
@@ -1824,6 +1865,32 @@ namespace WizOne.Tactil
             }
 
             return sqlCer;
+        }
+
+        private List<Module.Dami.metaGeneral2> ListaInterval(int perioada)
+        {
+            try
+            {
+                List<Module.Dami.metaGeneral2> list = new List<Module.Dami.metaGeneral2>();
+
+                DateTime ziua = new DateTime(2200, 1, 1, 0, 0, 0);
+                DateTime ziuaPlus = ziua.AddDays(1);
+
+                do
+                {
+                    ziua = ziua.AddMinutes(perioada);
+                    string str = ziua.Hour.ToString().PadLeft(2, '0') + ":" + ziua.Minute.ToString().PadLeft(2, '0');
+                    list.Add(new Module.Dami.metaGeneral2() { Id = str, Denumire = str });
+                }
+                while (ziua < ziuaPlus);
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                return null;
+            }
         }
 
 

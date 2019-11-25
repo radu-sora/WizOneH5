@@ -120,6 +120,158 @@ namespace WizOne.Module
             return rez;
         }
 
+
+
+        //public static void Securitate(ContentPlaceHolder pag)
+        //{
+        //    try
+        //    {
+        //        string filtru = "";
+
+        //        string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
+
+        //        if (nume.ToLower() == "sablon")
+        //        {
+        //            nume = "tbl." + HttpContext.Current.Session["Sablon_Tabela"];
+        //            filtru = " AND \"IdColoana\"='-'";
+        //        }
+
+        //        //Florin 2018-05-18
+        //        //S-a modificat din MIN in MAX
+        //        string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+        //                        SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+        //                        FROM ""Securitate"" A
+        //                        INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+        //                        WHERE B.""IdUser"" = @2 AND LOWER(A.""IdForm"") = @1 {0}
+        //                        UNION
+        //                        SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+        //                        FROM ""Securitate"" A
+        //                        WHERE A.""IdGrup"" = -1 AND LOWER(A.""IdForm"") = @1 {0}) X
+        //                        GROUP BY X.""IdControl"", X.""IdColoana""";
+        //        strSql = string.Format(strSql, filtru);
+        //        DataTable dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });
+
+        //        foreach (DataRow dr in dt.Rows)
+        //        {
+        //            try
+        //            {
+        //                if (dr["IdColoana"].ToString() == "-")
+        //                {
+        //                    WebControl ctl = pag.FindControl(dr["IdControl"].ToString()) as WebControl;
+        //                    if (ctl != null)
+        //                    {
+        //                        ctl.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                        ctl.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+        //                    }
+        //                    else
+        //                    {                                      
+        //                        //verificam daca nu cumva se gaseste intr-un container de tip ASPxCallbackPanel
+        //                        foreach (ASPxCallbackPanel pnlCtl in pag.Controls.OfType<ASPxCallbackPanel>())
+        //                        {
+        //                            WebControl ctl2 = pnlCtl.FindControl(dr["IdControl"].ToString()) as WebControl;
+        //                            if (ctl2 != null)
+        //                            {
+        //                                ctl2.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                ctl2.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+        //                            }
+        //                            else
+        //                            {
+        //                                if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+        //                                {
+        //                                    HtmlGenericControl ctl1 = pnlCtl.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
+        //                                    if (ctl1 != null)
+        //                                    {
+        //                                        ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                    }
+        //                                }
+        //                            }
+        //                            //verificam daca nu cumva se gaseste intr-un container de tip ASPxRoundPanel
+        //                            foreach (ASPxRoundPanel pnlCtl2 in pnlCtl.Controls.OfType<ASPxRoundPanel>())
+        //                            {
+        //                                WebControl ctl3 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as WebControl;
+        //                                if (ctl3 != null)
+        //                                {
+        //                                    ctl3.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                    ctl3.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+        //                                }
+        //                                else
+        //                                {
+        //                                    if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+        //                                    {
+        //                                        HtmlGenericControl ctl1 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
+        //                                        if (ctl1 != null)
+        //                                        {
+        //                                            ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                        }
+        //                                    }
+        //                                }
+        //                            }
+
+        //                        }
+
+
+
+        //                        //var wsx = pag.Controls.OfType<ASPxCallbackPanel>();
+        //                        //var xcv = pag.Controls.OfType<ASPxCallbackPanel>().Where(p => p.ID.ToLower().Contains("pnlCtl"));                                
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
+        //                    if (ctl != null)
+        //                    { 
+        //                        GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
+        //                        if (col != null)
+        //                        {
+        //                            col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                            col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
+        //                        }
+        //                        else
+        //                        {
+        //                            //verificam daca sunt butoane in interiorul gridului
+        //                            GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
+        //                            GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
+        //                            if (button != null)
+        //                            {
+        //                                if (Convert.ToInt32(dr["Vizibil"]) == 1)
+        //                                    button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
+        //                                else
+        //                                    button.Visibility = GridViewCustomButtonVisibility.Invisible;
+        //                            }
+        //                            else
+        //                            {
+        //                                //Florin 2018.08.16
+        //                                //atunci este buton BuiltIn al Devexpress-ului
+        //                                if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+        //                                {
+        //                                    column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                continue;
+        //                General.MemoreazaEroarea(ex + Environment.NewLine + 
+        //                    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+        //                    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+
+
+
+        //Florin 2019.11.25
+        //am modificat functia astfel incat daca labelul are acelasi nume ca si controlul aasociat sa-l ascunda automat; Ex: lblCateg - cmbCateg
+
         public static void Securitate(ContentPlaceHolder pag)
         {
             try
@@ -127,7 +279,7 @@ namespace WizOne.Module
                 string filtru = "";
 
                 string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
-                
+
                 if (nume.ToLower() == "sablon")
                 {
                     nume = "tbl." + HttpContext.Current.Session["Sablon_Tabela"];
@@ -153,85 +305,88 @@ namespace WizOne.Module
                 {
                     try
                     {
-                        if (dr["IdColoana"].ToString() == "-")
+                        bool vizibil = Convert.ToBoolean(General.Nz(dr["Vizibil"],0));
+                        bool blocat = Convert.ToBoolean(General.Nz(dr["Blocat"],0));
+                        string idCtl = General.Nz(dr["IdControl"],"").ToString();
+                        string idCol = General.Nz(dr["IdColoana"],"").ToString();
+
+                        if (idCol == "-")
                         {
-                            WebControl ctl = pag.FindControl(dr["IdControl"].ToString()) as WebControl;
+                            dynamic ctl = pag.FindControl(idCtl);
                             if (ctl != null)
                             {
-                                ctl.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                ctl.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+                                ctl.Visible = vizibil;
+                                ctl.Enabled = blocat;
+
+                                if (idCtl.Length > 3)
+                                {
+                                    string idLbl = "lbl" + idCtl.Substring(3);
+                                    dynamic lbl = pag.FindControl(idLbl);
+                                    if (lbl != null) lbl.Visible = vizibil;
+                                }
                             }
                             else
-                            {                                      
+                            {
                                 //verificam daca nu cumva se gaseste intr-un container de tip ASPxCallbackPanel
                                 foreach (ASPxCallbackPanel pnlCtl in pag.Controls.OfType<ASPxCallbackPanel>())
                                 {
-                                    WebControl ctl2 = pnlCtl.FindControl(dr["IdControl"].ToString()) as WebControl;
+                                    dynamic ctl2 = pnlCtl.FindControl(idCtl);
                                     if (ctl2 != null)
                                     {
-                                        ctl2.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                        ctl2.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
-                                    }
-                                    else
-                                    {
-                                        if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+                                        ctl2.Visible = vizibil;
+                                        ctl2.Enabled = blocat;
+
+                                        if (idCtl.Length > 3)
                                         {
-                                            HtmlGenericControl ctl1 = pnlCtl.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
-                                            if (ctl1 != null)
-                                            {
-                                                ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                            }
+                                            string idLbl = "lbl" + idCtl.Substring(3);
+                                            dynamic lbl = pnlCtl.FindControl(idLbl);
+                                            if (lbl != null) lbl.Visible = vizibil;
                                         }
+
+                                        break;
                                     }
+
                                     //verificam daca nu cumva se gaseste intr-un container de tip ASPxRoundPanel
                                     foreach (ASPxRoundPanel pnlCtl2 in pnlCtl.Controls.OfType<ASPxRoundPanel>())
                                     {
-                                        WebControl ctl3 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as WebControl;
+                                        dynamic ctl3 = pnlCtl2.FindControl(idCtl);
                                         if (ctl3 != null)
                                         {
-                                            ctl3.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                            ctl3.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
-                                        }
-                                        else
-                                        {
-                                            if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+                                            ctl3.Visible = vizibil;
+                                            ctl3.Enabled = blocat;
+
+                                            if (idCtl.Length > 3)
                                             {
-                                                HtmlGenericControl ctl1 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
-                                                if (ctl1 != null)
-                                                {
-                                                    ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                                }
+                                                string idLbl = "lbl" + idCtl.Substring(3);
+                                                dynamic lbl = pnlCtl2.FindControl(idLbl);
+                                                if (lbl != null) lbl.Visible = vizibil;
                                             }
                                         }
+
+                                        break;
                                     }
-
-                                }
-
-
-
-                                //var wsx = pag.Controls.OfType<ASPxCallbackPanel>();
-                                //var xcv = pag.Controls.OfType<ASPxCallbackPanel>().Where(p => p.ID.ToLower().Contains("pnlCtl"));                                
+                                }                            
                             }
                         }
                         else
                         {
-                            ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
+                            ASPxGridView ctl = pag.FindControl(idCtl) as ASPxGridView;
                             if (ctl != null)
-                            { 
-                                GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
+                            {
+                                GridViewDataColumn col = ctl.Columns[idCol] as GridViewDataColumn;
                                 if (col != null)
                                 {
-                                    col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                    col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
+                                    col.Visible = vizibil;
+                                    col.ReadOnly = blocat;
                                 }
                                 else
                                 {
                                     //verificam daca sunt butoane in interiorul gridului
                                     GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
-                                    GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
+                                    GridViewCommandColumnCustomButton button = column.CustomButtons[idCol] as GridViewCommandColumnCustomButton;
                                     if (button != null)
                                     {
-                                        if (Convert.ToInt32(dr["Vizibil"]) == 1)
+                                        if (vizibil)
                                             button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
                                         else
                                             button.Visibility = GridViewCustomButtonVisibility.Invisible;
@@ -240,9 +395,9 @@ namespace WizOne.Module
                                     {
                                         //Florin 2018.08.16
                                         //atunci este buton BuiltIn al Devexpress-ului
-                                        if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+                                        if (idCol.ToLower() == "btnedit")
                                         {
-                                            column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            column.ShowEditButton = vizibil;
                                         }
                                     }
                                 }
@@ -252,7 +407,7 @@ namespace WizOne.Module
                     catch (Exception ex)
                     {
                         continue;
-                        General.MemoreazaEroarea(ex + Environment.NewLine + 
+                        General.MemoreazaEroarea(ex + Environment.NewLine +
                             General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
                             General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
                     }
@@ -263,6 +418,7 @@ namespace WizOne.Module
                 General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
 
 
         public static void Securitate(Page pag)

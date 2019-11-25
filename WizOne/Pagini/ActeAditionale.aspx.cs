@@ -1087,11 +1087,19 @@ namespace WizOne.Pagini
                                             {
                                                 //cazul cand este angajat
                                                 DataRow dr = dtAvs.Rows[x];
-                                                Cereri pag = new Cereri();
-                                                pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
-                                                if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
-                                                    General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
-                                            }
+                                                //Florin 2019.11.25 - sporul de vechime nu se duce in F704; el este deja dus la inchidere luna si tot acolo se introduce si in Avs_Cereri
+                                                if (General.Nz(dr["IdAtribut"], -99).ToString() == "11" && General.Nz(dr["USER_NO"], -99).ToString() == "-89")
+                                                {
+                                                    //NOP - sporul de vechime nu se duce
+                                                }
+                                                else
+                                                {
+                                                    Cereri pag = new Cereri();
+                                                    pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
+                                                    if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
+                                                        General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
+                                                }
+                                                }
                                         }
 
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;

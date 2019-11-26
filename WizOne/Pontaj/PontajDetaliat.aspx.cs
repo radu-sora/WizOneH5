@@ -2023,8 +2023,11 @@ namespace WizOne.Pontaj
                         if (newValue != null && numeCol.Length >= 2 && numeCol.Substring(0,2).ToLower() == "in" && General.IsNumeric(numeCol.Replace("In", "")))
                         {
                             int i = Convert.ToInt32(numeCol.ToLower().Replace("in", ""));
+                            //Florin 2019.11.26
                             //DateTime inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
                             DateTime inOut = Convert.ToDateTime(newValue);
+                            if (inOut.Year == 100)
+                                inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
                             try
                             {
                                 if (i > 1 && row["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(row["Out" + (i - 1)]) > inOut)
@@ -2046,8 +2049,11 @@ namespace WizOne.Pontaj
                         if (newValue != null && numeCol.Length >= 3 && numeCol.Substring(0,3).ToLower() == "out" && General.IsNumeric(numeCol.Replace("Out", "")))
                         {
                             int i = Convert.ToInt32(numeCol.ToLower().Replace("out", ""));
+                            //Florin 2019.11.26
                             //DateTime inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
                             DateTime inOut = Convert.ToDateTime(newValue);
+                            if (inOut.Year == 100)
+                                inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
                             try
                             {
                                 var ert = row["In" + i];

@@ -771,7 +771,7 @@ namespace WizOne.Reports
                 rowH.CanGrow = true;
                 rowH.CanShrink = true;
                 if (dt != null && dt.Rows.Count > 0)                
-                    for (int j = 3; j <= 4; j++)
+                    for (int j = 3; j <= 5; j++)
                     {
                         XRTableCell cell = new XRTableCell();
                         cell.Text = Dami.TraduCuvant(General.Nz(dt.Columns[j], "").ToString());
@@ -793,7 +793,7 @@ namespace WizOne.Reports
                         row.CanGrow = true;
                         row.CanShrink = true;
 
-                        for (int j = 3; j <= 4; j++)
+                        for (int j = 3; j <= 5; j++)
                         {
                             XRTableCell cell = new XRTableCell();
                             cell.WidthF = 100;

@@ -348,15 +348,47 @@
                             {
                                 if (key == 45)              // scade o zi
                                 {
-                                    grDate.PerformCallback('dayMinus;' + cell.column.fieldName);
+                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                        grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                        grDate.batchEditApi.EndEdit();
+                                        alert('Done');
+                                    }
                                 }
                                 else if (key == 43)        // adauga o zi
                                 {
-                                    grDate.PerformCallback('dayPlus;' + cell.column.fieldName);
+                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                        grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                        grDate.batchEditApi.EndEdit();
+                                        alert('Done');
+                                    }
                                 }
                                 else if (key == 93)         ////insereaza celula   tasta   ]
                                 {
                                     grDate.PerformCallback('cellPlus;' + cell.column.fieldName);
+                                    //var idx = 21;
+                                    //var col = cell.column.fieldName;
+                                    //if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                    //    idx = col.substr(2);
+                                    //if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                    //    idx = col.substr(3);
+
+                                    //grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                    //for (var i = 20; i > idx; i--)
+                                    //{
+                                    //    if (i != idx || (i == idx && col.substr(0, 2).toLowerCase() == 'in'))
+                                    //        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+
+                                    //    grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + (i-1).toString()));
+                                    //}
+
+                                    //grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, null);
+                                    //grDate.batchEditApi.EndEdit();
                                 }
                                 else if (key == 91)         // sterge celula pe care este, daca este goala tasta [
                                 {

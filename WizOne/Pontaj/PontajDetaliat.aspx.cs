@@ -2023,7 +2023,8 @@ namespace WizOne.Pontaj
                         if (newValue != null && numeCol.Length >= 2 && numeCol.Substring(0,2).ToLower() == "in" && General.IsNumeric(numeCol.Replace("In", "")))
                         {
                             int i = Convert.ToInt32(numeCol.ToLower().Replace("in", ""));
-                            DateTime inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
+                            //DateTime inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
+                            DateTime inOut = Convert.ToDateTime(newValue);
                             try
                             {
                                 if (i > 1 && row["Out" + (i - 1)] != DBNull.Value && Convert.ToDateTime(row["Out" + (i - 1)]) > inOut)
@@ -2045,7 +2046,8 @@ namespace WizOne.Pontaj
                         if (newValue != null && numeCol.Length >= 3 && numeCol.Substring(0,3).ToLower() == "out" && General.IsNumeric(numeCol.Replace("Out", "")))
                         {
                             int i = Convert.ToInt32(numeCol.ToLower().Replace("out", ""));
-                            DateTime inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
+                            //DateTime inOut = new DateTime(ziua.Year, ziua.Month, ziua.Day, Convert.ToDateTime(newValue).Hour, Convert.ToDateTime(newValue).Minute, Convert.ToDateTime(newValue).Second);
+                            DateTime inOut = Convert.ToDateTime(newValue);
                             try
                             {
                                 var ert = row["In" + i];
@@ -2661,42 +2663,42 @@ namespace WizOne.Pontaj
                             break;
                         case "dayPlus":
                             {
-                                if (arr.Length > 1 && arr[1] != null && arr[1] != "")
-                                {
-                                    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
-                                    DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                                //if (arr.Length > 1 && arr[1] != null && arr[1] != "")
+                                //{
+                                //    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
+                                //    DataTable dt = Session["InformatiaCurenta"] as DataTable;
 
-                                    DateTime zi = Convert.ToDateTime(obj[1]);
-                                    DateTime inOut = Convert.ToDateTime(obj[2]);
+                                //    DateTime zi = Convert.ToDateTime(obj[1]);
+                                //    DateTime inOut = Convert.ToDateTime(obj[2]);
 
-                                    if (zi.Date == inOut.Date || zi.Date == inOut.AddDays(1).Date)
-                                    {
-                                        DataRow dr = dt.Rows.Find(obj[0]);
-                                        dr[arr[1]] = Convert.ToDateTime(dr[arr[1]]).AddDays(1);
-                                        Session["InformatiaCurenta"] = dt;
-                                        grDate.DataBind();
-                                    }
-                                }
+                                //    if (zi.Date == inOut.Date || zi.Date == inOut.AddDays(1).Date)
+                                //    {
+                                //        DataRow dr = dt.Rows.Find(obj[0]);
+                                //        dr[arr[1]] = Convert.ToDateTime(dr[arr[1]]).AddDays(1);
+                                //        Session["InformatiaCurenta"] = dt;
+                                //        grDate.DataBind();
+                                //    }
+                                //}
                             }
                             break;
                         case "dayMinus":
                             {
-                                if (arr.Length > 1 && arr[1] != null && arr[1] != "")
-                                {
-                                    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
-                                    DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                                //if (arr.Length > 1 && arr[1] != null && arr[1] != "")
+                                //{
+                                //    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
+                                //    DataTable dt = Session["InformatiaCurenta"] as DataTable;
 
-                                    DateTime zi = Convert.ToDateTime(obj[1]);
-                                    DateTime inOut = Convert.ToDateTime(obj[2]);
+                                //    DateTime zi = Convert.ToDateTime(obj[1]);
+                                //    DateTime inOut = Convert.ToDateTime(obj[2]);
 
-                                    if (zi.Date == inOut.Date || zi.Date == inOut.AddDays(-1).Date)
-                                    {
-                                        DataRow dr = dt.Rows.Find(obj[0]);
-                                        dr[arr[1]] = Convert.ToDateTime(dr[arr[1]]).AddDays(-1);
-                                        Session["InformatiaCurenta"] = dt;
-                                        grDate.DataBind();
-                                    }
-                                }
+                                //    if (zi.Date == inOut.Date || zi.Date == inOut.AddDays(-1).Date)
+                                //    {
+                                //        DataRow dr = dt.Rows.Find(obj[0]);
+                                //        dr[arr[1]] = Convert.ToDateTime(dr[arr[1]]).AddDays(-1);
+                                //        Session["InformatiaCurenta"] = dt;
+                                //        grDate.DataBind();
+                                //    }
+                                //}
                             }
                             break;
                         case "cellPlus":

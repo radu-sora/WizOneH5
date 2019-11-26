@@ -97,6 +97,13 @@ namespace WizOne.Personal
                 GridViewDataComboBoxColumn colTipAdr = (grDateAdresa.Columns["IdTipAdresa"] as GridViewDataComboBoxColumn);
                 colTipAdr.PropertiesComboBox.DataSource = dtTipAdr;
 
+                //sql = @"SELECT * FROM ""tblTipStrada"" ";
+                //if (Constante.tipBD == 2)
+                //    sql = General.SelectOracle("tblTipStrada", "Id");
+                //DataTable dtTipArt = General.IncarcaDT(sql, null);
+                //GridViewDataComboBoxColumn colTipArt = (grDateAdresa.Columns["IdTipStrada"] as GridViewDataComboBoxColumn);
+                //colTipArt.PropertiesComboBox.DataSource = dtTipArt;
+
                 if (!IsPostBack)
                 {
                     lblAdresa.Text = DamiAdresa(dt);

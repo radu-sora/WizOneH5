@@ -88,7 +88,7 @@
                         </CustomButtons>
                         
                     </dx:GridViewCommandColumn>
-                    <dx:GridViewDataTextColumn FieldName="IdTipStrada" Name="IdTipStrada" Caption="Tip artera" Visible="false" Width="150px" />
+                    <dx:GridViewDataTextColumn FieldName="IdTipStrada" Name="IdTipStrada" Caption="Tip artera"  Width="150px" Visible="false"/>
                     <dx:GridViewDataTextColumn FieldName="NumeNivel1" Name="NumeNivel1" Caption="Judet"  ReadOnly="true" Width="100px" />
                     <dx:GridViewDataTextColumn FieldName="SirutaNivel1" Name="SirutaNivel1" Caption="Judet" Visible="false" Width="200px" />
                     <dx:GridViewDataTextColumn FieldName="NumeNivel2" Name="NumeNivel2" Caption="Mun/Oras/Comuna" ReadOnly="true" Width="150px" />

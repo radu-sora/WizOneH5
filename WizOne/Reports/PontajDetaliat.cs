@@ -5,6 +5,7 @@ using System.ComponentModel;
 using DevExpress.XtraReports.UI;
 using WizOne.Module;
 using System.Web;
+using System.Globalization;
 
 namespace WizOne.Reports
 {
@@ -13,6 +14,11 @@ namespace WizOne.Reports
         public PontajDetaliat()
         {
             InitializeComponent();
+
+            CultureInfo newCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+            newCulture.DateTimeFormat.DateSeparator = "/";
+            System.Threading.Thread.CurrentThread.CurrentCulture = newCulture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = newCulture;
 
             string filtru = " AND 1=2";
             //string strSql = @"SELECT A.*, B.F10008 + ' ' + B.F10009 AS NumeComplet 
@@ -72,7 +78,6 @@ namespace WizOne.Reports
                     }
                 }
             }
-
             this.DataSource = General.IncarcaDT(strSql + filtru + @" ORDER BY B.F10008, B.F10009, A.""Ziua"" ", null);
         }
 

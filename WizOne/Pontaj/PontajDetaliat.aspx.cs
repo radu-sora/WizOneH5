@@ -2667,111 +2667,111 @@ namespace WizOne.Pontaj
                         case "btnDelete":
                             MetodeInitializare(2);
                             break;
-                        case "dayPlus":
-                            {
-                                //if (arr.Length > 1 && arr[1] != null && arr[1] != "")
-                                //{
-                                //    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
-                                //    DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                        //case "dayPlus":
+                        //    {
+                        //        if (arr.Length > 1 && arr[1] != null && arr[1] != "")
+                        //        {
+                        //            object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
+                        //            DataTable dt = Session["InformatiaCurenta"] as DataTable;
 
-                                //    DateTime zi = Convert.ToDateTime(obj[1]);
-                                //    DateTime inOut = Convert.ToDateTime(obj[2]);
+                        //            DateTime zi = Convert.ToDateTime(obj[1]);
+                        //            DateTime inOut = Convert.ToDateTime(obj[2]);
 
-                                //    if (zi.Date == inOut.Date || zi.Date == inOut.AddDays(1).Date)
-                                //    {
-                                //        DataRow dr = dt.Rows.Find(obj[0]);
-                                //        dr[arr[1]] = Convert.ToDateTime(dr[arr[1]]).AddDays(1);
-                                //        Session["InformatiaCurenta"] = dt;
-                                //        grDate.DataBind();
-                                //    }
-                                //}
-                            }
-                            break;
-                        case "dayMinus":
-                            {
-                                //if (arr.Length > 1 && arr[1] != null && arr[1] != "")
-                                //{
-                                //    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
-                                //    DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                        //            if (zi.Date == inOut.Date || zi.Date == inOut.AddDays(1).Date)
+                        //            {
+                        //                DataRow dr = dt.Rows.Find(obj[0]);
+                        //                dr[arr[1]] = Convert.ToDateTime(dr[arr[1]]).AddDays(1);
+                        //                Session["InformatiaCurenta"] = dt;
+                        //                grDate.DataBind();
+                        //            }
+                        //        }
+                        //    }
+                        //    break;
+                        //case "dayMinus":
+                        //    {
+                        //        if (arr.Length > 1 && arr[1] != null && arr[1] != "")
+                        //        {
+                        //            object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
+                        //            DataTable dt = Session["InformatiaCurenta"] as DataTable;
 
-                                //    DateTime zi = Convert.ToDateTime(obj[1]);
-                                //    DateTime inOut = Convert.ToDateTime(obj[2]);
+                        //            DateTime zi = Convert.ToDateTime(obj[1]);
+                        //            DateTime inOut = Convert.ToDateTime(obj[2]);
 
-                                //    if (zi.Date == inOut.Date || zi.Date == inOut.AddDays(-1).Date)
-                                //    {
-                                //        DataRow dr = dt.Rows.Find(obj[0]);
-                                //        dr[arr[1]] = Convert.ToDateTime(dr[arr[1]]).AddDays(-1);
-                                //        Session["InformatiaCurenta"] = dt;
-                                //        grDate.DataBind();
-                                //    }
-                                //}
-                            }
-                            break;
-                        case "cellPlus":
-                            if (arr.Length > 1 && arr[1] != null && arr[1] != "")
-                            {
-                                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
-                                DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                                DataRow dr = dt.Rows.Find(obj[0]);
+                        //            if (zi.Date == inOut.Date || zi.Date == inOut.AddDays(-1).Date)
+                        //            {
+                        //                DataRow dr = dt.Rows.Find(obj[0]);
+                        //                dr[arr[1]] = Convert.ToDateTime(dr[arr[1]]).AddDays(-1);
+                        //                Session["InformatiaCurenta"] = dt;
+                        //                grDate.DataBind();
+                        //            }
+                        //        }
+                        //    }
+                        //    break;
+                        //case "cellPlus":
+                        //    if (arr.Length > 1 && arr[1] != null && arr[1] != "")
+                        //    {
+                        //        object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
+                        //        DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                        //        DataRow dr = dt.Rows.Find(obj[0]);
                                 
-                                string[] arrIO = new string[] { "In1", "Out1", "In2", "Out2", "In3", "Out3", "In4", "Out4", "In5", "Out5", "In6", "Out6", "In7", "Out7", "In8", "Out8", "In9", "Out9", "In10", "Out10", "In11", "Out11", "In12", "Out12", "In13", "Out13", "In14", "Out14", "In15", "Out15", "In16", "Out16", "In17", "Out17", "In18", "Out18", "In19", "Out19", "In20", "Out20" };
+                        //        string[] arrIO = new string[] { "In1", "Out1", "In2", "Out2", "In3", "Out3", "In4", "Out4", "In5", "Out5", "In6", "Out6", "In7", "Out7", "In8", "Out8", "In9", "Out9", "In10", "Out10", "In11", "Out11", "In12", "Out12", "In13", "Out13", "In14", "Out14", "In15", "Out15", "In16", "Out16", "In17", "Out17", "In18", "Out18", "In19", "Out19", "In20", "Out20" };
                                 
-                                int idx = arrIO.ToList().FindIndex(pnlCtl => pnlCtl == arr[1]);
+                        //        int idx = arrIO.ToList().FindIndex(pnlCtl => pnlCtl == arr[1]);
 
-                                for (int i = arrIO.Length - 1; i > idx; i--)
-                                {
-                                    dr[arrIO[i]] = dr[arrIO[i - 1]];
-                                }
-                                //stergem pozitia curenta pt ca am mutat-o pe urmataorea poztie
-                                dr[arr[1]] = DBNull.Value;
+                        //        for (int i = arrIO.Length - 1; i > idx; i--)
+                        //        {
+                        //            dr[arrIO[i]] = dr[arrIO[i - 1]];
+                        //        }
+                        //        //stergem pozitia curenta pt ca am mutat-o pe urmataorea poztie
+                        //        dr[arr[1]] = DBNull.Value;
 
-                                Session["InformatiaCurenta"] = dt;
-                                grDate.DataBind();
-                            }
-                            break;
-                        case "cellMinus":
-                            if (arr.Length > 1 && arr[1] != null && arr[1] != "")
-                            {
-                                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
-                                DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                                DataRow dr = dt.Rows.Find(obj[0]);
+                        //        Session["InformatiaCurenta"] = dt;
+                        //        grDate.DataBind();
+                        //    }
+                        //    break;
+                        //case "cellMinus":
+                        //    if (arr.Length > 1 && arr[1] != null && arr[1] != "")
+                        //    {
+                        //        object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua", arr[1] }) as object[];
+                        //        DataTable dt = Session["InformatiaCurenta"] as DataTable;
+                        //        DataRow dr = dt.Rows.Find(obj[0]);
 
-                                string[] arrIO = new string[] { "In1", "Out1", "In2", "Out2", "In3", "Out3", "In4", "Out4", "In5", "Out5", "In6", "Out6", "In7", "Out7", "In8", "Out8", "In9", "Out9", "In10", "Out10", "In11", "Out11", "In12", "Out12", "In13", "Out13", "In14", "Out14", "In15", "Out15", "In16", "Out16", "In17", "Out17", "In18", "Out18", "In19", "Out19", "In20", "Out20" };
+                        //        string[] arrIO = new string[] { "In1", "Out1", "In2", "Out2", "In3", "Out3", "In4", "Out4", "In5", "Out5", "In6", "Out6", "In7", "Out7", "In8", "Out8", "In9", "Out9", "In10", "Out10", "In11", "Out11", "In12", "Out12", "In13", "Out13", "In14", "Out14", "In15", "Out15", "In16", "Out16", "In17", "Out17", "In18", "Out18", "In19", "Out19", "In20", "Out20" };
                                 
-                                int idx = arrIO.ToList().FindIndex(pnlCtl => pnlCtl == arr[1]);
+                        //        int idx = arrIO.ToList().FindIndex(pnlCtl => pnlCtl == arr[1]);
 
-                                //daca celula pe care sunt are valoare, nu fac nimic, celula trebuie sa fie goala ca sa pot sa mut tot ce este la stanga la dreapta
-                                if (dr[arr[1]] != DBNull.Value) return;
+                        //        //daca celula pe care sunt are valoare, nu fac nimic, celula trebuie sa fie goala ca sa pot sa mut tot ce este la stanga la dreapta
+                        //        if (dr[arr[1]] != DBNull.Value) return;
 
-                                for (int i = idx; i < arrIO.Length - 1; i++)
-                                {
-                                    dr[arrIO[i]] = dr[arrIO[i + 1]];
-                                }
-                                //stergem ultima pozitie pt ca am mutat valoarea pe campul precedent
-                                dr[arrIO[arrIO.Length-1]] = DBNull.Value;
+                        //        for (int i = idx; i < arrIO.Length - 1; i++)
+                        //        {
+                        //            dr[arrIO[i]] = dr[arrIO[i + 1]];
+                        //        }
+                        //        //stergem ultima pozitie pt ca am mutat valoarea pe campul precedent
+                        //        dr[arrIO[arrIO.Length-1]] = DBNull.Value;
 
-                                Session["InformatiaCurenta"] = dt;
-                                grDate.DataBind();
-                            }
-                            break;
-                        case "PtAbs":
-                            {
-                                //object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua" }) as object[];
+                        //        Session["InformatiaCurenta"] = dt;
+                        //        grDate.DataBind();
+                        //    }
+                        //    break;
+                        //case "PtAbs":
+                        //    {
+                        //        object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Cheia", "Ziua" }) as object[];
 
-                                //int idAbs = 2;
-                                //int ziua = Convert.ToInt32(obj[0]);
-                                //if (ziua == 1) idAbs = 5;
-                                //if (ziua == 2) idAbs = 6;
-                                //if (ziua == 3) idAbs = 16;
+                        //        int idAbs = 2;
+                        //        int ziua = Convert.ToInt32(obj[0]);
+                        //        if (ziua == 1) idAbs = 5;
+                        //        if (ziua == 2) idAbs = 6;
+                        //        if (ziua == 3) idAbs = 16;
 
 
-                                ////DataTable dt = General.GetAbsentePeContract(Convert.ToInt32(obj[0]));
-                                //DataTable dt = General.GetAbsentePeContract(idAbs);
-                                //GridViewDataComboBoxColumn cmb = grDate.Columns["ValAbs"] as GridViewDataComboBoxColumn;
+                        //        //DataTable dt = General.GetAbsentePeContract(Convert.ToInt32(obj[0]));
+                        //        DataTable dt = General.GetAbsentePeContract(idAbs);
+                        //        GridViewDataComboBoxColumn cmb = grDate.Columns["ValAbs"] as GridViewDataComboBoxColumn;
 
-                                //cmb.PropertiesComboBox.DataSource = dt;
-                            }
-                            break;
+                        //        cmb.PropertiesComboBox.DataSource = dt;
+                        //    }
+                        //    break;
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;
                             break;

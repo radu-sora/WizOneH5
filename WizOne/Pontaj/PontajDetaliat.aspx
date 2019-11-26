@@ -354,7 +354,7 @@
                                         var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
                                         grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
                                         grDate.batchEditApi.EndEdit();
-                                        alert('Done');
+                                        alert('Proces realizat cu succes');
                                     }
                                 }
                                 else if (key == 43)        // adauga o zi  tasta +
@@ -365,7 +365,7 @@
                                         var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
                                         grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
                                         grDate.batchEditApi.EndEdit();
-                                        alert('Done');
+                                        alert('Proces realizat cu succes');
                                     }
                                 }
                                 else if (key == 93)         ////insereaza celula   tasta   ]

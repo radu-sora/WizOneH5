@@ -57,11 +57,11 @@
                  if (oraInc < oraSf)
                      diff = oraSf - oraInc;
                  else
-                     diff = ((24 * 60) - oraInc) + oraSf;
-
-                 var rez = diff / 60;
-                 txtNrOre.SetValue(rez.toFixed(4));
+                     diff = ((24 * 60) - oraInc) + oraSf;        
+                 var rez = diff / 60;               
+                 //txtNrOre.SetValue(rez.toFixed(4));
                  txtNrOreInMinute.SetValue(diff);
+                 hfNrMinute.Set('NrMinute', diff);
              }
          }
     </script>
@@ -211,11 +211,14 @@
                                         </CalendarProperties>                               
                                     </dx:ASPxDateEdit>  
                         </td>
-                        <td width="300" align="right"  id="tdNrOre" runat="server"  visible="false">
-                                    <dx:ASPxSpinEdit ID="txtNrOre" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  Visible="false"/>                                    
+                        <td width="290" align="right"  id="tdNrOre" runat="server"  visible="false">
+                                    <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  Visible="false"/>                                    
  
                         </td>
-
+                        <td width="10" align="left"  id="tdNrOreInMinute" runat="server" visible="false">
+                                    <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  />                                    
+ 
+                        </td>
                           <td width="100" align="right"  id="tdOraInc" runat="server"  visible="false">                          
                             <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="200px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList"  DropDownWidth="100" DropDownHeight="200"  style="font-size:30px;" Height="75"  ButtonStyle-Width="75">
                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); }" />
@@ -325,6 +328,6 @@
             </dx:PanelContent>
         </PanelCollection>
     </dx:ASPxCallbackPanel>    
-
+  <dx:ASPxHiddenField runat="server" ID="hfNrMinute" ClientInstanceName="hfNrMinute" />
 </asp:Content>
 

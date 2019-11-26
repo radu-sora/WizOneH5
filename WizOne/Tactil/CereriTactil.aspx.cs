@@ -69,7 +69,7 @@ namespace WizOne.Tactil
 
                 string denumire = "";
                 if (!IsPostBack)
-                {
+                {                    
                     switch (Session["CereriTactil"].ToString())
                     {
                         case "AbsenteOra":
@@ -885,7 +885,14 @@ namespace WizOne.Tactil
 
                 if (Session["CereriTactil"].ToString() == "BiletVoie" || Session["CereriTactil"].ToString() == "AbsenteOra")
                 {
-                    if (Convert.ToInt32(General.Nz(txtNrOre.Value, -99)) <= 0) strErr += " " + Dami.TraduCuvant("Cerere cu numar de ore 0");
+                    int nrMinute = 0;
+                    if (hfNrMinute.Contains("NrMinute"))
+                    {
+                        nrMinute = Convert.ToInt32(General.Nz(hfNrMinute["NrMinute"], -1));
+                        txtNrOreInMinute.Value = nrMinute;
+                        txtNrOreInMinute.Text = nrMinute.ToString();
+                    }
+                    if (Convert.ToInt32(General.Nz(txtNrOre.Value, -99)) <= 0 && Convert.ToInt32(General.Nz(txtNrOreInMinute.Value, -99)) <= 0) strErr += " " + Dami.TraduCuvant("Cerere cu numar de ore 0");
                 }
                 else
                 {
@@ -1414,6 +1421,11 @@ namespace WizOne.Tactil
                             {
                                 List<Module.Dami.metaGeneral2> lst = ListaInterval(perioada);
 
+                                tdNrOreInMinute.Visible = true;
+                                txtNrOreInMinute.Visible = true;
+                                txtNrOreInMinute.ClientEnabled = false;
+                                tdNrOre.Visible = false;
+                                txtNrOre.Visible = false;
                                 lblOraInc.Visible = true;
                                 lblOraSf.Visible = true;
                                 tdOraInc.Visible = true;
@@ -1424,6 +1436,9 @@ namespace WizOne.Tactil
                                 cmbOraSf.Visible = true;
                                 cmbOraSf.DataSource = lst;
                                 cmbOraSf.DataBind();
+                                tdNrOre.Width = "300";
+                                tdNrOreInMinute.Width = "550";
+                                H3.InnerText = "Nr. minute";
                             }
                             else
                                 tdNrOre.Width = "1200";
@@ -1833,7 +1848,7 @@ namespace WizOne.Tactil
                                 (sqlPozitie == null ? "NULL" : sqlPozitie) + " AS \"Pozitie\", " +
                                 //trimiteLaInlocuitor + " AS \"TrimiteLa\", " +
                                 " NULL AS \"TrimiteLa\", " +
-                                (txtNrOre.Text.Length > 0 ? txtNrOre.Text : "NULL") + " AS \"NrOre\", " +
+                                (txtNrOre.Text.Length > 0 ? txtNrOre.Text : (txtNrOreInMinute.Text.Length > 0 ? Convert.ToDecimal(Convert.ToDecimal(txtNrOreInMinute.Text) / 60).ToString(new CultureInfo("en-US")) : "NULL")) + " AS \"NrOre\", " +
                                 "NULL AS \"AreAtas\"" +
                                 valExtra;
                 if (tip == 2)
@@ -1854,7 +1869,7 @@ namespace WizOne.Tactil
                     (sqlTotal == null ? "NULL" : sqlTotal) + ", " +
                     (sqlPozitie == null ? "NULL" : sqlPozitie) + ", " +
                     " NULL, " +
-                    (txtNrOre.Text.Length > 0 ? txtNrOre.Text : "NULL") + ", " +
+                    (txtNrOre.Text.Length > 0 ? txtNrOre.Text : (txtNrOreInMinute.Text.Length > 0 ? Convert.ToDecimal(Convert.ToDecimal(txtNrOreInMinute.Text) / 60).ToString(new CultureInfo("en-US")) : "NULL")) + ", " +
                     "NULL" +
                     valExtra + ")";
             }

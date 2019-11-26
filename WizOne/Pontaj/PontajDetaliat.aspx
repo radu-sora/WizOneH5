@@ -574,9 +574,8 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
                         grDate.UpdateEdit();
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>

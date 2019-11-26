@@ -2031,7 +2031,8 @@ namespace WizOne.Avs
             lblDataRevisal.Visible = false;
             deDataRevisal.Visible = false;
             if (atribut == (int)Constante.Atribute.Functie || atribut == (int)Constante.Atribute.CodCOR || atribut == (int)Constante.Atribute.Norma || atribut == (int)Constante.Atribute.PrelungireCIM
-                || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn)
+                || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn
+                || atribut == (int)Constante.Atribute.MotivPlecare || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.RevenireSuspendare)
             {
                 string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataMod.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + (dataMod.Year - 1).ToString();
                 if (Constante.tipBD == 2)
@@ -2077,17 +2078,7 @@ namespace WizOne.Avs
                 else
                     data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();
             }
-            if (atribut == (int)Constante.Atribute.MotivPlecare || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.RevenireSuspendare)
-            {
-                deDataRevisal.Value = dataMod.AddDays(-1);
-                if (param == 1)
-                {
-                    lblDataRevisal.Visible = true;
-                    deDataRevisal.Visible = true;
-                }
-                else
-                    data = dataMod.Day.ToString().PadLeft(2, '0') + "/" + dataMod.Month.ToString().PadLeft(2, '0') + "/" + dataMod.Year.ToString();
-            }
+ 
 
         }
 

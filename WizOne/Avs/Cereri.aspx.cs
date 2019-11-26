@@ -3540,8 +3540,14 @@ namespace WizOne.Avs
                                 + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + subSel + ", 'Modificari in avans', '"
                                 + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
 
-                            //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO                          
-                            General.CalculCO(dtModif.Year, f10003);
+                            //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO      
+                            if (dtModif.Year > DateTime.Now.Year)
+                            {
+                                General.CalculCO(dtModif.Year, f10003);
+                                General.CalculCO(DateTime.Now.Year, f10003);
+                            }
+                            else
+                                General.CalculCO(dtModif.Year, f10003);
                         }
                         break;
                     case (int)Constante.Atribute.Norma:
@@ -3703,8 +3709,14 @@ namespace WizOne.Avs
                             //General.IncarcaDT(sqlTmp, null);
 
 
-                            //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO                          
-                            General.CalculCO(dtSf.Year, f10003);
+                            //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO   
+                            if (dtSf.Year > DateTime.Now.Year)
+                            {
+                                General.CalculCO(dtSf.Year, f10003);
+                                General.CalculCO(DateTime.Now.Year, f10003);
+                            }
+                            else
+                                General.CalculCO(dtSf.Year, f10003);
                         }
                         break;
                     case (int)Constante.Atribute.Organigrama:

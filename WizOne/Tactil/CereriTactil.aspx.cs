@@ -1770,32 +1770,32 @@ namespace WizOne.Tactil
                 for (int i = 0; i < dtEx.Rows.Count; i++)
                 {
                     DataRow dr = dtEx.Rows[i];
-                    //ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + i) as ASPxEdit;
-                    //if (General.Nz(dr["IdCampExtra"], "").ToString() != "")
-                    //{
-                    //    if (ctl != null && ctl.Value != null && ctl.Value.ToString() != "")
-                    //    {
-                    //        switch (General.Nz(dr["TipCamp"], "").ToString())
-                    //        {
-                    //            case "0":
-                    //                lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
-                    //                break;
-                    //            case "1":
-                    //                if (Convert.ToBoolean(ctl.Value) == true)
-                    //                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Da'";
-                    //                else
-                    //                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Nu'";
-                    //                break;
-                    //            case "3":
-                    //                DateTime zi = Convert.ToDateTime(ctl.Value);
-                    //                lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "'";
-                    //                break;
-                    //            default:
-                    //                lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
-                    //                break;
-                    //        }
-                    //    }
-                    //}
+                    ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + i) as ASPxEdit;
+                    if (General.Nz(dr["IdCampExtra"], "").ToString() != "")
+                    {
+                        if (ctl != null && ctl.Value != null && ctl.Value.ToString() != "")
+                        {
+                            switch (General.Nz(dr["TipCamp"], "").ToString())
+                            {
+                                case "0":
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
+                                    break;
+                                case "1":
+                                    if (Convert.ToBoolean(ctl.Value) == true)
+                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Da'";
+                                    else
+                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Nu'";
+                                    break;
+                                case "3":
+                                    DateTime zi = Convert.ToDateTime(ctl.Value);
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "'";
+                                    break;
+                                default:
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
+                                    break;
+                            }
+                        }
+                    }
                 }
 
                 string valExtra = "";

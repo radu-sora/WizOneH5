@@ -344,19 +344,24 @@ namespace WizOne.Personal
                             case "TIPNIVEL3":
                                 row[col.ColumnName] = Convert.ToInt32(dtLoc.Select("SIRUTA=" + General.Nz(hfSiruta["SirutaNivel3"], -99))[0]["TIP"].ToString());
                                 break;
-                            case "IDTIPSTRADA":
+                            case "IDTIPSTRADA":  
                                 DataTable dtArtera = Session["MP_TipArtera"] as DataTable;
                                 if (dtArtera != null && dtArtera.Rows.Count > 0)
                                 {
+                                    bool gasit = false;
                                     for (int i = 0; i < dtArtera.Rows.Count; i++)
                                     {
-                                        if (e.NewValues["Strada"].ToString().ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
+                                        if (dtArtera.Rows[i]["Denumire"].ToString().Length > 0 && e.NewValues["Strada"].ToString().ToUpper().Contains(dtArtera.Rows[i]["Denumire"].ToString().ToUpper()))
                                         {
                                             row[col.ColumnName] = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
-                                            tipArtera = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString()); 
+                                            tipArtera = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
+                                            e.NewValues["Strada"] = e.NewValues["Strada"].ToString().ToUpper().Replace(dtArtera.Rows[i]["Denumire"].ToString().ToUpper(), "");
+                                            gasit = true;
                                             break;
                                         }
                                     }
+                                    if (!gasit)
+                                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                                 }
                                 break;
                             default:

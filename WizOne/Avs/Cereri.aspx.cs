@@ -3516,7 +3516,8 @@ namespace WizOne.Avs
                             //if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                             //{
                                 act = 1;
-                                sql100 = "UPDATE F100 SET F10023 = " + data1 + ", F100993 = " + data + " WHERE F10003 = " + f10003.ToString();
+                                string sql100Temp = "UPDATE F100 SET F10023 = " + data1 + ", F100993 = " + data + " WHERE F10003 = " + f10003.ToString();
+                                General.IncarcaDT(sql100Temp, null);
                             //}
 
 

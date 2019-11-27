@@ -646,7 +646,7 @@
                                 </div>
 
                                 <div style="float:left; padding-right:15px; vertical-align:middle; display:inline-block;">
-                                    <label id="Label1" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
+                                    <label id="lblTip" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
                                     <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                 </div>
 

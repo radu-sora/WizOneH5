@@ -232,6 +232,7 @@ namespace WizOne.Pontaj
                 btnPeAng.Text = Dami.TraduCuvant("btnPeAng", "Pontaj pe Angajat");
                 btnPeZi.Text = Dami.TraduCuvant("btnPeZi", "Pontaj pe Zi");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+                btnExport.Text = Dami.TraduCuvant("btnExport", "Export");
 
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
@@ -248,6 +249,24 @@ namespace WizOne.Pontaj
                 lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
                 lblCateg.InnerText = Dami.TraduCuvant("Categorie");
+
+                //Radu 27.11.2019
+                popUpExport.HeaderText = Dami.TraduCuvant("Export pontaj");
+                ASPxButton btnExp = popUpExport.FindControl("btnExp") as ASPxButton;
+                if (btnExp != null)
+                    btnExp.Text = Dami.TraduCuvant("btnExp", "Export");
+                ASPxCheckBox chkTotaluri = popUpExport.FindControl("chkTotaluri") as ASPxCheckBox;
+                if (chkTotaluri != null)
+                    chkTotaluri.Text = Dami.TraduCuvant("chkTotaluri", "totaluri");
+                ASPxCheckBox chkOre = popUpExport.FindControl("chkOre") as ASPxCheckBox;
+                if (chkOre != null)
+                    chkOre.Text = Dami.TraduCuvant("chkOre", "ore intrare si iesire");
+                ASPxCheckBox chkPauza = popUpExport.FindControl("chkPauza") as ASPxCheckBox;
+                if (chkPauza != null)
+                    chkPauza.Text = Dami.TraduCuvant("chkPauza", "pauza");
+                ASPxCheckBox chkLinie = popUpExport.FindControl("chkLinie") as ASPxCheckBox;
+                if (chkLinie != null)
+                    chkLinie.Text = Dami.TraduCuvant("chkLinie", "afisare pe o singura linie");
 
 
                 foreach (dynamic c in grDate.Columns)

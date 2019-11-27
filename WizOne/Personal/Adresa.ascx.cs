@@ -188,13 +188,13 @@ namespace WizOne.Personal
                                         {
                                             row[x] = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
                                             tipArtera = Convert.ToInt32(dtArtera.Rows[i]["Id"].ToString());
-                                            //e.NewValues["Strada"] = e.NewValues["Strada"].ToString().ToUpper().Replace(dtArtera.Rows[i]["Denumire"].ToString().ToUpper(), "");
+                                            e.NewValues["Strada"] = e.NewValues["Strada"].ToString().ToUpper().Replace(dtArtera.Rows[i]["Denumire"].ToString().ToUpper(), "");
                                             gasit = true;
                                             break;
                                         }
                                     }
-                                    //if (!gasit)
-                                    //    row[x] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                                    if (!gasit)
+                                        row[x] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                                 }
                                 break;
                             case "SIRUTANIVEL1":

@@ -119,15 +119,15 @@ namespace WizOne.Pontaj
                     grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
                 }
 
-                cmbPtjAng.Items.Add(new ListEditItem { Text = "Toate inregistrarile", Value = 1 });
-                cmbPtjAng.Items.Add(new ListEditItem { Text = "Erori", Value = 2 });
-                cmbPtjAng.Items.Add(new ListEditItem { Text = "Lipsa pontari", Value = 3 });
-                cmbPtjAng.Items.Add(new ListEditItem { Text = "Erori si lipsa pontari", Value = 4 });
+                cmbPtjAng.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Toate inregistrarile"), Value = 1 });
+                cmbPtjAng.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Erori"), Value = 2 });
+                cmbPtjAng.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Lipsa pontari"), Value = 3 });
+                cmbPtjAng.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Erori si lipsa pontari"), Value = 4 });
 
-                cmbPtjZi.Items.Add(new ListEditItem { Text = "Toate inregistrarile", Value = 1 });
-                cmbPtjZi.Items.Add(new ListEditItem { Text = "Erori", Value = 2 });
-                cmbPtjZi.Items.Add(new ListEditItem { Text = "Lipsa pontari", Value = 3 });
-                cmbPtjZi.Items.Add(new ListEditItem { Text = "Erori si lipsa pontari", Value = 4 });
+                cmbPtjZi.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Toate inregistrarile"), Value = 1 });
+                cmbPtjZi.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Erori"), Value = 2 });
+                cmbPtjZi.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Lipsa pontari"), Value = 3 });
+                cmbPtjZi.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Erori si lipsa pontari"), Value = 4 });
 
                 DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Filtru"" ", null);
                 for(int i = 0; i < dt.Rows.Count; i++)
@@ -175,6 +175,7 @@ namespace WizOne.Pontaj
                 lblRolAng.InnerText = Dami.TraduCuvant("Roluri");
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblStare.InnerText = Dami.TraduCuvant("Stare");
+                lblTip.InnerText = Dami.TraduCuvant("Tip inregistrare");
 
                 lblZiua.InnerText = Dami.TraduCuvant("Data");
                 lblRolZi.InnerText = Dami.TraduCuvant("Roluri");

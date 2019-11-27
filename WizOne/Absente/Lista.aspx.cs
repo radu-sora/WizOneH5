@@ -109,6 +109,14 @@ namespace WizOne.Absente
                     catch (Exception) { }
                 }
 
+                //Radu 27.11.2019             
+                ASPxListBox nestedListBox = cmbStare.FindControl("listBoxStare") as ASPxListBox;
+                foreach (ListEditItem item in nestedListBox.Items)                
+                    item.Text = Dami.TraduCuvant(item.Text);
+                ASPxButton btnInchide = cmbStare.FindControl("btnInchide") as ASPxButton;
+                if (btnInchide != null)
+                    btnInchide.Text = Dami.TraduCuvant("btnInchide", "Inchide");
+
                 #endregion
 
                 if (Request["pp"] != null)
@@ -1382,7 +1390,9 @@ namespace WizOne.Absente
             {
                 if (General.Nz(cmbStare.Value,"").ToString() != "")
                 {
-                    val = cmbStare.Value.ToString().ToLower().Replace("solicitat", "1").Replace("in curs", "2").Replace("aprobat", "3").Replace("respins", "0").Replace("anulat", "-1").Replace("planificat", "4");
+                    //Radu 27.11.2019
+                    //val = cmbStare.Value.ToString().ToLower().Replace("solicitat", "1").Replace("in curs", "2").Replace("aprobat", "3").Replace("respins", "0").Replace("anulat", "-1").Replace("planificat", "4");
+                    val = cmbStare.Value.ToString().Replace(Dami.TraduCuvant("Solicitat"), "1").Replace(Dami.TraduCuvant("In Curs"), "2").Replace(Dami.TraduCuvant("Aprobat"), "3").Replace(Dami.TraduCuvant("Respins"), "0").Replace(Dami.TraduCuvant("Anulat"), "-1").Replace(Dami.TraduCuvant("Planificat"), "4");
                 }
             }
             catch (Exception)

@@ -150,18 +150,14 @@ namespace WizOne.Reports
 
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["TextAfisare"].ToString() + " " + strZiua;
-                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
-                                lblSemnatura.WordWrap = true;
-                                lblSemnatura.CanGrow = false;
+                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));                            
                                 break;
                             case 3:                     //semnatura
                                 act = true;
 
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["Camp"].ToString();
-                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
-                                lblSemnatura.WordWrap = true;
-                                lblSemnatura.CanGrow = false;
+                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));                              
                                 break;
                             case 4:                     //antet
                                 string txt = "";
@@ -174,9 +170,7 @@ namespace WizOne.Reports
 
                                 lblAntet.Text = txt;
                                 //lblAntet.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
-                                lblAntet.Font = new Font("Calibri", 10);
-                                lblAntet.WordWrap = true;
-                                lblAntet.CanGrow = false;
+                                lblAntet.Font = new Font("Calibri", 10);                          
                                 break;
                             default:                    //restul
                                 lbl = CreazaCamp(dtPrint.Rows[k]["TextAfisare"].ToString(), pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()));

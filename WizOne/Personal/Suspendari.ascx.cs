@@ -54,12 +54,31 @@ namespace WizOne.Personal
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataTable dt = ds.Tables[0];
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    cmbMotivSuspendare.Value = dt.Rows[0]["F100925"];
-                    deDataInceputSusp.Value = dt.Rows[0]["F100922"];
-                    deDataSfarsitSusp.Value = dt.Rows[0]["F100923"];
-                    deDataIncetareSusp.Value = dt.Rows[0]["F100924"];
+                if (!IsPostBack)
+                {//Radu 27.11.2019
+                    DataTable dtSuspAng = General.IncarcaDT("select * from f111 Where F11103 = " + Session["Marca"].ToString() + " AND (F11107 IS NULL OR F11107 = "
+                        + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ")  ORDER BY F11105", null);
+                    //if (dt != null && dt.Rows.Count > 0)
+                    //{
+                    //    cmbMotivSuspendare.Value = dt.Rows[0]["F100925"];
+                    //    deDataInceputSusp.Value = dt.Rows[0]["F100922"];
+                    //    deDataSfarsitSusp.Value = dt.Rows[0]["F100923"];
+                    //    deDataIncetareSusp.Value = dt.Rows[0]["F100924"];
+                    //}
+                    if (dtSuspAng != null && dtSuspAng.Rows.Count > 0)
+                    {
+                        cmbMotivSuspendare.Value = dtSuspAng.Rows[0]["F11104"];
+                        deDataInceputSusp.Value = dtSuspAng.Rows[0]["F11105"];
+                        deDataSfarsitSusp.Value = dtSuspAng.Rows[0]["F11106"];
+                        deDataIncetareSusp.Value = dtSuspAng.Rows[0]["F11107"];
+                    }
+                    else
+                    {
+                        cmbMotivSuspendare.Value = 0;
+                        deDataInceputSusp.Value = new DateTime(2100, 1, 1);
+                        deDataSfarsitSusp.Value = new DateTime(2100, 1, 1);
+                        deDataIncetareSusp.Value = new DateTime(2100, 1, 1);
+                    }
                 }
             }
             catch (Exception ex)
@@ -86,7 +105,7 @@ namespace WizOne.Personal
         {
             try
             {
-                DataTable dt = General.IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + Session["Marca"].ToString(), null);
+                DataTable dt = General.IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + Session["Marca"].ToString() + " ORDER BY F11105", null);
                 grDateSuspendari.KeyFieldName = "F11103;F11104;F11105;F11106;F11107";
                 grDateSuspendari.DataSource = dt;
                 grDateSuspendari.DataBind();

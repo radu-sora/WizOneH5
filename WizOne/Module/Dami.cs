@@ -1249,47 +1249,83 @@ namespace WizOne.Module
         }
 
 
-        public static string NumeZi(int nrZi, int tip = 1)
-        {
+        public static string NumeZi(int nrZi, int tip = 1, string limba = "RO")
+        {//Radu 27.11.2019 - am adaugat limba engleza
             try
             {
                 string zi = "Luni";
 
-                switch (nrZi)
+                if (limba == "EN")
                 {
-                    case 1:
-                        zi = "Luni";
-                        break;
-                    case 2:
-                        zi = "Marti";
-                        break;
-                    case 3:
-                        zi = "Miercuri";
-                        break;
-                    case 4:
-                        zi = "Joi";
-                        break;
-                    case 5:
-                        zi = "Vineri";
-                        break;
-                    case 6:
-                        zi = "Sambata";
-                        break;
-                    case 7:
-                        zi = "Duminica";
-                        break;
-                    default:
-                        zi = "Luni";
-                        break;
+                    switch (nrZi)
+                    {
+                        case 1:
+                            zi = "Monday";
+                            break;
+                        case 2:
+                            zi = "Tuesday";
+                            break;
+                        case 3:
+                            zi = "Wednesday";
+                            break;
+                        case 4:
+                            zi = "Thursday";
+                            break;
+                        case 5:
+                            zi = "Friday";
+                            break;
+                        case 6:
+                            zi = "Saturday";
+                            break;
+                        case 7:
+                            zi = "Sunday";
+                            break;
+                        default:
+                            zi = "Monday";
+                            break;
+                    }
+                    if (tip == 2)
+                        if (nrZi == 2 || nrZi == 4 || nrZi == 6 || nrZi == 7)
+                            zi = zi.Substring(0, 2);
+                        else
+                            zi = zi.Substring(0, 1);
                 }
 
-
-                if (tip == 2)
-                    if (nrZi == 2 || nrZi == 3)
-                        zi = zi.Substring(0, 2);
-                    else
-                        zi = zi.Substring(0, 1);
-
+                if (limba == "RO")
+                {
+                    switch (nrZi)
+                    {
+                        case 1:
+                            zi = "Luni";
+                            break;
+                        case 2:
+                            zi = "Marti";
+                            break;
+                        case 3:
+                            zi = "Miercuri";
+                            break;
+                        case 4:
+                            zi = "Joi";
+                            break;
+                        case 5:
+                            zi = "Vineri";
+                            break;
+                        case 6:
+                            zi = "Sambata";
+                            break;
+                        case 7:
+                            zi = "Duminica";
+                            break;
+                        default:
+                            zi = "Luni";
+                            break;
+                    }
+                    if (tip == 2)
+                        if (nrZi == 2 || nrZi == 3)
+                            zi = zi.Substring(0, 2);
+                        else
+                            zi = zi.Substring(0, 1);
+                }  
 
                 return TraduCuvant(zi);
             }

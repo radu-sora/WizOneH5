@@ -1819,11 +1819,27 @@ namespace WizOne.Tactil
                 string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere})";
                 //string sqlNrOre = txtNrOre.Text == "" ? "NULL" : txtNrOre.Text;
 
+                string sqlOraInc = "NULL";
+                string sqlOraSf = "NULL";
+
+                if (General.Nz(cmbOraInc.Value, "").ToString() != "")
+                    sqlOraInc = "'" + txtDataInc.Date.Year + "-" + txtDataInc.Date.Month + "-" + txtDataInc.Date.Day + " " + General.Nz(cmbOraInc.Value, "").ToString() + ":00'";
+
+                if (General.Nz(cmbOraSf.Value, "").ToString() != "")
+                    sqlOraSf = "'" + txtDataSf.Date.Year + "-" + txtDataSf.Date.Month + "-" + txtDataSf.Date.Day + " " + General.Nz(cmbOraSf.Value, "").ToString() + ":00'";
+
                 if (Constante.tipBD == 2)
                 {
                     sqlIdStare = $@"(SELECT * FROM ({sqlIdStare}) WHERE ROWNUM=1)";
                     sqlPozitie = $@"(SELECT * FROM ({sqlPozitie}) WHERE ROWNUM=1)";
                     sqlCuloare = $@"(SELECT * FROM ({sqlCuloare}) WHERE ROWNUM=1)";
+
+                    if (General.Nz(cmbOraInc.Value, "").ToString() != "")
+                        sqlOraInc = "TO_DATE('" + txtDataInc.Date.Day + "-" + txtDataInc.Date.Month + "-" + txtDataInc.Date.Year + " " + General.Nz(cmbOraInc.Value, "").ToString() + ":00','DD-MM-YYYY HH24:MI:SS')";
+
+                    if (General.Nz(cmbOraSf.Value, "").ToString() != "")
+                        sqlOraSf = "TO_DATE('" + txtDataSf.Date.Day + "-" + txtDataSf.Date.Month + "-" + txtDataSf.Date.Year + " " + General.Nz(cmbOraSf.Value, "").ToString() + ":00','DD-MM-YYYY HH24:MI:SS')";
+
                 }
 
                 id = General.Nz(cmbSelAbs.Visible == true ? cmbSelAbs.Value : cmbAbs.Value, -99);
@@ -1849,6 +1865,8 @@ namespace WizOne.Tactil
                                 //trimiteLaInlocuitor + " AS \"TrimiteLa\", " +
                                 " NULL AS \"TrimiteLa\", " +
                                 (txtNrOre.Text.Length > 0 ? txtNrOre.Text : (txtNrOreInMinute.Text.Length > 0 ? Convert.ToDecimal(Convert.ToDecimal(txtNrOreInMinute.Text) / 60).ToString(new CultureInfo("en-US")) : "NULL")) + " AS \"NrOre\", " +
+                                sqlOraInc + " AS \"OraInceput\", " +
+                                sqlOraSf + " AS \"OraSfarsit\", " +
                                 "NULL AS \"AreAtas\"" +
                                 valExtra;
                 if (tip == 2)
@@ -1870,6 +1888,8 @@ namespace WizOne.Tactil
                     (sqlPozitie == null ? "NULL" : sqlPozitie) + ", " +
                     " NULL, " +
                     (txtNrOre.Text.Length > 0 ? txtNrOre.Text : (txtNrOreInMinute.Text.Length > 0 ? Convert.ToDecimal(Convert.ToDecimal(txtNrOreInMinute.Text) / 60).ToString(new CultureInfo("en-US")) : "NULL")) + ", " +
+                    sqlOraInc + ", " +
+                    sqlOraSf + ", " +
                     "NULL" +
                     valExtra + ")";
             }

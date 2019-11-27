@@ -194,7 +194,10 @@ namespace WizOne.Personal
                                         }
                                     }
                                     if (!gasit)
+                                    {
                                         row[x] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                                        tipArtera = Convert.ToInt32(row[x].ToString());
+                                    }
                                 }
                                 break;
                             case "SIRUTANIVEL1":
@@ -361,7 +364,10 @@ namespace WizOne.Personal
                                         }
                                     }
                                     if (!gasit)
+                                    {
                                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                                        tipArtera = Convert.ToInt32(row[col.ColumnName].ToString());
+                                    }
                                 }
                                 break;
                             default:

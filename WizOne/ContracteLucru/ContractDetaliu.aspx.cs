@@ -73,6 +73,9 @@ namespace WizOne.ContracteLucru
                     dtCtr.PrimaryKey = new DataColumn[] { dtCtr.Columns["IdAuto"] };
                 }
 
+                //Florin 2019.10.28
+                dtCtr.TableName = "Ptj_Contracte";
+                //
                 ds.Tables.Add(dtCtr);
                 Session["InformatiaCurentaContracte"] = ds;
             }
@@ -87,11 +90,14 @@ namespace WizOne.ContracteLucru
                 ASPxTextBox txtId = DataList1.Items[0].FindControl("txtId") as ASPxTextBox;
                 txtId.Enabled = false;
 
-                if (esteNou != "1")
-                {
-                    ASPxComboBox cmbTip = DataList1.Items[0].FindControl("cmbTip") as ASPxComboBox;
-                    cmbTip.Enabled = false;
-                }
+                //if (esteNou != "1")
+                //{
+                //    ASPxComboBox cmbTip = DataList1.Items[0].FindControl("cmbTip") as ASPxComboBox;
+                //    cmbTip.Enabled = false;
+                //}
+
+                ASPxComboBox cmbTip = DataList1.Items[0].FindControl("cmbTip") as ASPxComboBox;
+                cmbTip.Value = Convert.ToInt32(table.Rows[0]["TipContract"]);
             }
 
         }

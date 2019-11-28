@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Personal {
-    
-    
-    public partial class Structura {
-        
+namespace WizOne.Personal
+{
+
+
+    public partial class Structura
+    {
+
         /// <summary>
         /// pnlCtlStruct control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlStruct;
-        
+
         /// <summary>
         /// lgStruc control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lgStruc;
-        
+
         /// <summary>
         /// lblStru control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStru;
-        
+
         /// <summary>
         /// cmbStru control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbStru;
-        
+
         /// <summary>
         /// lblCom control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCom;
-        
+
         /// <summary>
         /// txtCom control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtCom;
-        
+
         /// <summary>
         /// lblSub control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSub;
-        
+
         /// <summary>
         /// txtSub control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtSub;
-        
+
         /// <summary>
         /// lblFil control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblFil;
-        
+
         /// <summary>
         /// txtFil control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtFil;
-        
+
         /// <summary>
         /// lblSec control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSec;
-        
+
         /// <summary>
         /// txtSec control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtSec;
-        
+
         /// <summary>
         /// lblDept control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDept;
-        
+
         /// <summary>
         /// txtDept control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtDept;
-        
+
         /// <summary>
         /// lblSubdept control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSubdept;
-        
+
         /// <summary>
         /// txtSubdept control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTextBox txtSubdept;
-        
+
         /// <summary>
         /// lblBir control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblBir;
-        
+
         /// <summary>
         /// cmbBir control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbBir;
-        
+
         /// <summary>
         /// lblCC control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCC;
-        
+
         /// <summary>
         /// cmbCC control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCC;
-        
+
         /// <summary>
         /// btnCC control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnCC;
-        
+
         /// <summary>
         /// btnCCIst control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnCCIst;
-        
+
         /// <summary>
         /// lblPL control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPL;
-        
+
         /// <summary>
         /// cmbPL control.
         /// </summary>
@@ -227,7 +229,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbPL;
-        
+
         /// <summary>
         /// btnPL control.
         /// </summary>
@@ -236,7 +238,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnPL;
-        
+
         /// <summary>
         /// btnPLIst control.
         /// </summary>
@@ -245,7 +247,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnPLIst;
-        
+
         /// <summary>
         /// lblLocatie control.
         /// </summary>
@@ -254,7 +256,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblLocatie;
-        
+
         /// <summary>
         /// cmbLocatie control.
         /// </summary>
@@ -263,7 +265,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbLocatie;
-        
+
         /// <summary>
         /// lblCAEN control.
         /// </summary>
@@ -272,7 +274,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCAEN;
-        
+
         /// <summary>
         /// cmbCAEN control.
         /// </summary>
@@ -281,7 +283,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCAEN;
-        
+
         /// <summary>
         /// lblUnitStat control.
         /// </summary>
@@ -290,7 +292,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblUnitStat;
-        
+
         /// <summary>
         /// cmbUnitStat control.
         /// </summary>
@@ -299,5 +301,14 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbUnitStat;
+
+        /// <summary>
+        /// hfCC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxHiddenField hfCC;
     }
 }

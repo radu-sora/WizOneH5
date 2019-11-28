@@ -16,97 +16,7 @@ namespace WizOne.Personal
     {
         protected void Page_Init(object sender, EventArgs e)
         {
-            DataTable table = new DataTable();
 
-            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-            table = ds.Tables[0];
-
-            Documente_DataList.DataSource = table;
-            Documente_DataList.DataBind();
-
-            ASPxComboBox cmbTara = Documente_DataList.Items[0].FindControl("cmbTara") as ASPxComboBox;
-            ASPxComboBox cmbTipDoc = Documente_DataList.Items[0].FindControl("cmbTipDoc") as ASPxComboBox;
-            ASPxComboBox cmbCetatenie = Documente_DataList.Items[0].FindControl("cmbCetatenie") as ASPxComboBox;
-
-            cmbTipDoc.DataSource = General.GetTipDoc(Convert.ToInt32(table.Rows[0]["F100987"] == DBNull.Value ? "0" : table.Rows[0]["F100987"].ToString()));
-            cmbTipDoc.DataBindItems();
-
-            cmbCetatenie.ClientEnabled = false;
-
-            SeteazaCetatenie();
-
-            if (!IsPostBack)
-            {
-               
-                cmbTipDoc.Value = Convert.ToInt32(table.Rows[0]["F100983"] == DBNull.Value ? "0" : table.Rows[0]["F100983"].ToString());
-
-                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))"; 
-                if (Constante.tipBD == 2) cmp = "CAST(ROWNUM AS INT) ";
-
-                DataTable dtTipDoc = General.IncarcaDT("select " + cmp + " AS \"IdAuto\", CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\", F73302, F73306 from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 ", null, "IdAuto");
-                string tipDoc = "";
-                for (int i = 0; i < dtTipDoc.Rows.Count; i++)
-                {
-                    tipDoc += dtTipDoc.Rows[i]["Id"].ToString() + "," + dtTipDoc.Rows[i]["Denumire"].ToString() + "," + dtTipDoc.Rows[i]["F73302"].ToString() + "," + dtTipDoc.Rows[i]["F73306"].ToString();
-                    if (i < dtTipDoc.Rows.Count - 1)
-                        tipDoc += ";";
-                }
-                Session["MP_ComboTipDoc"] = tipDoc;
-            }
-
-            string[] etichete = new string[37] { "lblTara", "lblCetatenie", "lblTipAutMunca", "lblDataInc", "lblDataSf", "lblNumeMama", "lblNumeTata", "lblTipDoc", "lblSerieNr", "lblEmisDe", "lblLocNastere", "lblDataELib", "lblDataExp",
-                                                 "lblNrPermisMunca", "lblDataPermisMunca", "lblNrCtrIntVechi", "lblDataCtrIntVechi", "lblDetaliiCtrAngajat", "lblCateg", "lblDataEmitere", "lblDataExpirare", "lblNr", "lblPermisEmisDe",
-                                                 "lblStudii", "lblCalif1", "lblCalif2", "lblTitluAcademic", "lblDedSomaj", "lblNrCarteMunca", "lblSerieCarteMunca", "lblDataCarteMunca", "lblLivret", "lblElibDe", "lblDeLaData", "lblLaData",
-                                                 "lblGrad", "lblOrdin"};
-            for (int i = 0; i < etichete.Count(); i++)
-            {
-                ASPxLabel lbl = Documente_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
-                lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
-            }
-
-            string[] butoane = new string[8] { "btnDocId", "btnDocIdIst", "btnPermis", "btnPermisIst", "btnStudii", "btnStudiiIst", "btnTitluAcad", "btnTitluAcadIst"  };
-            for (int i = 0; i < butoane.Count(); i++)
-            {
-                ASPxButton btn = Documente_DataList.Items[0].FindControl(butoane[i]) as ASPxButton;
-                btn.ToolTip = Dami.TraduCuvant(btn.ToolTip);
-            }
-
-            if (Dami.ValoareParam("ValidariPersonal") == "1")
-            {
-                string[] lstTextBox = new string[2] { "txtSerieNr", "txtEmisDe" };
-                for (int i = 0; i < lstTextBox.Count(); i++)
-                {
-                    ASPxTextBox txt = Documente_DataList.Items[0].FindControl(lstTextBox[i]) as ASPxTextBox;
-                    List<int> lst = new List<int>();
-                    if (Session["MP_CuloareCampOblig"] != null)
-                        lst = Session["MP_CuloareCampOblig"] as List<int>;
-                    txt.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
-                }
-
-                string[] lstDateEdit = new string[2] { "deDataElib", "deDataExp" };
-                for (int i = 0; i < lstDateEdit.Count(); i++)
-                {
-                    ASPxDateEdit de = Documente_DataList.Items[0].FindControl(lstDateEdit[i]) as ASPxDateEdit;
-                    List<int> lst = new List<int>();
-                    if (Session["MP_CuloareCampOblig"] != null)
-                        lst = Session["MP_CuloareCampOblig"] as List<int>;
-                    de.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
-                }
-
-
-                string[] lstComboBox = new string[1] { "cmbTipDoc" };
-                for (int i = 0; i < lstComboBox.Count(); i++)
-                {
-                    ASPxComboBox cmb = Documente_DataList.Items[0].FindControl(lstComboBox[i]) as ASPxComboBox;
-                    List<int> lst = new List<int>();
-                    if (Session["MP_CuloareCampOblig"] != null)
-                        lst = Session["MP_CuloareCampOblig"] as List<int>;
-                    cmb.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
-                }
-
-            }
-
-            General.SecuritatePersonal(Documente_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 
         }
 
@@ -143,6 +53,111 @@ namespace WizOne.Personal
                 //        }
                 //    }
                 //}
+
+                DataTable table = new DataTable();
+
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                table = ds.Tables[0];
+
+                Documente_DataList.DataSource = null;
+                Documente_DataList.DataBind();
+
+                Documente_DataList.DataSource = table;
+                Documente_DataList.DataBind();
+
+                ASPxComboBox cmbTara = Documente_DataList.Items[0].FindControl("cmbTara") as ASPxComboBox;
+                ASPxComboBox cmbTipDoc = Documente_DataList.Items[0].FindControl("cmbTipDoc") as ASPxComboBox;
+                ASPxComboBox cmbCetatenie = Documente_DataList.Items[0].FindControl("cmbCetatenie") as ASPxComboBox;
+
+                cmbTipDoc.DataSource = General.GetTipDoc(Convert.ToInt32(table.Rows[0]["F100987"] == DBNull.Value ? "0" : table.Rows[0]["F100987"].ToString()));
+                cmbTipDoc.DataBindItems();
+
+                cmbCetatenie.ClientEnabled = false;
+
+                SeteazaCetatenie();
+
+                if (!IsPostBack)
+                {
+
+                    cmbTipDoc.Value = Convert.ToInt32(table.Rows[0]["F100983"] == DBNull.Value ? "0" : table.Rows[0]["F100983"].ToString());
+
+
+                    //Florin 2019.11.13
+
+                    //string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))"; 
+                    //if (Constante.tipBD == 2) cmp = "CAST(ROWNUM AS INT) ";
+                    //DataTable dtTipDoc = General.IncarcaDT("select " + cmp + " AS \"IdAuto\", a.F08502 AS \"Id\", a.F08503 as \"Denumire\", F73302, F73306 from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 ", null, "IdAuto");
+
+                    DataTable dtTipDoc = General.IncarcaDT(
+                        $@"SELECT A.F08502 AS ""Id"", A.F08503 AS ""Denumire"", F73302, F73306 
+                    FROM F733 D
+                    INNER JOIN F732 C ON c.F73202 = d.F73306
+                    INNER JOIN F086 B ON b.F08602 = c.F73202
+                    INNER JOIN F085 A ON a.F08502 = b.F08603", null);
+
+                    string tipDoc = "";
+                    for (int i = 0; i < dtTipDoc.Rows.Count; i++)
+                    {
+                        tipDoc += dtTipDoc.Rows[i]["Id"].ToString() + "," + dtTipDoc.Rows[i]["Denumire"].ToString() + "," + dtTipDoc.Rows[i]["F73302"].ToString() + "," + dtTipDoc.Rows[i]["F73306"].ToString();
+                        if (i < dtTipDoc.Rows.Count - 1)
+                            tipDoc += ";";
+                    }
+                    Session["MP_ComboTipDoc"] = tipDoc;
+                }
+
+                string[] etichete = new string[37] { "lblTara", "lblCetatenie", "lblTipAutMunca", "lblDataInc", "lblDataSf", "lblNumeMama", "lblNumeTata", "lblTipDoc", "lblSerieNr", "lblEmisDe", "lblLocNastere", "lblDataELib", "lblDataExp",
+                                                 "lblNrPermisMunca", "lblDataPermisMunca", "lblNrCtrIntVechi", "lblDataCtrIntVechi", "lblDetaliiCtrAngajat", "lblCateg", "lblDataEmitere", "lblDataExpirare", "lblNr", "lblPermisEmisDe",
+                                                 "lblStudii", "lblCalif1", "lblCalif2", "lblTitluAcademic", "lblDedSomaj", "lblNrCarteMunca", "lblSerieCarteMunca", "lblDataCarteMunca", "lblLivret", "lblElibDe", "lblDeLaData", "lblLaData",
+                                                 "lblGrad", "lblOrdin"};
+                for (int i = 0; i < etichete.Count(); i++)
+                {
+                    ASPxLabel lbl = Documente_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
+                    lbl.Text = Dami.TraduCuvant(lbl.Text) + ": ";
+                }
+
+                string[] butoane = new string[8] { "btnDocId", "btnDocIdIst", "btnPermis", "btnPermisIst", "btnStudii", "btnStudiiIst", "btnTitluAcad", "btnTitluAcadIst" };
+                for (int i = 0; i < butoane.Count(); i++)
+                {
+                    ASPxButton btn = Documente_DataList.Items[0].FindControl(butoane[i]) as ASPxButton;
+                    btn.ToolTip = Dami.TraduCuvant(btn.ToolTip);
+                }
+
+                if (Dami.ValoareParam("ValidariPersonal") == "1")
+                {
+                    string[] lstTextBox = new string[2] { "txtSerieNr", "txtEmisDe" };
+                    for (int i = 0; i < lstTextBox.Count(); i++)
+                    {
+                        ASPxTextBox txt = Documente_DataList.Items[0].FindControl(lstTextBox[i]) as ASPxTextBox;
+                        List<int> lst = new List<int>();
+                        if (Session["MP_CuloareCampOblig"] != null)
+                            lst = Session["MP_CuloareCampOblig"] as List<int>;
+                        txt.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
+                    }
+
+                    string[] lstDateEdit = new string[2] { "deDataElib", "deDataExp" };
+                    for (int i = 0; i < lstDateEdit.Count(); i++)
+                    {
+                        ASPxDateEdit de = Documente_DataList.Items[0].FindControl(lstDateEdit[i]) as ASPxDateEdit;
+                        List<int> lst = new List<int>();
+                        if (Session["MP_CuloareCampOblig"] != null)
+                            lst = Session["MP_CuloareCampOblig"] as List<int>;
+                        de.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
+                    }
+
+
+                    string[] lstComboBox = new string[1] { "cmbTipDoc" };
+                    for (int i = 0; i < lstComboBox.Count(); i++)
+                    {
+                        ASPxComboBox cmb = Documente_DataList.Items[0].FindControl(lstComboBox[i]) as ASPxComboBox;
+                        List<int> lst = new List<int>();
+                        if (Session["MP_CuloareCampOblig"] != null)
+                            lst = Session["MP_CuloareCampOblig"] as List<int>;
+                        cmb.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
+                    }
+
+                }
+
+                General.SecuritatePersonal(Documente_DataList, Convert.ToInt32(Session["UserId"].ToString()));
             }
             catch (Exception ex)
             {

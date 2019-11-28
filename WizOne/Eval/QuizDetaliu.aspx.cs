@@ -78,11 +78,12 @@ namespace WizOne.Eval
                     Control ctrl = new Control();
                     if (File.Exists(HostingEnvironment.MapPath("~/Eval/" + dt.Rows[i]["Pagina"].ToString() + ".ascx")))
                     {
-                        ctrl = this.LoadControl(dt.Rows[i]["Pagina"].ToString() + ".ascx");
+                        ctrl = this.LoadControl(dt.Rows[i]["Pagina"].ToString() + ".ascx");                        
                         tabPage.Controls.Add(ctrl);
-                    }
+                    }                  
+              
 
-                    this.ASPxPageControl2.TabPages.Add(tabPage);
+                    this.ASPxPageControl2.TabPages.Add(tabPage);                  
                 }
             }
             catch (Exception ex)

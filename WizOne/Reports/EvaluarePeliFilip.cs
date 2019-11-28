@@ -148,7 +148,7 @@ namespace WizOne.Reports
 
                 //Floirn 2018.12.10
                 //s-a adaugat order by
-                string sqlEval_ObiIndividuale = @"select ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", {0}, ""Descriere"", {1}, ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", F10003, ""Pozitie"", ""Id"", ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"" from ""Eval_ObiIndividualeTemp"" where ""IdQuiz"" = {2}  ORDER BY ""Obiectiv"", ""Activitate"" ";
+                string sqlEval_ObiIndividuale = @"select ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", {0}, ""Descriere"", {1}, ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""IdQuiz"", F10003, ""Pozitie"", ""Id"", ""IdLinieQuiz"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"" from ""Eval_ObiIndividualeTemp"" where ""IdQuiz"" = {2}  ORDER BY ""Obiectiv"", ""Activitate"" ";
                 sqlEval_ObiIndividuale = string.Format(sqlEval_ObiIndividuale, (Constante.tipBD == 1 ? "FORMAT(Pondere, 'N2') as Pondere" : "ROUND(\"Pondere\", 2)"), (Constante.tipBD == 1 ? "FORMAT(Target, 'N2') as Target" : "ROUND(\"Target\", 2)"), idQuiz);
                 DataTable dtObiIndividuale = General.IncarcaDT(sqlEval_ObiIndividuale, null);
 
@@ -496,6 +496,35 @@ namespace WizOne.Reports
                             }
                     }
 
+
+                //Florin 2019.10.25 - adaugam toti cei care au avut comentarii in chest 360 sau proiect
+                string coment = "";
+                DataTable dtComent = General.IncarcaDT($@"
+                    SELECT DISTINCT COALESCE(D.""NumeComplet"", D.F70104) AS""Nume""
+                    FROM ""Eval_ObiIndividualeTemp"" A
+                    INNER JOIN ""Eval_Quiz"" B ON A.""IdQuiz""=B.""Id""
+                    INNER JOIN ""Eval_RaspunsIstoric"" C ON A.""IdQuiz""=C.""IdQuiz"" AND A.F10003=C.F10003 AND A.""Pozitie""=C.""Pozitie""
+                    INNER JOIN USERS D ON C.""IdUser""=D.F70102
+                    INNER JOIN ""Eval_QuizIntrebari"" E ON A.""IdQuiz""=E.""IdQuiz"" AND E.""Id""=A.""IdLinieQuiz""
+                    WHERE A.F10003=@2 AND 
+                    COALESCE(B.""CategorieQuiz"",0) IN (1,2) AND (A.""Obiectiv"" IS NOT NULL OR A.""Activitate"" IS NOT NULL)
+                    AND B.""Anul"" =(SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" =@1)", new object[] { idQuiz, f10003 });
+                if (dtComent != null)
+                {
+                    for (int k = 0; k < dtComent.Rows.Count; k++)
+                    {
+                        coment += dtComent.Rows[k]["Nume"] + "\r\n";
+                    }
+                }
+                if (coment != "")
+                {
+                    XRLabel lbl360 = CreeazaEticheta("Colegi care au oferit feedback:" + "\r\n" + coment, 0, true);
+                    lbl360.SizeF = new System.Drawing.SizeF(720F, 20F);
+                    lbl360.LocationF = new PointF(60, pozY);
+                    Detail.Controls.Add(lbl360);
+                }
+
+
                 DateTime dt = DateTime.Now.Date;
                 //la sfarsit de tot punem semnaturile
                 string semn = "";
@@ -742,7 +771,7 @@ namespace WizOne.Reports
                 rowH.CanGrow = true;
                 rowH.CanShrink = true;
                 if (dt != null && dt.Rows.Count > 0)                
-                    for (int j = 3; j <= 4; j++)
+                    for (int j = 3; j <= 5; j++)
                     {
                         XRTableCell cell = new XRTableCell();
                         cell.Text = Dami.TraduCuvant(General.Nz(dt.Columns[j], "").ToString());
@@ -764,7 +793,7 @@ namespace WizOne.Reports
                         row.CanGrow = true;
                         row.CanShrink = true;
 
-                        for (int j = 3; j <= 4; j++)
+                        for (int j = 3; j <= 5; j++)
                         {
                             XRTableCell cell = new XRTableCell();
                             cell.WidthF = 100;

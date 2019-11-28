@@ -109,6 +109,14 @@ namespace WizOne.Absente
                     catch (Exception) { }
                 }
 
+                //Radu 27.11.2019             
+                ASPxListBox nestedListBox = cmbStare.FindControl("listBoxStare") as ASPxListBox;
+                foreach (ListEditItem item in nestedListBox.Items)                
+                    item.Text = Dami.TraduCuvant(item.Text);
+                ASPxButton btnInchide = cmbStare.FindControl("btnInchide") as ASPxButton;
+                if (btnInchide != null)
+                    btnInchide.Text = Dami.TraduCuvant("btnInchide", "Inchide");
+
                 #endregion
 
                 if (Request["pp"] != null)
@@ -551,22 +559,33 @@ namespace WizOne.Absente
                                 if (idStare == 3) StergeInPontaj(Convert.ToInt32(obj[0]), idTipOre, oreInVal, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]), Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)));
 
 
-                                //Florin 2019.10.03
-                                DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { obj[1], obj[4], obj[6] });
-                                for (int i = 0; i < dtRun.Rows.Count; i++)
-                                {
-                                    string golesteVal = Dami.ValoareParam("GolesteVal");
-                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                                    FunctiiCeasuri.Calcul.h5 = true;
-                                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
-                                    DataRow drInt = dtRun.Rows[i];
-                                    FunctiiCeasuri.Calcul.CalculInOut(drInt, true, true);
-                                }
+
+                                //Florin 2019.11.13 - calcul formule si formule cumulat
+                                General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={obj[1]} AND {General.ToDataUniv(Convert.ToDateTime(obj[4]))} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(obj[6]))}");
 
 
-                                General.CalculFormuleCumulat(Convert.ToInt32(obj[1]), Convert.ToDateTime(obj[4]).Year, Convert.ToDateTime(obj[4]).Month);
+                                ////Florin 2019.10.03
+                                //DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { obj[1], obj[4], obj[6] });
+                                //for (int i = 0; i < dtRun.Rows.Count; i++)
+                                //{
+                                //    try
+                                //    {
+                                //        string golesteVal = Dami.ValoareParam("GolesteVal");
+                                //        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                //        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                //        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                                //        FunctiiCeasuri.Calcul.h5 = true;
+                                //        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                                //        DataRow drInt = dtRun.Rows[i];
+                                //        FunctiiCeasuri.Calcul.CalculInOut(drInt, true, true);
+                                //    }
+                                //    catch (Exception)
+                                //    {
+                                //    }
+                                //}
+
+
+                                //General.CalculFormuleCumulat(Convert.ToInt32(obj[1]), Convert.ToDateTime(obj[4]).Year, Convert.ToDateTime(obj[4]).Month);
 
                                 General.SituatieZLOperatii(Convert.ToInt32(General.Nz(obj[1],-99)), Convert.ToDateTime(General.Nz(obj[4],new DateTime(2100,1,1))), 3, Convert.ToInt32(General.Nz(obj[5],0)));
 
@@ -1371,7 +1390,9 @@ namespace WizOne.Absente
             {
                 if (General.Nz(cmbStare.Value,"").ToString() != "")
                 {
-                    val = cmbStare.Value.ToString().ToLower().Replace("solicitat", "1").Replace("in curs", "2").Replace("aprobat", "3").Replace("respins", "0").Replace("anulat", "-1").Replace("planificat", "4");
+                    //Radu 27.11.2019
+                    //val = cmbStare.Value.ToString().ToLower().Replace("solicitat", "1").Replace("in curs", "2").Replace("aprobat", "3").Replace("respins", "0").Replace("anulat", "-1").Replace("planificat", "4");
+                    val = cmbStare.Value.ToString().Replace(Dami.TraduCuvant("Solicitat"), "1").Replace(Dami.TraduCuvant("In Curs"), "2").Replace(Dami.TraduCuvant("Aprobat"), "3").Replace(Dami.TraduCuvant("Respins"), "0").Replace(Dami.TraduCuvant("Anulat"), "-1").Replace(Dami.TraduCuvant("Planificat"), "4");
                 }
             }
             catch (Exception)

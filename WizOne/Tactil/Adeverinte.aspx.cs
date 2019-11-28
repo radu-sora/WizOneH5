@@ -132,28 +132,39 @@ namespace WizOne.Tactil
 
                     //Florin 2019.10.17
                     //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + param, false);
+                    string nume = lnk.ID.Substring(3).ToLower();
+                    if (nume.ToLower().Contains("print"))
+                        Session["PrintareAutomata"] = 1;
                     Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["User_Marca"].ToString() + param), false);
                 }  
                 else
                 {
                     string nume = lnk.ID.Substring(3).ToLower();
+                    if (nume.ToLower().Contains("print"))
+                        Session["TactilPrintareAdeverinte"] = 1;
+                    else
+                        Session["TactilPrintareAdeverinte"] = 0;
                     switch (nume)
                     {
                         case "adeverintamedic":
+                        case "adeverintamedicprint":
                             lnkAdevMedic_Click();
                             break;
                         case "adeverintaangajat":
+                        case "adeverintaangajatprint":
                             lnkAdevAng_Click();
                             break;
                         case "adeverintapractica":
+                        case "adeverintapracticaprint":
                             lnkAdevPractica_Click();
                             break;
                         case "adeverintacresa":
+                        case "adeverintacresaprint":
                             lnkAdevGrad_Click(); ;
-                            break;
-                        //case "inapoi":
-                        //    lnkOut_Click();
-                        //    break;
+                            break;                  
+                            //case "inapoi":
+                            //    lnkOut_Click();
+                            //    break;
 
                     }
                 }             

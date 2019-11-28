@@ -353,6 +353,8 @@ namespace WizOne.Module
         public int OrdineInt { get; set; }
         public int TemplateIdObiectiv { get; set; }
         public int TemplateIdCompetenta { get; set; }
+        public int IdPeriod { get; set; }
+        public int IdPeriodComp { get; set; }
 
         public Eval_QuizIntrebari() { }
 
@@ -376,6 +378,9 @@ namespace WizOne.Module
             OrdineInt = columns.Contains("OrdineInt") == true ? Convert.ToInt32(dr["OrdineInt"].ToString() == string.Empty ? "-99" : dr["OrdineInt"].ToString()) : -99;
             TemplateIdObiectiv = columns.Contains("TemplateIdObiectiv") == true ? Convert.ToInt32(dr["TemplateIdObiectiv"].ToString() == string.Empty ? "-99" : dr["TemplateIdObiectiv"].ToString()) : -99;
             TemplateIdCompetenta = columns.Contains("TemplateIdCompetenta") == true ? Convert.ToInt32(dr["TemplateIdCompetenta"].ToString() == string.Empty ? "-99" : dr["TemplateIdCompetenta"].ToString()) : -99;
+            IdPeriod = columns.Contains("IdPeriod") == true ? Convert.ToInt32(dr["IdPeriod"].ToString() == string.Empty ? "-99" : dr["IdPeriod"].ToString()) : -99;
+            IdPeriodComp = columns.Contains("IdPeriodComp") == true ? Convert.ToInt32(dr["IdPeriodComp"].ToString() == string.Empty ? "-99" : dr["IdPeriodComp"].ToString()) : -99;
+
         }
     }
 
@@ -779,6 +784,8 @@ namespace WizOne.Module
         public int IdAuto { get; set; }
         public string ColoanaSuplimentara1 { get; set; }
         public string ColoanaSuplimentara2 { get; set; }
+        public string ColoanaSuplimentara3 { get; set; }
+        public string ColoanaSuplimentara4 { get; set; }
 
         public Eval_ObiIndividuale() { }
 
@@ -803,11 +810,14 @@ namespace WizOne.Module
             IdAuto = columns.Contains("IdAuto") == true ? Convert.ToInt32(dr["IdAuto"].ToString() == string.Empty ? "-99" : dr["IdAuto"].ToString()) : -99;
             ColoanaSuplimentara1 = columns.Contains("ColoanaSuplimentara1") == true ? dr["ColoanaSuplimentara1"].ToString() : "";
             ColoanaSuplimentara2 = columns.Contains("ColoanaSuplimentara2") == true ? dr["ColoanaSuplimentara2"].ToString() : "";
+            ColoanaSuplimentara3 = columns.Contains("ColoanaSuplimentara3") == true ? dr["ColoanaSuplimentara3"].ToString() : "";
+            ColoanaSuplimentara4 = columns.Contains("ColoanaSuplimentara4") == true ? dr["ColoanaSuplimentara4"].ToString() : "";
         }
     }
 
     public class Eval_ObiIndividualeTemp
     {
+        public int IdPeriod { get; set; }
         public decimal? Pondere { get; set; }
         public decimal? Target { get; set; }
         public int? Realizat { get; set; }
@@ -831,7 +841,8 @@ namespace WizOne.Module
         public int IdLinieQuiz { get; set; }
         public string ColoanaSuplimentara1 { get; set; }
         public string ColoanaSuplimentara2 { get; set; }
-
+        public string ColoanaSuplimentara3 { get; set; }
+        public string ColoanaSuplimentara4 { get; set; }
         public int IdUnic { get; set; }
         public int? USER_NO { get; set; }
         public DateTime? TIME { get; set; }
@@ -869,7 +880,9 @@ namespace WizOne.Module
 
             ColoanaSuplimentara1 = columns.Contains("ColoanaSuplimentara1") == true ? dr["ColoanaSuplimentara1"].ToString() : "";
             ColoanaSuplimentara2 = columns.Contains("ColoanaSuplimentara2") == true ? dr["ColoanaSuplimentara2"].ToString() : "";
-
+            ColoanaSuplimentara3 = columns.Contains("ColoanaSuplimentara3") == true ? dr["ColoanaSuplimentara3"].ToString() : "";
+            ColoanaSuplimentara4 = columns.Contains("ColoanaSuplimentara4") == true ? dr["ColoanaSuplimentara4"].ToString() : "";
+            IdPeriod = columns.Contains("IdPeriod") == true ? Convert.ToInt32(dr["IdPeriod"].ToString() == string.Empty ? "-99" : dr["IdPeriod"].ToString()) : -99;
             IdUnic = columns.Contains("IdUnic") == true ? Convert.ToInt32(dr["IdUnic"].ToString() == string.Empty ? "-99" : dr["IdUnic"].ToString()) : -99;
             USER_NO = columns.Contains("USER_NO") == true ? (General.IsNumeric(dr["USER_NO"]) ? (int?)dr["USER_NO"] : null) : null;
             TIME = columns.Contains("TIME") == true ? (dr["TIME"] != DBNull.Value ? (DateTime?)dr["TIME"] : null) : null;
@@ -1012,6 +1025,7 @@ namespace WizOne.Module
 
     public class Eval_CompetenteAngajatTemp
     {
+        public int IdPeriod { get; set; }
         public int IdCategCompetenta { get; set; }
         public string CategCompetenta { get; set; }
         public int IdCompetenta { get; set; }
@@ -1053,7 +1067,7 @@ namespace WizOne.Module
             Id = columns.Contains("Id") == true ? Convert.ToInt32(dr["Id"].ToString() == string.Empty ? "-99" : dr["Id"].ToString()) : -99;
             IdAuto = columns.Contains("IdAuto") == true ? Convert.ToInt32(dr["IdAuto"].ToString() == string.Empty ? "-99" : dr["IdAuto"].ToString()) : -99;
             IdLinieQuiz = columns.Contains("IdLinieQuiz") == true ? Convert.ToInt32(dr["IdLinieQuiz"].ToString() == string.Empty ? "-99" : dr["IdLinieQuiz"].ToString()) : -99;
-
+            IdPeriod = columns.Contains("IdPeriod") == true ? Convert.ToInt32(dr["IdPeriod"].ToString() == string.Empty ? "-99" : dr["IdPeriod"].ToString()) : -99;
             IdUnic = columns.Contains("IdUnic") == true ? Convert.ToInt32(dr["IdUnic"].ToString() == string.Empty ? "-99" : dr["IdUnic"].ToString()) : -99;
             USER_NO = columns.Contains("USER_NO") == true ? (General.IsNumeric(dr["USER_NO"]) ? (int?)dr["USER_NO"] : null) : null;
             TIME = columns.Contains("TIME") == true ? (dr["TIME"] != DBNull.Value ? (DateTime?)dr["TIME"] : null) : null;
@@ -1339,7 +1353,8 @@ namespace WizOne.Module
 	                case
 		                when {0}(dr.""PozitieVizibila"", -99) = 0  then 1
 		                else 0
-	                end as ""FaraDrepturi""
+	                end as ""FaraDrepturi"", per.""DenPerioada"",
+                CASE WHEN (SELECT COUNT(*) FROM ""Eval_RaspunsIstoric"" Z WHERE Z.""IdQuiz"" = rasp.""IdQuiz"" AND ""IdUser"" = {11}) <> 0 THEN 1 ELSE 0 END AS ""Quiz360Completat""
                 from ""Eval_Raspuns"" rasp
                 join ""Eval_Quiz"" chest on rasp.""IdQuiz"" = chest.""Id""
                 join ""F100"" fnume on rasp.""F10003"" = fnume.""F10003""
@@ -1372,6 +1387,7 @@ namespace WizOne.Module
 								                and rasp.""F10003"" = ist5.""F10003""
 								                and 5 = ist5.""Pozitie""
                 LEFT JOIN ""Eval_tblCategorie"" ctg ON chest.""CategorieQuiz""=ctg.""Id""
+                LEFT JOIN ""Eval_Perioada"" per ON chest.""Anul"" = per.""IdPerioada""
                 where
                 chest.""Activ"" = 1
                 and rasp.""IdQuiz"" = {5}
@@ -1887,24 +1903,93 @@ namespace WizOne.Module
                 }
 
                 #region insert Eval_RaspunsLinii
-                string cteManageri = @"with cteManageri as (select fnume.F10003, max(man.F10003) as ""F10003Manager"",
-                                                                    case when fnume.""IdSuper"" = 1 then 1 else 2 end as ""Pozitie""
+                //Radu 29.10.2019
+                //@"cteManageri as (select fnume.F10003, max(man.F10003) as ""F10003Manager"",
+                //                                                    case when fnume.""IdSuper"" = 1 then 1 else 2 end as ""Pozitie""
+                //                                            from ""F100Supervizori"" fnume
+                //                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                //                                                                    and ( {0} )
+                //                                            join USERS us on fnume.""IdUser"" = us.F70102
+                //                                            join F100 man on us.F10003 = man.F10003
+                //                                            where fnume.""IdSuper"" in (1, 5)
+                //                                            group by fnume.F10003, case when fnume.""IdSuper"" = 1 then 1 else 2 end)";
+
+                //@"              left join cteManageri man1 on fnume.F10003 = man1.F10003
+                //                                                        and 1 = man1.""Pozitie""";
+
+                string cteManageri = @"with cteManageri1 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
                                                             from ""F100Supervizori"" fnume
                                                             join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
                                                                                     and ( {0} )
                                                             join USERS us on fnume.""IdUser"" = us.F70102
                                                             join F100 man on us.F10003 = man.F10003
-                                                            where fnume.""IdSuper"" in (1, 5)
-                                                            group by fnume.F10003, case when fnume.""IdSuper"" = 1 then 1 else 2 end) ";
+                                                            where fnume.""IdSuper"" = 1
+                                                            group by fnume.F10003, fnume.""IdSuper""), 
+
+                                            cteManageri2 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 2
+                                                            group by fnume.F10003, fnume.""IdSuper""),
+
+                                            cteManageri3 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 3
+                                                            group by fnume.F10003, fnume.""IdSuper""), 
+
+                                            cteManageri4 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 4
+                                                            group by fnume.F10003, fnume.""IdSuper""), 
+
+                                            cteManageri5 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 5
+                                                            group by fnume.F10003, fnume.""IdSuper""),
+
+                                            cteManageri6 as (select fnume.F10003, max(man.F10003) as ""F10003Manager""
+                                                            from ""F100Supervizori"" fnume
+                                                            join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
+                                                                                    and ( {0} )
+                                                            join USERS us on fnume.""IdUser"" = us.F70102
+                                                            join F100 man on us.F10003 = man.F10003
+                                                            where fnume.""IdSuper"" = 6
+                                                            group by fnume.F10003, fnume.""IdSuper"")";
                 cteManageri = string.Format(cteManageri, strSelectIdQuizXF10003);
 
                 string cteF100 = @", cteF100 as (select fnume.F10003, fnume.F10008 {0} ' ' {0} fnume.F10009 as ""NumeComplet"",
                                                         {1}(c.F00305, '') {0} '/' {0} {1}(d.F00406, '') {0} '/' {0} {1}(e.F00507, '') {0} '/' {0} {1}(f.F00608, '') as ""Structura"",
                                                         post.""Denumire"" as ""Post"",
-                                                        {1}(fnumeMan1.F10008, '') {0} ' ' {0} {1}(fnumeMan1.F10009, '') as ""NumeManager"",
-                                                        postMan1.""Denumire"" as ""PostManager"", 
-                                                        {1}(fnumeMan2.F10008, '') {0} ' ' {0} {1}(fnumeMan2.F10009, '') as ""NumeManager2"",
-                                                        postMan2.""Denumire"" as ""PostManager2"",
+                                                        {1}(fnumeMan1.F10008, '') {0} ' ' {0} {1}(fnumeMan1.F10009, '') as ""NumeSupervizor1"",
+                                                        postMan1.""Denumire"" as ""PostSupervizor1"", 
+                                                        {1}(fnumeMan2.F10008, '') {0} ' ' {0} {1}(fnumeMan2.F10009, '') as ""NumeSupervizor2"",
+                                                        postMan2.""Denumire"" as ""PostSupervizor2"",
+
+                                                        {1}(fnumeMan3.F10008, '') {0} ' ' {0} {1}(fnumeMan3.F10009, '') as ""NumeSupervizor3"",
+                                                        postMan3.""Denumire"" as ""PostSupervizor3"", 
+                                                        {1}(fnumeMan4.F10008, '') {0} ' ' {0} {1}(fnumeMan4.F10009, '') as ""NumeSupervizor4"",
+                                                        postMan4.""Denumire"" as ""PostSupervizor4"",
+
+                                                        {1}(fnumeMan5.F10008, '') {0} ' ' {0} {1}(fnumeMan5.F10009, '') as ""NumeSupervizor5"",
+                                                        postMan5.""Denumire"" as ""PostSupervizor5"", 
+                                                        {1}(fnumeMan6.F10008, '') {0} ' ' {0} {1}(fnumeMan6.F10009, '') as ""NumeSupervizor6"",
+                                                        postMan6.""Denumire"" as ""PostSupervizor6"",
+
                                                         rasp.""IdQuiz"" as ""IdQuiz""
                                                 from F100 fnume
                                                 join ""Eval_Raspuns"" rasp on fnume.F10003 = rasp.F10003
@@ -1917,18 +2002,42 @@ namespace WizOne.Module
                                                 left join ""Org_relPostAngajat"" relPost on fnume.F10003 = relPost.F10003
                                                                                 and {3} between relPost.""DataInceput"" and relPost.""DataSfarsit""
                                                 left join ""Org_Posturi"" post on relPost.""IdPost"" = post.""Id""
-                                                left join cteManageri man1 on fnume.F10003 = man1.F10003
-                                                                        and 1 = man1.""Pozitie""
+                                                left join cteManageri1 man1 on fnume.F10003 = man1.F10003                                                                       
                                                 left join F100 fnumeMan1 on man1.""F10003Manager"" = fnumeMan1.F10003
                                                 left join ""Org_relPostAngajat"" relPostMan1 on fnumeMan1.F10003 = relPostMan1.F10003
                                                                                         and {3} between relPostMan1.""DataInceput"" and relPostMan1.""DataSfarsit""
                                                 left join ""Org_Posturi"" postMan1 on relPostMan1.""IdPost"" = postMan1.""Id""
-                                                left join cteManageri man2 on fnume.F10003 = man2.F10003
-                                                                        and 2 = man2.""Pozitie""
+
+                                                left join cteManageri2 man2 on fnume.F10003 = man2.F10003                                                                       
                                                 left join F100 fnumeMan2 on man2.""F10003Manager"" = fnumeMan2.F10003
                                                 left join ""Org_relPostAngajat"" relPostMan2 on fnumeMan2.F10003 = relPostMan2.F10003
                                                                                         and {3} between relPostMan2.""DataInceput"" and relPostMan2.""DataSfarsit""
                                                 left join ""Org_Posturi"" postMan2 on relPostMan2.""IdPost"" = postMan2.""Id""
+
+                                                left join cteManageri3 man3 on fnume.F10003 = man3.F10003                                                                       
+                                                left join F100 fnumeMan3 on man3.""F10003Manager"" = fnumeMan3.F10003
+                                                left join ""Org_relPostAngajat"" relPostMan3 on fnumeMan3.F10003 = relPostMan3.F10003
+                                                                                        and {3} between relPostMan3.""DataInceput"" and relPostMan3.""DataSfarsit""
+                                                left join ""Org_Posturi"" postMan3 on relPostMan3.""IdPost"" = postMan3.""Id""
+
+                                                left join cteManageri4 man4 on fnume.F10003 = man4.F10003                                                                       
+                                                left join F100 fnumeMan4 on man4.""F10003Manager"" = fnumeMan4.F10003
+                                                left join ""Org_relPostAngajat"" relPostMan4 on fnumeMan4.F10003 = relPostMan4.F10003
+                                                                                        and {3} between relPostMan4.""DataInceput"" and relPostMan4.""DataSfarsit""
+                                                left join ""Org_Posturi"" postMan4 on relPostMan4.""IdPost"" = postMan4.""Id""
+
+                                                left join cteManageri5 man5 on fnume.F10003 = man5.F10003                                                                       
+                                                left join F100 fnumeMan5 on man5.""F10003Manager"" = fnumeMan5.F10003
+                                                left join ""Org_relPostAngajat"" relPostMan5 on fnumeMan5.F10003 = relPostMan5.F10003
+                                                                                        and {3} between relPostMan5.""DataInceput"" and relPostMan5.""DataSfarsit""
+                                                left join ""Org_Posturi"" postMan5 on relPostMan5.""IdPost"" = postMan5.""Id""
+
+                                                left join cteManageri6 man6 on fnume.F10003 = man6.F10003                                                                       
+                                                left join F100 fnumeMan6 on man6.""F10003Manager"" = fnumeMan6.F10003
+                                                left join ""Org_relPostAngajat"" relPostMan6 on fnumeMan6.F10003 = relPostMan6.F10003
+                                                                                        and {3} between relPostMan6.""DataInceput"" and relPostMan6.""DataSfarsit""
+                                                left join ""Org_Posturi"" postMan6 on relPostMan6.""IdPost"" = postMan6.""Id""
+                                                
                                                 )";
                 switch (Constante.tipBD)
                 {
@@ -1949,10 +2058,21 @@ namespace WizOne.Module
                                             when 13 then fnume.""NumeComplet""
                                             when 14 then fnume.""Structura""
                                             when 15 then fnume.""Post""
-                                            when 18 then fnume.""NumeManager""
-                                            when 19 then fnume.""PostManager""
-                                            when 20 then fnume.""NumeManager2""
-                                            when 21 then fnume.""PostManager2""
+                                            when 18 then fnume.""NumeSupervizor1""
+                                            when 19 then fnume.""PostSupervizor1""
+                                            when 20 then fnume.""NumeSupervizor2""
+                                            when 21 then fnume.""PostSupervizor2""
+
+                                            when 60 then fnume.""NumeSupervizor3""
+                                            when 61 then fnume.""PostSupervizor3""
+                                            when 62 then fnume.""NumeSupervizor4""
+                                            when 63 then fnume.""PostSupervizor4""
+
+                                            when 64 then fnume.""NumeSupervizor5""
+                                            when 65 then fnume.""PostSupervizor5""
+                                            when 66 then fnume.""NumeSupervizor6""
+                                            when 67 then fnume.""PostSupervizor6""
+
                                             else null
                                         end as Super{0}";
                     super = string.Format(super, i);
@@ -2016,9 +2136,9 @@ namespace WizOne.Module
                                         nextId = General.Nz(General.ExecutaScalar(@"SELECT ""ObiIndividuale_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
                                     string sqlTemp =
-                                        $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                        SELECT ob.""IdObiectiv"",TO_CHAR(ob.""Obiectiv""), act.""IdActivitate"", TO_CHAR(act.""Activitate""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
-                                        FROM ""Eval_ListaObiectiv"" lista
+                                        $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"", TO_CHAR(ob.""Obiectiv""), act.""IdActivitate"", TO_CHAR(act.""Activitate""), MAX(ob.""Pondere""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        FROM ""Eval_ListaObiectiv"" lista                                        
                                         JOIN ""Eval_ListaObiectivDet"" listaOb on listaOb.""IdLista"" = lista.""IdLista""
                                         JOIN ""Eval_Obiectiv"" ob ON listaOb.""IdObiectiv"" = ob.""IdObiectiv""
                                         JOIN ""Eval_ObiectivXActivitate"" act on listaOb.""IdObiectiv"" = act.""IdObiectiv"" and listaob.""IdActivitate"" = act.""IdActivitate""
@@ -2039,8 +2159,8 @@ namespace WizOne.Module
                                         string sqlInsertObi = "";
                                         string sqlSablon =
                                             @"INSERT INTO ""Eval_ObiIndividualeTemp"" 
-                                                  (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                  (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                            SELECT ""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                         DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                         for (int x = 0; x < dtIst.Rows.Count; x++)
                                         {
@@ -2063,24 +2183,43 @@ namespace WizOne.Module
                                         if (Constante.tipBD == 2)
                                             nextId = General.Nz(General.ExecutaScalar(@"SELECT ""ObiIndividuale_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
+                                        //string sqlTemp =
+                                        //    $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        //    SELECT ob.""IdPeriod"", ob.""IdObiectiv"", ob.""Obiectiv"", ob.""IdActivitate"", ob.""Activitate"", {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        //    FROM ""Eval_ObiIndividuale"" ob
+                                        //    WHERE ob.""IdPeriod"" = @1 AND ob.F10003 = @2
+                                        //    group by ob.""IdPeriod"", ob.""IdObiectiv"", ob.""Obiectiv"", ob.""IdActivitate"", ob.""Activitate"" ";
+
+                                        ////inseram pt pozitia 1 si pentru id linie tip camp
+                                        //General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });
+                                        //General.ExecutaNonQuery(sqlTemp, new object[] { dtObiective.Rows[i]["IdPeriod"], arr[j].F10003.ToString() });
+
                                         string sqlTemp =
-                                            $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT ob.""IdObiectiv"", TO_CHAR(ob.""Obiectiv""), ob.""IdActivitate"", TO_CHAR(ob.""Activitate""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
-                                            FROM ""Eval_ObiIndividuale"" ob
-                                            WHERE ob.""IdPeriod"" = @1 AND ob.F10003 = @2
-                                            group by ob.""IdObiectiv"", TO_CHAR(ob.""Obiectiv""), ob.""IdActivitate"", TO_CHAR(ob.""Activitate"") ";
+                                        $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"",ob.""Obiectiv"", act.""IdActivitate"", act.""Activitate"", MAX(ob.""Pondere""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        FROM ""Eval_ListaObiectiv"" lista                                        
+                                        JOIN ""Eval_ListaObiectivDet"" listaOb on listaOb.""IdLista"" = lista.""IdLista""
+                                        JOIN ""Eval_ObiIndividuale"" ob ON listaOb.""IdObiectiv"" = ob.""IdObiectiv""
+                                        JOIN ""Eval_ObiectivXActivitate"" act on listaOb.""IdObiectiv"" = act.""IdObiectiv"" and listaob.""IdActivitate"" = act.""IdActivitate""
+                                        JOIN ""Eval_SetAngajatiDetail"" setAng ON setAng.""IdSetAng"" = listaOb.""IdSetAngajat""
+                                        JOIN ""Eval_ConfigObTemplateDetail"" tmpl ON  1=1
+                                        WHERE setAng.""Id"" = @1 AND lista.""IdLista"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2
+                                        AND tmpl.""ColumnName"" = 'Obiectiv'
+                                        group by ob.""IdObiectiv"", ob.""Obiectiv"", act.""IdActivitate"", act.""Activitate"" " + Environment.NewLine;
 
                                         //inseram pt pozitia 1 si pentru id linie tip camp
                                         General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });
-                                        General.ExecutaNonQuery(sqlTemp, new object[] { dtObiective.Rows[i]["IdPeriod"], arr[j].F10003.ToString() });
+                                        General.ExecutaNonQuery(sqlTemp, new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["TemplateIdObiectiv"].ToString() });
+
+
 
                                         if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && Convert.ToInt32(General.Nz(dtObiective.Rows[i]["CategorieQuiz"], 0)) == 0)
                                         {
                                             string sqlInsertObi = "";
                                             string sqlSablon =
                                                 @"INSERT INTO ""Eval_ObiIndividualeTemp"" 
-                                                      (""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                                SELECT ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                      (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                                SELECT ""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, @4,          ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                             DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                             for (int x = 0; x < dtIst.Rows.Count; x++)
                                             {
@@ -2130,11 +2269,12 @@ namespace WizOne.Module
                                         nextId = General.Nz(General.ExecutaScalar(@"SELECT ""CompetenteAng_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
                                     string sqlTemp =
-                                        $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                        SELECT comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtCompetente.Rows[i]["IdQuiz"].ToString()}), comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"", MAX(compDet.""Pondere""), {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                         FROM ""Eval_CategCompetente"" comp
                                         JOIN ""Eval_CategCompetenteDet"" compDet on compDet.""IdCategorie"" = comp.""IdCategorie""
-                                        JOIN ""Eval_SetAngajati"" setAng ON setAng.""CodSet"" = comp.""CodCategorie""
+                                        JOIN ""Eval_CompXSetAng"" compDetAng on compDetAng.""IdCategorie"" = comp.""IdCategorie""
+                                        JOIN ""Eval_SetAngajati"" setAng ON setAng.""IdSetAng"" = compDetAng.""IdSetAng""
                                         JOIN ""Eval_SetAngajatiDetail"" setAngDet ON   setAng.""IdSetAng"" = setAngDet.""IdSetAng""
                                         JOIN ""Eval_ConfigCompTemplateDetail"" tmpl ON  1=1
                                         WHERE setAngDet.""Id"" = @1 AND comp.""IdCategorie"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2
@@ -2151,8 +2291,8 @@ namespace WizOne.Module
                                         string sqlInsertObi = "";
                                         string sqlSablon =
                                             @"INSERT INTO ""Eval_CompetenteAngajatTemp"" 
-                                                  (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, @4         , ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                  (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                            SELECT ""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, @4         , ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                         DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                         for (int x = 0; x < dtIst.Rows.Count; x++)
                                         {
@@ -2176,25 +2316,42 @@ namespace WizOne.Module
                                         if (Constante.tipBD == 2)
                                             nextId = General.Nz(General.ExecutaScalar(@"SELECT ""CompetenteAng_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
-                                        string sqlTemp =
-                                            $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT comp.""IdCategCompetenta"", comp.""CategCompetenta"", comp.""IdCompetenta"", comp.""Competenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, { dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
-                                            FROM ""Eval_CompetenteAngajat"" comp
-                                            WHERE comp.""IdPeriod"" = @1 AND comp.F10003 = @2
-                                            GROUP BY comp.""IdCategCompetenta"", comp.""CategCompetenta"", comp.""IdCompetenta"", comp.""Competenta"" ";
+                                        //string sqlTemp =
+                                        //    $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        //    SELECT comp.""IdPeriod"", comp.""IdCategCompetenta"", comp.""CategCompetenta"", comp.""IdCompetenta"", comp.""Competenta"", {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, { dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        //    FROM ""Eval_CompetenteAngajat"" comp
+                                        //    WHERE comp.""IdPeriod"" = @1 AND comp.F10003 = @2
+                                        //    GROUP BY comp.""IdPeriod"", comp.""IdCategCompetenta"", comp.""CategCompetenta"", comp.""IdCompetenta"", comp.""Competenta"" ";
 
+
+                                        ////inseram pt pozitia 1 si pentru id linie tip camp
+                                        //General.ExecutaNonQuery(@"DELETE FROM ""Eval_CompetenteAngajatTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtCompetente.Rows[i]["IdQuiz"].ToString(), dtCompetente.Rows[i]["Id"].ToString() });
+                                        //General.ExecutaNonQuery(sqlTemp, new object[] { dtCompetente.Rows[i]["IdPeriodComp"], arr[j].F10003.ToString() });
+
+                                        string sqlTemp =
+                                        $@"INSERT INTO ""Eval_CompetenteAngajatTemp"" (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtCompetente.Rows[i]["IdQuiz"].ToString()}), comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"", MAX(compDet.""Pondere""), {dtCompetente.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtCompetente.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        FROM ""Eval_CompetenteAngajat"" comp
+                                        JOIN ""Eval_CategCompetenteDet"" compDet on compDet.""IdCategorie"" = comp.""IdCategorie""
+                                        JOIN ""Eval_CompXSetAng"" compDetAng on compDetAng.""IdCategorie"" = comp.""IdCategorie""
+                                        JOIN ""Eval_SetAngajati"" setAng ON setAng.""IdSetAng"" = compDetAng.""IdSetAng""
+                                        JOIN ""Eval_SetAngajatiDetail"" setAngDet ON   setAng.""IdSetAng"" = setAngDet.""IdSetAng""
+                                        JOIN ""Eval_ConfigCompTemplateDetail"" tmpl ON  1=1
+                                        WHERE setAngDet.""Id"" = @1 AND comp.""IdCategorie"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2
+                                        AND tmpl.""ColumnName"" = 'Competenta'
+                                        group by comp.""IdCategorie"", comp.""DenCategorie"", compDet.""IdCompetenta"", compDet.""DenCompetenta"" ";
 
                                         //inseram pt pozitia 1 si pentru id linie tip camp
                                         General.ExecutaNonQuery(@"DELETE FROM ""Eval_CompetenteAngajatTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtCompetente.Rows[i]["IdQuiz"].ToString(), dtCompetente.Rows[i]["Id"].ToString() });
-                                        General.ExecutaNonQuery(sqlTemp, new object[] { dtCompetente.Rows[i]["IdPeriodComp"], arr[j].F10003.ToString() });
+                                        General.ExecutaNonQuery(sqlTemp, new object[] { arr[j].F10003.ToString(), General.Nz(dtCompetente.Rows[i]["TemplateIdCompetenta"].ToString(), "-99") });
 
                                         if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && Convert.ToInt32(General.Nz(dtCompetente.Rows[i]["CategorieQuiz"], 0)) == 0)
                                         {
                                             string sqlInsertObi = "";
                                             string sqlSablon =
                                                 @"INSERT INTO ""Eval_CompetenteAngajatTemp"" 
-                                                  (""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                            SELECT ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, @4         , ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
+                                                  (""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                            SELECT ""IdPeriod"", ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""IdQuiz"", F10003, @4         , ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME FROM ""Eval_CompetenteAngajatTemp"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""=1 AND ""IdLinieQuiz""=@3;";
                                             DataTable dtIst = General.IncarcaDT(@"SELECT * FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""Pozitie""<>1 ORDER BY ""Pozitie""", new object[] { arr[j].IdQuiz, arr[j].F10003 });
                                             for (int x = 0; x < dtIst.Rows.Count; x++)
                                             {

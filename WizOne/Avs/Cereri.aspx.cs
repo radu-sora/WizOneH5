@@ -621,6 +621,8 @@ namespace WizOne.Avs
             lblTxt10Nou.Text = "";
             lblTxt11Nou.Visible = false;
             lblTxt11Nou.Text = "";
+            lblTxt13Nou.Visible = false;
+            lblTxt13Nou.Text = "";
 
             cmb2Act.Enabled = false;
             cmb2Act.Visible = false;
@@ -639,6 +641,8 @@ namespace WizOne.Avs
             de1Nou.Value = null;
             de2Nou.Visible = false;
             de2Nou.Value = null;
+            de3Nou.Visible = false;
+            de3Nou.Value = null;
 
             cmb3Act.Enabled = false;
             cmb3Act.Visible = false;
@@ -717,9 +721,20 @@ namespace WizOne.Avs
             lblDoc.Visible = false;
             btnDocUpload.Visible = false;
             btnDocSterge.Visible = false;
+
+            chk1.Visible = false;
+            chk2.Visible = false;
+            chk3.Visible = false;
+            chk4.Visible = false;
+            chk5.Visible = false;
+
+            cmb1Nou.ClientEnabled = true;
+            txt1Nou.ClientEnabled = true;
+            txt2Nou.ClientEnabled = true;
+            de1Nou.ClientEnabled = true;
         }
 
-        private void ArataCtl(int nr, string text1, string text2, string text3, string text4, string text5, string text6, string text7, string text8, string text9, string text10)
+        private void ArataCtl(int nr, string text1, string text2, string text3, string text4, string text5, string text6, string text7, string text8, string text9, string text10, string text11 = "")
         {
             if (nr == 1)
             {// 1 x TB
@@ -1098,6 +1113,68 @@ namespace WizOne.Avs
                 lblTxt12Nou.Text = text2;
                 cmbStructOrgNou.Visible = true;
                 cmbStructOrgNou.Enabled = true;
+            }
+            if (nr == 14)
+            {// 0.5 x CB + 3 x 0.5 x DE
+                lbl1Nou.Visible = true;
+                lbl10Nou.Visible = true;
+                lbl11Nou.Visible = true;
+                lbl13Nou.Visible = true;
+                lblTxt3Nou.Visible = true;
+                lblTxt3Nou.Text = text1;
+                cmb1Nou.Visible = true;
+                cmb1Nou.Enabled = true;
+           
+                lblTxt5Nou.Visible = true;
+                lblTxt5Nou.Text = text8;
+                de1Nou.Visible = true;
+        
+                lblTxt6Nou.Visible = true;
+                lblTxt6Nou.Text = text10;
+                de2Nou.Visible = true;
+
+                lblTxt13Nou.Visible = true;
+                lblTxt13Nou.Text = text11;
+                de3Nou.Visible = true;
+            }
+            if (nr == 15)
+            {// 0.5 x CB + 2 x 0.5 x TB + 3 x 0.5 x DE +  5 x bifa
+            
+                lbl1Nou.Visible = true;        
+                lbl8Nou.Visible = true;        
+                lbl9Nou.Visible = true;      
+                lbl10Nou.Visible = true;     
+                lbl11Nou.Visible = true;
+                lbl13Nou.Visible = true;
+                lblTxt3Nou.Visible = true;
+                lblTxt3Nou.Text = text2;
+                cmb1Nou.Visible = true;
+                cmb1Nou.Enabled = true;
+
+                lblTxt1Nou.Visible = true;
+                lblTxt1Nou.Text = text4;
+                lblTxt2Nou.Visible = true;
+                lblTxt2Nou.Text = text6;
+                txt1Nou.Visible = true;
+                txt2Nou.Visible = true;
+
+                lblTxt5Nou.Visible = true;
+                lblTxt5Nou.Text = text8;
+                de1Nou.Visible = true;
+
+                lblTxt6Nou.Visible = true;
+                lblTxt6Nou.Text = text10;
+                de2Nou.Visible = true;
+
+                lblTxt13Nou.Visible = true;
+                lblTxt13Nou.Text = text11;
+                de3Nou.Visible = true;
+
+                chk1.Visible = true;
+                chk2.Visible = true;
+                chk3.Visible = true;
+                chk4.Visible = true;
+                chk5.Visible = true;
             }
 
         }
@@ -1560,6 +1637,80 @@ namespace WizOne.Avs
                     de1Nou.Enabled = false;
                 }
             }
+
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Suspendare)
+            {
+                ArataCtl(14, "Motiv suspendare", "", "", "", "", "", "", "Data inceput", "", "Data sfarsit estimata", "Data incetare");
+                string op = "+";
+                if (Constante.tipBD == 2)
+                    op = "||";
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 ", null);        
+                IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
+            }
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.RevenireSuspendare)
+            {
+                ArataCtl(14, "Motiv suspendare", "", "", "", "", "", "", "Data inceput", "", "Data sfarsit estimata", "Data incetare");
+                string op = "+";
+                if (Constante.tipBD == 2)
+                    op = "||";
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 ", null);
+                IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
+                de1Nou.ClientEnabled = false;
+                DataTable dtTempRev = General.IncarcaDT("select * from f111 Where F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = " 
+                            + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") AND F11104 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString() + " ORDER BY F11105", null);
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11105"] != null && dtTempRev.Rows[0]["F11105"].ToString().Length > 0)
+                    de1Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11105"].ToString());
+                else
+                    de1Nou.Value = new DateTime(2100, 1, 1);
+
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11106"] != null && dtTempRev.Rows[0]["F11106"].ToString().Length > 0)
+                    de2Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11106"].ToString());
+                else
+                    de2Nou.Value = new DateTime(2100, 1, 1);
+            }
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Detasare)
+            {
+                ArataCtl(15, "", "Nationalitate", "", "Nume angajator", "", "CUI", "", "Data inceput", "", "Data sfarsit estimata", "Data incetare");
+                DataTable dtTemp = General.IncarcaDT("select F73302 AS \"Id\", F73304 AS \"Denumire\" from F733 ", null);
+                IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
+            }
+            if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.RevenireDetasare)
+            {
+                ArataCtl(15, "", "Nationalitate", "", "Nume angajator", "", "CUI", "", "Data inceput", "", "Data sfarsit estimata", "Data incetare");
+                DataTable dtTemp = General.IncarcaDT("select F73302 AS \"Id\", F73304 AS \"Denumire\" from F733 ", null);
+                IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
+                cmb1Nou.ClientEnabled = false;
+                txt1Nou.ClientEnabled = false;
+                txt2Nou.ClientEnabled = false;
+                de1Nou.ClientEnabled = false;
+
+                DataTable dtTempRev = General.IncarcaDT("select * from f112 Where F11203 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11209 IS NULL OR F11209 = "
+                    + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ")  ORDER BY F11207", null);
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11206"] != null && dtTempRev.Rows[0]["F11206"].ToString().Length > 0)
+                    cmb1Nou.Value = Convert.ToInt32(dtTempRev.Rows[0]["F11206"].ToString());
+                else
+                    cmb1Nou.Value = 0;
+
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11204"] != null && dtTempRev.Rows[0]["F11204"].ToString().Length > 0)
+                    txt1Nou.Text = dtTempRev.Rows[0]["F11204"].ToString();
+                else
+                    txt1Nou.Text = "";
+
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11205"] != null && dtTempRev.Rows[0]["F11205"].ToString().Length > 0)
+                    txt2Nou.Text = dtTempRev.Rows[0]["F11205"].ToString();
+                else
+                    txt2Nou.Text = "";
+
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11207"] != null && dtTempRev.Rows[0]["F11207"].ToString().Length > 0)
+                    de1Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11207"].ToString());
+                else
+                    de1Nou.Value = new DateTime(2100, 1, 1);
+
+                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11208"] != null && dtTempRev.Rows[0]["F11208"].ToString().Length > 0)
+                    de2Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11208"].ToString());
+                else
+                    de2Nou.Value = new DateTime(2100, 1, 1);
+            }
         }
 
 
@@ -1880,7 +2031,8 @@ namespace WizOne.Avs
             lblDataRevisal.Visible = false;
             deDataRevisal.Visible = false;
             if (atribut == (int)Constante.Atribute.Functie || atribut == (int)Constante.Atribute.CodCOR || atribut == (int)Constante.Atribute.Norma || atribut == (int)Constante.Atribute.PrelungireCIM
-                || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn)
+                || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn
+                || atribut == (int)Constante.Atribute.MotivPlecare || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.RevenireSuspendare)
             {
                 string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataMod.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + (dataMod.Year - 1).ToString();
                 if (Constante.tipBD == 2)
@@ -1926,17 +2078,7 @@ namespace WizOne.Avs
                 else
                     data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();
             }
-            if (atribut == (int)Constante.Atribute.MotivPlecare)
-            {
-                deDataRevisal.Value = dataMod;
-                if (param == 1)
-                {
-                    lblDataRevisal.Visible = true;
-                    deDataRevisal.Visible = true;
-                }
-                else
-                    data = dataMod.Day.ToString().PadLeft(2, '0') + "/" + dataMod.Month.ToString().PadLeft(2, '0') + "/" + dataMod.Year.ToString();
-            }
+ 
 
         }
 
@@ -1977,6 +2119,26 @@ namespace WizOne.Avs
                         return false;
                     }
 
+                if (idAtr == (int)Constante.Atribute.Suspendare || idAtr == (int)Constante.Atribute.Detasare)
+                {
+                    if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de1Nou.Value).Date && val == 1)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
+                        SetDataRevisal(1, Convert.ToDateTime(de1Nou.Value).AddDays(-1), Convert.ToInt32(cmbAtribute.Value), out dataRev);
+                        return false;
+                    }
+                }
+
+                if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
+                {
+                    if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de3Nou.Value).Date && val == 1)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
+                        SetDataRevisal(1, Convert.ToDateTime(de3Nou.Value).AddDays(-1), Convert.ToInt32(cmbAtribute.Value), out dataRev);
+                        return false;
+                    }
+                }
+
                 if (idAtr == (int)Constante.Atribute.Norma && Convert.ToInt32(cmb6Nou.Value) == 3 && (Convert.ToInt32(cmb7Nou.Value ?? - 1) <= 0 || txt1Nou.Text.Length <= 0))
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pentru repartizare inegala trebuie sa completati intervalul si numarul de ore!");
@@ -1986,17 +2148,55 @@ namespace WizOne.Avs
                 //verificare ca salariul sa nu fie mai mic decat cel minim (in functie si de timp partial) la schimbare norma sau salariu
                 if (idAtr == (int)Constante.Atribute.Norma)
                 {
-                    DataTable dtSal = General.IncarcaDT("SELECT COALESCE(F100699, 0) FROM F100 WHERE F10003 = " + F10003, null);
-                    if (!VerificareSalariu(Convert.ToInt32(dtSal.Rows[0][0].ToString()), Convert.ToInt32(cmb2Nou.Value)))
+                    //DataTable dtSal = General.IncarcaDT("SELECT COALESCE(F100699, 0) FROM F100 WHERE F10003 = " + F10003, null);
+                    sql = "select f100.f10003 as Marca, case when f100991 is null or f100991 = convert(datetime, '01/01/2100', 103) then  "
+                                            + "  convert(datetime, '01/' + convert(varchar, f01012) + '/' + convert(varchar, f01011), 103) "
+                                            + " else f100991 end as Data, COALESCE(F100699, 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                                            + " union "
+                                            + " select f70403 as Marca, f70406 as Data, COALESCE(F70407, 0) as Valoare from f704 where f70404 = 1 and f70420 = 0 "
+                                            + " union "
+                                            + " select f10003 as Marca, datamodif as Data, COALESCE(SalariulBrut, 0) as Valoare from Avs_Cereri where IdAtribut = 1 and IdStare in (1, 2, 3)";
+                    if (Constante.tipBD == 2)
+                        sql = "select f100.f10003 as \"Marca\", case when f100991 is null or f100991 = TO_DATE('01/01/2100', 'dd/mm/yyyy') then  "
+                            + "  TO_DATE('01/' ||  f01012 || '/' || F01011, 'dd/mm/yyyy') "
+                            + " else f100991 end as \"Data\", COALESCE(F100699, 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                            + " union "
+                            + " select f70403 as \"Marca\", f70406 as \"Data\", COALESCE(F70407, 0) as \"Valoare\" from f704 where f70404 = 1 and f70420 = 0 "
+                            + " union "
+                            + " select f10003 as \"Marca\", \"DataModif\" as \"Data\", COALESCE(\"SalariulBrut\", 0) as \"Valoare\" from \"Avs_Cereri\" where \"IdAtribut\" = 1 and \"IdStare\" in (1, 2, 3)";
+                    DataTable dtSal = General.IncarcaDT(sql, null);
+                    string dtModif = General.ToDataUniv(Convert.ToDateTime(txtDataMod.Value).Year, Convert.ToDateTime(txtDataMod.Value).Month, Convert.ToDateTime(txtDataMod.Value).Day);
+                    DataRow[] drSal = dtSal.Select("Marca = " + F10003 + " AND Data <= " + dtModif, "Data DESC");
+
+                    if (!VerificareSalariu(Convert.ToInt32(Convert.ToDouble(drSal[0]["Valoare"].ToString())), Convert.ToInt32(cmb2Nou.Value)))
                     {                       
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!");
-                        return false;
+                        Session["Avs_MesajNorma"] = Dami.TraduCuvant("Salariul angajatului este mai mic decat cel minim (raportat la timp partial)!\nVa rugam sa efectuati o cerere de modificare salariu in concordanta cu noul Timp partial!\n\n");
+                        //pnlCtl.JSProperties["cpAlertMessage"]
+                        //return false;
                     }
                 }
                 if (idAtr == (int)Constante.Atribute.Salariul)
                 {
-                    DataTable dtNorma = General.IncarcaDT("SELECT COALESCE(F10043, 0) FROM F100 WHERE F10003 = " + F10003, null);
-                    if (!VerificareSalariu(Convert.ToInt32(txt1Nou.Text.Length > 0 ? txt1Nou.Text : "0"), Convert.ToInt32(dtNorma.Rows[0][0].ToString())))
+                    //DataTable dtNorma = General.IncarcaDT("SELECT COALESCE(F10043, 0) FROM F100 WHERE F10003 = " + F10003, null);
+                    sql = "select f100.f10003 as Marca, case when f100955 is null or f100955 = convert(datetime, '01/01/2100', 103) then  "
+                    + "  convert(datetime, '01/' + convert(varchar, f01012) + '/' + convert(varchar, f01011), 103) "
+                    + " else f100955 end as Data, COALESCE(f10043, 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                    + " union "
+                    + " select f70403 as Marca, f70406 as Data, COALESCE(f70422, 0) as Valoare from f704 where f70404 = 6 and f70420 = 0 "
+                    + " union "
+                    + " select f10003 as Marca, datamodif as Data, COALESCE(TimpPartial, 0) as Valoare from Avs_Cereri where IdAtribut = 6 and IdStare in (1, 2, 3)";
+                    if (Constante.tipBD == 2)
+                        sql = "select f100.f10003 as \"Marca\", case when f100955 is null or f100955 = TO_DATE('01/01/2100', 'dd/mm/yyyy') then  "
+                            + "  TO_DATE('01/' ||  f01012 || '/' || F01011, 'dd/mm/yyyy') "
+                            + " else f100955 end as \"Data\", COALESCE(f10043, 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                            + " union "
+                            + " select f70403 as \"Marca\", f70406 as \"Data\", COALESCE(f70422, 0) as \"Valoare\" from f704 where f70404 = 6 and f70420 = 0 "
+                            + " union "
+                            + " select f10003 as \"Marca\", \"DataModif\" as \"Data\", COALESCE(\"TimpPartial\", 0) as \"Valoare\" from \"Avs_Cereri\" where \"IdAtribut\" = 6 and \"IdStare\" in (1, 2, 3)";
+                    DataTable dtNorma = General.IncarcaDT(sql, null);
+                    string dtModif = General.ToDataUniv(Convert.ToDateTime(txtDataMod.Value).Year, Convert.ToDateTime(txtDataMod.Value).Month, Convert.ToDateTime(txtDataMod.Value).Day);
+                    DataRow[] drNorma = dtNorma.Select("Marca = " + F10003 + " AND Data <= " + dtModif, "Data DESC");
+                    if (!VerificareSalariu(Convert.ToInt32(txt1Nou.Text.Length > 0 ? txt1Nou.Text : "0"), Convert.ToInt32(drNorma[0]["Valoare"].ToString())))
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Salariul introdus este mai mic decat cel minim (raportat la timp partial)!");
                         return false;
@@ -2094,6 +2294,18 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.BonusTeamLeader:
                         if (txt1Nou.Value == null) strErr += ", bonus Team Leader";
+                        break;
+                    case (int)Constante.Atribute.Suspendare:
+                        if (de1Nou.Value == null) strErr += ", suspendare";
+                        break;
+                    case (int)Constante.Atribute.RevenireSuspendare:
+                        if (de3Nou.Value == null) strErr += ", revenire suspendare";
+                        break;
+                    case (int)Constante.Atribute.Detasare:
+                        if (cmb1Nou.Value == null || txt1Nou.Value == null || txt2Nou.Value == null || de1Nou.Value == null) strErr += ", detasare";
+                        break;
+                    case (int)Constante.Atribute.RevenireDetasare:
+                        if (de3Nou.Value == null) strErr += ", revenire detasare";
                         break;
                 }
 
@@ -2658,6 +2870,30 @@ namespace WizOne.Avs
                     camp1 = "\"BonusTeamLeader\"";
                     camp2 = txt1Nou.Text;
                     break;
+                case (int)Constante.Atribute.Suspendare:    
+                    camp1 = "\"MotivSuspId\", \"MotivSuspNume\", \"DataInceputSusp\", \"DataSfEstimSusp\", \"DataIncetareSusp\"";
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy')") + 
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 103)" : "TO_DATE('" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 'dd/mm/yyyy')") + 
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 103)" : "TO_DATE('" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 'dd/mm/yyyy')");
+                    break;
+                case (int)Constante.Atribute.RevenireSuspendare:
+                    camp1 = "\"MotivSuspId\", \"MotivSuspNume\", \"DataInceputSusp\", \"DataSfEstimSusp\", \"DataIncetareSusp\"";
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + cmb1Nou.Text + "', " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy')") +
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 103)" : "TO_DATE('" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 'dd/mm/yyyy')") +
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de3Nou.Text + "', 103)" : "TO_DATE('" + de3Nou.Text + "', 'dd/mm/yyyy')");
+                    break;
+                case (int)Constante.Atribute.Detasare:
+                    camp1 = "\"IdNationalitAng\", \"NumeAngajator\", \"CUIAngajator\", \"DataInceputDet\", \"DataSfEstimDet\", \"DataIncetareDet\"";
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + txt1Nou.Text + "', '" + txt2Nou.Text + "', " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy')") +
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 103)" : "TO_DATE('" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 'dd/mm/yyyy')") +
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 103)" : "TO_DATE('" + (de3Nou.Text.Length <= 0 ? "01/01/2100" : de3Nou.Text) + "', 'dd/mm/yyyy')");
+                    break;
+                case (int)Constante.Atribute.RevenireDetasare:
+                    camp1 = "\"IdNationalitAng\", \"NumeAngajator\", \"CUIAngajator\", \"DataInceputDet\", \"DataSfEstimDet\", \"DataIncetareDet\"";
+                    camp2 = cmb1Nou.Value.ToString() + ", '" + txt1Nou.Text + "', '" + txt2Nou.Text + "', " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de1Nou.Text + "', 103)" : "TO_DATE('" + de1Nou.Text + "', 'dd/mm/yyyy')") +
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 103)" : "TO_DATE('" + (de2Nou.Text.Length <= 0 ? "01/01/2100" : de2Nou.Text) + "', 'dd/mm/yyyy')") +
+                        ", " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + de3Nou.Text + "', 103)" : "TO_DATE('" + de3Nou.Text + "', 'dd/mm/yyyy')");
+                    break;
             }
 
 
@@ -2769,8 +3005,8 @@ namespace WizOne.Avs
                 }
             }
 
-            sql = "INSERT INTO \"Avs_Cereri\" (\"Id\", F10003, \"IdAtribut\", \"IdCircuit\", \"Explicatii\", \"Motiv\", \"DataModif\", \"DataConsemnare\", \"Corectie\", \"Actualizat\", \"UserIntrod\", USER_NO, TIME, \"IdStare\", \"Culoare\", \"TotalCircuit\", \"Pozitie\", {0}) "
-                + "VALUES (" + idUrm.ToString() + ", " + F10003.ToString() + ", " + idAtr.ToString() + ", " + idCircuit.ToString() + ", '" + txtExpl.Text + "', '', " + dataModif + ", null, 0, 0, " + Session["UserId"].ToString() + ", "
+            sql = "INSERT INTO \"Avs_Cereri\" (\"Id\", F10003, \"IdAtribut\", \"IdCircuit\", \"Explicatii\", \"Document\", \"Motiv\", \"DataModif\", \"DataConsemnare\", \"Corectie\", \"Actualizat\", \"UserIntrod\", USER_NO, TIME, \"IdStare\", \"Culoare\", \"TotalCircuit\", \"Pozitie\", {0}) "
+                + "VALUES (" + idUrm.ToString() + ", " + F10003.ToString() + ", " + idAtr.ToString() + ", " + idCircuit.ToString() + ", '" + txtExpl.Text + "', '" + txtDocument.Text + "', '', " + dataModif + ", null, 0, 0, " + Session["UserId"].ToString() + ", "
                 + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ", " + idStare.ToString() + ", (SELECT \"Culoare\" FROM \"Ptj_tblStari\" WHERE \"Id\" = " + idStare.ToString() + "), " + total.ToString() + ", " + pozUser.ToString() + ",  {1})";
 
 
@@ -2859,7 +3095,8 @@ namespace WizOne.Avs
             Session["Avs_Cereri_Date"] = null;
 
             //ArataMesaj("Proces finalizat cu succes!");
-            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes!");
+            pnlCtl.JSProperties["cpAlertMessage"] = (Session["Avs_MesajNorma"] != null ? Session["Avs_MesajNorma"].ToString() : "") + Dami.TraduCuvant("Proces finalizat cu succes!");
+            Session["Avs_MesajNorma"] = null;
             AscundeCtl();
             txtExpl.Text = "";
             cmbAtribute.Value = null;
@@ -2906,6 +3143,10 @@ namespace WizOne.Avs
                             " when 24 then ''  " +
                             " when 25 then convert(nvarchar(20),a.\"DataInceputCIM\",103) + ' - ' + convert(nvarchar(20),a.\"DataSfarsitCIM\",103)  " +
                             " when 26 then convert(nvarchar(20),a.\"DataInceputCIM\",103) + ' - ' + convert(nvarchar(20),a.\"DataSfarsitCIM\",103)  " +
+                            " when 30 then a.\"MotivSuspNume\" + ' ' + convert(nvarchar(20),a.\"DataInceputSusp\",103) + ' - ' + convert(nvarchar(20),a.\"DataSfEstimSusp\",103) " +
+                            " when 31 then a.\"MotivSuspNume\" + ' ' + convert(nvarchar(20),a.\"DataInceputSusp\",103) + ' - ' + convert(nvarchar(20),a.\"DataIncetareSusp\",103) " +
+                            " when 32 then convert(nvarchar(20),a.\"DataInceputDet\",103) + ' - ' + convert(nvarchar(20),a.\"DataSfEstimDet\",103) " +
+                            " when 33 then convert(nvarchar(20),a.\"DataInceputDet\",103) + ' - ' + convert(nvarchar(20),a.\"DataIncetareDet\",103) " +
                             " when 101 then a.Nume + ' ' + a.Prenume " +
                             " when 102 then (select F06303 from F063 where F06302 = a.CASS) " +
                             " when 103 then (select F71204 from F712 where F71202 = a.\"Studii\") " +
@@ -2949,6 +3190,10 @@ namespace WizOne.Avs
                             " when 24 then '' " +
                             " when 25 then to_char(a.\"DataInceputCIM\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfarsitCIM\",'DD/MM/YYYY') " +
                             " when 26 then to_char(a.\"DataInceputCIM\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfarsitCIM\",'DD/MM/YYYY') " +
+                            " when 30 then a.\"MotivSuspNume\" || ' ' || to_char(a.\"DataInceputSusp\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfEstimSusp\",'DD/MM/YYYY') " +
+                            " when 31 then a.\"MotivSuspNume\" || ' ' || to_char(a.\"DataInceputSusp\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataIncetareSusp\",'DD/MM/YYYY') " +
+                            " when 32 then to_char(a.\"DataInceputDet\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataSfEstimDet\",'DD/MM/YYYY') " +
+                            " when 33 then to_char(a.\"DataInceputDet\",'DD/MM/YYYY') || ' - ' || to_char(a.\"DataIncetareDet\",'DD/MM/YYYY') " +
                             " when 101 then a.\"Nume\" || ' ' || a.\"Prenume\" " +
                             " when 102 then (select F06303 from F063 where F06302 = a.CASS) " +
                             " when 103 then (select F71204 from F712 where F71202 = a.\"Studii\") " +
@@ -3108,7 +3353,8 @@ namespace WizOne.Avs
         {
             try
             {
-                string data = "", data2 = "", data3 = "", data4 = "", data5 = "", data6 = "", data7 = "", data8 = "", data9 = "", data10 = "";
+                string data = "", data2 = "", data3 = "", data4 = "", data5 = "", data6 = "", data7 = "", data8 = "", data9 = "", data10 = "", 
+                    data11 = "", data12 = "", data13 = "", data14 = "", data15 = "", data16 = "";
                 if (Constante.tipBD == 1)
                 {
                     data = "CASE WHEN a.DataModif IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataModif, 103) END";
@@ -3121,6 +3367,12 @@ namespace WizOne.Avs
                     data8 = "CASE WHEN a.DataExpirarePermis IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataExpirarePermis, 103) END";
                     data9 = "CASE WHEN a.DataInceputCIM IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataInceputCIM, 103) END";
                     data10 = "CASE WHEN a.DataSfarsitCIM IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataSfarsitCIM, 103) END";
+                    data11 = "CASE WHEN a.DataInceputSusp IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataInceputSusp, 103) END";
+                    data12 = "CASE WHEN a.DataSfEstimSusp IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataSfEstimSusp, 103) END";
+                    data13 = "CASE WHEN a.DataIncetareSusp IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataIncetareSusp, 103) END";
+                    data14 = "CASE WHEN a.DataInceputDet IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataInceputDet, 103) END";
+                    data15 = "CASE WHEN a.DataSfEstimDet IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataSfEstimDet, 103) END";
+                    data16 = "CASE WHEN a.DataIncetareDet IS NULL THEN '01/01/2100' ELSE CONVERT(VARCHAR, a.DataIncetareDet, 103) END";
                 }
                 else
                 {
@@ -3134,9 +3386,16 @@ namespace WizOne.Avs
                     data8 = "CASE WHEN a.\"DataExpirarePermis\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataExpirarePermis\", 'dd/mm/yyyy') END";
                     data9 = "CASE WHEN a.\"DataInceputCIM\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataInceputCIM\", 'dd/mm/yyyy') END";
                     data10 = "CASE WHEN a.\"DataSfarsitCIM\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataSfarsitCIM\", 'dd/mm/yyyy') END";
+                    data11 = "CASE WHEN a.\"DataInceputSusp\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataInceputSusp\", 'dd/mm/yyyy') END";
+                    data12 = "CASE WHEN a.\"DataSfEstimSusp\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataSfEstimSusp\", 'dd/mm/yyyy') END";
+                    data13 = "CASE WHEN a.\"DataIncetareSusp\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataIncetareSusp\", 'dd/mm/yyyy') END";
+                    data14 = "CASE WHEN a.\"DataInceputDet\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataInceputDet\", 'dd/mm/yyyy') END";
+                    data15 = "CASE WHEN a.\"DataSfEstimDet\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataSfEstimDet\", 'dd/mm/yyyy') END";
+                    data16 = "CASE WHEN a.\"DataIncetareDet\" IS NULL THEN '01/01/2100' ELSE TO_CHAR(a.\"DataIncetareDet\", 'dd/mm/yyyy') END";
                 }
                 DataTable dtCer = General.IncarcaDT("SELECT " + data + " AS DM, " + data2 + " AS DI, " + data3 + " AS DITM, " + data4 + " AS DA, " + data5 + " AS DELIB, "
-                    + data6 + " AS DEXP, " + data7 + " AS DEMIT, " + data8 + " AS DEXPP, " + data9 + " AS DINC, " + data10 + " AS DSF, a.* FROM \"Avs_Cereri\" a WHERE \"Id\" = " + id.ToString(), null);
+                    + data6 + " AS DEXP, " + data7 + " AS DEMIT, " + data8 + " AS DEXPP, " + data9 + " AS DINC, " + data10 + " AS DSF, " 
+                    + data11 + " AS DIS, " + data12 + " AS DSES, " + data13 + " AS DSFS, " + data14 + " AS DID, " + data15 + " AS DSED, " + data16 + " AS DSFD, a.* FROM \"Avs_Cereri\" a WHERE \"Id\" = " + id.ToString(), null);
                 if (dtCer == null || dtCer.Rows.Count == 0) return;
 
                 int? idComp = 1;
@@ -3156,6 +3415,13 @@ namespace WizOne.Avs
                 DateTime dtExpP = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DEXPP"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DEXPP"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DEXPP"].ToString().Substring(0, 2)));
                 DateTime dtInc = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DINC"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DINC"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DINC"].ToString().Substring(0, 2)));
                 DateTime dtSf = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DSF"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DSF"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DSF"].ToString().Substring(0, 2)));
+                DateTime dtIncSusp = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DIS"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DIS"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DIS"].ToString().Substring(0, 2)));
+                DateTime dtSfEstSusp = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DSES"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DSES"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DSES"].ToString().Substring(0, 2)));
+                DateTime dtSfSusp = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DSFS"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DSFS"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DSFS"].ToString().Substring(0, 2)));
+                DateTime dtIncDet = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DID"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DID"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DID"].ToString().Substring(0, 2)));
+                DateTime dtSfEstDet = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DSED"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DSED"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DSED"].ToString().Substring(0, 2)));
+                DateTime dtSfDet = new DateTime(Convert.ToInt32(dtCer.Rows[0]["DSFD"].ToString().Substring(6, 4)), Convert.ToInt32(dtCer.Rows[0]["DSFD"].ToString().Substring(3, 2)), Convert.ToInt32(dtCer.Rows[0]["DSFD"].ToString().Substring(0, 2)));
+
 
                 DataTable dtF100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + f10003.ToString(), null);
                 DataTable dtF1001 = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + f10003.ToString(), null);
@@ -3174,6 +3440,12 @@ namespace WizOne.Avs
                     data8 = "CONVERT(DATETIME, '" + dtExpP.Day.ToString().PadLeft(2, '0') + "/" + dtExpP.Month.ToString().PadLeft(2, '0') + "/" + dtExpP.Year.ToString() + "', 103)";
                     data9 = "CONVERT(DATETIME, '" + dtInc.Day.ToString().PadLeft(2, '0') + "/" + dtInc.Month.ToString().PadLeft(2, '0') + "/" + dtInc.Year.ToString() + "', 103)";
                     data10 = "CONVERT(DATETIME, '" + dtSf.Day.ToString().PadLeft(2, '0') + "/" + dtSf.Month.ToString().PadLeft(2, '0') + "/" + dtSf.Year.ToString() + "', 103)";
+                    data11 = "CONVERT(DATETIME, '" + dtIncSusp.Day.ToString().PadLeft(2, '0') + "/" + dtIncSusp.Month.ToString().PadLeft(2, '0') + "/" + dtIncSusp.Year.ToString() + "', 103)";
+                    data12 = "CONVERT(DATETIME, '" + dtSfEstSusp.Day.ToString().PadLeft(2, '0') + "/" + dtSfEstSusp.Month.ToString().PadLeft(2, '0') + "/" + dtSfEstSusp.Year.ToString() + "', 103)";
+                    data13 = "CONVERT(DATETIME, '" + dtSfSusp.Day.ToString().PadLeft(2, '0') + "/" + dtSfSusp.Month.ToString().PadLeft(2, '0') + "/" + dtSfSusp.Year.ToString() + "', 103)";
+                    data14 = "CONVERT(DATETIME, '" + dtIncDet.Day.ToString().PadLeft(2, '0') + "/" + dtIncDet.Month.ToString().PadLeft(2, '0') + "/" + dtIncDet.Year.ToString() + "', 103)";
+                    data15 = "CONVERT(DATETIME, '" + dtSfEstDet.Day.ToString().PadLeft(2, '0') + "/" + dtSfEstDet.Month.ToString().PadLeft(2, '0') + "/" + dtSfEstDet.Year.ToString() + "', 103)";
+                    data16 = "CONVERT(DATETIME, '" + dtSfDet.Day.ToString().PadLeft(2, '0') + "/" + dtSfDet.Month.ToString().PadLeft(2, '0') + "/" + dtSfDet.Year.ToString() + "', 103)";
                 }
                 else
                 {
@@ -3188,6 +3460,12 @@ namespace WizOne.Avs
                     data8 = "TO_DATE('" + dtExpP.Day.ToString().PadLeft(2, '0') + "/" + dtExpP.Month.ToString().PadLeft(2, '0') + "/" + dtExpP.Year.ToString() + "', 'dd/mm/yyyy')";
                     data9 = "TO_DATE('" + dtInc.Day.ToString().PadLeft(2, '0') + "/" + dtInc.Month.ToString().PadLeft(2, '0') + "/" + dtInc.Year.ToString() + "', 'dd/mm/yyyy')";
                     data10 = "TO_DATE('" + dtSf.Day.ToString().PadLeft(2, '0') + "/" + dtSf.Month.ToString().PadLeft(2, '0') + "/" + dtSf.Year.ToString() + "', 'dd/mm/yyyy')";
+                    data11 = "TO_DATE('" + dtIncSusp.Day.ToString().PadLeft(2, '0') + "/" + dtIncSusp.Month.ToString().PadLeft(2, '0') + "/" + dtIncSusp.Year.ToString() + "', 'dd/mm/yyyy')";
+                    data12 = "TO_DATE('" + dtSfEstSusp.Day.ToString().PadLeft(2, '0') + "/" + dtSfEstSusp.Month.ToString().PadLeft(2, '0') + "/" + dtSfEstSusp.Year.ToString() + "', 'dd/mm/yyyy')";
+                    data13 = "TO_DATE('" + dtSfSusp.Day.ToString().PadLeft(2, '0') + "/" + dtSfSusp.Month.ToString().PadLeft(2, '0') + "/" + dtSfSusp.Year.ToString() + "', 'dd/mm/yyyy')";
+                    data14 = "TO_DATE('" + dtIncDet.Day.ToString().PadLeft(2, '0') + "/" + dtIncDet.Month.ToString().PadLeft(2, '0') + "/" + dtIncDet.Year.ToString() + "', 'dd/mm/yyyy')";
+                    data15 = "TO_DATE('" + dtSfEstDet.Day.ToString().PadLeft(2, '0') + "/" + dtSfEstDet.Month.ToString().PadLeft(2, '0') + "/" + dtSfEstDet.Year.ToString() + "', 'dd/mm/yyyy')";
+                    data16 = "TO_DATE('" + dtSfDet.Day.ToString().PadLeft(2, '0') + "/" + dtSfDet.Month.ToString().PadLeft(2, '0') + "/" + dtSfDet.Year.ToString() + "', 'dd/mm/yyyy')";
                 }
                 int act = 0;
                 string sql = "", sql100 = "", sql1001 = "";
@@ -3203,7 +3481,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70452, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 1, 'Salariu Tarifar', " + data + ", " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", " + dtCer.Rows[0]["ScutitImpozit"].ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", " + dtCer.Rows[0]["ScutitImpozit"].ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Functie:
@@ -3215,7 +3493,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 2, 'Functie', " + data + ", " + dtCer.Rows[0]["FunctieId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.CodCOR:
@@ -3229,7 +3507,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 3, 'Cod COR', " + data + ", " + dtCer.Rows[0]["CORCod"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.MotivPlecare:
@@ -3238,7 +3516,8 @@ namespace WizOne.Avs
                             //if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                             //{
                                 act = 1;
-                                sql100 = "UPDATE F100 SET F10023 = " + data1 + ", F100993 = " + data + " WHERE F10003 = " + f10003.ToString();
+                                string sql100Temp = "UPDATE F100 SET F10023 = " + data1 + ", F100993 = " + data + " WHERE F10003 = " + f10003.ToString();
+                                General.IncarcaDT(sql100Temp, null);
                             //}
 
 
@@ -3260,7 +3539,16 @@ namespace WizOne.Avs
 
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                                 + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 4, 'Motiv plecare', " + data + ", " + subSel + ", 'Modificari in avans', '"
-                                + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                                + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+
+                            //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO      
+                            if (dtModif.Year > DateTime.Now.Year)
+                            {
+                                General.CalculCO(dtModif.Year, f10003);
+                                General.CalculCO(DateTime.Now.Year, f10003);
+                            }
+                            else
+                                General.CalculCO(dtModif.Year, f10003);
                         }
                         break;
                     case (int)Constante.Atribute.Norma:
@@ -3275,8 +3563,8 @@ namespace WizOne.Avs
                                     sql1001 = "UPDATE F1001 SET F100955 = " + data + ", F100964 = " + dtCer.Rows[0]["NrOreLuna"].ToString() + "  WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70421, F70422, F70423, F70424, F70425, F70426, F70427, F70428, USER_NO, TIME) "
-                            + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 6, 'Norma Contract', " + data + ", " + dtCer.Rows[0]["Norma"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", " + dtCer.Rows[0]["TipAngajat"].ToString() + ", " + dtCer.Rows[0]["TimpPartial"].ToString() + ", "
+                            + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 6, 'Norma Contract', " + data + ", " + dtCer.Rows[0]["TimpPartial"].ToString() + ", 'Modificari in avans', '"
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", " + dtCer.Rows[0]["TipAngajat"].ToString() + ", " + dtCer.Rows[0]["TimpPartial"].ToString() + ", "
                             + dtCer.Rows[0]["Norma"].ToString() + ", " + dtCer.Rows[0]["TipNorma"].ToString() + ", " + dtCer.Rows[0]["DurataTimpMunca"].ToString() + ", " + dtCer.Rows[0]["RepartizareTimpMunca"].ToString()
                             + ", " + dtCer.Rows[0]["IntervalRepartizare"].ToString() + ", " + General.Nz(dtCer.Rows[0]["NrOreLuna"],"0").ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
@@ -3290,7 +3578,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70411, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 8, 'Nr si Data Contr.In', " + data + ", " + dtCer.Rows[0]["NrIntern"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + data2 + ", " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + data2 + ", " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.ContrITM:
@@ -3302,7 +3590,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 9, 'Nr si Data Contr.ITM', " + data + ", " + dtCer.Rows[0]["NrITM"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.DataAngajarii:
@@ -3314,7 +3602,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70409, F70410, F70411, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 10, 'Data Angajarii', " + data + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + data4 + ", " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + data4 + ", " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.TitluAcademic:
@@ -3326,7 +3614,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 12, 'Titlul academic', " + data + ", " + dtCer.Rows[0]["TitlulAcademicId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.MesajPersonal:
@@ -3338,7 +3626,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 13, 'Mesaj personal', " + data + ", " + dtCer.Rows[0]["MesajPersonalId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.CentrulCost:
@@ -3350,7 +3638,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 14, 'Centru cost', " + data + ", " + dtCer.Rows[0]["CentruCostId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.PunctLucru:
@@ -3362,7 +3650,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 16, 'Punct lucru', " + data + ", " + dtCer.Rows[0]["PunctLucruId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Meserie:
@@ -3374,7 +3662,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 22, 'Meserie', " + data + ", " + dtCer.Rows[0]["MeserieId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.PrelungireCIM:
@@ -3421,6 +3709,15 @@ namespace WizOne.Avs
                             //    + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                             //General.IncarcaDT(sqlTmp, null);
 
+
+                            //Radu 01.11.2019 - se modifica data plecarii, deci trebuie refacut CalculCO   
+                            if (dtSf.Year > DateTime.Now.Year)
+                            {
+                                General.CalculCO(dtSf.Year, f10003);
+                                General.CalculCO(DateTime.Now.Year, f10003);
+                            }
+                            else
+                                General.CalculCO(dtSf.Year, f10003);
                         }
                         break;
                     case (int)Constante.Atribute.Organigrama:
@@ -3433,7 +3730,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70414, F70415, F70416, F70417, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 5, 'Organigrama', " + data + ", " + dtCer.Rows[0]["DeptId"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + dtCer.Rows[0]["SubcompanieId"].ToString() + ", " + dtCer.Rows[0]["FilialaId"].ToString() + ", " + dtCer.Rows[0]["SectieId"].ToString()
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + dtCer.Rows[0]["SubcompanieId"].ToString() + ", " + dtCer.Rows[0]["FilialaId"].ToString() + ", " + dtCer.Rows[0]["SectieId"].ToString()
                             + ", " + dtCer.Rows[0]["DeptId"].ToString() + ", " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
@@ -3458,7 +3755,7 @@ namespace WizOne.Avs
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70420, USER_NO, TIME) "
                         + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 19, 'Componente', " + data + ", 0, 'Modificari in avans', '"
-                        + dtCer.Rows[0]["Explicatii"].ToString() + "', " + camp2 + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                        + dtCer.Rows[0]["Document"].ToString() + "', " + camp2 + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         break;
                     case (int)Constante.Atribute.Tarife:
                         if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
@@ -3468,7 +3765,7 @@ namespace WizOne.Avs
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70467, F70420, USER_NO, TIME) "
                         + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 28, 'Tarife', " + data + ", 0, 'Modificari in avans', '"
-                        + dtCer.Rows[0]["Explicatii"].ToString() + "','" + dtCer.Rows[0]["Tarife"].ToString() + "' ," + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                        + dtCer.Rows[0]["Document"].ToString() + "','" + dtCer.Rows[0]["Tarife"].ToString() + "' ," + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         break;
                     case (int)Constante.Atribute.Sporuri:
                         if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
@@ -3492,7 +3789,7 @@ namespace WizOne.Avs
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70467, F70420, USER_NO, TIME) "
                         + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 11, 'Sporuri', " + data + ", 0, 'Modificari in avans', '"
-                        + dtCer.Rows[0]["Explicatii"].ToString() + "', " + camp2 + "'" + dtCer.Rows[0]["Tarife"].ToString() + "'" + ", " +  act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                        + dtCer.Rows[0]["Document"].ToString() + "', " + camp2 + "'" + dtCer.Rows[0]["Tarife"].ToString() + "'" + ", " +  act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         break;
                     case (int)Constante.Atribute.SporTranzactii:
                         if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
@@ -3515,7 +3812,7 @@ namespace WizOne.Avs
                         }
                         sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, " + camp1 + " F70420, USER_NO, TIME) "
                         + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 15, 'Spor tranzactii', " + data + ", 0, 'Modificari in avans', '"
-                        + dtCer.Rows[0]["Explicatii"].ToString() + "', " + camp2 + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                        + dtCer.Rows[0]["Document"].ToString() + "', " + camp2 + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         break;
                     case (int)Constante.Atribute.NumePrenume:
                         {
@@ -3527,7 +3824,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, \"Nume\", \"Prenume\", F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 101, 'Nume si prenume', " + data + ", -99, 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', '" + dtCer.Rows[0]["Nume"].ToString() + "', '" + dtCer.Rows[0]["Prenume"].ToString() + "', "
+                            + dtCer.Rows[0]["Document"].ToString() + "', '" + dtCer.Rows[0]["Nume"].ToString() + "', '" + dtCer.Rows[0]["Prenume"].ToString() + "', "
                             + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
@@ -3540,7 +3837,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 102, 'CASS angajat', " + data + ", " + dtCer.Rows[0]["CASS"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.Studii:
@@ -3552,7 +3849,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 103, 'Studii', " + data + ", " + dtCer.Rows[0]["Studii"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.BancaSalariu:
@@ -3567,7 +3864,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70431, F70432, F70433, F70434, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 104, 'Banca - cont salariu', " + data + ", " + dtCer.Rows[0]["BancaSal"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["IBANSal"].ToString() + "', " + dtCer.Rows[0]["BancaSal"].ToString() + ", "
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["IBANSal"].ToString() + "', " + dtCer.Rows[0]["BancaSal"].ToString() + ", "
                             + dtCer.Rows[0]["SucursalaSal"].ToString() + ", '" + dtCer.Rows[0]["NrCard"].ToString() + "', -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
@@ -3583,7 +3880,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70435, F70436, F70437, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 105, 'Banca - cont gar.', " + data + ", " + dtCer.Rows[0]["BancaGar"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["IBANGar"].ToString() + "', " + dtCer.Rows[0]["BancaGar"].ToString() + ", "
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["IBANGar"].ToString() + "', " + dtCer.Rows[0]["BancaGar"].ToString() + ", "
                             + dtCer.Rows[0]["SucursalaGar"].ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
@@ -3606,7 +3903,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, \"NivelVorbit\", \"NrAniVorbit\" USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 106, 'Limbi straine', " + data + ", " + dtCer.Rows[0]["IdLimba"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["NivelVorbit"].ToString() + "', " + dtCer.Rows[0]["NrAniVorbit"].ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["NivelVorbit"].ToString() + "', " + dtCer.Rows[0]["NrAniVorbit"].ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
                     case (int)Constante.Atribute.DocId:
@@ -3621,7 +3918,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, \"SerieNrID\", \"IDEmisDe\", \"DataElibID\", \"DataExpID\", USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 107, 'Document identitate', " + data + ", " + dtCer.Rows[0]["TipID"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["SerieNrID"].ToString() + "', '" + dtCer.Rows[0]["IDEmisDe"].ToString() + "', " + data5
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["SerieNrID"].ToString() + "', '" + dtCer.Rows[0]["IDEmisDe"].ToString() + "', " + data5
                             + ", " + data6 + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
@@ -3636,7 +3933,7 @@ namespace WizOne.Avs
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, \"NrPermis\", \"PermisEmisDe\", \"DataEmiterePermis\", \"DataExpirarePermis\", USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 108, 'Permis auto', " + data + ", " + dtCer.Rows[0]["IdCateg"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["NrPermis"].ToString() + "', '" + dtCer.Rows[0]["PermisEmisDe"].ToString() + "', " + data7
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", '" + dtCer.Rows[0]["NrPermis"].ToString() + "', '" + dtCer.Rows[0]["PermisEmisDe"].ToString() + "', " + data7
                             + ", " + data8 + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
                         break;
@@ -3644,8 +3941,39 @@ namespace WizOne.Avs
                         {
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 109, 'Bonus Team Leader', " + data + ", " + dtCer.Rows[0]["BonusTeamLeader"].ToString() + ", 'Modificari in avans', '"
-                            + dtCer.Rows[0]["Explicatii"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
+                            + dtCer.Rows[0]["Document"].ToString() + "', " + act.ToString() + ", -9, " + (Constante.tipBD == 1 ? "getdate()" : "sysdate") + ")";
                         }
+                        break;
+                    case (int)Constante.Atribute.Suspendare:
+                        DateTime dtLuc = General.DamiDataLucru();
+                        sql100 = "UPDATE F100 SET F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + ", F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
+                             (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10076 = " + data11 + ", F10077 = " + data12 : "") + " WHERE F10003 = " + f10003.ToString();
+                        sql1001 = "UPDATE F1001 SET F1001102 = " + data11 + " - 1 WHERE F10003 = " + f10003.ToString();
+                        string sql111 = $@"INSERT INTO F111 (F11101, F11102, F11103, F11104, F11105, F11106, F11107, YEAR, MONTH, USER_NO, TIME)
+                               VALUES (111, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, {dtCer.Rows[0]["MotivSuspId"].ToString()},{data11}, {data12}, {data13},
+                               {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
+                        General.IncarcaDT(sql111, null);
+                        break;
+                    case (int)Constante.Atribute.RevenireSuspendare:
+                        sql100 = "UPDATE F100 SET F100924 = " + data13 + (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10077 = " + data13 : "") + " WHERE F10003 = " + f10003.ToString();
+                        sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();                      
+                        sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data1;
+                        General.IncarcaDT(sql111, null);
+                        break;
+                    case (int)Constante.Atribute.Detasare:
+                        dtLuc = General.DamiDataLucru();
+                        sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data13 + ", F100917 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();
+                        sql1001 = "UPDATE F1001 SET F1001125 = " + (chk1.Checked ? "1" : "0") + ", F1001126 = " + (chk2.Checked ? "1" : "0") + ", F1001127 = " + (chk3.Checked ? "1" : "0") 
+                            + ", F1001128 = " + (chk4.Checked ? "1" : "0") + ", F1001129 = " + (chk5.Checked ? "1" : "0") + " WHERE F10003 = " + f10003.ToString();
+                        string sql112 = $@"INSERT INTO F112 (F11201, F11202, F11203, F11204, F11205, F11206, F11207, F11208, F11209, YEAR, MONTH, USER_NO, TIME)
+                               VALUES (112, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, '{dtCer.Rows[0]["NumeAngajator"].ToString()}','{dtCer.Rows[0]["CUIAngajator"].ToString()}',{dtCer.Rows[0]["IdNationalitAng"].ToString()},
+                                {data14}, {data15}, {data16}, {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
+                        General.IncarcaDT(sql112, null);
+                        break;
+                    case (int)Constante.Atribute.RevenireDetasare:
+                        sql100 = "UPDATE F100 SET F100917 = " + data13 + " WHERE F10003 = " + f10003.ToString();
+                        sql112 = "UPDATE F112 SET F11209 = " + data16 + " WHERE F11203 = " + f10003 + " AND F11207 = " + data14;
+                        General.IncarcaDT(sql112, null);
                         break;
                     default:
                         return;
@@ -5077,9 +5405,10 @@ namespace WizOne.Avs
             grDateSporTran.SettingsPager.PageSize = 20;
 
 
-            sql = @"SELECT 0 as F02104, '---' AS F02105 UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
-            if (Constante.tipBD == 2)
-                sql = "SELECT 0 as F02104, '---' AS F02105 FROM DUAL UNION " + General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
+            //Florin 2019.10.28 - am comentat partea de Oracle deoarece este acelasi select si pe sql si pe oracle
+            sql = $@"SELECT 0 as F02104, '---' AS F02105 {(Constante.tipBD == 2 ? " FROM DUAL" : "")} UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
+            //if (Constante.tipBD == 2)
+            //    sql = "SELECT 0 as F02104, '---' AS F02105 FROM DUAL UNION " + General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
             DataTable dtSpor = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colSpor = (grDateSporTran.Columns["Spor"] as GridViewDataComboBoxColumn);
             colSpor.PropertiesComboBox.DataSource = dtSpor;

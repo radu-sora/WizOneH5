@@ -20,7 +20,7 @@
 <HeaderFilter MinHeight="140px"></HeaderFilter>
 </SettingsPopup>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="3" ButtonType="Image" Caption=" " />
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="3" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" VisibleIndex="0"/>
                         <dx:GridViewDataComboBoxColumn FieldName="IdTipAutorizatie" Name="IdTipAutorizatie" Caption="Tip autorizatie" Width="100px" VisibleIndex="4" >

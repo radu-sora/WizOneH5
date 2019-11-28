@@ -248,7 +248,8 @@
 		<th valign="top" class="legend-font-size">Schimburi</th>
 		</tr>			
 	</table>
-				
+
+			
   <table>
    <tr>   
      <td valign="top">
@@ -1500,4 +1501,5 @@
 
    
   </table>
+
 </body>

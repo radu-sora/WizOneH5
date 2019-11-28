@@ -75,7 +75,10 @@ namespace WizOne.Absente
 
                 if (!IsPostBack)
                 {
-                    txtTitlu.Text = General.VarSession("Titlu").ToString();
+                    if (Request["pp"] != null)
+                        txtTitlu.Text = "Prima Pagina - Cereri";
+                    else
+                        txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                     txtDataInc.Date = DateTime.Now;
                     txtDataSf.Date = DateTime.Now;
@@ -1138,18 +1141,23 @@ namespace WizOne.Absente
                             General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(cmbAng.Value)} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Text))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Text))} ", null);
                         }
 
-                        //Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
-                        DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { cmbAng.Value, txtDataInc.Date, txtDataSf.Date });
-                        for (int i = 0; i < dtRun.Rows.Count; i++)
-                        {
-                            string golesteVal = Dami.ValoareParam("GolesteVal");
-                            FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                            FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                            FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                            FunctiiCeasuri.Calcul.h5 = true;
-                            FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
-                            FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
-                        }
+
+                        //Florin 2019.11.13 - calcul formule si formule cumulat
+                        General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {txtDataInc.Date} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {txtDataSf.Date}");
+
+
+                        ////Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
+                        //DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { cmbAng.Value, txtDataInc.Date, txtDataSf.Date });
+                        //for (int i = 0; i < dtRun.Rows.Count; i++)
+                        //{
+                        //    string golesteVal = Dami.ValoareParam("GolesteVal");
+                        //    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                        //    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                        //    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                        //    FunctiiCeasuri.Calcul.h5 = true;
+                        //    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
+                        //    FunctiiCeasuri.Calcul.CalculInOut(dtRun.Rows[i], true, true);
+                        //}
                     }
 
                     #endregion
@@ -2260,6 +2268,34 @@ namespace WizOne.Absente
                             }
                             ctlDiv.Controls.Add(chk);
                             break;
+                        case "2":                   //combobox
+                            ASPxComboBox cmb = new ASPxComboBox();
+                            cmb.ID = ctlId;
+                            cmb.ClientIDMode = ClientIDMode.Static;
+                            cmb.ClientInstanceName = "ctlDinamic" + i;
+                            cmb.Width = Unit.Pixel(200);
+                            cmb.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
+                            try
+                            {
+                                if (General.Nz(dr["Sursa"], "").ToString() != "")
+                                {
+                                    string sel = InlocuiesteCampuri(dr["Sursa"].ToString());
+                                    if (sel != "")
+                                    {
+                                        DataTable dtCmb = General.IncarcaDT(sel, null);
+                                        cmb.ValueField = dtCmb.Columns[0].ColumnName;
+                                        cmb.TextField = dtCmb.Columns[1].ColumnName;
+                                        cmb.DataSource = dtCmb;
+                                        cmb.DataBind();
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), "Incarcare combobox camp extra");
+                            }
+                            ctlDiv.Controls.Add(cmb);
+                            break;
                         case "3":                   //dateTime
                             ASPxDateEdit dte = new ASPxDateEdit();
                             dte.ID = ctlId;
@@ -2460,7 +2496,7 @@ namespace WizOne.Absente
                                 sqlOraInc + " AS \"OraInceput\", " +
                                 sqlOraSf + " AS \"OraSfarsit\", " +
                                 areAtas + " AS \"AreAtas\"" +
-                                valExtra + ", " + Session["UserId"] + " AS USER_NO, " + General.CurrentDate() + " AS TINE, null AS \"IdCerereDivizata\", null AS \"Comentarii\", 0 AS \"CampBifa\"";
+                                valExtra + ", " + Session["UserId"] + " AS USER_NO, " + General.CurrentDate() + " AS TIME, null AS \"IdCerereDivizata\", null AS \"Comentarii\", 0 AS \"CampBifa\"";
                 if (tip == 2)
                     sqlCer = @"VALUES(" +
                     sqlIdCerere + ", " +

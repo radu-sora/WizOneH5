@@ -1,5 +1,7 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Cadru.master.cs" Inherits="WizOne.Cadru" %>    
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Cadru.master.cs" Inherits="WizOne.Cadru" %>
+
 <!DOCTYPE html>
+
 <html lang="en">
 <head runat="server">
 
@@ -18,7 +20,7 @@
     <asp:ContentPlaceHolder ID="head" runat="server" />
 
 </head>
-<body>    
+<body>
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager1" runat="server" >
             <Scripts>
@@ -215,7 +217,7 @@
             <BorderTop BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px" />
         </dx:ASPxPanel>
 
-        <dx:ASPxPanel ID="pnlContent1" runat="server" Width="100%" Height="100%" Paddings-Padding="10px" >
+        <dx:ASPxPanel ID="pnlContent1" runat="server" Width="100%" Height="100%" Paddings-Padding="10px" ScrollBars="Auto" >
             <PanelCollection>
                 <dx:PanelContent runat="server">
                
@@ -303,7 +305,7 @@
         <input type="hidden" runat="server" name="__TEME" id="__TEME" value="" />
     </form>
 
-    <script>        
+    <script>
         /* Theme selector control */
         var themeSelector = {
             currentThemeCookieKey: 'DXCurrentTheme',
@@ -343,7 +345,10 @@
                     location.href = location.href
                 }
             }
-        };        
+        };
+
+        
+
         /* Account form control */
         var accountForm = {
             init: function () {
@@ -351,7 +356,10 @@
                     e.stopPropagation();
                 });
             }
-        };        
+        };
+
+        
+
         /* Timer control */
         var timerControl = {
             timerId: null,
@@ -411,12 +419,12 @@
             }
         };
         /* Globals */
-        var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';         
-              
+        var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';
+
         /* Main functions */
         $(window).on('load', function () {
             var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
-            var firstLoad = <%= Session["PrimaIntrare"] %> === 1;            
+            var firstLoad = <%= Session["PrimaIntrare"] %> === 1;
             var myModal = $("#myModal");
             var anunt = $('#anunt');
 
@@ -433,15 +441,15 @@
                         timeLeftInfo.text(timeLeft).parent().removeClass('text-danger');
                     }
                 }, function () {
-                        window.location = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
-                });
+                    window.location = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+                    });
                 timerControl.start();
             }
 
             firstLoad && myModal.length && myModal.modal('show');
-            anunt.length && anunt.modal('show');            
+            anunt.length && anunt.modal('show');
         });
-        
+
         function onAccountFormKeyPress(e) {
             e.htmlEvent.keyCode === 13 && ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
         }

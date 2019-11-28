@@ -213,12 +213,13 @@ namespace WizOne
             {
                 if (__TEME.Value != null && __TEME.Value != "")
                 {
-                    string strSql = @"BEGIN;
-                                      INSERT INTO tblConfigUsers(F70102, Tema, USER_NO, TIME) SELECT @1, @2, @1, GetDate() WHERE (SELECT COUNT(*) FROM tblConfigUsers WHERE F70102=@1)=0;
-                                      UPDATE tblConfigUsers SET Tema=@2 WHERE F70102=@1;
-                                      END;";
+                    string strSql = $@"BEGIN
+                                    INSERT INTO ""tblConfigUsers""(F70102, ""Tema"", USER_NO, TIME) 
+                                    SELECT @1, @2, @1, {General.CurrentDate()} {General.FromDual()} WHERE (SELECT COUNT(*) FROM ""tblConfigUsers"" WHERE F70102=@1)=0;
+                                    UPDATE ""tblConfigUsers"" SET ""Tema""=@2 WHERE F70102=@1;
+                                    END;";
 
-                    General.ExecutaNonQuery(strSql,  new string[] { Session["UserId"].ToString(), __TEME.Value });
+                    General.ExecutaNonQuery(strSql,  new object[] { Session["UserId"].ToString(), __TEME.Value });
 
                     MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
                 }
@@ -273,7 +274,8 @@ namespace WizOne
                         CriptDecript prc = new CriptDecript();
                         string parola = prc.EncryptString(Constante.cheieCriptare, txtParola.Text, 1);
 
-                        General.AddUserIstoric();
+                        string idUser = General.Nz(HttpContext.Current.Session["UserId"], -99).ToString();
+                        General.AddUserIstoric(idUser);
 
                         string strSql = @"UPDATE USERS SET F70103=@1 WHERE F70102=@2";
                         General.ExecutaNonQuery(strSql, new string[] { parola, Session["UserId"].ToString() });
@@ -303,7 +305,8 @@ namespace WizOne
                         CriptDecript prc = new CriptDecript();
                         string parola = prc.EncryptString(Constante.cheieCriptare, txtParolaRap.Text, 1);
 
-                        General.AddUserIstoric(2);
+                        string idUser = General.Nz(HttpContext.Current.Session["UserId"], -99).ToString();
+                        General.AddUserIstoric(idUser, 2);
 
                         string strSql = @"UPDATE USERS SET ""Parola""=@1 WHERE F70102=@2";
                         General.ExecutaNonQuery(strSql, new string[] { parola, Session["UserId"].ToString() });

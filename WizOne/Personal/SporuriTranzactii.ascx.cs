@@ -28,6 +28,8 @@ namespace WizOne.Personal
             grDateSporTran.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
             grDateSporTran.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");
 
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateSporTran);
+
         }
 
         protected void grDateSporTran_DataBinding(object sender, EventArgs e)
@@ -88,10 +90,11 @@ namespace WizOne.Personal
             grDateSporTran.DataSource = dt;
             grDateSporTran.SettingsPager.PageSize = 20;
 
-
-            sql = @"SELECT 0 as F02104, '---' AS F02105 UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
-            if (Constante.tipBD == 2)
-                sql = "SELECT 0 as F02104, '---' AS F02105 FROM DUAL UNION " + General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
+            
+            //Florin 2019.10.28 - am comentat partea de Oracle deoarece este acelasi select si pe sql si pe oracle
+            sql = $@"SELECT 0 as F02104, '---' AS F02105 {(Constante.tipBD == 2 ? " FROM DUAL" : "")} UNION SELECT F02104, F02105 FROM F021 WHERE F02162 IS NOT NULL AND F02162 <> 0";
+            //if (Constante.tipBD == 2)
+            //    sql = "SELECT 0 as F02104, '---' AS F02105 FROM DUAL UNION " + General.SelectOracle("F021", "F02104") + " WHERE F02162 IS NOT NULL AND F02162 <> 0 ";
             DataTable dtSpor = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colSpor = (grDateSporTran.Columns["Spor"] as GridViewDataComboBoxColumn);
             colSpor.PropertiesComboBox.DataSource = dtSpor;

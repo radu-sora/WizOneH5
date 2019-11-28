@@ -492,7 +492,7 @@ namespace WizOne.Absente
                             grAnual.Rows[0].Cells.Add(new HtmlTableCell() { });
 
                             HtmlGenericControl lblZi = new HtmlGenericControl("div");
-                            lblZi.InnerText = Dami.NumeZi(((j % 7) == 0 ? 7 : (j % 7)), 2);
+                            lblZi.InnerText = Dami.NumeZi(((j % 7) == 0 ? 7 : (j % 7)), 2, General.Nz(Session["IdLimba"], "RO").ToString());
                             //lblZi.Attributes["class"] = "IstEx_NumeZi";
                             lblZi.Style.Add("background-color", "#b4d2f0");
                             lblZi.Style.Add("color", "#000000");

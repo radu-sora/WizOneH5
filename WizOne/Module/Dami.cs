@@ -120,6 +120,158 @@ namespace WizOne.Module
             return rez;
         }
 
+
+
+        //public static void Securitate(ContentPlaceHolder pag)
+        //{
+        //    try
+        //    {
+        //        string filtru = "";
+
+        //        string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
+
+        //        if (nume.ToLower() == "sablon")
+        //        {
+        //            nume = "tbl." + HttpContext.Current.Session["Sablon_Tabela"];
+        //            filtru = " AND \"IdColoana\"='-'";
+        //        }
+
+        //        //Florin 2018-05-18
+        //        //S-a modificat din MIN in MAX
+        //        string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+        //                        SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+        //                        FROM ""Securitate"" A
+        //                        INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+        //                        WHERE B.""IdUser"" = @2 AND LOWER(A.""IdForm"") = @1 {0}
+        //                        UNION
+        //                        SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+        //                        FROM ""Securitate"" A
+        //                        WHERE A.""IdGrup"" = -1 AND LOWER(A.""IdForm"") = @1 {0}) X
+        //                        GROUP BY X.""IdControl"", X.""IdColoana""";
+        //        strSql = string.Format(strSql, filtru);
+        //        DataTable dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });
+
+        //        foreach (DataRow dr in dt.Rows)
+        //        {
+        //            try
+        //            {
+        //                if (dr["IdColoana"].ToString() == "-")
+        //                {
+        //                    WebControl ctl = pag.FindControl(dr["IdControl"].ToString()) as WebControl;
+        //                    if (ctl != null)
+        //                    {
+        //                        ctl.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                        ctl.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+        //                    }
+        //                    else
+        //                    {                                      
+        //                        //verificam daca nu cumva se gaseste intr-un container de tip ASPxCallbackPanel
+        //                        foreach (ASPxCallbackPanel pnlCtl in pag.Controls.OfType<ASPxCallbackPanel>())
+        //                        {
+        //                            WebControl ctl2 = pnlCtl.FindControl(dr["IdControl"].ToString()) as WebControl;
+        //                            if (ctl2 != null)
+        //                            {
+        //                                ctl2.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                ctl2.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+        //                            }
+        //                            else
+        //                            {
+        //                                if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+        //                                {
+        //                                    HtmlGenericControl ctl1 = pnlCtl.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
+        //                                    if (ctl1 != null)
+        //                                    {
+        //                                        ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                    }
+        //                                }
+        //                            }
+        //                            //verificam daca nu cumva se gaseste intr-un container de tip ASPxRoundPanel
+        //                            foreach (ASPxRoundPanel pnlCtl2 in pnlCtl.Controls.OfType<ASPxRoundPanel>())
+        //                            {
+        //                                WebControl ctl3 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as WebControl;
+        //                                if (ctl3 != null)
+        //                                {
+        //                                    ctl3.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                    ctl3.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+        //                                }
+        //                                else
+        //                                {
+        //                                    if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+        //                                    {
+        //                                        HtmlGenericControl ctl1 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
+        //                                        if (ctl1 != null)
+        //                                        {
+        //                                            ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                        }
+        //                                    }
+        //                                }
+        //                            }
+
+        //                        }
+
+
+
+        //                        //var wsx = pag.Controls.OfType<ASPxCallbackPanel>();
+        //                        //var xcv = pag.Controls.OfType<ASPxCallbackPanel>().Where(p => p.ID.ToLower().Contains("pnlCtl"));                                
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
+        //                    if (ctl != null)
+        //                    { 
+        //                        GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
+        //                        if (col != null)
+        //                        {
+        //                            col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                            col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
+        //                        }
+        //                        else
+        //                        {
+        //                            //verificam daca sunt butoane in interiorul gridului
+        //                            GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
+        //                            GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
+        //                            if (button != null)
+        //                            {
+        //                                if (Convert.ToInt32(dr["Vizibil"]) == 1)
+        //                                    button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
+        //                                else
+        //                                    button.Visibility = GridViewCustomButtonVisibility.Invisible;
+        //                            }
+        //                            else
+        //                            {
+        //                                //Florin 2018.08.16
+        //                                //atunci este buton BuiltIn al Devexpress-ului
+        //                                if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+        //                                {
+        //                                    column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                continue;
+        //                General.MemoreazaEroarea(ex + Environment.NewLine + 
+        //                    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+        //                    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+
+
+
+        //Florin 2019.11.25
+        //am modificat functia astfel incat daca labelul are acelasi nume ca si controlul aasociat sa-l ascunda automat; Ex: lblCateg - cmbCateg
+
         public static void Securitate(ContentPlaceHolder pag)
         {
             try
@@ -127,7 +279,7 @@ namespace WizOne.Module
                 string filtru = "";
 
                 string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
-                
+
                 if (nume.ToLower() == "sablon")
                 {
                     nume = "tbl." + HttpContext.Current.Session["Sablon_Tabela"];
@@ -140,11 +292,11 @@ namespace WizOne.Module
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                 FROM ""Securitate"" A
                                 INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                WHERE B.""IdUser"" = @2 AND A.""IdForm"" = @1 {0}
+                                WHERE B.""IdUser"" = @2 AND LOWER(A.""IdForm"") = @1 {0}
                                 UNION
                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                 FROM ""Securitate"" A
-                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = @1 {0}) X
+                                WHERE A.""IdGrup"" = -1 AND LOWER(A.""IdForm"") = @1 {0}) X
                                 GROUP BY X.""IdControl"", X.""IdColoana""";
                 strSql = string.Format(strSql, filtru);
                 DataTable dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });
@@ -153,85 +305,88 @@ namespace WizOne.Module
                 {
                     try
                     {
-                        if (dr["IdColoana"].ToString() == "-")
+                        bool vizibil = Convert.ToBoolean(General.Nz(dr["Vizibil"],0));
+                        bool blocat = Convert.ToBoolean(General.Nz(dr["Blocat"],0));
+                        string idCtl = General.Nz(dr["IdControl"],"").ToString();
+                        string idCol = General.Nz(dr["IdColoana"],"").ToString();
+
+                        if (idCol == "-")
                         {
-                            WebControl ctl = pag.FindControl(dr["IdControl"].ToString()) as WebControl;
+                            dynamic ctl = pag.FindControl(idCtl);
                             if (ctl != null)
                             {
-                                ctl.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                ctl.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+                                ctl.Visible = vizibil;
+                                ctl.Enabled = blocat;
+
+                                if (idCtl.Length > 3)
+                                {
+                                    string idLbl = "lbl" + idCtl.Substring(3);
+                                    dynamic lbl = pag.FindControl(idLbl);
+                                    if (lbl != null) lbl.Visible = vizibil;
+                                }
                             }
                             else
-                            {                                      
+                            {
                                 //verificam daca nu cumva se gaseste intr-un container de tip ASPxCallbackPanel
                                 foreach (ASPxCallbackPanel pnlCtl in pag.Controls.OfType<ASPxCallbackPanel>())
                                 {
-                                    WebControl ctl2 = pnlCtl.FindControl(dr["IdControl"].ToString()) as WebControl;
+                                    dynamic ctl2 = pnlCtl.FindControl(idCtl);
                                     if (ctl2 != null)
                                     {
-                                        ctl2.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                        ctl2.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
-                                    }
-                                    else
-                                    {
-                                        if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+                                        ctl2.Visible = vizibil;
+                                        ctl2.Enabled = blocat;
+
+                                        if (idCtl.Length > 3)
                                         {
-                                            HtmlGenericControl ctl1 = pnlCtl.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
-                                            if (ctl1 != null)
-                                            {
-                                                ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                            }
+                                            string idLbl = "lbl" + idCtl.Substring(3);
+                                            dynamic lbl = pnlCtl.FindControl(idLbl);
+                                            if (lbl != null) lbl.Visible = vizibil;
                                         }
+
+                                        break;
                                     }
+
                                     //verificam daca nu cumva se gaseste intr-un container de tip ASPxRoundPanel
                                     foreach (ASPxRoundPanel pnlCtl2 in pnlCtl.Controls.OfType<ASPxRoundPanel>())
                                     {
-                                        WebControl ctl3 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as WebControl;
+                                        dynamic ctl3 = pnlCtl2.FindControl(idCtl);
                                         if (ctl3 != null)
                                         {
-                                            ctl3.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                            ctl3.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
-                                        }
-                                        else
-                                        {
-                                            if (dr["IdControl"].ToString().Length >= 3 && dr["IdControl"].ToString().Substring(0, 3) == "lbl")
+                                            ctl3.Visible = vizibil;
+                                            ctl3.Enabled = blocat;
+
+                                            if (idCtl.Length > 3)
                                             {
-                                                HtmlGenericControl ctl1 = pnlCtl2.FindControl(dr["IdControl"].ToString()) as HtmlGenericControl;
-                                                if (ctl1 != null)
-                                                {
-                                                    ctl1.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                                }
+                                                string idLbl = "lbl" + idCtl.Substring(3);
+                                                dynamic lbl = pnlCtl2.FindControl(idLbl);
+                                                if (lbl != null) lbl.Visible = vizibil;
                                             }
                                         }
+
+                                        break;
                                     }
-
-                                }
-
-
-
-                                //var wsx = pag.Controls.OfType<ASPxCallbackPanel>();
-                                //var xcv = pag.Controls.OfType<ASPxCallbackPanel>().Where(p => p.ID.ToLower().Contains("pnlCtl"));                                
+                                }                            
                             }
                         }
                         else
                         {
-                            ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
+                            ASPxGridView ctl = pag.FindControl(idCtl) as ASPxGridView;
                             if (ctl != null)
-                            { 
-                                GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
+                            {
+                                GridViewDataColumn col = ctl.Columns[idCol] as GridViewDataColumn;
                                 if (col != null)
                                 {
-                                    col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                    col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
+                                    col.Visible = vizibil;
+                                    col.ReadOnly = blocat;
                                 }
                                 else
                                 {
                                     //verificam daca sunt butoane in interiorul gridului
                                     GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
-                                    GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
+                                    GridViewCommandColumnCustomButton button = column.CustomButtons[idCol] as GridViewCommandColumnCustomButton;
                                     if (button != null)
                                     {
-                                        if (Convert.ToInt32(dr["Vizibil"]) == 1)
+                                        if (vizibil)
                                             button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
                                         else
                                             button.Visibility = GridViewCustomButtonVisibility.Invisible;
@@ -240,9 +395,9 @@ namespace WizOne.Module
                                     {
                                         //Florin 2018.08.16
                                         //atunci este buton BuiltIn al Devexpress-ului
-                                        if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+                                        if (idCol.ToLower() == "btnedit")
                                         {
-                                            column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            column.ShowEditButton = vizibil;
                                         }
                                     }
                                 }
@@ -252,7 +407,7 @@ namespace WizOne.Module
                     catch (Exception ex)
                     {
                         continue;
-                        General.MemoreazaEroarea(ex + Environment.NewLine + 
+                        General.MemoreazaEroarea(ex + Environment.NewLine +
                             General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
                             General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
                     }
@@ -263,6 +418,7 @@ namespace WizOne.Module
                 General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
 
 
         public static void Securitate(Page pag)
@@ -366,6 +522,13 @@ namespace WizOne.Module
                 Page pag = grDate.Page;
                 string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
 
+                //Radu 20.11.2019
+                if (nume.ToLower() == "personal.dateangajat")
+                {
+                    Control parent = grDate.Parent;
+                    nume = parent.TemplateControl.ToString().Replace("ASP.", "").Replace("_ascx", "").Replace("_", ".");
+                }
+
                 if (nume.ToLower() == "sablon")
                 {
                     nume = "tbl." + HttpContext.Current.Session["Sablon_Tabela"];
@@ -404,7 +567,7 @@ namespace WizOne.Module
                                 else
                                 {
                                     //verificam daca sunt butoane in interiorul gridului
-                                    GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
+                                    GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;                                
                                     GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
                                     if (button != null)
                                     {
@@ -421,7 +584,13 @@ namespace WizOne.Module
                                         {
                                             column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
                                         }
+                                        if (dr["IdColoana"].ToString().ToLower() == "btnsterge")
+                                        {
+                                            column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                        }
                                     }
+                                    
+                            
                                 }
                             }
                         }
@@ -510,6 +679,248 @@ namespace WizOne.Module
         }
 
 
+        //public static string SelectCereri(int totiAngajatii = 0)
+        //{
+        //    string sqlFinal = "";
+
+        //    try
+        //    {
+        //        // 78  -  Inlocuitor/Delegat
+        //        // 77  -  Drepturi depline
+        //        // 76  -  Fara supervizor (cazul cand pe circuit, in loc de id supervizor, se pune codul de user (F70102)
+
+
+        //        string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
+        //        string selectInloc = "-99";
+        //        if (Dami.ValoareParam("InlocuitorulVedeCererile", "0") == "1")
+        //        {
+        //            selectInloc = $@"SELECT Y.F70102 FROM ""Ptj_Cereri"" X
+        //                        INNER JOIN USERS Y ON X.F10003=Y.F10003
+        //                        WHERE X.""IdStare""=3 AND X.""Inlocuitor"" = {(HttpContext.Current.Session["User_Marca"])}
+        //                        AND CONVERT(date,X.""DataInceput"") <= CONVERT(date,GetDate()) AND CONVERT(date,GetDate()) <= CONVERT(date,X.""DataSfarsit"")";
+        //            if (Constante.tipBD == 2)
+        //                selectInloc = $@"SELECT Y.F70102 FROM ""Ptj_Cereri"" X
+        //                        INNER JOIN USERS Y ON X.F10003=Y.F10003
+        //                        WHERE X.""IdStare""=3 AND X.""Inlocuitor"" = {(HttpContext.Current.Session["User_Marca"])}
+        //                        AND TRUNC(X.""DataInceput"") <= TRUNC(SYSDATE) AND TRUNC(SYSDATE) <= TRUNC(X.""DataSfarsit"")";
+        //        }
+
+        //        //select 1 - toate cererile mele ca angajat
+        //        //select 2 - toate cererile care nu sunt ale mele dar pt care sunt pe circuit
+        //        //select 3 - toate cererile pt care sunt inlocuitor sau delegat
+
+        //        //OBSOLETE
+        //        //select 4 - taote cererile pt care am drepturi depline indiferent daca sunt sau nu pe circuit; id-urile care au drepturi depline sunt specificate in parametrii
+
+        //        //Radu 16.02.2018
+        //        string idStare = "(1, 2, 3, 4)";
+        //        string condSuplim = "";
+        //        if (totiAngajatii == 1)
+        //        {
+        //            idStare = "(1, 2, 3)";
+        //            condSuplim = $@" AND A.""IdStare"" IN (1, 2, 3) ";
+        //        }
+        //        //Radu 10.10.2019 - am scos conditia {General.TruncateDate("A.DataInceput")} <= {General.CurrentDate()} AND {General.CurrentDate()} <= {General.TruncateDate("A.DataSfarsit")} si am inlocuit cu 1 = 1
+        //        string strSql = $@"SELECT A.*, 0 AS ""Rol"",
+        //                        CASE WHEN (A.""IdStare"" IN (-1, 0, 3) OR B.""IdCerere"" IS NULL) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
+        //                        FROM ""Ptj_Cereri"" A
+        //                        LEFT JOIN ""Ptj_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""Pozitie"" <> 0 AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]} AND B.""IdStare"" IN {idStare}
+        //                        WHERE A.F10003 = {HttpContext.Current.Session["User_Marca"]}
+        //                        UNION
+        //                        SELECT A.*, CASE WHEN C.""Id"" IS NOT NULL THEN C.""Id"" ELSE (CASE WHEN B.""IdSuper"" > 0 THEN 76 ELSE C.""Id"" END) END AS ""Rol"",
+        //                        CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN (A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
+        //                        FROM ""Ptj_Cereri"" A
+        //                        INNER JOIN ""Ptj_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""Pozitie"" <> 0 AND B.""IdStare"" <> -1 AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}
+        //                        LEFT JOIN ""tblSupervizori"" C ON (-1 * B.""IdSuper"")= C.""Id""     --AND COALESCE(C.""ModululCereriAbsente"", 0) = 1
+        //                        WHERE A.F10003 <> {HttpContext.Current.Session["User_Marca"]} {condSuplim}
+        //                        UNION
+        //                        SELECT A.*, 78 AS ""Rol"",
+        //                        CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
+        //                        FROM ""Ptj_Cereri"" A
+        //                        INNER JOIN ""Ptj_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""IdSuper"" <> 0 AND B.""IdStare"" <> -1 AND B.""Pozitie"" <> 0 AND B.""IdUser"" IN 
+        //                        (
+        //                        {selectInloc}
+        //                        )
+        //                        WHERE 1 = 1  {condSuplim}
+        //                        UNION
+        //                        SELECT A.*, 78 AS Rol,
+        //                        CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE (CASE WHEN(A.""Pozitie"" + 1) = B.""Pozitie"" THEN 1 ELSE 0 END) END AS ""Actiune""
+        //                        FROM ""Ptj_Cereri"" A
+        //                        INNER JOIN ""Ptj_CereriIstoric"" B ON A.""Id"" = B.""IdCerere"" AND B.""IdSuper"" <> 0 AND B.""IdStare"" <> -1 AND B.""Pozitie"" <> 0 AND B.""IdUser"" IN 
+        //                        (SELECT ""IdUser"" FROM ""tblDelegari"" WHERE COALESCE(""IdModul"",-99)=1 AND ""IdDelegat""={HttpContext.Current.Session["UserId"]} AND ""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= ""DataSfarsit"") {condSuplim}";
+
+        //        if (totiAngajatii == 3)
+        //            strSql = $@"SELECT DISTINCT A.*, 77 AS ""Rol"", CASE WHEN A.""IdStare"" IN (-1, 0, 3) THEN 0 ELSE 1 END AS ""Actiune""
+        //                       FROM ""Ptj_Cereri"" A
+        //                       INNER JOIN ""F100Supervizori"" B ON A.F10003 = B.F10003 AND B.""IdSuper"" IN ({idHR}) AND B.""IdUser"" = {HttpContext.Current.Session["UserId"]}";
+
+        //        //Florin 2019.09.25 - optimizare
+        //        //Anulare_Valoare, Anulare_NrZile se transforma din subselecturi in LEFT JOIN
+        //        //s-a modificat filtrarea dupa sirul vid pt oracle
+
+        //        string campIntervalOrar = $@"
+        //                        CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+        //                        SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")) + ':' +
+        //                        SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")) + ' - ' +
+        //                        SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")) + ':' +
+        //                        SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END";
+        //        if (Constante.tipBD == 2)
+        //            campIntervalOrar = $@"
+        //                        CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+        //                        TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END";
+
+        //        #region OLD
+
+        //        //sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
+        //        //                CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
+        //        //                A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
+        //        //                CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
+        //        //                CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
+        //        //                A.""Observatii"", D.F10008 {1} ' ' {1} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
+        //        //                CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
+        //        //                A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
+        //        //                M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
+        //        //                CASE WHEN ""CampExtra1"" IS NOT NULL AND ""CampExtra1"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) + '=' + ""CampExtra1"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra2"" IS NOT NULL AND ""CampExtra2"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) + '=' + ""CampExtra2"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra3"" IS NOT NULL AND ""CampExtra3"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) + '=' + ""CampExtra3"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra4"" IS NOT NULL AND ""CampExtra4"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) + '=' + ""CampExtra4"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra5"" IS NOT NULL AND ""CampExtra5"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) + '=' + ""CampExtra5"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra6"" IS NOT NULL AND ""CampExtra6"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) + '=' + ""CampExtra6"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra7"" IS NOT NULL AND ""CampExtra7"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) + '=' + ""CampExtra7"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra8"" IS NOT NULL AND ""CampExtra8"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) + '=' + ""CampExtra8"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra9"" IS NOT NULL AND ""CampExtra9"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) + '=' + ""CampExtra9"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra10"" IS NOT NULL AND ""CampExtra10"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) + '=' + ""CampExtra10"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra11"" IS NOT NULL AND ""CampExtra11"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) + '=' + ""CampExtra11"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra12"" IS NOT NULL AND ""CampExtra12"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) + '=' + ""CampExtra12"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra13"" IS NOT NULL AND ""CampExtra13"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) + '=' + ""CampExtra13"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra14"" IS NOT NULL AND ""CampExtra14"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) + '=' + ""CampExtra14"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra15"" IS NOT NULL AND ""CampExtra15"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) + '=' + ""CampExtra15"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra16"" IS NOT NULL AND ""CampExtra16"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) + '=' + ""CampExtra16"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) + '=' + ""CampExtra17"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) + '=' + ""CampExtra18"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) + '=' + ""CampExtra19"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) + '=' + ""CampExtra20"" + '; ' ELSE '' END +
+        //        //                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+        //        //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")) + ':' +
+        //        //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")) + ' - ' +
+        //        //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")) + ':' +
+        //        //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END                                 
+        //        //                AS ""DateConcatenate"",
+        //        //                (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_Valoare,
+        //        //                (SELECT TOP 1 NrZile FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_NrZile,
+        //        //                COALESCE(A.""CampBifa"",0) AS ""CampBifa""
+        //        //                FROM ({0}) A
+        //        //                INNER JOIN F100 B ON A.F10003 = B.F10003
+        //        //                INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
+        //        //                LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
+        //        //                LEFT JOIN ""Ptj_tblAbsente"" N ON C.""CompensarePlata"" = N.""Id""
+        //        //                LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
+        //        //                LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
+        //        //                LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
+        //        //                WHERE 1=1 ";
+
+        //        //if (Constante.tipBD == 2)
+        //        //{
+        //        //    sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"",  B.F100901 AS EID,
+        //        //                CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
+        //        //                A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
+        //        //                CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
+        //        //                CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
+        //        //                A.""Observatii"", D.F10008 {1} ' ' {1} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
+        //        //                CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
+        //        //                A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
+        //        //                M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
+        //        //                CASE WHEN ""CampExtra1"" IS NOT NULL AND ""CampExtra1"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) {1} '=' {1} ""CampExtra1"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra2"" IS NOT NULL AND ""CampExtra2"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) {1} '=' {1} ""CampExtra2"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra3"" IS NOT NULL AND ""CampExtra3"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) {1} '=' {1} ""CampExtra3"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra4"" IS NOT NULL AND ""CampExtra4"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) {1} '=' {1} ""CampExtra4"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra5"" IS NOT NULL AND ""CampExtra5"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) {1} '=' {1} ""CampExtra5"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra6"" IS NOT NULL AND ""CampExtra6"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) {1} '=' {1} ""CampExtra6"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra7"" IS NOT NULL AND ""CampExtra7"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) {1} '=' {1} ""CampExtra7"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra8"" IS NOT NULL AND ""CampExtra8"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) {1} '=' {1} ""CampExtra8"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra9"" IS NOT NULL AND ""CampExtra9"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) {1} '=' {1} ""CampExtra9"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra10"" IS NOT NULL AND ""CampExtra10"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) {1} '=' {1} ""CampExtra10"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra11"" IS NOT NULL AND ""CampExtra11"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) {1} '=' {1} ""CampExtra11"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra12"" IS NOT NULL AND ""CampExtra12"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) {1} '=' {1} ""CampExtra12"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra13"" IS NOT NULL AND ""CampExtra13"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) {1} '=' {1} ""CampExtra13"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra14"" IS NOT NULL AND ""CampExtra14"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) {1} '=' {1} ""CampExtra14"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra15"" IS NOT NULL AND ""CampExtra15"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) {1} '=' {1} ""CampExtra15"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra16"" IS NOT NULL AND ""CampExtra16"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) {1} '=' {1} ""CampExtra16"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) {1} '=' {1} ""CampExtra17"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) {1} '=' {1} ""CampExtra18"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {1} '=' {1} ""CampExtra19"" {1} '; ' ELSE '' END {1}
+        //        //                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {1} '=' {1} ""CampExtra20"" {1} '; ' ELSE '' END {1} 
+        //        //                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+        //        //                TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END
+        //        //                AS ""DateConcatenate"",
+        //        //                V.""Valoare""  AS Anulare_Valoare,
+        //        //                Z.""NrZile""  AS Anulare_NrZile,
+        //        //                COALESCE(A.""CampBifa"",0) AS ""CampBifa""
+        //        //                FROM ({0}) A
+        //        //                INNER JOIN F100 B ON A.F10003 = B.F10003
+        //        //                INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
+        //        //                LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
+        //        //                LEFT JOIN ""Ptj_tblAbsente"" N ON C.""CompensarePlata"" = N.""Id""
+        //        //                LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
+        //        //                LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
+        //        //                LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
+        //        //                left join  (SELECT * FROM ""Ptj_CereriDrepturi"" DR WHERE  ROWNUM = 1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC ) V on (V.""IdAbs"" = A.""IdAbsenta"" OR V.""IdAbs"" = -13) AND (V.""IdStare"" = A.""IdStare"" OR V.""IdStare"" = -13) AND (V.""IdRol"" = A.""Rol"" OR V.""IdRol"" = -13) AND (V.""IdActiune"" = 3 OR V.""IdActiune"" = -13)  
+        //        //                left join  (SELECT * FROM ""Ptj_CereriDrepturi"" DR WHERE  ROWNUM = 1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC ) Z on (Z.""IdAbs"" = A.""IdAbsenta"" OR Z.""IdAbs"" = -13) AND (Z.""IdStare"" = A.""IdStare"" OR Z.""IdStare"" = -13) AND (Z.""IdRol"" = A.""Rol"" OR Z.""IdRol"" = -13) AND (Z.""IdActiune"" = 3 OR Z.""IdActiune"" = -13)
+        //        //                WHERE 1 =1 ";
+        //        //}								
+
+        //        #endregion
+
+        //        sqlFinal = $@"SELECT A.""Id"", B.F10003, B.F10008 {Dami.Operator()} ' ' {Dami.Operator()} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
+        //                        CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
+        //                        A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
+        //                        CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
+        //                        CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
+        //                        A.""Observatii"", D.F10008 {Dami.Operator()} ' ' {Dami.Operator()} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
+        //                        CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
+        //                        A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
+        //                        M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
+        //                        CASE WHEN ""CampExtra1"" IS NOT NULL {General.FiltrulCuNull("CampExtra1")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra1"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra2"" IS NOT NULL {General.FiltrulCuNull("CampExtra2")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra2"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra3"" IS NOT NULL {General.FiltrulCuNull("CampExtra3")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra3"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra4"" IS NOT NULL {General.FiltrulCuNull("CampExtra4")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra4"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra5"" IS NOT NULL {General.FiltrulCuNull("CampExtra5")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra5"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra6"" IS NOT NULL {General.FiltrulCuNull("CampExtra6")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra6"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra7"" IS NOT NULL {General.FiltrulCuNull("CampExtra7")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra7"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra8"" IS NOT NULL {General.FiltrulCuNull("CampExtra8")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra8"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra9"" IS NOT NULL {General.FiltrulCuNull("CampExtra9")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra9"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra10"" IS NOT NULL {General.FiltrulCuNull("CampExtra10")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra10"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra11"" IS NOT NULL {General.FiltrulCuNull("CampExtra11")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra11"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra12"" IS NOT NULL {General.FiltrulCuNull("CampExtra12")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra12"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra13"" IS NOT NULL {General.FiltrulCuNull("CampExtra13")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra13"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra14"" IS NOT NULL {General.FiltrulCuNull("CampExtra14")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra14"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra15"" IS NOT NULL {General.FiltrulCuNull("CampExtra15")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra15"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra16"" IS NOT NULL {General.FiltrulCuNull("CampExtra16")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra16"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra17"" IS NOT NULL {General.FiltrulCuNull("CampExtra17")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra17"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra18"" IS NOT NULL {General.FiltrulCuNull("CampExtra18")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra18"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra19"" IS NOT NULL {General.FiltrulCuNull("CampExtra19")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra19"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
+        //                        CASE WHEN ""CampExtra20"" IS NOT NULL {General.FiltrulCuNull("CampExtra20")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra20"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()} 
+        //                        {campIntervalOrar}
+        //                        AS ""DateConcatenate"", DR.""Valoare"" AS ""Anulare_Valoare"", DR.""NrZile"" AS ""Anulare_NrZile"", COALESCE(A.""CampBifa"",0) AS ""CampBifa""
+        //                        FROM ({strSql}) A
+        //                        INNER JOIN F100 B ON A.F10003 = B.F10003
+        //                        INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
+        //                        LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
+        //                        LEFT JOIN ""Ptj_tblAbsente"" N ON C.""CompensarePlata"" = N.""Id""
+        //                        LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
+        //                        LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
+        //                        LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
+        //                        LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"", W.""IdActiune"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC, W.""IdActiune"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = A.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 3 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
+        //                        WHERE 1=1 ";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return sqlFinal;
+        //}
+
         public static string SelectCereri(int totiAngajatii = 0)
         {
             string sqlFinal = "";
@@ -520,7 +931,7 @@ namespace WizOne.Module
                 // 77  -  Drepturi depline
                 // 76  -  Fara supervizor (cazul cand pe circuit, in loc de id supervizor, se pune codul de user (F70102)
 
-  
+
                 string idHR = Dami.ValoareParam("Cereri_IDuriRoluriHR", "-99");
                 string selectInloc = "-99";
                 if (Dami.ValoareParam("InlocuitorulVedeCererile", "0") == "1")
@@ -589,118 +1000,29 @@ namespace WizOne.Module
                 //Anulare_Valoare, Anulare_NrZile se transforma din subselecturi in LEFT JOIN
                 //s-a modificat filtrarea dupa sirul vid pt oracle
 
+                //Florin 2019.11.08
+                //am anulat LEFT JOIN si am revenit la subselecturi
+
+
                 string campIntervalOrar = $@"
-                                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
-                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")) + ':' +
-                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")) + ' - ' +
-                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")) + ':' +
-                                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END";
+                    CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
+                    SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")) + ':' +
+                    SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")) + ' - ' +
+                    SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")) + ':' +
+                    SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END";
+                string strDrepturi = $@"
+                    (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE DR.IdAbs IN (A.IdAbsenta,-13) AND DR.IdStare IN (A.IdStare, -13) AND DR.IdRol IN (A.Rol, -13) AND DR.IdActiune IN (3, -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_Valoare,
+                    (SELECT TOP 1 NrZile  FROM Ptj_CereriDrepturi DR WHERE DR.IdAbs IN (A.IdAbsenta,-13) AND DR.IdStare IN (A.IdStare, -13) AND DR.IdRol IN (A.Rol, -13) AND DR.IdActiune IN (3, -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_NrZile";
+
                 if (Constante.tipBD == 2)
+                {
                     campIntervalOrar = $@"
                                 CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
                                 TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END";
-
-                #region OLD
-
-                //sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
-                //                CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
-                //                A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
-                //                CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
-                //                CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
-                //                A.""Observatii"", D.F10008 {1} ' ' {1} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
-                //                CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
-                //                A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
-                //                M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
-                //                CASE WHEN ""CampExtra1"" IS NOT NULL AND ""CampExtra1"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) + '=' + ""CampExtra1"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra2"" IS NOT NULL AND ""CampExtra2"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) + '=' + ""CampExtra2"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra3"" IS NOT NULL AND ""CampExtra3"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) + '=' + ""CampExtra3"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra4"" IS NOT NULL AND ""CampExtra4"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) + '=' + ""CampExtra4"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra5"" IS NOT NULL AND ""CampExtra5"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) + '=' + ""CampExtra5"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra6"" IS NOT NULL AND ""CampExtra6"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) + '=' + ""CampExtra6"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra7"" IS NOT NULL AND ""CampExtra7"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) + '=' + ""CampExtra7"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra8"" IS NOT NULL AND ""CampExtra8"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) + '=' + ""CampExtra8"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra9"" IS NOT NULL AND ""CampExtra9"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) + '=' + ""CampExtra9"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra10"" IS NOT NULL AND ""CampExtra10"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) + '=' + ""CampExtra10"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra11"" IS NOT NULL AND ""CampExtra11"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) + '=' + ""CampExtra11"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra12"" IS NOT NULL AND ""CampExtra12"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) + '=' + ""CampExtra12"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra13"" IS NOT NULL AND ""CampExtra13"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) + '=' + ""CampExtra13"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra14"" IS NOT NULL AND ""CampExtra14"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) + '=' + ""CampExtra14"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra15"" IS NOT NULL AND ""CampExtra15"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) + '=' + ""CampExtra15"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra16"" IS NOT NULL AND ""CampExtra16"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) + '=' + ""CampExtra16"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) + '=' + ""CampExtra17"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) + '=' + ""CampExtra18"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) + '=' + ""CampExtra19"" + '; ' ELSE '' END +
-                //                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) + '=' + ""CampExtra20"" + '; ' ELSE '' END +
-                //                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
-                //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraInceput"")) + ':' +
-                //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraInceput"")) + ' - ' +
-                //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(HOUR, ""OraSfarsit"")) + ':' +
-                //                SUBSTRING('00', 1, 2 - LEN(CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")))) + CONVERT(nvarchar(2), DATEPART(MINUTE, ""OraSfarsit"")) + '; ' ELSE '' END                                 
-                //                AS ""DateConcatenate"",
-                //                (SELECT TOP 1 Valoare FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_Valoare,
-                //                (SELECT TOP 1 NrZile FROM Ptj_CereriDrepturi DR WHERE (DR.IdAbs=A.IdAbsenta OR DR.IdAbs = -13) AND (DR.IdStare=A.IdStare OR DR.IdStare = -13) AND (DR.IdRol=A.Rol OR DR.IdRol = -13) AND (DR.IdActiune=3 OR DR.IdActiune = -13) ORDER BY DR.IdAbs DESC, DR.IdRol DESC, DR.IdStare DESC) AS Anulare_NrZile,
-                //                COALESCE(A.""CampBifa"",0) AS ""CampBifa""
-                //                FROM ({0}) A
-                //                INNER JOIN F100 B ON A.F10003 = B.F10003
-                //                INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
-                //                LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
-                //                LEFT JOIN ""Ptj_tblAbsente"" N ON C.""CompensarePlata"" = N.""Id""
-                //                LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
-                //                LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
-                //                LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
-                //                WHERE 1=1 ";
-
-                //if (Constante.tipBD == 2)
-                //{
-                //    sqlFinal = @"SELECT A.""Id"", B.F10003, B.F10008 {1} ' ' {1} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"",  B.F100901 AS EID,
-                //                CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
-                //                A.""Rol"", A.""Actiune"", A.""Inlocuitor"", COALESCE(C.""AdaugaAtasament"",0) AS ""AdaugaAtasament"",
-                //                CASE WHEN C.""IdTipOre"" = 1 THEN A.""NrZile"" ELSE null END AS ""NrZile"", 
-                //                CASE WHEN C.""IdTipOre"" = 0 THEN A.""NrOre"" ELSE NULL END AS ""NrOre"", 
-                //                A.""Observatii"", D.F10008 {1} ' ' {1} D.F10009 AS ""NumeInlocuitor"", A.""IdStare"", 
-                //                CASE WHEN A.""TrimiteLa"" = -13 THEN 'Banca' ELSE CASE WHEN A.""TrimiteLa""= -14 THEN 'Plata' ELSE Q.""Denumire"" END END AS ""TrimiteLa"", 
-                //                A.""Comentarii"", C.""Compensare"", C.""CompensareBanca"", C.""CompensarePlata"",
-                //                M.""Denumire"" AS ""CompensareBancaDenumire"", N.""Denumire"" AS ""CompensarePlataDenumire"",
-                //                CASE WHEN ""CampExtra1"" IS NOT NULL AND ""CampExtra1"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=1) {1} '=' {1} ""CampExtra1"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra2"" IS NOT NULL AND ""CampExtra2"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=2) {1} '=' {1} ""CampExtra2"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra3"" IS NOT NULL AND ""CampExtra3"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=3) {1} '=' {1} ""CampExtra3"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra4"" IS NOT NULL AND ""CampExtra4"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=4) {1} '=' {1} ""CampExtra4"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra5"" IS NOT NULL AND ""CampExtra5"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=5) {1} '=' {1} ""CampExtra5"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra6"" IS NOT NULL AND ""CampExtra6"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=6) {1} '=' {1} ""CampExtra6"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra7"" IS NOT NULL AND ""CampExtra7"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=7) {1} '=' {1} ""CampExtra7"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra8"" IS NOT NULL AND ""CampExtra8"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=8) {1} '=' {1} ""CampExtra8"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra9"" IS NOT NULL AND ""CampExtra9"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=9) {1} '=' {1} ""CampExtra9"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra10"" IS NOT NULL AND ""CampExtra10"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=10) {1} '=' {1} ""CampExtra10"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra11"" IS NOT NULL AND ""CampExtra11"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=11) {1} '=' {1} ""CampExtra11"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra12"" IS NOT NULL AND ""CampExtra12"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=12) {1} '=' {1} ""CampExtra12"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra13"" IS NOT NULL AND ""CampExtra13"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=13) {1} '=' {1} ""CampExtra13"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra14"" IS NOT NULL AND ""CampExtra14"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=14) {1} '=' {1} ""CampExtra14"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra15"" IS NOT NULL AND ""CampExtra15"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=15) {1} '=' {1} ""CampExtra15"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra16"" IS NOT NULL AND ""CampExtra16"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=16) {1} '=' {1} ""CampExtra16"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra17"" IS NOT NULL AND ""CampExtra17"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=17) {1} '=' {1} ""CampExtra17"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra18"" IS NOT NULL AND ""CampExtra18"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=18) {1} '=' {1} ""CampExtra18"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra19"" IS NOT NULL AND ""CampExtra19"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {1} '=' {1} ""CampExtra19"" {1} '; ' ELSE '' END {1}
-                //                CASE WHEN ""CampExtra20"" IS NOT NULL AND ""CampExtra20"" <> '' THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {1} '=' {1} ""CampExtra20"" {1} '; ' ELSE '' END {1} 
-                //                CASE WHEN ""OraInceput"" IS NOT NULL AND ""OraSfarsit"" IS NOT NULL THEN 
-                //                TO_CHAR(""OraInceput"", 'HH24') || ':' || TO_CHAR(""OraInceput"", 'MM') || ' - ' || TO_CHAR(""OraSfarsit"", 'HH24') || ':' || TO_CHAR(""OraSfarsit"", 'MM') || '; ' ELSE '' END
-                //                AS ""DateConcatenate"",
-                //                V.""Valoare""  AS Anulare_Valoare,
-                //                Z.""NrZile""  AS Anulare_NrZile,
-                //                COALESCE(A.""CampBifa"",0) AS ""CampBifa""
-                //                FROM ({0}) A
-                //                INNER JOIN F100 B ON A.F10003 = B.F10003
-                //                INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
-                //                LEFT JOIN ""Ptj_tblAbsente"" M ON C.""CompensareBanca"" = M.""Id""
-                //                LEFT JOIN ""Ptj_tblAbsente"" N ON C.""CompensarePlata"" = N.""Id""
-                //                LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
-                //                LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
-                //                LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
-                //                left join  (SELECT * FROM ""Ptj_CereriDrepturi"" DR WHERE  ROWNUM = 1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC ) V on (V.""IdAbs"" = A.""IdAbsenta"" OR V.""IdAbs"" = -13) AND (V.""IdStare"" = A.""IdStare"" OR V.""IdStare"" = -13) AND (V.""IdRol"" = A.""Rol"" OR V.""IdRol"" = -13) AND (V.""IdActiune"" = 3 OR V.""IdActiune"" = -13)  
-                //                left join  (SELECT * FROM ""Ptj_CereriDrepturi"" DR WHERE  ROWNUM = 1 ORDER BY DR.""IdAbs"" DESC, DR.""IdRol"" DESC, DR.""IdStare"" DESC ) Z on (Z.""IdAbs"" = A.""IdAbsenta"" OR Z.""IdAbs"" = -13) AND (Z.""IdStare"" = A.""IdStare"" OR Z.""IdStare"" = -13) AND (Z.""IdRol"" = A.""Rol"" OR Z.""IdRol"" = -13) AND (Z.""IdActiune"" = 3 OR Z.""IdActiune"" = -13)
-                //                WHERE 1 =1 ";
-                //}								
-
-                #endregion
+                    strDrepturi = $@"
+                        (SELECT ""Valoare"" FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (A.""Rol"", -13) AND DR.""IdActiune"" IN (3, -13) AND ROWNUM <=1) AS ""Anulare_Valoare"",
+                        (SELECT ""NrZile""  FROM ""Ptj_CereriDrepturi"" DR WHERE DR.""IdAbs"" IN (A.""IdAbsenta"",-13) AND DR.""IdStare"" IN (A.""IdStare"", -13) AND DR.""IdRol"" IN (A.""Rol"", -13) AND DR.""IdActiune"" IN (3, -13) AND ROWNUM <=1) AS ""Anulare_NrZile"" ";
+                }
 
                 sqlFinal = $@"SELECT A.""Id"", B.F10003, B.F10008 {Dami.Operator()} ' ' {Dami.Operator()} B.F10009 AS ""NumeAngajat"", A.""IdAbsenta"", A.""DataInceput"", A.""DataSfarsit"", B.F100901 AS EID,
                                 CASE WHEN E.""Alias"" IS NULL OR E.""Alias""='' THEN E.""Denumire"" ELSE E.""Alias"" END AS ""RolDenumire"",
@@ -732,7 +1054,7 @@ namespace WizOne.Module
                                 CASE WHEN ""CampExtra19"" IS NOT NULL {General.FiltrulCuNull("CampExtra19")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=19) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra19"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()}
                                 CASE WHEN ""CampExtra20"" IS NOT NULL {General.FiltrulCuNull("CampExtra20")} THEN (SELECT ""Denumire"" FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=1 AND ""IdCampExtra""=20) {Dami.Operator()} '=' {Dami.Operator()} ""CampExtra20"" {Dami.Operator()} '; ' ELSE '' END {Dami.Operator()} 
                                 {campIntervalOrar}
-                                AS ""DateConcatenate"", DR.""Valoare"" AS ""Anulare_Valoare"", DR.""NrZile"" AS ""Anulare_NrZile"", COALESCE(A.""CampBifa"",0) AS ""CampBifa""
+                                AS ""DateConcatenate"", COALESCE(A.""CampBifa"",0) AS ""CampBifa"", {strDrepturi}
                                 FROM ({strSql}) A
                                 INNER JOIN F100 B ON A.F10003 = B.F10003
                                 INNER JOIN ""Ptj_tblAbsente"" C ON A.""IdAbsenta"" = C.""Id""
@@ -741,7 +1063,6 @@ namespace WizOne.Module
                                 LEFT JOIN ""Ptj_tblAbsente"" Q ON A.""TrimiteLa"" = Q.""Id""
                                 LEFT JOIN F100 D ON A.""Inlocuitor"" = D.F10003
                                 LEFT JOIN ""tblSupervizori"" E ON A.""Rol"" = E.""Id""
-                                LEFT JOIN (SELECT W.*, ROW_NUMBER() OVER(partition by W.""IdAbs"", W.""IdRol"", W.""IdStare"", W.""IdActiune"" ORDER BY W.""IdAbs"" DESC, W.""IdRol"" DESC, W.""IdStare"" DESC, W.""IdActiune"" DESC) ""IdRow"" FROM ""Ptj_CereriDrepturi"" W) DR ON (DR.""IdAbs"" = A.""IdAbsenta"" OR DR.""IdAbs"" = -13) AND (DR.""IdStare"" = A.""IdStare"" OR DR.""IdStare"" = -13) AND (DR.""IdRol"" = A.""Rol"" OR DR.""IdRol"" = -13) AND (DR.""IdActiune"" = 3 OR DR.""IdActiune"" = -13) AND DR.""IdRow"" <= 1
                                 WHERE 1=1 ";
             }
             catch (Exception ex)
@@ -751,6 +1072,7 @@ namespace WizOne.Module
 
             return sqlFinal;
         }
+
 
 
         public static string SelectCereriDiverse(int totiAngajatii = 0)
@@ -1083,47 +1405,83 @@ namespace WizOne.Module
         }
 
 
-        public static string NumeZi(int nrZi, int tip = 1)
-        {
+        public static string NumeZi(int nrZi, int tip = 1, string limba = "RO")
+        {//Radu 27.11.2019 - am adaugat limba engleza
             try
             {
                 string zi = "Luni";
 
-                switch (nrZi)
+                if (limba == "EN")
                 {
-                    case 1:
-                        zi = "Luni";
-                        break;
-                    case 2:
-                        zi = "Marti";
-                        break;
-                    case 3:
-                        zi = "Miercuri";
-                        break;
-                    case 4:
-                        zi = "Joi";
-                        break;
-                    case 5:
-                        zi = "Vineri";
-                        break;
-                    case 6:
-                        zi = "Sambata";
-                        break;
-                    case 7:
-                        zi = "Duminica";
-                        break;
-                    default:
-                        zi = "Luni";
-                        break;
+                    switch (nrZi)
+                    {
+                        case 1:
+                            zi = "Monday";
+                            break;
+                        case 2:
+                            zi = "Tuesday";
+                            break;
+                        case 3:
+                            zi = "Wednesday";
+                            break;
+                        case 4:
+                            zi = "Thursday";
+                            break;
+                        case 5:
+                            zi = "Friday";
+                            break;
+                        case 6:
+                            zi = "Saturday";
+                            break;
+                        case 7:
+                            zi = "Sunday";
+                            break;
+                        default:
+                            zi = "Monday";
+                            break;
+                    }
+                    if (tip == 2)
+                        if (nrZi == 2 || nrZi == 4 || nrZi == 6 || nrZi == 7)
+                            zi = zi.Substring(0, 2);
+                        else
+                            zi = zi.Substring(0, 1);
                 }
 
-
-                if (tip == 2)
-                    if (nrZi == 2 || nrZi == 3)
-                        zi = zi.Substring(0, 2);
-                    else
-                        zi = zi.Substring(0, 1);
-
+                if (limba == "RO")
+                {
+                    switch (nrZi)
+                    {
+                        case 1:
+                            zi = "Luni";
+                            break;
+                        case 2:
+                            zi = "Marti";
+                            break;
+                        case 3:
+                            zi = "Miercuri";
+                            break;
+                        case 4:
+                            zi = "Joi";
+                            break;
+                        case 5:
+                            zi = "Vineri";
+                            break;
+                        case 6:
+                            zi = "Sambata";
+                            break;
+                        case 7:
+                            zi = "Duminica";
+                            break;
+                        default:
+                            zi = "Luni";
+                            break;
+                    }
+                    if (tip == 2)
+                        if (nrZi == 2 || nrZi == 3)
+                            zi = zi.Substring(0, 2);
+                        else
+                            zi = zi.Substring(0, 1);
+                }  
 
                 return TraduCuvant(zi);
             }

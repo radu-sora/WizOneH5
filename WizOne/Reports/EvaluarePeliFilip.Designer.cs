@@ -216,7 +216,6 @@
             this.xrPageInfo2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrPageInfo2.PageInfo = DevExpress.XtraPrinting.PageInfo.DateTime;
             this.xrPageInfo2.SizeF = new System.Drawing.SizeF(89.62563F, 18F);
-            this.xrPageInfo2.TextFormatString = "{0:dd.MM.yyyy}";
             // 
             // xrPageInfo1
             // 
@@ -226,7 +225,6 @@
             this.xrPageInfo1.SizeF = new System.Drawing.SizeF(106.2505F, 18F);
             this.xrPageInfo1.StylePriority.UseTextAlignment = false;
             this.xrPageInfo1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopRight;
-            this.xrPageInfo1.TextFormatString = "Pagina {0} din {1}";
             // 
             // formattingRule1
             // 
@@ -236,7 +234,7 @@
             // 
             this.ReportHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
             this.xrPictureBox1});
-            this.ReportHeader.HeightF = 167.6666F;
+            this.ReportHeader.HeightF = 182.0417F;
             this.ReportHeader.KeepTogether = true;
             this.ReportHeader.Name = "ReportHeader";
             // 
@@ -244,9 +242,10 @@
             // 
             this.xrPictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("xrPictureBox1.Image")));
             this.xrPictureBox1.ImageAlignment = DevExpress.XtraPrinting.ImageAlignment.MiddleCenter;
-            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(305.6248F, 25.79168F);
+            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(56.06287F, 10.00001F);
             this.xrPictureBox1.Name = "xrPictureBox1";
-            this.xrPictureBox1.SizeF = new System.Drawing.SizeF(407.3751F, 115.5833F);
+            this.xrPictureBox1.SizeF = new System.Drawing.SizeF(911.688F, 166.6666F);
+            this.xrPictureBox1.Sizing = DevExpress.XtraPrinting.ImageSizeMode.ZoomImage;
             // 
             // PageHeader
             // 

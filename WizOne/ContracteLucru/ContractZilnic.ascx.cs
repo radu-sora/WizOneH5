@@ -221,18 +221,20 @@ namespace WizOne.ContracteLucru
                                 row[x] = 0;
                                 break;
                             case "IDAUTO":
-                                row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteSchimburi"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                //Florin 2019.11.22
+                                //row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteSchimburi"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteSchimburi"].Compute("max([IdAuto])", string.Empty), 0)) + 1;
                                 break;
                             case "ORAINCEPUT":  
                                 GridViewDataComboBoxColumn colPrg = (grDate0.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value,-1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();                               
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);        
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate0.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);
@@ -481,14 +483,14 @@ namespace WizOne.ContracteLucru
                                 break;
                             case "ORAINCEPUT":
                                 GridViewDataComboBoxColumn colPrg = (grDate1.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate1.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);
@@ -739,14 +741,14 @@ namespace WizOne.ContracteLucru
                                 break;
                             case "ORAINCEPUT":
                                 GridViewDataComboBoxColumn colPrg = (grDate2.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate2.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);
@@ -998,14 +1000,14 @@ namespace WizOne.ContracteLucru
                                 break;
                             case "ORAINCEPUT":
                                 GridViewDataComboBoxColumn colPrg = (grDate3.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate3.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);
@@ -1258,14 +1260,14 @@ namespace WizOne.ContracteLucru
                                 break;
                             case "ORAINCEPUT":
                                 GridViewDataComboBoxColumn colPrg = (grDate4.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate4.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);
@@ -1518,14 +1520,14 @@ namespace WizOne.ContracteLucru
                                 break;
                             case "ORAINCEPUT":
                                 GridViewDataComboBoxColumn colPrg = (grDate5.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate5.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);
@@ -1776,14 +1778,14 @@ namespace WizOne.ContracteLucru
                                 break;
                             case "ORAINCEPUT":
                                 GridViewDataComboBoxColumn colPrg = (grDate6.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate6.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);
@@ -2035,14 +2037,14 @@ namespace WizOne.ContracteLucru
                                 break;
                             case "ORAINCEPUT":
                                 GridViewDataComboBoxColumn colPrg = (grDate7.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate7.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);
@@ -2294,14 +2296,14 @@ namespace WizOne.ContracteLucru
                                 break;
                             case "ORAINCEPUT":
                                 GridViewDataComboBoxColumn colPrg = (grDate8.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                int index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                int index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 DataRow dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraIn = dr[0].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraIn[0]), Convert.ToInt32(oraIn[1]), 0);
                                 break;
                             case "ORASFARSIT":
                                 colPrg = (grDate8.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                                index = (int)colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value;
+                                index = Convert.ToInt32(General.Nz(colPrg.PropertiesComboBox.Items.FindByValue(e.NewValues["IdProgram"]).Value, -1));
                                 dr = dtPrg.Select("Id = " + index).FirstOrDefault();
                                 string[] oraOut = dr[1].ToString().Split(':');
                                 row[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(oraOut[0]), Convert.ToInt32(oraOut[1]), 0);

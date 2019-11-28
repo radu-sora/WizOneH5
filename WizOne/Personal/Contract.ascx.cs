@@ -235,7 +235,9 @@ namespace WizOne.Personal
                 }
                 Session["MP_Grila"] = grila;
 
-                CalcGrila(ds.Tables[0].Rows[0]["F10072"].ToString());
+                string gr = (ds.Tables[0].Rows[0]["F10072"] as string ?? "0").ToString();
+                CalcGrila(gr.Length <= 0 ? "0" : gr);
+
                 string sql = " select DATEDIFF(MONTH, (select convert(nvarchar(4), F01011) + '-' + convert(nvarchar(4), F01012) + '-01' from F010),  '" + DateTime.Now.Year + "-12-31')";
                 if (Constante.tipBD == 2)
                     sql = " select trunc(MONTHS_BETWEEN(to_date('31/12/" + DateTime.Now.Year + "', 'DD/MM/YYYY'),  (select to_date('01/' || F01012 || '/' || F01011, 'DD/MM/YYYY') from F010))  ) FROM DUAL";
@@ -876,7 +878,7 @@ namespace WizOne.Personal
                 + " F026 c where convert(int, " + grila + ") = c.F02604 and(convert(int, c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (convert(int, c.F02611 / 100) * 12) ";               
             if (Constante.tipBD == 2)
                 sql = "select TO_NUMBER(TRUNC(F02615))  from  "
-                   + " F026 c where" + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (to_number(c.F02611 / 100) * 12) ";
+                   + " F026 c where " + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (to_number(c.F02611 / 100) * 12) ";
 
             DataTable dtGrila = General.IncarcaDT(sql, null);
             if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][0] != null && dtGrila.Rows[0][0].ToString().Length > 0)
@@ -1574,13 +1576,23 @@ namespace WizOne.Personal
                 ASPxTextBox txtGrila = Contract_DataList.Items[0].FindControl("txtGrila") as ASPxTextBox;
                 ASPxTextBox txtVechCarteMuncaAni = Contract_DataList.Items[0].FindControl("txtVechCarteMuncaAni") as ASPxTextBox;
                 ASPxTextBox txtVechCarteMuncaLuni = Contract_DataList.Items[0].FindControl("txtVechCarteMuncaLuni") as ASPxTextBox;
+                ASPxTextBox txtVechCompAni = Contract_DataList.Items[0].FindControl("txtVechCompAni") as ASPxTextBox;
+                ASPxTextBox txtVechCompLuni = Contract_DataList.Items[0].FindControl("txtVechCompLuni") as ASPxTextBox;
                 if (txtGrila == null) return;
 
                 int an = DateTime.Now.Year;
                 DateTime f10022 = deDataAng.Date;
-                string f10072 = txtGrila.Text;                
+                string f10072 = txtGrila.Text;
 
-                string f100644 = (txtVechCarteMuncaAni.Text.Length > 0 ? txtVechCarteMuncaAni.Text.PadLeft(2, '0') : "00") + (txtVechCarteMuncaLuni.Text.Length > 0 ? txtVechCarteMuncaLuni.Text.PadLeft(2, '0') : "00"); ;
+                string vechime = "";
+
+                string paramVechime = Dami.ValoareParam("MP_VechimeCalculCO", "1");
+
+                if (paramVechime == "1")
+                    vechime = (txtVechCarteMuncaAni.Text.Length > 0 ? txtVechCarteMuncaAni.Text.PadLeft(2, '0') : "00") + (txtVechCarteMuncaLuni.Text.Length > 0 ? txtVechCarteMuncaLuni.Text.PadLeft(2, '0') : "00"); 
+                else
+                    vechime = (txtVechCompAni.Text.Length > 0 ? txtVechCompAni.Text.PadLeft(2, '0') : "00") + (txtVechCompLuni.Text.Length > 0 ? txtVechCompLuni.Text.PadLeft(2, '0') : "00"); 
+
 
                 string dtInc = an.ToString() + "-01-01";
                 string dtSf = an.ToString() + "-12-31";
@@ -1592,7 +1604,7 @@ namespace WizOne.Personal
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                     esteNou = true;
 
-                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, f100644, esteNou);
+                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, vechime, esteNou);
                 General.ExecutaNonQuery(strSql, null);
 
                 DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });

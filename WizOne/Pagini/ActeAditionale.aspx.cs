@@ -534,7 +534,7 @@ namespace WizOne.Pagini
                             UNION
                             SELECT CASE WHEN Motiv = 1 THEN X.DataModif ELSE '2100-01-01' END AS ColData  
                             UNION
-                            SELECT CASE WHEN (Salariul = 1 OR Spor = 1) THEN 
+                            SELECT CASE WHEN (Salariul = 1 OR Spor = 1 OR SporVechime = 1) THEN 
                             (SELECT Zi FROM (
                             SELECT Zi, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) as IdAuto 
                             FROM tblZile WHERE Zi>=DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays)) x
@@ -560,6 +560,10 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 2 THEN 1 ELSE 0 END) AS CIMDet,
                             MAX(CASE WHEN COALESCE(DurataContract, 0) = 1 THEN 1 ELSE 0 END) AS CIMNed,
                             MAX(CASE WHEN COALESCE(MotivId, 0) > 0 THEN 1 ELSE 0 END) AS Motiv,
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 30 THEN 1 ELSE 0 END) AS ""Suspendare"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 31 THEN 1 ELSE 0 END) AS ""SuspendareRev"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 32 THEN 1 ELSE 0 END) AS ""Detasare"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
                             CONVERT(nvarchar(10),J.DocNr) AS DocNr, J.DocData, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct, 
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas,
@@ -571,7 +575,24 @@ namespace WizOne.Pagini
                             AND COALESCE((SELECT CHARINDEX(',' + CAST(AA.IdAtribut AS nvarchar(20)) + ',', ',' + Valoare + ',') FROM tblParametrii WHERE Nume='IdExcluseCircuitDoc'),0) = 0                            
                             GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
-                            0 AS CandidatAngajat
+                            0 AS CandidatAngajat, 
+                            COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
+                            B5.F02504 IS NOT NULL OR B6.F02504 IS NOT NULL OR B7.F02504 IS NOT NULL OR B8.F02504 IS NOT NULL OR B9.F02504 IS NOT NULL THEN 1 ELSE 0 END) AS SporVechime
+                            FROM F704 FA
+                            LEFT JOIN F025 B0 ON FA.F704660 = B0.F02504 AND B0.F02504 > 10 AND B0.F02520 IN ('F100643','F100644') AND B0.F02521 > 0
+                            LEFT JOIN F025 B1 ON FA.F704661 = B1.F02504 AND B1.F02504 > 10 AND B1.F02520 IN ('F100643','F100644') AND B1.F02521 > 0
+                            LEFT JOIN F025 B2 ON FA.F704662 = B2.F02504 AND B2.F02504 > 10 AND B2.F02520 IN ('F100643','F100644') AND B2.F02521 > 0
+                            LEFT JOIN F025 B3 ON FA.F704663 = B3.F02504 AND B3.F02504 > 10 AND B3.F02520 IN ('F100643','F100644') AND B3.F02521 > 0
+                            LEFT JOIN F025 B4 ON FA.F704664 = B4.F02504 AND B4.F02504 > 10 AND B4.F02520 IN ('F100643','F100644') AND B4.F02521 > 0
+                            LEFT JOIN F025 B5 ON FA.F704665 = B5.F02504 AND B5.F02504 > 10 AND B5.F02520 IN ('F100643','F100644') AND B5.F02521 > 0
+                            LEFT JOIN F025 B6 ON FA.F704666 = B6.F02504 AND B6.F02504 > 10 AND B6.F02520 IN ('F100643','F100644') AND B6.F02521 > 0
+                            LEFT JOIN F025 B7 ON FA.F704667 = B7.F02504 AND B7.F02504 > 10 AND B7.F02520 IN ('F100643','F100644') AND B7.F02521 > 0
+                            LEFT JOIN F025 B8 ON FA.F704668 = B8.F02504 AND B8.F02504 > 10 AND B8.F02520 IN ('F100643','F100644') AND B8.F02521 > 0
+                            LEFT JOIN F025 B9 ON FA.F704669 = B9.F02504 AND B9.F02504 > 10 AND B9.F02520 IN ('F100643','F100644') AND B9.F02521 > 0
+                            WHERE FA.F70404=11 AND FA.F70410='Automat - grila' AND FA.F70403=A.F10003
+							AND CAST((SELECT CONVERT(nvarchar(10),F01011) + '-' + CONVERT(nvarchar(10),F01012) + '-01' FROM F010) AS DATE) <= FA.F70406
+							AND FA.F70406 < DATEADD(m,3,CAST((SELECT CONVERT(nvarchar(10),F01011) + '-' + CONVERT(nvarchar(10),F01012) + '-01' FROM F010) AS DATE))
+							),0) AS SporVechime
                             FROM Avs_Cereri A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
@@ -579,12 +600,12 @@ namespace WizOne.Pagini
                             GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, J.Revisal, B.F10025
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             CONVERT(nvarchar(10),B.F100985) AS DocNr, B.F100986, COALESCE(J.Tiparit,0) AS Tiparit, COALESCE(J.Semnat,0) AS Semnat, COALESCE(J.Revisal,0) AS Revisal,
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
                             B.F10022, B.F100993, J.IdAutoAtasamente,
-                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.Revisal,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat
+                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.Revisal,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat, 0 AS SporVechime
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
@@ -606,7 +627,7 @@ namespace WizOne.Pagini
                             when ""Motiv"" = 1 then X.""DataModif""
                             WHEN ""Norma""=1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (X.""DataModif"" - 1) AND ""ZiSapt"" <= 5)
-                            when ""Salariul"" = 1 OR ""Spor"" = 1 then
+                            when ""Salariul"" = 1 OR ""Spor"" = 1 OR ""SporVechime"" = 1 then
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
                             WHEN ""CORCod"" = 1 OR ""FunctieId"" = 1 OR ""CIMDet"" = 1 OR ""CIMNed"" = 1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" - 1 AND ""ZiSapt"" <= 5)
@@ -622,6 +643,10 @@ namespace WizOne.Pagini
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 2 THEN 1 ELSE 0 END) AS ""CIMDet"",
                             MAX(CASE WHEN COALESCE(""DurataContract"", 0) = 1 THEN 1 ELSE 0 END) AS ""CIMNed"",
                             MAX(CASE WHEN COALESCE(""MotivId"", 0) > 0 THEN 1 ELSE 0 END) AS ""Motiv"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 30 THEN 1 ELSE 0 END) AS ""Suspendare"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 31 THEN 1 ELSE 0 END) AS ""SuspendareRev"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 32 THEN 1 ELSE 0 END) AS ""Detasare"",
+							MAX(CASE WHEN COALESCE(""IdAtribut"", 0) = 33 THEN 1 ELSE 0 END) AS ""DetasareRev"",
                             CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
@@ -632,7 +657,25 @@ namespace WizOne.Pagini
                             WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) 
                             AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
                             AND COALESCE((SELECT INSTR(',' || CAST(AA.""IdAtribut"" AS varchar2(20)) || ',', ',' || ""Valoare"" || ',') FROM ""tblParametrii"" WHERE ""Nume"" ='IdExcluseCircuitDoc'),0) = 0
-                            ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente""
+                            ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente"",
+                            0 AS ""CandidatAngajat"", 
+                            COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
+                            B5.F02504 IS NOT NULL OR B6.F02504 IS NOT NULL OR B7.F02504 IS NOT NULL OR B8.F02504 IS NOT NULL OR B9.F02504 IS NOT NULL THEN 1 ELSE 0 END) AS ""SporVechime""
+                            FROM F704 FA
+                            LEFT JOIN F025 B0 ON FA.F704660 = B0.F02504 AND B0.F02504 > 10 AND B0.F02520 IN ('F100643','F100644') AND B0.F02521 > 0
+                            LEFT JOIN F025 B1 ON FA.F704661 = B1.F02504 AND B1.F02504 > 10 AND B1.F02520 IN ('F100643','F100644') AND B1.F02521 > 0
+                            LEFT JOIN F025 B2 ON FA.F704662 = B2.F02504 AND B2.F02504 > 10 AND B2.F02520 IN ('F100643','F100644') AND B2.F02521 > 0
+                            LEFT JOIN F025 B3 ON FA.F704663 = B3.F02504 AND B3.F02504 > 10 AND B3.F02520 IN ('F100643','F100644') AND B3.F02521 > 0
+                            LEFT JOIN F025 B4 ON FA.F704664 = B4.F02504 AND B4.F02504 > 10 AND B4.F02520 IN ('F100643','F100644') AND B4.F02521 > 0
+                            LEFT JOIN F025 B5 ON FA.F704665 = B5.F02504 AND B5.F02504 > 10 AND B5.F02520 IN ('F100643','F100644') AND B5.F02521 > 0
+                            LEFT JOIN F025 B6 ON FA.F704666 = B6.F02504 AND B6.F02504 > 10 AND B6.F02520 IN ('F100643','F100644') AND B6.F02521 > 0
+                            LEFT JOIN F025 B7 ON FA.F704667 = B7.F02504 AND B7.F02504 > 10 AND B7.F02520 IN ('F100643','F100644') AND B7.F02521 > 0
+                            LEFT JOIN F025 B8 ON FA.F704668 = B8.F02504 AND B8.F02504 > 10 AND B8.F02520 IN ('F100643','F100644') AND B8.F02521 > 0
+                            LEFT JOIN F025 B9 ON FA.F704669 = B9.F02504 AND B9.F02504 > 10 AND B9.F02520 IN ('F100643','F100644') AND B9.F02521 > 0
+                            WHERE FA.F70404=11 AND FA.F70410='Automat - grila' AND FA.F70403=A.F10003
+                            AND TO_DATE((SELECT '01-' || F01012 || '-' || F01011 FROM F010), 'DD-MM-YYYY') <= FA.F70406
+                            AND FA.F70406 < ADD_MONTHS(TO_DATE((SELECT '01-' || F01012 || '-' || F01011 FROM F010), 'DD-MM-YYYY'),3)
+							),0) AS ""SporVechime""
                             FROM ""Avs_Cereri"" A
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
@@ -640,11 +683,12 @@ namespace WizOne.Pagini
                             GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente""
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             A.F100985, A.F100986, COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"",
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
-                            A.F10022, A.F100993, J.""IdAutoAtasamente""
+                            A.F10022, A.F100993, J.""IdAutoAtasamente"",
+                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.""Revisal"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat"", 0 AS ""SporVechime""
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
                             WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
@@ -737,7 +781,7 @@ namespace WizOne.Pagini
                     //    return;
                     //}
 
-                    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData", "Candidat", "TermenDepasire", "Motiv" });
+                    List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "DataModif", "DocNr", "IdAutoAct", "IdAvans", "Tiparit", "Semnat", "Revisal", "NumeComplet", "DocData", "Candidat", "TermenDepasire", "Motiv", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev" });
                     if (General.Nz(arr[0], "").ToString() != "btnDocUpload" && General.Nz(arr[0], "").ToString() != "btnSterge")
                     {
                         if (lst == null || lst.Count() == 0 || lst[0] == null) return;
@@ -805,7 +849,7 @@ namespace WizOne.Pagini
                                             msg += obj[8] + " - " + Dami.TraduCuvant("este finalizata") + System.Environment.NewLine;
                                             continue;
                                         }
-                                        if (Convert.ToInt32(General.Nz(obj[12], 0)) != 0)
+                                        if (Convert.ToInt32(General.Nz(obj[12], 0)) != 0 || Convert.ToInt32(General.Nz(obj[13], 0)) != 0 || Convert.ToInt32(General.Nz(obj[14], 0)) != 0 || Convert.ToInt32(General.Nz(obj[15], 0)) != 0 || Convert.ToInt32(General.Nz(obj[16], 0)) != 0)
                                         {
                                             msg += obj[8] + " - " + Dami.TraduCuvant("atribuirea de numar se face doar prin editare") + System.Environment.NewLine;
                                             continue;
@@ -1043,11 +1087,19 @@ namespace WizOne.Pagini
                                             {
                                                 //cazul cand este angajat
                                                 DataRow dr = dtAvs.Rows[x];
-                                                Cereri pag = new Cereri();
-                                                pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
-                                                if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
-                                                    General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
-                                            }
+                                                //Florin 2019.11.25 - sporul de vechime nu se duce in F704; el este deja dus la inchidere luna si tot acolo se introduce si in Avs_Cereri
+                                                if (General.Nz(dr["IdAtribut"], -99).ToString() == "11" && General.Nz(dr["USER_NO"], -99).ToString() == "-89")
+                                                {
+                                                    //NOP - sporul de vechime nu se duce
+                                                }
+                                                else
+                                                {
+                                                    Cereri pag = new Cereri();
+                                                    pag.TrimiteInF704(Convert.ToInt32(General.Nz(dr["Id"], -99)));
+                                                    if (Convert.ToInt32(General.Nz(dr["IdAtribut"], -99)) == 2)
+                                                        General.ModificaFunctieAngajat(Convert.ToInt32(dr["F10003"]), Convert.ToInt32(General.Nz(dr["FunctieId"], -99)), Convert.ToDateTime(dr["DataModif"]), new DateTime(2100, 1, 1));
+                                                }
+                                                }
                                         }
 
                                         msg += obj[8] + " - " + Dami.TraduCuvant("proces realizat cu succes") + System.Environment.NewLine;
@@ -1471,81 +1523,246 @@ namespace WizOne.Pagini
         //    }
         //}
 
+        //protected void btnPrint_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        //Session["ReportId"] = 1;
+        //        //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&F10003=460&Validate=0", false);
+        //        //return;
+
+        //        string param = "";
+        //        string paramRaport = "";
+        //        List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat" });
+
+        //        if (lst == null || lst.Count() == 0 || lst[0] == null) return;
+
+        //        object[] obj = lst[0] as object[];
+
+        //        //if(Convert.ToInt32(General.Nz(lst[1],0)) == 1)
+        //        //{
+        //        //    Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_Incetare");
+        //        //    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&NrDecizie=" + lst[10] + "&DataDecizie=" + lst[11]);
+        //        //}
+        //        //else
+        //        //{
+        //        //    if (Convert.ToInt32(General.Nz(lst[2], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 0)) == 1)
+        //        //    {
+        //        //        Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_CIM");
+        //        //        Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + lst[0] + "&F10003=" + lst[0] + "&Validate=0");
+        //        //    }
+        //        //    else
+        //        //    {
+        //        //        if (Convert.ToInt32(General.Nz(lst[4], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 5)) == 1 ||
+        //        //            Convert.ToInt32(General.Nz(lst[6], 0)) == 1 || Convert.ToInt32(General.Nz(lst[7], 5)) == 1 ||
+        //        //            Convert.ToInt32(General.Nz(lst[8], 0)) == 1 || Convert.ToInt32(General.Nz(lst[9], 5)) == 1)
+        //        //        {
+        //        //            Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_ModificariCIM");
+        //        //            Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&DataModificare=" + lst[12]);
+        //        //        }
+        //        //    }
+        //        //}
+
+
+        //        if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
+        //        {
+        //            MessageBox.Show("Nu exista numar si data document", MessageBox.icoWarning, "Operatie anulata");
+        //            return;
+        //        }
+
+
+        //        if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
+        //        {
+        //            DateTime ziua = Convert.ToDateTime(obj[11]);
+        //            paramRaport = "RaportActeAditionale_Incetare";
+        //            param = "&NrDecizie=" + obj[10] + "&DataDecizie=" + +ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
+        //        }
+        //        else
+        //        {
+        //            if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+        //            {
+        //                paramRaport = "RaportActeAditionale_CIM";
+        //                param = "&F10003=" + obj[0] + "&Validate=0";
+        //            }
+        //            else
+        //            {
+        //                if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
+        //                {
+        //                    if (General.Nz(obj[12], "").ToString() == "")
+        //                    {
+        //                        MessageBox.Show("Nu exista data modificare", MessageBox.icoWarning, "Operatie anulata");
+        //                        return;
+        //                    }
+        //                    DateTime ziua = Convert.ToDateTime(obj[12]);
+        //                    paramRaport = "RaportActeAditionale_ModificariCIM";
+        //                    param = "&DataModificare=" + ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2,'0');
+        //                }
+        //            }
+        //        }
+
+        //        string idRap = Dami.ValoareParam(paramRaport);
+        //        if (idRap == "")
+        //        {
+        //            MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
+        //            return;
+        //        }
+
+        //        if (param == "")
+        //        {
+        //            MessageBox.Show("Nu exista parametrii", MessageBox.icoWarning, "Operatie anulata");
+        //            return;
+        //        }
+
+
+        //        //Florin 2019.07.15
+        //        #region Salvam Filtrul
+
+        //        string req = "";
+        //        if (cmbCmp.Value != null) req += "&Cmp=" + cmbCmp.Value;
+        //        if (cmbTip.Value != null) req += "&Tip=" + cmbTip.Value;
+        //        if (cmbAng.Value != null) req += "&Ang=" + cmbAng.Value;
+        //        if (cmbStatus.Value != null) req += "&Status=" + cmbStatus.Value;
+        //        if (txtData.Value != null) req += "&Data=" + txtData.Value;
+        //        if (txtDepasire.Value != null) req += "&Depasire=" + txtDepasire.Value;
+
+        //        Session["Filtru_ActeAditionale"] = req;
+
+        //        #endregion
+
+
+
+        //        Session["ReportId"] = Convert.ToInt32(idRap);
+
+        //        //Florin 2019.10.17
+        //        //string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;
+        //        string q = General.URLEncode("Angajat=" + obj[0] + param);
+        //        string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + q;
+
+        //        Response.Redirect(url);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
+
+
+        //Florin 2019.10.21
         protected void btnPrint_Click(object sender, EventArgs e)
         {
             try
             {
-                //Session["ReportId"] = 1;
-                //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&F10003=460&Validate=0", false);
-                //return;
-
-                string param = "";
                 string paramRaport = "";
-                List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat" });
+                string paramRaport_tmp = "";
+                string msg = "";
+                string ids = "";
+
+                List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct", "SporVechime", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev" });
 
                 if (lst == null || lst.Count() == 0 || lst[0] == null) return;
 
-                object[] obj = lst[0] as object[];
-
-                //if(Convert.ToInt32(General.Nz(lst[1],0)) == 1)
-                //{
-                //    Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_Incetare");
-                //    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&NrDecizie=" + lst[10] + "&DataDecizie=" + lst[11]);
-                //}
-                //else
-                //{
-                //    if (Convert.ToInt32(General.Nz(lst[2], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 0)) == 1)
-                //    {
-                //        Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_CIM");
-                //        Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + lst[0] + "&F10003=" + lst[0] + "&Validate=0");
-                //    }
-                //    else
-                //    {
-                //        if (Convert.ToInt32(General.Nz(lst[4], 0)) == 1 || Convert.ToInt32(General.Nz(lst[3], 5)) == 1 ||
-                //            Convert.ToInt32(General.Nz(lst[6], 0)) == 1 || Convert.ToInt32(General.Nz(lst[7], 5)) == 1 ||
-                //            Convert.ToInt32(General.Nz(lst[8], 0)) == 1 || Convert.ToInt32(General.Nz(lst[9], 5)) == 1)
-                //        {
-                //            Session["ReportId"] = Dami.ValoareParam("RaportActeAditionale_ModificariCIM");
-                //            Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=460&DataModificare=" + lst[12]);
-                //        }
-                //    }
-                //}
-
-
-                if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
+                for (int i = 0; i < lst.Count(); i++)
                 {
-                    MessageBox.Show("Nu exista numar si data document", MessageBox.icoWarning, "Operatie anulata");
-                    return;
-                }
+                    object[] obj = lst[i] as object[];
+
+                    if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
+                    {
+                        msg = "Exista inregistrare fara numar si data document";
+                        break;
+                    }
+
+                    //Florin 2019.11.19
+
+                    //if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
+                    //{
+                    //    paramRaport = "RaportActeAditionale_Incetare";
+                    //}
+                    //else
+                    //{
+                    //    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                    //    {
+                    //        paramRaport = "RaportActeAditionale_CIM";
+                    //    }
+                    //    else
+                    //    {
+                    //        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1)
+                    //        {
+                    //            if (General.Nz(obj[12], "").ToString() == "")
+                    //            {
+                    //                msg = "Nu exista data modificare";
+                    //                break;
+                    //            }
+                    //            paramRaport = "RaportActeAditionale_ModificariCIM";
+                    //        }
+                    //    }
+                    //}
 
 
-                if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
-                {
-                    DateTime ziua = Convert.ToDateTime(obj[11]);
-                    paramRaport = "RaportActeAditionale_Incetare";
-                    param = "&NrDecizie=" + obj[10] + "&DataDecizie=" + +ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
-                }
-                else
-                {
+                    if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_Incetare";
+                    }
+
                     if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                     {
                         paramRaport = "RaportActeAditionale_CIM";
-                        param = "&F10003=" + obj[0] + "&Validate=0";
                     }
-                    else
+
+                    if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1)
                     {
-                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
+                        if (General.Nz(obj[12], "").ToString() == "")
                         {
-                            if (General.Nz(obj[12], "").ToString() == "")
-                            {
-                                MessageBox.Show("Nu exista data modificare", MessageBox.icoWarning, "Operatie anulata");
-                                return;
-                            }
-                            DateTime ziua = Convert.ToDateTime(obj[12]);
-                            paramRaport = "RaportActeAditionale_ModificariCIM";
-                            param = "&DataModificare=" + ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2,'0');
+                            msg = "Nu exista data modificare";
+                            break;
                         }
+                        paramRaport = "RaportActeAditionale_ModificariCIM";
                     }
+
+                    if (Convert.ToInt32(General.Nz(obj[16], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_Suspendare";
+                    }
+                    if (Convert.ToInt32(General.Nz(obj[17], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_SuspendareRevenire";
+                    }
+                    if (Convert.ToInt32(General.Nz(obj[18], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_Detasare";
+                    }
+                    if (Convert.ToInt32(General.Nz(obj[19], 0)) == 1)
+                    {
+                        paramRaport = "RaportActeAditionale_DetasareRevenire";
+                    }
+
+
+                    if (paramRaport_tmp != "" && paramRaport != paramRaport_tmp)
+                    {
+                        msg = "Trebuie sa selectati inregistrari care au acelasi tip de modificare";
+                        break;
+                    }
+
+                    paramRaport_tmp = paramRaport;
+                    if (General.Nz(obj[14],"").ToString() != "")
+                        ids += "," + obj[14];
+                }
+
+                if (msg != "")
+                {
+                    MessageBox.Show(msg, MessageBox.icoWarning, "Operatie anulata");
+                    return;
+                }
+
+                if (ids == "")
+                {
+                    object[] obj = lst[0] as object[];
+                    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                        MessageBox.Show("Inainte de a imprima trebuie sa efectuati cel putin o operatie", MessageBox.icoWarning, "Operatie anulata");
+                    else
+                        MessageBox.Show("Nu exista inregistrari selectate", MessageBox.icoWarning, "Operatie anulata");
+                    return;
                 }
 
                 string idRap = Dami.ValoareParam(paramRaport);
@@ -1554,13 +1771,6 @@ namespace WizOne.Pagini
                     MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
                     return;
                 }
-
-                if (param == "")
-                {
-                    MessageBox.Show("Nu exista parametrii", MessageBox.icoWarning, "Operatie anulata");
-                    return;
-                }
-
 
                 //Florin 2019.07.15
                 #region Salvam Filtrul
@@ -1577,14 +1787,23 @@ namespace WizOne.Pagini
 
                 #endregion
 
-
-
                 Session["ReportId"] = Convert.ToInt32(idRap);
 
-                //Florin 2019.10.17
-                //string url = "../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + obj[0] + param;
-                string q = General.URLEncode("Angajat=" + obj[0] + param);
-                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + q;
+                int idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR tmpIdPrint_Id_SEQ", null));
+                if (Constante.tipBD == 2)
+                    idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""tmpIdPrint_Id_SEQ"".NEXTVAL FROM DUAL", null));
+
+                string sqlSes = "";
+                string[] arrIds = ids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                for(int k = 0; k < arrIds.Length; k++)
+                {
+                    sqlSes += $"UNION SELECT {idSesiune}, {arrIds[k]} " + (Constante.tipBD == 2 ? " FROM DUAL" : "");
+                }
+
+                if (sqlSes != "")
+                    General.ExecutaNonQuery(@"INSERT INTO ""tmpIdPrint""(""IdSesiune"", ""Id"") " + sqlSes.Substring(6), null);
+
+                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("idSesiune=" + idSesiune);
 
                 Response.Redirect(url);
 
@@ -1595,6 +1814,7 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
 
         protected void cmbTip_ValueChanged(object sender, EventArgs e)
         {

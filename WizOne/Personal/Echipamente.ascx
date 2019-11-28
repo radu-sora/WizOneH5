@@ -15,7 +15,7 @@
                     <SettingsEditing Mode="Inline" />  
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                         <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Nume echipament" Width="250px" >
@@ -31,7 +31,7 @@
                         <dx:GridViewDataDateColumn FieldName="DataExpirare" Name="DataExpirare" Caption="Data expirare"  Width="100px" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn FieldName="DurataUtil" Name="DurataUtil" Caption="Durata utilizare" ReadOnly="true"  Width="175px" UnboundType="String" />    
+                        <dx:GridViewDataTextColumn FieldName="DurataUtil" Name="DurataUtil" Caption="Durata utilizare" ReadOnly="true"  Width="175px" UnboundType="String" />   
                         <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
                         <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />                                              
                     </Columns>

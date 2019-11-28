@@ -1,9 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="MainPage.aspx.cs" Inherits="WizOne.Pagini.MainPage" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">    
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server"> 
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <script>
         pnlLoading.Show();
     </script>
@@ -37,6 +37,7 @@
         </div>
     </div>
 
+
     <dx:ASPxPopupControl ID="popUpPass" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static" Modal="true"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top" OnWindowCallback="popUpPass_WindowCallback"
         EnableViewState="False" PopupElementID="popUpPassArea" PopupHorizontalAlign="WindowCenter" SettingsLoadingPanel-Enabled="true"
@@ -59,8 +60,8 @@
                         </tr>
                         <tr>
                             <td style="width:100%; padding-left:20px;">
-                                <dx:ASPxLabel ID="lblRap" runat="server" Text="Introduceti parola raport" />
-                                <dx:ASPxTextBox ID="txtRapPass" ClientInstanceName="txtRapPass" runat="server" Width="280" Password="true">
+                                <dx:ASPxLabel ID="lblRap" runat="server"  Text="Introduceti parola raport"/>
+                                <dx:ASPxTextBox ID="txtRapPass" ClientInstanceName="txtRapPass" runat="server" Width="280" Password="true" >
                                     <ClientSideEvents KeyPress="function(s, e) { onPassKeyPress(e); }" />
                                  </dx:ASPxTextBox>
                                 <dx:ASPxHiddenField ID="hfRap" runat="server" />

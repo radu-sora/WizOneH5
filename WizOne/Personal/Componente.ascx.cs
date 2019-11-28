@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
@@ -28,6 +29,8 @@ namespace WizOne.Personal
             grDateComponente.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("Actualizeaza");
             grDateComponente.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("Renunta");           
             grDateComponente.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
+
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateComponente);
         }
 
         protected void grDateComponente_DataBinding(object sender, EventArgs e)

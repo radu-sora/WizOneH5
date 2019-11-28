@@ -166,8 +166,9 @@
             });
         }
         function AdjustSize() {
-            var randuri = parseInt("<%=Session["Ptj_NrRanduri"] %>");
-            var height = Math.max(0, document.documentElement.clientHeight) - ((100 / randuri) * 50);   // - 420
+<%--            var randuri = parseInt("<%=Session["Ptj_NrRanduri"] %>");
+            var height = Math.max(0, document.documentElement.clientHeight) - ((100 / randuri) * 50);   // - 420--%>
+            var height = Math.max(0, document.documentElement.clientHeight) - 200 - pnlFiltrare.GetHeight();
             grDate.SetHeight(height);
         }
 
@@ -213,7 +214,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <table width="100%">
+    <table width="100%">       
         <tr>
             <td align="left">
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
@@ -272,8 +273,9 @@
                     <PanelCollection>
                         <dx:PanelContent>
 
-                          <dx:ASPxRoundPanel ID="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20" >
-                            <HeaderStyle Font-Bold="true" />
+                          <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20">
+                              <HeaderStyle Font-Bold="true" />
+                              <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                             <PanelCollection>
                                 <dx:PanelContent>
 
@@ -398,7 +400,7 @@
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" AutoFilterCondition="Contains" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" />
-                    <ClientSideEvents ContextMenu="ctx" RowDblClick="function(s, e) { OnClickDetaliat(s, e); }" Init="OnInit" EndCallback="OnEndCallback" />
+                    <ClientSideEvents ContextMenu="ctx" RowDblClick="function(s, e) { OnClickDetaliat(s, e); }" Init="OnInit" EndCallback="OnEndCallback" />                    
                     <Columns>
                         
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" FixedStyle="Left" SelectAllCheckboxMode="AllPages" />

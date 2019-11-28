@@ -535,6 +535,7 @@ namespace WizOne.Personal
                         ds = Session["InformatiaCurentaPersonal"] as DataSet;
                         ds.Tables[i].Rows[0]["F10008"] = dt100.Rows[0]["F10008"];
                         ds.Tables[i].Rows[0]["F10009"] = dt100.Rows[0]["F10009"];
+                        ds.Tables[i].Rows[0]["F10017"] = dt100.Rows[0]["F10017"];
                         ds.Tables[i].Rows[0]["F10012"] = dt100.Rows[0]["F10012"];
                         ds.Tables[i].Rows[0]["F10013"] = dt100.Rows[0]["F10013"];
                         ds.Tables[i].Rows[0]["F10021"] = dt100.Rows[0]["F10021"];
@@ -561,9 +562,7 @@ namespace WizOne.Personal
                         ds.Tables[i].Rows[0]["F100942"] = dt100.Rows[0]["F100942"];
                         ds.Tables[i].Rows[0]["F10028"] = dt100.Rows[0]["F10028"];
                         ds.Tables[i].Rows[0]["F10024"] = dt100.Rows[0]["F10024"];
-                        ds.Tables[i].Rows[0]["F10050"] = dt100.Rows[0]["F10050"];
-                        ds.Tables[i].Rows[0]["F100903"] = dt100.Rows[0]["F100903"];
-                        ds.Tables[i].Rows[0]["F100904"] = dt100.Rows[0]["F100904"];
+                        ds.Tables[i].Rows[0]["F10050"] = dt100.Rows[0]["F10050"];           
                         ds.Tables[i].Rows[0]["F10051"] = dt100.Rows[0]["F10051"];
                         ds.Tables[i].Rows[0]["F10073"] = dt100.Rows[0]["F10073"];
                         ds.Tables[i].Rows[0]["F100571"] = dt100.Rows[0]["F100571"];
@@ -584,25 +583,54 @@ namespace WizOne.Personal
                             ds.Tables[i].Rows[0]["F1001001"] = dt1001.Rows[0]["F1001001"];
                             ds.Tables[i].Rows[0]["F1001002"] = dt1001.Rows[0]["F1001002"];
                             ds.Tables[i].Rows[0]["F100963"] = dt1001.Rows[0]["F100963"];
+                            ds.Tables[i].Rows[0]["F1001132"] = dt1001.Rows[0]["F1001132"];
+                            ds.Tables[i].Rows[0]["F1001133"] = dt1001.Rows[0]["F1001133"];
                         }
                     }
 
-                    ASPxTextBox txtNume = DateIdentificare_DataList.Items[0].FindControl("txtNume") as ASPxTextBox;
-                    ASPxTextBox txtPreume = DateIdentificare_DataList.Items[0].FindControl("txtPrenume") as ASPxTextBox;
-                    ASPxTextBox txtNumeAnt = DateIdentificare_DataList.Items[0].FindControl("txtNumeAnt") as ASPxTextBox;
-                    ASPxDateEdit deDataModifNume = DateIdentificare_DataList.Items[0].FindControl("deDataModifNume") as ASPxDateEdit;
-                    ASPxComboBox cmbStareCivila = DateIdentificare_DataList.Items[0].FindControl("cmbStareCivila") as ASPxComboBox;
+                    //ASPxTextBox txtNume = DateIdentificare_DataList.Items[0].FindControl("txtNume") as ASPxTextBox;
+                    //ASPxTextBox txtPreume = DateIdentificare_DataList.Items[0].FindControl("txtPrenume") as ASPxTextBox;
+                    //ASPxTextBox txtNumeAnt = DateIdentificare_DataList.Items[0].FindControl("txtNumeAnt") as ASPxTextBox;
+                    //ASPxDateEdit deDataModifNume = DateIdentificare_DataList.Items[0].FindControl("deDataModifNume") as ASPxDateEdit;
+                    //ASPxComboBox cmbStareCivila = DateIdentificare_DataList.Items[0].FindControl("cmbStareCivila") as ASPxComboBox;
 
-                    txtNume.Text = dt100.Rows[0]["F10008"].ToString();
-                    txtPreume.Text = dt100.Rows[0]["F10009"].ToString();
-                    txtNumeAnt.Text = dt100.Rows[0]["F100905"].ToString();
-                    if (dt100.Rows[0]["F100906"] != null && dt100.Rows[0]["F100906"].ToString().Length > 0)
-                        deDataModifNume.Value = Convert.ToDateTime(dt100.Rows[0]["F100906"].ToString());
-                    cmbStareCivila.Value = Convert.ToInt32(dt100.Rows[0]["F10046"].ToString());
+                    //txtNume.Text = dt100.Rows[0]["F10008"].ToString();
+                    //txtPreume.Text = dt100.Rows[0]["F10009"].ToString();
+                    //txtNumeAnt.Text = dt100.Rows[0]["F100905"].ToString();
+                    //if (dt100.Rows[0]["F100906"] != null && dt100.Rows[0]["F100906"].ToString().Length > 0)
+                    //    deDataModifNume.Value = Convert.ToDateTime(dt100.Rows[0]["F100906"].ToString());
+                    //cmbStareCivila.Value = Convert.ToInt32(dt100.Rows[0]["F10046"].ToString());
 
 
                     Session["InformatiaCurentaPersonal"] = ds;
-                    Session["PreluareDate"] = 1;
+                    //Session["PreluareDate"] = 1;
+
+                    ASPxPageControl ctl = this.NamingContainer as ASPxPageControl;
+                    foreach (TabPage tab in ctl.TabPages)
+                    {
+                        for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
+                        {
+                            if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
+                            {
+                                ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
+                                for (int k = 0; k < cb.Controls.Count; k++)
+                                {
+                                    if (cb.Controls[k].GetType() == typeof(DataList))
+                                    {
+                                        DataList dl = cb.Controls[k] as DataList;
+                                        dl.DataSource = null;
+                                        dl.DataBind();
+                                        DataSet dsNou = Session["InformatiaCurentaPersonal"] as DataSet;
+                                        DataTable table = dsNou.Tables[0];
+                                        dl.DataSource = table;
+                                        dl.DataBind();
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)

@@ -34,6 +34,10 @@ namespace WizOne.Personal
 
                 #endregion
 
+                Response.Cache.SetNoStore();
+                Response.AppendHeader("Pragma", "no-cache");
+                Response.Expires = 0;
+
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 string marca = Session["Marca"] as string;
                 if (ds == null && marca == null)
@@ -434,6 +438,13 @@ namespace WizOne.Personal
                         }
                     }
 
+                    //Radu 15.11.2019 -  nr si data contract intern se salveaza si pe nr si data contract ITM
+                    ds.Tables[1].Rows[0]["F10011"] = ds.Tables[1].Rows[0]["F100985"];
+                    ds.Tables[1].Rows[0]["FX1"] = ds.Tables[1].Rows[0]["F100986"];
+
+                    //Radu 15.11.2019 - data angajarii se salveaza si pe data modif. struct. org.
+                    ds.Tables[1].Rows[0]["F100910"] = ds.Tables[1].Rows[0]["F10022"];
+
                     //Florin 2018.11.23
                     //daca este nou verificam ca data angajarii sa fie mai mare decat luna de lucru
                     if (ds != null && ds.Tables.Count > 1 && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0 && ds.Tables[1].Rows[0]["F10022"] != DBNull.Value)
@@ -498,13 +509,16 @@ namespace WizOne.Personal
                     if (Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM USERS WHERE F70104=@1", new object[] { userNume })) != 0)
                         userNume += "2";
 
-
+                    //Radu 29.10.2019 - se scoate INSERT-ul in relGrupUser2
+                    //General.ExecutaNonQuery($@"
+                    //    BEGIN
+                    //        INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003, USER_NO, TIME) VALUES(701, (SELECT MAX(COALESCE(F70102,0)) + 1 FROM USERS), @1, @2, @3, @4, {General.CurrentDate()})
+                    //        INSERT INTO ""relGrupUser2""(""IdGrup"", ""IdUser"") VALUES(11, (SELECT MAX(COALESCE(F70102,1)) FROM USERS));
+                    //    END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
                     General.ExecutaNonQuery($@"
                         BEGIN
-                            INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003, USER_NO, TIME) VALUES(701, (SELECT MAX(COALESCE(F70102,0)) + 1 FROM USERS), @1, @2, @3, @4, {General.CurrentDate()})
-                            INSERT INTO ""relGrupUser2""(""IdGrup"", ""IdUser"") VALUES(1, (SELECT MAX(COALESCE(F70102,1)) FROM USERS));
+                            INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003, USER_NO, TIME) VALUES(701, (SELECT MAX(COALESCE(F70102,0)) + 1 FROM USERS), @1, @2, @3, @4, {General.CurrentDate()})                            
                         END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
-
 
 
                     #region OLD
@@ -669,7 +683,7 @@ namespace WizOne.Personal
                             if (dr[k].GetType() == typeof(DateTime))
                                 val = dr[k] == null ? "null" : General.ToDataUniv((DateTime)dr[k]);
                             if (val.Length <= 0)
-                                val = "''";
+                                val = "null";
                             sir += ",\"" + dt.Columns[k].ColumnName + "\" = " + val;
                         }
                     }
@@ -944,13 +958,11 @@ namespace WizOne.Personal
                         if (cnt != 0)
                         {
                             dt100.Rows[0]["F10003"] = marcaFin;
+                            dt1001.Rows[0]["F10003"] = marcaFin;
                             Session["MP_Mesaj"] = "Angajatului i-a fost atribuita o noua marca: " + marcaFin;
                         }
                     }
-                }
-               
-                dt1001.Rows[0]["F10003"] = marcaFin;               
-
+                }   
 
                 General.SalveazaDate(dt100, "F100");
                 General.SalveazaDate(dt1001, "F1001");
@@ -1114,32 +1126,35 @@ namespace WizOne.Personal
             {
                 ASPxPageControl ctl = sender as ASPxPageControl;
                 if (ctl == null) return;
-                TabPage tab = ctl.ActiveTabPage;
+                //TabPage tab = ctl.ActiveTabPage;
                 
-                if (Session["PreluareDate"] != null && Session["PreluareDate"].ToString() == "1")
-                {
-                    Session["PreluareDate"] = 0;
-                    for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
-                    {
-                        if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
-                        {
-                            ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
-                            for (int k = 0; k < cb.Controls.Count; k++)
-                            {
-                                if (cb.Controls[k].GetType() == typeof(DataList))
-                                {
-                                    DataList dl = cb.Controls[k] as DataList;
-                                    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                                    DataTable table = ds.Tables[0];
-                                    dl.DataSource = table;
-                                    dl.DataBind();
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
+                //if (Session["PreluareDate"] != null && Session["PreluareDate"].ToString() == "1")
+                //{
+                //    Session["PreluareDate"] = 0;
+                //    foreach (TabPage tab in ctl.TabPages)
+                //    {
+                //        for (int j = 0; j < tab.Controls[0].Controls.Count; j++)
+                //        {
+                //            if (tab.Controls[0].Controls[j].GetType() == typeof(DevExpress.Web.ASPxCallbackPanel))
+                //            {
+                //                ASPxCallbackPanel cb = tab.Controls[0].Controls[j] as ASPxCallbackPanel;
+                //                for (int k = 0; k < cb.Controls.Count; k++)
+                //                {
+                //                    if (cb.Controls[k].GetType() == typeof(DataList))
+                //                    {
+                //                        DataList dl = cb.Controls[k] as DataList;
+                //                        DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                //                        DataTable table = ds.Tables[0];
+                //                        dl.DataSource = table;
+                //                        dl.DataBind();
+                //                        break;
+                //                    }
+                //                }
+                //                break;
+                //            }
+                //        }
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -1305,7 +1320,7 @@ namespace WizOne.Personal
                 lstDV.Add("deData", "FX1");
                 lstDV.Add("txtLocNastere", "F100980");
                 lstDV.Add("cmbStudiiDiv", "F10050");
-                lstDV.Add("txtStudiiDet", "F100902");
+                lstDV.Add("txtStudiiDet", "F1001131");
                 lstDV.Add("cmbFunctieDiv", "F10071");
                 lstDV.Add("cmbNivel", "F10029");
                 lstDV.Add("txtZileCOFidel", "F100640");
@@ -1345,8 +1360,8 @@ namespace WizOne.Personal
                 lstDO.Add("txtNr", "F1001001");
                 lstDO.Add("txtPermisEmisDe", "F1001002");
                 lstDO.Add("cmbStudiiDoc", "F10050");
-                lstDO.Add("txtCalif1", "F100903");
-                lstDO.Add("txtCalif2", "F100904");
+                lstDO.Add("txtCalif1", "F1001132");
+                lstDO.Add("txtCalif2", "F1001133");
                 lstDO.Add("cmbTitluAcademic", "F10051");
                 lstDO.Add("cmbDedSomaj", "F10073");
                 lstDO.Add("txtNrCarteMunca", "F10012");
@@ -1455,28 +1470,29 @@ namespace WizOne.Personal
                                 if (cols1.Contains(colName)) dt = ds.Tables[1];
                                 if (cols2.Contains(colName)) dt = ds.Tables[2];
                                 if (ctl != null && General.Nz(dt.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString())
+                                {                
+                                    dt.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                }
+
+                                if (dt.Rows[0][colName].GetType() == typeof(DateTime))
                                 {
-                                    if (dt.Rows[0][colName].GetType() == typeof(DateTime))
-                                    {
-                                        DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
-                                        dt.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
-                                    }
-                                    else
-                                        dt.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                    DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
+                                    dt.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
                                 }
 
                                 DataTable dt2 = new DataTable();
                                 if (cols3.Contains(colName)) dt2 = ds.Tables[0];
                                 if (ctl != null && General.Nz(dt2.Rows[0][colName], "").ToString() != General.Nz(ctl.Value, "").ToString())
                                 {
-                                    if (dt2.Rows[0][colName].GetType() == typeof(DateTime))
-                                    {
-                                        DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
-                                        dt2.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
-                                    }
-                                    else
-                                        dt2.Rows[0][colName] = ctl.Value ?? DBNull.Value;
+                                    dt2.Rows[0][colName] = ctl.Value ?? DBNull.Value;
                                 }
+
+                                if (dt2.Rows[0][colName].GetType() == typeof(DateTime))
+                                {
+                                    DateTime data = Convert.ToDateTime(ctl.Value ?? new DateTime(2100, 1, 1));
+                                    dt2.Rows[0][colName] = new DateTime(data.Year, data.Month, data.Day);
+                                }
+
                             }
                             catch (Exception ex)
                             {

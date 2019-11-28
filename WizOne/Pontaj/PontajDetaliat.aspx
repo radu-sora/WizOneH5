@@ -82,7 +82,7 @@
 
         function OnBatchEditStartEditing(s, e) {
             //alert(s.batchEditApi.HasChanges());
-
+           
             var keyIndex = s.GetColumnByField("Cheia").index;
             var key = e.rowValues[keyIndex].value;
 
@@ -162,7 +162,6 @@
             }            
             if (col.length >= 6 && col.substr(0, 6) == 'ValAbs')
             {
-
                 var cmb = grDate.GetEditor('ValAbs');
                 if (cmb) {
                     cmb.ClearItems();
@@ -197,6 +196,8 @@
 
         function OnBatchEditEndEditing(s, e) {
             //grIsEditing = true;
+
+            if (!s.batchEditApi.GetEditCellInfo().column) return;
 
             var col = s.batchEditApi.GetEditCellInfo().column.fieldName;
             var arr = "In1,In2,In3,In4,In5,In6,In7,In8,In9,In10,In11,In12,In13,In14,In15,In16,In17,In18,In19,In20,Out1,Out2,Out3,Out4,Out5,Out6,Out7,Out8,Out9,Out10,Out11,Out12,Out13,Out14,Out15,Out16,Out17,Out18,Out19,Out20,";
@@ -345,21 +346,77 @@
                         case "In9":
                         case "Out":
                             {
-                                if (key == 45)              // scade o zi
+                                if (key == 45)              // scade o zi   tasta -
                                 {
-                                    grDate.PerformCallback('dayMinus;' + cell.column.fieldName);
+                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                        grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                        grDate.batchEditApi.EndEdit();
+                                        alert('Proces realizat cu succes');
+                                    }
                                 }
-                                else if (key == 43)        // adauga o zi
+                                else if (key == 43)        // adauga o zi  tasta +
                                 {
-                                    grDate.PerformCallback('dayPlus;' + cell.column.fieldName);
+                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                        grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                        grDate.batchEditApi.EndEdit();
+                                        alert('Proces realizat cu succes');
+                                    }
                                 }
                                 else if (key == 93)         ////insereaza celula   tasta   ]
                                 {
-                                    grDate.PerformCallback('cellPlus;' + cell.column.fieldName);
+                                    var idx = 21;
+                                    var col = cell.column.fieldName;
+                                    if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                        idx = Number(col.substr(2));
+                                    if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                        idx = Number(col.substr(3));
+
+                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                    for (var i = 20; i > idx; i--)
+                                    {
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + (i-1).toString()));
+                                    }
+
+                                    if (col.substr(0, 2).toLowerCase() == 'in')
+                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+
+                                    grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, null);
+                                    grDate.batchEditApi.EndEdit();
                                 }
                                 else if (key == 91)         // sterge celula pe care este, daca este goala tasta [
                                 {
-                                    grDate.PerformCallback('cellMinus;' + cell.column.fieldName);
+                                    if (grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName) != null)
+                                        return;
+
+                                    var idx = 21;
+                                    var col = cell.column.fieldName;
+                                    if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                        idx = Number(col.substr(2));
+                                    if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                        idx = Number(col.substr(3));
+
+                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                    
+                                    if (col.substr(0, 2).toLowerCase() == 'in')
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + idx));
+
+                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (idx + 1).toString()));
+
+                                    for (var i = (idx + 1); i <= 20; i++)
+                                    {
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + i));
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (i + 1).toString()));
+                                    }
+
+                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out20", null);
+                                    grDate.batchEditApi.EndEdit();
                                 }
                             }
                     }
@@ -379,6 +436,9 @@
             cmbDept.SetValue(null);
             cmbSubDept.SetValue(null);
             cmbBirou.SetValue(null);
+            cmbCateg.SetValue(null);
+
+            pnlCtl.PerformCallback('EmptyFields');
         }
 
         function OnPtjEchipa(s, e) {
@@ -452,23 +512,20 @@
             AdjustSize();
         }
 
-        function OnBeginCallback(s,e)
-        {
-            //pnlLoading.Show();
-        }
-        function OnEndCallback(s, e) {
-            AdjustSize();
-            //pnlLoading.Hide();
-        }
         function OnControlsInitialized(s, e) {
             ASPxClientUtils.AttachEventToElement(window, "resize", function (evt) {
                 AdjustSize();
             });
         }
         function AdjustSize() {
-            var height = Math.max(0, document.documentElement.clientHeight) - 330;
+            var dif = 230;
+            var div = document.getElementById('divPeAng');
+            var style = window.getComputedStyle(div);
+            if (style.display === 'none')
+                dif = 340;
+            var height = Math.max(0, document.documentElement.clientHeight) - dif;
             if (<%=Session["PontajulAreCC"] %> == 1) 
-                var height = Math.max(0, document.documentElement.clientHeight) - 450;
+                var height = Math.max(0, document.documentElement.clientHeight) - 470;
 
             grDate.SetHeight(height);
         }
@@ -484,6 +541,7 @@
         }
 
         function OnEndCallback(s, e) {
+            AdjustSize();
             if (s.cpAlertMessage != null) {
                 swal({
                     title: "", text: s.cpAlertMessage,
@@ -572,9 +630,8 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
                         grDate.UpdateEdit();
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
@@ -637,7 +694,7 @@
                                 </div>
 
                                 <div style="float:left; padding-right:15px; vertical-align:middle; display:inline-block;">
-                                    <label id="Label1" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
+                                    <label id="lblTip" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
                                     <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                 </div>
 
@@ -691,24 +748,24 @@
                                     <tr>
                                         <td>
                                             <div style="float:left; padding-right:15px;padding-bottom:10px;">
-                                                <label id="lblCtr" runat="server" style="display:inline-block; float:left; padding-right:25px; width:80px;">Contract</label>
-                                                <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"  />
+                                                <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)" style="display:inline-block; float:left; padding-right:25px; width:80px;">Contract</label>
+                                                <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"  />
                                             </div>
                                             <div style="float:left; padding-right:15px;">
-                                                <label id="lblSub" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Subcomp.</label>
-                                                <dx:ASPxComboBox ID="cmbSub" ClientInstanceName="cmbSub" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSubcompanie" TextField="Subcompanie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" >
+                                                <label id="lblSub" runat="server" oncontextMenu="ctx(this,event)" style="display:inline-block; float:left; padding-right:15px; width:80px;">Subcomp.</label>
+                                                <dx:ASPxComboBox ID="cmbSub" ClientInstanceName="cmbSub" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSubcompanie" TextField="Subcompanie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSub'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div style="float:left; padding-right:15px;">
-                                                <label id="lblFil" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Filiala</label>
-                                                <dx:ASPxComboBox ID="cmbFil" ClientInstanceName="cmbFil" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdFiliala" TextField="Filiala" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" >
+                                                <label id="lblFil" runat="server" oncontextMenu="ctx(this,event)" style="display:inline-block; float:left; padding-right:15px; width:80px;">Filiala</label>
+                                                <dx:ASPxComboBox ID="cmbFil" ClientInstanceName="cmbFil" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdFiliala" TextField="Filiala" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbFil'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div style="float:left; padding-right:15px;">
-                                                <label id="lblSec" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Sectie</label>
-                                                <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" >
+                                                <label id="lblSec" runat="server" oncontextMenu="ctx(this,event)" style="display:inline-block; float:left; padding-right:15px; width:80px;">Sectie</label>
+                                                <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
@@ -716,24 +773,32 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div style="float:left; padding-right:15px;">
-                                                <label id="lblDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Dept.</label>
-                                                <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" >
+                                            <div style="float:left; padding-right:15px;padding-bottom:10px;">
+                                                <label id="lblDept" runat="server" oncontextMenu="ctx(this,event)" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Dept.</label>
+                                                <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div style="float:left; padding-right:15px;">
-                                                <label id="lblSubDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:75px; width:80px;">Subdept.</label>
-                                                <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" />
+                                                <label id="lblSubDept" runat="server" oncontextMenu="ctx(this,event)" style="display:inline-block; float:left; padding-right:15px; min-width:75px; width:80px;">Subdept.</label>
+                                                <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
                                             </div>
                                             <div style="float:left; padding-right:15px;">
-                                                <label id="lblBirou" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Birou</label>
-                                                <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="150px" ValueField="F00809" TextField="F00810" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" />
+                                                <label id="lblBirou" runat="server" oncontextMenu="ctx(this,event)" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Birou</label>
+                                                <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="150px" ValueField="F00809" TextField="F00810" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
                                             </div>
                                             <div style="float:left; padding-right:15px;">
-                                                <label id="Label2" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
-                                                <dx:ASPxComboBox ID="cmbPtjZi" ClientInstanceName="cmbPtjZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
-                                            </div>                                        
+                                                <label id="lblPtjZi" runat="server" oncontextMenu="ctx(this,event)" style="float:left; padding-right:15px;">Tip inregistrare</label>
+                                                <dx:ASPxComboBox ID="cmbPtjZi" ClientInstanceName="cmbPtjZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="float:left; padding-right:15px;">
+                                                <label id="lblCateg" runat="server" oncontextMenu="ctx(this,event)" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Categorie</label>
+                                                <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -765,7 +830,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <br /><br />
+                <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" 
                     OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlRowPrepared="grDate_HtmlRowPrepared" 

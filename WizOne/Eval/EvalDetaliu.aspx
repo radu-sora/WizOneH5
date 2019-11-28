@@ -105,23 +105,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <div id="anunt" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">Anunt !</h3>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Atentie:</strong> trebuie sa salvezi informatiile pe fiecare rand ! <br /> Dupa salvarea informatiilor pe fiecare rand acceseaza si butonul Salvare de pe pagina!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Inchide</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
          <dx:ASPxCallbackPanel ID="pnlSectiune" ClientIDMode="Static" ClientInstanceName="pnlSectiune" ScrollBars="Vertical" runat="server" OnCallback="pnlSectiune_Callback" SettingsLoadingPanel-Enabled="false">
           <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }"/>
         <PanelCollection>
@@ -152,7 +135,7 @@
                         }" />
                     <Image Url="../Fisiere/Imagini/Icoane/salveaza.png" />
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" PostBackUrl="EvalLista.aspx">
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" PostBackUrl="EvalLista.aspx?q=56">
                     <Image Url="../Fisiere/Imagini/Icoane/iesire.png" />
                 </dx:ASPxButton>
             </td>

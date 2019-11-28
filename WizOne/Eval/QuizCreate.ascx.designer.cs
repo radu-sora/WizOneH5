@@ -166,6 +166,42 @@ namespace WizOne.Eval {
         protected global::DevExpress.Web.ASPxComboBox cmbTipObiect;
         
         /// <summary>
+        /// lblPerioadaObi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblPerioadaObi;
+        
+        /// <summary>
+        /// cmbPerioadaObi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbPerioadaObi;
+        
+        /// <summary>
+        /// lblPerioadaComp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblPerioadaComp;
+        
+        /// <summary>
+        /// cmbPerioadaComp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbPerioadaComp;
+        
+        /// <summary>
         /// lblOrientare control.
         /// </summary>
         /// <remarks>
@@ -274,24 +310,6 @@ namespace WizOne.Eval {
         protected global::DevExpress.Web.ASPxRadioButton chkObiective;
         
         /// <summary>
-        /// lblPerioadaObi control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblPerioadaObi;
-        
-        /// <summary>
-        /// cmbPerioadaObi control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbPerioadaObi;
-        
-        /// <summary>
         /// lblPrelComp control.
         /// </summary>
         /// <remarks>
@@ -317,24 +335,6 @@ namespace WizOne.Eval {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton chkCompetente;
-        
-        /// <summary>
-        /// lblPerioadaComp control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblPerioadaComp;
-        
-        /// <summary>
-        /// cmbPerioadaComp control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbPerioadaComp;
         
         /// <summary>
         /// lblSecPart8 control.

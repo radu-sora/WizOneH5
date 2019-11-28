@@ -189,7 +189,9 @@ namespace WizOne.ContracteLucru
                                 row[x] = Session["IdContract"];
                                 break;
                             case "IDAUTO":
-                                row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteAbsente"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                //Florin 2019.11.22
+                                //row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteAbsente"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+                                row[x] = Convert.ToInt32(General.Nz(ds.Tables["Ptj_ContracteAbsente"].Compute("max([IdAuto])", string.Empty), 0)) + 1;
                                 break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];

@@ -26,6 +26,7 @@ namespace WizOne.Reports
             System.Threading.Thread.CurrentThread.CurrentUICulture = newCulture;
 
             InitializeComponent();
+            lblTitlu.Text = Dami.TraduCuvant(lblTitlu.Text);
             IncarcaDate();
 
             //report.ExportOptions.Xls.TextExportMode = DevExpress.XtraPrinting.TextExportMode.Text;
@@ -53,7 +54,7 @@ namespace WizOne.Reports
                     if (arr.Length > 2 && arr[2] != "") struc = arr[2];
                 }
 
-                lblPerioada.Text = Dami.NumeLuna(luna) + " " + an.ToString();
+                lblPerioada.Text = Dami.NumeLuna(luna, 0, General.Nz(HttpContext.Current.Session["IdLimba"], "RO").ToString()) + " " + an.ToString();
 
                 DataTable dt = new DataTable();
                 if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 22)
@@ -105,6 +106,9 @@ namespace WizOne.Reports
                                             ziLibera = true;
                                             break;
                                         }
+                                    col.WordWrap = true;
+                                    col.CanGrow = false;
+
                                     if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) col.BackColor = Color.FromArgb(217, 243, 253);
                                     Detail.Controls.Add(col);
 
@@ -147,31 +151,32 @@ namespace WizOne.Reports
 
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["TextAfisare"].ToString() + " " + strZiua;
-                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
+                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));                          
                                 break;
                             case 3:                     //semnatura
                                 act = true;
 
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["Camp"].ToString();
-                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
-
+                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));                        
                                 break;
                             case 4:                     //antet
                                 string txt = "";
 
                                 if (struc != "" && struc != ";") txt += struc + "\n\r";
                                 string stare = DamiStareFornetii(dt);
-                                if (stare != "") txt += "Stare - " + stare + "\n\r";
-                                txt += "Nume Manager " + "\n\r";
-                                txt += "Nume Operator " + "\n\r";
+                                if (stare != "") txt += Dami.TraduCuvant("Stare") + " - " + stare + "\n\r";
+                                txt += Dami.TraduCuvant("Nume Manager") + " \n\r";
+                                txt += Dami.TraduCuvant("Nume Operator") + " \n\r";
 
                                 lblAntet.Text = txt;
                                 //lblAntet.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
-                                lblAntet.Font = new Font("Calibri", 10);
+                                lblAntet.Font = new Font("Calibri", 10);                         
                                 break;
                             default:                    //restul
                                 lbl = CreazaCamp(dtPrint.Rows[k]["TextAfisare"].ToString(), pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()));
+                                lbl.WordWrap = true;
+                                lbl.CanGrow = false;
                                 TopMargin.Controls.Add(lbl);
 
                                 col = CreazaCamp("[" + dtPrint.Rows[k]["Camp"].ToString() + "]", pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()), 2);
@@ -188,8 +193,10 @@ namespace WizOne.Reports
                                     col.XlsxFormatString = "#,##0";
                                 }
 
-                                col.WordWrap = false;
+                                col.WordWrap = true;                         
+                                col.CanGrow = false;                              
                                 col.TextAlignment = TextAlignment.MiddleLeft;
+                                
 
                                 pozX = pozX + lbl.WidthF;
                                 if (pozX >= this.PageWidth) this.PageWidth = (int)pozX;

@@ -661,7 +661,7 @@
     <value>February</value>
   </data>
   <data name="Filtru" xml:space="preserve">
-    <value>Gigi</value>
+    <value>Filter</value>
   </data>
   <data name="Ianuarie" xml:space="preserve">
     <value>January</value>
@@ -962,5 +962,50 @@
   </data>
   <data name="Pontajechipa" xml:space="preserve">
     <value>Team timesheet</value>
+  </data>  
+  <data name="(Selectietoate)" xml:space="preserve">
+    <value>(Select all)</value>
+  </data>  
+  <data name="Solicitat" xml:space="preserve">
+    <value>Requested</value>
+  </data> 
+  <data name="Incurs" xml:space="preserve">
+    <value>Running</value>
+  </data> 
+  <data name="Aprobat" xml:space="preserve">
+    <value>Approved</value>
+  </data> 
+  <data name="Respins" xml:space="preserve">
+    <value>Rejected</value>
+  </data> 
+  <data name="Anulat" xml:space="preserve">
+    <value>Canceled</value>
+  </data> 
+ <data name="Planificat" xml:space="preserve">
+    <value>Planned</value>
+  </data>  
+ <data name="btnInchide" xml:space="preserve">
+    <value>Close</value>
+  </data> 
+ <data name="chkTotaluri" xml:space="preserve">
+    <value>totals</value>
+  </data> 
+ <data name="chkOre" xml:space="preserve">
+    <value>in and out hours</value>
+  </data> 
+ <data name="chkPauza" xml:space="preserve">
+    <value>pause</value>
+  </data> 
+ <data name="chkLinie" xml:space="preserve">
+    <value>listing on one line</value>
+  </data>  
+ <data name="Foaiecolectivadeprezenta" xml:space="preserve">
+    <value>Collective sheet for attendance</value>
+  </data>  
+ <data name="Numemanager" xml:space="preserve">
+    <value>Manager name</value>
+  </data> 
+  <data name="Numeoperator" xml:space="preserve">
+    <value>Operator name</value>
   </data>  
 </root>

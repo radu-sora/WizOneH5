@@ -41,16 +41,12 @@
       <table width="30%">
             <tr>            
                 <td>
-                     <Label runat="server">Luna: </Label> 
-                    <dx:ASPxComboBox ID="cmbLuna" runat="server" ClientInstanceName="cmbLuna" ClientIDMode="Static" Width="100" ValueField="Id"  style="font-size:15px;"  
-                        TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbLuna"   >                                          
-                    </dx:ASPxComboBox>
-                </td>
-                <td>
-                    <Label runat="server">An: </Label> 
-                    <dx:ASPxComboBox ID="cmbAn" runat="server" ClientInstanceName="cmbAn" ClientIDMode="Static" Width="100" ValueField="Id"  style="font-size:15px;"  
-                        TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbAn"   >                                          
-                    </dx:ASPxComboBox>
+                     <Label runat="server">Luna/An: </Label> 
+                    <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="200px" DisplayFormatString="MM/yyyy" ButtonStyle-Width="75"  style="font-size:20px;" Height="30"  PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" >                           
+                            <CalendarProperties FirstDayOfWeek="Monday" >                            
+                       
+                            </CalendarProperties>
+                    </dx:ASPxDateEdit>
                 </td>
                 <td valign="bottom">
 					<dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
@@ -99,7 +95,7 @@
                     <Columns>
                         <dx:GridViewDataTextColumn FieldName="Id" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TextAfisare" Caption="Denumire" ReadOnly="true"  Width="200px" Visible="true" ShowInCustomizationForm="true" FixedStyle="Left" />
-                        <dx:GridViewDataTextColumn FieldName="Valoare" Name="Valoare" Caption="Valoare" ReadOnly="true" Width="150px"  ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Valoare" Name="Valoare" Caption="Valoare" ReadOnly="true" Width="100px"  ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="An" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="Luna" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

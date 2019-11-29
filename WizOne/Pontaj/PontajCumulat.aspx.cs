@@ -26,8 +26,12 @@ namespace WizOne.Pontaj
             {
                 if (!IsPostBack)
                 {
-                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
-                                                        FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.""Coloana"" = AF.""Denumire""
+                    //Radu 28.11.2019 - se inlocuieste Ptj_AliasF cu Ptj_tblAdmin
+                    //DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
+                    //                                    FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.""Coloana"" = AF.""Denumire""
+                    //                                    ORDER BY CS.""Ordine""  ", null);
+                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.""Alias"",CS.""Coloana"") ""Caption"" 
+                                                        FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_tblAdmin"" AF ON CS.""Coloana"" = AF.""Coloana""
                                                         ORDER BY CS.""Ordine""  ", null);
 
                     for (int i = 0; i < dt.Rows.Count; i++)

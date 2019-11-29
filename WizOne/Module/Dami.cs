@@ -316,7 +316,7 @@ namespace WizOne.Module
                             if (ctl != null)
                             {
                                 ctl.Visible = vizibil;
-                                ctl.Enabled = blocat;
+                                ctl.Enabled = !blocat;
 
                                 if (idCtl.Length > 3)
                                 {
@@ -334,7 +334,7 @@ namespace WizOne.Module
                                     if (ctl2 != null)
                                     {
                                         ctl2.Visible = vizibil;
-                                        ctl2.Enabled = blocat;
+                                        ctl2.Enabled = !blocat;
 
                                         if (idCtl.Length > 3)
                                         {
@@ -353,7 +353,7 @@ namespace WizOne.Module
                                         if (ctl3 != null)
                                         {
                                             ctl3.Visible = vizibil;
-                                            ctl3.Enabled = blocat;
+                                            ctl3.Enabled = !blocat;
 
                                             if (idCtl.Length > 3)
                                             {

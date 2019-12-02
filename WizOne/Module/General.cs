@@ -7405,7 +7405,7 @@ namespace WizOne.Module
                     if (idSectie != -99) strFiltru += " AND A.F10006 = " + idSectie.ToString();
                     if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""ValStr"", ""Val0"", ""In1"", ""Out1"", ""IdProgram"")
                                  {0} {1} {2} {3} ";
 
                     strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1, cuInOut), strFiltru, strFiltruZile, usr);
@@ -7577,7 +7577,7 @@ namespace WizOne.Module
                     string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
 
-                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1), strFiltru, strFiltruZile, usr);
+                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1, cuInOut), strFiltru, strFiltruZile, usr);
 
                     strFIN += strIns + ";";
 
@@ -7667,7 +7667,7 @@ namespace WizOne.Module
 
                 string strZile = "";
                 string nrm = "";
-                string inOut = " ,null, null";
+                string inOut = @" ,null AS ""In1"", null AS ""Out1""";
 
 
                 //Florin 2018.10.23
@@ -7694,7 +7694,7 @@ namespace WizOne.Module
                     if (cuInOut == 1)
                     {
                         inOut = @",(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraInInitializare), DATEPART(MINUTE,OraInInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS In1
-                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS In1";
+                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS Out1";
                     }
 
                     for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)               //pt fiecare zi din luna
@@ -7703,8 +7703,24 @@ namespace WizOne.Module
                     }
 
 
+                    //Florin 201.12.02 - am adaugat IdProgram
                     //Radu 04.04.2017 - am modificat F06204Default
-                    strSql = @"SELECT A.F10003, X.Ziua, CASE WHEN datepart(dw,X.Ziua) - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END AS ZiSapt,
+                    strSql = @"SELECT *,
+
+                                CASE WHEN X.ZiLiberaLegala = 1 AND Y.TipSchimb8 = 1 THEN  COALESCE(Y.Program8, Y.Program0) ELSE
+                                CASE X.ZiSapt
+                                WHEN 1 THEN (CASE WHEN Y.TipSchimb1 = 1 THEN COALESCE(Y.Program1, Y.Program0) END) 
+                                WHEN 2 THEN (CASE WHEN Y.TipSchimb2 = 1 THEN COALESCE(Y.Program2, Y.Program0) END) 
+                                WHEN 3 THEN (CASE WHEN Y.TipSchimb3 = 1 THEN COALESCE(Y.Program3, Y.Program0) END) 
+                                WHEN 4 THEN (CASE WHEN Y.TipSchimb4 = 1 THEN COALESCE(Y.Program4, Y.Program0) END) 
+                                WHEN 5 THEN (CASE WHEN Y.TipSchimb5 = 1 THEN COALESCE(Y.Program5, Y.Program0) END) 
+                                WHEN 6 THEN (CASE WHEN Y.TipSchimb6 = 1 THEN COALESCE(Y.Program6, Y.Program0) END) 
+                                WHEN 7 THEN (CASE WHEN Y.TipSchimb7 = 1 THEN COALESCE(Y.Program7, Y.Program0) END) 
+                                END END AS IdProgram
+
+                                FROM (
+
+                                SELECT A.F10003, X.Ziua, CASE WHEN datepart(dw,X.Ziua) - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END AS ZiSapt,
                                 CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 THEN 1 ELSE 0 END AS ZiLibera, 
                                 0 as Parinte, 0 as Linia, -1 as F06204, 
                                 G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007,
@@ -7726,7 +7742,8 @@ namespace WizOne.Module
                                 left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" where YEAR(Ziua)={3} AND MONTH(Ziua)={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = x.ZIUA
                                 {5}
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
-                                where isnull(D.CNT,0) = 0";
+                                where isnull(D.CNT,0) = 0) X
+                                LEFT JOIN Ptj_Contracte Y ON X.IdContract=Y.Id";
 
                 }
                 else
@@ -7735,13 +7752,33 @@ namespace WizOne.Module
                         nrm = @" ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") END AS ""ValStr""
                                  ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") * 60 END AS ""Val0"" ";
 
+                    if (cuInOut == 1)
+                    {
+                        inOut = @",(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraInInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""In1""
+                                  ,(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraOutInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""Out1"" ";
+                    }
                     for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)               //pt fiecare zi din luna
                     {
                         strZile += " union select " + General.ToDataUniv(an, luna, i) + " AS \"Ziua\" FROM Dual";
                     }
 
                     //Radu 04.04.2017 - am modificat F06204Default
-                    strSql = @"SELECT A.F10003, X.""Ziua"", (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW')) AS ""ZiSapt"",
+                    strSql = @"SELECT X.*,
+
+                                CASE WHEN X.""ZiLiberaLegala"" = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE X.""ZiSapt""
+                                WHEN 1 THEN (CASE WHEN Y.""TipSchimb1"" = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END) 
+                                WHEN 2 THEN (CASE WHEN Y.""TipSchimb2"" = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END) 
+                                WHEN 3 THEN (CASE WHEN Y.""TipSchimb3"" = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END) 
+                                WHEN 4 THEN (CASE WHEN Y.""TipSchimb4"" = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END) 
+                                WHEN 5 THEN (CASE WHEN Y.""TipSchimb5"" = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END) 
+                                WHEN 6 THEN (CASE WHEN Y.""TipSchimb6"" = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END) 
+                                WHEN 7 THEN (CASE WHEN Y.""TipSchimb7"" = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END) 
+                                END END AS ""IdProgram""
+
+                                FROM (
+
+                                SELECT A.F10003, X.""Ziua"", (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW')) AS ""ZiSapt"",
                                 CASE WHEN (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW'))=6 OR (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 THEN 1 ELSE 0 END AS ""ZiLibera"",
                                 0 as ""Parinte"", 0 as ""Linia"", -1 as F06204, 
                                 (SELECT C.F00603 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10002,
@@ -7765,8 +7802,8 @@ namespace WizOne.Module
                                 inner join F100 A on 1=1 AND TRUNC(A.F10022) <= TRUNC(X.""Ziua"") AND TRUNC(X.""Ziua"") <= TRUNC(A.F10023)
                                 left join HOLIDAYS B on X.""Ziua""=B.DAY
                                 left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" WHERE TO_NUMBER(TO_CHAR(""Ziua"",'YYYY'))={3} AND TO_NUMBER(TO_CHAR(""Ziua"",'MM'))={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = X.""Ziua""
-                                where COALESCE(D.CNT,0) = 0";
-
+                                where COALESCE(D.CNT,0) = 0) X
+                                LEFT JOIN ""Ptj_Contracte"" Y ON X.""IdContract""=Y.""Id"" ";
                 }
 
                 if (strZile.Length > 6) strZile = strZile.Substring(6);

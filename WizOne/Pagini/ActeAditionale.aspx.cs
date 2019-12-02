@@ -1654,156 +1654,218 @@ namespace WizOne.Pagini
         {
             try
             {
+                string param = "";
                 string paramRaport = "";
                 string paramRaport_tmp = "";
                 string msg = "";
                 string ids = "";
+                string url = "";
 
                 List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct", "SporVechime", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev" });
 
                 if (lst == null || lst.Count() == 0 || lst[0] == null) return;
 
-                for (int i = 0; i < lst.Count(); i++)
+
+                if (General.Nz(Dami.ValoareParam("RaportActeAditionale_PrintMultiplu"), 0).ToString() == "0")
                 {
-                    object[] obj = lst[i] as object[];
+                    object[] obj = lst[0] as object[];
 
                     if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
                     {
-                        msg = "Exista inregistrare fara numar si data document";
-                        break;
+                        MessageBox.Show("Nu exista numar si data document", MessageBox.icoWarning, "Operatie anulata");
+                        return;
                     }
-
-                    //Florin 2019.11.19
-
-                    //if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
-                    //{
-                    //    paramRaport = "RaportActeAditionale_Incetare";
-                    //}
-                    //else
-                    //{
-                    //    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
-                    //    {
-                    //        paramRaport = "RaportActeAditionale_CIM";
-                    //    }
-                    //    else
-                    //    {
-                    //        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1)
-                    //        {
-                    //            if (General.Nz(obj[12], "").ToString() == "")
-                    //            {
-                    //                msg = "Nu exista data modificare";
-                    //                break;
-                    //            }
-                    //            paramRaport = "RaportActeAditionale_ModificariCIM";
-                    //        }
-                    //    }
-                    //}
 
 
                     if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
                     {
+                        DateTime ziua = Convert.ToDateTime(obj[11]);
                         paramRaport = "RaportActeAditionale_Incetare";
+                        param = "&NrDecizie=" + obj[10] + "&DataDecizie=" + +ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
                     }
-
-                    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                    else
                     {
-                        paramRaport = "RaportActeAditionale_CIM";
-                    }
-
-                    if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1)
-                    {
-                        if (General.Nz(obj[12], "").ToString() == "")
+                        if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                         {
-                            msg = "Nu exista data modificare";
+                            paramRaport = "RaportActeAditionale_CIM";
+                            param = "&F10003=" + obj[0] + "&Validate=0";
+                        }
+                        else
+                        {
+                            if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1)
+                            {
+                                if (General.Nz(obj[12], "").ToString() == "")
+                                {
+                                    MessageBox.Show("Nu exista data modificare", MessageBox.icoWarning, "Operatie anulata");
+                                    return;
+                                }
+                                DateTime ziua = Convert.ToDateTime(obj[12]);
+                                paramRaport = "RaportActeAditionale_ModificariCIM";
+                                param = "&DataModificare=" + ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
+                            }
+                        }
+                    }
+
+                    string idRap = Dami.ValoareParam(paramRaport);
+                    if (idRap == "")
+                    {
+                        MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
+                        return;
+                    }
+
+                    if (paramRaport == "")
+                    {
+                        MessageBox.Show("Nu exista parametrii", MessageBox.icoWarning, "Operatie anulata");
+                        return;
+                    }
+
+                    //Florin 2019.07.15
+                    #region Salvam Filtrul
+
+                    string req = "";
+                    if (cmbCmp.Value != null) req += "&Cmp=" + cmbCmp.Value;
+                    if (cmbTip.Value != null) req += "&Tip=" + cmbTip.Value;
+                    if (cmbAng.Value != null) req += "&Ang=" + cmbAng.Value;
+                    if (cmbStatus.Value != null) req += "&Status=" + cmbStatus.Value;
+                    if (txtData.Value != null) req += "&Data=" + txtData.Value;
+                    if (txtDepasire.Value != null) req += "&Depasire=" + txtDepasire.Value;
+
+                    Session["Filtru_ActeAditionale"] = req;
+
+                    #endregion
+
+                    Session["ReportId"] = Convert.ToInt32(idRap);
+
+                    string q = General.URLEncode("Angajat=" + obj[0] + param);
+                    url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + q;
+                }
+                else
+                {
+
+                    for (int i = 0; i < lst.Count(); i++)
+                    {
+                        object[] obj = lst[i] as object[];
+
+                        if (General.Nz(obj[10], "").ToString() == "" || General.Nz(obj[11], "").ToString() == "")
+                        {
+                            msg = "Exista inregistrare fara numar si data document";
                             break;
                         }
-                        paramRaport = "RaportActeAditionale_ModificariCIM";
+
+                        if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
+                        {
+                            paramRaport = "RaportActeAditionale_Incetare";
+                        }
+
+                        if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                        {
+                            paramRaport = "RaportActeAditionale_CIM";
+                        }
+
+                        if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1)
+                        {
+                            if (General.Nz(obj[12], "").ToString() == "")
+                            {
+                                msg = "Nu exista data modificare";
+                                break;
+                            }
+                            paramRaport = "RaportActeAditionale_ModificariCIM";
+                        }
+
+                        if (Convert.ToInt32(General.Nz(obj[16], 0)) == 1)
+                        {
+                            paramRaport = "RaportActeAditionale_Suspendare";
+                        }
+                        if (Convert.ToInt32(General.Nz(obj[17], 0)) == 1)
+                        {
+                            paramRaport = "RaportActeAditionale_SuspendareRevenire";
+                        }
+                        if (Convert.ToInt32(General.Nz(obj[18], 0)) == 1)
+                        {
+                            paramRaport = "RaportActeAditionale_Detasare";
+                        }
+                        if (Convert.ToInt32(General.Nz(obj[19], 0)) == 1)
+                        {
+                            paramRaport = "RaportActeAditionale_DetasareRevenire";
+                        }
+
+
+                        if (paramRaport_tmp != "" && paramRaport != paramRaport_tmp)
+                        {
+                            msg = "Trebuie sa selectati inregistrari care au acelasi tip de modificare";
+                            break;
+                        }
+
+                        paramRaport_tmp = paramRaport;
+                        //Florin 2019.12.02 - fortam sa aiba ids, pt ca candidatii se aduc dinamic din F100 si nu sunt inca in Admin_NrActAd
+                        if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                        {
+                            if (General.Nz(obj[14], "").ToString() != "")
+                                ids += "," + obj[14];
+                        }
+                        else
+                        {
+                            if (General.Nz(obj[0], "").ToString() != "")
+                                ids += "," + obj[0];
+                        }
                     }
 
-                    if (Convert.ToInt32(General.Nz(obj[16], 0)) == 1)
+                    if (msg != "")
                     {
-                        paramRaport = "RaportActeAditionale_Suspendare";
+                        MessageBox.Show(msg, MessageBox.icoWarning, "Operatie anulata");
+                        return;
                     }
-                    if (Convert.ToInt32(General.Nz(obj[17], 0)) == 1)
+
+                    if (ids == "")
                     {
-                        paramRaport = "RaportActeAditionale_SuspendareRevenire";
+                        object[] obj = lst[0] as object[];
+                        if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
+                            MessageBox.Show("Inainte de a imprima trebuie sa efectuati cel putin o operatie", MessageBox.icoWarning, "Operatie anulata");
+                        else
+                            MessageBox.Show("Nu exista inregistrari selectate", MessageBox.icoWarning, "Operatie anulata");
+                        return;
                     }
-                    if (Convert.ToInt32(General.Nz(obj[18], 0)) == 1)
+
+                    string idRap = Dami.ValoareParam(paramRaport);
+                    if (idRap == "")
                     {
-                        paramRaport = "RaportActeAditionale_Detasare";
+                        MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
+                        return;
                     }
-                    if (Convert.ToInt32(General.Nz(obj[19], 0)) == 1)
+
+                    //Florin 2019.07.15
+                    #region Salvam Filtrul
+
+                    string req = "";
+                    if (cmbCmp.Value != null) req += "&Cmp=" + cmbCmp.Value;
+                    if (cmbTip.Value != null) req += "&Tip=" + cmbTip.Value;
+                    if (cmbAng.Value != null) req += "&Ang=" + cmbAng.Value;
+                    if (cmbStatus.Value != null) req += "&Status=" + cmbStatus.Value;
+                    if (txtData.Value != null) req += "&Data=" + txtData.Value;
+                    if (txtDepasire.Value != null) req += "&Depasire=" + txtDepasire.Value;
+
+                    Session["Filtru_ActeAditionale"] = req;
+
+                    #endregion
+
+                    Session["ReportId"] = Convert.ToInt32(idRap);
+
+                    int idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR tmpIdPrint_Id_SEQ", null));
+                    if (Constante.tipBD == 2)
+                        idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""tmpIdPrint_Id_SEQ"".NEXTVAL FROM DUAL", null));
+
+                    string sqlSes = "";
+                    string[] arrIds = ids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int k = 0; k < arrIds.Length; k++)
                     {
-                        paramRaport = "RaportActeAditionale_DetasareRevenire";
+                        sqlSes += $"UNION SELECT {idSesiune}, {arrIds[k]} " + (Constante.tipBD == 2 ? " FROM DUAL" : "");
                     }
 
+                    if (sqlSes != "")
+                        General.ExecutaNonQuery(@"INSERT INTO ""tmpIdPrint""(""IdSesiune"", ""Id"") " + sqlSes.Substring(6), null);
 
-                    if (paramRaport_tmp != "" && paramRaport != paramRaport_tmp)
-                    {
-                        msg = "Trebuie sa selectati inregistrari care au acelasi tip de modificare";
-                        break;
-                    }
-
-                    paramRaport_tmp = paramRaport;
-                    if (General.Nz(obj[14],"").ToString() != "")
-                        ids += "," + obj[14];
+                    url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("idSesiune=" + idSesiune);
                 }
-
-                if (msg != "")
-                {
-                    MessageBox.Show(msg, MessageBox.icoWarning, "Operatie anulata");
-                    return;
-                }
-
-                if (ids == "")
-                {
-                    object[] obj = lst[0] as object[];
-                    if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
-                        MessageBox.Show("Inainte de a imprima trebuie sa efectuati cel putin o operatie", MessageBox.icoWarning, "Operatie anulata");
-                    else
-                        MessageBox.Show("Nu exista inregistrari selectate", MessageBox.icoWarning, "Operatie anulata");
-                    return;
-                }
-
-                string idRap = Dami.ValoareParam(paramRaport);
-                if (idRap == "")
-                {
-                    MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
-                    return;
-                }
-
-                //Florin 2019.07.15
-                #region Salvam Filtrul
-
-                string req = "";
-                if (cmbCmp.Value != null) req += "&Cmp=" + cmbCmp.Value;
-                if (cmbTip.Value != null) req += "&Tip=" + cmbTip.Value;
-                if (cmbAng.Value != null) req += "&Ang=" + cmbAng.Value;
-                if (cmbStatus.Value != null) req += "&Status=" + cmbStatus.Value;
-                if (txtData.Value != null) req += "&Data=" + txtData.Value;
-                if (txtDepasire.Value != null) req += "&Depasire=" + txtDepasire.Value;
-
-                Session["Filtru_ActeAditionale"] = req;
-
-                #endregion
-
-                Session["ReportId"] = Convert.ToInt32(idRap);
-
-                int idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR tmpIdPrint_Id_SEQ", null));
-                if (Constante.tipBD == 2)
-                    idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""tmpIdPrint_Id_SEQ"".NEXTVAL FROM DUAL", null));
-
-                string sqlSes = "";
-                string[] arrIds = ids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                for(int k = 0; k < arrIds.Length; k++)
-                {
-                    sqlSes += $"UNION SELECT {idSesiune}, {arrIds[k]} " + (Constante.tipBD == 2 ? " FROM DUAL" : "");
-                }
-
-                if (sqlSes != "")
-                    General.ExecutaNonQuery(@"INSERT INTO ""tmpIdPrint""(""IdSesiune"", ""Id"") " + sqlSes.Substring(6), null);
-
-                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("idSesiune=" + idSesiune);
 
                 Response.Redirect(url);
 

@@ -934,7 +934,7 @@ namespace WizOne.Pontaj
                     
 
                     string val = General.Nz(grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri"), "").ToString();
-                    if (val != "" && (val + ",").IndexOf(e.DataColumn.FieldName) >= 0)
+                    if (val != "" && (val + ",").IndexOf("," + e.DataColumn.FieldName + ",") >= 0)
                     {
                         e.Cell.BackColor = Color.DarkGray;
                         e.Cell.Enabled = false;

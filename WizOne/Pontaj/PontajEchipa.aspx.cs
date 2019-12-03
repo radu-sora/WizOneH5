@@ -2524,12 +2524,12 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99)
                 {
                     strFiltru += " AND A.F100958 = " + cmbSubDept.Value;
-                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) B ON A.F10003 = B.F10003 ";
+                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.F10003 ";
                 }
                 if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99)
                 {
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
-                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) B ON A.F10003 = B.F10003 ";
+                    strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.F10003 ";
                 }
                 //Florin 2019.09.23
                 //if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
@@ -2547,7 +2547,7 @@ namespace WizOne.Pontaj
                 //Radu 13.03.2019
                 string strFiltruSpecial = "";
                 if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    strFiltruSpecial = strFiltru.Replace("A.F10095", "B.F10095").Replace("A.F1006", "C.F1006");
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006");
                 else
                     strLeg = "";
 

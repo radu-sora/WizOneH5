@@ -11,61 +11,43 @@ namespace WizOne.Personal
 {
 
 
-    public partial class DateAngajat
+    public partial class ListaDocumente
     {
 
         /// <summary>
-        /// btnDocPersonal control.
+        /// form1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnDocPersonal;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// btnSave control.
+        /// grDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSave;
+        protected global::DevExpress.Web.ASPxGridView grDate;
 
         /// <summary>
-        /// btnExit control.
+        /// btnArata control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnExit;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnArata;
 
         /// <summary>
-        /// lblDateAngajat control.
+        /// btnPrint control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblDateAngajat;
-
-        /// <summary>
-        /// ASPxPageControl2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPageControl ASPxPageControl2;
-
-        /// <summary>
-        /// popGenDoc control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl popGenDoc;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnPrint;
     }
 }

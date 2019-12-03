@@ -5428,8 +5428,11 @@ namespace WizOne.Module
         {
             try
             {
-                return General.IncarcaDT("SELECT \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_AliasF\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END", null);
+                //Radu 28.11.2019 - se inlocuieste Ptj_AliasF cu Ptj_tblAdmin
+                //return General.IncarcaDT("SELECT \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_AliasF\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END", null);
+                return General.IncarcaDT("SELECT \"Coloana\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
             }
+
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);

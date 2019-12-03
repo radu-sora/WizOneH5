@@ -7793,7 +7793,8 @@ namespace WizOne.Module
                                 inner join F100 A on 1=1 AND TRUNC(A.F10022) <= TRUNC(X.""Ziua"") AND TRUNC(X.""Ziua"") <= TRUNC(A.F10023)
                                 left join HOLIDAYS B on X.""Ziua""=B.DAY
                                 left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" WHERE TO_NUMBER(TO_CHAR(""Ziua"",'YYYY'))={3} AND TO_NUMBER(TO_CHAR(""Ziua"",'MM'))={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = X.""Ziua""
-                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")
+                                LEFT JOIN (SELECT ROW_NUMBER() OVER (PARTITION BY CTR.F10003 order by CTR.""F10003"", CTR.""IdContract"" DESC) as ""NrCrt"", CTR.* FROM ""F100Contracte"" CTR) BC ON BC.F10003 = A.F10003 AND BC.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= BC.""DataSfarsit"" AND ""NrCrt"" = 1
+                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id"" = BC.""IdContract""
                                 WHERE COALESCE(D.CNT,0) = 0 ";
                 }
 

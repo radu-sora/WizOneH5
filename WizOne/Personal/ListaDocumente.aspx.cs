@@ -54,8 +54,9 @@ namespace WizOne.Personal
                     grDate.KeyFieldName = "Id";
                     grDate.DataSource = dt;
                     grDate.DataBind();
-
                 }
+                string url = "Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["Marca"].ToString());
+                Session["ListaDoc_URL"] = url;
             }
             catch (Exception ex)
             {
@@ -68,11 +69,21 @@ namespace WizOne.Personal
         {
             try
             {
-                string str = e.Parameters;
+                string str = e.Parameters;           
                 if (str != "")
-                {   
-       
-                }
+                {
+                    string[] arr = e.Parameters.Split(';');
+                    switch (arr[0])
+                    {
+                        case "btnArata":
+                            Session["ReportId"] = Convert.ToInt32(arr[1]);                           
+                            break;
+                        case "btnPrint":
+                            Session["ReportId"] = Convert.ToInt32(arr[1]);
+                            Session["PrintareAutomata"] = 1;
+                            break;
+                    }
+                }  
             }
             catch (Exception ex)
             {

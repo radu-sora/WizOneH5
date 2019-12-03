@@ -2884,7 +2884,7 @@ namespace WizOne.Pontaj
 
 
                 if (Dami.ValoareParam("TipCalculDate") == "2")
-                    strInner += $@"LEFT JOIN DamiDataPlecare_Table dd ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
+                    strInner += $@"LEFT JOIN DamiDataPlecare_Table ddp ON ddp.F10003=X.F10003 AND ddp.dt={dtSf}";
                 else
                     strInner += $@"OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
 

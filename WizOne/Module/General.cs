@@ -7364,32 +7364,35 @@ namespace WizOne.Module
 
                     if (strZile.Length > 6) strZile = strZile.Substring(6);
 
-
-
                     if (stergePontariAngPlecati == 1)
                     {
-                        //Radu 15.03.2019 - modficare                
-                        //string strDel = @"DELETE A
-                        //            FROM Ptj_Intrari A
-                        //            INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //            WHERE CONVERT(date,ISNULL(MODIF.DATA, f10023)) >= {0} AND CONVERT(date,ISNULL(MODIF.DATA, f10023)) <> '2100-01-01') B 
-                        //            ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII ;";
+                        //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
+                        string strDel = $@"
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                FROM Ptj_Intrari A
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01';
+                                    
+                                DELETE A
+                                FROM Ptj_Intrari A
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01';";
 
-                        string strDel = @"DELETE A
-                                    FROM Ptj_Intrari A
-                                    INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                    ) B 
-                                    ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {0} <= A.Ziua AND A.Ziua <= {1} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01' ;";
-
-                        strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel + "\n\r";
 
-                        //Radu 12.02.2019
-                        strDel = @"DELETE A
-                                    FROM Ptj_Intrari A
-                                    INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) <= {1} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua< B.F10022  AND {0} <= A.Ziua AND A.Ziua <= {1};";
+                        strDel = $@"
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                FROM Ptj_Intrari A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) <= {ziSf} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua< B.F10022  AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf};
 
-                        strDel = string.Format(strDel, ziInc, ziSf);
+                                DELETE A
+                                FROM Ptj_Intrari A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) <= {ziSf} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua< B.F10022  AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf};";
+
                         strFIN += strDel + "\n\r";
                     }
 
@@ -7519,40 +7522,45 @@ namespace WizOne.Module
 
                     if (strZile.Length > 6) strZile = strZile.Substring(6);
 
-                    //string ziInc = General.ToDataUniv(an, luna, 1);
-                    //string ziSf = General.ToDataUniv(an, luna, 99);
-
-
                     if (stergePontariAngPlecati == 1)
                     {
-                        //Radu 15.03.2019 - modificare
-                        //string strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                        //                WHERE ""IdAuto"" IN 
-                        //                (SELECT A.""IdAuto""
-                        //                FROM ""Ptj_Intrari"" A
-                        //                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
-                        //                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII);";
+                        //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
+                        string strDel = $@"
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                FROM ""Ptj_Intrari"" A
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));
 
-                        string strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                                        WHERE ""IdAuto"" IN 
-                                        (SELECT A.""IdAuto""
-                                        FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                        ) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));";
+                                DELETE FROM ""Ptj_Intrari"" 
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));";
 
-                        strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;
 
-                        //Radu 12.02.2019
-                        strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                                        WHERE ""IdAuto"" IN 
-                                        (SELECT A.""IdAuto""
-                                        FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {1} AND TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1});";
+                        strDel = $@"
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                FROM ""Ptj_Intrari"" A
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {ziSf} AND TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf});
 
-                        strDel = string.Format(strDel, ziInc, ziSf);
+                                DELETE FROM ""Ptj_Intrari"" 
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {ziSf} AND TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf});";
+
                         strFIN += strDel;
                     }
 

@@ -1881,60 +1881,40 @@ namespace WizOne.Pontaj
             }
         }
 
-#endregion
+        #endregion
 
-
+        //Florin 2019.12.05 - am rescris functia
         protected void btnStergePontari_Click(object sender, EventArgs e)
         {
             try
             {
-                string strSql = "";
+                DateTime dt = DateTime.Now;
+                if (txtAnLuna.Value != null) dt = Convert.ToDateTime(txtAnLuna.Value);
 
-                if (Constante.tipBD == 1)
-                    strSql = @"SELECT DISTINCT CONVERT(nvarchar(10),A.F10003) + ', '
-                                FROM Ptj_Intrari A
-                                INNER JOIN (SELECT F10003, F10023 FROM f100 WHERE CONVERT(date,f10023) >= {0} AND CONVERT(date,F10023) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua>= B.F10023
-                                FOR XML PATH('')";
-                else
-                    strSql = @"SELECT LISTAGG(A.F10003, '; ') WITHIN GROUP (ORDER BY A.F10003) 
-                                FROM ""Ptj_Intrari"" A
-                                INNER JOIN (SELECT F10003, F10023 FROM f100 WHERE TRUNC(f10023) >= {0} AND TRUNC(F10023) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" >= B.F10023";
+                //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
 
-                strSql = string.Format(strSql, General.ToDataUniv(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month));
-
-                string rez = (General.ExecutaScalar(strSql, null) ?? "").ToString();
-
-                if (rez != "")
-                {
-                    DateTime dt = DateTime.Now;
-                    if (txtAnLuna.Value != null) dt = Convert.ToDateTime(txtAnLuna.Value);
-
-                    string ziInc = General.ToDataUniv(dt.Year, dt.Month, 1);
-                    string strDel = $@"
-                        BEGIN
-                        DELETE A
+                string ziInc = General.ToDataUniv(dt.Year, dt.Month, 1);
+                string strDel = $@"
+                    BEGIN
+                        INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}                            
                         FROM Ptj_Intrari A
-                        INNER JOIN (SELECT F10003, F10023 FROM f100 WHERE CONVERT(date,f10023) >= {ziInc} AND CONVERT(date,F10023) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua > B.F10023;
-                        DELETE A
-                        FROM Ptj_Intrari A
-                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) >= {ziInc} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua < B.F10022;
-                        END;";
-                    if (Constante.tipBD == 2)
-                        strDel = $@"
-                            BEGIN
-                            DELETE FROM ""Ptj_Intrari"" A
-                                    WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE TRUNC(f10023) >= {ziInc}  AND TRUNC(F10023) <> TO_DATE('01/01/2100', 'dd/mm/yyyy')) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" > B.F10023);
-                            DELETE FROM ""Ptj_Intrari"" A
-                                    WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE TRUNC(f10022) >= {ziInc}  AND TRUNC(F10022) <> TO_DATE('01/01/2100', 'dd/mm/yyyy')) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" < B.F10022);
-                            END;";
-									
-									
-                    General.ExecutaNonQuery(strDel, null);
-                    MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoInfo, "Angajati plecati");
+                            WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE {General.TruncateDate("F10023")} >= {ziInc}  AND {General.TruncateDate("F10023")} <> {General.ToDataUniv(2100, 1, 1)}) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" > B.F10023);
 
-                }
-                else
-                    MessageBox.Show(Dami.TraduCuvant("Nu exista postari"), MessageBox.icoInfo, "Angajati plecati");
+                        DELETE FROM ""Ptj_Intrari""
+                            WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE {General.TruncateDate("F10023")} >= {ziInc}  AND {General.TruncateDate("F10023")} <> {General.ToDataUniv(2100, 1, 1)}) B  WHERE B.F10003 = ""Ptj_Intrari"".F10003  AND ""Ptj_Intrari"".""Ziua"" > B.F10023);
+                            
+                        INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}                            
+                        FROM Ptj_Intrari A
+                            WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10022 FROM f100 WHERE {General.TruncateDate("F10022")} >= {ziInc}  AND {General.TruncateDate("F10022")} <> {General.ToDataUniv(2100, 1, 1)}) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" < B.F10022);
+
+                        DELETE FROM ""Ptj_Intrari""
+                            WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10022 FROM f100 WHERE {General.TruncateDate("F10022")} >= {ziInc}  AND {General.TruncateDate("F10022")} <> {General.ToDataUniv(2100, 1, 1)}) B  WHERE B.F10003 = ""Ptj_Intrari"".F10003  AND ""Ptj_Intrari"".""Ziua"" < B.F10022);
+                    END;";
+
+                General.ExecutaNonQuery(strDel, null);
+                MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoInfo, "Angajati plecati");
             }
             catch (Exception ex)
             {
@@ -1942,6 +1922,91 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        //protected void btnStergePontari_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string strSql = "";
+
+        //        if (Constante.tipBD == 1)
+        //            strSql = @"SELECT DISTINCT CONVERT(nvarchar(10),A.F10003) + ', '
+        //                        FROM Ptj_Intrari A
+        //                        INNER JOIN (SELECT F10003, F10023 FROM f100 WHERE CONVERT(date,f10023) >= {0} AND CONVERT(date,F10023) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua>= B.F10023
+        //                        FOR XML PATH('')";
+        //        else
+        //            strSql = @"SELECT LISTAGG(A.F10003, '; ') WITHIN GROUP (ORDER BY A.F10003) 
+        //                        FROM ""Ptj_Intrari"" A
+        //                        INNER JOIN (SELECT F10003, F10023 FROM f100 WHERE TRUNC(f10023) >= {0} AND TRUNC(F10023) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" >= B.F10023";
+
+        //        strSql = string.Format(strSql, General.ToDataUniv(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month));
+
+        //        string rez = (General.ExecutaScalar(strSql, null) ?? "").ToString();
+
+        //        if (rez != "")
+        //        {
+        //            DateTime dt = DateTime.Now;
+        //            if (txtAnLuna.Value != null) dt = Convert.ToDateTime(txtAnLuna.Value);
+
+
+        //            //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
+
+        //            string ziInc = General.ToDataUniv(dt.Year, dt.Month, 1);
+        //            string strDel = $@"
+        //                BEGIN
+        //                    INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+        //                    SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}                            
+        //                    FROM Ptj_Intrari A
+        //                    INNER JOIN (SELECT F10003, F10023 FROM f100 WHERE CONVERT(date,f10023) >= {ziInc} AND CONVERT(date,F10023) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua > B.F10023;
+
+        //                    DELETE A
+        //                    FROM Ptj_Intrari A
+        //                    INNER JOIN (SELECT F10003, F10023 FROM f100 WHERE CONVERT(date,f10023) >= {ziInc} AND CONVERT(date,F10023) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua > B.F10023;
+
+        //                    INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+        //                    SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}                            
+        //                    FROM Ptj_Intrari A
+        //                    INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) >= {ziInc} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua < B.F10022;
+
+        //                    DELETE A
+        //                    FROM Ptj_Intrari A
+        //                    INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) >= {ziInc} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua < B.F10022;
+        //                END;";
+        //            if (Constante.tipBD == 2)
+        //                strDel = $@"
+        //                    BEGIN
+        //                        INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+        //                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}                            
+        //                        FROM Ptj_Intrari A
+        //                            WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE TRUNC(f10023) >= {ziInc}  AND TRUNC(F10023) <> TO_DATE('01/01/2100', 'dd/mm/yyyy')) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" > B.F10023);
+
+        //                        DELETE FROM ""Ptj_Intrari"" A
+        //                            WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE TRUNC(f10023) >= {ziInc}  AND TRUNC(F10023) <> TO_DATE('01/01/2100', 'dd/mm/yyyy')) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" > B.F10023);
+
+        //                        INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+        //                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}                            
+        //                        FROM Ptj_Intrari A
+        //                            WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE TRUNC(f10022) >= {ziInc}  AND TRUNC(F10022) <> TO_DATE('01/01/2100', 'dd/mm/yyyy')) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" < B.F10022);
+
+        //                        DELETE FROM ""Ptj_Intrari"" A
+        //                            WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE TRUNC(f10022) >= {ziInc}  AND TRUNC(F10022) <> TO_DATE('01/01/2100', 'dd/mm/yyyy')) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" < B.F10022);
+        //                    END;";
+
+
+        //            General.ExecutaNonQuery(strDel, null);
+        //            MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoInfo, "Angajati plecati");
+
+        //        }
+        //        else
+        //            MessageBox.Show(Dami.TraduCuvant("Nu exista postari"), MessageBox.icoInfo, "Angajati plecati");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
         //protected void btnRespins_Click(object sender, EventArgs e)

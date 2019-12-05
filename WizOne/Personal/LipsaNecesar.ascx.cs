@@ -91,8 +91,9 @@ namespace WizOne.Personal
 
         public DataTable AduNecesarGrup(string marca)
         {
+            //Florin 2019.12.04 - s-a modificat Admin_AngajatGrup in relGrupAngajat
             string sql = "SELECT a.\"IdCategorie\", CAST(a.\"Id\" AS INT) AS \"IdObiect\", b.\"Denumire\" {0} ' / ' {0} a.\"Denumire\" AS \"NumeCompus\", a.\"ValoareEstimata\", a.\"Denumire\" AS \"NumeObiect\""
-                        + " FROM\"Admin_AngajatGrup\" c "
+                        + " FROM\"relGrupAngajat\" c "
                         + " JOIN \"Admin_NecesarGrup\" d ON c.\"IdGrup\" = d.\"IdGrup\" "
                         + " JOIN \"Admin_Obiecte\" a ON d.\"IdObiect\" = a.\"Id\" "
                         + " JOIN \"Admin_Categorii\" b ON a.\"IdCategorie\" = b.\"Id\" "
@@ -150,9 +151,9 @@ namespace WizOne.Personal
 
             totalAng = string.Format(totalAng, marca);
 
-
+            //Florin 2019.12.04 - s-a modificat Admin_AngajatGrup in relGrupAngajat
             string sql = "SELECT a.\"IdCategorie\", CAST(a.\"Id\" AS INT) AS \"IdObiect\", b.\"Denumire\" {0} ' / ' {0} a.\"Denumire\" AS \"NumeCompus\", a.\"ValoareEstimata\", a.\"Denumire\" AS \"NumeObiect\""
-                        + " FROM\"Admin_AngajatGrup\" c "
+                        + " FROM\"relGrupAngajat\" c "
                         + " JOIN \"Admin_NecesarGrup\" d ON c.\"IdGrup\" = d.\"IdGrup\" "
                         + " JOIN \"Admin_Obiecte\" a ON d.\"IdObiect\" = a.\"Id\" "
                         + " JOIN \"Admin_Categorii\" b ON a.\"IdCategorie\" = b.\"Id\" "

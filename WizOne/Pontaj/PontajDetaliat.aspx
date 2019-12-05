@@ -891,6 +891,7 @@
                             <dx:ASPxButton ID="btnSaveCC" ClientInstanceName="btnSaveCC" ClientIDMode="Static" runat="server" Text="Salveaza CC" AutoPostBack="false" oncontextMenu="ctx(this,event)" Visible="true" >
                                 <ClientSideEvents Click="function(s, e) {
                                     grCC.UpdateEdit();
+                                    grDate.PerformCallback('btnFiltru');
                                 }" />
                                 <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                             </dx:ASPxButton>

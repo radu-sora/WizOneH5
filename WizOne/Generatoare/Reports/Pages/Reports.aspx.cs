@@ -36,9 +36,12 @@ namespace WizOne.Generatoare.Reports.Pages
             if (!IsPostBack)
                 Session.Remove("ReportId");
 
-            if ((Session["EsteAdmin"] ?? "0").ToString() == "0") ReportsGridView.Columns[0].Visible = false;
+            //if ((Session["EsteAdmin"] ?? "0").ToString() == "0") ReportsGridView.Columns[0].Visible = false;
 
             ReportsGridView.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaRap", "10"));
+
+            //Radu 05.12.2019
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(ReportsGridView);
         }
         
         protected void ReportsGridView_DataBinding(object sender, EventArgs e)

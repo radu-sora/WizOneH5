@@ -440,8 +440,11 @@ namespace WizOne.Pontaj
                             DateTime ziTmp = Convert.ToDateTime(txtAnLuna.Value);
                             DataTable dt = SursaCC(Convert.ToInt32(f10003), General.ToDataUniv(ziTmp.Year, ziTmp.Month, Convert.ToInt32(ziua)));
                             Session["PtjCC"] = dt;
-                            grCC.KeyFieldName = "F10003;Ziua;F06204";
-                            dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                            //Radu 04.12.2019 - cheia este acum IdAuto
+                            //grCC.KeyFieldName = "F10003;Ziua;F06204";
+                            // dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                            grCC.KeyFieldName = "IdAuto";
+                            dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
 
                             grCC.DataSource = dt;
                             grCC.DataBind();
@@ -472,6 +475,7 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
 
         protected void btnFiltru_Click(object sender, EventArgs e)
         {
@@ -2776,6 +2780,9 @@ namespace WizOne.Pontaj
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;
                             break;
+                        case "btnFiltru":   //Radu 05.12.2019
+                            btnFiltru_Click(null, null);
+                            break;
                     }
                 }
             }
@@ -3644,11 +3651,13 @@ namespace WizOne.Pontaj
                                                 "END;"
                                                 , null);
 
+                        //Radu 04.12.2019
+                        General.CalculFormule(Convert.ToInt32(lst[0].ToString()), Convert.ToDateTime(lst[1]));
                         //recalcul f-uri la nivel de luna
                         DateTime zi = Convert.ToDateTime(lst[1]);
                         General.CalculFormuleCumulat(Convert.ToInt32(lst[0]), zi.Year, zi.Month);
                     }
-                }
+                }           
             }
             catch (Exception ex)
             {
@@ -3681,8 +3690,11 @@ namespace WizOne.Pontaj
                                 lblZiuaCC.Text = "Centrii de cost - Ziua " + Convert.ToDateTime(lst[1]).Day;
                                 DataTable dt = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
                                 Session["PtjCC"] = dt;
-                                grCC.KeyFieldName = "F10003;Ziua;F06204";
-                                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                                //Radu 04.12.2019 - cheia este acum IdAuto
+                                //grCC.KeyFieldName = "F10003;Ziua;F06204";
+                                //dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                                grCC.KeyFieldName = "IdAuto";
+                                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
 
                                 grCC.DataSource = dt;
                                 grCC.DataBind();
@@ -3698,8 +3710,10 @@ namespace WizOne.Pontaj
                                 btnSaveCC_Click(null, null);
 
                                 Session["PtjCC"] = dt;
-                                grCC.KeyFieldName = "F10003;Ziua;F06204";
-                                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                                //grCC.KeyFieldName = "F10003;Ziua;F06204";
+                                //dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                                grCC.KeyFieldName = "IdAuto";
+                                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                                 grCC.DataSource = dt;
                                 grCC.DataBind();
                             }
@@ -4208,12 +4222,17 @@ namespace WizOne.Pontaj
                 grDate.CancelEdit();
                 DataTable dt = Session["PtjCC"] as DataTable;
                 if (dt == null) return;
+                 
 
                 //daca avem linii noi
                 for (int i = 0; i < e.InsertValues.Count; i++)
                 {
                     ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
                     DataRow dr = dt.NewRow();
+
+                    //Radu 04.12.2019 - campurile "De" si "La" trebuie sa contina si ziua, nu doar ora
+                    DateTime oraDeLa = Convert.ToDateTime(upd.NewValues["De"] ?? new DateTime(2100, 1, 1, 0, 0, 0));
+                    DateTime oraLa = Convert.ToDateTime(upd.NewValues["La"] ?? new DateTime(2100, 1, 1, 0, 0, 0));
 
                     dr["F10003"] = lst[0];
                     dr["Ziua"] = Convert.ToDateTime(lst[1]);
@@ -4222,8 +4241,16 @@ namespace WizOne.Pontaj
                     dr["IdSubproiect"] = upd.NewValues["IdSubproiect"] ?? DBNull.Value;
                     dr["IdActivitate"] = upd.NewValues["IdActivitate"] ?? DBNull.Value;
                     dr["IdDept"] = upd.NewValues["IdDept"] ?? DBNull.Value;
-                    dr["De"] = upd.NewValues["De"] ?? DBNull.Value;
-                    dr["La"] = upd.NewValues["La"] ?? DBNull.Value;
+                    //dr["De"] = upd.NewValues["De"] ?? DBNull.Value;
+                    //dr["La"] = upd.NewValues["La"] ?? DBNull.Value;
+                    if (upd.NewValues["De"] == null)
+                        dr["De"] = DBNull.Value;
+                    else
+                        dr["De"] = new DateTime(Convert.ToDateTime(lst[1]).Year, Convert.ToDateTime(lst[1]).Month, Convert.ToDateTime(lst[1]).Day, oraDeLa.Hour, oraDeLa.Minute, oraDeLa.Second);
+                    if (upd.NewValues["La"] == null)
+                        dr["La"] = DBNull.Value;
+                    else
+                        dr["La"] = new DateTime(Convert.ToDateTime(lst[1]).Year, Convert.ToDateTime(lst[1]).Month, Convert.ToDateTime(lst[1]).Day, oraLa.Hour, oraLa.Minute, oraLa.Second);
                     dr["NrOre1"] = upd.NewValues["NrOre1"] ?? DBNull.Value;
                     dr["NrOre2"] = upd.NewValues["NrOre2"] ?? DBNull.Value;
                     dr["NrOre3"] = upd.NewValues["NrOre3"] ?? DBNull.Value;
@@ -4271,13 +4298,19 @@ namespace WizOne.Pontaj
                     DataRow dr = dt.Rows.Find(keys);
                     if (dr == null) continue;
 
+                    //Radu 04.12.2019 - campurile "De" si "La" trebuie sa contina si ziua, nu doar ora
+                    DateTime oraDeLa = Convert.ToDateTime(upd.NewValues["De"] ?? new DateTime(2100, 1, 1, 0, 0, 0));
+                    DateTime oraLa = Convert.ToDateTime(upd.NewValues["La"] ?? new DateTime(2100, 1, 1, 0, 0, 0));
+
                     if (upd.NewValues["F06204"] != null) dr["F06204"] = upd.NewValues["F06204"] ?? 9999;
                     if (upd.NewValues["IdProiect"] != null) dr["IdProiect"] = upd.NewValues["IdProiect"] ?? DBNull.Value;
                     if (upd.NewValues["IdSubproiect"] != null) dr["IdSubproiect"] = upd.NewValues["IdSubproiect"] ?? DBNull.Value;
                     if (upd.NewValues["IdActivitate"] != null) dr["IdActivitate"] = upd.NewValues["IdActivitate"] ?? DBNull.Value;
                     if (upd.NewValues["IdDept"] != null) dr["IdDept"] = upd.NewValues["IdDept"] ?? DBNull.Value;
-                    if (upd.NewValues["De"] != null) dr["De"] = upd.NewValues["De"] ?? DBNull.Value;
-                    if (upd.NewValues["La"] != null) dr["La"] = upd.NewValues["La"] ?? DBNull.Value;
+                    //if (upd.NewValues["De"] != null) dr["De"] = upd.NewValues["De"] ?? DBNull.Value;
+                    //if (upd.NewValues["La"] != null) dr["La"] = upd.NewValues["La"] ?? DBNull.Value;
+                    if (upd.NewValues["De"] != null) dr["De"] = new DateTime(Convert.ToDateTime(lst[1]).Year, Convert.ToDateTime(lst[1]).Month, Convert.ToDateTime(lst[1]).Day, oraDeLa.Hour, oraDeLa.Minute, oraDeLa.Second);
+                    if (upd.NewValues["La"] != null) dr["La"] = new DateTime(Convert.ToDateTime(lst[1]).Year, Convert.ToDateTime(lst[1]).Month, Convert.ToDateTime(lst[1]).Day, oraLa.Hour, oraLa.Minute, oraLa.Second);
                     if (upd.NewValues["NrOre1"] != null) dr["NrOre1"] = upd.NewValues["NrOre1"] ?? DBNull.Value;
                     if (upd.NewValues["NrOre2"] != null) dr["NrOre2"] = upd.NewValues["NrOre2"] ?? DBNull.Value;
                     if (upd.NewValues["NrOre3"] != null) dr["NrOre3"] = upd.NewValues["NrOre3"] ?? DBNull.Value;
@@ -4372,11 +4405,15 @@ namespace WizOne.Pontaj
                 DataTable dtCC = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
 
                 Session["PtjCC"] = dtCC;
-                grCC.KeyFieldName = "F10003;Ziua;F06204";
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                //grCC.KeyFieldName = "F10003;Ziua;F06204";
+                //dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                grCC.KeyFieldName = "IdAuto";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
                 grCC.DataSource = dtCC;
                 grCC.DataBind();
 
+                //Radu 04.12.2019
+                btnFiltru_Click(null, null);
             }
             catch (Exception ex)
             {
@@ -4448,8 +4485,10 @@ namespace WizOne.Pontaj
                 lblZiuaCC.Text = "Centrii de cost - Ziua " + Convert.ToDateTime(lst[1]).Day;
                 DataTable dt = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
                 Session["PtjCC"] = dt;
-                grCC.KeyFieldName = "F10003;Ziua;F06204";
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                //grCC.KeyFieldName = "F10003;Ziua;F06204";
+                //dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                grCC.KeyFieldName = "IdAuto";
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
 
                 grCC.DataSource = dt;
                 grCC.DataBind();

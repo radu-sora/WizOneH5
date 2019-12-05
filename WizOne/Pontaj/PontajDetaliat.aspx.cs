@@ -2780,6 +2780,9 @@ namespace WizOne.Pontaj
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;
                             break;
+                        case "btnFiltru":   //Radu 05.12.2019
+                            btnFiltru_Click(null, null);
+                            break;
                     }
                 }
             }

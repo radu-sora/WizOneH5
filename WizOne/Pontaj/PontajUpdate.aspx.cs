@@ -107,34 +107,38 @@ namespace WizOne.Pontaj
                     if (chkPerAng == true)
                     {
                         string strDel = $@"
+                            BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                                 SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
                                 INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                 ) B 
-                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01'
+                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01';
 
                                 DELETE A
                                 FROM Ptj_Intrari A
                                 INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                 ) B 
-                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01'";
+                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01';
+                            END;";
 
                         ras = General.ExecutaNonQuery(strDel, null);
 
                         strDel = $@"
+                            BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                                 SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
                                 INNER JOIN(SELECT F10003, F10022 FROM f100 WHERE CONVERT(date, F10022) <> '2100-01-01') B
                                 ON A.F10003 = B.F10003 AND A.Ziua < B.F10022 AND A.F10003 >= {angIn}
                                 AND A.F10003 <= {angSf}
-                                AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit}
+                                AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit};
 
                                 DELETE A
                                 FROM Ptj_Intrari A
                                 INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,F10022) <> '2100-01-01') B 
-                                ON A.F10003=B.F10003 AND A.Ziua< B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} ";
+                                ON A.F10003=B.F10003 AND A.Ziua< B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit};
+                            END;";
 
                         ras = General.ExecutaNonQuery(strDel, null);
                     }
@@ -214,7 +218,8 @@ namespace WizOne.Pontaj
                 {
                     if (chkPerAng == true)
                     {
-                        string strDel = $@"
+                        string strDel = 
+                            $@"BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                                 SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM ""Ptj_Intrari"" A
@@ -223,7 +228,7 @@ namespace WizOne.Pontaj
                                 FROM ""Ptj_Intrari"" A
                                 INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                 ) B 
-                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {ziSfarsit} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'))
+                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {ziSfarsit} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));
 
                                 DELETE FROM ""Ptj_Intrari"" 
                                 WHERE ""IdAuto"" IN 
@@ -231,11 +236,13 @@ namespace WizOne.Pontaj
                                 FROM ""Ptj_Intrari"" A
                                 INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                 ) B 
-                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {ziSfarsit} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'))";
+                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {ziSfarsit} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));
+                            END;";
 
                         ras = General.ExecutaNonQuery(strDel, null);
 
-                        strDel = $@"
+                        strDel = 
+                            $@"BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                                 SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM ""Ptj_Intrari"" A
@@ -243,14 +250,15 @@ namespace WizOne.Pontaj
                                 (SELECT A.""IdAuto""
                                 FROM ""Ptj_Intrari"" A
                                 INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE  TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B 
-                                ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.""Ziua"" AND A.""Ziua"" <= {ziSfarsit})
+                                ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.""Ziua"" AND A.""Ziua"" <= {ziSfarsit});
 
                                 DELETE FROM ""Ptj_Intrari"" 
                                 WHERE ""IdAuto"" IN 
                                 (SELECT A.""IdAuto""
                                 FROM ""Ptj_Intrari"" A
                                 INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE  TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B 
-                                ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.""Ziua"" AND A.""Ziua"" <= {ziSfarsit})";
+                                ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.""Ziua"" AND A.""Ziua"" <= {ziSfarsit});
+                            END;";
 
                         ras = General.ExecutaNonQuery(strDel, null);
                     }
@@ -288,12 +296,12 @@ namespace WizOne.Pontaj
                                 SET {4} 
                                 WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.""Ziua"" AND A.""Ziua"" <= {3};";
 
-                        if (chkCtr == true) act += ",A.\"IdContract\"=(SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS \"Date\") <= CAST(A.\"Ziua\" AS \"Date\") AND CAST(A.\"Ziua\" AS \"Date\") <= CAST(B.\"DataSfarsit\" AS \"Date\"))";
+                        if (chkCtr == true) act += ",A.\"IdContract\"=(SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(B.\"DataSfarsit\" AS Date))";
                         if (chkNrm == true) act += ",A.\"Norma\"=COALESCE(\"DamiNorma\"(A.F10003, A.\"Ziua\"), (SELECT C.F10043 FROM F100 C WHERE C.F10003=A.F10003))";
                         if (chkStr == true) act += ",A.F10007=COALESCE(\"DamiDept\"(A.F10003, A.\"Ziua\"), (SELECT C.F10007 FROM F100 C WHERE C.F10003=A.F10003))";
                         if (chkCC == true)
-                            act += ",A.\"F06204Default\"=CASE WHEN NOT EXISTS(SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS \"Date\") <= CAST(A.\"Ziua\" AS \"Date\") AND CAST(A.\"Ziua\" AS \"Date\") <= CAST(C.\"DataSfarsit\" AS \"Date\")) THEN COALESCE(\"DamiCC\"(A.F10003, A.\"Ziua\"), (SELECT C.F10053 FROM F100 C WHERE C.F10003=A.F10003)) ELSE "
-                                  + " (SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS \"Date\") <= CAST(A.\"Ziua\" AS \"Date\") AND CAST(A.\"Ziua\" AS \"Date\") <= CAST(C.\"DataSfarsit\" AS \"Date\")) END";
+                            act += ",A.\"F06204Default\"=CASE WHEN NOT EXISTS(SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) THEN COALESCE(\"DamiCC\"(A.F10003, A.\"Ziua\"), (SELECT C.F10053 FROM F100 C WHERE C.F10003=A.F10003)) ELSE "
+                                  + " (SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) END";
 
                         if (chkStr == true)
                         {
@@ -303,7 +311,6 @@ namespace WizOne.Pontaj
                                             A.F10004 = (SELECT C.F00604 FROM F006 C WHERE A.F10007=C.F00607),
                                             A.F10005 = (SELECT C.F00605 FROM F006 C WHERE A.F10007=C.F00607),
                                             A.F10006 = (SELECT C.F00606 FROM F006 C WHERE A.F10007=C.F00607)
-                                            FROM A 
                                             WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.""Ziua"" AND A.""Ziua"" <= {3};";
 
                             strSql += strStruct;

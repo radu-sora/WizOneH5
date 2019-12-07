@@ -6733,13 +6733,13 @@ namespace WizOne.Module
                     dtInc = "01-" + luna.ToString().PadLeft(2, '0') + "-" + an.ToString().Substring(2);
                     dtSf = DateTime.DaysInMonth(an, luna) + "-" + luna.ToString().PadLeft(2,'0') + "-" + an.ToString();
 
-                    strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MM-RRRR'))>=0";
+                    strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY')) - to_date('" + dtInc + "','DD-MM-RRRR'))>=0";
                     if (zi > 0 && zi <= 31)
                     {
                         //Florin 2019.11.07
                         //string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
                         string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, '0') + "-" + an.ToString().Substring(2);
-                        strSql = " AND TRUNC(to_date('" + dt + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MM-RRRR'))>=0";
+                        strSql = " AND TRUNC(to_date('" + dt + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY')) - to_date('" + dt + "','DD-MM-RRRR'))>=0";
                     }
 
                     //dtInc = "01-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
@@ -7048,7 +7048,7 @@ namespace WizOne.Module
                                 " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
                                 " GROUP BY B.F10003) X  " +
                                 " INNER JOIN F100 A ON A.F10003=X.F10003  " +
-                                " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(A.F100993) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+                                " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
                                 " GROUP BY X.F10003";
 
                     }
@@ -7222,6 +7222,9 @@ namespace WizOne.Module
                 string ziInc = ToDataUniv(an, luna, 1);
                 string ziSf = ToDataUniv(an, luna, 99);
 
+                if (filtru == "")
+                    filtru = $@" Y.F10003 IN (SELECT F10003 FROM ""Ptj_Intrari"" WHERE {ziInc} <= ""Ziua"" AND ""Ziua"" <= {ziSf} GROUP BY F10003) AND Y.""An""={an} AND Y.""Luna""={luna}";
+
                 string strSql = "";
                 //Florin 2019.11.13 - am pus filtrul null
                 //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' ORDER BY ""Ordine"" ", null);
@@ -7231,17 +7234,15 @@ namespace WizOne.Module
                     DataRow row = dt.Rows[i];
                     if (General.Nz(row["Coloana"], "").ToString() != "" && General.Nz(row["CampSelect"], "").ToString() != "")
                     {
-                        if (filtru == "")
-                            strSql += $@"UPDATE Y 
+                        if (Constante.tipBD == 1)
+                        strSql += $@"UPDATE Y 
                             SET {row["Coloana"]} = ({row["CampSelect"]}) 
                             FROM ""Ptj_Cumulat"" Y
-                            WHERE Y.F10003 IN (SELECT F10003 FROM Ptj_Intrari WHERE {ziInc} <= Ziua AND Ziua <= {ziSf} GROUP BY F10003) 
-                            AND Y.""An""={an} AND Y.""Luna""={luna};" + "\n\r";
+                            WHERE {filtru};" + "\n\r";
                         else
-                            strSql += $@"UPDATE Y 
-                                SET {row["Coloana"]} = ({row["CampSelect"]}) 
-                                FROM ""Ptj_Cumulat"" Y
-                                WHERE {filtru};" + "\n\r";
+                            strSql += $@"UPDATE ""Ptj_Cumulat"" Y 
+                            SET {row["Coloana"]} = ({row["CampSelect"]}) 
+                            WHERE {filtru};" + "\n\r";
                     }
                 }
 

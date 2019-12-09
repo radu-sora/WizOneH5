@@ -97,7 +97,7 @@ namespace WizOne.Personal
                         + " JOIN \"Admin_NecesarGrup\" d ON c.\"IdGrup\" = d.\"IdGrup\" "
                         + " JOIN \"Admin_Obiecte\" a ON d.\"IdObiect\" = a.\"Id\" "
                         + " JOIN \"Admin_Categorii\" b ON a.\"IdCategorie\" = b.\"Id\" "
-                        + " WHERE c.\"Marca\" = {1} "
+                        + " WHERE c.F10003 = {1} "
                         + " UNION "
                         + " SELECT 10000 + a.\"IdCategory\", 10000 + CAST(a.\"IdCategory\" AS INT) AS \"IdObiect\", a.\"NameCategory\" {0} ' / ' {0} 'Document' AS \"NumeCompus\", "
                         + " null as \"ValoareEstimata\", 'Document' AS \"NumeObiect\"   FROM \"CategoriiAtasamente\" a where a.\"Obligatoriu\" = 1";
@@ -157,7 +157,7 @@ namespace WizOne.Personal
                         + " JOIN \"Admin_NecesarGrup\" d ON c.\"IdGrup\" = d.\"IdGrup\" "
                         + " JOIN \"Admin_Obiecte\" a ON d.\"IdObiect\" = a.\"Id\" "
                         + " JOIN \"Admin_Categorii\" b ON a.\"IdCategorie\" = b.\"Id\" "
-                        + " WHERE c.\"Marca\" = {1} AND d.\"IdObiect\" NOT IN ({2}) "
+                        + " WHERE c.F10003 = {1} AND d.\"IdObiect\" NOT IN ({2}) "
 
                         + " UNION "
 

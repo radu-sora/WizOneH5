@@ -2956,15 +2956,17 @@ namespace WizOne.Adev
                 }
                 dtEmplFunction = General.IncarcaDT(temp, null);
 
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
+                string salariu_i = salariu.Replace("F100", "F910");
 
                 temp =
                      ("SELECT CASE WHEN (TO_CHAR(MAX(F910992), 'dd/MM/yyyy') <> '01/01/1900' AND EXTRACT(YEAR FROM MAX(F910992)) = Max(F910.YEAR) AND EXTRACT(MONTH FROM MAX(F910992)) = Min(F910.MONTH)) THEN TO_CHAR(MAX(F910992), 'yyyy-MM-dd') "
                      + "ELSE CASE WHEN (TO_DATE('01/'||MIN (F910.MONTH)||'/'||MAX (F910.YEAR), 'dd/MM/yyyy')- MIN(F910991)<31) THEN TO_CHAR(MIN(F910991), 'yyyy-MM-dd') "
 
-                     + "ELSE CASE WHEN (ROUND(F910.F910699) = 0 AND TO_CHAR(MAX(F91076), 'dd/MM/yyyy') <> '01/01/2100' ) THEN TO_CHAR(MAX(F91076), 'yyyy-MM-dd') "
+                     + "ELSE CASE WHEN (ROUND(F910." + salariu_i + ") = 0 AND TO_CHAR(MAX(F91076), 'dd/MM/yyyy') <> '01/01/2100' ) THEN TO_CHAR(MAX(F91076), 'yyyy-MM-dd') "
 
                      + "ELSE TO_CHAR( MIN(TO_DATE(YEAR||'-'||LPAD(TO_CHAR(F910.MONTH), 2, '0')||'-01', 'yyyy-MM-dd')), 'yyyy-MM-dd') END END END AS DATA,"
-                     + "TO_CHAR(Max(F10022), 'dd/MM/yyyy') AS DATANG, ROUND(F910.F910699) AS SALARIU, "
+                     + "TO_CHAR(Max(F10022), 'dd/MM/yyyy') AS DATANG, ROUND(F910." + salariu_i + ") AS SALARIU, "
                      + "CASE WHEN (TO_DATE(MIN(F100993), 'dd/mm/yyyy') < TO_DATE('01/01/2100', 'dd/mm/yyyy')) THEN TO_CHAR(MIN(F100993), 'dd/MM/yyyy') ELSE NULL END AS DATASF,"
                      + (rbFunc2.Checked ? "NVL(MIN(F718_I.F71804), MIN(F718.F71804))" : "MIN(F722.F72204)") + " AS FUNCTIA, MAX(F098.F09804) AS MOTIVINTR FROM F910, F717, F006, F721, " + (rbFunc2.Checked ? "F718 F718_I, F718" : "F722") + ", F100, F098 "
                      + "WHERE F910.F91029 = F717.F71702(+) "
@@ -2976,7 +2978,7 @@ namespace WizOne.Adev
                      + "CASE WHEN F10022 < TO_DATE('01/01/2011', 'dd/mm/yyyy') THEN TO_DATE('01/01/2011', 'dd/mm/yyyy') ELSE F10022 END AND SYSDATE "
 
                      + "AND F72106 = F09802 "
-                     + "GROUP BY F910.F91003, F910.F910699, F910.F91071, F91076, F91077 "
+                     + "GROUP BY F910.F91003, F910." + salariu_i + ", F910.F91071, F91076, F91077 "
                      + "HAVING F910.F91003=" + marca 
                      + " ORDER BY DATA, SALARIU, Max(F100.F10022)");
                 dtEmplMutations = General.IncarcaDT(temp, null);
@@ -3093,13 +3095,16 @@ namespace WizOne.Adev
                 }
                 dtEmplFunction = General.IncarcaDT(temp, null);
 
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
+                string salariu_i = salariu.Replace("F100", "F910");
+
                 temp =
                 ("SELECT CASE WHEN(CONVERT(VARCHAR,MAX(F910992), 103) <> '01/01/1900' AND YEAR(MAX(F910992)) = Max(F910.YEAR) "
                 + "AND MONTH(MAX(F910992)) = Min(F910.MONTH)) THEN CONVERT(VARCHAR, MAX(F910992), 23) ELSE	CASE WHEN "
                 + "(CONVERT(DATETIME, '01/' + CONVERT(VARCHAR,MIN(F910.MONTH)) + '/' + CONVERT(VARCHAR,MAX(F910.YEAR)), 103) - MIN(F910991)<31) "
                 + "THEN CONVERT(VARCHAR, MIN(F910991), 23)	ELSE CONVERT(VARCHAR, MIN(CONVERT(DATETIME, CONVERT(VARCHAR,YEAR) + '-' + right(replicate('0',2) "
                 + "+ CONVERT(VARCHAR,F910.MONTH),2) + '-01', 103)), 23) END END AS DATA, "
-                + "CONVERT(VARCHAR, Max(F10022), 103) AS DATANG, ROUND(F910.F910699,0) AS SALARIU, "
+                + "CONVERT(VARCHAR, Max(F10022), 103) AS DATANG, ROUND(F910." + salariu_i + ",0) AS SALARIU, "
                 + "CASE WHEN (CONVERT(DATETIME, MIN(F100993), 103) < CONVERT(DATETIME, '01/01/2100', 103)) THEN CONVERT(VARCHAR, MIN(F100993), 103) ELSE NULL END AS DATASF, "
                 + (rbFunc2.Checked ? "ISNULL(MIN(F718_I.F71804), MIN(F718.F71804))" : "MIN(F722.F72204)") + " AS FUNCTIA, MAX(F098.F09804) AS MOTIVINTR FROM F721, F098, F100"
                 + (rbFunc2.Checked ? " LEFT JOIN F718 ON F100.F10071 = F718.F71802 " : "")
@@ -3112,7 +3117,7 @@ namespace WizOne.Adev
                 + "AND (CONVERT(DATETIME, '01/' + right(replicate('0',2) + CONVERT(VARCHAR,F910.MONTH),2) + '/' +CONVERT(VARCHAR,F910.YEAR), 103)) BETWEEN "
                 + "CASE WHEN F10022 < CONVERT(DATETIME, '01/01/2011', 103) THEN CONVERT(DATETIME, '01/01/2011', 103) ELSE F10022 END AND getdate() "
                 + "AND F72106 = F09802 "
-                + "GROUP BY F910.F91003, F910.F910699, F910.F91071, F91076, F91077 "
+                + "GROUP BY F910.F91003, F910." + salariu_i + ", F910.F91071, F91076, F91077 "
                 + "HAVING F910.F91003=" + marca
                 + " ORDER BY DATA, SALARIU, Max(F100.F10022) ");
 
@@ -4341,7 +4346,7 @@ namespace WizOne.Adev
                                         + " (CASE WHEN F91022<TO_DATE('01/08/2011', 'dd/MM/yyyy') THEN TO_DATE('01/08/2011', 'dd/MM/yyyy') ELSE F91022 END), " + data + ", 'prezent' "
                                         + ", '" + functie + "', '" + tip_ctr + "', '" + sal
                                         + "', '" + norma + "' FROM F910 WHERE F91003 = " + marca + " AND F910985 = '" + contract + "' AND MONTH = " + luna + " AND YEAR = " + an
-                                        + " GROUP BY F91003, F91022, F910985, F910986,F91022,F910699)";
+                                        + " GROUP BY F91003, F91022, F910985, F910986,F91022," + salariu_i + ")";
                                 }
                                 else 
                                 {
@@ -4349,7 +4354,7 @@ namespace WizOne.Adev
                                         + " (CASE WHEN F91022<CONVERT(DATETIME, '01/08/2011', 103) THEN CONVERT(DATETIME, '01/08/2011', 103) ELSE F91022 END), " + data + ", 'prezent' "
                                         + ", '" + functie + "', '" + tip_ctr + "', '" + sal
                                         + "', '" + norma + "' FROM F910 WHERE F91003 = " + marca + " AND F910985 = '" + contract + "' AND MONTH = " + luna + " AND YEAR = " + an
-                                        + " GROUP BY F91003, F91022, F910985, F910986,F91022,F910699)";
+                                        + " GROUP BY F91003, F91022, F910985, F910986,F91022," + salariu_i + ")";
                                 }
                                 General.ExecutaNonQuery(szsql, null);
 
@@ -4933,14 +4938,14 @@ namespace WizOne.Adev
                         szsql = inregistru + " (SELECT 1, F10003, F10017, F10022, '" + contract + "' AS F100985, " + data_ctr + " AS F100986, 'contract', 'Adaugare', F10022, TO_CHAR(10022, 'dd/MM/yyyy'), 'prezent' "
                             + ", '" + functie + "', '" + tip_ctr + "', '"
                             + sal + "', TO_CHAR('" + norma + "') FROM F100, F095 WHERE F100.F10003 = F095.F09503 AND F100.F100985 = F095.F09504 AND F100.F10003 = " + marca
-                            + " GROUP BY F10003, F10017, F10022, F100985, F100986,F10022,F100699)";
+                            + " GROUP BY F10003, F10017, F10022, F100985, F100986,F10022," + salariu + ")";
                     }
                     else 
                     {
                         szsql = inregistru + " (SELECT 1, F10003, F10017, F10022, '" + contract + "' AS F100985, " + data_ctr + " AS F100986, 'contract', 'Adaugare', F10022, CONVERT(VARCHAR, 10022, 103), 'prezent' "
                             + ", '" + functie + "', '" + tip_ctr + "', '"
                             + sal + "', CONVERT(VARCHAR,'" + norma + "') FROM F100, F095 WHERE F100.F10003 = F095.F09503 AND F100.F100985 = F095.F09504 AND F100.F10003 = " + marca
-                            + " GROUP BY F10003, F10017, F10022, F100985, F100986,F10022,F100699)";
+                            + " GROUP BY F10003, F10017, F10022, F100985, F100986,F10022," + salariu +")";
                     }
                     General.ExecutaNonQuery(szsql, null);
                     linie++;

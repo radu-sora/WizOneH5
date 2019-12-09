@@ -268,6 +268,11 @@
 	                 <dx:ASPxLabel  ID="lblText" runat="server"  Text="" Width="400" style="text-align: left;"></dx:ASPxLabel >	
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-1">
+	                 <dx:ASPxCheckBox ID="chkUser"  runat="server" Text="Creeaza utilizator" TextAlign="Left"  Checked="true" ClientInstanceName="chkUser" />  
+                </div>
+            </div>
             <br />
            <asp:ObjectDataSource runat="server" ID="dsSablon" TypeName="WizOne.Module.General" SelectMethod="GetSablon" />
         </dx:PopupControlContentControl>

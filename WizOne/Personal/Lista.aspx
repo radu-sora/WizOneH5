@@ -171,7 +171,7 @@
                         <table style="width: 100%">
                             <tr>
                                 <td style="padding: 4px">
-                                    <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
+                                    <dx:ASPxButton ID="btnInchide" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
                                         <ClientSideEvents Click="function(s, e){ checkComboBoxStare.HideDropDown(); }" />
                                     </dx:ASPxButton>
                                 </td>

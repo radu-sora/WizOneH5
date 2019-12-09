@@ -36,13 +36,14 @@ namespace WizOne.Personal
                 lblBir.InnerText = Dami.TraduCuvant("Birou/Echipa");
                 lblCC.InnerText = Dami.TraduCuvant("Centru cost");
                 lblPL.InnerText = Dami.TraduCuvant("Punct de lucru");
+                lblLocatie.InnerText = Dami.TraduCuvant("Locatie munca");
                 lblCAEN.InnerText = Dami.TraduCuvant("CAEN");
                 lblUnitStat.InnerText = Dami.TraduCuvant("Unitate locala statistica");
 
                 btnCC.ToolTip = Dami.TraduCuvant("Modificari contract");
-                btnCC.ToolTip = Dami.TraduCuvant("Istoric modificari");
-                btnCC.ToolTip = Dami.TraduCuvant("Modificari contract");
-                btnCC.ToolTip = Dami.TraduCuvant("Istoric modificari");
+                btnCCIst.ToolTip = Dami.TraduCuvant("Istoric modificari");
+                btnPL.ToolTip = Dami.TraduCuvant("Modificari contract");
+                btnPLIst.ToolTip = Dami.TraduCuvant("Istoric modificari");
 
                 #endregion
 

@@ -310,11 +310,18 @@ namespace WizOne.Pontaj
 
                 strFiltru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), an, luna, 0, -99, Convert.ToInt32(cmbRol.Value ?? -99), 0, Convert.ToInt32(cmbDept.Value ?? -99), -99);
 
-                strSql = $@"SELECT * FROM ""Ptj_Cumulat"" C
-                            INNER JOIN F100 A ON C.F10003=A.F10003
-                            INNER JOIN F1001 B ON A.F10003=B.F10003
-                            LEFT JOIN (SELECT X.F10003, MAX(X.""IdContract"") AS ""IdContract"" FROM ""F100Contracte"" X WHERE {General.TruncateDate("X.DataInceput")} <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= {General.TruncateDate("X.DataSfarsit")} GROUP BY X.F10003) D ON A.F10003=D.F10003
-                            WHERE 1=1 {strFiltru}";
+                //Florin 2019.12.09 - adaugam drepturile
+                int idRol = Convert.ToInt32(General.Nz(cmbRol.Value, 1));
+                strSql = $@"SELECT C.*, 
+                        CASE WHEN ({idRol} = 0 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 4)) OR 
+					    ({idRol} = 1 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 4)) OR 
+					    ({idRol} = 2 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 2 OR C.""IdStare"" = 4 OR C.""IdStare"" = 6)) OR 
+					    {idRol} = 3 THEN 1 ELSE 0 END ""DrepturiModif""
+                        FROM ""Ptj_Cumulat"" C
+                        INNER JOIN F100 A ON C.F10003=A.F10003
+                        INNER JOIN F1001 B ON A.F10003=B.F10003
+                        LEFT JOIN (SELECT X.F10003, MAX(X.""IdContract"") AS ""IdContract"" FROM ""F100Contracte"" X WHERE {General.TruncateDate("X.DataInceput")} <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= {General.TruncateDate("X.DataSfarsit")} GROUP BY X.F10003) D ON A.F10003=D.F10003
+                        WHERE 1=1 {strFiltru}";
             }
             catch (Exception ex)
             {
@@ -325,5 +332,26 @@ namespace WizOne.Pontaj
             return strSql;
         }
 
+        protected void grDate_DataBound(object sender, EventArgs e)
+        {
+            try
+            {
+                var lstDrepturi = new Dictionary<int, int>();
+
+                var grid = sender as ASPxGridView;
+                for (int i = grid.VisibleStartIndex; i < grid.VisibleStartIndex + grid.SettingsPager.PageSize; i++)
+                {
+                    var rowValues = grid.GetRowValues(i, new string[] { "IdAuto", "DrepturiModif" }) as object[];
+                    lstDrepturi.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), Convert.ToInt32(rowValues[1] ?? 0));
+                }
+
+                grid.JSProperties["cp_cellsDrepturi"] = lstDrepturi;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

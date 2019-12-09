@@ -196,7 +196,7 @@ namespace WizOne.Personal
                                     if (!gasit)
                                     {
                                         row[x] = e.NewValues[col.ColumnName] ?? DBNull.Value;
-                                        tipArtera = Convert.ToInt32(row[x].ToString());
+                                        tipArtera = Convert.ToInt32((row[x] == DBNull.Value ? "0" : row[x].ToString()));
                                     }
                                 }
                                 break;
@@ -366,7 +366,7 @@ namespace WizOne.Personal
                                     if (!gasit)
                                     {
                                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
-                                        tipArtera = Convert.ToInt32(row[col.ColumnName].ToString());
+                                        tipArtera = Convert.ToInt32((row[col.ColumnName] == DBNull.Value ? "0" : row[col.ColumnName].ToString()));
                                     }
                                 }
                                 break;

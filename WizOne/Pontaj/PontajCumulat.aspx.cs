@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -194,7 +195,23 @@ namespace WizOne.Pontaj
 
                 if (dt.GetChanges() != null && ((DataTable)dt.GetChanges()).Rows.Count > 0)
                 {
-                    General.SalveazaDate(dt, "Ptj_Cumulat");
+                    ////Florin - 2019.12.09 Am adugat notificarle si validarile
+                    //string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    //if (msg != "" && msg.Substring(0, 1) == "2")
+                    //{
+                    //    MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
+                    //    return;
+                    //}
+                    //else
+                    //{
+
+                    //    General.SalveazaDate(dt, "Ptj_Cumulat");
+
+                    //    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                    //    {
+                    //        NotifAsync.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + idCer, "Ptj_Cereri", idCer, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
+                    //    });
+                    //}
 
                     string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < arr.Length; i++)

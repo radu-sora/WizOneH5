@@ -7094,7 +7094,17 @@ namespace WizOne.Module
 
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.Zi AND  A.Zi <= C.""DataSfarsit"") IS NULL THEN 
                                 CASE WHEN COALESCE(dc.CC, 9999) <> 9999 THEN dc.CC ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = dd.Dept) END 
-                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <=  A.Zi AND  A.Zi <= C.""DataSfarsit"") END AS ""F06204Default""
+                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <=  A.Zi AND  A.Zi <= C.""DataSfarsit"") END AS ""F06204Default"",
+                                CASE WHEN (CASE WHEN C.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE (CASE WHEN datepart(dw,A.""Zi"") - 1 = 0 THEN 7 ELSE datepart(dw,A.Zi) - 1 END)
+                                WHEN 1 THEN (CASE WHEN Y.""TipSchimb1"" = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END) 
+                                WHEN 2 THEN (CASE WHEN Y.""TipSchimb2"" = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END) 
+                                WHEN 3 THEN (CASE WHEN Y.""TipSchimb3"" = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END) 
+                                WHEN 4 THEN (CASE WHEN Y.""TipSchimb4"" = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END) 
+                                WHEN 5 THEN (CASE WHEN Y.""TipSchimb5"" = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END) 
+                                WHEN 6 THEN (CASE WHEN Y.""TipSchimb6"" = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END) 
+                                WHEN 7 THEN (CASE WHEN Y.""TipSchimb7"" = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END) 
+                                END END AS ""IdProgram""
 
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022 <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
@@ -7102,6 +7112,7 @@ namespace WizOne.Module
                                 LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {General.FunctiiData("X.\"Ziua\"", "A")}={an} AND {General.FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""
                                 {strInner}                                
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
+                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" BB WHERE BB.F10003 = B.F10003 AND BB.""DataInceput"" <= A.Zi AND A.Zi <= BB.""DataSfarsit"")
                                 WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {General.FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0;";
                 if (Constante.tipBD == 2)
                     strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME)
@@ -7111,12 +7122,29 @@ namespace WizOne.Module
                                 ""DamiNorma""(B.F10003, A.""Zi"") AS ""Norma"", 
                                 (SELECT MAX(P.""IdContract"") FROM ""F100Contracte"" P WHERE P.F10003 = B.F10003 AND {TruncateDate("P.DataInceput")} <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= {TruncateDate("P.DataSfarsit")} ) AS ""IdContract"", 
                                 G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007,
+
+                                CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= C.""DataSfarsit"" and ROWNUM <= 1) IS NULL THEN
+                                CASE WHEN COALESCE(""DamiCC""(B.F10003, A.""Zi""), 9999) <> 9999 THEN ""DamiCC""(B.F10003, A.""Zi"") ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = ""DamiDept""(B.F10003, A.""Zi"")) END 
+                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= C.""DataSfarsit"" and ROWNUM <= 1) END AS ""F06204Default"",
+                                CASE WHEN (CASE WHEN C.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE (1 + TRUNC(A.""Zi"") - TRUNC(A.""Zi"", 'IW'))
+                                WHEN 1 THEN (CASE WHEN Y.""TipSchimb1"" = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END) 
+                                WHEN 2 THEN (CASE WHEN Y.""TipSchimb2"" = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END) 
+                                WHEN 3 THEN (CASE WHEN Y.""TipSchimb3"" = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END) 
+                                WHEN 4 THEN (CASE WHEN Y.""TipSchimb4"" = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END) 
+                                WHEN 5 THEN (CASE WHEN Y.""TipSchimb5"" = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END) 
+                                WHEN 6 THEN (CASE WHEN Y.""TipSchimb6"" = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END) 
+                                WHEN 7 THEN (CASE WHEN Y.""TipSchimb7"" = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END) 
+                                END END AS ""IdProgram""
+
                                 {HttpContext.Current.Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022  <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
                                 LEFT JOIN HOLIDAYS C on A.""Zi""=C.DAY
                                 LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {FunctiiData("X.\"Ziua\"", "A")}={an} AND {FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""                                                                   
                                 LEFT JOIN F006 G ON G.F00607 = ""DamiDept""(B.F10003, A.""Zi"")
+                                LEFT JOIN (SELECT ROW_NUMBER() OVER (PARTITION BY CTR.F10003 order by CTR.""F10003"", CTR.""IdContract"" DESC) as ""NrCrt"", CTR.* FROM ""F100Contracte"" CTR) BC ON BC.F10003 = B.F10003 AND BC.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= BC.""DataSfarsit"" AND ""NrCrt"" = 1
+                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id"" = BC.""IdContract""                                
                                 WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0;";
 								
 								

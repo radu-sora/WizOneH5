@@ -56,7 +56,7 @@ namespace WizOne.Pontaj
 
                         btnFiltruSterge.Visible = false;
 
-                        grDate.Columns["Cheia"].Caption = "Ziua";
+                        grDate.Columns["Cheia"].Caption = Dami.TraduCuvant("Ziua");
                     }
                     else
                     {
@@ -70,7 +70,7 @@ namespace WizOne.Pontaj
                         btnDelete.Visible = false;
                         btnFiltruSterge.Visible = true;
 
-                        grDate.Columns["Cheia"].Caption = "Marca";
+                        grDate.Columns["Cheia"].Caption = Dami.TraduCuvant("Marca");
                     }
 
                     CreazaGrid();
@@ -107,8 +107,8 @@ namespace WizOne.Pontaj
                             //    cmp = dtAd.Rows[i]["Camp"].ToString() + "_Tmp";
 
                             grCC.Columns[cmp].Visible = Convert.ToBoolean(dtAd.Rows[i]["Vizibil"]);
-                            grCC.Columns[cmp].ToolTip = General.Nz(dtAd.Rows[i]["AliasToolTip"],"").ToString();
-                            grCC.Columns[cmp].Caption = General.Nz(dtAd.Rows[i]["Alias"], dtAd.Rows[i]["Camp"]).ToString();
+                            grCC.Columns[cmp].ToolTip = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["AliasToolTip"],"").ToString());
+                            grCC.Columns[cmp].Caption = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["Alias"], dtAd.Rows[i]["Camp"]).ToString());
                         }
                     }
                 }

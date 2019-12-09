@@ -31,6 +31,17 @@ namespace WizOne.Pontaj
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnAct.Text = Dami.TraduCuvant("btnAct", "Actualizeaza");
 
+                //Radu 09.12.2019
+                lblCtrInc.InnerText = Dami.TraduCuvant("Data Inceput");
+                lblCtrSf.InnerText = Dami.TraduCuvant("Data Sfarsit");
+                lblMarcaInc.InnerText = Dami.TraduCuvant("Marca Inceput");
+                lblMarcaSf.InnerText = Dami.TraduCuvant("Marca Sfarsit");
+                chkCtr.Text = Dami.TraduCuvant("Contract");
+                chkStr.Text = Dami.TraduCuvant("Structura Org.");
+                chkNrm.Text = Dami.TraduCuvant("Norma");
+                chkPerAng.Text = Dami.TraduCuvant("Perioada angajare");
+                chkRecalc.Text = Dami.TraduCuvant("Recalcul totaluri");
+                chkCC.Text = Dami.TraduCuvant("Centrul de cost");
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();

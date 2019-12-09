@@ -32,6 +32,17 @@ namespace WizOne.Personal
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnEdit.Image.ToolTip = Dami.TraduCuvant("btnEdit", "Modifica");
                 //grDate.SettingsPager.PageSize = 20;
+
+                //Radu 09.12.2019             
+                ASPxListBox nestedListBox = checkComboBoxStare.FindControl("listBox") as ASPxListBox;
+                foreach (ListEditItem item in nestedListBox.Items)
+                    item.Text = Dami.TraduCuvant(item.Text);
+                ASPxButton btnInchide = checkComboBoxStare.FindControl("btnInchide") as ASPxButton;
+                if (btnInchide != null)
+                    btnInchide.Text = Dami.TraduCuvant("btnInchide", "Inchide");
+                btnSterge.Image.ToolTip = Dami.TraduCuvant("btnSterge", "Sterge");
+                btnEdit.Image.ToolTip = Dami.TraduCuvant("btnEdit", "Modifica");
+                btnTransf.Image.ToolTip = Dami.TraduCuvant("btnTransf", "Transforma candidat in angajat");
                 #endregion
 
                 string sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'AngajatImplicitCandidat'";
@@ -52,8 +63,8 @@ namespace WizOne.Personal
                         checkComboBoxStare.Value = Session["FiltruListaMP"].ToString();
                     else
                     {
-                        checkComboBoxStare.Value = "Activ;Angajat in avans";
-                        Session["FiltruListaMP"] = "Activ;Angajat in avans";
+                        checkComboBoxStare.Value = Dami.TraduCuvant("Activ") + ";" + Dami.TraduCuvant("Angajat in avans");
+                        Session["FiltruListaMP"] = Dami.TraduCuvant("Activ") + ";" + Dami.TraduCuvant("Angajat in avans");
                     }
                     IncarcaGrid();
                     //btnNew.Attributes.Add("onclick", "window.open('Sablon.aspx', null,'height=300,width=500,left='+(window.outerWidth / 2 + window.screenX - 150)+', top=' + (window.outerHeight / 2 + window.screenY - 100));");

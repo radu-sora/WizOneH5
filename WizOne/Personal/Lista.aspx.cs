@@ -613,6 +613,7 @@ namespace WizOne.Personal
                             return;
                         }
                         Session["MP_Candidat"] = chkCandidat.Checked ? 1 : 0;
+                        Session["MP_CreareUtilizator"] = chkUser.Checked ? 1 : 0;
                         ASPxWebControl.RedirectOnCallback("~/Personal/DateAngajat.aspx");
                         break;
                 }

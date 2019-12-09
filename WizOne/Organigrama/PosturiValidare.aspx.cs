@@ -347,7 +347,9 @@ namespace WizOne.Organigrama
                     {
                         if (General.Nz(dtRel.Rows[0]["modifSalariu"], 0).ToString() == "1")
                         {
-                            dtF100.Rows[0]["F100699"] = dtRel.Rows[0]["SalariulAvizat"];
+                            //Radu 05.12.2019
+                            string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
+                            dtF100.Rows[0][salariu] = dtRel.Rows[0]["SalariulAvizat"];
                             dtF100.Rows[0]["F100991"] = dtRef;
                         }
 

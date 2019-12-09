@@ -42,7 +42,7 @@ namespace WizOne.Tactil
                 //adaugam butoanele
 
                 //Radu 08.03.2019 - adaugare coloane Pagina si IdParam2
-                DataTable dt = General.IncarcaDT("SELECT * FROM \"tblConfigTactil\" WHERE COALESCE(\"Vizibil\",0)=1 AND (\"Pagina\" IS NULL OR \"Pagina\" = '')", null);
+                DataTable dt = General.IncarcaDT("SELECT * FROM \"tblConfigTactil\" WHERE COALESCE(\"Vizibil\",0)=1 AND (\"Pagina\" IS NULL OR \"Pagina\" = '') ORDER BY \"Ordine\"", null);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     string nume = General.Nz(dt.Rows[i]["Denumire"], "").ToString();

@@ -25,7 +25,7 @@ namespace WizOne.Tactil
 
 
 
-                DataTable dt = General.IncarcaDT("SELECT * FROM \"tblConfigTactil\" WHERE COALESCE(\"Vizibil\",0)=1 AND \"Pagina\" = 'Adeverinte'", null);
+                DataTable dt = General.IncarcaDT("SELECT * FROM \"tblConfigTactil\" WHERE COALESCE(\"Vizibil\",0)=1 AND \"Pagina\" = 'Adeverinte' ORDER BY \"Ordine\"", null);
                 if (dt == null || dt.Rows.Count <= 0)
                 {
                     dt = new DataTable();

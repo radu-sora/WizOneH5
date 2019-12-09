@@ -4363,11 +4363,11 @@ namespace WizOne.Module
                     op = "||";
                     dt = "SysDate";
                 }
-
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                 strSql = @"SELECT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"", A.F10017 AS CNP,
                                 B.F00204 AS ""Companie"", C.F00305 AS ""Subcompanie"", D.F00406 AS ""Filiala"", E.F00507 AS ""Sectie"", F.F00608 AS ""Departament"", 
                                 A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, A.F10022, A.F10023, A.F10022 AS ""DataAngajarii"", A.F10023 AS ""DataPlecarii"",
-                                A.F10011 AS ""NrContract"", A.F100699 AS ""SalariulBrut"", X.F71804 AS ""Functia"", A.F100992 AS ""DataFunctie"", A.F10025,
+                                A.F10011 AS ""NrContract"", A.{2} AS ""SalariulBrut"", X.F71804 AS ""Functia"", A.F100992 AS ""DataFunctie"", A.F10025,
                                 A.F100571 AS ""Regiune"", A.F100925, A.F100901, A.F100922, A.F100923, A.F100924,
                                 CASE WHEN (A.F10025 = 0 OR A.F10025 = 999) THEN 1 ELSE 0 END AS ""AngajatActiv"", 
                                 CASE WHEN (A.F10022 <= {1} AND {1} <= A.F10023) THEN CAST(1 AS int) ELSE CAST(0 AS int) END AS ""Stare"",
@@ -4382,7 +4382,7 @@ namespace WizOne.Module
                                 LEFT JOIN F718 X ON A.F10071=X.F71802
                                 ORDER BY A.F10008, A.F10009";
 
-                strSql = string.Format(strSql, op, dt);
+                strSql = string.Format(strSql, op, dt, salariu);
            }
             catch (Exception ex)
             {
@@ -6419,11 +6419,11 @@ namespace WizOne.Module
                             WHERE (A.F10025 = 0 OR A.F10025 = 999)";
                 }
 
-
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                 strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"", 
                                         A.F100901, C.F71804 AS ""Functia"",
                                         A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"", A.F10023 AS ""DataPlecarii"", A.F10011 AS ""NrContract"", 
-                                        CASE WHEN A.F10022 <= {CurrentDate()} AND {CurrentDate()} <= A.F10023 THEN 1 ELSE 0 END AS ""Stare"", A.F100699 AS ""SalariulBrut"", A.F10025, A.F100571 AS ""Regiune"",
+                                        CASE WHEN A.F10022 <= {CurrentDate()} AND {CurrentDate()} <= A.F10023 THEN 1 ELSE 0 END AS ""Stare"", A.{salariu} AS ""SalariulBrut"", A.F10025, A.F100571 AS ""Regiune"",
                                         (SELECT MIN(Z.F70102) FROM USERS Z WHERE Z.F10003=A.F10003) AS ""IdUser""
                                         FROM ""InlocuitoriAngajat"" B
                                         INNER JOIN F100 A ON B.""F10003Inlocuitor"" = A.F10003

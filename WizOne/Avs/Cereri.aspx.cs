@@ -1182,11 +1182,11 @@ namespace WizOne.Avs
 
         private void IncarcaDate()
         {
-
+            string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Salariul)
             {
                 ArataCtl(2, "Salariu brut actual", "Salariu brut nou", "Salariu net actual", "Salariu net nou", "", "", "", "", "", "");
-                DataTable dtTemp = General.IncarcaDT("SELECT F100699 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                DataTable dtTemp = General.IncarcaDT("SELECT " + salariu + " FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 txt1Act.Text = dtTemp.Rows[0][0].ToString();
                 CalcSalariu(1, txt1Act, txt2Act);
             }
@@ -2148,10 +2148,11 @@ namespace WizOne.Avs
                 //verificare ca salariul sa nu fie mai mic decat cel minim (in functie si de timp partial) la schimbare norma sau salariu
                 if (idAtr == (int)Constante.Atribute.Norma)
                 {
+                    string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                     //DataTable dtSal = General.IncarcaDT("SELECT COALESCE(F100699, 0) FROM F100 WHERE F10003 = " + F10003, null);
                     sql = "select f100.f10003 as Marca, case when f100991 is null or f100991 = convert(datetime, '01/01/2100', 103) then  "
                                             + "  convert(datetime, '01/' + convert(varchar, f01012) + '/' + convert(varchar, f01011), 103) "
-                                            + " else f100991 end as Data, COALESCE(F100699, 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                                            + " else f100991 end as Data, COALESCE(" + salariu + ", 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
                                             + " union "
                                             + " select f70403 as Marca, f70406 as Data, COALESCE(F70407, 0) as Valoare from f704 where f70404 = 1 and f70420 = 0 "
                                             + " union "
@@ -2159,7 +2160,7 @@ namespace WizOne.Avs
                     if (Constante.tipBD == 2)
                         sql = "select f100.f10003 as \"Marca\", case when f100991 is null or f100991 = TO_DATE('01/01/2100', 'dd/mm/yyyy') then  "
                             + "  TO_DATE('01/' ||  f01012 || '/' || F01011, 'dd/mm/yyyy') "
-                            + " else f100991 end as \"Data\", COALESCE(F100699, 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                            + " else f100991 end as \"Data\", COALESCE(" + salariu + ", 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
                             + " union "
                             + " select f70403 as \"Marca\", f70406 as \"Data\", COALESCE(F70407, 0) as \"Valoare\" from f704 where f70404 = 1 and f70420 = 0 "
                             + " union "
@@ -3476,8 +3477,9 @@ namespace WizOne.Avs
                         {
                             if (dtModif.Year == dtLucru.Year && dtModif.Month == dtLucru.Month && dtF100 != null && dtF100.Rows.Count > 0)
                             {
+                                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                                 act = 1;
-                                sql100 = "UPDATE F100 SET F10026 = " + dtCer.Rows[0]["ScutitImpozit"].ToString() + ", F100699 = " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", F100991 = " + data + " WHERE F10003 = " + f10003.ToString();
+                                sql100 = "UPDATE F100 SET F10026 = " + dtCer.Rows[0]["ScutitImpozit"].ToString() + ", " + salariu + " = " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", F100991 = " + data + " WHERE F10003 = " + f10003.ToString();
                             }
                             sql = "INSERT INTO F704 (F70401, F70402, F70403, F70404, F70405, F70406, F70407, F70409, F70410, F70420, F70452, USER_NO, TIME) "
                             + " VALUES (704, " + idComp.ToString() + ", " + f10003.ToString() + ", 1, 'Salariu Tarifar', " + data + ", " + dtCer.Rows[0]["SalariulBrut"].ToString() + ", 'Modificari in avans', '"

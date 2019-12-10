@@ -186,11 +186,13 @@ namespace WizOne.Pontaj
             }
         }
 
-
+        //Florin 2019.12.10 - rescrisa
         protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
         {
             try
             {
+                string mesaj = "";
+
                 grDate.CancelEdit();
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
@@ -199,6 +201,16 @@ namespace WizOne.Pontaj
                 for (int x = 0; x < e.UpdateValues.Count; x++)
                 {
                     ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
+
+                    string msg = Notif.TrimiteNotificare("Pontaj.PontajCumulat", (int)Constante.TipNotificare.Validare, @"SELECT * FROM ""Ptj_Cumulat"" WHERE F10003= " + upd.NewValues["F10003"] + @" AND ""An""=" + txtAnLuna.Date.Year + @" AND ""Luna""=" + txtAnLuna.Date.Month, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    if (msg != "" && msg.Substring(0, 1) == "2")
+                    {
+                        mesaj += msg.Substring(2) + Environment.NewLine;
+                        continue;
+                    }
+                    else
+                        mesaj += upd.NewValues["F10003"] + " - proces realizat cu succes" + Environment.NewLine;
+
                     object[] keys = new object[] { upd.Keys[0] };
 
                     DataRow row = dt.Rows.Find(keys);
@@ -209,9 +221,13 @@ namespace WizOne.Pontaj
 
                     foreach (DictionaryEntry de in upd.NewValues)
                     {
+                        var ert = de.Key.ToString();
                         if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
                         {
-                            row[de.Key.ToString()] = upd.NewValues[de.Key.ToString()] ?? DBNull.Value;
+                            if (upd.NewValues[de.Key.ToString()] != null)
+                                row[de.Key.ToString()] = Convert.ToDecimal(upd.NewValues[de.Key.ToString()]);
+                            else
+                                row[de.Key.ToString()] = DBNull.Value;
                         }
                     }
 
@@ -220,35 +236,24 @@ namespace WizOne.Pontaj
 
                 if (dt.GetChanges() != null && ((DataTable)dt.GetChanges()).Rows.Count > 0)
                 {
-                    ////Florin - 2019.12.09 Am adugat notificarle si validarile
-                    //string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
-                    //if (msg != "" && msg.Substring(0, 1) == "2")
-                    //{
-                    //    MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
-                    //    return;
-                    //}
-                    //else
-                    //{
+                    General.SalveazaDate(dt, "Ptj_Cumulat");
 
-                    //    General.SalveazaDate(dt, "Ptj_Cumulat");
-
-                    //    HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
-                    //    {
-                    //        NotifAsync.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + idCer, "Ptj_Cereri", idCer, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99), arrParam);
-                    //    });
-                    //}
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
 
                     string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < arr.Length; i++)
                     {
                         General.CalculFormuleCumulat(Convert.ToInt32(arr[i]), txtAnLuna.Date.Year, txtAnLuna.Date.Month);
+
+                        Notif.TrimiteNotificare("Pontaj.PontajCumulat", (int)Constante.TipNotificare.Notificare, @"SELECT * FROM ""Ptj_Cumulat"" WHERE F10003= " + Convert.ToInt32(arr[i]) + @" AND ""An""=" + txtAnLuna.Date.Year + @" AND ""Luna""=" + txtAnLuna.Date.Month, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99) );
                     }
 
-                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+                    grDate.JSProperties["cpAlertMessage"] = mesaj;
+
+                    Session["InformatiaCurenta"] = dt;
                 }
                 else
-                    MessageBox.Show("Nu exista modificari", MessageBox.icoInfo);
-
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista modificari");
 
                 e.Handled = true;
             }
@@ -258,6 +263,63 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        //protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        //{
+        //    try
+        //    {
+        //        grDate.CancelEdit();
+
+        //        DataTable dt = Session["InformatiaCurenta"] as DataTable;
+        //        string ids = "";
+
+        //        for (int x = 0; x < e.UpdateValues.Count; x++)
+        //        {
+        //            ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
+        //            object[] keys = new object[] { upd.Keys[0] };
+
+        //            DataRow row = dt.Rows.Find(keys);
+        //            if (row == null) continue;
+
+        //            row["USER_NO"] = Session["UserId"];
+        //            row["TIME"] = DateTime.Now;
+
+        //            foreach (DictionaryEntry de in upd.NewValues)
+        //            {
+        //                if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
+        //                {
+        //                    row[de.Key.ToString()] = upd.NewValues[de.Key.ToString()] ?? DBNull.Value;
+        //                }
+        //            }
+
+        //            ids += upd.NewValues["F10003"] + ";";
+        //        }
+
+        //        if (dt.GetChanges() != null && ((DataTable)dt.GetChanges()).Rows.Count > 0)
+        //        {
+        //            General.SalveazaDate(dt, "Ptj_Cumulat");
+
+        //            string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+        //            for (int i = 0; i < arr.Length; i++)
+        //            {
+        //                General.CalculFormuleCumulat(Convert.ToInt32(arr[i]), txtAnLuna.Date.Year, txtAnLuna.Date.Month);
+        //            }
+
+        //            MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+        //        }
+        //        else
+        //            MessageBox.Show("Nu exista modificari", MessageBox.icoInfo);
+
+
+        //        e.Handled = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
         protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)

@@ -98,8 +98,13 @@ namespace WizOne.Pontaj
                 string act = "";
                 string inn = "";
 
+                ziIn = new DateTime(ziIn.Year, ziIn.Month, ziIn.Day);
+                ziSf = new DateTime(ziSf.Year, ziSf.Month, ziSf.Day);
+
                 string ziInceput = General.ToDataUniv(ziIn.Year, ziIn.Month, 1);
                 string ziSfarsit = General.ToDataUniv(ziSf.Year, ziSf.Month, 99);
+
+                string sqlPrg = "";
 
                 if (Constante.tipBD == 1)
                 {
@@ -211,8 +216,25 @@ namespace WizOne.Pontaj
 
                         if (act != "") act = act.Substring(1);
                         strSql = string.Format(strSql, angIn, angSf, General.ToDataUniv(ziIn), General.ToDataUniv(ziSf), act, inn);
-                    }
 
+                        //Florin 2019.12.10 - daca este contract, actualizam si programul
+                        if (chkCtr == true)
+                            sqlPrg = $@"UPDATE X
+                                    SET X.IdProgram=
+                                    CASE WHEN (COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                    CASE (X.""ZiSapt"")
+                                    WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END)
+                                    WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END)
+                                    WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END)
+                                    WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END)
+                                    WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END)
+                                    WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END)
+                                    WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END)
+                                    END END
+                                    FROM Ptj_Intrari X
+                                    INNER JOIN Ptj_Contracte Y ON X.IdContract = Y.Id
+                                    WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.Ziua AND X.Ziua <= @4";
+                    }
                 }
                 else
                 {
@@ -320,10 +342,32 @@ namespace WizOne.Pontaj
                         strSql = string.Format(strSql, angIn, angSf, General.ToDataUniv(ziIn), General.ToDataUniv(ziSf), act);
                         strSql = "BEGIN " + strSql + " END;";
                     }
+
+                    //Florin 2019.12.10 - daca este contract, actualizam si programul
+                    if (chkCtr == true)
+                        sqlPrg = $@"UPDATE ""Ptj_Intrari"" X
+                                SET X.""IdProgram"" =
+                                (SELECT
+                                CASE WHEN(COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE(X.""ZiSapt"")
+                                WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END)
+                                WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END)
+                                WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END)
+                                WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END)
+                                WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END)
+                                WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END)
+                                WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END)
+                                END END
+                                FROM ""Ptj_Contracte"" Y WHERE X.""IdContract"" = Y.""Id"")
+                                WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.""Ziua"" AND X.""Ziua"" <= @4";
                 }
 
                 if (strSql.Length > 0)
                     ras = General.ExecutaNonQuery(strSql, null);
+
+                if (sqlPrg.Length > 0)
+                    General.ExecutaNonQuery(sqlPrg, new object[] { angIn, angSf, ziIn, ziSf });
+
             }
             catch (Exception ex)
             {

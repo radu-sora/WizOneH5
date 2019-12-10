@@ -31,7 +31,7 @@ namespace WizOne.Pontaj
                     //DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
                     //                                    FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.""Coloana"" = AF.""Denumire""
                     //                                    ORDER BY CS.""Ordine""  ", null);
-                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.""Alias"",CS.""Coloana"") ""Caption"" 
+                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.""Alias"",CS.""Coloana"") ""Caption"",  coalesce(af.""AliasToolTip"", coalesce(AF.""Alias"",CS.""Coloana"")) ""ToolTip"" 
                                                         FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_tblAdmin"" AF ON CS.""Coloana"" = AF.""Coloana""
                                                         ORDER BY CS.""Ordine""  ", null);
 
@@ -41,6 +41,7 @@ namespace WizOne.Pontaj
                         c.Name = "col" + i;
                         c.FieldName = dt.Rows[i]["Coloana"].ToString();
                         c.Caption = Dami.TraduCuvant(dt.Rows[i]["Caption"].ToString());
+                        c.ToolTip = Dami.TraduCuvant(dt.Rows[i]["ToolTip"].ToString());
                         c.ReadOnly = true;
                         //c.Width = Unit.Pixel(100);
                         c.VisibleIndex = 100 + i;
@@ -85,6 +86,30 @@ namespace WizOne.Pontaj
 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
+
+                //Radu 09.12.2019
+                lblAnLuna.InnerText = Dami.TraduCuvant("Luna/An");
+                lblRol.InnerText = Dami.TraduCuvant("Roluri");
+                lblStare.InnerText = Dami.TraduCuvant("Stare");
+                lblCtr.InnerText = Dami.TraduCuvant("Contract");
+                lblSub.InnerText = Dami.TraduCuvant("Subcomp.");
+                lblFil.InnerText = Dami.TraduCuvant("Filiala");
+                lblSec.InnerText = Dami.TraduCuvant("Sectie");
+                lblDept.InnerText = Dami.TraduCuvant("Dept.");
+                lblSubDept.InnerText = Dami.TraduCuvant("Subdept.");
+                lblBirou.InnerText = Dami.TraduCuvant("Birou");
+
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
+
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
 
                 #endregion
 

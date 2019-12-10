@@ -4540,23 +4540,32 @@ namespace WizOne.Module
                     condAng = " AND (";
                     for (int i = 0; i < param.Length; i++)
                     {
-                        switch (param[i])
-                        {
-                            case "Activ":
-                            case "Activ detasat":
-                            case "Activ suspendat":
-                                condAng += " e.F10025 = 0 ";
-                                break;
-                            case "Inactiv":
-                                condAng += " e.F10025 <> 0 ";
-                                break;
-                            case "Candidat":
-                                condAng += " e.F10025 = 900 ";
-                                break;
-                            case "Angajat in avans":
-                                condAng += " e.F10025 = 999 ";
-                                break;
-                        }
+                        //switch (param[i])
+                        //{
+                        //    case "Activ":
+                        //    case "Activ detasat":
+                        //    case "Activ suspendat":
+                        //        condAng += " e.F10025 = 0 ";
+                        //        break;
+                        //    case "Inactiv":
+                        //        condAng += " e.F10025 <> 0 ";
+                        //        break;
+                        //    case "Candidat":
+                        //        condAng += " e.F10025 = 900 ";
+                        //        break;
+                        //    case "Angajat in avans":
+                        //        condAng += " e.F10025 = 999 ";
+                        //        break;
+                        //}
+                        //Radu 09.12.2019
+                        if (param[i] == Dami.TraduCuvant("Activ") || param[i] == Dami.TraduCuvant("Activ detasat") || param[i] == Dami.TraduCuvant("Activ suspendat"))
+                            condAng += " e.F10025 = 0 ";
+                        if (param[i] == Dami.TraduCuvant("Inactiv"))
+                            condAng += " e.F10025 <> 0 ";
+                        if (param[i] == Dami.TraduCuvant("Candidat"))
+                            condAng += " e.F10025 = 900 ";
+                        if (param[i] == Dami.TraduCuvant("Angajat in avans"))
+                            condAng += " e.F10025 = 999 ";
                         if (i < param.Length - 1)
                             condAng += " OR ";
                     }
@@ -4576,6 +4585,10 @@ namespace WizOne.Module
                     }
                 }
                 strSql = string.Format(strSql, strFiltru, cmp, left, " AND A.F10003 IN (" + DamiAngajati(idUser, filtruAng, condAng) + ")", op, dt, cmpSupl, legCmpSupl, tipData);
+
+                //Radu 09.12.2019
+                strSql = strSql.Replace("'Activ'", "'" + Dami.TraduCuvant("Activ") + "'").Replace("'Activ suspendat'", "'" + Dami.TraduCuvant("Activ suspendat") + "'").Replace("'Inactiv'", "'" 
+                    + Dami.TraduCuvant("Inactiv") + "'").Replace("'Candidat'", "'" + Dami.TraduCuvant("Candidat") + "'").Replace("'Angajat in avans'", "'" + Dami.TraduCuvant("Angajat in avans") + "'").Replace("'Activ detasat'", "'" + Dami.TraduCuvant("Activ detasat") + "'");
 
                 q = General.IncarcaDT(strSql, null);
 
@@ -5430,7 +5443,7 @@ namespace WizOne.Module
             {
                 //Radu 28.11.2019 - se inlocuieste Ptj_AliasF cu Ptj_tblAdmin
                 //return General.IncarcaDT("SELECT \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_AliasF\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END", null);
-                return General.IncarcaDT("SELECT \"Coloana\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
+                return General.IncarcaDT("SELECT \"Coloana\" AS \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
             }
 
             catch (Exception ex)

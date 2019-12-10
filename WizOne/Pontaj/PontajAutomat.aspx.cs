@@ -32,6 +32,11 @@ namespace WizOne.Pontaj
                 btnAct.Text = Dami.TraduCuvant("btnAct", "Actualizeaza absenta");
                 btnSte.Text = Dami.TraduCuvant("btnSte", "Sterge absenta");
 
+                //Radu 09.12.2019
+                lblCtrInc.InnerText = Dami.TraduCuvant("Contract Inceput");
+                lblCtrSf.InnerText = Dami.TraduCuvant("Contract Sfarsit");
+                lblZiua.InnerText = Dami.TraduCuvant("Ziua");
+                lblAbs.InnerText = Dami.TraduCuvant("Tip Cerere");
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();

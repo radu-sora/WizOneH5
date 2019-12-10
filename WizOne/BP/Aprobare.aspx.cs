@@ -785,15 +785,15 @@ namespace WizOne.BP
                                 B.""IdAuto""  AS ""IdIst""
                                 FROM({strSelect.Substring(6)}) RL
                                 INNER JOIN ""BP_Prime"" A ON RL.Id = A.Id
-                                LEFT JOIN ""BP_Istoric"" B ON A.""Id""=B.""Id"" 
+                                LEFT JOIN ""BP_Istoric"" B ON A.""Id""=B.""Id"" AND B.""Pozitie"" = A.""Pozitie"" + 1
 
-                                AND ((B.""IdSuper"" >= 0 and B.""IdUser"" = {idUser}) or (B.""IdSuper"" < 0 and
-				                {idUser} in (select sup.""IdUser"" from ""F100Supervizori"" sup where sup.F10003 = A.F10003 AND A.""Id""=B.""Id"" and sup.""IdSuper"" = (-1) * B.""IdSuper"") ) OR
-                                {idUser} in (select sup.""IdUser"" FROM ""F100Supervizori"" sup where sup.""IdSuper"" in ({idHR})) )
                                 
                                 LEFT JOIN ""BP_Circuit"" E ON A.""IdCircuit""=E.""IdAuto""
                                 LEFT JOIN F100 G ON A.F10003=G.F10003
-                                WHERE 1=1 ";
+                                WHERE 1=1  
+                                AND ((B.""IdSuper"" >= 0 and B.""IdUser"" = {idUser}) or (B.""IdSuper"" < 0 and
+				                {idUser} in (select sup.""IdUser"" from ""F100Supervizori"" sup where sup.F10003 = A.F10003 AND A.""Id""=B.""Id"" and sup.""IdSuper"" = (-1) * B.""IdSuper"") ) OR
+                                {idUser} in (select sup.""IdUser"" FROM ""F100Supervizori"" sup where sup.""IdSuper"" in ({idHR})) )  ";
                 DataTable dtCer = General.IncarcaDT(strSql, null);
 
 
@@ -833,12 +833,13 @@ namespace WizOne.BP
                         }
 
                         DataTable entCer = General.IncarcaDT("SELECT * FROM \"BP_Prime\" WHERE \"Id\" = " + id, null);
-                        DataTable entIst = General.IncarcaDT("SELECT * FROM \"BP_Istoric\" WHERE \"Id\" = " + id + " AND \"IdUser\" = " + Session["UserId"].ToString() + " AND \"Aprobat\" IS NULL ", null); 
+                        //DataTable entIst = General.IncarcaDT("SELECT * FROM \"BP_Istoric\" WHERE \"Id\" = " + id + " AND \"IdUser\" = " + Session["UserId"].ToString() + " AND \"Aprobat\" IS NULL ", null); 
+                        DataTable entIst = General.IncarcaDT("SELECT * FROM \"BP_Istoric\" WHERE \"Id\" = " + id + " AND  \"Aprobat\" IS NULL ORDER BY \"Pozitie\"", null);
                         DataTable entTip = General.IncarcaDT("SELECT a.*, " + (Constante.tipBD == 1 ? "CONVERT(VARCHAR, \"WizSal_DataPlatii\", 103)" : "TO_CHAR(\"WizSal_DataPlatii\", 'dd/mm/yyyy')") + " AS \"DataPlatii\" FROM \"BP_tblTipPrima\" a WHERE \"Id\" = " 
                             + (entCer != null && entCer.Rows.Count > 0 && entCer.Rows[0]["IdTip"] != null && entCer.Rows[0]["IdTip"].ToString().Length > 0 ? entCer.Rows[0]["IdTip"].ToString() : "-99"), null);
                         
 
-                        if (entIst == null) continue;
+                        if (entIst == null || entIst.Rows.Count <= 0) continue;
 
                         int idStare = 2;
 

@@ -238,12 +238,18 @@ namespace WizOne.Absente
                 //    return;
                 //}
 
-                if (cmbOraInc.Visible == true && cmbOraInc.Text == "")
+                if (!rbPrel1.Checked && dtDataSf.Visible == false && txtNrOre.Text.Length <= 0)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numarul de ore!"), MessageBox.icoError);
+                    return;
+                }
+
+                if (!rbPrel1.Checked && (cmbOraInc.Visible == true && cmbOraInc.Text == ""))
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu ati specificat ora inceput!"), MessageBox.icoError);
                     return;              
                 }
-                if (cmbOraSf.Visible == true && cmbOraSf.Text == "")
+                if (!rbPrel1.Checked && (cmbOraSf.Visible == true && cmbOraSf.Text == ""))
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu ati specificat ora sfarsit!"), MessageBox.icoError);
                     return;
@@ -298,21 +304,25 @@ namespace WizOne.Absente
         {
             string msg = "";
             string err = "";
+            Dictionary<int, int> lstOre = new Dictionary<int, int>();
             if (rbPrel1.Checked)
             {
-                lstMarci.Clear();
+                //lstMarci.Clear();
                 DateTime data = Convert.ToDateTime(dtDataInc.Value);
-                int dept = Convert.ToInt32(cmbDept.Value);
+                //int dept = Convert.ToInt32(cmbDept.Value);
                 int idAbsenta = Convert.ToInt32(cmbAbs.Value);
                 string dt = " CONVERT(DATETIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 103) ";
                 if (Constante.tipBD == 2) dt = " TO_DATE('" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 'dd/MM/yyyy') ";
 
-                string sql = "SELECT * FROM GENERARE_AUTOMATA_CERERI a WHERE a.F10007 =  " + dept + " AND a.\"IdAbsenta\" =  " + idAbsenta + " AND \"Data\" = " + dt + " AND "
+                string sql = "SELECT * FROM GENERARE_AUTOMATA_CERERI a WHERE  a.\"IdAbsenta\" =  " + idAbsenta + " AND \"Data\" = " + dt + " AND "
                            + " F10003 IN (select b.F10003 from \"F100Supervizori\" b where b.\"IdSuper\" = (select (-1) * \"UserIntrod\" from \"Ptj_Circuit\" where \"IdAuto\" = a.\"IdCircuit\") and b.\"IdUser\" = " + Session["UserId"].ToString() + ") ";
 
-                DataTable dtPrel = General.IncarcaDT(sql, null);
+                DataTable dtPrel = General.IncarcaDT(sql, null);               
                 for (int i = 0; i < dtPrel.Rows.Count; i++)
-                    lstMarci.Add(Convert.ToInt32(dtPrel.Rows[i]["F10003"].ToString()));
+                {
+                    if (lstMarci.Contains(Convert.ToInt32(dtPrel.Rows[i]["F10003"].ToString())))
+                        lstOre.Add(Convert.ToInt32(dtPrel.Rows[i]["F10003"].ToString()), Convert.ToInt32(dtPrel.Rows[i]["NrOre"].ToString()));
+                }
             }
             int x = 0, y = 1;
 
@@ -394,7 +404,7 @@ namespace WizOne.Absente
 
                 if (Constante.tipBD == 1)
                 {
-                    sqlCer = CreazaSelectCuValori(marca);
+                    sqlCer = CreazaSelectCuValori(marca, 1, lstOre.ContainsKey(marca) ? lstOre[marca] : -99);
 
                     sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
                                 OUTPUT Inserted.Id, Inserted.IdStare ";
@@ -1110,7 +1120,7 @@ namespace WizOne.Absente
             }
         }
 
-        public string CreazaSelectCuValori(int marca, int tip = 1)
+        public string CreazaSelectCuValori(int marca, int tip = 1, int nrOre = -99)
         {
             //tip = 1 intoarce un select
             //tip = 2 intoarce ca values; necesar pt Oracle
@@ -1147,7 +1157,11 @@ namespace WizOne.Absente
                 if (dtDataSf.Visible != false)
                     nrZile = txtNr.Text;
                 else
+                {
                     dtDataSf.Value = dtDataInc.Value;
+                    if (nrOre == -99)
+                        nrOre = Convert.ToInt32(txtNrOre.Text);
+                }
 
                 string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
                 string sqlInloc =  "NULL" ;
@@ -1155,7 +1169,7 @@ namespace WizOne.Absente
                 string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
                 string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
                 string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
-                string sqlNrOre = nrZile == "" ? "NULL" : nrZile;
+                string sqlNrOre = nrOre == -99 ? "NULL" : nrOre.ToString();
 
                 if (Constante.tipBD == 2)
                 {

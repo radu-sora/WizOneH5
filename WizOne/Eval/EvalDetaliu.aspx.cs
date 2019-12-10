@@ -203,13 +203,35 @@ namespace WizOne.Eval
         {
             try
             {
-                //Florin 2019.02.27
-                if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                //Florin 2019.12.10 Begin - sa poata sa modifice chestionarul simultan, oricare actor de pe circuit
+
+                ////Florin 2019.02.27
+                //if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                //{
+                //    //MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
+                //    pnlSectiune.JSProperties["cpAlertMessage"] = "Nu aveti drepturi pentru aceasta operatie!";
+                //    return;
+                //}
+
+                int respectaOrdinea = 0;
+                DataTable entCir = General.IncarcaDT(@"SELECT * FROM ""Eval_Circuit"" WHERE ""IdQuiz"" = @1", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) });
+                if (entCir != null && entCir.Rows.Count > 0) respectaOrdinea = Convert.ToInt32(entCir.Rows[0]["RespectaOrdinea"] != DBNull.Value ? entCir.Rows[0]["RespectaOrdinea"].ToString() : "0");
+
+                if (respectaOrdinea == 1)
                 {
-                    //MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
-                    pnlSectiune.JSProperties["cpAlertMessage"] = "Nu aveti drepturi pentru aceasta operatie!";
-                    return;
+                    if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                    {
+                        pnlSectiune.JSProperties["cpAlertMessage"] = "Nu aveti drepturi pentru aceasta operatie!";
+                        return;
+                    }
                 }
+                else
+                {
+                    //NOP
+                }
+
+                //Florin 2019.12.10 End
+
 
                 //Florin 2019.06.27
                 SalveazaGridurile();
@@ -700,11 +722,22 @@ namespace WizOne.Eval
                             {
                                 string mesaj = "";
 
+
+                                //Florin 2019.12.10 - Begin - in DataTable-ul de mia jos am inlocuit Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)) cu pozComp
+                                int pozComp = Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1));
+                                int respectaOrdinea = 0;
+                                DataTable entCir = General.IncarcaDT(@"SELECT * FROM ""Eval_Circuit"" WHERE ""IdQuiz"" = @1", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) });
+                                if (entCir != null && entCir.Rows.Count > 0) respectaOrdinea = Convert.ToInt32(entCir.Rows[0]["RespectaOrdinea"] != DBNull.Value ? entCir.Rows[0]["RespectaOrdinea"].ToString() : "0");
+
+                                if (respectaOrdinea == 0)
+                                    pozComp = Convert.ToInt32(General.Nz(Session["Eval_PozitieUserLogat"], 1));
+                                //Florin 2019.12.10 - End
+
                                 DataTable dt = General.IncarcaDT(
                                     @"select convert(INT,round(CONVERT(DECIMAL(18,2),sum(coalesce(""IdCalificativ"", 0))) / count(*),0)) 
                                     from ""Eval_ObiIndividualeTemp"" 
                                     where ""IdQuiz"" = @1 and F10003 = @2 AND ""Pozitie""=@3 
-                                    and ""IdLinieQuiz"" in (select ""Id"" from ""Eval_QuizIntrebari"" where ""IdQuiz"" = @1 and ""TipData"" = 23)", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)) });
+                                    and ""IdLinieQuiz"" in (select ""Id"" from ""Eval_QuizIntrebari"" where ""IdQuiz"" = @1 and ""TipData"" = 23)", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)), pozComp });
 
                                 DataTable dtVal = General.IncarcaDT(@"select * from ""Eval_tblTipValoriLinii"" where ""Id"" = 8 ORDER BY ""IdAuto"" ", null);
                                 if (dt != null && dt.Rows.Count > 0)
@@ -745,7 +778,10 @@ namespace WizOne.Eval
                                     {
                                         foreach (Eval_ObiIndividualeTemp clsObiIndividuale in lstObiIndividuale)
                                         {
-                                            int dif = Convert.ToInt32(General.Nz(clsObiIndividuale.IdCalificativ, 1)) - valCtl;
+                                            List<Eval_SetCalificativDet> lstEval_SetCalificativDet = Session["feedEval_Calificativ"] as List<Eval_SetCalificativDet>;
+                                            int nota = lstEval_SetCalificativDet.Where(p => p.IdCalificativ == clsObiIndividuale.IdCalificativ).FirstOrDefault().Nota;
+                                            //int dif = Convert.ToInt32(General.Nz(clsObiIndividuale.IdCalificativ, 1)) - valCtl;
+                                            int dif = nota - valCtl;
                                             if (Math.Abs(dif) >= 2)
                                             {
                                                 //Florin 2019.02.20

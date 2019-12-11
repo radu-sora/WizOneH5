@@ -1557,6 +1557,7 @@ namespace WizOne.Pontaj
                                 }
                                 break;
                             case 8:                             //Time
+                            case 9:                             //Time - fara spin buttons
                                 {
                                     GridViewDataTimeEditColumn c = new GridViewDataTimeEditColumn();
                                     c.Name = colName;
@@ -1576,6 +1577,10 @@ namespace WizOne.Pontaj
 
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+                                    //Florin 2019.12.11
+                                    if (tipCol == 9)
+                                        c.PropertiesTimeEdit.SpinButtons.ShowIncrementButtons = false;
 
                                     grDate.Columns.Add(c);
                                 }

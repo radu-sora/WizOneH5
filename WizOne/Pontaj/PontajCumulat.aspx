@@ -23,6 +23,16 @@
             }
         }
 
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
+
     </script>
 </asp:Content>
 
@@ -155,7 +165,7 @@
                     <SettingsBehavior ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" ShowFilterRow="True"  ShowFilterRowMenu="True" ShowFooter="True" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-                    <ClientSideEvents BatchEditStartEditing="function(s, e) { OnBatchEditStartEditing(s,e); }" />
+                    <ClientSideEvents BatchEditStartEditing="function(s, e) { OnBatchEditStartEditing(s,e); }" EndCallback="function(s, e) { OnEndCallback(s,e); }" ContextMenu="ctx"/>
                     <Columns>
 
                         <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" ShowInCustomizationForm="false" FixedStyle="Left" Width="80px" VisibleIndex="0" />

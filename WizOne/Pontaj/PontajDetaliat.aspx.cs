@@ -74,6 +74,7 @@ namespace WizOne.Pontaj
                     }
 
                     CreazaGrid();
+                    CreeazaGridTotaluri();
 
                     DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
@@ -4563,5 +4564,41 @@ namespace WizOne.Pontaj
                 e.DisplayText = string.Format("{0:00}:{1:00}", (int)ts.TotalHours, ts.Minutes);
             }
         }
+
+        protected void CreeazaGridTotaluri()
+        {
+            try
+            {
+                string cmp = "SUBSTRING";
+                if (Constante.tipBD == 2)
+                    cmp = "SUBSTR";
+                DataTable dtCol = General.IncarcaDT($@"SELECT A.*, 
+                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
+                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
+                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
+                                COALESCE(B.""DenumireScurta"",'') AS ""ColScurta""
+                                FROM ""Ptj_tblAdmin"" A
+                                LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
+                                ORDER BY A.""Ordine"" ", null);
+
+                if (dtCol != null)
+                {
+                    DataSet ds = new DataSet();
+
+                    for (int i = 0; i < dtCol.Rows.Count; i++)
+                    {
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
     }
 }

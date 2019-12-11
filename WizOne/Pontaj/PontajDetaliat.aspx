@@ -831,6 +831,14 @@
         <tr>
             <td colspan="2">
                 <br />
+                <dx:ASPxGridView ID="grDateTotaluri" runat="server" ClientInstanceName="grDateTotaluri" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" Enabled="false">
+
+                </dx:ASPxGridView>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" 
                     OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlRowPrepared="grDate_HtmlRowPrepared" 

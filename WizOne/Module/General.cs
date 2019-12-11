@@ -7108,15 +7108,15 @@ namespace WizOne.Module
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.Zi AND  A.Zi <= C.""DataSfarsit"") IS NULL THEN 
                                 CASE WHEN COALESCE(dc.CC, 9999) <> 9999 THEN dc.CC ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = dd.Dept) END 
                                 ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <=  A.Zi AND  A.Zi <= C.""DataSfarsit"") END AS ""F06204Default"",
-                                CASE WHEN (CASE WHEN C.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE WHEN (CASE WHEN C.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
                                 CASE (CASE WHEN datepart(dw,A.""Zi"") - 1 = 0 THEN 7 ELSE datepart(dw,A.Zi) - 1 END)
-                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END) 
-                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END) 
-                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END) 
-                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END) 
-                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END) 
-                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END) 
-                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END) 
+                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
                                 END END AS ""IdProgram""
 
                                 FROM ""tblZile"" A
@@ -7140,15 +7140,15 @@ namespace WizOne.Module
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= C.""DataSfarsit"" and ROWNUM <= 1) IS NULL THEN
                                 CASE WHEN COALESCE(""DamiCC""(B.F10003, A.""Zi""), 9999) <> 9999 THEN ""DamiCC""(B.F10003, A.""Zi"") ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = ""DamiDept""(B.F10003, A.""Zi"")) END 
                                 ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= C.""DataSfarsit"" and ROWNUM <= 1) END AS ""F06204Default"",
-                                CASE WHEN (CASE WHEN C.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE WHEN (CASE WHEN C.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
                                 CASE (1 + TRUNC(A.""Zi"") - TRUNC(A.""Zi"", 'IW'))
-                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END) 
-                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END) 
-                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END) 
-                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END) 
-                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END) 
-                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END) 
-                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END) 
+                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
                                 END END AS ""IdProgram""
 
                                 FROM ""tblZile"" A
@@ -7771,15 +7771,15 @@ namespace WizOne.Module
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.ZIUA AND X.ZIUA <= C.""DataSfarsit"") IS NULL THEN 
                                 CASE WHEN COALESCE(dc.CC, 9999) <> 9999 THEN dc.CC ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = dd.Dept) END 
                                 ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.ZIUA AND X.ZIUA <= C.""DataSfarsit"") END AS ""F06204Default"",
-                                CASE WHEN (CASE WHEN B.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE WHEN (CASE WHEN B.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
                                 CASE (CASE WHEN datepart(dw,X.""Ziua"") - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END)
-                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END) 
-                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END) 
-                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END) 
-                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END) 
-                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END) 
-                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END) 
-                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END) 
+                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
                                 END END AS ""IdProgram""
                                 {1}
                                 {6}
@@ -7827,15 +7827,15 @@ namespace WizOne.Module
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= C.""DataSfarsit"" and ROWNUM <= 1) IS NULL THEN
                                 CASE WHEN COALESCE(""DamiCC""(A.F10003, X.""Ziua""), 9999) <> 9999 THEN ""DamiCC""(A.F10003, X.""Ziua"") ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = ""DamiDept""(A.F10003, X.""Ziua"")) END 
                                 ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= C.""DataSfarsit"" and ROWNUM <= 1) END AS ""F06204Default"",
-                                CASE WHEN (CASE WHEN B.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE WHEN (CASE WHEN B.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
                                 CASE (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW'))
-                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END) 
-                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END) 
-                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END) 
-                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END) 
-                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END) 
-                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END) 
-                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END) 
+                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
                                 END END AS ""IdProgram""
                                 {1}
                                 {6}

@@ -232,15 +232,15 @@ namespace WizOne.Pontaj
                         if (chkCtr == true)
                             sqlPrg = $@"UPDATE X
                                     SET X.IdProgram=
-                                    CASE WHEN (COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                    CASE WHEN (COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
                                     CASE (X.""ZiSapt"")
-                                    WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END)
-                                    WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END)
-                                    WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END)
-                                    WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END)
-                                    WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END)
-                                    WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END)
-                                    WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END)
+                                    WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) END)
+                                    WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) END)
+                                    WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) END)
+                                    WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) END)
+                                    WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) END)
+                                    WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) END)
+                                    WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) END)
                                     END END
                                     FROM Ptj_Intrari X
                                     INNER JOIN Ptj_Contracte Y ON X.IdContract = Y.Id
@@ -359,15 +359,15 @@ namespace WizOne.Pontaj
                         sqlPrg = $@"UPDATE ""Ptj_Intrari"" X
                                 SET X.""IdProgram"" =
                                 (SELECT
-                                CASE WHEN(COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE WHEN(COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
                                 CASE(X.""ZiSapt"")
-                                WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END)
-                                WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END)
-                                WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END)
-                                WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END)
-                                WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END)
-                                WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END)
-                                WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END)
+                                WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END)
                                 END END
                                 FROM ""Ptj_Contracte"" Y WHERE X.""IdContract"" = Y.""Id"")
                                 WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.""Ziua"" AND X.""Ziua"" <= @4";

@@ -562,7 +562,7 @@
                 var idCtr = grDate.batchEditApi.GetCellValue(currentEditableVisibleIndex, "IdContract");
                 var idPrg = grDate.batchEditApi.GetCellValue(currentEditableVisibleIndex, "IdProgram");
                 LoadPrograme(idCtr);
-
+                
                 if (cmbProgram.FindItemByValue(idPrg))
                     cmbProgram.SetSelectedItem(cmbProgram.FindItemByValue(idPrg));
                 else {
@@ -578,7 +578,7 @@
             if (typeof cmbProgram !== "undefined" && ASPxClientUtils.IsExists(cmbProgram)) {
                 let programe = <%=Session["Json_Programe"] %>;
                 var arr = programe.filter(function (item) { return item.idContract == idCtr });
-
+                
                 cmbProgram.ClearItems();
 
                 var rez = "";
@@ -829,11 +829,9 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="2" id="tdGridTotaluri" runat="server">
                 <br />
-                <dx:ASPxGridView ID="grDateTotaluri" runat="server" ClientInstanceName="grDateTotaluri" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" Enabled="false">
 
-                </dx:ASPxGridView>
             </td>
         </tr>
         <tr>

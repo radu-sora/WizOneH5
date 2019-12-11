@@ -116,7 +116,9 @@ namespace WizOne.Eval
                     switch(q)
                     {
                         case "12":
-                            grDate.FilterExpression = "[Stare] NOT LIKE '%finalizat%' AND [CategorieQuiz] = 0";
+                            //Florin 2019.12.11
+                            //grDate.FilterExpression = "[Stare] NOT LIKE '%finalizat%' AND [CategorieQuiz] = 0";
+                            grDate.FilterExpression = "[Stare] NOT LIKE '%finalizat%'";
                             break;
                         case "34":
                             grDate.FilterExpression = "[Quiz360Completat] = 0 AND [CategorieQuiz] <> 0";
@@ -412,6 +414,8 @@ namespace WizOne.Eval
                 {
                     string idStare = e.GetValue("Stare").ToString();
                     string culoare = e.GetValue("Culoare").ToString();
+                    if (idStare.ToLower() == "evaluare finalizata" || idStare.ToLower() == "finalizat")
+                        culoare = "#FF96fa96";
                     if (!string.IsNullOrEmpty(culoare))
                         e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml(culoare);
                 }

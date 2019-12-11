@@ -472,13 +472,13 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
         
         /// <summary>
-        /// grDateTotaluri control.
+        /// tdGridTotaluri control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDateTotaluri;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdGridTotaluri;
         
         /// <summary>
         /// hfRowIndex control.

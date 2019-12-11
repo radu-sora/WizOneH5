@@ -74,7 +74,9 @@ namespace WizOne.Pontaj
                     }
 
                     CreazaGrid();
-                    CreeazaGridTotaluri();
+
+                    if (tip == 1 || tip == 10)
+                        CreeazaGridTotaluri();
 
                     DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
@@ -4569,26 +4571,45 @@ namespace WizOne.Pontaj
         {
             try
             {
-                string cmp = "SUBSTRING";
-                if (Constante.tipBD == 2)
-                    cmp = "SUBSTR";
-                DataTable dtCol = General.IncarcaDT($@"SELECT A.*, 
-                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
-                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
-                                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
-                                COALESCE(B.""DenumireScurta"",'') AS ""ColScurta""
-                                FROM ""Ptj_tblAdmin"" A
-                                LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
-                                ORDER BY A.""Ordine"" ", null);
+                DataTable dtCol = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""OrdineAfisarePontajDetaliat"",0) > 0 ORDER BY ""OrdineAfisarePontajDetaliat"" ", null);
 
-                if (dtCol != null)
+                if (dtCol != null && dtCol.Rows.Count > 0)
                 {
-                    DataSet ds = new DataSet();
+                    string cmp = "";
+
+                    ASPxGridView grDate = new ASPxGridView();
+                    grDate.ID = "grDateTotaluri";
+                    grDate.Width = Unit.Percentage(100);
+                    //grDate.Enabled = false;
+                    grDate.AutoGenerateColumns = false;
 
                     for (int i = 0; i < dtCol.Rows.Count; i++)
                     {
+                        DataRow dr = dtCol.Rows[i];
+                        if (General.Nz(dr["Coloana"], "").ToString() == "")
+                            continue;
+                        string colField = General.Nz(dr["Coloana"], "col" + i).ToString();
+                        cmp += "," + colField;
+                        string alias = General.Nz(dr["Alias"], "").ToString();
+                        string toolTip = General.Nz(dr["Explicatii"], "").ToString();
 
+                        GridViewDataColumn c = new GridViewDataColumn();
+                        c.Name = colField;
+                        c.FieldName = colField;
+                        c.Caption = Dami.TraduCuvant(alias);
+                        c.ToolTip = toolTip;
+                        c.ReadOnly = true;
+                        grDate.Columns.Add(c);
                     }
+
+                    if (cmp == "")
+                        return;
+
+                    DataTable dt = General.IncarcaDT($@"SELECT {cmp.Substring(1)} FROM ""Ptj_Cumulat"" WHERE F10003=@1 AND ""An""=@2 AND ""Luna""=@3 ", new object[] { General.Nz(cmbAng.Value,-99), txtAnLuna.Date.Year, txtAnLuna.Date.Month } );
+                    grDate.DataSource = dt;
+                    grDate.DataBind();
+
+                    tdGridTotaluri.Controls.Add(grDate);
                 }
 
             }

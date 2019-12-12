@@ -91,6 +91,21 @@
         btnCreaza.DoClick();
     }
 
+    function EmptyFields(s, e) {
+        cmbAngBulk.SetValue(null);
+        cmbCtr.SetValue(null);     
+
+        cmbSub.SetValue(null);
+        cmbSec.SetValue(null);
+        cmbFil.SetValue(null);
+        cmbDept.SetValue(null);
+        cmbSubDept.SetValue(null);
+        cmbBirou.SetValue(null);
+        cmbCateg.SetValue(null);
+
+        
+    }
+
 </script>
 	<style type="text/css">
         .legend-border
@@ -117,6 +132,120 @@
           <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }"  />
           <PanelCollection>
             <dx:PanelContent>
+                <table style="margin-left:15px;">
+                    <tr id="bulk1" runat="server">
+                        <td>
+                            <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                <label id="lblAngBulk" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Angajat</label>
+                                <dx:ASPxComboBox ID="cmbAngBulk" ClientInstanceName="cmbAngBulk" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"
+                                            CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
+                                        <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
+                                        <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
+                                        <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
+                                        <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
+                                    </Columns>
+                                </dx:ASPxComboBox>
+                            </div>                               
+                            <div style="float:left; padding-right:15px;">
+                                <label id="lblSub" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Subcomp.</label>
+                                <dx:ASPxComboBox ID="cmbSub" ClientInstanceName="cmbSub" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSubcompanie" TextField="Subcompanie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSub'); }" />
+                                </dx:ASPxComboBox>
+                            </div>
+                            <div style="float:left; padding-right:15px;">
+                                <label id="lblFil" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Filiala</label>
+                                <dx:ASPxComboBox ID="cmbFil" ClientInstanceName="cmbFil" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdFiliala" TextField="Filiala" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbFil'); }" />
+                                </dx:ASPxComboBox>
+                            </div>
+                            <div style="float:left; padding-right:15px;">
+                                <label id="lblSec" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Sectie</label>
+                                <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
+                                </dx:ASPxComboBox>
+                            </div>
+                            <div style="float:left; padding-right:15px;">
+                                <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Categorie</label>
+                                <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="F72402" TextField="F72404" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="bulk2" runat="server">
+                        <td>
+                            <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                <label id="lblDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:54px; width:80px;">Dept.</label>
+                                <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
+                                </dx:ASPxComboBox>
+                            </div>
+                            <div style="float:left; padding-right:15px;">
+                                <label id="lblSubDept" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:75px; width:80px;">Subdept.</label>
+                                <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
+                            </div>
+                            <div style="float:left; padding-right:15px;">
+                                <label id="lblBirou" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Birou</label>
+                                <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="150px" ValueField="F00809" TextField="F00810" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
+                                    </dx:ASPxComboBox>
+                            </div>   
+                            <div style="float:left; padding-right:15px;">
+                                <label id="lblCtr" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Contract</label>
+                                <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
+                            </div>                                                                                                                                                            
+                        </td> 
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="float:left; padding-right:15px; padding-bottom:10px;">
+                                    <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
+                                        <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
+                                        <ClientSideEvents Click="function(s, e) {
+                                                        pnlLoading.Show();
+                                                        e.processOnServer = true;
+                                                    }" />
+                                    </dx:ASPxButton>
+                         
+                                    <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
+                                        <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
+                                        <ClientSideEvents Click="EmptyFields" />
+                                    </dx:ASPxButton>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+
+                                <br />
+                                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  >
+                                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
+                                    <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" />                   
+                                    <ClientSideEvents ContextMenu="ctx"  />
+                                    <Columns>
+                        
+                                        <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" FixedStyle="Left" SelectAllCheckboxMode="AllPages" />
+
+                                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains" />
+                                        <dx:GridViewDataTextColumn FieldName="NumeComplet" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="150px" Settings-AutoFilterCondition="Contains"/>
+              
+                                        <dx:GridViewDataTextColumn FieldName="Companie" Caption="Companie" ReadOnly="true"  Width="150" />
+                                        <dx:GridViewDataTextColumn FieldName="Subcompanie" Caption="Subcompanie" ReadOnly="true"  Width="150"/>
+                                        <dx:GridViewDataTextColumn FieldName="Filiala" Caption="Filiala" ReadOnly="true" Width="150" />
+                                        <dx:GridViewDataTextColumn FieldName="Sectie" Caption="Sectie" ReadOnly="true" Width="150"/>
+                                        <dx:GridViewDataTextColumn FieldName="Dept" Caption="Dept" ReadOnly="true" Width="100"/>
+                                        <dx:GridViewDataTextColumn FieldName="Subdept" Caption="Subdept" ReadOnly="true" Width="100" />
+                                        <dx:GridViewDataTextColumn FieldName="Birou" Caption="Birou" ReadOnly="true" Width="100" />
+
+                                    </Columns>
+                    
+                                </dx:ASPxGridView>
+
+                                <br />
+    
+                            </td>
+                        </tr>
+                </table>
+
 			<div>
                 <tr align="left">
                  <td   valign="top">
@@ -149,6 +278,8 @@
                                 </dx:ASPxComboBox>
                             </td>
                         </tr>
+
+
                         <tr>
                             <td>
                                 <dx:ASPxCheckBox ID="chkVenit"  runat="server" Text="Angajati cu venituri in ..." TextAlign="Left" ClientInstanceName="chkVenit" >

@@ -2083,7 +2083,7 @@ namespace WizOne.Pontaj
                         if (numeCol.ToLower() == "valstr")
                         {
                             strSql += $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                            VALUES({f10003}, {General.ToDataUniv(ziua)}, '{newValue}', '{oldValue}', {Session["UserID"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()});" + Environment.NewLine;
+                            VALUES({f10003}, {General.ToDataUniv(ziua)}, '{newValue}', '{oldValue}', {Session["UserID"]}, {General.CurrentDate()}, 'Pontajul Detaliat - modificare pontare', {Session["UserId"]}, {General.CurrentDate()});" + Environment.NewLine;
                         }
 
                         //daca este ValAbs, stergem pontajul pe centrii de cost

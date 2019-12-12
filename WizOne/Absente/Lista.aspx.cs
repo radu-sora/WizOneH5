@@ -923,7 +923,7 @@ namespace WizOne.Absente
                         string sqlStr = 
                             $@"BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT F10003, ""Ziua"", {valStr}, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
+                                SELECT F10003, ""Ziua"", {valStr}, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Anulare cerere absenta', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM ""Ptj_Intrari"" 
                                 WHERE F10003={f10003} AND ""Ziua"" ={General.ToDataUniv(zi.Date)};
 
@@ -937,7 +937,7 @@ namespace WizOne.Absente
                     string sqlStr = 
                         $@"BEGIN
                             INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                            SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
+                            SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Anulare cerere absenta', {Session["UserId"]}, {General.CurrentDate()}
                             FROM ""Ptj_Intrari"" 
                             WHERE F10003 = (SELECT F10003 FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})
                             AND(SELECT ""DataInceput"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""

@@ -7411,7 +7411,7 @@ namespace WizOne.Module
                         //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
                         string strDel = $@"
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
                                 INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                 ) B 
@@ -7427,7 +7427,7 @@ namespace WizOne.Module
 
                         strDel = $@"
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
                                 INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) <= {ziSf} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua< B.F10022  AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf};
 
@@ -7569,7 +7569,7 @@ namespace WizOne.Module
                         //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
                         string strDel = $@"
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                 FROM ""Ptj_Intrari"" A
                                 WHERE ""IdAuto"" IN 
                                 (SELECT A.""IdAuto""
@@ -7590,7 +7590,7 @@ namespace WizOne.Module
 
                         strDel = $@"
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                 FROM ""Ptj_Intrari"" A
                                 WHERE ""IdAuto"" IN 
                                 (SELECT A.""IdAuto""

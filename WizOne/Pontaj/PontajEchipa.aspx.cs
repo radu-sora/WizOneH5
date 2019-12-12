@@ -1938,7 +1938,7 @@ namespace WizOne.Pontaj
                 string strDel = $@"
                     BEGIN
                         INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}                            
+                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare pontare angajati plecati', {Session["UserId"]}, {General.CurrentDate()}                            
                         FROM Ptj_Intrari A
                             WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE {General.TruncateDate("F10023")} >= {ziInc}  AND {General.TruncateDate("F10023")} <> {General.ToDataUniv(2100, 1, 1)}) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" > B.F10023);
 
@@ -1946,7 +1946,7 @@ namespace WizOne.Pontaj
                             WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10023 FROM f100 WHERE {General.TruncateDate("F10023")} >= {ziInc}  AND {General.TruncateDate("F10023")} <> {General.ToDataUniv(2100, 1, 1)}) B  WHERE B.F10003 = ""Ptj_Intrari"".F10003  AND ""Ptj_Intrari"".""Ziua"" > B.F10023);
                             
                         INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}                            
+                        SELECT F10003, ""Ziua"", NULL, ""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare pontare angajati plecati', {Session["UserId"]}, {General.CurrentDate()}                            
                         FROM Ptj_Intrari A
                             WHERE EXISTS (SELECT B.F10003 FROM (SELECT F10003, F10022 FROM f100 WHERE {General.TruncateDate("F10022")} >= {ziInc}  AND {General.TruncateDate("F10022")} <> {General.ToDataUniv(2100, 1, 1)}) B  WHERE B.F10003 = A.F10003  AND A.""Ziua"" < B.F10022);
 
@@ -2487,8 +2487,8 @@ namespace WizOne.Pontaj
                         string sqlIst = "";
                         try
                         {
-                            sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME) 
-                                           VALUES ({f10003}, {General.ToDataUniv(ziua)}, '{valStr}', '{General.Nz(drMd["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)})";
+                            sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
+                                           VALUES ({f10003}, {General.ToDataUniv(ziua)}, '{valStr}', '{General.Nz(drMd["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)})";
                         }
                         catch (Exception){}
 

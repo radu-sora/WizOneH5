@@ -314,7 +314,7 @@ namespace WizOne.Absente
                 string dt = " CONVERT(DATETIME, '" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 103) ";
                 if (Constante.tipBD == 2) dt = " TO_DATE('" + data.Day.ToString().PadLeft(2, '0') + "/" + data.Month.ToString().PadLeft(2, '0') + "/" + data.Year.ToString() + "', 'dd/MM/yyyy') ";
 
-                string sql = "SELECT * FROM GENERARE_AUTOMATA_CERERI a WHERE  a.\"IdAbsenta\" =  " + idAbsenta + " AND \"Data\" = " + dt + " AND "
+                string sql = "SELECT * FROM GENERARE_AUTOMATA_CERERI a WHERE  a.\"IdAbsenta\" =  " + idAbsenta + " AND \"Data\" = " + dt + " AND \"NrOre\" > 0 AND "
                            + " F10003 IN (select b.F10003 from \"F100Supervizori\" b where b.\"IdSuper\" = (select (-1) * \"UserIntrod\" from \"Ptj_Circuit\" where \"IdAuto\" = a.\"IdCircuit\") and b.\"IdUser\" = " + Session["UserId"].ToString() + ") ";
 
                 DataTable dtPrel = General.IncarcaDT(sql, null);               
@@ -322,7 +322,7 @@ namespace WizOne.Absente
                 {
                     if (lstMarci.Contains(Convert.ToInt32(dtPrel.Rows[i]["F10003"].ToString())))
                         lstOre.Add(Convert.ToInt32(dtPrel.Rows[i]["F10003"].ToString()), Convert.ToInt32(dtPrel.Rows[i]["NrOre"].ToString()));
-                }
+                }              
             }
             int x = 0, y = 1;
 
@@ -338,6 +338,13 @@ namespace WizOne.Absente
 
                 if (lstMarciProcesate.Contains(marca))
                     continue;
+
+                if (rbPrel1.Checked)
+                    if (!lstOre.ContainsKey(marca))
+                    {//angajatul selectat in grid nu are ore in view-ul GENERARE_AUTOMATA_CERERI
+                        lstMarciProcesate.Add(marca);
+                        continue;
+                    }
 
                 #region Salvare in baza
 
@@ -364,7 +371,7 @@ namespace WizOne.Absente
                 string sqlIst;
                 int trimiteLaInlocuitor;
 
-                int esteActiv = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM F100 WHERE F10003={marca} AND F10022 <= {General.ToDataUniv(Convert.ToDateTime(dtDataInc.Value))} AND {General.ToDataUniv(Convert.ToDateTime(dtDataSf.Value))} <= F10023", null), 0));
+                int esteActiv = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM F100 WHERE F10003={marca} AND F10022 <= {General.ToDataUniv(Convert.ToDateTime(dtDataInc.Value))} AND {General.ToDataUniv(Convert.ToDateTime((dtDataSf.Visible ? dtDataSf.Value : dtDataInc.Value)))} <= F10023", null), 0));
                 if (esteActiv == 0)
                 {
                     err += "In perioada solicitata, angajatul cu marca " + marca + " este inactiv\n";
@@ -383,7 +390,7 @@ namespace WizOne.Absente
                                 SELECT COUNT(*) 
                                 FROM ""Ptj_Cereri"" A
                                 INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
-                                WHERE A.F10003 = {marca} AND A.""DataInceput"" <= {General.ToDataUniv(dtDataSf.Date)} AND {General.ToDataUniv(dtDataInc.Date)} <= A.""DataSfarsit"" 
+                                WHERE A.F10003 = {marca} AND A.""DataInceput"" <= {General.ToDataUniv((dtDataSf.Visible ? dtDataSf.Date : dtDataInc.Date))} AND {General.ToDataUniv(dtDataInc.Date)} <= A.""DataSfarsit"" 
                                 AND A.""IdStare"" IN (1,2,3,4) AND B.""GrupOre"" IN({General.Nz(drAbs["GrupOreDeVerificat"], -99)})", null));
 
                 if (intersec > 0)

@@ -297,8 +297,28 @@
             nrLuni++;
         }
 
-        txtNrLuni.SetValue(nrLuni);
-        txtNrZile.SetValue(nrZile);
+        if (cmbExcIncet.GetValue() == "" || cmbExcIncet.GetValue() == 0) {
+            txtNrLuni.SetValue(nrLuni);
+            txtNrZile.SetValue(nrZile);
+        }
+        else {
+            txtNrLuni.SetValue("0");
+            txtNrZile.SetValue("0");
+        }
+    }
+
+    function cmbExcIncet_SelectedIndexChanged() {
+
+        if (cmbExcIncet.GetValue() != "" && cmbExcIncet.GetValue() != 0) {
+            txtNrLuni.SetValue("0");
+            txtNrZile.SetValue("0");
+        }
+        else {
+            var dateDeLa = new Date(deDeLaData.GetDate());
+            var dateLa = new Date(deLaData.GetDate());
+            CalculLuniSiZile(dateDeLa, dateLa);
+            Validare36Luni();
+        }
     }
 
     function SetNorma(s) {      
@@ -873,7 +893,7 @@
 						</td>	
 						<td>
 							<dx:ASPxComboBox DataSourceID="dsEI"  Value='<%#Eval("F100929") %>'  ID="cmbExcIncet"  Width="100" runat="server" DropDownStyle="DropDown" TabIndex="9"  TextField="F09403" ValueField="F09402" ValueType="System.Int32">
-                                
+                                 <ClientSideEvents SelectedIndexChanged="function(s,e){ cmbExcIncet_SelectedIndexChanged(s); }" />
 							</dx:ASPxComboBox>
 						</td>
 					</tr>	

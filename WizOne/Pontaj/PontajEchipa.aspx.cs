@@ -1207,6 +1207,7 @@ namespace WizOne.Pontaj
 
                                             ent.F30013 = Convert.ToInt32(dr["NrZile"]);
                                             ent.F30036 = Convert.ToDateTime(dr["DeLa"]);
+                                            ent.F30037 = Convert.ToDateTime(dr["DeLa"]);
                                             ent.F30038 = Convert.ToDateTime(dr["La"]);
 
                                             string strTmp = "";

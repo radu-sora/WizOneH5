@@ -105,8 +105,8 @@ namespace WizOne.Absente
 
                             if (Convert.ToInt32(General.Nz(cmbRol.Value,0)) != 0)
                             {
-                                cmbAng.Buttons.Add(new EditButton { Text = "Activi" });
-                                cmbAng.Buttons.Add(new EditButton { Text = "Toti" });
+                                cmbAng.Buttons.Add(new EditButton { Text = Dami.TraduCuvant("Activi") });
+                                cmbAng.Buttons.Add(new EditButton { Text = Dami.TraduCuvant("Toti") });
                             }
                             break;
                         default:
@@ -116,8 +116,8 @@ namespace WizOne.Absente
                             cmbRol.SelectedIndex = 0;
                             cmbAng.SelectedIndex = 0;
 
-                            cmbAng.Buttons.Add(new EditButton { Text = "Activi" });
-                            cmbAng.Buttons.Add(new EditButton { Text = "Toti" });
+                            cmbAng.Buttons.Add(new EditButton { Text = Dami.TraduCuvant("Activi") });
+                            cmbAng.Buttons.Add(new EditButton { Text = Dami.TraduCuvant("Toti") });
 
                             break;
                     }
@@ -1143,10 +1143,11 @@ namespace WizOne.Absente
                         {
                             General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(cmbAng.Value)} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Text))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Text))} ", null);
                         }
-
-
+                        
                         //Florin 2019.11.13 - calcul formule si formule cumulat
-                        General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {txtDataInc.Date} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {txtDataSf.Date}");
+                        //General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {txtDataInc.Date} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {txtDataSf.Date}");
+                        General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Date).Date)} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Date).Date)}");     //Radu 13.12.2019
+
 
 
                         ////Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj

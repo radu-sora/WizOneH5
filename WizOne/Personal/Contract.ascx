@@ -297,7 +297,7 @@
             nrLuni++;
         }
 
-	    if (cmbExcIncet.GetValue() == "" || cmbExcIncet.GetValue() == 0) {
+        if (cmbExcIncet.GetValue() == "" || cmbExcIncet.GetValue() == 0) {
             txtNrLuni.SetValue(nrLuni);
             txtNrZile.SetValue(nrZile);
         }
@@ -307,8 +307,8 @@
         }
     }
 
-
     function cmbExcIncet_SelectedIndexChanged() {
+
         if (cmbExcIncet.GetValue() != "" && cmbExcIncet.GetValue() != 0) {
             txtNrLuni.SetValue("0");
             txtNrZile.SetValue("0");

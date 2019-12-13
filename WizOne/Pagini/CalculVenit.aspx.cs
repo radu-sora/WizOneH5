@@ -35,7 +35,7 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
+                //pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -51,7 +51,7 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
+                //pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }

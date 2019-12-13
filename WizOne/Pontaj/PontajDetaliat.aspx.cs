@@ -202,6 +202,8 @@ namespace WizOne.Pontaj
                 //Radu 13.12.2019
                 foreach (ListBoxColumn col in cmbAng.Columns)
                     col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+                foreach (ListBoxColumn col in cmbAngZi.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 #endregion
 

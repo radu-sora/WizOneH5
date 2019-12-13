@@ -830,8 +830,6 @@
         </tr>
         <tr>
             <td colspan="2" id="tdGridTotaluri" runat="server">
-                <br />
-
             </td>
         </tr>
         <tr>

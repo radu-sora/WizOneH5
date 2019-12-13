@@ -75,9 +75,6 @@ namespace WizOne.Pontaj
 
                     CreazaGrid();
 
-                    if (tip == 1 || tip == 10)
-                        CreeazaGridTotaluri();
-
                     DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
                 }
@@ -464,6 +461,9 @@ namespace WizOne.Pontaj
                     if (IsPostBack && tip == 1)
                         IncarcaCC();
                 }
+
+                if (tip == 1 || tip == 10)
+                    CreeazaGridTotaluri();
             }
             catch (Exception ex)
             {

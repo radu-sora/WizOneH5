@@ -1073,6 +1073,13 @@ namespace WizOne.Pontaj
 
                             for (int j = 0; j < entFor.Rows.Count; j++)
                             {
+                                ent.F30013 = 0;
+                                ent.F30014 = 0;
+                                ent.F30015 = 0;
+                                ent.F30036 = dtLucru;
+                                ent.F30037 = dtLucru;
+                                ent.F30038 = dtLucru;
+
                                 try
                                 {
                                     if (General.Nz(entFor.Rows[j]["TransferF300Detaliat"], "").ToString() != "")

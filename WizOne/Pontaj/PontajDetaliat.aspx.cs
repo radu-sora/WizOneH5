@@ -202,6 +202,10 @@ namespace WizOne.Pontaj
                     catch (Exception) { }
                 }
 
+                //Radu 13.12.2019
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
                 #endregion
 
                 if (tip == 1 || tip == 10)

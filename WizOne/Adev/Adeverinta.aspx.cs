@@ -5400,7 +5400,8 @@ namespace WizOne.Adev
         {
             double number = 0.00; int num = 0;
             //bool result = Double.TryParse(value, out number);
-            bool result = double.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out number);
+            value = value.Replace(',', '.');
+            bool result = double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out number);
             if (result)
             {
                 num = Convert.ToInt32(number);

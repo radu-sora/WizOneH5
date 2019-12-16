@@ -451,7 +451,7 @@ namespace WizOne.Pontaj
                         cond = " TRIM(TRANSLATE(\"ValStr\",'0123456789', ' ')) is null ";
 
                     string sql = "";
-                    string oraIn = "", oraOut = "";
+                    string oraIn = "", oraOut = "", firstIn = "", lastOut = "";
 
                     if (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0)
                     {
@@ -459,17 +459,25 @@ namespace WizOne.Pontaj
                         {
                             oraIn = ", \"In1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
                             oraOut = ", \"Out1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+                            firstIn = ", \"FirstInPaid\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+                            lastOut = ", \"LastOutPaid\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+
                         }
                         else
                         {
                             oraIn = ", \"In1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
-                            oraOut = ", \"Out1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            oraOut = ", \"Out1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIesire\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            firstIn = ", \"FirstInPaid\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            lastOut = ", \"LastOutPaid\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIesire\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+
                         }
                     }
                     else
                     {
                         oraIn = ", \"In1\" = NULL ";
                         oraOut = ", \"Out1\" = NULL ";
+                        firstIn = ", \"FirstInPaid\" = NULL ";
+                        lastOut = ", \"LastOutPaid\" = NULL ";
                     }
 
                     string sirVal = "";
@@ -497,12 +505,12 @@ namespace WizOne.Pontaj
                     {
                         data = data.Substring(1);
 
-                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " + oraIn + oraOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " + oraIn + oraOut + firstIn + lastOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
                     }
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" + oraIn + oraOut + sirVal + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" + oraIn + oraOut + firstIn + lastOut + sirVal + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
                     }
                     else
                         sqlFin += sql + ";";

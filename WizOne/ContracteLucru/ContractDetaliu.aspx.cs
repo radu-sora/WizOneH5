@@ -64,6 +64,9 @@ namespace WizOne.ContracteLucru
                             case "TIME":
                                 rowCtr[x] = DateTime.Now;
                                 break;
+                            case "TIPCONTRACT":
+                                rowCtr[x] = 1;
+                                break;
                         }
                         x++;
                     }

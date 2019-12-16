@@ -248,13 +248,16 @@ namespace WizOne.Pontaj
                         Notif.TrimiteNotificare("Pontaj.PontajCumulat", (int)Constante.TipNotificare.Notificare, @"SELECT * FROM ""Ptj_Cumulat"" WHERE F10003= " + Convert.ToInt32(arr[i]) + @" AND ""An""=" + txtAnLuna.Date.Year + @" AND ""Luna""=" + txtAnLuna.Date.Month, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99) );
                     }
 
-                    grDate.JSProperties["cpAlertMessage"] = mesaj;
-
                     Session["InformatiaCurenta"] = dt;
                 }
                 else
-                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista modificari");
-
+                {
+                    if (mesaj != "")
+                        grDate.JSProperties["cpAlertMessage"] = mesaj;
+                    else
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista modificari");
+                }
+                    
                 e.Handled = true;
             }
             catch (Exception ex)

@@ -202,14 +202,33 @@ namespace WizOne.Pontaj
                 {
                     ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
 
-                    string msg = Notif.TrimiteNotificare("Pontaj.PontajCumulat", (int)Constante.TipNotificare.Validare, @"SELECT * FROM ""Ptj_Cumulat"" WHERE F10003= " + upd.NewValues["F10003"] + @" AND ""An""=" + txtAnLuna.Date.Year + @" AND ""Luna""=" + txtAnLuna.Date.Month, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
-                    if (msg != "" && msg.Substring(0, 1) == "2")
+                    //Florin 2019.12.16 - cream selectul pt validare
+                    string cmp = "";
+                    foreach (DictionaryEntry de in upd.NewValues)
                     {
-                        mesaj += msg.Substring(2) + Environment.NewLine;
-                        continue;
+                        if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
+                        {
+                            if (upd.NewValues[de.Key.ToString()] != null)
+                                cmp += "," + Convert.ToDecimal(upd.NewValues[de.Key.ToString()]).ToString().Replace(",",".") + " AS \"" + de.Key.ToString() + "\"";
+                            else
+                                cmp += ", NULL AS \"" + de.Key.ToString() + "\"";
+                        }
                     }
-                    else
-                        mesaj += upd.NewValues["F10003"] + " - proces realizat cu succes" + Environment.NewLine;
+                    string strSql = "";
+                    if (cmp != "")
+                        strSql = "SELECT " + upd.NewValues["F10003"] + " AS F10003,  " + txtAnLuna.Date.Year + " AS \"An\", " + txtAnLuna.Date.Month + " AS \"Luna\" " + cmp + General.FromDual();
+
+                    if (strSql != "")
+                    {
+                        string msg = Notif.TrimiteNotificare("Pontaj.PontajCumulat", (int)Constante.TipNotificare.Validare, strSql, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                        if (msg != "" && msg.Substring(0, 1) == "2")
+                        {
+                            mesaj += "Marca " + upd.NewValues["F10003"] + " - " + msg.Substring(2) + Environment.NewLine;
+                            continue;
+                        }
+                        //else
+                        //    mesaj += upd.NewValues["F10003"] + " - proces realizat cu succes" + Environment.NewLine;
+                    }
 
                     object[] keys = new object[] { upd.Keys[0] };
 

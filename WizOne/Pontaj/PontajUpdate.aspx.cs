@@ -196,7 +196,7 @@ namespace WizOne.Pontaj
                                 {5}
                                 WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.Ziua AND A.Ziua <= {3};";
 
-                        if (chkCtr == true) act += ",A.IdContract=(SELECT MAX(B.IdContract) AS IdContract FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CAST(B.DataInceput AS Date) <= CAST(A.Ziua AS Date) AND CAST(A.Ziua AS Date) <= CAST(B.DataSfarsit AS Date))";
+                        if (chkCtr == true) act += ",A.IdContract = CASE WHEN COALESCE(A.ModifProgram,0) = 1 THEN A.IdContract ELSE (SELECT MAX(B.IdContract) AS IdContract FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CAST(B.DataInceput AS Date) <= CAST(A.Ziua AS Date) AND CAST(A.Ziua AS Date) <= CAST(B.DataSfarsit AS Date)) END";
                         if (chkNrm == true)
                         {
                             act += ",A.Norma=ISNULL(dn.Norma, B.F10043)";
@@ -244,7 +244,7 @@ namespace WizOne.Pontaj
                                     END END
                                     FROM Ptj_Intrari X
                                     INNER JOIN Ptj_Contracte Y ON X.IdContract = Y.Id
-                                    WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.Ziua AND X.Ziua <= @4";
+                                    WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.Ziua AND X.Ziua <= @4 AND COALESCE(X.ModifProgram,0) = 0";
                     }
                 }
                 else
@@ -329,7 +329,7 @@ namespace WizOne.Pontaj
                                 SET {4} 
                                 WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.""Ziua"" AND A.""Ziua"" <= {3};";
 
-                        if (chkCtr == true) act += ",A.\"IdContract\"=(SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(B.\"DataSfarsit\" AS Date))";
+                        if (chkCtr == true) act += ",A.\"IdContract\" = CASE WHEN COALESCE(A.\"ModifProgram\",0) = 1 THEN A.\"IdContract\" ELSE (SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(B.\"DataSfarsit\" AS Date)) END";
                         if (chkNrm == true) act += ",A.\"Norma\"=COALESCE(\"DamiNorma\"(A.F10003, A.\"Ziua\"), (SELECT C.F10043 FROM F100 C WHERE C.F10003=A.F10003))";
                         if (chkStr == true) act += ",A.F10007=COALESCE(\"DamiDept\"(A.F10003, A.\"Ziua\"), (SELECT C.F10007 FROM F100 C WHERE C.F10003=A.F10003))";
                         if (chkCC == true)
@@ -370,7 +370,7 @@ namespace WizOne.Pontaj
                                 WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END)
                                 END END
                                 FROM ""Ptj_Contracte"" Y WHERE X.""IdContract"" = Y.""Id"")
-                                WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.""Ziua"" AND X.""Ziua"" <= @4";
+                                WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.""Ziua"" AND X.""Ziua"" <= @4 AND COALESCE(X.""ModifProgram"",0) = 0";
                 }
 
                 if (strSql.Length > 0)

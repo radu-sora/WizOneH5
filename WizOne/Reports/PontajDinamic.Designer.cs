@@ -59,7 +59,6 @@
             // 
             // Detail
             // 
-            this.Detail.Dpi = 100F;
             this.Detail.HeightF = 0F;
             this.Detail.Name = "Detail";
             this.Detail.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
@@ -71,15 +70,13 @@
             this.lblAntet,
             this.lblPerioada,
             this.lblTitlu});
-            this.TopMargin.Dpi = 100F;
-            this.TopMargin.HeightF = 170.2083F;
+            this.TopMargin.HeightF = 200.4166F;
             this.TopMargin.Name = "TopMargin";
             this.TopMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.TopMargin.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
             // 
             // lblAntet
             // 
-            this.lblAntet.Dpi = 100F;
             this.lblAntet.Font = new System.Drawing.Font("Times New Roman", 14F);
             this.lblAntet.LocationFloat = new DevExpress.Utils.PointFloat(41.6667F, 76.29167F);
             this.lblAntet.Multiline = true;
@@ -94,7 +91,6 @@
             // 
             // lblPerioada
             // 
-            this.lblPerioada.Dpi = 100F;
             this.lblPerioada.Font = new System.Drawing.Font("Times New Roman", 14F);
             this.lblPerioada.LocationFloat = new DevExpress.Utils.PointFloat(0F, 53.29167F);
             this.lblPerioada.Name = "lblPerioada";
@@ -106,7 +102,6 @@
             // 
             // lblTitlu
             // 
-            this.lblTitlu.Dpi = 100F;
             this.lblTitlu.Font = new System.Drawing.Font("Times New Roman", 14F);
             this.lblTitlu.LocationFloat = new DevExpress.Utils.PointFloat(0F, 30.29166F);
             this.lblTitlu.Name = "lblTitlu";
@@ -119,7 +114,6 @@
             // 
             // BottomMargin
             // 
-            this.BottomMargin.Dpi = 100F;
             this.BottomMargin.HeightF = 33.33333F;
             this.BottomMargin.Name = "BottomMargin";
             this.BottomMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
@@ -128,7 +122,6 @@
             // lblSemnatura
             // 
             this.lblSemnatura.Borders = DevExpress.XtraPrinting.BorderSide.None;
-            this.lblSemnatura.Dpi = 100F;
             this.lblSemnatura.LocationFloat = new DevExpress.Utils.PointFloat(3.178914E-05F, 7.291667F);
             this.lblSemnatura.Multiline = true;
             this.lblSemnatura.Name = "lblSemnatura";
@@ -142,7 +135,6 @@
             // 
             // lblPagina
             // 
-            this.lblPagina.Dpi = 100F;
             this.lblPagina.Format = "Pagina {0} din {1}";
             this.lblPagina.LocationFloat = new DevExpress.Utils.PointFloat(1.589457E-05F, 0F);
             this.lblPagina.Name = "lblPagina";
@@ -192,7 +184,6 @@
             // 
             this.PageFooter.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
             this.lblPagina});
-            this.PageFooter.Dpi = 100F;
             this.PageFooter.HeightF = 35.41667F;
             this.PageFooter.Name = "PageFooter";
             // 
@@ -225,7 +216,6 @@
             this.ReportFooter.Borders = DevExpress.XtraPrinting.BorderSide.None;
             this.ReportFooter.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
             this.lblSemnatura});
-            this.ReportFooter.Dpi = 100F;
             this.ReportFooter.HeightF = 38.62502F;
             this.ReportFooter.Name = "ReportFooter";
             this.ReportFooter.StylePriority.UseBorders = false;
@@ -245,12 +235,12 @@
             this.DefaultPrinterSettingsUsing.UseLandscape = true;
             this.FormattingRuleSheet.AddRange(new DevExpress.XtraReports.UI.FormattingRule[] {
             this.formattingRule1});
-            this.Margins = new System.Drawing.Printing.Margins(15, 15, 170, 33);
+            this.Margins = new System.Drawing.Printing.Margins(15, 15, 200, 33);
             this.PageHeight = 1169;
             this.PageWidth = 827;
             this.PaperKind = System.Drawing.Printing.PaperKind.Custom;
             this.RequestParameters = false;
-            this.Version = "16.1";
+            this.Version = "17.1";
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
         }

@@ -9025,7 +9025,7 @@ namespace WizOne.Module
                             CASE WHEN 1={nrPersIntretinere} THEN F73009 ELSE
                             CASE WHEN 2={nrPersIntretinere} THEN F73010 ELSE
                             CASE WHEN 3={nrPersIntretinere} THEN F73011 ELSE F73012 END END END END 
-                            FROM F730 WHERE F73004 <= {VB} AND {VB} <= F73006", null),0));
+                            FROM F730 WHERE F73004 <= {Convert.ToInt32(VB)} AND {Convert.ToInt32(VB)} <= F73006", null),0));
             }
             catch (Exception ex)
             {

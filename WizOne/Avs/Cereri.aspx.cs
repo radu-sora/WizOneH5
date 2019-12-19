@@ -1188,7 +1188,13 @@ namespace WizOne.Avs
                 ArataCtl(2, "Salariu brut actual", "Salariu brut nou", "Salariu net actual", "Salariu net nou", "", "", "", "", "", "");
                 DataTable dtTemp = General.IncarcaDT("SELECT " + salariu + " FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 txt1Act.Text = dtTemp.Rows[0][0].ToString();
-                CalcSalariu(1, txt1Act, txt2Act);
+
+                //Florin 2019.12.19
+                //CalcSalariu(1, txt1Act, txt2Act);
+                decimal venitCalculat = 0m;
+                string text = "";
+                General.CalcSalariu(1, txt1Act.Value, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text);
+                txt2Act.Value = venitCalculat;
             }
 
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Functie)
@@ -1753,10 +1759,26 @@ namespace WizOne.Avs
                             Session["Valoare7Noua"] = e.Parameter.Split(';')[1] + ";" + e.Parameter.Split(';')[2];
                         if (e.Parameter.Split(';')[1] == "cmbStructOrgNou")
                             Session["Valoare8Noua"] = e.Parameter.Split(';')[1] + ";" + e.Parameter.Split(';')[2];
+
+                        //Florin 2019.12.19
                         if (e.Parameter.Split(';')[1] == "txt1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Salariul)
-                            CalcSalariu(1, txt1Nou, txt2Nou);
+                        {
+                            //CalcSalariu(1, txt1Nou, txt2Nou);
+                            decimal venitCalculat = 0m;
+                            string text = "";
+                            General.CalcSalariu(1, txt1Nou.Value, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text);
+                            txt2Nou.Value = venitCalculat;
+                        }
                         if (e.Parameter.Split(';')[1] == "txt2Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Salariul)
-                            CalcSalariu(2, txt1Nou, txt2Nou);
+                        {
+                            //CalcSalariu(2, txt1Nou, txt2Nou);
+                            decimal venitCalculat = 0m;
+                            string text = "";
+                            General.CalcSalariu(2, txt2Nou.Value, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text);
+                            txt1Nou.Value = venitCalculat;
+                        }
+
+
                         if ((e.Parameter.Split(';')[1] == "de1Nou" || e.Parameter.Split(';')[1] == "de2Nou") && (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PrelungireCIM ||
                             Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.PrelungireCIM_Vanz))
                         {
@@ -2334,279 +2356,282 @@ namespace WizOne.Avs
         }
 
 
+        #region OLD
 
-        private void CalcSalariu(int tipVenit, ASPxTextBox txt1, ASPxTextBox txt2)
-        {
-            try
-            {
-                //tipVenit = 1     VB -> SN
-                //tipVenit = 2     SN -> VB
+        //private void CalcSalariu(int tipVenit, ASPxTextBox txt1, ASPxTextBox txt2)
+        //{
+        //    try
+        //    {
+        //        //tipVenit = 1     VB -> SN
+        //        //tipVenit = 2     SN -> VB
 
-                if (tipVenit == 1 && !General.IsNumeric(txt1.Value))
-                {
-                    //ArataMesaj("Lipseste venitul brut !");
-                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipseste venitul brut !");
-                    //MessageBox.Show(Dami.TraduCuvant("Lipseste venitul brut !"), MessageBox.icoError);
-                    return;
-                }
+        //        if (tipVenit == 1 && !General.IsNumeric(txt1.Value))
+        //        {
+        //            //ArataMesaj("Lipseste venitul brut !");
+        //            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipseste venitul brut !");
+        //            //MessageBox.Show(Dami.TraduCuvant("Lipseste venitul brut !"), MessageBox.icoError);
+        //            return;
+        //        }
 
-                if (tipVenit == 2 && !General.IsNumeric(txt2.Value))
-                {
-                    //ArataMesaj("Lipseste salariul net !");
-                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipseste salariul net !");
-                    //MessageBox.Show(Dami.TraduCuvant("Lipseste salariul net !"), MessageBox.icoError);                  
-                    return;
-                }
+        //        if (tipVenit == 2 && !General.IsNumeric(txt2.Value))
+        //        {
+        //            //ArataMesaj("Lipseste salariul net !");
+        //            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipseste salariul net !");
+        //            //MessageBox.Show(Dami.TraduCuvant("Lipseste salariul net !"), MessageBox.icoError);                  
+        //            return;
+        //        }
 
-                int i = 0;              //daca ajunge la 100 oprim iteratia ca sa nu devina bucla infinita
+        //        int i = 0;              //daca ajunge la 100 oprim iteratia ca sa nu devina bucla infinita
 
-                decimal varCas = 10.5m;
-                decimal varCass = 5.5m;
-                decimal varSom = 0.5m;
-                decimal varNr = 0;
-                decimal scutit = 0;
-                decimal tipAng = 1;
-                decimal varDed = 250;
-                decimal varImp = 16;
-
-
-                List<decimal> lst = GetVariabileVB();
-                varCass = lst[0];
-                varSom = lst[1];
-                varCas = lst[2];
-                varNr = lst[3];
-                scutit = lst[4];
-                varImp = lst[7];
-
-                //DataTable dtTemp = General.IncarcaDT("SELECT F10026 FROM F100 WHERE F10003 = " + F10003.ToString(), null);
-                //scutit = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
-
-                //scutit = Convert.ToDecimal(txtScutitAct.EditValue ?? 0);
-                tipAng = lst[5];
-                decimal salMediu = lst[6];
-
-                if (scutit == 1) varImp = 0;
-                if (tipAng == 2) varSom = 0;         //daca este pensionar nu plateste somaj
+        //        decimal varCas = 10.5m;
+        //        decimal varCass = 5.5m;
+        //        decimal varSom = 0.5m;
+        //        decimal varNr = 0;
+        //        decimal scutit = 0;
+        //        decimal tipAng = 1;
+        //        decimal varDed = 250;
+        //        decimal varImp = 16;
 
 
-                if (tipVenit == 1)           //VB -> SN
-                {
-                    varDed = DamiValDeducere(varNr, Convert.ToDecimal(txt1.Value ?? 0));
-                    txt2.Text = CalcSN(Convert.ToDecimal(txt1.Value ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu).ToString();
-                }
-                else                    //SN -> VB
-                {
-                    decimal SN = Convert.ToDecimal(txt2.Value ?? 1);
-                    varDed = DamiValDeducere(varNr, SN);
-                    decimal tmpVB = Math.Round((SN - (1.5m * varImp / 100 * varDed)) / (1 - varImp / 100 - (varImp / 100 * varDed / 2000) - ((1 - varImp / 100) * (varCas + varCass + varSom) / 100)));
-                    decimal tmpSN = 0;
+        //        List<decimal> lst = GetVariabileVB();
+        //        varCass = lst[0];
+        //        varSom = lst[1];
+        //        varCas = lst[2];
+        //        varNr = lst[3];
+        //        scutit = lst[4];
+        //        varImp = lst[7];
 
-                    while (tmpSN != SN)
-                    {
-                        if (i > 100)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            i += 1;
+        //        //DataTable dtTemp = General.IncarcaDT("SELECT F10026 FROM F100 WHERE F10003 = " + F10003.ToString(), null);
+        //        //scutit = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
 
-                            varDed = DamiValDeducere(varNr, tmpVB);
-                            tmpSN = CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu);
-                            if (tmpSN != SN)
-                            {
-                                if (tmpSN > SN)
-                                    tmpVB -= 1;
-                                else
-                                    tmpVB += 1;
-                            }
-                        }
-                    }
+        //        //scutit = Convert.ToDecimal(txtScutitAct.EditValue ?? 0);
+        //        tipAng = lst[5];
+        //        decimal salMediu = lst[6];
 
-                    txt1.Text = tmpVB.ToString();
-                }
+        //        if (scutit == 1) varImp = 0;
+        //        if (tipAng == 2) varSom = 0;         //daca este pensionar nu plateste somaj
 
 
+        //        if (tipVenit == 1)           //VB -> SN
+        //        {
+        //            varDed = DamiValDeducere(varNr, Convert.ToDecimal(txt1.Value ?? 0));
+        //            txt2.Text = CalcSN(Convert.ToDecimal(txt1.Value ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu).ToString();
+        //        }
+        //        else                    //SN -> VB
+        //        {
+        //            decimal SN = Convert.ToDecimal(txt2.Value ?? 1);
+        //            varDed = DamiValDeducere(varNr, SN);
+        //            decimal tmpVB = Math.Round((SN - (1.5m * varImp / 100 * varDed)) / (1 - varImp / 100 - (varImp / 100 * varDed / 2000) - ((1 - varImp / 100) * (varCas + varCass + varSom) / 100)));
+        //            decimal tmpSN = 0;
 
-            }
-            catch (Exception ex)
-            {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //            while (tmpSN != SN)
+        //            {
+        //                if (i > 100)
+        //                {
+        //                    return;
+        //                }
+        //                else
+        //                {
+        //                    i += 1;
 
+        //                    varDed = DamiValDeducere(varNr, tmpVB);
+        //                    tmpSN = CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu);
+        //                    if (tmpSN != SN)
+        //                    {
+        //                        if (tmpSN > SN)
+        //                            tmpVB -= 1;
+        //                        else
+        //                            tmpVB += 1;
+        //                    }
+        //                }
+        //            }
 
-        public List<decimal> GetVariabileVB()
-        {
-            List<decimal> lst = new List<decimal>();
-
-            try
-            {
-                int idCass = 0, idSomaj = 0, idCas = 0;
-                decimal cass = 0, som = 0, cas = 0, nrDed = 0, scutit = 0, tipAng = 0, salMediu = 0, procImp = 0;
-                DataTable dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CASS'", null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    idCass = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-                dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'SOMAJ'", null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    idSomaj = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-                dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CAS'", null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    idCas = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-
-                dtTemp = General.IncarcaDT("SELECT F01324 FROM F013 WHERE F01304 = " + idCass.ToString(), null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    cass = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
-                dtTemp = General.IncarcaDT("SELECT F01324 FROM F013 WHERE F01304 = " + idSomaj.ToString(), null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    som = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
-                dtTemp = General.IncarcaDT("SELECT F01324 FROM F013 WHERE F01304 = " + idCas.ToString(), null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    cas = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
-                dtTemp = General.IncarcaDT("SELECT COUNT(*) FROM F110 WHERE F11003 = " + F10003.ToString() + " AND F11016 = 1 ", null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    nrDed = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
-                dtTemp = General.IncarcaDT("SELECT F10026 FROM F100 WHERE F10003 = " + F10003.ToString(), null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    scutit = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
-                dtTemp = General.IncarcaDT("SELECT F10010 FROM F100 WHERE F10003 = " + F10003.ToString(), null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    tipAng = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
-
-                dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE UPPER(\"Nume\") = 'SALARIULMEDIU'", null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    salMediu = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-
-                dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE UPPER(\"Nume\") = 'PROCENT_IMPOZIT'", null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
-                    procImp = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
-
-                lst.Add(cass);
-                lst.Add(som);
-                lst.Add(cas);
-                lst.Add(nrDed);
-                lst.Add(scutit);
-                lst.Add(tipAng);
-                lst.Add(salMediu);
-                lst.Add(procImp);
-            }
-            catch (Exception ex)
-            {
-                //srvGeneral.MemoreazaEroarea(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return lst;
-        }
+        //            txt1.Text = tmpVB.ToString();
+        //        }
 
 
-        private decimal DamiValDeducere(decimal nrPersIntretinere, decimal VB)
-        {
-            decimal? varDed = 0;
 
-            try
-            {
-                DataTable dtTemp = General.IncarcaDT("SELECT * FROM F730 WHERE F73004 <= " + Convert.ToInt32(VB).ToString() + " AND  F73006 >= " + Convert.ToInt32(VB).ToString(), null);
-                if (dtTemp != null && dtTemp.Rows.Count > 0)
-                {
-                    switch (Convert.ToInt32(nrPersIntretinere))
-                    {
-                        case 0:
-                            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73008"].ToString());
-                            break;
-                        case 1:
-                            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73009"].ToString());
-                            break;
-                        case 2:
-                            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73010"].ToString());
-                            break;
-                        case 3:
-                            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73011"].ToString());
-                            break;
-                        default:
-                            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73012"].ToString());
-                            break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return Convert.ToDecimal(varDed ?? 250);
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
-        private decimal CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu)
-        {
-            try
-            {
-                //teorie:
-                //SN = VB - IMP - TAXE
-                //TAXE = CAS + CASS + SOM
-                //DED = sumafixa * (1-(VB-1000)/2000)
-                //IMP = varImp/100 * (VB - TAXE - DED)
+        //public List<decimal> GetVariabileVB()
+        //{
+        //    List<decimal> lst = new List<decimal>();
 
-                //unde:
-                //CAS = round(VB * 10,5/100)
-                //CASS = round(VB * 5,5/100)
-                //SOM = round(VB * 0,5/100)
+        //    try
+        //    {
+        //        int idCass = 0, idSomaj = 0, idCas = 0;
+        //        decimal cass = 0, som = 0, cas = 0, nrDed = 0, scutit = 0, tipAng = 0, salMediu = 0, procImp = 0;
+        //        DataTable dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CASS'", null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            idCass = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
+        //        dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'SOMAJ'", null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            idSomaj = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
+        //        dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CAS'", null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            idCas = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
 
-                //sumafixa: (este tabel)
-                //250 fara pers. in intretinere
-                //350 1 pers
-                //450 2 pers
+        //        dtTemp = General.IncarcaDT("SELECT F01324 FROM F013 WHERE F01304 = " + idCass.ToString(), null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            cass = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
+        //        dtTemp = General.IncarcaDT("SELECT F01324 FROM F013 WHERE F01304 = " + idSomaj.ToString(), null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            som = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
+        //        dtTemp = General.IncarcaDT("SELECT F01324 FROM F013 WHERE F01304 = " + idCas.ToString(), null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            cas = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
+        //        dtTemp = General.IncarcaDT("SELECT COUNT(*) FROM F110 WHERE F11003 = " + F10003.ToString() + " AND F11016 = 1 ", null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            nrDed = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
+        //        dtTemp = General.IncarcaDT("SELECT F10026 FROM F100 WHERE F10003 = " + F10003.ToString(), null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            scutit = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
+        //        dtTemp = General.IncarcaDT("SELECT F10010 FROM F100 WHERE F10003 = " + F10003.ToString(), null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            tipAng = Convert.ToDecimal(dtTemp.Rows[0][0].ToString());
 
-                decimal SN = 0;
-                decimal cas = 0;
-                decimal cass = 0;
-                decimal som = 0;
+        //        dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE UPPER(\"Nume\") = 'SALARIULMEDIU'", null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            salMediu = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
 
-                //in calculul CAS-ului, daca VB este mai mare decat salariul mediu * 5 ori atunci se plafoneaza la salariul mediu * 5 ori
-                //if (VB > (salMediu * 5))
-                //    cas = MathExt.Round((salMediu * 5) * varCas / 100, WizOne.Module.MidpointRounding.AwayFromZero);
-                //else
-                cas = MathExt.Round(VB * varCas / 100, MidpointRounding.AwayFromZero);
+        //        dtTemp = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE UPPER(\"Nume\") = 'PROCENT_IMPOZIT'", null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0].ToString().Length > 0)
+        //            procImp = Convert.ToInt32(dtTemp.Rows[0][0].ToString());
 
-                if (0 < cas && cas <= 1) cas = 1;   //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+        //        lst.Add(cass);
+        //        lst.Add(som);
+        //        lst.Add(cas);
+        //        lst.Add(nrDed);
+        //        lst.Add(scutit);
+        //        lst.Add(tipAng);
+        //        lst.Add(salMediu);
+        //        lst.Add(procImp);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //srvGeneral.MemoreazaEroarea(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-                cass = VB * varCass / 100;
-                som = VB * varSom / 100;
+        //    return lst;
+        //}
 
-                if (0 < cass && cass <= 1)          //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
-                    cass = 1;
-                else
-                    cass = MathExt.Round(VB * varCass / 100, MidpointRounding.AwayFromZero);
 
-                if (0 < som && som <= 1)            //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
-                    som = 1;
-                else
-                    som = MathExt.Round(VB * varSom / 100, MidpointRounding.AwayFromZero);
+        //private decimal DamiValDeducere(decimal nrPersIntretinere, decimal VB)
+        //{
+        //    decimal? varDed = 0;
 
-                decimal taxe = cas + cass + som;
+        //    try
+        //    {
+        //        DataTable dtTemp = General.IncarcaDT("SELECT * FROM F730 WHERE F73004 <= " + Convert.ToInt32(VB).ToString() + " AND  F73006 >= " + Convert.ToInt32(VB).ToString(), null);
+        //        if (dtTemp != null && dtTemp.Rows.Count > 0)
+        //        {
+        //            switch (Convert.ToInt32(nrPersIntretinere))
+        //            {
+        //                case 0:
+        //                    varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73008"].ToString());
+        //                    break;
+        //                case 1:
+        //                    varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73009"].ToString());
+        //                    break;
+        //                case 2:
+        //                    varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73010"].ToString());
+        //                    break;
+        //                case 3:
+        //                    varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73011"].ToString());
+        //                    break;
+        //                default:
+        //                    varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73012"].ToString());
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-                decimal ded = varDed;
+        //    return Convert.ToDecimal(varDed ?? 250);
+        //}
 
-                if (1001 <= VB && VB <= 3000)
-                {
-                    //ded = Math.Round((varDed * (1 - (VB - 1000) / 2000)), 0);
-                    ded = (varDed * (1 - (VB - 1000) / 2000));
-                    ded = Convert.ToDecimal(Math.Ceiling(Convert.ToDouble(ded / 10)) * 10);
-                }
 
-                decimal imp = MathExt.Round(varImp / 100 * (VB - taxe - ded), MidpointRounding.AwayFromZero);
-                if (imp < 0) imp = 0;
+        //private decimal CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu)
+        //{
+        //    try
+        //    {
+        //        //teorie:
+        //        //SN = VB - IMP - TAXE
+        //        //TAXE = CAS + CASS + SOM
+        //        //DED = sumafixa * (1-(VB-1000)/2000)
+        //        //IMP = varImp/100 * (VB - TAXE - DED)
 
-                SN = MathExt.Round((VB - imp - taxe), MidpointRounding.AwayFromZero);
+        //        //unde:
+        //        //CAS = round(VB * 10,5/100)
+        //        //CASS = round(VB * 5,5/100)
+        //        //SOM = round(VB * 0,5/100)
 
-                return SN;
-            }
-            catch (Exception ex)
-            {
-                // Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-                return 0;
-            }
-        }
+        //        //sumafixa: (este tabel)
+        //        //250 fara pers. in intretinere
+        //        //350 1 pers
+        //        //450 2 pers
+
+        //        decimal SN = 0;
+        //        decimal cas = 0;
+        //        decimal cass = 0;
+        //        decimal som = 0;
+
+        //        //in calculul CAS-ului, daca VB este mai mare decat salariul mediu * 5 ori atunci se plafoneaza la salariul mediu * 5 ori
+        //        //if (VB > (salMediu * 5))
+        //        //    cas = MathExt.Round((salMediu * 5) * varCas / 100, WizOne.Module.MidpointRounding.AwayFromZero);
+        //        //else
+        //        cas = MathExt.Round(VB * varCas / 100, MidpointRounding.AwayFromZero);
+
+        //        if (0 < cas && cas <= 1) cas = 1;   //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+
+        //        cass = VB * varCass / 100;
+        //        som = VB * varSom / 100;
+
+        //        if (0 < cass && cass <= 1)          //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+        //            cass = 1;
+        //        else
+        //            cass = MathExt.Round(VB * varCass / 100, MidpointRounding.AwayFromZero);
+
+        //        if (0 < som && som <= 1)            //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+        //            som = 1;
+        //        else
+        //            som = MathExt.Round(VB * varSom / 100, MidpointRounding.AwayFromZero);
+
+        //        decimal taxe = cas + cass + som;
+
+        //        decimal ded = varDed;
+
+        //        if (1001 <= VB && VB <= 3000)
+        //        {
+        //            //ded = Math.Round((varDed * (1 - (VB - 1000) / 2000)), 0);
+        //            ded = (varDed * (1 - (VB - 1000) / 2000));
+        //            ded = Convert.ToDecimal(Math.Ceiling(Convert.ToDouble(ded / 10)) * 10);
+        //        }
+
+        //        decimal imp = MathExt.Round(varImp / 100 * (VB - taxe - ded), MidpointRounding.AwayFromZero);
+        //        if (imp < 0) imp = 0;
+
+        //        SN = MathExt.Round((VB - imp - taxe), MidpointRounding.AwayFromZero);
+
+        //        return SN;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
+        //        return 0;
+        //    }
+        //}
+
+        #endregion
 
 
         private bool AdaugaCerere()

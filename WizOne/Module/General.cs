@@ -9026,29 +9026,6 @@ namespace WizOne.Module
                             CASE WHEN 2={nrPersIntretinere} THEN F73010 ELSE
                             CASE WHEN 3={nrPersIntretinere} THEN F73011 ELSE F73012 END END END END 
                             FROM F730 WHERE F73004 <= {VB} AND {VB} <= F73006", null),0));
-
-                //DataTable dtTemp = General.IncarcaDT("SELECT * FROM F730 WHERE F73004 <= " + Convert.ToInt32(VB).ToString() + " AND  F73006 >= " + Convert.ToInt32(VB).ToString(), null);
-                //if (dtTemp != null && dtTemp.Rows.Count > 0)
-                //{
-                //    switch (Convert.ToInt32(nrPersIntretinere))
-                //    {
-                //        case 0:
-                //            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73008"].ToString());
-                //            break;
-                //        case 1:
-                //            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73009"].ToString());
-                //            break;
-                //        case 2:
-                //            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73010"].ToString());
-                //            break;
-                //        case 3:
-                //            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73011"].ToString());
-                //            break;
-                //        default:
-                //            varDed = Convert.ToDecimal(dtTemp.Rows[0]["F73012"].ToString());
-                //            break;
-                //    }
-                //}
             }
             catch (Exception ex)
             {

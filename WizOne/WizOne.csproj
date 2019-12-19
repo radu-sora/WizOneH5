@@ -1564,6 +1564,9 @@
       <DependentUpon>CalculVenit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Pagini\CalculVenit.aspx.designer.cs">
+      <DependentUpon>CalculVenit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pagini\Captcha.aspx.cs">
       <DependentUpon>Captcha.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

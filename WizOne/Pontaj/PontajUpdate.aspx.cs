@@ -390,6 +390,19 @@ namespace WizOne.Pontaj
 
         }
 
+        protected void btnValStr_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                General.SintaxaValStr();
+                MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
 
     }

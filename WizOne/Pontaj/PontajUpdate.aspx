@@ -12,6 +12,9 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
+                <dx:ASPxButton ID="btnValStr" runat="server" Text="Sintaxa ValStr" AutoPostBack="true" OnClick="btnValStr_Click" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/m5.png" Width="16"></Image>
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAct" ClientInstanceName="btnAct" ClientIDMode="Static" runat="server" Text="Actualizeaza" AutoPostBack="false" OnClick="btnAct_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                     <ClientSideEvents Click="function (s,e) { 

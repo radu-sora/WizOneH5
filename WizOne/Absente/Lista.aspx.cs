@@ -563,7 +563,7 @@ namespace WizOne.Absente
 
 
                                 //Florin 2019.11.13 - calcul formule si formule cumulat
-                                General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={obj[1]} AND {General.ToDataUniv(Convert.ToDateTime(obj[4]))} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(obj[6]))}");
+                                General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={obj[1]} AND {General.ToDataUniv(Convert.ToDateTime(obj[4]))} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(obj[6]))}");
 
 
                                 ////Florin 2019.10.03

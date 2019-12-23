@@ -313,6 +313,27 @@
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
                                     <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)">Contract</label><br />
                                     <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
+
+                                    <dx:ASPxDropDownEdit ClientInstanceName="cmbStare" ID="ASPxDropDownEdit1" Width="150px" runat="server" AnimationType="None">
+                                        <DropDownWindowStyle BackColor="#EDEDED" />
+                                        <DropDownWindowTemplate>
+                                            <dx:ASPxListBox Width="100%" ID="listBoxStare" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
+                                                <Border BorderStyle="None" />
+                                                <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
+                                                <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
+                                            </dx:ASPxListBox>
+                                           <table style="width: 100%">
+                                                <tr>
+                                                    <td style="padding: 4px">
+                                                        <dx:ASPxButton ID="btnInchide" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
+                                                            <ClientSideEvents Click="function(s, e){ cmbStare.HideDropDown(); }" />
+                                                        </dx:ASPxButton>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </DropDownWindowTemplate>
+                                        <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />
+                                    </dx:ASPxDropDownEdit>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
                                     <label id="lblSub" runat="server" oncontextMenu="ctx(this,event)">Subcomp.</label><br />

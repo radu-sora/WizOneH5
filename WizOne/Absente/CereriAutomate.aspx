@@ -44,6 +44,7 @@
                 var rez = diff / 60;
                 txtNrOre.SetValue(rez.toFixed(4));
                 txtNrOreInMinute.SetValue(diff);
+                alert(txtNrOre.GetValue());
             }
         }
     </script>
@@ -51,6 +52,12 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
+                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
+                    <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
+                    <PanelCollection>
+                        <dx:PanelContent>
+
 
     <table width="100%">
         <tr>
@@ -74,10 +81,7 @@
             <td colspan="2">
                 <br /><br />
 
-                <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
-                    <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
-                    <PanelCollection>
-                        <dx:PanelContent>
+
 
                             <table style="margin-left:15px;">
                                 <tr>
@@ -217,9 +221,7 @@
                                         </td> 
                                     </tr>
                             </table>
-                        </dx:PanelContent>
-                    </PanelCollection>
-                </dx:ASPxCallbackPanel>
+
 
 
                 <div style="float:left; padding:0px 15px;">
@@ -291,6 +293,11 @@
             </td> 
         </tr>
     </table>
+
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxCallbackPanel>
+
     <dx:ASPxLoadingPanel ID="LoadingPanel" runat="server" ClientInstanceName="LoadingPanel"  Modal="True">
     </dx:ASPxLoadingPanel>
 

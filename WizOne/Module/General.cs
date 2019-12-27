@@ -7109,6 +7109,75 @@ namespace WizOne.Module
         }
 
 
+        //Florin 2019.12.27
+        public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, string denDept = "", int idAngajat = -99)
+        {
+            string str = "";
+
+            try
+            {
+                if (alMeu == 1)
+                {
+                    str = " AND A.F10003 IN (" + F10003 + ")";
+                }
+                else
+                {
+                    string strSql = "";
+                    string strFiltru = "";
+                    if (denDept != "") strFiltru = " AND B.\"F00608\" IN ('" + denDept.Replace(",","','") + "')";
+                    if (idAngajat != -99) strFiltru = " AND A.\"F10003\"=" + idAngajat;
+
+                    if (Constante.tipBD == 1)
+                    {
+                        strSql = " SELECT X.F10003 FROM ( " +
+                                " SELECT B.f10003 FROM relGrupAngajat B" +
+                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+                                " WHERE C.IdSuper =" + idUser + " AND C.IdRol=" + idRol +
+                                " GROUP BY B.f10003" +
+                                " UNION" +
+                                " SELECT B.f10003 FROM relGrupAngajat B" +
+                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+                                " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
+                                " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
+                                " GROUP BY B.F10003) X " +
+                                " INNER JOIN F100 A ON A.F10003=X.F10003 " +
+                                " INNER JOIN F006 B ON A.F10007=B.F00607 " +
+                                " WHERE 1=1 AND CONVERT(date,A.F10022) <> CONVERT(date,A.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) +
+                                " GROUP BY X.F10003";
+                    }
+                    else
+                    {
+                        strSql = "SELECT X.F10003 FROM ( " +
+                                " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
+                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+                                " WHERE C.\"IdSuper\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+                                " GROUP BY B.F10003 " +
+                                " UNION " +
+                                " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
+                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+                                " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND D.\"DataInceput\" <= " + ToDataUniv(an, luna, 99) + " AND " + ToDataUniv(an, luna, 1) + " <= D.\"DataSfarsit\" " +
+                                " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+                                " GROUP BY B.F10003) X  " +
+                                " INNER JOIN F100 A ON A.F10003=X.F10003 " +
+                                " INNER JOIN F006 B ON A.F10007=B.F00607 " +
+                                " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+                                " GROUP BY X.F10003";
+
+                    }
+
+                    str = " AND A.F10003 IN (" + strSql + ")";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return str;
+        }
+
+
         public static void PontajInitGeneral(int idUser, int an, int luna)
         {
             try
@@ -7404,7 +7473,7 @@ namespace WizOne.Module
         }
 
 
-        public static bool PontajInit(int idUser, int an, int luna, int idRol, bool cuNormaZL = false, bool cuCCCu = false, int idDept = -99, int idAng = -99, int idSubcompanie = -99, int idFiliala = -99, int idSectie = -99, int idContract = -99, bool cuNormaSD = false, bool cuNormaSL = false, bool cuCCFara = false, int stergePontariAngPlecati = 0, int cuInOut = 0)
+        public static bool PontajInit(int idUser, int an, int luna, int idRol, bool cuNormaZL = false, bool cuCCCu = false, string denDept = "", int idAng = -99, int idSubcompanie = -99, int idFiliala = -99, int idSectie = -99, string denContract = "", bool cuNormaSD = false, bool cuNormaSL = false, bool cuCCFara = false, int stergePontariAngPlecati = 0, int cuInOut = 0)
         {
             bool ras = false;
 
@@ -7415,7 +7484,7 @@ namespace WizOne.Module
                 string strZile = "";
                 string usr = "";
                 if (idAng == -99)
-                    usr = General.GetF10003Roluri(idUser, an, luna, 0, -99, idRol, 0, idDept, idAng);
+                    usr = General.GetF10003Roluri(idUser, an, luna, 0, -99, idRol, 0, denDept, idAng);
                 else
                     usr = " AND A.F10003=" + idAng;
 
@@ -7477,11 +7546,18 @@ namespace WizOne.Module
 
 
                     string strFiltru = "";
-                    if (idContract != -99) strFiltru += " AND (SELECT MAX(IdContract) FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CONVERT(date,B.DataInceput) <= " + ziSf + " AND " + ziInc + " <= CONVERT(date,B.DataSfarsit)) = " + idContract.ToString();
+                    //Florin 2019.12.27
+                    //if (idContract != -99) strFiltru += " AND (SELECT MAX(IdContract) FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CONVERT(date,B.DataInceput) <= " + ziSf + " AND " + ziInc + " <= CONVERT(date,B.DataSfarsit)) = " + idContract.ToString();
+                    if (denContract != "") strFiltru += " AND (SELECT MAX(W.Denumire) FROM F100Contracte B INNER JOIN Ptj_Contracte W ON W.Id=B.IdContract WHERE A.F10003 = B.F10003 AND CONVERT(date,B.DataInceput) <= " + ziSf + " AND " + ziInc + " <= CONVERT(date,B.DataSfarsit)) IN ('" + denContract.Replace(",","','") + "')";
+
+
                     if (idSubcompanie != -99) strFiltru += " AND A.F10004 = " + idSubcompanie.ToString();
                     if (idFiliala != -99) strFiltru += " AND A.F10005 = " + idFiliala.ToString();
                     if (idSectie != -99) strFiltru += " AND A.F10006 = " + idSectie.ToString();
-                    if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
+
+                    //Florin 2019.12.27
+                    //if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
+                    if (denDept != "") strFiltru += @" AND A.F10007 IN (SELECT F00607 FROM F006 WHERE F00608 IN ('" + denDept.Replace(",", "','") + "'))";
 
                     string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
@@ -7651,11 +7727,18 @@ namespace WizOne.Module
                     if (strFiltruUpdate != "") strFiltruUpdate = "AND (" + strFiltruUpdate.Substring(2) + ")";
 
                     string strFiltru = "";
-                    if (idContract != -99) strFiltru += @" AND (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE A.F10003 = B.F10003 AND TRUNC(B.""DataInceput"") <= " + ziSf + " AND " + ziInc + " <= TRUNC(B.\"DataSfarsit\")) = " + idContract.ToString();
+
+                    //Florin 2019.12.27
+                    //if (idContract != -99) strFiltru += @" AND (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE A.F10003 = B.F10003 AND TRUNC(B.""DataInceput"") <= " + ziSf + " AND " + ziInc + " <= TRUNC(B.\"DataSfarsit\")) = " + idContract.ToString();
+                    if (denContract != "") strFiltru += @" AND (SELECT MAX(W.""Denumire"") FROM ""F100Contracte"" BINNER JOIN Ptj_Contracte W ON W.Id=B.IdContract  WHERE A.F10003 = B.F10003 AND TRUNC(B.""DataInceput"") <= " + ziSf + " AND " + ziInc + " <= TRUNC(B.\"DataSfarsit\")) IN ('" + denContract.Replace(",", "','") + "')";
+
                     if (idSubcompanie != -99) strFiltru += " AND A.F10004 = " + idSubcompanie.ToString();
                     if (idFiliala != -99) strFiltru += " AND A.F10005 = " + idFiliala.ToString();
                     if (idSectie != -99) strFiltru += " AND A.F10006 = " + idSectie.ToString();
-                    if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
+
+                    //Florin 2019.12.27
+                    //if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
+                    if (denDept != "") strFiltru += @" AND A.""Dept"" IN ('" + denDept.Replace(",", "','") + "')";
 
                     string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
@@ -7847,7 +7930,7 @@ namespace WizOne.Module
                                 (SELECT C.F00604 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10004,
                                 (SELECT C.F00605 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10005,
                                 (SELECT C.F00606 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10006,
-                                ""DamiDept""(A.F10003, X.""Ziua"") AS F10007,                                
+                                ""DamiDept""(A.F10003, X.""Ziua"") AS F10007,
                                 '#00FFFFFF' as ""CuloareValoare"", 
                                 ""DamiNorma""(A.F10003, X.""Ziua"") as ""Norma"", 
                                 (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"" and ROWNUM <= 1) AS ""IdContract"", 

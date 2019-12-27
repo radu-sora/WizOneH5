@@ -68,13 +68,13 @@
 
         function EmptyFields(s,e) {
             cmbAng.SetValue(null);
-            cmbCtr.SetValue(null);
+            checkComboBox1.SetValue(null);
             cmbStare.SetValue(null);
 
             cmbSub.SetValue(null);
             cmbSec.SetValue(null);
             cmbFil.SetValue(null);
-            cmbDept.SetValue(null);
+            checkComboBox2.SetValue(null);
             cmbSubDept.SetValue(null);
             cmbBirou.SetValue(null);
             cmbCateg.SetValue(null);
@@ -208,6 +208,96 @@
             }
         }
 
+
+        var textSeparator = ",";
+        //first one
+        function OnListBoxSelectionChanged1(listBox, args) {
+            if (args.index == 0)
+                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+            UpdateSelectAllItemState1();
+            UpdateText1();
+        }
+        function UpdateSelectAllItemState1() {
+            IsAllSelected1() ? checkListBox1.SelectIndices([0]) : checkListBox1.UnselectIndices([0]);
+        }
+        function IsAllSelected1() {
+            var selectedDataItemCount = checkListBox1.GetItemCount() - (checkListBox1.GetItem(0).selected ? 0 : 1);
+            return checkListBox1.GetSelectedItems().length == selectedDataItemCount;
+        }
+        function UpdateText1() {
+            var selectedItems = checkListBox1.GetSelectedItems();
+            checkComboBox1.SetText(GetSelectedItemsText1(selectedItems));
+        }
+        function SynchronizeListBoxValues1(dropDown, args) {
+            checkListBox1.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts1(texts);
+            checkListBox1.SelectValues(values);
+            UpdateSelectAllItemState1();
+            UpdateText1(); // for remove non-existing texts
+        }
+        function GetSelectedItemsText1(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index != 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function GetValuesByTexts1(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox1.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
+        }
+        //second one
+        function OnListBoxSelectionChanged2(listBox, args) {
+            if (args.index == 0)
+                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+            UpdateSelectAllItemState2();
+            UpdateText2();
+            pnlCtl.PerformCallback('cmbDept');
+        }
+        function UpdateSelectAllItemState2() {
+            IsAllSelected2() ? checkListBox2.SelectIndices([0]) : checkListBox2.UnselectIndices([0]);
+        }
+        function IsAllSelected2() {
+            var selectedDataItemCount = checkListBox2.GetItemCount() - (checkListBox2.GetItem(0).selected ? 0 : 1);
+            return checkListBox2.GetSelectedItems().length == selectedDataItemCount;
+        }
+        function UpdateText2() {
+            var selectedItems = checkListBox2.GetSelectedItems();
+            checkComboBox2.SetText(GetSelectedItemsText2(selectedItems));
+        }
+        function SynchronizeListBoxValues2(dropDown, args) {
+            checkListBox2.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts2(texts);
+            checkListBox2.SelectValues(values);
+            UpdateSelectAllItemState2();
+            UpdateText2(); // for remove non-existing texts
+        }
+        function GetSelectedItemsText2(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index != 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function GetValuesByTexts2(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox2.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
+        }
+
     </script>
 
 </asp:Content>
@@ -312,28 +402,28 @@
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
                                     <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)">Contract</label><br />
-                                    <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
 
-                                    <dx:ASPxDropDownEdit ClientInstanceName="cmbStare" ID="ASPxDropDownEdit1" Width="150px" runat="server" AnimationType="None">
-                                        <DropDownWindowStyle BackColor="#EDEDED" />
-                                        <DropDownWindowTemplate>
-                                            <dx:ASPxListBox Width="100%" ID="listBoxStare" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
-                                                <Border BorderStyle="None" />
-                                                <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
-                                                <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
-                                            </dx:ASPxListBox>
-                                           <table style="width: 100%">
-                                                <tr>
-                                                    <td style="padding: 4px">
-                                                        <dx:ASPxButton ID="btnInchide" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
-                                                            <ClientSideEvents Click="function(s, e){ cmbStare.HideDropDown(); }" />
-                                                        </dx:ASPxButton>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </DropDownWindowTemplate>
-                                        <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />
-                                    </dx:ASPxDropDownEdit>
+                                    <dx:ASPxDropDownEdit ClientIDMode="AutoID" ClientInstanceName="checkComboBox1" ID="cmbCtr" Width="250px" runat="server" AnimationType="None">
+                                        <DropDownWindowStyle BackColor="#EDEDED" />
+                                        <DropDownWindowTemplate>
+                                            <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox1" SelectionMode="CheckColumn" runat="server" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+                                                <Border BorderStyle="None" />
+                                                <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
+                                                <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged1" />
+                                            </dx:ASPxListBox>
+                                            <table style="width: 100%">
+                                                <tr>
+                                                    <td style="padding: 4px">
+                                                        <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Close" Style="float: right">
+                                                            <ClientSideEvents Click="function(s, e){ checkComboBox1.HideDropDown(); }" />
+                                                        </dx:ASPxButton>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </DropDownWindowTemplate>
+                                        <ClientSideEvents TextChanged="SynchronizeListBoxValues1" DropDown="SynchronizeListBoxValues1" />
+                                    </dx:ASPxDropDownEdit>
+
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
                                     <label id="lblSub" runat="server" oncontextMenu="ctx(this,event)">Subcomp.</label><br />
@@ -355,9 +445,26 @@
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
                                     <label id="lblDept" runat="server" oncontextMenu="ctx(this,event)">Dept.</label><br />
-                                    <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
-                                        <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
-                                    </dx:ASPxComboBox>
+                                    <dx:ASPxDropDownEdit ClientIDMode="AutoID" ClientInstanceName="checkComboBox2" ID="cmbDept" Width="250px" runat="server" AnimationType="None">
+                                        <DropDownWindowStyle BackColor="#EDEDED" />
+                                        <DropDownWindowTemplate>
+                                            <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox2" SelectionMode="CheckColumn" runat="server" ValueField="IdDept" TextField="Dept" ValueType="System.Int32">
+                                                <Border BorderStyle="None" />
+                                                <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
+                                                <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged2" />
+                                            </dx:ASPxListBox>
+                                            <table style="width: 100%">
+                                                <tr>
+                                                    <td style="padding: 4px">
+                                                        <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Close" Style="float: right">
+                                                            <ClientSideEvents Click="function(s, e){ checkComboBox2.HideDropDown(); }" />
+                                                        </dx:ASPxButton>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </DropDownWindowTemplate>
+                                        <ClientSideEvents TextChanged="SynchronizeListBoxValues2" DropDown="SynchronizeListBoxValues2" />
+                                    </dx:ASPxDropDownEdit>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
                                     <label id="lblSubDept" runat="server" oncontextMenu="ctx(this,event)">Subdept.</label><br />

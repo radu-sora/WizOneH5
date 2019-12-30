@@ -220,6 +220,15 @@ namespace WizOne.Absente {
         protected global::DevExpress.Web.ASPxRadioButton rbPrel1;
         
         /// <summary>
+        /// divDateExtra control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDateExtra;
+        
+        /// <summary>
         /// lblAng control.
         /// </summary>
         /// <remarks>

@@ -672,31 +672,112 @@ namespace WizOne.Absente
 
         private void AfisareCtl(string param)
         {
-            DataTable dt = Session["CereriAut_Absente"] as DataTable;
-            int folosesteInterval = 0;
-            int perioada = 0;
-            if (dt != null && dt.Rows.Count > 0)
+            try
             {
-                DataRow[] arr = dt.Select("Id=" + General.Nz(cmbAbs.Value, "-99"));
-
-                if (arr.Count() > 0)
+                DataTable dt = Session["CereriAut_Absente"] as DataTable;
+                int folosesteInterval = 0;
+                int perioada = 0;
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    DataRow dr = arr[0];
-                    folosesteInterval = Convert.ToInt32(General.Nz(dr["AbsentaTipOraFolosesteInterval"], 0));
-                    perioada = Convert.ToInt32(General.Nz(dr["AbsentaTipOraPerioada"], 0));
-                    if (Convert.ToInt32(dr["IdTipOre"].ToString()) == 1)
-                    {//tip zi
+                    DataRow[] arr = dt.Select("Id=" + General.Nz(cmbAbs.Value, "-99"));
+
+                    if (arr.Count() > 0)
+                    {
+                        DataRow dr = arr[0];
+                        folosesteInterval = Convert.ToInt32(General.Nz(dr["AbsentaTipOraFolosesteInterval"], 0));
+                        perioada = Convert.ToInt32(General.Nz(dr["AbsentaTipOraPerioada"], 0));
+                        if (Convert.ToInt32(dr["IdTipOre"].ToString()) == 1)
+                        {//tip zi
+                            lblDataInc.InnerText = "Data inceput";
+                            lblDataSf.Visible = true;
+                            dtDataSf.Visible = true;
+                            lblNr.InnerText = "Nr. zile";
+                            lblNr.Visible = false;
+                            rbPrel.Visible = false;
+                            rbPrel1.Visible = false;
+                            txtNr.ClientEnabled = false;
+                            if (Session["CereriAut_NrZile"] != null)                        
+                                txtNr.Text = Session["CereriAut_NrZile"].ToString();
+                            txtNr.Visible = false;
+
+                            lblNrOre.Visible = false;
+                            txtNrOre.ClientVisible = false;
+                            txtNrOre.Value = null;
+
+                            lblOraInc.Visible = false;
+                            cmbOraInc.Visible = false;
+                            cmbOraInc.Value = null;
+
+                            lblOraSf.Visible = false;
+                            cmbOraSf.Visible = false;
+                            cmbOraSf.Value = null;
+
+                        }
+                        else
+                        {//tip ora
+                            //lblNrOre.Style["display"] = "inline-block";
+                            txtNrOre.ClientVisible = true;
+                            txtNrOre.DecimalPlaces = 0;
+                            txtNrOre.NumberType = SpinEditNumberType.Integer;
+
+                            lblNr.InnerText = "Nr. ore";
+                            lblNr.Visible = true;
+
+                            if (folosesteInterval == 1)
+                            {
+                                List<Module.Dami.metaGeneral2> lst = ListaInterval(perioada);
+
+                                //lblOraInc.Style["display"] = "inline-block";
+                                lblOraInc.Visible = true;
+                                cmbOraInc.Visible = true;
+                                cmbOraInc.DataSource = lst;
+                                cmbOraInc.DataBind();
+
+                                //lblOraSf.Style["display"] = "inline-block";
+                                lblOraSf.Visible = true;
+                                cmbOraSf.Visible = true;
+                                cmbOraSf.DataSource = lst;
+                                cmbOraSf.DataBind();
+
+                                txtNrOre.ClientEnabled = false;
+                                txtNrOre.DecimalPlaces = 4;
+                                txtNrOre.NumberType = SpinEditNumberType.Float;
+                                txtNrOre.ClientVisible = false;
+
+                                txtNrOreInMinute.ClientVisible = true;
+
+                                //lblNrOre.InnerText = Dami.TraduCuvant("Nr. minute");
+                                lblNr.InnerText = Dami.TraduCuvant("Nr. minute");
+                            }
+
+
+                            lblDataInc.InnerText = "Data";
+                            lblDataSf.Visible = false;
+                            dtDataSf.Visible = false;                     
+                            txtNr.Visible = false;
+                            rbPrel.Visible = true;
+                            rbPrel1.Visible = true;
+                            rbPrel.Checked = true;
+                            DataTable dtTemp = General.IncarcaDT((Constante.tipBD == 1 ? "SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'GENERARE_AUTOMATA_CERERI'" :
+                                "SELECT COUNT(*) FROM user_views where view_name = 'GENERARE_AUTOMATA_CERERI'"), null);
+                            if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtTemp.Rows[0][0].ToString()) > 0)
+                                rbPrel1.Enabled = true;
+                            else
+                                rbPrel1.Enabled = false;
+                            //txtNr.ClientEnabled = true;
+                            Session["CereriAut_NrZile"] = null;
+                        }
+                    }
+                    else
+                    {
                         lblDataInc.InnerText = "Data inceput";
                         lblDataSf.Visible = true;
                         dtDataSf.Visible = true;
                         lblNr.InnerText = "Nr. zile";
                         lblNr.Visible = false;
+                        txtNr.Visible = false;
                         rbPrel.Visible = false;
                         rbPrel1.Visible = false;
-                        txtNr.ClientEnabled = false;
-                        if (Session["CereriAut_NrZile"] != null)                        
-                            txtNr.Text = Session["CereriAut_NrZile"].ToString();
-                        txtNr.Visible = false;
 
                         lblNrOre.Visible = false;
                         txtNrOre.ClientVisible = false;
@@ -709,61 +790,6 @@ namespace WizOne.Absente
                         lblOraSf.Visible = false;
                         cmbOraSf.Visible = false;
                         cmbOraSf.Value = null;
-
-                    }
-                    else
-                    {//tip ora
-                        //lblNrOre.Style["display"] = "inline-block";
-                        txtNrOre.ClientVisible = true;
-                        txtNrOre.DecimalPlaces = 0;
-                        txtNrOre.NumberType = SpinEditNumberType.Integer;
-
-                        lblNr.InnerText = "Nr. ore";
-                        lblNr.Visible = true;
-
-                        if (folosesteInterval == 1)
-                        {
-                            List<Module.Dami.metaGeneral2> lst = ListaInterval(perioada);
-
-                            //lblOraInc.Style["display"] = "inline-block";
-                            lblOraInc.Visible = true;
-                            cmbOraInc.Visible = true;
-                            cmbOraInc.DataSource = lst;
-                            cmbOraInc.DataBind();
-
-                            //lblOraSf.Style["display"] = "inline-block";
-                            lblOraSf.Visible = true;
-                            cmbOraSf.Visible = true;
-                            cmbOraSf.DataSource = lst;
-                            cmbOraSf.DataBind();
-
-                            txtNrOre.ClientEnabled = false;
-                            txtNrOre.DecimalPlaces = 4;
-                            txtNrOre.NumberType = SpinEditNumberType.Float;
-                            txtNrOre.ClientVisible = false;
-
-                            txtNrOreInMinute.ClientVisible = true;
-
-                            //lblNrOre.InnerText = Dami.TraduCuvant("Nr. minute");
-                            lblNr.InnerText = Dami.TraduCuvant("Nr. minute");
-                        }
-
-
-                        lblDataInc.InnerText = "Data";
-                        lblDataSf.Visible = false;
-                        dtDataSf.Visible = false;                     
-                        txtNr.Visible = false;
-                        rbPrel.Visible = true;
-                        rbPrel1.Visible = true;
-                        rbPrel.Checked = true;
-                        DataTable dtTemp = General.IncarcaDT((Constante.tipBD == 1 ? "SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'GENERARE_AUTOMATA_CERERI'" :
-                            "SELECT COUNT(*) FROM user_views where view_name = 'GENERARE_AUTOMATA_CERERI'"), null);
-                        if (dtTemp != null && dtTemp.Rows.Count > 0 && dtTemp.Rows[0][0] != null && dtTemp.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtTemp.Rows[0][0].ToString()) > 0)
-                            rbPrel1.Enabled = true;
-                        else
-                            rbPrel1.Enabled = false;
-                        //txtNr.ClientEnabled = true;
-                        Session["CereriAut_NrZile"] = null;
                     }
                 }
                 else
@@ -789,29 +815,12 @@ namespace WizOne.Absente
                     cmbOraSf.Visible = false;
                     cmbOraSf.Value = null;
                 }
+
+                AfiseazaCtlExtra();
             }
-            else
+            catch (Exception ex)
             {
-                lblDataInc.InnerText = "Data inceput";
-                lblDataSf.Visible = true;
-                dtDataSf.Visible = true;
-                lblNr.InnerText = "Nr. zile";
-                lblNr.Visible = false;
-                txtNr.Visible = false;
-                rbPrel.Visible = false;
-                rbPrel1.Visible = false;
-
-                lblNrOre.Visible = false;
-                txtNrOre.ClientVisible = false;
-                txtNrOre.Value = null;
-
-                lblOraInc.Visible = false;
-                cmbOraInc.Visible = false;
-                cmbOraInc.Value = null;
-
-                lblOraSf.Visible = false;
-                cmbOraSf.Visible = false;
-                cmbOraSf.Value = null;
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
             }
         }
 
@@ -1154,7 +1163,38 @@ namespace WizOne.Absente
                 }
 
                 string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
-                
+
+                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { cmbAbs.Value });
+                for (int i = 0; i < dtEx.Rows.Count; i++)
+                {
+                    DataRow dr = dtEx.Rows[i];
+                    ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + i) as ASPxEdit;
+                    if (General.Nz(dr["IdCampExtra"], "").ToString() != "")
+                    {
+                        if (ctl != null && ctl.Value != null && ctl.Value.ToString() != "")
+                        {
+                            switch (General.Nz(dr["TipCamp"], "").ToString())
+                            {
+                                case "0":
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
+                                    break;
+                                case "1":
+                                    if (Convert.ToBoolean(ctl.Value) == true)
+                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Da'";
+                                    else
+                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Nu'";
+                                    break;
+                                case "3":
+                                    DateTime zi = Convert.ToDateTime(ctl.Value);
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "'";
+                                    break;
+                                default:
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
+                                    break;
+                            }
+                        }
+                    }
+                }
 
                 string valExtra = "";
                 for (int i = 0; i < lstExtra.Count(); i++)
@@ -1354,6 +1394,171 @@ namespace WizOne.Absente
             if (mInfo != null)
                 mInfo.Invoke(ScriptManager.GetCurrent(Page), new object[] { panel });
         }
+
+        private void AfiseazaCtlExtra()
+        {
+            try
+            {
+                divDateExtra.Controls.Clear();
+
+                string ids = "";
+
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND COALESCE(""ReadOnly"",0)=0", new object[] { General.Nz(cmbAbs.Value, "-99") });
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow dr = dt.Rows[i];
+
+                    HtmlGenericControl ctlDiv = new HtmlGenericControl("div");
+                    ctlDiv.Style.Add("float", "left");
+                    ctlDiv.Style.Add("padding-right", "15px");
+                    ctlDiv.Style.Add("padding-bottom", "10px");
+
+                    Label lbl = new Label();
+                    lbl.Text = Dami.TraduCuvant(dr["Denumire"].ToString());
+                    lbl.Style.Add("display", "inline-block");
+                    lbl.Style.Add("float", "left");
+                    lbl.Style.Add("padding-right", "15px");
+                    lbl.Style.Add("width", "80px");
+                    ctlDiv.Controls.Add(lbl);
+
+                    string ctlId = "ctlDinamic" + i;
+                    switch (General.Nz(dr["TipCamp"], "").ToString())
+                    {
+                        case "0":                   //text
+                            ASPxTextBox txt = new ASPxTextBox();
+                            txt.ID = ctlId;
+                            txt.ClientIDMode = ClientIDMode.Static;
+                            txt.ClientInstanceName = "ctlDinamic" + i;
+                            txt.Width = Unit.Pixel(70);
+                            txt.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
+                            if (General.Nz(dr["Sursa"], "").ToString() != "")
+                            {
+                                string sel = InlocuiesteCampuri(dr["Sursa"].ToString());
+                                if (sel != "")
+                                {
+                                    object val = General.Nz(General.ExecutaScalar(sel, null), "");
+                                    txt.Value = val.ToString();
+                                }
+                            }
+                            ctlDiv.Controls.Add(txt);
+                            break;
+                        case "1":                   //checkBox
+                            ASPxCheckBox chk = new ASPxCheckBox();
+                            chk.ID = ctlId;
+                            chk.ClientIDMode = ClientIDMode.Static;
+                            chk.ClientInstanceName = "ctlDinamic" + i;
+                            chk.Checked = false;
+                            chk.AllowGrayed = false;
+                            chk.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
+                            if (General.Nz(dr["Sursa"], "").ToString() != "")
+                            {
+                                string sel = InlocuiesteCampuri(dr["Sursa"].ToString());
+                                if (sel != "")
+                                {
+                                    object val = General.Nz(General.ExecutaScalar(sel, null), "");
+                                    chk.Value = val.ToString();
+                                }
+                            }
+                            ctlDiv.Controls.Add(chk);
+                            break;
+                        case "2":                   //combobox
+                            ASPxComboBox cmb = new ASPxComboBox();
+                            cmb.ID = ctlId;
+                            cmb.ClientIDMode = ClientIDMode.Static;
+                            cmb.ClientInstanceName = "ctlDinamic" + i;
+                            cmb.Width = Unit.Pixel(150);
+                            cmb.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
+                            try
+                            {
+                                if (General.Nz(dr["Sursa"], "").ToString() != "")
+                                {
+                                    string sel = InlocuiesteCampuri(dr["Sursa"].ToString());
+                                    if (sel != "")
+                                    {
+                                        DataTable dtCmb = General.IncarcaDT(sel, null);
+                                        cmb.ValueField = dtCmb.Columns[0].ColumnName;
+                                        cmb.TextField = dtCmb.Columns[1].ColumnName;
+                                        cmb.DataSource = dtCmb;
+                                        cmb.DataBind();
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), "Incarcare combobox camp extra");
+                            }
+                            ctlDiv.Controls.Add(cmb);
+                            break;
+                        case "3":                   //dateTime
+                            ASPxDateEdit dte = new ASPxDateEdit();
+                            dte.ID = ctlId;
+                            dte.ClientIDMode = ClientIDMode.Static;
+                            dte.ClientInstanceName = "ctlDinamic" + i;
+                            dte.Width = Unit.Pixel(100);
+                            dte.DisplayFormatString = "dd/MM/yyyy";
+                            dte.EditFormat = EditFormat.Custom;
+                            dte.EditFormatString = "dd/MM/yyyy";
+                            dte.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
+                            if (General.Nz(dr["Sursa"], "").ToString() != "")
+                            {
+                                string sel = InlocuiesteCampuri(dr["Sursa"].ToString());
+                                if (sel != "")
+                                {
+                                    object val = General.Nz(General.ExecutaScalar(sel, null), "");
+                                    dte.Value = val.ToString();
+                                }
+                            }
+                            ctlDiv.Controls.Add(dte);
+                            break;
+                    }
+
+                    divDateExtra.Controls.Add(ctlDiv);
+
+                    ids += ctlId + ";";
+                }
+
+                Session["Absente_Cereri_Date_Aditionale"] = ids;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private string InlocuiesteCampuri(string strSelect)
+        {
+            string str = strSelect;
+
+            try
+            {
+                //string dual = "";
+                //if (Constante.tipBD == 2) dual = " FROM DUAL";
+                //DataTable dt = General.IncarcaDT(CreazaSelectCuValori() + dual, null);
+                //if (dt != null && dt.Rows.Count > 0)
+                //{
+                //    for (int i = 0; i < dt.Columns.Count; i++)
+                //    {
+                //        var ert = dt.Columns[i];
+                //        var rfv = dt.Rows[0][i];
+
+                //        if (dt.Rows[0][i].GetType() == typeof(DateTime))
+                //            str = str.Replace("ent." + dt.Columns[i], (dt.Rows[0][i] == null ? "null" : General.ToDataUniv((DateTime)dt.Rows[0][i])).ToString());
+                //        else
+                //            str = str.Replace("ent." + dt.Columns[i], General.Nz(dt.Rows[0][i], "null").ToString());
+                //    }
+                //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return str;
+        }
+
 
     }
 }

@@ -151,6 +151,11 @@
                                     </tr>
                                 <tr>
                                     <td>
+                                        <div id="divDateExtra" runat="server" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
                                             <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px; width:80px;">Angajat</label>
                                             <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"

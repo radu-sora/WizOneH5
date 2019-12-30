@@ -302,13 +302,16 @@ namespace WizOne.Personal
                     ds.Tables[0].Rows[0]["F1001036"] = marcaUnica;
                     ds.Tables[2].Rows[0]["F1001036"] = marcaUnica;
 
-                    if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
-                    {
-                        DataTable dt100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10017 = '" + txtCNP.Text + "'", null);
+                    //Florin 2019.12.30
+                    //dezactivat de moment
 
-                        if (dt100 != null && dt100.Rows.Count > 0)
-                            DateIdentificare_pnlCtl.JSProperties["cp_InfoMessage"] = Dami.TraduCuvant("Angajatul exista deja in baza de date.\nDoriti preluarea datelor de pe cel mai recent contract?");
-                    }
+                    //if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
+                    //{
+                    //    DataTable dt100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10017 = '" + txtCNP.Text + "'", null);
+
+                    //    if (dt100 != null && dt100.Rows.Count > 0)
+                    //        DateIdentificare_pnlCtl.JSProperties["cp_InfoMessage"] = Dami.TraduCuvant("Angajatul exista deja in baza de date.\nDoriti preluarea datelor de pe cel mai recent contract?");
+                    //}
                 }
             }
             catch (Exception ex)

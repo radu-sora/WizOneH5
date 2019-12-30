@@ -44,7 +44,6 @@
                 var rez = diff / 60;
                 txtNrOre.SetValue(rez.toFixed(4));
                 txtNrOreInMinute.SetValue(diff);
-                alert(txtNrOre.GetValue());
             }
         }
     </script>
@@ -65,10 +64,10 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">  
-                <dx:ASPxButton ID="btnGen" ClientInstanceName="btnGen" ClientIDMode="Static" runat="server" Text="Generare" AutoPostBack="true" OnClick="btnGen_Click" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnGen" ClientInstanceName="btnGen" ClientIDMode="Static" runat="server" Text="Generare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) {
                         pnlLoading.Show();
-                        e.processOnServer = true;
+                        pnlCtl.PerformCallback('btnGen');
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>  
@@ -120,10 +119,10 @@
 
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblNrOre" runat="server" style="display:none;">Nr. ore</label>
-                                            <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" style="display:inline-block; float:left; width:75px;" ClientVisible="false" MinValue="0" MaxValue="999">
+                                            <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" style="display:inline-block; float:left; width:75px;" ClientVisible="true" MinValue="0" MaxValue="999">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                                             </dx:ASPxSpinEdit>
-                                            <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" style="display:inline-block; float:left; width:75px;" ClientVisible="false" ClientEnabled="false" />
+                                            <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" style="display:inline-block; float:left; width:75px;" ClientVisible="true" ClientEnabled="false" />
                                         </div>
 
                                        <div style="float:left; padding-right:15px;">
@@ -225,11 +224,11 @@
 
 
                 <div style="float:left; padding:0px 15px;">
-                    <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
+                    <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                         <ClientSideEvents Click="function(s, e) {
                                         pnlLoading.Show();
-                                        e.processOnServer = true;
+                                        pnlCtl.PerformCallback('btnFiltru');
                                     }" />
                     </dx:ASPxButton>
                 </div>

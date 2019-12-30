@@ -81,6 +81,9 @@ namespace WizOne.Absente
                 txtNr.MinValue = 1;
                 txtNr.MaxValue = 1000;
 
+                var ert = txtNrOre.Value;
+                var edc = txtNrOreInMinute.Value;
+
                 if (!IsPostBack)
                 {
                     string sir = "";
@@ -237,7 +240,7 @@ namespace WizOne.Absente
                 //    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numarul de ore!"), MessageBox.icoError);
                 //    return;
                 //}
-
+                var goigi = txtNrOreInMinute.Text;
                 if (!rbPrel1.Checked && dtDataSf.Visible == false && txtNrOre.Text.Length <= 0)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu ati specificat numarul de ore!"), MessageBox.icoError);
@@ -516,7 +519,7 @@ namespace WizOne.Absente
             try
             {
          
-                IncarcaGrid();
+                //IncarcaGrid();
             }
             catch (Exception ex)
             {
@@ -606,6 +609,12 @@ namespace WizOne.Absente
                         cmbAbs.DataBind();
                         Session["CereriAut_Absente"] = dt;                     
                         AfisareCtl("cmbAbs;0");
+                        break;
+                    case "btnFiltru":
+                        IncarcaGrid();
+                        break;
+                    case "btnGen":
+                        btnGen_Click(null, null);
                         break;
                 }
 

@@ -274,6 +274,24 @@ namespace WizOne.Eval {
         protected global::DevExpress.Web.ASPxComboBox cmbSursaDate;
         
         /// <summary>
+        /// lblCategObi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblCategObi;
+        
+        /// <summary>
+        /// cmbCategObi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCategObi;
+        
+        /// <summary>
         /// chkObligatoriu control.
         /// </summary>
         /// <remarks>

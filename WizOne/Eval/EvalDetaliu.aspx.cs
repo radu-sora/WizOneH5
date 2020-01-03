@@ -1763,6 +1763,13 @@ namespace WizOne.Eval
                 colPozitie.Caption = "Pozitie";
                 colPozitie.Visible = false;
                 grDateObiective.Columns.Add(colPozitie);
+
+                GridViewDataTextColumn colCateg = new GridViewDataTextColumn();
+                colCateg.FieldName = "IdCategObiective";
+                colCateg.Name = "IdCategObiective";
+                colCateg.Caption = "IdCategObiective";
+                colCateg.Visible = false;
+                grDateObiective.Columns.Add(colCateg);
                 #endregion
 
 
@@ -2209,6 +2216,9 @@ namespace WizOne.Eval
 
                     //Radu 24.10.2019
                     clsNew.IdPeriod = lstEval_QuizIntrebari.Where(p => p.Id == clsNew.IdLinieQuiz).FirstOrDefault().IdPeriod;
+
+                    //Florin 2020.01.03
+                    clsNew.IdCategObiective = lstEval_QuizIntrebari.Where(p => p.Id == clsNew.IdLinieQuiz).FirstOrDefault().IdCategObiective;
 
                     clsNew.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
                     clsNew.TIME = DateTime.Now;                                      

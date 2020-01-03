@@ -6629,7 +6629,8 @@ namespace WizOne.Module
                 //Florin 2019.10.16
                 HttpContext.Current.Session["Json_Programe"] = "[]";
 
-
+                //Florin 2020.01.03
+                HttpContext.Current.Session["Eval_tblCategorieObiective"] = null;
 
 
                 string ti = "nvarchar";

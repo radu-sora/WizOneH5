@@ -1093,6 +1093,11 @@ namespace WizOne
                 //Florin 2019.10.16
                 Session["Json_Programe"] = "[]";
 
+                //Florin 2020.01.03
+                Session["Eval_tblCategorieObiective"] = null;
+
+
+
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
 

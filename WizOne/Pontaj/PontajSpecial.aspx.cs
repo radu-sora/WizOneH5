@@ -387,7 +387,7 @@ namespace WizOne.Pontaj
                                 break;
                         }
 
-                        if (nrT > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
+                        if (nr > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
                         {
                             lstMarciSDSL.Clear();
                             lista1 = "";
@@ -402,7 +402,7 @@ namespace WizOne.Pontaj
                                             lstMarciSDSL.Add(marca);
                                         if (chkD.Checked && zi.DayOfWeek == DayOfWeek.Sunday)
                                             lstMarciSDSL.Add(marca);
-                                        if (chkSL.Checked && nrT > 0)
+                                        if (chkSL.Checked && nr > 0)
                                             lstMarciSDSL.Add(marca);
                                     }
                                     else

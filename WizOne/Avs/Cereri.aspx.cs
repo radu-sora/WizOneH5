@@ -2032,7 +2032,7 @@ namespace WizOne.Avs
             deDataRevisal.Visible = false;
             if (atribut == (int)Constante.Atribute.Functie || atribut == (int)Constante.Atribute.CodCOR || atribut == (int)Constante.Atribute.Norma || atribut == (int)Constante.Atribute.PrelungireCIM
                 || atribut == (int)Constante.Atribute.PrelungireCIM_Vanz || atribut == (int)Constante.Atribute.ContrITM || atribut == (int)Constante.Atribute.ContrIn
-                || atribut == (int)Constante.Atribute.MotivPlecare || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.RevenireSuspendare)
+                || atribut == (int)Constante.Atribute.Suspendare || atribut == (int)Constante.Atribute.RevenireSuspendare)
             {
                 string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataMod.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + (dataMod.Year - 1).ToString();
                 if (Constante.tipBD == 2)
@@ -2054,6 +2054,30 @@ namespace WizOne.Avs
                 else
                     data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();
             }
+
+            //Radu 06.01.2020
+            if (atribut == (int)Constante.Atribute.MotivPlecare)
+            {
+                string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataMod.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + (dataMod.Year - 1).ToString();
+                if (Constante.tipBD == 2)
+                    strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + dataMod.Year + " UNION SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY)  = " + (dataMod.Year - 1).ToString();
+                DataTable dtHolidays = General.IncarcaDT(strSql, null);
+                DateTime dataRevisal = dataMod;
+                bool ziLibera = EsteZiLibera(dataRevisal, dtHolidays);
+                if (dataRevisal.DayOfWeek.ToString().ToLower() == "saturday" || dataRevisal.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera)
+                {
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atentie: data incetarii este zi nelucratoare!");
+                }
+                deDataRevisal.Value = dataRevisal;
+                if (param == 1)
+                {
+                    lblDataRevisal.Visible = true;
+                    deDataRevisal.Visible = true;
+                }
+                else
+                    data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();
+            }
+
             if (atribut == (int)Constante.Atribute.Salariul || atribut == (int)Constante.Atribute.Sporuri)
             {
                 string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + dataMod.Year + " UNION SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + (dataMod.Year - 1).ToString();

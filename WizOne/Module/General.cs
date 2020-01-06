@@ -9298,5 +9298,218 @@ namespace WizOne.Module
 
 
 
+        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text)
+        {
+            decimal tmpVB = 0;
+            string rezultat = "";
+
+            try
+            {
+                //tipVenit = 1     VB -> SN
+                //tipVenit = 2     SN -> VB
+
+                int i = 0;              //daca ajunge la 100 oprim iteratia ca sa nu devina bucla infinita
+
+                decimal varCas = 10.5m;
+                decimal varCass = 5.5m;
+                //decimal varSom = 0.5m;
+                decimal varSom = 0m;
+                decimal varNr = 0;
+                decimal scutit = 0;
+                decimal tipAng = 1;
+                decimal varDed = 250;
+                decimal varImp = 16;
+                decimal salMediu = 0;
+
+                try
+                {
+                    DataTable dt = GetVariabileVB(f10003);
+                    varCass = Convert.ToDecimal(General.Nz(dt.Rows[0]["CASS"], 0));
+                    //varSom = lst[1];    nu se mai foloseste
+                    varCas = Convert.ToDecimal(General.Nz(dt.Rows[0]["CAS"], 0));
+                    varNr = Convert.ToDecimal(General.Nz(dt.Rows[0]["NrDed"], 0));
+                    scutit = Convert.ToDecimal(General.Nz(dt.Rows[0]["Scutit"], 0));
+                    tipAng = Convert.ToDecimal(General.Nz(dt.Rows[0]["TipAng"], 0));
+                    salMediu = Convert.ToDecimal(General.Nz(dt.Rows[0]["SalMediu"], 0));
+                    varImp = Convert.ToDecimal(General.Nz(dt.Rows[0]["ProcImp"], 0));
+                }
+                catch (Exception ex)
+                {
+                    General.MemoreazaEroarea(ex, "General", "GetVariabileVB");
+                }
+
+                if (scutit == 1) varImp = 0;
+                if (tipAng == 2) varSom = 0;         //daca este pensionar nu plateste somaj
+
+                if (tipVenit == 1)           //VB -> SN
+                {
+                    varDed = DamiValDeducere(varNr, Convert.ToDecimal(venit ?? 0));
+                    CalcSN(Convert.ToDecimal(venit ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu, out tmpVB, out rezultat);
+                }
+                else                    //SN -> VB
+                {
+                    decimal SN = Convert.ToDecimal(venit ?? 1);
+                    varDed = DamiValDeducere(varNr, SN);
+                    tmpVB = Math.Round((SN - (1.5m * varImp / 100 * varDed)) / (1 - varImp / 100 - (varImp / 100 * varDed / 2000) - ((1 - varImp / 100) * (varCas + varCass + varSom) / 100)));
+                    decimal tmpSN = 0;
+
+                    while (tmpSN != SN)
+                    {
+                        if (i > 100)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            i += 1;
+
+                            varDed = DamiValDeducere(varNr, tmpVB);
+                            CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu, out tmpSN, out rezultat);
+                            if (tmpSN != SN)
+                            {
+                                if (tmpSN > SN)
+                                    tmpVB -= 1;
+                                else
+                                    tmpVB += 1;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "CalcSalariu");
+            }
+
+            venitCalculat = tmpVB;
+            text = rezultat;
+        }
+
+        private static DataTable GetVariabileVB(int f10003)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                string strSql =
+                    $@"SELECT 
+                    (SELECT COALESCE(F01324,0) AS ""Valoare"" FROM F013 WHERE F01304=(SELECT F80003 FROM F800 WHERE UPPER(F80002)='ASSB')) AS CASS,
+                    (SELECT COALESCE(F01324,0) AS ""Valoare"" FROM F013 WHERE F01304=(SELECT F80003 FROM F800 WHERE UPPER(F80002)='CAS_ANG')) AS CAS,
+                    (SELECT COUNT(*) AS ""Valoare"" FROM F110 WHERE F11003=@1 AND F11016=1) AS ""NrDed"",
+                    (SELECT COALESCE(F10026,0) AS ""Valoare"" FROM F100 WHERE F10003=@1) AS ""Scutit"",
+                    (SELECT COALESCE(F10010,0) AS ""Valoare"" FROM F100 WHERE F10003=@1) AS ""TipAng"",
+                    (SELECT F80003 FROM F800 WHERE UPPER(F80002)='SAL_MED') AS ""SalMediu"",
+                    (SELECT F80003 FROM F800 WHERE UPPER(F80002)='IMP_ASIG') AS ""ProcImp"" " + General.FromDual();
+
+                dt = IncarcaDT(strSql, new object[] { f10003 });
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "GetVariablieVB");
+            }
+
+            return dt;
+        }
+
+        private static decimal DamiValDeducere(decimal nrPersIntretinere, decimal VB)
+        {
+            decimal? varDed = 0;
+
+            try
+            {
+                varDed = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                            $@"SELECT 
+                            CASE WHEN 0={nrPersIntretinere} THEN F73008 ELSE
+                            CASE WHEN 1={nrPersIntretinere} THEN F73009 ELSE
+                            CASE WHEN 2={nrPersIntretinere} THEN F73010 ELSE
+                            CASE WHEN 3={nrPersIntretinere} THEN F73011 ELSE F73012 END END END END 
+                            FROM F730 WHERE F73004 <= {Convert.ToInt32(VB)} AND {Convert.ToInt32(VB)} <= F73006", null), 0));
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "DamiValDeducere");
+            }
+
+            return Convert.ToDecimal(varDed ?? 250);
+        }
+
+        private static void CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu, out decimal SN, out string rezultat)
+        {
+            decimal tmpSN = 0m;
+            string tmpRezultat = "";
+
+            try
+            {
+                //teorie:
+                //SN = VB - IMP - TAXE
+                //TAXE = CAS + CASS + SOM
+                //DED = sumafixa * (1-(VB-1000)/2000)
+                //IMP = varImp/100 * (VB - TAXE - DED)
+
+                //unde:
+                //CAS = round(VB * 10,5/100)
+                //CASS = round(VB * 5,5/100)
+                //SOM = round(VB * 0,5/100)
+
+                //sumafixa: (este tabel)
+                //250 fara pers. in intretinere
+                //350 1 pers
+                //450 2 pers
+
+
+                decimal cas = 0;
+                decimal cass = 0;
+                decimal som = 0;
+
+                //in calculul CAS-ului, daca VB este mai mare decat salariul mediu * 5 ori atunci se plafoneaza la salariul mediu * 5 ori
+                //if (VB > (salMediu * 5))
+                //    cas = MathExt.Round((salMediu * 5) * varCas / 100, WizOne.Module.MidpointRounding.AwayFromZero);
+                //else
+                cas = MathExt.Round(VB * varCas / 100, MidpointRounding.AwayFromZero);
+
+                if (0 < cas && cas <= 1) cas = 1;   //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+
+                cass = VB * varCass / 100;
+                som = VB * varSom / 100;
+
+                if (0 < cass && cass <= 1)          //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+                    cass = 1;
+                else
+                    cass = MathExt.Round(VB * varCass / 100, MidpointRounding.AwayFromZero);
+
+                if (0 < som && som <= 1)            //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+                    som = 1;
+                else
+                    som = MathExt.Round(VB * varSom / 100, MidpointRounding.AwayFromZero);
+
+                decimal taxe = cas + cass + som;
+
+                decimal ded = varDed;
+
+                //Florin 2019.12.19 - nu se mai foloseste, s-a modificat, doar daca F73013 <> 0 se mai foloseste
+                //if (1001 <= VB && VB <= 3000)
+                //{
+                //    //ded = Math.Round((varDed * (1 - (VB - 1000) / 2000)), 0);
+                //    ded = (varDed * (1 - (VB - 1000) / 2000));
+                //    ded = Convert.ToDecimal(Math.Ceiling(Convert.ToDouble(ded / 10)) * 10);
+                //}
+
+                decimal imp = MathExt.Round(varImp / 100 * (VB - taxe - ded), MidpointRounding.AwayFromZero);
+                if (imp < 0) imp = 0;
+
+                tmpSN = MathExt.Round((VB - imp - taxe), MidpointRounding.AwayFromZero);
+                tmpRezultat = "CAS=" + cas + ";CASS=" + cass + ";Deducere=" + ded + ";Impozit=" + imp;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "DamiValDeducere");
+            }
+
+            SN = tmpSN;
+            rezultat = tmpRezultat;
+
+        }
+
+
     }
 }

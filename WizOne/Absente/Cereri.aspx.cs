@@ -139,7 +139,7 @@ namespace WizOne.Absente
                     //Florin 2019.01.17
                     //prima oara sa apara angajati activi
                     DataTable dtAngActivi = new DataTable();
-                    if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
+                    if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0 && dtAngFiltrati.Select("AngajatActiv=1").Count() > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
                     cmbAng.DataSource = dtAngActivi;
                     Session["Cereri_Absente_Angajati"] = dtAngActivi;
                     //cmbAng.DataSource = dtAngFiltrati;
@@ -1146,7 +1146,7 @@ namespace WizOne.Absente
                         
                         //Florin 2019.11.13 - calcul formule si formule cumulat
                         //General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {txtDataInc.Date} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {txtDataSf.Date}");
-                        General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Date).Date)} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Date).Date)}");     //Radu 13.12.2019
+                        General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Date).Date)} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Date).Date)}");     //Radu 13.12.2019
 
 
 

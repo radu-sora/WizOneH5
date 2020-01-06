@@ -203,7 +203,7 @@
     </Reference>
     <Reference Include="FunctiiCeasuri, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\TEMP\New folder (20)\ProceseCeasuri\ProceseCeasuri\bin\Debug\FunctiiCeasuri.dll</HintPath>
+      <HintPath>..\Artifacts\FunctiiCeasuri.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1563,6 +1563,9 @@
     <Compile Include="Pagini\CalculVenit.aspx.cs">
       <DependentUpon>CalculVenit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\CalculVenit.aspx.designer.cs">
+      <DependentUpon>CalculVenit.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pagini\Captcha.aspx.cs">
       <DependentUpon>Captcha.aspx</DependentUpon>

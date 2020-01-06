@@ -461,6 +461,9 @@ namespace WizOne.Pontaj
                     if (IsPostBack && tip == 1)
                         IncarcaCC();
                 }
+
+                if (tip == 1 || tip == 10)
+                    CreeazaGridTotaluri();
             }
             catch (Exception ex)
             {
@@ -1120,7 +1123,7 @@ namespace WizOne.Pontaj
                     if (General.Nz(cmbAngZi.Value, "").ToString() != "")
                         filtru += " AND P.F10003=" + cmbAngZi.Value;
                     else
-                        filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day);
+                        filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day,-99, -99);
 
                     tipInreg = Convert.ToInt32(General.Nz(cmbPtjZi.Value, 1));
 
@@ -2086,7 +2089,7 @@ namespace WizOne.Pontaj
                         if (numeCol.ToLower() == "valstr")
                         {
                             strSql += $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                            VALUES({f10003}, {General.ToDataUniv(ziua)}, '{newValue}', '{oldValue}', {Session["UserID"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()});" + Environment.NewLine;
+                            VALUES({f10003}, {General.ToDataUniv(ziua)}, '{newValue}', '{oldValue}', {Session["UserID"]}, {General.CurrentDate()}, 'Pontajul Detaliat - modificare pontare', {Session["UserId"]}, {General.CurrentDate()});" + Environment.NewLine;
                         }
 
                         //daca este ValAbs, stergem pontajul pe centrii de cost
@@ -3283,6 +3286,7 @@ namespace WizOne.Pontaj
                                 }
                                 break;
                             case 8:                             //Time
+                            case 9:                             //Time - fara spin buttons
                                 {
                                     GridViewDataTimeEditColumn c = new GridViewDataTimeEditColumn();
                                     c.Name = colName;
@@ -3305,6 +3309,10 @@ namespace WizOne.Pontaj
 
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+                                    //Florin 2019.12.11
+                                    if (tipCol == 9)
+                                        c.PropertiesTimeEdit.SpinButtons.ShowIncrementButtons = false;
 
                                     grDate.Columns.Add(c);
                                 }
@@ -4194,7 +4202,10 @@ namespace WizOne.Pontaj
                 else
                 {
                     DateTime dt = Convert.ToDateTime(txtAnLuna.Value);
-                    bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99), Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), chkNormaSD.Checked, chkNormaSL.Checked, false, 0, Convert.ToInt32(chkInOut.Checked));
+                    //Florin 2019.12.27
+                    //bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99), Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), chkNormaSD.Checked, chkNormaSL.Checked, false, 0, Convert.ToInt32(chkInOut.Checked));
+                    bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, cmbDept.Text, Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99), Convert.ToInt32(cmbSec.Value ?? -99), cmbCtr.Text, chkNormaSD.Checked, chkNormaSL.Checked, false, 0, Convert.ToInt32(chkInOut.Checked));
+
                     if (ras)
                     {
                         btnFiltru_Click(sender, null);
@@ -4564,5 +4575,60 @@ namespace WizOne.Pontaj
                 e.DisplayText = string.Format("{0:00}:{1:00}", (int)ts.TotalHours, ts.Minutes);
             }
         }
+
+        protected void CreeazaGridTotaluri()
+        {
+            try
+            {
+                DataTable dtCol = General.IncarcaDT($@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""OrdineAfisarePontajDetaliat"",0) > 0 ORDER BY ""OrdineAfisarePontajDetaliat"" ", null);
+
+                if (dtCol != null && dtCol.Rows.Count > 0)
+                {
+                    string cmp = "";
+
+                    ASPxGridView grDate = new ASPxGridView();
+                    grDate.ID = "grDateTotaluri";
+                    grDate.Width = Unit.Percentage(100);
+                    //grDate.Enabled = false;
+                    grDate.AutoGenerateColumns = false;
+
+                    for (int i = 0; i < dtCol.Rows.Count; i++)
+                    {
+                        DataRow dr = dtCol.Rows[i];
+                        if (General.Nz(dr["Coloana"], "").ToString() == "")
+                            continue;
+                        string colField = General.Nz(dr["Coloana"], "col" + i).ToString();
+                        cmp += "," + colField;
+                        string alias = General.Nz(dr["Alias"], "").ToString();
+                        string toolTip = General.Nz(dr["Explicatii"], "").ToString();
+
+                        GridViewDataColumn c = new GridViewDataColumn();
+                        c.Name = colField;
+                        c.FieldName = colField;
+                        c.Caption = Dami.TraduCuvant(alias);
+                        c.ToolTip = toolTip;
+                        c.ReadOnly = true;
+                        grDate.Columns.Add(c);
+                    }
+
+                    if (cmp == "")
+                        return;
+
+                    DataTable dt = General.IncarcaDT($@"SELECT {cmp.Substring(1)} FROM ""Ptj_Cumulat"" WHERE F10003=@1 AND ""An""=@2 AND ""Luna""=@3 ", new object[] { General.Nz(cmbAng.Value,-99), txtAnLuna.Date.Year, txtAnLuna.Date.Month } );
+                    grDate.DataSource = dt;
+                    grDate.DataBind();
+
+                    tdGridTotaluri.Controls.Add(grDate);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+
     }
 }

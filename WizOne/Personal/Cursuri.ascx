@@ -12,7 +12,7 @@
                     OnRowInserting="grDateCursuri_RowInserting" OnRowUpdating="grDateCursuri_RowUpdating" OnRowDeleting="grDateCursuri_RowDeleting" OnCommandButtonInitialize="grDateCursuri_CommandButtonInitialize">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />   
-                    <ClientSideEvents  ContextMenu="ctx" /> 
+                    <ClientSideEvents ContextMenu="ctx" /> 
                     <SettingsEditing Mode="Inline" />   
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <SettingsPopup>

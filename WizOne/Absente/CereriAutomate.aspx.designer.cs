@@ -13,6 +13,15 @@ namespace WizOne.Absente {
     public partial class CereriAutomate {
         
         /// <summary>
+        /// pnlCtl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
+        
+        /// <summary>
         /// txtTitlu control.
         /// </summary>
         /// <remarks>
@@ -38,15 +47,6 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
-        /// <summary>
-        /// pnlCtl control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
         
         /// <summary>
         /// lblRol control.
@@ -218,6 +218,15 @@ namespace WizOne.Absente {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxRadioButton rbPrel1;
+        
+        /// <summary>
+        /// divDateExtra control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDateExtra;
         
         /// <summary>
         /// lblAng control.

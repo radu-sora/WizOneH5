@@ -274,7 +274,7 @@ namespace WizOne.Pontaj
                 }
 
                 //initializam linii in Pontaj
-                bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, -99, true , false, -99, Convert.ToInt32(Session["User_Marca"] ?? -99), -99, -99, -99, -99, false, false, false, 0);
+                bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, -99, true , false, "", Convert.ToInt32(Session["User_Marca"] ?? -99), -99, -99, -99, "", false, false, false, 0);
                 
 
                 if (Dami.ValoareParam("PontajCCCalculTotalPeZi", "0") == "1")

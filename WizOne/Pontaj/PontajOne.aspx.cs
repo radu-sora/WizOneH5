@@ -1561,6 +1561,7 @@ namespace WizOne.Pontaj
                                 }
                                 break;
                             case 8:                             //Time
+                            case 9:                             //Time - fara spin buttons
                                 {
                                     GridViewDataTimeEditColumn c = new GridViewDataTimeEditColumn();
                                     c.Name = colName;
@@ -1580,6 +1581,10 @@ namespace WizOne.Pontaj
 
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+                                    //Florin 2019.12.11
+                                    if (tipCol == 9)
+                                        c.PropertiesTimeEdit.SpinButtons.ShowIncrementButtons = false;
 
                                     grDate.Columns.Add(c);
                                 }
@@ -2496,7 +2501,7 @@ namespace WizOne.Pontaj
                 else
                 {
                     DateTime dt = Convert.ToDateTime(txtAnLuna.Value);
-                    bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, -99, Convert.ToInt32(General.Nz(cmbAng.Value,-99)), -99, -99, -99, -99, chkNormaSD.Checked, chkNormaSL.Checked, false, 0);
+                    bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, "", Convert.ToInt32(General.Nz(cmbAng.Value,-99)), -99, -99, -99, "", chkNormaSD.Checked, chkNormaSL.Checked, false, 0);
                     if (ras)
                     {
                         btnFiltru_Click(sender, null);

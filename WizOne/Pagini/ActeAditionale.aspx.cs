@@ -1800,13 +1800,13 @@ namespace WizOne.Pagini
                         //Florin 2019.12.02 - fortam sa aiba ids, pt ca candidatii se aduc dinamic din F100 si nu sunt inca in Admin_NrActAd
                         if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                         {
-                            if (General.Nz(obj[14], "").ToString() != "")
-                                ids += "," + obj[14];
+                            if (General.Nz(obj[0], "").ToString() != "")
+                                ids += "," + obj[0];
                         }
                         else
                         {
-                            if (General.Nz(obj[0], "").ToString() != "")
-                                ids += "," + obj[0];
+                            if (General.Nz(obj[14], "").ToString() != "")
+                                ids += "," + obj[14];
                         }
                     }
 

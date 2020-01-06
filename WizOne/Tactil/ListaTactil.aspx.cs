@@ -414,7 +414,9 @@ namespace WizOne.Tactil
                                     idTipOre = Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0));
                                     oreInVal = General.Nz(drAbs["OreInVal"], "").ToString();
                                 }
-                                if (idStare == 3) StergeInPontaj(Convert.ToInt32(obj[0]), idTipOre, oreInVal, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]), Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)));
+
+                                if (idStare == 3)
+                                    General.StergeInPontaj(Convert.ToInt32(obj[0]), idTipOre, oreInVal, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]), Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)), Convert.ToInt32(General.Nz(Session["UserId"], -99)));
 
                                 General.CalculFormuleCumulat(Convert.ToInt32(obj[1]), Convert.ToDateTime(obj[4]).Year, Convert.ToDateTime(obj[4]).Month);
 
@@ -725,45 +727,46 @@ namespace WizOne.Tactil
             return ras;
         }
 
-        public void StergeInPontaj(int id, int idTipOre, string oreInVal, DateTime dtInc, DateTime dtSf, int f10003, int nrOre)
-        {
-            try
-            {
-                if (idTipOre == 0 && oreInVal != "")        //daca este de tip ore refacem varStr
-                {
-                    string sqlOre = $@"SELECT (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) 
-                                    THEN(CASE WHEN 1 = COALESCE(A.""TrimiteLa"", 0) THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)= 0 THEN(CASE WHEN(B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL)
-                                    THEN(CASE WHEN 1 = COALESCE(A.""TrimiteLa"", 0) THEN C.""OreInVal"" ELSE D.""OreInVal"" END) ELSE B.""OreInVal"" END) ELSE '' END) AS ValPentruOre
-                                    FROM ""Ptj_Cereri"" A
-                                    INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
-                                    LEFT JOIN  ""Ptj_tblAbsente"" C ON B.""CompensareBanca"" = C.""Id""
-                                    LEFT JOIN  ""Ptj_tblAbsente"" D ON B.""CompensarePlata"" = D.""Id""
-                                    WHERE A.""Id"" = {id} AND A.""IdStare"" = 3";
-                    string valPentruOre = General.Nz(General.ExecutaScalar(sqlOre, null),"").ToString();
+        //Florin 2019.12.19
+        //public void StergeInPontaj(int id, int idTipOre, string oreInVal, DateTime dtInc, DateTime dtSf, int f10003, int nrOre)
+        //{
+        //    try
+        //    {
+        //        if (idTipOre == 0 && oreInVal != "")        //daca este de tip ore refacem varStr
+        //        {
+        //            string sqlOre = $@"SELECT (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) 
+        //                            THEN(CASE WHEN 1 = COALESCE(A.""TrimiteLa"", 0) THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)= 0 THEN(CASE WHEN(B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL)
+        //                            THEN(CASE WHEN 1 = COALESCE(A.""TrimiteLa"", 0) THEN C.""OreInVal"" ELSE D.""OreInVal"" END) ELSE B.""OreInVal"" END) ELSE '' END) AS ValPentruOre
+        //                            FROM ""Ptj_Cereri"" A
+        //                            INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
+        //                            LEFT JOIN  ""Ptj_tblAbsente"" C ON B.""CompensareBanca"" = C.""Id""
+        //                            LEFT JOIN  ""Ptj_tblAbsente"" D ON B.""CompensarePlata"" = D.""Id""
+        //                            WHERE A.""Id"" = {id} AND A.""IdStare"" = 3";
+        //            string valPentruOre = General.Nz(General.ExecutaScalar(sqlOre, null),"").ToString();
 
-                    for (DateTime zi = dtInc; zi <= dtSf; zi = zi.AddDays(1))
-                    {
-                        //string sqlStr = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"=" + General.CalculValStr(f10003, zi.Date, "", valPentruOre, (int)(nrOre * 60)) +
-                        //        ", \"CuloareValoare\"=(SELECT \"Culoare\" FROM \"tblCulori\" WHERE \"Id\"=5) " +
-                        //        "WHERE  F10003=" + f10003 + " AND \"Ziua\"=" + General.ToDataUniv(zi.Date) + " AND F06204=-1";
+        //            for (DateTime zi = dtInc; zi <= dtSf; zi = zi.AddDays(1))
+        //            {
+        //                //string sqlStr = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"=" + General.CalculValStr(f10003, zi.Date, "", valPentruOre, (int)(nrOre * 60)) +
+        //                //        ", \"CuloareValoare\"=(SELECT \"Culoare\" FROM \"tblCulori\" WHERE \"Id\"=5) " +
+        //                //        "WHERE  F10003=" + f10003 + " AND \"Ziua\"=" + General.ToDataUniv(zi.Date) + " AND F06204=-1";
 
-                        string sqlStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" ={General.CalculValStr(f10003, zi.Date, "", valPentruOre, (int)(nrOre * 60))}
-                                        WHERE  F10003={f10003} AND ""Ziua"" ={General.ToDataUniv(zi.Date)}";
-                    }
-                }
-                else
-                {
-                    string sqlStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = NULL 
-                                    WHERE F10003 = (SELECT F10003 FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})
-                                    AND(SELECT ""DataInceput"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
-                                    AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})";
-                    General.ExecutaNonQuery(sqlStr,null);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
+        //                string sqlStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" ={General.CalculValStr(f10003, zi.Date, "", valPentruOre, (int)(nrOre * 60))}
+        //                                WHERE  F10003={f10003} AND ""Ziua"" ={General.ToDataUniv(zi.Date)}";
+        //            }
+        //        }
+        //        else
+        //        {
+        //            string sqlStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = NULL 
+        //                            WHERE F10003 = (SELECT F10003 FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})
+        //                            AND(SELECT ""DataInceput"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
+        //                            AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})";
+        //            General.ExecutaNonQuery(sqlStr,null);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //    }
+        //}
 
         protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {

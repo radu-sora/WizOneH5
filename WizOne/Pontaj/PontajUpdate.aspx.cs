@@ -125,7 +125,7 @@ namespace WizOne.Pontaj
                         string strDel = $@"
                             BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
                                 INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
                                 ) B 
@@ -143,7 +143,7 @@ namespace WizOne.Pontaj
                         strDel = $@"
                             BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
                                 INNER JOIN(SELECT F10003, F10022 FROM f100 WHERE CONVERT(date, F10022) <> '2100-01-01') B
                                 ON A.F10003 = B.F10003 AND A.Ziua < B.F10022 AND A.F10003 >= {angIn}
@@ -196,7 +196,7 @@ namespace WizOne.Pontaj
                                 {5}
                                 WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.Ziua AND A.Ziua <= {3};";
 
-                        if (chkCtr == true) act += ",A.IdContract=(SELECT MAX(B.IdContract) AS IdContract FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CAST(B.DataInceput AS Date) <= CAST(A.Ziua AS Date) AND CAST(A.Ziua AS Date) <= CAST(B.DataSfarsit AS Date))";
+                        if (chkCtr == true) act += ",A.IdContract = CASE WHEN COALESCE(A.ModifProgram,0) = 1 THEN A.IdContract ELSE (SELECT MAX(B.IdContract) AS IdContract FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CAST(B.DataInceput AS Date) <= CAST(A.Ziua AS Date) AND CAST(A.Ziua AS Date) <= CAST(B.DataSfarsit AS Date)) END";
                         if (chkNrm == true)
                         {
                             act += ",A.Norma=ISNULL(dn.Norma, B.F10043)";
@@ -232,19 +232,19 @@ namespace WizOne.Pontaj
                         if (chkCtr == true)
                             sqlPrg = $@"UPDATE X
                                     SET X.IdProgram=
-                                    CASE WHEN (COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN  COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                    CASE WHEN (COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
                                     CASE (X.""ZiSapt"")
-                                    WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END)
-                                    WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END)
-                                    WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END)
-                                    WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END)
-                                    WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END)
-                                    WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END)
-                                    WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END)
+                                    WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) END)
+                                    WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) END)
+                                    WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) END)
+                                    WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) END)
+                                    WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) END)
+                                    WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) END)
+                                    WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) END)
                                     END END
                                     FROM Ptj_Intrari X
                                     INNER JOIN Ptj_Contracte Y ON X.IdContract = Y.Id
-                                    WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.Ziua AND X.Ziua <= @4";
+                                    WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.Ziua AND X.Ziua <= @4 AND COALESCE(X.ModifProgram,0) = 0";
                     }
                 }
                 else
@@ -254,7 +254,7 @@ namespace WizOne.Pontaj
                         string strDel = 
                             $@"BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM ""Ptj_Intrari"" A
                                 WHERE ""IdAuto"" IN 
                                 (SELECT A.""IdAuto""
@@ -277,7 +277,7 @@ namespace WizOne.Pontaj
                         strDel = 
                             $@"BEGIN
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
-                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Meu', {Session["UserId"]}, {General.CurrentDate()}
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
                                 FROM ""Ptj_Intrari"" A
                                 WHERE ""IdAuto"" IN 
                                 (SELECT A.""IdAuto""
@@ -329,7 +329,7 @@ namespace WizOne.Pontaj
                                 SET {4} 
                                 WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.""Ziua"" AND A.""Ziua"" <= {3};";
 
-                        if (chkCtr == true) act += ",A.\"IdContract\"=(SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(B.\"DataSfarsit\" AS Date))";
+                        if (chkCtr == true) act += ",A.\"IdContract\" = CASE WHEN COALESCE(A.\"ModifProgram\",0) = 1 THEN A.\"IdContract\" ELSE (SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(B.\"DataSfarsit\" AS Date)) END";
                         if (chkNrm == true) act += ",A.\"Norma\"=COALESCE(\"DamiNorma\"(A.F10003, A.\"Ziua\"), (SELECT C.F10043 FROM F100 C WHERE C.F10003=A.F10003))";
                         if (chkStr == true) act += ",A.F10007=COALESCE(\"DamiDept\"(A.F10003, A.\"Ziua\"), (SELECT C.F10007 FROM F100 C WHERE C.F10003=A.F10003))";
                         if (chkCC == true)
@@ -359,18 +359,18 @@ namespace WizOne.Pontaj
                         sqlPrg = $@"UPDATE ""Ptj_Intrari"" X
                                 SET X.""IdProgram"" =
                                 (SELECT
-                                CASE WHEN(COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN COALESCE(Y.""Program8"", Y.""Program0"") ELSE
+                                CASE WHEN(COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
                                 CASE(X.""ZiSapt"")
-                                WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"") END)
-                                WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"") END)
-                                WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"") END)
-                                WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"") END)
-                                WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"") END)
-                                WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"") END)
-                                WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"") END)
+                                WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END)
                                 END END
                                 FROM ""Ptj_Contracte"" Y WHERE X.""IdContract"" = Y.""Id"")
-                                WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.""Ziua"" AND X.""Ziua"" <= @4";
+                                WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.""Ziua"" AND X.""Ziua"" <= @4 AND COALESCE(X.""ModifProgram"",0) = 0";
                 }
 
                 if (strSql.Length > 0)
@@ -390,6 +390,19 @@ namespace WizOne.Pontaj
 
         }
 
+        protected void btnValStr_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                General.SintaxaValStr();
+                MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
 
 
     }

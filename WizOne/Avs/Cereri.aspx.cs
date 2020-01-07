@@ -2187,7 +2187,7 @@ namespace WizOne.Avs
                     }
                 }
 
-                if (idAtr == (int)Constante.Atribute.Norma && Convert.ToInt32(cmb6Nou.Value) == 3 && (Convert.ToInt32(cmb7Nou.Value ?? - 1) <= 0 || txt1Nou.Text.Length <= 0))
+                if (idAtr == (int)Constante.Atribute.Norma && Convert.ToInt32(cmb6Nou.Value) == 3 && Convert.ToInt32(cmb7Nou.Value ?? -1) >= 2 && txt1Nou.Text.Length <= 0)
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pentru repartizare inegala trebuie sa completati intervalul si numarul de ore!");
                     return false;

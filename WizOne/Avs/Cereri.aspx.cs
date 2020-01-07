@@ -2088,7 +2088,8 @@ namespace WizOne.Avs
                 bool ziLibera = EsteZiLibera(dataRevisal, dtHolidays);
                 if (dataRevisal.DayOfWeek.ToString().ToLower() == "saturday" || dataRevisal.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera)
                 {
-                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atentie: data incetarii este zi nelucratoare!");
+                    if (param == 1)
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atentie: data incetarii este zi nelucratoare!");
                 }
                 deDataRevisal.Value = dataRevisal;
                 if (param == 1)

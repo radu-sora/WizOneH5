@@ -115,10 +115,10 @@
 
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblNrOre" runat="server" style="display:none;">Nr. ore</label>
-                                            <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" style="display:inline-block; float:left; width:75px;" ClientVisible="true" MinValue="0" MaxValue="999">
+                                            <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" style="display:inline-block; float:left; width:75px;"  MinValue="0" MaxValue="999">
                                                 <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                                             </dx:ASPxSpinEdit>
-                                            <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" style="display:inline-block; float:left; width:75px;" ClientVisible="true" ClientEnabled="false" />
+                                            <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" style="display:inline-block; float:left; width:75px;"  ClientEnabled="false" />
                                         </div>
 
                                         <div style="float:left; padding-right:15px;">

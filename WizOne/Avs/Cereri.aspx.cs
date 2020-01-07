@@ -1760,6 +1760,7 @@ namespace WizOne.Avs
                         if (e.Parameter.Split(';')[1] == "cmbStructOrgNou")
                             Session["Valoare8Noua"] = e.Parameter.Split(';')[1] + ";" + e.Parameter.Split(';')[2];
 
+
                         //Florin 2019.12.19
                         if (e.Parameter.Split(';')[1] == "txt1Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Salariul)
                         {
@@ -2088,7 +2089,8 @@ namespace WizOne.Avs
                 bool ziLibera = EsteZiLibera(dataRevisal, dtHolidays);
                 if (dataRevisal.DayOfWeek.ToString().ToLower() == "saturday" || dataRevisal.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera)
                 {
-                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atentie: data incetarii este zi nelucratoare!");
+                    if (param == 1)
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atentie: data incetarii este zi nelucratoare!");
                 }
                 deDataRevisal.Value = dataRevisal;
                 if (param == 1)
@@ -2124,7 +2126,7 @@ namespace WizOne.Avs
                 else
                     data = dataRevisal.Day.ToString().PadLeft(2, '0') + "/" + dataRevisal.Month.ToString().PadLeft(2, '0') + "/" + dataRevisal.Year.ToString();
             }
- 
+
 
         }
 
@@ -2185,7 +2187,7 @@ namespace WizOne.Avs
                     }
                 }
 
-                if (idAtr == (int)Constante.Atribute.Norma && Convert.ToInt32(cmb6Nou.Value) == 3 && (Convert.ToInt32(cmb7Nou.Value ?? - 1) <= 0 || txt1Nou.Text.Length <= 0))
+                if (idAtr == (int)Constante.Atribute.Norma && Convert.ToInt32(cmb6Nou.Value) == 3 && Convert.ToInt32(cmb7Nou.Value ?? -1) >= 2 && txt1Nou.Text.Length <= 0)
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Pentru repartizare inegala trebuie sa completati intervalul si numarul de ore!");
                     return false;

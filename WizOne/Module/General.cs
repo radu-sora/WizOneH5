@@ -4043,10 +4043,9 @@ namespace WizOne.Module
 
         public static DataTable GetCOR()
         {
-            if (Constante.tipBD == 1)
-                return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = (SELECT CONVERT(int, Valoare) FROM tblParametrii WHERE Nume = 'VersiuneF722')", null);
-            else
-                return General.IncarcaDT("SELECT F72204, CAST(F72202 AS INT) AS F72202 FROM F722 WHERE F72206 = (SELECT TO_NUMBER(\"Valoare\") FROM \"tblParametrii\" WHERE \"Nume\" = 'VersiuneF722')", null);
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
+            DataTable table = ds.Tables[0];          
+            return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)"), null);     
         }
 
         public static DataTable GetFunctie()

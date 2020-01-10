@@ -52,6 +52,17 @@ namespace WizOne.Pontaj
                     txtMarcaSf.Value = 999999;
                     txtDataInc.Value = DateTime.Now;
                     txtDataSf.Value = DateTime.Now;
+
+
+                    //Radu 09.01.2020
+                    string dataBlocare = "22001231";
+                    string strSql = $@"SELECT COALESCE(MIN(Ziua),'2200-12-31') FROM Ptj_tblBlocarePontaj";
+                    if (Constante.tipBD == 2)
+                        strSql = @"SELECT COALESCE(MIN(""Ziua""),TO_DATE('31-12-2200','DD-MM-YYYY')) FROM ""Ptj_tblBlocarePontaj""";
+                    DataTable dt = General.IncarcaDT(strSql, null);
+                    if (dt != null && dt.Rows.Count > 0 && General.Nz(dt.Rows[0][0], "").ToString() != "" && General.IsDate(dt.Rows[0][0]))
+                        dataBlocare = Convert.ToDateTime(dt.Rows[0][0]).Year + Convert.ToDateTime(dt.Rows[0][0]).Month.ToString().PadLeft(2, '0') + Convert.ToDateTime(dt.Rows[0][0]).Day.ToString().PadLeft(2, '0');
+                    Session["Ptj_DataBlocare"] = dataBlocare.ToString();
                 }
             }
             catch (Exception ex)

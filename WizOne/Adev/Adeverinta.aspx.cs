@@ -1128,16 +1128,16 @@ namespace WizOne.Adev
 
                 string cale = HostingEnvironment.MapPath("~/Adeverinta");
 
-                Dictionary<String, String> lista = new Dictionary<string, string>();
-                string sql = "SELECT -1 AS NRCRT, \"Nume\" AS ETICHETA, \"Valoare\" AS VALOARE FROM \"tblParametrii\" WHERE \"Nume\" IN ('CT_SIND_ST', 'CT_SIND_ORG', 'BAZA_FF', 'BAZAC_IMP_PROD', 'IMPOZIT_IMP_PROD',  'SOMB', 'SOMA', 'PP', 'ZAMBP', 'ZAMBP2', 'SUSP_CO')";
-                DataTable dtParam = General.IncarcaDT(sql, null);
-                if (dtParam != null && dtParam.Rows.Count > 0)
-                    for (int i = 0; i < dtParam.Rows.Count; i++)
-                        lista.Add(dtParam.Rows[i]["ETICHETA"].ToString(), dtParam.Rows[i]["VALOARE"].ToString());
+                //Dictionary<String, String> lista = new Dictionary<string, string>();
+                //string sql = "SELECT -1 AS NRCRT, \"Nume\" AS ETICHETA, \"Valoare\" AS VALOARE FROM \"tblParametrii\" WHERE \"Nume\" IN ('CT_SIND_ST', 'CT_SIND_ORG', 'BAZA_FF', 'BAZAC_IMP_PROD', 'IMPOZIT_IMP_PROD',  'SOMB', 'SOMA', 'PP', 'ZAMBP', 'ZAMBP2', 'SUSP_CO')";
+                //DataTable dtParam = General.IncarcaDT(sql, null);
+                //if (dtParam != null && dtParam.Rows.Count > 0)
+                //    for (int i = 0; i < dtParam.Rows.Count; i++)
+                //        lista.Add(dtParam.Rows[i]["ETICHETA"].ToString(), dtParam.Rows[i]["VALOARE"].ToString());
 
                 Hashtable Config = new Hashtable();
-                foreach (string key in lista.Keys)
-                    Config.Add(key, lista[key]);
+                //foreach (string key in lista.Keys)
+                //    Config.Add(key, lista[key]);
 
                 Config.Add("DATABASE", (Constante.tipBD == 2 ? "ORACLE" : "SQLSVR"));
                 Config.Add("ORACONN", conn);
@@ -1146,7 +1146,7 @@ namespace WizOne.Adev
                 Config.Add("ORALOGIN", user);
 
 
-                sql = "SELECT * FROM F100 WHERE F10003 = " + marca;
+                string sql = "SELECT * FROM F100 WHERE F10003 = " + marca;
                 DataTable dtAng = General.IncarcaDT(sql, null);
 
                 //var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/"));

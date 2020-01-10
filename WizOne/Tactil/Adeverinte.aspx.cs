@@ -85,13 +85,14 @@ namespace WizOne.Tactil
                 if (!IsPostBack)
                 {
                     //TactilPrintareAdeverinte : 0 - se deschide raport; 1 - se printeaza direct
-                    dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TactilPrintareAdeverinte'", null);
-                    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
-                    {
-                        Session["TactilPrintareAdeverinte"] = Convert.ToInt32(dt.Rows[0][0].ToString());
-                    }
-                    else
-                        Session["TactilPrintareAdeverinte"] = 0;
+                    //Radu 09.01.2020 - s-a renuntat la parametru; printarea automata se face daca denumirea butonului contine 'print'
+                    //dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TactilPrintareAdeverinte'", null);
+                    //if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
+                    //{
+                    //    Session["TactilPrintareAdeverinte"] = Convert.ToInt32(dt.Rows[0][0].ToString());
+                    //}
+                    //else
+                    //    Session["TactilPrintareAdeverinte"] = 0;
 
                 }
 

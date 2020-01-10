@@ -94,7 +94,7 @@ namespace WizOne.Pagini
                     grDate.DataBind();
                 }
 
-                grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaCO", "10"));
+                grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaUsr", "10"));
             }
             catch (Exception ex)
             {

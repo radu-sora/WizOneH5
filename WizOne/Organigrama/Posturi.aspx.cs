@@ -47,7 +47,7 @@ namespace WizOne.Organigrama
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
-                DataTable dtCor = General.IncarcaDT($@"SELECT F72202, F72204 FROM F722 WHERE F72206 = COALESCE((SELECT COALESCE(""Valoare"",7) FROM ""tblParametrii"" WHERE ""Nume""='VersiuneF722'),7)", null);
+                DataTable dtCor = General.IncarcaDT($@"SELECT F72202, F72204 FROM F722 WHERE F72206 = (select max(f72206) from f722)", null);
                 cmbCor.DataSource = dtCor;
                 cmbCor.DataBind();
 

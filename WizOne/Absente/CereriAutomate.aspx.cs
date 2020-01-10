@@ -698,11 +698,13 @@ namespace WizOne.Absente
                             txtNr.ClientEnabled = false;
                             if (Session["CereriAut_NrZile"] != null)                        
                                 txtNr.Text = Session["CereriAut_NrZile"].ToString();
-                            txtNr.Visible = false;
+                            txtNr.Visible = true;
 
                             lblNrOre.Visible = false;
                             txtNrOre.ClientVisible = false;
                             txtNrOre.Value = null;
+                            txtNrOreInMinute.ClientVisible = false;
+                            txtNrOreInMinute.Value = null;
 
                             lblOraInc.Visible = false;
                             cmbOraInc.Visible = false;
@@ -782,6 +784,8 @@ namespace WizOne.Absente
                         lblNrOre.Visible = false;
                         txtNrOre.ClientVisible = false;
                         txtNrOre.Value = null;
+                        txtNrOreInMinute.ClientVisible = false;
+                        txtNrOreInMinute.Value = null;
 
                         lblOraInc.Visible = false;
                         cmbOraInc.Visible = false;
@@ -806,6 +810,8 @@ namespace WizOne.Absente
                     lblNrOre.Visible = false;
                     txtNrOre.ClientVisible = false;
                     txtNrOre.Value = null;
+                    txtNrOreInMinute.ClientVisible = false;
+                    txtNrOreInMinute.Value = null;
 
                     lblOraInc.Visible = false;
                     cmbOraInc.Visible = false;

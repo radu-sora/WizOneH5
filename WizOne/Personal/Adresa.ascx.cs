@@ -252,7 +252,13 @@ namespace WizOne.Personal
                 {
                     ds.Tables[2].Rows[0]["F1001021"] = tipArtera;
 
-                    ds.Tables[1].Rows[0]["F100891"] = e.NewValues["NumeNivel1"] ?? DBNull.Value;
+                    if (e.NewValues.Contains("NumeNivel1"))
+                    {
+                        ds.Tables[1].Rows[0]["F100891"] = e.NewValues["NumeNivel1"] ?? DBNull.Value;
+                        DataTable dtJudet = General.IncarcaDT("SELECT OASP FROM JUDETE WHERE DENJUD = '" + ds.Tables[1].Rows[0]["F100891"].ToString().Replace("MUNICIPIUL ", "").Replace("JUDETUL ", "") + "'", null);
+                        if (dtJudet != null && dtJudet.Rows.Count > 0 && dtJudet.Rows[0][0] != null)
+                            ds.Tables[1].Rows[0]["F100895"] = dtJudet.Rows[0][0].ToString();
+                    }
 
                     if (e.NewValues["NumeNivel2"] != null && (e.NewValues["NumeNivel2"].ToString().IndexOf("ORAS") == 0 || e.NewValues["NumeNivel2"].ToString().IndexOf("MUNICIPIU") == 0))
                     {
@@ -264,8 +270,13 @@ namespace WizOne.Personal
                         ds.Tables[1].Rows[0]["F100907"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
                         ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
                     }
-                    //ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
-                    ds.Tables[1].Rows[0]["F10082"] = e.NewValues["NumeNivel3"] ?? DBNull.Value;
+                    if (e.NewValues.Contains("NumeNivel3"))
+                    {
+                        if (e.NewValues["NumeNivel3"] != null && e.NewValues["NumeNivel3"].ToString().Contains("SECTORUL"))
+                            ds.Tables[1].Rows[0]["F10082"] = e.NewValues["NumeNivel3"] ?? DBNull.Value;
+                        else
+                            ds.Tables[1].Rows[0]["F100908"] = e.NewValues["NumeNivel3"] ?? DBNull.Value;
+                    }
                     ds.Tables[1].Rows[0]["F10083"] = e.NewValues["Strada"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10084"] = e.NewValues["Numar"] ?? DBNull.Value;
                     ds.Tables[1].Rows[0]["F10085"] = e.NewValues["Bloc"] ?? DBNull.Value;
@@ -379,11 +390,15 @@ namespace WizOne.Personal
 
                 if (General.Nz(e.NewValues["Principal"],0).ToString() == "1")
                 {
-                    //if (e.NewValues.Contains("Principal"))
-                        ds.Tables[2].Rows[0]["F1001021"] = tipArtera;
+                    ds.Tables[2].Rows[0]["F1001021"] = tipArtera;
 
                     if (e.NewValues.Contains("NumeNivel1"))
+                    {
                         ds.Tables[1].Rows[0]["F100891"] = e.NewValues["NumeNivel1"] ?? DBNull.Value;
+                        DataTable dtJudet = General.IncarcaDT("SELECT OASP FROM JUDETE WHERE DENJUD = '" + ds.Tables[1].Rows[0]["F100891"].ToString().Replace("MUNICIPIUL ", "").Replace("JUDETUL ", "") + "'", null);
+                        if (dtJudet != null && dtJudet.Rows.Count > 0 && dtJudet.Rows[0][0] != null)
+                            ds.Tables[1].Rows[0]["F100895"] = dtJudet.Rows[0][0].ToString();
+                    }
                     if (e.NewValues.Contains("NumeNivel2"))
                     {
                         if (e.NewValues["NumeNivel2"] != null && (e.NewValues["NumeNivel2"].ToString().IndexOf("ORAS") == 0 || e.NewValues["NumeNivel2"].ToString().IndexOf("MUNICIPIU") == 0))
@@ -397,10 +412,13 @@ namespace WizOne.Personal
                             ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
                         }
                     }
-                    //if (e.NewValues.Contains("Strada"))
-                    //    ds.Tables[1].Rows[0]["F100908"] = e.NewValues["Strada"] ?? DBNull.Value;
                     if (e.NewValues.Contains("NumeNivel3"))
-                        ds.Tables[1].Rows[0]["F10082"] = e.NewValues["Sector"] ?? DBNull.Value;
+                    {
+                        if (e.NewValues["NumeNivel3"] != null && e.NewValues["NumeNivel3"].ToString().Contains("SECTORUL"))
+                            ds.Tables[1].Rows[0]["F10082"] = e.NewValues["NumeNivel3"] ?? DBNull.Value;
+                        else
+                            ds.Tables[1].Rows[0]["F100908"] = e.NewValues["NumeNivel3"] ?? DBNull.Value;
+                    }
                     if (e.NewValues.Contains("Strada"))
                         ds.Tables[1].Rows[0]["F10083"] = e.NewValues["Strada"] ?? DBNull.Value;
                     if (e.NewValues.Contains("Numar"))
@@ -461,6 +479,7 @@ namespace WizOne.Personal
                     ds.Tables[2].Rows[0]["F1001021"] = DBNull.Value;
 
                     ds.Tables[1].Rows[0]["F100891"] = DBNull.Value;
+                    ds.Tables[1].Rows[0]["F100895"] = DBNull.Value;
                     ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
                     ds.Tables[1].Rows[0]["F100907"] = DBNull.Value;
                     ds.Tables[1].Rows[0]["F100908"] = DBNull.Value;

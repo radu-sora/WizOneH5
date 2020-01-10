@@ -85,11 +85,10 @@ namespace WizOne.Personal
             DataTable dt = new DataTable();
             DataTable dt1 = new DataTable();
 
-            string cond = "";
-            if (Constante.tipBD == 1)
-               cond = " AND F72206 = (SELECT CONVERT(int, Valoare) FROM tblParametrii WHERE Nume = 'VersiuneF722')";
-            else
-                cond = " AND F72206 = (SELECT TO_NUMBER(\"Valoare\") FROM \"tblParametrii\" WHERE \"Nume\" = 'VersiuneF722')";
+            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            DataTable table = ds.Tables[0];
+
+            string cond = " AND F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)") + "";  
 
             string sql = "SELECT F72202, F72204, F72206 FROM F722 WHERE " + (codCOR.Length > 0 ? " F72202 LIKE '%" + codCOR + "%' " + (denumire.Length > 0 ? " AND " : "") : "") + (denumire.Length > 0 ? " UPPER(F72204) LIKE UPPER('%" + denumire + "%') " : "") + cond;
             dt = General.IncarcaDT(sql, null);

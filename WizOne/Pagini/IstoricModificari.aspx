@@ -148,14 +148,16 @@
                             <ClientSideEvents  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />           
                             <Columns>                       
 						        <dx:GridViewDataTextColumn FieldName="Tabela" Name="Tabela" Caption="Tabela" ReadOnly="true" Width="100px" VisibleIndex="1" />
-						        <dx:GridViewDataTextColumn FieldName="Nume_Camp" Name="Nume_Camp" Caption="Denumire camp" ReadOnly="true" Width="100px" VisibleIndex="2" />
-						        <dx:GridViewDataTextColumn FieldName="Cod_Op" Name="Cod_Op" Caption="Cod op." ReadOnly="true" Width="100px" VisibleIndex="3" />
-						        <dx:GridViewDataTextColumn FieldName="VAL_OLD" Name="VAL_OLD" Caption="Valoare veche" ReadOnly="true" Width="100px" VisibleIndex="4" />
-						        <dx:GridViewDataTextColumn FieldName="VAL_NEW" Name="VAL_NEW" Caption="Valoare noua" ReadOnly="true" Width="100px" VisibleIndex="5" />
-						        <dx:GridViewDataTextColumn FieldName="Data" Name="Data" Caption="Data" ReadOnly="true" Width="100px" VisibleIndex="6" />
-						        <dx:GridViewDataTextColumn FieldName="USER_WIN" Name="USER_WIN" Caption="Utilizator Windows" ReadOnly="true" Width="100px" VisibleIndex="7" />
-						        <dx:GridViewDataTextColumn FieldName="USER_WS" Name="USER_WS" Caption="Utilizator WS" ReadOnly="true" Width="100px" VisibleIndex="8" />					
-                                <dx:GridViewDataTextColumn FieldName="COMPUTER_NAME" Name="COMPUTER_NAME" Caption="Nume calculator" ReadOnly="true" Width="100px" VisibleIndex="9" />	
+                                <dx:GridViewDataTextColumn FieldName="COL_ID1" Name="COL_ID1" Caption="Cheie primara" ReadOnly="true" Width="100px" VisibleIndex="2" />
+                                <dx:GridViewDataTextColumn FieldName="VAL_ID1" Name="VAL_ID1" Caption="Val. cheie primara" ReadOnly="true" Width="100px" VisibleIndex="3" />
+						        <dx:GridViewDataTextColumn FieldName="Nume_Camp" Name="Nume_Camp" Caption="Denumire camp" ReadOnly="true" Width="100px" VisibleIndex="4" />
+						        <dx:GridViewDataTextColumn FieldName="Cod_Op" Name="Cod_Op" Caption="Cod op." ReadOnly="true" Width="100px" VisibleIndex="5" />
+						        <dx:GridViewDataTextColumn FieldName="VAL_OLD" Name="VAL_OLD" Caption="Valoare veche" ReadOnly="true" Width="100px" VisibleIndex="6" />
+						        <dx:GridViewDataTextColumn FieldName="VAL_NEW" Name="VAL_NEW" Caption="Valoare noua" ReadOnly="true" Width="100px" VisibleIndex="7" />
+						        <dx:GridViewDataTextColumn FieldName="Data" Name="Data" Caption="Data" ReadOnly="true" Width="100px" VisibleIndex="8" />
+						        <dx:GridViewDataTextColumn FieldName="USER_WIN" Name="USER_WIN" Caption="Utilizator Windows" ReadOnly="true" Width="100px" VisibleIndex="9" />
+						        <dx:GridViewDataTextColumn FieldName="USER_WS" Name="USER_WS" Caption="Utilizator WS" ReadOnly="true" Width="100px" VisibleIndex="10" />					
+                                <dx:GridViewDataTextColumn FieldName="COMPUTER_NAME" Name="COMPUTER_NAME" Caption="Nume calculator" ReadOnly="true" Width="100px" VisibleIndex="11" />	
                                 <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ReadOnly="true" Width="100px"  />	
                             </Columns>
                         </dx:ASPxGridView>

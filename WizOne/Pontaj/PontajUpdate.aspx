@@ -2,7 +2,25 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
-
+        function OnClickAct(s, e) {
+            var time = <%= Session["Ptj_DataBlocare"] %>;
+            var data = txtDataInc.GetValue();
+            var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
+            var dtInc = new Date(data.getFullYear(), data.getMonth(), data.getDate());
+            e.processOnServer = false;            
+            if (dtInc <= dtBlocare) {
+                swal({
+                    title: "Atentie", text: "Pontajul este blocat pana la data de " + dtBlocare.getDate() + "/" + (dtBlocare.getMonth() + 1) + "/" + dtBlocare.getFullYear() + "! \n Doriti sa continuati?",
+                    type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        e.processOnServer = true; 
+                    }
+                });
+            }
+            else
+                e.processOnServer = true;       
+        }
     </script>
 </asp:Content>
 
@@ -19,9 +37,8 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAct" ClientInstanceName="btnAct" ClientIDMode="Static" runat="server" Text="Actualizeaza" AutoPostBack="false" OnClick="btnAct_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
-                    <ClientSideEvents Click="function (s,e) { 
-                        pnlLoading.Show();
-                        e.processOnServer = true;
+                    <ClientSideEvents Click="function (s,e) {
+                        OnClickAct(s, e);                     
                      }" />
                 </dx:ASPxButton>
 
@@ -38,7 +55,7 @@
                     
                     <div class="Absente_Cereri_CampuriSup" id="divRol" runat="server">
                         <label id="lblCtrInc" runat="server" style="display:inline-block;">Data Inceput</label>
-                        <dx:ASPxDateEdit ID="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Date" >
+                        <dx:ASPxDateEdit ID="txtDataInc" ClientInstanceName="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Date" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </div>

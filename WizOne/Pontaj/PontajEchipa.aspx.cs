@@ -2727,28 +2727,26 @@ namespace WizOne.Pontaj
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
                     strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.F10003 ";
                 }
-                //Florin 2019.09.23
-                //if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
-                if (General.Nz(cmbCateg.Value,"").ToString() != "")
-                {
-                    cmpCateg = @" CTG.""Denumire"" AS ""Categorie"", ";
-                    filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
-                    strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
-                    //strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
-                    //strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-                    //strLeg += " LEFT JOIN (SELECT F10003, F10061, F10062 FROM F100) C ON A.F10003 = C.F10003 ";
-                }
 
                 //Florin 2019.12.27
                 //if (General.Nz(cmbCtr.Value,"").ToString() != "") strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
                 if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += " AND A.\"DescContract\" IN ('" + cmbCtr.Value.ToString().Replace(",","','") + "')";
 
+                //Florin 2020.01.13 - am adaugat si DescContract
                 //Radu 13.03.2019
                 string strFiltruSpecial = "";
                 if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006");
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""",@"C.""Denumire""");
                 else
                     strLeg = "";
+
+                //Florin 2019.09.23
+                if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                {
+                    cmpCateg = @" CTG.""Denumire"" AS ""Categorie"", ";
+                    filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+                    strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
+                }
 
                 if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
 
@@ -2787,7 +2785,10 @@ namespace WizOne.Pontaj
                 //LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                 //LEFT JOIN F724 CB ON A.F10062 = CB.F72402
                 if (Constante.tipBD == 1)
-                    strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A {strLeg}  WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
+                    strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
+                                LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
+                                {strLeg}  
+                                WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
                                 SELECT *,
                                 (SELECT ',Ziua' + CASE WHEN Y.Zi <= X.F10023 THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
                                 FROM F100 X
@@ -2849,7 +2850,10 @@ namespace WizOne.Pontaj
                                 ORDER BY AngajatNume) A
                                 WHERE 1=1 {strFiltru}";
                 else
-                    strSql = $@"with ""Ptj_Intrari_2"" as (select * from ""Ptj_Intrari"" A WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
+                    strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
+                                LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
+                                {strLeg}
+                                WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
                                 SELECT A.*,
                                 (SELECT LISTAGG(',Ziua' || CASE WHEN Y.""Zi"" <= X.F10023 THEN TO_CHAR(EXTRACT(DAY FROM Y.""Zi"")) END) WITHIN GROUP (ORDER BY X.F10003)
                                 FROM F100 X

@@ -2732,11 +2732,11 @@ namespace WizOne.Pontaj
                 //if (General.Nz(cmbCtr.Value,"").ToString() != "") strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
                 if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += " AND A.\"DescContract\" IN ('" + cmbCtr.Value.ToString().Replace(",","','") + "')";
 
-                //Florin 2020.01.13 - am adaugat si DescContract
+                //Florin 2020.01.13 - am adaugat si DescContract si Dept
                 //Radu 13.03.2019
                 string strFiltruSpecial = "";
                 if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""",@"C.""Denumire""");
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""",@"C.""Denumire""").Replace(@"A.""Dept""", "I.F00608");
                 else
                     strLeg = "";
 
@@ -2787,6 +2787,7 @@ namespace WizOne.Pontaj
                 if (Constante.tipBD == 1)
                     strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
                                 LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
                                 {strLeg}  
                                 WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
                                 SELECT *,
@@ -2852,6 +2853,7 @@ namespace WizOne.Pontaj
                 else
                     strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
                                 LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
                                 {strLeg}
                                 WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
                                 SELECT A.*,

@@ -9098,7 +9098,7 @@ namespace WizOne.Module
             text = rezultat;
         }
 
-        private static DataTable GetVariabileVB(int f10003)
+        public static DataTable GetVariabileVB(int f10003)
         {
             DataTable dt = new DataTable();
 

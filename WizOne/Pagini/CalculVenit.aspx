@@ -11,6 +11,8 @@
                  s.cpAlertMessage = null;
              }
          }
+
+
     </script>
 </asp:Content>
 
@@ -24,7 +26,7 @@
             <td align="right">
                 <dx:ASPxButton ID="btnCalcul" ClientInstanceName="btnCalcul" ClientIDMode="Static" runat="server" Text="Calculeaza" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
-                    <ClientSideEvents Click="function(s,e) { pnlCtl.PerformCallback(); }" />
+                    <ClientSideEvents Click="function(s,e) { pnlCtl.PerformCallback(2); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
@@ -74,6 +76,7 @@
                                         <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px"  />
                                         <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px"  />
                                     </Columns>
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback(1); }" />
                                 </dx:ASPxComboBox>
                             </td>
                         </tr>
@@ -81,71 +84,71 @@
                     <br />
                     <table>
                         <tr>
-                            <td><dx:ASPxLabel id="ASPxLabel1" runat="server" Text="Venit de calculat" Width="150px"/></td>
+                            <td><dx:ASPxLabel id="lblVenitCal" runat="server" Text="Venit de calculat" Width="150px"/></td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td>
-                                <dx:ASPxSpinEdit ID="ASPxSpinEdit1" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
+                                <dx:ASPxSpinEdit ID="txtVenitCal" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
                                     <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                                 </dx:ASPxSpinEdit>
                             </td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td><dx:ASPxLabel id="ASPxLabel2" runat="server" Text="Venit rezultat" Width="100px"/></td>
+                            <td><dx:ASPxLabel id="lblVenitRez" runat="server" Text="Venit rezultat" Width="100px"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="rezVenit" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtVenitRez" runat="server" ReadOnly="true" Enabled="false" Width="100px">
                                     <DisabledStyle BackColor="LightGray"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
                         </tr>
                         <tr>
-                            <td><br /><dx:ASPxLabel id="ASPxLabel3" runat="server" Text="Procent CAS"/></td>
+                            <td><br /><dx:ASPxLabel id="lblCasPro" runat="server" Text="Procent CAS"/></td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td>
-                                <dx:ASPxSpinEdit ID="ASPxSpinEdit2" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
+                                <dx:ASPxSpinEdit ID="txtCasPro" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
                                     <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                                 </dx:ASPxSpinEdit>
                             </td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td><dx:ASPxLabel id="ASPxLabel4" runat="server" Text="CAS"/></td>
+                            <td><dx:ASPxLabel id="lblCas" runat="server" Text="CAS"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="ASPxTextBox1" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtCas" runat="server" ReadOnly="true" Enabled="false" Width="100px">
                                     <DisabledStyle BackColor="LightGray"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
                         </tr>
                         <tr>
-                            <td><br /><dx:ASPxLabel id="ASPxLabel5" runat="server" Text="Procent CASS"/></td>
+                            <td><br /><dx:ASPxLabel id="lblCassPro" runat="server" Text="Procent CASS"/></td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td>
-                                <dx:ASPxSpinEdit ID="ASPxSpinEdit3" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
+                                <dx:ASPxSpinEdit ID="txtCassPro" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
                                     <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                                 </dx:ASPxSpinEdit>
                             </td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td><dx:ASPxLabel id="ASPxLabel6" runat="server" Text="CASS"/></td>
+                            <td><dx:ASPxLabel id="lblCass" runat="server" Text="CASS"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="ASPxTextBox2" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtCass" runat="server" ReadOnly="true" Enabled="false" Width="100px">
                                     <DisabledStyle BackColor="LightGray"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
                         </tr>
                         <tr>
-                            <td><br /><dx:ASPxLabel id="ASPxLabel7" runat="server" Text="Procent Impozit"/></td>
+                            <td><br /><dx:ASPxLabel id="lblImpProc" runat="server" Text="Procent Impozit"/></td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td>
-                                <dx:ASPxSpinEdit ID="ASPxSpinEdit4" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
+                                <dx:ASPxSpinEdit ID="txtImpPro" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
                                     <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                                 </dx:ASPxSpinEdit>
                             </td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td><dx:ASPxLabel id="ASPxLabel8" runat="server" Text="Impozit"/></td>
+                            <td><dx:ASPxLabel id="lblImp" runat="server" Text="Impozit"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="ASPxTextBox3" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtImp" runat="server" ReadOnly="true" Enabled="false" Width="100px">
                                     <DisabledStyle BackColor="LightGray"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
                         </tr>
                         <tr>
-                            <td><br /><dx:ASPxLabel id="ASPxLabel9" runat="server" Text="Nr. pers. in intretinere"/></td>
+                            <td><br /><dx:ASPxLabel id="lblPer" runat="server" Text="Nr. pers. in intretinere"/></td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td>
                                 <dx:ASPxComboBox ID="cmbPers" runat="server" AutoPostBack="false">
@@ -159,14 +162,15 @@
                                 </dx:ASPxComboBox>
                             </td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td><dx:ASPxLabel id="ASPxLabel10" runat="server" Text="Deducere"/></td>
+                            <td><dx:ASPxLabel id="lblDed" runat="server" Text="Deducere"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="ASPxTextBox4" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtDed" runat="server" ReadOnly="true" Enabled="false" Width="100px">
                                     <DisabledStyle BackColor="LightGray"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
                         </tr>
                     </table>
+
 		        <table>
                     <tr align="left">
                         <td>

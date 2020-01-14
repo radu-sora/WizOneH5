@@ -36,6 +36,11 @@ namespace WizOne.Pagini
 
                 cmbAng.DataSource = General.GetPersonalRestrans(Convert.ToInt32(General.Nz(Session["UserId"],-99)), "", 1);
                 cmbAng.DataBind();
+
+                DataTable dt = General.GetVariabileVB(-99);
+                txtCassPro.Value = Convert.ToDecimal(General.Nz(dt.Rows[0]["CASS"], 0));
+                txtCasPro.Value = Convert.ToDecimal(General.Nz(dt.Rows[0]["CAS"], 0));
+                txtImpPro.Value = Convert.ToDecimal(General.Nz(dt.Rows[0]["ProcImp"], 0));                
             }
             catch (Exception ex)
             {
@@ -48,6 +53,23 @@ namespace WizOne.Pagini
         {
             try
             {
+                string tip = e.Parameter;
+
+                switch (tip)
+                {
+                    case "1":
+                        {
+                            DataTable dt = General.GetVariabileVB(Convert.ToInt32(General.Nz(cmbAng.Value,-99)));
+                            cmbPers.Value = Convert.ToInt32(General.Nz(dt.Rows[0]["NrDed"], 0));
+                            txtRez1.Text = 
+                                "Scuttit           " + Convert.ToInt32(General.Nz(dt.Rows[0]["Scutit"], 0)).ToString() + Environment.NewLine +
+                                "Tip Angajat       " + Convert.ToInt32(General.Nz(dt.Rows[0]["TipAng"], 0)) + Environment.NewLine +
+                                "Salariul Mediu    " + Convert.ToInt32(General.Nz(dt.Rows[0]["SalMediu"], 0));
+                        }
+                        break;
+                }
+
+
                 if (cmbAng.Value == null)
                 {
                     pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipseste angajatul");

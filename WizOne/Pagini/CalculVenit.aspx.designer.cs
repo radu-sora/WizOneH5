@@ -94,157 +94,157 @@ namespace WizOne.Pagini {
         protected global::DevExpress.Web.ASPxComboBox cmbAng;
         
         /// <summary>
-        /// ASPxLabel1 control.
+        /// lblVenitCal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel1;
+        protected global::DevExpress.Web.ASPxLabel lblVenitCal;
         
         /// <summary>
-        /// ASPxSpinEdit1 control.
+        /// txtVenitCal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxSpinEdit ASPxSpinEdit1;
+        protected global::DevExpress.Web.ASPxSpinEdit txtVenitCal;
         
         /// <summary>
-        /// ASPxLabel2 control.
+        /// lblVenitRez control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel2;
+        protected global::DevExpress.Web.ASPxLabel lblVenitRez;
         
         /// <summary>
-        /// rezVenit control.
+        /// txtVenitRez control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox rezVenit;
+        protected global::DevExpress.Web.ASPxTextBox txtVenitRez;
         
         /// <summary>
-        /// ASPxLabel3 control.
+        /// lblCasPro control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel3;
+        protected global::DevExpress.Web.ASPxLabel lblCasPro;
         
         /// <summary>
-        /// ASPxSpinEdit2 control.
+        /// txtCasPro control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxSpinEdit ASPxSpinEdit2;
+        protected global::DevExpress.Web.ASPxSpinEdit txtCasPro;
         
         /// <summary>
-        /// ASPxLabel4 control.
+        /// lblCas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel4;
+        protected global::DevExpress.Web.ASPxLabel lblCas;
         
         /// <summary>
-        /// ASPxTextBox1 control.
+        /// txtCas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox ASPxTextBox1;
+        protected global::DevExpress.Web.ASPxTextBox txtCas;
         
         /// <summary>
-        /// ASPxLabel5 control.
+        /// lblCassPro control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel5;
+        protected global::DevExpress.Web.ASPxLabel lblCassPro;
         
         /// <summary>
-        /// ASPxSpinEdit3 control.
+        /// txtCassPro control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxSpinEdit ASPxSpinEdit3;
+        protected global::DevExpress.Web.ASPxSpinEdit txtCassPro;
         
         /// <summary>
-        /// ASPxLabel6 control.
+        /// lblCass control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel6;
+        protected global::DevExpress.Web.ASPxLabel lblCass;
         
         /// <summary>
-        /// ASPxTextBox2 control.
+        /// txtCass control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox ASPxTextBox2;
+        protected global::DevExpress.Web.ASPxTextBox txtCass;
         
         /// <summary>
-        /// ASPxLabel7 control.
+        /// lblImpProc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel7;
+        protected global::DevExpress.Web.ASPxLabel lblImpProc;
         
         /// <summary>
-        /// ASPxSpinEdit4 control.
+        /// txtImpPro control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxSpinEdit ASPxSpinEdit4;
+        protected global::DevExpress.Web.ASPxSpinEdit txtImpPro;
         
         /// <summary>
-        /// ASPxLabel8 control.
+        /// lblImp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel8;
+        protected global::DevExpress.Web.ASPxLabel lblImp;
         
         /// <summary>
-        /// ASPxTextBox3 control.
+        /// txtImp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox ASPxTextBox3;
+        protected global::DevExpress.Web.ASPxTextBox txtImp;
         
         /// <summary>
-        /// ASPxLabel9 control.
+        /// lblPer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel9;
+        protected global::DevExpress.Web.ASPxLabel lblPer;
         
         /// <summary>
         /// cmbPers control.
@@ -256,22 +256,22 @@ namespace WizOne.Pagini {
         protected global::DevExpress.Web.ASPxComboBox cmbPers;
         
         /// <summary>
-        /// ASPxLabel10 control.
+        /// lblDed control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel ASPxLabel10;
+        protected global::DevExpress.Web.ASPxLabel lblDed;
         
         /// <summary>
-        /// ASPxTextBox4 control.
+        /// txtDed control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox ASPxTextBox4;
+        protected global::DevExpress.Web.ASPxTextBox txtDed;
         
         /// <summary>
         /// lblAng control.

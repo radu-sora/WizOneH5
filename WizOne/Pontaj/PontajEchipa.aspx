@@ -259,7 +259,9 @@
                 args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
             UpdateSelectAllItemState2();
             UpdateText2();
-            pnlCtl.PerformCallback('cmbDept');
+            
+            if (cmbSec.GetValue() != null)
+                pnlCtl.PerformCallback('cmbDept');
         }
         function UpdateSelectAllItemState2() {
             IsAllSelected2() ? checkListBox2.SelectIndices([0]) : checkListBox2.UnselectIndices([0]);

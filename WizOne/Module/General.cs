@@ -9011,7 +9011,7 @@ namespace WizOne.Module
         }
 
 
-        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text)
+        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text, DataTable dt = null)
         {
             decimal tmpVB = 0;
             string rezultat = "";
@@ -9036,7 +9036,10 @@ namespace WizOne.Module
 
                 try
                 {
-                    DataTable dt = GetVariabileVB(f10003);
+                    //DataTable dt = GetVariabileVB(f10003);
+                    if (dt == null)
+                        dt = GetVariabileVB(f10003);
+
                     varCass = Convert.ToDecimal(General.Nz(dt.Rows[0]["CASS"],0));
                     //varSom = lst[1];    nu se mai foloseste
                     varCas = Convert.ToDecimal(General.Nz(dt.Rows[0]["CAS"], 0));

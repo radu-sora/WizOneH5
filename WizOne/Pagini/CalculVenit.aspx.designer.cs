@@ -274,75 +274,57 @@ namespace WizOne.Pagini {
         protected global::DevExpress.Web.ASPxTextBox txtDed;
         
         /// <summary>
-        /// lblAng control.
+        /// lblSalMediu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblAng;
+        protected global::DevExpress.Web.ASPxLabel lblSalMediu;
         
         /// <summary>
-        /// lblVenitBrut control.
+        /// txtSalMediu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblVenitBrut;
+        protected global::DevExpress.Web.ASPxSpinEdit txtSalMediu;
         
         /// <summary>
-        /// lblVenitNet control.
+        /// lblTipAng control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblVenitNet;
+        protected global::DevExpress.Web.ASPxLabel lblTipAng;
         
         /// <summary>
-        /// txtVenitBrut control.
+        /// txtTipAng control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxSpinEdit txtVenitBrut;
+        protected global::DevExpress.Web.ASPxSpinEdit txtTipAng;
         
         /// <summary>
-        /// txtVenitNet control.
+        /// lblScutit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxSpinEdit txtVenitNet;
+        protected global::DevExpress.Web.ASPxLabel lblScutit;
         
         /// <summary>
-        /// lblRez control.
+        /// chkScutit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblRez;
-        
-        /// <summary>
-        /// txtRez1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel txtRez1;
-        
-        /// <summary>
-        /// txtRez2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel txtRez2;
+        protected global::DevExpress.Web.ASPxCheckBox chkScutit;
     }
 }

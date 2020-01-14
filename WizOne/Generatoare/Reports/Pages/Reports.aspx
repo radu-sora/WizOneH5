@@ -22,7 +22,7 @@
         </tr>
     </table>
     <dx:ASPxGridView ID="ReportsGridView" ClientInstanceName="reportsGridView" runat="server" AutoGenerateColumns="False" Width="100%"
-        DataSourceID="ReportsDataSource" KeyFieldName="ReportId"
+        DataSourceID="ReportsDataSource" KeyFieldName="Id"
         OnDataBinding="ReportsGridView_DataBinding">
         <Settings ShowFilterRow="True" VerticalScrollBarMode="Auto" />
         <SettingsEditing Mode="Inline" />
@@ -36,28 +36,29 @@
             <Header Font-Bold="true" Wrap="True" />
         </Styles>
         <Columns>
-            <dx:GridViewCommandColumn ShowClearFilterButton="true" Caption=" " VisibleIndex="0" Width="50px" Name="butoaneGrid">
+            <dx:GridViewCommandColumn Caption=" " ShowClearFilterButton="true" Width="60px">
                 <CustomButtons>
                     <dx:GridViewCommandColumnCustomButton ID="ReportEditButton" Image-Url="~/Fisiere/Imagini/Icoane/edit.png" Image-ToolTip="Editare" Text=" " />
                     <dx:GridViewCommandColumnCustomButton ID="ReportDeleteButton" Image-Url="~/Fisiere/Imagini/Icoane/sterge.png" Image-ToolTip="Stergere" Text=" " />
                 </CustomButtons>
             </dx:GridViewCommandColumn>
-            <dx:GridViewDataTextColumn FieldName="Name" Caption="Denumire" VisibleIndex="1" Width="25%">
+            <dx:GridViewDataTextColumn FieldName="Name" Caption="Denumire" Width="25%">
                 <PropertiesTextEdit>
                     <ValidationSettings Display="Dynamic" ErrorDisplayMode="Text" ErrorTextPosition="Bottom" SetFocusOnError="true">
                         <RequiredField IsRequired="True" ErrorText="Denumirea este obligatorie" />
                     </ValidationSettings>
                 </PropertiesTextEdit>
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" VisibleIndex="2" />
-            <dx:GridViewDataComboBoxColumn FieldName="ReportTypeId" Caption="Tip raport" VisibleIndex="3" Width="150px">
+            <dx:GridViewDataTextColumn FieldName="Description" Caption="Descriere" />
+            <dx:GridViewDataComboBoxColumn FieldName="TypeId" Caption="Tip raport" Width="150px">
                 <PropertiesComboBox DataSourceID="ReportTypesDataSource" ValueField="ReportTypeId" TextField="Name">
                     <ValidationSettings Display="Dynamic" ErrorDisplayMode="Text" ErrorTextPosition="Bottom" SetFocusOnError="true">
                         <RequiredField IsRequired="True" ErrorText="Tipul raportului este obligatoriu" />
                     </ValidationSettings>
                 </PropertiesComboBox>
-            </dx:GridViewDataComboBoxColumn> 
-            <dx:GridViewDataTextColumn FieldName="ReportId" Visible="false" VisibleIndex="4" ShowInCustomizationForm="false" />
+            </dx:GridViewDataComboBoxColumn>
+            
+            <dx:GridViewDataTextColumn FieldName="Id" Visible="false" ShowInCustomizationForm="false" />
         </Columns>
         <ClientSideEvents
             CustomButtonClick="function(s, e) {
@@ -69,13 +70,9 @@
             }" />
     </dx:ASPxGridView>
                 
-    <ef:EntityDataSource ID="ReportsDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="Reports" Include="ReportGroupUsers"
-        EnableFlattening="False" EnableInsert="True" EnableUpdate="True" EnableDelete="True" 
-        Where="it.ReportTypeId != 5 && EXISTS(SELECT 1 FROM it.ReportGroupUsers AS u WHERE u.UserId = @UserId)">  
-        <WhereParameters>
-            <asp:SessionParameter Name="UserId" Type="Int32" SessionField="UserId" />
-        </WhereParameters>
-    </ef:EntityDataSource>
+    <asp:ObjectDataSource ID="ReportsDataSource" runat="server" TypeName="WizOne.Generatoare.Reports.Pages.Reports" DataObjectTypeName="WizOne.Generatoare.Reports.Pages.Reports+ReportViewModel"
+        SelectMethod="GetReports" InsertMethod="AddReport" UpdateMethod="SetReport" DeleteMethod="DelReport">        
+    </asp:ObjectDataSource>
     <ef:EntityDataSource ID="ReportTypesDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="ReportTypes"
         Where="it.ReportTypeId != 5">
     </ef:EntityDataSource>

@@ -18,7 +18,6 @@ namespace WizOne.Generatoare.Reports.Models
         public Report()
         {
             this.ReportUsers = new HashSet<ReportUser>();
-            this.ReportGroupUsers = new HashSet<ReportGroupUser>();
         }
     
         public int ReportId { get; set; }
@@ -34,7 +33,5 @@ namespace WizOne.Generatoare.Reports.Models
         public virtual ReportType ReportType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReportUser> ReportUsers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReportGroupUser> ReportGroupUsers { get; set; }
     }
 }

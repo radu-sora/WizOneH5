@@ -29,31 +29,31 @@ using WizOne.Generatoare.Reports.Models;
 
 namespace WizOne.Generatoare.Reports.Pages
 {
-    public partial class ReportDesign : Page
+    public partial class ReportDesign : ReportSessionPage
     {
         private int _reportId
         {
-            get { return Session["ReportId"] as int? ?? 0; }
+            get { return ReportSession.ReportId; }
         }
         private dynamic _reportParams
         {
-            get { return Session["ReportParams"]; }
-            set { Session["ReportParams"] = value; }
+            get { return ReportSession.DataCache.ReportParams; }
+            set { ReportSession.DataCache.ReportParams = value; }
         }
         private dynamic _chartOptions
         {
-            get { return Session["ChartOptions"]; }
-            set { Session["ChartOptions"] = value; }
+            get { return ReportSession.DataCache.ChartOptions; }
+            set { ReportSession.DataCache.ChartOptions = value; }
         }
         private string _gridTempLayout
         {
-            get { return Session["GridTempLayout"] as string; }
-            set { Session["GridTempLayout"] = value; }
+            get { return ReportSession.DataCache.GridTempLayout; }
+            set { ReportSession.DataCache.GridTempLayout = value; }
         }
         private XtraReport _report
         {
-            get { return Session["Report"] as XtraReport ?? (_report = new XtraReport()); }
-            set { Session["Report"] = value; }
+            get { return ReportSession.DataCache.Report; }
+            set { ReportSession.DataCache.Report = value; }
         }
         private XRPivotGrid _pivotGrid
         {
@@ -68,7 +68,11 @@ namespace WizOne.Generatoare.Reports.Pages
             get { return _report.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRRichText>().FirstOrDefault(); }
         }
 
-        protected short ReportType { get; set; }
+        // For client side customization
+        protected short ReportType
+        {
+            get; private set;
+        }
 
         private void LoadASPxPivotGridLayoutFromXRPivotGrid(ASPxPivotGrid aspxPivotGrid, XRPivotGrid xrPivotGrid)
         {
@@ -330,12 +334,6 @@ namespace WizOne.Generatoare.Reports.Pages
             {
                 if (!IsPostBack || ReportDesignerCallbackPanel.IsCallback)
                 {
-                    // Reset session data                                        
-                    Session.Remove("ReportParams");
-                    Session.Remove("ChartOptions");
-                    Session.Remove("GridTempLayout");
-                    Session.Remove("Report");
-
                     // Load data
                     if (_reportId == 0)
                         throw new Exception("No report id found");
@@ -509,9 +507,10 @@ namespace WizOne.Generatoare.Reports.Pages
 
                     entities.SaveChanges();
 
-                    // Init controls                   
-                    ReportType = report.ReportTypeId; // For client side customization
+                    // For client side customization
+                    ReportType = report.ReportTypeId;
 
+                    // Init controls
                     if (report.ReportTypeId == 3) // Cube
                     {
                         var pivotGrid = xtraReport.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRPivotGrid>().FirstOrDefault();
@@ -830,10 +829,11 @@ namespace WizOne.Generatoare.Reports.Pages
             }
             catch (Exception ex)
             {
-                // Log & redirect to error page
-                // For now, redirect to main page only
-                if (!IsCallback)
+                // Log error here
+                if (!IsPostBack) // Close the page
                     Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");
+                else // Or, page loaded, show the error
+                    throw;
             }
         }        
 
@@ -860,7 +860,7 @@ namespace WizOne.Generatoare.Reports.Pages
             }
             catch (Exception ex)
             {
-                // Log error
+                // Log error here
                 // For now, mark as unloaded only
             }
         }

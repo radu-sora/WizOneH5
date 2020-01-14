@@ -91,7 +91,7 @@ namespace WizOne.Generatoare.Reports.Pages {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource ReportsDataSource;
+        protected global::System.Web.UI.WebControls.ObjectDataSource ReportsDataSource;
         
         /// <summary>
         /// ReportTypesDataSource control.

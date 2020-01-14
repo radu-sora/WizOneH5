@@ -14,7 +14,7 @@
     <RootNamespace>WizOne</RootNamespace>
     <AssemblyName>WizOne</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -40,6 +40,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Charts.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
@@ -903,10 +905,6 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="DefaultTactil.aspx" />
     <Content Include="Tactil\PontajDetaliatTactil.aspx" />
-    <Content Include="WebForm1.aspx" />
-    <Content Include="WebForm2.aspx" />
-    <Content Include="WebForm3.aspx" />
-    <Content Include="WebForm4.aspx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -937,6 +935,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ReportsOraModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="Generatoare\Reports\Pages\Print.ashx" />
     <None Include="NuGet.config" />
     <None Include="Properties\PublishProfiles\Publicat.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -1433,13 +1432,15 @@
       <DependentUpon>ValoriLinii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Code\DictionaryExtensions.cs" />
+    <Compile Include="Generatoare\Reports\Code\ReportSessionModule.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportConnectionProviderService.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportDataSourceWizardConnectionStringsProvider.cs" />
     <Compile Include="Generatoare\Reports\Code\EntityReportStorageWebExtension.cs" />
-    <Compile Include="Generatoare\Reports\Models\Report.cs">
-      <DependentUpon>ReportsModel.tt</DependentUpon>
+    <Compile Include="Generatoare\Reports\Code\ReportProxy.cs" />
+    <Compile Include="Generatoare\Reports\Code\ReportSessionPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Generatoare\Reports\Models\ReportGroupUser.cs">
+    <Compile Include="Generatoare\Reports\Models\Report.cs">
       <DependentUpon>ReportsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Models\ReportsModel.Context.cs">
@@ -1470,6 +1471,9 @@
     </Compile>
     <Compile Include="Generatoare\Reports\Pages\Download.ashx.cs">
       <DependentUpon>Download.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\Print.ashx.cs">
+      <DependentUpon>Print.ashx</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Pages\ReportDesign.aspx.cs">
       <DependentUpon>ReportDesign.aspx</DependentUpon>
@@ -2332,34 +2336,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm2.aspx.cs">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm2.aspx.designer.cs">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm3.aspx.cs">
-      <DependentUpon>WebForm3.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm3.aspx.designer.cs">
-      <DependentUpon>WebForm3.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm4.aspx.cs">
-      <DependentUpon>WebForm4.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm4.aspx.designer.cs">
-      <DependentUpon>WebForm4.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WebService\Detalii.aspx.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2554,7 +2530,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63427</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

@@ -351,6 +351,15 @@
         var customLayoutChanged;
 
         // Main functions
+        $(window).on('beforeunload', function () {
+            $.ajax({
+                type: 'POST',
+                data: { close: true },
+                async: false
+            });
+            return;
+        });
+
         function onReportDesignerInit() {
             var designerModel = reportDesigner.designerModel;
             var previewModel = designerModel.reportPreviewModel;

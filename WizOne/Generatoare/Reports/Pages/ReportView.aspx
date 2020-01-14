@@ -215,10 +215,9 @@
                 <dx:ASPxGridViewExporter ID="CustomTableGridViewExporter" runat="server" GridViewID="CustomTableGridView"
                     TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0">                                
                 </dx:ASPxGridViewExporter>
-
             </td>            
         </tr>
-    </table>        
+    </table>
    
     <script type="text/html" id="dx-date-simple">
         <div data-bind="dxDateBox: { value: value.extend({ throttle: 500 }), closeOnValueChange: true, type: 'date', disabled: disabled }, dxValidator: { validationRules: validationRules || [] }"></div>
@@ -233,6 +232,15 @@
         var paramsSelectedValues = {};
 
         // Main functions       
+        $(window).on('beforeunload', function () {
+            $.ajax({
+                type: 'POST',
+                data: { close: true },
+                async: false
+            });
+            return;
+        });
+
         function onControlsInitialized(s, e) {
             // Validate document ready
             if (e.isCallback) {
@@ -252,7 +260,7 @@
                 }
 
                 showCustomLayoutSection(true);
-            }
+            }            
         }
 
         function onDocumentViewerInit() {
@@ -397,7 +405,7 @@
             showCustomLayoutSection(true);
         }
 
-        function onExitButtonClick() {
+        function onExitButtonClick() {   
             window.history.back();
         }
 

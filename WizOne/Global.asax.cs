@@ -1,6 +1,4 @@
-﻿using DevExpress.XtraReports.Web.Extensions;
-using DevExpress.XtraReports.Web.ReportDesigner;
-using Microsoft.AspNet.FriendlyUrls;
+﻿using Microsoft.AspNet.FriendlyUrls;
 using System;
 using System.Configuration;
 using System.IO;
@@ -13,6 +11,10 @@ namespace WizOne
 {
     public class Global : System.Web.HttpApplication
     {
+        static Global()
+        {           
+            ReportProxy.Register("Generatoare");
+        }       
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -21,13 +23,7 @@ namespace WizOne
                 RouteTable.Routes.EnableFriendlyUrls(new FriendlyUrlSettings()
                 {
                     AutoRedirectMode = RedirectMode.Permanent
-                });
-
-                DefaultReportDesignerContainer.RegisterDataSourceWizardConnectionStringsProvider<ReportDataSourceWizardConnectionStringsProvider>(true);
-                DefaultReportDesignerContainer.EnableCustomSql();                
-                ReportStorageWebExtension.RegisterExtensionGlobal(new EntityReportStorageWebExtension());
-
-                //HttpContext.Current.Session["formatDataSistem"] = CultureInfo.CurrentCulture.ToString();
+                });                                               
 
                 Dami.CnnWeb();
 

@@ -35,6 +35,5 @@ namespace WizOne.Generatoare.Reports.Models
         public virtual DbSet<Report> Reports { get; set; }
         public virtual DbSet<ReportUser> ReportsUsers { get; set; }
         public virtual DbSet<ReportType> ReportTypes { get; set; }
-        public virtual DbSet<ReportGroupUser> ReportsGroupUsers { get; set; }
     }
 }

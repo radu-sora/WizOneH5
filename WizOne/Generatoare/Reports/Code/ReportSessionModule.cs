@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace WizOne.Generatoare.Reports.Code
+namespace Wizrom.Reports.Code
 {
     public class ReportSessionModule : IHttpModule
     {

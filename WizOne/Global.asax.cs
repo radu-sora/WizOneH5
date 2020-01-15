@@ -4,17 +4,25 @@ using System.Configuration;
 using System.IO;
 using System.Web;
 using System.Web.Routing;
-using WizOne.Generatoare.Reports.Code;
 using WizOne.Module;
+using Wizrom.Reports.Code;
 
 namespace WizOne
 {
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
         static Global()
-        {           
-            ReportProxy.Register("Generatoare");
-        }       
+        {
+            try
+            {
+                Dami.InitCnn();
+                ReportProxy.Register("Generatoare", Constante.cnnWeb, Constante.cnnRap);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Global.asax");
+            }
+        }
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -23,9 +31,7 @@ namespace WizOne
                 RouteTable.Routes.EnableFriendlyUrls(new FriendlyUrlSettings()
                 {
                     AutoRedirectMode = RedirectMode.Permanent
-                });                                               
-
-                Dami.CnnWeb();
+                });                                                               
 
                 string str = Constante.cnnWeb;
                 if (str.ToUpper().IndexOf("INITIAL CATALOG") >=0)
@@ -64,8 +70,7 @@ namespace WizOne
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, "Global.asax");
-            }
-            
+            }            
         }
 
         protected void Session_Start(object sender, EventArgs e)

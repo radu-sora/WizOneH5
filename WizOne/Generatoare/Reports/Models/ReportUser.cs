@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Generatoare.Reports.Models
+namespace Wizrom.Reports.Models
 {
     using System;
     using System.Collections.Generic;

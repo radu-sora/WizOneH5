@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.UI;
 
-namespace WizOne.Generatoare.Reports.Code
+namespace Wizrom.Reports.Code
 {
     public class ReportSessionPage : Page
     {

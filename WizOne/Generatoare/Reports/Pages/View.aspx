@@ -1,4 +1,4 @@
-﻿<%@ Page Title="View Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="ReportView.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.ReportView" %>
+﻿<%@ Page Title="View Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="View.aspx.cs" Inherits="Wizrom.Reports.Pages.View" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- Modal dialogs -->
@@ -46,7 +46,7 @@
                                         onChangeLayout();
                                     }" />                        
                             </dx:ASPxComboBox>
-                            <ef:EntityDataSource ID="ReportsUsersDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="ReportsUsers"
+                            <ef:EntityDataSource ID="ReportsUsersDataSource" runat="server" ContextTypeName="Wizrom.Reports.Models.ReportsEntities" EntitySetName="ReportsUsers"
                                 Where="it.ReportId = @ReportId AND it.RegUserId = @RegUserId" OrderBy="it.Name">
                                 <WhereParameters>
                                     <asp:Parameter Name="ReportId" Type="Int32" />    

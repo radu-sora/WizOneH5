@@ -2,7 +2,7 @@
 using System.IO;
 using System.Web;
 
-namespace WizOne.Generatoare.Reports.Pages
+namespace Wizrom.Reports.Pages
 {
     /// <summary>
     /// File download http handler

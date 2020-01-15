@@ -1,14 +1,16 @@
 ﻿using DevExpress.Web;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web.UI;
-using WizOne.Generatoare.Reports.Code;
 using WizOne.Module;
+using Wizrom.Reports.Code;
 
-namespace WizOne.Generatoare.Reports.Pages
+namespace Wizrom.Reports.Pages
 {
-    public partial class Reports : Page
+    public partial class Manage : Page
     {
         public class ReportViewModel
         {
@@ -101,15 +103,23 @@ namespace WizOne.Generatoare.Reports.Pages
 
             if (selectedValues.Count > 0)
             {
-                var reportSettings = General.RunSqlSingle<ReportSettingsViewModel>(
-                    "SELECT [ExtensiiPermise] AS [ExportOptions], [MeniuRestrans] AS [ToolbarType] " +
-                    "FROM [RapoarteGrupuriUtilizatori] " +
-                    "WHERE [IdRaport] = @1 AND [IdUser] = @2", selectedValues[0], Session["UserId"]);
+                try
+                {
+                    var reportSettings = General.RunSqlSingle<ReportSettingsViewModel>(
+                        "SELECT [ExtensiiPermise] AS [ExportOptions], [MeniuRestrans] AS [ToolbarType] " +
+                        "FROM [RapoarteGrupuriUtilizatori] " +
+                        "WHERE [IdRaport] = @1 AND [IdUser] = @2", selectedValues[0], Session["UserId"]);
 
-                if (reportSettings != null)
-                    ReportProxy.View((int)selectedValues[0], reportSettings.ToolbarType, reportSettings.ExportOptions);
-                else
-                    ReportProxy.View((int)selectedValues[0]);
+                    if (reportSettings != null)
+                        ReportProxy.View((int)selectedValues[0], reportSettings.ToolbarType, reportSettings.ExportOptions);
+                    else
+                        ReportProxy.View((int)selectedValues[0]);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                }
             }            
         }
 
@@ -118,7 +128,17 @@ namespace WizOne.Generatoare.Reports.Pages
             var selectedValues = ReportsGridView.GetSelectedFieldValues(new string[] { "Id" });
 
             if (selectedValues.Count > 0)
-                ReportProxy.Design((int)selectedValues[0]);
+            {
+                try
+                {
+                    ReportProxy.Design((int)selectedValues[0]);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                }
+            }
         }     
     }
 }

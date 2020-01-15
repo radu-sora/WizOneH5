@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web;
 using System.Web.SessionState;
-using WizOne.Generatoare.Reports.Code;
+using Wizrom.Reports.Code;
 
-namespace WizOne.Generatoare.Reports.Pages
+namespace Wizrom.Reports.Pages
 {
     /// <summary>
     /// Report print http handler

@@ -20,6 +20,7 @@ namespace WizOne.Module
         public static int idClient = 1;
 
         public static string cnnWeb = "";
+        public static string cnnRap = "";
         public static string BD = "";
 
         public static string DefaultTheme = "SoftOrange";

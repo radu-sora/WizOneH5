@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Manage Reports" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Reports.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.Reports" %>
+﻿<%@ Page Title="Manage Reports" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Manage.aspx.cs" Inherits="Wizrom.Reports.Pages.Manage" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">   
     <!-- Modal dialogs -->    
@@ -70,10 +70,10 @@
             }" />
     </dx:ASPxGridView>
                 
-    <asp:ObjectDataSource ID="ReportsDataSource" runat="server" TypeName="WizOne.Generatoare.Reports.Pages.Reports" DataObjectTypeName="WizOne.Generatoare.Reports.Pages.Reports+ReportViewModel"
+    <asp:ObjectDataSource ID="ReportsDataSource" runat="server" TypeName="Wizrom.Reports.Pages.Manage" DataObjectTypeName="Wizrom.Reports.Pages.Manage+ReportViewModel"
         SelectMethod="GetReports" InsertMethod="AddReport" UpdateMethod="SetReport" DeleteMethod="DelReport">        
     </asp:ObjectDataSource>
-    <ef:EntityDataSource ID="ReportTypesDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="ReportTypes"
+    <ef:EntityDataSource ID="ReportTypesDataSource" runat="server" ContextTypeName="Wizrom.Reports.Models.ReportsEntities" EntitySetName="ReportTypes"
         Where="it.ReportTypeId != 5">
     </ef:EntityDataSource>
            

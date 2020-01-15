@@ -1,1 +1,1 @@
-﻿<%@ WebHandler Language="C#" CodeBehind="Print.ashx.cs" Class="WizOne.Generatoare.Reports.Pages.Print" %>
+﻿<%@ WebHandler Language="C#" CodeBehind="Print.ashx.cs" Class="Wizrom.Reports.Pages.Print" %>

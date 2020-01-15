@@ -24,12 +24,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using WizOne.Generatoare.Reports.Code;
-using WizOne.Generatoare.Reports.Models;
+using Wizrom.Reports.Code;
+using Wizrom.Reports.Models;
 
-namespace WizOne.Generatoare.Reports.Pages
+namespace Wizrom.Reports.Pages
 {
-    public partial class ReportView : ReportSessionPage
+    public partial class View : ReportSessionPage
     {
         private int _reportId
         {

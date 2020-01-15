@@ -3,10 +3,10 @@ using DevExpress.XtraReports.Web.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WizOne.Generatoare.Reports.Models;
-using WizOne.Generatoare.Reports.Pages;
+using Wizrom.Reports.Models;
+using Wizrom.Reports.Pages;
 
-namespace WizOne.Generatoare.Reports.Code
+namespace Wizrom.Reports.Code
 {
     public class EntityReportStorageWebExtension : ReportStorageWebExtension
     {
@@ -77,7 +77,7 @@ namespace WizOne.Generatoare.Reports.Code
             entities.SaveChanges();
 
             // Update internal data
-            xtraReport.Name = ReportDesign.GetReportName(defaultUrl);
+            xtraReport.Name = Design.GetReportName(defaultUrl);
             xtraReport.DisplayName = defaultUrl;
             xtraReport.Tag = report.ReportId;
 

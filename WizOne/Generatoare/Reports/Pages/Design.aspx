@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Design Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="ReportDesign.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.ReportDesign" %>
+﻿<%@ Page Title="Design Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="Design.aspx.cs" Inherits="Wizrom.Reports.Pages.Design" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- Modal dialogs -->

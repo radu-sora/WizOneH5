@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Generatoare.Reports.Pages {
+namespace Wizrom.Reports.Pages {
     
     
-    public partial class ReportDesign {
+    public partial class Design {
         
         /// <summary>
         /// ChartTypeComboBox control.

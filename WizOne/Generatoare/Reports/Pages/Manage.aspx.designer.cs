@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Generatoare.Reports.Pages {
+namespace Wizrom.Reports.Pages {
     
     
-    public partial class Reports {
+    public partial class Manage {
         
         /// <summary>
         /// TitleLabel control.

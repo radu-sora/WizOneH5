@@ -23,13 +23,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web.UI;
-using WizOne.Generatoare.Reports.Code;
-using WizOne.Generatoare.Reports.Models;
+using Wizrom.Reports.Code;
+using Wizrom.Reports.Models;
 
-namespace WizOne.Generatoare.Reports.Pages
+namespace Wizrom.Reports.Pages
 {
-    public partial class ReportDesign : ReportSessionPage
+    public partial class Design : ReportSessionPage
     {
         private int _reportId
         {
@@ -789,7 +788,17 @@ namespace WizOne.Generatoare.Reports.Pages
                         }
 
                         // Load layout from XRRichText if available or set data source
-                        if (commandName == "init" || commandName == "load")
+                        if (commandName == "init")
+                        {
+                            if (_report.Parameters.Count == 0)
+                                _report.FillDataSource();
+
+                            CustomTableGridView.DataSource = _report.DataSource;
+                            CustomTableGridView.DataMember = _report.DataMember;
+
+                            LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag);
+                        }
+                        else if (commandName == "load")
                         {
                             // Set UI params & load data
                             if (_report.Parameters.Count > 0)
@@ -814,8 +823,8 @@ namespace WizOne.Generatoare.Reports.Pages
                             CustomTableGridView.DataSource = _report.DataSource;
                             CustomTableGridView.DataMember = _report.DataMember;
                             CustomTableGridView.DataBind();
-
-                            LoadASPxGridViewLayout(CustomTableGridView, commandName == "init" ? _richText.Tag : _gridTempLayout);
+                            
+                            CustomTableGridView.LoadClientLayout(_gridTempLayout);
                         }
                         else // For save and all native callbacks
                         {

@@ -775,15 +775,17 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ReportsModel.edmx</DependentUpon>
       <LastGenOutput>ReportsModel.Context.cs</LastGenOutput>
+      <CustomToolNamespace>Wizrom.Reports.Models</CustomToolNamespace>
     </Content>
     <Content Include="Generatoare\Reports\Models\ReportsModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ReportsModel.edmx</DependentUpon>
       <LastGenOutput>ReportsModel.cs</LastGenOutput>
+      <CustomToolNamespace>Wizrom.Reports.Models</CustomToolNamespace>
     </Content>
-    <Content Include="Generatoare\Reports\Pages\ReportDesign.aspx" />
-    <Content Include="Generatoare\Reports\Pages\Reports.aspx" />
-    <Content Include="Generatoare\Reports\Pages\ReportView.aspx" />
+    <Content Include="Generatoare\Reports\Pages\Design.aspx" />
+    <Content Include="Generatoare\Reports\Pages\Manage.aspx" />
+    <Content Include="Generatoare\Reports\Pages\View.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
     <Content Include="Organigrama\Lista.aspx" />
@@ -1432,6 +1434,7 @@
       <DependentUpon>ValoriLinii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Code\DictionaryExtensions.cs" />
+    <Compile Include="Generatoare\Reports\Code\ReportsDbContext.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportSessionModule.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportConnectionProviderService.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportDataSourceWizardConnectionStringsProvider.cs" />
@@ -1475,26 +1478,26 @@
     <Compile Include="Generatoare\Reports\Pages\Print.ashx.cs">
       <DependentUpon>Print.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\ReportDesign.aspx.cs">
-      <DependentUpon>ReportDesign.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\Design.aspx.cs">
+      <DependentUpon>Design.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\ReportDesign.aspx.designer.cs">
-      <DependentUpon>ReportDesign.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\Design.aspx.designer.cs">
+      <DependentUpon>Design.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\Reports.aspx.cs">
-      <DependentUpon>Reports.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\Manage.aspx.cs">
+      <DependentUpon>Manage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\Reports.aspx.designer.cs">
-      <DependentUpon>Reports.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\Manage.aspx.designer.cs">
+      <DependentUpon>Manage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\ReportView.aspx.cs">
-      <DependentUpon>ReportView.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\View.aspx.cs">
+      <DependentUpon>View.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\ReportView.aspx.designer.cs">
-      <DependentUpon>ReportView.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\View.aspx.designer.cs">
+      <DependentUpon>View.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

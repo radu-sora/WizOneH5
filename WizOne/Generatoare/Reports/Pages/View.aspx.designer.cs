@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Generatoare.Reports.Pages {
+namespace Wizrom.Reports.Pages {
     
     
-    public partial class ReportView {
+    public partial class View {
         
         /// <summary>
         /// WebDocumentViewerCallbackPanel control.

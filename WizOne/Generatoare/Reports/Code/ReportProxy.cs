@@ -11,9 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using WizOne.Generatoare.Reports.Models;
+using Wizrom.Reports.Models;
 
-namespace WizOne.Generatoare.Reports.Code
+namespace Wizrom.Reports.Code
 {
     public class ReportProxy
     {
@@ -66,23 +66,31 @@ namespace WizOne.Generatoare.Reports.Code
             }
         }
 
-        private static readonly string[] SESSION_PAGE_NAMES = new string[] { "Reports/Pages/ReportView", "Reports/Pages/ReportDesign", "Reports/Pages/Print.ashx" };
+        private static readonly string[] SESSION_PAGE_NAMES = new string[] { "Reports/Pages/View", "Reports/Pages/Design", "Reports/Pages/Print.ashx" };
 
-        private static string _reportsUrl;
+        private static string _pagesPath;
         
-        public static void Register(string reportsUrl)
+        public static void Register(string reportsPath, string appConnectionString, string srcConnectionString)
         {            
-            if (string.IsNullOrEmpty(reportsUrl))
-                throw new ArgumentException("Invalid reports URL value");            
+            if (string.IsNullOrEmpty(reportsPath))
+                throw new ArgumentException("Invalid reports path value");
+
+            if (string.IsNullOrEmpty(appConnectionString))
+                throw new ArgumentException("Invalid app connection string value");
+
+            if (string.IsNullOrEmpty(srcConnectionString))
+                throw new ArgumentException("Invalid src connection string value");
 
             // DX
             DefaultReportDesignerContainer.RegisterDataSourceWizardConnectionStringsProvider<ReportDataSourceWizardConnectionStringsProvider>(true);
-            DefaultReportDesignerContainer.EnableCustomSql();
+            DefaultReportDesignerContainer. EnableCustomSql();
             ReportStorageWebExtension.RegisterExtensionGlobal(new EntityReportStorageWebExtension());
             // Reports
             DynamicModuleUtility.RegisterModule(typeof(ReportSessionModule));
+            ReportsDbContext.RegisterGlobalConnectionString(reportsPath, appConnectionString);
+            ReportDataSourceWizardConnectionStringsProvider.RegisterGlobalConnectionString(srcConnectionString);
             // If none throws an exception then ...
-            _reportsUrl = $"/{reportsUrl.Trim(new char[] { ' ', '/', '\\' })}/Reports/Pages/";
+            _pagesPath = $"/{reportsPath.Trim(new char[] { ' ', '/', '\\' })}/Reports/Pages/";
         }
 
         private static string GetUrl(int reportId, string userId, short toolbarType, string exportOptions, object paramList, bool oncePerGroup)
@@ -115,7 +123,7 @@ namespace WizOne.Generatoare.Reports.Code
 
             HttpContext.Current.Session["ReportsSessionsGroups"] = reportsSessionsGroups;
 
-            return $"{_reportsUrl}ReportView?id={id}";
+            return $"{_pagesPath}View?id={id}";
         }
         private static string GetUrl(int reportId, object paramList, bool oncePerGroup)
         {            
@@ -141,7 +149,7 @@ namespace WizOne.Generatoare.Reports.Code
 
             HttpContext.Current.Session["ReportsSessionsGroups"] = reportsSessionsGroups;
 
-            return $"{_reportsUrl}Print.ashx?id={id}";
+            return $"{_pagesPath}Print.ashx?id={id}";
         }
         private static string GetUrl(int reportId, bool oncePerGroup)
         {
@@ -166,7 +174,7 @@ namespace WizOne.Generatoare.Reports.Code
 
             HttpContext.Current.Session["ReportsSessionsGroups"] = reportsSessionsGroups;
 
-            return $"{_reportsUrl}ReportDesign?id={id}";
+            return $"{_pagesPath}Design?id={id}";
         }
 
         public static string GetViewUrl(int reportId, string userId, short toolbarType = 0, string exportOptions = "*", object paramList = null)

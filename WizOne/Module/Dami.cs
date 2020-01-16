@@ -1936,12 +1936,12 @@ namespace WizOne.Module
             try
             {
                 List<metaGeneral> list = new List<metaGeneral>();
-                list.Add(new metaGeneral() { Id = 1, Denumire = "Toti" });
-                list.Add(new metaGeneral() { Id = 2, Denumire = "Activi" });
-                list.Add(new metaGeneral() { Id = 3, Denumire = "Plecati" });
-                list.Add(new metaGeneral() { Id = 4, Denumire = "In avans" });
+                list.Add(new metaGeneral() { Id = 1, Denumire = Dami.TraduCuvant("Toti") });
+                list.Add(new metaGeneral() { Id = 2, Denumire = Dami.TraduCuvant("Activi") });
+                list.Add(new metaGeneral() { Id = 3, Denumire = Dami.TraduCuvant("Plecati") });
+                list.Add(new metaGeneral() { Id = 4, Denumire = Dami.TraduCuvant("In avans") });
                 //5 - acest id este ocupat in srvPersonal
-                list.Add(new metaGeneral() { Id = 6, Denumire = "Candidat" });
+                list.Add(new metaGeneral() { Id = 6, Denumire = Dami.TraduCuvant("Candidat") });
 
                 return list;
             }

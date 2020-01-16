@@ -417,6 +417,15 @@ namespace WizOne.Personal
                     return;
                 }
 
+                //Radu 15.01.2020
+                string sqlAng = "SELECT " + ds.Tables[1].Rows[0]["F10003"] + " AS F10003, '" + ds.Tables[1].Rows[0]["F100901"] + "' AS F100901 ";     //se pot completa in viitor si alte campuri de interes
+                string msg = Notif.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Validare, sqlAng + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                if (msg != "" && msg.Substring(0, 1) == "2")
+                {
+                    MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
+                    return;
+                }
+
 
                 //Florin 2018-10-30
                 //calculam CO daca se insereaza un angajat
@@ -635,6 +644,17 @@ namespace WizOne.Personal
 
                 //Florin 2019.09.23
                 GolireVariabile();
+
+                //Radu 15.01.2020
+                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                int marca = Convert.ToInt32(Session["Marca"] ?? -99);
+                int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+                int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
+
+                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                {
+                    NotifAsync.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM F100 Z WHERE F10003=" + marca.ToString(), "F100", marca, idUser, marcaUser, arrParam);
+                });
 
                 //Florin 2018.11.22
                 //trimitem la lista de angajati        

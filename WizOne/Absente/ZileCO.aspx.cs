@@ -31,8 +31,14 @@ namespace WizOne.Absente
                 btnNew.Text = Dami.TraduCuvant("btnNew", "Nou");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("btnUpdate", "Actualizeaza");
                 grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("btnCancel", "Renunta");
+
+                lblAn.InnerText = Dami.TraduCuvant("Anul");
+                lblAng.InnerText = Dami.TraduCuvant("Angajat");
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 #endregion
 

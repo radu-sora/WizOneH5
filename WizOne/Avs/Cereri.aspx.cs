@@ -3478,6 +3478,7 @@ namespace WizOne.Avs
                 DataTable dtF1001 = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + f10003.ToString(), null);
 
                 string data1 = "";
+                string dataInceput = "";
                 if (Constante.tipBD == 1)
                 {
                     data = "CONVERT(DATETIME, '" + dtModif.Day.ToString().PadLeft(2, '0') + "/" + dtModif.Month.ToString().PadLeft(2, '0') + "/" + dtModif.Year.ToString() + "', 103)";
@@ -3497,6 +3498,7 @@ namespace WizOne.Avs
                     data14 = "CONVERT(DATETIME, '" + dtIncDet.Day.ToString().PadLeft(2, '0') + "/" + dtIncDet.Month.ToString().PadLeft(2, '0') + "/" + dtIncDet.Year.ToString() + "', 103)";
                     data15 = "CONVERT(DATETIME, '" + dtSfEstDet.Day.ToString().PadLeft(2, '0') + "/" + dtSfEstDet.Month.ToString().PadLeft(2, '0') + "/" + dtSfEstDet.Year.ToString() + "', 103)";
                     data16 = "CONVERT(DATETIME, '" + dtSfDet.Day.ToString().PadLeft(2, '0') + "/" + dtSfDet.Month.ToString().PadLeft(2, '0') + "/" + dtSfDet.Year.ToString() + "', 103)";
+                    dataInceput = "CONVERT(DATETIME, '" + Convert.ToDateTime(de1Nou.Value ?? "01/01/2100").Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value ?? "01/01/2100").Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value ?? "01/01/2100").Year.ToString() + "', 103)";
                 }
                 else
                 {
@@ -3517,6 +3519,7 @@ namespace WizOne.Avs
                     data14 = "TO_DATE('" + dtIncDet.Day.ToString().PadLeft(2, '0') + "/" + dtIncDet.Month.ToString().PadLeft(2, '0') + "/" + dtIncDet.Year.ToString() + "', 'dd/mm/yyyy')";
                     data15 = "TO_DATE('" + dtSfEstDet.Day.ToString().PadLeft(2, '0') + "/" + dtSfEstDet.Month.ToString().PadLeft(2, '0') + "/" + dtSfEstDet.Year.ToString() + "', 'dd/mm/yyyy')";
                     data16 = "TO_DATE('" + dtSfDet.Day.ToString().PadLeft(2, '0') + "/" + dtSfDet.Month.ToString().PadLeft(2, '0') + "/" + dtSfDet.Year.ToString() + "', 'dd/mm/yyyy')";
+                    dataInceput = "TO_DATE('" + Convert.ToDateTime(de1Nou.Value ?? "01/01/2100").Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value ?? "01/01/2100").Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value ?? "01/01/2100").Year.ToString() + "', 'dd/mm/yyyy')";
                 }
                 int act = 0;
                 string sql = "", sql100 = "", sql1001 = "";
@@ -4009,7 +4012,7 @@ namespace WizOne.Avs
                     case (int)Constante.Atribute.RevenireSuspendare:
                         sql100 = "UPDATE F100 SET F100924 = " + data13 + (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10077 = " + data13 : "") + " WHERE F10003 = " + f10003.ToString();
                         sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();                      
-                        sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data1;
+                        sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + dataInceput;
                         General.IncarcaDT(sql111, null);
                         break;
                     case (int)Constante.Atribute.Detasare:
@@ -4024,7 +4027,7 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.RevenireDetasare:
                         sql100 = "UPDATE F100 SET F100917 = " + data13 + " WHERE F10003 = " + f10003.ToString();
-                        sql112 = "UPDATE F112 SET F11209 = " + data16 + " WHERE F11203 = " + f10003 + " AND F11207 = " + data14;
+                        sql112 = "UPDATE F112 SET F11209 = " + data16 + " WHERE F11203 = " + f10003 + " AND F11207 = " + dataInceput;
                         General.IncarcaDT(sql112, null);
                         break;
                     default:

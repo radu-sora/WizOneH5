@@ -32,8 +32,7 @@ namespace Wizrom.Reports.Pages
             var reports = General.RunSqlQuery<ReportViewModel>(
                 "SELECT [DynReportId] AS [Id], [Name], [Description], [DynReportTypeId] AS [TypeId], [HasPassword] AS Restricted " +
                 "FROM [DynReports] " +
-                "WHERE [DynReportTypeId] <> 5 " +
-                "AND [DynReportId] IN (SELECT [IdRaport] FROM [RapoarteGrupuriUtilizatori] WHERE [IdUser] = @1)", Session["UserId"]);
+                "WHERE [DynReportId] IN (SELECT [IdRaport] FROM [RapoarteGrupuriUtilizatori] WHERE [IdUser] = @1)", Session["UserId"]);
 
             return reports;
         }

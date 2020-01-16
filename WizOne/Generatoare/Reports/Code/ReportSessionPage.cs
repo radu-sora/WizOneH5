@@ -7,7 +7,10 @@ namespace Wizrom.Reports.Code
     {
         private bool _close;
 
-        protected dynamic ReportSession { get; private set; }
+        protected dynamic ReportSession
+        {
+            get; private set;
+        }
 
         protected override void OnInit(EventArgs e)
         {

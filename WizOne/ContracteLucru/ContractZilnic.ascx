@@ -442,7 +442,7 @@
                 <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Nume"  Width="200px" />                
                 <dx:GridViewDataComboBoxColumn FieldName="IdProgram" Name="IdProgram" Caption="Program" Width="140px">
                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" >
-                        <Columns>
+                        <Columns>                         
                             <dx:ListBoxColumn FieldName="Denumire" />
                             <dx:ListBoxColumn FieldName="OraIntrare1" Caption="Ora inceput" />
                             <dx:ListBoxColumn FieldName="OraIesire1" Caption="Ora Sfarsit" />

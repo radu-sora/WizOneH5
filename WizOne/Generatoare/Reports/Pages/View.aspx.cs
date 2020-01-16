@@ -72,6 +72,10 @@ namespace Wizrom.Reports.Pages
         }
 
         // For client side customization
+        protected string ReportName
+        {
+            get; private set;
+        }
         protected short ReportType
         {
             get; private set;
@@ -471,6 +475,7 @@ namespace Wizrom.Reports.Pages
                     }
 
                     // For client side customization
+                    ReportName = report.Name;
                     ReportType = report.ReportTypeId;
 
                     // Init controls

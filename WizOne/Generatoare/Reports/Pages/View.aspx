@@ -116,6 +116,9 @@
                                 <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                             </button>                            
                         </td>
+                        <td>
+                            <label><%: ReportName %></label>
+                        </td>
                     </tr>
                 </table>
 

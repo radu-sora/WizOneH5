@@ -2211,10 +2211,16 @@ namespace WizOne.Eval
                     clsNew.IdPeriod = lstEval_QuizIntrebari.Where(p => p.Id == clsNew.IdLinieQuiz).FirstOrDefault().IdPeriod;
 
                     clsNew.USER_NO = Convert.ToInt32(General.Nz(Session["UserId"], -99));
-                    clsNew.TIME = DateTime.Now;                                      
+                    clsNew.TIME = DateTime.Now;
+
+                    //Florin 2020.01.17 - martor care ne indica daca este inregistrare goala
+                    bool areValori = false;
 
                     foreach (DictionaryEntry de in ins.NewValues)
                     {
+                        //Florin 2020.01.17 
+                        if (ins.NewValues[de.Key.ToString()] != null) areValori = true;
+
                         switch (de.Key.ToString())
                         {
                             case "IdObiectiv":
@@ -2292,7 +2298,9 @@ namespace WizOne.Eval
 
                     }
 
-                    lst.Add(clsNew);
+                    //Florin 2020.01.17 
+                    if (areValori)
+                        lst.Add(clsNew);
                 }
                 int sumaClaim = 0;
                 int marca = -99;

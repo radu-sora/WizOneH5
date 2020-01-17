@@ -1389,11 +1389,8 @@ namespace WizOne.Module
                 LEFT JOIN ""Eval_tblCategorie"" ctg ON chest.""CategorieQuiz""=ctg.""Id""
                 LEFT JOIN ""Eval_Perioada"" per ON chest.""Anul"" = per.""IdPerioada""
                 where
-                chest.""Activ"" = 1
-                and rasp.""IdQuiz"" = {5}
+                rasp.""IdQuiz"" = {5}
                 and rasp.""F10003"" = {6}
-                and {2} chest.""DataInceput"") <= {2} {3})
-                and {2} {3}) <= {2} chest.""DataSfarsit"")
                 and {0}(case 
 		                    when dr.""PozitieVizibila"" = 0 then 1
 		                    else dr.""Pozitie""
@@ -1404,6 +1401,9 @@ namespace WizOne.Module
                 and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.F10003 != {10})) 
                 {9}";
 
+                //Florin 2020.01.17 - am elminat 2 filtre
+                //chest.""Activ"" = 1
+                //and {2} chest.""DataInceput"") <= {2} {3}) and {2} {3}) <= {2} chest.""DataSfarsit"")
 
                 //Florin 2019.02.01
                 if (idAuto != -99)

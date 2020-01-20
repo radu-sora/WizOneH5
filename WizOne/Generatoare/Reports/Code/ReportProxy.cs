@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.UI;
 using Wizrom.Reports.Models;
 
 namespace Wizrom.Reports.Code
@@ -386,7 +387,23 @@ namespace Wizrom.Reports.Code
 
             // Assuming that all sessions was recycled ...
             if (!SESSION_PAGE_NAMES.Contains(pageName))
-                HttpContext.Current.Session.Remove("ReportsSessionsGroups");
+            {                
+                var reportsSessionsGroups = HttpContext.Current.Session["ReportsSessionsGroups"] as Dictionary<string, Dictionary<string, object>>;
+                var group = HttpContext.Current.Request.Url.LocalPath;
+                var isPostBack = (HttpContext.Current.Handler as Page)?.IsPostBack ?? false;
+
+                if (reportsSessionsGroups == null)
+                    throw new Exception("No reports sessions found");
+
+                reportsSessionsGroups.Select(sg => sg.Key).ToList().ForEach(gr =>
+                {
+                    if ((gr != group) || (gr == group && !isPostBack))
+                        reportsSessionsGroups.Remove(gr);
+                });
+
+                //if (reportsSessionsGroups.Count == 0)
+                //    HttpContext.Current.Session.Remove("ReportsSessionsGroups");
+            }
         }
     }
 }

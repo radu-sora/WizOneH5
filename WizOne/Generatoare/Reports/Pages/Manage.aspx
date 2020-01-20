@@ -57,7 +57,10 @@
                     </ValidationSettings>
                 </PropertiesComboBox>
             </dx:GridViewDataComboBoxColumn>
-            
+            <dx:GridViewDataCheckColumn FieldName="Restricted" Caption="Parola" Width="70px">
+                <PropertiesCheckEdit DisplayTextChecked="Da" DisplayTextUnchecked="Nu" />
+            </dx:GridViewDataCheckColumn>
+
             <dx:GridViewDataTextColumn FieldName="Id" Visible="false" ShowInCustomizationForm="false" />
         </Columns>
         <ClientSideEvents

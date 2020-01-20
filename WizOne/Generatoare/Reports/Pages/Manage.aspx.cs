@@ -30,9 +30,9 @@ namespace Wizrom.Reports.Pages
         public IEnumerable<ReportViewModel> GetReports()
         {
             var reports = General.RunSqlQuery<ReportViewModel>(
-                "SELECT [DynReportId] AS [Id], [Name], [Description], [DynReportTypeId] AS [TypeId], [HasPassword] AS Restricted " +
-                "FROM [DynReports] " +
-                "WHERE [DynReportId] IN (SELECT [IdRaport] FROM [RapoarteGrupuriUtilizatori] WHERE [IdUser] = @1)", Session["UserId"]);
+                "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], rgu.[AreParola] AS Restricted " +
+                "FROM [DynReports] r " +
+                "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1", Session["UserId"]);
 
             return reports;
         }
@@ -41,25 +41,35 @@ namespace Wizrom.Reports.Pages
         {            
             var reportId = General.RunSqlScalar<int>("INSERT INTO [DynReports]([Name], [Description], [DynReportTypeId], [RegUserId]) VALUES (@1, @2, @3, @4)", "DynReportId",
                 report.Name, report.Description, report.TypeId, Session["UserId"].ToString());
+            // For adding new reports into user groups if necessary.
+            var tableName = Constante.tipBD == 1 ? "relGrupRaport2" : "relGrupRaport";
 
-            // For adding new reports into user groups if necessary. There is a different approach in Oracle involving RapoarteGrupuriUtilizatori view.
-            //General.RunSqlColumn<int>("SELECT DISTINCT [IdGrup] FROM [relGrupUser] WHERE [IdUser] = @1", Session["UserId"])?.ToList().ForEach(groupId =>
-            //{
-            //    General.RunSqlScalar<int>("INSERT INTO [relGrupRaport2]([IdGrup], [IdRaport]) VALUES (@1, @2)", null, groupId, reportId);
-            //});
+            General.RunSqlColumn<int>("SELECT DISTINCT [IdGrup] FROM [relGrupUser] WHERE [IdUser] = @1", Session["UserId"])?.ToList().ForEach(groupId =>
+            {                
+                General.RunSqlScalar<int>($"INSERT INTO [{tableName}]([IdGrup], [IdRaport], [AreParola]) VALUES (@1, @2, @3)", null, groupId, reportId, report.Restricted);
+            });
         }
 
         public void SetReport(ReportViewModel report)
         {
             General.RunSqlScalar<int>("UPDATE [DynReports] SET [Name] = @1, [Description] = @2, [DynReportTypeId] = @3 WHERE [DynReportId] = @4", null,
-                report.Name, report.Description, report.TypeId, report.Id);
+                report.Name, report.Description, report.TypeId, report.Id);            
+            // For updating existing reports from user groups if necessary.
+            var tableName = Constante.tipBD == 1 ? "relGrupRaport2" : "relGrupRaport";
+
+            General.RunSqlColumn<int>("SELECT DISTINCT [IdGrup] FROM [relGrupUser] WHERE [IdUser] = @1", Session["UserId"])?.ToList().ForEach(groupId =>
+            {
+                General.RunSqlScalar<int>($"UPDATE [{tableName}] SET [AreParola] = @1 WHERE [IdGrup] = @2 AND [IdRaport] = @3", null, report.Restricted, groupId, report.Id);
+            });            
         }
 
         public void DelReport(ReportViewModel report)
         {
             General.RunSqlScalar<int>("DELETE FROM [DynReports] WHERE [DynReportId] = @1", null, report.Id);
-            // For removing reports from user groups if necessary. There is a different approach in Oracle involving RapoarteGrupuriUtilizatori view.
-            //General.RunSqlScalar<int>("DELETE FROM [relGrupRaport2] WHERE [IdRaport] = @1", null, report.Id);
+            // For removing reports from user groups if necessary.
+            var tableName = Constante.tipBD == 1 ? "relGrupRaport2" : "relGrupRaport";
+
+            General.RunSqlScalar<int>($"DELETE FROM [{tableName}] WHERE [IdRaport] = @1", null, report.Id);
         }
 
         protected void Page_Load(object sender, EventArgs e)

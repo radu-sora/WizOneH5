@@ -38,11 +38,11 @@
             <Image Url="~/Fisiere/Imagini/loading.gif" Height="40px" Width="40px"></Image>
         </dx:ASPxLoadingPanel>
 
-        <dx:ASPxPanel ID="pnlHeader" runat="server" FixedPosition="WindowTop" Width="100%" BackColor="#FFFFFF" Height="75px" Collapsible="true" SettingsAdaptivity-CollapseAtWindowInnerWidth="700">
+        <dx:ASPxPanel ID="pnlHeader" runat="server" FixedPosition="WindowTop" Width="100%" BackColor="#FFFFFF" Collapsible="true" SettingsAdaptivity-CollapseAtWindowInnerWidth="700">
             <SettingsAdaptivity CollapseAtWindowInnerWidth="700"></SettingsAdaptivity>
             <PanelCollection>
                 <dx:PanelContent runat="server">
-                    <a href="#" runat="server" onserverclick="OnImageClick"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" style="float:left; height:45px; margin-left:15px; margin-top:4px;" runat="server" /></a>
+                    <a href="#" runat="server" onserverclick="OnImageClick"><img src="~/Fisiere/Imagini/WizOne.png" alt="WizOne" style="float:left; height:45px; margin-left:15px;" runat="server" /></a>
                     <div class="HeaderMeniu">
 
                         <div id="divCmbProfile" runat="server">
@@ -52,8 +52,7 @@
 
                         <div class="dropdown">
                             <a href="#" id="LangButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <img src="~/Fisiere/Imagini/Icoane/lang.png" alt="" runat="server" />
-                                <label id="etiLimbi" runat="server"></label>
+                                <img src="~/Fisiere/Imagini/Icoane/lang.png" alt="" runat="server" /><label id="etiLimbi" runat="server"></label>
                             </a>        
                             <ul class="dropdown-menu" aria-labelledby="LangButton">
                                 <li>
@@ -76,8 +75,7 @@
 
                         <div class="dropdown">
                             <a href="#" id="ThemeButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <img src="~/Fisiere/Imagini/Icoane/paleta.png" alt="" runat="server" />
-                                <label id="etiTeme" runat="server"></label> 
+                                <img src="~/Fisiere/Imagini/Icoane/paleta.png" alt="" runat="server" /><label id="etiTeme" runat="server"></label> 
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="ThemeButton">
                                 <li>
@@ -131,8 +129,7 @@
 
                         <div class="dropdown">
                             <a href="#" id="ContButton" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <img src="~/Fisiere/Imagini/Icoane/user.png" alt="" runat="server" />
-                                <label id="etiCont" runat="server"></label>
+                                <img src="~/Fisiere/Imagini/Icoane/user.png" alt="" runat="server" /><label id="etiCont" runat="server"></label>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="ContButton">
                                 <li>
@@ -162,7 +159,7 @@
 
                         <div>
                             <asp:LinkButton ID="lnkOut" runat="server" OnClick="lnkOut_Click">
-                                <img src="~/Fisiere/Imagini/Icoane/logout.png" alt="" runat="server" />&nbsp;<span id="etiLog" runat="server"></span>
+                                <img src="~/Fisiere/Imagini/Icoane/logout.png" alt="" runat="server" /><label id="etiLog" runat="server"></label>
                             </asp:LinkButton>
                         </div>
                     </div>

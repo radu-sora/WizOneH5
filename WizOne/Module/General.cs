@@ -1000,7 +1000,7 @@ namespace WizOne.Module
                         var value = paramList[param] ?? DBNull.Value;
                         var parameter = Constante.tipBD == 1 ?
                             new SqlParameter(name, value) as DbParameter :
-                            new OracleParameter(name, value);
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01 - A more generic solution must be found.
 
                         command.Parameters.Add(parameter);
                     }
@@ -1072,7 +1072,7 @@ namespace WizOne.Module
                         var value = paramList[param] ?? DBNull.Value;
                         var parameter = Constante.tipBD == 1 ?
                             new SqlParameter(name, value) as DbParameter :
-                            new OracleParameter(name, value);
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
 
                         command.Parameters.Add(parameter);
                     }
@@ -1131,7 +1131,7 @@ namespace WizOne.Module
                         var value = paramList[param] ?? DBNull.Value;
                         var parameter = Constante.tipBD == 1 ?
                             new SqlParameter(name, value) as DbParameter :
-                            new OracleParameter(name, value);
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
 
                         command.Parameters.Add(parameter);
                     }
@@ -1209,7 +1209,7 @@ namespace WizOne.Module
                         var value = paramList[param] ?? DBNull.Value;
                         var parameter = Constante.tipBD == 1 ?
                             new SqlParameter(name, value) as DbParameter :
-                            new OracleParameter(name, value);
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
 
                         command.Parameters.Add(parameter);
                     }

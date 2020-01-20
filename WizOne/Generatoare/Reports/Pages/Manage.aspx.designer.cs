@@ -7,108 +7,99 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Generatoare.Reports.Pages {
+namespace Wizrom.Reports.Pages {
     
     
-    public partial class ReportView {
+    public partial class Manage {
         
         /// <summary>
-        /// WebDocumentViewerCallbackPanel control.
+        /// TitleLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel WebDocumentViewerCallbackPanel;
+        protected global::DevExpress.Web.ASPxLabel TitleLabel;
         
         /// <summary>
-        /// WebDocumentViewer control.
+        /// ReportNewButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.XtraReports.Web.ASPxWebDocumentViewer WebDocumentViewer;
+        protected global::DevExpress.Web.ASPxButton ReportNewButton;
         
         /// <summary>
-        /// LayoutComboBox control.
+        /// ReportViewButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox LayoutComboBox;
+        protected global::DevExpress.Web.ASPxButton ReportViewButton;
         
         /// <summary>
-        /// ReportsUsersDataSource control.
+        /// ReportDesignButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource ReportsUsersDataSource;
+        protected global::DevExpress.Web.ASPxButton ReportDesignButton;
         
         /// <summary>
-        /// ChartTypeComboBox control.
+        /// ExitButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox ChartTypeComboBox;
+        protected global::DevExpress.Web.ASPxButton ExitButton;
         
         /// <summary>
-        /// ChartOptionsCheckBoxList control.
+        /// ReportsGridView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBoxList ChartOptionsCheckBoxList;
+        protected global::DevExpress.Web.ASPxGridView ReportsGridView;
         
         /// <summary>
-        /// CustomCubePivotGrid control.
+        /// ReportEditButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxPivotGrid.ASPxPivotGrid CustomCubePivotGrid;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton ReportEditButton;
         
         /// <summary>
-        /// CustomCubeWebChartControl control.
+        /// ReportDeleteButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.XtraCharts.Web.WebChartControl CustomCubeWebChartControl;
+        protected global::DevExpress.Web.GridViewCommandColumnCustomButton ReportDeleteButton;
         
         /// <summary>
-        /// CustomTableGridView control.
+        /// ReportsDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView CustomTableGridView;
+        protected global::System.Web.UI.WebControls.ObjectDataSource ReportsDataSource;
         
         /// <summary>
-        /// CustomTableGridViewExporter control.
+        /// ReportTypesDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridViewExporter CustomTableGridViewExporter;
-        
-        /// <summary>
-        /// globalEvents control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGlobalEvents globalEvents;
+        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource ReportTypesDataSource;
     }
 }

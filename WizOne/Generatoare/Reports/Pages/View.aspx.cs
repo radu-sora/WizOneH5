@@ -20,82 +20,43 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
-using System.Web.UI;
-using WizOne.Generatoare.Reports.Code;
-using WizOne.Generatoare.Reports.Models;
-using WizOne.Module;
+using Wizrom.Reports.Code;
+using Wizrom.Reports.Models;
 
-namespace WizOne.Generatoare.Reports.Pages
+namespace Wizrom.Reports.Pages
 {
-    public partial class ReportView : Page
+    public partial class View : ReportSessionPage
     {
+        private int _reportId
+        {
+            get { return ReportSession.ReportId; }
+        }
         private string _userId
         {
-            get { return Request.QueryString["UserId"] ?? (Session["UserId"] as int? ?? 0).ToString(); }
-        }
-        private int _reportId
-        {            
-            get
-            {
-                int reportId;
-
-                reportId = int.TryParse(Request.QueryString["ReportId"], out reportId) ? reportId : Session["ReportId"] as int? ?? 0;
-
-                //verificam daca s-a trimis si id-ul raportului
-                if (reportId == 0)
-                {
-                    string strUrl = "";
-                    string[] arrQ = null;
-                    if (!string.IsNullOrEmpty(Request.QueryString["q"]))
-                    {
-                        strUrl = General.URLDecode(Request.QueryString["q"]);
-                        arrQ = strUrl.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
-                    }
-
-                    if (strUrl.IndexOf("IdRaportDyn") >= 0)
-                    {
-                        string item = arrQ.Where(p => p.IndexOf("IdRaportDyn") >= 0).Select(p => p).FirstOrDefault();
-                        if (item != "")
-                        {
-                            string[] vals = item.Split('=');
-                            if (vals.Length == 2)
-                            {
-                                reportId = Convert.ToInt32(vals[1]);
-                            }
-                        }
-                    }
-                }
-
-                return reportId;
-            }
-        }
-        private bool _serverPrint
-        {
-            get { return (Request.QueryString["PrintareAutomata"] ?? (Session["PrintareAutomata"] as int? ?? 0).ToString()) == "1"; }
+            get { return ReportSession.UserId; }
         }
         private int _reportUserId
         {
-            get { return Session["ReportUserId"] as int? ?? 0; }
-            set { Session["ReportUserId"] = value; }
+            get { return ReportSession.DataCache.ReportUserId; }
+            set { ReportSession.DataCache.ReportUserId = value; }
         }
         private dynamic _reportParams
         {
-            get { return Session["ReportParams"]; }
-            set { Session["ReportParams"] = value; }
+            get { return ReportSession.DataCache.ReportParams; }
+            set { ReportSession.DataCache.ReportParams = value; }
         }
         private dynamic _chartOptions
         {
-            get { return Session["ChartOptions"]; }
-            set { Session["ChartOptions"] = value; }
+            get { return ReportSession.DataCache.ChartOptions; }
+            set { ReportSession.DataCache.ChartOptions = value; }
         }
         private XtraReport _report
         {
-            get { return Session["Report"] as XtraReport ?? (_report = new XtraReport()); }
-            set { Session["Report"] = value; }
+            get { return ReportSession.DataCache.Report; }
         }
         private XRPivotGrid _pivotGrid
         {
@@ -110,10 +71,27 @@ namespace WizOne.Generatoare.Reports.Pages
             get { return _report.Bands.OfType<DetailBand>().FirstOrDefault()?.Controls.OfType<XRRichText>().FirstOrDefault(); }
         }
 
-        protected short ReportType { get; set; }
-        protected short ToolbarType { get; set; }
-        protected string ExportOptions { get; set; }
-        protected short ChartStatus { get; set; }        
+        // For client side customization
+        protected string ReportName
+        {
+            get; private set;
+        }
+        protected short ReportType
+        {
+            get; private set;
+        }
+        protected short ToolbarType
+        {
+            get { return ReportSession.ToolbarType; }
+        }
+        protected string ExportOptions
+        {
+            get { return ReportSession.ExportOptions; }
+        }
+        protected short ChartStatus // 0 - None, 1 - Hidden, 2 - Visible
+        {
+            get { return (short)(_chartOptions != null ? ((bool)_chartOptions.Options.O5 ? 2 : 1) : 0); }
+        }
 
         private void LoadASPxPivotGridLayoutFromXRPivotGrid(ASPxPivotGrid aspxPivotGrid, XRPivotGrid xrPivotGrid)
         {
@@ -454,20 +432,14 @@ namespace WizOne.Generatoare.Reports.Pages
 
                 return devices.Any(d => userAgent.Contains(d));
             }
-        }
+        }        
 
         protected void Page_Load(object sender, EventArgs e)
         {
             try
-            {
+            {                               
                 if (!IsPostBack)
                 {
-                    // Reset session data                    
-                    Session.Remove("ReportUserId");
-                    Session.Remove("ReportParams");
-                    Session.Remove("ChartOptions");
-                    Session.Remove("Report");
-
                     // Load data
                     if (_reportId == 0)
                         throw new Exception("No report id found");
@@ -484,63 +456,29 @@ namespace WizOne.Generatoare.Reports.Pages
                     using (var memStream = new MemoryStream(report.LayoutData))
                         _report.LoadLayoutFromXml(memStream);
 
-                    // Set internal params                    
-                    var parameters = _report.ObjectStorage.OfType<SqlDataSource>().
-                        SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                        Where(p => p.Type != typeof(Expression));
-
-
-                    //Florin 2019.10.17
-
-                    //foreach (var param in parameters)
-                    //{
-                    //    var name = param.Name.TrimStart('@');
-                    //    var value = Request.QueryString[name] ?? Session[name];
-
-                    //    if (value != null)
-                    //        param.Value = Convert.ChangeType(value, param.Type);
-                    //}
-
-                    string strUrl = "";
-                    string[] arrQ = null;
-                    if (!string.IsNullOrEmpty(Request.QueryString["q"]))
+                    // Set internal params            
+                    if (ReportSession.ParamList != null)
                     {
-                        strUrl = General.URLDecode(Request.QueryString["q"]).ToLower();
-                        arrQ = strUrl.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
-                    }
+                        var properties = ReportSession.ParamList.GetType().GetProperties() as PropertyInfo[];
+                        var parameters = _report.ObjectStorage.OfType<SqlDataSource>().
+                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                            Where(p => p.Type != typeof(Expression));
 
-                    foreach (var param in parameters)
-                    {
-                        var name = param.Name.TrimStart('@');
-                        var value = Session[name];
-
-                        if (strUrl.IndexOf(name.ToLower()) >= 0)
+                        foreach (var param in parameters)
                         {
-                            string item = arrQ.Where(p => p.IndexOf(name.ToLower()) >= 0).Select(p => p).FirstOrDefault();
-                            if (item != "")
-                            {
-                                string[] vals = item.Split('=');
-                                if (vals.Length == 2)
-                                {
-                                    value = vals[1];
-                                }
-                            }
+                            var name = param.Name.TrimStart('@');
+                            var value = properties.SingleOrDefault(p => p.Name == name)?.GetValue(ReportSession.ParamList);
+
+                            if (value != null)
+                                param.Value = Convert.ChangeType(value, param.Type);
                         }
-
-                        if (value != null)
-                            param.Value = Convert.ChangeType(value, param.Type);                        
                     }
-
-                    // Init controls                   
-                    var userId = Convert.ToInt32(_userId);
-                    var reportGroupUser = report.ReportGroupUsers.SingleOrDefault(rgu => rgu.UserId == userId);
 
                     // For client side customization
+                    ReportName = report.Name;
                     ReportType = report.ReportTypeId;
-                    ToolbarType = ConfigurationManager.AppSettings["EsteTactil"] == "true" ? // Temp fix until this param can be stored at user group level.
-                        reportGroupUser?.ToolbarType ?? 0 : (short)0; // 0 - full items, 1 - only Print, Customize layout & Exit
-                    ExportOptions = reportGroupUser?.ExportOptions ?? "*"; // "pdf,image[...]" or "*" to display all options.
 
+                    // Init controls
                     if (report.ReportTypeId == 3) // Cube
                     {
                         if (_pivotGrid != null)
@@ -549,12 +487,9 @@ namespace WizOne.Generatoare.Reports.Pages
                             ReportsUsersDataSource.WhereParameters["RegUserId"].DefaultValue = _userId;
 
                             if (_chart != null)
-                            {                                                             
+                            {
                                 // Init chart options
                                 _chartOptions = JObject.Parse(SaveXRChartOptions(_chart, _pivotGrid));
-
-                                // For client side customization                                
-                                ChartStatus = (short)((bool)_chartOptions.Options.O5 ? 2 : 1); // 0 - None, 1 - Hidden, 2 - Visible
 
                                 ChartTypeComboBox.Items.AddRange(Enum.GetValues(typeof(ViewType)).OfType<ViewType>().
                                     Select(vt => new ListEditItem() { Value = (int)vt, Text = vt.ToString() }).ToList());
@@ -614,17 +549,10 @@ namespace WizOne.Generatoare.Reports.Pages
                         ImageClassName = WebDocumentViewer.MobileMode ? "dxrd-image-exit mobile" : "dxrd-image-exit",
                         JSClickAction = "function() { onExitButtonClick(); }",
                         Container = MenuItemContainer.Toolbar
-                    });                    
+                    });
 
-                    if (_serverPrint) // Send to server default printer & exit
-                    {
-                        Session["PrintareAutomata"] = 0;
-                        _report.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for FillDataSource here
-                        new ReportPrintTool(_report).Print();
-                        Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");                    
-                    }
-                    else // Open the report
-                        WebDocumentViewer.OpenReport(_report);
+                    // Open the report
+                    WebDocumentViewer.OpenReport(_report);
                 }
                 else if (WebDocumentViewerCallbackPanel.IsCallback)
                 {
@@ -803,7 +731,7 @@ namespace WizOne.Generatoare.Reports.Pages
                                 // Log error
                                 // For now, mark as unprinted only                            
                             }
-                        }                        
+                        }
 
                         if (commandName != "delete")
                         {
@@ -855,7 +783,7 @@ namespace WizOne.Generatoare.Reports.Pages
                                     }
                                 }
                                 else
-                                    _report.FillDataSource();                                
+                                    _report.FillDataSource();
                             }
 
                             CustomCubePivotGrid.DataSource = _pivotGrid.DataSource;
@@ -1034,7 +962,7 @@ namespace WizOne.Generatoare.Reports.Pages
 
                             _richText.Tag = SaveASPxGridViewLayout(CustomTableGridView);
                         }
-                        
+
                         // Load layout from XRRichText if available or set data source
                         if (commandName == "init")
                         {
@@ -1093,7 +1021,7 @@ namespace WizOne.Generatoare.Reports.Pages
 
                             LoadASPxGridViewLayout(CustomTableGridView, _richText.Tag, true);
                         }
-                                                
+
                         // Process command (second part - layout & data dependent)
                         if (commandName == "print")
                         {
@@ -1183,14 +1111,15 @@ namespace WizOne.Generatoare.Reports.Pages
                             }
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
-                // Log & redirect to error page
-                // For now, redirect to main page only                
-                if (!IsCallback)
+                // Log error here                
+                if (!IsPostBack) // Close the page
                     Response.Redirect(Request.UrlReferrer?.LocalPath ?? "~/");
+                else // Or, page loaded, show the error
+                    throw;
             }
         }
 

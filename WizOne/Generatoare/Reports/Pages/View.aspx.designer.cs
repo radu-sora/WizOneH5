@@ -7,10 +7,46 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Generatoare.Reports.Pages {
+namespace Wizrom.Reports.Pages {
     
     
-    public partial class ReportDesign {
+    public partial class View {
+        
+        /// <summary>
+        /// WebDocumentViewerCallbackPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel WebDocumentViewerCallbackPanel;
+        
+        /// <summary>
+        /// WebDocumentViewer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.XtraReports.Web.ASPxWebDocumentViewer WebDocumentViewer;
+        
+        /// <summary>
+        /// LayoutComboBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox LayoutComboBox;
+        
+        /// <summary>
+        /// ReportsUsersDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource ReportsUsersDataSource;
         
         /// <summary>
         /// ChartTypeComboBox control.
@@ -29,24 +65,6 @@ namespace WizOne.Generatoare.Reports.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCheckBoxList ChartOptionsCheckBoxList;
-        
-        /// <summary>
-        /// CustomDocumentCallbackPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel CustomDocumentCallbackPanel;
-        
-        /// <summary>
-        /// CustomDocumentRichEdit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxRichEdit.ASPxRichEdit CustomDocumentRichEdit;
         
         /// <summary>
         /// CustomCubePivotGrid control.
@@ -85,21 +103,12 @@ namespace WizOne.Generatoare.Reports.Pages {
         protected global::DevExpress.Web.ASPxGridViewExporter CustomTableGridViewExporter;
         
         /// <summary>
-        /// ReportDesignerCallbackPanel control.
+        /// globalEvents control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel ReportDesignerCallbackPanel;
-        
-        /// <summary>
-        /// ReportDesigner control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.XtraReports.Web.ASPxReportDesigner ReportDesigner;
+        protected global::DevExpress.Web.ASPxGlobalEvents globalEvents;
     }
 }

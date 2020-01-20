@@ -46,12 +46,14 @@ namespace WizOne.Module
         //}
 
 
-        public static void CnnWeb()
+        public static void InitCnn()
         {
             try
             {
                 CriptDecript prc = new CriptDecript();
                 Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
+                Constante.cnnRap = ConfigurationManager.ConnectionStrings["cnRap"]?.ConnectionString ?? ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString;
+                Constante.cnnRap = prc.EncryptString(Constante.cheieCriptare, Constante.cnnRap, 2);
             }
             catch (Exception ex)
             {

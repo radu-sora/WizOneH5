@@ -19,7 +19,8 @@ a, a:focus, a:hover {
 /* Header menu control */
 .HeaderMeniu {
     float:right; 
-    line-height:50px;
+    height:45px;
+    line-height:45px;
 }
 
 .HeaderMeniu > div {
@@ -35,6 +36,10 @@ a, a:focus, a:hover {
 .HeaderMeniu > div > a {
     margin-left:13px;
     cursor:pointer;
+}
+
+.HeaderMeniu > div > a > img {
+    margin-right: 5px;
 }
 
 .HeaderMeniu > div > label,

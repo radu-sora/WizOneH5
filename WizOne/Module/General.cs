@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.IO;
-using System.Web.Hosting;
-using System.Diagnostics;
-using System.Data.SqlClient;
-using System.Data;
-using System.Text.RegularExpressions;
-using System.Data.OleDb;
-using System.Web.UI;
-using System.Net.Mail;
-using System.Net;
-using System.Globalization;
-using System.Threading;
-using DevExpress.Web;
-using System.Drawing;
+﻿using DevExpress.Web;
+using Oracle.ManagedDataAccess.Client;
 using ProceseSec;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Web;
+using System.Web.Hosting;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
 using System.Web.UI.HtmlControls;
@@ -992,6 +992,271 @@ namespace WizOne.Module
             }
         }
 
+        // For a projection with many columns (T must be a model class)
+        public static IEnumerable<T> RunSqlQuery<T>(string sql, params object[] paramList) where T : class, new()
+        {
+            var command = Constante.tipBD == 1 ?
+                new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
+                new OracleCommand(sql.Replace('[', '"').Replace(']', '"').Replace("@", ":p"), new OracleConnection(Constante.cnnWeb))
+                {
+                    BindByName = true
+                };
+            var items = null as List<T>;
+
+            try
+            {                            
+                if (paramList != null)
+                {
+                    for (int param = 0; param < paramList.Length; param++)
+                    {
+                        var name = "p" + (param + 1);
+                        var value = paramList[param] ?? DBNull.Value;
+                        var parameter = Constante.tipBD == 1 ?
+                            new SqlParameter(name, value) as DbParameter :
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01 - A more generic solution must be found.
+
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
+                command.CommandTimeout = 600;
+                command.Connection.Open();
+
+                using (var reader = command.ExecuteReader(CommandBehavior.SingleResult))
+                {
+                    items = new List<T>();
+
+                    while (reader.Read())
+                    {
+                        var item = new T();
+                        var properties = item.GetType().GetProperties();
+
+                        foreach (var property in properties)
+                        {
+                            var value = reader[property.Name];
+
+                            if (value == DBNull.Value)
+                            {
+                                if (property.PropertyType.IsValueType)
+                                    value = Activator.CreateInstance(property.PropertyType);
+                                else
+                                    value = null;
+                            }
+
+                            property.SetValue(item, Convert.ChangeType(value, property.PropertyType));
+                        }
+
+                        items.Add(item);
+                    }
+                }                                                
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                command.Connection.Close();
+                command.Connection.Dispose();
+                command.Dispose();
+            }
+
+            return items;
+        }
+
+        // For a projection with one column (T must be a primitive or a string)
+        public static IEnumerable<T> RunSqlColumn<T>(string sql, params object[] paramList)
+        {
+            var command = Constante.tipBD == 1 ?
+                new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
+                new OracleCommand(sql.Replace('[', '"').Replace(']', '"').Replace("@", ":p"), new OracleConnection(Constante.cnnWeb))
+                {
+                    BindByName = true
+                };
+            var items = null as List<T>;
+
+            try
+            {
+                if (paramList != null)
+                {
+                    for (int param = 0; param < paramList.Length; param++)
+                    {
+                        var name = "p" + (param + 1);
+                        var value = paramList[param] ?? DBNull.Value;
+                        var parameter = Constante.tipBD == 1 ?
+                            new SqlParameter(name, value) as DbParameter :
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
+
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
+                command.CommandTimeout = 600;
+                command.Connection.Open();
+
+                using (var reader = command.ExecuteReader(CommandBehavior.SingleResult))
+                {
+                    items = new List<T>();
+
+                    while (reader.Read())
+                    {
+                        var value = reader[0];
+
+                        if (value == DBNull.Value)
+                            value = default(T);
+
+                        items.Add((T)Convert.ChangeType(value, typeof(T)));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                command.Connection.Close();
+                command.Connection.Dispose();
+                command.Dispose();
+            }
+
+            return items;
+        }
+
+        // For a projection with many columns and a single result (T must be a model class)
+        public static T RunSqlSingle<T>(string sql, params object[] paramList) where T : class, new()
+        {
+            var command = Constante.tipBD == 1 ?
+                new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
+                new OracleCommand(sql.Replace('[', '"').Replace(']', '"').Replace("@", ":p"), new OracleConnection(Constante.cnnWeb))
+                {
+                    BindByName = true
+                };
+            var item = null as T;
+
+            try
+            {
+                if (paramList != null)
+                {
+                    for (int param = 0; param < paramList.Length; param++)
+                    {
+                        var name = "p" + (param + 1);
+                        var value = paramList[param] ?? DBNull.Value;
+                        var parameter = Constante.tipBD == 1 ?
+                            new SqlParameter(name, value) as DbParameter :
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
+
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
+                command.CommandTimeout = 600;
+                command.Connection.Open();
+
+                using (var reader = command.ExecuteReader(CommandBehavior.SingleRow))
+                {                    
+                    if (reader.Read())
+                    {
+                        item = new T();
+
+                        var properties = item.GetType().GetProperties();
+
+                        foreach (var property in properties)
+                        {
+                            var value = reader[property.Name];
+
+                            if (value == DBNull.Value)
+                            {
+                                if (property.PropertyType.IsValueType)
+                                    value = Activator.CreateInstance(property.PropertyType);
+                                else
+                                    value = null;
+                            }
+
+                            property.SetValue(item, Convert.ChangeType(value, property.PropertyType));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                command.Connection.Close();
+                command.Connection.Dispose();
+                command.Dispose();
+            }
+
+            return item;
+        }
+
+        // For scalar and non-query (T must be a primitive or a string)
+        public static T RunSqlScalar<T>(string sql, string pk, params object[] paramList)
+        {
+            var command = Constante.tipBD == 1 ?
+                new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
+                new OracleCommand(sql.Replace('[', '"').Replace(']', '"').Replace("@", ":p"), new OracleConnection(Constante.cnnWeb))
+                {
+                    BindByName = true
+                };
+            var result = null as object;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(pk)) // Return the pk identity value
+                {
+                    command.CommandText = command.CommandText.Trim(new char[] { ' ', ';' }) +
+                        (Constante.tipBD == 1 ? $" SELECT scope_identity()" : $@" RETURNING ""{pk.Trim()}"" INTO :pk");
+
+                    if (Constante.tipBD != 1)
+                        command.Parameters.Add(new OracleParameter("pk", OracleDbType.Int64, ParameterDirection.Output));
+                }
+
+                if (paramList != null)
+                {
+                    for (int param = 0; param < paramList.Length; param++)
+                    {
+                        var name = "p" + (param + 1);
+                        var value = paramList[param] ?? DBNull.Value;
+                        var parameter = Constante.tipBD == 1 ?
+                            new SqlParameter(name, value) as DbParameter :
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
+
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
+                command.CommandTimeout = 600;
+                command.Connection.Open();
+
+                if (command.CommandText.IndexOf("SELECT", StringComparison.OrdinalIgnoreCase) > -1)
+                {
+                    if ((result = command.ExecuteScalar()) != DBNull.Value)
+                        result = (T)Convert.ChangeType(result, typeof(T));                    
+                    else
+                        result = default(T);
+                }
+                else
+                    result = (T)Convert.ChangeType(command.ExecuteNonQuery(), typeof(T));
+
+                if (!string.IsNullOrEmpty(pk) && Constante.tipBD != 1)
+                    result = (T)Convert.ChangeType(command.Parameters["pk"].Value.ToString(), typeof(T));
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                command.Connection.Close();
+                command.Connection.Dispose();
+                command.Dispose();
+            }
+
+            return result != null ? (T)result : default;
+        }        
 
         //public static dynamic DamiOracleScalar(string strSql, object[] lstParam)
         //{

@@ -28,11 +28,20 @@
         display: none;
     }
         .report-view-template > tbody > tr:first-child > td:last-child > table:first-child {
-            margin: 7px 0;
+            margin: 7px 5px;
         }
             .report-view-template > tbody > tr:first-child > td:last-child > table:first-child > tbody > tr > td:not(:first-child) {
                 padding-left: 5px;
             }
+            .report-view-template > tbody > tr:first-child > td:last-child > table:first-child > tbody > tr > td:last-child {
+                width: 100%;
+                text-align: right;
+                vertical-align: middle;
+            }
+                .report-view-template > tbody > tr:first-child > td:last-child > table:first-child > tbody > tr > td:last-child > * {
+                    margin: 0;
+                    padding: 0;
+                }
             .report-view-template > tbody > tr:first-child > td:last-child > table:first-child > tbody > tr > td:nth-child(5) > div > ul.dropdown-menu {
                 min-width: 0;
             }

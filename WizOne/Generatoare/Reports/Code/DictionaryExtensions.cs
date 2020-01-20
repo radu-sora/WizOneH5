@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WizOne.Generatoare.Reports.Code
+namespace Wizrom.Reports.Code
 {
     public static class DictionaryExtensions
     {

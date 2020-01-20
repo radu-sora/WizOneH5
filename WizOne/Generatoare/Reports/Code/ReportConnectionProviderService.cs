@@ -1,7 +1,7 @@
 ﻿using DevExpress.DataAccess.Sql;
 using DevExpress.DataAccess.Wizard.Services;
 
-namespace WizOne.Generatoare.Reports.Code
+namespace Wizrom.Reports.Code
 {
     public class ReportConnectionProviderService : IConnectionProviderService
     {

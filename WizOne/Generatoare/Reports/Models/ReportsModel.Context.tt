@@ -4,10 +4,6 @@
 <#
 
 const string inputFile = @"ReportsModel.edmx";
-const string edmxMetadata = "res://*/Generatoare.Reports.Models.ReportsModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.msl";
-const string edmxOraMetadata = "res://*/Generatoare.Reports.Models.ReportsOraModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.msl";
-const string sqlProvider = "System.Data.SqlClient";
-const string oraProvider = "Oracle.ManagedDataAccess.Client";
 
 var textTransform = DynamicTextTransformation.Create(this);
 var code = new CodeGenerationTools(this);
@@ -48,7 +44,6 @@ namespace <#=code.EscapeNamespace(codeNamespace)#>
 #>
 using System;
 using System.Data.Entity;
-using System.Data.Entity.Core.EntityClient;
 using System.Data.Entity.Infrastructure;
 <#
 if (container.FunctionImports.Any())
@@ -60,15 +55,9 @@ using System.Linq;
 }
 #>
 
-<#=Accessibility.ForType(container)#> partial class <#=code.Escape(container)#> : DbContext
+<#=Accessibility.ForType(container)#> partial class <#=code.Escape(container)#> : Wizrom.Reports.Code.ReportsDbContext
 {
-    public <#=code.Escape(container)#>()
-        : base((new EntityConnectionStringBuilder()
-		{	
-			Metadata = WizOne.Module.Constante.tipBD == 1 ? "<#=edmxMetadata#>" : "<#=edmxOraMetadata#>",
-			Provider = WizOne.Module.Constante.tipBD == 1 ? "<#=sqlProvider#>" : "<#=oraProvider#>",
-			ProviderConnectionString = WizOne.Module.Constante.cnnWeb
-		}).ToString())
+    public <#=code.Escape(container)#>() : base()
     {
 <#
 if (!loader.IsLazyLoadingEnabled(container))

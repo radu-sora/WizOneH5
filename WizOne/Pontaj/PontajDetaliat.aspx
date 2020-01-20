@@ -319,7 +319,23 @@
                 var monthSf = jsDateSf.getMonth() + 1;
                 var daySf = jsDateSf.getDate();
 
-                grDate.PerformCallback("btnRecalcParam;" + dayInc + "/" + monthInc + "/" + yearInc + ";" + daySf + "/" + monthSf + "/" + yearSf + ";" + txtMarcaInc.GetText() + ";" + txtMarcaSf.GetText());
+                //Radu 15.01.2020
+                var time = <%= Session["Ptj_DataBlocare"] %>;
+                var data = txtDataInc.GetValue();
+                var dtBlocare = new Date(Number(time.toString().substring(0, 4)), Number(time.toString().substring(4, 6)) - 1, Number(time.toString().substring(6)));
+                var dtInc = new Date(data.getFullYear(), data.getMonth(), data.getDate());
+                if (dtInc <= dtBlocare) {
+                    swal({
+                        title: "Atentie", text: "Pontajul este blocat pana la data de " + dtBlocare.getDate() + "/" + (dtBlocare.getMonth() + 1) + "/" + dtBlocare.getFullYear() + "! \n Doriti sa continuati?",
+                        type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            grDate.PerformCallback("btnRecalcParam;" + dayInc + "/" + monthInc + "/" + yearInc + ";" + daySf + "/" + monthSf + "/" + yearSf + ";" + txtMarcaInc.GetText() + ";" + txtMarcaSf.GetText());
+                        }
+                    });
+                }
+                else
+                    grDate.PerformCallback("btnRecalcParam;" + dayInc + "/" + monthInc + "/" + yearInc + ";" + daySf + "/" + monthSf + "/" + yearSf + ";" + txtMarcaInc.GetText() + ";" + txtMarcaSf.GetText());
             }
         }
 

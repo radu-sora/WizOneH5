@@ -14,17 +14,45 @@
                     type: "info", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da!", cancelButtonText: "Nu", closeOnConfirm: true
                 }, function (isConfirm) {
                     if (isConfirm) {
-                        e.processOnServer = true; 
+                        pnlCtl.PerformCallback('btnAct');
                     }
                 });
             }
-            else
-                e.processOnServer = true;       
+            else {
+                pnlLoading.Show();
+                e.processOnServer = true;
+            }
         }
+
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+            pnlLoading.Hide();
+        }
+
+        function DataInceput(s, e) {
+            var dtInc = new Date(s.GetDate());
+            pnlCtl.PerformCallback('txtDataInc;' + dtInc.getDate() + '/' + (dtInc.getMonth() + 1) + '/' + dtInc.getFullYear()); 
+        }
+
     </script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
+
+    <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
+        <ClientSideEvents  EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
+        <PanelCollection>
+            <dx:PanelContent>
+            </dx:PanelContent>
+        </PanelCollection>
+    </dx:ASPxCallbackPanel>
 
     <table width="100%">
         <tr>
@@ -37,7 +65,7 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAct" ClientInstanceName="btnAct" ClientIDMode="Static" runat="server" Text="Actualizeaza" AutoPostBack="false" OnClick="btnAct_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
-                    <ClientSideEvents Click="function (s,e) {
+                    <ClientSideEvents Click="function (s,e) {                        
                         OnClickAct(s, e);                     
                      }" />
                 </dx:ASPxButton>
@@ -57,9 +85,9 @@
                         <label id="lblCtrInc" runat="server" style="display:inline-block;">Data Inceput</label>
                         <dx:ASPxDateEdit ID="txtDataInc" ClientInstanceName="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Date" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
+                            <ClientSideEvents DateChanged="function (s,e) { DataInceput (s, e)}" />
                         </dx:ASPxDateEdit>
                     </div>
-
                     <div class="Absente_Cereri_CampuriSup" id="div1" runat="server">
                         <label id="lblCtrSf" runat="server" style="display:inline-block;">Data Sfarsit</label>
                         <dx:ASPxDateEdit ID="txtDataSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Date" >

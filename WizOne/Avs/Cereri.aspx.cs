@@ -4003,7 +4003,7 @@ namespace WizOne.Avs
                         DateTime dtLuc = General.DamiDataLucru();
                         sql100 = "UPDATE F100 SET F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + ", F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
                              (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10076 = " + data11 + ", F10077 = " + data12 : "") + " WHERE F10003 = " + f10003.ToString();
-                        sql1001 = "UPDATE F1001 SET F1001102 = " + data11 + " - 1 WHERE F10003 = " + f10003.ToString();
+                        sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data11 + " - 1 WHERE F10003 = " + f10003.ToString();
                         string sql111 = $@"INSERT INTO F111 (F11101, F11102, F11103, F11104, F11105, F11106, F11107, YEAR, MONTH, USER_NO, TIME)
                                VALUES (111, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, {dtCer.Rows[0]["MotivSuspId"].ToString()},{data11}, {data12}, {data13},
                                {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";

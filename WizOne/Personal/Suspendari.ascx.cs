@@ -56,29 +56,8 @@ namespace WizOne.Personal
                 DataTable dt = ds.Tables[0];
                 if (!IsPostBack)
                 {//Radu 27.11.2019
-                    DataTable dtSuspAng = General.IncarcaDT("select * from f111 Where F11103 = " + Session["Marca"].ToString() + " AND (F11107 IS NULL OR F11107 = "
-                        + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ")  ORDER BY F11105", null);
-                    //if (dt != null && dt.Rows.Count > 0)
-                    //{
-                    //    cmbMotivSuspendare.Value = dt.Rows[0]["F100925"];
-                    //    deDataInceputSusp.Value = dt.Rows[0]["F100922"];
-                    //    deDataSfarsitSusp.Value = dt.Rows[0]["F100923"];
-                    //    deDataIncetareSusp.Value = dt.Rows[0]["F100924"];
-                    //}
-                    if (dtSuspAng != null && dtSuspAng.Rows.Count > 0)
-                    {
-                        cmbMotivSuspendare.Value = dtSuspAng.Rows[0]["F11104"];
-                        deDataInceputSusp.Value = dtSuspAng.Rows[0]["F11105"];
-                        deDataSfarsitSusp.Value = dtSuspAng.Rows[0]["F11106"];
-                        deDataIncetareSusp.Value = dtSuspAng.Rows[0]["F11107"];
-                    }
-                    else
-                    {
-                        cmbMotivSuspendare.Value = 0;
-                        deDataInceputSusp.Value = new DateTime(2100, 1, 1);
-                        deDataSfarsitSusp.Value = new DateTime(2100, 1, 1);
-                        deDataIncetareSusp.Value = new DateTime(2100, 1, 1);
-                    }
+                    Session["MP_SuspMotiv"] = -99;
+                    ActualizareSusp(1);
                 }
             }
             catch (Exception ex)
@@ -109,6 +88,7 @@ namespace WizOne.Personal
                 grDateSuspendari.KeyFieldName = "F11103;F11104;F11105;F11106;F11107";
                 grDateSuspendari.DataSource = dt;
                 grDateSuspendari.DataBind();
+                Session["MP_Suspendari"] = dt;
             }
             catch (Exception ex)
             {
@@ -139,6 +119,11 @@ namespace WizOne.Personal
                 ds.Tables[1].Rows[0]["F100922"] = deDataInceputSusp.Date;
                 ds.Tables[1].Rows[0]["F100923"] = deDataSfarsitSusp.Date;
                 ds.Tables[1].Rows[0]["F100924"] = deDataIncetareSusp.Date;
+                //Radu 17.01.2020
+                ds.Tables[0].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                ds.Tables[0].Rows[0]["F1001102"] = deDataInceputSusp.Date.AddDays(-1);
+                ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];        
+                ds.Tables[2].Rows[0]["F1001102"] = deDataInceputSusp.Date.AddDays(-1);
                 Session["InformatiaCurentaPersonal"] = ds;
 
                 AdaugaIstoricSuspendare(Convert.ToInt32(Session["Marca"].ToString()), Convert.ToInt32(cmbMotivSuspendare.Value ?? -99), deDataInceputSusp.Date, deDataSfarsitSusp.Date, deDataIncetareSusp.Date, Convert.ToInt32(Session["UserId"].ToString()));
@@ -188,6 +173,7 @@ namespace WizOne.Personal
 
                 DataTable dt = General.IncarcaDT("SELECT " + data + ", a.* FROM F111 a WHERE F11103 = " + Session["Marca"].ToString() + " ORDER BY TIME DESC", null);
 
+
                 if (dt == null || dt.Rows.Count == 0)
                 {
                     modif = true;
@@ -230,7 +216,112 @@ namespace WizOne.Personal
             }
         }
 
-        
+        protected void grDateSuspendari_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }                
+
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataTable dtSusp = Session["MP_Suspendari"] as DataTable;
+                DataRow row = dtSusp.Rows.Find(keys);
+
+                foreach (DataColumn col in dtSusp.Columns)
+                {
+                    if (!col.AutoIncrement && grDateSuspendari.Columns[col.ColumnName] != null && grDateSuspendari.Columns[col.ColumnName].Visible)
+                    {
+                        var edc = e.NewValues[col.ColumnName];
+                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                    }
+
+                }
+
+                e.Cancel = true;
+                grDateSuspendari.CancelEdit();
+                Session["InformatiaCurentaPersonal"] = ds;
+                grDateSuspendari.DataSource = dtSusp;
+                Session["MP_Suspendari"] = dtSusp;
+                ActualizareSusp(2);
+                General.SalveazaDate(dtSusp, "F111");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+
+        }
+
+        protected void grDateSuspendari_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
+        {
+            try
+            {
+                object[] keys = new object[e.Keys.Count];
+                for (int i = 0; i < e.Keys.Count; i++)
+                { keys[i] = e.Keys[i]; }
+
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DataTable dtSusp = Session["MP_Suspendari"] as DataTable;
+                DataRow row = dtSusp.Rows.Find(keys);
+
+                row.Delete();
+
+                e.Cancel = true;
+                grDateSuspendari.CancelEdit();
+                Session["InformatiaCurentaPersonal"] = ds;
+                grDateSuspendari.DataSource = dtSusp;
+                Session["MP_Suspendari"] = dtSusp;
+                ActualizareSusp(2);
+                General.SalveazaDate(dtSusp, "F111");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            }
+        }
+
+        private void ActualizareSusp(int param)
+        {
+            DataTable dtSuspAng = new DataTable();
+
+            if (param == 1)
+            {
+                dtSuspAng = General.IncarcaDT("select * from f111 Where F11103 = " + Session["Marca"].ToString() + " AND (F11107 IS NULL OR F11107 = "
+                    + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ")  ORDER BY F11105", null);
+
+            }
+            if (param == 2)
+            {
+                DataTable dt = Session["MP_Suspendari"] as DataTable;
+                string data = General.ToDataUniv(2100, 1, 1);
+                if (dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC") != null && dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC").Count() > 0)
+                    dtSuspAng = dt.Select("F11107 IS NULL OR F11107 = " + data, "F11105 ASC").CopyToDataTable();
+            }
+            if (dtSuspAng != null && dtSuspAng.Rows.Count > 0)
+            {
+                cmbMotivSuspendare.Value = dtSuspAng.Rows[0]["F11104"];
+                deDataInceputSusp.Value = dtSuspAng.Rows[0]["F11105"];
+                deDataSfarsitSusp.Value = dtSuspAng.Rows[0]["F11106"];
+                deDataIncetareSusp.Value = dtSuspAng.Rows[0]["F11107"];
+                Session["MP_SuspMotiv"] = dtSuspAng.Rows[0]["F11104"];
+                Session["MP_SuspDataIncp"] = dtSuspAng.Rows[0]["F11105"];
+                Session["MP_SuspDataSf"] = dtSuspAng.Rows[0]["F11106"];
+                Session["MP_SuspDataInct"] = dtSuspAng.Rows[0]["F11107"];
+            }
+            else
+            {
+                cmbMotivSuspendare.Value = 0;
+                deDataInceputSusp.Value = new DateTime(2100, 1, 1);
+                deDataSfarsitSusp.Value = new DateTime(2100, 1, 1);
+                deDataIncetareSusp.Value = new DateTime(2100, 1, 1);
+                Session["MP_SuspMotiv"] = 0;
+                Session["MP_SuspDataIncp"] = new DateTime(2100, 1, 1);
+                Session["MP_SuspDataSf"] = new DateTime(2100, 1, 1);
+                Session["MP_SuspDataInct"] = new DateTime(2100, 1, 1);
+            }
+        }
+
 
     }
 }

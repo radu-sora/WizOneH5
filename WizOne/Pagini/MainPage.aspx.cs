@@ -207,45 +207,53 @@ namespace WizOne.Pagini
 
 
                 //adaugam rapoartele
-                DataTable dtRap = General.IncarcaDT(@"SELECT * FROM ""DynReports""", null);
-
-                if (dtRap.Rows.Count > 0)
+                var reports = Wizrom.Reports.Pages.Manage.GetReports(); // Do not use the DynReports table directly. Use Manage[GetReports, GetReportSettings] instead.
+                                                                        // To modify reports list from code use (make static) the AddReport, SetReport and DelReport methods from Manage class.
+                foreach (var report in reports)
                 {
-                    for (int i = 0; i < dtRap.Rows.Count; i++)
+                    ASPxButton btn = new ASPxButton();
+                    btn.ID = "btn_Rap" + report.Id;
+                    btn.Text = Dami.TraduCuvant(report.Name);
+                    btn.UseSubmitBehavior = false;
+
+                    // New report access interface                     
+                    // Also, do not open reports pages i.e. View, Design or Print directly. Use ReportProxy[View, Design, Print] or [GetViewUrl, GetDesignUrl, GetPrintUrl] instead.
+                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(report.Id);
+                    var reportUrl = null as string;
+
+                    if (reportSettings != null)
+                        reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(report.Id, reportSettings.ToolbarType, reportSettings.ExportOptions, new { Angajat = General.Nz(Session["User_Marca"], -99).ToString() });
+                    else
+                        reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(report.Id, paramList: new { Angajat = General.Nz(Session["User_Marca"], -99).ToString() });
+
+                    if (report.Restricted)
                     {
-                        ASPxButton btn = new ASPxButton();
-                        btn.ID = "btn_Rap_" + dtRap.Rows[i]["DynReportId"];
-                        btn.Text = Dami.TraduCuvant(General.Nz(dtRap.Rows[i]["Name"],"").ToString());
-                        btn.UseSubmitBehavior = false;
-                        if (Convert.ToInt32(General.Nz(dtRap.Rows[i]["HasPassword"], 0)) == 1)
-                        {
-                            btn.ClientSideEvents.Click = "function(s, e){ onRapButtonClick(s); }";
-                            btn.AutoPostBack = false;
-                        }
-                        else
-                            btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + dtRap.Rows[i]["DynReportId"] + "&Angajat=" + General.Nz(Session["User_Marca"], -99).ToString());
-
-                        ASPxDockPanel pnl = new ASPxDockPanel();
-                        string nme = "wdgRap" + i;
-                        pnl.ID = nme;
-                        pnl.PanelUID = nme;
-                        pnl.ClientInstanceName = nme;
-                        pnl.HeaderText = "";
-                        pnl.DragElement = DragElement.Window;
-                        pnl.OwnerZoneUID = "LeftZone";
-                        pnl.CssClass = "cssDockPanel_noBorder";
-                        pnl.Styles.Header.CssClass = "cssHeader";
-                        pnl.AllowDragging = false;
-                        pnl.AllowResize = false;
-                        pnl.ShowOnPageLoad = false;
-                        pnl.ShowShadow = false;
-                        pnl.ShowHeader = false;
-                        pnl.Styles.Content.Paddings.Padding = 0;
-                        pnl.Controls.Add(btn);
-
-                        divPanel.Controls.Add(pnl);
+                        btn.ClientSideEvents.Click = $"function(s, e) {{ onRapButtonClick('{ResolveClientUrl(reportUrl)}'); }}";
+                        btn.AutoPostBack = false;
                     }
-                }
+                    else
+                        btn.PostBackUrl = reportUrl;
+
+                    ASPxDockPanel pnl = new ASPxDockPanel();
+                    string nme = "wdgRap" + report.Id;
+                    pnl.ID = nme;
+                    pnl.PanelUID = nme;
+                    pnl.ClientInstanceName = nme;
+                    pnl.HeaderText = "";
+                    pnl.DragElement = DragElement.Window;
+                    pnl.OwnerZoneUID = "LeftZone";
+                    pnl.CssClass = "cssDockPanel_noBorder";
+                    pnl.Styles.Header.CssClass = "cssHeader";
+                    pnl.AllowDragging = false;
+                    pnl.AllowResize = false;
+                    pnl.ShowOnPageLoad = false;
+                    pnl.ShowShadow = false;
+                    pnl.ShowHeader = false;
+                    pnl.Styles.Content.Paddings.Padding = 0;
+                    pnl.Controls.Add(btn);
+
+                    divPanel.Controls.Add(pnl);
+                }                
 
 
                 //adaugam meniuri
@@ -375,43 +383,16 @@ namespace WizOne.Pagini
         protected void popUpPass_WindowCallback(object source, PopupWindowCallbackArgs e)
         {
             try
-            {
-                if (txtRapPass.Text.Trim() != "")
-                {
-                    string numeRap = "";
-                    if (hfRap.Contains("NumeRap"))
-                        numeRap = General.Nz(hfRap["NumeRap"], "").ToString();
+            {                                                        
+                CriptDecript prc = new CriptDecript();
+                string parola = General.Nz(General.ExecutaScalar(@"SELECT ""Parola"" FROM USERS WHERE F70102=@1", new object[] { Session["UserId"] }), "").ToString();
 
-                    if (numeRap != "")
-                    {
-                        string idRap = numeRap.Substring(numeRap.LastIndexOf("_") + 1);
-                        if (General.IsNumeric(idRap))
-                        {
-                            string parola = General.Nz(General.ExecutaScalar(@"SELECT ""Parola"" FROM USERS WHERE F70102=@1", new object[] { Session["UserId"] }), "").ToString();
-                            CriptDecript prc = new CriptDecript();
-                            parola = prc.EncryptString(Constante.cheieCriptare, parola, Constante.DECRYPT);
-                            if (parola == txtRapPass.Text)
-                            {
-                                string url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("IdRaportDyn=" + idRap + "&Angajat=" + General.Nz(Session["User_Marca"], -99).ToString());
+                parola = prc.EncryptString(Constante.cheieCriptare, parola, Constante.DECRYPT);
 
-                                //Response.Redirect(url);
-                                ASPxPopupControl.RedirectOnCallback(url);
-                            }
-                            else
-                            {
-                                //MessageBox.Show("Parola nu este corecta", MessageBox.icoWarning, "Atentie !");
-                                popUpPass.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Parola nu este corecta");
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Lipsesc date", MessageBox.icoWarning, "Atentie !");
-                }
-
+                if (parola != txtRapPass.Text)
+                    popUpPass.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Parola nu este corecta");
+                
                 txtRapPass.Text = "";
-                hfRap.Remove("NumeRap");
             }
             catch (Exception ex)
             {

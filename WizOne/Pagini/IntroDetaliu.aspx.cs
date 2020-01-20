@@ -205,43 +205,45 @@ namespace WizOne.Pagini
 
                 }
 
-                //adaugam rapoartele
-                //DataTable dtRap = General.IncarcaDT(@"SELECT * FROM ""Rap_Rapoarte"" WHERE COALESCE(""Activ"",0)=1", null);
-                DataTable dtRap = General.IncarcaDT(@"SELECT * FROM ""DynReports""", null);
 
-                if (dtRap.Rows.Count > 0)
+                //adaugam rapoartele                
+                var reports = Wizrom.Reports.Pages.Manage.GetReports();
+                
+                foreach (var report in reports)
                 {
-                    for (int i = 0; i < dtRap.Rows.Count; i++)
-                    {
-                        ASPxButton btn = new ASPxButton();
-                        btn.Text = Dami.TraduCuvant((dtRap.Rows[i]["Name"] ?? "").ToString());
-                        //btn.PostBackUrl = "RapDetaliu.aspx?id=" + dtRap.Rows[i]["DynReportId"];
-                        //Session["ReportId"] = dtRap.Rows[i]["DynReportId"];
-                        btn.PostBackUrl = "../Generatoare/Reports/Pages/ReportView.aspx";
+                    ASPxButton btn = new ASPxButton();
+                    btn.Text = Dami.TraduCuvant(report.Name);
 
-                        ASPxDockPanel pnl = new ASPxDockPanel();
-                        string nme = "wdgRap" + i;
-                        pnl.ID = nme;
-                        pnl.PanelUID = nme;
-                        pnl.ClientInstanceName = nme;
-                        pnl.HeaderText = "";
-                        pnl.DragElement = DragElement.Window;
-                        pnl.OwnerZoneUID = "LeftZone";
-                        pnl.CssClass = "cssDockPanel";
-                        pnl.Styles.Header.CssClass = "cssHeader";
-                        pnl.AllowDragging = true;
-                        pnl.AllowResize = true;
-                        pnl.ShowOnPageLoad = false;
-                        pnl.ShowShadow = false;
-                        pnl.ShowHeader = false;
-                        pnl.Styles.Content.Paddings.Padding = 0;
-                        pnl.Controls.Add(btn);
+                    // New report access interface
+                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(report.Id);
 
-                        divPanel.Controls.Add(pnl);
+                    if (reportSettings != null)
+                        btn.PostBackUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(report.Id, reportSettings.ToolbarType, reportSettings.ExportOptions);
+                    else
+                        btn.PostBackUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(report.Id);                        
 
-                        widgetNames.Add(new metaWidget { Nume = nme, Eticheta = Dami.TraduCuvant(btn.Text), RutaImg = "icoWidget0" });
-                    }
-                }
+                    ASPxDockPanel pnl = new ASPxDockPanel();
+                    string nme = "wdgRap" + report.Id;
+                    pnl.ID = nme;
+                    pnl.PanelUID = nme;
+                    pnl.ClientInstanceName = nme;
+                    pnl.HeaderText = "";
+                    pnl.DragElement = DragElement.Window;
+                    pnl.OwnerZoneUID = "LeftZone";
+                    pnl.CssClass = "cssDockPanel";
+                    pnl.Styles.Header.CssClass = "cssHeader";
+                    pnl.AllowDragging = true;
+                    pnl.AllowResize = true;
+                    pnl.ShowOnPageLoad = false;
+                    pnl.ShowShadow = false;
+                    pnl.ShowHeader = false;
+                    pnl.Styles.Content.Paddings.Padding = 0;
+                    pnl.Controls.Add(btn);
+
+                    divPanel.Controls.Add(pnl);
+
+                    widgetNames.Add(new metaWidget { Nume = nme, Eticheta = Dami.TraduCuvant(btn.Text), RutaImg = "icoWidget0" });
+                }                
 
 
                 //adaugam meniuri

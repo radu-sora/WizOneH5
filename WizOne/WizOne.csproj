@@ -40,6 +40,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Charts.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
@@ -917,7 +919,6 @@
     <Content Include="Reports\Imprima.aspx" />
     <Content Include="DefaultTactil.aspx" />
     <Content Include="Tactil\PontajDetaliatTactil.aspx" />
-    <Content Include="ViewSwitcher.ascx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -968,7 +969,6 @@
     </Content>
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
-    <Content Include="Site.Mobile.Master" />
     <None Include="Web References\SodexoOnline\paper.wsdl" />
     <None Include="Web References\SodexoOnline\paper.xsd">
       <SubType>Designer</SubType>
@@ -1814,13 +1814,6 @@
     <Compile Include="Revisal\Revisal.aspx.designer.cs">
       <DependentUpon>Revisal.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Site.Mobile.Master.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Site.Mobile.Master.designer.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
-    </Compile>
     <Compile Include="Tactil\Adeverinte.aspx.cs">
       <DependentUpon>Adeverinte.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2420,13 +2413,6 @@
     </Compile>
     <Compile Include="Tactil\PontajDetaliatTactil.aspx.designer.cs">
       <DependentUpon>PontajDetaliatTactil.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSwitcher.ascx.cs">
-      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ViewSwitcher.ascx.designer.cs">
-      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
     <Compile Include="Web References\SodexoOnline\Reference.cs">
       <AutoGen>True</AutoGen>

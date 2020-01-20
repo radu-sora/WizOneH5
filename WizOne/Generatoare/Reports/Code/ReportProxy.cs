@@ -90,7 +90,7 @@ namespace Wizrom.Reports.Code
             ReportsDbContext.RegisterGlobalConnectionString(reportsPath, appConnectionString);
             ReportDataSourceWizardConnectionStringsProvider.RegisterGlobalConnectionString(srcConnectionString);
             // If none throws an exception then ...
-            _pagesPath = $"/{reportsPath.Trim(new char[] { ' ', '/', '\\' })}/Reports/Pages/";
+            _pagesPath = $"~/{reportsPath.Trim(new char[] { ' ', '/', '\\' })}/Reports/Pages/";
         }
 
         private static string GetUrl(int reportId, string userId, short toolbarType, string exportOptions, object paramList, bool oncePerGroup)

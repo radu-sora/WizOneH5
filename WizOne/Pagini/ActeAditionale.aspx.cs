@@ -1654,12 +1654,12 @@ namespace WizOne.Pagini
         {
             try
             {
-                string param = "";
                 string paramRaport = "";
                 string paramRaport_tmp = "";
                 string msg = "";
                 string ids = "";
-                string url = "";
+                var idRap = null as string; 
+                var reportParams = null as object;
 
                 List<Object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "Motiv", "CIMDet", "CIMNed", "CORCod", "FunctieId", "Norma", "Salariul", "Spor", "Structura", "DocNr", "DocData", "DataModif", "Candidat", "IdAutoAct", "SporVechime", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev" });
 
@@ -1676,19 +1676,27 @@ namespace WizOne.Pagini
                         return;
                     }
 
-
                     if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1)
                     {
-                        DateTime ziua = Convert.ToDateTime(obj[11]);
                         paramRaport = "RaportActeAditionale_Incetare";
-                        param = "&NrDecizie=" + obj[10] + "&DataDecizie=" + +ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
+                        reportParams = new
+                        {
+                            Angajat = obj[0],
+                            NrDecizie = obj[10],
+                            DataDecizie = obj[11]
+                        };
                     }
                     else
                     {
                         if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                         {
                             paramRaport = "RaportActeAditionale_CIM";
-                            param = "&F10003=" + obj[0] + "&Validate=0";
+                            reportParams = new
+                            {
+                                Angajat = obj[0],
+                                F10003 = obj[0],
+                                Validate = 0
+                            };
                         }
                         else
                         {
@@ -1699,14 +1707,18 @@ namespace WizOne.Pagini
                                     MessageBox.Show("Nu exista data modificare", MessageBox.icoWarning, "Operatie anulata");
                                     return;
                                 }
-                                DateTime ziua = Convert.ToDateTime(obj[12]);
+
                                 paramRaport = "RaportActeAditionale_ModificariCIM";
-                                param = "&DataModificare=" + ziua.Year + "-" + ziua.Month.ToString().PadLeft(2, '0') + "-" + ziua.Day.ToString().PadLeft(2, '0');
+                                reportParams = new
+                                {
+                                    Angajat = obj[0],
+                                    DataModificare = obj[12]
+                                };
                             }
                         }
                     }
 
-                    string idRap = Dami.ValoareParam(paramRaport);
+                    idRap = Dami.ValoareParam(paramRaport);
                     if (idRap == "")
                     {
                         MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
@@ -1733,15 +1745,9 @@ namespace WizOne.Pagini
                     Session["Filtru_ActeAditionale"] = req;
 
                     #endregion
-
-                    Session["ReportId"] = Convert.ToInt32(idRap);
-
-                    string q = General.URLEncode("Angajat=" + obj[0] + param);
-                    url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + q;
                 }
                 else
                 {
-
                     for (int i = 0; i < lst.Count(); i++)
                     {
                         object[] obj = lst[i] as object[];
@@ -1826,7 +1832,7 @@ namespace WizOne.Pagini
                         return;
                     }
 
-                    string idRap = Dami.ValoareParam(paramRaport);
+                    idRap = Dami.ValoareParam(paramRaport);
                     if (idRap == "")
                     {
                         MessageBox.Show("Nu este setat raport", MessageBox.icoWarning, "Operatie anulata");
@@ -1848,8 +1854,6 @@ namespace WizOne.Pagini
 
                     #endregion
 
-                    Session["ReportId"] = Convert.ToInt32(idRap);
-
                     int idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT NEXT VALUE FOR tmpIdPrint_Id_SEQ", null));
                     if (Constante.tipBD == 2)
                         idSesiune = Convert.ToInt32(General.ExecutaScalar($@"SELECT ""tmpIdPrint_Id_SEQ"".NEXTVAL FROM DUAL", null));
@@ -1863,12 +1867,21 @@ namespace WizOne.Pagini
 
                     if (sqlSes != "")
                         General.ExecutaNonQuery(@"INSERT INTO ""tmpIdPrint""(""IdSesiune"", ""Id"") " + sqlSes.Substring(6), null);
-
-                    url = "../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("idSesiune=" + idSesiune);
+                    
+                    reportParams = new
+                    {
+                        idSesiune
+                    };
                 }
 
-                Response.Redirect(url);
+                // New report access interface
+                var reportId = Convert.ToInt32(idRap);
+                var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(reportId);
 
+                if (reportSettings != null)
+                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+                else
+                    Wizrom.Reports.Code.ReportProxy.View(reportId, paramList: reportParams);
             }
             catch (Exception ex)
             {

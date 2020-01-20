@@ -1,19 +1,15 @@
 ﻿using DevExpress.Web;
+using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using WizOne.Module;
 using System.Diagnostics;
-using System.Text;
+using System.IO;
+using System.Web.UI;
+using WizOne.Module;
 
 namespace WizOne.Personal
 {
-    public partial class ListaDocumente : System.Web.UI.Page
+    public partial class ListaDocumente : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -23,7 +19,7 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                 {      
-                    string qwe = Convert.ToString(General.Nz(Request["qwe"], "-99"));           
+                    string qwe = Convert.ToString(General.Nz(Request["qwe"], "-99"));
                     string idButon = "0";
                     switch (qwe)
                     {
@@ -49,14 +45,12 @@ namespace WizOne.Personal
                           order by ""Denumire""";
 
                     strSql = string.Format(strSql, inn, filtru);
-                    DataTable dt = General.IncarcaDT(strSql, null);
+                    DataTable dt = General.IncarcaDT(strSql, null); // TODO: FIX02 - Use repository pattern e.g. Manage.GetReports() from MainPage.
                     dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
                     grDate.KeyFieldName = "Id";
                     grDate.DataSource = dt;
                     grDate.DataBind();
-                }
-                string url = "Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["Marca"].ToString());
-                Session["ListaDoc_URL"] = url;
+                }                
             }
             catch (Exception ex)
             {
@@ -69,29 +63,28 @@ namespace WizOne.Personal
         {
             try
             {
-                string str = e.Parameters;           
-                if (str != "")
-                {
-                    string[] arr = e.Parameters.Split(';');
-                    switch (arr[0])
-                    {
-                        case "btnArata":
-                            Session["ReportId"] = Convert.ToInt32(arr[1]);                           
-                            break;
-                        case "btnPrint":
-                            Session["ReportId"] = Convert.ToInt32(arr[1]);
-                            Session["PrintareAutomata"] = 1;
-                            break;
-                    }
-                }  
+                var param = JObject.Parse(e.Parameters) as dynamic;
+
+                // New report access interface
+                if (param.command == "btnArata")
+                {                    
+                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(param.reportId);
+                    var reportUrl = null as string;
+
+                    if (reportSettings != null)
+                        reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(param.reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, new { Angajat = Session["Marca"].ToString() });
+                    else
+                        reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(param.reportId, paramList: new { Angajat = Session["Marca"].ToString() });
+
+                    grDate.JSProperties["cpReportUrl"] = ResolveClientUrl(reportUrl);
+                }
+                else if (param.command == "btnPrint")
+                    Wizrom.Reports.Code.ReportProxy.Print(param.reportId);
             }
             catch (Exception ex)
             {
-                grDate.JSProperties["cpAlertMessage"] = ex.Message;         
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-
     }
 }

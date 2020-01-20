@@ -7,3 +7,5 @@ GO
 INSERT [dbo].[DynReportTypes] ([DynReportTypeId], [Name]) VALUES (4, N'Tabel')
 GO
 
+UPDATE [dbo].[tblMeniuri] SET [Pagina] = 'Generatoare\Reports\Pages\Manage' WHERE [Id] = 24
+GO

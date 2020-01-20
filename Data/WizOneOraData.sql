@@ -1,0 +1,1 @@
+UPDATE "tblMeniuri" SET "Pagina" = 'Generatoare\Reports\Pages\Manage' WHERE "Id" = 24

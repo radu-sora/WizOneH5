@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IdentityModel.Services;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -18,12 +19,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
-using System.Web.Hosting;
-using System.Web.UI.WebControls;
-using Oracle.ManagedDataAccess.Client;
-using System.Web.UI.HtmlControls;
-using System.IdentityModel.Services;
 using System.Web.Configuration;
+using System.Web.Hosting;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace WizOne.Module
 {

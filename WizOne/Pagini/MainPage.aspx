@@ -37,7 +37,6 @@
         </div>
     </div>
 
-
     <dx:ASPxPopupControl ID="popUpPass" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static" Modal="true"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top" OnWindowCallback="popUpPass_WindowCallback"
         EnableViewState="False" PopupElementID="popUpPassArea" PopupHorizontalAlign="WindowCenter" SettingsLoadingPanel-Enabled="true"
@@ -60,11 +59,10 @@
                         </tr>
                         <tr>
                             <td style="width:100%; padding-left:20px;">
-                                <dx:ASPxLabel ID="lblRap" runat="server"  Text="Introduceti parola raport"/>
+                                <dx:ASPxLabel ID="lblRap" runat="server" Text="Introduceti parola raport" />
                                 <dx:ASPxTextBox ID="txtRapPass" ClientInstanceName="txtRapPass" runat="server" Width="280" Password="true" >
                                     <ClientSideEvents KeyPress="function(s, e) { onPassKeyPress(e); }" />
                                  </dx:ASPxTextBox>
-                                <dx:ASPxHiddenField ID="hfRap" runat="server" />
                             </td>
                         </tr>
                     </table>
@@ -78,18 +76,23 @@
     </dx:ASPxGlobalEvents>
 
     <script>
-        function onRapButtonClick(s) {
-            popUpPass.Show();
-            hfRap.Set('NumeRap', s.name); 
+        var selectedReportUrl;
+
+        function onRapButtonClick(url) {
+            selectedReportUrl = url;
+            popUpPass.Show();            
         }
 
         function onPassEndCallback(s) {
             if (s.cpAlertMessage) {
                 swal({
-                    title: "", text: s.cpAlertMessage,
-                    type: "warning"
+                    title: 'Atentie !',
+                    text: s.cpAlertMessage,
+                    type: 'warning'
                 });
                 delete s.cpAlertMessage;
+            } else {
+                window.location.href = selectedReportUrl;
             }
         }
 
@@ -105,13 +108,14 @@
 
             if (!txtRapPass.GetText()) {
                 swal({
-                    title: 'Atentie !', text: 'Lipsesc date',
+                    title: 'Atentie !',
+                    text: 'Lipsesc date',
                     type: 'warning'
                 });
             }
             else {
                 popUpPass.Hide();
-                pnlLoading.Show();
+                pnlLoading.Show();                
                 popUpPass.PerformCallback();
             }
         }

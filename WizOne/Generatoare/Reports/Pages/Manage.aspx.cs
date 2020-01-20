@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using WizOne.Module;
 using Wizrom.Reports.Code;
@@ -27,12 +28,12 @@ namespace Wizrom.Reports.Pages
             public short ToolbarType { get; set; }
         }
 
-        public IEnumerable<ReportViewModel> GetReports()
+        public static IEnumerable<ReportViewModel> GetReports()
         {
             var reports = General.RunSqlQuery<ReportViewModel>(
                 "SELECT DISTINCT r.[DynReportId] AS [Id], r.[Name], r.[Description], r.[DynReportTypeId] AS [TypeId], rgu.[AreParola] AS Restricted " +
                 "FROM [DynReports] r " +
-                "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1", Session["UserId"]);
+                "INNER JOIN [RapoarteGrupuriUtilizatori] rgu ON r.[DynReportId] = rgu.[IdRaport] AND rgu.[IdUser] = @1", HttpContext.Current.Session["UserId"]);
 
             return reports;
         }
@@ -72,6 +73,14 @@ namespace Wizrom.Reports.Pages
             General.RunSqlScalar<int>($"DELETE FROM [{tableName}] WHERE [IdRaport] = @1", null, report.Id);
         }
 
+        public static ReportSettingsViewModel GetReportSettings(int reportId)
+        {
+            return General.RunSqlSingle<ReportSettingsViewModel>(
+                "SELECT [ExtensiiPermise] AS [ExportOptions], [MeniuRestrans] AS [ToolbarType] " +
+                "FROM [RapoarteGrupuriUtilizatori] " +
+                "WHERE [IdRaport] = @1 AND [IdUser] = @2", reportId, HttpContext.Current.Session["UserId"]);
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             Dami.AccesApp();
@@ -89,15 +98,11 @@ namespace Wizrom.Reports.Pages
             ExitButton.Text = Dami.TraduCuvant("ExitButton", "Iesire");            
 
             foreach (var col in ReportsGridView.Columns.OfType<GridViewDataColumn>())
-            {                
-                col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);                
-            }
+                col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
             #endregion
 
-            if ((Session["EsteAdmin"] ?? "0").ToString() == "0")
-                ReportsGridView.Columns[0].Visible = false;
-
-            ReportsGridView.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaRap", "10"));            
+            ReportsGridView.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaRap", "10"));
+            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(ReportsGridView);
         }
         
         protected void ReportsGridView_DataBinding(object sender, EventArgs e)
@@ -114,10 +119,7 @@ namespace Wizrom.Reports.Pages
             {
                 try
                 {
-                    var reportSettings = General.RunSqlSingle<ReportSettingsViewModel>(
-                        "SELECT [ExtensiiPermise] AS [ExportOptions], [MeniuRestrans] AS [ToolbarType] " +
-                        "FROM [RapoarteGrupuriUtilizatori] " +
-                        "WHERE [IdRaport] = @1 AND [IdUser] = @2", selectedValues[0], Session["UserId"]);
+                    var reportSettings = GetReportSettings((int)selectedValues[0]);
 
                     if (reportSettings != null)
                         ReportProxy.View((int)selectedValues[0], reportSettings.ToolbarType, reportSettings.ExportOptions);

@@ -1604,7 +1604,11 @@ namespace WizOne.Eval
             ASPxGridView grDateObiective = new ASPxGridView();
             if (Session["lstEval_ObiIndividualeTemp"] == null)
             {
-                DataTable dtObiIndividuale = General.IncarcaDT(@"select * from ""Eval_ObiIndividualeTemp"" WHERE F10003=@1 ORDER BY ""Obiectiv"", ""Activitate"" ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                string sqlObiTmp = @"select * from ""Eval_ObiIndividualeTemp"" WHERE F10003=@1 ORDER BY ""Obiectiv"", ""Activitate"" ";
+                if (Constante.tipBD == 2)
+                    sqlObiTmp = @"select * from ""Eval_ObiIndividualeTemp"" WHERE F10003=@1 ORDER BY TO_CHAR(""Obiectiv""), TO_CHAR(""Activitate"") ";
+
+                DataTable dtObiIndividuale = General.IncarcaDT(sqlObiTmp, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                 foreach (DataRow rwObiIndividuale in dtObiIndividuale.Rows)
                 {
                     Eval_ObiIndividualeTemp clsObiIndividuale = new Eval_ObiIndividualeTemp(rwObiIndividuale);

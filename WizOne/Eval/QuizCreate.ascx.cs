@@ -639,7 +639,7 @@ namespace WizOne.Eval
                         if (cmbCategObi.Value != null)
                             rowSelected["IdCategObiective"] = Convert.ToInt32(cmbCategObi.Value);
                         else
-                            rowSelected["IdCategObiective"] = null;
+                            rowSelected["IdCategObiective"] = DBNull.Value;
 
                         Session["InformatiaCurentaEvalQuiz"] = ds;
 

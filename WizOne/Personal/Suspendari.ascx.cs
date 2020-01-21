@@ -111,11 +111,11 @@ namespace WizOne.Personal
                 }
 
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                ds.Tables[0].Rows[0]["F100925"] = cmbMotivSuspendare.Value;
+                ds.Tables[0].Rows[0]["F100925"] = Convert.ToInt32(cmbMotivSuspendare.Value);
                 ds.Tables[0].Rows[0]["F100922"] = deDataInceputSusp.Date;
                 ds.Tables[0].Rows[0]["F100923"] = deDataSfarsitSusp.Date;
                 ds.Tables[0].Rows[0]["F100924"] = deDataIncetareSusp.Date;
-                ds.Tables[1].Rows[0]["F100925"] = cmbMotivSuspendare.Value;
+                ds.Tables[1].Rows[0]["F100925"] = Convert.ToInt32(cmbMotivSuspendare.Value);
                 ds.Tables[1].Rows[0]["F100922"] = deDataInceputSusp.Date;
                 ds.Tables[1].Rows[0]["F100923"] = deDataSfarsitSusp.Date;
                 ds.Tables[1].Rows[0]["F100924"] = deDataIncetareSusp.Date;
@@ -284,7 +284,7 @@ namespace WizOne.Personal
         private void ActualizareSusp(int param)
         {
             DataTable dtSuspAng = new DataTable();
-
+            DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
             if (param == 1)
             {
                 dtSuspAng = General.IncarcaDT("select * from f111 Where F11103 = " + Session["Marca"].ToString() + " AND (F11107 IS NULL OR F11107 = "
@@ -319,6 +319,12 @@ namespace WizOne.Personal
                 Session["MP_SuspDataIncp"] = new DateTime(2100, 1, 1);
                 Session["MP_SuspDataSf"] = new DateTime(2100, 1, 1);
                 Session["MP_SuspDataInct"] = new DateTime(2100, 1, 1);
+
+                //Radu 21.01.2020
+                ds.Tables[0].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
+                ds.Tables[0].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
+                ds.Tables[2].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
+                ds.Tables[2].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
             }
         }
 

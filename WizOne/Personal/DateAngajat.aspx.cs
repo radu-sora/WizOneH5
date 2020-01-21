@@ -624,7 +624,7 @@ namespace WizOne.Personal
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
-                    {  
+                    {                     
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                     }
                 }

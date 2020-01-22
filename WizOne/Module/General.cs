@@ -844,9 +844,7 @@ namespace WizOne.Module
                             if (param.GetType().Name == "Byte[]")
                                 cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Blob)).Value = param;
                             else
-                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param));
-
-
+                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), (param ?? System.DBNull.Value) ));
                         }
                         catch (Exception ex)
                         {

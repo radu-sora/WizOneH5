@@ -243,7 +243,47 @@ namespace WizOne.Eval
 
                 #region Set Scripts Upload DB
                 sqlCommandDelete = @"delete from ""Eval_RaspunsLinii"" where ""IdQuiz"" = @1 and ""F10003"" = @2 and ""Id"" = @3";
-                sqlCommandInsert = @"insert into ""Eval_RaspunsLinii""(""IdQuiz"", ""F10003"", ""Id"", ""Linia"", 
+                //sqlCommandInsert = $@"insert into ""Eval_RaspunsLinii""(""IdQuiz"", ""F10003"", ""Id"", ""Linia"", 
+                //                                ""Super1"",""Super2"",""Super3"",""Super4"",""Super5"",
+                //                                ""Super6"",""Super7"",""Super8"",""Super9"",""Super10"",
+                //                                ""Super11"",""Super12"",""Super13"",""Super14"",""Super15"",
+                //                                ""Super16"",""Super17"",""Super18"",""Super19"",""Super20"",
+                //                                ""USER_NO"",""TIME"",""Descriere"",""TipData"",""TipValoare"",
+                //                                ""Sublinia"",""Tinta"",""Super1_1"",""Super1_2"",""Super1_3"",
+                //                                ""Super2_1"",""Super2_2"",""Super2_3"",""Super3_1"",""Super3_2"",
+                //                                ""Super3_3"",""Super4_1"",""Super4_2"",""Super4_3"",""Super5_1"",
+                //                                ""Super5_2"",""Super5_3"",""Super6_1"",""Super6_2"",""Super6_3"",
+                //                                ""Super7_1"",""Super7_2"",""Super7_3"",""Super8_1"",""Super8_2"",
+                //                                ""Super8_3"",""Super9_1"",""Super9_2"",""Super9_3"",""Super10_1"",
+                //                                ""Super10_2"",""Super10_3"",""IdGrup"",""PondereRatingGlobal"",""NumeGrup"",
+                //                                ""Super11_1"",""Super11_2"",""Super11_3"",""Super12_1"",""Super12_2"",
+                //                                ""Super12_3"",""Super13_1"",""Super13_2"",""Super13_3"",""Super14_1"",
+                //                                ""Super14_2"",""Super14_3"",""Super15_1"",""Super15_2"",""Super15_3"",
+                //                                ""Super16_1"",""Super16_2"",""Super16_3"",""Super17_1"",""Super17_2"",
+                //                                ""Super17_3"",""Super18_1"",""Super18_2"",""Super18_3"",""Super19_1"",
+                //                                ""Super19_2"",""Super19_3"",""Super20_1"",""Super20_2"",""Super20_3"",
+                //                                ""Super1_4"",""Super1_5"",""Super1_6"",""Super2_4"",""Super2_5"",
+                //                                ""Super2_6"",""Super3_4"",""Super3_5"",""Super3_6"",""Super4_4"",
+                //                                ""Super4_5"",""Super4_6"",""Super5_4"",""Super5_5"",""Super5_6"",
+                //                                ""Super6_4"",""Super6_5"",""Super6_6"",""Super7_4"",""Super7_5"",
+                //                                ""Super7_6"",""Super8_4"",""Super8_5"",""Super8_6"",""Super9_4"",
+                //                                ""Super9_5"",""Super9_6"",""Super10_4"",""Super10_5"",""Super10_6"",
+                //                                ""Super11_4"",""Super11_5"",""Super11_6"",""Super12_4"",""Super12_5"",
+                //                                ""Super12_6"",""Super13_4"",""Super13_5"",""Super13_6"",""Super14_4"",
+                //                                ""Super14_5"",""Super14_6"",""Super15_4"",""Super15_5"",""Super15_6"",
+                //                                ""Super16_4"",""Super16_5"",""Super16_6"",""Super17_4"",""Super17_5"",
+                //                                ""Super17_6"",""Super18_4"",""Super18_5"",""Super18_6"",""Super19_4"",
+                //                                ""Super19_5"",""Super19_6"",""Super20_4"",""Super20_5"",""Super20_6"",
+                //                                ""DescriereInRatingGlobal"")
+                //                              values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,
+                //                                @20,@21,@22,@23,@24,{General.CurrentDate()},@26,@27,@28,@29,@30,@31,@32,@33,@34,@35,@36,@37,@38,@39,
+                //                                @40,@41,@42,@43,@44,@45,@46,@47,@48,@49,@50,@51,@52,@53,@54,@55,@56,@57,@58,@59,
+                //                                @60,@61,@62,@63,@64,@65,@66,@67,@68,@69,@70,@71,@72,@73,@74,@75,@76,@77,@78,@79,
+                //                                @80,@81,@82,@83,@84,@85,@86,@87,@88,@89,@90,@91,@92,@93,@94,@95,@96,@97,@98,@99,
+                //                                @100,@101,@102,@103,@104,@105,@106,@107,@108,@109,@110,@111,@112,@113,@114,@115,@116,@117,@118,@119,
+                //                                @120,@121,@122,@123,@124,@125,@126,@127,@128,@129,@130,@131,@132,@133,@134,@135,@136,@137,@138,@139,
+                //                                @140,@141,@142,@143,@144,@145,@146,@147,@148,@149,@150,@151,@152,@153,@154,@155);";
+                sqlCommandInsert = $@"insert into ""Eval_RaspunsLinii""(""IdQuiz"", ""F10003"", ""Id"", ""Linia"", 
                                                 ""Super1"",""Super2"",""Super3"",""Super4"",""Super5"",
                                                 ""Super6"",""Super7"",""Super8"",""Super9"",""Super10"",
                                                 ""Super11"",""Super12"",""Super13"",""Super14"",""Super15"",
@@ -276,13 +316,13 @@ namespace WizOne.Eval
                                                 ""Super19_5"",""Super19_6"",""Super20_4"",""Super20_5"",""Super20_6"",
                                                 ""DescriereInRatingGlobal"")
                                               values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,
-                                                @20,@21,@22,@23,@24,@25,@26,@27,@28,@29,@30,@31,@32,@33,@34,@35,@36,@37,@38,@39,
+                                                @20,@21,@22,@23,@24,{General.CurrentDate()},@25,@26,@27,@28,@29,@30,@31,@32,@33,@34,@35,@36,@37,@38,@39,
                                                 @40,@41,@42,@43,@44,@45,@46,@47,@48,@49,@50,@51,@52,@53,@54,@55,@56,@57,@58,@59,
                                                 @60,@61,@62,@63,@64,@65,@66,@67,@68,@69,@70,@71,@72,@73,@74,@75,@76,@77,@78,@79,
                                                 @80,@81,@82,@83,@84,@85,@86,@87,@88,@89,@90,@91,@92,@93,@94,@95,@96,@97,@98,@99,
                                                 @100,@101,@102,@103,@104,@105,@106,@107,@108,@109,@110,@111,@112,@113,@114,@115,@116,@117,@118,@119,
                                                 @120,@121,@122,@123,@124,@125,@126,@127,@128,@129,@130,@131,@132,@133,@134,@135,@136,@137,@138,@139,
-                                                @140,@141,@142,@143,@144,@145,@146,@147,@148,@149,@150,@151,@152,@153,@154,@155);";
+                                                @140,@141,@142,@143,@144,@145,@146,@147,@148,@149,@150,@151,@152,@153,@154);";
                 #endregion
 
                 lstEval_RaspunsLinii = Session["lstEval_RaspunsLinii"] as List<Eval_RaspunsLinii>;
@@ -293,13 +333,14 @@ namespace WizOne.Eval
                         sqlCommandDeleteTemp = sqlCommandDelete;
                         General.ExecutaNonQuery(sqlCommandDeleteTemp, new object[] { entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id });
 
+                        //Florin 2020.01.22 - DateTime.Now.ToString("yyyyMMdd HH:mm") este suprascrisa mai sus in sqlCommandInsert
                         sqlCommandInsertTemp = sqlCommandInsert;
                         General.ExecutaNonQuery(sqlCommandInsertTemp, new object[] {  entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id,
                                             entRaspLinie.Linia, entRaspLinie.Super1, entRaspLinie.Super2, entRaspLinie.Super3, entRaspLinie.Super4,
                                             entRaspLinie.Super5, entRaspLinie.Super6, entRaspLinie.Super7, entRaspLinie.Super8, entRaspLinie.Super9,
                                             entRaspLinie.Super10, entRaspLinie.Super11, entRaspLinie.Super12, entRaspLinie.Super13, entRaspLinie.Super14,
                                             entRaspLinie.Super15, entRaspLinie.Super16, entRaspLinie.Super17, entRaspLinie.Super18, entRaspLinie.Super19,
-                                            entRaspLinie.Super20, entRaspLinie.USER_NO, DateTime.Now.ToString("yyyyMMdd HH:mm"), entRaspLinie.Descriere, entRaspLinie.TipData,
+                                            entRaspLinie.Super20, entRaspLinie.USER_NO, entRaspLinie.Descriere, entRaspLinie.TipData,
                                             entRaspLinie.TipValoare, entRaspLinie.Sublinia, entRaspLinie.Tinta, entRaspLinie.Super1_1, entRaspLinie.Super1_2,
                                             entRaspLinie.Super1_3, entRaspLinie.Super2_1, entRaspLinie.Super2_2, entRaspLinie.Super2_3, entRaspLinie.Super3_1,
                                             entRaspLinie.Super3_2, entRaspLinie.Super3_3, entRaspLinie.Super4_1, entRaspLinie.Super4_2, entRaspLinie.Super4_3,

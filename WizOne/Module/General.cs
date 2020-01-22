@@ -841,10 +841,18 @@ namespace WizOne.Module
                             //cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param));
 
 
-                            if (param.GetType().Name == "Byte[]")
-                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Blob)).Value = param;
+                            if (General.Nz(param,"").ToString().Trim() == "")
+                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), null));
                             else
-                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), (param ?? System.DBNull.Value) ));
+                            {
+                                if (param.GetType().Name == "Byte[]")
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Blob)).Value = param;
+                                else
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param));
+                            }
+                                
+
+                            //(param ?? System.DBNull.Value)
                         }
                         catch (Exception ex)
                         {

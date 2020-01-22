@@ -17,6 +17,7 @@
     }
 
     function OnEndCallbackGridSusp(s, e) {
+  
         var motiv = parseInt("<%=Session["MP_SuspMotiv"] %>");
         var dataIncp = "<%=Session["MP_SuspDataIncp"] %>";
         var dataSf = "<%=Session["MP_SuspDataSf"] %>";

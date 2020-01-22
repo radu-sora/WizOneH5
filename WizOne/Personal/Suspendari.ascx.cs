@@ -304,10 +304,13 @@ namespace WizOne.Personal
                 deDataInceputSusp.Value = dtSuspAng.Rows[0]["F11105"];
                 deDataSfarsitSusp.Value = dtSuspAng.Rows[0]["F11106"];
                 deDataIncetareSusp.Value = dtSuspAng.Rows[0]["F11107"];
-                Session["MP_SuspMotiv"] = dtSuspAng.Rows[0]["F11104"];
-                Session["MP_SuspDataIncp"] = dtSuspAng.Rows[0]["F11105"];
-                Session["MP_SuspDataSf"] = dtSuspAng.Rows[0]["F11106"];
-                Session["MP_SuspDataInct"] = dtSuspAng.Rows[0]["F11107"];
+                if (param == 2)
+                {
+                    Session["MP_SuspMotiv"] = dtSuspAng.Rows[0]["F11104"];
+                    Session["MP_SuspDataIncp"] = dtSuspAng.Rows[0]["F11105"];
+                    Session["MP_SuspDataSf"] = dtSuspAng.Rows[0]["F11106"];
+                    Session["MP_SuspDataInct"] = dtSuspAng.Rows[0]["F11107"];
+                }
             }
             else
             {
@@ -315,10 +318,13 @@ namespace WizOne.Personal
                 deDataInceputSusp.Value = new DateTime(2100, 1, 1);
                 deDataSfarsitSusp.Value = new DateTime(2100, 1, 1);
                 deDataIncetareSusp.Value = new DateTime(2100, 1, 1);
-                Session["MP_SuspMotiv"] = 0;
-                Session["MP_SuspDataIncp"] = new DateTime(2100, 1, 1);
-                Session["MP_SuspDataSf"] = new DateTime(2100, 1, 1);
-                Session["MP_SuspDataInct"] = new DateTime(2100, 1, 1);
+                if (param == 2)
+                {
+                    Session["MP_SuspMotiv"] = 0;
+                    Session["MP_SuspDataIncp"] = new DateTime(2100, 1, 1);
+                    Session["MP_SuspDataSf"] = new DateTime(2100, 1, 1);
+                    Session["MP_SuspDataInct"] = new DateTime(2100, 1, 1);
+                }
 
                 //Radu 21.01.2020
                 ds.Tables[0].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];

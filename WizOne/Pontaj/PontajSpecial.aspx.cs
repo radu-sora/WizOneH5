@@ -298,7 +298,6 @@ namespace WizOne.Pontaj
             }
         }
 
-
         public string InitializarePontajSpecial(DateTime dataStart, DateTime dataSf, int nrZile, DataRow sablon, List<int> lstMarci)
         {
             string msg = "";
@@ -309,7 +308,7 @@ namespace WizOne.Pontaj
             string dtSf = General.ToDataUniv(dataSf.Date.Year, dataSf.Date.Month, dataSf.Date.Day);
             DataTable dtHolidays = General.IncarcaDT("SELECT * FROM HOLIDAYS", null);
 
-            DataTable dtAbs = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" = 'COP'", null);            
+            DataTable dtAbs = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" = 'COP'", null);
             int idAbsenta = -1;
             if (dtAbs != null && dtAbs.Rows.Count > 0)
                 idAbsenta = Convert.ToInt32(dtAbs.Rows[0]["Id"].ToString());
@@ -330,7 +329,7 @@ namespace WizOne.Pontaj
                 string sqlSDSL = "";
                 string cond = "";
                 List<DateTime> lstInit = new List<DateTime>();
-                
+
                 for (int i = 1; i <= nrZile; i++)
                 {
                     string data = "";
@@ -387,7 +386,7 @@ namespace WizOne.Pontaj
                                 break;
                         }
 
-                        if (nrT > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
+                        if (nr > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
                         {
                             lstMarciSDSL.Clear();
                             lista1 = "";
@@ -402,7 +401,7 @@ namespace WizOne.Pontaj
                                             lstMarciSDSL.Add(marca);
                                         if (chkD.Checked && zi.DayOfWeek == DayOfWeek.Sunday)
                                             lstMarciSDSL.Add(marca);
-                                        if (chkSL.Checked && nrT > 0)
+                                        if (chkSL.Checked && nr > 0)
                                             lstMarciSDSL.Add(marca);
                                     }
                                     else
@@ -427,7 +426,7 @@ namespace WizOne.Pontaj
 
                                 lstInit.Add(zi);
                                 sqlSDSL += "OR (\"Ziua\" = " + data1 + " AND F10003 IN (" + lista1 + ")) ";
-                            
+
                             }
 
                         }
@@ -443,7 +442,7 @@ namespace WizOne.Pontaj
 
                         ziuaPrec = zi;
                     }
-                                       
+
 
                     if (Constante.tipBD == 1)
                         cond = " ISNUMERIC(\"ValStr\") = 1 ";
@@ -483,7 +482,7 @@ namespace WizOne.Pontaj
                     string sirVal = "";
                     List<string> listaVal = new List<string>();
                     if (sablon["ValZiua" + i] != null && sablon["ValZiua" + i].ToString().Length > 0)
-                    {                    
+                    {
                         string[] param = sablon["ValZiua" + i].ToString().Split(';');
                         for (int k = 0; k < param.Length; k++)
                         {

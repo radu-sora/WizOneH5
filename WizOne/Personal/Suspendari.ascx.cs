@@ -59,6 +59,11 @@ namespace WizOne.Personal
                     Session["MP_SuspMotiv"] = -99;
                     ActualizareSusp(1);
                 }
+
+                cmbMotivSuspendare.ClientEnabled = false;
+                deDataInceputSusp.ClientEnabled = false;
+                deDataSfarsitSusp.ClientEnabled = false;
+                deDataIncetareSusp.ClientEnabled = false;
             }
             catch (Exception ex)
             {
@@ -149,6 +154,7 @@ namespace WizOne.Personal
             }
         }
 
+        //Radu 22.01.2020 - nu se mai foloseste
         public void AdaugaIstoricSuspendare(int f10003, int idMotiv, DateTime dtInceput, DateTime dtSfarsit, DateTime dtIncetare, int idUser)
         {
             try
@@ -240,11 +246,35 @@ namespace WizOne.Personal
 
                 e.Cancel = true;
                 grDateSuspendari.CancelEdit();
-                Session["InformatiaCurentaPersonal"] = ds;
+               
                 grDateSuspendari.DataSource = dtSusp;
                 Session["MP_Suspendari"] = dtSusp;
-                ActualizareSusp(2);
+
+                ds.Tables[0].Rows[0]["F100925"] = dtSusp.Rows[0]["F11104"];
+                ds.Tables[0].Rows[0]["F100922"] = dtSusp.Rows[0]["F11105"];
+                ds.Tables[0].Rows[0]["F100923"] = dtSusp.Rows[0]["F11106"];
+                ds.Tables[0].Rows[0]["F100924"] = dtSusp.Rows[0]["F11107"];
+                ds.Tables[1].Rows[0]["F100925"] = dtSusp.Rows[0]["F11104"];
+                ds.Tables[1].Rows[0]["F100922"] = dtSusp.Rows[0]["F11105"];
+                ds.Tables[1].Rows[0]["F100923"] = dtSusp.Rows[0]["F11106"];
+                ds.Tables[1].Rows[0]["F100924"] = dtSusp.Rows[0]["F11107"];
+                //Radu 17.01.2020
+                ds.Tables[0].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                ds.Tables[0].Rows[0]["F1001102"] = Convert.ToDateTime(dtSusp.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
+                ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                ds.Tables[2].Rows[0]["F1001102"] = Convert.ToDateTime(dtSusp.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
+                Session["InformatiaCurentaPersonal"] = ds;
+
+                
                 General.SalveazaDate(dtSusp, "F111");
+
+                try
+                {
+                    General.CalculCO(Convert.ToDateTime(dtSusp.Rows[0]["F11105"]).Year, Convert.ToInt32(dtSusp.Rows[0]["F11103"].ToString()));
+                }
+                catch (Exception) { }
+
+                ActualizareSusp(2);
             }
             catch (Exception ex)
             {
@@ -255,25 +285,118 @@ namespace WizOne.Personal
 
         protected void grDateSuspendari_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
         {
+            //try
+            //{
+            //    object[] keys = new object[e.Keys.Count];
+            //    for (int i = 0; i < e.Keys.Count; i++)
+            //    { keys[i] = e.Keys[i]; }
+
+            //    DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+            //    DataTable dtSusp = Session["MP_Suspendari"] as DataTable;
+            //    DataRow row = dtSusp.Rows.Find(keys);
+
+            //    row.Delete();
+
+            //    e.Cancel = true;
+            //    grDateSuspendari.CancelEdit();
+            //    Session["InformatiaCurentaPersonal"] = ds;
+            //    grDateSuspendari.DataSource = dtSusp;
+            //    Session["MP_Suspendari"] = dtSusp;
+            //    ActualizareSusp(2);
+            //    General.SalveazaDate(dtSusp, "F111");
+
+            //    try
+            //    {
+            //        General.CalculCO(Convert.ToDateTime(dtSusp.Rows[0]["F11105"]).Year, Convert.ToInt32(dtSusp.Rows[0]["F11103"].ToString()));
+            //    }
+            //    catch (Exception) { }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+            //}
+        }
+
+
+        protected void grDateSuspendari_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
+        {
             try
             {
-                object[] keys = new object[e.Keys.Count];
-                for (int i = 0; i < e.Keys.Count; i++)
-                { keys[i] = e.Keys[i]; }
+                DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
+                DateTime dtLuc = General.DamiDataLucru();
+                e.NewValues["F11101"] = 111;
+                e.NewValues["F11102"] = ds.Tables[0].Rows[0]["F10017"];
+                e.NewValues["F11103"] = Convert.ToInt32(Session["Marca"].ToString());
+                e.NewValues["F11104"] = 0;
+                e.NewValues["F11105"] = new DateTime(2100, 1, 1);
+                e.NewValues["F11106"] = new DateTime(2100, 1, 1);
+                e.NewValues["F11107"] = new DateTime(2100, 1, 1);
+                e.NewValues["YEAR"] = dtLuc.Year;
+                e.NewValues["MONTH"] = dtLuc.Month;
+                e.NewValues["USER_NO"] = Convert.ToInt32(Session["UserId"].ToString());
+                e.NewValues["TIME"] = DateTime.Now;
 
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void grDateSuspendari_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            try
+            {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 DataTable dtSusp = Session["MP_Suspendari"] as DataTable;
-                DataRow row = dtSusp.Rows.Find(keys);
+                object[] row = new object[dtSusp.Columns.Count];
+                int x = 0;
+                foreach (DataColumn col in dtSusp.Columns)
+                {
+                    if (!col.AutoIncrement)
+                    {
+                        switch (col.ColumnName.ToUpper())
+                        {     
+                            default:
+                                row[x] = e.NewValues[col.ColumnName];
+                                break;
+                        }
+                    }
+                    x++;
+                }
 
-                row.Delete();
-
+                dtSusp.Rows.Add(row);
                 e.Cancel = true;
-                grDateSuspendari.CancelEdit();
-                Session["InformatiaCurentaPersonal"] = ds;
+                grDateSuspendari.CancelEdit();               
                 grDateSuspendari.DataSource = dtSusp;
+                //grDateSuspendari.KeyFieldName = "IdAuto";
                 Session["MP_Suspendari"] = dtSusp;
-                ActualizareSusp(2);
+              
+              
                 General.SalveazaDate(dtSusp, "F111");
+
+                try
+                {
+                    General.CalculCO(Convert.ToDateTime(dtSusp.Rows[0]["F11105"]).Year, Convert.ToInt32(dtSusp.Rows[0]["F11103"].ToString()));
+                }
+                catch (Exception) { }
+
+       
+                ds.Tables[0].Rows[0]["F100925"] = dtSusp.Rows[0]["F11104"];
+                ds.Tables[0].Rows[0]["F100922"] = dtSusp.Rows[0]["F11105"];
+                ds.Tables[0].Rows[0]["F100923"] = dtSusp.Rows[0]["F11106"];
+                ds.Tables[0].Rows[0]["F100924"] = dtSusp.Rows[0]["F11107"];
+                ds.Tables[1].Rows[0]["F100925"] = dtSusp.Rows[0]["F11104"];
+                ds.Tables[1].Rows[0]["F100922"] = dtSusp.Rows[0]["F11105"];
+                ds.Tables[1].Rows[0]["F100923"] = dtSusp.Rows[0]["F11106"];
+                ds.Tables[1].Rows[0]["F100924"] = dtSusp.Rows[0]["F11107"];
+                //Radu 17.01.2020
+                ds.Tables[0].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                ds.Tables[0].Rows[0]["F1001102"] = Convert.ToDateTime(dtSusp.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
+                ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                ds.Tables[2].Rows[0]["F1001102"] = Convert.ToDateTime(dtSusp.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
+                Session["InformatiaCurentaPersonal"] = ds;
+                ActualizareSusp(2);
             }
             catch (Exception ex)
             {
@@ -314,17 +437,17 @@ namespace WizOne.Personal
             }
             else
             {
-                cmbMotivSuspendare.Value = 0;
-                deDataInceputSusp.Value = new DateTime(2100, 1, 1);
-                deDataSfarsitSusp.Value = new DateTime(2100, 1, 1);
-                deDataIncetareSusp.Value = new DateTime(2100, 1, 1);
-                if (param == 2)
-                {
-                    Session["MP_SuspMotiv"] = 0;
-                    Session["MP_SuspDataIncp"] = new DateTime(2100, 1, 1);
-                    Session["MP_SuspDataSf"] = new DateTime(2100, 1, 1);
-                    Session["MP_SuspDataInct"] = new DateTime(2100, 1, 1);
-                }
+                //cmbMotivSuspendare.Value = 0;
+                //deDataInceputSusp.Value = new DateTime(2100, 1, 1);
+                //deDataSfarsitSusp.Value = new DateTime(2100, 1, 1);
+                //deDataIncetareSusp.Value = new DateTime(2100, 1, 1);
+                //if (param == 2)
+                //{
+                //    Session["MP_SuspMotiv"] = 0;
+                //    Session["MP_SuspDataIncp"] = new DateTime(2100, 1, 1);
+                //    Session["MP_SuspDataSf"] = new DateTime(2100, 1, 1);
+                //    Session["MP_SuspDataInct"] = new DateTime(2100, 1, 1);
+                //}
 
                 //Radu 21.01.2020
                 ds.Tables[0].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];

@@ -47,7 +47,7 @@
 						    <dx:ASPxComboBox ID="cmbMotivSuspendare" ClientInstanceName="cmbMotivSuspendare" runat="server" DropDownStyle="DropDown" TabIndex="1" TextField="F09003" ValueField="F09002" AutoPostBack="false" ValueType="System.Int32" Width="250" />
 					    </td>
                         <td>
-					        <dx:ASPxButton ID="btnSalveazaSusp" runat="server" AutoPostBack="false"  RenderMode="Link">  
+					        <dx:ASPxButton ID="btnSalveazaSusp" runat="server" AutoPostBack="false" Visible="false"  RenderMode="Link">  
                                 <ClientSideEvents Click="function(s,e){ pnlCtlSusp.PerformCallback(s.name) }" />
 						        <Image Url="../Fisiere/Imagini/Icoane/salveaza.png"></Image>
                                 <Paddings PaddingLeft="10px" />
@@ -87,13 +87,13 @@
 			    </table>
 
                 <dx:ASPxGridView ID="grDateSuspendari" runat="server" ClientInstanceName="grDateSuspendari" ClientIDMode="Static" Width="80%" AutoGenerateColumns="false"
-                    OnRowUpdating="grDateSuspendari_RowUpdating" OnRowDeleting="grDateSuspendari_RowDeleting">
+                    OnRowUpdating="grDateSuspendari_RowUpdating" OnRowInserting="grDateSuspendari_RowInserting" OnInitNewRow="grDateSuspendari_InitNewRow">
                     <ClientSideEvents EndCallback="function (s,e) { OnEndCallbackGridSusp(s,e); }" />
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  /> 
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
                         <dx:GridViewDataComboBoxColumn FieldName="F11104" Name="F11104" Caption="Motiv"  Width="250px" >
                             <PropertiesComboBox TextField="F09003" ValueField="F09002" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
@@ -124,10 +124,13 @@
                             <Styles>
                                 <Style Paddings-PaddingRight="5px" />
                             </Styles>
-                        </EditButton>
-                        <DeleteButton Image-ToolTip="Sterge">
-                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
-                        </DeleteButton>  
+                        </EditButton> 
+                        <NewButton Image-ToolTip="Rand nou">
+                            <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                            <Styles>
+                                <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+                            </Styles>
+                        </NewButton>
                     </SettingsCommandButton>
                 </dx:ASPxGridView>
 

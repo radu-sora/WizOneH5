@@ -283,54 +283,47 @@ namespace WizOne.Eval
                 //                                @100,@101,@102,@103,@104,@105,@106,@107,@108,@109,@110,@111,@112,@113,@114,@115,@116,@117,@118,@119,
                 //                                @120,@121,@122,@123,@124,@125,@126,@127,@128,@129,@130,@131,@132,@133,@134,@135,@136,@137,@138,@139,
                 //                                @140,@141,@142,@143,@144,@145,@146,@147,@148,@149,@150,@151,@152,@153,@154,@155);";
-                //sqlCommandInsert = $@"insert into ""Eval_RaspunsLinii""(""IdQuiz"", ""F10003"", ""Id"", ""Linia"", 
-                //                                ""Super1"",""Super2"",""Super3"",""Super4"",""Super5"",
-                //                                ""Super6"",""Super7"",""Super8"",""Super9"",""Super10"",
-                //                                ""Super11"",""Super12"",""Super13"",""Super14"",""Super15"",
-                //                                ""Super16"",""Super17"",""Super18"",""Super19"",""Super20"",
-                //                                ""USER_NO"",""TIME"",""Descriere"",""TipData"",""TipValoare"",
-                //                                ""Sublinia"",""Tinta"",""Super1_1"",""Super1_2"",""Super1_3"",
-                //                                ""Super2_1"",""Super2_2"",""Super2_3"",""Super3_1"",""Super3_2"",
-                //                                ""Super3_3"",""Super4_1"",""Super4_2"",""Super4_3"",""Super5_1"",
-                //                                ""Super5_2"",""Super5_3"",""Super6_1"",""Super6_2"",""Super6_3"",
-                //                                ""Super7_1"",""Super7_2"",""Super7_3"",""Super8_1"",""Super8_2"",
-                //                                ""Super8_3"",""Super9_1"",""Super9_2"",""Super9_3"",""Super10_1"",
-                //                                ""Super10_2"",""Super10_3"",""IdGrup"",""PondereRatingGlobal"",""NumeGrup"",
-                //                                ""Super11_1"",""Super11_2"",""Super11_3"",""Super12_1"",""Super12_2"",
-                //                                ""Super12_3"",""Super13_1"",""Super13_2"",""Super13_3"",""Super14_1"",
-                //                                ""Super14_2"",""Super14_3"",""Super15_1"",""Super15_2"",""Super15_3"",
-                //                                ""Super16_1"",""Super16_2"",""Super16_3"",""Super17_1"",""Super17_2"",
-                //                                ""Super17_3"",""Super18_1"",""Super18_2"",""Super18_3"",""Super19_1"",
-                //                                ""Super19_2"",""Super19_3"",""Super20_1"",""Super20_2"",""Super20_3"",
-                //                                ""Super1_4"",""Super1_5"",""Super1_6"",""Super2_4"",""Super2_5"",
-                //                                ""Super2_6"",""Super3_4"",""Super3_5"",""Super3_6"",""Super4_4"",
-                //                                ""Super4_5"",""Super4_6"",""Super5_4"",""Super5_5"",""Super5_6"",
-                //                                ""Super6_4"",""Super6_5"",""Super6_6"",""Super7_4"",""Super7_5"",
-                //                                ""Super7_6"",""Super8_4"",""Super8_5"",""Super8_6"",""Super9_4"",
-                //                                ""Super9_5"",""Super9_6"",""Super10_4"",""Super10_5"",""Super10_6"",
-                //                                ""Super11_4"",""Super11_5"",""Super11_6"",""Super12_4"",""Super12_5"",
-                //                                ""Super12_6"",""Super13_4"",""Super13_5"",""Super13_6"",""Super14_4"",
-                //                                ""Super14_5"",""Super14_6"",""Super15_4"",""Super15_5"",""Super15_6"",
-                //                                ""Super16_4"",""Super16_5"",""Super16_6"",""Super17_4"",""Super17_5"",
-                //                                ""Super17_6"",""Super18_4"",""Super18_5"",""Super18_6"",""Super19_4"",
-                //                                ""Super19_5"",""Super19_6"",""Super20_4"",""Super20_5"",""Super20_6"",
-                //                                ""DescriereInRatingGlobal"")
-                //                              values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,
-                //                                @20,@21,@22,@23,@24,@25,{General.CurrentDate()},@26,@27,@28,@29,@30,@31,@32,@33,@34,@35,@36,@37,@38,@39,
-                //                                @40,@41,@42,@43,@44,@45,@46,@47,@48,@49,@50,@51,@52,@53,@54,@55,@56,@57,@58,@59,
-                //                                @60,@61,@62,@63,@64,@65,@66,@67,@68,@69,@70,@71,@72,@73,@74,@75,@76,@77,@78,@79,
-                //                                @80,@81,@82,@83,@84,@85,@86,@87,@88,@89,@90,@91,@92,@93,@94,@95,@96,@97,@98,@99,
-                //                                @100,@101,@102,@103,@104,@105,@106,@107,@108,@109,@110,@111,@112,@113,@114,@115,@116,@117,@118,@119,
-                //                                @120,@121,@122,@123,@124,@125,@126,@127,@128,@129,@130,@131,@132,@133,@134,@135,@136,@137,@138,@139,
-                //                                @140,@141,@142,@143,@144,@145,@146,@147,@148,@149,@150,@151,@152,@153,@154);";
                 sqlCommandInsert = $@"insert into ""Eval_RaspunsLinii""(""IdQuiz"", ""F10003"", ""Id"", ""Linia"", 
                                                 ""Super1"",""Super2"",""Super3"",""Super4"",""Super5"",
                                                 ""Super6"",""Super7"",""Super8"",""Super9"",""Super10"",
                                                 ""Super11"",""Super12"",""Super13"",""Super14"",""Super15"",
                                                 ""Super16"",""Super17"",""Super18"",""Super19"",""Super20"",
-                                                ""USER_NO"",""TIME"")
+                                                ""USER_NO"",""TIME"",""Descriere"",""TipData"",""TipValoare"",
+                                                ""Sublinia"",""Tinta"",""Super1_1"",""Super1_2"",""Super1_3"",
+                                                ""Super2_1"",""Super2_2"",""Super2_3"",""Super3_1"",""Super3_2"",
+                                                ""Super3_3"",""Super4_1"",""Super4_2"",""Super4_3"",""Super5_1"",
+                                                ""Super5_2"",""Super5_3"",""Super6_1"",""Super6_2"",""Super6_3"",
+                                                ""Super7_1"",""Super7_2"",""Super7_3"",""Super8_1"",""Super8_2"",
+                                                ""Super8_3"",""Super9_1"",""Super9_2"",""Super9_3"",""Super10_1"",
+                                                ""Super10_2"",""Super10_3"",""IdGrup"",""PondereRatingGlobal"",""NumeGrup"",
+                                                ""Super11_1"",""Super11_2"",""Super11_3"",""Super12_1"",""Super12_2"",
+                                                ""Super12_3"",""Super13_1"",""Super13_2"",""Super13_3"",""Super14_1"",
+                                                ""Super14_2"",""Super14_3"",""Super15_1"",""Super15_2"",""Super15_3"",
+                                                ""Super16_1"",""Super16_2"",""Super16_3"",""Super17_1"",""Super17_2"",
+                                                ""Super17_3"",""Super18_1"",""Super18_2"",""Super18_3"",""Super19_1"",
+                                                ""Super19_2"",""Super19_3"",""Super20_1"",""Super20_2"",""Super20_3"",
+                                                ""Super1_4"",""Super1_5"",""Super1_6"",""Super2_4"",""Super2_5"",
+                                                ""Super2_6"",""Super3_4"",""Super3_5"",""Super3_6"",""Super4_4"",
+                                                ""Super4_5"",""Super4_6"",""Super5_4"",""Super5_5"",""Super5_6"",
+                                                ""Super6_4"",""Super6_5"",""Super6_6"",""Super7_4"",""Super7_5"",
+                                                ""Super7_6"",""Super8_4"",""Super8_5"",""Super8_6"",""Super9_4"",
+                                                ""Super9_5"",""Super9_6"",""Super10_4"",""Super10_5"",""Super10_6"",
+                                                ""Super11_4"",""Super11_5"",""Super11_6"",""Super12_4"",""Super12_5"",
+                                                ""Super12_6"",""Super13_4"",""Super13_5"",""Super13_6"",""Super14_4"",
+                                                ""Super14_5"",""Super14_6"",""Super15_4"",""Super15_5"",""Super15_6"",
+                                                ""Super16_4"",""Super16_5"",""Super16_6"",""Super17_4"",""Super17_5"",
+                                                ""Super17_6"",""Super18_4"",""Super18_5"",""Super18_6"",""Super19_4"",
+                                                ""Super19_5"",""Super19_6"",""Super20_4"",""Super20_5"",""Super20_6"",
+                                                ""DescriereInRatingGlobal"")
                                               values(@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,
-                                                @20,@21,@22,@23,@24,@25,{General.CurrentDate()})";
+                                                @20,@21,@22,@23,@24,@25,{General.CurrentDate()},@26,@27,@28,@29,@30,@31,@32,@33,@34,@35,@36,@37,@38,@39,
+                                                @40,@41,@42,@43,@44,@45,@46,@47,@48,@49,@50,@51,@52,@53,@54,@55,@56,@57,@58,@59,
+                                                @60,@61,@62,@63,@64,@65,@66,@67,@68,@69,@70,@71,@72,@73,@74,@75,@76,@77,@78,@79,
+                                                @80,@81,@82,@83,@84,@85,@86,@87,@88,@89,@90,@91,@92,@93,@94,@95,@96,@97,@98,@99,
+                                                @100,@101,@102,@103,@104,@105,@106,@107,@108,@109,@110,@111,@112,@113,@114,@115,@116,@117,@118,@119,
+                                                @120,@121,@122,@123,@124,@125,@126,@127,@128,@129,@130,@131,@132,@133,@134,@135,@136,@137,@138,@139,
+                                                @140,@141,@142,@143,@144,@145,@146,@147,@148,@149,@150,@151,@152,@153,@154)";
+
                 #endregion
 
                 lstEval_RaspunsLinii = Session["lstEval_RaspunsLinii"] as List<Eval_RaspunsLinii>;
@@ -342,44 +335,38 @@ namespace WizOne.Eval
                         General.ExecutaNonQuery(sqlCommandDeleteTemp, new object[] { entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id });
 
                         sqlCommandInsertTemp = sqlCommandInsert;
-                        //General.ExecutaNonQuery(sqlCommandInsertTemp, new object[] {  entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id,
-                        //                    entRaspLinie.Linia, entRaspLinie.Super1, entRaspLinie.Super2, entRaspLinie.Super3, entRaspLinie.Super4,
-                        //                    entRaspLinie.Super5, entRaspLinie.Super6, entRaspLinie.Super7, entRaspLinie.Super8, entRaspLinie.Super9,
-                        //                    entRaspLinie.Super10, entRaspLinie.Super11, entRaspLinie.Super12, entRaspLinie.Super13, entRaspLinie.Super14,
-                        //                    entRaspLinie.Super15, entRaspLinie.Super16, entRaspLinie.Super17, entRaspLinie.Super18, entRaspLinie.Super19,
-                        //                    entRaspLinie.Super20, entRaspLinie.USER_NO, entRaspLinie.Descriere, entRaspLinie.TipData,
-                        //                    entRaspLinie.TipValoare, entRaspLinie.Sublinia, entRaspLinie.Tinta, entRaspLinie.Super1_1, entRaspLinie.Super1_2,
-                        //                    entRaspLinie.Super1_3, entRaspLinie.Super2_1, entRaspLinie.Super2_2, entRaspLinie.Super2_3, entRaspLinie.Super3_1,
-                        //                    entRaspLinie.Super3_2, entRaspLinie.Super3_3, entRaspLinie.Super4_1, entRaspLinie.Super4_2, entRaspLinie.Super4_3,
-                        //                    entRaspLinie.Super5_1, entRaspLinie.Super5_2, entRaspLinie.Super5_3, entRaspLinie.Super6_1, entRaspLinie.Super6_2,
-                        //                    entRaspLinie.Super6_3, entRaspLinie.Super7_1, entRaspLinie.Super7_2, entRaspLinie.Super7_3, entRaspLinie.Super8_1,
-                        //                    entRaspLinie.Super8_2, entRaspLinie.Super8_3, entRaspLinie.Super9_1, entRaspLinie.Super9_2, entRaspLinie.Super9_3,
-                        //                    entRaspLinie.Super10_1, entRaspLinie.Super10_2, entRaspLinie.Super10_3, entRaspLinie.IdGrup, entRaspLinie.PondereRatingGlobal,
-                        //                    entRaspLinie.NumeGrup, entRaspLinie.Super11_1, entRaspLinie.Super11_2, entRaspLinie.Super11_3, entRaspLinie.Super12_1,
-                        //                    entRaspLinie.Super12_2, entRaspLinie.Super12_3, entRaspLinie.Super13_1, entRaspLinie.Super13_2, entRaspLinie.Super13_3,
-                        //                    entRaspLinie.Super14_1, entRaspLinie.Super14_2, entRaspLinie.Super14_3, entRaspLinie.Super15_1, entRaspLinie.Super15_2,
-                        //                    entRaspLinie.Super15_3, entRaspLinie.Super16_1, entRaspLinie.Super16_2, entRaspLinie.Super16_3, entRaspLinie.Super17_1,
-                        //                    entRaspLinie.Super17_2, entRaspLinie.Super17_3, entRaspLinie.Super18_1, entRaspLinie.Super18_2, entRaspLinie.Super18_3,
-                        //                    entRaspLinie.Super19_1, entRaspLinie.Super19_2, entRaspLinie.Super19_3, entRaspLinie.Super20_1, entRaspLinie.Super20_2,
-                        //                    entRaspLinie.Super20_3, entRaspLinie.Super1_4, entRaspLinie.Super1_5, entRaspLinie.Super1_6, entRaspLinie.Super2_4,
-                        //                    entRaspLinie.Super2_5, entRaspLinie.Super2_6, entRaspLinie.Super3_4, entRaspLinie.Super3_5, entRaspLinie.Super3_6,
-                        //                    entRaspLinie.Super4_4, entRaspLinie.Super4_5, entRaspLinie.Super4_6, entRaspLinie.Super5_4, entRaspLinie.Super5_5,
-                        //                    entRaspLinie.Super5_6, entRaspLinie.Super6_4, entRaspLinie.Super6_5, entRaspLinie.Super6_6, entRaspLinie.Super7_4,
-                        //                    entRaspLinie.Super7_5, entRaspLinie.Super7_6, entRaspLinie.Super8_4, entRaspLinie.Super8_5, entRaspLinie.Super8_6,
-                        //                    entRaspLinie.Super9_4, entRaspLinie.Super9_5, entRaspLinie.Super9_6, entRaspLinie.Super10_4, entRaspLinie.Super10_5,
-                        //                    entRaspLinie.Super10_6, entRaspLinie.Super11_4, entRaspLinie.Super11_5, entRaspLinie.Super11_6, entRaspLinie.Super12_4,
-                        //                    entRaspLinie.Super12_5, entRaspLinie.Super12_6, entRaspLinie.Super13_4, entRaspLinie.Super13_5, entRaspLinie.Super13_6,
-                        //                    entRaspLinie.Super14_4, entRaspLinie.Super14_5, entRaspLinie.Super14_6, entRaspLinie.Super15_4, entRaspLinie.Super15_5,
-                        //                    entRaspLinie.Super15_6, entRaspLinie.Super16_4, entRaspLinie.Super16_5, entRaspLinie.Super16_6, entRaspLinie.Super17_4,
-                        //                    entRaspLinie.Super17_5, entRaspLinie.Super17_6, entRaspLinie.Super18_4, entRaspLinie.Super18_5, entRaspLinie.Super18_6,
-                        //                    entRaspLinie.Super19_4, entRaspLinie.Super19_5, entRaspLinie.Super19_6, entRaspLinie.Super20_4, entRaspLinie.Super20_5,
-                        //                    entRaspLinie.Super20_6, entRaspLinie.DescriereInRatingGlobal});
                         General.ExecutaNonQuery(sqlCommandInsertTemp, new object[] {  entRaspLinie.IdQuiz, entRaspLinie.F10003, entRaspLinie.Id,
                                             entRaspLinie.Linia, entRaspLinie.Super1, entRaspLinie.Super2, entRaspLinie.Super3, entRaspLinie.Super4,
                                             entRaspLinie.Super5, entRaspLinie.Super6, entRaspLinie.Super7, entRaspLinie.Super8, entRaspLinie.Super9,
                                             entRaspLinie.Super10, entRaspLinie.Super11, entRaspLinie.Super12, entRaspLinie.Super13, entRaspLinie.Super14,
                                             entRaspLinie.Super15, entRaspLinie.Super16, entRaspLinie.Super17, entRaspLinie.Super18, entRaspLinie.Super19,
-                                            entRaspLinie.Super20, entRaspLinie.USER_NO });
+                                            entRaspLinie.Super20, entRaspLinie.USER_NO, entRaspLinie.Descriere, entRaspLinie.TipData,
+                                            entRaspLinie.TipValoare, entRaspLinie.Sublinia, entRaspLinie.Tinta, entRaspLinie.Super1_1, entRaspLinie.Super1_2,
+                                            entRaspLinie.Super1_3, entRaspLinie.Super2_1, entRaspLinie.Super2_2, entRaspLinie.Super2_3, entRaspLinie.Super3_1,
+                                            entRaspLinie.Super3_2, entRaspLinie.Super3_3, entRaspLinie.Super4_1, entRaspLinie.Super4_2, entRaspLinie.Super4_3,
+                                            entRaspLinie.Super5_1, entRaspLinie.Super5_2, entRaspLinie.Super5_3, entRaspLinie.Super6_1, entRaspLinie.Super6_2,
+                                            entRaspLinie.Super6_3, entRaspLinie.Super7_1, entRaspLinie.Super7_2, entRaspLinie.Super7_3, entRaspLinie.Super8_1,
+                                            entRaspLinie.Super8_2, entRaspLinie.Super8_3, entRaspLinie.Super9_1, entRaspLinie.Super9_2, entRaspLinie.Super9_3,
+                                            entRaspLinie.Super10_1, entRaspLinie.Super10_2, entRaspLinie.Super10_3, entRaspLinie.IdGrup, entRaspLinie.PondereRatingGlobal,
+                                            entRaspLinie.NumeGrup, entRaspLinie.Super11_1, entRaspLinie.Super11_2, entRaspLinie.Super11_3, entRaspLinie.Super12_1,
+                                            entRaspLinie.Super12_2, entRaspLinie.Super12_3, entRaspLinie.Super13_1, entRaspLinie.Super13_2, entRaspLinie.Super13_3,
+                                            entRaspLinie.Super14_1, entRaspLinie.Super14_2, entRaspLinie.Super14_3, entRaspLinie.Super15_1, entRaspLinie.Super15_2,
+                                            entRaspLinie.Super15_3, entRaspLinie.Super16_1, entRaspLinie.Super16_2, entRaspLinie.Super16_3, entRaspLinie.Super17_1,
+                                            entRaspLinie.Super17_2, entRaspLinie.Super17_3, entRaspLinie.Super18_1, entRaspLinie.Super18_2, entRaspLinie.Super18_3,
+                                            entRaspLinie.Super19_1, entRaspLinie.Super19_2, entRaspLinie.Super19_3, entRaspLinie.Super20_1, entRaspLinie.Super20_2,
+                                            entRaspLinie.Super20_3, entRaspLinie.Super1_4, entRaspLinie.Super1_5, entRaspLinie.Super1_6, entRaspLinie.Super2_4,
+                                            entRaspLinie.Super2_5, entRaspLinie.Super2_6, entRaspLinie.Super3_4, entRaspLinie.Super3_5, entRaspLinie.Super3_6,
+                                            entRaspLinie.Super4_4, entRaspLinie.Super4_5, entRaspLinie.Super4_6, entRaspLinie.Super5_4, entRaspLinie.Super5_5,
+                                            entRaspLinie.Super5_6, entRaspLinie.Super6_4, entRaspLinie.Super6_5, entRaspLinie.Super6_6, entRaspLinie.Super7_4,
+                                            entRaspLinie.Super7_5, entRaspLinie.Super7_6, entRaspLinie.Super8_4, entRaspLinie.Super8_5, entRaspLinie.Super8_6,
+                                            entRaspLinie.Super9_4, entRaspLinie.Super9_5, entRaspLinie.Super9_6, entRaspLinie.Super10_4, entRaspLinie.Super10_5,
+                                            entRaspLinie.Super10_6, entRaspLinie.Super11_4, entRaspLinie.Super11_5, entRaspLinie.Super11_6, entRaspLinie.Super12_4,
+                                            entRaspLinie.Super12_5, entRaspLinie.Super12_6, entRaspLinie.Super13_4, entRaspLinie.Super13_5, entRaspLinie.Super13_6,
+                                            entRaspLinie.Super14_4, entRaspLinie.Super14_5, entRaspLinie.Super14_6, entRaspLinie.Super15_4, entRaspLinie.Super15_5,
+                                            entRaspLinie.Super15_6, entRaspLinie.Super16_4, entRaspLinie.Super16_5, entRaspLinie.Super16_6, entRaspLinie.Super17_4,
+                                            entRaspLinie.Super17_5, entRaspLinie.Super17_6, entRaspLinie.Super18_4, entRaspLinie.Super18_5, entRaspLinie.Super18_6,
+                                            entRaspLinie.Super19_4, entRaspLinie.Super19_5, entRaspLinie.Super19_6, entRaspLinie.Super20_4, entRaspLinie.Super20_5,
+                                            entRaspLinie.Super20_6, entRaspLinie.DescriereInRatingGlobal});
                     }
                     catch (Exception ex)
                     {
@@ -450,7 +437,7 @@ namespace WizOne.Eval
 
                         //Radu 07.02.2019 - deoarece liniile vechi au fost sterse, trebuie reinitializata lista obiectivelor, deoarece liniile au alt IdAuto in tabela
                         lstEval_ObiIndividualeTemp = new List<Eval_ObiIndividualeTemp>();
-                        DataTable dtObiIndividuale = General.IncarcaDT(@"select * from ""Eval_ObiIndividualeTemp"" WHERE F10003=@1 ORDER BY ""Obiectiv"", ""Activitate"" ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                        DataTable dtObiIndividuale = General.IncarcaDT(@"SELECT * FROM ""Eval_ObiIndividualeTemp"" WHERE F10003=@1 ORDER BY CAST(""Obiectiv"" AS varchar(4000)), CAST(""Activitate"" AS varchar(4000)) ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                         foreach (DataRow rwObiIndividuale in dtObiIndividuale.Rows)
                         {
                             Eval_ObiIndividualeTemp clsObiIndividuale = new Eval_ObiIndividualeTemp(rwObiIndividuale);
@@ -1660,11 +1647,7 @@ namespace WizOne.Eval
             ASPxGridView grDateObiective = new ASPxGridView();
             if (Session["lstEval_ObiIndividualeTemp"] == null)
             {
-                string sqlObiTmp = @"select * from ""Eval_ObiIndividualeTemp"" WHERE F10003=@1 ORDER BY ""Obiectiv"", ""Activitate"" ";
-                if (Constante.tipBD == 2)
-                    sqlObiTmp = @"select * from ""Eval_ObiIndividualeTemp"" WHERE F10003=@1 ORDER BY TO_CHAR(""Obiectiv""), TO_CHAR(""Activitate"") ";
-
-                DataTable dtObiIndividuale = General.IncarcaDT(sqlObiTmp, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                DataTable dtObiIndividuale = General.IncarcaDT(@"SELECT * FROM ""Eval_ObiIndividualeTemp"" WHERE F10003=@1 ORDER BY CAST(""Obiectiv"" AS varchar(4000)), CAST(""Activitate"" AS varchar(4000)) ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                 foreach (DataRow rwObiIndividuale in dtObiIndividuale.Rows)
                 {
                     Eval_ObiIndividualeTemp clsObiIndividuale = new Eval_ObiIndividualeTemp(rwObiIndividuale);
@@ -1864,7 +1847,7 @@ namespace WizOne.Eval
                                                             join ""Eval_Obiectiv"" ob on det.""IdObiectiv"" = ob.""IdObiectiv""
                                                             where det.""IdLista"" = @1
                                                             and setAng.""Id"" = @2
-                                                            group by ob.""IdObiectiv"", ob.""Obiectiv"" ";
+                                                            group by ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)) ";
 
                                     DataTable dtObiectiv = General.IncarcaDT(strSQLObiectiv, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                                     foreach (DataRow rwObiectiv in dtObiectiv.Rows)
@@ -1888,7 +1871,7 @@ namespace WizOne.Eval
                                                                                                                 and det.""IdActivitate"" = obAct.""IdActivitate""
                                                                         where det.""IdLista"" = @1
                                                                         and setAng.""Id"" = @2
-                                                                        group by ob.""IdObiectiv"", obAct.""IdActivitate"", obAct.""Activitate"" ";
+                                                                        group by ob.""IdObiectiv"", obAct.""IdActivitate"", CAST(obAct.""Activitate"" AS varchar(4000)) ";
                                     
                                     DataTable dtObiectivActivitate = General.IncarcaDT(strSQLObiectivActivitate, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                                     lstActivitati.Clear();
@@ -1962,7 +1945,7 @@ namespace WizOne.Eval
                                                             join ""Eval_Obiectiv"" ob on det.""IdObiectiv"" = ob.""IdObiectiv""
                                                             where det.""IdLista"" = @1
                                                             and setAng.""Id"" = @2
-                                                            group by ob.""IdObiectiv"", ob.""Obiectiv"" ";
+                                                            group by ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)) ";
                                     
                                     DataTable dtObiectiv = General.IncarcaDT(strSQLObiectiv, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                                     foreach (DataRow rwObiectiv in dtObiectiv.Rows)
@@ -1986,7 +1969,7 @@ namespace WizOne.Eval
                                                                                                                 and det.""IdActivitate"" = obAct.""IdActivitate""
                                                                         where det.""IdLista"" = @1
                                                                         and setAng.""Id"" = @2
-                                                                        group by ob.""IdObiectiv"", obAct.""IdActivitate"", obAct.""Activitate"" ";
+                                                                        group by ob.""IdObiectiv"", obAct.""IdActivitate"", CAST(obAct.""Activitate"" AS varchar(4000)) ";
                                     
                                     DataTable dtObiectivActivitate = General.IncarcaDT(strSQLObiectivActivitate, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                                     lstActivitati.Clear();
@@ -4327,14 +4310,14 @@ namespace WizOne.Eval
             {
                 if (Session["feedEval_ObiectivActivitate"] == null)
                 {
-                    string strSQLObiectivActivitate = @"select ob.""IdObiectiv"" as ""Parinte"", obAct.""IdActivitate"" as ""Id"", obAct.""Activitate"" as ""Denumire""
+                    string strSQLObiectivActivitate = @"select ob.""IdObiectiv"" as ""Parinte"", obAct.""IdActivitate"" as ""Id"", CAST(obAct.""Activitate"" AS varchar(4000)) as ""Denumire""
                                                                             from ""Eval_ListaObiectivDet"" det
                                                                             join ""Eval_SetAngajatiDetail"" setAng on det.""IdSetAngajat"" = setAng.""IdSetAng""
                                                                             join ""Eval_Obiectiv"" ob on det.""IdObiectiv"" = ob.""IdObiectiv""
                                                                             join ""Eval_ObiectivXActivitate"" obAct on det.""IdObiectiv"" = obAct.""IdObiectiv""
                                                                                                                     and det.""IdActivitate"" = obAct.""IdActivitate""
                                                                             where setAng.""Id"" = @1
-                                                                            group by ob.""IdObiectiv"", obAct.""IdActivitate"", obAct.""Activitate"" ";
+                                                                            group by ob.""IdObiectiv"", obAct.""IdActivitate"", CAST(obAct.""Activitate"" AS varchar(4000)) ";
                     strSQLObiectivActivitate = string.Format(strSQLObiectivActivitate, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)));
                     DataTable dtObiectivActivitate = General.IncarcaDT(strSQLObiectivActivitate, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                     lstActivitati.Clear();

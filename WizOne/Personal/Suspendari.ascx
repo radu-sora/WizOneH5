@@ -17,21 +17,11 @@
     }
 
     function OnEndCallbackGridSusp(s, e) {
-  
-        var motiv = parseInt("<%=Session["MP_SuspMotiv"] %>");
-        var dataIncp = "<%=Session["MP_SuspDataIncp"] %>";
-        var dataSf = "<%=Session["MP_SuspDataSf"] %>";
-        var dataInct = "<%=Session["MP_SuspDataInct"] %>";
-
-        if (motiv != -99) {
-            cmbMotivSuspendare.SetValue(motiv);
-            deDataInceputSusp.SetText(dataIncp);
-            deDataSfarsitSusp.SetText(dataSf);
-            deDataIncetareSusp.SetText(dataInct);
-        }
+        pnlCtlSusp.PerformCallback("ActSusp");
         pnlLoading.Hide();
     }
 </script>
+
 
     <dx:ASPxCallbackPanel ID = "pnlCtlSusp" ClientIDMode="Static" ClientInstanceName="pnlCtlSusp" runat="server" OnCallback="pnlCtlSusp_Callback" SettingsLoadingPanel-Enabled="false">
         <ClientSideEvents BeginCallback="function (s,e) { pnlLoading.Show(); }" EndCallback="function (s,e) { OnEndCallbackSusp(s,e); }" />

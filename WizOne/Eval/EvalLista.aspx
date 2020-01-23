@@ -203,6 +203,7 @@
                         <dx:GridViewDataTextColumn FieldName="PoateModifica" Name="PoateModifica" Caption="PoateModifica" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="TrebuieSaIaLaCunostinta" Name="TrebuieSaIaLaCunostinta" Caption="TrebuieSaIaLaCunostinta" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                         <dx:GridViewDataTextColumn FieldName="ALuatLaCunostinta" Name="ALuatLaCunostinta" Caption="ALuatLaCunostinta" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Aprobat" Name="Aprobat" Caption="Aprobat" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                     </Columns>
 
                     <Templates>

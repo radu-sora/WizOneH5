@@ -713,6 +713,8 @@ namespace WizOne.Eval
         {
             try
             {
+                bool creat = false;
+
                 if (e.Parameter == "btnSave")
                 {
                     btnSave_Click(null, null);
@@ -946,6 +948,7 @@ namespace WizOne.Eval
                 {
                     Session["Eval_ActiveTab"] = tabSuper.ActiveTab.Name.Replace("tab","");
                     CreeazaSectiune("Super" + Session["Eval_ActiveTab"]);
+                    creat = true;
                 }
 
                 if (e.Parameter == "btnFinalizare")
@@ -995,8 +998,8 @@ namespace WizOne.Eval
                 hf["IdSec"] = (indexSec + 1).ToString();
 
                 Session["indexSec"] = indexSec;
-
-                CreeazaSectiune("Super" + Session["Eval_ActiveTab"].ToString());
+                if (!creat)
+                    CreeazaSectiune("Super" + Session["Eval_ActiveTab"].ToString());
             }
             catch (Exception ex)
             {
@@ -1041,6 +1044,8 @@ namespace WizOne.Eval
 
                 int blocat = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Blocat"",0)) FROM ""Eval_DrepturiTab"" WHERE ""IdQuiz"" = @1 AND ""Pozitie"" = @2 AND ""TabIndex"" = @3 ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), super.Replace("Super",""), indexSec+1 }), 0));
                 divIntrebari.Enabled = blocat == 1 ? false : true;
+
+
             }
             catch (Exception ex)
             {
@@ -1151,12 +1156,21 @@ namespace WizOne.Eval
                         ert = Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1));
                         ert = Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1));
 
+
+                        //Florin 2020.01.23 - daca utilizatorul conectat este cel de pe circuit si a terminat evaluarea
+                        if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Aprobat"], 1)) == 1)
+                            ctl.Enabled = false;
+
+                        //Florin 2020.01.23 - daca utilizatorul conectat intra pe alt tab decat cel care nu este al lui
+                        if (Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)))
+                            ctl.Enabled = false;
+
                         ////Radu 11.02.2019 - am adaugat conditia idCateg = 0
                         //if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
                         //    ctl.Enabled = false;
                         ////ctl.ReadOnly = true;
                         ////ctl.Enabled = false;
-                        
+
                         //Florin 2019.10.23 - s-a rescris functia de mai sus pentru a tine cont si de respecta ordinea
                         if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
                             ctl.Enabled = false;
@@ -4194,19 +4208,21 @@ namespace WizOne.Eval
                     //}
                 }
                 else
-                {//Radu 23.10.2019 - se transfera in EvalObiIndividuale si Eval_CompetenteAngajat
+                {
+                    //Florin 2020.01.23 - am scos -1 de la filtrul pozitie Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1) - 1)
+                    //Radu 23.10.2019 - se transfera in EvalObiIndividuale si Eval_CompetenteAngajat
                     string sqlOC =
                             $@"BEGIN
 
                             INSERT INTO ""Eval_ObiIndividuale"" (""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4"")
                             SELECT ""IdPeriod"", F10003, ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""Descriere"", ""Target"", ""Termen"", ""Realizat"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""ColoanaSuplimentara1"", ""ColoanaSuplimentara2"", ""ColoanaSuplimentara3"", ""ColoanaSuplimentara4""
                             FROM ""Eval_ObiIndividualeTemp"" 
-                            WHERE ""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
+                            WHERE ""IdQuiz"" =@1 AND F10003 =@2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))};
 
                             INSERT INTO ""Eval_CompetenteAngajat"" (""IdPeriod"", F10003, ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"",  ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""Explicatii"")
                             SELECT ""IdPeriod"",  F10003, ""IdCategCompetenta"", ""CategCompetenta"", ""IdCompetenta"", ""Competenta"", ""Pondere"", ""IdCalificativ"", ""Calificativ"", ""ExplicatiiCalificativ"", ""Explicatii""
                             FROM ""Eval_CompetenteAngajatTemp"" 
-                            WHERE  ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1)) - 1};
+                            WHERE  ""IdQuiz"" = @1 AND F10003 = @2 AND ""Pozitie"" = {Convert.ToInt32(General.Nz(ent.Rows[0]["Pozitie"], 1))};
 
                             END; ";
                     General.ExecutaNonQuery(sqlOC, new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });

@@ -212,7 +212,7 @@ namespace WizOne.Eval
                         case "btnEdit":
                             {
                                 //object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdQuiz", "F10003", "PozitiePeCircuit", "Finalizat", "PoateModifica", "Utilizator", "TrebuieSaIaLaCunostinta", "ALuatLaCunostinta" }) as object[];
-                                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAuto", "IdQuiz", "F10003", "PozitiePeCircuit", "Finalizat", "PoateModifica", "Utilizator", "TrebuieSaIaLaCunostinta", "ALuatLaCunostinta" }) as object[];
+                                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAuto", "IdQuiz", "F10003", "PozitiePeCircuit", "Finalizat", "PoateModifica", "Utilizator", "TrebuieSaIaLaCunostinta", "ALuatLaCunostinta", "Aprobat" }) as object[];
                                 if (obj == null || obj.Count() == 0)
                                 {
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata");
@@ -288,6 +288,7 @@ namespace WizOne.Eval
                                 Session["CompletareChestionar_Nume"] = General.Nz(obj[6], "");
                                 Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = General.Nz(obj[7], "0");
                                 Session["CompletareChestionar_ALuatLaCunostinta"] = General.Nz(obj[8], "0");
+                                Session["CompletareChestionar_Aprobat"] = General.Nz(obj[9], "0");
 
                                 //Florin 2020.01.23 - End
 

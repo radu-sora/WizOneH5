@@ -30,7 +30,10 @@ namespace WizOne.Pagini
 
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
-
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+                btnSave.Text = Dami.TraduCuvant("btnSave", "Salvare luna");
+                btnClose.Text = Dami.TraduCuvant("btnClose", "Inchidere luna");
+                lblInchidere.InnerText = Dami.TraduCuvant("Inchidere luna");
                 #endregion
             }
             catch (Exception ex)

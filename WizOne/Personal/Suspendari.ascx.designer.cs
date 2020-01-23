@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Personal {
-    
-    
-    public partial class Suspendari {
-        
+namespace WizOne.Personal
+{
+
+
+    public partial class Suspendari
+    {
+
         /// <summary>
         /// pnlCtlSusp control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlSusp;
-        
+
         /// <summary>
         /// lblMtvSusp control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblMtvSusp;
-        
+
         /// <summary>
         /// cmbMotivSuspendare control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbMotivSuspendare;
-        
+
         /// <summary>
         /// btnSalveazaSusp control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSalveazaSusp;
-        
+
         /// <summary>
         /// lblDataInceputSusp control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDataInceputSusp;
-        
+
         /// <summary>
         /// deDataInceputSusp control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit deDataInceputSusp;
-        
+
         /// <summary>
         /// lblDataSfarsitSusp control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDataSfarsitSusp;
-        
+
         /// <summary>
         /// deDataSfarsitSusp control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit deDataSfarsitSusp;
-        
+
         /// <summary>
         /// lblDataIncetareSusp control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDataIncetareSusp;
-        
+
         /// <summary>
         /// deDataIncetareSusp control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Personal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit deDataIncetareSusp;
-        
+
         /// <summary>
         /// grDateSuspendari control.
         /// </summary>

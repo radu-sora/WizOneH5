@@ -32,6 +32,9 @@ namespace WizOne.Absente
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+
+                btnCO.Text = Dami.TraduCuvant("btnCO", "Calcul CO");
+                btnSI.Text = Dami.TraduCuvant("btnSI", "Calcul SI");
                 grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("btnUpdate", "Actualizeaza");
                 grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("btnCancel", "Renunta");
 

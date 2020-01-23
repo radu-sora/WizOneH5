@@ -136,12 +136,12 @@ namespace WizOne.Pagini
                                 CASE WHEN (C.F10008 IS NULL OR C.F10008 = '') THEN B.F70104 ELSE C.F10008 {Dami.Operator()} ' ' {Dami.Operator()} C.F10009 END AS ""Nume"",
                                 A.""Pozitie"" AS ""IdStare"", '' AS ""Inlocuitor""
                                 FROM ""Eval_Raspuns"" X
-                                INNER JOIN ""Eval_RaspunsIstoric"" A ON A.IdQuiz=X.IdQuiz AND A.F10003=X.F10003
+                                INNER JOIN ""Eval_RaspunsIstoric"" A ON A.""IdQuiz""= X.""IdQuiz"" AND A.F10003=X.F10003
                                 LEFT JOIN USERS B ON A.""IdUser""=B.F70102
                                 LEFT JOIN F100 C ON B.F10003=C.F10003
                                 LEFT JOIN ""tblSupervizori"" D ON (-1 * a.""IdSuper"") = D.""Id""
                                 LEFT JOIN ""Eval_Drepturi"" H ON A.""IdQuiz""=H.""IdQuiz"" AND A.""Pozitie""=H.""Pozitie"" AND H.""PozitieVizibila""=0
-                                WHERE X.IdAuto=@1 AND COALESCE(h.""PozitieVizibila"",1)=1 
+                                WHERE X.""IdAuto"" =@1 AND COALESCE(h.""PozitieVizibila"",1)=1 
                                 ORDER BY A.""Pozitie"", (A.""IdAuto"" * 10) ";
 
                         grDate.Columns["Stare"].Visible = true;

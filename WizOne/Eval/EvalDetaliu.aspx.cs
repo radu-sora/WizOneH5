@@ -3969,7 +3969,8 @@ namespace WizOne.Eval
                 //Florin 2019.02.27
                 if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
                 {
-                    MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
+                    //MessageBox.Show("Nu aveti drepturi pentru aceasta operatie!", MessageBox.icoSuccess);
+                    pnlSectiune.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie!");
                     return;
                 }
 
@@ -4128,11 +4129,11 @@ namespace WizOne.Eval
                 string tmpSql = $@"
                     BEGIN
                     UPDATE ""Eval_RaspunsLinii""
-                    SET ""Super1""={General.CurrentDate()},""Super2""={General.CurrentDate()},""Super3""={General.CurrentDate()},""Super4""={General.CurrentDate()},
-                    ""Super5""={General.CurrentDate()},""Super6""={General.CurrentDate()},""Super7""={General.CurrentDate()},""Super8""={General.CurrentDate()},
-                    ""Super9""={General.CurrentDate()},""Super10""={General.CurrentDate()},""Super11""={General.CurrentDate()},""Super12""={General.CurrentDate()},
-                    ""Super13""={General.CurrentDate()},""Super14""={General.CurrentDate()},""Super15""={General.CurrentDate()},""Super16""={General.CurrentDate()},
-                    ""Super17""={General.CurrentDate()},""Super18""={General.CurrentDate()},""Super19""={General.CurrentDate()},""Super20""={General.CurrentDate()}
+                    SET ""Super1""=CAST({General.CurrentDate()} AS varchar(30)),""Super2""=CAST({General.CurrentDate()} AS varchar(30)),""Super3""=CAST({General.CurrentDate()} AS varchar(30)),""Super4""=CAST({General.CurrentDate()} AS varchar(30)),
+                    ""Super5""=CAST({General.CurrentDate()} AS varchar(30)),""Super6""=CAST({General.CurrentDate()} AS varchar(30)),""Super7""=CAST({General.CurrentDate()} AS varchar(30)),""Super8""=CAST({General.CurrentDate()} AS varchar(30)),
+                    ""Super9""=CAST({General.CurrentDate()} AS varchar(30)),""Super10""=CAST({General.CurrentDate()} AS varchar(30)),""Super11""=CAST({General.CurrentDate()} AS varchar(30)),""Super12""=CAST({General.CurrentDate()} AS varchar(30)),
+                    ""Super13""=CAST({General.CurrentDate()} AS varchar(30)),""Super14""=CAST({General.CurrentDate()} AS varchar(30)),""Super15""=CAST({General.CurrentDate()} AS varchar(30)),""Super16""=CAST({General.CurrentDate()} AS varchar(30)),
+                    ""Super17""=CAST({General.CurrentDate()} AS varchar(30)),""Super18""=CAST({General.CurrentDate()} AS varchar(30)),""Super19""=CAST({General.CurrentDate()} AS varchar(30)),""Super20""=CAST({General.CurrentDate()} AS varchar(30))
                     WHERE ""IdQuiz""=@1 AND F10003=@2 AND ""TipData""=36;
                     
                     UPDATE ""Eval_Raspuns"" SET ""Pozitie"" = @3, ""Culoare"" = @4, ""Finalizat"" = @5 WHERE ""IdQuiz"" = @1 AND F10003 = @2;
@@ -4447,24 +4448,19 @@ namespace WizOne.Eval
                         sqlUpd += sablon.Replace("@pozIst", General.Nz(dt.Rows[i]["Pozitie"], 1).ToString()).Replace("@poz", pozitie.ToString()) + Environment.NewLine;
                 }
 
-                string sqlSinc = $@"                    
-                    UPDATE B
-                    SET B.""IdPeriod"" = A.""IdPeriod"", B.""Obiectiv""=A.""Obiectiv"", B.""Activitate""=A.""Activitate"", B.""Descriere""=A.""Descriere"", B.""Pondere""=A.""Pondere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"", B.""IdCalificativ""=A.""IdCalificativ"",B.""Calificativ""=A.""Calificativ"",  B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""IdCategObiective""=A.""IdCategObiective""
-                    FROM ""Eval_ObiIndividualeTemp"" A
-                    INNER JOIN ""Eval_ObiIndividualeTemp"" B ON A.""IdUnic""=B.""IdUnic"" AND A.""Pozitie""<>B.""Pozitie""
-                    WHERE A.""IdQuiz"" = @1 AND A.F10003 = @2 AND A.""Pozitie""=@3;";
+                //string sqlSinc = $@"                    
+                //    UPDATE B
+                //    SET B.""IdPeriod"" = A.""IdPeriod"", B.""Obiectiv""=A.""Obiectiv"", B.""Activitate""=A.""Activitate"", B.""Descriere""=A.""Descriere"", B.""Pondere""=A.""Pondere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"", B.""IdCalificativ""=A.""IdCalificativ"",B.""Calificativ""=A.""Calificativ"",  B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""IdCategObiective""=A.""IdCategObiective""
+                //    FROM ""Eval_ObiIndividualeTemp"" A
+                //    INNER JOIN ""Eval_ObiIndividualeTemp"" B ON A.""IdUnic""=B.""IdUnic"" AND A.""Pozitie""<>B.""Pozitie""
+                //    WHERE A.""IdQuiz"" = @1 AND A.F10003 = @2 AND A.""Pozitie""=@3;";
 
-                if (Constante.tipBD == 2)
-                    sqlSinc = $@"UPDATE ""Eval_ObiIndividualeTemp"" B
-                                        SET (B.""IdPeriod"", B.""Obiectiv"", B.""Activitate"", B.""Descriere"", B.""Pondere"", B.""Target"", B.""Termen"", B.""Realizat"", B.""IdCalificativ"", B.""Calificativ"", B.""ExplicatiiCalificativ"", B.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4"", B.""IdCategObiective"") =
-                                          (SELECT A.""IdPeriod"", A.""Obiectiv"", A.""Activitate"", A.""Descriere"", A.""Pondere"", A.""Target"", A.""Termen"", A.""Realizat"", A.""IdCalificativ"", A.""Calificativ"", A.""ExplicatiiCalificativ"", A.""ColoanaSuplimentara1"", A.""ColoanaSuplimentara2"", A.""ColoanaSuplimentara3"", A.""ColoanaSuplimentara4"", A.""IdCategObiective""
-                                            FROM ""Eval_ObiIndividualeTemp"" A
-                                            INNER JOIN ""Eval_ObiIndividualeTemp"" B ON A.""IdUnic""=B.""IdUnic"" AND A.""Pozitie""<>B.""Pozitie""
-                                            WHERE A.""IdQuiz"" = @1 AND A.F10003 = @2 AND A.""Pozitie""=@3)
-                                        WHERE EXISTS(SELECT 1 
-                                                    FROM ""Eval_ObiIndividualeTemp"" A
-                                                    INNER JOIN ""Eval_ObiIndividualeTemp"" B ON A.""IdUnic""=B.""IdUnic"" AND A.""Pozitie""<>B.""Pozitie""
-                                                    WHERE A.""IdQuiz"" = @1 AND A.F10003 = @2 AND A.""Pozitie""=@3);";
+                //if (Constante.tipBD == 2)
+                string sqlSinc = $@"MERGE INTO ""Eval_ObiIndividualeTemp"" B
+                            USING (SELECT * FROM ""Eval_ObiIndividualeTemp"" WHERE ""IdQuiz"" = 28 AND F10003 = 5537 AND ""Pozitie"" = 1) A
+                            ON(A.""IdUnic"" = B.""IdUnic"" AND A.""Pozitie"" <> B.""Pozitie"")
+                            WHEN MATCHED THEN
+                            UPDATE SET B.""IdPeriod"" = A.""IdPeriod"", B.""Obiectiv""=A.""Obiectiv"", B.""Activitate""=A.""Activitate"", B.""Descriere""=A.""Descriere"", B.""Pondere""=A.""Pondere"", B.""Target""=A.""Target"", B.""Termen""=A.""Termen"", B.""Realizat""=A.""Realizat"", B.""IdCalificativ""=A.""IdCalificativ"",B.""Calificativ""=A.""Calificativ"",  B.""ExplicatiiCalificativ""=A.""ExplicatiiCalificativ"", B.""ColoanaSuplimentara1""=A.""ColoanaSuplimentara1"", B.""ColoanaSuplimentara2""=A.""ColoanaSuplimentara2"", B.""ColoanaSuplimentara3""=A.""ColoanaSuplimentara3"", B.""ColoanaSuplimentara4""=A.""ColoanaSuplimentara4"", B.""IdCategObiective""=A.""IdCategObiective"";";
 
 
                 string strSql =

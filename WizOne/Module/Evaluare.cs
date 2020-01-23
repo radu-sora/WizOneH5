@@ -1250,7 +1250,10 @@ namespace WizOne.Module
         //functia returneaza string in loc de DataTable
         //Florin 2019.02.01
         //s-a adaugat un filtru in plus IdAuto
-        public static string GetEvalLista(int? idUser, int? idQuiz, int? F10003, DateTime? dtInc, DateTime? dtSf, int? tip, int? rol, int ordonat = 1, int idAuto = -99)
+        //Florin 2020.01.23
+        //am scos filtrul cu IdAuto
+
+        public static string GetEvalLista(int? idUser, int? idQuiz, int? F10003, DateTime? dtInc, DateTime? dtSf, int? tip, int? rol, int ordonat = 1)
         {
             //DataTable dtReturnEvalLista = null;
             string strSQL = string.Empty;
@@ -1414,9 +1417,11 @@ namespace WizOne.Module
                 //chest.""Activ"" = 1
                 //and {2} chest.""DataInceput"") <= {2} {3}) and {2} {3}) <= {2} chest.""DataSfarsit"")
 
-                //Florin 2019.02.01
-                if (idAuto != -99)
-                    strSQL += @" AND rasp.""IdAuto""=" + idAuto;
+
+                //Florin 2020.01.23
+                ////Florin 2019.02.01
+                //if (idAuto != -99)
+                //    strSQL += @" AND rasp.""IdAuto""=" + idAuto;
 
 
                 if (ordonat == 1)

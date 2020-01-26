@@ -185,10 +185,7 @@ namespace WizOne.Tactil
                                 {
                                     var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(reportId);
 
-                                    if (reportSettings != null)
-                                        Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
-                                    else
-                                        Wizrom.Reports.Code.ReportProxy.View(reportId, paramList: reportParams);
+                                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                                 }
                                 else
                                     Wizrom.Reports.Code.ReportProxy.Print(reportId, paramList: reportParams); // TODO: FIX03                                

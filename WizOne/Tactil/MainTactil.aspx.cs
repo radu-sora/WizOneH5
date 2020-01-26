@@ -88,10 +88,7 @@ namespace WizOne.Tactil
                     };
 
                     // New report access interface
-                    if (reportSettings != null)
-                        Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
-                    else
-                        Wizrom.Reports.Code.ReportProxy.View(reportId, paramList: reportParams);                    
+                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                 }
                 else
                 {
@@ -132,10 +129,7 @@ namespace WizOne.Tactil
                     };
 
                     // New report access interface
-                    if (reportSettings != null)
-                        Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
-                    else
-                        Wizrom.Reports.Code.ReportProxy.View(reportId, paramList: reportParams);                    
+                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                 }
                 else
                 {

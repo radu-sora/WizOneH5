@@ -207,9 +207,7 @@ namespace WizOne.Pagini
 
 
                 //adaugam rapoartele                
-                var reports = Wizrom.Reports.Pages.Manage.GetReports();
-                
-                foreach (var report in reports)
+                Wizrom.Reports.Pages.Manage.GetReports().ForEach(report =>
                 {
                     ASPxButton btn = new ASPxButton();
                     btn.Text = Dami.TraduCuvant(report.Name);
@@ -217,10 +215,7 @@ namespace WizOne.Pagini
                     // New report access interface
                     var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(report.Id);
 
-                    if (reportSettings != null)
-                        btn.PostBackUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(report.Id, reportSettings.ToolbarType, reportSettings.ExportOptions);
-                    else
-                        btn.PostBackUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(report.Id);                        
+                    btn.PostBackUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(report.Id, reportSettings.ToolbarType, reportSettings.ExportOptions);
 
                     ASPxDockPanel pnl = new ASPxDockPanel();
                     string nme = "wdgRap" + report.Id;
@@ -243,7 +238,7 @@ namespace WizOne.Pagini
                     divPanel.Controls.Add(pnl);
 
                     widgetNames.Add(new metaWidget { Nume = nme, Eticheta = Dami.TraduCuvant(btn.Text), RutaImg = "icoWidget0" });
-                }                
+                });                
 
 
                 //adaugam meniuri

@@ -6,12 +6,13 @@ using DevExpress.XtraReports.Web.Extensions;
 using DevExpress.XtraReports.Web.ReportDesigner;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web;
-using System.Web.UI;
 using Wizrom.Reports.Models;
 
 namespace Wizrom.Reports.Code
@@ -84,7 +85,7 @@ namespace Wizrom.Reports.Code
 
             // DX
             DefaultReportDesignerContainer.RegisterDataSourceWizardConnectionStringsProvider<ReportDataSourceWizardConnectionStringsProvider>(true);
-            DefaultReportDesignerContainer. EnableCustomSql();
+            DefaultReportDesignerContainer.EnableCustomSql();
             ReportStorageWebExtension.RegisterExtensionGlobal(new EntityReportStorageWebExtension());
             // Reports
             DynamicModuleUtility.RegisterModule(typeof(ReportSessionModule));
@@ -116,11 +117,12 @@ namespace Wizrom.Reports.Code
                 DataCache = new ViewDataCache(),
                 OncePerGroup = oncePerGroup
             };
+            var sessionsGroup = null as Dictionary<string, object>;
 
-            if (reportsSessionsGroups.ContainsKey(group))
-                reportsSessionsGroups[group].Add(id, session);
+            if (reportsSessionsGroups.TryGetValue(group, out sessionsGroup))
+                sessionsGroup.Add(id, session);
             else
-                reportsSessionsGroups.Add(group, new Dictionary<string, object>() { { id, session } });
+                reportsSessionsGroups.Add(group, new Dictionary<string, object>() { { id, session } });            
 
             HttpContext.Current.Session["ReportsSessionsGroups"] = reportsSessionsGroups;
 
@@ -142,11 +144,12 @@ namespace Wizrom.Reports.Code
                 DataCache = null as object, // No cache for print handler
                 OncePerGroup = oncePerGroup
             };
+            var sessionsGroup = null as Dictionary<string, object>;
 
-            if (reportsSessionsGroups.ContainsKey(group))
-                reportsSessionsGroups[group].Add(id, session);
+            if (reportsSessionsGroups.TryGetValue(group, out sessionsGroup))
+                sessionsGroup.Add(id, session);
             else
-                reportsSessionsGroups.Add(group, new Dictionary<string, object>() { { id, session } });
+                reportsSessionsGroups.Add(group, new Dictionary<string, object>() { { id, session } });            
 
             HttpContext.Current.Session["ReportsSessionsGroups"] = reportsSessionsGroups;
 
@@ -167,11 +170,12 @@ namespace Wizrom.Reports.Code
                 DataCache = new DesignDataCache(), // Only for Document, Cube and Table report types
                 OncePerGroup = oncePerGroup
             };
+            var sessionsGroup = null as Dictionary<string, object>;
 
-            if (reportsSessionsGroups.ContainsKey(group))
-                reportsSessionsGroups[group].Add(id, session);
+            if (reportsSessionsGroups.TryGetValue(group, out sessionsGroup))
+                sessionsGroup.Add(id, session);
             else
-                reportsSessionsGroups.Add(group, new Dictionary<string, object>() { { id, session } });
+                reportsSessionsGroups.Add(group, new Dictionary<string, object>() { { id, session } });            
 
             HttpContext.Current.Session["ReportsSessionsGroups"] = reportsSessionsGroups;
 
@@ -374,35 +378,25 @@ namespace Wizrom.Reports.Code
                 throw new Exception($"No report session found for id {id}");
 
             session.DataCache?.Dispose();
-
         }
 
         public static void ClearSessions()
         {
             if (HttpContext.Current?.Session == null)
-                throw new Exception("Invalid HTTP context");
-
-            var urlSegments = HttpContext.Current.Request.Url.Segments;
-            var pageName = string.Concat(urlSegments.Skip(Math.Max(0, urlSegments.Count() - 3)));
-
-            // Assuming that all sessions was recycled ...
-            if (!SESSION_PAGE_NAMES.Contains(pageName))
+                throw new Exception("Invalid HTTP context");            
+            
+            if (HttpContext.Current.Request.RequestType == WebRequestMethods.Http.Get)
             {                
-                var reportsSessionsGroups = HttpContext.Current.Session["ReportsSessionsGroups"] as Dictionary<string, Dictionary<string, object>>;
-                var group = HttpContext.Current.Request.Url.LocalPath;
-                var isPostBack = (HttpContext.Current.Handler as Page)?.IsPostBack ?? false;
+                var urlSegments = HttpContext.Current.Request.Url.Segments;
+                var pageName = string.Concat(urlSegments.Skip(Math.Max(0, urlSegments.Count() - 3)));
 
-                if (reportsSessionsGroups == null)
-                    throw new Exception("No reports sessions found");
-
-                reportsSessionsGroups.Select(sg => sg.Key).ToList().ForEach(gr =>
+                if (!SESSION_PAGE_NAMES.Contains(pageName))
                 {
-                    if ((gr != group) || (gr == group && !isPostBack))
-                        reportsSessionsGroups.Remove(gr);
-                });
-
-                //if (reportsSessionsGroups.Count == 0)
-                //    HttpContext.Current.Session.Remove("ReportsSessionsGroups");
+                    // Assuming that all sessions was recycled ...
+                    (HttpContext.Current.Session["ReportsSessionsGroups"] as IDictionary)?.Clear();
+                    HttpContext.Current.Session.Remove("ReportsSessionsGroups");
+                    // TODO: FIX04 - Clear recycled or unused sessions only.
+                }
             }
         }
     }

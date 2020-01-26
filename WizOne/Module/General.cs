@@ -992,7 +992,7 @@ namespace WizOne.Module
         }
 
         // For a projection with many columns (T must be a model class)
-        public static IEnumerable<T> RunSqlQuery<T>(string sql, params object[] paramList) where T : class, new()
+        public static List<T> RunSqlQuery<T>(string sql, params object[] paramList) where T : class, new()
         {
             var command = Constante.tipBD == 1 ?
                 new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
@@ -1000,7 +1000,7 @@ namespace WizOne.Module
                 {
                     BindByName = true
                 };
-            var items = null as List<T>;
+            var items = new List<T>();
 
             try
             {                            
@@ -1023,8 +1023,6 @@ namespace WizOne.Module
 
                 using (var reader = command.ExecuteReader(CommandBehavior.SingleResult))
                 {
-                    items = new List<T>();
-
                     while (reader.Read())
                     {
                         var item = new T();
@@ -1064,7 +1062,7 @@ namespace WizOne.Module
         }
 
         // For a projection with one column (T must be a primitive or a string)
-        public static IEnumerable<T> RunSqlColumn<T>(string sql, params object[] paramList)
+        public static List<T> RunSqlColumn<T>(string sql, params object[] paramList)
         {
             var command = Constante.tipBD == 1 ?
                 new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
@@ -1072,7 +1070,7 @@ namespace WizOne.Module
                 {
                     BindByName = true
                 };
-            var items = null as List<T>;
+            var items = new List<T>();
 
             try
             {
@@ -1095,8 +1093,6 @@ namespace WizOne.Module
 
                 using (var reader = command.ExecuteReader(CommandBehavior.SingleResult))
                 {
-                    items = new List<T>();
-
                     while (reader.Read())
                     {
                         var value = reader[0];
@@ -6881,7 +6877,7 @@ namespace WizOne.Module
                 HttpContext.Current.Session["IdGrid"] = "1";
 
                 //Florin 2019.07.15
-                HttpContext.Current.Session["Filtru_ActeAditionale"] = "";
+                HttpContext.Current.Session["Filtru_ActeAditionale"] = "{}";
 
                 //Florin 2019.07.17
                 HttpContext.Current.Session["Filtru_CereriAbs"] = "";

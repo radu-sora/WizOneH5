@@ -624,7 +624,7 @@ namespace WizOne.Personal
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
-                    {  
+                    {                     
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                     }
                 }
@@ -1437,6 +1437,7 @@ namespace WizOne.Personal
                 lstBC.Add("deDataIncTichete", "F1001122");
                 lstBC.Add("deDataSfTichete", "F1001123");
                 #endregion
+ 
 
                 DataColumnCollection cols1 = ds.Tables[1].Columns;
                 DataColumnCollection cols2 = ds.Tables[2].Columns;
@@ -1476,7 +1477,7 @@ namespace WizOne.Personal
                                 break;
                             case "Banca":
                                 lst = lstBC;
-                                break;
+                                break;        
                         }
                         foreach (string idCtl in lst.Keys)
                         {

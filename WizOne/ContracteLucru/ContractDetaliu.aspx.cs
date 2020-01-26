@@ -114,7 +114,7 @@ namespace WizOne.ContracteLucru
 
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 //if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup")>=0) Constante.IdLimba = ctlPost.Substring(ctlPost.LastIndexOf("$")+1).Replace("a", "");
-
+              
 
                 #endregion
 

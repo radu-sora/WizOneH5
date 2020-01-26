@@ -566,49 +566,50 @@ namespace WizOne.Absente
             }
         }
 
-        public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrOre, int tip)
-        {
-            //tip
-            //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
-            //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
+        //Florin 2020.01.22
+        //public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrOre, int tip)
+        //{
+        //    //tip
+        //    //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
+        //    //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
 
 
-            string msg = "";
+        //    string msg = "";
 
-            try
-            {
-                //calculam norma
-                string strSql = "SELECT * FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
-                if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
-                int norma = Convert.ToInt32(General.ExecutaScalar(strSql,null));
+        //    try
+        //    {
+        //        //calculam norma
+        //        string strSql = "SELECT * FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
+        //        if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
+        //        int norma = Convert.ToInt32(General.ExecutaScalar(strSql,null));
 
-                int sumaPtj = 0;
-                if (tip == 1)
-                {
-                    //absentele din pontaj care intra in suma de ore
-                    string sqlOre = @"SELECT ' + COALESCE(' + OreInVal + ',0)'  FROM Ptj_tblAbsente WHERE COALESCE(VerificareNrMaxOre,0) = 1 FOR XML PATH ('')";
-                    if (Constante.tipBD == 2) sqlOre = @"SELECT LISTAGG('COALESCE(' || ""OreInVal"" || ')', ' + ') WITHIN GROUP (ORDER BY ""OreInVal"") FROM ""Ptj_tblAbsente"" WHERE COALESCE(VerificareNrMaxOre,0) = 1";
-                    string strVal = (General.ExecutaScalar(sqlOre, null) ?? "").ToString();
-                    if (Constante.tipBD == 1) strVal = strVal.Substring(3);
-                    if (strVal != "") sumaPtj = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM({strVal}), 0) FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(dtInc.Date)}", null));
-                }
+        //        int sumaPtj = 0;
+        //        if (tip == 1)
+        //        {
+        //            //absentele din pontaj care intra in suma de ore
+        //            string sqlOre = @"SELECT ' + COALESCE(' + OreInVal + ',0)'  FROM Ptj_tblAbsente WHERE COALESCE(VerificareNrMaxOre,0) = 1 FOR XML PATH ('')";
+        //            if (Constante.tipBD == 2) sqlOre = @"SELECT LISTAGG('COALESCE(' || ""OreInVal"" || ')', ' + ') WITHIN GROUP (ORDER BY ""OreInVal"") FROM ""Ptj_tblAbsente"" WHERE COALESCE(VerificareNrMaxOre,0) = 1";
+        //            string strVal = (General.ExecutaScalar(sqlOre, null) ?? "").ToString();
+        //            if (Constante.tipBD == 1) strVal = strVal.Substring(3);
+        //            if (strVal != "") sumaPtj = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM({strVal}), 0) FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(dtInc.Date)}", null));
+        //        }
 
-                //suma de ore din Cereri
-                int sumaCere = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) FROM ""Ptj_Cereri"" WHERE F10003={f10003} AND ""DataInceput"" = {General.ToDataUniv(dtInc.Date)} AND ""IdStare"" IN (1,2)", null));
-                if (((sumaCere * 60) + sumaPtj + (nrOre * 60)) > (norma * 60))
-                {
-                    msg = "Totalul de ore depaseste norma pe aceasta zi";
-                    return msg;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //        //suma de ore din Cereri
+        //        int sumaCere = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) FROM ""Ptj_Cereri"" WHERE F10003={f10003} AND ""DataInceput"" = {General.ToDataUniv(dtInc.Date)} AND ""IdStare"" IN (1,2)", null));
+        //        if (((sumaCere * 60) + sumaPtj + (nrOre * 60)) > (norma * 60))
+        //        {
+        //            msg = "Totalul de ore depaseste norma pe aceasta zi";
+        //            return msg;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-            return msg;
-        }
+        //    return msg;
+        //}
 
 
         private void SalveazaDate(int tip = 1)
@@ -934,7 +935,7 @@ namespace WizOne.Absente
 
                         if (Convert.ToInt32(General.Nz(drAbs["VerificareNrMaxOre"], 0)) == 1)
                         {
-                            string msgNr = VerificareDepasireNorma(Convert.ToInt32(cmbAng.Value), txtDataInc.Date, Convert.ToInt32(txtNrOre.Value ?? 0), 1);
+                            string msgNr = General.VerificareDepasireNorma(Convert.ToInt32(cmbAng.Value), txtDataInc.Date, Convert.ToInt32(txtNrOre.Value ?? 0) * 60, 1);
                             if (msgNr != "")
                             {
                                 if (tip == 1)

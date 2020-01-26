@@ -34,6 +34,15 @@ namespace WizOne.Pagini
                 grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("btnUpdate", "Actualizeaza");
                 grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("btnCancel", "Renunta");
 
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
+
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();

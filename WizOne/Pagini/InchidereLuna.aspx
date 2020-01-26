@@ -57,7 +57,7 @@
                 <tr>
                  <td  valign="top">
                <fieldset  >
-                <legend class="legend-font-size">Inchidere luna</legend>
+                <legend id="lblInchidere" runat="server" class="legend-font-size">Inchidere luna</legend>
                 <table width="10%" >
                     <tr>
                         <td align="center">

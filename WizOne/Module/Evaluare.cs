@@ -1250,7 +1250,10 @@ namespace WizOne.Module
         //functia returneaza string in loc de DataTable
         //Florin 2019.02.01
         //s-a adaugat un filtru in plus IdAuto
-        public static string GetEvalLista(int? idUser, int? idQuiz, int? F10003, DateTime? dtInc, DateTime? dtSf, int? tip, int? rol, int ordonat = 1, int idAuto = -99)
+        //Florin 2020.01.23
+        //am scos filtrul cu IdAuto
+
+        public static string GetEvalLista(int? idUser, int? idQuiz, int? F10003, DateTime? dtInc, DateTime? dtSf, int? tip, int? rol, int ordonat = 1)
         {
             //DataTable dtReturnEvalLista = null;
             string strSQL = string.Empty;
@@ -1262,14 +1265,14 @@ namespace WizOne.Module
                 strSQL = @"
                 select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS ""DenumireCategorie"", chest.""CategorieQuiz"",
 	                chest.""DataInceput"", chest.""DataSfarsit"", {0}(fnume.""F10009"", '') {1} ' ' {1} {0}(fnume.""F10008"", '') as ""Utilizator"",
-	                CASE WHEN COALESCE((SELECT COALESCE(""Aprobat"",0) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz"" = rasp.""IdQuiz"" AND ""IdUser"" = {11}),0)=1 THEN '#FFE18030' ELSE '#FFFFFF00' END AS ""Culoare"",
+	                CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz"" = rasp.""IdQuiz"" AND ""IdUser"" = {11}),0)=1 THEN '#FFE18030' ELSE '#FFFFFF00' END AS ""Culoare"",
 	                case
                         when rasp.""LuatLaCunostinta"" = 2 then 'Contestat'
 		                when rasp.""LuatLaCunostinta"" = 1 then 'Luat la cunostinta'
 		                else 
 						    CASE 
-						    WHEN COALESCE(chest.""CategorieQuiz"",0)=1 THEN (CASE WHEN COALESCE((SELECT COALESCE(""Aprobat"",0) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}),0) = 1 THEN 'Finalizat' ELSE 'Evaluare 360' END)
-						    WHEN COALESCE(chest.""CategorieQuiz"",0)=2 THEN (CASE WHEN COALESCE((SELECT COALESCE(""Aprobat"",0) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}),0) = 1 THEN 'Finalizat' ELSE 'Evaluare pe proiect' END)
+						    WHEN COALESCE(chest.""CategorieQuiz"",0)=1 THEN (CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}),0) = 1 THEN 'Finalizat' ELSE 'Evaluare 360' END)
+						    WHEN COALESCE(chest.""CategorieQuiz"",0)=2 THEN (CASE WHEN COALESCE((SELECT MIN(COALESCE(""Aprobat"",0)) FROM ""Eval_RaspunsIstoric"" WHERE F10003=rasp.F10003 and ""IdQuiz""=rasp.""IdQuiz"" AND ""IdUser""={11}),0) = 1 THEN 'Finalizat' ELSE 'Evaluare pe proiect' END)
 						    ELSE
                                 case
 			                         when rasp.""Finalizat"" = 1 then 'Evaluare finalizata'
@@ -1414,9 +1417,11 @@ namespace WizOne.Module
                 //chest.""Activ"" = 1
                 //and {2} chest.""DataInceput"") <= {2} {3}) and {2} {3}) <= {2} chest.""DataSfarsit"")
 
-                //Florin 2019.02.01
-                if (idAuto != -99)
-                    strSQL += @" AND rasp.""IdAuto""=" + idAuto;
+
+                //Florin 2020.01.23
+                ////Florin 2019.02.01
+                //if (idAuto != -99)
+                //    strSQL += @" AND rasp.""IdAuto""=" + idAuto;
 
 
                 if (ordonat == 1)

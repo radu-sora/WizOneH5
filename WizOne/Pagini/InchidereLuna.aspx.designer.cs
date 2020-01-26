@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Pagini {
-    
-    
-    public partial class InchidereLuna {
-        
+namespace WizOne.Pagini
+{
+
+
+    public partial class InchidereLuna
+    {
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// pnlCtl control.
         /// </summary>
@@ -29,7 +31,16 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-        
+
+        /// <summary>
+        /// lblInchidere control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblInchidere;
+
         /// <summary>
         /// btnSave control.
         /// </summary>
@@ -38,7 +49,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSave;
-        
+
         /// <summary>
         /// btnClose control.
         /// </summary>

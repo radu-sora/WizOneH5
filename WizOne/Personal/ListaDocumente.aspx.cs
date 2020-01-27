@@ -68,18 +68,13 @@ namespace WizOne.Personal
                 // New report access interface
                 if (param.command == "btnArata")
                 {                    
-                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(Convert.ToInt32(param.reportId));
-                    var reportUrl = null as string;
-
-                    if (reportSettings != null)
-                        reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(Convert.ToInt32(param.reportId), reportSettings.ToolbarType, reportSettings.ExportOptions, new { Angajat = Session["Marca"].ToString() });
-                    else
-                        reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(Convert.ToInt32(param.reportId), paramList: new { Angajat = Session["Marca"].ToString() });
+                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings((int)param.reportId);
+                    var reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl((int)param.reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, new { Angajat = Session["Marca"].ToString() });
 
                     grDate.JSProperties["cpReportUrl"] = ResolveClientUrl(reportUrl);
                 }
                 else if (param.command == "btnPrint")
-                    Wizrom.Reports.Code.ReportProxy.Print(Convert.ToInt32(param.reportId));
+                    Wizrom.Reports.Code.ReportProxy.Print((int)param.reportId);
             }
             catch (Exception ex)
             {

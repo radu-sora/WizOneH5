@@ -48,7 +48,7 @@
                 <asp:Panel ID="Panel1" runat="server">
                     <table style="width:100%;">
                         <tr>
-                            <td align="right">
+                            <td class="pull-right">
                                 <dx:ASPxButton ID="btnRapPass" ClientInstanceName="btnRapPass" runat="server" Text="Afisare" AutoPostBack="false" >
                                     <ClientSideEvents Click="function(s, e) { onPassRapButtonClick(); }" />
                                     <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
@@ -104,8 +104,6 @@
         }
 
         function onPassRapButtonClick() {
-            popUpPass.processOnServer = false;
-
             if (!txtRapPass.GetText()) {
                 swal({
                     title: 'Atentie !',

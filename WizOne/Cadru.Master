@@ -415,6 +415,9 @@
                 }
             }
         };
+
+
+
         /* Globals */
         var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';
 

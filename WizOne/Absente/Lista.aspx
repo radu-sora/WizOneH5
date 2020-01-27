@@ -308,6 +308,9 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
+                <dx:ASPxButton ID="btnSolNoua" ClientInstanceName="btnSolNoua" Font-Bold="true" ClientIDMode="Static" runat="server" Text="Solicitare noua" OnClick="btnNew_Click" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnIstoricExtins" ClientInstanceName="btnIstoricExtins" ClientIDMode="Static" runat="server" Text="Istoric Extins" AutoPostBack="true" OnClick="btnIstoricExtins_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/istoric.png"></Image>
                 </dx:ASPxButton>
@@ -320,9 +323,6 @@
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function(s, e) { OnAproba(s,e); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
-                </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSolNoua" ClientInstanceName="btnSolNoua" ClientIDMode="Static" runat="server" Text="Solicitare noua" OnClick="btnNew_Click" oncontextMenu="ctx(this,event)" >
-                    <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>

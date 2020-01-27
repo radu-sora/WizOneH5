@@ -38,15 +38,13 @@
 
         <script>
             function onCustomButtonClick(s, e) {
-                var reportId = s.GetRowKey(e.visibleIndex);
-                var command = e.buttonID;                           
-
                 s.PerformCallback(JSON.stringify({
-                    reportId: reportId,
-                    command: command
+                    reportId: s.GetRowKey(e.visibleIndex),
+                    command: e.buttonID
                 }), function () {  
                     if (s.cpReportUrl) {
                         window.open(s.cpReportUrl);          
+                        delete s.cpReportUrl;
                     }                 
                 });
             }                 

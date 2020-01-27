@@ -1,150 +1,32 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="ActeAditionale.aspx.cs" Inherits="WizOne.Pagini.ActeAditionale" %>
 
+<asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-
-<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-
-    
-    <script language="javascript" type="text/javascript">
-
-        var limba = "<%= Session["IdLimba"] %>";
-
-        function OnMetodeClick(s, e) {
-            if (grDate.GetSelectedRowCount() > 0) {
-                    grDate.PerformCallback(s.name + ";1");
-            }
-            else
-            {
-                swal({
-                    title: trad_string(limba, "Atentie"), text: trad_string(limba, "Nu exista linii selectate"),
-                    type: "info"
-                });
-            }
-        }
-
-        function GoToAtasMode(Value) {
-            window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=7&id=' + Value, '_blank ')
-        }
-
-        function ValidareUpload(s, Value) {
-            if (Value == "-99") {
-                s.Cancel();
-                swal({
-                    title: trad_string(limba, "Atentie"), text: trad_string(limba, "Nu se poate adauga atasament deoarece nu exista numar"),
-                    type: "warning"
-                });
-            }
-        }
-
-        var textSeparator = ",";
-        function OnListBoxSelectionChanged(listBox, args) {
-            if (args.index == 0)
-                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
-            UpdateSelectAllItemState();
-            UpdateText();
-        }
-        function UpdateSelectAllItemState() {
-            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
-        }
-        function IsAllSelected() {
-            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
-            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
-        }
-        function UpdateText() {
-            var selectedItems = checkListBox.GetSelectedItems();
-            cmbStare.SetText(GetSelectedItemsText(selectedItems));
-        }
-        function SynchronizeListBoxValues(dropDown, args) {
-            checkListBox.UnselectAll();
-            var texts = dropDown.GetText().split(textSeparator);
-            var values = GetValuesByTexts(texts);
-            checkListBox.SelectValues(values);
-            UpdateSelectAllItemState();
-            UpdateText();
-        }
-        function GetSelectedItemsText(items) {
-            var texts = [];
-            for (var i = 0; i < items.length; i++)
-                if (items[i].index != 0)
-                    texts.push(items[i].text);
-            return texts.join(textSeparator);
-        }
-        function GetValuesByTexts(texts) {
-            var actualValues = [];
-            var item;
-            for (var i = 0; i < texts.length; i++) {
-                item = checkListBox.FindItemByText(texts[i]);
-                if (item != null)
-                    actualValues.push(item.value);
-            }
-            return actualValues;
-        }
-
-
-
-
-
-
-
-        function OnInitGrid(s, e) {
-            AdjustSize();
-        }
-
-        function OnControlsInitialized(s, e) {
-            ASPxClientUtils.AttachEventToElement(window, "resize", function (evt) {
-                AdjustSize();
-            });
-        }
-
-        function AdjustSize() {
-            var height = Math.max(0, document.documentElement.clientHeight) - 220;
-            grDate.SetHeight(height);
-        }
-
-        function OnEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: trad_string(limba, ""), text: s.cpAlertMessage,
-                    type: "warning"
-                });
-                s.cpAlertMessage = null;
-            }
-
-            AdjustSize();
-        }
-
-
-    </script>
-
-</asp:Content>
-
-
-<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
-    <table width="100%">
+    <table style="width:100%">
         <tr>
-            <td align="left">
+            <td class="pull-left">
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
-            <td align="right">
-                <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="true" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" >
+            <td class="pull-right">
+                <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
+                    <ClientSideEvents Click="function(s,e) { onHeaderButtonClick(s); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnNr" ClientInstanceName="btnNr" ClientIDMode="Static" runat="server" Text="Atribuire numar" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/istoric.png"></Image>
-                    <ClientSideEvents Click="function(s,e) { OnMetodeClick(s,e); }" />
+                    <ClientSideEvents Click="function(s,e) { onHeaderButtonClick(s); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnTiparit" ClientInstanceName="btnTiparit" ClientIDMode="Static" runat="server" Text="Tiparit" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
-                    <ClientSideEvents Click="function(s,e) { OnMetodeClick(s,e); }" />
+                    <ClientSideEvents Click="function(s,e) { onHeaderButtonClick(s); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSemnat" ClientInstanceName="btnSemnat" ClientIDMode="Static" runat="server" Text="Semnat" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/doc2.png"></Image>
-                    <ClientSideEvents Click="function(s,e) { OnMetodeClick(s,e); }" />
+                    <ClientSideEvents Click="function(s,e) { onHeaderButtonClick(s); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnFinalizat" ClientInstanceName="btnFinalizat" ClientIDMode="Static" runat="server" Text="Finalizat" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
-                    <ClientSideEvents Click="function(s,e) { OnMetodeClick(s,e); }" />
+                    <ClientSideEvents Click="function(s,e) { onHeaderButtonClick(s); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="~/Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
@@ -153,29 +35,32 @@
         </tr>
         <tr>
             <td colspan="2">
-                <div class="Absente_divOuter" style="margin:15px 0px;">
+                <div class="Absente_divOuter" style="display:flex; align-items:flex-end; margin:15px 0px;">
 
                     <div class="Absente_Cereri_CampuriSup" id="pnlComp" runat="server" visible="false">
                         <label id="lblCmp" runat="server" style="display:inline-block;">Companie</label>
-                        <dx:ASPxComboBox ID="cmbCmp" ClientInstanceName="cmbCmp" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="true" ValueField="F00202" TextField="F00204" ValueType="System.Int32" AllowNull="false" OnSelectedIndexChanged="cmbComp_SelectedIndexChanged"/>
+                        <dx:ASPxComboBox ID="cmbCmp" ClientInstanceName="cmbCmp" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="false" ValueField="F00202" TextField="F00204" ValueType="System.Int32" AllowNull="false">
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { onLoadCmbAng(cmbCmp.GetValue(), cmbTip.GetValue()); }" />
+                        </dx:ASPxComboBox>
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblTip" runat="server" style="display:inline-block;">Tip</label>
-                        <dx:ASPxComboBox ID="cmbTip" ClientInstanceName="cmbTip" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="true" AllowNull="true" OnValueChanged="cmbTip_ValueChanged" >
+                        <dx:ASPxComboBox ID="cmbTip" ClientInstanceName="cmbTip" ClientIDMode="Static" runat="server" Width="150px" AutoPostBack="false" ValueType="System.Int32" AllowNull="true">
                             <Items>
                                 <dx:ListEditItem Text="(Selectie toate)" Value="9" />
                                 <dx:ListEditItem Text="Angajat" Value="0" />
                                 <dx:ListEditItem Text="Candidat" Value="1" />
                                 <dx:ListEditItem Text="Candidat-Angajat" Value="2" />
                             </Items>
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { onLoadCmbAng(typeof cmbCmp != 'undefined' ? cmbCmp.GetValue() : null, cmbTip.GetValue()); }" />
                         </dx:ASPxComboBox>
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblAng" runat="server" style="display:inline-block;">Angajat/Candidat</label>
                         <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
-                                    CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" AllowNull="true" >
+                            CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" AllowNull="true" OnCallback="cmbAng_Callback">
                             <Columns>
                                 <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
                                 <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
@@ -200,38 +85,27 @@
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblData" runat="server" style="display:inline-block;">Data modificarii</label>
-                        <dx:ASPxDateEdit ID="txtData" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" AllowNull="true" >
+                        <dx:ASPxDateEdit ID="txtData" runat="server" ClientInstanceName="txtData" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" AllowNull="true" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">
                         <label id="lblDepasire" runat="server" style="display:inline-block;">Depasire Revisal</label>
-                        <dx:ASPxDateEdit ID="txtDepasire" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" AllowNull="true" >
+                        <dx:ASPxDateEdit ID="txtDepasire" runat="server" ClientInstanceName="txtDepasire" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" AllowNull="true" >
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </div>
 
-                    <div class="Absente_Cereri_CampuriSup" style="margin-top:28px;">
-                        <table>
-                            <tr>
-                                <td>
-                                    <div style="float:left;">
-                                        <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
-                                            <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                                        </dx:ASPxButton>
-                                    </div>
-                                </td>
-                                <td>&nbsp;&nbsp;</td>
-                                <td>
-                                    <div style="float:left;">
-                                        <dx:ASPxButton ID="btnFiltruSterge" Text="Sterge Filtru" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="true" oncontextMenu="ctx(this,event)" OnClick="btnFiltruSterge_Click" >                    
-                                            <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
-                                        </dx:ASPxButton>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                    <div class="Absente_Cereri_CampuriSup">
+                        <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                            <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
+                            <ClientSideEvents Click="function(s, e) { onFilterButtonClick(); }" />
+                        </dx:ASPxButton>
+                        <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)"> 
+                            <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
+                            <ClientSideEvents Click="function(s, e) { onClearFilterButtonClick(); }" />
+                        </dx:ASPxButton>                                                
                     </div>
 
                 </div>
@@ -248,8 +122,8 @@
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents 
                         ContextMenu="ctx" 
-                        EndCallback="function(s,e) { OnEndCallback(s,e); }"
-                        Init="OnInitGrid"  />
+                        Init="function(s,e) { onGridInit(); }"
+                        EndCallback="function(s,e) { onGridEndCallback(s); }" />
                     <Columns>
 
                         <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" SelectAllCheckboxMode="AllPages" />
@@ -298,7 +172,7 @@
                             </Columns>
                         </dx:GridViewBandColumn>
 
-                        <dx:GridViewBandColumn Caption="Atasamente" HeaderStyle-HorizontalAlign="Center" Name="colAtas">
+                        <dx:GridViewBandColumn Caption="Fisiere atasate" HeaderStyle-HorizontalAlign="Center" Name="colAtas">
                             <Columns>
                                 <dx:GridViewDataCheckColumn FieldName="AreAtas" Name="AreAtas" Caption="Are Atas." ReadOnly="true" Width="80px"  />
 
@@ -326,8 +200,7 @@
                                 <dx:GridViewDataColumn Width="100px" Caption="Stergere" CellStyle-HorizontalAlign="Center" Name="colSterge">
                                     <DataItemTemplate>
                                         <dx:ASPxButton ID="btnSterge" runat="server" Text="" AutoPostBack="false" ToolTip="Sterge document" oncontextMenu="ctx(this,event)" >
-                                            <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
-                                           
+                                            <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>                                           
                                         </dx:ASPxButton>
                                     </DataItemTemplate>
                                 </dx:GridViewDataColumn>
@@ -391,12 +264,104 @@
                     
             </td>
         </tr>
-    </table>
+    </table>   
 
+    <script>
+        var limba = "<%= Session["IdLimba"] %>";        
 
-    <dx:ASPxGlobalEvents ID="ge" runat="server">
-        <ClientSideEvents ControlsInitialized="OnControlsInitialized" />
-    </dx:ASPxGlobalEvents>
+        function onGridInit() {
+            window.addEventListener('resize', function () {
+                adjustSize();
+            })
 
+            adjustSize();
+        }             
+
+        function onGridEndCallback(s) {
+            if (s.cpAlertMessage) {
+                swal({
+                    title: trad_string(limba, "Atentie"),
+                    text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                delete s.cpAlertMessage;
+            } else if (s.cpReportUrl) {
+                window.location.href = s.cpReportUrl;
+            }
+        }
+
+        function onOpenAttachment(value) {
+            value && window.open(getAbsoluteUrl + 'Pagini/Fisiere.aspx?tip=0&tbl=7&id=' + value, '_blank ');
+        }
+
+        function onValidateUpload(s, value) {
+            if (value == "-99") {
+                s.Cancel();
+                swal({
+                    title: trad_string(limba, "Atentie"),
+                    text: trad_string(limba, "Fisierul nu poate fi atasat deoarece nu exista numar"),
+                    type: "warning"
+                });
+            }
+        }
+
+        function onHeaderButtonClick(s) {
+            if (grDate.GetSelectedRowCount() > 0) {
+                grDate.PerformCallback(s.name + ";1");
+            }
+            else {
+                swal({
+                    title: trad_string(limba, "Atentie"),
+                    text: trad_string(limba, "Nu exista linii selectate"),
+                    type: "info"
+                });
+            }
+        }
+       
+        function onLoadCmbAng(cmp, tip) {
+            cmbAng.PerformCallback(JSON.stringify({
+                cmp: cmp,
+                tip: tip
+            }));
+        }
+
+        function onFilterButtonClick() {
+            grDate.PerformCallback('btnFilter;' + JSON.stringify({
+                cmp: typeof cmbCmp != 'undefined' ? cmbCmp.GetValue() : null,
+                tip: cmbTip.GetValue(),
+                ang: cmbAng.GetValue(),
+                status: cmbStatus.GetValue(),
+                data: getLocalDate(txtData.GetDate()),
+                depasire: getLocalDate(txtDepasire.GetDate())
+            }));
+        }
+
+        function onClearFilterButtonClick() {
+            typeof cmbCmp != 'undefined' && cmbCmp.SetValue();
+            cmbTip.SetValue();
+            cmbAng.SetValue();
+            cmbStatus.SetValue();
+            txtData.SetDate();
+            txtDepasire.SetDate();
+            grDate.PerformCallback('btnFilter;{}');
+        }
+
+        function getLocalDate(date) {
+            var localDate = null;
+
+            if (date instanceof Date) {
+                localDate = new Date();
+                localDate.setTime(date.getTime() + (date.getTimezoneOffset() * (-1) * 60 * 1000));
+            }
+
+            return localDate;
+        }   
+
+        function adjustSize() {
+            var height = Math.max(0, document.documentElement.clientHeight) - 243;
+
+            grDate.SetHeight(height);
+        }
+    </script>    
 
 </asp:Content>

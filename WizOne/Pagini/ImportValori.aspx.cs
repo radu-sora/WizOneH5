@@ -358,9 +358,9 @@ namespace WizOne.Pagini
                     {                       
                         while (!ws2.Cells[0, x].Value.IsEmpty)
                         {
-                            if (ws2.Cells[0, x].Value.ToString() == obj["ColoanaFisier"].ToString())
-                                break;
                             x++;
+                            if (ws2.Cells[0, x].Value.ToString() == obj["ColoanaFisier"].ToString())
+                                break;                            
                         }
                     }
                 }
@@ -413,7 +413,7 @@ namespace WizOne.Pagini
                 }
                 
 
-                if (x == 0)
+                if (x >= grDate.VisibleRowCount)
                 {
                     MessageBox.Show("Nu ati specificat coloana pentru marca!", MessageBox.icoError, "");
                     return;

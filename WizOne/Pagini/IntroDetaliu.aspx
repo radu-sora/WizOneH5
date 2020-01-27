@@ -4,13 +4,16 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
     <script type="text/javascript">
-        function ShowWidgetPanel(widgetPanelUID) {
+        function ShowWidgetPanel(widgetPanelUID) {     
             var panel = dockManager.GetPanelByUID(widgetPanelUID);
             var button = ASPxClientControl.GetControlCollection().GetByName('widgetButton_' + widgetPanelUID);
             if (button != null) {
                 var currentClass = button.GetMainElement().className;
-                if (currentClass.indexOf("disabled") == -1)
+                if (currentClass.indexOf("disabled") == -1) {
+                    panel.left = 150;
+                    panel.top = 500;
                     panel.Show();
+                }
                 else
                     panel.Hide();
             }
@@ -18,7 +21,7 @@
                 panel.Show();
         }
 
-        function SetWidgetButtonVisible(widgetName, visible) {
+        function SetWidgetButtonVisible(widgetName, visible) {        
             var button = ASPxClientControl.GetControlCollection().GetByName('widgetButton_' + widgetName);
             if (button != null) {
                 var currentClass = button.GetMainElement().className;
@@ -84,7 +87,7 @@
             </dx:PanelContent>
         </PanelCollection>
         <ExpandButtonTemplate>
-            <div style="border-bottom:solid 1px #898989; vertical-align:top; line-height:25px;">
+            <div style="border-bottom:solid 1px #898989; vertical-align:bottom; line-height:25px;">
                 <label id="lblCfg" runat="server" style="font-size:14px;">Date de configurare</label>
                 <img src="../Fisiere/Imagini/Icoane/sgCls.png" style="display:inline-block; vertical-align:middle;" alt="ico"  />
             </div>

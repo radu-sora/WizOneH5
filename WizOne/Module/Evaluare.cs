@@ -2212,35 +2212,52 @@ namespace WizOne.Module
                                         if (Constante.tipBD == 2)
                                             nextId = General.Nz(General.ExecutaScalar(@"SELECT ""ObiIndividuale_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
+                                        //inseram pt pozitia 1 si pentru id linie tip camp
+                                        string sqlTemp =
+                                            $@"BEGIN
+                                                DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3;
+
+                                                INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"")
+                                                SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)), ob.""IdActivitate"", CAST(ob.""Activitate"" AS varchar(4000)), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, {(dtObiective.Rows[i]["IdCategObiective"] == DBNull.Value ? "null" : dtObiective.Rows[i]["IdCategObiective"].ToString())}
+                                                FROM ""Eval_ObiIndividuale"" ob
+                                                WHERE  ob.F10003 = @1 AND ob.""IdPeriod"" = @4
+                                                group by ob.""IdPeriod"", ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)), ob.""IdActivitate"", CAST(ob.""Activitate"" AS varchar(4000));
+                                            END;";
+
+                                        General.ExecutaNonQuery(sqlTemp, new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString(), dtObiective.Rows[i]["IdPeriod"] });
+
+
+                                        #region OLD
+
+                                        ////string sqlTemp =
+                                        ////    $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
+                                        ////    SELECT ob.""IdPeriod"", ob.""IdObiectiv"", ob.""Obiectiv"", ob.""IdActivitate"", ob.""Activitate"", {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                        ////    FROM ""Eval_ObiIndividuale"" ob
+                                        ////    WHERE ob.""IdPeriod"" = @1 AND ob.F10003 = @2
+                                        ////    group by ob.""IdPeriod"", ob.""IdObiectiv"", ob.""Obiectiv"", ob.""IdActivitate"", ob.""Activitate"" ";
+
+                                        //////inseram pt pozitia 1 si pentru id linie tip camp
+                                        ////General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });
+                                        ////General.ExecutaNonQuery(sqlTemp, new object[] { dtObiective.Rows[i]["IdPeriod"], arr[j].F10003.ToString() });
+
                                         //string sqlTemp =
-                                        //    $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"",""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME)
-                                        //    SELECT ob.""IdPeriod"", ob.""IdObiectiv"", ob.""Obiectiv"", ob.""IdActivitate"", ob.""Activitate"", {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
-                                        //    FROM ""Eval_ObiIndividuale"" ob
-                                        //    WHERE ob.""IdPeriod"" = @1 AND ob.F10003 = @2
-                                        //    group by ob.""IdPeriod"", ob.""IdObiectiv"", ob.""Obiectiv"", ob.""IdActivitate"", ob.""Activitate"" ";
+                                        //$@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"")
+                                        //SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"",CAST(ob.""Obiectiv"" AS varchar(4000)), act.""IdActivitate"", CAST(act.""Activitate"" AS varchar(4000)), MAX(ob.""Pondere""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, {(dtObiective.Rows[i]["IdCategObiective"] == DBNull.Value ? "null" : dtObiective.Rows[i]["IdCategObiective"].ToString())}
+                                        //FROM ""Eval_ListaObiectiv"" lista                                        
+                                        //JOIN ""Eval_ListaObiectivDet"" listaOb on listaOb.""IdLista"" = lista.""IdLista""
+                                        //JOIN ""Eval_ObiIndividuale"" ob ON listaOb.""IdObiectiv"" = ob.""IdObiectiv""
+                                        //JOIN ""Eval_ObiectivXActivitate"" act on listaOb.""IdObiectiv"" = act.""IdObiectiv"" and listaob.""IdActivitate"" = act.""IdActivitate""
+                                        //JOIN ""Eval_SetAngajatiDetail"" setAng ON setAng.""IdSetAng"" = listaOb.""IdSetAngajat""
+                                        //JOIN ""Eval_ConfigObTemplateDetail"" tmpl ON  1=1
+                                        //WHERE setAng.""Id"" = @1 AND lista.""IdLista"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2
+                                        //AND tmpl.""ColumnName"" = 'Obiectiv'
+                                        //group by ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)), act.""IdActivitate"", CAST(act.""Activitate"" AS varchar(4000)) " + Environment.NewLine;
 
                                         ////inseram pt pozitia 1 si pentru id linie tip camp
                                         //General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });
-                                        //General.ExecutaNonQuery(sqlTemp, new object[] { dtObiective.Rows[i]["IdPeriod"], arr[j].F10003.ToString() });
+                                        //General.ExecutaNonQuery(sqlTemp, new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["TemplateIdObiectiv"].ToString() });
 
-                                        string sqlTemp =
-                                        $@"INSERT INTO ""Eval_ObiIndividualeTemp"" (""IdPeriod"", ""IdObiectiv"", ""Obiectiv"", ""IdActivitate"", ""Activitate"", ""Pondere"", ""IdQuiz"", F10003, ""Pozitie"", ""IdLinieQuiz"", ""IdUnic"", USER_NO, TIME, ""IdCategObiective"")
-                                        SELECT (SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" = {dtObiective.Rows[i]["IdQuiz"].ToString()}), ob.""IdObiectiv"",ob.""Obiectiv"", act.""IdActivitate"", act.""Activitate"", MAX(ob.""Pondere""), {dtObiective.Rows[i]["IdQuiz"].ToString()}, {arr[j].F10003.ToString()}, 1, {dtObiective.Rows[i]["Id"].ToString()}, {nextId}, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, {(dtObiective.Rows[i]["IdCategObiective"] == DBNull.Value ? "null" : dtObiective.Rows[i]["IdCategObiective"].ToString())}
-                                        FROM ""Eval_ListaObiectiv"" lista                                        
-                                        JOIN ""Eval_ListaObiectivDet"" listaOb on listaOb.""IdLista"" = lista.""IdLista""
-                                        JOIN ""Eval_ObiIndividuale"" ob ON listaOb.""IdObiectiv"" = ob.""IdObiectiv""
-                                        JOIN ""Eval_ObiectivXActivitate"" act on listaOb.""IdObiectiv"" = act.""IdObiectiv"" and listaob.""IdActivitate"" = act.""IdActivitate""
-                                        JOIN ""Eval_SetAngajatiDetail"" setAng ON setAng.""IdSetAng"" = listaOb.""IdSetAngajat""
-                                        JOIN ""Eval_ConfigObTemplateDetail"" tmpl ON  1=1
-                                        WHERE setAng.""Id"" = @1 AND lista.""IdLista"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2
-                                        AND tmpl.""ColumnName"" = 'Obiectiv'
-                                        group by ob.""IdObiectiv"", ob.""Obiectiv"", act.""IdActivitate"", act.""Activitate"" " + Environment.NewLine;
-
-                                        //inseram pt pozitia 1 si pentru id linie tip camp
-                                        General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });
-                                        General.ExecutaNonQuery(sqlTemp, new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["TemplateIdObiectiv"].ToString() });
-
-
+                                        #endregion
 
                                         if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && Convert.ToInt32(General.Nz(dtObiective.Rows[i]["CategorieQuiz"], 0)) == 0)
                                         {

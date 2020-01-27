@@ -357,10 +357,10 @@ namespace WizOne.Pagini
                     if (obj["ColoanaBD"].ToString() == "F10003")
                     {                       
                         while (!ws2.Cells[0, x].Value.IsEmpty)
-                        {
-                            x++;
+                        {                            
                             if (ws2.Cells[0, x].Value.ToString() == obj["ColoanaFisier"].ToString())
-                                break;                            
+                                break;
+                            x++;
                         }
                     }
                 }
@@ -413,11 +413,11 @@ namespace WizOne.Pagini
                 }
                 
 
-                if (x >= grDate.VisibleRowCount)
-                {
-                    MessageBox.Show("Nu ati specificat coloana pentru marca!", MessageBox.icoError, "");
-                    return;
-                }
+                //if (x >= )
+                //{
+                //    MessageBox.Show("Nu ati specificat coloana pentru marca!", MessageBox.icoError, "");
+                //    return;
+                //}
 
                 for (int i = 0; i < grDate.VisibleRowCount; i++)
                 {

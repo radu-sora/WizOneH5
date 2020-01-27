@@ -483,12 +483,23 @@ namespace WizOne
                     General.SignOut();
                 else
                 {
-                    //Radu 20.07.2018 - am inlocuit ../ cu ~/
+                    //Florin 2020.01.27
+
+                    string url = "~/Default.aspx";
                     if (Constante.esteTactil)
-                        //Response.Redirect("~/DefaultTactil.aspx", false);
-                        Response.Redirect("~/Tactil/MainTactil.aspx", false);
+                        url = "~/Tactil/MainTactil.aspx";
+
+                    if (Page.IsCallback)
+                        ASPxWebControl.RedirectOnCallback(url);
                     else
-                        Response.Redirect("~/Default.aspx", false);
+                        Response.Redirect(url, false);
+
+                    ////Radu 20.07.2018 - am inlocuit ../ cu ~/
+                    //if (Constante.esteTactil)
+                    //    //Response.Redirect("~/DefaultTactil.aspx", false);
+                    //    Response.Redirect("~/Tactil/MainTactil.aspx", false);
+                    //else
+                    //    Response.Redirect("~/Default.aspx", false);
                 }
             }
             catch (Exception ex)

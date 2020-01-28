@@ -87,6 +87,7 @@ namespace WizOne.Reports
                     {
                         XRLabel lbl = new XRLabel();
                         XRLabel col = new XRLabel();
+                        XRLine linie = new XRLine();
                         switch (Convert.ToInt32(dtPrint.Rows[k]["Id"].ToString()))
                         {
                             case 1:                          //zilele lunii
@@ -205,6 +206,8 @@ namespace WizOne.Reports
                                 x += 1;
                                 break;
                         }
+                        //linie.WidthF = this.PageWidth;
+                        //Detail.Controls.Add(linie);
                     }
                 }
 

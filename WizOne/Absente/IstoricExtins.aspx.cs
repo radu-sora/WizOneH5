@@ -36,7 +36,7 @@ namespace WizOne.Absente
                 btnLoad.Text = Dami.TraduCuvant("btnLoad", "Incarca");
                 btnExport.Text = Dami.TraduCuvant("btnExport", "Export");
 
-                
+                lblAn.InnerText = Dami.TraduCuvant("Anul");
                 lblLuna.InnerText = Dami.TraduCuvant("Luna");
                 lblFil.InnerText = Dami.TraduCuvant("Filtru");
 
@@ -80,6 +80,10 @@ namespace WizOne.Absente
                     cmbFil.Items.Add(Dami.TraduCuvant("aceeasi filiala"), 1);
                     cmbFil.Items.Add(Dami.TraduCuvant("toate inregistrarile"), 0);
                     cmbFil.SelectedIndex = 0;
+
+                    cmbAn.DataSource = Dami.ListaAni(2015, 2030);
+                    cmbAn.DataBind();
+                    cmbAn.Value = DateTime.Now.Year;
 
                     //Adaugam ultimele zile din luna
                     SetColoane();
@@ -445,17 +449,19 @@ namespace WizOne.Absente
         //}
 
 
-        private void CreazaGridAnual(bool primaData = true)
+        private void CreazaGridAnual(int an, bool primaData = true)
         {
             try
             {
                 //ASPxGridView grLeg = (ASPxGridView)pnlLeg.FindControl("grLegenda");
                 List<object> lst = grLeg.GetSelectedFieldValues("Id");
 
-                DataTable lstZlb = GetZileLibere(Convert.ToInt32(Session["UserId"] ?? 99), new DateTime(DateTime.Now.Year, 1, 1), new DateTime(DateTime.Now.Year, 12, 31), Convert.ToInt32(Session["IstoricExtins_Angajat_Marca"] ?? -99));
+                //DataTable lstZlb = GetZileLibere(Convert.ToInt32(Session["UserId"] ?? 99), new DateTime(DateTime.Now.Year, 1, 1), new DateTime(DateTime.Now.Year, 12, 31), Convert.ToInt32(Session["IstoricExtins_Angajat_Marca"] ?? -99));
+                DataTable lstZlb = GetZileLibere(Convert.ToInt32(Session["UserId"] ?? 99), new DateTime(an, 1, 1), new DateTime(an, 12, 31), Convert.ToInt32(Session["IstoricExtins_Angajat_Marca"] ?? -99));
+
 
                 grAnual.Rows.Clear();
-                int an = DateTime.Now.Year;
+                //int an = DateTime.Now.Year;
 
                 //prima linie (cea a zilelor saptamanii) este fixa
                 grAnual.Rows.Add(new HtmlTableRow());
@@ -882,7 +888,7 @@ namespace WizOne.Absente
                         }
                         break;
                     case 3:
-                        CreazaGridAnual();
+                        CreazaGridAnual(Convert.ToInt32(cmbAn.Value ?? DateTime.Now.Year));
                         break;
                     case 4:
                         {

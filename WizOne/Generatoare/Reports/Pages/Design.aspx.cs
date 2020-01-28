@@ -334,7 +334,7 @@ namespace Wizrom.Reports.Pages
                 if (!IsPostBack || ReportDesignerCallbackPanel.IsCallback)
                 {
                     // Load data
-                    if (_reportId == 0)
+                    if (_reportId == 0) // TODO: Evaluate this in all places.
                         throw new Exception("No report id found");
 
                     var entities = new ReportsEntities();

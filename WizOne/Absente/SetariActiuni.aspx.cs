@@ -54,6 +54,21 @@ namespace WizOne.Absente
                     item.Text = Dami.TraduCuvant(item.Text, item.Text);
                 }
 
+                foreach (ListEditItem item in cmbAct.Items)
+                {
+                    item.Text = Dami.TraduCuvant(item.Text, item.Text);
+                }
+
+                foreach (var c in grDate.Columns)
+                {
+                    try
+                    {
+                        GridViewDataColumn col = (GridViewDataColumn)c;
+                        col.Caption = Dami.TraduCuvant(col.FieldName);
+                    }
+                    catch (Exception) { }
+                }
+
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
@@ -80,15 +95,7 @@ namespace WizOne.Absente
                 }
                 else
                 {
-                    foreach (var c in grDate.Columns)
-                    {
-                        try
-                        {
-                            GridViewDataColumn col = (GridViewDataColumn)c;
-                            col.Caption = Dami.TraduCuvant(col.FieldName);
-                        }
-                        catch (Exception) { }
-                    }
+
 
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();

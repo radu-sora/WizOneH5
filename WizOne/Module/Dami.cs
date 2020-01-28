@@ -1919,7 +1919,7 @@ namespace WizOne.Module
             try
             {
                 List<metaGeneral> list = new List<metaGeneral>();
-                for (int i = anStart; i <= 2200; i++)
+                for (int i = anStart; i <= anEnd; i++)
                 {
                     list.Add(new metaGeneral() { Id = i, Denumire = i.ToString() });
                 }

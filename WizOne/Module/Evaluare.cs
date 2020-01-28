@@ -1259,9 +1259,17 @@ namespace WizOne.Module
             string strSQL = string.Empty;
             try
             {
+                //Florin 2020.01.28 - am adaugat IdAutoNew si Rolul
                 //Radu 19.02.2019 - am inlocuit ist cu istPoz la Stare (pt Evaluare angajat si Evaluare supervizor) si am adaugat AND rasp.F10003 = {10} la Evaluare angajat
                 //Radu 20.02.2019 - am inlocuit Finalizat si PoateModifica
                 //Radu 07.05.2019 - am eliminat conditia de CategorieQuiz pentru Culoare       (COALESCE(chest.""CategorieQuiz"",0)=1 OR COALESCE(chest.""CategorieQuiz"",0)=2) AND 
+
+                string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+                if (Constante.tipBD == 2)
+                    idAuto = "ROWNUM";
+
+                //{14} AS ""IdAutoNew"", (SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""= (-1 * ist.""IdSuper"")) AS ""Rol"", 
+
                 strSQL = @"
                 select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS ""DenumireCategorie"", chest.""CategorieQuiz"",
 	                chest.""DataInceput"", chest.""DataSfarsit"", {0}(fnume.""F10009"", '') {1} ' ' {1} {0}(fnume.""F10008"", '') as ""Utilizator"",
@@ -1371,8 +1379,9 @@ namespace WizOne.Module
                 from ""Eval_Raspuns"" rasp
                 join ""Eval_Quiz"" chest on rasp.""IdQuiz"" = chest.""Id""
                 join ""F100"" fnume on rasp.""F10003"" = fnume.""F10003""
+                LEFT JOIN ""Eval_tblCategorie"" ctg ON chest.""CategorieQuiz""=ctg.""Id""
                 {12} join ""Eval_RaspunsIstoric"" ist on rasp.""IdQuiz"" = ist.""IdQuiz""
-							                and rasp.""F10003"" = ist.""F10003"" AND ist.""IdUser"" = {4}
+							                and rasp.""F10003"" = ist.""F10003"" AND (ist.""IdUser"" = {4}  OR (ist.""Pozitie""=1 AND ctg.""Id"" = 0 AND rasp.F10003={10} AND {4} NOT IN (SELECT XX.IdUSer FROM Eval_RaspunsIStoric XX WHERE XX.F10003=ist.F10003 AND XX.IdQuiz=ist.IdQuiz)))
                 left join ""Eval_RaspunsIstoric"" istPoz on rasp.""IdQuiz"" = istPoz.""IdQuiz""
 									                and rasp.""F10003"" = istPoz.""F10003""
 									                and rasp.""Pozitie"" = istPoz.""Pozitie""
@@ -1399,7 +1408,6 @@ namespace WizOne.Module
                 left join ""Eval_RaspunsIstoric"" ist5 on rasp.""IdQuiz"" = ist5.""IdQuiz""
 								                and rasp.""F10003"" = ist5.""F10003""
 								                and 5 = ist5.""Pozitie""
-                LEFT JOIN ""Eval_tblCategorie"" ctg ON chest.""CategorieQuiz""=ctg.""Id""
                 LEFT JOIN ""Eval_Perioada"" per ON chest.""Anul"" = per.""IdPerioada""
                 where rasp.""IdQuiz"" = {5}
                 and rasp.""F10003"" = {6}
@@ -1509,9 +1517,9 @@ namespace WizOne.Module
                 }
 
                 if (Constante.tipBD == 1) //SQL
-                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
+                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, idAuto);
                 else                      //ORACLE
-                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
+                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, idAuto);
 
                 //Florin  2018.07.05
                 strSQL = strSQL.Replace("@1", Dami.TraduCuvant("Evaluare angajat"));
@@ -2175,7 +2183,7 @@ namespace WizOne.Module
                                         JOIN ""Eval_ConfigObTemplateDetail"" tmpl ON  1=1
                                         WHERE setAng.""Id"" = @1 AND lista.""IdLista"" = tmpl.""IdNomenclator"" and tmpl.""TemplateId"" = @2
                                         AND tmpl.""ColumnName"" = 'Obiectiv'
-                                        group by ob.""IdObiectiv"", CAST(ob.""Obiectiv""), act.""IdActivitate"", CAST(act.""Activitate"" AS varchar(4000)) " + Environment.NewLine;
+                                        group by ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)), act.""IdActivitate"", CAST(act.""Activitate"" AS varchar(4000)) " + Environment.NewLine;
 
                                     //inseram pt pozitia 1 si pentru id linie tip camp
                                     General.ExecutaNonQuery(@"DELETE FROM ""Eval_ObiIndividualeTemp"" WHERE F10003 = @1 AND ""IdQuiz"" = @2 AND ""IdLinieQuiz"" = @3", new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString() });

@@ -5646,7 +5646,7 @@ namespace WizOne.Module
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "Contract zilnic");
+                table.Rows.Add(1, Dami.TraduCuvant("Contract zilnic"));
                 //table.Rows.Add(2, "Contract ciclic");
 
                 return table;
@@ -5804,11 +5804,11 @@ namespace WizOne.Module
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "Pontare automata");
-                table.Rows.Add(2, "Pontare automata la minim o citire card");
-                table.Rows.Add(3, "Pontare doar prima intrare si ultima iesire");
-                table.Rows.Add(4, "Pontare toate intrarile si iesirile");
-                table.Rows.Add(5, "Pontare prima intrare, ultima iesire - pauze > x minute");
+                table.Rows.Add(1, Dami.TraduCuvant("Pontare automata"));
+                table.Rows.Add(2, Dami.TraduCuvant("Pontare automata la minim o citire card"));
+                table.Rows.Add(3, Dami.TraduCuvant("Pontare doar prima intrare si ultima iesire"));
+                table.Rows.Add(4, Dami.TraduCuvant("Pontare toate intrarile si iesirile"));
+                table.Rows.Add(5, Dami.TraduCuvant("Pontare prima intrare, ultima iesire - pauze > x minute"));
 
                 return table;
             }

@@ -37,7 +37,7 @@ namespace WizOne.Pagini
                     try
                     {
                         TreeListDataColumn col = (TreeListDataColumn)c;
-                        col.Caption = Dami.TraduCuvant(col.Caption ?? col.FieldName);
+                        col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption);
                     }
                     catch (Exception){}
                 }

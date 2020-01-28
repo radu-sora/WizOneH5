@@ -97,8 +97,11 @@ namespace Wizrom.Reports.Code
 
         private static string GetUrl(int reportId, string userId, short toolbarType, string exportOptions, object paramList, bool oncePerGroup)
         {
+            if (reportId == 0)
+                throw new ArgumentException("Invalid report id value");
+
             if (string.IsNullOrEmpty(userId))
-                throw new ArgumentException("Invalid user ID value");
+                throw new ArgumentException("Invalid user id value");
 
             if (HttpContext.Current?.Session == null)
                 throw new Exception("Invalid HTTP context");
@@ -113,7 +116,7 @@ namespace Wizrom.Reports.Code
                 UserId = userId,
                 ToolbarType = toolbarType, // 0 - full items, 1 - only Print, Customize layout & Exit
                 ExportOptions = exportOptions ?? "*", // "pdf,image[...]" or "*" to display all options
-                ParamList = paramList,
+                ParamList = paramList ?? new { UserId = userId },
                 DataCache = new ViewDataCache(),
                 OncePerGroup = oncePerGroup
             };
@@ -128,8 +131,11 @@ namespace Wizrom.Reports.Code
 
             return $"{_pagesPath}View?id={id}";
         }
-        private static string GetUrl(int reportId, object paramList, bool oncePerGroup)
-        {            
+        private static string GetUrl(int reportId, string userId, object paramList, bool oncePerGroup)
+        {
+            if (reportId == 0)
+                throw new ArgumentException("Invalid report id value");
+
             if (HttpContext.Current?.Session == null)
                 throw new Exception("Invalid HTTP context");
 
@@ -140,7 +146,7 @@ namespace Wizrom.Reports.Code
             var session = new // Anonymous type here to enforce read-only members
             {
                 ReportId = reportId,
-                ParamList = paramList,
+                ParamList = paramList ?? (!string.IsNullOrEmpty(userId) ? new { UserId = userId } : null),
                 DataCache = null as object, // No cache for print handler
                 OncePerGroup = oncePerGroup
             };
@@ -157,6 +163,9 @@ namespace Wizrom.Reports.Code
         }
         private static string GetUrl(int reportId, bool oncePerGroup)
         {
+            if (reportId == 0)
+                throw new ArgumentException("Invalid report id value");
+
             if (HttpContext.Current?.Session == null)
                 throw new Exception("Invalid HTTP context");
 
@@ -191,12 +200,9 @@ namespace Wizrom.Reports.Code
             if (HttpContext.Current?.Session == null)
                 throw new Exception("Invalid HTTP context");
 
-            var userId = HttpContext.Current.Session["UserId"];
-
-            if (userId != null)
-                userId = Convert.ChangeType(userId, typeof(string));
-
-            return GetViewUrl(reportId, userId as string, toolbarType, exportOptions, paramList);
+            var userId = HttpContext.Current.Session["UserId"]?.ToString();
+            
+            return GetViewUrl(reportId, userId, toolbarType, exportOptions, paramList);
         }
         
         public static void View(int reportId, string userId, short toolbarType = 0, string exportOptions = "*", object paramList = null)
@@ -208,21 +214,20 @@ namespace Wizrom.Reports.Code
             if (HttpContext.Current?.Session == null)
                 throw new Exception("Invalid HTTP context");
 
-            var userId = HttpContext.Current.Session["UserId"];
+            var userId = HttpContext.Current.Session["UserId"]?.ToString();
 
-            if (userId != null)
-                userId = Convert.ChangeType(userId, typeof(string));
-
-            View(reportId, userId as string, toolbarType, exportOptions, paramList);
+            View(reportId, userId, toolbarType, exportOptions, paramList);
         }
 
         public static string GetPrintUrl(int reportId, object paramList = null)
         {
-            return GetUrl(reportId, paramList, oncePerGroup: true);           
+            var userId = HttpContext.Current.Session["UserId"]?.ToString();
+
+            return GetUrl(reportId, userId, paramList, oncePerGroup: true);
         }
 
         public static void Print(int reportId, object paramList = null)
-        {            
+        {
             if (reportId == 0)
                 throw new ArgumentException("Invalid report id value");
 
@@ -243,7 +248,7 @@ namespace Wizrom.Reports.Code
 
                 // Set internal params
                 if (paramList != null)
-                {
+                {                    
                     var properties = paramList.GetType().GetProperties() as PropertyInfo[];
                     var parameters = xtraReport.ObjectStorage.OfType<SqlDataSource>().
                         SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).

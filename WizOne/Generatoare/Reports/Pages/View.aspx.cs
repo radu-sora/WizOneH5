@@ -457,21 +457,21 @@ namespace Wizrom.Reports.Pages
                         _report.LoadLayoutFromXml(memStream);
 
                     // Set internal params            
-                    if (ReportSession.ParamList != null)
+                    var values = ReportSession.ParamList;
+                    var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                    var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                    var parameters = _report.ObjectStorage.OfType<SqlDataSource>().
+                        SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                        Where(p => p.Type != typeof(Expression));
+
+                    foreach (var param in parameters)
                     {
-                        var properties = ReportSession.ParamList.GetType().GetProperties() as PropertyInfo[];
-                        var parameters = _report.ObjectStorage.OfType<SqlDataSource>().
-                            SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                            Where(p => p.Type != typeof(Expression));
+                        var name = param.Name.TrimStart('@');
+                        var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                            implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
 
-                        foreach (var param in parameters)
-                        {
-                            var name = param.Name.TrimStart('@');
-                            var value = properties.SingleOrDefault(p => p.Name == name)?.GetValue(ReportSession.ParamList);
-
-                            if (value != null)
-                                param.Value = Convert.ChangeType(value, param.Type);
-                        }
+                        if (value != null)
+                            param.Value = Convert.ChangeType(value, param.Type);
                     }
 
                     // For client side customization

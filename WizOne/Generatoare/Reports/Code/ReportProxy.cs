@@ -110,13 +110,13 @@ namespace Wizrom.Reports.Code
                 new Dictionary<string, Dictionary<string, object>>();
             var group = HttpContext.Current.Request.Url.LocalPath;
             var id = Guid.NewGuid().ToString("N");
-            var session = new // Anonymous type here to enforce read-only members
+            var session = new // Anonymous type to enforce read-only members
             {
                 ReportId = reportId,
                 UserId = userId,
                 ToolbarType = toolbarType, // 0 - full items, 1 - only Print, Customize layout & Exit
                 ExportOptions = exportOptions ?? "*", // "pdf,image[...]" or "*" to display all options
-                ParamList = paramList ?? new { UserId = userId },
+                ParamList = paramList,
                 DataCache = new ViewDataCache(),
                 OncePerGroup = oncePerGroup
             };
@@ -131,7 +131,7 @@ namespace Wizrom.Reports.Code
 
             return $"{_pagesPath}View?id={id}";
         }
-        private static string GetUrl(int reportId, string userId, object paramList, bool oncePerGroup)
+        private static string GetUrl(int reportId, object paramList, bool oncePerGroup)
         {
             if (reportId == 0)
                 throw new ArgumentException("Invalid report id value");
@@ -143,10 +143,10 @@ namespace Wizrom.Reports.Code
                 new Dictionary<string, Dictionary<string, object>>();
             var group = HttpContext.Current.Request.Url.LocalPath;
             var id = Guid.NewGuid().ToString("N");
-            var session = new // Anonymous type here to enforce read-only members
+            var session = new // Anonymous type to enforce read-only members
             {
                 ReportId = reportId,
-                ParamList = paramList ?? (!string.IsNullOrEmpty(userId) ? new { UserId = userId } : null),
+                ParamList = paramList,
                 DataCache = null as object, // No cache for print handler
                 OncePerGroup = oncePerGroup
             };
@@ -193,43 +193,53 @@ namespace Wizrom.Reports.Code
 
         public static string GetViewUrl(int reportId, string userId, short toolbarType = 0, string exportOptions = "*", object paramList = null)
         {
+            paramList = new
+            {
+                Implicit = new { UserId = HttpContext.Current?.Session?["UserId"] },
+                Explicit = paramList
+            };
+            
             return GetUrl(reportId, userId, toolbarType, exportOptions, paramList, oncePerGroup: true);
         }
         public static string GetViewUrl(int reportId, short toolbarType = 0, string exportOptions = "*", object paramList = null)
         {
-            if (HttpContext.Current?.Session == null)
-                throw new Exception("Invalid HTTP context");
-
-            var userId = HttpContext.Current.Session["UserId"]?.ToString();
+            var userId = HttpContext.Current?.Session?["UserId"]?.ToString();
             
             return GetViewUrl(reportId, userId, toolbarType, exportOptions, paramList);
         }
         
         public static void View(int reportId, string userId, short toolbarType = 0, string exportOptions = "*", object paramList = null)
-        {            
+        {
+            paramList = new
+            {
+                Implicit = new { UserId = HttpContext.Current?.Session?["UserId"] },
+                Explicit = paramList
+            };
+
             HttpContext.Current.Response.Redirect(GetUrl(reportId, userId, toolbarType, exportOptions, paramList, oncePerGroup: false));
         }
         public static void View(int reportId, short toolbarType = 0, string exportOptions = "*", object paramList = null)
         {
-            if (HttpContext.Current?.Session == null)
-                throw new Exception("Invalid HTTP context");
-
-            var userId = HttpContext.Current.Session["UserId"]?.ToString();
+            var userId = HttpContext.Current?.Session?["UserId"]?.ToString();
 
             View(reportId, userId, toolbarType, exportOptions, paramList);
         }
 
         public static string GetPrintUrl(int reportId, object paramList = null)
         {
-            var userId = HttpContext.Current.Session["UserId"]?.ToString();
+            paramList = new
+            {
+                Implicit = new { UserId = HttpContext.Current?.Session?["UserId"] },
+                Explicit = paramList
+            };
 
-            return GetUrl(reportId, userId, paramList, oncePerGroup: true);
+            return GetUrl(reportId, paramList, oncePerGroup: true);
         }
 
         public static void Print(int reportId, object paramList = null)
         {
             if (reportId == 0)
-                throw new ArgumentException("Invalid report id value");
+                throw new ArgumentException("Invalid report id value");            
 
             using (var entities = new ReportsEntities())
             using (var xtraReport = new XtraReport())
@@ -247,21 +257,25 @@ namespace Wizrom.Reports.Code
                     xtraReport.LoadLayoutFromXml(memStream);
 
                 // Set internal params
-                if (paramList != null)
-                {                    
-                    var properties = paramList.GetType().GetProperties() as PropertyInfo[];
-                    var parameters = xtraReport.ObjectStorage.OfType<SqlDataSource>().
-                        SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
-                        Where(p => p.Type != typeof(Expression));
+                var values = new
+                {
+                    Implicit = new { UserId = HttpContext.Current?.Session?["UserId"] },
+                    Explicit = paramList
+                };                
+                var implicitValues = values.Implicit.GetType().GetProperties() as PropertyInfo[];
+                var explicitValues = values.Explicit?.GetType().GetProperties() as PropertyInfo[];
+                var parameters = xtraReport.ObjectStorage.OfType<SqlDataSource>().
+                    SelectMany(ds => ds.Queries).SelectMany(q => q.Parameters).
+                    Where(p => p.Type != typeof(Expression));
 
-                    foreach (var param in parameters)
-                    {
-                        var name = param.Name.TrimStart('@');
-                        var value = properties.SingleOrDefault(p => p.Name == name)?.GetValue(paramList);
+                foreach (var param in parameters)
+                {
+                    var name = param.Name.TrimStart('@');
+                    var value = explicitValues?.SingleOrDefault(p => p.Name == name)?.GetValue(values.Explicit) ??
+                        implicitValues.SingleOrDefault(p => p.Name == name)?.GetValue(values.Implicit);
 
-                        if (value != null)
-                            param.Value = Convert.ChangeType(value, param.Type);
-                    }
+                    if (value != null)
+                        param.Value = Convert.ChangeType(value, param.Type);
                 }
 
                 xtraReport.PrintingSystem.AddService(typeof(IConnectionProviderService), new ReportConnectionProviderService()); // Temp fix only for Print here

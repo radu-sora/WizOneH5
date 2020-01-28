@@ -649,6 +649,7 @@ namespace WizOne.Pagini
                         pnlComp.Visible = true;
 
                     IncarcaCmbAng(-1, -1);
+                    IncarcaGrid();
 
                     var filter = JObject.Parse(Session["Filtru_ActeAditionale"] as string) as dynamic;
 
@@ -660,11 +661,11 @@ namespace WizOne.Pagini
                         cmbStatus.Value = (int?)filter.status;
                         txtData.Value = (DateTime?)filter.data;
                         txtDepasire.Value = (DateTime?)filter.depasire;
+
+                        Session["Filtru_ActeAditionale"] = "{}";
                     }                    
 
-                    if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);
-
-                    IncarcaGrid();
+                    if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);                    
 
                     //in cazul in care se sterge atasamentul din managemetul de personal
                     General.ExecutaNonQuery(@"UPDATE ""Admin_NrActAd"" SET ""IdAutoAtasamente""=NULL WHERE ""IdAutoAtasamente"" NOT IN (SELECT ""IdAuto"" FROM ""Atasamente"")", null);

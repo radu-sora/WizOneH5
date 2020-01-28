@@ -550,6 +550,10 @@ namespace WizOne
                         //MessageBox.Show("Contul este suspendat sau inactiv ! Contactati administratorul de sistem.", MessageBox.icoWarning);
                         txtRas = "Angajatul asociat acestui utilizator este inactiv sau suspendat! Contactati administratorul de sistem.";
                         break;
+                    case 6: //Radu 28.01.2020
+                        General.InregistreazaLogarea(0, txtPan1.Text, "Acest utilizator are alocati mai multi angajati!");                        
+                        txtRas = "Acest utilizator are alocati mai multi angajati! Va rugam contactati administratorul de sistem!";
+                        break;
                 }
 
                 if (txtRas != "" && cuMesaj)
@@ -970,6 +974,14 @@ namespace WizOne
                         }
                         break;               
                 }
+
+                //Radu 28.01.2020 - daca numele utilizatorului apare de mai multe ori in USERS, accesul sa fie blocat
+                DataTable dtMultiUser = General.IncarcaDT("SELECT COUNT(*) FROM USERS WHERE UPPER(F70104) = '" + utilizator.ToUpper() + "'", null);
+                if (dtMultiUser != null && dtMultiUser.Rows.Count > 0 && dtMultiUser.Rows[0][0] != null && dtMultiUser.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtMultiUser.Rows[0][0].ToString()) > 1)
+                {
+                    stare = "6" + idLimba;
+                }
+
  
             }
             catch (Exception ex)

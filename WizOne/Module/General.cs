@@ -338,6 +338,7 @@ namespace WizOne.Module
                     SqlDataAdapter da = new SqlDataAdapter();
                     da.SelectCommand = General.DamiSqlCommand(strSql, null);
                     SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                    cb.ConflictOption = ConflictOption.OverwriteChanges;
                     da.Update(dt);
 
                     //Radu 2017.11.01
@@ -354,6 +355,7 @@ namespace WizOne.Module
                     OracleDataAdapter da = new OracleDataAdapter();
                     da.SelectCommand = General.DamiOleDbCommand(strSql, null);
                     OracleCommandBuilder cb = new OracleCommandBuilder(da);
+                    cb.ConflictOption = ConflictOption.OverwriteChanges;
                     var ert = cb.GetUpdateCommand();
                     da.Update(dt);
 

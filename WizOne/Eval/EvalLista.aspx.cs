@@ -228,20 +228,27 @@ namespace WizOne.Eval
                                 Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = "0";
                                 Session["CompletareChestionar_ALuatLaCunostinta"] = "0";
 
-                                //Florin 2019.01.31  Cerinta de la Claim
-                                //daca utilizatorul logat este HR si avem rolul de HR pe circuit, actualizam in istoric cu userul logat
-                                try
-                                {
-                                    string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
-                                    if (idHR.Trim() != "")
-                                        General.ExecutaNonQuery(
-                                            $@"UPDATE ""Eval_RaspunsIstoric"" 
+
+                                //Florin 2020.01.28
+                                //if (Constante.idClient == Convert.ToInt32(IdClienti.Clienti.Pelifilip))
+                                //{
+                                    //Florin 2019.01.31  Cerinta de la Claim
+                                    //daca utilizatorul logat este HR si avem rolul de HR pe circuit, actualizam in istoric cu userul logat
+                                    try
+                                    {
+                                        string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
+                                        if (idHR.Trim() != "")
+                                            General.ExecutaNonQuery(
+                                                $@"UPDATE ""Eval_RaspunsIstoric"" 
                                             SET ""IdUser""=@3
-                                            WHERE ""IdQuiz""=@1 AND F10003=@2 AND 
+                                            WHERE ""IdQuiz""=@1 AND F10003=@2 AND COALESCE(""Aprobat"",0) = 0 AND
                                             (SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""=@3 AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"") <> 0 AND
                                             (-1 * ""IdSuper"") IN ({idHR})", new object[] { Convert.ToInt32(General.Nz(obj[1], 1)), Convert.ToInt32(General.Nz(obj[2], 1)), Session["UserId"] });
-                                }
-                                catch (Exception) { }
+                                    }
+                                    catch (Exception) { }
+                                //}
+
+
 
                                 //Florin 2020.01.23 - Begin - am pus toate cumpurile care ne intereseaza in grid, si luam valorile de acolo
 
@@ -474,6 +481,7 @@ namespace WizOne.Eval
                             Convert.ToDateTime(dtDataInceput.Value ?? new DateTime(1900, 1, 1)), Convert.ToDateTime(dtDataSfarsit.Value ?? new DateTime(1900, 1, 1)),
                             Convert.ToInt32(cmbNivel.Value ?? -99), Convert.ToInt32(cmbRoluri.Value ?? -99));
 
+                //Florin 2020.01.28 - am schimbat din IdAuto in IdAutoNew
                 dt = General.IncarcaDT(strSql, null);
                 grDate.KeyFieldName = "IdAuto; IdQuiz; F10003";
                 grDate.DataSource = dt;

@@ -1050,7 +1050,7 @@ namespace WizOne.Eval
                 divIntrebari.Controls.Add(grIntrebari);
 
                 int blocat = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(COALESCE(""Blocat"",0)) FROM ""Eval_DrepturiTab"" WHERE ""IdQuiz"" = @1 AND ""Pozitie"" = @2 AND ""TabIndex"" = @3 ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)), super.Replace("Super",""), indexSec+1 }), 0));
-                divIntrebari.Enabled = blocat == 1 ? false : true;
+                //divIntrebari.ClientEnabled = blocat == 1 ? false : true;
 
 
             }
@@ -1164,23 +1164,23 @@ namespace WizOne.Eval
                         ert = Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1));
 
 
-                        //Florin 2020.01.23 - daca utilizatorul conectat este cel de pe circuit si a terminat evaluarea
-                        if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Aprobat"], 1)) == 1)
-                            ctl.Enabled = false;
-
-                        //Florin 2020.01.23 - daca utilizatorul conectat intra pe alt tab decat cel care nu este al lui
-                        if (Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)))
-                            ctl.Enabled = false;
-
-                        ////Radu 11.02.2019 - am adaugat conditia idCateg = 0
-                        //if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                        ////Florin 2020.01.23 - daca utilizatorul conectat este cel de pe circuit si a terminat evaluarea
+                        //if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Aprobat"], 1)) == 1)
                         //    ctl.Enabled = false;
-                        ////ctl.ReadOnly = true;
-                        ////ctl.Enabled = false;
 
-                        //Florin 2019.10.23 - s-a rescris functia de mai sus pentru a tine cont si de respecta ordinea
-                        if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
-                            ctl.Enabled = false;
+                        ////Florin 2020.01.23 - daca utilizatorul conectat intra pe alt tab decat cel care nu este al lui
+                        //if (Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1)))
+                        //    ctl.Enabled = false;
+
+                        //////Radu 11.02.2019 - am adaugat conditia idCateg = 0
+                        ////if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1 || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                        ////    ctl.Enabled = false;
+                        //////ctl.ReadOnly = true;
+                        //////ctl.Enabled = false;
+
+                        ////Florin 2019.10.23 - s-a rescris functia de mai sus pentru a tine cont si de respecta ordinea
+                        //if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
+                        //    ctl.Enabled = false;
 
                         int respectaOrdinea = 0;
                         DataTable entCir = General.IncarcaDT(@"SELECT * FROM ""Eval_Circuit"" WHERE ""IdQuiz"" = @1", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)) });
@@ -1188,8 +1188,8 @@ namespace WizOne.Eval
 
                         if (respectaOrdinea == 1)
                         {
-                            if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
-                                ctl.Enabled = false;
+                            //if ((Convert.ToInt32(General.Nz(idCateg, 0)) == 0 && Convert.ToInt32(Session["Eval_ActiveTab"]) != Convert.ToInt32(General.Nz(Session["CompletareChestionar_Pozitie"], 1))) || Convert.ToInt32(General.Nz(Session["CompletareChestionar_Modifica"], 1)) == 0)
+                            //    ctl.Enabled = false;
                         }
                         else
                         {

@@ -1862,7 +1862,7 @@ namespace WizOne.Eval
                                 #region getDS values
                                 if (Session["feedEval_Obiectiv"] == null)
                                 {
-                                    string strSQLObiectiv = @"select ob.""IdObiectiv"" as ""Id"", ob.""Obiectiv"" as ""Denumire""
+                                    string strSQLObiectiv = @"select ob.""IdObiectiv"" as ""Id"", CAST(ob.""Obiectiv"" AS varchar(4000)) as ""Denumire""
                                                             from ""Eval_ListaObiectivDet"" det
                                                             join ""Eval_SetAngajatiDetail"" setAng on det.""IdSetAngajat"" = setAng.""IdSetAng""
                                                             join ""Eval_Obiectiv"" ob on det.""IdObiectiv"" = ob.""IdObiectiv""
@@ -1884,7 +1884,7 @@ namespace WizOne.Eval
 
                                 if (Session["feedEval_ObiectivActivitate"] == null)
                                 {
-                                    string strSQLObiectivActivitate = @"select ob.""IdObiectiv"" as ""Parinte"", obAct.""IdActivitate"" as ""Id"", obAct.""Activitate"" as ""Denumire""
+                                    string strSQLObiectivActivitate = @"select ob.""IdObiectiv"" as ""Parinte"", obAct.""IdActivitate"" as ""Id"", CAST(obAct.""Activitate"" AS varchar(4000)) as ""Denumire""
                                                                         from ""Eval_ListaObiectivDet"" det
                                                                         join ""Eval_SetAngajatiDetail"" setAng on det.""IdSetAngajat"" = setAng.""IdSetAng""
                                                                         join ""Eval_Obiectiv"" ob on det.""IdObiectiv"" = ob.""IdObiectiv""
@@ -1960,7 +1960,7 @@ namespace WizOne.Eval
                                 #region getDS values
                                 if (Session["feedEval_Obiectiv"] == null)
                                 {
-                                    string strSQLObiectiv = @"select ob.""IdObiectiv"" as ""Id"", ob.""Obiectiv"" as ""Denumire""
+                                    string strSQLObiectiv = @"select ob.""IdObiectiv"" as ""Id"", CAST(ob.""Obiectiv"" AS varchar(4000)) as ""Denumire""
                                                             from ""Eval_ListaObiectivDet"" det
                                                             join ""Eval_SetAngajatiDetail"" setAng on det.""IdSetAngajat"" = setAng.""IdSetAng""
                                                             join ""Eval_Obiectiv"" ob on det.""IdObiectiv"" = ob.""IdObiectiv""
@@ -1982,7 +1982,7 @@ namespace WizOne.Eval
 
                                 if (Session["feedEval_ObiectivActivitate"] == null)
                                 {
-                                    string strSQLObiectivActivitate = @"select ob.""IdObiectiv"" as ""Parinte"", obAct.""IdActivitate"" as ""Id"", obAct.""Activitate"" as ""Denumire""
+                                    string strSQLObiectivActivitate = @"select ob.""IdObiectiv"" as ""Parinte"", obAct.""IdActivitate"" as ""Id"", CAST(obAct.""Activitate"" AS varchar(4000)) as ""Denumire""
                                                                         from ""Eval_ListaObiectivDet"" det
                                                                         join ""Eval_SetAngajatiDetail"" setAng on det.""IdSetAngajat"" = setAng.""IdSetAng""
                                                                         join ""Eval_Obiectiv"" ob on det.""IdObiectiv"" = ob.""IdObiectiv""

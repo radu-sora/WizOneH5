@@ -87,7 +87,6 @@ namespace WizOne.Reports
                     {
                         XRLabel lbl = new XRLabel();
                         XRLabel col = new XRLabel();
-                        XRLine linie = new XRLine();
                         switch (Convert.ToInt32(dtPrint.Rows[k]["Id"].ToString()))
                         {
                             case 1:                          //zilele lunii
@@ -111,6 +110,7 @@ namespace WizOne.Reports
                                     col.CanGrow = false;
 
                                     if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) col.BackColor = Color.FromArgb(217, 243, 253);
+                                    col.Borders = DevExpress.XtraPrinting.BorderSide.Bottom;
                                     Detail.Controls.Add(col);
 
                                     pozX = pozX + lbl.WidthF;
@@ -182,6 +182,7 @@ namespace WizOne.Reports
                                 TopMargin.Controls.Add(lbl);
 
                                 col = CreazaCamp("[" + dtPrint.Rows[k]["Camp"].ToString() + "]", pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()), 2);
+                                col.Borders = DevExpress.XtraPrinting.BorderSide.Bottom;
                                 Detail.Controls.Add(col);
 
                                 string cmp = dtPrint.Rows[k]["Camp"].ToString();
@@ -206,8 +207,6 @@ namespace WizOne.Reports
                                 x += 1;
                                 break;
                         }
-                        //linie.WidthF = this.PageWidth;
-                        //Detail.Controls.Add(linie);
                     }
                 }
 

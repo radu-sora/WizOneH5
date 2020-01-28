@@ -7437,7 +7437,7 @@ namespace WizOne.Module
                                 " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
                                 " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
                                 " GROUP BY B.F10003) X " +
-                                " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
+                                " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE S.F10025 <> 900 AND CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
                                 " GROUP BY X.F10003";
                     }
                     else
@@ -7471,7 +7471,7 @@ namespace WizOne.Module
                                 " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
                                 " GROUP BY B.F10003) X  " +
                                 " INNER JOIN F100 A ON A.F10003=X.F10003  " +
-                                " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+                                " WHERE 1=1 AND A.F10025 <> 900 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
                                 " GROUP BY X.F10003";
 
                     }

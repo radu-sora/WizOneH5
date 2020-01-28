@@ -2212,6 +2212,9 @@ namespace WizOne.Module
                                         if (Constante.tipBD == 2)
                                             nextId = General.Nz(General.ExecutaScalar(@"SELECT ""ObiIndividuale_SEQ"".NEXTVAL FROM DUAL", null), 1).ToString();
 
+
+                                        //Florin 2020.01.28 Begin
+
                                         //inseram pt pozitia 1 si pentru id linie tip camp
                                         string sqlTemp =
                                             $@"BEGIN
@@ -2225,7 +2228,6 @@ namespace WizOne.Module
                                             END;";
 
                                         General.ExecutaNonQuery(sqlTemp, new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["IdQuiz"].ToString(), dtObiective.Rows[i]["Id"].ToString(), dtObiective.Rows[i]["IdPeriod"] });
-
 
                                         #region OLD
 
@@ -2258,6 +2260,8 @@ namespace WizOne.Module
                                         //General.ExecutaNonQuery(sqlTemp, new object[] { arr[j].F10003.ToString(), dtObiective.Rows[i]["TemplateIdObiectiv"].ToString() });
 
                                         #endregion
+
+                                        //Florin 2020.01.28 End
 
                                         if (Dami.ValoareParam("PreluareDateAutomat", "0") == "1" && Convert.ToInt32(General.Nz(dtObiective.Rows[i]["CategorieQuiz"], 0)) == 0)
                                         {

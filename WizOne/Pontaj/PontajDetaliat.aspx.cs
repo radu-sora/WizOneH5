@@ -1646,7 +1646,7 @@ namespace WizOne.Pontaj
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
                                 WHERE J.""IdUser"" = {Session["UserId"]} ) X 
-                                WHERE X.""IdRol""={(cmbRolAng.Value ?? -99)} AND X.F10022 <= {dtSf} AND {dtInc} <= X.F10023
+                                WHERE X.""IdRol""={(cmbRolAng.Value ?? -99)} AND X.F10022 <= {dtSf} AND {dtInc} <= X.F10023 AND X.F10025 <> 900
                                 ORDER BY X.""NumeComplet"" ";
 
                 DataTable dt = General.IncarcaDT(strSql, null);

@@ -229,75 +229,40 @@ namespace WizOne.Eval
                                 Session["CompletareChestionar_ALuatLaCunostinta"] = "0";
 
 
-                                //Florin 2020.01.28
-                                //if (Constante.idClient == Convert.ToInt32(IdClienti.Clienti.Pelifilip))
-                                //{
-                                    //Florin 2019.01.31  Cerinta de la Claim
-                                    //daca utilizatorul logat este HR si avem rolul de HR pe circuit, actualizam in istoric cu userul logat
-                                    try
-                                    {
-                                        string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
-                                        if (idHR.Trim() != "")
-                                            General.ExecutaNonQuery(
-                                                $@"UPDATE ""Eval_RaspunsIstoric"" 
-                                            SET ""IdUser""=@3
-                                            WHERE ""IdQuiz""=@1 AND F10003=@2 AND COALESCE(""Aprobat"",0) = 0 AND
-                                            (SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""=@3 AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"") <> 0 AND
-                                            (-1 * ""IdSuper"") IN ({idHR})", new object[] { Convert.ToInt32(General.Nz(obj[1], 1)), Convert.ToInt32(General.Nz(obj[2], 1)), Session["UserId"] });
-                                    }
-                                    catch (Exception) { }
-                                //}
+                                //Florin 2019.01.31  Cerinta de la Claim
+                                //daca utilizatorul logat este HR si avem rolul de HR pe circuit, actualizam in istoric cu userul logat
+                                try
+                                {
+                                    string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
+                                    if (idHR.Trim() != "")
+                                        General.ExecutaNonQuery(
+                                            $@"UPDATE ""Eval_RaspunsIstoric"" 
+                                        SET ""IdUser""=@3
+                                        WHERE ""IdQuiz""=@1 AND F10003=@2 AND COALESCE(""Aprobat"",0) = 0 AND
+                                        (SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""=@3 AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"") <> 0 AND
+                                        (-1 * ""IdSuper"") IN ({idHR})", new object[] { Convert.ToInt32(General.Nz(obj[1], 1)), Convert.ToInt32(General.Nz(obj[2], 1)), Session["UserId"] });
+                                }
+                                catch (Exception) { }
 
+                                //Florin 2020.01.29 - trebuie refiltrat, ca sa ia valorile corecte, datorita update-lui de mai sus
+                                string strSql = Evaluare.GetEvalLista(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(cmbQuiz.Value ?? -99), Convert.ToInt32(cmbAngajat.Value ?? -99),
+                                    Convert.ToDateTime(dtDataInceput.Value ?? new DateTime(1900, 1, 1)), Convert.ToDateTime(dtDataSfarsit.Value ?? new DateTime(1900, 1, 1)),
+                                    Convert.ToInt32(cmbNivel.Value ?? -99), Convert.ToInt32(cmbRoluri.Value ?? -99), 1, Convert.ToInt32(General.Nz(obj[0], -99)));
+                                DataTable dt = General.IncarcaDT(strSql, null);
 
-
-                                //Florin 2020.01.23 - Begin - am pus toate cumpurile care ne intereseaza in grid, si luam valorile de acolo
-
-                                #region OLD
-
-                                //string strSql = Evaluare.GetEvalLista(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(cmbQuiz.Value ?? -99), Convert.ToInt32(cmbAngajat.Value ?? -99),
-                                //    Convert.ToDateTime(dtDataInceput.Value ?? new DateTime(1900, 1, 1)), Convert.ToDateTime(dtDataSfarsit.Value ?? new DateTime(1900, 1, 1)),
-                                //    Convert.ToInt32(cmbNivel.Value ?? -99), Convert.ToInt32(cmbRoluri.Value ?? -99), 1, Convert.ToInt32(General.Nz(obj[0],-99)));
-                                //DataTable dt = General.IncarcaDT(strSql, null);
-
-                                //if (dt != null && dt.Rows.Count > 0)
-                                //{
-                                //    DataRow dr = dt.Rows[0];
-                                //    Session["CompletareChestionar_IdQuiz"] = Convert.ToInt32(General.Nz(dr["IdQuiz"],-99));
-                                //    Session["CompletareChestionar_F10003"] = Convert.ToInt32(General.Nz(dr["F10003"],-99));
-                                //    Session["CompletareChestionar_Pozitie"] = Convert.ToInt32(General.Nz(dr["PozitiePeCircuit"], -99));
-                                //    Session["CompletareChestionar_Finalizat"] = Convert.ToInt32(General.Nz(dr["Finalizat"],-99));
-                                //    Session["CompletareChestionar_Modifica"] = Convert.ToInt32(General.Nz(dr["PoateModifica"],-99));
-                                //    Session["CompletareChestionar_Nume"] = General.Nz(dr["Utilizator"],"");
-                                //    Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = General.Nz(dr["TrebuieSaIaLaCunostinta"],"0");
-                                //    Session["CompletareChestionar_ALuatLaCunostinta"] = General.Nz(dr["ALuatLaCunostinta"],"0");
-
-                                //    //Session["lstEval_ObiIndividualeTemp"] = null;
-                                //    //Session["lstEval_CompetenteAngajatTemp"] = null;
-                                //    //Session["CompletareChestionar_IdQuiz"] = Convert.ToInt32(obj[0] ?? -99);
-                                //    //Session["CompletareChestionar_F10003"] = Convert.ToInt32(obj[1] ?? -99);
-                                //    //Session["Eval_PozitieUserLogat"] = General.Nz(General.ExecutaScalar($@"SELECT ""Pozitie"" FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz""={ Convert.ToInt32(obj[0] ?? -99)} AND F10003={ Convert.ToInt32(obj[1] ?? -99)} AND ""IdUser""={Session["UserId"]}", null), 1);
-                                //    //Session["IdClient"] = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='IdClient'", null), 1));
-                                //    //Session["CompletareChestionar_Pozitie"] = Convert.ToInt32(obj[2] ?? -99);
-                                //    //Session["CompletareChestionar_Finalizat"] = Convert.ToInt32(obj[3] ?? -99);
-                                //    //Session["CompletareChestionar_Modifica"] = Convert.ToInt32(obj[4] ?? -99);
-                                //    //Session["CompletareChestionar_Nume"] = obj[5] ?? "";
-                                //    //Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = obj[6] ?? "0";
-                                //    //Session["CompletareChestionar_ALuatLaCunostinta"] = obj[7] ?? "0";
-                                //}
-
-                                #endregion
-
-                                Session["CompletareChestionar_IdQuiz"] = Convert.ToInt32(General.Nz(obj[1], -99));
-                                Session["CompletareChestionar_F10003"] = Convert.ToInt32(General.Nz(obj[2], -99));
-                                Session["CompletareChestionar_Pozitie"] = Convert.ToInt32(General.Nz(obj[3], -99));
-                                Session["CompletareChestionar_Finalizat"] = Convert.ToInt32(General.Nz(obj[4], -99));
-                                Session["CompletareChestionar_Modifica"] = Convert.ToInt32(General.Nz(obj[5], -99));
-                                Session["CompletareChestionar_Nume"] = General.Nz(obj[6], "");
-                                Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = General.Nz(obj[7], "0");
-                                Session["CompletareChestionar_ALuatLaCunostinta"] = General.Nz(obj[8], "0");
-                                Session["CompletareChestionar_Aprobat"] = General.Nz(obj[9], "0");
-
-                                //Florin 2020.01.23 - End
+                                if (dt != null && dt.Rows.Count > 0)
+                                {
+                                    DataRow dr = dt.Rows[0];
+                                    Session["CompletareChestionar_IdQuiz"] = Convert.ToInt32(General.Nz(dr["IdQuiz"], -99));
+                                    Session["CompletareChestionar_F10003"] = Convert.ToInt32(General.Nz(dr["F10003"], -99));
+                                    Session["CompletareChestionar_Pozitie"] = Convert.ToInt32(General.Nz(dr["PozitiePeCircuit"], -99));
+                                    Session["CompletareChestionar_Finalizat"] = Convert.ToInt32(General.Nz(dr["Finalizat"], -99));
+                                    Session["CompletareChestionar_Modifica"] = Convert.ToInt32(General.Nz(dr["PoateModifica"], -99));
+                                    Session["CompletareChestionar_Nume"] = General.Nz(dr["Utilizator"], "");
+                                    Session["CompletareChestionar_TrebuieSaIaLaCunostinta"] = General.Nz(dr["TrebuieSaIaLaCunostinta"], "0");
+                                    Session["CompletareChestionar_ALuatLaCunostinta"] = General.Nz(dr["ALuatLaCunostinta"], "0");
+                                    Session["CompletareChestionar_Aprobat"] = General.Nz(dr["Aprobat"], "0");
+                                }
 
                                 Session["lstEval_ObiIndividualeTemp"] = null;
                                 Session["lstEval_CompetenteAngajatTemp"] = null;

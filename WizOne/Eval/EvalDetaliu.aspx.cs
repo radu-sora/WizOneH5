@@ -1921,7 +1921,8 @@ namespace WizOne.Eval
                                 colObiectiv.PropertiesComboBox.TextField = "Denumire";
                                 colObiectiv.PropertiesComboBox.ValueField = "Id";
                                 colObiectiv.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDown;
-                                colObiectiv.PropertiesComboBox.EnableCallbackMode = true;
+                                //Florin 2020.01.29 - comentat deoarece apare eroarea - Unable to set property 'collectCallbackIDs' of undefined or null reference
+                                //colObiectiv.PropertiesComboBox.EnableCallbackMode = true;
                                 colObiectiv.PropertiesComboBox.ValidationSettings.RequiredField.IsRequired = true;
                                 colObiectiv.PropertiesComboBox.ValidationSettings.Display = Display.None;
                                 colObiectiv.PropertiesComboBox.ClientSideEvents.SelectedIndexChanged = "cmbObiectiv_SelectedIndexChanged";
@@ -2019,7 +2020,8 @@ namespace WizOne.Eval
                                 colActivitate.PropertiesComboBox.TextField = "Denumire";
                                 colActivitate.PropertiesComboBox.ValueField = "Id";
                                 colActivitate.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDown;
-                                colActivitate.PropertiesComboBox.EnableCallbackMode = true;
+                                //Florin 2020.01.29 - comentat deoarece apare eroarea - Unable to set property 'collectCallbackIDs' of undefined or null reference
+                                //colActivitate.PropertiesComboBox.EnableCallbackMode = true;
                                 colActivitate.PropertiesComboBox.ItemRequestedByValue += Activitate_RequestedByValue;
                                 colActivitate.PropertiesComboBox.ItemsRequestedByFilterCondition += Activitate_ItemsRequestedByFilterCondition;
                                 colActivitate.PropertiesComboBox.DataSource = lstActivitati;

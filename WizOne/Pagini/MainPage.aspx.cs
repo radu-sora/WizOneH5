@@ -29,9 +29,10 @@ namespace WizOne.Pagini
         {
             try
             {
-                if (!IsPostBack)
-                {
-                    string ctlPost = Request.Params["__EVENTTARGET"];
+                string ctlPost = Request.Params["__EVENTTARGET"];
+
+                if (!IsPostBack || (ctlPost?.Contains("pnlHeader") ?? false))   //Radu 29.01.2020
+                {                    
 
                     if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0)
                         Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");

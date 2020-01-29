@@ -620,7 +620,11 @@ namespace WizOne.Pagini
 
                 if (!IsPostBack)
                 {
-                    Session["PaginaWeb"] = "Pagini.ActeAditionale";
+                    if (Session["PaginaWeb"] as string != "Pagini.ActeAditionale")
+                    {
+                        Session["PaginaWeb"] = "Pagini.ActeAditionale";
+                        Session["Filtru_ActeAditionale"] = "{}";
+                    }
 
                     #region Traducere
                     string ctlPost = Request.Params["__EVENTTARGET"];
@@ -648,8 +652,7 @@ namespace WizOne.Pagini
                     if ((cmbCmp.DataSource as DataTable)?.Rows.Count > 1)
                         pnlComp.Visible = true;
 
-                    IncarcaCmbAng(-1, -1);
-                    IncarcaGrid();
+                    IncarcaCmbAng(-1, -1);                    
 
                     var filter = JObject.Parse(Session["Filtru_ActeAditionale"] as string) as dynamic;
 
@@ -660,10 +663,10 @@ namespace WizOne.Pagini
                         cmbAng.Value = (int?)filter.ang;
                         cmbStatus.Value = (int?)filter.status;
                         txtData.Value = (DateTime?)filter.data;
-                        txtDepasire.Value = (DateTime?)filter.depasire;
+                        txtDepasire.Value = (DateTime?)filter.depasire;                        
+                    }
 
-                        Session["Filtru_ActeAditionale"] = "{}";
-                    }                    
+                    IncarcaGrid();
 
                     if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDate);                    
 

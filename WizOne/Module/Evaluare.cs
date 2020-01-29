@@ -1253,22 +1253,15 @@ namespace WizOne.Module
         //Florin 2020.01.23
         //am scos filtrul cu IdAuto
 
-        public static string GetEvalLista(int? idUser, int? idQuiz, int? F10003, DateTime? dtInc, DateTime? dtSf, int? tip, int? rol, int ordonat = 1)
+        public static string GetEvalLista(int? idUser, int? idQuiz, int? F10003, DateTime? dtInc, DateTime? dtSf, int? tip, int? rol, int ordonat = 1, int idAuto = -99)
         {
             //DataTable dtReturnEvalLista = null;
             string strSQL = string.Empty;
             try
             {
-                //Florin 2020.01.28 - am adaugat IdAutoNew si Rolul
                 //Radu 19.02.2019 - am inlocuit ist cu istPoz la Stare (pt Evaluare angajat si Evaluare supervizor) si am adaugat AND rasp.F10003 = {10} la Evaluare angajat
                 //Radu 20.02.2019 - am inlocuit Finalizat si PoateModifica
                 //Radu 07.05.2019 - am eliminat conditia de CategorieQuiz pentru Culoare       (COALESCE(chest.""CategorieQuiz"",0)=1 OR COALESCE(chest.""CategorieQuiz"",0)=2) AND 
-
-                string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
-                if (Constante.tipBD == 2)
-                    idAuto = "ROWNUM";
-
-                //{14} AS ""IdAutoNew"", (SELECT COALESCE(""Alias"", ""Denumire"") FROM ""tblSupervizori"" WHERE ""Id""= (-1 * ist.""IdSuper"")) AS ""Rol"", 
 
                 strSQL = @"
                 select distinct rasp.""IdAuto"", rasp.""IdQuiz"", rasp.""F10003"", chest.""Denumire"", ctg.""Denumire"" AS ""DenumireCategorie"", chest.""CategorieQuiz"",
@@ -1425,11 +1418,9 @@ namespace WizOne.Module
                 //chest.""Activ"" = 1
                 //and {2} chest.""DataInceput"") <= {2} {3}) and {2} {3}) <= {2} chest.""DataSfarsit"")
 
-
-                //Florin 2020.01.23
-                ////Florin 2019.02.01
-                //if (idAuto != -99)
-                //    strSQL += @" AND rasp.""IdAuto""=" + idAuto;
+                //Florin 2019.02.01
+                if (idAuto != -99)
+                    strSQL += @" AND rasp.""IdAuto""=" + idAuto;
 
 
                 if (ordonat == 1)
@@ -1517,9 +1508,9 @@ namespace WizOne.Module
                 }
 
                 if (Constante.tipBD == 1) //SQL
-                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, idAuto);
+                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
                 else                      //ORACLE
-                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie, idAuto);
+                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
 
                 //Florin  2018.07.05
                 strSQL = strSQL.Replace("@1", Dami.TraduCuvant("Evaluare angajat"));

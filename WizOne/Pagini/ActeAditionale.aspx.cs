@@ -117,6 +117,9 @@ namespace WizOne.Pagini
 
                 if ((filter as JObject).HasValues)
                 {
+                    //Florin 2020.01.29 - am modificat filtrul
+                    //CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat, in
+                    //CASE WHEN(COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat,
                     //Florin 2019.09.11
                     ////Florin 2019.09.09
                     //if (General.Nz(cmbTip.Value, 9).ToString() != "9")
@@ -496,7 +499,7 @@ namespace WizOne.Pagini
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
                             B.F10022, B.F100993, J.IdAutoAtasamente,
-                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat, 0 AS SporVechime
+                            CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat, 0 AS SporVechime
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
@@ -578,7 +581,7 @@ namespace WizOne.Pagini
                             J.""IdAuto"" AS ""IdAutoAct"",
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
                             A.F10022, A.F100993, J.""IdAutoAtasamente"",
-                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.""Semnat"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat"", 0 AS ""SporVechime""
+                            CASE WHEN (COALESCE(B.F10025,-99) <> 900 AND COALESCE(J.""Semnat"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat"", 0 AS ""SporVechime""
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
                             WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X

@@ -330,7 +330,7 @@ namespace WizOne.Personal
                 //ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
                 //ds.Tables[2].Rows[0]["F1001102"] = Convert.ToDateTime(dtSusp.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
 
-                if (Convert.ToInt32(row["F11104"].ToString()) == 11 && Convert.ToDateTime(row["F100924"]) != new DateTime(2100, 1, 1))  //revenire din CIC
+                if (Convert.ToInt32(row["F11104"].ToString()) == 11 && Convert.ToDateTime(row["F11107"]) != new DateTime(2100, 1, 1))  //revenire din CIC
                 {
                     ds.Tables[0].Rows[0]["F10076"] = row["F11105"];
                     ds.Tables[0].Rows[0]["F10077"] = Convert.ToDateTime(row["F11107"].ToString()).AddDays(-1);

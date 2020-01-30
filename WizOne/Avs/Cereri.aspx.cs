@@ -4032,6 +4032,7 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.RevenireDetasare:
                         sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data15 + ", F100917 = " + data16 + " WHERE F10003 = " + f10003.ToString();
+                        sql1001 = "UPDATE F1001 SET F1001125 = 0, F1001126 = 0, F1001127 = 0, F1001128 = 0, F1001129 = 0 WHERE F10003 = " + f10003.ToString();
                         sql112 = "UPDATE F112 SET F11209 = " + data16 + " WHERE F11203 = " + f10003 + " AND F11207 = " + data14;
                         General.IncarcaDT(sql112, null);
                         ActualizareDet(f10003, ref sql100, ref sql1001);

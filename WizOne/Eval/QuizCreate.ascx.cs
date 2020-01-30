@@ -15,7 +15,7 @@ namespace WizOne.Eval
 {
     public partial class QuizCreate : System.Web.UI.UserControl
     {
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
         public class metaDate
         {
             public int Id { get; set; }

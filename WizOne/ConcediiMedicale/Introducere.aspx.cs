@@ -16,8 +16,8 @@ namespace WizOne.ConcediiMedicale
 {
     public partial class Introducere : System.Web.UI.Page
     {
-        decimal timpPartial = 0;
-        bool inactiveazaDeLaLa = false;
+        //decimal timpPartial = 0;
+        //bool inactiveazaDeLaLa = false;
         protected void Page_Init(object sender, EventArgs e)
         {
             //DataList1.DataSource = General.IncarcaDT("SELECT * FROM F300 WHERE F10003 = " + (Session["MarcaCM"] != null ? Session["MarcaCM"].ToString() : "-99"), null);

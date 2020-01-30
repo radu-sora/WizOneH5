@@ -7034,7 +7034,7 @@ namespace WizOne.Module
 
             try
             {
-                if (HttpContext.Current.Session[numeVar] != null && HttpContext.Current.Session[numeVar] != "")
+                if (General.Nz(HttpContext.Current.Session[numeVar],"").ToString() != "")
                     obj = HttpContext.Current.Session[numeVar];
                 else
                     obj = "";

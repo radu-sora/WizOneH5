@@ -9,7 +9,7 @@ namespace WizOne
 {
     public partial class DefaultTactil : System.Web.UI.Page
     {
-        static string arrIncercari = "";
+        //static string arrIncercari = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {

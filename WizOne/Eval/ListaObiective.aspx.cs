@@ -18,7 +18,7 @@ namespace WizOne.Eval
     public partial class ListaObiective : System.Web.UI.Page
     {
         string cmp = "USER_NO,TIME,IDAUTO,";
-        int tmpObi = -99;
+        //int tmpObi = -99;
 
         public class metaDate
         {

@@ -18,7 +18,7 @@ namespace WizOne.Pagini
 {
     public partial class IstoricModificari : System.Web.UI.Page
     {
-        int F10003 = -99;
+        //int F10003 = -99;
 
         protected void Page_Load(object sender, EventArgs e)
         {

@@ -18,7 +18,7 @@ namespace WizOne.Personal
 {
     public partial class Lista : System.Web.UI.Page
     {
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
         protected void Page_Load(object sender, EventArgs e)
         {
             try

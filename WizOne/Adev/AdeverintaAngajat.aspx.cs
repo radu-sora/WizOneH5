@@ -11,7 +11,7 @@ namespace WizOne.Adev
 {
     public partial class AdeverintaAngajat : System.Web.UI.Page
     {
-        string fisier = "";
+        //string fisier = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             try

@@ -14,7 +14,7 @@ namespace WizOne.Personal
     public partial class Contract : System.Web.UI.UserControl
     {
         //decimal timpPartial = 0;
-        bool inactiveazaDeLaLa = false;
+        //bool inactiveazaDeLaLa = false;
 
 
         protected void Page_Init(object sender, EventArgs e)
@@ -1072,7 +1072,7 @@ namespace WizOne.Personal
 
                     if (deDeLaData.Value != null && deLaData.Value != null)
                     {
-                        inactiveazaDeLaLa = true;
+                        //inactiveazaDeLaLa = true;
 
                         deDeLaData.Enabled = true;
                         deLaData.Enabled = true;

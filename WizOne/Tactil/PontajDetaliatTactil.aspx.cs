@@ -21,7 +21,7 @@ namespace WizOne.Tactil
         //tip = 1       Pontaj pe Angajat
         //tip = 2       Pontaj pe Zi
         public int tip = 1;
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
         int luna = -99;
         int an = -99;
 

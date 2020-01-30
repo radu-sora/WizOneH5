@@ -17,7 +17,7 @@ namespace WizOne.ProgrameLucru
 {
     public partial class Programe : System.Web.UI.Page
     {
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
         protected void Page_Init(object sender, EventArgs e)
         {
             try

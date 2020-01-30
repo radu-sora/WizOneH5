@@ -18,7 +18,7 @@ namespace WizOne.BP
 {
     public partial class CrearePrime : System.Web.UI.Page
     {
-        int F10003 = -99;
+        //int F10003 = -99;
 
         protected void Page_Load(object sender, EventArgs e)
         {

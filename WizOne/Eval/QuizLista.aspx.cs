@@ -15,7 +15,7 @@ namespace WizOne.Eval
 {
     public partial class QuizLista : System.Web.UI.Page
     {
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
 
         #region Events
         protected void Page_Load(object sender, EventArgs e)

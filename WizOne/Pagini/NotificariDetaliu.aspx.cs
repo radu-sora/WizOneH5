@@ -17,7 +17,7 @@ namespace WizOne.Pagini
         //int tip = 1;                //1-new; 2-edit; 3-clone
         //int id = -99;
         //int idCl = -99;
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
 
         protected void Page_Load(object sender, EventArgs e)
         {

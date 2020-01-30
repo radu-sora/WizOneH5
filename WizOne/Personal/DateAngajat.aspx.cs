@@ -240,7 +240,7 @@ namespace WizOne.Personal
                         if (ds.Tables[0].Rows[0]["F100933"] == null || ds.Tables[0].Rows[0]["F100933"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(1900, 1, 1)
                             || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()) == new DateTime(2100, 1, 1))
                             mesaj += " - de la data" + Environment.NewLine;
-                        if (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1))
+                        if ((ds.Tables[0].Rows[0]["F100929"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100929"].ToString()) == 0) && (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1)))
                             mesaj += " - la data" + Environment.NewLine;
                     }
                     if (ds.Tables[0].Rows[0]["F100699"] == null || ds.Tables[0].Rows[0]["F100699"].ToString().Length <= 0 || Convert.ToDouble(ds.Tables[0].Rows[0]["F100699"].ToString()) == 0.0)
@@ -344,7 +344,7 @@ namespace WizOne.Personal
                             mesaj += " - de la data" + Environment.NewLine;
                             err = true;
                         }
-                        if (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1))
+                        if ((ds.Tables[0].Rows[0]["F100929"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100929"].ToString()) == 0) && (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1)))
                         {
                             mesaj += " - la data" + Environment.NewLine;
                             err = true;

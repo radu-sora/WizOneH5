@@ -684,7 +684,7 @@ namespace Wizrom.Reports.Pages
                                     CustomCubePivotGrid.JSProperties["cpLayoutSaved"] = true;
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unsaved only                            
@@ -706,7 +706,7 @@ namespace Wizrom.Reports.Pages
                                     CustomCubePivotGrid.JSProperties["cpLayoutDeleted"] = true;
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as undeleted only                                                        
@@ -726,7 +726,7 @@ namespace Wizrom.Reports.Pages
                                 LoadXRPivotGridLayoutFromASPxPivotGrid(_pivotGrid, CustomCubePivotGrid);
                                 CustomCubePivotGrid.JSProperties["cpLayoutPrinted"] = true;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unprinted only                            
@@ -900,7 +900,7 @@ namespace Wizrom.Reports.Pages
                                     CustomTableGridView.JSProperties["cpLayoutSaved"] = true;
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unsaved only                            
@@ -922,7 +922,7 @@ namespace Wizrom.Reports.Pages
                                     CustomTableGridView.JSProperties["cpLayoutDeleted"] = true;
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as undeleted only                                                        
@@ -1035,7 +1035,7 @@ namespace Wizrom.Reports.Pages
 
                                 CustomTableGridView.JSProperties["cpLayoutPrinted"] = true;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unprinted only                            
@@ -1104,7 +1104,7 @@ namespace Wizrom.Reports.Pages
                                 if (fileName.Length > 0)
                                     CustomTableGridView.JSProperties["cpLayoutExportedTo"] = Path.GetFileName(fileName);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unexported only
@@ -1113,7 +1113,7 @@ namespace Wizrom.Reports.Pages
                     }
                 }                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here                
                 if (!IsPostBack) // Close the page

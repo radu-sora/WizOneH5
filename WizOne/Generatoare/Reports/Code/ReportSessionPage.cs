@@ -23,7 +23,7 @@ namespace Wizrom.Reports.Code
                 else
                     ReportSession = ReportProxy.GetSession();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here
                 if (!_close)

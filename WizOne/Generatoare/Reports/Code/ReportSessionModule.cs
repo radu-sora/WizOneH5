@@ -16,7 +16,7 @@ namespace Wizrom.Reports.Code
                     if (context.Session != null)
                         ReportProxy.ClearSessions();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Log error here
                 }                

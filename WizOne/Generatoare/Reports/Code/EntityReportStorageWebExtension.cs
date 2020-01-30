@@ -31,7 +31,7 @@ namespace Wizrom.Reports.Code
                     canSet = entities.Reports.Any(r => r.ReportId == reportId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here
             }
@@ -49,7 +49,7 @@ namespace Wizrom.Reports.Code
                     urls = entities.Reports.Where(r => r.ReportTypeId == 1 || r.ReportTypeId == 2). // Only report & document types for 'Report Source Url' property.
                         ToDictionary(r => r.ReportId.ToString(), r => r.Name);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here
             }
@@ -81,7 +81,7 @@ namespace Wizrom.Reports.Code
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here
             }
@@ -109,7 +109,7 @@ namespace Wizrom.Reports.Code
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here
             }
@@ -152,7 +152,7 @@ namespace Wizrom.Reports.Code
                     reportId = newReport.ReportId.ToString();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here
             }

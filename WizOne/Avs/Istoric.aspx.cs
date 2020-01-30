@@ -132,15 +132,15 @@ namespace WizOne.Avs
         {
             try
             {
-                string data = "";
-                if (Constante.tipBD == 1)
-                {
-                    data = "CONVERT(VARCHAR, a.F10022, 103)";
-                }
-                else
-                {
-                    data = "TO_CHAR(a.F10022, 'dd/mm/yyyy')";
-                }
+                //string data = "";
+                //if (Constante.tipBD == 1)
+                //{
+                //    data = "CONVERT(VARCHAR, a.F10022, 103)";
+                //}
+                //else
+                //{
+                //    data = "TO_CHAR(a.F10022, 'dd/mm/yyyy')";
+                //}
                 string sql = "SELECT * FROM F100 WHERE F10003 = " + marca.ToString();
                 DataTable dt = General.IncarcaDT(sql, null);
                 string numeAng = dt.Rows[0]["F10008"].ToString() + " " + dt.Rows[0]["F10009"].ToString();

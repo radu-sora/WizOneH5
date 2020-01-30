@@ -24,8 +24,7 @@
             </tr>
             <tr>
                 <td>
-                     <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared"   OnInitNewRow="grDate_InitNewRow"  
-                        OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting">
+                     <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting">
                         <SettingsBehavior  AllowFocusedRow="true"  />
                         <Settings ShowFilterRow="False" ShowColumnHeaders="true" />
                         <SettingsSearchPanel Visible="False" />   

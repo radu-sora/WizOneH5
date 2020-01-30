@@ -4001,33 +4001,41 @@ namespace WizOne.Avs
                     case (int)Constante.Atribute.Suspendare:
                         DateTime dtLuc = General.DamiDataLucru();
                         sql100 = "UPDATE F100 SET F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + ", F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
-                             (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10076 = " + data11 + ", F10077 = " + data12 : "") + " WHERE F10003 = " + f10003.ToString();
+                             (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10076 = " + data11 + ", F10077 = " + data12 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
                         sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data11 + " - 1 WHERE F10003 = " + f10003.ToString();
                         string sql111 = $@"INSERT INTO F111 (F11101, F11102, F11103, F11104, F11105, F11106, F11107, YEAR, MONTH, USER_NO, TIME)
                                VALUES (111, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, {dtCer.Rows[0]["MotivSuspId"].ToString()},{data11}, {data12}, {data13},
                                {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
                         General.IncarcaDT(sql111, null);
+                        ActualizareSusp(f10003, ref sql100, ref sql1001);
                         break;
                     case (int)Constante.Atribute.RevenireSuspendare:
-                        sql100 = "UPDATE F100 SET F100924 = " + data13 + (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10077 = " + data13 : "") + " WHERE F10003 = " + f10003.ToString();
+                        sql100 = "UPDATE F100 SET F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + data13 + (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ",F10076 = " + data11 + ", F10077 = " + data13 + " - 1" : "") + ", F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " WHERE F10003 = " + f10003.ToString();
                         sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();                      
                         sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data11;
                         General.IncarcaDT(sql111, null);
+                        ActualizareSusp(f10003, ref sql100, ref sql1001);
                         break;
                     case (int)Constante.Atribute.Detasare:
                         dtLuc = General.DamiDataLucru();
-                        sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data13 + ", F100917 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();
-                        sql1001 = "UPDATE F1001 SET F1001125 = " + (chk1.Checked ? "1" : "0") + ", F1001126 = " + (chk2.Checked ? "1" : "0") + ", F1001127 = " + (chk3.Checked ? "1" : "0") 
-                            + ", F1001128 = " + (chk4.Checked ? "1" : "0") + ", F1001129 = " + (chk5.Checked ? "1" : "0") + " WHERE F10003 = " + f10003.ToString();
+                        sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data15 + ", F100917 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();
+                        if (chk1 != null)
+                        {
+                            sql1001 = "UPDATE F1001 SET F1001125 = " + (chk1.Checked ? "1" : "0") + ", F1001126 = " + (chk2.Checked ? "1" : "0") + ", F1001127 = " + (chk3.Checked ? "1" : "0")
+                                + ", F1001128 = " + (chk4.Checked ? "1" : "0") + ", F1001129 = " + (chk5.Checked ? "1" : "0") + " WHERE F10003 = " + f10003.ToString();
+                        }
                         string sql112 = $@"INSERT INTO F112 (F11201, F11202, F11203, F11204, F11205, F11206, F11207, F11208, F11209, YEAR, MONTH, USER_NO, TIME)
                                VALUES (112, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, '{dtCer.Rows[0]["NumeAngajator"].ToString()}','{dtCer.Rows[0]["CUIAngajator"].ToString()}',{dtCer.Rows[0]["IdNationalitAng"].ToString()},
                                 {data14}, {data15}, {data16}, {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
                         General.IncarcaDT(sql112, null);
+                        ActualizareDet(f10003, ref sql100, ref sql1001);
                         break;
                     case (int)Constante.Atribute.RevenireDetasare:
-                        sql100 = "UPDATE F100 SET F100917 = " + data13 + " WHERE F10003 = " + f10003.ToString();
+                        sql100 = "UPDATE F100 SET F100915 = " + data14 + ", F100916 = " + data15 + ", F100917 = " + data16 + " WHERE F10003 = " + f10003.ToString();
+                        sql1001 = "UPDATE F1001 SET F1001125 = 0, F1001126 = 0, F1001127 = 0, F1001128 = 0, F1001129 = 0 WHERE F10003 = " + f10003.ToString();
                         sql112 = "UPDATE F112 SET F11209 = " + data16 + " WHERE F11203 = " + f10003 + " AND F11207 = " + data14;
                         General.IncarcaDT(sql112, null);
+                        ActualizareDet(f10003, ref sql100, ref sql1001);
                         break;
                     default:
                         return;
@@ -4052,6 +4060,51 @@ namespace WizOne.Avs
             }
         }
 
+        //Radu 30.01.2020
+        private void ActualizareSusp(int f10003, ref string sql100, ref string sql1001)
+        {
+            DataTable dtSuspAng = General.IncarcaDT("select * from f111 Where F11103 = " + f10003.ToString() + " AND (F11107 IS NULL OR F11107 = "
+                + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ")  ORDER BY F11105", null);
+            if (dtSuspAng != null && dtSuspAng.Rows.Count > 0)
+            {
+                string data1 = "", data2 = "";
+                if (Constante.tipBD == 1)
+                {
+                    data1 = "CONVERT(DATETIME, '" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Year.ToString() + "', 103)";
+                    data2 = "CONVERT(DATETIME, '" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Year.ToString() + "', 103)";
+                }
+                else
+                {
+                    data1 = "TO_DATE('" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Year.ToString() + "', 'dd/mm/yyyy')";
+                    data2 = "TO_DATE('" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Year.ToString() + "', 'dd/mm/yyyy')";
+               }
+                sql100 = "UPDATE F100 SET F100925 = " + dtSuspAng.Rows[0]["F11104"].ToString() + ", F100922 = " + data1 + ", F100923 = " + data2 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
+                     (Convert.ToInt32(dtSuspAng.Rows[0]["F11104"].ToString()) == 11 ? ", F10076 = " + data1 + ", F10077 = " + data2 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
+                sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data1 + " - 1 WHERE F10003 = " + f10003.ToString();
+            }
+        }
+        private void ActualizareDet(int f10003, ref string sql100, ref string sql1001)
+        {
+            DataTable dtSuspAng = General.IncarcaDT("select * from f112 Where F11203 = " + f10003.ToString() + " AND (F11209 IS NULL OR F11209 = "
+                + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ")  ORDER BY F11207", null);
+            if (dtSuspAng != null && dtSuspAng.Rows.Count > 0)
+            {
+                string data1 = "", data2 = "";
+                if (Constante.tipBD == 1)
+                {
+                    data1 = "CONVERT(DATETIME, '" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11207"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11207"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11207"].ToString()).Year.ToString() + "', 103)";
+                    data2 = "CONVERT(DATETIME, '" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11208"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11208"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11208"].ToString()).Year.ToString() + "', 103)";
+                }
+                else
+                {
+                    data1 = "TO_DATE('" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11207"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11207"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11207"].ToString()).Year.ToString() + "', 'dd/mm/yyyy')";
+                    data2 = "TO_DATE('" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11208"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11208"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11208"].ToString()).Year.ToString() + "', 'dd/mm/yyyy')";
+                }
+                sql100 = "UPDATE F100 SET F100915 = " + data1 + ", F100916 = " + data2 + ", F100917 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();
+                //sql1001 = "UPDATE F1001 SET F1001125 = " + (chk1.Checked ? "1" : "0") + ", F1001126 = " + (chk2.Checked ? "1" : "0") + ", F1001127 = " + (chk3.Checked ? "1" : "0")
+                //    + ", F1001128 = " + (chk4.Checked ? "1" : "0") + ", F1001129 = " + (chk5.Checked ? "1" : "0") + " WHERE F10003 = " + f10003.ToString();
+            }
+        }
         private void IncarcaComboBox(ASPxComboBox cmbAct, ASPxComboBox cmbNou, DataTable dt1, DataTable dt2)
         {
             cmbAct.DataSource = dt1;

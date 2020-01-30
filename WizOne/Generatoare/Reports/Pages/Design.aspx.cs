@@ -615,7 +615,7 @@ namespace Wizrom.Reports.Pages
 
                                 CustomDocumentCallbackPanel.JSProperties["cpDocumentSaved"] = true;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unsaved only                    
@@ -678,7 +678,7 @@ namespace Wizrom.Reports.Pages
                                 entities.SaveChanges();
                                 CustomCubePivotGrid.JSProperties["cpLayoutSaved"] = true;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unsaved only                            
@@ -780,7 +780,7 @@ namespace Wizrom.Reports.Pages
                                 entities.SaveChanges();
                                 CustomTableGridView.JSProperties["cpLayoutSaved"] = true;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unsaved only                            
@@ -836,7 +836,7 @@ namespace Wizrom.Reports.Pages
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here
                 if (!IsPostBack) // Close the page
@@ -867,7 +867,7 @@ namespace Wizrom.Reports.Pages
                 ReportDesigner.JSProperties["cpHasChart"] = _chart != null;
                 ReportDesigner.JSProperties["cpReportLoaded"] = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here
                 // For now, mark as unloaded only

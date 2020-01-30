@@ -2261,14 +2261,170 @@ namespace WizOne.Module
             return dt;
         }
 
+
+        //Florin 2020.01.21
+
+        //public static string SelectAbsente(string f10003, int idAbs = -99)
+        //{
+        //    //IdSuperRol - ce id are superiorul care in numele meu face o solicitare; este necesar pentru a-l cauta pe circuit
+
+        //    // dreptul de aprobare si ce angajati se incarca sunt preluati din baza de date pe baza parametrului DreptSolicitareAbsenta
+        //    // 0 - se poate face aprobarea pentru toti angajatii asignati supervizorului de pe prima coloana de pe circuit (User Introducere)  
+        //    // 1 - se poate face aprobarea pentru toti angajatii asignati oricarui supervizor de pe circuit
+
+        //    string strSql = "";
+
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(f10003)) return strSql;
+
+        //        string dt = "GetDate()";
+        //        string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
+        //        string filtru = "";
+
+        //        if (Constante.tipBD == 2)
+        //        {
+        //            idAuto = "ROWNUM";
+        //            dt = "sysdate";
+        //        }
+
+        //        if (idAbs != -99) filtru = @" WHERE Y.""Id""=" + idAbs;
+
+        //        if (Dami.ValoareParam("DreptSolicitareAbsenta") == "1")
+        //        {
+        //            if (HttpContext.Current.Session["User_Marca"].ToString() != f10003)
+        //            {
+        //                //SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"",X.""Denumire"",X.""DenumireScurta"",X.""Culoare"",X.""Explicatii"",X.""CampData1"",X.""CampData2"",X.""CampBifa1"",X.""CampBifa2"",X.""CampText"",X.""NrMaxZileLucratoare"",X.""NrMaxZileLucratoareAn"",X.""NrMaxZileCalendaristice"",X.""NrMaxZileCalendaristiceAn"",X.""Anulare"",X.""AnulareAltii"",X.""ArataInlocuitor"",X.""ArataAtasament"",X.""OreCalculateEticheta"",X.""OreCalculateF"",X.""OreCalculateSL"",X.""OreCalculateVerifica"",X.""OreSursaEticheta"",X.""OreSursaF"",X.""OreSursaSL"",X.""OreSursaVerifica"",X.""AdunaZileLibere"",X.""CampData1Obligatoriu"",X.""CampData2Obligatoriu"",X.""CampBifa1Obligatoriu"",X.""CampBifa2Obligatoriu"",X.""CampTextObligatoriu"",X.""Planificare"" AS ""EstePlanificare"",X.""InfoCOPRamase"",X.""OreInVal"",X.""IdTipOre"", X.""NuTrimiteInPontaj"", X.""GrupOreDeVerificat"", X.""Prezenta"", X.""NrMaxOre"", X.""VerificaCereriInlocuitor"", X.""VerificareNrMaxOre""
+        //                strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
+        //                        SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+        //                        FROM (
+        //                        SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+        //                        FROM ""Ptj_tblAbsente"" A
+        //                        INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+        //                        INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod""
+        //                        INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
+        //                        INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+        //                        INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+        //                        INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+        //                        WHERE B.F10003 = {0} AND B.""IdUser"" = {1} 
+        //                        UNION
+        //                        SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+        //                        FROM ""Ptj_tblAbsente"" A
+        //                        INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+        //                        INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+        //                        INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+        //                        INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+        //                        INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+        //                        WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
+        //                        ) X 
+        //                        GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+        //                        ) Y {4} ORDER BY Y.""Denumire""";
+        //            }
+        //            else
+        //            {
+        //                strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
+        //                        SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+        //                        FROM (
+        //                        SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+        //                        FROM ""Ptj_tblAbsente"" A
+        //                        INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+        //                        INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+        //                        INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+        //                        INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+        //                        INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+        //                        WHERE D.F10003 = {0} AND C.""UserIntrod"" = 0 
+        //                        UNION
+        //                        SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+        //                        FROM ""Ptj_tblAbsente"" A
+        //                        INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+        //                        INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+        //                        INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+        //                        INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+        //                        INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+        //                        WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
+        //                        ) X 
+        //                        GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+        //                        ) Y {4} ORDER BY Y.""Denumire""";
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (HttpContext.Current.Session["User_Marca"].ToString() != f10003)
+        //            {
+        //                strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
+        //                        SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+        //                        FROM (
+        //                        SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+        //                        FROM ""Ptj_tblAbsente"" A
+        //                        INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+        //                        INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod"" OR B.""IdSuper"" = -1 * c.""Super1"" OR B.""IdSuper"" = -1 * c.""Super2"" OR B.""IdSuper"" = -1 * c.""Super3"" OR B.""IdSuper"" = -1 * c.""Super4"" OR B.""IdSuper"" = -1 * c.""Super5"" OR B.""IdSuper"" = -1 * c.""Super6""  OR B.""IdSuper"" = -1 * c.""Super7"" OR B.""IdSuper"" = -1 * c.""Super8"" OR B.""IdSuper"" = -1 * c.""Super9"" OR B.""IdSuper"" = -1 * c.""Super10"" OR B.""IdSuper"" = -1 * c.""Super11"" OR B.""IdSuper"" = -1 * c.""Super12"" OR B.""IdSuper"" = -1 * c.""Super13"" OR B.""IdSuper"" = -1 * c.""Super14"" OR B.""IdSuper"" = -1 * c.""Super15"" OR B.""IdSuper"" = -1 * c.""Super16"" OR B.""IdSuper"" = -1 * c.""Super17"" OR B.""IdSuper"" = -1 * c.""Super18"" OR B.""IdSuper"" = -1 * c.""Super19"" OR B.""IdSuper"" = -1 * c.""Super20""
+        //                        INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
+        //                        INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+        //                        INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+        //                        INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+        //                        WHERE B.F10003 = {0} AND B.""IdUser"" = {1} 
+        //                        UNION
+        //                        SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+        //                        FROM ""Ptj_tblAbsente"" A
+        //                        INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+        //                        INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+        //                        INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+        //                        INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+        //                        INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+        //                        WHERE D.F10003 = {0} AND (C.""UserIntrod"" = {1})
+        //                        ) X 
+        //                        GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+        //                        ) Y {4} ORDER BY Y.""Denumire""";
+        //                //Radu 11.02.2019 - am eliminat conditiile pentru Super1 ... Super20 pe ramura cu DreptSolicitareAbsenta = 0, ca in functia Absente/Cereri.SelectAngajati
+        //                //(C.""UserIntrod"" = {1} OR c.""Super1"" = {1}  OR c.""Super2"" = {1}  OR c.""Super3"" = {1}  OR c.""Super4"" = {1}  OR c.""Super5"" = {1}  OR c.""Super6"" = {1}  OR c.""Super7"" = {1}  OR c.""Super8"" = {1}  OR c.""Super9"" = {1}  OR c.""Super10"" = {1} OR c.""Super11"" = {1} OR c.""Super12"" = {1}  OR c.""Super13"" = {1}  OR c.""Super14"" = {1}  OR c.""Super15"" = {1}  OR c.""Super16"" = {1}  OR c.""Super17"" = {1}  OR c.""Super18"" = {1}  OR c.""Super19"" = {1}  OR c.""Super20"" = {1})
+
+        //            }
+        //            else
+        //            {
+        //                strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
+        //                        SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+        //                        FROM (
+        //                        SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+        //                        FROM ""Ptj_tblAbsente"" A
+        //                        INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+        //                        INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+        //                        INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+        //                        INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+        //                        INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+        //                        WHERE D.F10003 = {0} AND (C.""UserIntrod"" = 0 OR c.""Super1"" = 0  OR c.""Super2"" = 0  OR c.""Super3"" = 0  OR c.""Super4"" = 0  OR c.""Super5"" = 0  OR c.""Super6"" = 0  OR c.""Super7"" = 0  OR c.""Super8"" = 0  OR c.""Super9"" = 0  OR c.""Super10"" = 0 OR c.""Super11"" = 0 OR c.""Super12"" = 0  OR c.""Super13"" = 0  OR c.""Super14"" = 0  OR c.""Super15"" = 0  OR c.""Super16"" = 0  OR c.""Super17"" = 0  OR c.""Super18"" = 0  OR c.""Super19"" = 0  OR c.""Super20"" = 0)
+        //                        UNION
+        //                        SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+        //                        FROM ""Ptj_tblAbsente"" A
+        //                        INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+        //                        INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+        //                        INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+        //                        INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+        //                        INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+        //                        WHERE D.F10003 = {0} AND (C.""UserIntrod"" = {1})
+        //                        ) X 
+        //                        GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+        //                        ) Y {4} ORDER BY Y.""Denumire""";
+        //                //Radu 11.02.2019 - am eliminat conditiile pentru Super1 ... Super20 pe ramura cu DreptSolicitareAbsenta = 0, ca in functia Absente/Cereri.SelectAngajati
+        //                //(C.""UserIntrod"" = {1} OR c.""Super1"" = {1}  OR c.""Super2"" = {1}  OR c.""Super3"" = {1}  OR c.""Super4"" = {1}  OR c.""Super5"" = {1}  OR c.""Super6"" = {1}  OR c.""Super7"" = {1}  OR c.""Super8"" = {1}  OR c.""Super9"" = {1}  OR c.""Super10"" = {1} OR c.""Super11"" = {1} OR c.""Super12"" = {1}  OR c.""Super13"" = {1}  OR c.""Super14"" = {1}  OR c.""Super15"" = {1}  OR c.""Super16"" = {1}  OR c.""Super17"" = {1}  OR c.""Super18"" = {1}  OR c.""Super19"" = {1}  OR c.""Super20"" = {1})
+
+
+        //            }
+        //        }
+
+        //        strSql = string.Format(strSql, f10003, HttpContext.Current.Session["UserId"], idAuto, dt, filtru);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MemoreazaEroarea(ex.ToString(), "General", "SelectAbsente");
+        //    }
+
+        //    return strSql;
+        //}
+
+
+        //Florin 2020.01.21
         public static string SelectAbsente(string f10003, int idAbs = -99)
         {
-            //IdSuperRol - ce id are superiorul care in numele meu face o solicitare; este necesar pentru a-l cauta pe circuit
-
-            // dreptul de aprobare si ce angajati se incarca sunt preluati din baza de date pe baza parametrului DreptSolicitareAbsenta
-            // 0 - se poate face aprobarea pentru toti angajatii asignati supervizorului de pe prima coloana de pe circuit (User Introducere)  
-            // 1 - se poate face aprobarea pentru toti angajatii asignati oricarui supervizor de pe circuit
-
             string strSql = "";
 
             try
@@ -2287,125 +2443,58 @@ namespace WizOne.Module
 
                 if (idAbs != -99) filtru = @" WHERE Y.""Id""=" + idAbs;
 
-                if (Dami.ValoareParam("DreptSolicitareAbsenta") == "1")
+                if (HttpContext.Current.Session["User_Marca"].ToString() != f10003)
                 {
-                    if (HttpContext.Current.Session["User_Marca"].ToString() != f10003)
-                    {
-                        //SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"",X.""Denumire"",X.""DenumireScurta"",X.""Culoare"",X.""Explicatii"",X.""CampData1"",X.""CampData2"",X.""CampBifa1"",X.""CampBifa2"",X.""CampText"",X.""NrMaxZileLucratoare"",X.""NrMaxZileLucratoareAn"",X.""NrMaxZileCalendaristice"",X.""NrMaxZileCalendaristiceAn"",X.""Anulare"",X.""AnulareAltii"",X.""ArataInlocuitor"",X.""ArataAtasament"",X.""OreCalculateEticheta"",X.""OreCalculateF"",X.""OreCalculateSL"",X.""OreCalculateVerifica"",X.""OreSursaEticheta"",X.""OreSursaF"",X.""OreSursaSL"",X.""OreSursaVerifica"",X.""AdunaZileLibere"",X.""CampData1Obligatoriu"",X.""CampData2Obligatoriu"",X.""CampBifa1Obligatoriu"",X.""CampBifa2Obligatoriu"",X.""CampTextObligatoriu"",X.""Planificare"" AS ""EstePlanificare"",X.""InfoCOPRamase"",X.""OreInVal"",X.""IdTipOre"", X.""NuTrimiteInPontaj"", X.""GrupOreDeVerificat"", X.""Prezenta"", X.""NrMaxOre"", X.""VerificaCereriInlocuitor"", X.""VerificareNrMaxOre""
-                        strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
-                                SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                                FROM (
-                                SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                                FROM ""Ptj_tblAbsente"" A
-                                INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                                INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod""
-                                INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
-                                INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                                INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                                INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                                WHERE B.F10003 = {0} AND B.""IdUser"" = {1} 
-                                UNION
-                                SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                                FROM ""Ptj_tblAbsente"" A
-                                INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                                INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                                INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                                INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                                INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                                WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
-                                ) X 
-                                GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                                ) Y {4} ORDER BY Y.""Denumire""";
-                    }
-                    else
-                    {
-                        strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
-                                SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                                FROM (
-                                SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                                FROM ""Ptj_tblAbsente"" A
-                                INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                                INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                                INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                                INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                                INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                                WHERE D.F10003 = {0} AND C.""UserIntrod"" = 0 
-                                UNION
-                                SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                                FROM ""Ptj_tblAbsente"" A
-                                INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                                INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                                INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                                INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                                INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                                WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
-                                ) X 
-                                GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                                ) Y {4} ORDER BY Y.""Denumire""";
-                    }
+                    strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
+                            SELECT MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+                            FROM (
+                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+                            FROM ""Ptj_tblAbsente"" A
+                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+                            INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod""
+                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
+                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+                            WHERE B.F10003 = {0} AND B.""IdUser"" = {1} 
+                            UNION
+                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+                            FROM ""Ptj_tblAbsente"" A
+                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
+                            ) X 
+                            GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+                            ) Y {4} ORDER BY Y.""Denumire""";
                 }
                 else
                 {
-                    if (HttpContext.Current.Session["User_Marca"].ToString() != f10003)
-                    {
-                        strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
-                                SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                                FROM (
-                                SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                                FROM ""Ptj_tblAbsente"" A
-                                INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                                INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod"" OR B.""IdSuper"" = -1 * c.""Super1"" OR B.""IdSuper"" = -1 * c.""Super2"" OR B.""IdSuper"" = -1 * c.""Super3"" OR B.""IdSuper"" = -1 * c.""Super4"" OR B.""IdSuper"" = -1 * c.""Super5"" OR B.""IdSuper"" = -1 * c.""Super6""  OR B.""IdSuper"" = -1 * c.""Super7"" OR B.""IdSuper"" = -1 * c.""Super8"" OR B.""IdSuper"" = -1 * c.""Super9"" OR B.""IdSuper"" = -1 * c.""Super10"" OR B.""IdSuper"" = -1 * c.""Super11"" OR B.""IdSuper"" = -1 * c.""Super12"" OR B.""IdSuper"" = -1 * c.""Super13"" OR B.""IdSuper"" = -1 * c.""Super14"" OR B.""IdSuper"" = -1 * c.""Super15"" OR B.""IdSuper"" = -1 * c.""Super16"" OR B.""IdSuper"" = -1 * c.""Super17"" OR B.""IdSuper"" = -1 * c.""Super18"" OR B.""IdSuper"" = -1 * c.""Super19"" OR B.""IdSuper"" = -1 * c.""Super20""
-                                INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
-                                INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                                INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                                INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                                WHERE B.F10003 = {0} AND B.""IdUser"" = {1} 
-                                UNION
-                                SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                                FROM ""Ptj_tblAbsente"" A
-                                INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                                INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                                INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                                INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                                INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                                WHERE D.F10003 = {0} AND (C.""UserIntrod"" = {1})
-                                ) X 
-                                GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                                ) Y {4} ORDER BY Y.""Denumire""";
-                        //Radu 11.02.2019 - am eliminat conditiile pentru Super1 ... Super20 pe ramura cu DreptSolicitareAbsenta = 0, ca in functia Absente/Cereri.SelectAngajati
-                        //(C.""UserIntrod"" = {1} OR c.""Super1"" = {1}  OR c.""Super2"" = {1}  OR c.""Super3"" = {1}  OR c.""Super4"" = {1}  OR c.""Super5"" = {1}  OR c.""Super6"" = {1}  OR c.""Super7"" = {1}  OR c.""Super8"" = {1}  OR c.""Super9"" = {1}  OR c.""Super10"" = {1} OR c.""Super11"" = {1} OR c.""Super12"" = {1}  OR c.""Super13"" = {1}  OR c.""Super14"" = {1}  OR c.""Super15"" = {1}  OR c.""Super16"" = {1}  OR c.""Super17"" = {1}  OR c.""Super18"" = {1}  OR c.""Super19"" = {1}  OR c.""Super20"" = {1})
-
-                    }
-                    else
-                    {
-                        strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
-                                SELECT COALESCE(574,-99) AS ""IdSuperRol"",MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                                FROM (
-                                SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                                FROM ""Ptj_tblAbsente"" A
-                                INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                                INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                                INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                                INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                                INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                                WHERE D.F10003 = {0} AND (C.""UserIntrod"" = 0 OR c.""Super1"" = 0  OR c.""Super2"" = 0  OR c.""Super3"" = 0  OR c.""Super4"" = 0  OR c.""Super5"" = 0  OR c.""Super6"" = 0  OR c.""Super7"" = 0  OR c.""Super8"" = 0  OR c.""Super9"" = 0  OR c.""Super10"" = 0 OR c.""Super11"" = 0 OR c.""Super12"" = 0  OR c.""Super13"" = 0  OR c.""Super14"" = 0  OR c.""Super15"" = 0  OR c.""Super16"" = 0  OR c.""Super17"" = 0  OR c.""Super18"" = 0  OR c.""Super19"" = 0  OR c.""Super20"" = 0)
-                                UNION
-                                SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                                FROM ""Ptj_tblAbsente"" A
-                                INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                                INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                                INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                                INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                                INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                                WHERE D.F10003 = {0} AND (C.""UserIntrod"" = {1})
-                                ) X 
-                                GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                                ) Y {4} ORDER BY Y.""Denumire""";
-                        //Radu 11.02.2019 - am eliminat conditiile pentru Super1 ... Super20 pe ramura cu DreptSolicitareAbsenta = 0, ca in functia Absente/Cereri.SelectAngajati
-                        //(C.""UserIntrod"" = {1} OR c.""Super1"" = {1}  OR c.""Super2"" = {1}  OR c.""Super3"" = {1}  OR c.""Super4"" = {1}  OR c.""Super5"" = {1}  OR c.""Super6"" = {1}  OR c.""Super7"" = {1}  OR c.""Super8"" = {1}  OR c.""Super9"" = {1}  OR c.""Super10"" = {1} OR c.""Super11"" = {1} OR c.""Super12"" = {1}  OR c.""Super13"" = {1}  OR c.""Super14"" = {1}  OR c.""Super15"" = {1}  OR c.""Super16"" = {1}  OR c.""Super17"" = {1}  OR c.""Super18"" = {1}  OR c.""Super19"" = {1}  OR c.""Super20"" = {1})
-
-
-                    }
+                    strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
+                            SELECT MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+                            FROM (
+                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+                            FROM ""Ptj_tblAbsente"" A
+                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = 0 
+                            UNION
+                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+                            FROM ""Ptj_tblAbsente"" A
+                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
+                            ) X 
+                            GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+                            ) Y {4} ORDER BY Y.""Denumire""";
                 }
 
                 strSql = string.Format(strSql, f10003, HttpContext.Current.Session["UserId"], idAuto, dt, filtru);
@@ -2417,7 +2506,6 @@ namespace WizOne.Module
 
             return strSql;
         }
-
 
 
         public static void SelectCereriIstoric(int f10003, int idInloc, int idCircuit, int estePlanificare, out string sqlSelect, out int trimiteLaInlocuitor, int idCerere = -99)
@@ -2508,22 +2596,51 @@ namespace WizOne.Module
                     }
 
 
-                    //Florin - 2019.11.13
+                    //Florin 2020.01.21
+
+                    ////Florin - 2019.11.13
+                    //if (paramCumul == "1" || paramCumul == "2")
+                    //{
+                    //    DataTable dtSql = General.IncarcaDT(strSql.Substring((" UNION " + strUnion).Length), null);
+
+                    //    string sqlNou = "";
+                    //    int[] arr = new int[dtSql.Rows.Count];
+
+                    //    for (int i = 0; i < dtSql.Rows.Count; i++)
+                    //    {
+                    //        int idUsr = Convert.ToInt32(General.Nz(dtSql.Rows[i]["IdUser"], 0));
+                    //        if (i == 0 || (paramCumul == "1" && i > 0 && Convert.ToInt32(arr[i - 1]) != idUsr) || (paramCumul == "2" && !arr.Contains(idUsr)))
+                    //        {
+                    //            sqlNou += lstSql[i];
+                    //            arr[i] = idUsr;
+                    //        }
+                    //    }
+
+                    //    if (sqlNou != "") strSql = sqlNou;
+                    //}
+
+                    //Florin - 2020.01.21
                     if (paramCumul == "1" || paramCumul == "2")
                     {
-                        DataTable dtSql = General.IncarcaDT(strSql.Substring((" UNION " + strUnion).Length), null);
-
+                        int x = 0;
+                        int idUserTmp = -99;
                         string sqlNou = "";
-                        int[] arr = new int[dtSql.Rows.Count];
-                        
-                        for (int i = 0; i < dtSql.Rows.Count; i++)
+                        int[] arr = new int[20];
+
+                        for (int i = 0; i < lstSql.Count; i++)
                         {
-                            int idUsr = Convert.ToInt32(General.Nz(dtSql.Rows[i]["IdUser"], 0));
-                            if (i == 0 || (paramCumul == "1" && i > 0 && Convert.ToInt32(arr[i - 1]) != idUsr) || (paramCumul == "2" && !arr.Contains(idUsr)))
+                            DataTable dtSql = General.IncarcaDT(lstSql[i].Substring((" UNION " + strUnion).Length), null);
+                            if (dtSql.Rows.Count == 0) continue;
+                            int idUsrCurent = Convert.ToInt32(General.Nz(dtSql.Rows[0]["IdUser"], 0));
+
+                            if (i == 0 || (paramCumul == "1" && i > 0 && Convert.ToInt32(arr[x - 1]) != idUsrCurent) || (paramCumul == "2" && !arr.Contains(idUsrCurent)))
                             {
                                 sqlNou += lstSql[i];
-                                arr[i] = idUsr;
+                                arr[x] = idUsrCurent;
+                                x += 1;
                             }
+
+                            idUserTmp = idUsrCurent;
                         }
 
                         if (sqlNou != "") strSql = sqlNou;
@@ -4363,11 +4480,11 @@ namespace WizOne.Module
                     op = "||";
                     dt = "SysDate";
                 }
-
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                 strSql = @"SELECT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"", A.F10017 AS CNP,
                                 B.F00204 AS ""Companie"", C.F00305 AS ""Subcompanie"", D.F00406 AS ""Filiala"", E.F00507 AS ""Sectie"", F.F00608 AS ""Departament"", 
                                 A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, A.F10022, A.F10023, A.F10022 AS ""DataAngajarii"", A.F10023 AS ""DataPlecarii"",
-                                A.F10011 AS ""NrContract"", A.F100699 AS ""SalariulBrut"", X.F71804 AS ""Functia"", A.F100992 AS ""DataFunctie"", A.F10025,
+                                A.F10011 AS ""NrContract"", A.{2} AS ""SalariulBrut"", X.F71804 AS ""Functia"", A.F100992 AS ""DataFunctie"", A.F10025,
                                 A.F100571 AS ""Regiune"", A.F100925, A.F100901, A.F100922, A.F100923, A.F100924,
                                 CASE WHEN (A.F10025 = 0 OR A.F10025 = 999) THEN 1 ELSE 0 END AS ""AngajatActiv"", 
                                 CASE WHEN (A.F10022 <= {1} AND {1} <= A.F10023) THEN CAST(1 AS int) ELSE CAST(0 AS int) END AS ""Stare"",
@@ -4382,7 +4499,7 @@ namespace WizOne.Module
                                 LEFT JOIN F718 X ON A.F10071=X.F71802
                                 ORDER BY A.F10008, A.F10009";
 
-                strSql = string.Format(strSql, op, dt);
+                strSql = string.Format(strSql, op, dt, salariu);
            }
             catch (Exception ex)
             {
@@ -4540,23 +4657,32 @@ namespace WizOne.Module
                     condAng = " AND (";
                     for (int i = 0; i < param.Length; i++)
                     {
-                        switch (param[i])
-                        {
-                            case "Activ":
-                            case "Activ detasat":
-                            case "Activ suspendat":
-                                condAng += " e.F10025 = 0 ";
-                                break;
-                            case "Inactiv":
-                                condAng += " e.F10025 <> 0 ";
-                                break;
-                            case "Candidat":
-                                condAng += " e.F10025 = 900 ";
-                                break;
-                            case "Angajat in avans":
-                                condAng += " e.F10025 = 999 ";
-                                break;
-                        }
+                        //switch (param[i])
+                        //{
+                        //    case "Activ":
+                        //    case "Activ detasat":
+                        //    case "Activ suspendat":
+                        //        condAng += " e.F10025 = 0 ";
+                        //        break;
+                        //    case "Inactiv":
+                        //        condAng += " e.F10025 <> 0 ";
+                        //        break;
+                        //    case "Candidat":
+                        //        condAng += " e.F10025 = 900 ";
+                        //        break;
+                        //    case "Angajat in avans":
+                        //        condAng += " e.F10025 = 999 ";
+                        //        break;
+                        //}
+                        //Radu 09.12.2019
+                        if (param[i] == Dami.TraduCuvant("Activ") || param[i] == Dami.TraduCuvant("Activ detasat") || param[i] == Dami.TraduCuvant("Activ suspendat"))
+                            condAng += " e.F10025 = 0 ";
+                        if (param[i] == Dami.TraduCuvant("Inactiv"))
+                            condAng += " e.F10025 <> 0 ";
+                        if (param[i] == Dami.TraduCuvant("Candidat"))
+                            condAng += " e.F10025 = 900 ";
+                        if (param[i] == Dami.TraduCuvant("Angajat in avans"))
+                            condAng += " e.F10025 = 999 ";
                         if (i < param.Length - 1)
                             condAng += " OR ";
                     }
@@ -4576,6 +4702,10 @@ namespace WizOne.Module
                     }
                 }
                 strSql = string.Format(strSql, strFiltru, cmp, left, " AND A.F10003 IN (" + DamiAngajati(idUser, filtruAng, condAng) + ")", op, dt, cmpSupl, legCmpSupl, tipData);
+
+                //Radu 09.12.2019
+                strSql = strSql.Replace("'Activ'", "'" + Dami.TraduCuvant("Activ") + "'").Replace("'Activ suspendat'", "'" + Dami.TraduCuvant("Activ suspendat") + "'").Replace("'Inactiv'", "'" 
+                    + Dami.TraduCuvant("Inactiv") + "'").Replace("'Candidat'", "'" + Dami.TraduCuvant("Candidat") + "'").Replace("'Angajat in avans'", "'" + Dami.TraduCuvant("Angajat in avans") + "'").Replace("'Activ detasat'", "'" + Dami.TraduCuvant("Activ detasat") + "'");
 
                 q = General.IncarcaDT(strSql, null);
 
@@ -5428,8 +5558,11 @@ namespace WizOne.Module
         {
             try
             {
-                return General.IncarcaDT("SELECT \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_AliasF\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END", null);
+                //Radu 28.11.2019 - se inlocuieste Ptj_AliasF cu Ptj_tblAdmin
+                //return General.IncarcaDT("SELECT \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_AliasF\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Denumire\" ELSE \"Alias\" END", null);
+                return General.IncarcaDT("SELECT \"Coloana\" AS \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
             }
+
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
@@ -6416,11 +6549,11 @@ namespace WizOne.Module
                             WHERE (A.F10025 = 0 OR A.F10025 = 999)";
                 }
 
-
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                 strSql = $@"SELECT A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"",G.F00406 AS ""Filiala"",H.F00507 AS ""Sectie"",I.F00608 AS ""Departament"", 
                                         A.F100901, C.F71804 AS ""Functia"",
                                         A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"", A.F10023 AS ""DataPlecarii"", A.F10011 AS ""NrContract"", 
-                                        CASE WHEN A.F10022 <= {CurrentDate()} AND {CurrentDate()} <= A.F10023 THEN 1 ELSE 0 END AS ""Stare"", A.F100699 AS ""SalariulBrut"", A.F10025, A.F100571 AS ""Regiune"",
+                                        CASE WHEN A.F10022 <= {CurrentDate()} AND {CurrentDate()} <= A.F10023 THEN 1 ELSE 0 END AS ""Stare"", A.{salariu} AS ""SalariulBrut"", A.F10025, A.F100571 AS ""Regiune"",
                                         (SELECT MIN(Z.F70102) FROM USERS Z WHERE Z.F10003=A.F10003) AS ""IdUser""
                                         FROM ""InlocuitoriAngajat"" B
                                         INNER JOIN F100 A ON B.""F10003Inlocuitor"" = A.F10003
@@ -6730,13 +6863,13 @@ namespace WizOne.Module
                     dtInc = "01-" + luna.ToString().PadLeft(2, '0') + "-" + an.ToString().Substring(2);
                     dtSf = DateTime.DaysInMonth(an, luna) + "-" + luna.ToString().PadLeft(2,'0') + "-" + an.ToString();
 
-                    strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dtInc + "','DD-MM-RRRR'))>=0";
+                    strSql = " AND TRUNC(to_date('" + dtSf + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY')) - to_date('" + dtInc + "','DD-MM-RRRR'))>=0";
                     if (zi > 0 && zi <= 31)
                     {
                         //Florin 2019.11.07
                         //string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
                         string dt = zi.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, '0') + "-" + an.ToString().Substring(2);
-                        strSql = " AND TRUNC(to_date('" + dt + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(F100993 - to_date('" + dt + "','DD-MM-RRRR'))>=0";
+                        strSql = " AND TRUNC(to_date('" + dt + "','DD-MM-RRRR') - F10022)>=0 AND TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY')) - to_date('" + dt + "','DD-MM-RRRR'))>=0";
                     }
 
                     //dtInc = "01-" + Dami.NumeLuna(luna, 1, "EN") + "-" + an.ToString().Substring(2);
@@ -7045,7 +7178,7 @@ namespace WizOne.Module
                                 " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
                                 " GROUP BY B.F10003) X  " +
                                 " INNER JOIN F100 A ON A.F10003=X.F10003  " +
-                                " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(A.F100993) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+                                " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
                                 " GROUP BY X.F10003";
 
                     }
@@ -7080,7 +7213,7 @@ namespace WizOne.Module
                 }
 
                 //initializam Ptj_Intrari
-                string strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"")
+                string strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"")
                                 SELECT B.F10003, A.""Zi"", -1 AS F06204, A.""ZiSapt"", 
                                 CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                                 CASE WHEN C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
@@ -7091,7 +7224,17 @@ namespace WizOne.Module
 
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.Zi AND  A.Zi <= C.""DataSfarsit"") IS NULL THEN 
                                 CASE WHEN COALESCE(dc.CC, 9999) <> 9999 THEN dc.CC ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = dd.Dept) END 
-                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <=  A.Zi AND  A.Zi <= C.""DataSfarsit"") END AS ""F06204Default""
+                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <=  A.Zi AND  A.Zi <= C.""DataSfarsit"") END AS ""F06204Default"",
+                                CASE WHEN (CASE WHEN C.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
+                                CASE (CASE WHEN datepart(dw,A.""Zi"") - 1 = 0 THEN 7 ELSE datepart(dw,A.Zi) - 1 END)
+                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
+                                END END AS ""IdProgram""
 
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022 <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
@@ -7099,21 +7242,39 @@ namespace WizOne.Module
                                 LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {General.FunctiiData("X.\"Ziua\"", "A")}={an} AND {General.FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""
                                 {strInner}                                
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
+                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" BB WHERE BB.F10003 = B.F10003 AND BB.""DataInceput"" <= A.Zi AND A.Zi <= BB.""DataSfarsit"")
                                 WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {General.FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0;";
                 if (Constante.tipBD == 2)
-                    strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME)
+                    strInt = $@"INSERT INTO ""Ptj_Intrari""(F10003, ""Ziua"", F06204, ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""Norma"", ""IdContract"", F10002, F10004, F10005, F10006, F10007, USER_NO, TIME, ""F06204Default"", ""IdProgram"")
                                 SELECT B.F10003, A.""Zi"", -1 AS F06204, A.""ZiSapt"", 
                                 CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                                 CASE WHEN C.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                                 ""DamiNorma""(B.F10003, A.""Zi"") AS ""Norma"", 
                                 (SELECT MAX(P.""IdContract"") FROM ""F100Contracte"" P WHERE P.F10003 = B.F10003 AND {TruncateDate("P.DataInceput")} <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= {TruncateDate("P.DataSfarsit")} ) AS ""IdContract"", 
                                 G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007,
-                                {HttpContext.Current.Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME
+                                {HttpContext.Current.Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME,
+
+                                CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= C.""DataSfarsit"" and ROWNUM <= 1) IS NULL THEN
+                                CASE WHEN COALESCE(""DamiCC""(B.F10003, A.""Zi""), 9999) <> 9999 THEN ""DamiCC""(B.F10003, A.""Zi"") ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = ""DamiDept""(B.F10003, A.""Zi"")) END 
+                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = B.F10003 AND C.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= C.""DataSfarsit"" and ROWNUM <= 1) END AS ""F06204Default"",
+                                CASE WHEN (CASE WHEN C.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
+                                CASE (1 + TRUNC(A.""Zi"") - TRUNC(A.""Zi"", 'IW'))
+                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
+                                END END AS ""IdProgram""
+
                                 FROM ""tblZile"" A
                                 INNER JOIN F100 B ON 1=1 AND B.F10022  <= {TruncateDate("A.Zi")}  AND {TruncateDate("A.Zi")}  <= B.F10023
                                 LEFT JOIN HOLIDAYS C on A.""Zi""=C.DAY
                                 LEFT JOIN (SELECT X.F10003, X.""Ziua"", COUNT(*) AS CNT FROM ""Ptj_Intrari"" X WHERE {FunctiiData("X.\"Ziua\"", "A")}={an} AND {FunctiiData("X.\"Ziua\"", "L")}={luna} GROUP BY X.F10003, X.""Ziua"") D ON D.F10003=B.F10003 AND D.""Ziua"" = A.""Zi""                                                                   
                                 LEFT JOIN F006 G ON G.F00607 = ""DamiDept""(B.F10003, A.""Zi"")
+                                LEFT JOIN (SELECT ROW_NUMBER() OVER (PARTITION BY CTR.F10003 order by CTR.""F10003"", CTR.""IdContract"" DESC) as ""NrCrt"", CTR.* FROM ""F100Contracte"" CTR) BC ON BC.F10003 = B.F10003 AND BC.""DataInceput"" <= A.""Zi"" AND A.""Zi"" <= BC.""DataSfarsit"" AND ""NrCrt"" = 1
+                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id"" = BC.""IdContract""                                
                                 WHERE {General.FunctiiData("A.\"Zi\"", "A")}={an} AND {FunctiiData("A.\"Zi\"", "L")}={luna} AND COALESCE(D.CNT,0) = 0;";
 								
 								
@@ -7219,6 +7380,9 @@ namespace WizOne.Module
                 string ziInc = ToDataUniv(an, luna, 1);
                 string ziSf = ToDataUniv(an, luna, 99);
 
+                if (filtru == "")
+                    filtru = $@" Y.F10003 IN (SELECT F10003 FROM ""Ptj_Intrari"" WHERE {ziInc} <= ""Ziua"" AND ""Ziua"" <= {ziSf} GROUP BY F10003) AND Y.""An""={an} AND Y.""Luna""={luna}";
+
                 string strSql = "";
                 //Florin 2019.11.13 - am pus filtrul null
                 //DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE ""CampSelect"" IS NOT NULL AND COALESCE(""CampSelect"",'') <> '' ORDER BY ""Ordine"" ", null);
@@ -7228,17 +7392,15 @@ namespace WizOne.Module
                     DataRow row = dt.Rows[i];
                     if (General.Nz(row["Coloana"], "").ToString() != "" && General.Nz(row["CampSelect"], "").ToString() != "")
                     {
-                        if (filtru == "")
-                            strSql += $@"UPDATE Y 
+                        if (Constante.tipBD == 1)
+                        strSql += $@"UPDATE Y 
                             SET {row["Coloana"]} = ({row["CampSelect"]}) 
                             FROM ""Ptj_Cumulat"" Y
-                            WHERE Y.F10003 IN (SELECT F10003 FROM Ptj_Intrari WHERE {ziInc} <= Ziua AND Ziua <= {ziSf} GROUP BY F10003) 
-                            AND Y.""An""={an} AND Y.""Luna""={luna};" + "\n\r";
+                            WHERE {filtru};" + "\n\r";
                         else
-                            strSql += $@"UPDATE Y 
-                                SET {row["Coloana"]} = ({row["CampSelect"]}) 
-                                FROM ""Ptj_Cumulat"" Y
-                                WHERE {filtru};" + "\n\r";
+                            strSql += $@"UPDATE ""Ptj_Cumulat"" Y 
+                            SET {row["Coloana"]} = ({row["CampSelect"]}) 
+                            WHERE {filtru};" + "\n\r";
                     }
                 }
 
@@ -7361,32 +7523,35 @@ namespace WizOne.Module
 
                     if (strZile.Length > 6) strZile = strZile.Substring(6);
 
-
-
                     if (stergePontariAngPlecati == 1)
                     {
-                        //Radu 15.03.2019 - modficare                
-                        //string strDel = @"DELETE A
-                        //            FROM Ptj_Intrari A
-                        //            INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //            WHERE CONVERT(date,ISNULL(MODIF.DATA, f10023)) >= {0} AND CONVERT(date,ISNULL(MODIF.DATA, f10023)) <> '2100-01-01') B 
-                        //            ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII ;";
+                        //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
+                        string strDel = $@"
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                FROM Ptj_Intrari A
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01';
+                                    
+                                DELETE A
+                                FROM Ptj_Intrari A
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01';";
 
-                        string strDel = @"DELETE A
-                                    FROM Ptj_Intrari A
-                                    INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                    ) B 
-                                    ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {0} <= A.Ziua AND A.Ziua <= {1} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01' ;";
-
-                        strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel + "\n\r";
 
-                        //Radu 12.02.2019
-                        strDel = @"DELETE A
-                                    FROM Ptj_Intrari A
-                                    INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) <= {1} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua< B.F10022  AND {0} <= A.Ziua AND A.Ziua <= {1};";
+                        strDel = $@"
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                FROM Ptj_Intrari A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) <= {ziSf} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua< B.F10022  AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf};
 
-                        strDel = string.Format(strDel, ziInc, ziSf);
+                                DELETE A
+                                FROM Ptj_Intrari A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) <= {ziSf} AND CONVERT(date,F10022) <> '2100-01-01') B ON A.F10003=B.F10003 AND A.Ziua< B.F10022  AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf};";
+
                         strFIN += strDel + "\n\r";
                     }
 
@@ -7405,7 +7570,7 @@ namespace WizOne.Module
                     if (idSectie != -99) strFiltru += " AND A.F10006 = " + idSectie.ToString();
                     if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
 
                     strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1, cuInOut), strFiltru, strFiltruZile, usr);
@@ -7516,40 +7681,45 @@ namespace WizOne.Module
 
                     if (strZile.Length > 6) strZile = strZile.Substring(6);
 
-                    //string ziInc = General.ToDataUniv(an, luna, 1);
-                    //string ziSf = General.ToDataUniv(an, luna, 99);
-
-
                     if (stergePontariAngPlecati == 1)
                     {
-                        //Radu 15.03.2019 - modificare
-                        //string strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                        //                WHERE ""IdAuto"" IN 
-                        //                (SELECT A.""IdAuto""
-                        //                FROM ""Ptj_Intrari"" A
-                        //                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
-                        //                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII);";
+                        //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
+                        string strDel = $@"
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                FROM ""Ptj_Intrari"" A
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));
 
-                        string strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                                        WHERE ""IdAuto"" IN 
-                                        (SELECT A.""IdAuto""
-                                        FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                        ) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));";
+                                DELETE FROM ""Ptj_Intrari"" 
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));";
 
-                        strDel = string.Format(strDel, ziInc, ziSf);
                         strFIN += strDel;
 
-                        //Radu 12.02.2019
-                        strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                                        WHERE ""IdAuto"" IN 
-                                        (SELECT A.""IdAuto""
-                                        FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {1} AND TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {0} <= A.""Ziua"" AND A.""Ziua"" <= {1});";
+                        strDel = $@"
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
+                                FROM ""Ptj_Intrari"" A
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {ziSf} AND TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf});
 
-                        strDel = string.Format(strDel, ziInc, ziSf);
+                                DELETE FROM ""Ptj_Intrari"" 
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {ziSf} AND TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022  AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf});";
+
                         strFIN += strDel;
                     }
 
@@ -7574,10 +7744,10 @@ namespace WizOne.Module
                     if (idSectie != -99) strFiltru += " AND A.F10006 = " + idSectie.ToString();
                     if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
 
-                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
+                    string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
 
-                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1), strFiltru, strFiltruZile, usr);
+                    strIns = string.Format(strIns, DamiSelectPontajInit(idUser, an, luna, 1, cuInOut), strFiltru, strFiltruZile, usr);
 
                     strFIN += strIns + ";";
 
@@ -7667,7 +7837,7 @@ namespace WizOne.Module
 
                 string strZile = "";
                 string nrm = "";
-                string inOut = " ,null, null";
+                string inOut = @" ,null AS ""In1"", null AS ""Out1""";
 
 
                 //Florin 2018.10.23
@@ -7694,7 +7864,7 @@ namespace WizOne.Module
                     if (cuInOut == 1)
                     {
                         inOut = @",(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraInInitializare), DATEPART(MINUTE,OraInInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS In1
-                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS In1";
+                                  ,(SELECT DATETIMEFROMPARTS(YEAR(X.Ziua), MONTH(X.Ziua), DAY(X.Ziua), DATEPART(HOUR,OraOutInitializare), DATEPART(MINUTE,OraOutInitializare),0,0) FROM Ptj_Contracte WHERE Id=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")) AS Out1";
                     }
 
                     for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)               //pt fiecare zi din luna
@@ -7703,8 +7873,9 @@ namespace WizOne.Module
                     }
 
 
+                    //Florin 201.12.02 - am adaugat IdProgram
                     //Radu 04.04.2017 - am modificat F06204Default
-                    strSql = @"SELECT A.F10003, X.Ziua, CASE WHEN datepart(dw,X.Ziua) - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END AS ZiSapt,
+                    strSql = @" SELECT A.F10003, X.Ziua, CASE WHEN datepart(dw,X.Ziua) - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END AS ZiSapt,
                                 CASE WHEN datepart(dw,X.Ziua)=1 OR datepart(dw,X.Ziua)=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.Ziua)<>0 THEN 1 ELSE 0 END AS ZiLibera, 
                                 0 as Parinte, 0 as Linia, -1 as F06204, 
                                 G.F00603 AS F10002, G.F00604 AS F10004, G.F00605 AS F10005, G.F00606 AS F10006, G.F00607 as F10007,
@@ -7716,8 +7887,17 @@ namespace WizOne.Module
 
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.ZIUA AND X.ZIUA <= C.""DataSfarsit"") IS NULL THEN 
                                 CASE WHEN COALESCE(dc.CC, 9999) <> 9999 THEN dc.CC ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = dd.Dept) END 
-                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.ZIUA AND X.ZIUA <= C.""DataSfarsit"") END AS ""F06204Default""
-
+                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.ZIUA AND X.ZIUA <= C.""DataSfarsit"") END AS ""F06204Default"",
+                                CASE WHEN (CASE WHEN B.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
+                                CASE (CASE WHEN datepart(dw,X.""Ziua"") - 1 = 0 THEN 7 ELSE datepart(dw,X.Ziua) - 1 END)
+                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
+                                END END AS ""IdProgram""
                                 {1}
                                 {6}
                                 FROM ({2}) x
@@ -7726,6 +7906,7 @@ namespace WizOne.Module
                                 left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" where YEAR(Ziua)={3} AND MONTH(Ziua)={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = x.ZIUA
                                 {5}
                                 LEFT JOIN F006 G ON G.F00607 = dd.Dept
+                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.ZIUA AND X.ZIUA <= B.""DataSfarsit"")
                                 where isnull(D.CNT,0) = 0";
 
                 }
@@ -7735,6 +7916,11 @@ namespace WizOne.Module
                         nrm = @" ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") END AS ""ValStr""
                                  ,CASE WHEN (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=6 OR (1 + TRUNC (X.""Ziua"") - TRUNC (X.""Ziua"", 'IW'))=7 OR (SELECT COUNT(*) FROM HOLIDAYS WHERE DAY = X.""Ziua"")<>0 OR TRUNC(X.""Ziua"") > TRUNC(""DamiDataPlecare""(A.F10003, X.""Ziua"")) THEN NULL ELSE ""DamiNorma""(A.F10003, X.""Ziua"") * 60 END AS ""Val0"" ";
 
+                    if (cuInOut == 1)
+                    {
+                        inOut = @",(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraInInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id""=(SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""In1""
+                                  ,(SELECT TO_DATE(TO_CHAR(X.""Ziua"", 'DD-MM-YYYY') || ' ' || TO_CHAR(""OraOutInitializare"", 'HH24:MI:SS'), 'DD-MM-YYYY HH24:MI:SS') FROM ""Ptj_Contracte"" WHERE ""Id"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"")) AS ""Out1"" ";
+                    }
                     for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)               //pt fiecare zi din luna
                     {
                         strZile += " union select " + General.ToDataUniv(an, luna, i) + " AS \"Ziua\" FROM Dual";
@@ -7757,16 +7943,26 @@ namespace WizOne.Module
 
                                 CASE WHEN (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= C.""DataSfarsit"" and ROWNUM <= 1) IS NULL THEN
                                 CASE WHEN COALESCE(""DamiCC""(A.F10003, X.""Ziua""), 9999) <> 9999 THEN ""DamiCC""(A.F10003, X.""Ziua"") ELSE (SELECT C.F00615 FROM F006 C WHERE C.F00607 = ""DamiDept""(A.F10003, X.""Ziua"")) END 
-                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= C.""DataSfarsit"" and ROWNUM <= 1) END AS ""F06204Default""
-
+                                ELSE (SELECT MAX(""IdCentruCost"") FROM ""F100CentreCost"" C WHERE C.F10003 = A.F10003 AND C.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= C.""DataSfarsit"" and ROWNUM <= 1) END AS ""F06204Default"",
+                                CASE WHEN (CASE WHEN B.DAY is not null THEN 1 ELSE 0 END) = 1 AND Y.""TipSchimb8"" = 1 THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
+                                CASE (1 + TRUNC(X.""Ziua"") - TRUNC(X.""Ziua"", 'IW'))
+                                WHEN 1 THEN (CASE WHEN COALESCE(Y.""TipSchimb1"",1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 2 THEN (CASE WHEN COALESCE(Y.""TipSchimb2"",1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 3 THEN (CASE WHEN COALESCE(Y.""TipSchimb3"",1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 4 THEN (CASE WHEN COALESCE(Y.""TipSchimb4"",1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 5 THEN (CASE WHEN COALESCE(Y.""TipSchimb5"",1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 6 THEN (CASE WHEN COALESCE(Y.""TipSchimb6"",1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END) 
+                                WHEN 7 THEN (CASE WHEN COALESCE(Y.""TipSchimb7"",1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END) 
+                                END END AS ""IdProgram""
                                 {1}
                                 {6}
                                 FROM ({2}) x
                                 inner join F100 A on 1=1 AND TRUNC(A.F10022) <= TRUNC(X.""Ziua"") AND TRUNC(X.""Ziua"") <= TRUNC(A.F10023)
                                 left join HOLIDAYS B on X.""Ziua""=B.DAY
                                 left join (select F10003, ""Ziua"", count(*) as CNT from ""Ptj_Intrari"" WHERE TO_NUMBER(TO_CHAR(""Ziua"",'YYYY'))={3} AND TO_NUMBER(TO_CHAR(""Ziua"",'MM'))={4} AND F06204=-1 GROUP BY F10003, ""Ziua"") D on D.F10003=A.F10003 AND D.""Ziua"" = X.""Ziua""
-                                where COALESCE(D.CNT,0) = 0";
-
+                                LEFT JOIN (SELECT ROW_NUMBER() OVER (PARTITION BY CTR.F10003 order by CTR.""F10003"", CTR.""IdContract"" DESC) as ""NrCrt"", CTR.* FROM ""F100Contracte"" CTR) BC ON BC.F10003 = A.F10003 AND BC.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= BC.""DataSfarsit"" AND ""NrCrt"" = 1
+                                LEFT JOIN ""Ptj_Contracte"" Y ON Y.""Id"" = BC.""IdContract""
+                                WHERE COALESCE(D.CNT,0) = 0 ";
                 }
 
                 if (strZile.Length > 6) strZile = strZile.Substring(6);
@@ -8757,6 +8953,264 @@ namespace WizOne.Module
             {
                 MemoreazaEroarea(ex.ToString(), "Calcul", "CalculFormule");
             }
+        }
+
+
+        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text)
+        {
+            decimal tmpVB = 0;
+            string rezultat = "";
+
+            try
+            {
+                //tipVenit = 1     VB -> SN
+                //tipVenit = 2     SN -> VB
+
+                int i = 0;              //daca ajunge la 100 oprim iteratia ca sa nu devina bucla infinita
+
+                decimal varCas = 10.5m;
+                decimal varCass = 5.5m;
+                //decimal varSom = 0.5m;
+                decimal varSom = 0m;
+                decimal varNr = 0;
+                decimal scutit = 0;
+                decimal tipAng = 1;
+                decimal varDed = 250;
+                decimal varImp = 16;
+                decimal salMediu = 0;
+
+                try
+                {
+                    DataTable dt = GetVariabileVB(f10003);
+                    varCass = Convert.ToDecimal(General.Nz(dt.Rows[0]["CASS"], 0));
+                    //varSom = lst[1];    nu se mai foloseste
+                    varCas = Convert.ToDecimal(General.Nz(dt.Rows[0]["CAS"], 0));
+                    varNr = Convert.ToDecimal(General.Nz(dt.Rows[0]["NrDed"], 0));
+                    scutit = Convert.ToDecimal(General.Nz(dt.Rows[0]["Scutit"], 0));
+                    tipAng = Convert.ToDecimal(General.Nz(dt.Rows[0]["TipAng"], 0));
+                    salMediu = Convert.ToDecimal(General.Nz(dt.Rows[0]["SalMediu"], 0));
+                    varImp = Convert.ToDecimal(General.Nz(dt.Rows[0]["ProcImp"], 0));
+                }
+                catch (Exception ex)
+                {
+                    General.MemoreazaEroarea(ex, "General", "GetVariabileVB");
+                }
+
+                if (scutit == 1) varImp = 0;
+                if (tipAng == 2) varSom = 0;         //daca este pensionar nu plateste somaj
+
+                if (tipVenit == 1)           //VB -> SN
+                {
+                    varDed = DamiValDeducere(varNr, Convert.ToDecimal(venit ?? 0));
+                    CalcSN(Convert.ToDecimal(venit ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu, out tmpVB, out rezultat);
+                }
+                else                    //SN -> VB
+                {
+                    decimal SN = Convert.ToDecimal(venit ?? 1);
+                    varDed = DamiValDeducere(varNr, SN);
+                    tmpVB = Math.Round((SN - (1.5m * varImp / 100 * varDed)) / (1 - varImp / 100 - (varImp / 100 * varDed / 2000) - ((1 - varImp / 100) * (varCas + varCass + varSom) / 100)));
+                    decimal tmpSN = 0;
+
+                    while (tmpSN != SN)
+                    {
+                        if (i > 100)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            i += 1;
+
+                            varDed = DamiValDeducere(varNr, tmpVB);
+                            CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu, out tmpSN, out rezultat);
+                            if (tmpSN != SN)
+                            {
+                                if (tmpSN > SN)
+                                    tmpVB -= 1;
+                                else
+                                    tmpVB += 1;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "CalcSalariu");
+            }
+
+            venitCalculat = tmpVB;
+            text = rezultat;
+        }
+
+        private static DataTable GetVariabileVB(int f10003)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                string strSql =
+                    $@"SELECT 
+                    (SELECT COALESCE(F01324,0) AS ""Valoare"" FROM F013 WHERE F01304=(SELECT F80003 FROM F800 WHERE UPPER(F80002)='ASSB')) AS CASS,
+                    (SELECT COALESCE(F01324,0) AS ""Valoare"" FROM F013 WHERE F01304=(SELECT F80003 FROM F800 WHERE UPPER(F80002)='CAS_ANG')) AS CAS,
+                    (SELECT COUNT(*) AS ""Valoare"" FROM F110 WHERE F11003=@1 AND F11016=1) AS ""NrDed"",
+                    (SELECT COALESCE(F10026,0) AS ""Valoare"" FROM F100 WHERE F10003=@1) AS ""Scutit"",
+                    (SELECT COALESCE(F10010,0) AS ""Valoare"" FROM F100 WHERE F10003=@1) AS ""TipAng"",
+                    (SELECT F80003 FROM F800 WHERE UPPER(F80002)='SAL_MED') AS ""SalMediu"",
+                    (SELECT F80003 FROM F800 WHERE UPPER(F80002)='IMP_ASIG') AS ""ProcImp"" " + General.FromDual();
+
+                dt = IncarcaDT(strSql, new object[] { f10003 });
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "GetVariablieVB");
+            }
+
+            return dt;
+        }
+
+        private static decimal DamiValDeducere(decimal nrPersIntretinere, decimal VB)
+        {
+            decimal? varDed = 0;
+
+            try
+            {
+                varDed = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+                            $@"SELECT 
+                            CASE WHEN 0={nrPersIntretinere} THEN F73008 ELSE
+                            CASE WHEN 1={nrPersIntretinere} THEN F73009 ELSE
+                            CASE WHEN 2={nrPersIntretinere} THEN F73010 ELSE
+                            CASE WHEN 3={nrPersIntretinere} THEN F73011 ELSE F73012 END END END END 
+                            FROM F730 WHERE F73004 <= {Convert.ToInt32(VB)} AND {Convert.ToInt32(VB)} <= F73006", null), 0));
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "DamiValDeducere");
+            }
+
+            return Convert.ToDecimal(varDed ?? 250);
+        }
+
+        private static void CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu, out decimal SN, out string rezultat)
+        {
+            decimal tmpSN = 0m;
+            string tmpRezultat = "";
+
+            try
+            {
+                //teorie:
+                //SN = VB - IMP - TAXE
+                //TAXE = CAS + CASS + SOM
+                //DED = sumafixa * (1-(VB-1000)/2000)
+                //IMP = varImp/100 * (VB - TAXE - DED)
+
+                //unde:
+                //CAS = round(VB * 10,5/100)
+                //CASS = round(VB * 5,5/100)
+                //SOM = round(VB * 0,5/100)
+
+                //sumafixa: (este tabel)
+                //250 fara pers. in intretinere
+                //350 1 pers
+                //450 2 pers
+
+
+                decimal cas = 0;
+                decimal cass = 0;
+                decimal som = 0;
+
+                //in calculul CAS-ului, daca VB este mai mare decat salariul mediu * 5 ori atunci se plafoneaza la salariul mediu * 5 ori
+                //if (VB > (salMediu * 5))
+                //    cas = MathExt.Round((salMediu * 5) * varCas / 100, WizOne.Module.MidpointRounding.AwayFromZero);
+                //else
+                cas = MathExt.Round(VB * varCas / 100, MidpointRounding.AwayFromZero);
+
+                if (0 < cas && cas <= 1) cas = 1;   //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+
+                cass = VB * varCass / 100;
+                som = VB * varSom / 100;
+
+                if (0 < cass && cass <= 1)          //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+                    cass = 1;
+                else
+                    cass = MathExt.Round(VB * varCass / 100, MidpointRounding.AwayFromZero);
+
+                if (0 < som && som <= 1)            //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+                    som = 1;
+                else
+                    som = MathExt.Round(VB * varSom / 100, MidpointRounding.AwayFromZero);
+
+                decimal taxe = cas + cass + som;
+
+                decimal ded = varDed;
+
+                //Florin 2019.12.19 - nu se mai foloseste, s-a modificat, doar daca F73013 <> 0 se mai foloseste
+                //if (1001 <= VB && VB <= 3000)
+                //{
+                //    //ded = Math.Round((varDed * (1 - (VB - 1000) / 2000)), 0);
+                //    ded = (varDed * (1 - (VB - 1000) / 2000));
+                //    ded = Convert.ToDecimal(Math.Ceiling(Convert.ToDouble(ded / 10)) * 10);
+                //}
+
+                decimal imp = MathExt.Round(varImp / 100 * (VB - taxe - ded), MidpointRounding.AwayFromZero);
+                if (imp < 0) imp = 0;
+
+                tmpSN = MathExt.Round((VB - imp - taxe), MidpointRounding.AwayFromZero);
+                tmpRezultat = "CAS=" + cas + ";CASS=" + cass + ";Deducere=" + ded + ";Impozit=" + imp;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "DamiValDeducere");
+            }
+
+            SN = tmpSN;
+            rezultat = tmpRezultat;
+
+        }
+
+        //Florin 2020.01.22
+        public static string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrMinute, int tip)
+        {
+            //tip
+            //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
+            //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
+
+
+            string msg = "";
+
+            try
+            {
+                //calculam norma
+                string strSql = "SELECT Norma FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
+                if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
+                int norma = Convert.ToInt32(General.ExecutaScalar(strSql, null));
+
+                int sumaPtj = 0;
+                if (tip == 1)
+                {
+                    //absentele din pontaj care intra in suma de ore
+                    string sqlOre = @"SELECT ' + COALESCE(' + OreInVal + ',0)'  FROM Ptj_tblAbsente WHERE COALESCE(VerificareNrMaxOre,0) = 1 FOR XML PATH ('')";
+                    if (Constante.tipBD == 2) sqlOre = @"SELECT LISTAGG('COALESCE(' || ""OreInVal"" || ')', ' + ') WITHIN GROUP (ORDER BY ""OreInVal"") FROM ""Ptj_tblAbsente"" WHERE COALESCE(VerificareNrMaxOre,0) = 1";
+                    string strVal = (General.ExecutaScalar(sqlOre, null) ?? "").ToString();
+                    if (Constante.tipBD == 1) strVal = strVal.Substring(3);
+                    if (strVal != "") sumaPtj = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM({strVal}), 0) FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(dtInc.Date)}", null));
+                }
+
+                //suma de ore din Cereri
+                int sumaCere = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) FROM ""Ptj_Cereri"" WHERE F10003={f10003} AND ""DataInceput"" = {General.ToDataUniv(dtInc.Date)} AND ""IdStare"" IN (1,2)", null));
+                if (((sumaCere * 60) + sumaPtj + nrMinute) > (norma * 60))
+                {
+                    msg = "Totalul de ore depaseste norma pe aceasta zi";
+                    return msg;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, "General", "VerificareDepasireNorma");
+            }
+
+            return msg;
         }
 
 

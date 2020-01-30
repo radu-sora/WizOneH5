@@ -211,6 +211,7 @@ namespace WizOne.Personal
                 if (Dami.ValoareParam("ValidariPersonal") == "1")
                 {
                     string mesaj = "", mesajDI = "", mesajDA = "", mesajStr = "", mesajAdr = "", mesajDoc = "";
+                    string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
 
                     if (ds.Tables[0].Rows[0]["F10017"] == null || ds.Tables[0].Rows[0]["F10017"].ToString().Length <= 0)
                         mesaj += " - CNP/CUI" + Environment.NewLine;
@@ -243,7 +244,7 @@ namespace WizOne.Personal
                         if ((ds.Tables[0].Rows[0]["F100929"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100929"].ToString()) == 0) && (ds.Tables[0].Rows[0]["F100934"] == null || ds.Tables[0].Rows[0]["F100934"].ToString().Length <= 0 || Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()) == new DateTime(2100, 1, 1)))
                             mesaj += " - la data" + Environment.NewLine;
                     }
-                    if (ds.Tables[0].Rows[0]["F100699"] == null || ds.Tables[0].Rows[0]["F100699"].ToString().Length <= 0 || Convert.ToDouble(ds.Tables[0].Rows[0]["F100699"].ToString()) == 0.0)
+                    if (ds.Tables[0].Rows[0][salariu] == null || ds.Tables[0].Rows[0][salariu].ToString().Length <= 0 || Convert.ToDouble(ds.Tables[0].Rows[0][salariu].ToString()) == 0.0)
                         mesaj += " - salariu" + Environment.NewLine;
                     if (ds.Tables[0].Rows[0]["F10010"] == null || ds.Tables[0].Rows[0]["F10010"].ToString().Length <= 0)
                         mesaj += " - tip angajat" + Environment.NewLine;
@@ -479,47 +480,51 @@ namespace WizOne.Personal
                     int tip_pass = 0;
                     tip_pass = Convert.ToInt32(Dami.ValoareParam("Parola_creare_user", "0"));
 
-                    string pass = General.Nz(ds.Tables[1].Rows[0]["F10017"],"").ToString();
-                    ProceseSec.CriptDecript cls = new ProceseSec.CriptDecript();
+                    int creareUtilizator = (Session["MP_CreareUtilizator"] as int? ?? 0);
 
-                    switch (tip_pass)
-                    {
-                        case 0:
-                            //parola este cnp-ul
-                            break;
-                        case 1:
-                            if (ds.Tables[1].Rows[0]["F10017"].ToString().Length >= 4)
-                                pass = ds.Tables[1].Rows[0]["F10017"].ToString().Substring(ds.Tables[1].Rows[0]["F10017"].ToString().Length - 4);
-                            break;
-                        case 2:             //parola este ultimele 6 caractere din CNP
-                            if (pass.Length >= 6)
-                                pass = pass.Substring(pass.Length - 6);
-;                            break;
-                        default:
-                            //parola este cnp-ul
-                            break;
-                    }
+                    if (creareUtilizator == 1)
+                    {//Radu 05.12.2019 - crearea utilizatorului se va face numai daca a fost bifata optiunea din popup Sablon
+                        string pass = General.Nz(ds.Tables[1].Rows[0]["F10017"], "").ToString();
+                        ProceseSec.CriptDecript cls = new ProceseSec.CriptDecript();
 
-                    if (pass == "") pass = "0";
-                    string userNume = "";
-                    if (General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString() != "" || General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString() != "")
-                        userNume = General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString().Replace("-","").Replace(" ","") + "." + General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString().Replace("-", "").Replace(" ", "");
+                        switch (tip_pass)
+                        {
+                            case 0:
+                                //parola este cnp-ul
+                                break;
+                            case 1:
+                                if (ds.Tables[1].Rows[0]["F10017"].ToString().Length >= 4)
+                                    pass = ds.Tables[1].Rows[0]["F10017"].ToString().Substring(ds.Tables[1].Rows[0]["F10017"].ToString().Length - 4);
+                                break;
+                            case 2:             //parola este ultimele 6 caractere din CNP
+                                if (pass.Length >= 6)
+                                    pass = pass.Substring(pass.Length - 6);
+                                break;
+                            default:
+                                //parola este cnp-ul
+                                break;
+                        }
 
-                    //daca numele de utilizator exista, adaugam un 2 in coada
-                    if (Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM USERS WHERE F70104=@1", new object[] { userNume })) != 0)
-                        userNume += "2";
+                        if (pass == "") pass = "0";
+                        string userNume = "";
+                        if (General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString() != "" || General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString() != "")
+                            userNume = General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString().Replace("-", "").Replace(" ", "") + "." + General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString().Replace("-", "").Replace(" ", "");
 
-                    //Radu 29.10.2019 - se scoate INSERT-ul in relGrupUser2
-                    //General.ExecutaNonQuery($@"
-                    //    BEGIN
-                    //        INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003, USER_NO, TIME) VALUES(701, (SELECT MAX(COALESCE(F70102,0)) + 1 FROM USERS), @1, @2, @3, @4, {General.CurrentDate()})
-                    //        INSERT INTO ""relGrupUser2""(""IdGrup"", ""IdUser"") VALUES(11, (SELECT MAX(COALESCE(F70102,1)) FROM USERS));
-                    //    END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
-                    General.ExecutaNonQuery($@"
+                        //daca numele de utilizator exista, adaugam un 2 in coada
+                        if (Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM USERS WHERE F70104=@1", new object[] { userNume })) != 0)
+                            userNume += "2";
+
+                        //Radu 29.10.2019 - se scoate INSERT-ul in relGrupUser2
+                        //General.ExecutaNonQuery($@"
+                        //    BEGIN
+                        //        INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003, USER_NO, TIME) VALUES(701, (SELECT MAX(COALESCE(F70102,0)) + 1 FROM USERS), @1, @2, @3, @4, {General.CurrentDate()})
+                        //        INSERT INTO ""relGrupUser2""(""IdGrup"", ""IdUser"") VALUES(11, (SELECT MAX(COALESCE(F70102,1)) FROM USERS));
+                        //    END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
+                        General.ExecutaNonQuery($@"
                         BEGIN
                             INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003, USER_NO, TIME) VALUES(701, (SELECT MAX(COALESCE(F70102,0)) + 1 FROM USERS), @1, @2, @3, @4, {General.CurrentDate()})                            
                         END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
-
+                    }
 
                     #region OLD
 
@@ -1169,6 +1174,7 @@ namespace WizOne.Personal
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
                 string[] tabs = { "DateIdentificare", "Contract", "DateGenerale", "Detasari", "Diverse", "Documente", "Studii", "Banca" };
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
 
                 //DateIdentificare
                 #region DateIdentificare
@@ -1201,7 +1207,7 @@ namespace WizOne.Personal
                 lstCtr.Add("cmbExcIncet", "F100929");
                 lstCtr.Add("cmbCASSAngajat", "F1003900");
                 lstCtr.Add("cmbCASSAngajator", "F1003907");
-                lstCtr.Add("txtSalariu", "F100699");
+                lstCtr.Add("txtSalariu", salariu);
                 lstCtr.Add("deDataModifSal", "F100991");
                 lstCtr.Add("cmbCategAng1", "F10061");
                 lstCtr.Add("cmbCategAng2", "F10062");

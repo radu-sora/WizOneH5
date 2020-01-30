@@ -16,6 +16,23 @@
             cmbBirou.SetValue(null);
         }
 
+        function OnBatchEditStartEditing(s, e) {
+            var key = s.GetRowKey(e.visibleIndex);
+            if (typeof s.cp_cellsDrepturi[key] != "undefined" && s.cp_cellsDrepturi[key] != null && s.cp_cellsDrepturi[key] == 0) {
+                e.cancel = true;
+            }
+        }
+
+        function OnEndCallback(s, e) {
+            if (s.cpAlertMessage != null) {
+                swal({
+                    title: "", text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                s.cpAlertMessage = null;
+            }
+        }
+
     </script>
 </asp:Content>
 
@@ -144,11 +161,11 @@
 
                 <br />
 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" >
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" OnDataBound="grDate_DataBound" >
                     <SettingsBehavior ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" ShowFilterRow="True"  ShowFilterRowMenu="True" ShowFooter="True" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-
+                    <ClientSideEvents BatchEditStartEditing="function(s, e) { OnBatchEditStartEditing(s,e); }" EndCallback="function(s, e) { OnEndCallback(s,e); }" ContextMenu="ctx"/>
                     <Columns>
 
                         <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" ShowInCustomizationForm="false" FixedStyle="Left" Width="80px" VisibleIndex="0" />

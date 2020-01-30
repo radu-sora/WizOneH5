@@ -112,6 +112,7 @@ namespace WizOne.Personal
             ASPxComboBox cmbTipNorma = Contract_DataList.Items[0].FindControl("cmbTipNorma") as ASPxComboBox;
             ASPxComboBox cmbIntRepTimpMunca = Contract_DataList.Items[0].FindControl("cmbIntRepTimpMunca") as ASPxComboBox;
             ASPxTextBox txtNrOre = Contract_DataList.Items[0].FindControl("txtNrOre") as ASPxTextBox;
+            ASPxTextBox txtSalariu = Contract_DataList.Items[0].FindControl("txtSalariu") as ASPxTextBox;
             if (!IsPostBack)
             {
                 //cmbTimpPartial.DataSource = General.GetTimpPartial(Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()));
@@ -157,6 +158,9 @@ namespace WizOne.Personal
                     deLaData.ClientEnabled = false;
                 }
                 CalculZLP();
+
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
+                txtSalariu.Text = ds.Tables[0].Rows[0][salariu].ToString();
 
             }
             else

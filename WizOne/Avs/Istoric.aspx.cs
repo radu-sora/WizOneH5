@@ -252,21 +252,23 @@ namespace WizOne.Avs
 
                 if (lst.Count == 0 || lst.Contains(Convert.ToInt32(Constante.Atribute.Salariul)))
                 {
+                    string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
+                    string salariu_i = salariu.Replace("F100", "F910");
                     if (Constante.tipBD == 1)
                     {
-                        camp100 = "CONVERT(INTEGER, F100699)";
-                        camp910 = "CONVERT(INTEGER, F910699)";
-                        camp910_1 = "CONVERT(INTEGER, a.F910699)";
-                        camp910_2 = "CONVERT(INTEGER, b.F910699)";
+                        camp100 = "CONVERT(INTEGER, " + salariu + ")";
+                        camp910 = "CONVERT(INTEGER, " + salariu_i + ")";
+                        camp910_1 = "CONVERT(INTEGER, a." + salariu_i + ")";
+                        camp910_2 = "CONVERT(INTEGER, b." + salariu_i + ")";
                         campV = "CONVERT(VARCHAR, ValV)";
                         campN = "CONVERT(VARCHAR, ValN)";
                     }
                     else
                     {
-                        camp100 = "CAST(F100699 AS INTEGER)";
-                        camp910 = "CAST(F910699 AS INTEGER)";
-                        camp910_1 = "CAST(a.F910699 AS INTEGER)";
-                        camp910_2 = "CAST(b.F910699 AS INTEGER)";
+                        camp100 = "CAST(" + salariu + " AS INTEGER)";
+                        camp910 = "CAST(" + salariu_i + " AS INTEGER)";
+                        camp910_1 = "CAST(a." + salariu_i + " AS INTEGER)";
+                        camp910_2 = "CAST(b." + salariu_i + " AS INTEGER)";
                         campV = "TO_CHAR(\"ValV\")";
                         campN = "TO_CHAR(\"ValN\")";
                     }

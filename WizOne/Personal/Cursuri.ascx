@@ -12,53 +12,62 @@
                     OnRowInserting="grDateCursuri_RowInserting" OnRowUpdating="grDateCursuri_RowUpdating" OnRowDeleting="grDateCursuri_RowDeleting" OnCommandButtonInitialize="grDateCursuri_CommandButtonInitialize">
                     <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />   
-                    <ClientSideEvents CustomButtonClick="function(s, e) { grDateCursuri_CustomButtonClick(s, e); }" ContextMenu="ctx" /> 
+                    <ClientSideEvents ContextMenu="ctx" /> 
                     <SettingsEditing Mode="Inline" />   
                     <SettingsResizing ColumnResizeMode="Control" Visualization="Live"/>
-
-<SettingsPopup>
-<HeaderFilter MinHeight="140px"></HeaderFilter>
-</SettingsPopup>
+                    <SettingsPopup>
+                        <HeaderFilter MinHeight="140px"></HeaderFilter>
+                    </SettingsPopup>
                     <Columns>
-                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="4" ButtonType="Image" Caption=" "  Name="butoaneGrid"/>
+                        <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true"  ButtonType="Image" Caption=" "  Name="butoaneGrid"/>
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false" ReadOnly="True"/>
-                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" VisibleIndex="0"/>
-                        <dx:GridViewDataComboBoxColumn FieldName="IdTipCurs" Name="IdTipCurs" Caption="Tip curs" Width="100px" VisibleIndex="5" >
+                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" />
+                        <dx:GridViewDataComboBoxColumn FieldName="IdTipCurs" Name="IdTipCurs" Caption="Tip curs" Width="100px"  >
                             <PropertiesComboBox TextField="TipCurs" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume complet"  Width="250px" VisibleIndex="7" />
-                        <dx:GridViewDataTextColumn FieldName="Info" Name="Info" Caption="Info" VisibleIndex="10" Width="150px" >
+                        <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume complet"  Width="250px"  />
+                        <dx:GridViewDataTextColumn FieldName="Info" Name="Info" Caption="Info" Width="150px" >
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" VisibleIndex="1" />						
-                        <dx:GridViewDataDateColumn Caption="TIME" FieldName="TIME" Name="TIME" VisibleIndex="2" Width="100px" Visible="False">
+                        <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput"  Width="100px"  ShowInCustomizationForm="True" >
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                            </PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn Caption="Numar Ore" FieldName="NrOre" Name="NrOre" VisibleIndex="11" Width="100px">
+                        <dx:GridViewDataDateColumn FieldName="DataSfarsit" Name="DataSfarsit" Caption="Data sfarsit"  Width="100px"  ShowInCustomizationForm="True" >
+                            <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
+                            </PropertiesDateEdit>
+                        </dx:GridViewDataDateColumn>
+                        <dx:GridViewDataTextColumn Caption="Numar zile" FieldName="NrZile" Name="NrZile"  Width="70px">
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataComboBoxColumn Caption="Descriere curs" FieldName="IdDescriereCurs" Name="IdDescriereCurs" VisibleIndex="6" Width="250px" ShowInCustomizationForm="True">
+                        <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px"  />						
+                        <dx:GridViewDataDateColumn Caption="TIME" FieldName="TIME" Name="TIME" Width="100px" Visible="False">
+                        </dx:GridViewDataDateColumn>
+                        <dx:GridViewDataTextColumn Caption="Numar Ore" FieldName="NrOre" Name="NrOre"  Width="100px">
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataComboBoxColumn Caption="Descriere curs" FieldName="IdDescriereCurs" Name="IdDescriereCurs"  Width="250px" ShowInCustomizationForm="True">
                             <PropertiesComboBox TextField="DescriereCurs" ValueField="IdAuto" DropDownStyle="DropDown" ValueType="System.Int32">
                             </PropertiesComboBox>
                         </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn Caption="Nume furnizor" FieldName="NumeFurnizor" Name="NumeFurnizor" VisibleIndex="8" Width="100px" ShowInCustomizationForm="True">
+                        <dx:GridViewDataTextColumn Caption="Nume furnizor" FieldName="NumeFurnizor" Name="NumeFurnizor" Width="100px" ShowInCustomizationForm="True">
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="TemaCurs" Name="TemaCurs" Caption="Tema curs"  Width="100px" VisibleIndex="9" ShowInCustomizationForm="True" >
+                        <dx:GridViewDataTextColumn FieldName="TemaCurs" Name="TemaCurs" Caption="Tema curs"  Width="100px"  ShowInCustomizationForm="True" >
                             <PropertiesTextEdit EnableFocusedStyle="False">
                             </PropertiesTextEdit>
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataDateColumn FieldName="DataCurs" Name="DataCurs" Caption="Data curs"  Width="100px" VisibleIndex="12" ShowInCustomizationForm="True" >
+                        <dx:GridViewDataDateColumn FieldName="DataCurs" Name="DataCurs" Caption="Data curs"  Width="100px" ShowInCustomizationForm="True" >
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
                             </PropertiesDateEdit>
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn Caption="Buget" FieldName="Buget" Name="Buget" VisibleIndex="13" Width="100px" ShowInCustomizationForm="True">
+                        <dx:GridViewDataTextColumn Caption="Buget" FieldName="Buget" Name="Buget" Width="100px" ShowInCustomizationForm="True">
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn Caption="Perioada amortizare" FieldName="PerioadaAmortizare" Name="PerioadaAmortizare" VisibleIndex="14" Width="100px" ShowInCustomizationForm="True">
+                        <dx:GridViewDataTextColumn Caption="Perioada amortizare" FieldName="PerioadaAmortizare" Name="PerioadaAmortizare"  Width="100px" ShowInCustomizationForm="True">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataDateColumn Caption="Data Expirare Autorizare" FieldName="AutorizareExpirare" Name="AutorizareExpirare" VisibleIndex="15" Width="100px" ShowInCustomizationForm="True">
+                        <dx:GridViewDataDateColumn Caption="Data Expirare Autorizare" FieldName="AutorizareExpirare" Name="AutorizareExpirare"  Width="100px" ShowInCustomizationForm="True">
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy">
                             </PropertiesDateEdit>
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataDateColumn>
-                        <dx:GridViewDataTextColumn Caption="Modificabil" FieldName="Modificabil" Name="Modificabil" Visible="False" VisibleIndex="3">
+                        <dx:GridViewDataTextColumn Caption="Modificabil" FieldName="Modificabil" Name="Modificabil" Visible="False" >
                         </dx:GridViewDataTextColumn>
                     </Columns>
                     <SettingsCommandButton>

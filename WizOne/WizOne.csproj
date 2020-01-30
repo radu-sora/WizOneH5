@@ -201,9 +201,8 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="FunctiiCeasuri, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\TEMP\New folder (20)\ProceseCeasuri\ProceseCeasuri\bin\Debug\FunctiiCeasuri.dll</HintPath>
+    <Reference Include="FunctiiCeasuri">
+      <HintPath>..\Artifacts\FunctiiCeasuri.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -228,10 +227,10 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\packages\Oracle.ManagedDataAccess.19.3.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess.EntityFramework, Version=6.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\packages\Oracle.ManagedDataAccess.EntityFramework.19.3.0\lib\net45\Oracle.ManagedDataAccess.EntityFramework.dll</HintPath>
+      <HintPath>..\packages\Oracle.ManagedDataAccess.EntityFramework.19.6.0\lib\net45\Oracle.ManagedDataAccess.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="ProceseSec, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -791,6 +790,7 @@
     <Content Include="Organigrama\PosturiValidare.aspx" />
     <Content Include="Pagini\ActeAditionale.aspx" />
     <Content Include="Pagini\ActualizareDate.aspx" />
+    <Content Include="Pagini\CalculVenit.aspx" />
     <Content Include="Pagini\Captcha.aspx" />
     <Content Include="Pagini\CodConfirmare.aspx" />
     <Content Include="Pagini\Delegari.aspx" />
@@ -812,6 +812,7 @@
     <Content Include="Personal\Componente.ascx" />
     <Content Include="Personal\Atestate.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
+    <Content Include="Personal\ListaDocumente.aspx" />
     <Content Include="Personal\Sporuri.ascx" />
     <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\Tarife.ascx" />
@@ -1558,6 +1559,13 @@
     <Compile Include="Pagini\ActualizareDate.aspx.designer.cs">
       <DependentUpon>ActualizareDate.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pagini\CalculVenit.aspx.cs">
+      <DependentUpon>CalculVenit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\CalculVenit.aspx.designer.cs">
+      <DependentUpon>CalculVenit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pagini\Captcha.aspx.cs">
       <DependentUpon>Captcha.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1704,6 +1712,13 @@
     </Compile>
     <Compile Include="Personal\LipsaNecesar.ascx.designer.cs">
       <DependentUpon>LipsaNecesar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\ListaDocumente.aspx.cs">
+      <DependentUpon>ListaDocumente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\ListaDocumente.aspx.designer.cs">
+      <DependentUpon>ListaDocumente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Sporuri.ascx.cs">
       <DependentUpon>Sporuri.ascx</DependentUpon>

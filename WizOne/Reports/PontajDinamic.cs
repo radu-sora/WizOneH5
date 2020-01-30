@@ -33,7 +33,7 @@ namespace WizOne.Reports
             this.ExportOptions.Xls.TextExportMode = DevExpress.XtraPrinting.TextExportMode.Value;
             this.ExportOptions.Xlsx.TextExportMode = DevExpress.XtraPrinting.TextExportMode.Value;
 
-            TopMargin.HeightF = 149.25f;
+            TopMargin.HeightF = 169.25f;
 
         }
 
@@ -61,9 +61,9 @@ namespace WizOne.Reports
                 {
                     try
                     {
-                        dt = General.IncarcaDT(General.Nz(HttpContext.Current.Session["PrintDnata"],"").ToString(), null);
+                        dt = General.IncarcaDT(General.Nz(HttpContext.Current.Session["PrintDnata"], "").ToString(), null);
                     }
-                    catch (Exception){}
+                    catch (Exception) { }
                 }
                 else
                     dt = HttpContext.Current.Session["InformatiaCurenta"] as DataTable;
@@ -151,19 +151,20 @@ namespace WizOne.Reports
 
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["TextAfisare"].ToString() + " " + strZiua;
-                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));                          
+                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
                                 break;
                             case 3:                     //semnatura
                                 act = true;
 
                                 if (lblSemnatura.Text != "") lblSemnatura.Text += "\n\r";
                                 lblSemnatura.Text += dtPrint.Rows[k]["Camp"].ToString();
-                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));                        
+                                lblSemnatura.Font = new Font("Calibri", (float)(Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString())));
                                 break;
                             case 4:                     //antet
                                 string txt = "";
 
                                 if (struc != "" && struc != ";") txt += struc + "\n\r";
+                                else txt += " \n\r";
                                 string stare = DamiStareFornetii(dt);
                                 if (stare != "") txt += Dami.TraduCuvant("Stare") + " - " + stare + "\n\r";
                                 txt += Dami.TraduCuvant("Nume Manager") + " \n\r";
@@ -171,7 +172,7 @@ namespace WizOne.Reports
 
                                 lblAntet.Text = txt;
                                 //lblAntet.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
-                                lblAntet.Font = new Font("Calibri", 10);                         
+                                lblAntet.Font = new Font("Calibri", 10);
                                 break;
                             default:                    //restul
                                 lbl = CreazaCamp(dtPrint.Rows[k]["TextAfisare"].ToString(), pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()));
@@ -183,7 +184,7 @@ namespace WizOne.Reports
                                 Detail.Controls.Add(col);
 
                                 string cmp = dtPrint.Rows[k]["Camp"].ToString();
-                                if ((cmp.Length == 2 || cmp.Length == 3) && cmp.Substring(0,1) == "F" && General.IsNumeric(cmp.Replace("F","")))
+                                if ((cmp.Length == 2 || cmp.Length == 3) && cmp.Substring(0, 1) == "F" && General.IsNumeric(cmp.Replace("F", "")))
                                 {
                                     //col.Text = "0";
                                     //col.DataBindings.Add("Text", this.DataSource, cmp);
@@ -193,10 +194,10 @@ namespace WizOne.Reports
                                     col.XlsxFormatString = "#,##0";
                                 }
 
-                                col.WordWrap = true;                         
-                                col.CanGrow = false;                              
+                                col.WordWrap = true;
+                                col.CanGrow = false;
                                 col.TextAlignment = TextAlignment.MiddleLeft;
-                                
+
 
                                 pozX = pozX + lbl.WidthF;
                                 if (pozX >= this.PageWidth) this.PageWidth = (int)pozX;
@@ -210,16 +211,16 @@ namespace WizOne.Reports
                 if (act)
                 {
                     lblSemnatura.LocationF = new PointF(0, 100);
-                    lblSemnatura.HeightF += 15;                
+                    lblSemnatura.HeightF += 15;
                 }
 
 
                 this.PageWidth += margine;
                 lblPagina.WidthF = this.PageWidth;
-                lblSemnatura.WidthF = this.PageWidth; 
+                lblSemnatura.WidthF = this.PageWidth;
                 lblTitlu.WidthF = this.PageWidth;
                 lblPerioada.WidthF = this.PageWidth;
-            
+
                 this.DataSource = dt;
             }
             catch (Exception ex)

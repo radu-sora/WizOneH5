@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
@@ -26,8 +27,12 @@ namespace WizOne.Pontaj
             {
                 if (!IsPostBack)
                 {
-                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
-                                                        FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.""Coloana"" = AF.""Denumire""
+                    //Radu 28.11.2019 - se inlocuieste Ptj_AliasF cu Ptj_tblAdmin
+                    //DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
+                    //                                    FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.""Coloana"" = AF.""Denumire""
+                    //                                    ORDER BY CS.""Ordine""  ", null);
+                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.""Alias"",CS.""Coloana"") ""Caption"",  coalesce(af.""AliasToolTip"", coalesce(AF.""Alias"",CS.""Coloana"")) ""ToolTip"" 
+                                                        FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_tblFormuleCumulat"" AF ON CS.""Coloana"" = AF.""Coloana""
                                                         ORDER BY CS.""Ordine""  ", null);
 
                     for (int i = 0; i < dt.Rows.Count; i++)
@@ -36,6 +41,7 @@ namespace WizOne.Pontaj
                         c.Name = "col" + i;
                         c.FieldName = dt.Rows[i]["Coloana"].ToString();
                         c.Caption = Dami.TraduCuvant(dt.Rows[i]["Caption"].ToString());
+                        c.ToolTip = Dami.TraduCuvant(dt.Rows[i]["ToolTip"].ToString());
                         c.ReadOnly = true;
                         //c.Width = Unit.Pixel(100);
                         c.VisibleIndex = 100 + i;
@@ -80,6 +86,30 @@ namespace WizOne.Pontaj
 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
+
+                //Radu 09.12.2019
+                lblAnLuna.InnerText = Dami.TraduCuvant("Luna/An");
+                lblRol.InnerText = Dami.TraduCuvant("Roluri");
+                lblStare.InnerText = Dami.TraduCuvant("Stare");
+                lblCtr.InnerText = Dami.TraduCuvant("Contract");
+                lblSub.InnerText = Dami.TraduCuvant("Subcomp.");
+                lblFil.InnerText = Dami.TraduCuvant("Filiala");
+                lblSec.InnerText = Dami.TraduCuvant("Sectie");
+                lblDept.InnerText = Dami.TraduCuvant("Dept.");
+                lblSubDept.InnerText = Dami.TraduCuvant("Subdept.");
+                lblBirou.InnerText = Dami.TraduCuvant("Birou");
+
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
+
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
 
                 #endregion
 
@@ -156,11 +186,13 @@ namespace WizOne.Pontaj
             }
         }
 
-
+        //Florin 2019.12.10 - rescrisa
         protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
         {
             try
             {
+                string mesaj = "";
+
                 grDate.CancelEdit();
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
@@ -169,6 +201,35 @@ namespace WizOne.Pontaj
                 for (int x = 0; x < e.UpdateValues.Count; x++)
                 {
                     ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
+
+                    //Florin 2019.12.16 - cream selectul pt validare
+                    string cmp = "";
+                    foreach (DictionaryEntry de in upd.NewValues)
+                    {
+                        if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
+                        {
+                            if (upd.NewValues[de.Key.ToString()] != null)
+                                cmp += "," + Convert.ToDecimal(upd.NewValues[de.Key.ToString()]).ToString().Replace(",",".") + " AS \"" + de.Key.ToString() + "\"";
+                            else
+                                cmp += ", NULL AS \"" + de.Key.ToString() + "\"";
+                        }
+                    }
+                    string strSql = "";
+                    if (cmp != "")
+                        strSql = "SELECT " + upd.NewValues["F10003"] + " AS F10003,  " + txtAnLuna.Date.Year + " AS \"An\", " + txtAnLuna.Date.Month + " AS \"Luna\" " + cmp + General.FromDual();
+
+                    if (strSql != "")
+                    {
+                        string msg = Notif.TrimiteNotificare("Pontaj.PontajCumulat", (int)Constante.TipNotificare.Validare, strSql, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                        if (msg != "" && msg.Substring(0, 1) == "2")
+                        {
+                            mesaj += "Marca " + upd.NewValues["F10003"] + " - " + msg.Substring(2) + Environment.NewLine;
+                            continue;
+                        }
+                        //else
+                        //    mesaj += upd.NewValues["F10003"] + " - proces realizat cu succes" + Environment.NewLine;
+                    }
+
                     object[] keys = new object[] { upd.Keys[0] };
 
                     DataRow row = dt.Rows.Find(keys);
@@ -179,9 +240,13 @@ namespace WizOne.Pontaj
 
                     foreach (DictionaryEntry de in upd.NewValues)
                     {
+                        var ert = de.Key.ToString();
                         if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
                         {
-                            row[de.Key.ToString()] = upd.NewValues[de.Key.ToString()] ?? DBNull.Value;
+                            if (upd.NewValues[de.Key.ToString()] != null)
+                                row[de.Key.ToString()] = Convert.ToDecimal(upd.NewValues[de.Key.ToString()]);
+                            else
+                                row[de.Key.ToString()] = DBNull.Value;
                         }
                     }
 
@@ -192,18 +257,26 @@ namespace WizOne.Pontaj
                 {
                     General.SalveazaDate(dt, "Ptj_Cumulat");
 
+                    string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+
                     string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < arr.Length; i++)
                     {
                         General.CalculFormuleCumulat(Convert.ToInt32(arr[i]), txtAnLuna.Date.Year, txtAnLuna.Date.Month);
+
+                        Notif.TrimiteNotificare("Pontaj.PontajCumulat", (int)Constante.TipNotificare.Notificare, @"SELECT * FROM ""Ptj_Cumulat"" WHERE F10003= " + Convert.ToInt32(arr[i]) + @" AND ""An""=" + txtAnLuna.Date.Year + @" AND ""Luna""=" + txtAnLuna.Date.Month, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99) );
                     }
 
-                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+                    Session["InformatiaCurenta"] = dt;
                 }
                 else
-                    MessageBox.Show("Nu exista modificari", MessageBox.icoInfo);
-
-
+                {
+                    if (mesaj != "")
+                        grDate.JSProperties["cpAlertMessage"] = mesaj;
+                    else
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista modificari");
+                }
+                    
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -212,6 +285,63 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        //protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        //{
+        //    try
+        //    {
+        //        grDate.CancelEdit();
+
+        //        DataTable dt = Session["InformatiaCurenta"] as DataTable;
+        //        string ids = "";
+
+        //        for (int x = 0; x < e.UpdateValues.Count; x++)
+        //        {
+        //            ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
+        //            object[] keys = new object[] { upd.Keys[0] };
+
+        //            DataRow row = dt.Rows.Find(keys);
+        //            if (row == null) continue;
+
+        //            row["USER_NO"] = Session["UserId"];
+        //            row["TIME"] = DateTime.Now;
+
+        //            foreach (DictionaryEntry de in upd.NewValues)
+        //            {
+        //                if (Constante.lstFuri.IndexOf(de.Key.ToString() + ";") >= 0)
+        //                {
+        //                    row[de.Key.ToString()] = upd.NewValues[de.Key.ToString()] ?? DBNull.Value;
+        //                }
+        //            }
+
+        //            ids += upd.NewValues["F10003"] + ";";
+        //        }
+
+        //        if (dt.GetChanges() != null && ((DataTable)dt.GetChanges()).Rows.Count > 0)
+        //        {
+        //            General.SalveazaDate(dt, "Ptj_Cumulat");
+
+        //            string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+        //            for (int i = 0; i < arr.Length; i++)
+        //            {
+        //                General.CalculFormuleCumulat(Convert.ToInt32(arr[i]), txtAnLuna.Date.Year, txtAnLuna.Date.Month);
+        //            }
+
+        //            MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+        //        }
+        //        else
+        //            MessageBox.Show("Nu exista modificari", MessageBox.icoInfo);
+
+
+        //        e.Handled = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
         protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
@@ -306,11 +436,18 @@ namespace WizOne.Pontaj
 
                 strFiltru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), an, luna, 0, -99, Convert.ToInt32(cmbRol.Value ?? -99), 0, Convert.ToInt32(cmbDept.Value ?? -99), -99);
 
-                strSql = $@"SELECT * FROM ""Ptj_Cumulat"" C
-                            INNER JOIN F100 A ON C.F10003=A.F10003
-                            INNER JOIN F1001 B ON A.F10003=B.F10003
-                            LEFT JOIN (SELECT X.F10003, MAX(X.""IdContract"") AS ""IdContract"" FROM ""F100Contracte"" X WHERE {General.TruncateDate("X.DataInceput")} <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= {General.TruncateDate("X.DataSfarsit")} GROUP BY X.F10003) D ON A.F10003=D.F10003
-                            WHERE 1=1 {strFiltru}";
+                //Florin 2019.12.09 - adaugam drepturile
+                int idRol = Convert.ToInt32(General.Nz(cmbRol.Value, 1));
+                strSql = $@"SELECT C.*, 
+                        CASE WHEN ({idRol} = 0 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 4)) OR 
+					    ({idRol} = 1 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 4)) OR 
+					    ({idRol} = 2 AND (C.""IdStare"" = 1 OR C.""IdStare"" = 2 OR C.""IdStare"" = 4 OR C.""IdStare"" = 6)) OR 
+					    {idRol} = 3 THEN 1 ELSE 0 END ""DrepturiModif""
+                        FROM ""Ptj_Cumulat"" C
+                        INNER JOIN F100 A ON C.F10003=A.F10003
+                        INNER JOIN F1001 B ON A.F10003=B.F10003
+                        LEFT JOIN (SELECT X.F10003, MAX(X.""IdContract"") AS ""IdContract"" FROM ""F100Contracte"" X WHERE {General.TruncateDate("X.DataInceput")} <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= {General.TruncateDate("X.DataSfarsit")} GROUP BY X.F10003) D ON A.F10003=D.F10003
+                        WHERE 1=1 {strFiltru}";
             }
             catch (Exception ex)
             {
@@ -321,5 +458,26 @@ namespace WizOne.Pontaj
             return strSql;
         }
 
+        protected void grDate_DataBound(object sender, EventArgs e)
+        {
+            try
+            {
+                var lstDrepturi = new Dictionary<int, int>();
+
+                var grid = sender as ASPxGridView;
+                for (int i = grid.VisibleStartIndex; i < grid.VisibleStartIndex + grid.SettingsPager.PageSize; i++)
+                {
+                    var rowValues = grid.GetRowValues(i, new string[] { "IdAuto", "DrepturiModif" }) as object[];
+                    lstDrepturi.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), Convert.ToInt32(rowValues[1] ?? 0));
+                }
+
+                grid.JSProperties["cp_cellsDrepturi"] = lstDrepturi;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

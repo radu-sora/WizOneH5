@@ -73,6 +73,10 @@ namespace WizOne.Pontaj
                     catch (Exception) { }
                 }
 
+                //Radu 13.12.2019
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
+
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
@@ -294,7 +298,6 @@ namespace WizOne.Pontaj
             }
         }
 
-
         public string InitializarePontajSpecial(DateTime dataStart, DateTime dataSf, int nrZile, DataRow sablon, List<int> lstMarci)
         {
             string msg = "";
@@ -305,7 +308,7 @@ namespace WizOne.Pontaj
             string dtSf = General.ToDataUniv(dataSf.Date.Year, dataSf.Date.Month, dataSf.Date.Day);
             DataTable dtHolidays = General.IncarcaDT("SELECT * FROM HOLIDAYS", null);
 
-            DataTable dtAbs = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" = 'COP'", null);            
+            DataTable dtAbs = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" = 'COP'", null);
             int idAbsenta = -1;
             if (dtAbs != null && dtAbs.Rows.Count > 0)
                 idAbsenta = Convert.ToInt32(dtAbs.Rows[0]["Id"].ToString());
@@ -326,7 +329,7 @@ namespace WizOne.Pontaj
                 string sqlSDSL = "";
                 string cond = "";
                 List<DateTime> lstInit = new List<DateTime>();
-                
+
                 for (int i = 1; i <= nrZile; i++)
                 {
                     string data = "";
@@ -383,7 +386,7 @@ namespace WizOne.Pontaj
                                 break;
                         }
 
-                        if (nrT > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
+                        if (nr > 0 || zi.DayOfWeek == DayOfWeek.Saturday || zi.DayOfWeek == DayOfWeek.Sunday)
                         {
                             lstMarciSDSL.Clear();
                             lista1 = "";
@@ -398,7 +401,7 @@ namespace WizOne.Pontaj
                                             lstMarciSDSL.Add(marca);
                                         if (chkD.Checked && zi.DayOfWeek == DayOfWeek.Sunday)
                                             lstMarciSDSL.Add(marca);
-                                        if (chkSL.Checked && nrT > 0)
+                                        if (chkSL.Checked && nr > 0)
                                             lstMarciSDSL.Add(marca);
                                     }
                                     else
@@ -423,7 +426,7 @@ namespace WizOne.Pontaj
 
                                 lstInit.Add(zi);
                                 sqlSDSL += "OR (\"Ziua\" = " + data1 + " AND F10003 IN (" + lista1 + ")) ";
-                            
+
                             }
 
                         }
@@ -439,7 +442,7 @@ namespace WizOne.Pontaj
 
                         ziuaPrec = zi;
                     }
-                                       
+
 
                     if (Constante.tipBD == 1)
                         cond = " ISNUMERIC(\"ValStr\") = 1 ";
@@ -447,7 +450,7 @@ namespace WizOne.Pontaj
                         cond = " TRIM(TRANSLATE(\"ValStr\",'0123456789', ' ')) is null ";
 
                     string sql = "";
-                    string oraIn = "", oraOut = "";
+                    string oraIn = "", oraOut = "", firstIn = "", lastOut = "";
 
                     if (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0)
                     {
@@ -455,23 +458,31 @@ namespace WizOne.Pontaj
                         {
                             oraIn = ", \"In1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
                             oraOut = ", \"Out1\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+                            firstIn = ", \"FirstInPaid\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraintrare from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+                            lastOut = ", \"LastOutPaid\" =convert(datetime, convert(varchar, Ziua, 111) + ' ' + convert(varchar, (select oraiesire from ptj_programe where id = " + sablon["IdProgram" + i].ToString() + "), 108), 120)";
+
                         }
                         else
                         {
                             oraIn = ", \"In1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
-                            oraOut = ", \"Out1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            oraOut = ", \"Out1\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIesire\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            firstIn = ", \"FirstInPaid\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIntrare\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+                            lastOut = ", \"LastOutPaid\" =to_date(to_char(\"Ziua\", 'dd/mm/yyyy') || ' ' || to_char((select \"OraIesire\" from \"Ptj_Programe\" WHERE \"Id\"=" + sablon["IdProgram" + i].ToString() + "), 'hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss') ";
+
                         }
                     }
                     else
                     {
                         oraIn = ", \"In1\" = NULL ";
                         oraOut = ", \"Out1\" = NULL ";
+                        firstIn = ", \"FirstInPaid\" = NULL ";
+                        lastOut = ", \"LastOutPaid\" = NULL ";
                     }
 
                     string sirVal = "";
                     List<string> listaVal = new List<string>();
                     if (sablon["ValZiua" + i] != null && sablon["ValZiua" + i].ToString().Length > 0)
-                    {                    
+                    {
                         string[] param = sablon["ValZiua" + i].ToString().Split(';');
                         for (int k = 0; k < param.Length; k++)
                         {
@@ -493,12 +504,12 @@ namespace WizOne.Pontaj
                     {
                         data = data.Substring(1);
 
-                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " + oraIn + oraOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " + oraIn + oraOut + firstIn + lastOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
                     }
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" + oraIn + oraOut + sirVal + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" + oraIn + oraOut + firstIn + lastOut + sirVal + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
                     }
                     else
                         sqlFin += sql + ";";

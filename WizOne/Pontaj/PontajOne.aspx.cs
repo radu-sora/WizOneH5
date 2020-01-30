@@ -43,7 +43,7 @@ namespace WizOne.Pontaj
 
                     CreazaGrid();
 
-                    DataTable dtVal = General.IncarcaDT(@"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" ", null);
+                    DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
                 }
 
@@ -114,6 +114,10 @@ namespace WizOne.Pontaj
                     }
                     catch (Exception) { }
                 }
+
+                //Radu 13.12.2019
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 #endregion
 
@@ -1557,6 +1561,7 @@ namespace WizOne.Pontaj
                                 }
                                 break;
                             case 8:                             //Time
+                            case 9:                             //Time - fara spin buttons
                                 {
                                     GridViewDataTimeEditColumn c = new GridViewDataTimeEditColumn();
                                     c.Name = colName;
@@ -1576,6 +1581,10 @@ namespace WizOne.Pontaj
 
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+                                    //Florin 2019.12.11
+                                    if (tipCol == 9)
+                                        c.PropertiesTimeEdit.SpinButtons.ShowIncrementButtons = false;
 
                                     grDate.Columns.Add(c);
                                 }

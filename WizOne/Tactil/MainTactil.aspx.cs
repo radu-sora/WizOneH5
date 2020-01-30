@@ -35,7 +35,7 @@ namespace WizOne.Tactil
                     spnLuna.Value = Convert.ToInt32(Dami.ValoareParam("LunaLucru"));
                     spnAnul.Value = Convert.ToInt32(Dami.ValoareParam("AnLucru"));
 
-                    DataTable dt = General.IncarcaDT("SELECT * FROM \"tblConfigTactil\" WHERE LOWER(\"Nume\") = 'fluturas'", null);
+                    DataTable dt = General.IncarcaDT("SELECT * FROM \"tblConfigTactil\" WHERE LOWER(\"Nume\") = 'fluturas' ORDER BY \"Ordine\"", null);
                     if (dt.Rows[0]["IdParam"] != null && dt.Rows[0]["IdParam"].ToString().Length > 0)
                     {
                         Session["FluturasGeneral"] = dt.Rows[0]["IdParam"].ToString();

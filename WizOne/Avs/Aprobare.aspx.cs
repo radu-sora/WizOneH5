@@ -634,9 +634,11 @@ namespace WizOne.Avs
                     //Radu 14.11.2019 - verificare norma si salariu
                     if ((Convert.ToInt32(General.Nz(arr[2], 0)) == (int)Constante.Atribute.Norma || Convert.ToInt32(General.Nz(arr[2], 0)) == (int)Constante.Atribute.Salariul) && (tipActiune == 2 || tipActiune == 3))
                     {
+                        string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
+
                         string sql = "select f100.f10003 as Marca, case when f100991 is null or f100991 = convert(datetime, '01/01/2100', 103) then  "
                         + "  convert(datetime, '01/' + convert(varchar, f01012) + '/' + convert(varchar, f01011), 103) "
-                        + " else f100991 end as Data, COALESCE(F100699, 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                        + " else f100991 end as Data, COALESCE(" + salariu + ", 0) as Valoare from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
                         + " union "
                         + " select f70403 as Marca, f70406 as Data, COALESCE(F70407, 0) as Valoare from f704 where f70404 = 1 and f70420 = 0 "
                         + " union "
@@ -644,7 +646,7 @@ namespace WizOne.Avs
                         if (Constante.tipBD == 2)
                             sql = "select f100.f10003 as \"Marca\", case when f100991 is null or f100991 = TO_DATE('01/01/2100', 'dd/mm/yyyy') then  "
                                 + "  TO_DATE('01/' ||  f01012 || '/' || F01011, 'dd/mm/yyyy') "
-                                + " else f100991 end as \"Data\", COALESCE(F100699, 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
+                                + " else f100991 end as \"Data\", COALESCE(" + salariu + ", 0) as \"Valoare\" from f100 left join f1001 on f100.f10003 = f1001.f10003 left join f010 on 1 = 1 "
                                 + " union "
                                 + " select f70403 as \"Marca\", f70406 as \"Data\", COALESCE(F70407, 0) as \"Valoare\" from f704 where f70404 = 1 and f70420 = 0 "
                                 + " union "

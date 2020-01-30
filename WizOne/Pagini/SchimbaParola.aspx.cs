@@ -17,6 +17,12 @@ namespace WizOne.Pagini
         protected void Page_Load(object sender, EventArgs e)
         {
             //Dami.AccesApp();
+            //Radu 06.01.2020
+            if (Session["SchimbaParolaMesaj"] != null)
+            {
+                MessageBox.Show(Session["SchimbaParolaMesaj"].ToString(), MessageBox.icoWarning);
+                Session["SchimbaParolaMesaj"] = null;
+            }
         }
 
         protected void btnOk_Click(object sender, EventArgs e)

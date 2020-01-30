@@ -605,7 +605,7 @@ namespace WizOne.Pagini
                             J.IdAuto AS IdAutoAct,
                             CASE WHEN (SELECT COUNT(*) FROM Atasamente FIS WHERE FIS.IdAuto=J.IdAutoAtasamente) = 0 THEN 0 ELSE 1 END AS AreAtas, ',-1' AS IdAvans,
                             B.F10022, B.F100993, J.IdAutoAtasamente,
-                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.Revisal,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat, 0 AS SporVechime
+                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.Semnat,0) = 1) THEN 1 ELSE 0 END AS CandidatAngajat, 0 AS SporVechime
                             FROM F100 B
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
@@ -688,7 +688,7 @@ namespace WizOne.Pagini
                             J.""IdAuto"" AS ""IdAutoAct"",
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"", ',-1' AS ""IdAvans"",
                             A.F10022, A.F100993, J.""IdAutoAtasamente"",
-                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.""Revisal"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat"", 0 AS ""SporVechime""
+                            CASE WHEN (COALESCE(B.F10025,-99) IN (0,999) AND COALESCE(J.""Semnat"",0) = 1) THEN 1 ELSE 0 END AS ""CandidatAngajat"", 0 AS ""SporVechime""
                             FROM F100 A
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
                             WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
@@ -1800,13 +1800,13 @@ namespace WizOne.Pagini
                         //Florin 2019.12.02 - fortam sa aiba ids, pt ca candidatii se aduc dinamic din F100 si nu sunt inca in Admin_NrActAd
                         if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1)
                         {
-                            if (General.Nz(obj[14], "").ToString() != "")
-                                ids += "," + obj[14];
+                            if (General.Nz(obj[0], "").ToString() != "")
+                                ids += "," + obj[0];
                         }
                         else
                         {
-                            if (General.Nz(obj[0], "").ToString() != "")
-                                ids += "," + obj[0];
+                            if (General.Nz(obj[14], "").ToString() != "")
+                                ids += "," + obj[14];
                         }
                     }
 

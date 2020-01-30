@@ -1389,11 +1389,8 @@ namespace WizOne.Module
                 LEFT JOIN ""Eval_tblCategorie"" ctg ON chest.""CategorieQuiz""=ctg.""Id""
                 LEFT JOIN ""Eval_Perioada"" per ON chest.""Anul"" = per.""IdPerioada""
                 where
-                chest.""Activ"" = 1
-                and rasp.""IdQuiz"" = {5}
+                rasp.""IdQuiz"" = {5}
                 and rasp.""F10003"" = {6}
-                and {2} chest.""DataInceput"") <= {2} {3})
-                and {2} {3}) <= {2} chest.""DataSfarsit"")
                 and {0}(case 
 		                    when dr.""PozitieVizibila"" = 0 then 1
 		                    else dr.""Pozitie""
@@ -1401,8 +1398,12 @@ namespace WizOne.Module
                 and {0}(ist.""IdSuper"", -99)  = {8}
                 and fnume.F10025 in (0, 999)
 
-                and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.F10003 != {10})) ";
+                and (ctg.""Id"" = 0 OR (ctg.""Id"" != 0  and rasp.F10003 != {10})) 
+                {9}";
 
+                //Florin 2020.01.17 - am elminat 2 filtre
+                //chest.""Activ"" = 1
+                //and {2} chest.""DataInceput"") <= {2} {3}) and {2} {3}) <= {2} chest.""DataSfarsit"")
 
                 //Florin 2019.02.01
                 if (idAuto != -99)
@@ -1417,13 +1418,18 @@ namespace WizOne.Module
                 else
                     idUserFiltru = @"ist.""IdUser"" ";
 
-                //Radu 09.07.2018
-                string sqlCoordonator = string.Empty;
-                if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 20)
-                {
-                    sqlCoordonator = @" 	or  ( (ist.""Pozitie"" = 2 and {0} in (select sup.""IdUser"" from ""F100Supervizori"" sup where sup.F10003 in (select users.F10003 FROM users where f70102=ist.""IdUser"") and sup.""IdSuper""  in (1, 4)) )	) ";
-                    sqlCoordonator = string.Format(sqlCoordonator, idUserFiltru);
-                }
+
+                //Florin - 2019.12.12 - comentat pt ca nu se folosea, in loc de sqlCoordonator am folosit filtruSuper (vezi mai jos)
+
+                ////Radu 09.07.2018
+                //string sqlCoordonator = string.Empty;
+                //if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 20)
+                //{
+                //    sqlCoordonator = @" 	or  ( (ist.""Pozitie"" = 2 and {0} in (select sup.""IdUser"" from ""F100Supervizori"" sup where sup.F10003 in (select users.F10003 FROM users where f70102=ist.""IdUser"") and sup.""IdSuper""  in (1, 4)) )	) ";
+                //    sqlCoordonator = string.Format(sqlCoordonator, idUserFiltru);
+                //}
+
+
 
                 string idQuizFiltru = string.Empty;
                 if (idQuiz != -99)
@@ -1472,18 +1478,26 @@ namespace WizOne.Module
                 else
                     conversie = "to_char(";
 
+                //Florin 2019.12.12 - la cererea Pelifilip, daca este intr-unul din grupurile din parametru, atunci aratam toti angajatii din F100Supervizori conform relatiei
+
                 //Florin 2019.01.04
                 //daca este HR vede toate chestionarele
+                string filtruSuper = "";
                 string filtruHR = " LEFT ";
                 string idHR = Dami.ValoareParam("Eval_IDuriRoluriHR", "-99");
                 string sqlHr = $@"SELECT COUNT(""IdUser"") FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR}) GROUP BY ""IdUser"" ";
                 //if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) == 0) filtruHR = " AND ist.\"IdUser\" = " + idUserFiltru;
-                if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) == 0) filtruHR = " INNER ";
+                if (Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlHr, null), 0)) == 0)
+                    filtruHR = " INNER ";
+                else
+                {
+                    filtruSuper = $@" AND rasp.""F10003"" IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={HttpContext.Current.Session["UserId"]} AND ""IdSuper"" IN ({idHR})) ";
+                }
 
                 if (Constante.tipBD == 1) //SQL
-                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, sqlCoordonator, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
+                    strSQL = string.Format(strSQL, "isnull", "+", "convert(date,", "getdate()", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
                 else                      //ORACLE
-                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, sqlCoordonator, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
+                    strSQL = string.Format(strSQL, "nvl", "||", "trunc(", "sysdate", idUserFiltru, idQuizFiltru, F10003Filtru, tipFiltru, rolFiltru, filtruSuper, HttpContext.Current.Session["User_Marca"].ToString(), HttpContext.Current.Session["UserId"].ToString(), filtruHR, conversie);
 
                 //Florin  2018.07.05
                 strSQL = strSQL.Replace("@1", Dami.TraduCuvant("Evaluare angajat"));

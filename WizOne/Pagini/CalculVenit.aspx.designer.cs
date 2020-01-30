@@ -7,13 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Personal
-{
-
-
-    public partial class Lista
-    {
-
+namespace WizOne.Pagini {
+    
+    
+    public partial class CalculVenit {
+        
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -22,16 +20,16 @@ namespace WizOne.Personal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-
+        
         /// <summary>
-        /// btnNew control.
+        /// btnCalcul control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnNew;
-
+        protected global::DevExpress.Web.ASPxButton btnCalcul;
+        
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -40,149 +38,95 @@ namespace WizOne.Personal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-
+        
         /// <summary>
-        /// checkComboBoxStare control.
+        /// pnlCtl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxDropDownEdit checkComboBoxStare;
-
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
+        
         /// <summary>
-        /// btnFiltru control.
+        /// lblAng control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnFiltru;
-
+        protected global::DevExpress.Web.ASPxLabel lblAng;
+        
         /// <summary>
-        /// grDate control.
+        /// lblVenitBrut control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDate;
-
+        protected global::DevExpress.Web.ASPxLabel lblVenitBrut;
+        
         /// <summary>
-        /// btnEdit control.
+        /// lblVenitNet control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnEdit;
-
+        protected global::DevExpress.Web.ASPxLabel lblVenitNet;
+        
         /// <summary>
-        /// btnSterge control.
+        /// cmbAng control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnSterge;
-
+        protected global::DevExpress.Web.ASPxComboBox cmbAng;
+        
         /// <summary>
-        /// btnTransf control.
+        /// txtVenitBrut control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnTransf;
-
+        protected global::DevExpress.Web.ASPxSpinEdit txtVenitBrut;
+        
         /// <summary>
-        /// popUpSablon control.
+        /// txtVenitNet control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl popUpSablon;
-
+        protected global::DevExpress.Web.ASPxSpinEdit txtVenitNet;
+        
         /// <summary>
-        /// Popupcontrolcontentcontrol1 control.
+        /// lblRez control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.PopupControlContentControl Popupcontrolcontentcontrol1;
-
+        protected global::DevExpress.Web.ASPxLabel lblRez;
+        
         /// <summary>
-        /// btnOK control.
+        /// txtRez1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnOK;
-
+        protected global::DevExpress.Web.ASPxLabel txtRez1;
+        
         /// <summary>
-        /// btnCloseSablon control.
+        /// txtRez2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnCloseSablon;
-
-        /// <summary>
-        /// cmbSablon control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbSablon;
-
-        /// <summary>
-        /// chkCandidat control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox chkCandidat;
-
-        /// <summary>
-        /// lblText control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblText;
-
-        /// <summary>
-        /// chkUser control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox chkUser;
-
-        /// <summary>
-        /// dsSablon control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource dsSablon;
-
-        /// <summary>
-        /// ge control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGlobalEvents ge;
+        protected global::DevExpress.Web.ASPxLabel txtRez2;
     }
 }

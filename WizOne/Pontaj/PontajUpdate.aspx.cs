@@ -31,6 +31,17 @@ namespace WizOne.Pontaj
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnAct.Text = Dami.TraduCuvant("btnAct", "Actualizeaza");
 
+                //Radu 09.12.2019
+                lblCtrInc.InnerText = Dami.TraduCuvant("Data Inceput");
+                lblCtrSf.InnerText = Dami.TraduCuvant("Data Sfarsit");
+                lblMarcaInc.InnerText = Dami.TraduCuvant("Marca Inceput");
+                lblMarcaSf.InnerText = Dami.TraduCuvant("Marca Sfarsit");
+                chkCtr.Text = Dami.TraduCuvant("Contract");
+                chkStr.Text = Dami.TraduCuvant("Structura Org.");
+                chkNrm.Text = Dami.TraduCuvant("Norma");
+                chkPerAng.Text = Dami.TraduCuvant("Perioada angajare");
+                chkRecalc.Text = Dami.TraduCuvant("Recalcul totaluri");
+                chkCC.Text = Dami.TraduCuvant("Centrul de cost");
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
@@ -98,72 +109,55 @@ namespace WizOne.Pontaj
                 string act = "";
                 string inn = "";
 
+                ziIn = new DateTime(ziIn.Year, ziIn.Month, ziIn.Day);
+                ziSf = new DateTime(ziSf.Year, ziSf.Month, ziSf.Day);
+
+                string ziInceput = General.ToDataUniv(ziIn.Year, ziIn.Month, 1);
+                string ziSfarsit = General.ToDataUniv(ziSf.Year, ziSf.Month, 99);
+
+                string sqlPrg = "";
+
                 if (Constante.tipBD == 1)
                 {
-                    //Radu 12.02.2019
+                    //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
                     if (chkPerAng == true)
                     {
-                        string ziInceput = General.ToDataUniv(ziIn.Year, ziIn.Month, 1);
-                        string ziSfarsit = General.ToDataUniv(ziSf.Year, ziSf.Month, 99);
+                        string strDel = $@"
+                            BEGIN
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
+                                FROM Ptj_Intrari A
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01';
 
+                                DELETE A
+                                FROM Ptj_Intrari A
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01';
+                            END;";
 
-                        //string strDel = @"DELETE A
-                        //            FROM Ptj_Intrari A
-                        //            INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //            WHERE CONVERT(date,ISNULL(MODIF.DATA, f10023)) >= {0} AND CONVERT(date,ISNULL(MODIF.DATA, f10023)) <> '2100-01-01') B 
-                        //            ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2}";
-
-                        string strDel = @"DELETE A
-                                    FROM Ptj_Intrari A
-                                    INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                    ) B 
-                                    ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2} AND {0} <= A.Ziua AND A.Ziua <= {3} AND CONVERT(date,DATA_PLECARII) <> '2100-01-01'";
-
-                        strDel = string.Format(strDel, ziInceput, angIn, angSf, ziSfarsit);
                         ras = General.ExecutaNonQuery(strDel, null);
 
+                        strDel = $@"
+                            BEGIN
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
+                                FROM Ptj_Intrari A
+                                INNER JOIN(SELECT F10003, F10022 FROM f100 WHERE CONVERT(date, F10022) <> '2100-01-01') B
+                                ON A.F10003 = B.F10003 AND A.Ziua < B.F10022 AND A.F10003 >= {angIn}
+                                AND A.F10003 <= {angSf}
+                                AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit};
 
-                        //strDel = @"DELETE A
-                        //            FROM Ptj_Intrari A
-                        //            INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,f10022) <= {0} AND CONVERT(date,F10022) <> '2100-01-01') B 
-                        //            ON A.F10003=B.F10003 AND A.Ziua< B.F10022 AND A.F10003 >= {1} AND A.F10003 <= {2}";
+                                DELETE A
+                                FROM Ptj_Intrari A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,F10022) <> '2100-01-01') B 
+                                ON A.F10003=B.F10003 AND A.Ziua< B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.Ziua AND A.Ziua <= {ziSfarsit};
+                            END;";
 
-                        strDel = @"DELETE A
-                                    FROM Ptj_Intrari A
-                                    INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE CONVERT(date,F10022) <> '2100-01-01') B 
-                                    ON A.F10003=B.F10003 AND A.Ziua< B.F10022 AND A.F10003 >= {1} AND A.F10003 <= {2} AND {3} <= A.Ziua AND A.Ziua <= {0} ";
-
-                        strDel = string.Format(strDel, ziSfarsit, angIn, angSf, ziInceput);
                         ras = General.ExecutaNonQuery(strDel, null);
                     }
-
-
-                    //Florin 2019.07.15    Rescrisa
-                    //Radu 12.02.2019
-                    //if (chkRecalc == true)
-                    //{
-                    //    int an = ziIn.Year;
-                    //    int luna = ziIn.Month;
-
-                    //    string sql = "SELECT F10003 FROM F100 WHERE F10025 IN (0, 999) AND " + angIn + " <= F10003 AND F10003 <= " + angSf;
-                    //    DataTable dt = General.IncarcaDT(sql, null);
-
-                    //    if (dt != null && dt.Rows.Count > 0)
-                    //    {
-                    //        while (an < ziSf.Year || (an == ziSf.Year && luna <= ziSf.Month))
-                    //        {
-                    //            for (int i = 0; i < dt.Rows.Count; i++)
-                    //                General.CalculFormuleCumulat(Convert.ToInt32(dt.Rows[i][0].ToString()), an, luna);
-                    //            luna++;
-                    //            if (luna > 12)
-                    //            {
-                    //                luna = 1;
-                    //                an++;
-                    //            }
-                    //        }
-                    //    }
-                    //    ras = true;
-                    //}
 
                     if (chkRecalc)
                     {
@@ -202,7 +196,7 @@ namespace WizOne.Pontaj
                                 {5}
                                 WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.Ziua AND A.Ziua <= {3};";
 
-                        if (chkCtr == true) act += ",A.IdContract=(SELECT MAX(B.IdContract) AS IdContract FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CAST(B.DataInceput AS Date) <= CAST(A.Ziua AS Date) AND CAST(A.Ziua AS Date) <= CAST(B.DataSfarsit AS Date))";
+                        if (chkCtr == true) act += ",A.IdContract = CASE WHEN COALESCE(A.ModifProgram,0) = 1 THEN A.IdContract ELSE (SELECT MAX(B.IdContract) AS IdContract FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CAST(B.DataInceput AS Date) <= CAST(A.Ziua AS Date) AND CAST(A.Ziua AS Date) <= CAST(B.DataSfarsit AS Date)) END";
                         if (chkNrm == true)
                         {
                             act += ",A.Norma=ISNULL(dn.Norma, B.F10043)";
@@ -233,84 +227,74 @@ namespace WizOne.Pontaj
 
                         if (act != "") act = act.Substring(1);
                         strSql = string.Format(strSql, angIn, angSf, General.ToDataUniv(ziIn), General.ToDataUniv(ziSf), act, inn);
-                    }
 
+                        //Florin 2019.12.10 - daca este contract, actualizam si programul
+                        if (chkCtr == true)
+                            sqlPrg = $@"UPDATE X
+                                    SET X.IdProgram=
+                                    CASE WHEN (COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN  COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
+                                    CASE (X.""ZiSapt"")
+                                    WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) END)
+                                    WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) END)
+                                    WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) END)
+                                    WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) END)
+                                    WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) END)
+                                    WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) END)
+                                    WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) END)
+                                    END END
+                                    FROM Ptj_Intrari X
+                                    INNER JOIN Ptj_Contracte Y ON X.IdContract = Y.Id
+                                    WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.Ziua AND X.Ziua <= @4 AND COALESCE(X.ModifProgram,0) = 0";
+                    }
                 }
                 else
                 {
-
-                    //Radu 12.02.2019
                     if (chkPerAng == true)
                     {
-                        string ziInceput = General.ToDataUniv(ziIn.Year, ziIn.Month, 1);
-                        string ziSfarsit = General.ToDataUniv(ziSf.Year, ziSf.Month, 99);
+                        string strDel = 
+                            $@"BEGIN
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
+                                FROM ""Ptj_Intrari"" A
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {ziSfarsit} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));
 
+                                DELETE FROM ""Ptj_Intrari"" 
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                ) B 
+                                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {ziSfarsit} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));
+                            END;";
 
-                        //string strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                        //                WHERE ""IdAuto"" IN 
-                        //                (SELECT A.""IdAuto""
-                        //                FROM ""Ptj_Intrari"" A
-                        //                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                        //                WHERE TRUNC(NVL(MODIF.DATA, f10023)) >= {0} AND TRUNC(NVL(MODIF.DATA, f10023)) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
-                        //                ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2})";
-
-                        string strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                                        WHERE ""IdAuto"" IN 
-                                        (SELECT A.""IdAuto""
-                                        FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
-                                        ) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND A.F10003 >= {1} AND A.F10003 <= {2} AND {0} <= TRUNC(A.""Ziua"") AND TRUNC(A.""Ziua"") <= {3} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'))";
-
-                        strDel = string.Format(strDel, ziInceput, angIn, angSf, ziSfarsit);
                         ras = General.ExecutaNonQuery(strDel, null);
 
-                        //strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                        //                WHERE ""IdAuto"" IN 
-                        //                (SELECT A.""IdAuto""
-                        //                FROM ""Ptj_Intrari"" A
-                        //                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE TRUNC(f10022) <= {0} AND TRUNC(F10022) <> TO_DATE('01-JAN-2100','DD-MM-YYYY')) B 
-                        //                ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {1} AND A.F10003 <= {2})";
+                        strDel = 
+                            $@"BEGIN
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {Session["UserId"]}, {General.CurrentDate()}, 'Actualizare date pontaj', {Session["UserId"]}, {General.CurrentDate()}
+                                FROM ""Ptj_Intrari"" A
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE  TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B 
+                                ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.""Ziua"" AND A.""Ziua"" <= {ziSfarsit});
 
-                        strDel = @"DELETE FROM ""Ptj_Intrari"" 
-                                        WHERE ""IdAuto"" IN 
-                                        (SELECT A.""IdAuto""
-                                        FROM ""Ptj_Intrari"" A
-                                        INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE  TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B 
-                                        ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {1} AND A.F10003 <= {2} AND {3} <= A.""Ziua"" AND A.""Ziua"" <= {0})";
+                                DELETE FROM ""Ptj_Intrari"" 
+                                WHERE ""IdAuto"" IN 
+                                (SELECT A.""IdAuto""
+                                FROM ""Ptj_Intrari"" A
+                                INNER JOIN (SELECT F10003, F10022 FROM f100 WHERE  TRUNC(F10022) <> TO_DATE('01-01-2100','DD-MM-YYYY')) B 
+                                ON A.F10003=B.F10003 AND A.""Ziua"" < B.F10022 AND A.F10003 >= {angIn} AND A.F10003 <= {angSf} AND {ziInceput} <= A.""Ziua"" AND A.""Ziua"" <= {ziSfarsit});
+                            END;";
 
-                        strDel = string.Format(strDel, ziSfarsit, angIn, angSf, ziInceput);
                         ras = General.ExecutaNonQuery(strDel, null);
                     }
-
-
-                    //Florin 2019.07.15         Rescrisa
-                    ////Radu 12.02.2019
-                    //if (chkRecalc == true)
-                    //{
-                    //    int an = ziIn.Year;
-                    //    int luna = ziIn.Month;
-
-                    //    //string sql = "SELECT F10003 FROM F100 WHERE F10025 IN (0, 999) AND " + angIn + " <= F10003 AND F10003 <= " + angSf;
-                    //    string sql = "SELECT F10003 FROM F100 WHERE " + angIn + " <= F10003 AND F10003 <= " + angSf;
-                    //    DataTable dt = General.IncarcaDT(sql, null);
-
-                    //    if (dt != null && dt.Rows.Count > 0)
-                    //    {
-                    //        while (an < ziSf.Year || (an == ziSf.Year && luna <= ziSf.Month))
-                    //        {
-                    //            for (int i = 0; i < dt.Rows.Count; i++)
-                    //                General.CalculFormuleCumulat(Convert.ToInt32(dt.Rows[i][0].ToString()), an, luna);
-                    //            luna++;
-                    //            if (luna > 12)
-                    //            {
-                    //                luna = 1;
-                    //                an++;
-                    //            }
-                    //        }
-                    //    }
-                    //    ras = true;
-                    //}
 
                     if (chkRecalc)
                     {
@@ -345,12 +329,12 @@ namespace WizOne.Pontaj
                                 SET {4} 
                                 WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.""Ziua"" AND A.""Ziua"" <= {3};";
 
-                        if (chkCtr == true) act += ",A.\"IdContract\"=(SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS \"Date\") <= CAST(A.\"Ziua\" AS \"Date\") AND CAST(A.\"Ziua\" AS \"Date\") <= CAST(B.\"DataSfarsit\" AS \"Date\"))";
+                        if (chkCtr == true) act += ",A.\"IdContract\" = CASE WHEN COALESCE(A.\"ModifProgram\",0) = 1 THEN A.\"IdContract\" ELSE (SELECT MAX(B.\"IdContract\") AS \"IdContract\" FROM \"F100Contracte\" B WHERE A.F10003 = B.F10003 AND CAST(B.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(B.\"DataSfarsit\" AS Date)) END";
                         if (chkNrm == true) act += ",A.\"Norma\"=COALESCE(\"DamiNorma\"(A.F10003, A.\"Ziua\"), (SELECT C.F10043 FROM F100 C WHERE C.F10003=A.F10003))";
                         if (chkStr == true) act += ",A.F10007=COALESCE(\"DamiDept\"(A.F10003, A.\"Ziua\"), (SELECT C.F10007 FROM F100 C WHERE C.F10003=A.F10003))";
                         if (chkCC == true)
-                            act += ",A.\"F06204Default\"=CASE WHEN NOT EXISTS(SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS \"Date\") <= CAST(A.\"Ziua\" AS \"Date\") AND CAST(A.\"Ziua\" AS \"Date\") <= CAST(C.\"DataSfarsit\" AS \"Date\")) THEN COALESCE(\"DamiCC\"(A.F10003, A.\"Ziua\"), (SELECT C.F10053 FROM F100 C WHERE C.F10003=A.F10003)) ELSE "
-                                  + " (SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS \"Date\") <= CAST(A.\"Ziua\" AS \"Date\") AND CAST(A.\"Ziua\" AS \"Date\") <= CAST(C.\"DataSfarsit\" AS \"Date\")) END";
+                            act += ",A.\"F06204Default\"=CASE WHEN NOT EXISTS(SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) THEN COALESCE(\"DamiCC\"(A.F10003, A.\"Ziua\"), (SELECT C.F10053 FROM F100 C WHERE C.F10003=A.F10003)) ELSE "
+                                  + " (SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) END";
 
                         if (chkStr == true)
                         {
@@ -360,7 +344,6 @@ namespace WizOne.Pontaj
                                             A.F10004 = (SELECT C.F00604 FROM F006 C WHERE A.F10007=C.F00607),
                                             A.F10005 = (SELECT C.F00605 FROM F006 C WHERE A.F10007=C.F00607),
                                             A.F10006 = (SELECT C.F00606 FROM F006 C WHERE A.F10007=C.F00607)
-                                            FROM A 
                                             WHERE {0} <= A.F10003 AND A.F10003 <= {1} AND {2} <= A.""Ziua"" AND A.""Ziua"" <= {3};";
 
                             strSql += strStruct;
@@ -370,10 +353,32 @@ namespace WizOne.Pontaj
                         strSql = string.Format(strSql, angIn, angSf, General.ToDataUniv(ziIn), General.ToDataUniv(ziSf), act);
                         strSql = "BEGIN " + strSql + " END;";
                     }
+
+                    //Florin 2019.12.10 - daca este contract, actualizam si programul
+                    if (chkCtr == true)
+                        sqlPrg = $@"UPDATE ""Ptj_Intrari"" X
+                                SET X.""IdProgram"" =
+                                (SELECT
+                                CASE WHEN(COALESCE(X.""ZiLiberaLegala"",0) = 1 AND Y.""TipSchimb8"" = 1) THEN COALESCE(Y.""Program8"", Y.""Program0"", -99) ELSE
+                                CASE(X.""ZiSapt"")
+                                WHEN 1 THEN(CASE WHEN COALESCE(Y.""TipSchimb1"", 1) = 1 THEN COALESCE(Y.""Program1"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 2 THEN(CASE WHEN COALESCE(Y.""TipSchimb2"", 1) = 1 THEN COALESCE(Y.""Program2"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 3 THEN(CASE WHEN COALESCE(Y.""TipSchimb3"", 1) = 1 THEN COALESCE(Y.""Program3"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 4 THEN(CASE WHEN COALESCE(Y.""TipSchimb4"", 1) = 1 THEN COALESCE(Y.""Program4"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 5 THEN(CASE WHEN COALESCE(Y.""TipSchimb5"", 1) = 1 THEN COALESCE(Y.""Program5"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 6 THEN(CASE WHEN COALESCE(Y.""TipSchimb6"", 1) = 1 THEN COALESCE(Y.""Program6"", Y.""Program0"", -99) ELSE -99 END)
+                                WHEN 7 THEN(CASE WHEN COALESCE(Y.""TipSchimb7"", 1) = 1 THEN COALESCE(Y.""Program7"", Y.""Program0"", -99) ELSE -99 END)
+                                END END
+                                FROM ""Ptj_Contracte"" Y WHERE X.""IdContract"" = Y.""Id"")
+                                WHERE @1 <= X.F10003 AND X.F10003 <= @2 AND @3 <= X.""Ziua"" AND X.""Ziua"" <= @4 AND COALESCE(X.""ModifProgram"",0) = 0";
                 }
 
                 if (strSql.Length > 0)
                     ras = General.ExecutaNonQuery(strSql, null);
+
+                if (sqlPrg.Length > 0)
+                    General.ExecutaNonQuery(sqlPrg, new object[] { angIn, angSf, ziIn, ziSf });
+
             }
             catch (Exception ex)
             {

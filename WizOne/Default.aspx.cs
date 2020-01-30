@@ -382,6 +382,7 @@ namespace WizOne
         protected string Verifica(string utilizator, string parola, bool dinButon, bool cuMesaj = true)
         {
             string txtRas = "";
+            bool schimba = false;
 
             try
             {
@@ -504,6 +505,7 @@ namespace WizOne
                                     General.InregistreazaLogarea(0, txtPan1.Text, "Parola expirata");
                                     //MessageBox.Show("Parola a expirat", MessageBox.icoWarning, "", "Pagini/SchimbaParola.aspx");
                                     txtRas = "Parola a expirat";
+                                    schimba = true; //Radu 06.01.2020
                                 }
                                 else
                                 {
@@ -551,7 +553,17 @@ namespace WizOne
                 }
 
                 if (txtRas != "" && cuMesaj)
+                {
                     MessageBox.Show(txtRas, MessageBox.icoWarning);
+
+                    //Radu 06.01.2020
+                    if (schimba)
+                    {
+                        Session["SecApp"] = "OK";
+                        Response.Redirect("Pagini/SchimbaParola.aspx", false);
+                        Session["SchimbaParolaMesaj"] = txtRas;
+                    }
+                }
             }
             catch (Exception ex)
             {

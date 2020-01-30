@@ -71,6 +71,9 @@ namespace WizOne.Absente
                 btnDocUpload.ToolTip = Dami.TraduCuvant("incarca document");
                 btnDocSterge.ToolTip = Dami.TraduCuvant("sterge document");
 
+                //Radu 09.12.2019
+                foreach (ListBoxColumn col in cmbAng.Columns)
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
                 #endregion
 
                 if (!IsPostBack)
@@ -102,8 +105,8 @@ namespace WizOne.Absente
 
                             if (Convert.ToInt32(General.Nz(cmbRol.Value,0)) != 0)
                             {
-                                cmbAng.Buttons.Add(new EditButton { Text = "Activi" });
-                                cmbAng.Buttons.Add(new EditButton { Text = "Toti" });
+                                cmbAng.Buttons.Add(new EditButton { Text = Dami.TraduCuvant("Activi") });
+                                cmbAng.Buttons.Add(new EditButton { Text = Dami.TraduCuvant("Toti") });
                             }
                             break;
                         default:
@@ -113,8 +116,8 @@ namespace WizOne.Absente
                             cmbRol.SelectedIndex = 0;
                             cmbAng.SelectedIndex = 0;
 
-                            cmbAng.Buttons.Add(new EditButton { Text = "Activi" });
-                            cmbAng.Buttons.Add(new EditButton { Text = "Toti" });
+                            cmbAng.Buttons.Add(new EditButton { Text = Dami.TraduCuvant("Activi") });
+                            cmbAng.Buttons.Add(new EditButton { Text = Dami.TraduCuvant("Toti") });
 
                             break;
                     }
@@ -136,7 +139,7 @@ namespace WizOne.Absente
                     //Florin 2019.01.17
                     //prima oara sa apara angajati activi
                     DataTable dtAngActivi = new DataTable();
-                    if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
+                    if (dtAngFiltrati != null && dtAngFiltrati.Rows.Count > 0 && dtAngFiltrati.Select("AngajatActiv=1").Count() > 0) dtAngActivi = dtAngFiltrati.Select("AngajatActiv=1").CopyToDataTable();
                     cmbAng.DataSource = dtAngActivi;
                     Session["Cereri_Absente_Angajati"] = dtAngActivi;
                     //cmbAng.DataSource = dtAngFiltrati;
@@ -563,49 +566,51 @@ namespace WizOne.Absente
             }
         }
 
-        public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrOre, int tip)
-        {
-            //tip
-            //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
-            //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
+
+        //Florin 2020.01.22
+        //public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrOre, int tip)
+        //{
+        //    //tip
+        //    //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
+        //    //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
 
 
-            string msg = "";
+        //    string msg = "";
 
-            try
-            {
-                //calculam norma
-                string strSql = "SELECT * FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
-                if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
-                int norma = Convert.ToInt32(General.ExecutaScalar(strSql,null));
+        //    try
+        //    {
+        //        //calculam norma
+        //        string strSql = "SELECT * FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
+        //        if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
+        //        int norma = Convert.ToInt32(General.ExecutaScalar(strSql,null));
 
-                int sumaPtj = 0;
-                if (tip == 1)
-                {
-                    //absentele din pontaj care intra in suma de ore
-                    string sqlOre = @"SELECT ' + COALESCE(' + OreInVal + ',0)'  FROM Ptj_tblAbsente WHERE COALESCE(VerificareNrMaxOre,0) = 1 FOR XML PATH ('')";
-                    if (Constante.tipBD == 2) sqlOre = @"SELECT LISTAGG('COALESCE(' || ""OreInVal"" || ')', ' + ') WITHIN GROUP (ORDER BY ""OreInVal"") FROM ""Ptj_tblAbsente"" WHERE COALESCE(VerificareNrMaxOre,0) = 1";
-                    string strVal = (General.ExecutaScalar(sqlOre, null) ?? "").ToString();
-                    if (Constante.tipBD == 1) strVal = strVal.Substring(3);
-                    if (strVal != "") sumaPtj = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM({strVal}), 0) FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(dtInc.Date)}", null));
-                }
+        //        int sumaPtj = 0;
+        //        if (tip == 1)
+        //        {
+        //            //absentele din pontaj care intra in suma de ore
+        //            string sqlOre = @"SELECT ' + COALESCE(' + OreInVal + ',0)'  FROM Ptj_tblAbsente WHERE COALESCE(VerificareNrMaxOre,0) = 1 FOR XML PATH ('')";
+        //            if (Constante.tipBD == 2) sqlOre = @"SELECT LISTAGG('COALESCE(' || ""OreInVal"" || ')', ' + ') WITHIN GROUP (ORDER BY ""OreInVal"") FROM ""Ptj_tblAbsente"" WHERE COALESCE(VerificareNrMaxOre,0) = 1";
+        //            string strVal = (General.ExecutaScalar(sqlOre, null) ?? "").ToString();
+        //            if (Constante.tipBD == 1) strVal = strVal.Substring(3);
+        //            if (strVal != "") sumaPtj = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM({strVal}), 0) FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(dtInc.Date)}", null));
+        //        }
 
-                //suma de ore din Cereri
-                int sumaCere = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) FROM ""Ptj_Cereri"" WHERE F10003={f10003} AND ""DataInceput"" = {General.ToDataUniv(dtInc.Date)} AND ""IdStare"" IN (1,2)", null));
-                if (((sumaCere * 60) + sumaPtj + (nrOre * 60)) > (norma * 60))
-                {
-                    msg = "Totalul de ore depaseste norma pe aceasta zi";
-                    return msg;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //        //suma de ore din Cereri
+        //        int sumaCere = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) FROM ""Ptj_Cereri"" WHERE F10003={f10003} AND ""DataInceput"" = {General.ToDataUniv(dtInc.Date)} AND ""IdStare"" IN (1,2)", null));
+        //        if (((sumaCere * 60) + sumaPtj + (nrOre * 60)) > (norma * 60))
+        //        {
+        //            msg = "Totalul de ore depaseste norma pe aceasta zi";
+        //            return msg;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-            return msg;
-        }
+        //    return msg;
+        //}
 
 
         private void SalveazaDate(int tip = 1)
@@ -931,7 +936,7 @@ namespace WizOne.Absente
 
                         if (Convert.ToInt32(General.Nz(drAbs["VerificareNrMaxOre"], 0)) == 1)
                         {
-                            string msgNr = VerificareDepasireNorma(Convert.ToInt32(cmbAng.Value), txtDataInc.Date, Convert.ToInt32(txtNrOre.Value ?? 0), 1);
+                            string msgNr = General.VerificareDepasireNorma(Convert.ToInt32(cmbAng.Value), txtDataInc.Date, Convert.ToInt32(txtNrOre.Value ?? 0) * 60, 1);
                             if (msgNr != "")
                             {
                                 if (tip == 1)
@@ -987,7 +992,7 @@ namespace WizOne.Absente
                     string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrZile"",0)),0) AS ""ZileAn"" FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
                     DataRow drAn = General.IncarcaDR(sqlAn, new object[] { Convert.ToInt32(cmbAng.Value), txtDataInc.Date.Year, Convert.ToInt32(cmbAbs.Value) });
 
-                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(drAbs["NrMaxAn"]) > (int)drAbs[0])
+                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(General.Nz(drAn[0], 0)) > Convert.ToInt32(drAbs["NrMaxAn"]))
                     {
                         if (tip == 1)
                             MessageBox.Show(Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite in an"), MessageBox.icoWarning);
@@ -1140,10 +1145,11 @@ namespace WizOne.Absente
                         {
                             General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(cmbAng.Value)} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Text))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Text))} ", null);
                         }
-
-
+                        
                         //Florin 2019.11.13 - calcul formule si formule cumulat
-                        General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {txtDataInc.Date} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {txtDataSf.Date}");
+                        //General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {txtDataInc.Date} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {txtDataSf.Date}");
+                        General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={cmbAng.Value} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Date).Date)} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Date).Date)}");     //Radu 13.12.2019
+
 
 
                         ////Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj

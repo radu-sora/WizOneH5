@@ -297,7 +297,7 @@
             nrLuni++;
         }
 
-	    if (cmbExcIncet.GetValue() == "" || cmbExcIncet.GetValue() == 0) {
+        if (cmbExcIncet.GetValue() == "" || cmbExcIncet.GetValue() == 0) {
             txtNrLuni.SetValue(nrLuni);
             txtNrZile.SetValue(nrZile);
         }
@@ -307,8 +307,8 @@
         }
     }
 
-
     function cmbExcIncet_SelectedIndexChanged() {
+
         if (cmbExcIncet.GetValue() != "" && cmbExcIncet.GetValue() != 0) {
             txtNrLuni.SetValue("0");
             txtNrZile.SetValue("0");
@@ -936,7 +936,7 @@
 							<dx:ASPxLabel  ID="lblSalariu" Width="100" runat="server"  Text="Salariu" ></dx:ASPxLabel >	
 						</td>	
 						<td>
-							<dx:ASPxTextBox  ID="txtSalariu"  Width="100" runat="server"  Text='<%# Eval("F100699") %>'  DisplayFormatString="N0"  TabIndex="11" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
+							<dx:ASPxTextBox  ID="txtSalariu"  Width="100" runat="server"  DisplayFormatString="N0"  TabIndex="11" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                 <ClientSideEvents TextChanged="function(s,e){ txtSalariu_TextChanged(s); }" />                                
 							</dx:ASPxTextBox >
 						</td>

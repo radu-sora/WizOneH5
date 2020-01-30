@@ -110,12 +110,12 @@ namespace WizOne.Pontaj
                     return;
                 }
 
-                int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Ptj_CC"" WHERE F10003={Session["User_Marca"]} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(e.NewValues["Ziua"]))} AND F06204={e.NewValues["F06204"]}", null),0));
-                if (cnt != 0)
-                {
-                    msgError = "Inregistrare existenta";
-                    return;
-                }
+                //int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Ptj_CC"" WHERE F10003={Session["User_Marca"]} AND ""Ziua""={General.ToDataUniv(Convert.ToDateTime(e.NewValues["Ziua"]))} AND F06204={e.NewValues["F06204"]}", null),0));
+                //if (cnt != 0)
+                //{
+                //    msgError = "Inregistrare existenta";
+                //    return;
+                //}
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.NewRow();
@@ -169,15 +169,15 @@ namespace WizOne.Pontaj
                     return;
                 }
 
-                if (e.NewValues["Ziua"] != e.OldValues["Ziua"] || e.NewValues["F06204"] != e.OldValues["F06204"])
-                {
-                    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Ptj_CC"" WHERE F10003={Session["User_Marca"]} AND Ziua={General.ToDataUniv(Convert.ToDateTime(e.NewValues["Ziua"]))} AND F06204={e.NewValues["F06204"]}", null), 0));
-                    if (cnt != 0)
-                    {
-                        msgError = "Inregistrare existenta";
-                        return;
-                    }
-                }
+                //if (e.NewValues["Ziua"] != e.OldValues["Ziua"] || e.NewValues["F06204"] != e.OldValues["F06204"])
+                //{
+                //    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""Ptj_CC"" WHERE F10003={Session["User_Marca"]} AND Ziua={General.ToDataUniv(Convert.ToDateTime(e.NewValues["Ziua"]))} AND F06204={e.NewValues["F06204"]}", null), 0));
+                //    if (cnt != 0)
+                //    {
+                //        msgError = "Inregistrare existenta";
+                //        return;
+                //    }
+                //}
 
                 dr["Ziua"] = e.NewValues["Ziua"] ?? DBNull.Value;
                 dr["F06204"] = e.NewValues["F06204"] ?? DBNull.Value;
@@ -330,12 +330,12 @@ namespace WizOne.Pontaj
             try
             {
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" WHERE {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Value))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Value))} ", null);
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"], dt.Columns["Ziua"], dt.Columns["F06204"] };
+                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
 
                 Session["InformatiaCurenta"] = dt;
 
                 grCC.DataSource = Session["InformatiaCurenta"];
-                grCC.KeyFieldName = "F10003; Ziua; F06204";
+                grCC.KeyFieldName = "IdAuto";
                 grCC.DataBind();
             }
             catch (Exception ex)

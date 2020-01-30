@@ -562,7 +562,7 @@
                 var idCtr = grDate.batchEditApi.GetCellValue(currentEditableVisibleIndex, "IdContract");
                 var idPrg = grDate.batchEditApi.GetCellValue(currentEditableVisibleIndex, "IdProgram");
                 LoadPrograme(idCtr);
-
+                
                 if (cmbProgram.FindItemByValue(idPrg))
                     cmbProgram.SetSelectedItem(cmbProgram.FindItemByValue(idPrg));
                 else {
@@ -578,7 +578,7 @@
             if (typeof cmbProgram !== "undefined" && ASPxClientUtils.IsExists(cmbProgram)) {
                 let programe = <%=Session["Json_Programe"] %>;
                 var arr = programe.filter(function (item) { return item.idContract == idCtr });
-
+                
                 cmbProgram.ClearItems();
 
                 var rez = "";
@@ -829,6 +829,10 @@
             </td>
         </tr>
         <tr>
+            <td colspan="2" id="tdGridTotaluri" runat="server">
+            </td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
@@ -891,6 +895,7 @@
                             <dx:ASPxButton ID="btnSaveCC" ClientInstanceName="btnSaveCC" ClientIDMode="Static" runat="server" Text="Salveaza CC" AutoPostBack="false" oncontextMenu="ctx(this,event)" Visible="true" >
                                 <ClientSideEvents Click="function(s, e) {
                                     grCC.UpdateEdit();
+                                    grDate.PerformCallback('btnFiltru');
                                 }" />
                                 <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                             </dx:ASPxButton>

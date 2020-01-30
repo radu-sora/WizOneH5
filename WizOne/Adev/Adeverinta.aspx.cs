@@ -41,10 +41,40 @@ namespace WizOne.Adev
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
-                //btnClose.Text = Dami.TraduCuvant("btnClose", "Inchidere luna");
-                //btnSave.Text = Dami.TraduCuvant("btnSave", "Salvare luna");
+                btnGenerare.Text = Dami.TraduCuvant("btnGenerare", "Genereaza");
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
+
+                lblAng.InnerText = Dami.TraduCuvant("Angajat");
+                lblAngBulk.InnerText = Dami.TraduCuvant("Angajat");
+                lblSub.InnerText = Dami.TraduCuvant("Subcompanie");
+                lblFil.InnerText = Dami.TraduCuvant("Filiala");
+                lblSec.InnerText = Dami.TraduCuvant("Sectie");
+                lblDept.InnerText = Dami.TraduCuvant("Dept");
+                lblSubDept.InnerText = Dami.TraduCuvant("SubDept");
+                lblBirou.InnerText = Dami.TraduCuvant("Birou");
+
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
 
                 #endregion
+
+                /////TEST
+                bulk1.Visible = false;
+                bulk2.Visible = false;
+                btnFiltru.Visible = false;
+                btnFiltruSterge.Visible = false;
+                grDate.Visible = false;
+                ///////////
+                
 
 
                 //cmbAng.SelectedIndex = -1;
@@ -59,6 +89,9 @@ namespace WizOne.Adev
                 cmbAng.DataSource = dtAng;
                 cmbAng.DataBind();
 
+                cmbAngBulk.DataSource = dtAng;
+                cmbAngBulk.DataBind();
+
                 if (!IsPostBack)
                 {
                     UpdateControls(lista);
@@ -67,7 +100,48 @@ namespace WizOne.Adev
                     else
                         lista["XML"] = "1";
                     SalvareParam(lista);
+
+                    Session["InformatiaCurenta_Adev"] = null;
                 }
+                else
+                {
+                    DataTable dtert = Session["InformatiaCurenta_Adev"] as DataTable;
+
+                    if (Session["InformatiaCurenta_Adev"] != null)
+                    {
+                        grDate.DataSource = Session["InformatiaCurenta_Adev"];
+                        grDate.DataBind();
+                    }
+
+                }
+
+
+                cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003", null);
+                cmbSub.DataBind();
+                cmbFil.DataSource = General.IncarcaDT(@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404=" + General.Nz(cmbSub.Value, -99), null);
+                cmbFil.DataBind();
+                cmbSec.DataSource = General.IncarcaDT(@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505=" + General.Nz(cmbFil.Value, -99), null);
+                cmbSec.DataBind();
+                if (cmbSub.Value == null && cmbFil.Value == null && cmbSec.Value == null)
+                {
+                    cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
+                    cmbDept.DataBind();
+                }
+                else
+                {
+                    cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99), null);
+                    cmbDept.DataBind();
+                }
+                cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 WHERE F00707=" + General.Nz(cmbDept.Value, -99), null);
+                cmbSubDept.DataBind();
+                cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
+                cmbBirou.DataBind();
+
+                cmbCateg.DataSource = General.IncarcaDT("SELECT F72402, F72404 FROM F724", null);
+                cmbCateg.DataBind();
+
+                cmbCtr.DataSource = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte"" ", null);
+                cmbCtr.DataBind();
 
             }
             catch (Exception ex)
@@ -425,6 +499,205 @@ namespace WizOne.Adev
         }
 
 
+        protected void btnFiltru_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                IncarcaGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void IncarcaGrid()
+        {
+            try
+            {
+                grDate.KeyFieldName = "F10003";
+
+                DataTable dt = GetF100NumeComplet(Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99),
+                    Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbSubDept.Value ?? -99), Convert.ToInt32(cmbBirou.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), Convert.ToInt32(cmbCateg.Value ?? -99));
+
+                grDate.DataSource = dt;
+                Session["InformatiaCurenta_Adev"] = dt;
+                grDate.DataBind();
+                grDate.SettingsPager.PageSize = 25;
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        public DataTable GetF100NumeComplet(int idUser, int idSubcomp = -99, int idFiliala = -99, int idSectie = -99, int idDept = -99, int idSubdept = -99, int idBirou = -99, int idAngajat = -9, int idCtr = -99, int idCateg = -99)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                string op = "+";
+                if (Constante.tipBD == 2)
+                    op = "||";
+
+
+                string strSql = @"SELECT Y.* FROM(
+                                SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025,
+                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
+                                A.F10061, A.F10062
+
+                                FROM ""relGrupAngajat"" B                                
+                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
+                                INNER JOIN F100 A ON b.F10003 = a.F10003   
+                                INNER JOIN F1001 X ON A.F10003 = X.F10003                            
+                                LEFT JOIN F718 D ON A.F10071 = D.F71802                                
+                                LEFT JOIN F002 E ON A.F10002 = E.F00202                                
+                                LEFT JOIN F003 F ON A.F10004 = F.F00304                                
+                                LEFT JOIN F004 G ON A.F10005 = G.F00405                                
+                                LEFT JOIN F005 H ON A.F10006 = H.F00506                                
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607                                
+                                LEFT JOIN F007 K ON X.F100958 = K.F00708  
+                                LEFT JOIN F008 L ON X.F100959 = L.F00809                                 
+                                WHERE C.""IdSuper"" = {1}
+
+                                UNION
+
+                                SELECT DISTINCT CAST(A.F10003 AS int) AS F10003,  A.F10008 {0} ' ' {0} A.F10009 AS ""NumeComplet"",                                  
+                                A.F10002, A.F10004, A.F10005, A.F10006, A.F10007, X.F100958, X. F100959, A.F10025  ,
+                                F00204 AS ""Companie"", F00305 AS ""Subcompanie"", F00406 AS ""Filiala"", F00507 AS ""Sectie"", F00608 AS ""Dept"", F00709 AS ""Subdept"",  F00810 AS ""Birou"",
+                                A.F10061, A.F10062
+
+                                FROM ""relGrupAngajat"" B                                
+                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""                                
+                                INNER JOIN F100 A ON b.F10003 = a.F10003 
+                                INNER JOIN F1001 X ON A.F10003 = X.F10003                               
+                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")                                
+                                LEFT JOIN F718 D ON A.F10071 = D.F71802                                
+                                LEFT JOIN F002 E ON A.F10002 = E.F00202                                
+                                LEFT JOIN F003 F ON A.F10004 = F.F00304                                
+                                LEFT JOIN F004 G ON A.F10005 = G.F00405                                
+                                LEFT JOIN F005 H ON A.F10006 = H.F00506                                
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                LEFT JOIN F007 K ON X.F100958 = K.F00708  
+                                LEFT JOIN F008 L ON X.F100959 = L.F00809                                  
+                                WHERE J.""IdUser"" = {1}
+  
+                                                           
+                                ) Y 
+                                {2}    ";
+
+
+                string tmp = "", cond = "", condCtr = "";
+
+                if (idSubcomp != -99)
+                {
+                    tmp = string.Format("  Y.F10004 = {0} ", idSubcomp);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idFiliala != -99)
+                {
+                    tmp = string.Format("  Y.F10005 = {0} ", idFiliala);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idSectie != -99)
+                {
+                    tmp = string.Format("  Y.F10006 = {0} ", idSectie);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idDept != -99)
+                {
+                    tmp = string.Format("  Y.F10007 = {0} ", idDept);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idSubdept != -99)
+                {
+                    tmp = string.Format("  Y.F100958 = {0} ", idSubdept);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idBirou != -99)
+                {
+                    tmp = string.Format("  Y.F100959 = {0} ", idBirou);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idAngajat != -99)
+                {
+                    tmp = string.Format("  Y.F10003 = {0} ", idAngajat);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idCtr != -99)
+                {
+                    condCtr = " LEFT JOIN \"F100Contracte\" Ctr ON Ctr.F10003 = Y.F10003  ";
+                    tmp = string.Format("  \"DataInceput\" <= {0} AND {0} <= \"DataSfarsit\" AND \"IdContract\" = {1}", (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), idCtr);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (idCateg != -99)
+                {
+                    tmp = string.Format("  (Y.F10061 = {0} OR Y.F10062 = {0})", idCateg);
+                    if (cond.Length <= 0)
+                        cond = " WHERE " + tmp;
+                    else
+                        cond += " AND " + tmp;
+                }
+
+                if (cond.Length <= 0)
+                    cond = " WHERE (Y.F10025 = 0 OR Y.F10025 = 999) ";
+                else
+                    cond += " AND (Y.F10025 = 0 OR Y.F10025 = 999) ";
+
+                strSql += cond;
+
+                strSql = string.Format(strSql, op, idUser, condCtr);
+
+                dt = General.IncarcaDT(strSql, null);
+
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return dt;
+        }
+
         protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
         {
             try
@@ -563,6 +836,10 @@ namespace WizOne.Adev
                             lista.Add("BCM", "");
                         lista["BCM"] = param[1];
                         break;
+                    case "EmptyFields":
+                        cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
+                        cmbDept.DataBind();
+                        return;
                 }
                 UpdateControls(lista);
 
@@ -2956,15 +3233,17 @@ namespace WizOne.Adev
                 }
                 dtEmplFunction = General.IncarcaDT(temp, null);
 
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
+                string salariu_i = salariu.Replace("F100", "F910");
 
                 temp =
                      ("SELECT CASE WHEN (TO_CHAR(MAX(F910992), 'dd/MM/yyyy') <> '01/01/1900' AND EXTRACT(YEAR FROM MAX(F910992)) = Max(F910.YEAR) AND EXTRACT(MONTH FROM MAX(F910992)) = Min(F910.MONTH)) THEN TO_CHAR(MAX(F910992), 'yyyy-MM-dd') "
                      + "ELSE CASE WHEN (TO_DATE('01/'||MIN (F910.MONTH)||'/'||MAX (F910.YEAR), 'dd/MM/yyyy')- MIN(F910991)<31) THEN TO_CHAR(MIN(F910991), 'yyyy-MM-dd') "
 
-                     + "ELSE CASE WHEN (ROUND(F910.F910699) = 0 AND TO_CHAR(MAX(F91076), 'dd/MM/yyyy') <> '01/01/2100' ) THEN TO_CHAR(MAX(F91076), 'yyyy-MM-dd') "
+                     + "ELSE CASE WHEN (ROUND(F910." + salariu_i + ") = 0 AND TO_CHAR(MAX(F91076), 'dd/MM/yyyy') <> '01/01/2100' ) THEN TO_CHAR(MAX(F91076), 'yyyy-MM-dd') "
 
                      + "ELSE TO_CHAR( MIN(TO_DATE(YEAR||'-'||LPAD(TO_CHAR(F910.MONTH), 2, '0')||'-01', 'yyyy-MM-dd')), 'yyyy-MM-dd') END END END AS DATA,"
-                     + "TO_CHAR(Max(F10022), 'dd/MM/yyyy') AS DATANG, ROUND(F910.F910699) AS SALARIU, "
+                     + "TO_CHAR(Max(F10022), 'dd/MM/yyyy') AS DATANG, ROUND(F910." + salariu_i + ") AS SALARIU, "
                      + "CASE WHEN (TO_DATE(MIN(F100993), 'dd/mm/yyyy') < TO_DATE('01/01/2100', 'dd/mm/yyyy')) THEN TO_CHAR(MIN(F100993), 'dd/MM/yyyy') ELSE NULL END AS DATASF,"
                      + (rbFunc2.Checked ? "NVL(MIN(F718_I.F71804), MIN(F718.F71804))" : "MIN(F722.F72204)") + " AS FUNCTIA, MAX(F098.F09804) AS MOTIVINTR FROM F910, F717, F006, F721, " + (rbFunc2.Checked ? "F718 F718_I, F718" : "F722") + ", F100, F098 "
                      + "WHERE F910.F91029 = F717.F71702(+) "
@@ -2976,7 +3255,7 @@ namespace WizOne.Adev
                      + "CASE WHEN F10022 < TO_DATE('01/01/2011', 'dd/mm/yyyy') THEN TO_DATE('01/01/2011', 'dd/mm/yyyy') ELSE F10022 END AND SYSDATE "
 
                      + "AND F72106 = F09802 "
-                     + "GROUP BY F910.F91003, F910.F910699, F910.F91071, F91076, F91077 "
+                     + "GROUP BY F910.F91003, F910." + salariu_i + ", F910.F91071, F91076, F91077 "
                      + "HAVING F910.F91003=" + marca 
                      + " ORDER BY DATA, SALARIU, Max(F100.F10022)");
                 dtEmplMutations = General.IncarcaDT(temp, null);
@@ -3093,13 +3372,16 @@ namespace WizOne.Adev
                 }
                 dtEmplFunction = General.IncarcaDT(temp, null);
 
+                string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
+                string salariu_i = salariu.Replace("F100", "F910");
+
                 temp =
                 ("SELECT CASE WHEN(CONVERT(VARCHAR,MAX(F910992), 103) <> '01/01/1900' AND YEAR(MAX(F910992)) = Max(F910.YEAR) "
                 + "AND MONTH(MAX(F910992)) = Min(F910.MONTH)) THEN CONVERT(VARCHAR, MAX(F910992), 23) ELSE	CASE WHEN "
                 + "(CONVERT(DATETIME, '01/' + CONVERT(VARCHAR,MIN(F910.MONTH)) + '/' + CONVERT(VARCHAR,MAX(F910.YEAR)), 103) - MIN(F910991)<31) "
                 + "THEN CONVERT(VARCHAR, MIN(F910991), 23)	ELSE CONVERT(VARCHAR, MIN(CONVERT(DATETIME, CONVERT(VARCHAR,YEAR) + '-' + right(replicate('0',2) "
                 + "+ CONVERT(VARCHAR,F910.MONTH),2) + '-01', 103)), 23) END END AS DATA, "
-                + "CONVERT(VARCHAR, Max(F10022), 103) AS DATANG, ROUND(F910.F910699,0) AS SALARIU, "
+                + "CONVERT(VARCHAR, Max(F10022), 103) AS DATANG, ROUND(F910." + salariu_i + ",0) AS SALARIU, "
                 + "CASE WHEN (CONVERT(DATETIME, MIN(F100993), 103) < CONVERT(DATETIME, '01/01/2100', 103)) THEN CONVERT(VARCHAR, MIN(F100993), 103) ELSE NULL END AS DATASF, "
                 + (rbFunc2.Checked ? "ISNULL(MIN(F718_I.F71804), MIN(F718.F71804))" : "MIN(F722.F72204)") + " AS FUNCTIA, MAX(F098.F09804) AS MOTIVINTR FROM F721, F098, F100"
                 + (rbFunc2.Checked ? " LEFT JOIN F718 ON F100.F10071 = F718.F71802 " : "")
@@ -3112,7 +3394,7 @@ namespace WizOne.Adev
                 + "AND (CONVERT(DATETIME, '01/' + right(replicate('0',2) + CONVERT(VARCHAR,F910.MONTH),2) + '/' +CONVERT(VARCHAR,F910.YEAR), 103)) BETWEEN "
                 + "CASE WHEN F10022 < CONVERT(DATETIME, '01/01/2011', 103) THEN CONVERT(DATETIME, '01/01/2011', 103) ELSE F10022 END AND getdate() "
                 + "AND F72106 = F09802 "
-                + "GROUP BY F910.F91003, F910.F910699, F910.F91071, F91076, F91077 "
+                + "GROUP BY F910.F91003, F910." + salariu_i + ", F910.F91071, F91076, F91077 "
                 + "HAVING F910.F91003=" + marca
                 + " ORDER BY DATA, SALARIU, Max(F100.F10022) ");
 
@@ -4341,7 +4623,7 @@ namespace WizOne.Adev
                                         + " (CASE WHEN F91022<TO_DATE('01/08/2011', 'dd/MM/yyyy') THEN TO_DATE('01/08/2011', 'dd/MM/yyyy') ELSE F91022 END), " + data + ", 'prezent' "
                                         + ", '" + functie + "', '" + tip_ctr + "', '" + sal
                                         + "', '" + norma + "' FROM F910 WHERE F91003 = " + marca + " AND F910985 = '" + contract + "' AND MONTH = " + luna + " AND YEAR = " + an
-                                        + " GROUP BY F91003, F91022, F910985, F910986,F91022,F910699)";
+                                        + " GROUP BY F91003, F91022, F910985, F910986,F91022," + salariu_i + ")";
                                 }
                                 else 
                                 {
@@ -4349,7 +4631,7 @@ namespace WizOne.Adev
                                         + " (CASE WHEN F91022<CONVERT(DATETIME, '01/08/2011', 103) THEN CONVERT(DATETIME, '01/08/2011', 103) ELSE F91022 END), " + data + ", 'prezent' "
                                         + ", '" + functie + "', '" + tip_ctr + "', '" + sal
                                         + "', '" + norma + "' FROM F910 WHERE F91003 = " + marca + " AND F910985 = '" + contract + "' AND MONTH = " + luna + " AND YEAR = " + an
-                                        + " GROUP BY F91003, F91022, F910985, F910986,F91022,F910699)";
+                                        + " GROUP BY F91003, F91022, F910985, F910986,F91022," + salariu_i + ")";
                                 }
                                 General.ExecutaNonQuery(szsql, null);
 
@@ -4933,14 +5215,14 @@ namespace WizOne.Adev
                         szsql = inregistru + " (SELECT 1, F10003, F10017, F10022, '" + contract + "' AS F100985, " + data_ctr + " AS F100986, 'contract', 'Adaugare', F10022, TO_CHAR(10022, 'dd/MM/yyyy'), 'prezent' "
                             + ", '" + functie + "', '" + tip_ctr + "', '"
                             + sal + "', TO_CHAR('" + norma + "') FROM F100, F095 WHERE F100.F10003 = F095.F09503 AND F100.F100985 = F095.F09504 AND F100.F10003 = " + marca
-                            + " GROUP BY F10003, F10017, F10022, F100985, F100986,F10022,F100699)";
+                            + " GROUP BY F10003, F10017, F10022, F100985, F100986,F10022," + salariu + ")";
                     }
                     else 
                     {
                         szsql = inregistru + " (SELECT 1, F10003, F10017, F10022, '" + contract + "' AS F100985, " + data_ctr + " AS F100986, 'contract', 'Adaugare', F10022, CONVERT(VARCHAR, 10022, 103), 'prezent' "
                             + ", '" + functie + "', '" + tip_ctr + "', '"
                             + sal + "', CONVERT(VARCHAR,'" + norma + "') FROM F100, F095 WHERE F100.F10003 = F095.F09503 AND F100.F100985 = F095.F09504 AND F100.F10003 = " + marca
-                            + " GROUP BY F10003, F10017, F10022, F100985, F100986,F10022,F100699)";
+                            + " GROUP BY F10003, F10017, F10022, F100985, F100986,F10022," + salariu +")";
                     }
                     General.ExecutaNonQuery(szsql, null);
                     linie++;
@@ -5118,7 +5400,8 @@ namespace WizOne.Adev
         {
             double number = 0.00; int num = 0;
             //bool result = Double.TryParse(value, out number);
-            bool result = double.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out number);
+            value = value.Replace(',', '.');
+            bool result = double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out number);
             if (result)
             {
                 num = Convert.ToInt32(number);

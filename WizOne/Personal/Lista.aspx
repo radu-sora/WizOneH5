@@ -171,7 +171,7 @@
                         <table style="width: 100%">
                             <tr>
                                 <td style="padding: 4px">
-                                    <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
+                                    <dx:ASPxButton ID="btnInchide" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
                                         <ClientSideEvents Click="function(s, e){ checkComboBoxStare.HideDropDown(); }" />
                                     </dx:ASPxButton>
                                 </td>
@@ -266,6 +266,11 @@
             <div class="row">
                 <div class="col-md-1">
 	                 <dx:ASPxLabel  ID="lblText" runat="server"  Text="" Width="400" style="text-align: left;"></dx:ASPxLabel >	
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+	                 <dx:ASPxCheckBox ID="chkUser"  runat="server" Text="Creeaza utilizator" TextAlign="Left"  Checked="true" ClientInstanceName="chkUser" />  
                 </div>
             </div>
             <br />

@@ -13558,42 +13558,22 @@ create or replace TRIGGER "Auto_Eval_ObiIndividuale"
 END;
 /
 
-INSERT INTO "Securitate"("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu", "VizibilInColumnChooser") 
-SELECT 'Eval.EvalLista', 'grDate', 'Rol', "Id", 0, 0, 0, 0 FROM "tblGrupUsers";
+
+
+DELETE FROM "tblParametrii" WHERE "Nume" IN ('SOMA','SOMB', 'TactilPrintareAdeverinte');
 COMMIT;
 
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ZiBlocareIntroducerePrimaAvansHR', '5', 'Pentru RU: F - luna din f010, G - luna din f010+1, C - luna curenta, D - luna curenta + 1', 8, -99, sysdate);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ZiBlocareIntroducerePrimaLichidareHR', '5', 'Pentru RU: F - luna din f010, G - luna din f010+1, C - luna curenta, D - luna curenta + 1', 8, -99, sysdate);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AdunaComp', '4003,4008,4010', 'Componentele care se aduna pe F100690 la inchiderea de luna', 0, -99, sysdate);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('WebService_Utilizator', NULL, 'Utilizator pentru conectarea la serviciul web Sodexo', 0, -99, sysdate);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('WebService_Parola', NULL, 'Parola pentru conectarea la serviciul web Sodexo (recomandare: Criptat = 1)', 0, -99, sysdate);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('CaleBackUp', NULL, 'Directorul unde se doreste sa se salveze copia bazei de date', 0, -99, sysdate);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('CaleExpOracle', 'D:\oracle\product\10.2.0\client_1\bin', 'Directorul unde se afla exp.exe', 0, -99, sysdate);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('MP_VechimeCalculCO', NULL, '1- vechimea in munca; 2 - vechimea in companie', 3, -99, sysdate);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('NumeProcedura', NULL, 'Folosit de serviciul Windows LansareProcedura', 0, -99, sysdate);
+COMMIT;
 
-
-
-DELETE FROM "tblParametrii" WHERE "Nume" IN ('SOMA','SOMB', 'TactilPrintareAdeverinte')
-;
-
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ZiBlocareIntroducerePrimaAvansHR', '5', 'Pentru RU: F - luna din f010, G - luna din f010+1, C - luna curenta, D - luna curenta + 1', 8, -99, sysdate)
-;
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ZiBlocareIntroducerePrimaLichidareHR', '5', 'Pentru RU: F - luna din f010, G - luna din f010+1, C - luna curenta, D - luna curenta + 1', 8, -99, sysdate)
-;
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AdunaComp', '4003,4008,4010', 'Componentele care se aduna pe F100690 la inchiderea de luna', 0, -99, sysdate)
-;
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('WebService_Utilizator', NULL, 'Utilizator pentru conectarea la serviciul web Sodexo', 0, -99, sysdate)
-;
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('WebService_Parola', NULL, 'Parola pentru conectarea la serviciul web Sodexo (recomandare: Criptat = 1)', 0, -99, sysdate)
-;
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('CaleBackUp', NULL, 'Directorul unde se doreste sa se salveze copia bazei de date', 0, -99, sysdate)
-;
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('CaleExpOracle', 'D:\oracle\product\10.2.0\client_1\bin', 'Directorul unde se afla exp.exe', 0, -99, sysdate)
-;
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('MP_VechimeCalculCO', NULL, '1- vechimea in munca; 2 - vechimea in companie', 3, -99, sysdate)
-;
-
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('NumeProcedura', NULL, 'Folosit de serviciul Windows LansareProcedura', 0, -99, sysdate)
-;
-
+UPDATE "Avs_tblAtribute" SET "Activ"=0 WHERE "Id" IN (30,31,32,33);
+COMMIT;
 

@@ -12665,10 +12665,6 @@ GO
 DELETE FROM "tblParametrii" WHERE "Nume" = 'DreptSolicitareAbsenta'
 GO
 
-INSERT INTO "Securitate"("IdForm", "IdControl", "IdColoana", "IdGrup", "Vizibil", "Blocat", "Obligatoriu", "VizibilInColumnChooser") 
-SELECT 'Eval.EvalLista', 'grDate', 'Rol', "Id", 0, 0, 0, 0 FROM "tblGrupUsers"
-GO
-
 IF COL_LENGTH('DynReports', 'HasPassword') IS NOT NULL
 	ALTER TABLE [dbo].[DynReports] DROP COLUMN [HasPassword];
 GO
@@ -12735,3 +12731,7 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('NumeProcedura', NULL, 'Folosit de serviciul Windows LansareProcedura', 0, -99, GetDate())
 GO
+
+UPDATE "Avs_tblAtribute" SET "Activ"=0 WHERE "Id" IN (30,31,32,33)
+GO
+

@@ -427,7 +427,7 @@ namespace WizOne.ConcediiMedicale
 
                 if (zile90 + nrZileLC > 90)
                 {
-                    CM90 = true;
+                    //CM90 = true;
                     if (txtNrAviz.Text.Trim().Length <= 0)
                     {
                         bErr = true;

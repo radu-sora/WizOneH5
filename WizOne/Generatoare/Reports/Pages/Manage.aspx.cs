@@ -43,11 +43,9 @@ namespace Wizrom.Reports.Pages
             var reportId = General.RunSqlScalar<int>("INSERT INTO [DynReports]([Name], [Description], [DynReportTypeId], [RegUserId]) VALUES (@1, @2, @3, @4)", "DynReportId",
                 report.Name, report.Description, report.TypeId, Session["UserId"].ToString());
             // For adding new reports into user groups if necessary.
-            var tableName = Constante.tipBD == 1 ? "relGrupRaport2" : "relGrupRaport";
-
             General.RunSqlColumn<int>("SELECT DISTINCT [IdGrup] FROM [relGrupUser] WHERE [IdUser] = @1", Session["UserId"]).ForEach(groupId =>
             {                
-                General.RunSqlScalar<int>($"INSERT INTO [{tableName}]([IdGrup], [IdRaport], [AreParola]) VALUES (@1, @2, @3)", null, groupId, reportId, report.Restricted);
+                General.RunSqlScalar<int>($"INSERT INTO [relGrupRaport2]([IdGrup], [IdRaport], [AreParola]) VALUES (@1, @2, @3)", null, groupId, reportId, report.Restricted);
             });
         }
 
@@ -56,12 +54,14 @@ namespace Wizrom.Reports.Pages
             General.RunSqlScalar<int>("UPDATE [DynReports] SET [Name] = @1, [Description] = @2, [DynReportTypeId] = @3 WHERE [DynReportId] = @4", null,
                 report.Name, report.Description, report.TypeId, report.Id);            
             // For updating existing reports from user groups if necessary.
-            var tableName = Constante.tipBD == 1 ? "relGrupRaport2" : "relGrupRaport";
-
-            General.RunSqlColumn<int>("SELECT DISTINCT [IdGrup] FROM [relGrupUser] WHERE [IdUser] = @1", Session["UserId"]).ForEach(groupId =>
+            General.RunSqlColumn<int>(
+                "SELECT DISTINCT [IdGrup] FROM [relGrupUser] WHERE [IdUser] = @1 " +
+                "UNION " +
+                "SELECT DISTINCT [IdGrup] FROM [relGrupRaport2] WHERE [IdRaport] = @2", Session["UserId"], report.Id).ForEach(groupId =>
             {
-                if (General.RunSqlScalar<int>($"UPDATE [{tableName}] SET [AreParola] = @1 WHERE [IdGrup] = @2 AND [IdRaport] = @3", null, report.Restricted, groupId, report.Id) == 0)
-                    General.RunSqlScalar<int>($"INSERT INTO [{tableName}] ([IdGrup], [IdRaport], [AreParola]) VALUES (@1, @2, @3)", null, groupId, report.Id, report.Restricted);
+                if (General.RunSqlScalar<int>($"UPDATE [relGrupRaport2] SET [AreParola] = @1 WHERE [IdGrup] = @2 AND [IdRaport] = @3", null, report.Restricted, groupId, report.Id) == 0)
+                    General.RunSqlScalar<int>($"INSERT INTO [relGrupRaport2] ([IdGrup], [IdRaport], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null, 
+                        groupId, report.Id, report.Restricted, Session["UserId"], DateTime.Now);
             });            
         }
 
@@ -69,9 +69,7 @@ namespace Wizrom.Reports.Pages
         {
             General.RunSqlScalar<int>("DELETE FROM [DynReports] WHERE [DynReportId] = @1", null, report.Id);
             // For removing reports from user groups if necessary.
-            var tableName = Constante.tipBD == 1 ? "relGrupRaport2" : "relGrupRaport";
-
-            General.RunSqlScalar<int>($"DELETE FROM [{tableName}] WHERE [IdRaport] = @1", null, report.Id);
+            General.RunSqlScalar<int>($"DELETE FROM [relGrupRaport2] WHERE [IdRaport] = @1", null, report.Id);
         }
 
         public static ReportSettingsViewModel GetReportSettings(int reportId)

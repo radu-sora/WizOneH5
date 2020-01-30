@@ -59,9 +59,9 @@ namespace WizOne.Module
                 double dblBPS, dblBPSRON, dblBPS6 = 0, dblBPSRON6 = 0, dblMedieZilnica, dblMedieZilnica6 /*dblCol11*/;
                 bool calculez, bAllowRedistr;
 
-                bool bAreStagiu;
+                //bool bAreStagiu = false;
 
-                int nZileLunaCurentaPropusa;
+                //int nZileLunaCurentaPropusa;
 
 
                 double Medie10;
@@ -72,7 +72,7 @@ namespace WizOne.Module
 
                 int nTmp, nTmp1, nTmpTZSLuna, TmpZileLucrate, TmpZileCM, TmpZileLuna, zileLucrate10 = 0, nrzileCM10 = 0, nrZileLuna10 = 0;
 
-                string szTxtMedieZilnica6_10, szValMedieZilnica6_10, szTmpTxt;
+                //string szTxtMedieZilnica6_10, szValMedieZilnica6_10, szTmpTxt;
 
           
                 int[] zileLucrate = new int[13];
@@ -87,17 +87,17 @@ namespace WizOne.Module
                 double[] SumaZi = new double[13], SumaZiRON= new double[12], ardTOTAL = new double[13];
 
                 int i, j, nLunaFractionata;
-                int nZileLunaStart = 0, nZileLunaStart6;
+                int nZileLunaStart = 0;   //, nZileLunaStart6;
                 //nZileLunaStart6 = Day(dtTmp) - DateTime.Now.Day;
                 //nZileLunaStart6 = CalculZL(nZileLunaStart6, dtStart6);
 
                 // nZileLunaStart = nZileLunaStart6;
 
-                string szBazaCMFUNASS = "", szBazaCMAMBP, szNN, szPP, szZAMBP, szCASTOT, szBCCAS;
+                string szBazaCMFUNASS = "", szBazaCMAMBP, szNN, szPP, szZAMBP, szCASTOT;   //, szBCCAS;
                 string szsql = "";
                 int nZileLunaCurenta = 0, month, year, nchkMedie6Luni = 1;       
-                int zileDiff_Stagiu_ZL = 0, zileDiff = 0, nStageCount_ZL_10 = 0, nStageCount_TZS_10 = 0, nStageCount_ZL_6 = 0, nStageCount_TZS_6 = 0;
-                bool bHasDiffZL = false;
+                int zileDiff_Stagiu_ZL = 0, nStageCount_ZL_10 = 0, nStageCount_TZS_10 = 0, nStageCount_ZL_6 = 0, nStageCount_TZS_6 = 0;
+                //bool bHasDiffZL = false;
 
                 int zileLucrate6 = 0, nrzileCM6 = 0, nrZileLuna6 = 0;
 
@@ -218,7 +218,7 @@ namespace WizOne.Module
                 string szBCCAS_2017, szCASTOT_2017 = "", szBCCAS_2018, szCASTOT_2018 = "";
                 if (szBazaCMFUNASS.Length > 4)
                 {
-                    szBCCAS = " 0 ";
+                    //szBCCAS = " 0 ";
                     szCASTOT = szBazaCMFUNASS;
                     szBCCAS_2017 = " 0 ";
                     szBCCAS_2018 = " 0 ";
@@ -1163,12 +1163,12 @@ namespace WizOne.Module
        
     if (nchkMedie6Luni == 1) 
         {
-         if (tCol7 >= 22)
-             bAreStagiu = true;
-            else
-            {
-             bAreStagiu = false;
-            }
+         //if (tCol7 >= 22)
+         //    bAreStagiu = true;
+         //   else
+         //   {
+         //    bAreStagiu = false;
+         //   }
             
             long nrluc;
             if (nrluni_stagiu == 1) 
@@ -1224,18 +1224,18 @@ namespace WizOne.Module
             }
             else
         {
-           szValMedieZilnica6_10 = "0";
+           //szValMedieZilnica6_10 = "0";
             Medie6 = 0;
         }
       }  
       else
    {
 
-          if (tCol7 >= 22)  
-             bAreStagiu = true;
-            else
-            //arCM.lblARENARE6.ForeColor = 255
-             bAreStagiu = false;
+          //if (tCol7 >= 22)  
+          //   bAreStagiu = true;
+          //  else
+          //  //arCM.lblARENARE6.ForeColor = 255
+          //   bAreStagiu = false;
 
                     long nrluc;
             if (nrluni_stagiu == 1) 
@@ -1288,7 +1288,7 @@ namespace WizOne.Module
               }
             else
             {
-            szValMedieZilnica6_10 = "0";
+            //szValMedieZilnica6_10 = "0";
             Medie10 = 0;
             }
     

@@ -3270,7 +3270,7 @@ namespace WizOne.Avs
                 grDate.DataSource = dt;
                 grDate.DataBind();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -3479,7 +3479,7 @@ namespace WizOne.Avs
                 DataTable dtF1001 = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + f10003.ToString(), null);
 
                 string data1 = "";
-                string dataInceputSusp = "", dataInceputDet = "";
+                //string dataInceputSusp = "", dataInceputDet = "";
                 if (Constante.tipBD == 1)
                 {
                     data = "CONVERT(DATETIME, '" + dtModif.Day.ToString().PadLeft(2, '0') + "/" + dtModif.Month.ToString().PadLeft(2, '0') + "/" + dtModif.Year.ToString() + "', 103)";
@@ -4054,7 +4054,7 @@ namespace WizOne.Avs
                     General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { id });
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

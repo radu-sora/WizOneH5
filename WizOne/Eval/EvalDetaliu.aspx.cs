@@ -4395,8 +4395,8 @@ namespace WizOne.Eval
                 if (descriere.Length <= 0)
                     descriere = dtIntreb.Rows[dtIntreb.Rows.Count - 1]["Descriere"].ToString();
 
-                string op = "+";
-                if (Constante.tipBD == 2) op = "||";
+                //string op = "+";
+                //if (Constante.tipBD == 2) op = "||";
                 DataTable dt = General.IncarcaDT($@"SELECT * FROM ""{numeView}"" WHERE F10003 = @1 AND ""Perioada""=(SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id""=@2) AND '{descriere}' LIKE '%' {Dami.Operator()} ""Descriere"" {Dami.Operator()} '%' ", new object[] { Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)).ToString(), Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"], 1)).ToString() });
 
                 grDate.AutoGenerateColumns = true;

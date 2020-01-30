@@ -242,7 +242,7 @@ namespace WizOne.Tactil
                             //Afisam explicatiile
                             //calculam nr de zile luate
                             int nr = 0;
-                            int nrViitor = 0;
+                            //int nrViitor = 0;
                             //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                             //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
                             nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0),
@@ -429,7 +429,7 @@ namespace WizOne.Tactil
 
                         //calculam nr de zile luate
                         int nr = 0;
-                        int nrViitor = 0;
+                        //int nrViitor = 0;
                         //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                         //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
                         nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0),

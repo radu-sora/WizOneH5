@@ -1769,7 +1769,7 @@ namespace WizOne.Module
             {
                 if (arr.Count == 0) return "Eroare";
 
-                bool HR = false;
+                //bool HR = false;
                 //int idRolEcran = 1;
                 //string ids = "";
 
@@ -2140,8 +2140,8 @@ namespace WizOne.Module
                     sqlInsertEval_RaspunsLinii = sqlInsert + Environment.NewLine + cteManageri + Environment.NewLine + cteF100 + Environment.NewLine + sqlSelectInsert;
                 General.ExecutaNonQuery(sqlInsertEval_RaspunsLinii, null);
 
-                string to_char = "";
-                if (Constante.tipBD == 2) to_char = "TO_CHAR";
+                //string to_char = "";
+                //if (Constante.tipBD == 2) to_char = "TO_CHAR";
                 //Radu 22.02.2018 - Obiectivele
                 string sqlObiective =
                     $@"SELECT A.*, B.""CategorieQuiz"" FROM ""Eval_QuizIntrebari"" A

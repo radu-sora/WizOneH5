@@ -1095,7 +1095,7 @@ namespace WizOne.Personal
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                // Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -1687,7 +1687,7 @@ namespace WizOne.Personal
                         txtZLP.Value = nrZLP.ToString();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
             }

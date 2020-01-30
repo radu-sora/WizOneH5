@@ -288,9 +288,8 @@ namespace WizOne.Absente
                             cont = false;
                         }
                     }
-                    catch (Exception exc)
+                    catch (Exception)
                     {
-
                     }
                 }
                 MessageBox.Show(Dami.TraduCuvant(msg), MessageBox.icoSuccess);
@@ -305,7 +304,7 @@ namespace WizOne.Absente
 
         private string GenerareCereri(List<int> lstMarci)
         {
-            string msg = "";
+            //string msg = "";
             string err = "";
             Dictionary<int, int> lstOre = new Dictionary<int, int>();
             if (rbPrel1.Checked)
@@ -559,7 +558,7 @@ namespace WizOne.Absente
             try
             {
                 bool esteStruc = true;
-                string sql = "";
+                //string sql = "";
                 switch (e.Parameter.Split(';')[0])
                 {
                     case "cmbSub":

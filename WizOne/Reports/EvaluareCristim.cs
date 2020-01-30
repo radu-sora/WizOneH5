@@ -493,7 +493,7 @@ namespace WizOne.Reports
                 lbl.CanShrink = true;
                 lbl.Text = desc;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -521,7 +521,7 @@ namespace WizOne.Reports
 
                 lbl.Multiline = multiLine;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 

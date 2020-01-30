@@ -302,7 +302,7 @@ namespace WizOne.Pontaj
         {
             string msg = "";
 
-            int x = 1;
+            //int x = 1;
             List<int> lstMarciSDSL = new List<int>();
             string dtStart = General.ToDataUniv(dataStart.Date.Year, dataStart.Date.Month, dataStart.Date.Day);
             string dtSf = General.ToDataUniv(dataSf.Date.Year, dataSf.Date.Month, dataSf.Date.Day);

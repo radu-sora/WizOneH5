@@ -26,23 +26,23 @@ namespace WizOne.Reports
 
             #endregion
 
-            string titlu = "";
-            if (Session["TactilAdeverinte"] != null)
-                switch (Session["TactilAdeverinte"].ToString())
-                {
-                    case "Angajat":
-                        titlu = "Adeverinta de angajat";
-                        break;
-                    case "Practica":
-                        titlu = "Adeverinta de practica";
-                        break;
-                    case "Gradinita":
-                        titlu = "Adeverinta de cresa/gradinita";
-                        break;
-                    case "Medic":
-                        titlu = "Adeverinta de sanatate/medic";
-                        break;
-                }
+            //string titlu = "";
+            //if (Session["TactilAdeverinte"] != null)
+            //    switch (Session["TactilAdeverinte"].ToString())
+            //    {
+            //        case "Angajat":
+            //            titlu = "Adeverinta de angajat";
+            //            break;
+            //        case "Practica":
+            //            titlu = "Adeverinta de practica";
+            //            break;
+            //        case "Gradinita":
+            //            titlu = "Adeverinta de cresa/gradinita";
+            //            break;
+            //        case "Medic":
+            //            titlu = "Adeverinta de sanatate/medic";
+            //            break;
+            //    }
 
             //txtTitlu.Text = Dami.TraduCuvant(titlu);
 

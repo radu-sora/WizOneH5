@@ -547,7 +547,7 @@ namespace WizOne.Personal
                 grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.Message.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -590,7 +590,7 @@ namespace WizOne.Personal
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.Message.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

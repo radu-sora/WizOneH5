@@ -406,12 +406,12 @@ namespace WizOne.Module
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         continue;
-                        General.MemoreazaEroarea(ex + Environment.NewLine +
-                            General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
-                            General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+                        //General.MemoreazaEroarea(ex + Environment.NewLine +
+                        //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+                        //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
                     }
                 }
             }
@@ -499,12 +499,12 @@ namespace WizOne.Module
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         continue;
-                        General.MemoreazaEroarea(ex + Environment.NewLine +
-                            General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
-                            General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+                        //General.MemoreazaEroarea(ex + Environment.NewLine +
+                        //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+                        //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
                     }
                 }
             }
@@ -597,12 +597,12 @@ namespace WizOne.Module
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         continue;
-                        General.MemoreazaEroarea(ex + Environment.NewLine +
-                            General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
-                            General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+                        //General.MemoreazaEroarea(ex + Environment.NewLine +
+                        //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+                        //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
                     }
                 }
             }
@@ -1790,7 +1790,7 @@ namespace WizOne.Module
                     #endregion
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // srvGeneral.MemoreazaEroarea(ex.ToString(), "srvGeneral", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

@@ -756,7 +756,7 @@ namespace WizOne.Module
 
                 //strSql = strSql.Replace("CRP.F10008", "dbo.nuf('F10008', CRP.F10003, CRP.F10008) AS F10008");
                 //strSql = strSql.Replace("CRP.F10009", "dbo.nuf('F10009', CRP.F10003, CRP.F10009) AS F10009");
-            }catch (Exception ex){}
+            }catch (Exception){}
 
 
             SqlCommand cmd = new SqlCommand(strSql, conn, tran);
@@ -1974,7 +1974,7 @@ namespace WizOne.Module
                 //else
                 //    return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MemoreazaEroarea(ex.ToString(), "General", "IsDate");
                 return false;
@@ -5060,22 +5060,6 @@ namespace WizOne.Module
             }
         }
 
-        public static void StergeFotografie(object sender, int id, string Tabela)
-        {
-            try
-            {
-
-                //string sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + Tabela + "' AND \"Id\" = " + id;
-                //General.ExecutaNonQuery(sql, null);          
-
-            }
-            catch (Exception ex)
-            {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-
         public static void StergeFisier(string Tabela, object cheie)
         {
             try
@@ -5156,12 +5140,9 @@ namespace WizOne.Module
                         oledbAdapter.Dispose();
                         oledbAdapter = null;
                     }
-
                 }
-
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -5234,18 +5215,13 @@ namespace WizOne.Module
                         HttpContext.Current.Response.Buffer = true;
                         ms.WriteTo(HttpContext.Current.Response.OutputStream);
                     }
-
                 }
-
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
-
         }
-
 
         public static string NumarLuniContract(decimal F10003, string F100985, DateTime F100933, DateTime F100934, int zileContractCurent)
         {
@@ -5306,7 +5282,7 @@ namespace WizOne.Module
                     mesaj = "1Mai puteti prelungi acest contract pe maxim " + months + " luni si " + days + " zile";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.Message.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -5914,7 +5890,7 @@ namespace WizOne.Module
                 return null;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
                 return null;
@@ -6583,7 +6559,7 @@ namespace WizOne.Module
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
                 return false;
@@ -9297,7 +9273,7 @@ namespace WizOne.Module
 
                 smtp.Dispose();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 strErr = "Mailul nu a fost trimis.";
             }

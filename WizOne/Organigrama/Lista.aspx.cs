@@ -473,7 +473,7 @@ namespace WizOne.Organigrama
                     nod = Convert.ToInt32(General.Nz(dt.Rows[0]["Id"],-99));
                     if (nod == -99) return;
 
-                    string strSql = "";
+                    //string strSql = "";
                     string arrId = "," + nod;
                     string arrIdAuto = "," + nod_idAuto;
 
@@ -492,7 +492,7 @@ namespace WizOne.Organigrama
                             for (int i = 0; i < po.Rows.Count; i++)
                             {
                                 DataRow dr = po.Rows[i];
-                                int modifStruc = 0;
+                                //int modifStruc = 0;
                                 //if (drOri["F10002"] != drDes["F10002"] || drOri["F10004"] != drDes["F10004"] || drOri["F10005"] != drDes["F10005"] || drOri["F10006"] != drDes["F10006"] || drOri["F10007"] != drDes["F10007"]) modifStruc = 1;
 
                                 ExecutaModif(target_idAuto, Convert.ToInt32(dr["IdAuto"]), Convert.ToInt32(dr["Id"]), Convert.ToDateTime(dr["DataInceput"]));

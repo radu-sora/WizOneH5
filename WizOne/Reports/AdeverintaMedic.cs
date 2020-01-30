@@ -28,7 +28,7 @@ namespace WizOne.Reports
                 return;
 
             string sql = "";
-            string op = "";
+            //string op = "";
             if (Constante.tipBD == 1)
                 sql = "SELECT F00204, F00207, F00281, F00282, 'Str. ' + F00233 + ', nr. ' + F00234 + ', ' + F00231 AS \"AdresaAngajator\", "
                                     + "F00241 + '/' + CONVERT(VARCHAR, F00242) + '/' + CONVERT(VARCHAR, F00243) AS \"NrOrdine\",  (select f06304 from f063 where f06302=f00284) as Casa FROM F002 WHERE F00202 = (SELECT F10002 FROM F100 WHERE F10003 = {0})";
@@ -262,7 +262,7 @@ namespace WizOne.Reports
             {
                 DirectoryInfo root = new DirectoryInfo(HostingEnvironment.MapPath("~/Fisiere/Imagini/Clienti/" + HttpContext.Current.Session["IdClient"].ToString()));
                 FileInfo[] listfiles = root.GetFiles("Logo.*");
-                string logo = "";
+                //string logo = "";
                 if (listfiles.Length > 0)
                 {
                     string path = root.FullName + "/" + listfiles[0].Name;
@@ -271,7 +271,7 @@ namespace WizOne.Reports
                 }
 
                 FileInfo[] listfilesSub = root.GetFiles("Subsol.*");
-                logo = "";
+                //logo = "";
                 if (listfilesSub.Length > 0)
                 {
                     string path = root.FullName + "/" + listfilesSub[0].Name;

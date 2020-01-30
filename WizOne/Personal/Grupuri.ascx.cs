@@ -7,6 +7,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using DevExpress.Web;
+using System.IO;
+using System.Diagnostics;
 
 namespace WizOne.Personal
 {
@@ -107,17 +109,12 @@ namespace WizOne.Personal
                     e.NewValues["IdAuto"] = Dami.NextId("relGrupAngajat2");
 
                 e.NewValues["Modificabil"] = 1;
-               
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-
-
-
 
         protected void grDateGrupuri_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {

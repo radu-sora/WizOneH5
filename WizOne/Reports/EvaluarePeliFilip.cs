@@ -314,13 +314,12 @@ namespace WizOne.Reports
                                         break;
                                     case 23:                     //Obiective angajat
                                         {
-                                            if ((arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") == "468")
-                                            {
-                                                string ert = "";
-                                                string qwe = "F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Replace("Super","");
-                                                var ert1 = dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Replace("Super", ""));
-                                                var wsx = ert1.Length;
-                                            }
+                                            //if ((arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") == "468")
+                                            //{
+                                            //    string qwe = "F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Replace("Super","");
+                                            //    var ert1 = dtObiIndividuale.Select("F10003 = " + f10003 + " AND IdLinieQuiz = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0") + " AND Pozitie = " + super.Replace("Super", ""));
+                                            //    var wsx = ert1.Length;
+                                            //}
 
                                             DataRow[] dtColOb = dtTemplateOb.Select("Id = " + (arrIntre[j]["Id"] != DBNull.Value ? arrIntre[j]["Id"].ToString() : "0"));
                                             if (dtColOb != null && dtColOb.Length > 0)
@@ -617,7 +616,7 @@ namespace WizOne.Reports
                 lbl.CanShrink = true;
                 lbl.Text = desc;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -641,7 +640,7 @@ namespace WizOne.Reports
 
                 lbl.Multiline = multiLine;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -810,7 +809,7 @@ namespace WizOne.Reports
                 tbl.BeforePrint += new PrintEventHandler(table_BeforePrint);
                 tbl.AdjustSize();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -1070,7 +1069,7 @@ namespace WizOne.Reports
                 tbl.BeforePrint += new PrintEventHandler(table_BeforePrint);
                 tbl.AdjustSize();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 

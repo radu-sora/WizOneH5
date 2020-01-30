@@ -44,7 +44,7 @@ namespace WizOne.Eval
                             col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
                         }
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                 }
                 #endregion
 

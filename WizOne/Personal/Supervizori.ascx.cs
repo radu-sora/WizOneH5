@@ -125,7 +125,7 @@ namespace WizOne.Personal
                     e.NewValues["DataSfarsit"] = new DateTime(2100, 1, 1);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageBox.Show(this, ex, MessageBox.icoError, "");
                 //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);

@@ -459,7 +459,7 @@ namespace WizOne.Personal
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -491,7 +491,7 @@ namespace WizOne.Personal
                     valid = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -524,7 +524,7 @@ namespace WizOne.Personal
                 else
                     cmbTimpPartial.SelectedItem.Value = 1;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -547,7 +547,7 @@ namespace WizOne.Personal
                 Session["InformatiaCurentaPersonal"] = ds;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

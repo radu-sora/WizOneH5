@@ -279,7 +279,7 @@ namespace WizOne.Adev
                                         if (i > 0)
                                             tranzactii += "+";
                                         index = keyAbs;
-                                        index = index + listaAbs[keyAbs];
+                                        index += listaAbs[keyAbs];
                                         if (index > 99)
                                             tranzactii += ("F20004" + index);
                                         else
@@ -485,7 +485,7 @@ namespace WizOne.Adev
         {
             Dictionary<int, int> lista = new Dictionary<int, int>();
 
-            string sql = "";
+            string sql;
             if (Constante.tipBD == 2)
                 sql = "SELECT DISTINCT CASE WHEN F02113 = 0 THEN INSTR(F02118, '6') ELSE F02113 END AS INDEXS, CASE WHEN F02113 = 0 THEN 59 ELSE 29 END AS PLUS FROM F021 where F02104 IN (" + tranzactii + ")";
             else

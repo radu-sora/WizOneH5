@@ -40,16 +40,6 @@
           <Property Name="DynReportTypeId" Type="smallint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="RapoarteGrupuriUtilizatori">
-          <Key>
-            <PropertyRef Name="IdRaport" />
-            <PropertyRef Name="IdUser" />
-          </Key>
-          <Property Name="IdRaport" Type="int" Nullable="false" />
-          <Property Name="IdUser" Type="int" Nullable="false" />
-          <Property Name="ExtensiiPermise" Type="nvarchar" MaxLength="100" />
-          <Property Name="MeniuRestrans" Type="smallint" />
-        </EntityType>
         <Association Name="FK_DynReports_DynReportTypes">
           <End Role="DynReportTypes" Type="Self.DynReportTypes" Multiplicity="1" />
           <End Role="DynReports" Type="Self.DynReports" Multiplicity="*" />
@@ -80,14 +70,6 @@
           <EntitySet Name="DynReports" EntityType="Self.DynReports" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DynReportsUsers" EntityType="Self.DynReportsUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DynReportTypes" EntityType="Self.DynReportTypes" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="RapoarteGrupuriUtilizatori" EntityType="Self.RapoarteGrupuriUtilizatori" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [RapoarteGrupuriUtilizatori].[IdRaport] AS [IdRaport], 
-    [RapoarteGrupuriUtilizatori].[IdUser] AS [IdUser], 
-    [RapoarteGrupuriUtilizatori].[ExtensiiPermise] AS [ExtensiiPermise], 
-    [RapoarteGrupuriUtilizatori].[MeniuRestrans] AS [MeniuRestrans]
-    FROM [dbo].[RapoarteGrupuriUtilizatori] AS [RapoarteGrupuriUtilizatori]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_DynReports_DynReportTypes" Association="Self.FK_DynReports_DynReportTypes">
             <End Role="DynReportTypes" EntitySet="DynReportTypes" />
             <End Role="DynReports" EntitySet="DynReports" />
@@ -116,7 +98,6 @@
           <Property Name="UpdDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="ReportType" Relationship="Self.FK_DynReports_DynReportTypes" FromRole="DynReports" ToRole="DynReportTypes" />
           <NavigationProperty Name="ReportUsers" Relationship="Self.FK_DynReportsUsers_DynReports" FromRole="DynReports" ToRole="DynReportsUsers" />
-          <NavigationProperty Name="ReportGroupUsers" Relationship="ReportsModel.ReportReportGroupUser" FromRole="Report" ToRole="ReportGroupUser" />
         </EntityType>
         <EntityType Name="ReportUser">
           <Key>
@@ -179,35 +160,7 @@
             <End Role="DynReports" EntitySet="Reports" />
             <End Role="DynReportsUsers" EntitySet="ReportsUsers" />
           </AssociationSet>
-          <EntitySet Name="ReportsGroupUsers" EntityType="ReportsModel.ReportGroupUser" />
-          <AssociationSet Name="ReportReportGroupUser" Association="ReportsModel.ReportReportGroupUser">
-            <End Role="Report" EntitySet="Reports" />
-            <End Role="ReportGroupUser" EntitySet="ReportsGroupUsers" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="ReportGroupUser">
-          <Key>
-            <PropertyRef Name="ReportId" />
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="ReportId" Type="Int32" Nullable="false" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Report" Relationship="ReportsModel.ReportReportGroupUser" FromRole="ReportGroupUser" ToRole="Report" />
-          <Property Name="ExportOptions" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ToolbarType" Type="Int16" />
-        </EntityType>
-        <Association Name="ReportReportGroupUser">
-          <End Type="ReportsModel.Report" Role="Report" Multiplicity="1" />
-          <End Type="ReportsModel.ReportGroupUser" Role="ReportGroupUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Report">
-              <PropertyRef Name="ReportId" />
-            </Principal>
-            <Dependent Role="ReportGroupUser">
-              <PropertyRef Name="ReportId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -249,16 +202,6 @@
               <MappingFragment StoreEntitySet="DynReportTypes">
                 <ScalarProperty Name="ReportTypeId" ColumnName="DynReportTypeId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ReportsGroupUsers">
-            <EntityTypeMapping TypeName="ReportsModel.ReportGroupUser">
-              <MappingFragment StoreEntitySet="RapoarteGrupuriUtilizatori">
-                <ScalarProperty Name="ToolbarType" ColumnName="MeniuRestrans" />
-                <ScalarProperty Name="ExportOptions" ColumnName="ExtensiiPermise" />
-                <ScalarProperty Name="UserId" ColumnName="IdUser" />
-                <ScalarProperty Name="ReportId" ColumnName="IdRaport" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

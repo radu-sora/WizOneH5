@@ -23,6 +23,8 @@
                     grLeg.MoveColumn(0, 0);
                     grLeg.SetVisible(false);
                     pnlLoading.Hide();
+                    document.getElementById('<%= lblAn.ClientID %>').style.display = "none";
+                    cmbAn.SetVisible(false);
                     break;
                 case 2:
                     grDate.SetVisible(false);
@@ -40,6 +42,8 @@
                     grLeg.MoveColumn(0, 0);
                     grLeg.SetVisible(false);
                     pnlLoading.Hide();
+                    document.getElementById('<%= lblAn.ClientID %>').style.display = "none";
+                    cmbAn.SetVisible(false);
                     break;
                 case 3:
                     grDate.SetVisible(false);
@@ -52,11 +56,13 @@
                     txtLuna.SetVisible(false);
                     document.getElementById('<%= lblFil.ClientID %>').style.display = "none";
                     cmbFil.SetVisible(false);
-                    btnLoad.SetVisible(false);
+                    btnLoad.SetVisible(true);
                     btnExport.SetVisible(false);
                     grLeg.MoveColumn(0,0);
                     grLeg.SetVisible(true);
                     pnlLoading.Hide();
+                    document.getElementById('<%= lblAn.ClientID %>').style.display = "inline-block";
+                    cmbAn.SetVisible(true);
                     break;
                 case 4:
                     grDate.SetVisible(false);
@@ -74,6 +80,8 @@
                     grLeg.MoveColumn(0);
                     grLeg.SetVisible(true);
                     pnlLoading.Hide();
+                    document.getElementById('<%= lblAn.ClientID %>').style.display = "none";
+                    cmbAn.SetVisible(false);
                     break;
                 default:
                     pnlLoading.Hide();
@@ -157,18 +165,25 @@
             </dx:ASPxComboBox>
         </div>
 
+
         <div class="Absente_Cereri_CampuriSup">
             <label id="lblLuna" runat="server" style="display:none;">Luna</label>
-            <dx:ASPxDateEdit ID="txtLuna" ClientInstanceName="txtLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" EditFormatString="MM/yyyy" EditFormat="Custom" ClientVisible="false" >
+            <dx:ASPxDateEdit ID="txtLuna" ClientInstanceName="txtLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" ClientVisible="false" >
                 <CalendarProperties FirstDayOfWeek="Monday" />
             </dx:ASPxDateEdit>
         </div>
 
+        <div class="Absente_Cereri_CampuriSup">
+            <label id="lblAn" runat="server" style="display:none;">Anul</label>
+            <dx:ASPxComboBox ID="cmbAn" runat="server" ClientInstanceName="cmbAn" ClientIDMode="Static" Width="100px" ValueField="Id" DropDownWidth="100" 
+                TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" ClientVisible="false" >
+            </dx:ASPxComboBox>
+        </div>
 
         <div class="Absente_Cereri_CampuriSup">
             <label id="lblFil" runat="server" style="display:none;">Filtru</label>
             <dx:ASPxComboBox ID="cmbFil" runat="server" ClientInstanceName="cmbFil" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
-                TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" ClientVisible="false" >
+                TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" ClientVisible="false" >            
             </dx:ASPxComboBox>
         </div>
 

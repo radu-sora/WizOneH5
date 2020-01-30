@@ -146,36 +146,74 @@ namespace WizOne
 
                 DataRow drUsr = General.IncarcaDR(strSql, null);
                 //DataRow drUsr = General.IncarcaDR(strSql, new object[] { cartela });
-                if (drUsr != null)
+
+                //Radu 14.01.2020
+                //1 - blocare utilizatori inactivi la logare
+                //2- blocare utilizatori inactivi si suspendati la logare
+
+                string dezactiv = Dami.ValoareParam("DezactivareUtilizatori");
+                if (dezactiv.Length <= 0) dezactiv = "0";
+                bool err = false;
+                switch (dezactiv)
                 {
-                    var ert = General.Nz(drUsr["Nume"], "").ToString() + " " + General.Nz(drUsr["Prenume"], "").ToString();
+                    case "1":
+                        string inactiv = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN  {General.TruncateDate("F10023")} < {General.CurrentDate(true)} OR {General.TruncateDate("F10022")} > {General.CurrentDate(true)} THEN 1 ELSE 0 END INACTIV FROM F100 WHERE F10003 = @1", new object[] { Convert.ToInt32(General.Nz(drUsr["Marca"], -99)) }), "").ToString();
 
-                    Session["UserId"] = Convert.ToInt32(drUsr["UtilizatorId"]);
-                    Session["User"] = drUsr["Utilizator"].ToString();
-                    Session["User_Marca"] = Convert.ToInt32(General.Nz(drUsr["Marca"], -99));
-                    Session["User_IdDept"] = Convert.ToInt32(General.Nz(drUsr["IdDept"], -99));
-                    Session["User_Dept"] = drUsr["Dept"].ToString();
-                    Session["User_NumeComplet"] = General.Nz(drUsr["Nume"], "").ToString() + " " + General.Nz(drUsr["Prenume"], "").ToString();
-                    Session["User_CNP"] = drUsr["CNP"].ToString();
-                    Session["EsteAdmin"] = Convert.ToInt32(General.Nz(drUsr["EsteAdmin"], 0));
-                    Session["EsteInGrup99"] = Convert.ToInt32(General.Nz(drUsr["EsteInGrup99"], 0));
-                    Session["ParolaComplexa"] = Convert.ToInt32(General.Nz(drUsr["ParolaComplexa"], 0));
+                        if (inactiv == "1")
+                        {
+                            General.InregistreazaLogarea(0, txtPan1.Value, "Angajatul asociat acestui utilizator este inactiv!");
+                            MessageBox.Show("Angajatul asociat acestui utilizator este inactiv! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                            txtPan1.Focus();
+                            err = true;
+                        }
+                        break;
+                    case "2":
+                        string suspendatinactiv = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN ({General.TruncateDate("F10023")} < {General.CurrentDate(true)} OR {General.TruncateDate("F10022")} > {General.CurrentDate(true)} ) OR ( {General.TruncateDate("F100922")} <= {General.CurrentDate(true)} AND NOT ( {General.TruncateDate("F100924")} <= {General.CurrentDate(true)} ) ) THEN 1 ELSE 0 END SI FROM F100 WHERE F10003 = @1", new object[] { Convert.ToInt32(General.Nz(drUsr["Marca"], -99)) }), "").ToString();
 
-                    General.SetTheme();
-                    General.InregistreazaLogarea(1, txtPan1.Value);
-                    Session["SecApp"] = "OK_Tactil";
-
-                    Session["TimeOutSecunde"] = 99999;
-                    DataTable dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TimeoutSecunde'", null);
-                    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
-                        Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
-                    Response.Redirect("~/Tactil/Main.aspx", false);
+                        if (suspendatinactiv == "1")
+                        {
+                            General.InregistreazaLogarea(0, txtPan1.Value, "Angajatul asociat acestui utilizator este suspendat!");
+                            MessageBox.Show("Angajatul asociat acestui utilizator este suspendat! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                            txtPan1.Focus();
+                            err = true;
+                        }
+                        break;
                 }
-                else
+
+
+                if (!err)
                 {
-                    General.InregistreazaLogarea(0, txtPan1.Value, "Utilizator inexistent in aplicatie");
-                    MessageBox.Show("Utilizator inexistent in aplicatie! Contactati administratorul de sistem!", MessageBox.icoWarning);
-                    txtPan1.Focus();
+                    if (drUsr != null)
+                    {
+                        var ert = General.Nz(drUsr["Nume"], "").ToString() + " " + General.Nz(drUsr["Prenume"], "").ToString();
+
+                        Session["UserId"] = Convert.ToInt32(drUsr["UtilizatorId"]);
+                        Session["User"] = drUsr["Utilizator"].ToString();
+                        Session["User_Marca"] = Convert.ToInt32(General.Nz(drUsr["Marca"], -99));
+                        Session["User_IdDept"] = Convert.ToInt32(General.Nz(drUsr["IdDept"], -99));
+                        Session["User_Dept"] = drUsr["Dept"].ToString();
+                        Session["User_NumeComplet"] = General.Nz(drUsr["Nume"], "").ToString() + " " + General.Nz(drUsr["Prenume"], "").ToString();
+                        Session["User_CNP"] = drUsr["CNP"].ToString();
+                        Session["EsteAdmin"] = Convert.ToInt32(General.Nz(drUsr["EsteAdmin"], 0));
+                        Session["EsteInGrup99"] = Convert.ToInt32(General.Nz(drUsr["EsteInGrup99"], 0));
+                        Session["ParolaComplexa"] = Convert.ToInt32(General.Nz(drUsr["ParolaComplexa"], 0));
+
+                        General.SetTheme();
+                        General.InregistreazaLogarea(1, txtPan1.Value);
+                        Session["SecApp"] = "OK_Tactil";
+
+                        Session["TimeOutSecunde"] = 99999;
+                        DataTable dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TimeoutSecunde'", null);
+                        if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
+                            Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
+                        Response.Redirect("~/Tactil/Main.aspx", false);
+                    }
+                    else
+                    {
+                        General.InregistreazaLogarea(0, txtPan1.Value, "Utilizator inexistent in aplicatie");
+                        MessageBox.Show("Utilizator inexistent in aplicatie! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                        txtPan1.Focus();
+                    }
                 }
 
                 txtPan1.Value = null;

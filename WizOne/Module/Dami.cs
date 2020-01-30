@@ -46,12 +46,14 @@ namespace WizOne.Module
         //}
 
 
-        public static void CnnWeb()
+        public static void InitCnn()
         {
             try
             {
                 CriptDecript prc = new CriptDecript();
                 Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
+                Constante.cnnRap = ConfigurationManager.ConnectionStrings["cnRap"]?.ConnectionString ?? ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString;
+                Constante.cnnRap = prc.EncryptString(Constante.cheieCriptare, Constante.cnnRap, 2);
             }
             catch (Exception ex)
             {
@@ -1917,7 +1919,7 @@ namespace WizOne.Module
             try
             {
                 List<metaGeneral> list = new List<metaGeneral>();
-                for (int i = anStart; i <= 2200; i++)
+                for (int i = anStart; i <= anEnd; i++)
                 {
                     list.Add(new metaGeneral() { Id = i, Denumire = i.ToString() });
                 }
@@ -1936,12 +1938,12 @@ namespace WizOne.Module
             try
             {
                 List<metaGeneral> list = new List<metaGeneral>();
-                list.Add(new metaGeneral() { Id = 1, Denumire = "Toti" });
-                list.Add(new metaGeneral() { Id = 2, Denumire = "Activi" });
-                list.Add(new metaGeneral() { Id = 3, Denumire = "Plecati" });
-                list.Add(new metaGeneral() { Id = 4, Denumire = "In avans" });
+                list.Add(new metaGeneral() { Id = 1, Denumire = Dami.TraduCuvant("Toti") });
+                list.Add(new metaGeneral() { Id = 2, Denumire = Dami.TraduCuvant("Activi") });
+                list.Add(new metaGeneral() { Id = 3, Denumire = Dami.TraduCuvant("Plecati") });
+                list.Add(new metaGeneral() { Id = 4, Denumire = Dami.TraduCuvant("In avans") });
                 //5 - acest id este ocupat in srvPersonal
-                list.Add(new metaGeneral() { Id = 6, Denumire = "Candidat" });
+                list.Add(new metaGeneral() { Id = 6, Denumire = Dami.TraduCuvant("Candidat") });
 
                 return list;
             }

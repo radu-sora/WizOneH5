@@ -2,7 +2,7 @@
 using System.IO;
 using System.Web;
 
-namespace WizOne.Generatoare.Reports.Pages
+namespace Wizrom.Reports.Pages
 {
     /// <summary>
     /// File download http handler
@@ -37,7 +37,7 @@ namespace WizOne.Generatoare.Reports.Pages
             }
             catch (Exception ex)
             {
-                // Log & redirect to error page
+                // Log error here
                 // For now, just display the error message
                 context.Response.ContentType = "text/plain";
                 context.Response.Write(ex.Message);

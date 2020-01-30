@@ -422,30 +422,46 @@ namespace WizOne.Eval
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(!IsPostBack)
+            try
             {
+                if(!IsPostBack)
+                {
+                    GridViewDataComboBoxColumn colTipValoare = (grDateObiective.Columns["TipValoare"] as GridViewDataComboBoxColumn);
+                    GridViewDataComboBoxColumn colIdNomenclator = (grDateObiective.Columns["IdNomenclator"] as GridViewDataComboBoxColumn);
+                    colTipValoare.PropertiesComboBox.DataSource = lstEval_DictionaryItem;
+                    colIdNomenclator.PropertiesComboBox.DataSource = lstVwEval_ConfigObiectivCol;
 
-                GridViewDataComboBoxColumn colTipValoare = (grDateObiective.Columns["TipValoare"] as GridViewDataComboBoxColumn);
-                GridViewDataComboBoxColumn colIdNomenclator = (grDateObiective.Columns["IdNomenclator"] as GridViewDataComboBoxColumn);
-                colTipValoare.PropertiesComboBox.DataSource = lstEval_DictionaryItem;
-                colIdNomenclator.PropertiesComboBox.DataSource = lstVwEval_ConfigObiectivCol;
+                    //Florin 2020.01.03
+                    DataTable dt = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Eval_tblCategorieObiective"" ", null);
+                    cmbCategObi.DataSource = dt;
+                    cmbCategObi.DataBind();
+                    Session["Eval_tblCategorieObiective"] = dt;
+                }
+                else
+                {
+                    lstEval_DictionaryItem = new List<Eval_DictionaryItem>();
+                    lstVwEval_ConfigObiectivCol = new List<vwEval_ConfigObiectivCol>();
+                    lstVwEval_ConfigCompetenteCol = new List<vwEval_ConfigCompetenteCol>();
+
+                    lstEval_DictionaryItem = Session["nomenEval_DictionaryItem"] as List<Eval_DictionaryItem>;
+                    lstVwEval_ConfigObiectivCol = Session["nomenVwEval_ConfigObiectivCol"] as List<vwEval_ConfigObiectivCol>;
+                    lstVwEval_ConfigCompetenteCol = Session["nomenVwEval_ConfigCompetenteCol"] as List<vwEval_ConfigCompetenteCol>;
+
+                    GridViewDataComboBoxColumn colTipValoare = (grDateObiective.Columns["TipValoare"] as GridViewDataComboBoxColumn);
+                    GridViewDataComboBoxColumn colIdNomenclator = (grDateObiective.Columns["IdNomenclator"] as GridViewDataComboBoxColumn);
+                    colTipValoare.PropertiesComboBox.DataSource = lstEval_DictionaryItem;
+                    colIdNomenclator.PropertiesComboBox.DataSource = lstVwEval_ConfigObiectivCol;
+                    
+                    //Florin 2020.01.03
+                    DataTable dt = Session["Eval_tblCategorieObiective"] as DataTable;
+                    cmbCategObi.DataSource = dt;
+                    cmbCategObi.DataBind();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                lstEval_DictionaryItem = new List<Eval_DictionaryItem>();
-                lstVwEval_ConfigObiectivCol = new List<vwEval_ConfigObiectivCol>();
-                lstVwEval_ConfigCompetenteCol = new List<vwEval_ConfigCompetenteCol>();
-
-                lstEval_DictionaryItem = Session["nomenEval_DictionaryItem"] as List<Eval_DictionaryItem>;
-                lstVwEval_ConfigObiectivCol = Session["nomenVwEval_ConfigObiectivCol"] as List<vwEval_ConfigObiectivCol>;
-                lstVwEval_ConfigCompetenteCol = Session["nomenVwEval_ConfigCompetenteCol"] as List<vwEval_ConfigCompetenteCol>;
-
-                GridViewDataComboBoxColumn colTipValoare = (grDateObiective.Columns["TipValoare"] as GridViewDataComboBoxColumn);
-                GridViewDataComboBoxColumn colIdNomenclator = (grDateObiective.Columns["IdNomenclator"] as GridViewDataComboBoxColumn);
-                colTipValoare.PropertiesComboBox.DataSource = lstEval_DictionaryItem;
-                colIdNomenclator.PropertiesComboBox.DataSource = lstVwEval_ConfigObiectivCol;
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-           
         }
 
         protected void pnlCtlQuiz_Callback(object sender, DevExpress.Web.CallbackEventArgsBase e)
@@ -565,6 +581,7 @@ namespace WizOne.Eval
                     lblPerioadaComp.Visible = false;
                     cmbPerioadaComp.Visible = false;
                     cmbPerioadaComp.Value = null;
+                    cmbCategObi.Value = null;
 
 
                     grDateIntrebari.DataSource = ds.Tables["Eval_QuizIntrebari"];
@@ -617,6 +634,13 @@ namespace WizOne.Eval
                     if (grDateIntrebari.FocusedNode.Level == 3)
                     {
                         rowSelected["Descriere"] = txtDescIntrebare.Text;
+                        Session["InformatiaCurentaEvalQuiz"] = ds;
+
+                        if (cmbCategObi.Value != null)
+                            rowSelected["IdCategObiective"] = Convert.ToInt32(cmbCategObi.Value);
+                        else
+                            rowSelected["IdCategObiective"] = DBNull.Value;
+
                         Session["InformatiaCurentaEvalQuiz"] = ds;
 
                         grDateIntrebari.DataSource = ds.Tables["Eval_QuizIntrebari"];
@@ -840,6 +864,21 @@ namespace WizOne.Eval
                             #endregion
 
                             Session["Eval_QuizIntrebari_IdCategorieData"] = IdCategorieTipCamp;
+
+                            //Florin 2020.01.03 - daca tipul de control ales este obiectiv si exista inregistrari in tabela de categori de obiective, atunci afisam combobox-ul de categ obi
+                            DataTable dtCtgObi = Session["Eval_tblCategorieObiective"] as DataTable;
+                            if (dtCtgObi != null && dtCtgObi.Rows.Count > 0 && Convert.ToInt32(General.Nz(cmbTip.Value,-1)) == 4)
+                            {
+                                lblCategObi.ClientVisible = true;
+                                cmbCategObi.ClientVisible = true;
+                                if (Convert.ToInt32(General.Nz(rwDataCurrent["IdCategObiective"], -99)) != -99)
+                                    cmbCategObi.Value = Convert.ToInt32(General.Nz(rwDataCurrent["IdCategObiective"],-1));
+                            }
+                            else
+                            {
+                                lblCategObi.ClientVisible = false;
+                                cmbCategObi.ClientVisible = false;
+                            }
                         }
                     }
                     else
@@ -1454,6 +1493,9 @@ namespace WizOne.Eval
                 lblPerioadaComp.Visible = false;
                 cmbPerioadaComp.Visible = false;
                 cmbPerioadaComp.Value = null;
+
+                //Florin 2020.01.03
+                cmbCategObi.Value = null;
             }
             catch (Exception ex)
             {

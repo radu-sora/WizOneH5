@@ -302,6 +302,9 @@ namespace WizOne.Personal
                     ds.Tables[0].Rows[0]["F1001036"] = marcaUnica;
                     ds.Tables[2].Rows[0]["F1001036"] = marcaUnica;
 
+                    //Florin 2019.12.30
+                    //dezactivat de moment
+
                     //if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                     //{
                     //    DataTable dt100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10017 = '" + txtCNP.Text + "'", null);

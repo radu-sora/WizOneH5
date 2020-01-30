@@ -546,9 +546,13 @@ namespace WizOne
                         txtRas = "Contul este inactivat ! Contactati administratorul de sistem.";
                         break;
                     case 5:
-                        General.InregistreazaLogarea(0, txtPan1.Text, "Cont suspendat sau inactiv");
+                        General.InregistreazaLogarea(0, txtPan1.Text, "Angajatul asociat acestui utilizator este inactiv sau suspendat!");
                         //MessageBox.Show("Contul este suspendat sau inactiv ! Contactati administratorul de sistem.", MessageBox.icoWarning);
-                        txtRas = "Contul este suspendat sau inactiv ! Contactati administratorul de sistem.";
+                        txtRas = "Angajatul asociat acestui utilizator este inactiv sau suspendat! Contactati administratorul de sistem.";
+                        break;
+                    case 6: //Radu 28.01.2020
+                        General.InregistreazaLogarea(0, txtPan1.Text, "Acest utilizator are alocati mai multi angajati!");                        
+                        txtRas = "Acest utilizator are alocati mai multi angajati! Va rugam contactati administratorul de sistem!";
                         break;
                 }
 
@@ -803,6 +807,7 @@ namespace WizOne
 
             string stare = "0";
             string idLimba = General.Nz(Session["IdLimba"],"RO").ToString();
+            string marca = "-99";
 
             try
             {
@@ -852,6 +857,8 @@ namespace WizOne
                             strsql = string.Format(strsql, op, exp);
 
                             DataRow dr = General.IncarcaDR(strsql,null);
+                            if (dr != null)
+                                marca = (dr["F10003"] as int? ?? -99).ToString();
 
                             //DataRow dr = General.IncarcaDR(@"SELECT F70103, F70114, ""Mail"", ""IdLimba"" FROM USERS WHERE UPPER(F70104)='" + utilizator.ToUpper() + "'", null);
                             if (dr == null)
@@ -884,16 +891,6 @@ namespace WizOne
                                         else
                                             stare = "3" + idLimba;
                                     }
-
-                                    //Mihnea adaugat blocare pt useri inactivi / suspendati
-                                    string suspendatinactiv = string.Empty;
-
-                                    suspendatinactiv = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN F10025 NOT IN (0,999) OR ( F100922 <= {General.CurrentDate()} AND NOT ( F100924 <= {General.CurrentDate()} ) ) THEN 1 ELSE 0 END SI FROM F100 WHERE F10003 = @1", new object[] { dr["F10003"] }) , "" ).ToString();
-                                   
-                                    if(suspendatinactiv == "1")
-                                    {
-                                        stare = "5" + idLimba;
-                                    }
                                 }
                             }
                         }
@@ -916,8 +913,12 @@ namespace WizOne
                                     stare = "0" + idLimba;
                                 else
                                 {
-                                    DataRow dr = General.IncarcaDR("SELECT \"IdLimba\" FROM USERS WHERE UPPER(F70104)=@1", new string[] { General.Strip(utilizator.ToUpper()) });
-                                    if (dr != null && dr["IdLimba"] != null && dr["IdLimba"].ToString() != "") idLimba = dr["IdLimba"].ToString();
+                                    DataRow dr = General.IncarcaDR("SELECT \"IdLimba\", F10003 FROM USERS WHERE UPPER(F70104)=@1", new string[] { General.Strip(utilizator.ToUpper()) });
+                                    if (dr != null && dr["IdLimba"] != null && dr["IdLimba"].ToString() != "")
+                                    {
+                                        idLimba = dr["IdLimba"].ToString();
+                                        marca = (dr["F10003"] as int? ?? -99).ToString();
+                                    }
 
                                     if (usr.Enabled == false)
                                         stare = "4" + idLimba;
@@ -945,6 +946,43 @@ namespace WizOne
                         }
                         break;
                 }
+
+                //Mihnea adaugat blocare pt useri inactivi / suspendati
+                //Radu 14.01.2020 - verificarea trebuie facuta pentru toate tipurile de conectare + inlocuire conditie F10025 cu F10022 si F10023 + parametru
+
+                //1 - blocare utilizatori inactivi la logare
+                //2- blocare utilizatori inactivi si suspendati la logare
+                
+                string dezactiv = Dami.ValoareParam("DezactivareUtilizatori");
+                if (dezactiv.Length <= 0) dezactiv = "0";
+                switch (dezactiv)
+                {
+                    case "1":
+                        string inactiv = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN {General.TruncateDate("F10023")} < {General.CurrentDate(true)} OR {General.TruncateDate("F10022")} > {General.CurrentDate(true)} THEN 1 ELSE 0 END INACTIV FROM F100 WHERE F10003 = @1", new object[] { marca }), "").ToString();
+
+                        if (inactiv == "1")
+                        {
+                            stare = "5" + idLimba;
+                        }
+                        break;
+                    case "2":
+                        string suspendatinactiv = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN ({General.TruncateDate("F10023")} < {General.CurrentDate(true)} OR {General.TruncateDate("F10022")} > {General.CurrentDate(true)} ) OR ( {General.TruncateDate("F100922")} <= {General.CurrentDate(true)} AND NOT ( {General.TruncateDate("F100924")} <= {General.CurrentDate(true)} ) ) THEN 1 ELSE 0 END SI FROM F100 WHERE F10003 = @1", new object[] { marca }), "").ToString();
+
+                        if (suspendatinactiv == "1")
+                        {
+                            stare = "5" + idLimba;
+                        }
+                        break;               
+                }
+
+                //Radu 28.01.2020 - daca numele utilizatorului apare de mai multe ori in USERS, accesul sa fie blocat
+                DataTable dtMultiUser = General.IncarcaDT("SELECT COUNT(*) FROM USERS WHERE UPPER(F70104) = '" + utilizator.ToUpper() + "'", null);
+                if (dtMultiUser != null && dtMultiUser.Rows.Count > 0 && dtMultiUser.Rows[0][0] != null && dtMultiUser.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtMultiUser.Rows[0][0].ToString()) > 1)
+                {
+                    stare = "6" + idLimba;
+                }
+
+ 
             }
             catch (Exception ex)
             {
@@ -1094,7 +1132,7 @@ namespace WizOne
                 Session["TimeOutSecunde"] = 0;
 
                 //Florin 2019.07.15
-                Session["Filtru_ActeAditionale"] = "";
+                Session["Filtru_ActeAditionale"] = "{}";
 
                 //Florin 2019.07.17
                 Session["Filtru_CereriAbs"] = "";
@@ -1104,6 +1142,11 @@ namespace WizOne
 
                 //Florin 2019.10.16
                 Session["Json_Programe"] = "[]";
+
+                //Florin 2020.01.03
+                Session["Eval_tblCategorieObiective"] = null;
+
+
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";

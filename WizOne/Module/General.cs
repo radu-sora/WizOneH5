@@ -1,29 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.IO;
-using System.Web.Hosting;
-using System.Diagnostics;
-using System.Data.SqlClient;
-using System.Data;
-using System.Text.RegularExpressions;
-using System.Data.OleDb;
-using System.Web.UI;
-using System.Net.Mail;
-using System.Net;
-using System.Globalization;
-using System.Threading;
-using DevExpress.Web;
-using System.Drawing;
+﻿using DevExpress.Web;
+using Oracle.ManagedDataAccess.Client;
 using ProceseSec;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IdentityModel.Services;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web.UI.WebControls;
-using Oracle.ManagedDataAccess.Client;
-using System.Web.UI.HtmlControls;
-using System.IdentityModel.Services;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Web;
 using System.Web.Configuration;
+using System.Web.Hosting;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 namespace WizOne.Module
 {
@@ -255,11 +254,8 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
-                if (strSql.IndexOf("Eval_") < 0)
-                {
-                    MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                    MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                }
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
             }
             return dt;
         }
@@ -342,6 +338,7 @@ namespace WizOne.Module
                     SqlDataAdapter da = new SqlDataAdapter();
                     da.SelectCommand = General.DamiSqlCommand(strSql, null);
                     SqlCommandBuilder cb = new SqlCommandBuilder(da);
+                    cb.ConflictOption = ConflictOption.OverwriteChanges;
                     da.Update(dt);
 
                     //Radu 2017.11.01
@@ -358,6 +355,7 @@ namespace WizOne.Module
                     OracleDataAdapter da = new OracleDataAdapter();
                     da.SelectCommand = General.DamiOleDbCommand(strSql, null);
                     OracleCommandBuilder cb = new OracleCommandBuilder(da);
+                    cb.ConflictOption = ConflictOption.OverwriteChanges;
                     var ert = cb.GetUpdateCommand();
                     da.Update(dt);
 
@@ -842,12 +840,18 @@ namespace WizOne.Module
                             //cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param));
 
 
-                            if (param.GetType().Name == "Byte[]")
-                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Blob)).Value = param;
+                            if (General.Nz(param,"").ToString().Trim() == "")
+                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), null));
                             else
-                                cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param));
+                            {
+                                if (param.GetType().Name == "Byte[]")
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), OracleDbType.Blob)).Value = param;
+                                else
+                                    cmd.Parameters.Add(new Oracle.ManagedDataAccess.Client.OracleParameter("param" + x.ToString(), param));
+                            }
+                                
 
-
+                            //(param ?? System.DBNull.Value)
                         }
                         catch (Exception ex)
                         {
@@ -992,6 +996,267 @@ namespace WizOne.Module
             }
         }
 
+        // For a projection with many columns (T must be a model class)
+        public static List<T> RunSqlQuery<T>(string sql, params object[] paramList) where T : class, new()
+        {
+            var command = Constante.tipBD == 1 ?
+                new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
+                new OracleCommand(sql.Replace('[', '"').Replace(']', '"').Replace("@", ":p"), new OracleConnection(Constante.cnnWeb))
+                {
+                    BindByName = true
+                };
+            var items = new List<T>();
+
+            try
+            {                            
+                if (paramList != null)
+                {
+                    for (int param = 0; param < paramList.Length; param++)
+                    {
+                        var name = "p" + (param + 1);
+                        var value = paramList[param] ?? DBNull.Value;
+                        var parameter = Constante.tipBD == 1 ?
+                            new SqlParameter(name, value) as DbParameter :
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01 - A more generic solution must be found.
+
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
+                command.CommandTimeout = 600;
+                command.Connection.Open();
+
+                using (var reader = command.ExecuteReader(CommandBehavior.SingleResult))
+                {
+                    while (reader.Read())
+                    {
+                        var item = new T();
+                        var properties = item.GetType().GetProperties();
+
+                        foreach (var property in properties)
+                        {
+                            var value = reader[property.Name];
+
+                            if (value == DBNull.Value)
+                            {
+                                if (property.PropertyType.IsValueType)
+                                    value = Activator.CreateInstance(property.PropertyType);
+                                else
+                                    value = null;
+                            }
+
+                            property.SetValue(item, Convert.ChangeType(value, property.PropertyType));
+                        }
+
+                        items.Add(item);
+                    }
+                }                                                
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                command.Connection.Close();
+                command.Connection.Dispose();
+                command.Dispose();
+            }
+
+            return items;
+        }
+
+        // For a projection with one column (T must be a primitive or a string)
+        public static List<T> RunSqlColumn<T>(string sql, params object[] paramList)
+        {
+            var command = Constante.tipBD == 1 ?
+                new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
+                new OracleCommand(sql.Replace('[', '"').Replace(']', '"').Replace("@", ":p"), new OracleConnection(Constante.cnnWeb))
+                {
+                    BindByName = true
+                };
+            var items = new List<T>();
+
+            try
+            {
+                if (paramList != null)
+                {
+                    for (int param = 0; param < paramList.Length; param++)
+                    {
+                        var name = "p" + (param + 1);
+                        var value = paramList[param] ?? DBNull.Value;
+                        var parameter = Constante.tipBD == 1 ?
+                            new SqlParameter(name, value) as DbParameter :
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
+
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
+                command.CommandTimeout = 600;
+                command.Connection.Open();
+
+                using (var reader = command.ExecuteReader(CommandBehavior.SingleResult))
+                {
+                    while (reader.Read())
+                    {
+                        var value = reader[0];
+
+                        if (value == DBNull.Value)
+                            value = default(T);
+
+                        items.Add((T)Convert.ChangeType(value, typeof(T)));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                command.Connection.Close();
+                command.Connection.Dispose();
+                command.Dispose();
+            }
+
+            return items;
+        }
+
+        // For a projection with many columns and a single result (T must be a model class)
+        public static T RunSqlSingle<T>(string sql, params object[] paramList) where T : class, new()
+        {
+            var command = Constante.tipBD == 1 ?
+                new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
+                new OracleCommand(sql.Replace('[', '"').Replace(']', '"').Replace("@", ":p"), new OracleConnection(Constante.cnnWeb))
+                {
+                    BindByName = true
+                };
+            var item = null as T;
+
+            try
+            {
+                if (paramList != null)
+                {
+                    for (int param = 0; param < paramList.Length; param++)
+                    {
+                        var name = "p" + (param + 1);
+                        var value = paramList[param] ?? DBNull.Value;
+                        var parameter = Constante.tipBD == 1 ?
+                            new SqlParameter(name, value) as DbParameter :
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
+
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
+                command.CommandTimeout = 600;
+                command.Connection.Open();
+
+                using (var reader = command.ExecuteReader(CommandBehavior.SingleRow))
+                {                    
+                    if (reader.Read())
+                    {
+                        item = new T();
+
+                        var properties = item.GetType().GetProperties();
+
+                        foreach (var property in properties)
+                        {
+                            var value = reader[property.Name];
+
+                            if (value == DBNull.Value)
+                            {
+                                if (property.PropertyType.IsValueType)
+                                    value = Activator.CreateInstance(property.PropertyType);
+                                else
+                                    value = null;
+                            }
+
+                            property.SetValue(item, Convert.ChangeType(value, property.PropertyType));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                command.Connection.Close();
+                command.Connection.Dispose();
+                command.Dispose();
+            }
+
+            return item;
+        }
+
+        // For scalar and non-query (T must be a primitive or a string)
+        public static T RunSqlScalar<T>(string sql, string pk, params object[] paramList)
+        {
+            var command = Constante.tipBD == 1 ?
+                new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
+                new OracleCommand(sql.Replace('[', '"').Replace(']', '"').Replace("@", ":p"), new OracleConnection(Constante.cnnWeb))
+                {
+                    BindByName = true
+                };
+            var result = null as object;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(pk)) // Return the pk identity value
+                {
+                    command.CommandText = command.CommandText.Trim(new char[] { ' ', ';' }) +
+                        (Constante.tipBD == 1 ? $" SELECT scope_identity()" : $@" RETURNING ""{pk.Trim()}"" INTO :pk");
+
+                    if (Constante.tipBD != 1)
+                        command.Parameters.Add(new OracleParameter("pk", OracleDbType.Int64, ParameterDirection.Output));
+                }
+
+                if (paramList != null)
+                {
+                    for (int param = 0; param < paramList.Length; param++)
+                    {
+                        var name = "p" + (param + 1);
+                        var value = paramList[param] ?? DBNull.Value;
+                        var parameter = Constante.tipBD == 1 ?
+                            new SqlParameter(name, value) as DbParameter :
+                            new OracleParameter(name, value.GetType() == typeof(bool) ? Convert.ToByte(value) : value); // TODO: FIX01
+
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
+                command.CommandTimeout = 600;
+                command.Connection.Open();
+
+                if (command.CommandText.IndexOf("SELECT", StringComparison.OrdinalIgnoreCase) > -1)
+                {
+                    if ((result = command.ExecuteScalar()) != DBNull.Value)
+                        result = (T)Convert.ChangeType(result, typeof(T));                    
+                    else
+                        result = default(T);
+                }
+                else
+                    result = (T)Convert.ChangeType(command.ExecuteNonQuery(), typeof(T));
+
+                if (!string.IsNullOrEmpty(pk) && Constante.tipBD != 1)
+                    result = (T)Convert.ChangeType(command.Parameters["pk"].Value.ToString(), typeof(T));
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+            finally
+            {
+                command.Connection.Close();
+                command.Connection.Dispose();
+                command.Dispose();
+            }
+
+            return result != null ? (T)result : default;
+        }        
 
         //public static dynamic DamiOracleScalar(string strSql, object[] lstParam)
         //{
@@ -2016,7 +2281,8 @@ namespace WizOne.Module
                             //trimte orele in Val indicat in tabela Ptj_tblAbsente - numai pt cererile de tip ore
                             string sqlUp = "";
                             string sqlIst = "";
-                            if ((dr["ValPentruOre"] ?? "").ToString() == "")
+                            string sqlValStr = "";
+                            if (General.Nz(dr["ValPentruOre"], "").ToString() == "")
                             {
                                 sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"='" + valStr + "', \"Val0\"=null, \"Val1\"=null, \"Val2\"=null, \"Val3\"=null, \"Val4\"=null, \"Val5\"=null, \"Val6\"=null, \"Val7\"=null, \"Val8\"=null, \"Val9\"=null, \"Val10\"=null, \"Val11\"=null, \"Val12\"=null, \"Val13\"=null, \"Val14\"=null, \"Val15\"=null, \"Val16\"=null, \"Val17\"=null, \"Val18\"=null, \"Val19\"=null, \"Val20\"=null" +
                                         " WHERE F10003 = " + dr["F10003"] + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date);
@@ -2026,15 +2292,19 @@ namespace WizOne.Module
                             }
                             else
                             {
+                                //Florin 2019,12,23 - am separat ValStr de Nr Ore
                                 //Florin 2019.03.05
                                 //am scos apostroafele de la ValStr, si in update si in insert
                                 valStr = CalculValStr((int)dr["F10003"], zi.Date, "", (dr["ValPentruOre"] ?? "").ToString(), (int)(nrOre * 60));
-                                sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"=" + valStr + "," +
-                                        (dr["ValPentruOre"] ?? "").ToString() + "=" + (nrOre * 60).ToString() +
-                                        "WHERE  F10003=" + dr["F10003"] + " AND \"Ziua\"=" + General.ToDataUniv(zi.Date);
+                                //sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"=" + valStr + "," +
+                                //        (dr["ValPentruOre"] ?? "").ToString() + "=" + (nrOre * 60).ToString() +
+                                //        "WHERE  F10003=" + dr["F10003"] + " AND \"Ziua\"=" + General.ToDataUniv(zi.Date);
 
+
+                                sqlUp = $@"UPDATE ""Ptj_Intrari"" SET {dr["ValPentruOre"]}  = {nrOre * 60} WHERE F10003= {dr["F10003"]} AND ""Ziua""= {General.ToDataUniv(zi.Date)}";
+                                sqlValStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = {valStr}  WHERE F10003= {dr["F10003"]} AND ""Ziua""= {General.ToDataUniv(zi.Date)}";
                                 sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
-                                            SELECT {dr["F10003"]}, {ToDataUniv(zi.Date)}, {valStr}, '{General.Nz(dtAbs.Rows[i]["ValStr"],"")}', {idUser}, {General.CurrentDate()}, {idUser}, {General.CurrentDate()}, 'Din Cereri' FROM ""Ptj_Intrari"" WHERE F10003={dr["F10003"]} AND ""Ziua""={General.ToDataUniv(zi.Date)}";
+                                            SELECT {dr["F10003"]}, {ToDataUniv(zi.Date)}, {valStr}, '{General.Nz(dtAbs.Rows[i]["ValStr"], "")}', {idUser}, {General.CurrentDate()}, {idUser}, {General.CurrentDate()}, 'Din Cereri' FROM ""Ptj_Intrari"" WHERE F10003={dr["F10003"]} AND ""Ziua""={General.ToDataUniv(zi.Date)}";
 
                             }
 
@@ -2043,11 +2313,12 @@ namespace WizOne.Module
                             //                VALUES({dr["F10003"]}, {ToDataUniv(zi.Date)}, '{valStr}', {idUser}, GetDate(), {idUser}, GetDate(), 'Din Cereri')";
 
 
-                            
+
                             strSql += "IF((SELECT COUNT(*) FROM \"Ptj_Intrari\" WHERE F10003 = " + dr["F10003"] + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date) + ") = 0) \n"
                                         + sqlIns + "\n" +
                                         "ELSE \n" +
-                                        sqlUp  + "; \n" + 
+                                        sqlUp + "; \n" +
+                                        sqlValStr + "; \n" +
                                         sqlIst + "; \n";
 
                             //if(Constante.tipBD == 2)
@@ -2080,7 +2351,8 @@ namespace WizOne.Module
                         //strSql = "BEGIN\n" + strSql + "END;\n";
                         ExecutaNonQuery(strSql, null);
 
-                        CalculFormuleCumulat(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]).Date.Year, Convert.ToDateTime(dr["DataInceput"]).Date.Month);
+                        General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={dr["F10003"]} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))}");
+                        //CalculFormuleCumulat(Convert.ToInt32(dr["F10003"]), Convert.ToDateTime(dr["DataInceput"]).Date.Year, Convert.ToDateTime(dr["DataInceput"]).Date.Month);
                     }
 
                 }
@@ -2092,6 +2364,7 @@ namespace WizOne.Module
         }
 
 
+        //Florin 2019.12.23
         public static string CalculValStr(int f10003, DateTime ziua, string idAbsente, string valCamp, int valMinute)
         {
             string strCmp = "";
@@ -2102,71 +2375,7 @@ namespace WizOne.Module
                 int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1 AND ""Id"" IN (@1)", new object[] { idAbsente }) ?? 0);
                 if (cnt > 0) return strCmp;
 
-                int tipAfisare = 1;
-                int scadeVal0 = 0;
-
-                DataRow dr = General.IncarcaDR($@"SELECT A.""Afisare"", A.""ScadeVal0"" FROM ""Ptj_Contracte"" A
-                                                INNER JOIN ""F100Contracte"" B ON A.""Id"" = B.""IdContract""
-                                                WHERE B.F10003 = {f10003} AND B.""DataInceput"" <= {General.ToDataUniv(ziua)} AND {General.ToDataUniv(ziua)} <= B.""DataSfarsit""  ", null);
-                if (dr != null)
-                {
-                    if (dr["Afisare"] != null && dr["Afisare"].ToString() != "") tipAfisare = Convert.ToInt32(dr["Afisare"]);
-                    if (dr["ScadeVal0"] != null && dr["ScadeVal0"].ToString() != "") scadeVal0 = Convert.ToInt32(dr["ScadeVal0"]);
-                }
-
-                if (scadeVal0 == 1)
-                {
-                    string sqlVal0 = "";
-                    if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 14)
-                        sqlVal0 = $@"UPDATE ""Ptj_Intrari"" SET ""Val0""= CASE WHEN ((F1 + ""Val5"" + ""Val6"" + ""Val7"") >= (""Norma"" * 60)) THEN ((""Norma"" * 60) - (""Val5"" + ""Val6"" + ""Val7"")) ELSE F1 END WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)} ";
-                    else
-                        sqlVal0 = $@"UPDATE ""Ptj_Intrari"" SET ""Val0""= CASE WHEN (COALESCE(""Val0"",0) - (COALESCE(""Val1"",0) + COALESCE(""Val2"",0) + COALESCE(""Val3"",0) + COALESCE(""Val4"",0) + COALESCE(""Val5"",0) + COALESCE(""Val6"",0) + COALESCE(""Val7"",0) + COALESCE(""Val8"",0) + COALESCE(""Val9"",0) + COALESCE(""Val10"",0) + COALESCE(""Val11"",0) + COALESCE(""Val12"",0) + COALESCE(""Val13"",0) + COALESCE(""Val14"",0) + COALESCE(""Val15"",0) + COALESCE(""Val16"",0) + COALESCE(""Val17"",0) + COALESCE(""Val18"",0) + COALESCE(""Val19"",0) + COALESCE(""Val20"",0))) < 0 THEN 0 ELSE (COALESCE(""Val0"",0) - (COALESCE(""Val1"",0) + COALESCE(""Val2"",0) + COALESCE(""Val3"",0) + COALESCE(""Val4"",0) + COALESCE(""Val5"",0) + COALESCE(""Val6"",0) + COALESCE(""Val7"",0) + COALESCE(""Val8"",0) + COALESCE(""Val9"",0) + COALESCE(""Val10"",0) + COALESCE(""Val11"",0) + COALESCE(""Val12"",0) + COALESCE(""Val13"",0) + COALESCE(""Val14"",0) + COALESCE(""Val15"",0) + COALESCE(""Val16"",0) + COALESCE(""Val17"",0) + COALESCE(""Val18"",0) + COALESCE(""Val19"",0) + COALESCE(""Val20"",0))) END  WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}  ";
-
-                    General.ExecutaNonQuery(sqlVal0, null);
-                }
-
-                //var lstAbs = this.ObjectContext.Ptj_tblAbsente.Where(p => p.OreInVal != null).OrderBy(p => p.OreInVal);
-
-
-                string masca = "";
-                switch (tipAfisare)
-                {
-                    case 1:
-                        masca = "'CASE WHEN ' + \"OreInVal\" + '=0 THEN '''' ELSE COALESCE(''/'' + CAST(' + \"OreInVal\" + '/60 AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''') END'";
-                        break;
-                    case 2:
-                        masca = "'COALESCE(''/'' + CAST(' + \"OreInVal\" + ' / 60 AS nvarchar(10)) + ''.'' + CAST(' + \"OreInVal\" + ' % 60 AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''')'";
-                        break;
-                    case 3:
-                        masca = "'COALESCE(''/'' + CAST(CAST(ROUND(CAST(' + OreInVal + ' AS decimal) / 60,2) as decimal(18,2)) AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''')'";
-                        break;
-                }
-
-                //COALESCE('/' + CAST(Val0 / 60 AS nvarchar(10)) + '.' + CAST(Val0 % 60 AS nvarchar(10)) + 'OG','')
-
-
-                string ert = @"SELECT '+' + {0} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL ORDER BY CONVERT(int,REPLACE(""OreInVal"", 'Val','')) For XML PATH ('') ";
-                ert = string.Format(ert, masca);
-
-                string strVal = (General.ExecutaScalar($@"SELECT '+' + {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL ORDER BY CONVERT(int,REPLACE(""OreInVal"", 'Val','')) For XML PATH ('') ", null) ?? "").ToString();
-                if (strVal != "") strCmp += "STUFF(" + strVal.Substring(1) + ",1,1,'')";
-                //if (strVal != "") strCmp += "," + "STUFF(" + strVal.Substring(1) + ",1,1,'')";
-                //if (strCmp != "") strCmp = strCmp.Substring(1);
-
-                if (valCamp != "") strCmp = strCmp.Replace(valCamp, valMinute.ToString());
-
-                //int esteAbs = this.ObjectContext.Ptj_tblAbsente.Where(p => p.DenumireScurta.Trim() == valStrOri).Count();
-                //if (valStrOri == "" || esteAbs == null || esteAbs == 0)
-                //    ent.ValStr = valStr.Replace(" ", "");
-                //else
-                //    ent.ValStr = valStrOri.Replace(" ", "");
-
-                ////recalculat
-                //val0 = ent.Val0 ?? 0;
-                //if (val0 == 0)
-                //    ent.Val0 = null;
-                //else
-                //    ent.Val0 = val0;
+                strCmp = Dami.ValoareParam("SintaxaValStr", "1");
             }
             catch (Exception ex)
             {
@@ -2175,6 +2384,90 @@ namespace WizOne.Module
 
             return strCmp;
         }
+
+        //public static string CalculValStr(int f10003, DateTime ziua, string idAbsente, string valCamp, int valMinute)
+        //{
+        //    string strCmp = "";
+
+        //    try
+        //    {
+        //        //daca absenta este de tip zi (de exemplu este CO) nu mai trebuie calculat ValStr
+        //        int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1 AND ""Id"" IN (@1)", new object[] { idAbsente }) ?? 0);
+        //        if (cnt > 0) return strCmp;
+
+        //        int tipAfisare = 1;
+        //        int scadeVal0 = 0;
+
+        //        DataRow dr = General.IncarcaDR($@"SELECT A.""Afisare"", A.""ScadeVal0"" FROM ""Ptj_Contracte"" A
+        //                                        INNER JOIN ""F100Contracte"" B ON A.""Id"" = B.""IdContract""
+        //                                        WHERE B.F10003 = {f10003} AND B.""DataInceput"" <= {General.ToDataUniv(ziua)} AND {General.ToDataUniv(ziua)} <= B.""DataSfarsit""  ", null);
+        //        if (dr != null)
+        //        {
+        //            if (dr["Afisare"] != null && dr["Afisare"].ToString() != "") tipAfisare = Convert.ToInt32(dr["Afisare"]);
+        //            if (dr["ScadeVal0"] != null && dr["ScadeVal0"].ToString() != "") scadeVal0 = Convert.ToInt32(dr["ScadeVal0"]);
+        //        }
+
+        //        if (scadeVal0 == 1)
+        //        {
+        //            string sqlVal0 = "";
+        //            if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 14)
+        //                sqlVal0 = $@"UPDATE ""Ptj_Intrari"" SET ""Val0""= CASE WHEN ((F1 + ""Val5"" + ""Val6"" + ""Val7"") >= (""Norma"" * 60)) THEN ((""Norma"" * 60) - (""Val5"" + ""Val6"" + ""Val7"")) ELSE F1 END WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)} ";
+        //            else
+        //                sqlVal0 = $@"UPDATE ""Ptj_Intrari"" SET ""Val0""= CASE WHEN (COALESCE(""Val0"",0) - (COALESCE(""Val1"",0) + COALESCE(""Val2"",0) + COALESCE(""Val3"",0) + COALESCE(""Val4"",0) + COALESCE(""Val5"",0) + COALESCE(""Val6"",0) + COALESCE(""Val7"",0) + COALESCE(""Val8"",0) + COALESCE(""Val9"",0) + COALESCE(""Val10"",0) + COALESCE(""Val11"",0) + COALESCE(""Val12"",0) + COALESCE(""Val13"",0) + COALESCE(""Val14"",0) + COALESCE(""Val15"",0) + COALESCE(""Val16"",0) + COALESCE(""Val17"",0) + COALESCE(""Val18"",0) + COALESCE(""Val19"",0) + COALESCE(""Val20"",0))) < 0 THEN 0 ELSE (COALESCE(""Val0"",0) - (COALESCE(""Val1"",0) + COALESCE(""Val2"",0) + COALESCE(""Val3"",0) + COALESCE(""Val4"",0) + COALESCE(""Val5"",0) + COALESCE(""Val6"",0) + COALESCE(""Val7"",0) + COALESCE(""Val8"",0) + COALESCE(""Val9"",0) + COALESCE(""Val10"",0) + COALESCE(""Val11"",0) + COALESCE(""Val12"",0) + COALESCE(""Val13"",0) + COALESCE(""Val14"",0) + COALESCE(""Val15"",0) + COALESCE(""Val16"",0) + COALESCE(""Val17"",0) + COALESCE(""Val18"",0) + COALESCE(""Val19"",0) + COALESCE(""Val20"",0))) END  WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}  ";
+
+        //            General.ExecutaNonQuery(sqlVal0, null);
+        //        }
+
+        //        //var lstAbs = this.ObjectContext.Ptj_tblAbsente.Where(p => p.OreInVal != null).OrderBy(p => p.OreInVal);
+
+
+        //        string masca = "";
+        //        switch (tipAfisare)
+        //        {
+        //            case 1:
+        //                masca = "'CASE WHEN ' + \"OreInVal\" + '=0 THEN '''' ELSE COALESCE(''/'' + CAST(' + \"OreInVal\" + '/60 AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''') END'";
+        //                break;
+        //            case 2:
+        //                masca = "'COALESCE(''/'' + CAST(' + \"OreInVal\" + ' / 60 AS nvarchar(10)) + ''.'' + CAST(' + \"OreInVal\" + ' % 60 AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''')'";
+        //                break;
+        //            case 3:
+        //                masca = "'COALESCE(''/'' + CAST(CAST(ROUND(CAST(' + OreInVal + ' AS decimal) / 60,2) as decimal(18,2)) AS nvarchar(10)) + ''' + COALESCE(DenumireScurta,'') + ''','''')'";
+        //                break;
+        //        }
+
+        //        //COALESCE('/' + CAST(Val0 / 60 AS nvarchar(10)) + '.' + CAST(Val0 % 60 AS nvarchar(10)) + 'OG','')
+
+
+        //        string ert = @"SELECT '+' + {0} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL ORDER BY CONVERT(int,REPLACE(""OreInVal"", 'Val','')) For XML PATH ('') ";
+        //        ert = string.Format(ert, masca);
+
+        //        string strVal = (General.ExecutaScalar($@"SELECT '+' + {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL ORDER BY CONVERT(int,REPLACE(""OreInVal"", 'Val','')) For XML PATH ('') ", null) ?? "").ToString();
+        //        if (strVal != "") strCmp += "STUFF(" + strVal.Substring(1) + ",1,1,'')";
+        //        //if (strVal != "") strCmp += "," + "STUFF(" + strVal.Substring(1) + ",1,1,'')";
+        //        //if (strCmp != "") strCmp = strCmp.Substring(1);
+
+        //        if (valCamp != "") strCmp = strCmp.Replace(valCamp, valMinute.ToString());
+
+        //        //int esteAbs = this.ObjectContext.Ptj_tblAbsente.Where(p => p.DenumireScurta.Trim() == valStrOri).Count();
+        //        //if (valStrOri == "" || esteAbs == null || esteAbs == 0)
+        //        //    ent.ValStr = valStr.Replace(" ", "");
+        //        //else
+        //        //    ent.ValStr = valStrOri.Replace(" ", "");
+
+        //        ////recalculat
+        //        //val0 = ent.Val0 ?? 0;
+        //        //if (val0 == 0)
+        //        //    ent.Val0 = null;
+        //        //else
+        //        //    ent.Val0 = val0;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MemoreazaEroarea(ex.ToString(), "General", "CalculValStr");
+        //    }
+
+        //    return strCmp;
+        //}
 
 
         public static DataRow GetParamCereri(int tipOperatie, int idRol, int idCircuit = -99)
@@ -2261,8 +2554,91 @@ namespace WizOne.Module
             return dt;
         }
 
-
         //Florin 2020.01.21
+        public static string SelectAbsente(string f10003, int idAbs = -99)
+        {
+            string strSql = "";
+
+            try
+            {
+                if (string.IsNullOrEmpty(f10003)) return strSql;
+
+                string dt = "GetDate()";
+                string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
+                string filtru = "";
+
+                if (Constante.tipBD == 2)
+                {
+                    idAuto = "ROWNUM";
+                    dt = "sysdate";
+                }
+
+                if (idAbs != -99) filtru = @" WHERE Y.""Id""=" + idAbs;
+
+                if (HttpContext.Current.Session["User_Marca"].ToString() != f10003)
+                {
+                    strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
+                            SELECT MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+                            FROM (
+                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+                            FROM ""Ptj_tblAbsente"" A
+                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+                            INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod""
+                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
+                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+                            WHERE B.F10003 = {0} AND B.""IdUser"" = {1} 
+                            UNION
+                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+                            FROM ""Ptj_tblAbsente"" A
+                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
+                            ) X 
+                            GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+                            ) Y {4} ORDER BY Y.""Denumire""";
+                }
+                else
+                {
+                    strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
+                            SELECT MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+                            FROM (
+                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+                            FROM ""Ptj_tblAbsente"" A
+                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = 0 
+                            UNION
+                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
+                            FROM ""Ptj_tblAbsente"" A
+                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
+                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
+                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
+                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
+                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
+                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
+                            ) X 
+                            GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
+                            ) Y {4} ORDER BY Y.""Denumire""";
+                }
+
+                strSql = string.Format(strSql, f10003, HttpContext.Current.Session["UserId"], idAuto, dt, filtru);
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "General", "SelectAbsente");
+            }
+
+            return strSql;
+        }
+
 
         //public static string SelectAbsente(string f10003, int idAbs = -99)
         //{
@@ -2422,91 +2798,6 @@ namespace WizOne.Module
         //}
 
 
-        //Florin 2020.01.21
-        public static string SelectAbsente(string f10003, int idAbs = -99)
-        {
-            string strSql = "";
-
-            try
-            {
-                if (string.IsNullOrEmpty(f10003)) return strSql;
-
-                string dt = "GetDate()";
-                string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
-                string filtru = "";
-
-                if (Constante.tipBD == 2)
-                {
-                    idAuto = "ROWNUM";
-                    dt = "sysdate";
-                }
-
-                if (idAbs != -99) filtru = @" WHERE Y.""Id""=" + idAbs;
-
-                if (HttpContext.Current.Session["User_Marca"].ToString() != f10003)
-                {
-                    strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
-                            SELECT MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                            FROM (
-                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                            FROM ""Ptj_tblAbsente"" A
-                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                            INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod""
-                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
-                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                            WHERE B.F10003 = {0} AND B.""IdUser"" = {1} 
-                            UNION
-                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                            FROM ""Ptj_tblAbsente"" A
-                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
-                            ) X 
-                            GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                            ) Y {4} ORDER BY Y.""Denumire""";
-                }
-                else
-                {
-                    strSql = @"SELECT {2} AS ""IdAuto"", Y.* FROM (
-                            SELECT MIN(""IdCircuit"") AS ""IdCircuit"", X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"" AS ""EstePlanificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                            FROM (
-                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                            FROM ""Ptj_tblAbsente"" A
-                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = 0 
-                            UNION
-                            SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
-                            FROM ""Ptj_tblAbsente"" A
-                            INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                            INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup""
-                            INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
-                            INNER JOIN ""F100Contracte"" H ON H.F10003={0} AND CAST(H.""DataInceput"" as date) <= CAST({3} as date) AND CAST({3} as date) <= CAST(H.""DataSfarsit"" as date)
-                            INNER JOIN ""Ptj_ContracteAbsente"" J ON J.""IdContract""=H.""IdContract"" AND J.""IdAbsenta""=A.""Id""
-                            WHERE D.F10003 = {0} AND C.""UserIntrod"" = {1} 
-                            ) X 
-                            GROUP BY X.""Id"", X.""Denumire"", X.""DenumireScurta"", X.""DenumireIstoricExtins"", X.""Prezenta"", X.""Culoare"", X.""IdGrupAbsenta"", X.""IdTipOre"", X.""Compensare"", X.""Explicatii"", X.""Planificare"", X.""NrMax"", X.""NrMaxAn"", X.""WizSal_CodTranzac"", X.""WizSal_DataPlatii"", X.""WizSal_Cantitate"", X.""WizSal_Procent"", X.""WizSal_Suma1"", X.""WizSal_Suma2"", X.""WizSal_Vechime"", X.""LunaCalculInF300"", X.""Anulare"", X.""AnulareAltii"", X.""ArataInlocuitor"", X.""ArataAtasament"", X.""CompensareBanca"", X.""CompensarePlata"", X.""AdunaZileLibere"", X.""GrupOre"", X.""OreInVal"", X.""GrupOreDeVerificat"", X.""AbsenteCFPInCalculCO"", X.""AngajatulPoateAproba"", X.""VerificaCereriInlocuitor"", X.""NuTrimiteInPontaj"", X.""VerificareNrMaxOre"", X.""AbsentaTipOraFolosesteInterval"", X.""AbsentaTipOraPerioada""
-                            ) Y {4} ORDER BY Y.""Denumire""";
-                }
-
-                strSql = string.Format(strSql, f10003, HttpContext.Current.Session["UserId"], idAuto, dt, filtru);
-            }
-            catch (Exception ex)
-            {
-                MemoreazaEroarea(ex.ToString(), "General", "SelectAbsente");
-            }
-
-            return strSql;
-        }
-
 
         public static void SelectCereriIstoric(int f10003, int idInloc, int idCircuit, int estePlanificare, out string sqlSelect, out int trimiteLaInlocuitor, int idCerere = -99)
         {
@@ -2596,8 +2887,6 @@ namespace WizOne.Module
                     }
 
 
-                    //Florin 2020.01.21
-
                     ////Florin - 2019.11.13
                     //if (paramCumul == "1" || paramCumul == "2")
                     //{
@@ -2609,11 +2898,14 @@ namespace WizOne.Module
                     //    for (int i = 0; i < dtSql.Rows.Count; i++)
                     //    {
                     //        int idUsr = Convert.ToInt32(General.Nz(dtSql.Rows[i]["IdUser"], 0));
+                    //        int idUsrCurent = -99;
+                    //        if (i > 0)
+                    //            idUsrCurent = Convert.ToInt32(arr[i - 1]);
                     //        if (i == 0 || (paramCumul == "1" && i > 0 && Convert.ToInt32(arr[i - 1]) != idUsr) || (paramCumul == "2" && !arr.Contains(idUsr)))
                     //        {
                     //            sqlNou += lstSql[i];
-                    //            arr[i] = idUsr;
                     //        }
+                    //        arr[i] = idUsr;
                     //    }
 
                     //    if (sqlNou != "") strSql = sqlNou;
@@ -2626,7 +2918,7 @@ namespace WizOne.Module
                         int idUserTmp = -99;
                         string sqlNou = "";
                         int[] arr = new int[20];
-
+                        
                         for (int i = 0; i < lstSql.Count; i++)
                         {
                             DataTable dtSql = General.IncarcaDT(lstSql[i].Substring((" UNION " + strUnion).Length), null);
@@ -2645,6 +2937,7 @@ namespace WizOne.Module
 
                         if (sqlNou != "") strSql = sqlNou;
                     }
+
 
 
                     //daca este cerere de tip planificata se duce in starea 4 indiferent de pozitie
@@ -3301,7 +3594,7 @@ namespace WizOne.Module
 
 
                             //Florin 2019.11.13 - calcul formule si formule cumulat
-                            General.CalcFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dr["F10003"])} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))}");
+                            General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dr["F10003"])} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))}");
 
 
                             ////Florin 2019.10.03 se face recalcul indiferent daca se duce sau nu in pontaj
@@ -4132,10 +4425,9 @@ namespace WizOne.Module
 
         public static DataTable GetCOR()
         {
-            if (Constante.tipBD == 1)
-                return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = (SELECT CONVERT(int, Valoare) FROM tblParametrii WHERE Nume = 'VersiuneF722')", null);
-            else
-                return General.IncarcaDT("SELECT F72204, CAST(F72202 AS INT) AS F72202 FROM F722 WHERE F72206 = (SELECT TO_NUMBER(\"Valoare\") FROM \"tblParametrii\" WHERE \"Nume\" = 'VersiuneF722')", null);
+            DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
+            DataTable table = ds.Tables[0];          
+            return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)"), null);     
         }
 
         public static DataTable GetFunctie()
@@ -5356,7 +5648,7 @@ namespace WizOne.Module
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "Contract zilnic");
+                table.Rows.Add(1, Dami.TraduCuvant("Contract zilnic"));
                 //table.Rows.Add(2, "Contract ciclic");
 
                 return table;
@@ -5514,11 +5806,11 @@ namespace WizOne.Module
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "Pontare automata");
-                table.Rows.Add(2, "Pontare automata la minim o citire card");
-                table.Rows.Add(3, "Pontare doar prima intrare si ultima iesire");
-                table.Rows.Add(4, "Pontare toate intrarile si iesirile");
-                table.Rows.Add(5, "Pontare prima intrare, ultima iesire - pauze > x minute");
+                table.Rows.Add(1, Dami.TraduCuvant("Pontare automata"));
+                table.Rows.Add(2, Dami.TraduCuvant("Pontare automata la minim o citire card"));
+                table.Rows.Add(3, Dami.TraduCuvant("Pontare doar prima intrare si ultima iesire"));
+                table.Rows.Add(4, Dami.TraduCuvant("Pontare toate intrarile si iesirile"));
+                table.Rows.Add(5, Dami.TraduCuvant("Pontare prima intrare, ultima iesire - pauze > x minute"));
 
                 return table;
             }
@@ -6707,7 +6999,7 @@ namespace WizOne.Module
                 HttpContext.Current.Session["IdGrid"] = "1";
 
                 //Florin 2019.07.15
-                HttpContext.Current.Session["Filtru_ActeAditionale"] = "";
+                HttpContext.Current.Session["Filtru_ActeAditionale"] = "{}";
 
                 //Florin 2019.07.17
                 HttpContext.Current.Session["Filtru_CereriAbs"] = "";
@@ -6718,7 +7010,8 @@ namespace WizOne.Module
                 //Florin 2019.10.16
                 HttpContext.Current.Session["Json_Programe"] = "[]";
 
-
+                //Florin 2020.01.03
+                HttpContext.Current.Session["Eval_tblCategorieObiective"] = null;
 
 
                 string ti = "nvarchar";
@@ -6802,42 +7095,44 @@ namespace WizOne.Module
             return strSql; 
         }
 
-        public void StergeInPontaj(int id)
-        {
-            try
-            {
-                DataTable dt = General.IncarcaDT(@"SELECT A.*, B.""IdTipOre"", B.OreInVal"" FROM ""Ptj_Cereri"" A 
-                                        LEFT JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
-                                        WHERE A.""Id""=" + id, null);
 
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    DataRow dr = dt.Rows[0];
-                    for (DateTime zi = Convert.ToDateTime(Convert.ToDateTime(dr["DataInceput"])); zi <= Convert.ToDateTime(Convert.ToDateTime(dr["DataSfarsit"])); zi = zi.AddDays(1))
-                    {
-                        if (Convert.ToInt32(dr["IdTipOre"]) == 0 && General.Nz(dr["OreInVal"], "").ToString() != "")    //daca este de tip ore refacem valStr
-                        {
-                            DataTable dtPtj = General.IncarcaDT(@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND ""Ziua""=@2 AND COALESCE(""Linia"",0)=0 ", new object[] { dr["F10003"], dr["Ziua"] });
-                            if (dtPtj != null && dtPtj.Rows.Count > 0)
-                            {
-                                CalculValStr((int)dr["F10003"], (DateTime)dr["Ziua"], dr["IdAbsennta"].ToString(), "", 0);
-                            }
-                        }
-                        else
-                        {
-                            General.ExecutaNonQuery(@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=NULL WHERE F10003=@1 AND ""Ziua""=@2 AND COALESCE(""Linia"",0)=0 ", new object[] { dr["F10003"], dr["Ziua"] });
-                        }
-                    }
+        //Florin 2019.12.18 - nu se mai foloseste
+        //public void StergeInPontaj(int id)
+        //{
+        //    try
+        //    {
+        //        DataTable dt = General.IncarcaDT(@"SELECT A.*, B.""IdTipOre"", B.OreInVal"" FROM ""Ptj_Cereri"" A 
+        //                                LEFT JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
+        //                                WHERE A.""Id""=" + id, null);
+
+        //        if (dt != null && dt.Rows.Count > 0)
+        //        {
+        //            DataRow dr = dt.Rows[0];
+        //            for (DateTime zi = Convert.ToDateTime(Convert.ToDateTime(dr["DataInceput"])); zi <= Convert.ToDateTime(Convert.ToDateTime(dr["DataSfarsit"])); zi = zi.AddDays(1))
+        //            {
+        //                if (Convert.ToInt32(dr["IdTipOre"]) == 0 && General.Nz(dr["OreInVal"], "").ToString() != "")    //daca este de tip ore refacem valStr
+        //                {
+        //                    DataTable dtPtj = General.IncarcaDT(@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND ""Ziua""=@2 AND COALESCE(""Linia"",0)=0 ", new object[] { dr["F10003"], dr["Ziua"] });
+        //                    if (dtPtj != null && dtPtj.Rows.Count > 0)
+        //                    {
+        //                        CalculValStr((int)dr["F10003"], (DateTime)dr["Ziua"], dr["IdAbsenta"].ToString(), "", 0);
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    General.ExecutaNonQuery(@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=NULL WHERE F10003=@1 AND ""Ziua""=@2 AND COALESCE(""Linia"",0)=0 ", new object[] { dr["F10003"], dr["Ziua"] });
+        //                }
+        //            }
 
                 
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         public static string FiltruActivi(int an, int luna, int zi = 0)
         {
@@ -7144,7 +7439,7 @@ namespace WizOne.Module
                                 " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
                                 " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
                                 " GROUP BY B.F10003) X " +
-                                " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
+                                " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE S.F10025 <> 900 AND CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
                                 " GROUP BY X.F10003";
                     }
                     else
@@ -7178,6 +7473,75 @@ namespace WizOne.Module
                                 " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
                                 " GROUP BY B.F10003) X  " +
                                 " INNER JOIN F100 A ON A.F10003=X.F10003  " +
+                                " WHERE 1=1 AND A.F10025 <> 900 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+                                " GROUP BY X.F10003";
+
+                    }
+
+                    str = " AND A.F10003 IN (" + strSql + ")";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return str;
+        }
+
+
+        //Florin 2019.12.27
+        public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, string denDept = "", int idAngajat = -99)
+        {
+            string str = "";
+
+            try
+            {
+                if (alMeu == 1)
+                {
+                    str = " AND A.F10003 IN (" + F10003 + ")";
+                }
+                else
+                {
+                    string strSql = "";
+                    string strFiltru = "";
+                    if (denDept != "") strFiltru = " AND B.\"F00608\" IN ('" + denDept.Replace(",","','") + "')";
+                    if (idAngajat != -99) strFiltru = " AND A.\"F10003\"=" + idAngajat;
+
+                    if (Constante.tipBD == 1)
+                    {
+                        strSql = " SELECT X.F10003 FROM ( " +
+                                " SELECT B.f10003 FROM relGrupAngajat B" +
+                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+                                " WHERE C.IdSuper =" + idUser + " AND C.IdRol=" + idRol +
+                                " GROUP BY B.f10003" +
+                                " UNION" +
+                                " SELECT B.f10003 FROM relGrupAngajat B" +
+                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+                                " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
+                                " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
+                                " GROUP BY B.F10003) X " +
+                                " INNER JOIN F100 A ON A.F10003=X.F10003 " +
+                                " INNER JOIN F006 B ON A.F10007=B.F00607 " +
+                                " WHERE 1=1 AND CONVERT(date,A.F10022) <> CONVERT(date,A.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) +
+                                " GROUP BY X.F10003";
+                    }
+                    else
+                    {
+                        strSql = "SELECT X.F10003 FROM ( " +
+                                " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
+                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+                                " WHERE C.\"IdSuper\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+                                " GROUP BY B.F10003 " +
+                                " UNION " +
+                                " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
+                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+                                " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND D.\"DataInceput\" <= " + ToDataUniv(an, luna, 99) + " AND " + ToDataUniv(an, luna, 1) + " <= D.\"DataSfarsit\" " +
+                                " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+                                " GROUP BY B.F10003) X  " +
+                                " INNER JOIN F100 A ON A.F10003=X.F10003 " +
+                                " INNER JOIN F006 B ON A.F10007=B.F00607 " +
                                 " WHERE 1=1 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
                                 " GROUP BY X.F10003";
 
@@ -7491,7 +7855,7 @@ namespace WizOne.Module
         }
 
 
-        public static bool PontajInit(int idUser, int an, int luna, int idRol, bool cuNormaZL = false, bool cuCCCu = false, int idDept = -99, int idAng = -99, int idSubcompanie = -99, int idFiliala = -99, int idSectie = -99, int idContract = -99, bool cuNormaSD = false, bool cuNormaSL = false, bool cuCCFara = false, int stergePontariAngPlecati = 0, int cuInOut = 0)
+        public static bool PontajInit(int idUser, int an, int luna, int idRol, bool cuNormaZL = false, bool cuCCCu = false, string denDept = "", int idAng = -99, int idSubcompanie = -99, int idFiliala = -99, int idSectie = -99, string denContract = "", bool cuNormaSD = false, bool cuNormaSL = false, bool cuCCFara = false, int stergePontariAngPlecati = 0, int cuInOut = 0)
         {
             bool ras = false;
 
@@ -7502,7 +7866,7 @@ namespace WizOne.Module
                 string strZile = "";
                 string usr = "";
                 if (idAng == -99)
-                    usr = General.GetF10003Roluri(idUser, an, luna, 0, -99, idRol, 0, idDept, idAng);
+                    usr = General.GetF10003Roluri(idUser, an, luna, 0, -99, idRol, 0, denDept, idAng);
                 else
                     usr = " AND A.F10003=" + idAng;
 
@@ -7564,11 +7928,18 @@ namespace WizOne.Module
 
 
                     string strFiltru = "";
-                    if (idContract != -99) strFiltru += " AND (SELECT MAX(IdContract) FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CONVERT(date,B.DataInceput) <= " + ziSf + " AND " + ziInc + " <= CONVERT(date,B.DataSfarsit)) = " + idContract.ToString();
+                    //Florin 2019.12.27
+                    //if (idContract != -99) strFiltru += " AND (SELECT MAX(IdContract) FROM F100Contracte B WHERE A.F10003 = B.F10003 AND CONVERT(date,B.DataInceput) <= " + ziSf + " AND " + ziInc + " <= CONVERT(date,B.DataSfarsit)) = " + idContract.ToString();
+                    if (denContract != "") strFiltru += " AND (SELECT MAX(W.Denumire) FROM F100Contracte B INNER JOIN Ptj_Contracte W ON W.Id=B.IdContract WHERE A.F10003 = B.F10003 AND CONVERT(date,B.DataInceput) <= " + ziSf + " AND " + ziInc + " <= CONVERT(date,B.DataSfarsit)) IN ('" + denContract.Replace(",","','") + "')";
+
+
                     if (idSubcompanie != -99) strFiltru += " AND A.F10004 = " + idSubcompanie.ToString();
                     if (idFiliala != -99) strFiltru += " AND A.F10005 = " + idFiliala.ToString();
                     if (idSectie != -99) strFiltru += " AND A.F10006 = " + idSectie.ToString();
-                    if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
+
+                    //Florin 2019.12.27
+                    //if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
+                    if (denDept != "") strFiltru += @" AND A.F10007 IN (SELECT F00607 FROM F006 WHERE F00608 IN ('" + denDept.Replace(",", "','") + "'))";
 
                     string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
@@ -7738,11 +8109,18 @@ namespace WizOne.Module
                     if (strFiltruUpdate != "") strFiltruUpdate = "AND (" + strFiltruUpdate.Substring(2) + ")";
 
                     string strFiltru = "";
-                    if (idContract != -99) strFiltru += @" AND (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE A.F10003 = B.F10003 AND TRUNC(B.""DataInceput"") <= " + ziSf + " AND " + ziInc + " <= TRUNC(B.\"DataSfarsit\")) = " + idContract.ToString();
+
+                    //Florin 2019.12.27
+                    //if (idContract != -99) strFiltru += @" AND (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE A.F10003 = B.F10003 AND TRUNC(B.""DataInceput"") <= " + ziSf + " AND " + ziInc + " <= TRUNC(B.\"DataSfarsit\")) = " + idContract.ToString();
+                    if (denContract != "") strFiltru += @" AND (SELECT MAX(W.""Denumire"") FROM ""F100Contracte"" BINNER JOIN Ptj_Contracte W ON W.Id=B.IdContract  WHERE A.F10003 = B.F10003 AND TRUNC(B.""DataInceput"") <= " + ziSf + " AND " + ziInc + " <= TRUNC(B.\"DataSfarsit\")) IN ('" + denContract.Replace(",", "','") + "')";
+
                     if (idSubcompanie != -99) strFiltru += " AND A.F10004 = " + idSubcompanie.ToString();
                     if (idFiliala != -99) strFiltru += " AND A.F10005 = " + idFiliala.ToString();
                     if (idSectie != -99) strFiltru += " AND A.F10006 = " + idSectie.ToString();
-                    if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
+
+                    //Florin 2019.12.27
+                    //if (idDept != -99) strFiltru += " AND A.F10007 = " + idDept.ToString();
+                    if (denDept != "") strFiltru += @" AND A.""Dept"" IN ('" + denDept.Replace(",", "','") + "')";
 
                     string strIns = @"insert into ""Ptj_Intrari""(F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""Parinte"", ""Linia"", F06204, F10002, F10004, F10005, F10006, F10007, ""CuloareValoare"", ""Norma"", ""IdContract"", USER_NO, TIME, ""ZiLiberaLegala"", ""F06204Default"", ""IdProgram"", ""ValStr"", ""Val0"", ""In1"", ""Out1"")
                                  {0} {1} {2} {3} ";
@@ -7934,7 +8312,7 @@ namespace WizOne.Module
                                 (SELECT C.F00604 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10004,
                                 (SELECT C.F00605 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10005,
                                 (SELECT C.F00606 FROM F006 C WHERE C.F00607=""DamiDept""(A.F10003, X.""Ziua"")) AS F10006,
-                                ""DamiDept""(A.F10003, X.""Ziua"") AS F10007,                                
+                                ""DamiDept""(A.F10003, X.""Ziua"") AS F10007,
                                 '#00FFFFFF' as ""CuloareValoare"", 
                                 ""DamiNorma""(A.F10003, X.""Ziua"") as ""Norma"", 
                                 (SELECT ""IdContract"" FROM ""F100Contracte"" B WHERE B.F10003 = A.F10003 AND B.""DataInceput"" <= X.""Ziua"" AND X.""Ziua"" <= B.""DataSfarsit"" and ROWNUM <= 1) AS ""IdContract"", 
@@ -8927,7 +9305,7 @@ namespace WizOne.Module
             return strErr;
         }
 
-        public static void CalcFormuleAll(string strSql)
+        public static void CalculFormuleAll(string strSql)
         {
             try
             {
@@ -8955,8 +9333,67 @@ namespace WizOne.Module
             }
         }
 
+        public static void StergeInPontaj(int id, int idTipOre, string oreInVal, DateTime dtInc, DateTime dtSf, int f10003, int nrOre, int idUser)
+        {
+            try
+            {
 
-        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text)
+                //Florin 2019.12.05 - am adaugat Ptj_IstoricVal
+                if (idTipOre == 0 && oreInVal != "")        //daca este de tip ore refacem varStr
+                {
+                    string sqlOre = $@"SELECT (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) 
+                                    THEN(CASE WHEN 1 = COALESCE(A.""TrimiteLa"", 0) THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)= 0 THEN(CASE WHEN(B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL)
+                                    THEN(CASE WHEN 1 = COALESCE(A.""TrimiteLa"", 0) THEN C.""OreInVal"" ELSE D.""OreInVal"" END) ELSE B.""OreInVal"" END) ELSE '' END) AS ValPentruOre
+                                    FROM ""Ptj_Cereri"" A
+                                    INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
+                                    LEFT JOIN  ""Ptj_tblAbsente"" C ON B.""CompensareBanca"" = C.""Id""
+                                    LEFT JOIN  ""Ptj_tblAbsente"" D ON B.""CompensarePlata"" = D.""Id""
+                                    WHERE A.""Id"" = {id}";
+
+                    string valPentruOre = General.Nz(General.ExecutaScalar(sqlOre, null), "").ToString();
+
+                    for (DateTime zi = dtInc; zi <= dtSf; zi = zi.AddDays(1))
+                    {
+                        string valStr = General.CalculValStr(f10003, zi.Date, "", valPentruOre, 0);
+                        string sqlStr =
+                            $@"BEGIN
+                                INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                                SELECT F10003, ""Ziua"", {valStr}, ""ValStr"", {idUser}, {General.CurrentDate()}, 'Anulare cerere absenta', {idUser}, {General.CurrentDate()}
+                                FROM ""Ptj_Intrari"" 
+                                WHERE F10003={f10003} AND ""Ziua"" ={General.ToDataUniv(zi.Date)};
+
+                                UPDATE ""Ptj_Intrari"" SET ""ValStr"" ={valStr}, ""{valPentruOre}"" = NULL WHERE  F10003={f10003} AND ""Ziua"" ={General.ToDataUniv(zi.Date)};
+                            END;";
+                        General.ExecutaNonQuery(sqlStr, null);
+                    }
+                }
+                else
+                {
+                    string sqlStr =
+                        $@"BEGIN
+                            INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
+                            SELECT F10003, ""Ziua"", NULL, ""ValStr"", {idUser}, {General.CurrentDate()}, 'Anulare cerere absenta', {idUser}, {General.CurrentDate()}
+                            FROM ""Ptj_Intrari"" 
+                            WHERE F10003 = (SELECT F10003 FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})
+                            AND(SELECT ""DataInceput"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
+                            AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id});
+
+                            UPDATE ""Ptj_Intrari"" SET ""ValStr"" = NULL 
+                            WHERE F10003 = (SELECT F10003 FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})
+                            AND (SELECT ""DataInceput"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
+                            AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id});
+                        END;";
+                    General.ExecutaNonQuery(sqlStr, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "StergeInPontaj");
+            }
+        }
+
+
+        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text, DataTable dt = null)
         {
             decimal tmpVB = 0;
             string rezultat = "";
@@ -8981,8 +9418,11 @@ namespace WizOne.Module
 
                 try
                 {
-                    DataTable dt = GetVariabileVB(f10003);
-                    varCass = Convert.ToDecimal(General.Nz(dt.Rows[0]["CASS"], 0));
+                    //DataTable dt = GetVariabileVB(f10003);
+                    if (dt == null)
+                        dt = GetVariabileVB(f10003);
+
+                    varCass = Convert.ToDecimal(General.Nz(dt.Rows[0]["CASS"],0));
                     //varSom = lst[1];    nu se mai foloseste
                     varCas = Convert.ToDecimal(General.Nz(dt.Rows[0]["CAS"], 0));
                     varNr = Convert.ToDecimal(General.Nz(dt.Rows[0]["NrDed"], 0));
@@ -9043,13 +9483,13 @@ namespace WizOne.Module
             text = rezultat;
         }
 
-        private static DataTable GetVariabileVB(int f10003)
+        public static DataTable GetVariabileVB(int f10003)
         {
             DataTable dt = new DataTable();
 
             try
             {
-                string strSql =
+                string strSql = 
                     $@"SELECT 
                     (SELECT COALESCE(F01324,0) AS ""Valoare"" FROM F013 WHERE F01304=(SELECT F80003 FROM F800 WHERE UPPER(F80002)='ASSB')) AS CASS,
                     (SELECT COALESCE(F01324,0) AS ""Valoare"" FROM F013 WHERE F01304=(SELECT F80003 FROM F800 WHERE UPPER(F80002)='CAS_ANG')) AS CAS,
@@ -9059,7 +9499,7 @@ namespace WizOne.Module
                     (SELECT F80003 FROM F800 WHERE UPPER(F80002)='SAL_MED') AS ""SalMediu"",
                     (SELECT F80003 FROM F800 WHERE UPPER(F80002)='IMP_ASIG') AS ""ProcImp"" " + General.FromDual();
 
-                dt = IncarcaDT(strSql, new object[] { f10003 });
+                dt = IncarcaDT(strSql, new object[] { f10003});
             }
             catch (Exception ex)
             {
@@ -9081,7 +9521,7 @@ namespace WizOne.Module
                             CASE WHEN 1={nrPersIntretinere} THEN F73009 ELSE
                             CASE WHEN 2={nrPersIntretinere} THEN F73010 ELSE
                             CASE WHEN 3={nrPersIntretinere} THEN F73011 ELSE F73012 END END END END 
-                            FROM F730 WHERE F73004 <= {Convert.ToInt32(VB)} AND {Convert.ToInt32(VB)} <= F73006", null), 0));
+                            FROM F730 WHERE F73004 <= {Convert.ToInt32(VB)} AND {Convert.ToInt32(VB)} <= F73006", null),0));
             }
             catch (Exception ex)
             {
@@ -9090,6 +9530,7 @@ namespace WizOne.Module
 
             return Convert.ToDecimal(varDed ?? 250);
         }
+
 
         private static void CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu, out decimal SN, out string rezultat)
         {
@@ -9168,7 +9609,292 @@ namespace WizOne.Module
 
         }
 
-        //Florin 2020.01.22
+        public static void SintaxaValStr()
+        {
+            try
+            {
+                string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
+                string masca = "";
+
+                string substr = "SUBSTRING";
+                string conversie = "nvarchar";
+                int poz = 2;
+                if (Constante.tipBD == 2)
+                {
+                    substr = "SUBSTR";
+                    conversie = "varchar2";
+                    poz = 3;
+                }
+
+                switch (tipAfisare)
+                {
+                    case "1":
+                        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\"/60 AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                        if (Constante.tipBD == 2)
+                            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\"/60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                        break;
+                    case "2":
+                        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60 AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                        if (Constante.tipBD == 2)
+                            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                        break;
+                    case "3":
+                        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(CAST(ROUND(CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" AS decimal) / 60,2) as decimal(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                        if (Constante.tipBD == 2)
+                            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(CAST(TRUNC(CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" AS number) / 60,2) as number(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                        break;
+                }
+
+                string sqlVal = $@"SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH ('') ";
+                if (Constante.tipBD == 2)
+                    sqlVal = $@"SELECT LISTAGG('{Dami.Operator()}' {Dami.Operator()} {masca}) WITHIN GROUP (ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int)) FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL";
+
+                string strVal = (General.ExecutaScalar(sqlVal, null) ?? "").ToString();
+
+                if (strVal != "")
+                {
+                    strVal = substr + "(" + strVal.Substring(poz - 1) + ",2,500)";
+                    strVal = strVal.Replace("'", "''");
+                    string strSql = $@"
+                        IF ((SELECT COUNT(*) FROM ""tblParametrii"" WHERE ""Nume""='SintaxaValStr') = 0)
+                        INSERT INTO ""tblParametrii""(""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", USER_NO, TIME) VALUES('SintaxaValStr', '{strVal}', 'Este formula prin care se creaza ValStr in pontaj', 2, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()})
+                        ELSE
+                        UPDATE ""tblParametrii"" SET ""Valoare""='{strVal}' WHERE ""Nume""='SintaxaValStr'";
+                    if (Constante.tipBD == 2)
+                        strSql = $@"
+                            DECLARE cnt number;
+                            BEGIN
+                                SELECT COUNT(*) into cnt FROM ""tblParametrii"" WHERE ""Nume""='SintaxaValStr';
+                                IF(cnt = 0) THEN
+                                    INSERT INTO ""tblParametrii""(""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", USER_NO, TIME) VALUES('SintaxaValStr', '{strVal}', 'Este formula prin care se creaza ValStr in pontaj', 2, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()});
+                                ELSE
+                                    UPDATE ""tblParametrii"" SET ""Valoare""='{strVal}' WHERE ""Nume""='SintaxaValStr';
+                                END IF;
+                            END; ";
+                    General.ExecutaNonQuery(strSql, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "General", "DamiValDeducere");
+            }
+        }
+
+
+
+        //public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text)
+        //{
+        //    decimal tmpVB = 0;
+        //    string rezultat = "";
+
+        //    try
+        //    {
+        //        //tipVenit = 1     VB -> SN
+        //        //tipVenit = 2     SN -> VB
+
+        //        int i = 0;              //daca ajunge la 100 oprim iteratia ca sa nu devina bucla infinita
+
+        //        decimal varCas = 10.5m;
+        //        decimal varCass = 5.5m;
+        //        //decimal varSom = 0.5m;
+        //        decimal varSom = 0m;
+        //        decimal varNr = 0;
+        //        decimal scutit = 0;
+        //        decimal tipAng = 1;
+        //        decimal varDed = 250;
+        //        decimal varImp = 16;
+        //        decimal salMediu = 0;
+
+        //        try
+        //        {
+        //            DataTable dt = GetVariabileVB(f10003);
+        //            varCass = Convert.ToDecimal(General.Nz(dt.Rows[0]["CASS"], 0));
+        //            //varSom = lst[1];    nu se mai foloseste
+        //            varCas = Convert.ToDecimal(General.Nz(dt.Rows[0]["CAS"], 0));
+        //            varNr = Convert.ToDecimal(General.Nz(dt.Rows[0]["NrDed"], 0));
+        //            scutit = Convert.ToDecimal(General.Nz(dt.Rows[0]["Scutit"], 0));
+        //            tipAng = Convert.ToDecimal(General.Nz(dt.Rows[0]["TipAng"], 0));
+        //            salMediu = Convert.ToDecimal(General.Nz(dt.Rows[0]["SalMediu"], 0));
+        //            varImp = Convert.ToDecimal(General.Nz(dt.Rows[0]["ProcImp"], 0));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            General.MemoreazaEroarea(ex, "General", "GetVariabileVB");
+        //        }
+
+        //        if (scutit == 1) varImp = 0;
+        //        if (tipAng == 2) varSom = 0;         //daca este pensionar nu plateste somaj
+
+        //        if (tipVenit == 1)           //VB -> SN
+        //        {
+        //            varDed = DamiValDeducere(varNr, Convert.ToDecimal(venit ?? 0));
+        //            CalcSN(Convert.ToDecimal(venit ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu, out tmpVB, out rezultat);
+        //        }
+        //        else                    //SN -> VB
+        //        {
+        //            decimal SN = Convert.ToDecimal(venit ?? 1);
+        //            varDed = DamiValDeducere(varNr, SN);
+        //            tmpVB = Math.Round((SN - (1.5m * varImp / 100 * varDed)) / (1 - varImp / 100 - (varImp / 100 * varDed / 2000) - ((1 - varImp / 100) * (varCas + varCass + varSom) / 100)));
+        //            decimal tmpSN = 0;
+
+        //            while (tmpSN != SN)
+        //            {
+        //                if (i > 100)
+        //                {
+        //                    break;
+        //                }
+        //                else
+        //                {
+        //                    i += 1;
+
+        //                    varDed = DamiValDeducere(varNr, tmpVB);
+        //                    CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu, out tmpSN, out rezultat);
+        //                    if (tmpSN != SN)
+        //                    {
+        //                        if (tmpSN > SN)
+        //                            tmpVB -= 1;
+        //                        else
+        //                            tmpVB += 1;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", "CalcSalariu");
+        //    }
+
+        //    venitCalculat = tmpVB;
+        //    text = rezultat;
+        //}
+
+        //private static DataTable GetVariabileVB(int f10003)
+        //{
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        string strSql =
+        //            $@"SELECT 
+        //            (SELECT COALESCE(F01324,0) AS ""Valoare"" FROM F013 WHERE F01304=(SELECT F80003 FROM F800 WHERE UPPER(F80002)='ASSB')) AS CASS,
+        //            (SELECT COALESCE(F01324,0) AS ""Valoare"" FROM F013 WHERE F01304=(SELECT F80003 FROM F800 WHERE UPPER(F80002)='CAS_ANG')) AS CAS,
+        //            (SELECT COUNT(*) AS ""Valoare"" FROM F110 WHERE F11003=@1 AND F11016=1) AS ""NrDed"",
+        //            (SELECT COALESCE(F10026,0) AS ""Valoare"" FROM F100 WHERE F10003=@1) AS ""Scutit"",
+        //            (SELECT COALESCE(F10010,0) AS ""Valoare"" FROM F100 WHERE F10003=@1) AS ""TipAng"",
+        //            (SELECT F80003 FROM F800 WHERE UPPER(F80002)='SAL_MED') AS ""SalMediu"",
+        //            (SELECT F80003 FROM F800 WHERE UPPER(F80002)='IMP_ASIG') AS ""ProcImp"" " + General.FromDual();
+
+        //        dt = IncarcaDT(strSql, new object[] { f10003 });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", "GetVariablieVB");
+        //    }
+
+        //    return dt;
+        //}
+
+        //private static decimal DamiValDeducere(decimal nrPersIntretinere, decimal VB)
+        //{
+        //    decimal? varDed = 0;
+
+        //    try
+        //    {
+        //        varDed = Convert.ToDecimal(General.Nz(General.ExecutaScalar(
+        //                    $@"SELECT 
+        //                    CASE WHEN 0={nrPersIntretinere} THEN F73008 ELSE
+        //                    CASE WHEN 1={nrPersIntretinere} THEN F73009 ELSE
+        //                    CASE WHEN 2={nrPersIntretinere} THEN F73010 ELSE
+        //                    CASE WHEN 3={nrPersIntretinere} THEN F73011 ELSE F73012 END END END END 
+        //                    FROM F730 WHERE F73004 <= {Convert.ToInt32(VB)} AND {Convert.ToInt32(VB)} <= F73006", null), 0));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", "DamiValDeducere");
+        //    }
+
+        //    return Convert.ToDecimal(varDed ?? 250);
+        //}
+
+        //private static void CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu, out decimal SN, out string rezultat)
+        //{
+        //    decimal tmpSN = 0m;
+        //    string tmpRezultat = "";
+
+        //    try
+        //    {
+        //        //teorie:
+        //        //SN = VB - IMP - TAXE
+        //        //TAXE = CAS + CASS + SOM
+        //        //DED = sumafixa * (1-(VB-1000)/2000)
+        //        //IMP = varImp/100 * (VB - TAXE - DED)
+
+        //        //unde:
+        //        //CAS = round(VB * 10,5/100)
+        //        //CASS = round(VB * 5,5/100)
+        //        //SOM = round(VB * 0,5/100)
+
+        //        //sumafixa: (este tabel)
+        //        //250 fara pers. in intretinere
+        //        //350 1 pers
+        //        //450 2 pers
+
+
+        //        decimal cas = 0;
+        //        decimal cass = 0;
+        //        decimal som = 0;
+
+        //        //in calculul CAS-ului, daca VB este mai mare decat salariul mediu * 5 ori atunci se plafoneaza la salariul mediu * 5 ori
+        //        //if (VB > (salMediu * 5))
+        //        //    cas = MathExt.Round((salMediu * 5) * varCas / 100, WizOne.Module.MidpointRounding.AwayFromZero);
+        //        //else
+        //        cas = MathExt.Round(VB * varCas / 100, MidpointRounding.AwayFromZero);
+
+        //        if (0 < cas && cas <= 1) cas = 1;   //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+
+        //        cass = VB * varCass / 100;
+        //        som = VB * varSom / 100;
+
+        //        if (0 < cass && cass <= 1)          //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+        //            cass = 1;
+        //        else
+        //            cass = MathExt.Round(VB * varCass / 100, MidpointRounding.AwayFromZero);
+
+        //        if (0 < som && som <= 1)            //Radu 04.04.2016 - am pus conditia sa fie strict mai mare ca 0
+        //            som = 1;
+        //        else
+        //            som = MathExt.Round(VB * varSom / 100, MidpointRounding.AwayFromZero);
+
+        //        decimal taxe = cas + cass + som;
+
+        //        decimal ded = varDed;
+
+        //        //Florin 2019.12.19 - nu se mai foloseste, s-a modificat, doar daca F73013 <> 0 se mai foloseste
+        //        //if (1001 <= VB && VB <= 3000)
+        //        //{
+        //        //    //ded = Math.Round((varDed * (1 - (VB - 1000) / 2000)), 0);
+        //        //    ded = (varDed * (1 - (VB - 1000) / 2000));
+        //        //    ded = Convert.ToDecimal(Math.Ceiling(Convert.ToDouble(ded / 10)) * 10);
+        //        //}
+
+        //        decimal imp = MathExt.Round(varImp / 100 * (VB - taxe - ded), MidpointRounding.AwayFromZero);
+        //        if (imp < 0) imp = 0;
+
+        //        tmpSN = MathExt.Round((VB - imp - taxe), MidpointRounding.AwayFromZero);
+        //        tmpRezultat = "CAS=" + cas + ";CASS=" + cass + ";Deducere=" + ded + ";Impozit=" + imp;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", "DamiValDeducere");
+        //    }
+
+        //    SN = tmpSN;
+        //    rezultat = tmpRezultat;
+
+        //}
+
+
         public static string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrMinute, int tip)
         {
             //tip
@@ -9212,6 +9938,7 @@ namespace WizOne.Module
 
             return msg;
         }
+
 
 
     }

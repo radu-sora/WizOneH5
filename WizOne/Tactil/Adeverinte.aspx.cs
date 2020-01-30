@@ -85,13 +85,14 @@ namespace WizOne.Tactil
                 if (!IsPostBack)
                 {
                     //TactilPrintareAdeverinte : 0 - se deschide raport; 1 - se printeaza direct
-                    dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TactilPrintareAdeverinte'", null);
-                    if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
-                    {
-                        Session["TactilPrintareAdeverinte"] = Convert.ToInt32(dt.Rows[0][0].ToString());
-                    }
-                    else
-                        Session["TactilPrintareAdeverinte"] = 0;
+                    //Radu 09.01.2020 - s-a renuntat la parametru; printarea automata se face daca denumirea butonului contine 'print'
+                    //dt = General.IncarcaDT("SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TactilPrintareAdeverinte'", null);
+                    //if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
+                    //{
+                    //    Session["TactilPrintareAdeverinte"] = Convert.ToInt32(dt.Rows[0][0].ToString());
+                    //}
+                    //else
+                    //    Session["TactilPrintareAdeverinte"] = 0;
 
                 }
 
@@ -116,26 +117,40 @@ namespace WizOne.Tactil
             try
             {
                 LinkButton lnk = sender as LinkButton;
+                
                 if (lnk.CommandArgument != null && lnk.CommandArgument.Length > 0)
                 {
                     string[] lstParam = lnk.CommandArgument.Split('_');
-                    int id = Convert.ToInt32(lstParam[0]);
-                    int tip = -1;
+                    int reportId = Convert.ToInt32(lstParam[0]);
+                    var reportParams = null as object;
+                    int tip = -1;                 
+
                     if (lstParam.Length > 1)
                         tip = Convert.ToInt32(lstParam[1]);
-                    Session["ReportId"] = id;
-                    string param = "";
-                    HtmlImage img = lnk.Controls[0].Controls[0] as HtmlImage;
-                    //if (img.Alt.Contains("Adeverinta"))
-                    if (tip > 0)
-                        param = "&TipAdeverinta=" + tip;
 
-                    //Florin 2019.10.17
-                    //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + param, false);
-                    string nume = lnk.ID.Substring(3).ToLower();
-                    if (nume.ToLower().Contains("print"))
-                        Session["PrintareAutomata"] = 1;
-                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["User_Marca"].ToString() + param), false);
+                    if (tip > 0)
+                        reportParams = new
+                        {
+                            Angajat = Session["User_Marca"].ToString(),
+                            TipAdeverinta = tip
+                        };
+                    else
+                        reportParams = new
+                        {
+                            Angajat = Session["User_Marca"].ToString()
+                        };
+
+                    string nume = lnk.ID.Substring(3).ToLower();                  
+
+                    // New report access interface
+                    if (!nume.ToLower().Contains("print"))
+                    {
+                        var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(reportId);
+
+                        Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+                    }
+                    else
+                        Wizrom.Reports.Code.ReportProxy.Print(reportId, paramList: reportParams); // TODO: FIX03 - Use async method for non blocking UI.
                 }  
                 else
                 {

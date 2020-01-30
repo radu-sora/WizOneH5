@@ -217,7 +217,7 @@ namespace WizOne.Pontaj {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbCtr;
+        protected global::DevExpress.Web.ASPxDropDownEdit cmbCtr;
         
         /// <summary>
         /// lblSub control.
@@ -289,7 +289,7 @@ namespace WizOne.Pontaj {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbDept;
+        protected global::DevExpress.Web.ASPxDropDownEdit cmbDept;
         
         /// <summary>
         /// lblSubDept control.

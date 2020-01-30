@@ -296,7 +296,7 @@ namespace WizOne.Eval
                 int idQuiz = Convert.ToInt32(Session["IdEvalQuiz"].ToString());
                 string sqlOrdine = string.Empty;
                 sqlOrdine = @"
-                            select '-' {1} cast(rot.""Id"" as {0}) {1} '-' + cast(sec.""Id"" as {0}) {1} '-' + cast(intre.""Id"" as {0}) {1} '-' as ""Ordine"", intre.""Id""
+                            select '-' {1} cast(rot.""Id"" as {0}) {1} '-' {1} cast(sec.""Id"" as {0}) {1} '-' {1} cast(intre.""Id"" as {0}) {1} '-' as ""Ordine"", intre.""Id""
                             from ""Eval_QuizIntrebari"" intre
                             join ""Eval_QuizIntrebari"" sec on intre.""Parinte"" = sec.""Id""
                             join ""Eval_QuizIntrebari"" rot on sec.""Parinte"" = rot.""Id""
@@ -304,7 +304,7 @@ namespace WizOne.Eval
                             where cop.""Id"" is null
                             and intre.""IdQuiz"" = {2}
                             union all
-                            select '-' {1} cast(rot.""Id"" as {0}) {1} '-' + cast(sec.""Id"" as {0}) {1} '-' as ""Ordine"", sec.""Id""
+                            select '-' {1} cast(rot.""Id"" as {0}) {1} '-' {1} cast(sec.""Id"" as {0}) {1} '-' as ""Ordine"", sec.""Id""
                             from ""Eval_QuizIntrebari"" rot
                             join ""Eval_QuizIntrebari"" sec on rot.""Id"" = sec.""Parinte""
                             where rot.""IdQuiz"" = {2}

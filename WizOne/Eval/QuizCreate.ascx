@@ -514,7 +514,7 @@
                                                                     </td>
                                                                     <td>&nbsp;&nbsp;&nbsp;</td>
                                                                     <td>
-                                                                        <dx:ASPxLabel ID="lblTipIntrebareObiect" Text="Obiect" runat="server" Width="50" />
+                                                                        <dx:ASPxLabel ID="lblTipIntrebareObiect" Text="Obiect" runat="server" Width="90" />
                                                                     </td>
                                                                     <td>
                                                                         <dx:ASPxComboBox ID="cmbTipObiect" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" ClientInstanceName="cmbTipObiect" >
@@ -583,6 +583,13 @@
                                                                             <ClientSideEvents SelectedIndexChanged="function(s, e){ OnCMBTipChanged(s); }" />
                                                                         </dx:ASPxComboBox>
                                                                     </td>
+                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                    <td>
+                                                                        <dx:ASPxLabel ID="lblCategObi" runat="server" Width="90" Text="Categ. obiectiv" ClientVisible="false" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <dx:ASPxComboBox ID="cmbCategObi" ClientInstanceName="cmbCategObi" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false" ValueType="System.Int32" ClientVisible="true"/>
+                                                                    </td>                                                                    
                                                                     <td>&nbsp;&nbsp;&nbsp;</td>
                                                                     <td>
                                                                         <dx:ASPxCheckBox ID="chkObligatoriu" runat="server" Text="Obligatoriu" TextAlign="Left" ClientInstanceName="chkObligatoriu" AutoPostBack="false">

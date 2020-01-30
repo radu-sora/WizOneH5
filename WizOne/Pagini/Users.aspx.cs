@@ -34,6 +34,15 @@ namespace WizOne.Pagini
                 grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("btnUpdate", "Actualizeaza");
                 grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("btnCancel", "Renunta");
 
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
+
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
@@ -94,7 +103,7 @@ namespace WizOne.Pagini
                     grDate.DataBind();
                 }
 
-                grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaCO", "10"));
+                grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaUsr", "10"));
             }
             catch (Exception ex)
             {
@@ -387,7 +396,7 @@ namespace WizOne.Pagini
                         //General.AddUserIstoric(General.Nz(Session["UserId"], -99).ToString());
                         //Radu 06.01.2020
                         General.AddUserIstoric(General.Nz(dr["F70102"], -99).ToString());
-                        dr["F70103"] = pwd;                    
+                        dr["F70103"] = pwd;
                         break;
                     case 2:
                         dr["Parola"] = pwd;

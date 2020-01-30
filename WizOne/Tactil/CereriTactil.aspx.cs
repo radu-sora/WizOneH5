@@ -216,7 +216,9 @@ namespace WizOne.Tactil
                             Session["Absente_Tactil"] = dtAbsSpn;
 
                             DataRow[] dtRow = dtAbsSpn.Select("Id=" + Convert.ToInt32(cmbSelAbs.Value));
-                            if (dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
+                            if (dtRow.ElementAt(0)["DenumireScurta"] != null && 
+                                ((dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 2 &&  dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO") 
+                                    || (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 &&  dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")))
                             {
                                 lblZileRamase.Visible = true;
                                 //tdNrZileRamase.Visible = true;
@@ -500,7 +502,10 @@ namespace WizOne.Tactil
                         if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0)
                         {
                             DataRow[] dtRow = dtAbsSpn.Select("Id=" + (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value) : Convert.ToInt32(cmbAbs.Value)));
-                            if (dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO" || dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")
+                           if (dtRow.ElementAt(0)["DenumireScurta"] != null &&
+                                                 ((dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 2 && dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO")
+                                                     || (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")))
+
                             {
                                 lblZileRamase.Visible = true;
                                 //tdNrZileRamase.Visible = true;
@@ -675,8 +680,8 @@ namespace WizOne.Tactil
 
 
 
-
         //Florin 2020.01.22
+
         //public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrOre, int tip)
         //{
         //    //tip

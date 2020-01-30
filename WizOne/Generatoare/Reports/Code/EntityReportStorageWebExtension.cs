@@ -1,12 +1,13 @@
 ﻿using DevExpress.XtraReports.UI;
 using DevExpress.XtraReports.Web.Extensions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WizOne.Generatoare.Reports.Models;
-using WizOne.Generatoare.Reports.Pages;
+using Wizrom.Reports.Models;
+using Wizrom.Reports.Pages;
 
-namespace WizOne.Generatoare.Reports.Code
+namespace Wizrom.Reports.Code
 {
     public class EntityReportStorageWebExtension : ReportStorageWebExtension
     {
@@ -19,78 +20,144 @@ namespace WizOne.Generatoare.Reports.Code
 
         public override bool CanSetData(string url)
         {
-            var entities = new ReportsEntities();
-            int reportId = int.Parse(url);
+            var canSet = false;
 
-            return entities.Reports.Any(r => r.ReportId == reportId);
+            try
+            {
+                using (var entities = new ReportsEntities())
+                {
+                    int reportId = int.Parse(url);
+
+                    canSet = entities.Reports.Any(r => r.ReportId == reportId);
+                }
+            }
+            catch (Exception)
+            {
+                // Log error here
+            }
+
+            return canSet;
         }
 
         public override Dictionary<string, string> GetUrls()
         {
-            var entities = new ReportsEntities();
-            
-            return entities.Reports.Where(r => r.ReportTypeId == 5). // Only subreports for 'Report Source Url' property.
-                ToDictionary(r => r.ReportId.ToString(), r => r.Name);            
+            var urls = null as Dictionary<string, string>;
+
+            try
+            {
+                using (var entities = new ReportsEntities())
+                    urls = entities.Reports.Where(r => r.ReportTypeId == 1 || r.ReportTypeId == 2). // Only report & document types for 'Report Source Url' property.
+                        ToDictionary(r => r.ReportId.ToString(), r => r.Name);
+            }
+            catch (Exception)
+            {
+                // Log error here
+            }
+
+            return urls;
         }
 
         public override byte[] GetData(string url)
         {
-            var entities = new ReportsEntities();
-            var report = entities.Reports.Find(int.Parse(url));
+            var data = null as byte[];
 
-            if (report != null)
-                return report.LayoutData;
+            try
+            {
+                using (var entities = new ReportsEntities())
+                    data = entities.Reports.Find(int.Parse(url))?.LayoutData;
 
-            return null;
+                if (data == null)
+                {
+                    using (var xtraReport = new XtraReport())
+                    {
+                        xtraReport.Name = "MissingReport";
+                        xtraReport.DisplayName = "Missing report definition";
+
+                        using (var memStream = new MemoryStream())
+                        {
+                            xtraReport.SaveLayoutToXml(memStream);
+                            data = memStream.GetBuffer();
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Log error here
+            }
+
+            return data;
         }
 
         public override void SetData(XtraReport xtraReport, string url)
         {
-            var entities = new ReportsEntities();
-            var report = entities.Reports.Find(int.Parse(url));
-
-            if (report != null)
+            try
             {
-                using (var memStream = new MemoryStream())
+                using (var entities = new ReportsEntities())
                 {
-                    xtraReport.SaveLayoutToXml(memStream);
-                    report.LayoutData = memStream.GetBuffer();
-                }
+                    var report = entities.Reports.Find(int.Parse(url));
 
-                entities.SaveChanges();
+                    if (report != null)
+                    {
+                        using (var memStream = new MemoryStream())
+                        {
+                            xtraReport.SaveLayoutToXml(memStream);
+                            report.LayoutData = memStream.GetBuffer();
+                        }
+
+                        entities.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Log error here
             }
         }
 
         public override string SetNewData(XtraReport xtraReport, string defaultUrl)
         {
-            var entities = new ReportsEntities();
-            var sourceReport = !string.IsNullOrEmpty((string)xtraReport.Tag) ? // Save as existing report. 
-                entities.Reports.Find(int.Parse((string)xtraReport.Tag)) : (Report)null; // Save new subreport.
-            var report = (Report)null;
+            var reportId = null as string;
 
-            entities.Reports.Add(report = new Report() {
-                Name = defaultUrl,
-                Description = sourceReport?.Description,
-                ReportTypeId = sourceReport?.ReportTypeId ?? 5, // Subreport
-                RegUserId = sourceReport?.RegUserId
-            });
-            entities.SaveChanges();
-
-            // Update internal data
-            xtraReport.Name = ReportDesign.GetReportName(defaultUrl);
-            xtraReport.DisplayName = defaultUrl;
-            xtraReport.Tag = report.ReportId;
-
-            // Save layout changes
-            using (var memStream = new MemoryStream())
+            try
             {
-                xtraReport.SaveLayoutToXml(memStream);
-                report.LayoutData = memStream.GetBuffer();
+                using (var entities = new ReportsEntities())
+                {
+                    var sourceReport = !string.IsNullOrEmpty(xtraReport.Tag as string) ? // Save as existing report. 
+                        entities.Reports.Find(int.Parse(xtraReport.Tag as string)) : null; // Save new subreport.
+                    var newReport = null as Report;
+
+                    entities.Reports.Add(newReport = new Report()
+                    {
+                        Name = defaultUrl,
+                        Description = sourceReport != null ? sourceReport.Description : "Autogenerated subreport",
+                        ReportTypeId = sourceReport?.ReportTypeId ?? 1, // Report
+                        RegUserId = sourceReport?.RegUserId
+                    });
+                    entities.SaveChanges();
+
+                    // Update internal data
+                    xtraReport.Name = Design.GetReportName(defaultUrl);
+                    xtraReport.DisplayName = defaultUrl;
+                    xtraReport.Tag = newReport.ReportId;
+
+                    // Save layout changes
+                    using (var memStream = new MemoryStream())
+                    {
+                        xtraReport.SaveLayoutToXml(memStream);
+                        newReport.LayoutData = memStream.GetBuffer();
+                    }
+
+                    entities.SaveChanges();
+                    reportId = newReport.ReportId.ToString();
+                }
+            }
+            catch (Exception)
+            {
+                // Log error here
             }
 
-            entities.SaveChanges();
-            
-            return report.ReportId.ToString();                   
+            return reportId;
         }
     }
 }

@@ -28,13 +28,16 @@ namespace WizOne.Pagini
 
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
+                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
 
+                lblId.Text = Dami.TraduCuvant("Grup de angajati");
                 foreach (var c in grDate.Columns)
                 {
                     try
                     {
                         TreeListDataColumn col = (TreeListDataColumn)c;
-                        col.Caption = Dami.TraduCuvant(col.Caption ?? col.FieldName);
+                        col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption);
                     }
                     catch (Exception){}
                 }

@@ -1,18 +1,28 @@
-﻿using DevExpress.XtraReports.Web.Extensions;
-using DevExpress.XtraReports.Web.ReportDesigner;
-using Microsoft.AspNet.FriendlyUrls;
+﻿using Microsoft.AspNet.FriendlyUrls;
 using System;
 using System.Configuration;
 using System.IO;
 using System.Web;
 using System.Web.Routing;
-using WizOne.Generatoare.Reports.Code;
 using WizOne.Module;
+using Wizrom.Reports.Code;
 
 namespace WizOne
 {
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
+        static Global()
+        {
+            try
+            {
+                Dami.InitCnn();
+                ReportProxy.Register("Generatoare", Constante.cnnWeb, Constante.cnnRap);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Global.asax");
+            }
+        }
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -21,15 +31,7 @@ namespace WizOne
                 RouteTable.Routes.EnableFriendlyUrls(new FriendlyUrlSettings()
                 {
                     AutoRedirectMode = RedirectMode.Permanent
-                });
-
-                DefaultReportDesignerContainer.RegisterDataSourceWizardConnectionStringsProvider<ReportDataSourceWizardConnectionStringsProvider>(true);
-                DefaultReportDesignerContainer.EnableCustomSql();                
-                ReportStorageWebExtension.RegisterExtensionGlobal(new EntityReportStorageWebExtension());
-
-                //HttpContext.Current.Session["formatDataSistem"] = CultureInfo.CurrentCulture.ToString();
-
-                Dami.CnnWeb();
+                });                                                               
 
                 string str = Constante.cnnWeb;
                 if (str.ToUpper().IndexOf("INITIAL CATALOG") >=0)
@@ -68,8 +70,7 @@ namespace WizOne
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, "Global.asax");
-            }
-            
+            }            
         }
 
         protected void Session_Start(object sender, EventArgs e)

@@ -35,6 +35,40 @@ namespace WizOne.Absente
                 grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("btnUpdate", "Actualizeaza");
                 grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("btnCancel", "Renunta");
 
+                lblViz.InnerText = Dami.TraduCuvant("Actiune");
+                lblRol.InnerText = Dami.TraduCuvant("Stare");
+                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
+
+                GridViewDataComboBoxColumn colVal = (grDate.Columns["Valoare"] as GridViewDataComboBoxColumn);
+                foreach (ListEditItem item in colVal.PropertiesComboBox.Items)
+                {
+                    item.Text = Dami.TraduCuvant(item.Text, item.Text);
+                }
+
+                foreach (ListEditItem item in cmbAct.Items)
+                {
+                    item.Text = Dami.TraduCuvant(item.Text, item.Text);
+                }
+
+                foreach (var c in grDate.Columns)
+                {
+                    try
+                    {
+                        GridViewDataColumn col = (GridViewDataColumn)c;
+                        col.Caption = Dami.TraduCuvant(col.FieldName);
+                    }
+                    catch (Exception) { }
+                }
+
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
@@ -61,15 +95,7 @@ namespace WizOne.Absente
                 }
                 else
                 {
-                    foreach (var c in grDate.Columns)
-                    {
-                        try
-                        {
-                            GridViewDataColumn col = (GridViewDataColumn)c;
-                            col.Caption = Dami.TraduCuvant(col.FieldName);
-                        }
-                        catch (Exception) { }
-                    }
+
 
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.DataBind();

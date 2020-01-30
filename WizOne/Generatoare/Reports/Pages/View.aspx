@@ -1,4 +1,4 @@
-﻿<%@ Page Title="View Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="ReportView.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.ReportView" %>
+﻿<%@ Page Title="View Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="View.aspx.cs" Inherits="Wizrom.Reports.Pages.View" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- Modal dialogs -->
@@ -46,7 +46,7 @@
                                         onChangeLayout();
                                     }" />                        
                             </dx:ASPxComboBox>
-                            <ef:EntityDataSource ID="ReportsUsersDataSource" runat="server" ContextTypeName="WizOne.Generatoare.Reports.Models.ReportsEntities" EntitySetName="ReportsUsers"
+                            <ef:EntityDataSource ID="ReportsUsersDataSource" runat="server" ContextTypeName="Wizrom.Reports.Models.ReportsEntities" EntitySetName="ReportsUsers"
                                 Where="it.ReportId = @ReportId AND it.RegUserId = @RegUserId" OrderBy="it.Name">
                                 <WhereParameters>
                                     <asp:Parameter Name="ReportId" Type="Int32" />    
@@ -115,6 +115,9 @@
                             <button type="button" class="btn btn-default btn-sm" title="Exit" onclick="onExitButtonClick()">
                                 <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                             </button>                            
+                        </td>
+                        <td>
+                            <label><%: ReportName %></label>
                         </td>
                     </tr>
                 </table>
@@ -215,10 +218,9 @@
                 <dx:ASPxGridViewExporter ID="CustomTableGridViewExporter" runat="server" GridViewID="CustomTableGridView"
                     TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0">                                
                 </dx:ASPxGridViewExporter>
-
             </td>            
         </tr>
-    </table>        
+    </table>
    
     <script type="text/html" id="dx-date-simple">
         <div data-bind="dxDateBox: { value: value.extend({ throttle: 500 }), closeOnValueChange: true, type: 'date', disabled: disabled }, dxValidator: { validationRules: validationRules || [] }"></div>
@@ -233,6 +235,15 @@
         var paramsSelectedValues = {};
 
         // Main functions       
+        $(window).on('beforeunload', function () {
+            $.ajax({
+                type: 'POST',
+                data: { close: true },
+                async: false
+            });
+            return;
+        });
+
         function onControlsInitialized(s, e) {
             // Validate document ready
             if (e.isCallback) {
@@ -252,7 +263,7 @@
                 }
 
                 showCustomLayoutSection(true);
-            }
+            }            
         }
 
         function onDocumentViewerInit() {
@@ -397,12 +408,8 @@
             showCustomLayoutSection(true);
         }
 
-        function onExitButtonClick() {
-            var sessionValue = '<%=Session["PaginaWeb"]%>'
-            if (sessionValue == "Pagini.ActeAditionale")
-                window.location = '<%= ResolveUrl("~/Pagini/ActeAditionale.aspx") %>'
-            else
-                window.history.back();
+        function onExitButtonClick() {   
+            window.history.back();
         }
 
         function onCustomCubePopupMenuItemClick(itemName, fieldId) {

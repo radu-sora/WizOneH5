@@ -71,6 +71,7 @@
 						</dx:GridViewDataComboBoxColumn>
 						<dx:GridViewDataSpinEditColumn FieldName="NrOre1" Name="NrOre" Caption="Nr. Ore" VisibleIndex="4" />
                         <dx:GridViewDataSpinEditColumn FieldName="NrOre10" Name="NrAng" Caption="Nr. Ang" VisibleIndex="5" />
+                        <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii" VisibleIndex="6" PropertiesTextEdit-MaxLength="500" />
                         
 						<dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="50px" Visible="false" VisibleIndex="5" ShowInCustomizationForm="false" />
 

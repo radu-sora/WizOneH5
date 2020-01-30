@@ -78,10 +78,17 @@ namespace WizOne.Tactil
 
                 if (Session["FluturasGeneral"] != null && Session["FluturasGeneral"].ToString().Length > 0)
                 {
-                    Session["ReportId"] = Convert.ToInt32(Session["FluturasGeneral"].ToString());
-                    //Florin 2019.10.17
-                    //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + "&An=" + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")), false);
-                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["User_Marca"].ToString() + "&An=" + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"))), false);
+                    var reportId = Convert.ToInt32(Session["FluturasGeneral"].ToString());                    
+                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(reportId);
+                    var reportParams = new
+                    {
+                        Angajat = Session["User_Marca"].ToString(),
+                        An = Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")),
+                        Luna = Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"))
+                    };
+
+                    // New report access interface
+                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                 }
                 else
                 {
@@ -110,13 +117,19 @@ namespace WizOne.Tactil
                     return;
                 }
 
-
                 if (Session["FluturasGeneral"] != null && Session["FluturasGeneral"].ToString().Length > 0)
                 {
-                    Session["ReportId"] = Convert.ToInt32(Session["FluturasGeneral"].ToString());
-                    //Florin 2019.10.17
-                    //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + "&An=" + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru")), false);
-                    Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["User_Marca"].ToString() + "&An=" + Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")) + "&Luna=" + Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"))), false);
+                    var reportId = Convert.ToInt32(Session["FluturasGeneral"].ToString());
+                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(reportId);
+                    var reportParams = new
+                    {
+                        Angajat = Session["User_Marca"].ToString(),
+                        An = Convert.ToInt32(spnAnul.Value ?? Dami.ValoareParam("AnLucru")),
+                        Luna = Convert.ToInt32(spnLuna.Value ?? Dami.ValoareParam("LunaLucru"))
+                    };
+
+                    // New report access interface
+                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
                 }
                 else
                 {

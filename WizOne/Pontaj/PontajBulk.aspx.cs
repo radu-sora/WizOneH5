@@ -126,6 +126,7 @@ namespace WizOne.Pontaj
                 dr["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
                 dr["NrOre1"] = e.NewValues["NrOre1"] ?? DBNull.Value;
                 dr["NrOre10"] = e.NewValues["NrOre10"] ?? DBNull.Value;
+                dr["Observatii"] = e.NewValues["Observatii"] ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
@@ -184,6 +185,7 @@ namespace WizOne.Pontaj
                 dr["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
                 dr["NrOre1"] = e.NewValues["NrOre1"] ?? DBNull.Value;
                 dr["NrOre10"] = e.NewValues["NrOre10"] ?? DBNull.Value;
+                dr["Observatii"] = e.NewValues["Observatii"] ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
@@ -274,7 +276,7 @@ namespace WizOne.Pontaj
                 }
 
                 //initializam linii in Pontaj
-                bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, -99, true , false, -99, Convert.ToInt32(Session["User_Marca"] ?? -99), -99, -99, -99, -99, false, false, false, 0);
+                bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, -99, true , false, "", Convert.ToInt32(Session["User_Marca"] ?? -99), -99, -99, -99, "", false, false, false, 0);
                 
 
                 if (Dami.ValoareParam("PontajCCCalculTotalPeZi", "0") == "1")

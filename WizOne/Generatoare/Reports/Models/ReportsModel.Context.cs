@@ -8,22 +8,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Generatoare.Reports.Models
+namespace Wizrom.Reports.Models
 {
     using System;
     using System.Data.Entity;
-    using System.Data.Entity.Core.EntityClient;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ReportsEntities : DbContext
+    public partial class ReportsEntities : Wizrom.Reports.Code.ReportsDbContext
     {
-        public ReportsEntities()
-            : base((new EntityConnectionStringBuilder()
-    		{	
-    			Metadata = WizOne.Module.Constante.tipBD == 1 ? "res://*/Generatoare.Reports.Models.ReportsModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.msl" : "res://*/Generatoare.Reports.Models.ReportsOraModel.ssdl|res://*/Generatoare.Reports.Models.ReportsModel.csdl|res://*/Generatoare.Reports.Models.ReportsModel.msl",
-    			Provider = WizOne.Module.Constante.tipBD == 1 ? "System.Data.SqlClient" : "Oracle.ManagedDataAccess.Client",
-    			ProviderConnectionString = WizOne.Module.Constante.cnnWeb
-    		}).ToString())
+        public ReportsEntities() : base()
         {
         }
     
@@ -35,6 +28,5 @@ namespace WizOne.Generatoare.Reports.Models
         public virtual DbSet<Report> Reports { get; set; }
         public virtual DbSet<ReportUser> ReportsUsers { get; set; }
         public virtual DbSet<ReportType> ReportTypes { get; set; }
-        public virtual DbSet<ReportGroupUser> ReportsGroupUsers { get; set; }
     }
 }

@@ -288,8 +288,8 @@ namespace WizOne.BP
         {
             try
             {
-                string strErr = "";
-                int idAtr = -99;
+                //string strErr = "";
+                //int idAtr = -99;
 
 
                 string msg = General.AdaugaCerere( Convert.ToInt32(Session["UserId"].ToString()), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbAn.Value ?? -99), Convert.ToInt32(cmbLuna.Value ?? -99), Convert.ToInt32(cmbTip.Value ?? -99), 
@@ -364,7 +364,7 @@ namespace WizOne.BP
                 grDate.DataBind();
                 Session["BP_Prime"] = dt;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

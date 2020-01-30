@@ -15,6 +15,7 @@ using System.Web.UI.HtmlControls;
 using DevExpress.Data;
 using System.Web.Hosting;
 using System.Data.OleDb;
+using System.Diagnostics;
 
 namespace WizOne.ContracteLucru
 {
@@ -114,7 +115,7 @@ namespace WizOne.ContracteLucru
 
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 //if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup")>=0) Constante.IdLimba = ctlPost.Substring(ctlPost.LastIndexOf("$")+1).Replace("a", "");
-
+              
 
                 #endregion
 
@@ -219,27 +220,6 @@ namespace WizOne.ContracteLucru
 
                 for (int i = 0; i < ds.Tables.Count; i++)
                 {
-                    //if (Constante.tipBD == 1)
-                    //{
-                    //    SqlDataAdapter da = new SqlDataAdapter();
-                    //    SqlCommandBuilder cb = new SqlCommandBuilder();
-                    //    da = new SqlDataAdapter();
-                    //    da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM \"" + ds.Tables[i].TableName + "\"", null);
-                    //    cb = new SqlCommandBuilder(da);
-                    //    da.Update(ds.Tables[i]);
-                    //    da.Dispose();
-                    //    da = null;
-                    //}
-                    //else
-                    //{
-                    //    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-                    //    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"" + ds.Tables[i].TableName + "\" WHERE ROWNUM = 0", null);
-                    //    OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
-                    //    oledbAdapter.Update(ds.Tables[i]);
-                    //    oledbAdapter.Dispose();
-                    //    oledbAdapter = null;            
-
-                    //}
                     General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                 }
 
@@ -248,33 +228,12 @@ namespace WizOne.ContracteLucru
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
         protected void InserareContract(string id, DataTable dt)
         {
-            //if (Constante.tipBD == 1)
-            //{
-            //    SqlDataAdapter da = new SqlDataAdapter();
-            //    SqlCommandBuilder cb = new SqlCommandBuilder();
-            //    da = new SqlDataAdapter();
-            //    da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM \"Ptj_Contracte\"", null);
-            //    cb = new SqlCommandBuilder(da);
-            //    da.Update(dt);
-            //    da.Dispose();
-            //    da = null;
-            //}
-            //else
-            //{
-            //    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-            //    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM \"Ptj_Contracte\" WHERE ROWNUM = 0", null);
-            //    OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
-            //    oledbAdapter.Update(dt);
-            //    oledbAdapter.Dispose();
-            //    oledbAdapter = null;
-
-            //}
             General.SalveazaDate(dt, "Ptj_Contracte");
         }
 

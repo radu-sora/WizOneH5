@@ -2501,7 +2501,7 @@ namespace WizOne.Pontaj
                 else
                 {
                     DateTime dt = Convert.ToDateTime(txtAnLuna.Value);
-                    bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, -99, Convert.ToInt32(General.Nz(cmbAng.Value,-99)), -99, -99, -99, -99, chkNormaSD.Checked, chkNormaSL.Checked, false, 0);
+                    bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, "", Convert.ToInt32(General.Nz(cmbAng.Value,-99)), -99, -99, -99, "", chkNormaSD.Checked, chkNormaSL.Checked, false, 0);
                     if (ras)
                     {
                         btnFiltru_Click(sender, null);

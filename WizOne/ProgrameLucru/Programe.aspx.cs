@@ -47,6 +47,15 @@ namespace WizOne.ProgrameLucru
 
                 txtTitlu.Text = (Session["Titlu"] ?? "").ToString();
 
+
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
                 grDate.DataBind();
 
 

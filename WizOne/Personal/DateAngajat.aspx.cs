@@ -417,6 +417,16 @@ namespace WizOne.Personal
                     return;
                 }
 
+                //Radu 15.01.2020
+                string sqlAng = "SELECT " + ds.Tables[1].Rows[0]["F10003"] + " AS F10003, '" + ds.Tables[1].Rows[0]["F100901"] + "' AS F100901, " 
+                        + ds.Tables[1].Rows[0]["F10071"] + " AS F10071, " + ds.Tables[1].Rows[0]["F10050"] + " AS F10050, " + ds.Tables[1].Rows[0]["F10051"] + " AS F10051 ";     //se pot completa in viitor si alte campuri de interes
+                string msg = Notif.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Validare, sqlAng + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                if (msg != "" && msg.Substring(0, 1) == "2")
+                {
+                    MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
+                    return;
+                }
+
 
                 //Florin 2018-10-30
                 //calculam CO daca se insereaza un angajat
@@ -614,7 +624,7 @@ namespace WizOne.Personal
                     if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
-                    {  
+                    {                     
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                     }
                 }
@@ -635,6 +645,17 @@ namespace WizOne.Personal
 
                 //Florin 2019.09.23
                 GolireVariabile();
+
+                //Radu 15.01.2020
+                string[] arrParam = new string[] { HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority, General.Nz(Session["IdClient"], "1").ToString(), General.Nz(Session["IdLimba"], "RO").ToString() };
+                int marca = Convert.ToInt32(Session["Marca"] ?? -99);
+                int marcaUser = Convert.ToInt32(Session["User_Marca"] ?? -99);
+                int idUser = Convert.ToInt32(Session["UserId"] ?? -99);
+
+                HostingEnvironment.QueueBackgroundWorkItem(cancellationToken =>
+                {
+                    NotifAsync.TrimiteNotificare("Personal.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 1 AS ""Actiune"", 1 AS ""IdStareViitoare"" FROM F100 Z WHERE F10003=" + marca.ToString(), "F100", marca, idUser, marcaUser, arrParam);
+                });
 
                 //Florin 2018.11.22
                 //trimitem la lista de angajati        
@@ -1416,6 +1437,7 @@ namespace WizOne.Personal
                 lstBC.Add("deDataIncTichete", "F1001122");
                 lstBC.Add("deDataSfTichete", "F1001123");
                 #endregion
+ 
 
                 DataColumnCollection cols1 = ds.Tables[1].Columns;
                 DataColumnCollection cols2 = ds.Tables[2].Columns;
@@ -1455,7 +1477,7 @@ namespace WizOne.Personal
                                 break;
                             case "Banca":
                                 lst = lstBC;
-                                break;
+                                break;        
                         }
                         foreach (string idCtl in lst.Keys)
                         {

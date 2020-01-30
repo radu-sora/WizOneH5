@@ -62,6 +62,15 @@ namespace WizOne.ContracteLucru
 
                 grDate.DataBind();
 
+                foreach (dynamic c in grDate.Columns)
+                {
+                    try
+                    {
+                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
+                    }
+                    catch (Exception) { }
+                }
+
 
             }
             catch (Exception ex)

@@ -176,6 +176,8 @@ namespace WizOne.Pontaj
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblStare.InnerText = Dami.TraduCuvant("Stare");
                 lblTip.InnerText = Dami.TraduCuvant("Tip inregistrare");
+                lblPtjZi.InnerText = Dami.TraduCuvant("Tip inregistrare");
+                lblCateg.InnerText = Dami.TraduCuvant("Categorie");
 
                 lblZiua.InnerText = Dami.TraduCuvant("Data");
                 lblRolZi.InnerText = Dami.TraduCuvant("Roluri");
@@ -218,6 +220,9 @@ namespace WizOne.Pontaj
                 {
                     txtAnLuna.Value = DateTime.Now;
                     txtZiua.Value = DateTime.Now;
+
+                    //Radu 15.01.2020
+                    GetDataBlocare(DateTime.Now);
 
                     Session["InformatiaCurenta"] = null;
 
@@ -1123,7 +1128,7 @@ namespace WizOne.Pontaj
                     if (General.Nz(cmbAngZi.Value, "").ToString() != "")
                         filtru += " AND P.F10003=" + cmbAngZi.Value;
                     else
-                        filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day);
+                        filtru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), ziua.Year, ziua.Month, 0, -99, idRol, ziua.Day,-99, -99);
 
                     tipInreg = Convert.ToInt32(General.Nz(cmbPtjZi.Value, 1));
 
@@ -1641,7 +1646,7 @@ namespace WizOne.Pontaj
                                 LEFT JOIN F005 H ON A.F10006 = H.F00506
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
                                 WHERE J.""IdUser"" = {Session["UserId"]} ) X 
-                                WHERE X.""IdRol""={(cmbRolAng.Value ?? -99)} AND X.F10022 <= {dtSf} AND {dtInc} <= X.F10023
+                                WHERE X.""IdRol""={(cmbRolAng.Value ?? -99)} AND X.F10022 <= {dtSf} AND {dtInc} <= X.F10023 AND X.F10025 <> 900
                                 ORDER BY X.""NumeComplet"" ";
 
                 DataTable dt = General.IncarcaDT(strSql, null);
@@ -2960,6 +2965,8 @@ namespace WizOne.Pontaj
                     case "txtZiua":
                         IncarcaAngajati();
                         esteStruc = false;
+                        //Radu 15.01.2020
+                        GetDataBlocare(Convert.ToDateTime(txtAnLuna.Value));
                         break;
                 }
 
@@ -4202,7 +4209,10 @@ namespace WizOne.Pontaj
                 else
                 {
                     DateTime dt = Convert.ToDateTime(txtAnLuna.Value);
-                    bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99), Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), chkNormaSD.Checked, chkNormaSL.Checked, false, 0, Convert.ToInt32(chkInOut.Checked));
+                    //Florin 2019.12.27
+                    //bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, Convert.ToInt32(cmbDept.Value ?? -99), Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99), Convert.ToInt32(cmbSec.Value ?? -99), Convert.ToInt32(cmbCtr.Value ?? -99), chkNormaSD.Checked, chkNormaSL.Checked, false, 0, Convert.ToInt32(chkInOut.Checked));
+                    bool ras = General.PontajInit(Convert.ToInt32(Session["UserId"]), dt.Year, dt.Month, -99, chkNormaZL.Checked, chkCCCu.Checked, cmbDept.Text, Convert.ToInt32(cmbAng.Value ?? -99), Convert.ToInt32(cmbSub.Value ?? -99), Convert.ToInt32(cmbFil.Value ?? -99), Convert.ToInt32(cmbSec.Value ?? -99), cmbCtr.Text, chkNormaSD.Checked, chkNormaSL.Checked, false, 0, Convert.ToInt32(chkInOut.Checked));
+
                     if (ras)
                     {
                         btnFiltru_Click(sender, null);
@@ -4624,6 +4634,93 @@ namespace WizOne.Pontaj
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
+        }
+
+        //Radu 15.01.2020
+        private void GetDataBlocare(DateTime dataInc)
+        {
+            string idRol = "-99";
+            string strSql = $@"SELECT X.""IdRol"", X.""RolDenumire"" FROM ({SelectComun(dataInc)}) X 
+                                WHERE X.F10022 <= {General.ToDataUniv(dataInc.Year, dataInc.Month, 99)} AND {General.ToDataUniv(dataInc.Year, dataInc.Month)} <= X.F10023
+                                GROUP BY X.""IdRol"", X.""RolDenumire""
+                                ORDER BY X.""RolDenumire"" ";
+            DataTable dtRol = General.IncarcaDT(strSql, null);
+            if (dtRol != null && dtRol.Rows.Count > 0)
+            {
+                idRol = "";
+                for (int i = 0; i < dtRol.Rows.Count; i++)
+                    idRol += dtRol.Rows[i]["IdRol"].ToString() + ",";
+                idRol = idRol.Substring(0, idRol.Length - 1);
+            }
+
+            //Radu 09.01.2020
+            string dataBlocare = "22001231";
+            strSql = $@"SELECT COALESCE(MIN(Ziua),'2200-12-31') FROM Ptj_tblBlocarePontaj WHERE IdRol IN (" + idRol + ")";
+            if (Constante.tipBD == 2)
+                strSql = @"SELECT COALESCE(MIN(""Ziua""),TO_DATE('31-12-2200','DD-MM-YYYY')) FROM ""Ptj_tblBlocarePontaj"" WHERE ""IdRol"" IN (" + idRol + ")";
+            DataTable dt = General.IncarcaDT(strSql, null);
+            if (dt != null && dt.Rows.Count > 0 && General.Nz(dt.Rows[0][0], "").ToString() != "" && General.IsDate(dt.Rows[0][0]))
+                dataBlocare = Convert.ToDateTime(dt.Rows[0][0]).Year + Convert.ToDateTime(dt.Rows[0][0]).Month.ToString().PadLeft(2, '0') + Convert.ToDateTime(dt.Rows[0][0]).Day.ToString().PadLeft(2, '0');
+            Session["Ptj_DataBlocare"] = dataBlocare.ToString();
+        }
+        private string SelectComun(DateTime dtInc)
+        {
+            string strSql = "";
+            try
+            {
+                string semn = "+";
+                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+                if (Constante.tipBD == 2)
+                {
+                    semn = "||";
+                    cmp = "ROWNUM";
+                }
+
+                DateTime dtData = dtInc;
+
+                strSql = @"SELECT B.F10003 AS F10003, A.F10008 {1} ' ' {1} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
+                                A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
+                                G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament"", D.F71804 AS ""Functia"", 
+                                CAST(COALESCE(A.F10043,0) AS int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(S.""Denumire"", '') AS ""RolDenumire"", COALESCE(A.F10025,0) AS F10025
+                                FROM ""relGrupAngajat"" B
+                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
+                                INNER JOIN F100 A ON b.F10003 = a.F10003
+                                LEFT JOIN F718 D ON A.F10071 = D.F71802
+                                LEFT JOIN F002 E ON A.F10002 = E.F00202
+                                LEFT JOIN F003 F ON A.F10004 = F.F00304
+                                LEFT JOIN F004 G ON A.F10005 = G.F00405
+                                LEFT JOIN F005 H ON A.F10006 = H.F00506
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                LEFT JOIN ""Ptj_tblRoluri"" S ON C.""IdRol""=S.""Id""
+                                WHERE C.""IdSuper"" = {0}
+                                UNION
+                                SELECT B.F10003 AS F10003, A.F10008 {1} ' ' {1} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
+                                A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
+                                G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Departament"", D.F71804 AS ""Functia"", 
+                                CAST(COALESCE(A.F10043,0) as int) AS ""Norma"", A.F100901, A.F10022, A.F10023, COALESCE(C.""IdRol"",1) AS ""IdRol"", COALESCE(S.""Denumire"", '') AS ""RolDenumire"", COALESCE(A.F10025,0) AS F10025
+                                FROM ""relGrupAngajat"" B
+                                INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
+                                INNER JOIN F100 A ON b.F10003 = a.F10003
+                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
+                                LEFT JOIN F718 D ON A.F10071 = D.F71802
+                                LEFT JOIN F002 E ON A.F10002 = E.F00202
+                                LEFT JOIN F003 F ON A.F10004 = F.F00304
+                                LEFT JOIN F004 G ON A.F10005 = G.F00405
+                                LEFT JOIN F005 H ON A.F10006 = H.F00506
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                LEFT JOIN ""Ptj_tblRoluri"" S ON C.""IdRol""=S.""Id""
+                                WHERE J.""IdUser"" = {0}";
+
+                strSql = string.Format(strSql, Session["UserId"], semn, cmp);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
         }
 
 

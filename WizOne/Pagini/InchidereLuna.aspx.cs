@@ -30,7 +30,10 @@ namespace WizOne.Pagini
 
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
-
+                btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
+                btnSave.Text = Dami.TraduCuvant("btnSave", "Salvare luna");
+                btnClose.Text = Dami.TraduCuvant("btnClose", "Inchidere luna");
+                lblInchidere.InnerText = Dami.TraduCuvant("Inchidere luna");
                 #endregion
             }
             catch (Exception ex)
@@ -89,19 +92,21 @@ namespace WizOne.Pagini
                 if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
                     AdunaComp = dtParam.Rows[0][0].ToString();
 
-                sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'SOMA'";
+                //sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'SOMA'";
+                sql = "SELECT F80003 FROM F800 WHERE F80002 = 'SOMA'";
                 dtParam = General.IncarcaDT(sql, null);
                 if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
                     szSOMA = dtParam.Rows[0][0].ToString();
 
-                sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'SOMB'";
+                //sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'SOMB'";
+                sql = "SELECT F80003 FROM F800 WHERE F80002 = 'SOMB'";
                 dtParam = General.IncarcaDT(sql, null);
                 if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
                     szSOMB = dtParam.Rows[0][0].ToString();
 
                 if (szSOMA.Length <= 0 || szSOMB.Length <= 0)
                 {
-                    mesaj = "Nu ati precizat etichetele SOMA si SOMB in tblParametrii!";
+                    mesaj = "Nu ati precizat etichetele SOMA si SOMB in F800!";
                     return mesaj;
                 }
 

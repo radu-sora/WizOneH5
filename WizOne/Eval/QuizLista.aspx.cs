@@ -504,7 +504,7 @@ namespace WizOne.Eval
                 int idUrmLinii = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT MAX(""Id"") FROM ""Eval_QuizIntrebari"" ", null), 0)) + 1;
                 General.ExecutaNonQuery($@"
                 INSERT INTO ""Eval_QuizIntrebari""(""Id"",                ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", ""IdQuiz"", ""Orientare"", ""Obligatoriu"", ""Parinte"",                ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", ""TIME"", ""USER_NO"")
-                                            SELECT ""Id"" + {idUrmLinii}, ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", {idUrm},    ""Orientare"", ""Obligatoriu"", ""Parinte"" + {idUrmLinii}, ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", SYSDATE, {Session["UserId"]} FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = {id}", null);
+                                            SELECT ""Id"" + {idUrmLinii}, ""Descriere"", ""TipValoare"", ""Ordine"", ""IdIntrebare"", ""TipData"", {idUrm},    ""Orientare"", ""Obligatoriu"", CASE WHEN ""Descriere"" ='Root' THEN 0 ELSE ""Parinte"" + {idUrmLinii} END AS ""Parinte"", ""EsteSectiune"", ""DescriereInRatingGlobal"", ""TemplateIdObiectiv"", ""TemplateIdCompetenta"", ""OrdineInt"", ""PreluareObiective"", ""IdPeriod"", ""PreluareCompetente"", ""IdPeriodComp"", {General.CurrentDate()}, {Session["UserId"]} FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz"" = {id}", null);
 
                 //End Florin 2019.10.02
 

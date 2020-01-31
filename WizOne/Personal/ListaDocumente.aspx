@@ -1,42 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ListaDocumente.aspx.cs" Inherits="WizOne.Personal.ListaDocumente" %>
-
-
-     <script language="javascript" type="text/javascript">
-
-        function grDate_CustomButtonClick(s, e) {
-            switch(e.buttonID)
-            {
-                case "btnArata":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToAfisare);
-                   
-                    break;   
-                case "btnPrint":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToPrint);
-                    break; 
-            }
-         }
-
-
-         function GoToAfisare(Value) {
-             grDate.PerformCallback("btnArata;" + Value);
-         }
-
-         function GoToPrint(Value) {
-             grDate.PerformCallback("btnPrint;" + Value);
-         }
-
-         function OnEndCallbackListaDoc(s, e) {
-             debugger;
-             var getAbsoluteUrl = window.location.protocol + '//' + window.location.host + '<%=VirtualPathUtility.ToAbsolute("~/")%>';
-             var url = "<%= Session["ListaDoc_URL"] %>";               
-             window.open(getAbsoluteUrl + url, '_blank ');          
-         }
-    </script>
-
+     
 <body>
     <form id="form1" runat="server">
-
-
         <table style="width:100%;">
             <tr>
                 <td style="float:right; text-align:right;">
@@ -48,7 +13,10 @@
                         <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="true" AllowSort="false" />
                         <Settings ShowFilterRow="False" ShowGroupPanel="False" />
                         <SettingsSearchPanel Visible="False" />    
-                        <ClientSideEvents  CustomButtonClick="grDate_CustomButtonClick" EndCallback="OnEndCallbackListaDoc" />
+                        <ClientSideEvents  
+                            CustomButtonClick="function(s, e) {
+                                onCustomButtonClick(s, e);
+                            }" />
                         <Columns>	
                             <dx:GridViewCommandColumn Width="50px" VisibleIndex="0" ButtonType="Image"  Caption=" " Name="butoaneGrid" >
                                 <CustomButtons>                
@@ -63,13 +31,24 @@
                             <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Nr. Crt." ReadOnly="true" Width="50px" />
                             <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Denumire" ReadOnly="true" Width="200px" />  
 						</Columns>
-                    </dx:ASPxGridView>
-                    
+                    </dx:ASPxGridView>                    
                 </td>
             </tr>
         </table>
 
-
-    </form>
+        <script>
+            function onCustomButtonClick(s, e) {
+                s.PerformCallback(JSON.stringify({
+                    reportId: s.GetRowKey(e.visibleIndex),
+                    command: e.buttonID
+                }), function () {  
+                    if (s.cpReportUrl) {
+                        window.open(s.cpReportUrl);          
+                        delete s.cpReportUrl;
+                    }                 
+                });
+            }                 
+        </script>
+    </form>    
 </body>
 

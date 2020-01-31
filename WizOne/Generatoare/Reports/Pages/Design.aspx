@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Design Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="ReportDesign.aspx.cs" Inherits="WizOne.Generatoare.Reports.Pages.ReportDesign" %>
+﻿<%@ Page Title="Design Report" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" ViewStateMode="Disabled" CodeBehind="Design.aspx.cs" Inherits="Wizrom.Reports.Pages.Design" %>
 
 <asp:Content ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- Modal dialogs -->
@@ -351,6 +351,15 @@
         var customLayoutChanged;
 
         // Main functions
+        $(window).on('beforeunload', function () {
+            $.ajax({
+                type: 'POST',
+                data: { close: true },
+                async: false
+            });
+            return;
+        });
+
         function onReportDesignerInit() {
             var designerModel = reportDesigner.designerModel;
             var previewModel = designerModel.reportPreviewModel;

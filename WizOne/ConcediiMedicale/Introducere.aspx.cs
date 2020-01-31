@@ -417,7 +417,7 @@ namespace WizOne.ConcediiMedicale
             if (Convert.ToInt32(dtMARDEF.Rows[0]["CODE4"].ToString()) > 0 && Convert.ToInt32(dtMARDEF.Rows[0]["PERC4"].ToString()) >= 0)
                 code = Convert.ToInt32(dtMARDEF.Rows[0]["CODE4"].ToString());
 
-            bool CM90 = false;
+            //bool CM90 = false;
             if (!codExcl90.Contains(code.ToString()))
             {
                 int diff = (dtEnd - dtStart).Days;
@@ -427,7 +427,7 @@ namespace WizOne.ConcediiMedicale
 
                 if (zile90 + nrZileLC > 90)
                 {
-                    CM90 = true;
+                    //CM90 = true;
                     if (txtNrAviz.Text.Trim().Length <= 0)
                     {
                         bErr = true;
@@ -610,7 +610,7 @@ namespace WizOne.ConcediiMedicale
 
                         if (dtF300 != null && dtF300.Rows.Count > 0)
                         {
-                            string sz;
+                            //string sz;
                             dtF300.Rows[0]["F300611"] = Convert.ToInt32(cmbLocPresc.Value);
                             dtF300.Rows[0]["F300612"] = Convert.ToInt32(txtBCCM.Text);
                             dtF300.Rows[0]["F300613"] = Convert.ToInt32(txtZBC.Text);

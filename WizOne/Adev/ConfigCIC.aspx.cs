@@ -21,12 +21,10 @@ namespace WizOne.Adev
         {
             try
             {
-
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-
             }
         }
 
@@ -67,7 +65,6 @@ namespace WizOne.Adev
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-
             }
         }
 
@@ -75,10 +72,8 @@ namespace WizOne.Adev
         {
             try
             {
-
                 DataTable dtIst = General.IncarcaDT("SELECT * FROM ADEVERINTE_CIC_DATE WHERE EMITERE = 1", null);
-                         
-                
+         
                 Session["InformatiaCurentaConfigCIC"] = dtIst;
                 grDate.KeyFieldName = "MARCA;DATA_NASTERE";
                 grDate.DataSource = dtIst;
@@ -87,20 +82,6 @@ namespace WizOne.Adev
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-
-            }
-
-        }
-
-        protected void grDate_HtmlDataCellPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-
             }
         }
 
@@ -110,11 +91,10 @@ namespace WizOne.Adev
             {
                 if (Session["MarcaConfigCIC"] != null)
                     e.NewValues["MARCA"] = Convert.ToInt32(Session["MarcaConfigCIC"].ToString());                           
-
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -307,8 +287,6 @@ namespace WizOne.Adev
                         General.ExecutaNonQuery(sql, null);
                     }
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -319,28 +297,15 @@ namespace WizOne.Adev
 
         private void SalvareDate()
         {
-            DataTable dt = Session["InformatiaCurentaConfigCIC"] as DataTable;
-            //if (Constante.tipBD == 1)
-            //{
-            //    SqlDataAdapter da = new SqlDataAdapter();
-            //    SqlCommandBuilder cb = new SqlCommandBuilder();
-            //    da = new SqlDataAdapter();
-            //    da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM ADEVERINTE_CIC_DATE", null);
-            //    cb = new SqlCommandBuilder(da);
-            //    da.Update(dt);
-            //    da.Dispose();
-            //    da = null;
-            //}
-            //else
-            //{
-            //    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-            //    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM ADEVERINTE_CIC_DATE WHERE ROWNUM = 0", null);
-            //    OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
-            //    oledbAdapter.Update(dt);
-            //    oledbAdapter.Dispose();
-            //    oledbAdapter = null;
-            //}
-            General.SalveazaDate(dt, "ADEVERINTE_CIC_DATE");
+            try
+            {
+                DataTable dt = Session["InformatiaCurentaConfigCIC"] as DataTable;
+                General.SalveazaDate(dt, "ADEVERINTE_CIC_DATE");
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "Adev", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
         protected void btnGen_Click(object sender, EventArgs e)

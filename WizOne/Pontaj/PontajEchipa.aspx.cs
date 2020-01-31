@@ -2580,7 +2580,7 @@ namespace WizOne.Pontaj
 
                         if (nrMin != 0)
                         {
-                            string msgNr = VerificareDepasireNorma(f10003, ziua.Date, nrMin, 2);
+                            string msgNr = General.VerificareDepasireNorma(f10003, ziua.Date, nrMin, 2);
                             if (msgNr != "")
                             {
                                 MessageBox.Show(Dami.TraduCuvant(msgNr), MessageBox.icoWarning);
@@ -2605,49 +2605,50 @@ namespace WizOne.Pontaj
             }
         }
 
-        public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrMin, int tip)
-        {
-            //tip
-            //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
-            //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
+        //Florin 2020.01.22
+        //public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrMin, int tip)
+        //{
+        //    //tip
+        //    //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
+        //    //tip - 2  vine din pontaj  - valorile sunt deja in pontaj
 
 
-            string msg = "";
+        //    string msg = "";
 
-            try
-            {
-                //calculam norma
-                string strSql = "SELECT CAST(rez as int) FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
-                if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
-                int norma = Convert.ToInt32(General.ExecutaScalar(strSql, null));
+        //    try
+        //    {
+        //        //calculam norma
+        //        string strSql = "SELECT CAST(rez as int) FROM DamiNorma(" + f10003 + "," + General.ToDataUniv(dtInc) + ")";
+        //        if (Constante.tipBD == 2) strSql = "SELECT \"DamiNorma\"(" + f10003 + ", " + General.ToDataUniv(dtInc) + ") FROM DUAL";
+        //        int norma = Convert.ToInt32(General.ExecutaScalar(strSql, null));
 
-                int sumaPtj = 0;
-                if (tip == 1)
-                {
-                    //absentele din pontaj care intra in suma de ore
-                    string sqlOre = @"SELECT ' + COALESCE(' + OreInVal + ',0)'  FROM Ptj_tblAbsente WHERE COALESCE(VerificareNrMaxOre,0) = 1 FOR XML PATH ('')";
-                    if (Constante.tipBD == 2) sqlOre = @"SELECT LISTAGG('COALESCE(' || ""OreInVal"" || ')', ' + ') WITHIN GROUP (ORDER BY ""OreInVal"") FROM ""Ptj_tblAbsente"" WHERE COALESCE(VerificareNrMaxOre,0) = 1";
-                    string strVal = (General.ExecutaScalar(sqlOre, null) ?? "").ToString();
-                    if (Constante.tipBD == 1) strVal = strVal.Substring(3);
-                    if (strVal != "") sumaPtj = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM({strVal}), 0) FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(dtInc.Date)}", null));
-                }
+        //        int sumaPtj = 0;
+        //        if (tip == 1)
+        //        {
+        //            //absentele din pontaj care intra in suma de ore
+        //            string sqlOre = @"SELECT ' + COALESCE(' + OreInVal + ',0)'  FROM Ptj_tblAbsente WHERE COALESCE(VerificareNrMaxOre,0) = 1 FOR XML PATH ('')";
+        //            if (Constante.tipBD == 2) sqlOre = @"SELECT LISTAGG('COALESCE(' || ""OreInVal"" || ')', ' + ') WITHIN GROUP (ORDER BY ""OreInVal"") FROM ""Ptj_tblAbsente"" WHERE COALESCE(VerificareNrMaxOre,0) = 1";
+        //            string strVal = (General.ExecutaScalar(sqlOre, null) ?? "").ToString();
+        //            if (Constante.tipBD == 1) strVal = strVal.Substring(3);
+        //            if (strVal != "") sumaPtj = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM({strVal}), 0) FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(dtInc.Date)}", null));
+        //        }
 
-                //suma de ore din Cereri
-                int sumaCere = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) FROM ""Ptj_Cereri"" WHERE F10003={f10003} AND ""DataInceput"" = {General.ToDataUniv(dtInc.Date)} AND ""IdStare"" IN (1,2)", null));
-                if (((sumaCere * 60) + sumaPtj + (nrMin)) > (norma * 60))
-                {
-                    msg = "Totalul de ore depaseste norma pe aceasta zi";
-                    return msg;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //        //suma de ore din Cereri
+        //        int sumaCere = Convert.ToInt32(General.ExecutaScalar($@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) FROM ""Ptj_Cereri"" WHERE F10003={f10003} AND ""DataInceput"" = {General.ToDataUniv(dtInc.Date)} AND ""IdStare"" IN (1,2)", null));
+        //        if (((sumaCere * 60) + sumaPtj + (nrMin)) > (norma * 60))
+        //        {
+        //            msg = "Totalul de ore depaseste norma pe aceasta zi";
+        //            return msg;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-            return msg;
-        }
+        //    return msg;
+        //}
 
         protected void grDate_DataBound(object sender, EventArgs e)
         {
@@ -2727,28 +2728,26 @@ namespace WizOne.Pontaj
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
                     strLeg = " LEFT JOIN (SELECT F10003, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.F10003 ";
                 }
-                //Florin 2019.09.23
-                //if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
-                if (General.Nz(cmbCateg.Value,"").ToString() != "")
-                {
-                    cmpCateg = @" CTG.""Denumire"" AS ""Categorie"", ";
-                    filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
-                    strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
-                    //strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
-                    //strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-                    //strLeg += " LEFT JOIN (SELECT F10003, F10061, F10062 FROM F100) C ON A.F10003 = C.F10003 ";
-                }
 
                 //Florin 2019.12.27
                 //if (General.Nz(cmbCtr.Value,"").ToString() != "") strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
                 if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += " AND A.\"DescContract\" IN ('" + cmbCtr.Value.ToString().Replace(",","','") + "')";
 
+                //Florin 2020.01.13 - am adaugat si DescContract si Dept
                 //Radu 13.03.2019
                 string strFiltruSpecial = "";
                 if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006");
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""",@"C.""Denumire""").Replace(@"A.""Dept""", "I.F00608");
                 else
                     strLeg = "";
+
+                //Florin 2019.09.23
+                if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                {
+                    cmpCateg = @" CTG.""Denumire"" AS ""Categorie"", ";
+                    filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+                    strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
+                }
 
                 if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
 
@@ -2787,7 +2786,11 @@ namespace WizOne.Pontaj
                 //LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                 //LEFT JOIN F724 CB ON A.F10062 = CB.F72402
                 if (Constante.tipBD == 1)
-                    strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A {strLeg}  WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
+                    strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
+                                LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                {strLeg}  
+                                WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
                                 SELECT *,
                                 (SELECT ',Ziua' + CASE WHEN Y.Zi <= X.F10023 THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
                                 FROM F100 X
@@ -2849,7 +2852,11 @@ namespace WizOne.Pontaj
                                 ORDER BY AngajatNume) A
                                 WHERE 1=1 {strFiltru}";
                 else
-                    strSql = $@"with ""Ptj_Intrari_2"" as (select * from ""Ptj_Intrari"" A WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
+                    strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
+                                LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContract""=C.""Id""
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                {strLeg}
+                                WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
                                 SELECT A.*,
                                 (SELECT LISTAGG(',Ziua' || CASE WHEN Y.""Zi"" <= X.F10023 THEN TO_CHAR(EXTRACT(DAY FROM Y.""Zi"")) END) WITHIN GROUP (ORDER BY X.F10003)
                                 FROM F100 X
@@ -2863,7 +2870,7 @@ namespace WizOne.Pontaj
                                 ) AS ""ZileGri""
                                 FROM (
                                 SELECT COALESCE({idRol},1) AS ""IdRol"", st.""Denumire"" AS ""StarePontaj"", nvl(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"", A.F100901, {dtInc}  AS ""ZiuaInc"", 
-                                TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"",  A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", C.""Id"" AS ""IdContract"", 
+                                A.F10022 AS ""DataInceput"", ""DamiDataPlecare""(X.F10003, {dtSf}) AS ""DataSfarsit"",  A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", C.""Id"" AS ""IdContract"", 
                                 Y.""Norma"", Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.""Denumire"" AS ""DescContract"", NVL(C.""OreSup"",0) AS ""OreSup"", NVL(C.""Afisare"",1) AS ""Afisare"", 
                                 B.F100958, B.F100959,
@@ -2880,10 +2887,10 @@ namespace WizOne.Pontaj
                                 left join (SELECT * FROM ""SituatieZileAbsente"" WHERE ""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An""
                                 left join ""SituatieZLP"" zlp on zlp.F10003 = x.F10003 and zlp.""An"" = x.""An""
                                 INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""ValStr"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf})  source  
+                                (SELECT F10003, ""ValStr"", TO_CHAR(""Ziua"",'DD-MM-YYYY') AS ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf})  source  
                                 PIVOT  (MAX(COALESCE(""ValStr"",'')) FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003
-                                LEFT JOIN F100 A ON A.F10003=X.F10003 
+                                LEFT JOIN F100 A ON A.F10003=X.F10003
                                 LEFT JOIN F1001 B ON A.F10003=B.F10003 
                                 LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari_2"" R WHERE EXTRACT(YEAR FROM R.""Ziua"")= {an} AND EXTRACT(MONTH FROM R.""Ziua"")= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
                                 LEFT JOIN ""Ptj_Intrari_2"" Y ON A.F10003=Y.F10003 AND Y.""Ziua""=Q.""ZiuaMin""

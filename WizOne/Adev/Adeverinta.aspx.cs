@@ -1108,7 +1108,7 @@ namespace WizOne.Adev
 
             try
             {
-                byte[] bytes = null;
+                //byte[] bytes = null;
 
                 string cnApp = Constante.cnnWeb;
                 string tmp = cnApp.Split(new[] { "Data source=" }, StringSplitOptions.None)[1];
@@ -2571,7 +2571,7 @@ namespace WizOne.Adev
                 + "w:hAnsi=\"Times New Roman\" w:cs=\"Times New Roman\"/></w:rPr><w:t>[VENIT_NET]</w:t></w:r></w:p></w:tc></w:tr>";
 
             string table = "";
-            string val1 = "————", val2 = "————";
+            //string val1 = "————", val2 = "————";
 
             if (dt != null)
             {

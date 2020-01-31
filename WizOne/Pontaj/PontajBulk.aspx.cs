@@ -126,6 +126,7 @@ namespace WizOne.Pontaj
                 dr["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
                 dr["NrOre1"] = e.NewValues["NrOre1"] ?? DBNull.Value;
                 dr["NrOre10"] = e.NewValues["NrOre10"] ?? DBNull.Value;
+                dr["Observatii"] = e.NewValues["Observatii"] ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 
@@ -184,6 +185,7 @@ namespace WizOne.Pontaj
                 dr["IdActivitate"] = e.NewValues["IdActivitate"] ?? DBNull.Value;
                 dr["NrOre1"] = e.NewValues["NrOre1"] ?? DBNull.Value;
                 dr["NrOre10"] = e.NewValues["NrOre10"] ?? DBNull.Value;
+                dr["Observatii"] = e.NewValues["Observatii"] ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
 

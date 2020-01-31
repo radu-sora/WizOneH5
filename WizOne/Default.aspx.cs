@@ -1132,7 +1132,7 @@ namespace WizOne
                 Session["TimeOutSecunde"] = 0;
 
                 //Florin 2019.07.15
-                Session["Filtru_ActeAditionale"] = "";
+                Session["Filtru_ActeAditionale"] = "{}";
 
                 //Florin 2019.07.17
                 Session["Filtru_CereriAbs"] = "";

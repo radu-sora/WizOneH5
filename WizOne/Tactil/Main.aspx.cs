@@ -151,25 +151,44 @@ namespace WizOne.Tactil
                     default:
                         {
                             if (nume.Substring(0, 6) == "raport")
-                            {//Radu 08.03.2019
+                            { //Radu 08.03.2019
                                 string[] lstParam = lnk.CommandArgument.Split('_');
-                                int id = Convert.ToInt32(lstParam[0]);
-                                int tip = -1;
-                                if (lstParam.Length > 1)
-                                    tip = Convert.ToInt32(lstParam[1]);
-                                Session["ReportId"] = id;
-                                string param = "";
+                                int reportId = Convert.ToInt32(lstParam[0]);
+                                var reportParams = null as object;
                                 HtmlImage img = lnk.Controls[0].Controls[0] as HtmlImage;
-                                if (img.Alt.Contains("Fluturas"))
-                                    param = "&An=" + Dami.ValoareParam("AnLucru") + "&Luna=" + Dami.ValoareParam("LunaLucru");
-                                if (img.Alt.Contains("Adeverinta") && tip > 0)
-                                    param = "&TipAdeverinta=" + tip;
+                                int tip = -1;                                
 
-                                //Florin 2019.10.17
-                                //Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?Angajat=" + Session["User_Marca"].ToString() + param, false);
-                                if (nume.ToLower().Contains("print"))
-                                    Session["PrintareAutomata"] = 1;
-                                Response.Redirect("../Generatoare/Reports/Pages/ReportView.aspx?q=" + General.URLEncode("Angajat=" + Session["User_Marca"].ToString() + param), false);
+                                if (lstParam.Length > 1)
+                                    tip = Convert.ToInt32(lstParam[1]);                                                               
+
+                                if (img.Alt.Contains("Fluturas"))
+                                    reportParams = new
+                                    {
+                                        Angajat = Session["User_Marca"].ToString(),
+                                        An = Dami.ValoareParam("AnLucru"),
+                                        Luna = Dami.ValoareParam("LunaLucru")
+                                    };
+                                else if (img.Alt.Contains("Adeverinta") && tip > 0)
+                                    reportParams = new
+                                    {
+                                        Angajat = Session["User_Marca"].ToString(),
+                                        TipAdeverinta = tip
+                                    };
+                                else
+                                    reportParams = new
+                                    {
+                                        Angajat = Session["User_Marca"].ToString()
+                                    };
+
+                                // New report access interface
+                                if (!nume.ToLower().Contains("print"))
+                                {
+                                    var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(reportId);
+
+                                    Wizrom.Reports.Code.ReportProxy.View(reportId, reportSettings.ToolbarType, reportSettings.ExportOptions, reportParams);
+                                }
+                                else
+                                    Wizrom.Reports.Code.ReportProxy.Print(reportId, paramList: reportParams); // TODO: FIX03                                
                             }
                         }
                         break;

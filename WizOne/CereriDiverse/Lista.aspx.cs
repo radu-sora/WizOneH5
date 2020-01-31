@@ -438,8 +438,8 @@ namespace WizOne.CereriDiverse
                                 //}
 
                                 //stergem din pontaj
-                                int idTipOre = 0;
-                                string oreInVal = "";
+                                //int idTipOre = 0;
+                                //string oreInVal = "";
                                 //if (drAbs != null)
                                 //{
                                 //    idTipOre = Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0));

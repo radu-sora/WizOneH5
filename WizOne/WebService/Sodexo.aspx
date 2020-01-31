@@ -127,7 +127,7 @@
                 <table width="40%" >
                     <tr>
                         <td>
-                            <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="50%" AutoGenerateColumns="false" OnDataBinding="grDate_DataBinding" OnInitNewRow="grDate_InitNewRow" OnCustomCallback="grDate_CustomCallback"
+                            <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="50%" AutoGenerateColumns="false" OnDataBinding="grDate_DataBinding" OnCustomCallback="grDate_CustomCallback"
                                 OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnRowDeleting="grDate_RowDeleting">
                                 <SettingsBehavior AllowFocusedRow="true" />
                                 <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                                   

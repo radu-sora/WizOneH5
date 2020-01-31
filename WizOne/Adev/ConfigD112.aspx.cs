@@ -1,16 +1,10 @@
 ﻿using DevExpress.Web;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using WizOne.Module;
 using System.Diagnostics;
-using System.Data.SqlClient;
-using System.Data.OleDb;
+using System.IO;
+using System.Web.UI;
+using WizOne.Module;
 
 namespace WizOne.Adev
 {
@@ -38,43 +32,22 @@ namespace WizOne.Adev
 
                 if (!IsPostBack)
                 {
-                    //DataTable table = new DataTable();
-                    //table.Columns.Add("Id", typeof(int));
-                    //table.Columns.Add("Denumire", typeof(string));
-
-                    //for (int i = DateTime.Now.Year; i >= DateTime.Now.Year - 10; i--)
-                    //    table.Rows.Add(i, i.ToString());
-                    //GridViewDataComboBoxColumn colAn = (grDate.Columns["AN"] as GridViewDataComboBoxColumn);
-                    //colAn.PropertiesComboBox.DataSource = table;
-
-                    //table.Clear();
-
-                    //for (int i = 1; i <= 12; i++)
-                    //    table.Rows.Add(i, i.ToString());
-                    //GridViewDataComboBoxColumn colLuna = (grDate.Columns["LUNA"] as GridViewDataComboBoxColumn);
-                    //colLuna.PropertiesComboBox.DataSource = table;
-
                     GridViewDataTextColumn colDecl = (grDate.Columns["DECLARATIE"] as GridViewDataTextColumn);
                     colDecl.HeaderStyle.Wrap = DevExpress.Utils.DefaultBoolean.True;
 
                     IncarcaGrid();
-
                 }
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-
             }
         }
-
-
 
         private void IncarcaGrid()
         {
             try
             {
-
                 DataTable dtIst = General.IncarcaDT("SELECT * FROM ADEVERINTE_SOM_D112", null);
                 Session["InformatiaCurentaConfigD112"] = dtIst;
                 grDate.KeyFieldName = "AN;LUNA";
@@ -84,39 +57,8 @@ namespace WizOne.Adev
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-
-            }
-
-        }
-
-        protected void grDate_HtmlDataCellPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-
             }
         }
-
-
-
-        protected void grDate_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-
-
 
         protected void grDate_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
@@ -214,40 +156,17 @@ namespace WizOne.Adev
 
         private void SalvareDate()
         {
-            DataTable dt = Session["InformatiaCurentaConfigD112"] as DataTable;
-            //if (Constante.tipBD == 1)
-            //{
-            //    SqlDataAdapter da = new SqlDataAdapter();
-            //    SqlCommandBuilder cb = new SqlCommandBuilder();
-            //    da = new SqlDataAdapter();
-            //    da.SelectCommand = General.DamiSqlCommand("SELECT TOP 0 * FROM ADEVERINTE_SOM_D112", null);
-            //    cb = new SqlCommandBuilder(da);
-            //    da.Update(dt);
-            //    da.Dispose();
-            //    da = null;
-            //}
-            //else
-            //{
-            //    OracleDataAdapter oledbAdapter = new OracleDataAdapter();
-            //    oledbAdapter.SelectCommand = General.DamiOleDbCommand("SELECT * FROM ADEVERINTE_SOM_D112 WHERE ROWNUM = 0", null);
-            //    OracleCommandBuilder cb = new OracleCommandBuilder(oledbAdapter);
-            //    oledbAdapter.Update(dt);
-            //    oledbAdapter.Dispose();
-            //    oledbAdapter = null;
-            //}
-            General.SalveazaDate(dt, "ADEVERINTE_SOM_D112");
+            try
+            {
+                DataTable dt = Session["InformatiaCurentaConfigD112"] as DataTable;
+                General.SalveazaDate(dt, "ADEVERINTE_SOM_D112");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
-
-
-
-
-                            //<dx:GridViewDataComboBoxColumn FieldName = "AN" Name="AN" Caption="Anul"  Width="75px" >
-                            //    <PropertiesComboBox TextField = "Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            //</dx:GridViewDataComboBoxColumn>
-                            //<dx:GridViewDataComboBoxColumn FieldName = "LUNA" Name="LUNA" Caption="Luna"  Width="75px" >
-                            //    <PropertiesComboBox TextField = "Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            //</dx:GridViewDataComboBoxColumn>  
-
 
     }
 }

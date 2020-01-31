@@ -292,7 +292,7 @@ namespace WizOne.WebService
             {
                 tichete = infoSodexo.productList(utilizator, parola);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 MessageBox.Show(Dami.TraduCuvant("Conectare esuata!"));
             }
@@ -375,7 +375,7 @@ namespace WizOne.WebService
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -825,7 +825,7 @@ namespace WizOne.WebService
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -1000,27 +1000,27 @@ namespace WizOne.WebService
             }
         }
 
-        protected void grDateAdrese_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
-        {
-            try
-            {
-                //DataTable dt = Session["Sodexo_Adrese"] as DataTable;
-                //if (dt.Columns["IdAuto"] != null)
-                //{
-                //    if (dt != null && dt.Rows.Count > 0)
-                //    {
-                //        int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                //        e.NewValues["IdAuto"] = max;
-                //    }
-                //    else
-                //        e.NewValues["IdAuto"] = 1;
-                //}
-            }
-            catch (Exception ex)
-            {
+        //protected void grDateAdrese_InitNewRow(object sender, DevExpress.Web.Data.ASPxDataInitNewRowEventArgs e)
+        //{
+        //    try
+        //    {
+        //        //DataTable dt = Session["Sodexo_Adrese"] as DataTable;
+        //        //if (dt.Columns["IdAuto"] != null)
+        //        //{
+        //        //    if (dt != null && dt.Rows.Count > 0)
+        //        //    {
+        //        //        int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
+        //        //        e.NewValues["IdAuto"] = max;
+        //        //    }
+        //        //    else
+        //        //        e.NewValues["IdAuto"] = 1;
+        //        //}
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         //private void ArataMesaj(string mesaj)
         //{

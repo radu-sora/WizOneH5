@@ -40,6 +40,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Charts.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
@@ -227,10 +229,10 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\packages\Oracle.ManagedDataAccess.19.3.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess.EntityFramework, Version=6.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\packages\Oracle.ManagedDataAccess.EntityFramework.19.3.0\lib\net45\Oracle.ManagedDataAccess.EntityFramework.dll</HintPath>
+      <HintPath>..\packages\Oracle.ManagedDataAccess.EntityFramework.19.6.0\lib\net45\Oracle.ManagedDataAccess.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="ProceseSec, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -774,15 +776,17 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ReportsModel.edmx</DependentUpon>
       <LastGenOutput>ReportsModel.Context.cs</LastGenOutput>
+      <CustomToolNamespace>Wizrom.Reports.Models</CustomToolNamespace>
     </Content>
     <Content Include="Generatoare\Reports\Models\ReportsModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ReportsModel.edmx</DependentUpon>
       <LastGenOutput>ReportsModel.cs</LastGenOutput>
+      <CustomToolNamespace>Wizrom.Reports.Models</CustomToolNamespace>
     </Content>
-    <Content Include="Generatoare\Reports\Pages\ReportDesign.aspx" />
-    <Content Include="Generatoare\Reports\Pages\Reports.aspx" />
-    <Content Include="Generatoare\Reports\Pages\ReportView.aspx" />
+    <Content Include="Generatoare\Reports\Pages\Design.aspx" />
+    <Content Include="Generatoare\Reports\Pages\Manage.aspx" />
+    <Content Include="Generatoare\Reports\Pages\View.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Info.aspx" />
     <Content Include="Organigrama\Lista.aspx" />
@@ -836,6 +840,8 @@
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripturi\ScriptOracle.txt" />
+    <Content Include="Scripturi\ScriptSql.txt" />
     <Content Include="Tactil\Adeverinte.aspx" />
     <Content Include="Tactil\CereriDiverseTactil.aspx" />
     <Content Include="Tactil\CereriTactil.aspx" />
@@ -915,7 +921,6 @@
     <Content Include="Reports\Imprima.aspx" />
     <Content Include="DefaultTactil.aspx" />
     <Content Include="Tactil\PontajDetaliatTactil.aspx" />
-    <Content Include="ViewSwitcher.ascx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -946,6 +951,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ReportsOraModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="Generatoare\Reports\Pages\Print.ashx" />
     <None Include="NuGet.config" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Publicat.pubxml" />
@@ -965,7 +971,6 @@
     </Content>
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
-    <Content Include="Site.Mobile.Master" />
     <None Include="Web References\SodexoOnline\paper.wsdl" />
     <None Include="Web References\SodexoOnline\paper.xsd">
       <SubType>Designer</SubType>
@@ -1189,7 +1194,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Mesaje.it.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Avs\Aprobare.aspx.cs">
       <DependentUpon>Aprobare.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1449,13 +1453,16 @@
       <DependentUpon>ValoriLinii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Code\DictionaryExtensions.cs" />
+    <Compile Include="Generatoare\Reports\Code\ReportsDbContext.cs" />
+    <Compile Include="Generatoare\Reports\Code\ReportSessionModule.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportConnectionProviderService.cs" />
     <Compile Include="Generatoare\Reports\Code\ReportDataSourceWizardConnectionStringsProvider.cs" />
     <Compile Include="Generatoare\Reports\Code\EntityReportStorageWebExtension.cs" />
-    <Compile Include="Generatoare\Reports\Models\Report.cs">
-      <DependentUpon>ReportsModel.tt</DependentUpon>
+    <Compile Include="Generatoare\Reports\Code\ReportProxy.cs" />
+    <Compile Include="Generatoare\Reports\Code\ReportSessionPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Generatoare\Reports\Models\ReportGroupUser.cs">
+    <Compile Include="Generatoare\Reports\Models\Report.cs">
       <DependentUpon>ReportsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Generatoare\Reports\Models\ReportsModel.Context.cs">
@@ -1487,26 +1494,29 @@
     <Compile Include="Generatoare\Reports\Pages\Download.ashx.cs">
       <DependentUpon>Download.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\ReportDesign.aspx.cs">
-      <DependentUpon>ReportDesign.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\Print.ashx.cs">
+      <DependentUpon>Print.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Generatoare\Reports\Pages\Design.aspx.cs">
+      <DependentUpon>Design.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\ReportDesign.aspx.designer.cs">
-      <DependentUpon>ReportDesign.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\Design.aspx.designer.cs">
+      <DependentUpon>Design.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\Reports.aspx.cs">
-      <DependentUpon>Reports.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\Manage.aspx.cs">
+      <DependentUpon>Manage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\Reports.aspx.designer.cs">
-      <DependentUpon>Reports.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\Manage.aspx.designer.cs">
+      <DependentUpon>Manage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\ReportView.aspx.cs">
-      <DependentUpon>ReportView.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\View.aspx.cs">
+      <DependentUpon>View.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Generatoare\Reports\Pages\ReportView.aspx.designer.cs">
-      <DependentUpon>ReportView.aspx</DependentUpon>
+    <Compile Include="Generatoare\Reports\Pages\View.aspx.designer.cs">
+      <DependentUpon>View.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1805,13 +1815,6 @@
     </Compile>
     <Compile Include="Revisal\Revisal.aspx.designer.cs">
       <DependentUpon>Revisal.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Site.Mobile.Master.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Site.Mobile.Master.designer.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="Tactil\Adeverinte.aspx.cs">
       <DependentUpon>Adeverinte.aspx</DependentUpon>
@@ -2412,13 +2415,6 @@
     </Compile>
     <Compile Include="Tactil\PontajDetaliatTactil.aspx.designer.cs">
       <DependentUpon>PontajDetaliatTactil.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ViewSwitcher.ascx.cs">
-      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ViewSwitcher.ascx.designer.cs">
-      <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
     <Compile Include="Web References\SodexoOnline\Reference.cs">
       <AutoGen>True</AutoGen>

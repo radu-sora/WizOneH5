@@ -2676,7 +2676,7 @@ namespace WizOne.Adev
                     j++;
                 }
 
-                for (i = i; i < 25; i++)
+                for (i = 0; i < 25; i++)
                 {
                     string nr_luna = "";
                     table += tableRow;

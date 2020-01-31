@@ -13577,3 +13577,43 @@ COMMIT;
 UPDATE "Avs_tblAtribute" SET "Activ"=0 WHERE "Id" IN (30,31,32,33);
 COMMIT;
 
+
+DECLARE vExists number;
+BEGIN
+  SELECT COUNT(*) INTO vExists FROM USER_TAB_COLUMNS WHERE TABLE_NAME = 'DynReports' AND COLUMN_NAME = 'HasPassword';
+  IF vExists > 0 THEN 
+    EXECUTE IMMEDIATE 'ALTER TABLE "DynReports" DROP COLUMN "HasPassword"';
+  END IF;
+
+  UPDATE "DynReports" SET "DynReportTypeId" = 1 WHERE "DynReportTypeId" = 5;
+  DELETE FROM "DynReportTypes" WHERE "DynReportTypeId" = 5;
+  UPDATE "tblMeniuri" SET "Pagina" = 'Generatoare\Reports\Pages\Manage' WHERE "Id" = 24;
+  
+  SELECT COUNT(*) INTO vExists FROM USER_TAB_COLUMNS WHERE TABLE_NAME = 'relGrupRaport2';
+  IF vExists = 0 THEN         
+    EXECUTE IMMEDIATE 'RENAME "relGrupRaport" TO "relGrupRaport2"';    
+    EXECUTE IMMEDIATE 'CREATE VIEW "relGrupRaport" AS SELECT * FROM "relGrupRaport2"';
+  END IF;
+  
+  SELECT COUNT(*) INTO vExists FROM USER_TAB_COLUMNS WHERE TABLE_NAME = 'relGrupRaport2' AND COLUMN_NAME = 'AreParola';
+  IF vExists = 0 THEN 
+    EXECUTE IMMEDIATE 'ALTER TABLE "relGrupRaport2" ADD "AreParola" NUMBER(1, 0) DEFAULT 0 NOT NULL';
+  END IF;
+  
+  EXECUTE IMMEDIATE '
+  CREATE OR REPLACE VIEW "RapoarteGrupuriUtilizatori" ("IdRaport", "IdUser", "ExtensiiPermise", "MeniuRestrans", "AreParola")
+  AS 
+  SELECT DISTINCT r."DynReportId" AS "IdRaport", gu."IdUser", gs."ExtensiiPermise", gs."MeniuRestrans", gr."AreParola"
+  FROM "DynReports" r
+  INNER JOIN "relGrupRaport2" gr ON r."DynReportId" = gr."IdRaport"
+  INNER JOIN "relGrupUser" gu ON gr."IdGrup" = gu."IdGrup"
+  INNER JOIN "tblGrupUsers" gs ON gu."IdGrup" = gs."Id"
+  UNION ALL
+  SELECT "DynReportId" AS "IdRaport", "IdUser" AS "IdUser", NULL AS "ExtensiiPermise", NULL AS "MeniuRestrans", 0 AS "AreParola"
+  FROM "relGrupUser", "DynReports"
+  WHERE "IdGrup" = 0 AND "DynReportId" NOT IN (SELECT "IdRaport" FROM "relGrupRaport" WHERE "IdGrup" = 0)
+  UNION ALL
+  SELECT B."IdRaport", A.F70102 AS "IdUser", NULL AS "ExtensiiPermise", NULL AS "MeniuRestrans", B."AreParola"
+  FROM USERS A
+  INNER JOIN "relGrupRaport2" B ON B."IdGrup"=-1';
+END;

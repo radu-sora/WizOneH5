@@ -146,7 +146,7 @@ namespace WizOne.Personal
                     txtNrOre.Text = "0";
                 }
 
-                if (Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
+                if (ds.Tables[0].Rows[0]["F100939"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
                 {
                     txtNrOre.ClientEnabled = false;
                     txtNrOre.Text = "0";

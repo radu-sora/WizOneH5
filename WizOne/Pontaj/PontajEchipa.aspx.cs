@@ -887,10 +887,15 @@ namespace WizOne.Pontaj
 
                 //DataTable dtErt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Cereri"" WHERE ""DataInceput"" >= " + General.ToDataUniv(dtData.Year, dtData.Month, 99), null);
 
+                //string strSql = $@"SELECT X.""IdRol"", X.""RolDenumire"" FROM ({SelectComun()}) X 
+                //                WHERE X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023
+                //                GROUP BY X.""IdRol"", X.""RolDenumire""
+                //                ORDER BY X.""RolDenumire"" ";
+                //Radu 31.01.2020 - se doreste sa se puna implicit rolul cel mai mare
                 string strSql = $@"SELECT X.""IdRol"", X.""RolDenumire"" FROM ({SelectComun()}) X 
                                 WHERE X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023
                                 GROUP BY X.""IdRol"", X.""RolDenumire""
-                                ORDER BY X.""RolDenumire"" ";
+                                ORDER BY X.""IdRol"" DESC";
 
                 DataTable dtRol = General.IncarcaDT(strSql, null);
 

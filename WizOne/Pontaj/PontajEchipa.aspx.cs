@@ -2589,7 +2589,7 @@ namespace WizOne.Pontaj
                         }
 
                         General.ExecutaNonQuery(sqlDel, null);
-                        General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+                        General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} , USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
                         General.ExecutaNonQuery(sqlIst, null);
                         General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
 

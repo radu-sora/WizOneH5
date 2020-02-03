@@ -31,14 +31,6 @@ namespace WizOne
         {
             try
             {
-                var ert1 = HttpContext.Current.Session["tblParam"];
-                DataTable dtGigi1 = HttpContext.Current.Session["tblParam"] as DataTable;
-                if (dtGigi1 != null)
-                {
-                    var edc = dtGigi1.Rows.Count;
-                }
-
-
                 if (Constante.esteTactil)
                     Dami.AccesTactil();
                 else
@@ -170,14 +162,7 @@ namespace WizOne
                 //Florin 2018.09.10
                 txtVers.InnerText = Constante.versiune;
                 txtVers1.Text = Constante.versiune;
-                //txtVers.InnerText = Dami.TraduCuvant("Versiune") + ": " + Dami.ValoareParam("VersiuneApp","3.3.0");
 
-                var ert = HttpContext.Current.Session["tblParam"];
-                DataTable dtGigi = HttpContext.Current.Session["tblParam"] as DataTable;
-                if (dtGigi != null)
-                {
-                    var edc = dtGigi.Rows.Count;
-                }
                 if (Dami.ValoareParam("ArataLunaCurentaInSubsolApp", "0") == "1") txtLunaLucru.InnerText = Dami.TraduCuvant("Luna de lucru") + ": " + Dami.ValoareParam("LunaLucru") + " " + Dami.ValoareParam("AnLucru");
 
                 //Radu 11.07.2018 - la PeliFilip, pentru anumiti utilizatori, sa nu se mai afiseze cuvantul Angajat si nici data angajarii

@@ -1147,16 +1147,11 @@ namespace WizOne
                 Session["Eval_tblCategorieObiective"] = null;
 
 
-
-                string ti = "nvarchar";
-                if (Constante.tipBD == 2) ti = "varchar2";
-
                 string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""
                                 UNION
-                                SELECT 'AnLucru', CAST(F01011 AS {0}(10)), '', 1, 0 FROM F010
+                                SELECT 'AnLucru', CAST(F01011 AS varchar(10)), '', 1, 0 FROM F010
                                 UNION
-                                SELECT 'LunaLucru', CAST(F01012 AS {0}(10)), '', 1, 0 FROM F010";
-                strSql = string.Format(strSql, ti);
+                                SELECT 'LunaLucru', CAST(F01012 AS varchar(10)), '', 1, 0 FROM F010";
 
                 Session["tblParam"] = General.IncarcaDT(strSql, null);
                 Session["IdClient"] = Convert.ToInt32(Dami.ValoareParam("IdClient", "1"));

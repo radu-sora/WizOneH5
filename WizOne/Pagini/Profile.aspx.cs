@@ -166,7 +166,7 @@ namespace WizOne.Pagini
             try
             {
                 //List<object> arr = grDate.GetSelectedFieldValues("Id");
-                object[] arr = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id" }) as object[];
+                object[] arr = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "Activ" }) as object[];
                 if (arr != null && arr.Count() > 0)
                 {
                     var ert = arr[0];

@@ -2520,7 +2520,7 @@ namespace WizOne.Pontaj
                     if (txtCol.Count > 0 && txtCol["valuri"] != null)
                     {
                         var ert = txtCol["valuri"];
-                        
+
                         DataRow drMd = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
                         string valStr = "";
                         string cmp = "";
@@ -2576,7 +2576,7 @@ namespace WizOne.Pontaj
                             sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
                                            VALUES ({f10003}, {General.ToDataUniv(ziua)}, '{valStr}', '{General.Nz(drMd["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)})";
                         }
-                        catch (Exception){}
+                        catch (Exception) { }
 
                         if (nrMin != 0)
                         {
@@ -2589,7 +2589,7 @@ namespace WizOne.Pontaj
                         }
 
                         General.ExecutaNonQuery(sqlDel, null);
-                        General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} , USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+                        General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} , USER_NO={Session["UserId"]}, TIME={General.CurrentDate()}, ""CuloareValoare""='{Constante.CuloareModificatManual}' WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
                         General.ExecutaNonQuery(sqlIst, null);
                         General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
 

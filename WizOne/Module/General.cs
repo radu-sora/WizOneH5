@@ -9369,7 +9369,7 @@ namespace WizOne.Module
         }
 
 
-        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text, DataTable dt = null)
+        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text, DataTable dt = null, int valTichete = 0)
         {
             decimal tmpVB = 0;
             string rezultat = "";
@@ -9417,13 +9417,13 @@ namespace WizOne.Module
 
                 if (tipVenit == 1)           //VB -> SN
                 {
-                    varDed = DamiValDeducere(varNr, Convert.ToDecimal(venit ?? 0));
-                    CalcSN(Convert.ToDecimal(venit ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu, out tmpVB, out rezultat);
+                    varDed = DamiValDeducere(varNr, Convert.ToDecimal(venit ?? 0) + valTichete);
+                    CalcSN(Convert.ToDecimal(venit ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu, valTichete, out tmpVB, out rezultat);
                 }
                 else                    //SN -> VB
                 {
                     decimal SN = Convert.ToDecimal(venit ?? 1);
-                    varDed = DamiValDeducere(varNr, SN);
+                    varDed = DamiValDeducere(varNr, SN + valTichete);
                     tmpVB = Math.Round((SN - (1.5m * varImp / 100 * varDed)) / (1 - varImp / 100 - (varImp / 100 * varDed / 2000) - ((1 - varImp / 100) * (varCas + varCass + varSom) / 100)));
                     decimal tmpSN = 0;
 
@@ -9437,8 +9437,8 @@ namespace WizOne.Module
                         {
                             i += 1;
 
-                            varDed = DamiValDeducere(varNr, tmpVB);
-                            CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu, out tmpSN, out rezultat);
+                            varDed = DamiValDeducere(varNr, tmpVB + valTichete);
+                            CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu, valTichete, out tmpSN, out rezultat);
                             if (tmpSN != SN)
                             {
                                 if (tmpSN > SN)
@@ -9508,7 +9508,7 @@ namespace WizOne.Module
         }
 
 
-        private static void CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu, out decimal SN, out string rezultat)
+        private static void CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu, int valTichete, out decimal SN, out string rezultat)
         {
             decimal tmpSN = 0m;
             string tmpRezultat = "";
@@ -9569,7 +9569,7 @@ namespace WizOne.Module
                 //    ded = Convert.ToDecimal(Math.Ceiling(Convert.ToDouble(ded / 10)) * 10);
                 //}
 
-                decimal imp = MathExt.Round(varImp / 100 * (VB - taxe - ded), MidpointRounding.AwayFromZero);
+                decimal imp = MathExt.Round(varImp / 100 * ((VB + valTichete) - taxe - ded), MidpointRounding.AwayFromZero);
                 if (imp < 0) imp = 0;
 
                 tmpSN = MathExt.Round((VB - imp - taxe), MidpointRounding.AwayFromZero);

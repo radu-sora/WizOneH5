@@ -424,12 +424,13 @@ namespace WizOne.Eval
                                         sqlIns + Environment.NewLine +
                                     "END;";
 
+                                //Florin 2020.02.03 - am scos .Replace(",", ".") de la activitate
                                 string seq = "NEXT VALUE FOR ObiIndividuale_SEQ";
                                 if (Constante.tipBD == 2) seq = @" ""ObiIndividuale_SEQ"".NEXTVAL";
                                 sqlObi = sqlObi.Replace("@idUnic", clsObiIndividuale.IdUnic <= 0 ? seq : clsObiIndividuale.IdUnic.ToString());
                                 tgv += sqlObi + Environment.NewLine;
                                 General.ExecutaNonQuery(sqlObi, new object[] {
-                                    clsObiIndividuale.IdAuto, clsObiIndividuale.IdObiectiv, clsObiIndividuale.Obiectiv, clsObiIndividuale.IdActivitate, General.Nz(clsObiIndividuale.Activitate, "").ToString().Replace(",", "."),
+                                    clsObiIndividuale.IdAuto, clsObiIndividuale.IdObiectiv, clsObiIndividuale.Obiectiv, clsObiIndividuale.IdActivitate, General.Nz(clsObiIndividuale.Activitate, "").ToString(),
                                     General.Nz(clsObiIndividuale.Pondere, "0").ToString().Replace(",", "."), clsObiIndividuale.Descriere, General.Nz(clsObiIndividuale.Target, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.Realizat, "0").ToString().Replace(",", "."), General.Nz(clsObiIndividuale.IdCalificativ, "0").ToString().Replace(",", "."),
                                     clsObiIndividuale.Calificativ, clsObiIndividuale.ExplicatiiCalificativ, clsObiIndividuale.IdQuiz, clsObiIndividuale.F10003, clsObiIndividuale.Pozitie,
                                     clsObiIndividuale.Id, clsObiIndividuale.IdLinieQuiz,

@@ -13617,3 +13617,9 @@ BEGIN
   FROM USERS A
   INNER JOIN "relGrupRaport2" B ON B."IdGrup"=-1';
 END;
+
+
+----  2.2.125  ----
+
+UPDATE "tblParametrii" SET "Explicatie"='Se completeaza calea unde se va salva backup-ul bazei de date' WHERE "Nume"='CaleBackUp';
+COMMIT;

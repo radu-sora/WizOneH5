@@ -588,7 +588,7 @@ namespace WizOne.Personal
                     ds.Tables[2].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
                     ds.Tables[2].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
 
-                    if (Convert.ToInt32(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"].ToString()) == 11 && Convert.ToDateTime(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"]) != new DateTime(2100, 1, 1))  //revenire din CIC
+                    if (dt.Select("1 = 1", "F11105 DESC") != null && dt.Select("1 = 1", "F11105 DESC").Count() > 0 && (Convert.ToInt32(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"].ToString()) == 11 && Convert.ToDateTime(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"]) != new DateTime(2100, 1, 1)))  //revenire din CIC
                     {
                         ds.Tables[0].Rows[0]["F10076"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11105"];
                         ds.Tables[0].Rows[0]["F10077"] = Convert.ToDateTime(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"].ToString()).AddDays(-1);
@@ -596,10 +596,13 @@ namespace WizOne.Personal
                         ds.Tables[1].Rows[0]["F10077"] = Convert.ToDateTime(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"].ToString()).AddDays(-1);
                     }
 
-                    Session["MP_SuspMotiv"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"];
-                    Session["MP_SuspDataIncp"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11105"];
-                    Session["MP_SuspDataSf"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11106"];
-                    Session["MP_SuspDataInct"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"];
+                    if (dt.Select("1 = 1", "F11105 DESC") != null && dt.Select("1 = 1", "F11105 DESC").Count() > 0)
+                    {
+                        Session["MP_SuspMotiv"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"];
+                        Session["MP_SuspDataIncp"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11105"];
+                        Session["MP_SuspDataSf"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11106"];
+                        Session["MP_SuspDataInct"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"];
+                    }
                 }
                 //if (param == 2)
                 //{

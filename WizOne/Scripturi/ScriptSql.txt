@@ -12736,3 +12736,7 @@ GO
 UPDATE "Avs_tblAtribute" SET "Activ"=0 WHERE "Id" IN (30,31,32,33)
 GO
 
+----  2.2.125  ----
+
+UPDATE "tblParametrii" SET "Explicatie"='Se completeaza calea unde se va salva backup-ul bazei de date' WHERE "Nume"='CaleBackUp'
+GO

@@ -27,7 +27,6 @@ namespace WizOne.Pagini
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
                 btnNew.Text = Dami.TraduCuvant("btnNew", "Nou");
-                btnShow.Image.ToolTip = Dami.TraduCuvant("btnShow", "Arata");
                 btnEdit.Image.ToolTip = Dami.TraduCuvant("btnEdit", "Modifica");
                 btnDelete.Image.ToolTip = Dami.TraduCuvant("btnDelete", "Sterge");
                 foreach (GridViewColumn c in grDate.Columns)
@@ -61,11 +60,6 @@ namespace WizOne.Pagini
                 if (!IsPostBack)
                 {
                     IncarcaGrid();
-                }
-                else
-                {
-                    //grDate.DataSource = Session["InformatiaCurenta"];
-                    //grDate.DataBind();
                 }
             }
             catch (Exception ex)
@@ -113,12 +107,6 @@ namespace WizOne.Pagini
                                 IncarcaGrid();
                             }
                             break;
-                        case "btnShow":
-                            {
-                                Session["ProfilId"] = arr[1];
-                                Page.ClientScript.RegisterStartupScript(this.GetType(), "ANY_KEY2", "window.parent.popGen.Hide();", true);
-                            }
-                            break;
                     }
 
                     Session["Profil_DataGrid"] = "";
@@ -136,18 +124,7 @@ namespace WizOne.Pagini
         {
             try
             {
-                //string strSql = @"SELECT A.""Id"", A.""Denumire"", A.""Continut"", A.""Implicit"", A.""Activ"" 
-                //                FROM ""tblProfile"" A
-                //                INNER JOIN ""tblProfileLinii"" B ON  A.Id = B.Id
-                //                INNER JOIN ""relGrupUser"" C ON B.""IdGrup"" = C.""IdGrup""
-                //                WHERE A.""Pagina"" = @1 AND C.""IdUser"" = @2
-                //                GROUP BY A.""Id"", A.""Denumire"", A.""Continut"", A.""Implicit"", A.""Activ"" ";
-
-                //if (Session["EsteAdmin"] == 1)
-                    string strSql = @"SELECT * FROM ""tblProfile"" WHERE ""Pagina""=@1 ORDER BY ""Denumire"" ";
-
-                //DataTable dt = General.IncarcaDT(strSql,new string[] { Dami.PaginaWeb(), Session["UserId"].ToString() });
-                DataTable dt = General.IncarcaDT(strSql, new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", "."), Session["UserId"].ToString() });
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""tblProfile"" WHERE ""Pagina""=@1 ORDER BY ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", "."), Session["UserId"].ToString() });
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
                 grDate.KeyFieldName = "Id";
                 grDate.DataSource = dt;
@@ -159,27 +136,6 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
-        }
-
-        protected void btnArata_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                //List<object> arr = grDate.GetSelectedFieldValues("Id");
-                object[] arr = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "Activ" }) as object[];
-                if (arr != null && arr.Count() > 0)
-                {
-                    var ert = arr[0];
-                    Session["ProfilId"] = arr[0];
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ANY_KEY12", "window.parent.popGen.Hide();", true);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
         }
 
         protected void grDate_AutoFilterCellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)

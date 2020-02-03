@@ -1786,6 +1786,9 @@ namespace WizOne.Pontaj
                     FunctiiCeasuri.Calcul.h5 = true;
                     FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"]), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
                     FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
+
+                    //Florin 2020.01.31
+                    General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dtModif.Rows[i]["F10003"])} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dtModif.Rows[i]["Ziua"]))}");
                 }
 
                 //Session["InformatiaCurenta"] = dt;
@@ -2154,6 +2157,9 @@ namespace WizOne.Pontaj
 
                         FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
                         FunctiiCeasuri.Calcul.CalculInOut(dr, true, true);
+
+                        //Florin 2020.01.31
+                        General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(ziua)}");
                     }
                 }
 
@@ -2670,8 +2676,11 @@ namespace WizOne.Pontaj
                                         //Florin 2019.05.02
                                         FunctiiCeasuri.Calcul.h5 = true;
 
-                                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dt.Rows[i]["Ziua"]));
+                                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
                                         FunctiiCeasuri.Calcul.CalculInOut(dt.Rows[i], true, true);
+
+                                        //Florin 2020.01.31
+                                        General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dt.Rows[i]["F10003"].ToString())} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dt.Rows[i]["Ziua"]))}");
                                     }
                                 }
                                 //Session["InformatiaCurenta"] = dt;

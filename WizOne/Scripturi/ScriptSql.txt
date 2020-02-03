@@ -12738,5 +12738,8 @@ GO
 
 ----  2.2.125  ----
 
+
+--Imbunatatire procedura Inchidere luna din WO
+--https://github.com/wizromRD/WizOne/issues/206
 UPDATE "tblParametrii" SET "Explicatie"='Se completeaza calea unde se va salva backup-ul bazei de date' WHERE "Nume"='CaleBackUp'
 GO

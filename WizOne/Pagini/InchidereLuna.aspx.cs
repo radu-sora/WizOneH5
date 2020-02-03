@@ -120,14 +120,14 @@ namespace WizOne.Pagini
                 //string DB = tmp.Split(';')[0];
                 tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
                 string user = tmp.Split(';')[0];
-                string DB = "";
-                if (Constante.tipBD == 1)
-                {
-                    tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
-                    DB = tmp.Split(';')[0];
-                }
-                else
-                    DB = user;        
+                string DB = Constante.BD;
+                //if (Constante.tipBD == 1)
+                //{
+                //    tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                //    DB = tmp.Split(';')[0];
+                //}
+                //else
+                //    DB = user;        
                 tmp = Constante.cnnWeb.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 
@@ -270,8 +270,7 @@ namespace WizOne.Pagini
             {
                 string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
-                string DB = tmp.Split(';')[0];
+                string DB = Constante.BD;
                 tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
                 string user = tmp.Split(';')[0];
                 tmp = Constante.cnnWeb.ToUpper().Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
@@ -279,13 +278,23 @@ namespace WizOne.Pagini
 
                 string cale = Dami.ValoareParam("CaleBackUp").Trim();
                 if (cale == "")
-                    return "Nu este setata calea pentru salvarea bazei de date in parametri";
+                {
+                    //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
+                    System.Threading.Thread.Sleep(1000);
+                    return "Nu este setata calea pentru salvarea bazei de date in parametri (CaleBackUp)";
+                }
 
-                if (!Directory.Exists(cale))
-                    Directory.CreateDirectory(cale);
-
-                if (!Directory.Exists(cale))
+                try
+                {
+                    if (!Directory.Exists(cale))
+                        Directory.CreateDirectory(cale);
+                }
+                catch (Exception)
+                {
+                    //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
+                    System.Threading.Thread.Sleep(1000);
                     return "Calea pentru salvarea bazei de date nu este valida";
+                }
 
                 string anLucru = Dami.ValoareParam("AnLucru");
                 string lunaLucru = Dami.ValoareParam("LunaLucru");
@@ -338,8 +347,19 @@ namespace WizOne.Pagini
                 {
                     string caleExp = Dami.ValoareParam("CaleExpOracle");
 
-                    if (cale == "")
-                        return "Nu ati precizat calea executabilului exp.exe in tblParametri!";
+                    if (caleExp == "")
+                    {
+                        //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
+                        System.Threading.Thread.Sleep(1000);
+                        return "Nu este setata calea executabilului exp.exe in parametri (CaleExpOracle)";
+                    }
+
+                    if (!File.Exists(caleExp + "\\exp.exe"))
+                    {
+                        //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
+                        System.Threading.Thread.Sleep(1000);
+                        return "Calea executabilului exp.exe nu este una valida (CaleExpOracle)";
+                    }
 
                     Process process = new Process();
                     process.StartInfo.FileName = caleExp + "\\exp.exe";
@@ -354,7 +374,7 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
+                mesaj = ex.ToString();
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 

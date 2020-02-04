@@ -2366,14 +2366,14 @@ namespace WizOne.Pontaj
                     val_uri += ",\"Val" + i + "\"";
                 }
 
+                //Florin 2020.02.04 - am inlocuit Ptj_Contracte.Afisare cu tblParametrii.TipAfisareOre
                 string sqlVal = $@"SELECT COALESCE(A.""OreInVal"",'') AS ""ValAbs"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", 
-                        COALESCE(D.""Afisare"",1) AS ""Afisare"", COALESCE(A.""VerificareNrMaxOre"",0) AS ""VerificareNrMaxOre"",
+                        COALESCE(A.""VerificareNrMaxOre"",0) AS ""VerificareNrMaxOre"",
                         COALESCE(A.""NrMax"", 23) AS ""NrMax"" {val_uri}
                         FROM ""Ptj_tblAbsente"" a
                         INNER JOIN ""Ptj_ContracteAbsente"" b ON a.""Id"" = b.""IdAbsenta""
                         INNER JOIN ""Ptj_relRolAbsenta"" c ON a.""Id"" = c.""IdAbsenta""
                         INNER JOIN(SELECT * FROM ""Ptj_Intrari"" Y WHERE {General.ToDataUniv(ziua)} <= CAST(Y.""Ziua"" AS DATE) AND CAST(Y.""Ziua"" AS DATE) <= {General.ToDataUniv(ziua)} AND Y.F10003 = {f10003}) P ON 1 = 1
-                        LEFT JOIN ""Ptj_Contracte"" D ON B.""IdContract"" = D.""Id""
                         WHERE A.""OreInVal"" IS NOT NULL {strGol1} AND B.""IdContract"" = P.""IdContract"" AND C.""IdRol"" = {cmbRol.Value} AND
                         (
                         (COALESCE(B.ZL,0)<> 0 AND (CASE WHEN(P.""ZiSapt"" < 6 AND P.""ZiLibera"" = 0) THEN 1 ELSE 0 END) = COALESCE(B.ZL,0)) OR
@@ -2381,7 +2381,7 @@ namespace WizOne.Pontaj
                         (COALESCE(B.D,0)<> 0 AND (CASE WHEN P.""ZiSapt"" = 7 THEN 1 ELSE 0 END) = COALESCE(B.D,0)) OR
                         (COALESCE(B.SL,0)<> 0 AND COALESCE(P.""ZiLiberaLegala"",0) = COALESCE(B.SL,0))
                         ) 
-                        GROUP BY A.""OreInVal"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", D.""Afisare"", A.""NrMax"", A.""VerificareNrMaxOre"" {val_uri}
+                        GROUP BY A.""OreInVal"", A.""DenumireScurta"", A.""Denumire"", A.""Id"", A.""NrMax"", A.""VerificareNrMaxOre"" {val_uri}
                         ORDER BY A.""OreInVal"" ";
 
                 DataTable dtVal = General.IncarcaDT(sqlVal, null);
@@ -2394,14 +2394,6 @@ namespace WizOne.Pontaj
                     HtmlGenericControl divCol = new HtmlGenericControl("div");
                     divCol.Attributes["class"] = "col-md-3";
                     divCol.Style["margin-bottom"] = "15px";
-
-                    //HtmlGenericControl lbl = new HtmlGenericControl("label");
-                    //lbl.Style["width"] = "100%";
-                    //lbl.InnerHtml = General.Nz(dr["DenumireScurta"], "&nbsp;").ToString();
-                    ////Label lbl = new Label();
-                    ////lbl.Style["width"] = "100%";
-                    ////lbl.Text = General.Nz(dr["DenumireScurta"], "&nbsp;").ToString();
-
 
                     ASPxLabel lbl = new ASPxLabel();
                     lbl.Text = General.Nz(dr["DenumireScurta"], "___").ToString();
@@ -2416,9 +2408,9 @@ namespace WizOne.Pontaj
                     txt.MinValue = 0;
                     txt.ClientSideEvents.ValueChanged = "EmptyCmbAbs";
                     txt.MaxValue = Convert.ToInt32(dr["NrMax"]);
-                    //txt.Attributes["validareMaxOre"] = i.ToString();
 
-                    if (General.Nz(dr["Afisare"], "1").ToString() == "1")
+                    string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
+                    if (tipAfisare == "1")
                     {
                         txt.DecimalPlaces = 0;
                         txt.NumberType = SpinEditNumberType.Integer;
@@ -2441,17 +2433,26 @@ namespace WizOne.Pontaj
                             try
                             {
                                 int min = Convert.ToInt32(General.Nz(dr[dr["ValAbs"].ToString()], "0"));
+                                string val = "0";
 
-                                if (General.Nz(dr["Afisare"], "1").ToString() == "1")
+                                switch(tipAfisare)
                                 {
-                                    txt.Text = (min / 60).ToString();
+                                    case "1":
+                                        val = (min / 60).ToString();
+                                        break;
+                                    case "2":
+                                        var ert = Math.Round(Convert.ToDecimal(min % 60) / 100, 2);
+                                        var edc = (min % 60) / 100;
+
+                                        val = ((min / 60) + Math.Round(Convert.ToDecimal(min % 60) / 100,2)).ToString();
+                                        break;
+                                    case "3":
+                                        val = Math.Round((Convert.ToDecimal(min) / 60), 2).ToString();
+                                        break;
                                 }
-                                else
-                                {
-                                    string valoare = (min / 60).ToString() + "." + (min % 60).ToString();
-                                    txt.Text = valoare;
-                                    txt.Value = Convert.ToDecimal(valoare);
-                                }
+
+                                txt.Text = val;
+                                txt.Value = Convert.ToDecimal(val);
                             }
                             catch (Exception) { }
                         }
@@ -2520,7 +2521,8 @@ namespace WizOne.Pontaj
                     if (txtCol.Count > 0 && txtCol["valuri"] != null)
                     {
                         var ert = txtCol["valuri"];
-                        
+                        string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
+
                         DataRow drMd = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
                         string valStr = "";
                         string cmp = "";
@@ -2542,8 +2544,28 @@ namespace WizOne.Pontaj
                                     //salvam val-urile
                                     try
                                     {
-                                        cmp += ",\"" + str[0] + "\"=" + Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60)).ToString();
-                                        if (str[2] == "1") nrMin += Convert.ToInt32(Convert.ToDecimal(arrAtr[1]) * 60);
+                                        int valCalc = 0;
+
+                                        switch(tipAfisare)
+                                        {
+                                            case "1":
+                                                valCalc = Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60));
+                                               break;
+                                            case "2":
+                                                string[] v = arrAtr[1].Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                                                if (v.Length > 0) valCalc += Convert.ToInt32(v[0]) * 60;
+                                                if (v.Length > 1) valCalc += Convert.ToInt32(v[1]);
+                                                break;
+                                            case "3":
+                                                valCalc = Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60));
+                                                break;
+                                        }
+
+                                        //cmp += ",\"" + str[0] + "\"=" + Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60)).ToString();
+                                        //if (str[2] == "1") nrMin += Convert.ToInt32(Convert.ToDecimal(arrAtr[1]) * 60);
+
+                                        cmp += ",\"" + str[0] + "\"=" + valCalc.ToString();
+                                        if (str[2] == "1") nrMin += valCalc;
                                     }
                                     catch (Exception ex) { var ert55 = ex.Message; }
 

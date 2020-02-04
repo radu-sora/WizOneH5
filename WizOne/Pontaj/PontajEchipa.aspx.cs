@@ -2534,7 +2534,7 @@ namespace WizOne.Pontaj
                             if (arrVal[i] != "")
                             {
                                 string[] arrAtr = arrVal[i].Split('=');
-                                if (arrAtr[0] != "" && arrAtr[1] != "" && arrAtr[1] != "0" && arrAtr[1] != "0,00")
+                                if (arrAtr[0] != "" && arrAtr[1] != "" && arrAtr[1] != "0" && arrAtr[1] != "0,00" && arrAtr[1] != "0.00")
                                 {
                                     string[] str = arrAtr[0].Split('_');
                                     valStr += "/" + arrAtr[1] + str[1];

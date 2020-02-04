@@ -13626,3 +13626,6 @@ END;
 --https://github.com/wizromRD/WizOne/issues/206
 UPDATE "tblParametrii" SET "Explicatie"='Se completeaza calea unde se va salva backup-ul bazei de date' WHERE "Nume"='CaleBackUp';
 COMMIT;
+
+ALTER TABLE "Ptj_Intrari" MODIFY "ValStr" varchar2(500);
+/

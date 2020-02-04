@@ -13629,3 +13629,7 @@ COMMIT;
 
 ALTER TABLE "Ptj_Intrari" MODIFY "ValStr" varchar2(500);
 /
+ALTER TABLE "Ptj_IstoricVal" MODIFY "ValStr" varchar2(500);
+/
+ALTER TABLE "Ptj_IstoricVal" MODIFY "ValStrOld" varchar2(500);
+/

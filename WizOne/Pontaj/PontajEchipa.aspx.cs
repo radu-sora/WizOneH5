@@ -2169,7 +2169,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                int x = 0;
+                //int x = 0;
                 int select = 0;
                 //List<int> ids = new List<int>();
                 int idRol = -99;
@@ -2186,7 +2186,7 @@ namespace WizOne.Pontaj
                 }
 
                 List<metaActiuni> ids = new List<metaActiuni>();
-                string msg = "";
+                //string msg = "";
                 List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003", "IdStare" });
                 if (lst == null || lst.Count() == 0 || lst[0] == null) return;
 
@@ -2611,7 +2611,8 @@ namespace WizOne.Pontaj
                         }
 
                         General.ExecutaNonQuery(sqlDel, null);
-                        General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+                        //General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+                        General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} , USER_NO={Session["UserId"]}, TIME={General.CurrentDate()}, ""CuloareValoare""='{Constante.CuloareModificatManual}' WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
                         General.ExecutaNonQuery(sqlIst, null);
                         General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
 

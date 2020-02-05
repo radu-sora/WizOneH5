@@ -317,14 +317,23 @@ namespace WizOne.Module
                             dynamic ctl = pag.FindControl(idCtl);
                             if (ctl != null)
                             {
-                                ctl.Visible = vizibil;
-                                ctl.Enabled = !blocat;
-
-                                if (idCtl.Length > 3)
+                                //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
+                                dynamic pnl = ctl.Parent;
+                                if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
                                 {
-                                    string idLbl = "lbl" + idCtl.Substring(3);
-                                    dynamic lbl = pag.FindControl(idLbl);
-                                    if (lbl != null) lbl.Visible = vizibil;
+                                    pnl.Style["display"] = "none";
+                                }
+                                else
+                                {
+                                    ctl.Visible = vizibil;
+                                    ctl.Enabled = !blocat;
+
+                                    if (idCtl.Length > 3)
+                                    {
+                                        string idLbl = "lbl" + idCtl.Substring(3);
+                                        dynamic lbl = pag.FindControl(idLbl);
+                                        if (lbl != null) lbl.Visible = vizibil;
+                                    }
                                 }
                             }
                             else
@@ -335,14 +344,23 @@ namespace WizOne.Module
                                     dynamic ctl2 = pnlCtl.FindControl(idCtl);
                                     if (ctl2 != null)
                                     {
-                                        ctl2.Visible = vizibil;
-                                        ctl2.Enabled = !blocat;
-
-                                        if (idCtl.Length > 3)
+                                        //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
+                                        dynamic pnl = ctl2.Parent;
+                                        if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
                                         {
-                                            string idLbl = "lbl" + idCtl.Substring(3);
-                                            dynamic lbl = pnlCtl.FindControl(idLbl);
-                                            if (lbl != null) lbl.Visible = vizibil;
+                                            pnl.Style["display"] = "none";
+                                        }
+                                        else
+                                        {
+                                            ctl2.Visible = vizibil;
+                                            ctl2.Enabled = !blocat;
+
+                                            if (idCtl.Length > 3)
+                                            {
+                                                string idLbl = "lbl" + idCtl.Substring(3);
+                                                dynamic lbl = pnlCtl.FindControl(idLbl);
+                                                if (lbl != null) lbl.Visible = vizibil;
+                                            }
                                         }
 
                                         break;
@@ -354,14 +372,23 @@ namespace WizOne.Module
                                         dynamic ctl3 = pnlCtl2.FindControl(idCtl);
                                         if (ctl3 != null)
                                         {
-                                            ctl3.Visible = vizibil;
-                                            ctl3.Enabled = !blocat;
-
-                                            if (idCtl.Length > 3)
+                                            //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
+                                            dynamic pnl = ctl3.Parent;
+                                            if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
                                             {
-                                                string idLbl = "lbl" + idCtl.Substring(3);
-                                                dynamic lbl = pnlCtl2.FindControl(idLbl);
-                                                if (lbl != null) lbl.Visible = vizibil;
+                                                pnl.Style["display"] = "none";
+                                            }
+                                            else
+                                            {
+                                                ctl3.Visible = vizibil;
+                                                ctl3.Enabled = !blocat;
+
+                                                if (idCtl.Length > 3)
+                                                {
+                                                    string idLbl = "lbl" + idCtl.Substring(3);
+                                                    dynamic lbl = pnlCtl2.FindControl(idLbl);
+                                                    if (lbl != null) lbl.Visible = vizibil;
+                                                }
                                             }
                                         }
 
@@ -406,8 +433,9 @@ namespace WizOne.Module
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        string www = ex.Message;
                         continue;
                         //General.MemoreazaEroarea(ex + Environment.NewLine +
                         //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +

@@ -371,8 +371,8 @@ namespace WizOne.Pontaj
                 if (cmbSub.Value == null && cmbFil.Value == null && cmbSec.Value == null)
                 {
                     lstDept.DataSource = General.IncarcaDT(
-                        @"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" " + General.FromDual() + " UNION " + 
-                        @"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE " + 
+                        @"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" " + General.FromDual() + " UNION " +
+                        @"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE " +
                         (Constante.tipBD == 1 ? "F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : "F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
                     lstDept.DataBind();
                 }
@@ -381,7 +381,7 @@ namespace WizOne.Pontaj
                     lstDept.DataSource = General.IncarcaDT(
                         @"SELECT -5 AS ""IdDept"", 'Select All' AS ""Dept"" " + General.FromDual() + " UNION " +
                         @"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006 WHERE F00606=" + General.Nz(cmbSec.Value, -99) +
-                         (Constante.tipBD == 1 ? " AND F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : " AND F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
+                            (Constante.tipBD == 1 ? " AND F00622 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00623" : " AND F00622 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00623"), null);
                     lstDept.DataBind();
                 }
                 cmbSubDept.DataSource = General.IncarcaDT(@"SELECT F00708 AS ""IdSubDept"", F00709 AS ""SubDept"" FROM F007 INNER JOIN F006 ON F007.F00707=F006.F00607 WHERE F00608 IN ('" + General.Nz(cmbDept.Value, -99).ToString().Replace(",","','") + "') " +
@@ -403,9 +403,9 @@ namespace WizOne.Pontaj
                 ASPxListBox list = cmbCtr.FindControl("listBox") as ASPxListBox;
                 list.DataSource = General.IncarcaDT(
                     $@"SELECT -5 AS ""Id"", 'Select All' AS ""Denumire"" {General.FromDual()}
-                    UNION
-                    SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte""
-                    ORDER BY ""Id"" ", null);
+                UNION
+                SELECT ""Id"", ""Denumire"" FROM ""Ptj_Contracte""
+                ORDER BY ""Id"" ", null);
                 list.DataBind();
 
                 DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);

@@ -826,7 +826,7 @@
                 </dx:ASPxCallbackPanel>
 
 
-                <div style="float:left; padding:0px 15px;">
+                <div style="float:left; padding:0px 15px; position:relative;">
                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                         <ClientSideEvents Click="function(s, e) {
@@ -834,6 +834,17 @@
                                         e.processOnServer = true;
                                     }" />
                     </dx:ASPxButton>
+    	            <div class="hovercard" id="divHovercard" runat="server">
+			            <div class="hovercard-container">
+				            <div class="hovercard-arrow">
+				            </div>
+				            <div class="hovercard-box">									
+					            <div class="hovercard-body">
+						            Pentru vizualizare apasati butonul Filtru
+					            </div>
+				            </div>
+			            </div>
+		            </div>
                 </div>
 
                 <div style="float:left;">

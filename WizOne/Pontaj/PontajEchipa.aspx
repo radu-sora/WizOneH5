@@ -484,14 +484,25 @@
 
                             <div class="row">
                                 <div class="col-lg-9 col-md-8 col-sm-6" style="margin-bottom:8px;"></div>
-                                <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:8px;">
+                                <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:58px;" id="rowHovercard" runat="server">
                                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                         <ClientSideEvents Click="function(s, e) {
                                                         pnlLoading.Show();
                                                         e.processOnServer = true;
                                                     }" />
-                                    </dx:ASPxButton>                                
+                                    </dx:ASPxButton>
+    	                            <div class="hovercard" id="divHovercard" runat="server">
+			                            <div class="hovercard-container">
+				                            <div class="hovercard-arrow">
+				                            </div>
+				                            <div class="hovercard-box">									
+					                            <div class="hovercard-body">
+						                            Pentru vizualizare apasati butonul Filtru
+					                            </div>
+				                            </div>
+			                            </div>
+		                            </div>
                                     &nbsp;&nbsp;
                                     <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>

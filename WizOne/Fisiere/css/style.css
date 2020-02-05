@@ -653,3 +653,62 @@ table label {
 }
 
 
+.hovercard {
+    position: absolute;
+    left: 0px;
+    top: 35px;
+    z-index: 500;
+    display: block;
+}
+
+    .hovercard .hovercard-container {
+        position: relative;
+        padding-top: 10px;
+        z-index: 450;
+    }
+
+        .hovercard .hovercard-container:before {
+            content: " ";
+            display: block;
+            left: 0;
+            right: 0;
+            top: 10px;
+            bottom: 0;
+            position: absolute;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.07);
+            border-radius: 0px;
+        }
+
+    .hovercard .hovercard-box {
+        z-index: 470;
+        background: white;
+        position: relative;
+    }
+
+        .hovercard .hovercard-box .hovercard-body {
+            /*min-height: 50px;
+  width: 270px;*/
+            background: white;
+            z-index: 500;
+            display: block;
+            padding: 15px 35px;
+        }
+
+    .hovercard .hovercard-arrow {
+        height: 14px;
+        width: 14px;
+        z-index: 460;
+        position: absolute;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        background: white;
+        left: 45px;
+        top: 2px;
+        border-top-width: 1px;
+        border-left-width: 1px;
+        border-color: rgba(0, 0, 0, 0.12);
+        border-style: solid;
+        border-bottom: 0;
+        border-right: 0;
+    }
+

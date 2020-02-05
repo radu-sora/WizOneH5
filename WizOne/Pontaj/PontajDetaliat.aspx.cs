@@ -498,6 +498,7 @@ namespace WizOne.Pontaj
                 IncarcaGrid();
                 grCC.DataSource = null;
                 grCC.DataBind();
+                divHovercard.Visible = false;
 
                 //Florin 2019.07.19
                 int idRol = Convert.ToInt32(cmbRolAng.Value);

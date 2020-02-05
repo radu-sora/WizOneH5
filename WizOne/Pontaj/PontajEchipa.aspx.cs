@@ -576,7 +576,8 @@ namespace WizOne.Pontaj
                 RetineFiltru("1");
                 SetColoane();
                 IncarcaGrid();
-
+                divHovercard.Visible = false;
+                rowHovercard.Style["margin-bottom"] = "8px";
 
                 //Florin 2019.07.19
                 //long dataBlocare = (new DateTime(2200, 12, 31)).Ticks / TimeSpan.TicksPerMillisecond;

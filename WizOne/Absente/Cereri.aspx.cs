@@ -2402,7 +2402,7 @@ namespace WizOne.Absente
                             switch (General.Nz(dr["TipCamp"], "").ToString())
                             {
                                 case "0":
-                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString().Replace("'","''") + "'";
                                     break;
                                 case "1":
                                     if (Convert.ToBoolean(ctl.Value) == true)
@@ -2487,7 +2487,7 @@ namespace WizOne.Absente
                                 General.ToDataUniv(txtDataSf.Date) + " AS \"DataSfarsit\", " +
                                 (txtNrZile.Value == null ? "NULL" : txtNrZile.Value.ToString()) + " AS \"NrZile\", " +
                                 (txtNrZileViitor.Value == null ? "NULL" : txtNrZileViitor.Value.ToString()) + " AS \"NrZileViitor\", " +
-                                (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'") + " AS \"Observatii\", " +
+                                (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString().Replace("'","''") + "'") + " AS \"Observatii\", " +
                                 (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + " AS \"IdStare\", " +
                                 (idCircuit) + " AS \"IdCircuit\", " +
                                 Session["UserId"] + " AS \"UserIntrod\", " +
@@ -2511,7 +2511,7 @@ namespace WizOne.Absente
                     General.ToDataUniv(txtDataSf.Date) + ", " +
                     (txtNrZile.Value == null ? "NULL" : txtNrZile.Value.ToString()) + ", " +
                     (txtNrZileViitor.Value == null ? "NULL" : txtNrZileViitor.Value.ToString()) + ", " +
-                    (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'") + ", " +
+                    (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString().Replace("'","''") + "'") + ", " +
                     (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + ", " +
                     (idCircuit) + ", " +
                     Session["UserId"] + ", " +

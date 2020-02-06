@@ -740,6 +740,8 @@ namespace WizOne.Module
 
         }
 
+        //Florin 2020.02.06
+
         private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
         {
             string str = text;
@@ -749,20 +751,9 @@ namespace WizOne.Module
                 string strSelect = "";
                 string strOriginal = "";
 
-                //cautam daca avem de inserat tabel
-                if (str.ToLower().IndexOf("#$select") >= 0)
-                {
-                    int start = str.ToLower().IndexOf("#$select");
-                    strSelect = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$", "");
-                    strOriginal = strSelect;
-                    strSelect = WebUtility.HtmlDecode(strSelect);
-                    strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
-                }
-
                 for (int i = 0; i < dtSel.Columns.Count; i++)
                 {
                     str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
-                    strSelect = strSelect.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
                 }
 
                 if (str.IndexOf("#$Link") >= 0)
@@ -799,10 +790,15 @@ namespace WizOne.Module
                         str = str.Replace("#$Link Respinge$#", "").ToString();
                 }
 
-
                 //cautam daca avem de inserat tabel
                 if (str.ToLower().IndexOf("#$select") >= 0)
                 {
+                    int start = str.ToLower().IndexOf("#$select");
+                    strSelect = str.Substring(start, str.Substring(start).LastIndexOf("$#")).Replace("#$", "");
+                    strOriginal = strSelect;
+                    strSelect = WebUtility.HtmlDecode(strSelect);
+                    strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
+
                     DataTable dtTbl = General.IncarcaDT(WebUtility.HtmlDecode(strSelect), null);
                     string tbl = "";
                     tbl += @"<table style=""border: solid 1px #ccc; width:100%;"">" + Environment.NewLine;
@@ -845,6 +841,113 @@ namespace WizOne.Module
 
             return str;
         }
+
+
+        //private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
+        //{
+        //    string str = text;
+
+        //    try
+        //    {
+        //        string strSelect = "";
+        //        string strOriginal = "";
+
+        //        //cautam daca avem de inserat tabel
+        //        if (str.ToLower().IndexOf("#$select") >= 0)
+        //        {
+        //            int start = str.ToLower().IndexOf("#$select");
+        //            strSelect = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$", "");
+        //            strOriginal = strSelect;
+        //            strSelect = WebUtility.HtmlDecode(strSelect);
+        //            strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
+        //        }
+
+        //        for (int i = 0; i < dtSel.Columns.Count; i++)
+        //        {
+        //            str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+        //            strSelect = strSelect.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+        //        }
+
+        //        if (str.IndexOf("#$Link") >= 0)
+        //        {
+        //            string cuv = str.Substring(str.IndexOf("#$Link"), str.Substring(str.IndexOf("#$Link")).IndexOf("$#"));
+        //            if (cuv != "") cuv = cuv.Replace("#$Link", "").Replace("$#", "").Trim();
+
+        //            if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
+        //            {
+        //                string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
+
+        //                string rsp = General.Encrypt_QueryString(arg);
+        //                string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
+        //                string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+        //                str = str.Replace("#$Link " + cuv + "$#", lnk).ToString();
+        //            }
+        //            else
+        //                str = str.Replace("#$Link " + cuv + "$#", "").ToString();
+        //        }
+
+
+        //        if (str.IndexOf("Link Respinge") >= 0)
+        //        {
+        //            if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
+        //            {
+        //                string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
+
+        //                string rsp = General.Encrypt_QueryString(arg);
+        //                string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
+        //                string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + Dami.TraduCuvant("Respinge") + "</a>";
+        //                str = str.Replace("#$Link Respinge$#", lnk).ToString();
+        //            }
+        //            else
+        //                str = str.Replace("#$Link Respinge$#", "").ToString();
+        //        }
+
+
+        //        //cautam daca avem de inserat tabel
+        //        if (str.ToLower().IndexOf("#$select") >= 0)
+        //        {
+        //            DataTable dtTbl = General.IncarcaDT(WebUtility.HtmlDecode(strSelect), null);
+        //            string tbl = "";
+        //            tbl += @"<table style=""border: solid 1px #ccc; width:100%;"">" + Environment.NewLine;
+
+
+        //            //adaugam capul de tabel
+        //            tbl += @"<thead style=""background-color:lightblue;"">" + Environment.NewLine;
+        //            tbl += "<tr>" + Environment.NewLine;
+        //            for (int x = 0; x < dtTbl.Columns.Count; x++)
+        //            {
+        //                tbl += "<td>" + dtTbl.Columns[x].ColumnName + "</td>" + Environment.NewLine;
+        //            }
+        //            tbl += "</tr>" + Environment.NewLine;
+        //            tbl += @"</thead>" + Environment.NewLine;
+
+
+        //            //adaugam corpul tabelului
+        //            tbl += @"<tbody>" + Environment.NewLine;
+        //            for (int x = 0; x < dtTbl.Rows.Count; x++)
+        //            {
+        //                tbl += "<tr>" + Environment.NewLine;
+        //                for (int y = 0; y < dtTbl.Columns.Count; y++)
+        //                {
+        //                    tbl += @"<td style=""border: solid 1px #ccc;"">" + dtTbl.Rows[x][dtTbl.Columns[y]] + "</td>" + Environment.NewLine;
+        //                }
+        //                tbl += "</tr>" + Environment.NewLine;
+        //            }
+        //            tbl += @"</tbody>" + Environment.NewLine;
+
+
+        //            tbl += "</table>" + Environment.NewLine;
+
+        //            str = str.Replace("#$" + strOriginal + "$#", tbl);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return str;
+        //}
 
 
         private static void TrimiteMail(string mail, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls)

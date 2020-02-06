@@ -3023,7 +3023,10 @@ namespace WizOne.Pontaj
 
                 string strFiltruSpecial = "";
                 if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F10061", "C.CATEG1").Replace("A.F10062", "C.CATEG2");
+                {
+                    //strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F10061", "C.CATEG1").Replace("A.F10062", "C.CATEG2");
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""", @"C.""Denumire""").Replace(@"A.""Dept""", "I.F00608");
+                }
                 else
                     strLeg = "";
                 
@@ -3135,9 +3138,12 @@ namespace WizOne.Pontaj
                 //LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                 //LEFT JOIN F724 CB ON A.F10062 = CB.F72402
                 if (Constante.tipBD == 1)
-                    strSql = $@"with ptj_intrari_2 as (select * from Ptj_Intrari A {strLeg}  WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
+                    strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
+                                LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                {strLeg}  
+                                WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
                                 SELECT *
-                           
                                 FROM (
                                  SELECT TOP 100 PERCENT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, A.F10008 + ' ' + A.F10009 AS AngajatNume, st.Denumire AS StarePontaj, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate,
                                  H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
@@ -3179,7 +3185,11 @@ namespace WizOne.Pontaj
                                 ORDER BY NumeComplet) A
                                 WHERE 1=1 {strFiltru}";
                 else
-                    strSql = $@"with ""Ptj_Intrari_2"" as (select * from ""Ptj_Intrari"" A WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
+                    strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
+                                LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContract""=C.""Id""
+                                LEFT JOIN F006 I ON A.F10007 = I.F00607
+                                {strLeg}
+                                WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
                                 SELECT  *                                
                                 FROM (
                                 SELECT X.F10003, TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"", A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", st.""Denumire"" AS ""StarePontaj"", COALESCE(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"",

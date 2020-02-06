@@ -84,36 +84,32 @@
 
         function OnClickDetaliat(s,e)
         {
-            var edc = txtCol.Get('coloana');
-            var edc1 = txtCol.Get('f10003');
-            
-
-            if (txtCol.Get('coloana') || txtCol.Get('f10003'))
-            {
-                var colSel = txtCol.Get('coloana');
-                if (colSel.length >= 4 && colSel.substr(0, 4).toLowerCase() == 'ziua') {
-                    pnlLoading.Show();
-
-                    var idxPag = grDate.GetPageIndex();
-                    var idxRow = grDate.GetFocusedRowIndex();
-                    grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + colSel + ";" + idxPag + ";" + idxRow);
+            if (s.name == 'btnPeAng') {
+                pnlLoading.Show();
+                grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + txtCol.Get('coloana') + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+            }
+            else {
+                if (txtCol.Get('coloana') || txtCol.Get('f10003')) {
+                    var colSel = txtCol.Get('coloana');
+                    if (colSel.length >= 4 && colSel.substr(0, 4).toLowerCase() == 'ziua') {
+                        pnlLoading.Show();
+                        grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + colSel + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+                    }
+                    else {
+                        swal({
+                            title: "", text: "Trebuie sa selectati o coloana care afiseaza ziua",
+                            type: "warning"
+                        });
+                        e.processOnServer = false;
+                    }
                 }
-                else
-                {
+                else {
                     swal({
-                        title: "", text: "Trebuie sa selectati o coloana care afiseaza ziua",
+                        title: "", text: "Nu exista celula selectata",
                         type: "warning"
                     });
                     e.processOnServer = false;
                 }
-            }
-            else
-            {
-                swal({
-                    title: "", text: "Nu exista celula selectata",
-                    type: "warning"
-                });
-                e.processOnServer = false;
             }
         }
 

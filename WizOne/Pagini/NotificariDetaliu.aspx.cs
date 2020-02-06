@@ -133,6 +133,7 @@ namespace WizOne.Pagini
                                     cmbMesaj.Value = (dtHead.Rows[0]["Mesaj"] ?? "").ToString();
                                     chkExcel.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["TrimiteXLS"], 0));
                                     txtExcel.Value = (dtHead.Rows[0]["SelectXLS"] ?? "").ToString();
+                                    txtNumeExcel.Text = (dtHead.Rows[0]["NumeExcel"] ?? "").ToString();
                                 }
 
 
@@ -275,6 +276,7 @@ namespace WizOne.Pagini
                             drHead["ContinutAtasament"] = txtAtt.Html;
                             drHead["TrimiteXLS"] = chkExcel.Checked;
                             drHead["SelectXLS"] = txtExcel.Text;
+                            drHead["NumeExcel"] = txtNumeExcel.Text;
                             drHead["USER_NO"] = Session["UserId"];
                             drHead["TIME"] = DateTime.Now;
                             dtHead.Rows.Add(drHead);
@@ -329,6 +331,7 @@ namespace WizOne.Pagini
                             dtHead.Rows[0]["ContinutAtasament"] = txtAtt.Html;
                             dtHead.Rows[0]["TrimiteXLS"] = chkExcel.Checked;
                             dtHead.Rows[0]["SelectXLS"] = txtExcel.Text;
+                            dtHead.Rows[0]["NumeExcel"] = txtNumeExcel.Text;
                             dtHead.Rows[0]["USER_NO"] = Session["UserId"];
                             dtHead.Rows[0]["TIME"] = DateTime.Now;
                         }

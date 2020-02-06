@@ -13633,3 +13633,8 @@ ALTER TABLE "Ptj_IstoricVal" MODIFY "ValStr" varchar2(500);
 /
 ALTER TABLE "Ptj_IstoricVal" MODIFY "ValStrOld" varchar2(500);
 /
+
+--Posibilitate setare nume fisier XLS la notificari si alerte #218
+--https://github.com/wizromRD/WizOne/issues/218
+ALTER TABLE "Ntf_Setari" ADD "NumeExcel" varchar2(250);
+/

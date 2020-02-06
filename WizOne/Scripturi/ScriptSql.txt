@@ -12751,3 +12751,8 @@ ALTER TABLE Ptj_IstoricVal ALTER COLUMN ValStr nvarchar(500)
 GO
 ALTER TABLE Ptj_IstoricVal ALTER COLUMN ValStrOld nvarchar(500)
 GO
+
+--Posibilitate setare nume fisier XLS la notificari si alerte #218
+--https://github.com/wizromRD/WizOne/issues/218
+ALTER TABLE Ntf_Setari ADD NumeExcel nvarchar(250)
+GO

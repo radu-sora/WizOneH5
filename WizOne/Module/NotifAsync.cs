@@ -81,11 +81,12 @@ namespace WizOne.Module
                                         string corpAtt = "";
                                         string numeAtt = "";
                                         string selectXls = "";
+                                        string numeExcel = "";
 
                                         if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["SalveazaInDisc"],0)) == 1 || Convert.ToInt32(General.Nz(dtReg.Rows[i]["SalveazaInBaza"],0)) == 1 || Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimitePeMail"],0)) == 1)
                                         {
                                             corpAtt = InlocuiesteCampuri((dtReg.Rows[i]["ContinutAtasament"] ?? "").ToString(), dtSel, userId, userMarca);
-                                            numeAtt = InlocuiesteCampuri((dtReg.Rows[i]["NumeAtasament"] ?? "").ToString(), dtSel, userId, userMarca) + ".html";
+                                            numeAtt = InlocuiesteCampuri(General.Nz(dtReg.Rows[i]["NumeAtasament"], "Atasament_" + DateTime.Now.Ticks.ToString()).ToString(), dtSel, userId, userMarca) + ".html";
 
                                             if (Convert.ToInt32(dtReg.Rows[i]["SalveazaInBaza"]) == 1)
                                             {
@@ -113,6 +114,7 @@ namespace WizOne.Module
 
                                         if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)) == 1 || (dtReg.Rows[i]["TrimiteXLS"] ?? "").ToString() != "")
                                         {
+                                            numeExcel = InlocuiesteCampuri(General.Nz(dtReg.Rows[i]["NumeExcel"], "Atasament_" + DateTime.Now.Ticks.ToString()).ToString(), dtSel, userId, userMarca) + ".xls";
                                             selectXls = InlocuiesteCampuri((dtReg.Rows[i]["SelectXLS"] ?? "").ToString(),dtSel, userId, userMarca);
                                         }
 
@@ -137,14 +139,14 @@ namespace WizOne.Module
                                             if (lstAdrese.Where(p => p.IncludeLinkAprobare == 1).Count() == 0)
                                             {
                                                 string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id);
-                                                TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls);
+                                                TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel);
                                             }
                                             else
                                             {
                                                 for (int j = 0; j < lstAdrese.Count(); j++)
                                                 {
                                                     string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id, lstAdrese[j].Mail, lstAdrese[j].IncludeLinkAprobare);
-                                                    TrimiteMail(lstAdrese[j].Mail, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls);
+                                                    TrimiteMail(lstAdrese[j].Mail, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel);
                                                 }
                                             }
                                         }
@@ -956,7 +958,7 @@ namespace WizOne.Module
         //}
 
 
-        private static void TrimiteMail(string mail, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls)
+        private static void TrimiteMail(string mail, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel)
         {
             try
             {
@@ -1062,10 +1064,10 @@ namespace WizOne.Module
                     if (selectXls != "")
                     {
                         DateTime ora = DateTime.Now;
-                        string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
+                        //string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
 
                         MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
-                        mm.Attachments.Add(new Attachment(stream, numeXLS, "application/vnd.ms-excel"));
+                        mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
                     }
                     else
                     {
@@ -1103,7 +1105,7 @@ namespace WizOne.Module
         }
 
 
-        private static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls)
+        private static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel)
         {
             try
             {
@@ -1195,10 +1197,10 @@ namespace WizOne.Module
                     if (selectXls != "")
                     {
                         DateTime ora = DateTime.Now;
-                        string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
+                        //string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
 
                         MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
-                        mm.Attachments.Add(new Attachment(stream, numeXLS, "application/vnd.ms-excel"));
+                        mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
                     }
                     else
                     {

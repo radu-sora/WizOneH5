@@ -2471,13 +2471,14 @@ namespace WizOne.Pontaj
             }
         }
 
+
+        //Florin 2020.02.07 - diverse imbunatatiri; ValStr se formeaza pe baza parametrului SintaxaValStr nu se mai formeaza manual;
         protected void btnModif_Click(object sender, EventArgs e)
         {
             try
             {
                 int f10003 = -99;
                 DateTime ziua = DateTime.Now;
-
 
                 if (txtCol.Count > 0 && txtCol["f10003"] != null && txtCol["f10003"] != null && General.IsNumeric(txtCol["f10003"]))
                     f10003 = Convert.ToInt32(txtCol["f10003"]);
@@ -2492,27 +2493,16 @@ namespace WizOne.Pontaj
                 else
                     return;
 
-
-
-                //string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET Val0=null,Val1=null,Val2=null,Val3=null,Val4=null,Val5=null,Val6=null,Val7=null,Val8=null,Val9=null,Val10=null,
-                //                Val11=null,Val12=null,Val13=null,Val14=null,Val15=null,Val16=null,Val17=null,Val18=null,Val19=null,Val20=null,
-                //                ValModif0=null,ValModif1=null,ValModif2=null,ValModif3=null,ValModif4=null,ValModif5=null,ValModif6=null,ValModif7=null,ValModif8=null,ValModif9=null,ValModif10=null,
-                //                ValModif11=null,ValModif12=null,ValModif13=null,ValModif14=null,ValModif15=null,ValModif16=null,ValModif17=null,ValModif18=null,ValModif19=null,ValModif20=null
-                //                WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}";
-
+                string sqlUpd = "";
+                string sqlIst = "";
+                string sqlValStr = "";
                 string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
                                 ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
-                                WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}";
-
-
+                                WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
 
                 if (General.Nz(cmbTipAbs.Value, "").ToString() != "")
                 {
-                    General.ExecutaNonQuery(sqlDel, null);
-                    General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{cmbTipAbs.Text}' WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
-                    General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
-
-                    IncarcaGrid();
+                    sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{cmbTipAbs.Text}' WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                 }
                 else
                 {
@@ -2524,7 +2514,6 @@ namespace WizOne.Pontaj
                         string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
 
                         DataRow drMd = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
-                        string valStr = "";
                         string cmp = "";
                         string cmpModif = "";
                         int nrMin = 0;
@@ -2539,18 +2528,17 @@ namespace WizOne.Pontaj
                                 if (arrAtr[0] != "" && arrAtr[1] != "" && arrAtr[1] != "0" && arrAtr[1] != "0,00" && arrAtr[1] != "0.00")
                                 {
                                     string[] str = arrAtr[0].Split('_');
-                                    valStr += "/" + arrAtr[1] + str[1];
 
                                     //salvam val-urile
                                     try
                                     {
                                         int valCalc = 0;
 
-                                        switch(tipAfisare)
+                                        switch (tipAfisare)
                                         {
                                             case "1":
                                                 valCalc = Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60));
-                                               break;
+                                                break;
                                             case "2":
                                                 string[] v = arrAtr[1].Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                                                 if (v.Length > 0) valCalc += Convert.ToInt32(v[0]) * 60;
@@ -2561,14 +2549,10 @@ namespace WizOne.Pontaj
                                                 break;
                                         }
 
-                                        //cmp += ",\"" + str[0] + "\"=" + Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60)).ToString();
-                                        //if (str[2] == "1") nrMin += Convert.ToInt32(Convert.ToDecimal(arrAtr[1]) * 60);
-
                                         cmp += ",\"" + str[0] + "\"=" + valCalc.ToString();
                                         if (str[2] == "1") nrMin += valCalc;
                                     }
                                     catch (Exception ex) { var ert55 = ex.Message; }
-
 
                                     //marcam ce valuri au fost modificate manual
                                     try
@@ -2590,16 +2574,6 @@ namespace WizOne.Pontaj
                             }
                         }
 
-                        if (valStr != "") valStr = valStr.Substring(1);
-
-                        string sqlIst = "";
-                        try
-                        {
-                            sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
-                                           VALUES ({f10003}, {General.ToDataUniv(ziua)}, '{valStr}', '{General.Nz(drMd["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)})";
-                        }
-                        catch (Exception){}
-
                         if (nrMin != 0)
                         {
                             string msgNr = General.VerificareDepasireNorma(f10003, ziua.Date, nrMin, 2);
@@ -2610,14 +2584,22 @@ namespace WizOne.Pontaj
                             }
                         }
 
-                        General.ExecutaNonQuery(sqlDel, null);
-                        General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
-                        General.ExecutaNonQuery(sqlIst, null);
-                        General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
-
-                        IncarcaGrid();
-                        
+                        sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)} {cmpModif} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                        sqlValStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""={Dami.ValoareParam("SintaxaValStr")} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                        sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
+                                        VALUES ({f10003}, {General.ToDataUniv(ziua)}, (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}), '{General.Nz(drMd["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)});";
                     }
+
+                    General.ExecutaNonQuery("BEGIN " + Environment.NewLine +
+                        sqlDel + Environment.NewLine +
+                        sqlUpd + Environment.NewLine +
+                        sqlValStr + Environment.NewLine +
+                        sqlIst + Environment.NewLine +
+                        " END;", null);
+                    General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
+
+                    IncarcaGrid();
+
                 }
             }
             catch (Exception ex)
@@ -2626,6 +2608,163 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        //protected void btnModif_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        int f10003 = -99;
+        //        DateTime ziua = DateTime.Now;
+
+
+        //        if (txtCol.Count > 0 && txtCol["f10003"] != null && txtCol["f10003"] != null && General.IsNumeric(txtCol["f10003"]))
+        //            f10003 = Convert.ToInt32(txtCol["f10003"]);
+        //        else
+        //            return;
+
+        //        if (txtCol.Count > 0 && txtCol["coloana"] != null && txtCol["coloana"].ToString().Length > 4 && txtCol["coloana"].ToString().Substring(0, 4) == "Ziua")
+        //        {
+        //            string zi = txtCol["coloana"].ToString().Replace("Ziua", "");
+        //            ziua = new DateTime(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, Convert.ToInt32(zi));
+        //        }
+        //        else
+        //            return;
+
+
+
+        //        //string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET Val0=null,Val1=null,Val2=null,Val3=null,Val4=null,Val5=null,Val6=null,Val7=null,Val8=null,Val9=null,Val10=null,
+        //        //                Val11=null,Val12=null,Val13=null,Val14=null,Val15=null,Val16=null,Val17=null,Val18=null,Val19=null,Val20=null,
+        //        //                ValModif0=null,ValModif1=null,ValModif2=null,ValModif3=null,ValModif4=null,ValModif5=null,ValModif6=null,ValModif7=null,ValModif8=null,ValModif9=null,ValModif10=null,
+        //        //                ValModif11=null,ValModif12=null,ValModif13=null,ValModif14=null,ValModif15=null,ValModif16=null,ValModif17=null,ValModif18=null,ValModif19=null,ValModif20=null
+        //        //                WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}";
+
+        //        string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
+        //                        ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
+        //                        WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}";
+
+
+
+        //        if (General.Nz(cmbTipAbs.Value, "").ToString() != "")
+        //        {
+        //            General.ExecutaNonQuery(sqlDel, null);
+        //            General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{cmbTipAbs.Text}' WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+        //            General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
+
+        //            IncarcaGrid();
+        //        }
+        //        else
+        //        {
+        //            //txtValuri
+        //            //,Val0__1=1,Val1_OS_0=3,Val2_ERT_1=2
+        //            if (txtCol.Count > 0 && txtCol["valuri"] != null)
+        //            {
+        //                var ert = txtCol["valuri"];
+        //                string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
+
+        //                DataRow drMd = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+        //                string valStr = "";
+        //                string cmp = "";
+        //                string cmpModif = "";
+        //                int nrMin = 0;
+
+        //                var txt = txtCol["valuri"].ToString().Replace("_I=", "=");
+        //                string[] arrVal = txt.Split(';');
+        //                for (int i = 0; i < arrVal.Length; i++)
+        //                {
+        //                    if (arrVal[i] != "")
+        //                    {
+        //                        string[] arrAtr = arrVal[i].Split('=');
+        //                        if (arrAtr[0] != "" && arrAtr[1] != "" && arrAtr[1] != "0" && arrAtr[1] != "0,00" && arrAtr[1] != "0.00")
+        //                        {
+        //                            string[] str = arrAtr[0].Split('_');
+        //                            valStr += "/" + arrAtr[1] + str[1];
+
+        //                            //salvam val-urile
+        //                            try
+        //                            {
+        //                                int valCalc = 0;
+
+        //                                switch(tipAfisare)
+        //                                {
+        //                                    case "1":
+        //                                        valCalc = Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60));
+        //                                       break;
+        //                                    case "2":
+        //                                        string[] v = arrAtr[1].Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+        //                                        if (v.Length > 0) valCalc += Convert.ToInt32(v[0]) * 60;
+        //                                        if (v.Length > 1) valCalc += Convert.ToInt32(v[1]);
+        //                                        break;
+        //                                    case "3":
+        //                                        valCalc = Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60));
+        //                                        break;
+        //                                }
+
+        //                                //cmp += ",\"" + str[0] + "\"=" + Convert.ToInt32((Convert.ToDecimal(arrAtr[1]) * 60)).ToString();
+        //                                //if (str[2] == "1") nrMin += Convert.ToInt32(Convert.ToDecimal(arrAtr[1]) * 60);
+
+        //                                cmp += ",\"" + str[0] + "\"=" + valCalc.ToString();
+        //                                if (str[2] == "1") nrMin += valCalc;
+        //                            }
+        //                            catch (Exception ex) { var ert55 = ex.Message; }
+
+
+        //                            //marcam ce valuri au fost modificate manual
+        //                            try
+        //                            {
+        //                                if (drMd == null)
+        //                                {
+        //                                    cmpModif += ",\"" + str[0].Replace("Val", "ValModif") + "\"=4";
+        //                                }
+        //                                else
+        //                                {
+        //                                    if (drMd[str[0]].ToString() != arrAtr[1].ToString())
+        //                                        cmpModif += ",\"" + str[0].Replace("Val", "ValModif") + "\"=4";
+        //                                }
+        //                            }
+        //                            catch (Exception) { }
+
+
+        //                        }
+        //                    }
+        //                }
+
+        //                if (valStr != "") valStr = valStr.Substring(1);
+
+        //                string sqlIst = "";
+        //                try
+        //                {
+        //                    sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
+        //                                   VALUES ({f10003}, {General.ToDataUniv(ziua)}, '{valStr}', '{General.Nz(drMd["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)})";
+        //                }
+        //                catch (Exception){}
+
+        //                if (nrMin != 0)
+        //                {
+        //                    string msgNr = General.VerificareDepasireNorma(f10003, ziua.Date, nrMin, 2);
+        //                    if (msgNr != "")
+        //                    {
+        //                        MessageBox.Show(Dami.TraduCuvant(msgNr), MessageBox.icoWarning);
+        //                        return;
+        //                    }
+        //                }
+
+        //                General.ExecutaNonQuery(sqlDel, null);
+        //                General.ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{valStr}' {cmp} {cmpModif} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+        //                General.ExecutaNonQuery(sqlIst, null);
+        //                General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
+
+        //                IncarcaGrid();
+
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         //Florin 2020.01.22
         //public string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrMin, int tip)

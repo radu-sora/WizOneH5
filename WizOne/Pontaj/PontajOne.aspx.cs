@@ -935,6 +935,9 @@ namespace WizOne.Pontaj
 
                                 //Florin 2020.01.31
                                 General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dtModif.Rows[i]["F10003"])} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dtModif.Rows[i]["Ziua"]))}");
+
+                                //Florin 2020.02.07
+                                General.ExecValStr(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
                             }
                         }
                         else
@@ -958,6 +961,9 @@ namespace WizOne.Pontaj
 
                                     //Florin 2020.01.31
                                     General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dtModif.Rows[i]["F10003"])} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dtModif.Rows[i]["Ziua"]))}");
+
+                                    //Florin 2020.02.07
+                                    General.ExecValStr(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
                                 }
                             }
                         }
@@ -1061,6 +1067,9 @@ namespace WizOne.Pontaj
 
                                         //Florin 2020.01.31
                                         General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dt.Rows[i]["F10003"].ToString())} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dt.Rows[i]["Ziua"]))}");
+
+                                        //Florin 2020.02.07
+                                        General.ExecValStr(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
                                     }
                                 }
                                 Session["InformatiaCurenta"] = dt;

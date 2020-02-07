@@ -2003,10 +2003,8 @@ namespace WizOne.Pontaj
             {
                 grDate.CancelEdit();
 
-                //List<metaAbsTipZi> lst = new List<metaAbsTipZi>();
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                //DataTable dtVal = Session["Ptj_IstoricVal"] as DataTable;
 
                 ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
                 object[] keys = new object[] { upd.Keys[0] };
@@ -2039,10 +2037,15 @@ namespace WizOne.Pontaj
                             if (!adaugat)
                             {
                                 cmp += @", ""CuloareValoare""='" + Constante.CuloareModificatManual + "'";
+                                row["CuloareValoare"] = Constante.CuloareModificatManual;
                                 adaugat = true;
                             }
                             cmp += $@", ""ValModif{i}""=" + (int)Constante.TipModificarePontaj.ModificatManual;
                             cmp += $@", ""Val{i}""=" + (Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60))).ToString();
+
+                            row["ValModif" + i] = (int)Constante.TipModificarePontaj.ModificatManual;
+                            row["Val" + i] = Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60));
+
                             continue;
                         }
 
@@ -2063,6 +2066,7 @@ namespace WizOne.Pontaj
                                     row[numeCol] = inOut;
 
                                 cmp += $@", ""{numeCol}""=" + General.ToDataUniv(Convert.ToDateTime(row[numeCol]), true);
+                                row[numeCol] = inOut;
                             }
                             catch (Exception ex)
                             {
@@ -2116,7 +2120,10 @@ namespace WizOne.Pontaj
 
                         //daca sunt restul campurilor
                         if (newValue == null)
+                        {
                             cmp += $@", ""{numeCol}"" = NULL";
+                            row[numeCol] = DBNull.Value;
+                        }
                         else
                         {
                             switch (row.Table.Columns[numeCol].DataType.ToString())
@@ -2131,6 +2138,8 @@ namespace WizOne.Pontaj
                                     cmp += $@", ""{numeCol}""={newValue}";
                                     break;
                             }
+
+                            row[numeCol] = newValue;
                         }
                     }
                 }
@@ -2138,12 +2147,12 @@ namespace WizOne.Pontaj
                 if (cmp != "")
                     strSql += $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
 
-                //Florin 2020.02.07 - am adugat validarile
-                string sqlCer = "";
+                //Florin 2020.02.07 - am adaugat validarile
                 string msg = "";
                 if (strSql != "")
                 {
-                    msg = Notif.TrimiteNotificare("Pontaj.PontajDetaliat", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    string sqlPtj = General.CreazaSelectFromRow(row);
+                    msg = Notif.TrimiteNotificare("Pontaj.PontajDetaliat", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                     if (msg != "" && msg.Substring(0, 1) == "2")
                     {
                         MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);

@@ -41,6 +41,13 @@ namespace WizOne.Avs
                     string qwe = Convert.ToString(General.Nz(Request["qwe"], -99));
                     IncarcaGrid(Convert.ToInt32(Session["Marca"].ToString()), GetAtribut(qwe));
                 }
+                else
+                {
+                    DataTable dt = Session["Istoric_Grid"] as DataTable;
+                    grDate.KeyFieldName = "NumeAngajat;DataModif";
+                    grDate.DataSource = dt;
+                    grDate.DataBind();
+                }
             }
             catch (Exception ex)
             {
@@ -190,7 +197,7 @@ namespace WizOne.Avs
             try
             {
                 string strSql = "", strSqlComp = "";
-                string camp100 = "", camp910 = "", camp910_1 = "", camp910_2 = "", campF704 = "";
+                string camp100 = "", camp910 = "", camp910_1 = "", camp910_2 = "", campF704 = "", campTest = "";
                 string campV = "", campN = "", numeAtr = "";
                 string tabelaC = "", tabelaI = "";
                 string sql_tmp = "";
@@ -213,16 +220,56 @@ namespace WizOne.Avs
                 else
                     strSqlComp = "select \"NumeAngajat\", \"NumeAtribut\", \"DataModif\", \"ValV\", \"ValN\", \"Explicatii\", TO_NUMBER(ROW_NUMBER() OVER (order by \"DataModif\" desc)) as \"IdAuto\", \"TipCon\", \"MotivSusp\", \"DataInceput\", \"DataSfarsit\", \"DataIncetare\", \"Utilizator\", \"Data\", CRIPTAT from (";
 
+
+
                 string codValV704 = "", codValN = "", codValV100 = "", campValV910 = "", campValN910 = "", codValV910 = "", codValN910 = "", groupBy = "", cond = "";
+
+
+                string conditieCOR = " case when (b.year < 2010 or (b.year = 2011 and b.month <12)) then 5 "
+                        + "  when(b.year = 2011 and b.month = 12) or(b.year >= 2012 and b.year < 2016) or(b.year = 2016 and b.month < 4) "
+                        + "  or(b.year = 2016 and b.month = 4 and coalesce(b.F910956, {0}) < {1}) then 6 "
+                        + "  when(b.year = 2016 and b.month = 4 and coalesce(b.F910956, {0}) >= {1}) or(b.year = 2016 and b.month > 4) "
+                        + "  or(b.year >= 2017 and b.year < 2019) or(b.year = 2019 and b.month < 6) then 7  else 8 end";
+                conditieCOR = string.Format(conditieCOR, General.ToDataUniv(new DateTime(2100, 1, 1)), General.ToDataUniv(new DateTime(2016, 4, 17)));
+                              
+                string conditieCOR100 = "case when f100956 is null then (SELECT MAX(F72206) FROM F722) when F100956 < {0} then 5 when {0} <= f100956 and f100956 < {1} then 6 "
+                                        + " when {1} <= f100956 and f100956 < {2} then 7 else 8 end";
+                conditieCOR100 = string.Format(conditieCOR100, General.ToDataUniv(new DateTime(2011, 12, 1)), General.ToDataUniv(new DateTime(2016, 4, 17)), General.ToDataUniv(new DateTime(2019, 6, 1)));
+
+                string test = "select CONVERT(DATETIME, '01/' + convert(varchar, b.MONTH) + '/' + convert(varchar, b.year) , 103) as DM,  {21} as ValV, "
+                            + "{32} {22} As ValN {33} from "
+                            + "(select a.year, a.month, a.F91003, a.F91098, b.F9101082, b.f910956 {23} "
+                            + "from f910 a left join f9101 b on a.month = b.month and a.year = b.year and   a.F91003 = b.F91003) a "
+                            + "left join "
+                            + "(select a.year, a.month, a.F91003, a.F91098, b.F9101082, b.f910956 {23} from   f910 a    left "
+                            + "join f9101 b on a.month = b.month and a.year = b.year and   a.F91003 = b.F91003) b on a.F91003 = b.f91003 "
+                            + "where a.F91003 = " + F10003 + "  and DATEDIFF(month, CONVERT(DATETIME, '01/' + convert(varchar, a.MONTH) + '/' + convert(varchar, a.year) , 103), CONVERT(DATETIME, '01/' + convert(varchar, b.MONTH) + '/' + "
+                            + "convert(varchar, b.year), 103)) = 1";
+                if (Constante.tipBD == 2)
+                    test = "select TO_DATE('01/' || TO_CHAR(b.MONTH) || '/' || TO_CHAR(b.year) , 103) as DM,  {21} as \"ValV\", "
+                                + "{32} {22} As \"ValN\" {33} from "
+                                + "(select a.year, a.month, a.F91003, a.F91098, b.F9101082, b.f910956 {23} "
+                                + "from f910 a left join f9101 b on a.month = b.month and a.year = b.year and   a.F91003 = b.F91003) a "
+                                + "left join "
+                                + "(select a.year, a.month, a.F91003, a.F91098, b.F9101082, b.f910956 {23} from   f910 a    left "
+                                + "join f9101 b on a.month = b.month and a.year = b.year and   a.F91003 = b.F91003) b on a.F91003 = b.f91003 "
+                                + "where a.F91003 = " + F10003 + " and "
+                                + "MONTHS_BETWEEN(TO_DATE('01/' || TO_CHAR(b.MONTH) || '/' || TO_CHAR(b.year), 'dd/mm/yyyy'), "
+                                + "TO_DATE('01/' || TO_CHAR(a.MONTH) || '/' || TO_CHAR(a.year) , 'dd/mm/yyyy')) = 1";               
+
                 if (lst.Count == 0 || lst.Contains(Convert.ToInt32(Constante.Atribute.CodCOR)))
                 {
-                    codValV704 = " COALESCE(F1001082, (SELECT MAX(F72206) FROM F722)) AS \"CodValV\",";    //27
+                    codValV704 = " COALESCE(F1001082, {0}) AS \"CodValV\",";    //27
+                    codValV704 = string.Format(codValV704, conditieCOR100);
                     codValN = "(SELECT MAX(F72206) FROM F722) AS \"CodValN\",";                         //28
-                    codValV100 = "COALESCE(F9101082, (SELECT MAX(F72206) FROM F722)) AS \"CodValV\",";    //29
+                    codValV100 = "COALESCE(F9101082, {0}) AS \"CodValV\",";    //29
+                    codValV100 = string.Format(codValV100, conditieCOR.Replace("b.year", "f910.year").Replace("b.month", "F910.month").Replace("b.F910956", "F9101.F910956"));
                     campValV910 = "\"CodValV\",";   //30
                     campValN910 = "\"CodValN\",";   //31
-                    codValV910 = "COALESCE(c.F9101082, (SELECT MAX(F72206) FROM F722)) as \"CodValV\",";    //32
-                    codValN910 = ", COALESCE(d.F9101082, (SELECT MAX(F72206) FROM F722)) AS \"CodValN\"";    //33
+                    codValV910 = "COALESCE(a.F9101082, {0}) as \"CodValV\",";    //32
+                    codValV910 = string.Format(codValV910, conditieCOR);
+                    codValN910 = ", COALESCE(b.F9101082, {0}) AS \"CodValN\"";    //33
+                    codValN910 = string.Format(codValN910, conditieCOR);
                     groupBy = " \"CodValV\", \"CodValN\",";   //34
                     cond = "or \"CodValV\" <> \"CodValN\"";  //35
                  
@@ -239,14 +286,10 @@ namespace WizOne.Avs
                             + "CONVERT(DATETIME, '01/' + convert(varchar, F01012) + '/' + convert(varchar, f01011) , 103)) = 1 and {18} <> {19} "
                             + "union "
                             + "select CONVERT(DATETIME, '01/' + convert(varchar, MONTH) + '/' + convert(varchar, year) , 103) as DataModif, ValV,  {30} "
-                            + "ValN, {31} '' as explicatii, (SELECT F70104 FROM USERS WHERE F70102 = MAX({20}.USER_NO)) AS Utilizator, MAX(TIME) AS Data, " + criptat.Replace("F704.USER_NO", "MAX({20}.USER_NO)") + " from {20}, (select CONVERT(DATETIME, '01/' + convert(varchar, b.MONTH) + '/' + convert(varchar, b.year) , 103) as DM,  "
-                            + "{21} as ValV, {32} {22} As ValN {33} from {23} a left join {24} b on a.F91003 = b.f91003 left join F9101 c on a.F91003=c.F91003 and a.MONTH = c.MONTH and a.YEAR = c.YEAR left join F9101 d on b.F91003 = d.F91003 where a.F91003 = {25} and  "
-                            + "DATEDIFF(month, CONVERT(DATETIME, '01/' + convert(varchar, a.MONTH) + '/' + convert(varchar, a.year) , 103), "
-                            + "CONVERT(DATETIME, '01/' + convert(varchar, b.MONTH) + '/' + convert(varchar, b.year) , 103)) = 1 and "                            
-                            + "DATEDIFF(month, CONVERT(DATETIME, '01/' + convert(varchar, c.MONTH) + '/' + convert(varchar, c.year) , 103), "
-                            + "CONVERT(DATETIME, '01/' + convert(varchar, d.MONTH) + '/' + convert(varchar, d.year) , 103)) = 1) Test  where F91003 = {26} "
+                            + "ValN, {31} '' as explicatii, (SELECT F70104 FROM USERS WHERE F70102 = MAX({20}.USER_NO)) AS Utilizator, MAX(TIME) AS Data, " + criptat.Replace("F704.USER_NO", "MAX({20}.USER_NO)") + " from {20}, " 
+                            + "(" + test + ") Test  where F91003 = {26} "
                             + "and CONVERT(DATETIME, '01/' + convert(varchar, MONTH) + '/' + convert(varchar, year) , 103) = DM and (ValV <> ValN {35}) group by ValV, ValN, {34}"
-                            + "CONVERT(DATETIME, '01/' + convert(varchar, MONTH) + '/' + convert(varchar, year) , 103)) t";
+                            + "CONVERT(DATETIME, '01/' + convert(varchar, MONTH) + '/' + convert(varchar, year) , 103)) t  {24} {25}   ";
                 else
                     sql_tmp = "select '{0}' AS \"NumeAngajat\", '{1}' AS \"NumeAtribut\", TO_NUMBER(ROW_NUMBER() OVER (order by \"DataModif\" desc)) as \"IdAuto\", \"DataModif\", {2} as \"ValV\",  {3} as \"ValN\", \"Explicatii\",  '' AS \"TipCon\", '' as \"MotivSusp\", null as \"DataInceput\", null as \"DataSfarsit\", null as \"DataIncetare\", \"Utilizator\", \"Data\", CRIPTAT  from "
                             + "(select F70406 as \"DataModif\", {4} As \"ValV\", {27} {5} As \"ValN\", {28} F70410 AS \"Explicatii\", (SELECT F70104 FROM USERS WHERE F70102 = F704.USER_NO) AS \"Utilizator\", F704.TIME AS \"Data\", " + criptat
@@ -258,14 +301,10 @@ namespace WizOne.Avs
                             + "TO_DATE('01/' || TO_CHAR({16}.MONTH) || '/' || TO_CHAR({16}.year) , 'dd/mm/yyyy')) = 1 and {18} <> {19} "
                             + "union "
                             + "select TO_DATE('01/' || TO_CHAR(MONTH) || '/' || TO_CHAR(year), 'dd/mm/yyyy') as \"DataModif\", \"ValV\",  {30} "
-                            + "\"ValN\", {31} '' as \"Explicatii\", (SELECT F70104 FROM USERS WHERE F70102 = MAX({20}.USER_NO)) AS \"Utilizator\", MAX(TIME) AS \"Data\", " + criptat.Replace("F704.USER_NO", "MAX({20}.USER_NO)") + " from {20}, (select TO_DATE('01/' || TO_CHAR(b.MONTH) || '/' || TO_CHAR(b.year), 'dd/mm/yyyy') as DM,  "
-                            + "{21} as \"ValV\", {32} {22} As \"ValN\" {33}  from {23} a left join {24} b a.F91003 = b.f91003 left join F9101 c on a.F91003=c.F91003 and a.MONTH = c.MONTH and a.YEAR = c.YEAR left join F9101 d on b.F91003 = d.F91003 where a.F91003 = {25} and "
-                            + "MONTHS_BETWEEN(TO_DATE('01/' || TO_CHAR(b.MONTH) || '/' || TO_CHAR(b.year) , 'dd/mm/yyyy'), "
-                            + "TO_DATE('01/' || TO_CHAR(a.MONTH) || '/' || TO_CHAR(a.year) , 'dd/mm/yyyy')) = 1 and " 
-                            + "MONTHS_BETWEEN(TO_DATE('01/' || TO_CHAR(d.MONTH) || '/' || TO_CHAR(d.year) , 'dd/mm/yyyy'), "
-                            + "TO_DATE('01/' || TO_CHAR(c.MONTH) || '/' || TO_CHAR(c.year) , 'dd/mm/yyyy')) = 1) Test  where F91003 = {26} "
+                            + "\"ValN\", {31} '' as \"Explicatii\", (SELECT F70104 FROM USERS WHERE F70102 = MAX({20}.USER_NO)) AS \"Utilizator\", MAX(TIME) AS \"Data\", " + criptat.Replace("F704.USER_NO", "MAX({20}.USER_NO)") + " from {20}, " 
+                            + "(" + test + ") Test  where F91003 = {26} "
                             + "and TO_DATE('01/' || TO_CHAR(MONTH) || '/' || TO_CHAR(year), 'dd/mm/yyyy') = DM and (\"ValV\" <> \"ValN\" {35}) group by \"ValV\", \"CodValV\", {34}"
-                            + "TO_DATE('01/' || TO_CHAR(MONTH) || '/' || TO_CHAR(year), 'dd/mm/yyyy')) t ";
+                            + "TO_DATE('01/' || TO_CHAR(MONTH) || '/' || TO_CHAR(year), 'dd/mm/yyyy')) t   {24} {25}   ";
 
 
                 if (lst.Count == 0 || lst.Contains(Convert.ToInt32(Constante.Atribute.Salariul)))
@@ -280,6 +319,7 @@ namespace WizOne.Avs
                         camp910_2 = "CONVERT(INTEGER, b." + salariu_i + ")";
                         campV = "CONVERT(VARCHAR, ValV)";
                         campN = "CONVERT(VARCHAR, ValN)";
+                        campTest = ", " + salariu_i;
                     }
                     else
                     {
@@ -296,8 +336,12 @@ namespace WizOne.Avs
                     numeAtr = "Salariu";
                     nr = 1;
 
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -313,13 +357,18 @@ namespace WizOne.Avs
                     campF704 = "F70407";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",F91071 ";
                     nr = 2;
                     campV = "(select f71804 from f718 where f71802=\"ValV\")";
                     campN = "(select f71804 from f718 where f71802=\"ValN\")";
                     numeAtr = "Functia interna";
 
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -335,14 +384,19 @@ namespace WizOne.Avs
                     campF704 = "F70407";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = " ";
                     nr = 3;
                    
                     campV = "(select f72204 from f722 where f72202=\"ValV\" and F72206 = \"CodValV\")";
                     campN = "(select f72204 from f722 where f72202=\"ValN\" and F72206 = \"CodValN\")";
               
                     numeAtr = "COR";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -358,6 +412,7 @@ namespace WizOne.Avs
                     campF704 = "F70407";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",F91025";
                     nr = 4;
                     //Florin 2019.09.30
 
@@ -373,8 +428,12 @@ namespace WizOne.Avs
                     }
 
                     numeAtr = "Motiv plecare";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -428,8 +487,14 @@ namespace WizOne.Avs
                     numeAtr = "Organigrama";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",f91004 , f91005 , f91006 , f91007";
+
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -493,8 +558,13 @@ namespace WizOne.Avs
                     numeAtr = "Norma";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",F91043";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -520,11 +590,16 @@ namespace WizOne.Avs
                     nr = 8;
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",f910985, f910986";
                     campV = "\"ValV\"";
                     campN = "\"ValN\"";
                     numeAtr = "Nr/data contract intern";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -538,14 +613,19 @@ namespace WizOne.Avs
                     camp100 = "f10053";
                     camp910 = "f91053"; camp910_1 = "a.f91053"; camp910_2 = "b.f91053";
                     campF704 = "F70407";
+                    campTest = ",f91053";
                     nr = 14;
                     campV = "(select F06205 from F062 where f06204=\"ValV\")";
                     campN = "(select F06205 from F062 where f06204=\"ValN\")";
                     numeAtr = "Centru de cost";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -565,8 +645,13 @@ namespace WizOne.Avs
                     numeAtr = "Punct de lucru";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",f91079";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -586,8 +671,13 @@ namespace WizOne.Avs
                     numeAtr = "Meserie";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",f91029";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -689,8 +779,13 @@ namespace WizOne.Avs
                     numeAtr = "Nume si prenume";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",F91008, F91009";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -710,8 +805,13 @@ namespace WizOne.Avs
                     numeAtr = "CASS";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",f9103900";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -731,8 +831,13 @@ namespace WizOne.Avs
                     numeAtr = "Studii";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",f91050";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -752,8 +857,13 @@ namespace WizOne.Avs
                     numeAtr = "Cont salariu";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",f91020";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -773,8 +883,13 @@ namespace WizOne.Avs
                     numeAtr = "Cont garantii";
                     tabelaC = "F100";  // tabelaC = "F1001";
                     tabelaI = "F910";  // tabelaI = "F9101";
+                    campTest = ",F9101028";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -795,8 +910,13 @@ namespace WizOne.Avs
                     numeAtr = "Document identitate";
                     tabelaC = "F100";
                     tabelaI = "F910";
+                    campTest = ",f91052";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -817,8 +937,13 @@ namespace WizOne.Avs
                     numeAtr = "Permis auto";
                     tabelaC = "F100"; // tabelaC = "F1001";
                     tabelaI = "F910"; // tabelaI = "F9101";
+                    campTest = ",F9101001";
+                    //strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
+                    //    camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                    //    codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
+
                     strSql = string.Format(sql_tmp, numeAng, numeAtr, campV, campN, camp100, campF704, tabelaC, F10003.ToString(), nr.ToString(), luna, an, camp100, campF704, camp910,
-                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, tabelaI, tabelaI, F10003.ToString(), F10003.ToString(),
+                        camp100, tabelaC, tabelaI, F10003.ToString(), camp910, camp100, tabelaI, camp910_1, camp910_2, campTest, "", "", F10003.ToString(),
                         codValV704, codValN, codValV100, campValV910, campValN910, codValV910, codValN910, groupBy, cond);
 
                     if (!strSqlComp.Contains(" union "))
@@ -841,6 +966,7 @@ namespace WizOne.Avs
                 }
 
                 dt = General.IncarcaDT(strSqlComp, null);
+       
             }
             catch(Exception ex)
             {
@@ -858,7 +984,7 @@ namespace WizOne.Avs
                         dt.Rows[i]["Utilizator"] = DecryptUser(dt.Rows[i]["Utilizator"].ToString());
             }
 
-
+            Session["Istoric_Grid"] = dt;
 
             return dt;
         }

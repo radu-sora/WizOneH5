@@ -60,6 +60,11 @@ namespace WizOne.Avs
                         cmbAngFiltru.DataBind();
                     }
 
+                    DataTable dt = Session["Istoric_Grid"] as DataTable;
+                    grDate.KeyFieldName = "NumeAngajat;DataModif";
+                    grDate.DataSource = dt;
+                    grDate.DataBind();
+
                 }
             }
             catch (Exception ex)
@@ -179,6 +184,7 @@ namespace WizOne.Avs
                 grDate.KeyFieldName = "NumeAngajat;DataModif";
                 grDate.DataSource = dt;
                 grDate.DataBind();
+                Session["Istoric_Grid"] = dt;
             }
             catch(Exception ex)
             {

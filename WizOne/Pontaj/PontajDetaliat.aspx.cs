@@ -2136,6 +2136,7 @@ namespace WizOne.Pontaj
                     strSql += $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
 
                 //Florin 2020.02.07 - am adugat validarile
+                string sqlCer = "";
                 string msg = "";
                 if (strSql != "")
                 {

@@ -2196,9 +2196,9 @@ namespace WizOne.Pontaj
 
                 //Florin 2020.02.07
                 if (msg != "" && msg.Substring(0, 1) != "2")
-                    MessageBox.Show("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg, MessageBox.icoWarning);
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
                 else
-                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes ");
 
                 e.Handled = true;
             }

@@ -9918,7 +9918,18 @@ namespace WizOne.Module
             return msg;
         }
 
-
+        public static void ExecValStr(int f10003, DateTime ziua)
+        {
+            try
+            {
+                ExecutaNonQuery($@"UPDATE ""Ptj_Intrari"" SET ""ValStr""={Dami.ValoareParam("SintaxaValStr", "")} WHERE F10003=@1 AND ""Ziua""=@2", new object[] { f10003, ziua });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, "General", "VerificareDepasireNorma");
+            }
+        }
 
     }
 }

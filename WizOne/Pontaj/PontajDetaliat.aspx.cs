@@ -1991,6 +1991,7 @@ namespace WizOne.Pontaj
             }
         }
 
+        //Florin 2020.02.07 - am adaugat functia de validare; pt acest lucru am adaugat valorile in row si am facut selectul care se trimite ca parametru in validari din acest row;
         //Florin 2019.10.31 - am refacut intreaga functie
 
         protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
@@ -2134,11 +2135,22 @@ namespace WizOne.Pontaj
                 if (cmp != "")
                     strSql += $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
 
+                //Florin 2020.02.07 - am adugat validarile
+                string msg = "";
                 if (strSql != "")
-                    General.ExecutaNonQuery(
-                        "BEGIN " + Environment.NewLine +
-                        strSql + Environment.NewLine +
-                        "END;", null);
+                {
+                    msg = Notif.TrimiteNotificare("Pontaj.PontajDetaliat", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    if (msg != "" && msg.Substring(0, 1) == "2")
+                    {
+                        MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
+                        return;
+                    }
+                    else
+                        General.ExecutaNonQuery(
+                            "BEGIN " + Environment.NewLine +
+                            strSql + Environment.NewLine +
+                            "END;", null);
+                }
 
 
                 DataRow dr = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
@@ -2166,7 +2178,12 @@ namespace WizOne.Pontaj
 
                 IncarcaGrid();
 
-                MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+                //Florin 2020.02.07
+                if (msg != "" && msg.Substring(0, 1) != "2")
+                    MessageBox.Show("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg, MessageBox.icoWarning);
+                else
+                    MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+
                 e.Handled = true;
             }
             catch (Exception ex)

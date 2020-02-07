@@ -254,8 +254,11 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
-                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                if (strSql.IndexOf("Eval_") < 0)
+                {
+                    MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                    MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                }
             }
             return dt;
         }

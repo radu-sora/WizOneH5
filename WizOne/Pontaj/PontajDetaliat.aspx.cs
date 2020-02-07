@@ -2155,7 +2155,8 @@ namespace WizOne.Pontaj
                     msg = Notif.TrimiteNotificare("Pontaj.PontajDetaliat", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                     if (msg != "" && msg.Substring(0, 1) == "2")
                     {
-                        MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));
+                        e.Handled = true;
                         return;
                     }
                     else
@@ -2198,7 +2199,7 @@ namespace WizOne.Pontaj
                 if (msg != "" && msg.Substring(0, 1) != "2")
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
                 else
-                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes ");
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
 
                 e.Handled = true;
             }

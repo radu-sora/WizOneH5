@@ -1866,7 +1866,7 @@ namespace WizOne.Pontaj
                                     if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[row + 3, nrCol].FillColor = Color.FromArgb(217, 243, 253);
                                     if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
                                         ws2.Cells[row + 3, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
-                                    if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare"].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
+                                    if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
                                         ws2.Cells[row + 3, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                     nrCol++;
                                     idZile = listaId["Zilele 1-31"];
@@ -1942,7 +1942,7 @@ namespace WizOne.Pontaj
                                         if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = Color.FromArgb(217, 243, 253);
                                         if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
                                             ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
-                                        if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare"].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
+                                        if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
                                             ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                         idZile = listaId["Zilele 1-31"];
                                         colZile = nrCol;
@@ -2951,20 +2951,20 @@ namespace WizOne.Pontaj
 
                 int an = Convert.ToDateTime(txtAnLuna.Value).Year;
                 int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
-                int idRol = Convert.ToInt32(cmbRol.Value ?? -99);
+                //int idRol = Convert.ToInt32(cmbRol.Value ?? -99);
 
                 string dtInc = General.ToDataUniv(an, luna, 1);
                 string dtSf = General.ToDataUniv(an, luna, 99);
 
                 string zile = "";
-                string zileAs = "", zileAsIn = "", zileAsOut = "", zileAsPauza = "";
+                string zileAs = "", zileAsIn = "", zileAsOut = "", zileAsPauza = "", zileAsCuloare = "";
                 string zileVal = "";
                 string zileF = "";
                 string strInner = "";
                 string filtruPlus = "";
                 string cmpCateg = "";
 
-                string pvt = "", pvtIn = "", pvtOut = "", pvtPauza = "";
+                string pvt = "", pvtIn = "", pvtOut = "", pvtPauza = "", pvtCuloare = "";
 
                 string strFiltru = "", strLeg = "";
                 if (Convert.ToInt32(cmbSub.Value ?? -99) != -99) strFiltru += " AND A.F10004 = " + cmbSub.Value;
@@ -3008,7 +3008,17 @@ namespace WizOne.Pontaj
                 
                 if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
                 if (Convert.ToInt32(cmbAng.Value ?? -99) == -99)
-                    strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, idRol, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
+                {//Radu 04.02.2020
+                    if (chkRoluri.Checked)
+                    {
+                        List<int> lstRoluri = new List<int>();
+                        foreach (int val in cmbRol.Items)
+                            lstRoluri.Add(val);
+                        strFiltru += General.GetF10003RoluriComasate(idUser, an, luna, f10003, lstRoluri, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
+                    }
+                    else
+                        strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, Convert.ToInt32(cmbRol.Value ?? -99), 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
+                }
                 else
                     strFiltru += " AND A.F10003=" + cmbAng.Value;
 
@@ -3022,7 +3032,7 @@ namespace WizOne.Pontaj
                     zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";
 
                     if (chkTotaluri.Checked)
-                        zileVal += $@",COALESCE(pvt.""Ziua{i}"",'') AS ""Ziua{i}""";
+                        zileVal += $@",COALESCE(pvt.""Ziua{i}"",'') AS ""Ziua{i}"", pvtCuloare.""CuloareValoare{i}"" AS ""CuloareValoare{i}""";
                     if (chkOre.Checked)
                     {
                         if (Constante.tipBD == 1)
@@ -3042,6 +3052,7 @@ namespace WizOne.Pontaj
                     zileAsIn += ", " + strZi + " AS \"Ziua" + i.ToString() + "I\"";
                     zileAsOut += ", " + strZi + " AS \"Ziua" + i.ToString() + "O\"";
                     zileAsPauza += ", " + strZi + " AS \"Ziua" + i.ToString() + "P\"";
+                    zileAsCuloare += ", " + strZi + " AS \"CuloareValoare" + i.ToString() + "\"";
                 }
 
                 for (int i = 1; i <= 60; i++)
@@ -3075,6 +3086,11 @@ namespace WizOne.Pontaj
                                 (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003";
+
+                    pvtCuloare = $@"INNER JOIN (SELECT F10003 {zileAsCuloare} FROM 
+                                (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                                ) pvtCuloare ON X.F10003=pvtCuloare.F10003";
                 }
                 else
                 {
@@ -3101,6 +3117,11 @@ namespace WizOne.Pontaj
                                 (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003";
+
+                    pvtCuloare = $@"INNER JOIN (SELECT * FROM 
+                                (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                ) pvtCuloare ON X.F10003=pvtCuloare.F10003";
                 }
 
 
@@ -3120,7 +3141,7 @@ namespace WizOne.Pontaj
                                 FROM (
                                  SELECT TOP 100 PERCENT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, A.F10008 + ' ' + A.F10009 AS AngajatNume, st.Denumire AS StarePontaj, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate,
                                  H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
-                                B.F100958, B.F100959, Y.IdContract, A.F100901 AS EID, X.IdStare , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.Denumire AS DescContract, Y.CuloareValoare
+                                B.F100958, B.F100959, Y.IdContract, A.F100901 AS EID, X.IdStare , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.Denumire AS DescContract
                                 {zileVal}  {zileF}
                                 FROM Ptj_Cumulat X 
 		                        LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
@@ -3130,6 +3151,7 @@ namespace WizOne.Pontaj
                                 {pvtIn}
                                 {pvtOut}
                                 {pvtPauza}
+                                {pvtCuloare}
                                 LEFT JOIN F100 A ON A.F10003=X.F10003 
                                 LEFT JOIN F1001 B ON A.F10003=B.F10003 
                                 LEFT JOIN (SELECT R.F10003, MIN(R.Ziua) AS ZiuaMin FROM Ptj_Intrari_2 R WHERE YEAR(R.Ziua)= {an} AND MONTH(R.Ziua)= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
@@ -3163,7 +3185,7 @@ namespace WizOne.Pontaj
                                 FROM (
                                 SELECT X.F10003, TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"", A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", st.""Denumire"" AS ""StarePontaj"", COALESCE(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"",
                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
-                                B.F100958, B.F100959, Y.""IdContract"", A.F100901 AS EID, X.""IdStare"" , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.""Denumire"" AS ""DescContract"", Y.""CuloareValoare""
+                                B.F100958, B.F100959, Y.""IdContract"", A.F100901 AS EID, X.""IdStare"" , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.""Denumire"" AS ""DescContract""
                                 {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
 		                        LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
@@ -3173,6 +3195,7 @@ namespace WizOne.Pontaj
                                 {pvtIn}
                                 {pvtOut}
                                 {pvtPauza}
+                                {pvtCuloare}
                                 LEFT JOIN F100 A ON A.F10003=X.F10003 
                                 LEFT JOIN F1001 B ON A.F10003=B.F10003 
                                 LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari"" R WHERE EXTRACT(YEAR FROM R.""Ziua"")= {an} AND EXTRACT(MONTH FROM R.""Ziua"")= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003

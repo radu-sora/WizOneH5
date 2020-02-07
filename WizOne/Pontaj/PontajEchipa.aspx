@@ -744,6 +744,8 @@
                                 <br />
                                 <dx:ASPxCheckBox ID="chkLinie" ClientInstanceName="chkLinie" runat="server" Text="afisare pe o singura linie" TextAlign="Right" />
                                 <br />
+                                <dx:ASPxCheckBox ID="chkRoluri" ClientInstanceName="chkRoluri" runat="server" Text="toate rolurile" TextAlign="Right" />
+                                <br />
                             </td>
                         </tr>
                     </table>

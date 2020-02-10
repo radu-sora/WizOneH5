@@ -13621,9 +13621,8 @@ END;
 
 ----  2.2.125  ----
 
-
---Imbunatatire procedura Inchidere luna din WO
 --https://github.com/wizromRD/WizOne/issues/206
+--Imbunatatire procedura Inchidere luna din WO
 UPDATE "tblParametrii" SET "Explicatie"='Se completeaza calea unde se va salva backup-ul bazei de date' WHERE "Nume"='CaleBackUp';
 COMMIT;
 
@@ -13634,12 +13633,17 @@ ALTER TABLE "Ptj_IstoricVal" MODIFY "ValStr" varchar2(500);
 ALTER TABLE "Ptj_IstoricVal" MODIFY "ValStrOld" varchar2(500);
 /
 
---Posibilitate setare nume fisier XLS la notificari si alerte #218
 --https://github.com/wizromRD/WizOne/issues/218
+--Posibilitate setare nume fisier XLS la notificari si alerte #218
 ALTER TABLE "Ntf_Setari" ADD "NumeExcel" varchar2(250);
 /
 
 --https://github.com/wizromRD/WizOne/issues/204
 --Evaluare - optiune invitatie la evaluare 360 fara aprobare
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_AprobareInvitatie', 0, 'Se foloseste la crearea unei invitatii din evaluare si trimite direct in starea aprobat daca are valoarea 1', 5, -99, SYSDATE);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_AprobareInvitatie', 1, 'Se foloseste la crearea unei invitatii din evaluare si trimite direct in starea aprobat daca are valoarea 1', 5, -99, SYSDATE);
+COMMIT;
+
+--https://github.com/wizromRD/WizOne/issues/205
+--La evaluare 360 se se completeze automat rol Coleg
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_IdSuperManager', 1, 'Se foloseste la crearea unei invitatii din evaluare pt a determina rolul celui invitat (angajat, manager, subordonat sau coleg) si indica id-ul de manager din tabela tblSupervizori', 5, -99, SYSDATE);
 COMMIT;

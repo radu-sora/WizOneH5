@@ -288,11 +288,13 @@ namespace WizOne.Eval
                 string strSql = "";
                 int idStare = 1;
 
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Pelifilip || Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
+                //Florin 2020.02.10
+                //if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Pelifilip)
+                if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
                 {
                     //Florin 2018.12.05
                     //Pelifilip - nu mai vor sa se duca in solictare, vor sa se duca direct in aprobare
-                    strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
+                    strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, ({DamiRol()}), {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
                     idStare = 3;
 
                     strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
@@ -301,7 +303,7 @@ namespace WizOne.Eval
                 {
                     if ((rbTip.Value ?? "").ToString() == "1")
                     {
-                        strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
+                        strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, ({DamiRol()}), {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
                         idStare = 3;
                     }
                     strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
@@ -699,7 +701,7 @@ namespace WizOne.Eval
                             {
                                 string sqlUpd = $@"UPDATE ""Eval_Invitatie360"" SET ""IdStare""={tip} WHERE ""IdUser""={arr[0]} AND F10003={arr[1]} AND ""IdQuiz""={arr[2]};";
                                 string sqlIns = "";
-                                if (tip == 3) sqlIns = $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({arr[2]}, {arr[1]}, 1, {arr[0]}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {arr[2]} AND F10003 = {arr[1]}));";
+                                if (tip == 3) sqlIns = $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({arr[2]}, {arr[1]}, ({DamiRol()}), {arr[0]}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {arr[2]} AND F10003 = {arr[1]}));";
                                 string sqlGen = "BEGIN " + "\n\r" +
                                            sqlUpd + "\n\r" +
                                            sqlIns + "\n\r" +
@@ -727,7 +729,43 @@ namespace WizOne.Eval
             }
         }
 
+        private string DamiRol()
+        {
+            string strSql = "";
+            //1 - manager
+            //2 - subordonat
+            //3 - coleg
 
+            try
+            {
+                //SELECT 'Angajat' AS Rol, 1 AS NrCrt FROM F100Supervizori WHERE F10003={Session["User_Marca"]} AND IdSuper=0 AND IdUser={Session["UserId"]}
+
+                string top = "";
+                string rowNum = "";
+                if (Constante.tipBD == 1)
+                    top = "TOP 1";
+                else
+                    rowNum = " WHERE ROWNUM<=1 ";
+
+                string idSuper = Dami.ValoareParam("Eval_IdSuperManager", "1");
+                strSql = $@"
+                    SELECT {top} X.IdRol FROM
+                    (
+                    SELECT 'Manager' AS Rol, 1 AS IdRol FROM F100Supervizori WHERE F10003={Session["User_Marca"]} AND IdSuper={idSuper} AND IdUser={cmbUsr.Value ?? -99}
+                    UNION
+                    SELECT 'Subordonat' AS Rol, 2 AS IdRol FROM F100Supervizori WHERE F10003=(SELECT F10003 FROM USERS WHERE F70102 = {cmbUsr.Value ?? -99}) AND IdSuper={idSuper} AND IdUser={Session["UserId"]}
+                    UNION
+                    SELECT 'Coleg' AS Rol, 3 AS IdRol {General.FromDual()}
+                    ) X {rowNum} ORDER BY X.IdRol";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+        }
 
     }
 }

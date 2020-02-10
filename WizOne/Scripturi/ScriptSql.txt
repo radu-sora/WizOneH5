@@ -12756,5 +12756,10 @@ GO
 
 --https://github.com/wizromRD/WizOne/issues/204
 --Evaluare - optiune invitatie la evaluare 360 fara aprobare
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_AprobareInvitatie', 0, 'Se foloseste la crearea unei invitatii din evaluare si trimite direct in starea aprobat daca are valoarea 1', 5, -99, GetDate())
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_AprobareInvitatie', 1, 'Se foloseste la crearea unei invitatii din evaluare si trimite direct in starea aprobat daca are valoarea 1', 5, -99, GetDate())
+GO
+
+--https://github.com/wizromRD/WizOne/issues/205
+--La evaluare 360 se se completeze automat rol Coleg
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_IdSuperManager', 1, 'Se foloseste la crearea unei invitatii din evaluare pt a determina rolul celui invitat (angajat, manager, subordonat sau coleg) si indica id-ul de manager din tabela tblSupervizori', 5, -99, GetDate())
 GO

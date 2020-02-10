@@ -13638,3 +13638,8 @@ ALTER TABLE "Ptj_IstoricVal" MODIFY "ValStrOld" varchar2(500);
 --https://github.com/wizromRD/WizOne/issues/218
 ALTER TABLE "Ntf_Setari" ADD "NumeExcel" varchar2(250);
 /
+
+--https://github.com/wizromRD/WizOne/issues/204
+--Evaluare - optiune invitatie la evaluare 360 fara aprobare
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_AprobareInvitatie', 0, 'Se foloseste la crearea unei invitatii din evaluare si trimite direct in starea aprobat daca are valoarea 1', 5, -99, SYSDATE);
+COMMIT;

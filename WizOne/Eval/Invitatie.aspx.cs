@@ -41,6 +41,12 @@ namespace WizOne.Eval
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
+
+                if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
+                {
+                    btnAproba.Visible = false;
+                    btnRespinge.Visible = false;
+                }
             }
             catch (Exception ex)
             {
@@ -282,7 +288,7 @@ namespace WizOne.Eval
                 string strSql = "";
                 int idStare = 1;
 
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Pelifilip)
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Pelifilip || Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
                 {
                     //Florin 2018.12.05
                     //Pelifilip - nu mai vor sa se duca in solictare, vor sa se duca direct in aprobare

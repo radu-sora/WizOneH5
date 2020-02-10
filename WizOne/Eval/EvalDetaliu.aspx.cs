@@ -1870,6 +1870,9 @@ namespace WizOne.Eval
                                                             and setAng.""Id"" = @2
                                                             group by ob.""IdObiectiv"", CAST(ob.""Obiectiv"" AS varchar(4000)) ";
 
+                                    if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
+                                        strSQLObiectiv = @"SELECT ""IdObiectiv"" AS ""Id"", CAST(""Obiectiv"" AS varchar(4000)) AS ""Denumire"" FROM ""Eval_Obiectiv""  ";
+
                                     DataTable dtObiectiv = General.IncarcaDT(strSQLObiectiv, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                                     foreach (DataRow rwObiectiv in dtObiectiv.Rows)
                                     {
@@ -1893,7 +1896,12 @@ namespace WizOne.Eval
                                                                         where det.""IdLista"" = @1
                                                                         and setAng.""Id"" = @2
                                                                         group by ob.""IdObiectiv"", obAct.""IdActivitate"", CAST(obAct.""Activitate"" AS varchar(4000)) ";
-                                    
+
+                                    if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
+                                        strSQLObiectivActivitate = @"SELECT ob.""IdObiectiv"" as ""Parinte"", obAct.""IdActivitate"" as ""Id"", CAST(obAct.""Activitate"" AS varchar(4000)) as ""Denumire""
+                                                                    FROM ""Eval_Obiectiv"" ob
+                                                                    INNER JOIN ""Eval_ObiectivXActivitate"" obAct on ob.""IdObiectiv"" = obAct.""IdObiectiv"" ";
+
                                     DataTable dtObiectivActivitate = General.IncarcaDT(strSQLObiectivActivitate, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                                     lstActivitati.Clear();
                                     foreach (DataRow rwObiectivActivitate in dtObiectivActivitate.Rows)
@@ -3586,7 +3594,12 @@ namespace WizOne.Eval
                                                             where categ.""IdCategorie"" = @1
                                                             and setAngDetail.""Id"" = @2
                                                             group by categDet.""IdCompetenta"", categDet.""DenCompetenta""";
-                                
+
+                                if (Convert.ToInt32(General.Nz(Session["CompletareChestionar_Finalizat"], 1)) == 1)
+                                    strSQLCompetenta = @"select categDet.""IdCompetenta"" as ""Id"", categDet.""DenCompetenta"" as ""Denumire""
+                                                            from ""Eval_CategCompetente"" categ
+                                                            join ""Eval_CategCompetenteDet"" categDet on categ.""IdCategorie"" = categDet.""IdCategorie""";
+
                                 DataTable dtCompetenta = General.IncarcaDT(strSQLCompetenta, new object[] { clsConfigDetail.IdNomenclator, Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                                 foreach (DataRow rwCompetenta in dtCompetenta.Rows)
                                 {

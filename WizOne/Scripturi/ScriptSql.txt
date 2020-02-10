@@ -9977,9 +9977,6 @@ GO
 ALTER TABLE "Ptj_tmpCeasuri" ALTER COLUMN NrCeas nvarchar(50)
 GO
 
-ALTER TABLE Ptj_tblFormuleCumulat ADD OrdineAfisarePontajDetaliat int
-GO
-
 ALTER TABLE Admin_Sanctiuni ALTER COLUMN Descriere nvarchar(MAX)
 GO
 

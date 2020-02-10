@@ -205,7 +205,7 @@
     </Reference>
     <Reference Include="FunctiiCeasuri, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\TEMP\Backup Tmp\FunctiiCeasuri.dll</HintPath>
+      <HintPath>..\Artifacts\FunctiiCeasuri.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

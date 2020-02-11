@@ -3012,8 +3012,8 @@ namespace WizOne.Pontaj
                     if (chkRoluri.Checked)
                     {
                         List<int> lstRoluri = new List<int>();
-                        foreach (int val in cmbRol.Items)
-                            lstRoluri.Add(val);
+                        foreach (ListEditItem val in cmbRol.Items)
+                            lstRoluri.Add(Convert.ToInt32(val.Value));
                         strFiltru += General.GetF10003RoluriComasate(idUser, an, luna, f10003, lstRoluri, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
                     }
                     else

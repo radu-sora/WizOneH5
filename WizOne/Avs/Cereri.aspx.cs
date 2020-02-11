@@ -187,8 +187,8 @@ namespace WizOne.Avs
                     DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                     cmbAtribute.DataSource = dtAtr;
                     cmbAtribute.DataBind();
-                    cmbAtributeFiltru.DataSource = dtAtr;
-                    cmbAtributeFiltru.DataBind();
+                    //cmbAtributeFiltru.DataSource = dtAtr;
+                    //cmbAtributeFiltru.DataBind();
 
 
                     AscundeCtl();
@@ -198,6 +198,13 @@ namespace WizOne.Avs
                 }
                 else
                 {
+                    if (Session["Avs_MarcaFiltru1"] != null)
+                    {
+                        DataTable dtAtrF = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), Convert.ToInt32(Session["Avs_MarcaFiltru1"].ToString()) });
+                        cmbAtributeFiltru.DataSource = dtAtrF;
+                        cmbAtributeFiltru.DataBind();
+                    }
+
                     if (IsCallback)
                     {
                         cmbAng.DataSource = null;
@@ -221,8 +228,8 @@ namespace WizOne.Avs
                         DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                         cmbAtribute.DataSource = dtAtr;
                         cmbAtribute.DataBind();
-                        cmbAtributeFiltru.DataSource = dtAtr;
-                        cmbAtributeFiltru.DataBind();
+                        //cmbAtributeFiltru.DataSource = dtAtr;
+                        //cmbAtributeFiltru.DataBind();
 
                         if (Session["Marca_atribut"] != null)
                         {
@@ -1903,8 +1910,8 @@ namespace WizOne.Avs
                             DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                             cmbAtribute.DataSource = dtAtr;
                             cmbAtribute.DataBind();
-                            cmbAtributeFiltru.DataSource = dtAtr;
-                            cmbAtributeFiltru.DataBind();
+                            //cmbAtributeFiltru.DataSource = dtAtr;
+                            //cmbAtributeFiltru.DataBind();
 
                             AscundeCtl();
                             txtExpl.Text = "";
@@ -1916,8 +1923,8 @@ namespace WizOne.Avs
                             DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                             cmbAtribute.DataSource = dtAtr;
                             cmbAtribute.DataBind();
-                            cmbAtributeFiltru.DataSource = dtAtr;
-                            cmbAtributeFiltru.DataBind();
+                            //cmbAtributeFiltru.DataSource = dtAtr;
+                            //cmbAtributeFiltru.DataBind();
                             Session["AvsCereri"] = null;
                             Session["AvsCereriCalcul"] = null;
                             AscundeCtl();
@@ -1925,6 +1932,18 @@ namespace WizOne.Avs
                         }
                         break;
                     case "10":                //Document
+                        break;
+                    case "11":               //cmbAngFiltru
+                        {
+                            DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAngFiltru.Value, -99) });                 
+                            cmbAtributeFiltru.DataSource = dtAtr;
+                            cmbAtributeFiltru.DataBind();
+                            Session["AvsCereri"] = null;
+                            Session["AvsCereriCalcul"] = null;
+                            //AscundeCtl();
+                            cmbAtributeFiltru.Value = null;
+                            Session["Avs_MarcaFiltru1"] = Convert.ToInt32(cmbAngFiltru.Value);                 
+                        }
                         break;
 
                 }
@@ -3396,6 +3415,7 @@ namespace WizOne.Avs
             checkComboBoxStare.Value = null;
             Session["Avs_MarcaFiltru"] = null;
             Session["Avs_AtributFiltru"] = null;
+            Session["Avs_MarcaFiltru1"] = null;
 
         }
 

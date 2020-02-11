@@ -69,9 +69,9 @@ namespace WizOne.Pagini
                     DataTable dtCmp = General.IncarcaDT($@"SELECT * FROM (
                                         SELECT 0 AS ""Ordine"", ""Alias"" AS ""Denumire"", ""IdAuto"" as ""Id"", ""TipData"" FROM ""Ntf_tblCampuri"" WHERE ""Pagina"" = @1
                                         UNION
-                                        SELECT -2, 'Link Aproba',-78, 'Link' {tbl}
+                                        SELECT -2, 'Link1 Aproba',-78, 'Link' {tbl}
                                         UNION
-                                        SELECT -1, 'Link Respinge', -77, 'Link' {tbl} ) X ORDER BY ""Ordine"", ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
+                                        SELECT -1, 'Link2 Respinge', -77, 'Link' {tbl} ) X ORDER BY ""Ordine"", ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
 
                     cmbAddCmp.DataSource = dtCmp;
                     cmbAddCmp.DataBindItems();
@@ -1106,9 +1106,9 @@ namespace WizOne.Pagini
                 DataTable dtCmp = General.IncarcaDT($@"SELECT * FROM (
                                         SELECT 0 AS ""Ordine"", ""Alias"" AS ""Denumire"", ""IdAuto"" as ""Id"", ""TipData"" FROM ""Ntf_tblCampuri"" WHERE ""Pagina"" = @1
                                         UNION
-                                        SELECT -2, 'Link Aproba',-78, 'Link' {tbl}
+                                        SELECT -2, 'Link1 Aproba',-78, 'Link' {tbl}
                                         UNION
-                                        SELECT -1, 'Link Respinge', -77, 'Link' {tbl} ) X ORDER BY ""Ordine"", ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
+                                        SELECT -1, 'Link2 Respinge', -77, 'Link' {tbl} ) X ORDER BY ""Ordine"", ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
 
                 object[] obj = grDateCond.GetRowValues(grDateCond.FocusedRowIndex, new string[] { "Id", "Coloana", "Operator", "Valoare1", "Valoare2", "NrZile1", "NrZile2" }) as object[];
 

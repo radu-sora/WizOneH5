@@ -758,10 +758,10 @@ namespace WizOne.Module
                     str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
                 }
 
-                if (str.IndexOf("#$Link") >= 0)
+                if (str.IndexOf("#$Link1") >= 0)
                 {
-                    string cuv = str.Substring(str.IndexOf("#$Link"), str.Substring(str.IndexOf("#$Link")).IndexOf("$#"));
-                    if (cuv != "") cuv = cuv.Replace("#$Link", "").Replace("$#", "").Trim();
+                    string cuv = str.Substring(str.IndexOf("#$Link1"), str.Substring(str.IndexOf("#$Link1")).IndexOf("$#"));
+                    if (cuv != "") cuv = cuv.Replace("#$Link1", "").Replace("$#", "").Trim();
 
                     if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
                     {
@@ -770,26 +770,29 @@ namespace WizOne.Module
                         string rsp = General.Encrypt_QueryString(arg);
                         string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
                         string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
-                        str = str.Replace("#$Link " + cuv + "$#", lnk).ToString();
+                        str = str.Replace("#$Link1 " + cuv + "$#", lnk).ToString();
                     }
                     else
-                        str = str.Replace("#$Link " + cuv + "$#", "").ToString();
+                        str = str.Replace("#$Link1 " + cuv + "$#", "").ToString();
                 }
 
 
-                if (str.IndexOf("Link Respinge") >= 0)
+                if (str.IndexOf("#$Link2") >= 0)
                 {
+                    string cuv = str.Substring(str.IndexOf("#$Link2"), str.Substring(str.IndexOf("#$Link2")).IndexOf("$#"));
+                    if (cuv != "") cuv = cuv.Replace("#$Link2", "").Replace("$#", "").Trim();
+
                     if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
                     {
                         string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
 
                         string rsp = General.Encrypt_QueryString(arg);
                         string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-                        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + Dami.TraduCuvant("Respinge") + "</a>";
-                        str = str.Replace("#$Link Respinge$#", lnk).ToString();
+                        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+                        str = str.Replace("#$Link2 " + cuv + "$#", lnk).ToString();
                     }
                     else
-                        str = str.Replace("#$Link Respinge$#", "").ToString();
+                        str = str.Replace("#$Link2 " + cuv + "$#", "").ToString();
                 }
 
                 //cautam daca avem de inserat tabel

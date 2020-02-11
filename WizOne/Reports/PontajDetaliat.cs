@@ -76,9 +76,43 @@ namespace WizOne.Reports
                     {
                         filtru = filtru.Replace("@" + (i + 1).ToString(), lst[i]);
                     }
+
+                    //Radu 31.01.2020 - La Print Pontaj per angajat, numele angajatului sa apara o singura data
+                    if (tip == 1)
+                    {
+                        lblNumeAngajat.Visible = true;
+                        xrLabel26.Visible = false;
+                        xrLabel3.Visible = false;
+                        xrLabel26.WidthF = 0;
+                        xrLabel3.WidthF = 0;    
+                     
+                        for (int k = 27; k <= 68; k++)
+                        {
+                            XRLabel lbl = new XRLabel();
+                            lbl = TopMargin.FindControl("xrLabel" + k, false) as XRLabel;                       
+                            lbl.LeftF -= 100;
+                        }
+
+                        for (int k = 4; k <= 25; k++)
+                        {
+                            XRLabel lbl = new XRLabel();
+                            lbl = Detail.FindControl("xrLabel" + k, false) as XRLabel;
+                            lbl.LeftF -= 100;
+                        }
+                        for (int k = 69; k <= 88; k++)
+                        {
+                            XRLabel lbl = new XRLabel();
+                            lbl = Detail.FindControl("xrLabel" + k, false) as XRLabel;
+                            lbl.LeftF -= 100;
+                        }
+                    }        
                 }
             }
-            this.DataSource = General.IncarcaDT(strSql + filtru + @" ORDER BY B.F10008, B.F10009, A.""Ziua"" ", null);
+
+            System.Data.DataTable dt = General.IncarcaDT(strSql + filtru + @" ORDER BY B.F10008, B.F10009, A.""Ziua"" ", null);
+            if (dt != null && dt.Rows.Count > 0 && dt.Rows[0]["NumeComplet"] != null)
+                lblNumeAngajat.Text = dt.Rows[0]["NumeComplet"].ToString();
+            this.DataSource = dt;
         }
 
     }

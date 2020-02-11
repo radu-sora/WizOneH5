@@ -895,10 +895,15 @@ namespace WizOne.Pontaj
 
                 //DataTable dtErt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Cereri"" WHERE ""DataInceput"" >= " + General.ToDataUniv(dtData.Year, dtData.Month, 99), null);
 
+                //string strSql = $@"SELECT X.""IdRol"", X.""RolDenumire"" FROM ({SelectComun()}) X 
+                //                WHERE X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023
+                //                GROUP BY X.""IdRol"", X.""RolDenumire""
+                //                ORDER BY X.""RolDenumire"" ";
+                //Radu 31.01.2020 - se doreste sa se puna implicit rolul cel mai mare
                 string strSql = $@"SELECT X.""IdRol"", X.""RolDenumire"" FROM ({SelectComun()}) X 
                                 WHERE X.F10022 <= {General.ToDataUniv(dtData.Year, dtData.Month, 99)} AND {General.ToDataUniv(dtData.Year, dtData.Month)} <= X.F10023
                                 GROUP BY X.""IdRol"", X.""RolDenumire""
-                                ORDER BY X.""RolDenumire"" ";
+                                ORDER BY X.""IdRol"" DESC";
 
                 DataTable dtRol = General.IncarcaDT(strSql, null);
 
@@ -1869,9 +1874,12 @@ namespace WizOne.Pontaj
                                     if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[row + 3, nrCol].FillColor = Color.FromArgb(217, 243, 253);
                                     if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
                                         ws2.Cells[row + 3, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
+                                    if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
+                                        ws2.Cells[row + 3, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                     nrCol++;
                                     idZile = listaId["Zilele 1-31"];
-                                    colZile = nrCol;
+                                    colZile = nrCol;                                    
+
                                 }
                             }
                         }
@@ -1942,6 +1950,8 @@ namespace WizOne.Pontaj
                                         if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = Color.FromArgb(217, 243, 253);
                                         if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
                                             ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
+                                        if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
+                                            ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                         idZile = listaId["Zilele 1-31"];
                                         colZile = nrCol;
                                     }
@@ -3109,20 +3119,20 @@ namespace WizOne.Pontaj
 
                 int an = Convert.ToDateTime(txtAnLuna.Value).Year;
                 int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
-                int idRol = Convert.ToInt32(cmbRol.Value ?? -99);
+                //int idRol = Convert.ToInt32(cmbRol.Value ?? -99);
 
                 string dtInc = General.ToDataUniv(an, luna, 1);
                 string dtSf = General.ToDataUniv(an, luna, 99);
 
                 string zile = "";
-                string zileAs = "", zileAsIn = "", zileAsOut = "", zileAsPauza = "";
+                string zileAs = "", zileAsIn = "", zileAsOut = "", zileAsPauza = "", zileAsCuloare = "";
                 string zileVal = "";
                 string zileF = "";
                 string strInner = "";
                 string filtruPlus = "";
                 string cmpCateg = "";
 
-                string pvt = "", pvtIn = "", pvtOut = "", pvtPauza = "";
+                string pvt = "", pvtIn = "", pvtOut = "", pvtPauza = "", pvtCuloare = "";
 
                 string strFiltru = "", strLeg = "";
                 if (Convert.ToInt32(cmbSub.Value ?? -99) != -99) strFiltru += " AND A.F10004 = " + cmbSub.Value;
@@ -3169,7 +3179,17 @@ namespace WizOne.Pontaj
                 
                 if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
                 if (Convert.ToInt32(cmbAng.Value ?? -99) == -99)
-                    strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, idRol, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
+                {//Radu 04.02.2020
+                    if (chkRoluri.Checked)
+                    {
+                        List<int> lstRoluri = new List<int>();
+                        foreach (ListEditItem val in cmbRol.Items)
+                            lstRoluri.Add(Convert.ToInt32(val.Value));
+                        strFiltru += General.GetF10003RoluriComasate(idUser, an, luna, f10003, lstRoluri, 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
+                    }
+                    else
+                        strFiltru += General.GetF10003Roluri(idUser, an, luna, 0, f10003, Convert.ToInt32(cmbRol.Value ?? -99), 0, -99, Convert.ToInt32(cmbAng.Value ?? -99));
+                }
                 else
                     strFiltru += " AND A.F10003=" + cmbAng.Value;
 
@@ -3183,7 +3203,7 @@ namespace WizOne.Pontaj
                     zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";
 
                     if (chkTotaluri.Checked)
-                        zileVal += $@",COALESCE(pvt.""Ziua{i}"",'') AS ""Ziua{i}""";
+                        zileVal += $@",COALESCE(pvt.""Ziua{i}"",'') AS ""Ziua{i}"", pvtCuloare.""CuloareValoare{i}"" AS ""CuloareValoare{i}""";
                     if (chkOre.Checked)
                     {
                         if (Constante.tipBD == 1)
@@ -3203,6 +3223,7 @@ namespace WizOne.Pontaj
                     zileAsIn += ", " + strZi + " AS \"Ziua" + i.ToString() + "I\"";
                     zileAsOut += ", " + strZi + " AS \"Ziua" + i.ToString() + "O\"";
                     zileAsPauza += ", " + strZi + " AS \"Ziua" + i.ToString() + "P\"";
+                    zileAsCuloare += ", " + strZi + " AS \"CuloareValoare" + i.ToString() + "\"";
                 }
 
                 for (int i = 1; i <= 60; i++)
@@ -3236,6 +3257,11 @@ namespace WizOne.Pontaj
                                 (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003";
+
+                    pvtCuloare = $@"INNER JOIN (SELECT F10003 {zileAsCuloare} FROM 
+                                (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                                ) pvtCuloare ON X.F10003=pvtCuloare.F10003";
                 }
                 else
                 {
@@ -3262,6 +3288,11 @@ namespace WizOne.Pontaj
                                 (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003";
+
+                    pvtCuloare = $@"INNER JOIN (SELECT * FROM 
+                                (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                ) pvtCuloare ON X.F10003=pvtCuloare.F10003";
                 }
 
 
@@ -3294,6 +3325,7 @@ namespace WizOne.Pontaj
                                 {pvtIn}
                                 {pvtOut}
                                 {pvtPauza}
+                                {pvtCuloare}
                                 LEFT JOIN F100 A ON A.F10003=X.F10003 
                                 LEFT JOIN F1001 B ON A.F10003=B.F10003 
                                 LEFT JOIN (SELECT R.F10003, MIN(R.Ziua) AS ZiuaMin FROM Ptj_Intrari_2 R WHERE YEAR(R.Ziua)= {an} AND MONTH(R.Ziua)= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
@@ -3341,6 +3373,7 @@ namespace WizOne.Pontaj
                                 {pvtIn}
                                 {pvtOut}
                                 {pvtPauza}
+                                {pvtCuloare}
                                 LEFT JOIN F100 A ON A.F10003=X.F10003 
                                 LEFT JOIN F1001 B ON A.F10003=B.F10003 
                                 LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari"" R WHERE EXTRACT(YEAR FROM R.""Ziua"")= {an} AND EXTRACT(MONTH FROM R.""Ziua"")= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003

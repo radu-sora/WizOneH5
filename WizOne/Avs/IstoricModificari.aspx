@@ -79,27 +79,25 @@
                     </td>                    	
                 </tr>
             </table>
-            <table>
-                <tr>
-                    <td >
-						<dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"   >
-							<SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
-							<Settings ShowFilterRow="False" HorizontalScrollBarMode="Auto"  />                
-							<Columns>                            
-								<dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="Nume" Caption="Nume angajat"  Width="200px"/>
-								<dx:GridViewDataDateColumn FieldName="DataModif" Name="DataModif" Caption="Data Modificare" ReadOnly="true" Width="100px" >
-									<PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
-								</dx:GridViewDataDateColumn>
-								<dx:GridViewDataTextColumn FieldName="Salariu" Name="Salariu" Caption="Salariu"  Width="80px" />
-								<dx:GridViewDataTextColumn FieldName="Functie" Name="Functie" Caption="Functie"  Width="250px" />
-								<dx:GridViewDataTextColumn FieldName="COR" Name="COR" Caption="COR"  Width="250px" />
-								<dx:GridViewDataTextColumn FieldName="Departament" Name="Departament" Caption="Organigrama"  Width="300px" />
-                                <dx:GridViewDataTextColumn FieldName="NumePrenume" Name="NumePrenume" Caption="Nume si prenume"  Width="200px" />
-							</Columns>
-						</dx:ASPxGridView>
-                    </td>
-                </tr>
-            </table>
+          
+             <table width="90%"> 
+			        <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"   >
+				        <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="NextColumn" />
+				        <Settings ShowFilterRow="False" HorizontalScrollBarMode="Auto"  />                
+				        <Columns>                            
+					        <dx:GridViewDataTextColumn FieldName="NumeAngajat" Name="Nume" Caption="Nume angajat"  Width="200px"/>
+					        <dx:GridViewDataDateColumn FieldName="DataModif" Name="DataModif" Caption="Data Modificare" ReadOnly="true" Width="100px" >
+						        <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
+					        </dx:GridViewDataDateColumn>
+					        <dx:GridViewDataTextColumn FieldName="Salariu" Name="Salariu" Caption="Salariu"  Width="80px" />
+					        <dx:GridViewDataTextColumn FieldName="Functie" Name="Functie" Caption="Functie"  Width="250px" />
+					        <dx:GridViewDataTextColumn FieldName="COR" Name="COR" Caption="COR"  Width="250px" />
+					        <dx:GridViewDataTextColumn FieldName="Departament" Name="Departament" Caption="Organigrama"  Width="300px" />
+                            <dx:GridViewDataTextColumn FieldName="NumePrenume" Name="NumePrenume" Caption="Nume si prenume"  Width="200px" />
+				        </Columns>
+			        </dx:ASPxGridView>
+              </table>
+       
 
           </dx:PanelContent>
         </PanelCollection>

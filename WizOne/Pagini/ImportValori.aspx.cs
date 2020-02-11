@@ -74,11 +74,7 @@ namespace WizOne.Pagini
                     grDate.DataBind();
                     Session["Import_Grid"] = dt;
 
-                    cmbObiectiv.DataSource = General.IncarcaDT("SELECT \"IdObiectiv\", \"Obiectiv\" FROM \"Eval_Obiectiv\"", null);
-                    cmbObiectiv.DataBind();
 
-                    cmbComp.DataSource = General.IncarcaDT("SELECT \"IdCompetenta\", \"DenCompetenta\" FROM \"Eval_CategCompetenteDet\"", null);
-                    cmbComp.DataBind();
                 }
                 else
                 {
@@ -87,16 +83,19 @@ namespace WizOne.Pagini
                     grDate.DataSource = dt;                 
                     grDate.KeyFieldName = "IdAuto";
                     grDate.DataBind();
-                    Session["Import_Grid"] = dt;
-
-                    cmbObiectiv.DataSource = General.IncarcaDT("SELECT \"IdObiectiv\", \"Obiectiv\" FROM \"Eval_Obiectiv\"", null);
-                    cmbObiectiv.DataBind();
-
-                    cmbComp.DataSource = General.IncarcaDT("SELECT \"IdCompetenta\", \"DenCompetenta\" FROM \"Eval_CategCompetenteDet\"", null);
-                    cmbComp.DataBind();
+                    Session["Import_Grid"] = dt; 
 
                     rbTip1.Checked = true;
                 }
+
+                cmbObiectiv.DataSource = General.IncarcaDT("SELECT \"IdObiectiv\", \"Obiectiv\" FROM \"Eval_Obiectiv\"", null);
+                cmbObiectiv.DataBind();
+
+                cmbComp.DataSource = General.IncarcaDT("SELECT \"IdCompetenta\", \"DenCompetenta\" FROM \"Eval_CategCompetenteDet\"", null);
+                cmbComp.DataBind();
+
+                cmbPerioada.DataSource = General.IncarcaDT("SELECT \"IdPerioada\", \"DenPerioada\" FROM \"Eval_Perioada\"", null);
+                cmbPerioada.DataBind();
 
 
 
@@ -152,7 +151,7 @@ namespace WizOne.Pagini
                     sql = "SELECT * FROM \"Eval_CompetenteAngajatTemp\"";
                 DataTable dt = General.IncarcaDT(sql, null);
                 for (int k = 0; k < dt.Columns.Count; k++)                
-                    table.Rows.Add(dt.Columns[k].ColumnName, dt.Columns[k].ColumnName);                
+                    table.Rows.Add(dt.Columns[k].ColumnName, dt.Columns[k].ColumnName == "F10003" ? "Marca" : dt.Columns[k].ColumnName);                
 
                 GridViewDataComboBoxColumn colDBCol = (grDate.Columns["ColoanaBD"] as GridViewDataComboBoxColumn);
                 colDBCol.PropertiesComboBox.DataSource = table;
@@ -346,6 +345,12 @@ namespace WizOne.Pagini
                     return;
                 }
 
+                if (cmbPerioada.Value == null)
+                {
+                    MessageBox.Show("Nu ati selectat perioada!", MessageBox.icoError, "");
+                    return;
+                }
+
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
                 workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
 
@@ -444,16 +449,20 @@ namespace WizOne.Pagini
                             if (rbTip1.Checked)
                             {
                                 if (obj["Tip"].ToString() == "String")
-                                    sql = "UPDATE \"Eval_ObiIndividualeTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = '" + ws2.Cells[j, k].Value.ToString() + "' " + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbObiectiv.Value == null ? "" : " AND \"IdObiectiv\" = " + cmbObiectiv.Value.ToString());
+                                    sql = "UPDATE \"Eval_ObiIndividualeTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = '" + ws2.Cells[j, k].Value.ToString() + "' " + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbObiectiv.Value == null ? "" : " AND \"IdObiectiv\" = " + cmbObiectiv.Value.ToString()) 
+                                        + " AND COALESCE(\"IdPeriod\", 1) =  " + Convert.ToInt32(cmbPerioada.Value);
                                 else
-                                    sql = "UPDATE \"Eval_ObiIndividualeTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = " + ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US")) + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbObiectiv.Value == null ? "" : " AND \"IdObiectiv\" = " + cmbObiectiv.Value.ToString());
+                                    sql = "UPDATE \"Eval_ObiIndividualeTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = " + ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US")) + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbObiectiv.Value == null ? "" : " AND \"IdObiectiv\" = " + cmbObiectiv.Value.ToString())
+                                        + " AND COALESCE(\"IdPeriod\", 1) =  " + Convert.ToInt32(cmbPerioada.Value);
                             }
                             else
                             {
                                 if (obj["Tip"].ToString() == "String")
-                                    sql = "UPDATE \"Eval_CompetenteAngajatTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = '" + ws2.Cells[j, k].Value.ToString() + "' " + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbComp.Value == null ? "" : " AND \"IdCompetenta\" = " + cmbComp.Value.ToString());
+                                    sql = "UPDATE \"Eval_CompetenteAngajatTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = '" + ws2.Cells[j, k].Value.ToString() + "' " + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbComp.Value == null ? "" : " AND \"IdCompetenta\" = " + cmbComp.Value.ToString())
+                                          + " AND COALESCE(\"IdPeriod\", 1) =  " + Convert.ToInt32(cmbPerioada.Value);
                                 else
-                                    sql = "UPDATE \"Eval_CompetenteAngajatTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = " + ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US")) + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbComp.Value == null ? "" : " AND \"IdCompetenta\" = " + cmbComp.Value.ToString());
+                                    sql = "UPDATE \"Eval_CompetenteAngajatTemp\" SET \"" + obj["ColoanaBD"].ToString() + "\" = " + ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US")) + cmp + " WHERE F10003 = " + ws2.Cells[j, x].Value.ToString() + (cmbComp.Value == null ? "" : " AND \"IdCompetenta\" = " + cmbComp.Value.ToString())
+                                          + " AND COALESCE(\"IdPeriod\", 1) =  " + Convert.ToInt32(cmbPerioada.Value);
 
                             }
                             General.ExecutaNonQuery(sql, null);

@@ -1475,7 +1475,7 @@ namespace WizOne.Pontaj
                 //                GROUP BY X.""IdRol"", X.""RolDenumire""
                 //                ORDER BY X.""RolDenumire"" ";
 
-
+                //Radu 31.01.2020 - se doreste sa se puna implicit rolul cel mai mare (am adaugat ORDER BY)
                 string strSql = @"select a.""Id"", a.""Denumire"", case when a.""PoateInitializa"" = 1 then 1 else 0 end as ""PoateInitializa"", case when a.""PoateSterge"" = 1 then 1 else 0 end as ""PoateSterge"", COALESCE(a.""TipMesaj"",1) AS ""TipMesaj"" 
                                  from ""Ptj_tblRoluri"" a 
                                  inner join ""Ptj_relGrupSuper"" b on a.""Id"" = b.""IdRol"" 
@@ -1488,7 +1488,7 @@ namespace WizOne.Pontaj
                                  inner join ""relGrupAngajat"" c on b.""IdGrup""  = c.""IdGrup"" 
                                  inner join ""F100Supervizori"" d on c.F10003 = d.F10003 and (-1 * b.""IdSuper"")= d.""IdSuper"" 
                                  where d.""IdUser"" =  {0}
-                                 group by a.""Id"", a.""Denumire"", a.""PoateInitializa"",a.""PoateSterge"", a.""TipMesaj"" ";
+                                 group by a.""Id"", a.""Denumire"", a.""PoateInitializa"",a.""PoateSterge"", a.""TipMesaj"" ORDER BY a.""Id"" DESC";
 
                 strSql = string.Format(strSql, Session["UserId"]);
 

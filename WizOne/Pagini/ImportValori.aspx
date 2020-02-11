@@ -148,6 +148,13 @@
 							</dx:ASPxComboBox>
 						</td>
 					</tr>
+					<tr>				
+						<td >
+							<dx:ASPxLabel  ID="lblPerioada" Width="100" runat="server"  Text="Perioada" ></dx:ASPxLabel >	
+							<dx:ASPxComboBox Width="100%"  ID="cmbPerioada"   runat="server" DropDownStyle="DropDown"  TextField="DenPerioada" ValueField="IdPerioada" AutoPostBack="false"  ValueType="System.Int32" >                               
+							</dx:ASPxComboBox>
+						</td>
+					</tr>
   
                 </table>
               </fieldset >

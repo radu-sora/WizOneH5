@@ -415,7 +415,7 @@ namespace WizOne.Absente
                 {
                     sqlCer = CreazaSelectCuValori(marca, 1, lstOre.ContainsKey(marca) ? lstOre[marca] : -99);
 
-                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
+                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", USER_NO, TIME) 
                                 OUTPUT Inserted.Id, Inserted.IdStare ";
 
                     strGen = "BEGIN TRAN " +
@@ -427,7 +427,7 @@ namespace WizOne.Absente
                 else
                 {
                     sqlCer = CreazaSelectCuValori(marca, 2);
-                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") ";
+                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", USER_NO, TIME) ";
 
                     strGen = "BEGIN " +
                                 sqlIst + "; " + Environment.NewLine +
@@ -1150,7 +1150,7 @@ namespace WizOne.Absente
             }
         }
 
-        public string CreazaSelectCuValori(int marca, int tip = 1, int nrOre = -99)
+        public string CreazaSelectCuValori(int marca, int tip = 1, decimal nrOre = -99)
         {
             //tip = 1 intoarce un select
             //tip = 2 intoarce ca values; necesar pt Oracle
@@ -1221,7 +1221,7 @@ namespace WizOne.Absente
                 {
                     dtDataSf.Value = dtDataInc.Value;
                     if (nrOre == -99)
-                        nrOre = Convert.ToInt32(txtNrOre.Text);
+                        nrOre = Convert.ToDecimal(txtNrOre.Text);
                 }
 
                 string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
@@ -1230,7 +1230,7 @@ namespace WizOne.Absente
                 string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
                 string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
                 string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
-                string sqlNrOre = nrOre == -99 ? "NULL" : nrOre.ToString();
+                string sqlNrOre = nrOre == -99 ? "NULL" : nrOre.ToString(new CultureInfo("en-US"));
 
                 if (Constante.tipBD == 2)
                 {
@@ -1239,6 +1239,30 @@ namespace WizOne.Absente
                     sqlCuloare = $@"(SELECT * FROM ({sqlCuloare}) WHERE ROWNUM=1)";
                     //dual = " FROM DUAL";
                 }
+
+                string sqlOraInc = "NULL";
+                string sqlOraSf = "NULL";
+
+                if (General.Nz(cmbOraInc.Value, "").ToString() != "")
+                    sqlOraInc = "'" + dtDataInc.Date.Year + "-" + dtDataInc.Date.Month + "-" + dtDataInc.Date.Day + " " + General.Nz(cmbOraInc.Value, "").ToString() + ":00'";
+
+                if (General.Nz(cmbOraSf.Value, "").ToString() != "")
+                    sqlOraSf = "'" + dtDataSf.Date.Year + "-" + dtDataSf.Date.Month + "-" + dtDataSf.Date.Day + " " + General.Nz(cmbOraSf.Value, "").ToString() + ":00'";
+
+                if (Constante.tipBD == 2)
+                {
+                    sqlIdStare = $@"(SELECT * FROM ({sqlIdStare}) WHERE ROWNUM=1)";
+                    sqlPozitie = $@"(SELECT * FROM ({sqlPozitie}) WHERE ROWNUM=1)";
+                    sqlCuloare = $@"(SELECT * FROM ({sqlCuloare}) WHERE ROWNUM=1)";
+
+             
+                    if (General.Nz(cmbOraInc.Value, "").ToString() != "")
+                        sqlOraInc = "TO_DATE('" + dtDataInc.Date.Day + "-" + dtDataInc.Date.Month + "-" + dtDataInc.Date.Year + " " + General.Nz(cmbOraInc.Value, "").ToString() + ":00','DD-MM-YYYY HH24:MI:SS')";
+
+                    if (General.Nz(cmbOraSf.Value, "").ToString() != "")
+                        sqlOraSf = "TO_DATE('" + dtDataSf.Date.Day + "-" + dtDataSf.Date.Month + "-" + dtDataSf.Date.Year + " " + General.Nz(cmbOraSf.Value, "").ToString() + ":00','DD-MM-YYYY HH24:MI:SS')";
+                }
+
 
                 sqlCer = @"SELECT " +
                                 sqlIdCerere + " AS \"Id\", " +
@@ -1259,8 +1283,10 @@ namespace WizOne.Absente
                                 //trimiteLaInlocuitor + " AS \"TrimiteLa\", " +
                                 " NULL AS \"TrimiteLa\", " +
                                 (sqlNrOre == null ? "NULL" : sqlNrOre) + " AS \"NrOre\", " +
+                                sqlOraInc + " AS \"OraInceput\", " +
+                                sqlOraSf + " AS \"OraSfarsit\", " +
                                 " 0 AS \"AreAtas\"" +
-                                valExtra;
+                                valExtra + ", " + Session["UserId"] + " AS USER_NO, " + General.CurrentDate() + " AS TIME";
                 if (tip == 2)
                     sqlCer = @"VALUES(" +
                     sqlIdCerere + ", " +
@@ -1280,8 +1306,10 @@ namespace WizOne.Absente
                     (sqlPozitie == null ? "NULL" : sqlPozitie) + ", " +
                     " NULL, " +
                     (sqlNrOre == null ? "NULL" : sqlNrOre) + ", " +
+                    sqlOraInc + ", " +
+                    sqlOraSf + ", " +
                      " 0 " +
-                    valExtra + ")";
+                    valExtra + ", " + Session["UserId"] + ", " + General.CurrentDate() + ")";
             }
             catch (Exception ex)
             {

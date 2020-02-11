@@ -668,6 +668,12 @@
                     <PanelCollection>
                         <dx:PanelContent>
 
+                          <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20">
+                              <HeaderStyle Font-Bold="true" />
+                              <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
+                            <PanelCollection>
+                                <dx:PanelContent>
+
 
                             <div id="divPeAng" runat="server" style="float:left; display:none; line-height:22px; vertical-align:middle;">
                     
@@ -819,7 +825,9 @@
                                     </tr>
                                 </table>
                             </div>
-
+                                </dx:PanelContent>
+                            </PanelCollection>
+                        </dx:ASPxRoundPanel>
 
                         </dx:PanelContent>
                     </PanelCollection>

@@ -808,7 +808,8 @@
                                 <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
                                 <dx:ListBoxColumn FieldName="Departament" Caption="Dept" Width="130px" />
                                 <dx:ListBoxColumn FieldName="Functia" Caption="Functia" Width="130px" />
-                            </Columns>                                                        
+                            </Columns>  
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback(11); }" />
                         </dx:ASPxComboBox>
                     </td>
                     <td>

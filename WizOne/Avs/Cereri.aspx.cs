@@ -205,6 +205,11 @@ namespace WizOne.Avs
                         cmbAtributeFiltru.DataBind();
                     }
 
+                    DataTable dt = Session["Avs_Grid"] as DataTable;
+                    grDate.KeyFieldName = "Id";
+                    grDate.DataSource = dt;
+                    grDate.DataBind();
+
                     if (IsCallback)
                     {
                         cmbAng.DataSource = null;
@@ -3288,6 +3293,7 @@ namespace WizOne.Avs
                 grDate.KeyFieldName = "Id";
                 grDate.DataSource = dt;
                 grDate.DataBind();
+                Session["Avs_Grid"] = dt;
             }
             catch (Exception)
             {
@@ -3416,6 +3422,11 @@ namespace WizOne.Avs
             Session["Avs_MarcaFiltru"] = null;
             Session["Avs_AtributFiltru"] = null;
             Session["Avs_MarcaFiltru1"] = null;
+
+            grDate.KeyFieldName = "Id";
+            grDate.DataSource = null;
+            grDate.DataBind();
+            Session["Avs_Grid"] = null;
 
         }
 

@@ -59,6 +59,10 @@
                         </dx:GridViewDataDateColumn>
                         <dx:GridViewDataTextColumn Caption="Buget" FieldName="Buget" Name="Buget" Width="100px" ShowInCustomizationForm="True">
                         </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataComboBoxColumn Caption="Moneda" FieldName="IdMoneda" Name="IdMoneda"  Width="75px" ShowInCustomizationForm="True">
+                            <PropertiesComboBox TextField="Abreviere" ValueField="Id" DropDownStyle="DropDown" ValueType="System.Int32">
+                            </PropertiesComboBox>
+                        </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn Caption="Perioada amortizare" FieldName="PerioadaAmortizare" Name="PerioadaAmortizare"  Width="100px" ShowInCustomizationForm="True">
                             <HeaderStyle Wrap="True" />
                         </dx:GridViewDataTextColumn>
@@ -74,7 +78,6 @@
                         <UpdateButton ButtonType="Link" Text="Actualizeaza">
                             <Styles>
                                 <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
-<Paddings PaddingTop="10px" PaddingRight="10px"></Paddings>
                                 </Style>
                             </Styles>
                         </UpdateButton>
@@ -85,7 +88,6 @@
                             <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
                             <Styles>
                                 <Style Paddings-PaddingRight="5px" >
-<Paddings PaddingRight="5px"></Paddings>
                                 </Style>
                             </Styles>
                         </EditButton>
@@ -96,7 +98,6 @@
                             <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
                             <Styles>
                                 <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" >
-<Paddings PaddingLeft="5px" PaddingRight="5px"></Paddings>
                                 </Style>
                             </Styles>
                         </NewButton>

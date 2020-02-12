@@ -2528,7 +2528,7 @@ namespace WizOne.Pontaj
 
                 if (General.Nz(cmbTipAbs.Value, "").ToString() != "")
                 {
-                    sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{cmbTipAbs.Text}' WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                    sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = '{cmbTipAbs.Text}', USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                 }
                 else
                 {
@@ -2610,23 +2610,23 @@ namespace WizOne.Pontaj
                             }
                         }
 
-                        sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)} {cmpModif} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                        sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)} {cmpModif}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                         sqlValStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""={Dami.ValoareParam("SintaxaValStr")} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                         sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
                                         VALUES ({f10003}, {General.ToDataUniv(ziua)}, (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}), '{General.Nz(drMd["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)});";
                     }
-
-                    General.ExecutaNonQuery("BEGIN " + Environment.NewLine +
-                        sqlDel + Environment.NewLine +
-                        sqlUpd + Environment.NewLine +
-                        sqlValStr + Environment.NewLine +
-                        sqlIst + Environment.NewLine +
-                        " END;", null);
-                    General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
-
-                    IncarcaGrid();
-
                 }
+
+                General.ExecutaNonQuery("BEGIN " + Environment.NewLine +
+                    sqlDel + Environment.NewLine +
+                    sqlUpd + Environment.NewLine +
+                    sqlValStr + Environment.NewLine +
+                    sqlIst + Environment.NewLine +
+                    " END;", null);
+                General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
+
+                IncarcaGrid();
+
             }
             catch (Exception ex)
             {

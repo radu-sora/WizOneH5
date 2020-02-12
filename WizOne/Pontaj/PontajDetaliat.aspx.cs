@@ -136,7 +136,8 @@ namespace WizOne.Pontaj
                     cmbPtjZi.Items.Add(new ListEditItem { Text = General.Nz(dt.Rows[i]["Denumire"], "").ToString(), Value = Convert.ToInt32(General.Nz(dt.Rows[i]["Id"], 1)) + 5 });
                 }
 
-                
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
+                    divHovercard.Visible = false;
             }
             catch (Exception ex)
             {
@@ -498,7 +499,8 @@ namespace WizOne.Pontaj
                 IncarcaGrid();
                 grCC.DataSource = null;
                 grCC.DataBind();
-                divHovercard.Visible = false;
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
+                    divHovercard.Visible = false;
 
                 //Florin 2019.07.19
                 int idRol = Convert.ToInt32(cmbRolAng.Value);

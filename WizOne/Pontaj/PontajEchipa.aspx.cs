@@ -158,6 +158,12 @@ namespace WizOne.Pontaj
 
                 grDate.JSProperties["cpParamMotiv"] = Dami.ValoareParam("AfisareMotivLaRespingereCerere", "0");
 
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
+                {
+                    divHovercard.Visible = false;
+                    rowHovercard.Style["margin-bottom"] = "8px";
+                }
+
                 if (!IsPostBack)
                 {
                     grDate.Attributes.Add("onkeypress", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
@@ -583,8 +589,11 @@ namespace WizOne.Pontaj
                 RetineFiltru("1");
                 SetColoane();
                 IncarcaGrid();
-                divHovercard.Visible = false;
-                rowHovercard.Style["margin-bottom"] = "8px";
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
+                {
+                    divHovercard.Visible = false;
+                    rowHovercard.Style["margin-bottom"] = "8px";
+                }
 
                 //Florin 2019.07.19
                 //long dataBlocare = (new DateTime(2200, 12, 31)).Ticks / TimeSpan.TicksPerMillisecond;

@@ -45,7 +45,7 @@ namespace WizOne.Adev
                 table.Rows.Add(1, "Grădiniță");
                 table.Rows.Add(2, "Practică");
                 table.Rows.Add(3, "Angajat");
-                if (Constante.idClient == 18)
+                if (Convert.ToInt32(General.Nz(Session["IdClient"],"-99")) == Convert.ToInt32(IdClienti.Clienti.Harting))
                     table.Rows.Add(4, "Fluturaș");
                 cmbAdev.DataSource = table;
                 cmbAdev.DataBind();

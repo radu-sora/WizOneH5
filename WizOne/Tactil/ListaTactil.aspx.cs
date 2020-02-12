@@ -329,7 +329,7 @@ namespace WizOne.Tactil
                                 DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToInt32(obj[2])), null);
                                 if (drAbs != null)
                                 {
-                                    if (Constante.idClient == 34)
+                                    if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Groupama))
                                     {
                                         if (General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() != "D1" && General.Nz(drAbs["DenumireScurta"], "").ToString().ToUpper() != "D2")
                                         {

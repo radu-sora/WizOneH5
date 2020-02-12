@@ -4644,6 +4644,7 @@ namespace WizOne.Pontaj
 
                     ASPxGridView grDate = new ASPxGridView();
                     grDate.ID = "grDateTotaluri";
+                    grDate.ClientInstanceName = "grDateTotaluri";
                     grDate.Width = Unit.Percentage(100);
                     //grDate.Enabled = false;
                     grDate.AutoGenerateColumns = false;

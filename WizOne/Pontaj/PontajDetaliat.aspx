@@ -534,15 +534,15 @@
             });
         }
         function AdjustSize() {
-            var dif = 230;
-            var div = document.getElementById('divPeAng');
-            var style = window.getComputedStyle(div);
-            if (style.display === 'none')
-                dif = 340;
-            var height = Math.max(0, document.documentElement.clientHeight) - dif;
+            var dif = 200 + pnlFiltrare.GetHeight();
+            
+            if (typeof grDateTotaluri !== "undefined" && ASPxClientUtils.IsExists(grDateTotaluri))
+                dif = dif + grDateTotaluri.GetHeight();
+            
             if (<%=Session["PontajulAreCC"] %> == 1) 
-                var height = Math.max(0, document.documentElement.clientHeight) - 470;
-
+                dif = dif + (grCC.GetHeight() + 50);
+            
+            var height = Math.max(0, document.documentElement.clientHeight) - dif;
             grDate.SetHeight(height);
         }
 

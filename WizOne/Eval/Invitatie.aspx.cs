@@ -33,7 +33,7 @@ namespace WizOne.Eval
                     SELECT A.F70102, CASE WHEN A.""NumeComplet"" IS NULL THEN A.F70104 ELSE A.""NumeComplet"" END AS ""NumeComplet"", A.F10003 
                     FROM USERS A 
                     INNER JOIN F100 B ON A.F10003=B.F10003
-                    WHERE A.F10003 IS NOT NULL AND B.F10025 IN (0,999)
+                    WHERE A.F10003 IS NOT NULL AND B.F10023 >= CAST({General.CurrentDate()} AS DATE) AND B.F10025 <> 900
                     ORDER BY ""NumeComplet"" ";
                 DataTable dtUsr = General.IncarcaDT(sqlUsr, null);
                 cmbUsr.DataSource = dtUsr;

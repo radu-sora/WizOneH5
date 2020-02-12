@@ -86,9 +86,11 @@ namespace WizOne.Personal
 
                 DataTable dt = General.IncarcaDT(sql, null);
 
+                int tipAfisare = Convert.ToInt32(Dami.ValoareParam("AfisareTaburiPersonal", "1"));
+
                 int nrTaburi = dt.Rows.Count;
                 bool multirand = false;
-                if (nrTaburi > 10)
+                if (nrTaburi > 10 && tipAfisare == 1)
                     multirand = true;
 
                 List<string> lista = ListaSecuritate();
@@ -165,6 +167,8 @@ namespace WizOne.Personal
                 }
 
                 this.ASPxPageControl2.Attributes.Add("oncontextmenu", "ctx(this,event); return false;");
+                if (tipAfisare == 2)
+                    this.ASPxPageControl2.EnableTabScrolling = true;
 
                 if (Session["MP_Avans_Tab"] != null)
                 {

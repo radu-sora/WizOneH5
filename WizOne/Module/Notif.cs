@@ -776,7 +776,7 @@ namespace WizOne.Module
 
                         string rsp = General.Encrypt_QueryString(arg);
                         string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-                        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+                        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + Dami.TraduCuvant(cuv) + "</a>";
                         str = str.Replace("#$Link " + cuv + "$#", lnk).ToString();
                     }
                     else

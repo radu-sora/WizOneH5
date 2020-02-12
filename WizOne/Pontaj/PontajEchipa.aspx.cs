@@ -2752,10 +2752,17 @@ namespace WizOne.Pontaj
                     strLeg = "";
 
                 //Florin 2019.09.23
-                if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                //Radu 12.02.2020 - am inlocuit conditia
+                string sqlCateg = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'viewCategoriePontaj'";
+                if (Constante.tipBD == 2)
+                    sqlCateg = "SELECT COUNT(*) FROM user_views where view_name = 'viewCategoriePontaj'";
+                DataTable dtCateg = General.IncarcaDT(sqlCateg, null);
+                //if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                if (dtCateg != null && dtCateg.Rows.Count > 0 && dtCateg.Rows[0][0] != null && Convert.ToInt32(dtCateg.Rows[0][0].ToString()) == 1)
                 {
                     cmpCateg = @" CTG.""Denumire"" AS ""Categorie"", ";
-                    filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+                    if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                        filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
                     strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                 }
 
@@ -2984,16 +2991,20 @@ namespace WizOne.Pontaj
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
                     strLeg = " LEFT JOIN (SELECT F10003 AS MARCA2, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.MARCA2 ";
                 }
+
                 //Florin 2019.09.23
-                //if (Convert.ToInt32(cmbCateg.Value ?? -99) != -99)
-                if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                //Radu 12.02.2020 - am inlocuit conditia
+                string sqlCateg = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'viewCategoriePontaj'";
+                if (Constante.tipBD == 2)
+                    sqlCateg = "SELECT COUNT(*) FROM user_views where view_name = 'viewCategoriePontaj'";
+                DataTable dtCateg = General.IncarcaDT(sqlCateg, null);
+                //if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                if (dtCateg != null && dtCateg.Rows.Count > 0 && dtCateg.Rows[0][0] != null && Convert.ToInt32(dtCateg.Rows[0][0].ToString()) == 1)
                 {
                     cmpCateg = @" CTG.""Denumire"" AS ""Categorie"", ";
-                    filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+                    if (General.Nz(cmbCateg.Value, "").ToString() != "")
+                        filtruPlus += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
                     strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
-                    //strInner += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
-                    //strFiltru += " AND (A.F10061 = " + cmbCateg.Value + " OR A.F10062 = " + cmbCateg.Value + ")";
-                    //strLeg += " LEFT JOIN (SELECT F10003, F10061, F10062 FROM F100) C ON A.F10003 = C.F10003 ";
                 }
 
                 //Florin 2019.12.27
@@ -3135,7 +3146,7 @@ namespace WizOne.Pontaj
                 //LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                 //LEFT JOIN F724 CB ON A.F10062 = CB.F72402
                 if (Constante.tipBD == 1)
-                    strSql = $@"with ptj_intrari_2 as (select * from Ptj_Intrari A {strLeg}  WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
+                    strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A {strLeg}  WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
                                 SELECT *
                            
                                 FROM (
@@ -3180,7 +3191,7 @@ namespace WizOne.Pontaj
                                 ORDER BY NumeComplet) A
                                 WHERE 1=1 {strFiltru}";
                 else
-                    strSql = $@"with ""Ptj_Intrari_2"" as (select * from ""Ptj_Intrari"" A WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
+                    strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A WHERE 1=1 AND {dtInc} <= A.""Ziua"" AND A.""Ziua"" <= {dtSf} {strFiltruSpecial})
                                 SELECT  *                                
                                 FROM (
                                 SELECT X.F10003, TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"", A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", st.""Denumire"" AS ""StarePontaj"", COALESCE(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"",

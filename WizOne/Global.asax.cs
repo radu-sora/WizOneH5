@@ -42,7 +42,7 @@ namespace WizOne
                     if (pozEnd > 0)
                         Constante.BD = str.ToUpper().Substring(poz, pozEnd - poz).Replace(" ", "").Replace("INITIALCATALOG=", "");
                     else
-                        Constante.BD = str.Substring(poz);
+                        Constante.BD = str.ToUpper().Substring(poz).Replace(" ", "").Replace("INITIALCATALOG=", "");
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace WizOne
                     if (pozEnd > 0)
                         Constante.BD = str.ToUpper().Substring(poz, pozEnd - poz).Replace(" ","").Replace("USERID=", "");
                     else
-                        Constante.BD = str.Substring(poz);
+                        Constante.BD = str.ToUpper().Substring(poz).Replace(" ", "").Replace("USERID=", "");
                 }
 
                 //determinam versiunea

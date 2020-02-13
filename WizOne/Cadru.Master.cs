@@ -100,21 +100,20 @@ namespace WizOne
 
                 if (!IsPostBack)
                 {
-
                     //incarcam lista de profile disponibile
-                    string sqlPro = @"SELECT A.""Id"", A.""Denumire"", A.""Continut"", A.""Implicit"", A.""Activ"" 
+                    string sqlPro = @"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
                                 FROM ""tblProfile"" A
                                 INNER JOIN ""tblProfileLinii"" B ON  A.""Id"" = B.""Id""
                                 INNER JOIN ""relGrupUser"" C ON B.""IdGrup"" = C.""IdGrup""
                                 WHERE A.""Pagina"" = @1 AND C.""IdUser"" = @2 AND COALESCE(A.""Activ"" ,0) = 1
-                                GROUP BY A.""Id"", A.""Denumire"", A.""Continut"", A.""Implicit"", A.""Activ"" ";
-                    if (Constante.tipBD == 2)
-                        sqlPro = @"SELECT A.""Id"", A.""Denumire"", TO_CHAR(A.""Continut"") AS ""Continut"", A.""Implicit"", A.""Activ"" 
+                                GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"" ";
+
+                    if (General.VarSession("EsteAdmin").ToString() == "1")
+                        sqlPro = @"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
                                 FROM ""tblProfile"" A
                                 INNER JOIN ""tblProfileLinii"" B ON  A.""Id"" = B.""Id""
-                                INNER JOIN ""relGrupUser"" C ON B.""IdGrup"" = C.""IdGrup""
-                                WHERE A.""Pagina"" = @1 AND C.""IdUser"" = @2 AND COALESCE(A.""Activ"" ,0) = 1
-                                GROUP BY A.""Id"", A.""Denumire"", TO_CHAR(A.""Continut""), A.""Implicit"", A.""Activ"" ";								
+                                WHERE A.""Pagina"" = @1 AND COALESCE(A.""Activ"" ,0) = 1
+                                GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"" ";
 
                     DataTable dtPro = new DataTable();
                     if (General.Nz(Session["PaginaWeb"],"").ToString() != "") dtPro = General.IncarcaDT(sqlPro, new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", "."), Session["UserId"].ToString() });

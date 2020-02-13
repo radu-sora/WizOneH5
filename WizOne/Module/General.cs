@@ -7269,8 +7269,8 @@ namespace WizOne.Module
 
                 #region Validare start
                 //string sqlVal = @"SELECT " + f10003 + " AS F10003, " + General.ToDataUniv(an,luna) + " AS ZiuaInc, " + idStare.ToString() + " AS IdStare, " + an + " AS An, " + luna + " AS Luna " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
-                string sablon = @"SELECT {0} AS F10003, {1} AS ZiuaInc, {2} AS IdStare, {3} AS An, {4} AS Luna " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
-                string sqlVal = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna);
+                string sablon = @"SELECT {0} AS F10003, {1} AS ""ZiuaInc"", {2} AS ""IdStare"", {3} AS ""An"", {4} AS ""Luna"", {5} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                string sqlVal = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
 
                 //string msg = Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Validare, sqlVal, "", -99, Convert.ToInt32(HttpContext.Current.Session["UserId"] ?? -99), Convert.ToInt32(HttpContext.Current.Session["User_Marca"] ?? -99));
                 string msg = Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Validare, sqlVal, "", -99, userId, userMarca);
@@ -7352,7 +7352,7 @@ namespace WizOne.Module
 
                 #region  Notificare start
 
-                string sqlNtf = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna);
+                string sqlNtf = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
                 //Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Notificare, sqlNtf, "Ptj_Cumulat",
                 //    Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT IdAuto FROM ""Ptj_Cumulat"" WHERE F10003 =@1 AND ""An"" =@2 AND ""Luna"" =@3", new object[] { f10003, an, luna }),-99)),
                 //    Convert.ToInt32(HttpContext.Current.Session["UserId"] ?? -99), Convert.ToInt32(HttpContext.Current.Session["User_Marca"] ?? -99));

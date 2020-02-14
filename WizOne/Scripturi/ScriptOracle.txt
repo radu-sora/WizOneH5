@@ -13647,3 +13647,8 @@ COMMIT;
 --La evaluare 360 se se completeze automat rol Coleg
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_IdSuperManager', 1, 'Se foloseste la crearea unei invitatii din evaluare pt a determina rolul celui invitat (angajat, manager, subordonat sau coleg) si indica id-ul de manager din tabela tblSupervizori', 5, -99, SYSDATE);
 COMMIT;
+
+
+alter table "Admin_Cursuri" add "IdMoneda" number(9);
+insert into "tblParametrii" ("Nume", "Valoare", "Explicatie", "IdModul") values ('AfisareTaburiPersonal', '1', '1 - pe mai multe linii; 2 - pe o singura linie cu sageti de derulare', 3);
+

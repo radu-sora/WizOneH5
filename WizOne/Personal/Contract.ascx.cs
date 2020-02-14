@@ -377,7 +377,7 @@ namespace WizOne.Personal
                 //    SetariNorma();
                 //}
 
-            }
+            }            
 
             General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 

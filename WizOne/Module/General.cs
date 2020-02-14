@@ -6041,11 +6041,11 @@ namespace WizOne.Module
                     bool vizibil = true, blocat = false;
                     string[] param = elem.Split('_');
                     SecuritateCtrl(elem, idUser, out vizibil, out blocat);
-                    WebControl ctl = dtList.Items[0].FindControl(param[0]) as WebControl;
+                    dynamic ctl = dtList.Items[0].FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.Visible = vizibil;
-                        ctl.Enabled = !blocat; 
+                        ctl.ClientVisible = vizibil;
+                        ctl.ClientEnabled = !blocat;           
                     }
                     else
                     {
@@ -6095,11 +6095,11 @@ namespace WizOne.Module
                     bool vizibil = true, blocat = false;
                     string[] param = elem.Split('_');
                     SecuritateCtrl(elem, idUser, out vizibil, out blocat);
-                    WebControl ctl = pnl.FindControl(param[0]) as WebControl;
+                    dynamic ctl = pnl.FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.Visible = vizibil;
-                        ctl.Enabled = !blocat;
+                        ctl.ClientVisible = vizibil;
+                        ctl.ClientEnabled = !blocat;
                     }
                     else
                     {
@@ -6149,11 +6149,11 @@ namespace WizOne.Module
                     bool vizibil = true, blocat = false;
                     string[] param = elem.Split('_');
                     SecuritateCtrl(elem, idUser, out vizibil, out blocat);
-                    WebControl ctl = dtList.Items[0].FindControl(param[0]) as WebControl;
+                    dynamic ctl = dtList.Items[0].FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.Visible = vizibil;
-                        ctl.Enabled = !blocat;
+                        ctl.ClientVisible = vizibil;
+                        ctl.ClientEnabled = !blocat;
                     }
                 }
             }

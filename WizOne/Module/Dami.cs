@@ -316,10 +316,10 @@ namespace WizOne.Module
                         {
                             dynamic ctl = pag.FindControl(idCtl);
                             if (ctl != null)
-                            {
+                            {                                
                                 ctl.Visible = vizibil;
                                 ctl.Enabled = !blocat;
-
+                           
                                 if (idCtl.Length > 3)
                                 {
                                     string idLbl = "lbl" + idCtl.Substring(3);

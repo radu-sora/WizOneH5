@@ -431,6 +431,68 @@ namespace WizOne.Module
                                     }
                                 }
                             }
+                            else
+                            {
+                                //verificam daca nu cumva se gaseste intr-un container de tip ASPxCallbackPanel
+                                foreach (ASPxCallbackPanel pnlCtl in pag.Controls.OfType<ASPxCallbackPanel>())
+                                {
+                                    dynamic ctl4 = pnlCtl.FindControl(idCtl);
+                                    if (ctl4 != null)
+                                    {
+                                        if (idCol == "-")
+                                        {
+                                            dynamic ctl5 = pag.FindControl(idCtl);
+                                            if (ctl5 != null)
+                                            {
+                                                ctl5.Visible = vizibil;
+                                                ctl5.Enabled = !blocat;
+
+                                                if (idCtl.Length > 3)
+                                                {
+                                                    string idLbl = "lbl" + idCtl.Substring(3);
+                                                    dynamic lbl = pag.FindControl(idLbl);
+                                                    if (lbl != null) lbl.Visible = vizibil;
+                                                }
+                                            }                                      
+                                        }
+                                        else
+                                        {
+                                            ASPxGridView ctl6 = pnlCtl.FindControl(idCtl) as ASPxGridView;
+                                            if (ctl6 != null)
+                                            {
+                                                GridViewDataColumn col = ctl6.Columns[idCol] as GridViewDataColumn;
+                                                if (col != null)
+                                                {
+                                                    col.Visible = vizibil;
+                                                    col.ReadOnly = blocat;
+                                                }
+                                                else
+                                                {
+                                                    //verificam daca sunt butoane in interiorul gridului
+                                                    GridViewCommandColumn column = ctl6.Columns["butoaneGrid"] as GridViewCommandColumn;
+                                                    GridViewCommandColumnCustomButton button = column.CustomButtons[idCol] as GridViewCommandColumnCustomButton;
+                                                    if (button != null)
+                                                    {
+                                                        if (vizibil)
+                                                            button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                                                        else
+                                                            button.Visibility = GridViewCustomButtonVisibility.Invisible;
+                                                    }
+                                                    else
+                                                    {
+                                                        //Florin 2018.08.16
+                                                        //atunci este buton BuiltIn al Devexpress-ului
+                                                        if (idCol.ToLower() == "btnedit")
+                                                        {
+                                                            column.ShowEditButton = vizibil;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)

@@ -71,7 +71,7 @@
         <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" />
         <PanelCollection>
             <dx:PanelContent>
-            <table width="50%">
+            <table width="55%">
                 <tr>
 
                     <td>
@@ -96,39 +96,35 @@
                     <td>
                         <dx:ASPxLabel  ID="lblTipOp" runat="server"  style="display:inline-block;"  Text="Tip operatie"></dx:ASPxLabel >
                         <dx:ASPxComboBox ID="cmbTipOp" runat="server" ClientInstanceName="cmbTipOp" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150"  
-                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >                   
                         </dx:ASPxComboBox>
-                    </td>                   								
-
-					<td>		
+                    </td>                      
+   					<td>		
                         <dx:ASPxLabel  id="lblUtilWin" runat="server" style="display:inline-block;" Text="Utilizator Windows"></dx:ASPxLabel>	
                         <dx:ASPxComboBox ID="cmbUtilWin" runat="server" ClientInstanceName="cmbUtilWin" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                         </dx:ASPxComboBox> 
-                    </td>
-
+                    </td>      
 					<td>		
                         <dx:ASPxLabel  id="lblUtilWSWO" runat="server" style="display:inline-block;" Text="Utilizator WS/WO"></dx:ASPxLabel>	
                         <dx:ASPxComboBox ID="cmbUtilWSWO" runat="server" ClientInstanceName="cmbUtilWSWO" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                         </dx:ASPxComboBox> 
                     </td>
-
 					<td>		
                         <dx:ASPxLabel  id="lblNumeCalc" runat="server" style="display:inline-block;" Text="Nume calculator"></dx:ASPxLabel>	
                         <dx:ASPxComboBox ID="cmbNumeCalc" runat="server" ClientInstanceName="cmbNumeCalc" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                         </dx:ASPxComboBox> 
-                    </td>
-
+                    </td>          
                     <td>
-                        <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                        <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"  >
                             <ClientSideEvents Click="function(s, e) { OnFiltruClick(s); }" />
                             <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                         </dx:ASPxButton>
                     </td>
                     <td>
-                        <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                        <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"  >
                             <ClientSideEvents Click="function(s, e) {
                                 pnlLoading.Show();
                                 pnlCtl.PerformCallback(s.name);
@@ -143,7 +139,7 @@
                     <td >
                         <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  >
                             <SettingsBehavior AllowFocusedRow="true"  />
-                            <Settings ShowFilterRow="False" ShowColumnHeaders="true" />  
+                            <Settings ShowFilterRow="true" ShowColumnHeaders="true" />  
                             <SettingsEditing Mode="Inline" />  
                             <ClientSideEvents  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />           
                             <Columns>                       

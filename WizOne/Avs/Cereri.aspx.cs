@@ -203,7 +203,7 @@ namespace WizOne.Avs
                         DataTable dtAtrF = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), Convert.ToInt32(Session["Avs_MarcaFiltru1"].ToString()) });
                         cmbAtributeFiltru.DataSource = dtAtrF;
                         cmbAtributeFiltru.DataBind();
-                    }
+                    } 
 
                     DataTable dt = Session["Avs_Grid"] as DataTable;
                     grDate.KeyFieldName = "Id";
@@ -1947,7 +1947,7 @@ namespace WizOne.Avs
                             Session["AvsCereriCalcul"] = null;
                             //AscundeCtl();
                             cmbAtributeFiltru.Value = null;
-                            Session["Avs_MarcaFiltru1"] = Convert.ToInt32(cmbAngFiltru.Value);                 
+                            Session["Avs_MarcaFiltru1"] = Convert.ToInt32(cmbAngFiltru.Value);
                         }
                         break;
 

@@ -165,7 +165,8 @@ namespace WizOne
                     }
                 }
 
-                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(this.ContentPlaceHolder1);
+                if (General.VarSession("EsteAdmin").ToString() == "0") 
+                    Dami.Securitate(this.ContentPlaceHolder1);
 
                 //Florin 2018.09.10
                 txtVers.InnerText = Constante.versiune;

@@ -91,7 +91,7 @@ namespace WizOne.Pagini
                 cmbObiectiv.DataSource = General.IncarcaDT("SELECT \"IdObiectiv\", \"Obiectiv\" FROM \"Eval_Obiectiv\"", null);
                 cmbObiectiv.DataBind();
 
-                cmbComp.DataSource = General.IncarcaDT("SELECT \"IdCompetenta\", \"DenCompetenta\" FROM \"Eval_CategCompetenteDet\"", null);
+                cmbComp.DataSource = General.IncarcaDT("SELECT a.\"IdCompetenta\", b.\"DenCategorie\" " + Dami.Operator() + " ' - ' " + Dami.Operator() + "  a.\"DenCompetenta\" as \"DenCompetenta\" FROM \"Eval_CategCompetenteDet\" a left join \"Eval_CategCompetente\" b on a.\"IdCategorie\" = b.\"IdCategorie\" ", null);
                 cmbComp.DataBind();
 
                 cmbPerioada.DataSource = General.IncarcaDT("SELECT \"IdPerioada\", \"DenPerioada\" FROM \"Eval_Perioada\"", null);

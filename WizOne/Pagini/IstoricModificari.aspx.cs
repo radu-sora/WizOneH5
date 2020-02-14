@@ -71,8 +71,7 @@ namespace WizOne.Pagini
                     Session["WizTrace_Tabele"] = General.IncarcaDT(sql, null);
                     sql = "SELECT * FROM ALIASCMP";
                     Session["WizTrace_Campuri"] = General.IncarcaDT(sql, null);
-                }          
-
+                }              
             }
             catch (Exception ex)
             {

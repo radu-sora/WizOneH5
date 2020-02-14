@@ -120,7 +120,8 @@
                 else {
                     txtDataInc.value = values[2].getTime();
                     txtDataSf.value = values[3].getTime();
-                    txtDataDivide.value = txtDataInc.value;
+                    //txtDataDivide.value = txtDataInc.value;
+                    txtDataDivide.SetValue(null);
                     popUpDivide.Show();
                 }
             }

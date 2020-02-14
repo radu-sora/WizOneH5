@@ -740,7 +740,7 @@ namespace WizOne.Absente
         {
             try
             {
-                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "F10003", "IdAbsenta", "Inlocuitor", "DataInceput", "DataSfarsit", "IdStare" }) as object[];
+                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "F10003", "IdAbsenta", "Inlocuitor", "DataInceput", "DataSfarsit", "IdStare", "NrOre" }) as object[];
                 if (obj == null || obj.Count() == 0 || obj[0] == null || obj[1] == null)
                 {
                     MessageBox.Show(Dami.TraduCuvant("Nu exista linie selectata"), MessageBox.icoWarning, "");
@@ -850,10 +850,28 @@ namespace WizOne.Absente
                 if (dtCer.Rows.Count > 0)
                 {
                     string sqlIst = $@"INSERT INTO ""Ptj_CereriIstoric""(IdCerere, IdCircuit, IdSuper, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, USER_NO, TIME, Inlocuitor, IdUserInlocuitor)
-                                SELECT {Convert.ToInt32(dtCer.Rows[0]["Id"])} AS IdCerere, IdCircuit, IdSuper, IdStare, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, Inlocuitor, IdUserInlocuitor FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere"" = {obj[0]}";
+                                SELECT {Convert.ToInt32(dtCer.Rows[0]["Id"])} AS IdCerere, IdCircuit, IdSuper, {idStare}, IdUser, Pozitie, Culoare, Aprobat, DataAprobare, {Session["UserId"]} AS USER_NO, {General.CurrentDate()} AS TIME, Inlocuitor, IdUserInlocuitor FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere"" = {obj[0]}";
 
                     General.ExecutaNonQuery(sqlIst, null);
                 }
+
+                //Radu 13.02.2020 - daca chkAnulare este bifata, trebuie sterse valorile din Pontaj
+                if (chkAnulare.Checked)
+                {
+                    int idTipOre = 0;
+                    string oreInVal = "";
+                    DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToInt32(obj[2])), null);
+                    if (drAbs != null)
+                    {
+                        idTipOre = Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0));
+                        oreInVal = General.Nz(drAbs["OreInVal"], "").ToString();
+                    }
+
+                    General.StergeInPontaj(Convert.ToInt32(dtCer.Rows[0]["Id"]), idTipOre, oreInVal, dtIncDes, dtSfDes, Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)), Convert.ToInt32(General.Nz(Session["UserId"], -99)));
+
+                    General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={obj[1]} AND {General.ToDataUniv(dtIncDes)} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(dtSfDes)}");
+                }
+
 
                 //stergem cererea veche din baza de date
                 General.ExecutaNonQuery(@"DELETE ""tblFisiere"" WHERE ""Tabela""='Ptj_Cereri' AND ""Id""=@1", new object[] { obj[0] });

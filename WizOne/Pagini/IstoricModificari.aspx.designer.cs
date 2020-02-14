@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Pagini {
-    
-    
-    public partial class IstoricModificari {
-        
+namespace WizOne.Pagini
+{
+
+
+    public partial class IstoricModificari
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// pnlCtl control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-        
+
         /// <summary>
         /// lblDataInceput control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDataInceput;
-        
+
         /// <summary>
         /// deDataInceput control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit deDataInceput;
-        
+
         /// <summary>
         /// lblDataSfarsit control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblDataSfarsit;
-        
+
         /// <summary>
         /// deDataSfarsit control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit deDataSfarsit;
-        
+
         /// <summary>
         /// lblTabela control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblTabela;
-        
+
         /// <summary>
         /// cmbTabela control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbTabela;
-        
+
         /// <summary>
         /// lblTipOp control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblTipOp;
-        
+
         /// <summary>
         /// cmbTipOp control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbTipOp;
-        
+
         /// <summary>
         /// lblUtilWin control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblUtilWin;
-        
+
         /// <summary>
         /// cmbUtilWin control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbUtilWin;
-        
+
         /// <summary>
         /// lblUtilWSWO control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblUtilWSWO;
-        
+
         /// <summary>
         /// cmbUtilWSWO control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbUtilWSWO;
-        
+
         /// <summary>
         /// lblNumeCalc control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblNumeCalc;
-        
+
         /// <summary>
         /// cmbNumeCalc control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbNumeCalc;
-        
+
         /// <summary>
         /// btnFiltru control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-        
+
         /// <summary>
         /// btnFiltruSterge control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>

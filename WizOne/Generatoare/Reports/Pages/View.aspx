@@ -345,8 +345,10 @@
         }
 
         function onCustomizeParameter(parameter, info) {
-            if (parameter.type == 'System.DateTime') {
-                info.editor = { header: 'dx-date-simple' };
+            if (parameter.type === 'System.DateTime') {
+                // Show a calendar only without a time part
+                info.editor = $.extend({}, info.editor);
+                info.editor.extendedOptions = $.extend(info.editor.extendedOptions || {}, { type: 'date' });
             }
         }        
 

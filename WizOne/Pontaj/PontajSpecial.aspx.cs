@@ -302,7 +302,7 @@ namespace WizOne.Pontaj
         {
             string msg = "";
 
-            int x = 1;
+            //int x = 1;
             List<int> lstMarciSDSL = new List<int>();
             string dtStart = General.ToDataUniv(dataStart.Date.Year, dataStart.Date.Month, dataStart.Date.Day);
             string dtSf = General.ToDataUniv(dataSf.Date.Year, dataSf.Date.Month, dataSf.Date.Day);
@@ -318,6 +318,7 @@ namespace WizOne.Pontaj
             try
             {
                 string lista = "", sqlFin = "", lista1 = "";
+                string sqlZileGolite = "";
                 for (int j = 0; j < lstMarci.Count; j++)
                 {
                     lista += lstMarci[j].ToString();
@@ -334,6 +335,7 @@ namespace WizOne.Pontaj
                 {
                     string data = "";
                     sqlSDSL = "";
+                    List<DateTime> lstZileGolite = new List<DateTime>();
 
                     DateTime ziuaPrec = dataStart;
 
@@ -352,11 +354,23 @@ namespace WizOne.Pontaj
                                 int nrK = dtHolidays.Select("DAY = " + dtK).Count();
 
                                 if (!chkS.Checked && k.DayOfWeek == DayOfWeek.Saturday)
+                                {
+                                    if (!lstZileGolite.Contains(k))
+                                        lstZileGolite.Add(k);
                                     nrZileNel++;
+                                }
                                 if (!chkD.Checked && k.DayOfWeek == DayOfWeek.Sunday)
+                                {
+                                    if (!lstZileGolite.Contains(k))
+                                        lstZileGolite.Add(k);
                                     nrZileNel++;
+                                }
                                 if (!chkSL.Checked && nrK > 0)
+                                {
+                                    if (!lstZileGolite.Contains(k))
+                                        lstZileGolite.Add(k);
                                     nrZileNel++;
+                                }
                             }
                         }
 
@@ -366,7 +380,7 @@ namespace WizOne.Pontaj
                         int nrT = dtHolidays.Select("DAY = " + dtT).Count();
                         while ((!chkS.Checked && dtTemp.DayOfWeek == DayOfWeek.Saturday) || (!chkD.Checked && dtTemp.DayOfWeek == DayOfWeek.Sunday) || (!chkSL.Checked && nrT > 0))
                         {
-                            m++;
+                            m++;                       
                             dtTemp = dtTemp.AddDays(1);
                             dtT = General.ToDataUniv(dtTemp.Date.Year, dtTemp.Date.Month, dtTemp.Date.Day);
                             nrT = dtHolidays.Select("DAY = " + dtT).Count();
@@ -431,13 +445,13 @@ namespace WizOne.Pontaj
 
                         }
                         else
-                        {
+                        {   
                             data += ",";
                             if (Constante.tipBD == 1)
                                 data += " CONVERT(DATETIME, '" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 103) ";
                             else
                                 data += " TO_DATE('" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "', 'dd/mm/yyyy') ";
-                            lstInit.Add(zi);
+                            lstInit.Add(zi);  
                         }
 
                         ziuaPrec = zi;
@@ -491,6 +505,8 @@ namespace WizOne.Pontaj
                         }
                     }
 
+
+                    string sirValZileGolite = "";
                     for (int k = 0; k <= 20; k++)
                     {
                         string val = "Val" + k;
@@ -498,6 +514,7 @@ namespace WizOne.Pontaj
                         {
                             sirVal += ", \"" + val + "\" = NULL";
                         }
+                        sirValZileGolite += ", \"" + val + "\" = NULL";
                     }
 
                     if (data.Length > 0)
@@ -505,6 +522,18 @@ namespace WizOne.Pontaj
                         data = data.Substring(1);
 
                         sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " + oraIn + oraOut + firstIn + lastOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                    }
+                    if (lstZileGolite != null && lstZileGolite.Count > 0)
+                    {
+                        string dataZileGolite = "";
+                        foreach (DateTime ziGolita in lstZileGolite)
+                        {
+                            if (Constante.tipBD == 1)
+                                dataZileGolite += ", CONVERT(DATETIME, '" + ziGolita.Day.ToString().PadLeft(2, '0') + "/" + ziGolita.Month.ToString().PadLeft(2, '0') + "/" + ziGolita.Year.ToString() + "', 103) ";
+                            else
+                                dataZileGolite += ", TO_DATE('" + ziGolita.Day.ToString().PadLeft(2, '0') + "/" + ziGolita.Month.ToString().PadLeft(2, '0') + "/" + ziGolita.Year.ToString() + "', 'dd/mm/yyyy') ";
+                        }
+                        sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
                     }
                     if (sqlSDSL.Length > 0)
                     {
@@ -516,7 +545,7 @@ namespace WizOne.Pontaj
 
                 }
 
-                General.ExecutaNonQuery("BEGIN " + sqlFin + " END;", null);
+                General.ExecutaNonQuery("BEGIN " + sqlFin + sqlZileGolite + ";" + " END;", null);
 
 
                 //Florin 2019.05.13

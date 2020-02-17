@@ -25,15 +25,16 @@ namespace WizOne.Eval
         {
             try
             {
-                //string sqlQuiz = $@"SELECT A.""Id"", A.""Denumire"", B.""Denumire"" AS ""DenumireCategorie"" 
-                //    FROM ""Eval_Quiz"" A 
-                //    LEFT JOIN ""Eval_tblCategorie"" B ON A.""CategorieQuiz""=B.""Id""
-                //    WHERE COALESCE(A.""CategorieQuiz"",0) IN (1,2) AND COALESCE(A.""Activ"",0)=1 AND A.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= A.""DataSfarsit""   ";
-                //DataTable dtQuiz = General.IncarcaDT(sqlQuiz, null);
-                //cmbQuiz.DataSource = dtQuiz;
-                //cmbQuiz.DataBind();
-
-                string sqlUsr = $@"SELECT F70102, CASE WHEN ""NumeComplet"" IS NULL THEN F70104 ELSE ""NumeComplet"" END AS ""NumeComplet"", F10003 FROM USERS";
+                //Florin 2020.02.12
+                //string sqlUsr = $@"SELECT F70102, CASE WHEN ""NumeComplet"" IS NULL THEN F70104 ELSE ""NumeComplet"" END AS ""NumeComplet"", F10003 FROM USERS";
+                string sqlUsr = 
+                    $@"SELECT F70102, CASE WHEN ""NumeComplet"" IS NULL THEN F70104 ELSE ""NumeComplet"" END AS ""NumeComplet"", F10003 FROM USERS WHERE F10003 IS NULL
+                    UNION
+                    SELECT A.F70102, CASE WHEN A.""NumeComplet"" IS NULL THEN A.F70104 ELSE A.""NumeComplet"" END AS ""NumeComplet"", A.F10003 
+                    FROM USERS A 
+                    INNER JOIN F100 B ON A.F10003=B.F10003
+                    WHERE A.F10003 IS NOT NULL AND B.F10023 >= CAST({General.CurrentDate()} AS DATE) AND B.F10025 <> 900
+                    ORDER BY ""NumeComplet"" ";
                 DataTable dtUsr = General.IncarcaDT(sqlUsr, null);
                 cmbUsr.DataSource = dtUsr;
                 cmbUsr.DataBind();
@@ -41,6 +42,12 @@ namespace WizOne.Eval
                 DataTable dtStari = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"", ""Culoare"" FROM ""Ptj_tblStari"" ", null);
                 GridViewDataComboBoxColumn colStari = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 colStari.PropertiesComboBox.DataSource = dtStari;
+
+                if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
+                {
+                    btnAproba.Visible = false;
+                    btnRespinge.Visible = false;
+                }
             }
             catch (Exception ex)
             {
@@ -92,21 +99,12 @@ namespace WizOne.Eval
                 int esteHr = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper"" IN ({idHR})", null), 0));
                 int manager = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT COUNT(*) FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]} AND ""IdSuper""=1", null), 0));
 
-                //Florin 2018.12.05
-                //Pelifilip - s-a cerut ca utilizatorul sa fie vizibil tot timpul
-
-                //if (esteHr > 0 || manager > 0)
                 if (esteHr > 0 || (manager > 0 && Convert.ToInt32(General.Nz(Session["IdClient"], -99)) != (int)IdClienti.Clienti.Pelifilip))
                 {
                     btnAproba.Visible = true;
                     btnRespinge.Visible = true;
                     pnlStare.Visible = true;
 
-                    //if (esteHr > 0)
-                    //{
-                    //    lblPar.Visible = true;
-                    //    cmbPar.Visible = true;
-                    //}
                     cmbPar.DataSource = cmbUsr.DataSource;
                     cmbPar.DataBind();
                     cmbPar.Value = Convert.ToInt32(Session["UserId"]);
@@ -147,24 +145,6 @@ namespace WizOne.Eval
 
             try
             {
-                //if (btnAproba.Visible == false)
-                //{
-                //    if (cmbUsr.Value == null || cmbQuiz.Value == null)
-                //    {
-                //        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date");
-                //        return;
-                //    }
-                //}
-                //else
-                //{
-                //    if (cmbUsr.Value == null || cmbQuiz.Value == null || cmbPar.Value == null)
-                //    {
-                //        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Lipsesc date");
-                //        return;
-                //    }
-                //}
-
-
                 if (btnAproba.Visible == false)
                 {
                     if (cmbUsr.Value == null)
@@ -181,7 +161,6 @@ namespace WizOne.Eval
                         return;
                     }
                 }
-
 
                 //verificam sa nu participe la propria evaluare; asta se face din momentul initializarii
                 if (btnAproba.Visible == false)
@@ -282,11 +261,9 @@ namespace WizOne.Eval
                 string strSql = "";
                 int idStare = 1;
 
-                if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Pelifilip)
+                if (Dami.ValoareParam("Eval_AprobareInvitatie") == "1")
                 {
-                    //Florin 2018.12.05
-                    //Pelifilip - nu mai vor sa se duca in solictare, vor sa se duca direct in aprobare
-                    strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
+                    strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, ({DamiRol()}), {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
                     idStare = 3;
 
                     strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
@@ -295,7 +272,7 @@ namespace WizOne.Eval
                 {
                     if ((rbTip.Value ?? "").ToString() == "1")
                     {
-                        strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, 1, {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
+                        strSql += $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({idQuiz}, {f10003}, ({DamiRol()}), {idUsr}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {idQuiz} AND F10003 = {f10003}));" + System.Environment.NewLine;
                         idStare = 3;
                     }
                     strSql += $@"INSERT INTO ""Eval_Invitatie360""(""IdUser"", ""F10003"", ""IdQuiz"", ""IdStare"", ""IdTip"", USER_NO, TIME) VALUES({idUsr}, {f10003}, {idQuiz}, {idStare}, {rbTip.Value}, {Session["UserId"]}, GetDate()); " + System.Environment.NewLine;
@@ -337,135 +314,6 @@ namespace WizOne.Eval
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
-
-        //private void IncarcaGrid()
-        //{
-        //    DataTable dt = new DataTable();
-
-        //    try
-        //    {
-        //        string filtru = "";
-        //        if (General.Nz(cmbTip.Value, "").ToString() != "") filtru += " AND D.\"CategorieQuiz\"=" + cmbTip.Value;
-
-
-        //        //Florin 2018.12.05
-        //        //Pelifilip - filtru sa se faca dupa utilizator si tip chestionar
-
-        //        //if (btnAproba.Visible == false)
-        //        //{
-        //        //    if (General.Nz(cmbUsr.Value, "").ToString() == "")
-        //        //        filtru += $@" AND (A.""IdUser""={Session["UserId"]} OR A.F10003 =(SELECT F10003 FROM USERS WHERE F70102={Session["UserId"]})) ";
-        //        //    else
-        //        //    {
-        //        //        if ((rbTip.Value ?? 1).ToString() == "1")
-        //        //            filtru += $@" AND A.""IdUser""={cmbUsr.Value} ";
-        //        //        else
-        //        //            filtru += $@" AND A.F10003 =(SELECT F10003 FROM USERS WHERE F70102={cmbUsr.Value}) ";
-        //        //    }
-        //        //}
-        //        //else
-        //        //{
-        //        //    if (General.Nz(cmbStare.Value, "").ToString() != "" && General.Nz(cmbStare.Value, "").ToString() != "-9") filtru += " AND A.\"IdStare\"=" + cmbStare.Value;
-        //        //    if (General.Nz(cmbUsr.Value, "").ToString() == "" && General.Nz(cmbPar.Value, "").ToString() == "")
-        //        //    {
-        //        //        //NOP
-        //        //    }
-        //        //    else
-        //        //    {
-        //        //        if ((rbTip.Value ?? 1).ToString() == "1")
-        //        //        {
-        //        //            if (General.Nz(cmbUsr.Value, "").ToString() != "") filtru += $@" AND A.""IdUser""={cmbUsr.Value} ";
-        //        //            if (General.Nz(cmbPar.Value, "").ToString() != "") filtru += $@" AND A.F10003 =(SELECT F10003 FROM USERS WHERE F70102={cmbPar.Value}) ";
-        //        //        }
-        //        //        else
-        //        //        {
-        //        //            if (General.Nz(cmbPar.Value, "").ToString() != "") filtru += $@" AND A.""IdUser""={cmbPar.Value} ";
-        //        //            if (General.Nz(cmbUsr.Value, "").ToString() != "") filtru += $@" AND A.F10003 =(SELECT F10003 FROM USERS WHERE F70102={cmbUsr.Value}) ";
-        //        //        }
-
-        //        //        if (cmbPar.Visible == false)
-        //        //        {
-        //        //            if (filtru != "" && filtru.Length >= 4 && filtru.Trim().Substring(0,3).ToLower() == "and")
-        //        //            {
-        //        //                filtru = " AND (" + filtru.Trim().Substring(3) + " OR A.F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdSuper=1 AND IdUser=" + cmbPar.Value + "))";
-        //        //            }
-        //        //        }
-        //        //    }
-        //        //}
-
-        //        if (General.Nz(cmbPar.Value, "").ToString() != "")
-        //        {
-        //            ListEditItem li = cmbPar.SelectedItem;
-        //            string usr_f10003 = General.Nz(li.GetFieldValue("F10003"),-99).ToString();
-        //            filtru += $@" AND (A.""IdUser""={cmbPar.Value} OR A.F10003={usr_f10003})";
-        //        }
-
-        //        //Florin 2018.12.11
-        //        ////Radu 28.08.2018
-        //        //string tip1 = "Invitat", tip2 = "Participant";
-        //        //if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 20)
-        //        //{
-        //        //    if ((rbTip.Value ?? 1).ToString() == "1")
-        //        //    {
-        //        //        tip1 = "Invitat de mine";
-        //        //        tip2 = "Autoinvitat";
-        //        //    }
-        //        //    else
-        //        //    {
-        //        //        tip1 = "Eu dau feedback - invitat";
-        //        //        tip2 = "Eu dau feedback - autoinvitat";
-        //        //    }
-        //        //}
-        //        //string sqlFinal = $@"SELECT CASE WHEN B.F10003 IS NULL THEN B.F70104 ELSE E.F10008 {Dami.Operator()} ' ' {Dami.Operator()} E.F10009 END AS 'User', 
-        //        //                    C.F10008 {Dami.Operator()} ' ' {Dami.Operator()} C.F10009 AS 'Evaluat', D.""Denumire"" AS Quiz, 
-        //        //                    CASE WHEN A.""IdTip"" = 1 THEN '{tip1}' ELSE '{tip2}' END AS ""Tip"",
-        //        //                    A.*
-        //        //                    FROM ""Eval_Invitatie360"" A
-        //        //                    INNER JOIN USERS B ON A.""IdUser""=B.F70102
-        //        //                    LEFT JOIN F100 E ON B.F10003=E.F10003
-        //        //                    INNER JOIN F100 C ON A.F10003=C.F10003
-        //        //                    INNER JOIN ""Eval_Quiz"" D ON A.""IdQuiz""=D.""Id""
-        //        //                    WHERE 1=1 {filtru}
-        //        //                    ORDER BY A.TIME DESC";
-
-        //        string sqlFinal = $@"SELECT CASE WHEN B.F10003 IS NULL THEN B.F70104 ELSE E.F10008 {Dami.Operator()} ' ' {Dami.Operator()} E.F10009 END AS 'User', 
-        //                            C.F10008 {Dami.Operator()} ' ' {Dami.Operator()} C.F10009 AS 'Evaluat', D.""Denumire"" AS Quiz, 
-        //                            CASE WHEN A.IdTip=1 AND A.F10003={Session["User_Marca"]} THEN 'Invitat de catre mine' ELSE
-        //                            CASE WHEN A.IdTip=1 AND A.IdUser={Session["UserId"]} THEN 'Eu sunt invitat' ELSE
-        //                            CASE WHEN A.IdTip=2 AND A.F10003={Session["User_Marca"]} THEN 'Coleg autoinvitat' ELSE
-        //                            CASE WHEN A.IdTip=2 AND A.IdUser={Session["UserId"]} THEN 'Eu dau feedback autoinvitat' ELSE '' END END END END AS Tip,
-        //                            A.*
-        //                            FROM ""Eval_Invitatie360"" A
-        //                            INNER JOIN USERS B ON A.""IdUser""=B.F70102
-        //                            LEFT JOIN F100 E ON B.F10003=E.F10003
-        //                            INNER JOIN F100 C ON A.F10003=C.F10003
-        //                            INNER JOIN ""Eval_Quiz"" D ON A.""IdQuiz""=D.""Id""
-        //                            WHERE 1=1 {filtru}
-        //                            ORDER BY A.TIME DESC";
-
-        //        dt = General.IncarcaDT(sqlFinal, null);
-        //        grDate.KeyFieldName = "IdUser; F10003; IdQuiz";
-
-        //        dt.PrimaryKey = new DataColumn[] { dt.Columns["IdUser"], dt.Columns["F10003"], dt.Columns["IdQuiz"] };
-        //        grDate.DataSource = dt;
-        //        Session["InformatiaCurenta"] = dt;
-        //        grDate.DataBind();
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //    finally
-        //    {
-        //        dt.Dispose();
-        //        dt = null;
-        //    }
-        //}
-
-        //Florin 2018.12.17
 
 
         public string CreazaSelect(int f10003, int idUser, int tipQuiz=-99)
@@ -572,12 +420,6 @@ namespace WizOne.Eval
                                 grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti anula o cerere respinsa");
                                 return;
                             }
-
-                            //Florin 2018.12.10
-                            //string strSql = $@"BEGIN
-                            //                UPDATE ""Eval_Invitatie360"" SET ""IdStare""=-1 WHERE IdUser={obj[0]} AND F10003={obj[1]} AND IdQuiz={obj[2]};
-                            //                DELETE ""Eval_RaspunsIstoric"" WHERE IdUser={obj[0]} AND F10003={obj[1]} AND IdQuiz={obj[2]};
-                            //                END";
 
                             string cmp = "";
                             string poz = "";
@@ -693,7 +535,7 @@ namespace WizOne.Eval
                             {
                                 string sqlUpd = $@"UPDATE ""Eval_Invitatie360"" SET ""IdStare""={tip} WHERE ""IdUser""={arr[0]} AND F10003={arr[1]} AND ""IdQuiz""={arr[2]};";
                                 string sqlIns = "";
-                                if (tip == 3) sqlIns = $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({arr[2]}, {arr[1]}, 1, {arr[0]}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {arr[2]} AND F10003 = {arr[1]}));";
+                                if (tip == 3) sqlIns = $@"INSERT INTO ""Eval_RaspunsIstoric""(""IdQuiz"", F10003, ""IdSuper"", ""IdUser"", ""Pozitie"") VALUES({arr[2]}, {arr[1]}, ({DamiRol()}), {arr[0]}, (SELECT COALESCE(MAX(COALESCE(""Pozitie"",0)),0) + 1 FROM ""Eval_RaspunsIstoric"" WHERE ""IdQuiz"" = {arr[2]} AND F10003 = {arr[1]}));";
                                 string sqlGen = "BEGIN " + "\n\r" +
                                            sqlUpd + "\n\r" +
                                            sqlIns + "\n\r" +
@@ -721,7 +563,41 @@ namespace WizOne.Eval
             }
         }
 
+        private string DamiRol()
+        {
+            string strSql = "";
+            //1 - manager
+            //2 - subordonat
+            //3 - coleg
 
+            try
+            {
+                string top = "";
+                string rowNum = "";
+                if (Constante.tipBD == 1)
+                    top = "TOP 1";
+                else
+                    rowNum = " WHERE ROWNUM<=1 ";
+
+                string idSuper = Dami.ValoareParam("Eval_IdSuperManager", "1");
+                strSql = $@"
+                    SELECT {top} X.IdRol FROM
+                    (
+                    SELECT 'Manager' AS Rol, 1 AS IdRol FROM F100Supervizori WHERE F10003={Session["User_Marca"]} AND IdSuper={idSuper} AND IdUser={cmbUsr.Value ?? -99}
+                    UNION
+                    SELECT 'Subordonat' AS Rol, 2 AS IdRol FROM F100Supervizori WHERE F10003=(SELECT F10003 FROM USERS WHERE F70102 = {cmbUsr.Value ?? -99}) AND IdSuper={idSuper} AND IdUser={Session["UserId"]}
+                    UNION
+                    SELECT 'Coleg' AS Rol, 3 AS IdRol {General.FromDual()}
+                    ) X {rowNum} ORDER BY X.IdRol";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return strSql;
+        }
 
     }
 }

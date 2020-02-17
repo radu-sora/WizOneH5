@@ -7,6 +7,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using DevExpress.Web;
+using System.IO;
+using System.Diagnostics;
 
 namespace WizOne.Personal
 {
@@ -103,7 +105,7 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

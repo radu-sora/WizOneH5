@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -112,7 +114,7 @@ namespace WizOne.ProgrameLucru
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

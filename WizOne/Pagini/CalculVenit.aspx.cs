@@ -87,7 +87,7 @@ namespace WizOne.Pagini
                             string strSql = $@"SELECT {General.Nz(txtCassPro.Value, 0)} AS CASS, {General.Nz(txtCasPro.Value, 0)} AS CAS, {General.Nz(cmbPers.Value, 0)} AS ""NrDed"", {Convert.ToInt32(General.Nz(chkScutit.Value, 0))} AS ""Scutit"", {General.Nz(txtTipAng.Value, 0)} AS ""TipAng"", {General.Nz(txtSalMediu.Value, 0)} AS ""SalMediu"", {General.Nz(txtImpPro.Value, 0)} AS ""ProcImp"" ";
                             DataTable dt = General.IncarcaDT(strSql, null);
 
-                            General.CalcSalariu(tipVenit, venit, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text, dt);
+                            General.CalcSalariu(tipVenit, venit, Convert.ToInt32(General.Nz(cmbAng.Value, -99)), out venitCalculat, out text, dt, Convert.ToInt32(General.Nz(txtTicheteTotal.Value,0)));
 
                             txtVenitRez.Value = venitCalculat;
 

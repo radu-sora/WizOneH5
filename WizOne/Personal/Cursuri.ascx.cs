@@ -7,6 +7,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using DevExpress.Web;
+using System.IO;
+using System.Diagnostics;
 
 namespace WizOne.Personal
 {
@@ -85,6 +87,14 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colDescriereAutorizatie = (grDateCursuri.Columns["IdDescriereCurs"] as GridViewDataComboBoxColumn);
             colDescriereAutorizatie.PropertiesComboBox.DataSource = dtDescriereAutorizatie;
 
+            //Radu 11.02.2020
+            sql = @"SELECT * FROM ""tblMonede"" ";
+            if (Constante.tipBD == 2)
+                sql = General.SelectOracle("tblMonede", "Id");
+            DataTable dtMonede = General.IncarcaDT(sql, null);
+            GridViewDataComboBoxColumn colMonede = (grDateCursuri.Columns["IdMoneda"] as GridViewDataComboBoxColumn);
+            colMonede.PropertiesComboBox.DataSource = dtMonede;
+
 
         }
 
@@ -112,7 +122,7 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

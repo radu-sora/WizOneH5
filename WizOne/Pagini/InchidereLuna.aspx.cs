@@ -110,8 +110,9 @@ namespace WizOne.Pagini
                     return mesaj;
                 }
 
-                CriptDecript prc = new CriptDecript();
-                Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
+                //Florin 2020.02.03
+                //CriptDecript prc = new CriptDecript();
+                //Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
 
                 string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
                 string conn = tmp.Split(';')[0];
@@ -119,14 +120,14 @@ namespace WizOne.Pagini
                 //string DB = tmp.Split(';')[0];
                 tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
                 string user = tmp.Split(';')[0];
-                string DB = "";
-                if (Constante.tipBD == 1)
-                {
-                    tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
-                    DB = tmp.Split(';')[0];
-                }
-                else
-                    DB = user;        
+                string DB = Constante.BD;
+                //if (Constante.tipBD == 1)
+                //{
+                //    tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+                //    DB = tmp.Split(';')[0];
+                //}
+                //else
+                //    DB = user;        
                 tmp = Constante.cnnWeb.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 
@@ -258,41 +259,45 @@ namespace WizOne.Pagini
 
         }
 
+
+        //Florin 2020.02.03
+
         public string SalvareLuna()
         {
             string mesaj = "", sql = "", sql_tmp = "";
 
             try
             {
-                CriptDecript prc = new CriptDecript();
-                Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
-                                
                 string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
-                string DB = tmp.Split(';')[0];
+                string DB = Constante.BD;
                 tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
                 string user = tmp.Split(';')[0];
                 tmp = Constante.cnnWeb.ToUpper().Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
                 string pwd = tmp.Split(';')[0];
 
-                string cale = HostingEnvironment.MapPath("~/SALVARI");
-
-                sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CaleBackUp'";
-                DataTable dtParam = General.IncarcaDT(sql, null);
-                if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
-                    cale = dtParam.Rows[0][0].ToString();
-
-                sql = "SELECT F01012, F01011 FROM F010";
-                DataTable dt010 = General.IncarcaDT(sql, null);
-                int anLucru = DateTime.Now.Year;
-                int lunaLucru = DateTime.Now.Month;
-                if (dt010 != null && dt010.Rows.Count > 0)
+                string cale = Dami.ValoareParam("CaleBackUp").Trim();
+                if (cale == "")
                 {
-                    lunaLucru = Convert.ToInt32(dt010.Rows[0][0].ToString());
-                    anLucru = Convert.ToInt32(dt010.Rows[0][1].ToString());
+                    //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
+                    System.Threading.Thread.Sleep(1000);
+                    return "Nu este setata calea pentru salvarea bazei de date in parametri (CaleBackUp)";
                 }
 
+                try
+                {
+                    if (!Directory.Exists(cale))
+                        Directory.CreateDirectory(cale);
+                }
+                catch (Exception)
+                {
+                    //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
+                    System.Threading.Thread.Sleep(1000);
+                    return "Calea pentru salvarea bazei de date nu este valida";
+                }
+
+                string anLucru = Dami.ValoareParam("AnLucru");
+                string lunaLucru = Dami.ValoareParam("LunaLucru");
 
                 string numeFisier = anLucru.ToString() + "_" + lunaLucru.ToString().PadLeft(2, '0');
 
@@ -340,22 +345,24 @@ namespace WizOne.Pagini
                 }
                 else
                 {
-                    Process process = new Process();
-                    string fisierExp = "{0}\\exp.exe";
-                    string caleExp = "";
+                    string caleExp = Dami.ValoareParam("CaleExpOracle");
 
-                    sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CaleExpOracle'";
-                    dtParam = General.IncarcaDT(sql, null);
-                    if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
-                        caleExp = dtParam.Rows[0][0].ToString();
-
-                    if (caleExp.Length <= 0)
+                    if (caleExp == "")
                     {
-                        mesaj = "Nu ati precizat calea executabilului exp.exe in tblParametrii!";
-                        return mesaj;
+                        //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
+                        System.Threading.Thread.Sleep(1000);
+                        return "Nu este setata calea executabilului exp.exe in parametri (CaleExpOracle)";
                     }
-                    fisierExp = string.Format(fisierExp, caleExp);
-                    process.StartInfo.FileName = fisierExp;
+
+                    if (!File.Exists(caleExp + "\\exp.exe"))
+                    {
+                        //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
+                        System.Threading.Thread.Sleep(1000);
+                        return "Calea executabilului exp.exe nu este una valida (CaleExpOracle)";
+                    }
+
+                    Process process = new Process();
+                    process.StartInfo.FileName = caleExp + "\\exp.exe";
                     string arg = "{0}/{1}@{2} file={3}.dmp log={4}.log owner={5} grants=Y rows=Y compress=Y";
                     arg = string.Format(arg, user, pwd, conn, cale + "\\" + numeFisier, numeFisier, user);
                     process.StartInfo.Arguments = arg;
@@ -367,23 +374,157 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
+                mesaj = ex.ToString();
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return mesaj;
         }
 
-        //private void ArataMesaj(string mesaj)
-        //{
-        //    pnlCtl.Controls.Add(new LiteralControl());
-        //    WebControl script = new WebControl(HtmlTextWriterTag.Script);
-        //    pnlCtl.Controls.Add(script);
-        //    script.Attributes["id"] = "dxss_123456";
-        //    script.Attributes["type"] = "text/javascript";
-        //    script.Controls.Add(new LiteralControl("var str = '" + mesaj + "'; alert(str);"));
 
+        //public string SalvareLuna()
+        //{
+        //    string mesaj = "", sql = "", sql_tmp = "";
+
+        //    try
+        //    {
+        //        //Florin 2020.02.03
+
+
+
+        //        //CriptDecript prc = new CriptDecript();
+        //        //Constante.cnnWeb = prc.EncryptString(Constante.cheieCriptare, ConfigurationManager.ConnectionStrings["cnWeb"].ConnectionString, 2);
+
+        //        string tmp = Constante.cnnWeb.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
+        //        string conn = tmp.Split(';')[0];
+        //        tmp = Constante.cnnWeb.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
+        //        string DB = tmp.Split(';')[0];
+        //        tmp = Constante.cnnWeb.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
+        //        string user = tmp.Split(';')[0];
+        //        tmp = Constante.cnnWeb.ToUpper().Split(new[] { "PASSWORD=" }, StringSplitOptions.None)[1];
+        //        string pwd = tmp.Split(';')[0];
+
+        //        //string cale = HostingEnvironment.MapPath("~/SALVARI");
+
+        //        //sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CaleBackUp'";
+        //        //DataTable dtParam = General.IncarcaDT(sql, null);
+        //        //if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
+        //        //    cale = dtParam.Rows[0][0].ToString();
+
+        //        string cale = Dami.ValoareParam("CaleBackUp").Trim();
+        //        if (cale == "")
+        //            return "Nu este setata calea pentru salvarea bazei de date in parametri";
+
+        //        if (!Directory.Exists(cale))
+        //            Directory.CreateDirectory(cale);
+
+        //        if (!Directory.Exists(cale))
+        //            return "Calea pentru salvarea bazei de date nu este valida";
+
+        //        //sql = "SELECT F01012, F01011 FROM F010";
+        //        //DataTable dt010 = General.IncarcaDT(sql, null);
+        //        //int anLucru = DateTime.Now.Year;
+        //        //int lunaLucru = DateTime.Now.Month;
+        //        //if (dt010 != null && dt010.Rows.Count > 0)
+        //        //{
+        //        //    lunaLucru = Convert.ToInt32(dt010.Rows[0][0].ToString());
+        //        //    anLucru = Convert.ToInt32(dt010.Rows[0][1].ToString());
+        //        //}
+
+        //        string anLucru = Dami.ValoareParam("AnLucru");
+        //        string lunaLucru = Dami.ValoareParam("LunaLucru");
+
+        //        string numeFisier = anLucru.ToString() + "_" + lunaLucru.ToString().PadLeft(2, '0');
+
+        //        //cautam se vedem daca mai exista o salvare pe luna curenta
+        //        var folder = new DirectoryInfo(cale);
+        //        if (!folder.Exists)
+        //            folder.Create();
+        //        FileInfo[] fileList = folder.GetFiles("*.bak");
+
+        //        bool gasit = false;
+        //        foreach (FileInfo fileDest in fileList)
+        //        {
+        //            if (fileDest.Name == numeFisier + ".bak")
+        //            {
+        //                gasit = true;
+        //                break;
+        //            }
+        //        }
+        //        if (gasit)
+        //        {
+        //            int i = 1;
+        //            do
+        //            {
+        //                if (!File.Exists(folder + @"\" + numeFisier + "_" + i.ToString() + ".bak"))
+        //                {
+        //                    numeFisier = numeFisier + "_" + i.ToString();
+        //                    break;
+        //                }
+        //                i++;
+        //            } while (true);
+        //        }
+
+
+        //        if (Constante.tipBD == 1)   //SQL
+        //        {
+
+        //            sql_tmp = "ROLLBACK; ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK IMMEDIATE; "
+        //                + " BACKUP DATABASE {1} TO  DISK = '{2}\\{3}.bak' "
+        //                + " WITH NOFORMAT, INIT, NAME = '{4}FullBackup', SKIP, NOREWIND, NOUNLOAD, STATS = 10; "
+        //                + " ALTER DATABASE {5} SET MULTI_USER WITH ROLLBACK IMMEDIATE; ";
+        //            sql = string.Format(sql_tmp, DB, DB, cale, numeFisier, DB, DB);
+
+        //            General.ExecutaNonQuery(sql, null);
+        //            mesaj = "Salvarea s-a realizat cu succes!";
+        //        }
+        //        else
+        //        {
+        //            Process process = new Process();
+        //            //string fisierExp = "{0}\\exp.exe";
+        //            //string caleExp = "";
+
+        //            //sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'CaleExpOracle'";
+        //            //dtParam = General.IncarcaDT(sql, null);
+        //            //if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
+        //            //    caleExp = dtParam.Rows[0][0].ToString();
+
+        //            //if (caleExp.Length <= 0)
+        //            //{
+        //            //    mesaj = "Nu ati precizat calea executabilului exp.exe in tblParametrii!";
+        //            //    return mesaj;
+        //            //}
+        //            //fisierExp = string.Format(fisierExp, caleExp);
+
+
+        //            string caleExp = Dami.ValoareParam("CaleExpOracle");
+
+        //            if (cale == "")
+        //                return "Nu ati precizat calea executabilului exp.exe in tblParametri!";
+
+        //            //process.StartInfo.FileName = fisierExp;
+
+        //            process.StartInfo.FileName = caleExp + "\\exp.exe";
+
+        //            string arg = "{0}/{1}@{2} file={3}.dmp log={4}.log owner={5} grants=Y rows=Y compress=Y";
+        //            arg = string.Format(arg, user, pwd, conn, cale + "\\" + numeFisier, numeFisier, user);
+        //            process.StartInfo.Arguments = arg;
+        //            process.StartInfo.ErrorDialog = true;
+        //            process.Start();
+        //            process.WaitForExit();
+        //            mesaj = "Salvarea s-a realizat cu succes!";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return mesaj;
         //}
+
+
 
 
 

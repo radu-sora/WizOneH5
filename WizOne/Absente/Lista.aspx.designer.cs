@@ -267,6 +267,15 @@ namespace WizOne.Absente
         protected global::DevExpress.Web.ASPxDateEdit txtDataDivide;
 
         /// <summary>
+        /// chkAnulare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkAnulare;
+
+        /// <summary>
         /// txtDataSf control.
         /// </summary>
         /// <remarks>

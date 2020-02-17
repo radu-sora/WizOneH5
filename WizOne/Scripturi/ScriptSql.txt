@@ -9977,9 +9977,6 @@ GO
 ALTER TABLE "Ptj_tmpCeasuri" ALTER COLUMN NrCeas nvarchar(50)
 GO
 
-ALTER TABLE Ptj_tblFormuleCumulat ADD OrdineAfisarePontajDetaliat int
-GO
-
 ALTER TABLE Admin_Sanctiuni ALTER COLUMN Descriere nvarchar(MAX)
 GO
 
@@ -12736,3 +12733,52 @@ GO
 UPDATE "Avs_tblAtribute" SET "Activ"=0 WHERE "Id" IN (30,31,32,33)
 GO
 
+----  2.2.125  ----
+
+
+--https://github.com/wizromRD/WizOne/issues/206
+--Imbunatatire procedura Inchidere luna din WO
+UPDATE "tblParametrii" SET "Explicatie"='Se completeaza calea unde se va salva backup-ul bazei de date' WHERE "Nume"='CaleBackUp'
+GO
+
+ALTER TABLE Ptj_Intrari ALTER COLUMN ValStr nvarchar(500)
+GO
+
+ALTER TABLE Ptj_IstoricVal ALTER COLUMN ValStr nvarchar(500)
+GO
+ALTER TABLE Ptj_IstoricVal ALTER COLUMN ValStrOld nvarchar(500)
+GO
+
+--https://github.com/wizromRD/WizOne/issues/218
+--Posibilitate setare nume fisier XLS la notificari si alerte #218
+ALTER TABLE Ntf_Setari ADD NumeExcel nvarchar(250)
+GO
+
+--https://github.com/wizromRD/WizOne/issues/204
+--Evaluare - optiune invitatie la evaluare 360 fara aprobare
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_AprobareInvitatie', 1, 'Se foloseste la crearea unei invitatii din evaluare si trimite direct in starea aprobat daca are valoarea 1', 5, -99, GetDate())
+GO
+
+--https://github.com/wizromRD/WizOne/issues/205
+--La evaluare 360 se se completeze automat rol Coleg
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('Eval_IdSuperManager', 1, 'Se foloseste la crearea unei invitatii din evaluare pt a determina rolul celui invitat (angajat, manager, subordonat sau coleg) si indica id-ul de manager din tabela tblSupervizori', 5, -99, GetDate())
+GO
+
+
+
+alter table Admin_Cursuri add IdMoneda int
+Go
+
+insert into tblParametrii (nume, Valoare, Explicatie, IdModul) values ('AfisareTaburiPersonal', '1', '1 - pe mai multe linii; 2 - pe o singura linie cu sageti de derulare', 3)
+GO
+
+--https://github.com/wizromRD/WizOne/issues/59
+--SSO utilizand SAML2 pentru H5: solicitare Garrett #59
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('SAML_Certificat', '', 'Se foloseste la tipul de autentificare 6 (TipVerificareAccesApp) si reprezinta certificatul necesar pt conectarea cu SAML', 0, -99, GetDate())
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('SAML_Link', '', 'Se foloseste la tipul de autentificare 6 (TipVerificareAccesApp) si reprezinta link-ul catre care este redirectionata aplicatia pt conectarea cu SAML', 0, -99, GetDate())
+GO
+
+UPDATE tblParametrii SET Explicatie='1 – verificarea accesului se face pe baza tabelei USERS; 2 – verificarea se face cu AD-ul (Active Directory); 3 – SSO (Single Sign On) cu baza de date; 4 – SSO (Single Sign On) cu AD-ul; 5– ADFS (Active Directory Federation Services); 6 - SAML (Security Assertion Markup Language)' WHERE Nume='TipVerificareAccesApp'
+GO

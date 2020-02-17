@@ -317,14 +317,23 @@ namespace WizOne.Module
                             dynamic ctl = pag.FindControl(idCtl);
                             if (ctl != null)
                             {
-                                ctl.Visible = vizibil;
-                                ctl.Enabled = !blocat;
-
-                                if (idCtl.Length > 3)
+                                //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
+                                dynamic pnl = ctl.Parent;
+                                if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
                                 {
-                                    string idLbl = "lbl" + idCtl.Substring(3);
-                                    dynamic lbl = pag.FindControl(idLbl);
-                                    if (lbl != null) lbl.Visible = vizibil;
+                                    pnl.Style["display"] = "none";
+                                }
+                                else
+                                {
+                                    ctl.Visible = vizibil;
+                                    ctl.Enabled = !blocat;
+
+                                    if (idCtl.Length > 3)
+                                    {
+                                        string idLbl = "lbl" + idCtl.Substring(3);
+                                        dynamic lbl = pag.FindControl(idLbl);
+                                        if (lbl != null) lbl.Visible = vizibil;
+                                    }
                                 }
                             }
                             else
@@ -335,14 +344,23 @@ namespace WizOne.Module
                                     dynamic ctl2 = pnlCtl.FindControl(idCtl);
                                     if (ctl2 != null)
                                     {
-                                        ctl2.Visible = vizibil;
-                                        ctl2.Enabled = !blocat;
-
-                                        if (idCtl.Length > 3)
+                                        //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
+                                        dynamic pnl = ctl2.Parent;
+                                        if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
                                         {
-                                            string idLbl = "lbl" + idCtl.Substring(3);
-                                            dynamic lbl = pnlCtl.FindControl(idLbl);
-                                            if (lbl != null) lbl.Visible = vizibil;
+                                            pnl.Style["display"] = "none";
+                                        }
+                                        else
+                                        {
+                                            ctl2.Visible = vizibil;
+                                            ctl2.Enabled = !blocat;
+
+                                            if (idCtl.Length > 3)
+                                            {
+                                                string idLbl = "lbl" + idCtl.Substring(3);
+                                                dynamic lbl = pnlCtl.FindControl(idLbl);
+                                                if (lbl != null) lbl.Visible = vizibil;
+                                            }
                                         }
 
                                         break;
@@ -354,14 +372,23 @@ namespace WizOne.Module
                                         dynamic ctl3 = pnlCtl2.FindControl(idCtl);
                                         if (ctl3 != null)
                                         {
-                                            ctl3.Visible = vizibil;
-                                            ctl3.Enabled = !blocat;
-
-                                            if (idCtl.Length > 3)
+                                            //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
+                                            dynamic pnl = ctl3.Parent;
+                                            if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
                                             {
-                                                string idLbl = "lbl" + idCtl.Substring(3);
-                                                dynamic lbl = pnlCtl2.FindControl(idLbl);
-                                                if (lbl != null) lbl.Visible = vizibil;
+                                                pnl.Style["display"] = "none";
+                                            }
+                                            else
+                                            {
+                                                ctl3.Visible = vizibil;
+                                                ctl3.Enabled = !blocat;
+
+                                                if (idCtl.Length > 3)
+                                                {
+                                                    string idLbl = "lbl" + idCtl.Substring(3);
+                                                    dynamic lbl = pnlCtl2.FindControl(idLbl);
+                                                    if (lbl != null) lbl.Visible = vizibil;
+                                                }
                                             }
                                         }
 
@@ -404,14 +431,77 @@ namespace WizOne.Module
                                     }
                                 }
                             }
+                            else
+                            {
+                                //verificam daca nu cumva se gaseste intr-un container de tip ASPxCallbackPanel
+                                foreach (ASPxCallbackPanel pnlCtl in pag.Controls.OfType<ASPxCallbackPanel>())
+                                {
+                                    dynamic ctl4 = pnlCtl.FindControl(idCtl);
+                                    if (ctl4 != null)
+                                    {
+                                        if (idCol == "-")
+                                        {
+                                            dynamic ctl5 = pag.FindControl(idCtl);
+                                            if (ctl5 != null)
+                                            {
+                                                ctl5.Visible = vizibil;
+                                                ctl5.Enabled = !blocat;
+
+                                                if (idCtl.Length > 3)
+                                                {
+                                                    string idLbl = "lbl" + idCtl.Substring(3);
+                                                    dynamic lbl = pag.FindControl(idLbl);
+                                                    if (lbl != null) lbl.Visible = vizibil;
+                                                }
+                                            }                                      
+                                        }
+                                        else
+                                        {
+                                            ASPxGridView ctl6 = pnlCtl.FindControl(idCtl) as ASPxGridView;
+                                            if (ctl6 != null)
+                                            {
+                                                GridViewDataColumn col = ctl6.Columns[idCol] as GridViewDataColumn;
+                                                if (col != null)
+                                                {
+                                                    col.Visible = vizibil;
+                                                    col.ReadOnly = blocat;
+                                                }
+                                                else
+                                                {
+                                                    //verificam daca sunt butoane in interiorul gridului
+                                                    GridViewCommandColumn column = ctl6.Columns["butoaneGrid"] as GridViewCommandColumn;
+                                                    GridViewCommandColumnCustomButton button = column.CustomButtons[idCol] as GridViewCommandColumnCustomButton;
+                                                    if (button != null)
+                                                    {
+                                                        if (vizibil)
+                                                            button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                                                        else
+                                                            button.Visibility = GridViewCustomButtonVisibility.Invisible;
+                                                    }
+                                                    else
+                                                    {
+                                                        //Florin 2018.08.16
+                                                        //atunci este buton BuiltIn al Devexpress-ului
+                                                        if (idCol.ToLower() == "btnedit")
+                                                        {
+                                                            column.ShowEditButton = vizibil;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
+                        string www = ex.Message;
                         continue;
-                        General.MemoreazaEroarea(ex + Environment.NewLine +
-                            General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
-                            General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+                        //General.MemoreazaEroarea(ex + Environment.NewLine +
+                        //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+                        //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
                     }
                 }
             }
@@ -499,12 +589,12 @@ namespace WizOne.Module
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         continue;
-                        General.MemoreazaEroarea(ex + Environment.NewLine +
-                            General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
-                            General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+                        //General.MemoreazaEroarea(ex + Environment.NewLine +
+                        //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+                        //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
                     }
                 }
             }
@@ -597,12 +687,12 @@ namespace WizOne.Module
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         continue;
-                        General.MemoreazaEroarea(ex + Environment.NewLine +
-                            General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
-                            General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+                        //General.MemoreazaEroarea(ex + Environment.NewLine +
+                        //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+                        //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
                     }
                 }
             }
@@ -666,10 +756,11 @@ namespace WizOne.Module
 
             try
             {
-                if (Constante.tipBD == 1)
-                    strSql = "SELECT 1 AS X UNION SELECT 2 UNION SELECT 3";
-                else
-                    strSql = "SELECT 1 AS X FROM DUAL UNION SELECT 2 FROM DUAL UNION SELECT 3 FROM DUAL";
+                strSql = @"SELECT F10003 FROM ""Ptj_Intrari"" WHERE 1=2";
+                //if (Constante.tipBD == 1)
+                //    strSql = "SELECT 1 AS X UNION SELECT 2 UNION SELECT 3";
+                //else
+                //    strSql = "SELECT 1 AS X FROM DUAL UNION SELECT 2 FROM DUAL UNION SELECT 3 FROM DUAL";
 
             }
             catch (Exception ex)
@@ -1790,7 +1881,7 @@ namespace WizOne.Module
                     #endregion
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // srvGeneral.MemoreazaEroarea(ex.ToString(), "srvGeneral", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

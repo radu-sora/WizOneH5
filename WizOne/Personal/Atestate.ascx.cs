@@ -7,6 +7,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using DevExpress.Web;
+using System.IO;
+using System.Diagnostics;
 
 namespace WizOne.Personal
 {
@@ -100,7 +102,7 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 
@@ -111,7 +113,7 @@ namespace WizOne.Personal
             try
             {
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
-                string result = "", valoare = "";
+                //string result = "", valoare = "";
                 object[] row = new object[ds.Tables["Admin_Atestate"].Columns.Count];
                 int x = 0;
                 foreach (DataColumn col in ds.Tables["Admin_Atestate"].Columns)

@@ -205,7 +205,7 @@ namespace WizOne.Pontaj
             }
             catch (Exception ex)
             {
-                
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
 
             return ras;

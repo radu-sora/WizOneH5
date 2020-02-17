@@ -8,13 +8,14 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Drawing;
+using System.Web.UI.HtmlControls;
 
 namespace WizOne.Personal
 {
     public partial class Contract : System.Web.UI.UserControl
     {
         //decimal timpPartial = 0;
-        bool inactiveazaDeLaLa = false;
+        //bool inactiveazaDeLaLa = false;
 
 
         protected void Page_Init(object sender, EventArgs e)
@@ -146,7 +147,7 @@ namespace WizOne.Personal
                     txtNrOre.Text = "0";
                 }
 
-                if (Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
+                if (ds.Tables[0].Rows[0]["F100939"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 0 || Convert.ToInt32(ds.Tables[0].Rows[0]["F100939"].ToString()) == 1)
                 {
                     txtNrOre.ClientEnabled = false;
                     txtNrOre.Text = "0";
@@ -294,12 +295,12 @@ namespace WizOne.Personal
             ds.Tables[1].Rows[0]["F100936"] = nrZile;
             Session["InformatiaCurentaPersonal"] = ds;
 
-            string[] etichete = new string[60] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
+            string[] etichete = new string[63] { "lblNrCtrInt", "lblDataCtrInt", "lblDataAng", "lblTipCtrMunca", "lblDurCtr", "lblDeLaData", "lblLaData", "lblNrLuni", "lblNrZile", "lblPrel", "lblExcIncet","lblCASSAngajat",
                                                  "lblCASSAngajator", "lblSalariu", "lblDataModifSal", "lblCategAng1", "lblCategAng2", "lblLocAnt", "lblLocatieInt", "lblTipAng", "lblTimpPartial", "lblNorma", "lblDataModifNorma",
                                                  "lblTipNorma", "lblDurTimpMunca", "lblRepTimpMunca", "lblIntervRepTimpMunca", "lblNrOre", "lblCOR", "lblDataModifCOR", "lblFunctie", "lblDataModifFunctie", "lblMeserie",
                                                  "lblPerioadaProba", "lblZL", "lblZC", "lblNrZilePreavizDemisie", "lblNrZilePreavizConc", "lblUltimaZiLucr", "lblMotivPlecare", "lblDataPlecarii", "lblDataReintegr", "lblGradInvalid",
                                                  "lblDataValabInvalid", "lblVechimeComp", "lblVechCompAni", "lblVechCompLuni", "lblVechimeCarteMunca", "lblVechCarteMuncaAni", "lblVechCarteMuncaLuni", "lblGrila", "lblZileCOFidel",
-                                                 "lblZileCOAnAnt", "lblZileCOCuvAnCrt", "lblZLP", "lblZLPCuv", "lblDataPrimeiAng", "lblMotivScutit", "lblMotivScutitCAS", "lblCtrRadiat"};
+                                                 "lblZileCOAnAnt", "lblZileCOCuvAnCrt", "lblZLP", "lblZLPCuv", "lblDataPrimeiAng", "lblMotivScutit", "lblMotivScutitCAS", "lblCtrRadiat", "lblTermenRevisal", "lblNivelFunctie", "lblZileCOAnCrt"};
             for (int i = 0; i < etichete.Count(); i++)
             {
                 ASPxLabel lbl = Contract_DataList.Items[0].FindControl(etichete[i]) as ASPxLabel;
@@ -356,8 +357,6 @@ namespace WizOne.Personal
                         lst = Session["MP_CuloareCampOblig"] as List<int>;
                     cmb.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }
-
-
                 //Florin 2019.05.31
                 //if (!IsPostBack)
                 //{
@@ -365,6 +364,17 @@ namespace WizOne.Personal
                 //}
 
             }
+
+            HtmlGenericControl lgContract = Contract_DataList.Items[0].FindControl("lgContract") as HtmlGenericControl;
+            lgContract.InnerText = Dami.TraduCuvant("Contract");
+            HtmlGenericControl lgTipM = Contract_DataList.Items[0].FindControl("lgTipM") as HtmlGenericControl;
+            lgTipM.InnerText = Dami.TraduCuvant("Tip munca");
+            HtmlGenericControl lgPerioada = Contract_DataList.Items[0].FindControl("lgPerioada") as HtmlGenericControl;
+            lgPerioada.InnerText = Dami.TraduCuvant("Perioada");
+            HtmlGenericControl lgDataInc = Contract_DataList.Items[0].FindControl("lgDataInc") as HtmlGenericControl;
+            lgDataInc.InnerText = Dami.TraduCuvant("Data incetare");
+            HtmlGenericControl lgSitCOCtr = Contract_DataList.Items[0].FindControl("lgSitCOCtr") as HtmlGenericControl;
+            lgSitCOCtr.InnerText = Dami.TraduCuvant("Situatie CO");
 
             General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 
@@ -1072,7 +1082,7 @@ namespace WizOne.Personal
 
                     if (deDeLaData.Value != null && deLaData.Value != null)
                     {
-                        inactiveazaDeLaLa = true;
+                        //inactiveazaDeLaLa = true;
 
                         deDeLaData.Enabled = true;
                         deLaData.Enabled = true;
@@ -1095,7 +1105,7 @@ namespace WizOne.Personal
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                // Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -1687,7 +1697,7 @@ namespace WizOne.Personal
                         txtZLP.Value = nrZLP.ToString();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
             }

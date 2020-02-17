@@ -81,11 +81,12 @@ namespace WizOne.Module
                                         string corpAtt = "";
                                         string numeAtt = "";
                                         string selectXls = "";
+                                        string numeExcel = "";
 
                                         if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["SalveazaInDisc"],0)) == 1 || Convert.ToInt32(General.Nz(dtReg.Rows[i]["SalveazaInBaza"],0)) == 1 || Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimitePeMail"],0)) == 1)
                                         {
                                             corpAtt = InlocuiesteCampuri((dtReg.Rows[i]["ContinutAtasament"] ?? "").ToString(), dtSel, userId, userMarca);
-                                            numeAtt = InlocuiesteCampuri((dtReg.Rows[i]["NumeAtasament"] ?? "").ToString(), dtSel, userId, userMarca) + ".html";
+                                            numeAtt = InlocuiesteCampuri(General.Nz(dtReg.Rows[i]["NumeAtasament"], "Atasament_" + DateTime.Now.Ticks.ToString()).ToString(), dtSel, userId, userMarca) + ".html";
 
                                             if (Convert.ToInt32(dtReg.Rows[i]["SalveazaInBaza"]) == 1)
                                             {
@@ -113,6 +114,7 @@ namespace WizOne.Module
 
                                         if (Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)) == 1 || (dtReg.Rows[i]["TrimiteXLS"] ?? "").ToString() != "")
                                         {
+                                            numeExcel = InlocuiesteCampuri(General.Nz(dtReg.Rows[i]["NumeExcel"], "Atasament_" + DateTime.Now.Ticks.ToString()).ToString(), dtSel, userId, userMarca) + ".xls";
                                             selectXls = InlocuiesteCampuri((dtReg.Rows[i]["SelectXLS"] ?? "").ToString(),dtSel, userId, userMarca);
                                         }
 
@@ -137,14 +139,14 @@ namespace WizOne.Module
                                             if (lstAdrese.Where(p => p.IncludeLinkAprobare == 1).Count() == 0)
                                             {
                                                 string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id);
-                                                TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls);
+                                                TrimiteMail(lstAdrese, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel);
                                             }
                                             else
                                             {
                                                 for (int j = 0; j < lstAdrese.Count(); j++)
                                                 {
                                                     string corpMail = InlocuiesteCampuri((dtReg.Rows[i]["ContinutMail"] ?? "").ToString(), dtSel, userId, userMarca, numePagina, tblAtasamente_Id, lstAdrese[j].Mail, lstAdrese[j].IncludeLinkAprobare);
-                                                    TrimiteMail(lstAdrese[j].Mail, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls);
+                                                    TrimiteMail(lstAdrese[j].Mail, subiect, corpMail, Convert.ToInt32(dtReg.Rows[i]["TrimitePeMail"]), numeAtt, corpAtt, Convert.ToInt32(General.Nz(dtReg.Rows[i]["TrimiteXLS"], 0)), selectXls, numeExcel);
                                                 }
                                             }
                                         }
@@ -746,6 +748,8 @@ namespace WizOne.Module
 
         }
 
+        //2020.02.06
+
         private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
         {
             string str = text;
@@ -755,26 +759,18 @@ namespace WizOne.Module
                 string strSelect = "";
                 string strOriginal = "";
 
-                //cautam daca avem de inserat tabel
-                if (str.ToLower().IndexOf("#$select") >= 0)
-                {
-                    int start = str.ToLower().IndexOf("#$select");
-                    strSelect = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$", "");
-                    strOriginal = strSelect;
-                    strSelect = WebUtility.HtmlDecode(strSelect);
-                    strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
-                }
-
                 for (int i = 0; i < dtSel.Columns.Count; i++)
                 {
                     str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
-                    strSelect = strSelect.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
                 }
 
-                if (str.IndexOf("#$Link") >= 0)
+                if (str.IndexOf("Link1") >= 0)
                 {
-                    string cuv = str.Substring(str.IndexOf("#$Link"), str.Substring(str.IndexOf("#$Link")).IndexOf("$#"));
-                    if (cuv != "") cuv = cuv.Replace("#$Link", "").Replace("$#", "").Trim();
+                    int pozFirst = str.Substring(0, str.IndexOf("Link1")).LastIndexOf("#$");
+                    string cuv = str.Substring(pozFirst, str.Substring(pozFirst).IndexOf("$#"));
+                    string cuvOriginal = cuv;
+
+                    if (cuv != "") cuv = cuv.Replace("Link1 ", "").Replace("Link1", "").Replace("#$", "").Replace("$#", "").Trim();
 
                     if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
                     {
@@ -783,32 +779,43 @@ namespace WizOne.Module
                         string rsp = General.Encrypt_QueryString(arg);
                         string hostUrl = baseUrl + VirtualPathUtility.ToAbsolute("~/");
                         string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
-                        str = str.Replace("#$Link " + cuv + "$#", lnk).ToString();
+                        str = str.Replace(cuvOriginal + "$#", lnk).ToString();
                     }
                     else
-                        str = str.Replace("#$Link " + cuv + "$#", "").ToString();
+                        str = str.Replace("#$Link1 " + cuv + "$#", "").ToString();
                 }
 
 
-                if (str.IndexOf("Link Respinge") >= 0)
+                if (str.IndexOf("Link2") >= 0)
                 {
+                    int pozFirst = str.Substring(0, str.IndexOf("Link2")).LastIndexOf("#$");
+                    string cuv = str.Substring(pozFirst, str.Substring(pozFirst).IndexOf("$#"));
+                    string cuvOriginal = cuv;
+
+                    if (cuv != "") cuv = cuv.Replace("Link2 ","").Replace("Link2", "").Replace("#$", "").Replace("$#", "").Trim();
+
                     if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
                     {
                         string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + idClient.PadLeft(8, '0') + "/" + numePagina;
 
                         string rsp = General.Encrypt_QueryString(arg);
                         string hostUrl = baseUrl + VirtualPathUtility.ToAbsolute("~/");
-                        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + TraduCuvant("Respinge") + "</a>";
-                        str = str.Replace("#$Link Respinge$#", lnk).ToString();
+                        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+                        str = str.Replace(cuvOriginal + "$#", lnk).ToString();
                     }
                     else
-                        str = str.Replace("#$Link Respinge$#", "").ToString();
+                        str = str.Replace("#$Link2 " + cuv + "$#", "").ToString();
                 }
-
 
                 //cautam daca avem de inserat tabel
                 if (str.ToLower().IndexOf("#$select") >= 0)
                 {
+                    int start = str.ToLower().IndexOf("#$select");
+                    strSelect = str.Substring(start, str.Substring(start).LastIndexOf("$#")).Replace("#$", "");
+                    strOriginal = strSelect;
+                    strSelect = WebUtility.HtmlDecode(strSelect);
+                    strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
+
                     DataTable dtTbl = General.IncarcaDT(WebUtility.HtmlDecode(strSelect), null);
                     string tbl = "";
                     tbl += @"<table style=""border: solid 1px #ccc; width:100%;"">" + Environment.NewLine;
@@ -853,7 +860,114 @@ namespace WizOne.Module
         }
 
 
-        private static void TrimiteMail(string mail, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls)
+        //private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
+        //{
+        //    string str = text;
+
+        //    try
+        //    {
+        //        string strSelect = "";
+        //        string strOriginal = "";
+
+        //        //cautam daca avem de inserat tabel
+        //        if (str.ToLower().IndexOf("#$select") >= 0)
+        //        {
+        //            int start = str.ToLower().IndexOf("#$select");
+        //            strSelect = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$", "");
+        //            strOriginal = strSelect;
+        //            strSelect = WebUtility.HtmlDecode(strSelect);
+        //            strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
+        //        }
+
+        //        for (int i = 0; i < dtSel.Columns.Count; i++)
+        //        {
+        //            str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+        //            strSelect = strSelect.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
+        //        }
+
+        //        if (str.IndexOf("#$Link") >= 0)
+        //        {
+        //            string cuv = str.Substring(str.IndexOf("#$Link"), str.Substring(str.IndexOf("#$Link")).IndexOf("$#"));
+        //            if (cuv != "") cuv = cuv.Replace("#$Link", "").Replace("$#", "").Trim();
+
+        //            if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
+        //            {
+        //                string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + idClient.PadLeft(8, '0') + "/" + numePagina;
+
+        //                string rsp = General.Encrypt_QueryString(arg);
+        //                string hostUrl = baseUrl + VirtualPathUtility.ToAbsolute("~/");
+        //                string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+        //                str = str.Replace("#$Link " + cuv + "$#", lnk).ToString();
+        //            }
+        //            else
+        //                str = str.Replace("#$Link " + cuv + "$#", "").ToString();
+        //        }
+
+
+        //        if (str.IndexOf("Link Respinge") >= 0)
+        //        {
+        //            if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
+        //            {
+        //                string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + idClient.PadLeft(8, '0') + "/" + numePagina;
+
+        //                string rsp = General.Encrypt_QueryString(arg);
+        //                string hostUrl = baseUrl + VirtualPathUtility.ToAbsolute("~/");
+        //                string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + TraduCuvant("Respinge") + "</a>";
+        //                str = str.Replace("#$Link Respinge$#", lnk).ToString();
+        //            }
+        //            else
+        //                str = str.Replace("#$Link Respinge$#", "").ToString();
+        //        }
+
+
+        //        //cautam daca avem de inserat tabel
+        //        if (str.ToLower().IndexOf("#$select") >= 0)
+        //        {
+        //            DataTable dtTbl = General.IncarcaDT(WebUtility.HtmlDecode(strSelect), null);
+        //            string tbl = "";
+        //            tbl += @"<table style=""border: solid 1px #ccc; width:100%;"">" + Environment.NewLine;
+
+
+        //            //adaugam capul de tabel
+        //            tbl += @"<thead style=""background-color:lightblue;"">" + Environment.NewLine;
+        //            tbl += "<tr>" + Environment.NewLine;
+        //            for (int x = 0; x < dtTbl.Columns.Count; x++)
+        //            {
+        //                tbl += "<td>" + dtTbl.Columns[x].ColumnName + "</td>" + Environment.NewLine;
+        //            }
+        //            tbl += "</tr>" + Environment.NewLine;
+        //            tbl += @"</thead>" + Environment.NewLine;
+
+
+        //            //adaugam corpul tabelului
+        //            tbl += @"<tbody>" + Environment.NewLine;
+        //            for (int x = 0; x < dtTbl.Rows.Count; x++)
+        //            {
+        //                tbl += "<tr>" + Environment.NewLine;
+        //                for (int y = 0; y < dtTbl.Columns.Count; y++)
+        //                {
+        //                    tbl += @"<td style=""border: solid 1px #ccc;"">" + dtTbl.Rows[x][dtTbl.Columns[y]] + "</td>" + Environment.NewLine;
+        //                }
+        //                tbl += "</tr>" + Environment.NewLine;
+        //            }
+        //            tbl += @"</tbody>" + Environment.NewLine;
+
+
+        //            tbl += "</table>" + Environment.NewLine;
+
+        //            str = str.Replace("#$" + strOriginal + "$#", tbl);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+
+        //    return str;
+        //}
+
+
+        private static void TrimiteMail(string mail, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel)
         {
             try
             {
@@ -959,10 +1073,10 @@ namespace WizOne.Module
                     if (selectXls != "")
                     {
                         DateTime ora = DateTime.Now;
-                        string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
+                        //string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
 
                         MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
-                        mm.Attachments.Add(new Attachment(stream, numeXLS, "application/vnd.ms-excel"));
+                        mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
                     }
                     else
                     {
@@ -1000,7 +1114,7 @@ namespace WizOne.Module
         }
 
 
-        private static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls)
+        private static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel)
         {
             try
             {
@@ -1092,10 +1206,10 @@ namespace WizOne.Module
                     if (selectXls != "")
                     {
                         DateTime ora = DateTime.Now;
-                        string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
+                        //string numeXLS = "SituatieConcedii_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
 
                         MemoryStream stream = new MemoryStream(General.CreazaExcel(selectXls));
-                        mm.Attachments.Add(new Attachment(stream, numeXLS, "application/vnd.ms-excel"));
+                        mm.Attachments.Add(new Attachment(stream, numeExcel, "application/vnd.ms-excel"));
                     }
                     else
                     {

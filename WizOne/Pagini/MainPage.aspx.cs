@@ -31,6 +31,8 @@ namespace WizOne.Pagini
             {
                 string ctlPost = Request.Params["__EVENTTARGET"];
 
+                Session["PaginaWeb"] = "Pagini.MainPage";
+
                 if (!IsPostBack || (ctlPost?.Contains("pnlHeader") ?? false))   //Radu 29.01.2020
                 {                    
 

@@ -37,7 +37,7 @@ namespace WizOne.Reports
                 return;
 
             string sql = "";
-            string op = "";
+            //string op = "";
             if (Constante.tipBD == 1)
                 sql = "SELECT F00204, F00207, F00281, F00282, 'Str. ' + F00233 + ', nr. ' + F00234 + ', ' + F00231 AS \"AdresaAngajator\", "
                                     + "F00241 + '/' + CONVERT(VARCHAR, F00242) + '/' + CONVERT(VARCHAR, F00243) AS \"NrOrdine\" FROM F002 WHERE F00202 = (SELECT F10002 FROM F100 WHERE F10003 = {0})";
@@ -97,29 +97,24 @@ namespace WizOne.Reports
             xrLabel14.Text = text;
             xrLabel15.Text = text3;
 
-            
-
             if (Directory.Exists(HostingEnvironment.MapPath("~/Fisiere/Imagini/Clienti/" + HttpContext.Current.Session["IdClient"].ToString())))
             {
                 DirectoryInfo root = new DirectoryInfo(HostingEnvironment.MapPath("~/Fisiere/Imagini/Clienti/" + HttpContext.Current.Session["IdClient"].ToString()));
                 FileInfo[] listfiles = root.GetFiles("Logo.*");
-                string logo = "";
+                //string logo = "";
                 if (listfiles.Length > 0)
                 {
                     string path = root.FullName + "/" + listfiles[0].Name;
                     xrPictureBox1.Image = Image.FromFile(path);
-
                 }
 
                 FileInfo[] listfilesSub = root.GetFiles("Subsol.*");
-                logo = "";
+                //logo = "";
                 if (listfilesSub.Length > 0)
                 {
                     string path = root.FullName + "/" + listfilesSub[0].Name;
                     xrPictureBox2.Image = Image.FromFile(path);
-
                 }
-
             }
 
 

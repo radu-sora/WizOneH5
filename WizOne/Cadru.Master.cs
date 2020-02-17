@@ -31,14 +31,6 @@ namespace WizOne
         {
             try
             {
-                var ert1 = HttpContext.Current.Session["tblParam"];
-                DataTable dtGigi1 = HttpContext.Current.Session["tblParam"] as DataTable;
-                if (dtGigi1 != null)
-                {
-                    var edc = dtGigi1.Rows.Count;
-                }
-
-
                 if (Constante.esteTactil)
                     Dami.AccesTactil();
                 else
@@ -108,21 +100,20 @@ namespace WizOne
 
                 if (!IsPostBack)
                 {
-
                     //incarcam lista de profile disponibile
-                    string sqlPro = @"SELECT A.""Id"", A.""Denumire"", A.""Continut"", A.""Implicit"", A.""Activ"" 
+                    string sqlPro = @"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
                                 FROM ""tblProfile"" A
                                 INNER JOIN ""tblProfileLinii"" B ON  A.""Id"" = B.""Id""
                                 INNER JOIN ""relGrupUser"" C ON B.""IdGrup"" = C.""IdGrup""
                                 WHERE A.""Pagina"" = @1 AND C.""IdUser"" = @2 AND COALESCE(A.""Activ"" ,0) = 1
-                                GROUP BY A.""Id"", A.""Denumire"", A.""Continut"", A.""Implicit"", A.""Activ"" ";
-                    if (Constante.tipBD == 2)
-                        sqlPro = @"SELECT A.""Id"", A.""Denumire"", TO_CHAR(A.""Continut"") AS ""Continut"", A.""Implicit"", A.""Activ"" 
+                                GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"" ";
+
+                    if (General.VarSession("EsteAdmin").ToString() == "1")
+                        sqlPro = @"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
                                 FROM ""tblProfile"" A
                                 INNER JOIN ""tblProfileLinii"" B ON  A.""Id"" = B.""Id""
-                                INNER JOIN ""relGrupUser"" C ON B.""IdGrup"" = C.""IdGrup""
-                                WHERE A.""Pagina"" = @1 AND C.""IdUser"" = @2 AND COALESCE(A.""Activ"" ,0) = 1
-                                GROUP BY A.""Id"", A.""Denumire"", TO_CHAR(A.""Continut""), A.""Implicit"", A.""Activ"" ";								
+                                WHERE A.""Pagina"" = @1 AND COALESCE(A.""Activ"" ,0) = 1
+                                GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"" ";
 
                     DataTable dtPro = new DataTable();
                     if (General.Nz(Session["PaginaWeb"],"").ToString() != "") dtPro = General.IncarcaDT(sqlPro, new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", "."), Session["UserId"].ToString() });
@@ -165,19 +156,13 @@ namespace WizOne
                     }
                 }
 
-                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(this.ContentPlaceHolder1);
+                if (General.VarSession("EsteAdmin").ToString() == "0") 
+                    Dami.Securitate(this.ContentPlaceHolder1);
 
                 //Florin 2018.09.10
                 txtVers.InnerText = Constante.versiune;
                 txtVers1.Text = Constante.versiune;
-                //txtVers.InnerText = Dami.TraduCuvant("Versiune") + ": " + Dami.ValoareParam("VersiuneApp","3.3.0");
 
-                var ert = HttpContext.Current.Session["tblParam"];
-                DataTable dtGigi = HttpContext.Current.Session["tblParam"] as DataTable;
-                if (dtGigi != null)
-                {
-                    var edc = dtGigi.Rows.Count;
-                }
                 if (Dami.ValoareParam("ArataLunaCurentaInSubsolApp", "0") == "1") txtLunaLucru.InnerText = Dami.TraduCuvant("Luna de lucru") + ": " + Dami.ValoareParam("LunaLucru") + " " + Dami.ValoareParam("AnLucru");
 
                 //Radu 11.07.2018 - la PeliFilip, pentru anumiti utilizatori, sa nu se mai afiseze cuvantul Angajat si nici data angajarii

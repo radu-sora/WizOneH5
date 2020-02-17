@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Web.UI.HtmlControls;
 using DevExpress.Data;
 using System.Web.Hosting;
+using System.Diagnostics;
 
 namespace WizOne.ProgrameLucru
 {
@@ -261,7 +262,7 @@ namespace WizOne.ProgrameLucru
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

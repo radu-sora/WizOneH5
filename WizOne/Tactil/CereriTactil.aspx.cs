@@ -216,9 +216,11 @@ namespace WizOne.Tactil
                             Session["Absente_Tactil"] = dtAbsSpn;
 
                             DataRow[] dtRow = dtAbsSpn.Select("Id=" + Convert.ToInt32(cmbSelAbs.Value));
-                            if (dtRow.ElementAt(0)["DenumireScurta"] != null && 
-                                ((dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 2 &&  dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO") 
-                                    || (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 &&  dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")))
+                            //if (dtRow.ElementAt(0)["DenumireScurta"] != null && 
+                            //    ((dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 2 &&  dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO") 
+                            //        || (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 &&  dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")))
+                            if ((dtRow.ElementAt(0)["DenumireScurta"] != null && (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP"))
+                                || Convert.ToInt32(dtRow.ElementAt(0)["Id"].ToString()) == Convert.ToInt32(Dami.ValoareParam("IdAbsentaCO", "1")))
                             {
                                 lblZileRamase.Visible = true;
                                 //tdNrZileRamase.Visible = true;
@@ -242,7 +244,7 @@ namespace WizOne.Tactil
                             //Afisam explicatiile
                             //calculam nr de zile luate
                             int nr = 0;
-                            int nrViitor = 0;
+                            //int nrViitor = 0;
                             //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                             //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
                             nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0),
@@ -429,7 +431,7 @@ namespace WizOne.Tactil
 
                         //calculam nr de zile luate
                         int nr = 0;
-                        int nrViitor = 0;
+                        //int nrViitor = 0;
                         //string adunaZL = General.Nz(arr[0]["AdunaZileLibere"], "0").ToString();
                         //General.CalcZile(txtDataInc.Date, txtDataSf.Date, adunaZL, out nr, out nrViitor);
                         nr = General.CalcZile(Convert.ToInt32(General.Nz(General.VarSession("User_Marca"), -99)), Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToInt32(cmbRol.Value ?? 0),
@@ -502,10 +504,11 @@ namespace WizOne.Tactil
                         if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0)
                         {
                             DataRow[] dtRow = dtAbsSpn.Select("Id=" + (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value) : Convert.ToInt32(cmbAbs.Value)));
-                           if (dtRow.ElementAt(0)["DenumireScurta"] != null &&
-                                                 ((dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 2 && dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO")
-                                                     || (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")))
-
+                            //if (dtRow.ElementAt(0)["DenumireScurta"] != null &&
+                            //                      ((dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 2 && dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO")
+                            //                          || (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")))
+                            if ((dtRow.ElementAt(0)["DenumireScurta"] != null && (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP"))
+                                || Convert.ToInt32(dtRow.ElementAt(0)["Id"].ToString()) == Convert.ToInt32(Dami.ValoareParam("IdAbsentaCO", "1")))
                             {
                                 lblZileRamase.Visible = true;
                                 //tdNrZileRamase.Visible = true;

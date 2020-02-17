@@ -279,7 +279,7 @@ namespace WizOne.Adev
                                         if (i > 0)
                                             tranzactii += "+";
                                         index = keyAbs;
-                                        index = index + listaAbs[keyAbs];
+                                        index += listaAbs[keyAbs];
                                         if (index > 99)
                                             tranzactii += ("F20004" + index);
                                         else
@@ -485,7 +485,7 @@ namespace WizOne.Adev
         {
             Dictionary<int, int> lista = new Dictionary<int, int>();
 
-            string sql = "";
+            string sql;
             if (Constante.tipBD == 2)
                 sql = "SELECT DISTINCT CASE WHEN F02113 = 0 THEN INSTR(F02118, '6') ELSE F02113 END AS INDEXS, CASE WHEN F02113 = 0 THEN 59 ELSE 29 END AS PLUS FROM F021 where F02104 IN (" + tranzactii + ")";
             else
@@ -3870,7 +3870,7 @@ namespace WizOne.Adev
         private bool AdeverintaStagiu(int marca, string FileName)
         {
 
-            bool err = true;
+            //bool err = true;
 
             DataTable dtCoasig = new DataTable();
             DataTable dtCompany = new DataTable();
@@ -3881,7 +3881,7 @@ namespace WizOne.Adev
             DataTable dtVer = new DataTable();
             DataTable dtEmplSum = new DataTable();
             string luna_istoric_F940 = "";
-            string dataStart = "";
+            //string dataStart = "";
             string dataSf = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
             Dictionary<String, String> lista = new Dictionary<string, string>();
             if (Session["AdevListaParam"] == null)
@@ -3919,7 +3919,7 @@ namespace WizOne.Adev
                 string data_luna = "";
                 data_luna = "01/" + (int.Parse(month) < 10 ? "0" + month : month) + "/" + year;
 
-                err = true;
+                //err = true;
 
                 string sql = "";
 
@@ -4107,13 +4107,13 @@ namespace WizOne.Adev
                 }
 
                 string data_incetare = "";
-                int nrluni = 12;
+                //int nrluni = 12;
 
                 if (dtIncetare != null && dtIncetare.Rows.Count > 0
                     && dtIncetare.Rows[0][0].ToString() != String.Empty)
                 {
                     data_incetare = dtIncetare.Rows[0]["DI"].ToString();
-                    nrluni = 12;
+                    //nrluni = 12;
                 }
                 else
                     data_incetare = "";
@@ -4389,9 +4389,8 @@ namespace WizOne.Adev
                 sw.Dispose();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 return false;
             }
 

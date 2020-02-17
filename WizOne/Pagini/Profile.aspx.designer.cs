@@ -31,15 +31,6 @@ namespace WizOne.Pagini {
         protected global::DevExpress.Web.ASPxButton btnNew;
         
         /// <summary>
-        /// btnArata control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnArata;
-        
-        /// <summary>
         /// grDate control.
         /// </summary>
         /// <remarks>
@@ -47,15 +38,6 @@ namespace WizOne.Pagini {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-        
-        /// <summary>
-        /// btnShow control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnShow;
         
         /// <summary>
         /// btnEdit control.

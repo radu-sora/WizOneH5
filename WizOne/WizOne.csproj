@@ -1535,6 +1535,7 @@
     <Compile Include="Module\MathExt.cs" />
     <Compile Include="Module\Notif.cs" />
     <Compile Include="Module\NotifAsync.cs" />
+    <Compile Include="Module\Saml.cs" />
     <Compile Include="Organigrama\Lista.aspx.cs">
       <DependentUpon>Lista.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

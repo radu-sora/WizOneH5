@@ -17,7 +17,7 @@ namespace WizOne.Module
         public const string cheieCriptare = "WizOne2016";
 
         public static int tipBD = 1;        //1 = SQL;  2 = Oracle
-        public static int idClient = 1;
+        //public static int idClient = 1;
 
         public static string cnnWeb = "";
         public static string cnnRap = "";

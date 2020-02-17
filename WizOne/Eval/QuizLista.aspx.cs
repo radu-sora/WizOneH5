@@ -15,7 +15,7 @@ namespace WizOne.Eval
 {
     public partial class QuizLista : System.Web.UI.Page
     {
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
 
         #region Events
         protected void Page_Load(object sender, EventArgs e)
@@ -112,6 +112,9 @@ namespace WizOne.Eval
                     {
                         case "btnEdit":
                             {
+                                //Florin 2020.01.30
+                                Session["Eval_QuizSetAngajati"] = null;
+
                                 string url = "~/Eval/QuizDetaliu.aspx";
                                 if(url!="")
                                 {
@@ -225,6 +228,10 @@ namespace WizOne.Eval
                 Session["IdEvalQuiz"] = null;
                 Session["InformatiaCurentaEvalQuiz"] = null;
                 Session["Quiz360"] = 0;
+
+                //Florin 2020.01.30
+                Session["Eval_QuizSetAngajati"] = null;
+
                 /*
                 DataTable table = General.IncarcaDT(@"select * from ""Eval_Quiz"" where ""Id"" = " + IdQuiz, null);
                 DataTable table0 = General.IncarcaDT(@"select * from ""Eval_QuizIntrebari"" where ""Id"" = " + IdQuiz, null);
@@ -650,7 +657,7 @@ namespace WizOne.Eval
                 }
 
 
-                int idAuto = 10000000;
+                //int idAuto = 10000000;
                 int idUrmGrup = 10000;
                 idUrmGrup = Dami.NextId("Eval_relGrupAngajatQuiz", dtOriGrup.Columns.Count);
                 idUrmGrup = idUrmGrup - dtOriGrup.Columns.Count + 1;

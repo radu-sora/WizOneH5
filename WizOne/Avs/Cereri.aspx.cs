@@ -187,8 +187,8 @@ namespace WizOne.Avs
                     DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                     cmbAtribute.DataSource = dtAtr;
                     cmbAtribute.DataBind();
-                    cmbAtributeFiltru.DataSource = dtAtr;
-                    cmbAtributeFiltru.DataBind();
+                    //cmbAtributeFiltru.DataSource = dtAtr;
+                    //cmbAtributeFiltru.DataBind();
 
 
                     AscundeCtl();
@@ -198,6 +198,18 @@ namespace WizOne.Avs
                 }
                 else
                 {
+                    if (Session["Avs_MarcaFiltru1"] != null)
+                    {
+                        DataTable dtAtrF = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), Convert.ToInt32(Session["Avs_MarcaFiltru1"].ToString()) });
+                        cmbAtributeFiltru.DataSource = dtAtrF;
+                        cmbAtributeFiltru.DataBind();
+                    } 
+
+                    DataTable dt = Session["Avs_Grid"] as DataTable;
+                    grDate.KeyFieldName = "Id";
+                    grDate.DataSource = dt;
+                    grDate.DataBind();
+
                     if (IsCallback)
                     {
                         cmbAng.DataSource = null;
@@ -221,8 +233,8 @@ namespace WizOne.Avs
                         DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                         cmbAtribute.DataSource = dtAtr;
                         cmbAtribute.DataBind();
-                        cmbAtributeFiltru.DataSource = dtAtr;
-                        cmbAtributeFiltru.DataBind();
+                        //cmbAtributeFiltru.DataSource = dtAtr;
+                        //cmbAtributeFiltru.DataBind();
 
                         if (Session["Marca_atribut"] != null)
                         {
@@ -1903,8 +1915,8 @@ namespace WizOne.Avs
                             DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                             cmbAtribute.DataSource = dtAtr;
                             cmbAtribute.DataBind();
-                            cmbAtributeFiltru.DataSource = dtAtr;
-                            cmbAtributeFiltru.DataBind();
+                            //cmbAtributeFiltru.DataSource = dtAtr;
+                            //cmbAtributeFiltru.DataBind();
 
                             AscundeCtl();
                             txtExpl.Text = "";
@@ -1916,8 +1928,8 @@ namespace WizOne.Avs
                             DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                             cmbAtribute.DataSource = dtAtr;
                             cmbAtribute.DataBind();
-                            cmbAtributeFiltru.DataSource = dtAtr;
-                            cmbAtributeFiltru.DataBind();
+                            //cmbAtributeFiltru.DataSource = dtAtr;
+                            //cmbAtributeFiltru.DataBind();
                             Session["AvsCereri"] = null;
                             Session["AvsCereriCalcul"] = null;
                             AscundeCtl();
@@ -1925,6 +1937,18 @@ namespace WizOne.Avs
                         }
                         break;
                     case "10":                //Document
+                        break;
+                    case "11":               //cmbAngFiltru
+                        {
+                            DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAngFiltru.Value, -99) });                 
+                            cmbAtributeFiltru.DataSource = dtAtr;
+                            cmbAtributeFiltru.DataBind();
+                            Session["AvsCereri"] = null;
+                            Session["AvsCereriCalcul"] = null;
+                            //AscundeCtl();
+                            cmbAtributeFiltru.Value = null;
+                            Session["Avs_MarcaFiltru1"] = Convert.ToInt32(cmbAngFiltru.Value);
+                        }
                         break;
 
                 }
@@ -3269,8 +3293,9 @@ namespace WizOne.Avs
                 grDate.KeyFieldName = "Id";
                 grDate.DataSource = dt;
                 grDate.DataBind();
+                Session["Avs_Grid"] = dt;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -3396,6 +3421,12 @@ namespace WizOne.Avs
             checkComboBoxStare.Value = null;
             Session["Avs_MarcaFiltru"] = null;
             Session["Avs_AtributFiltru"] = null;
+            Session["Avs_MarcaFiltru1"] = null;
+
+            grDate.KeyFieldName = "Id";
+            grDate.DataSource = null;
+            grDate.DataBind();
+            Session["Avs_Grid"] = null;
 
         }
 
@@ -3479,7 +3510,7 @@ namespace WizOne.Avs
                 DataTable dtF1001 = General.IncarcaDT("SELECT * FROM F1001 WHERE F10003 = " + f10003.ToString(), null);
 
                 string data1 = "";
-                string dataInceputSusp = "", dataInceputDet = "";
+                //string dataInceputSusp = "", dataInceputDet = "";
                 if (Constante.tipBD == 1)
                 {
                     data = "CONVERT(DATETIME, '" + dtModif.Day.ToString().PadLeft(2, '0') + "/" + dtModif.Month.ToString().PadLeft(2, '0') + "/" + dtModif.Year.ToString() + "', 103)";
@@ -4054,7 +4085,7 @@ namespace WizOne.Avs
                     General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""Actualizat""=1 WHERE ""Id""=@1", new object[] { id });
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

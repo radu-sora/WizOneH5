@@ -84,36 +84,32 @@
 
         function OnClickDetaliat(s,e)
         {
-            var edc = txtCol.Get('coloana');
-            var edc1 = txtCol.Get('f10003');
-            
-
-            if (txtCol.Get('coloana') || txtCol.Get('f10003'))
-            {
-                var colSel = txtCol.Get('coloana');
-                if (colSel.length >= 4 && colSel.substr(0, 4).toLowerCase() == 'ziua') {
-                    pnlLoading.Show();
-
-                    var idxPag = grDate.GetPageIndex();
-                    var idxRow = grDate.GetFocusedRowIndex();
-                    grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + colSel + ";" + idxPag + ";" + idxRow);
+            if (s.name == 'btnPeAng') {
+                pnlLoading.Show();
+                grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + txtCol.Get('coloana') + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+            }
+            else {
+                if (txtCol.Get('coloana') || txtCol.Get('f10003')) {
+                    var colSel = txtCol.Get('coloana');
+                    if (colSel.length >= 4 && colSel.substr(0, 4).toLowerCase() == 'ziua') {
+                        pnlLoading.Show();
+                        grDate.PerformCallback(s.name + ";" + txtCol.Get('f10003') + ";" + colSel + ";" + grDate.GetPageIndex() + ";" + grDate.GetFocusedRowIndex());
+                    }
+                    else {
+                        swal({
+                            title: "", text: "Trebuie sa selectati o coloana care afiseaza ziua",
+                            type: "warning"
+                        });
+                        e.processOnServer = false;
+                    }
                 }
-                else
-                {
+                else {
                     swal({
-                        title: "", text: "Trebuie sa selectati o coloana care afiseaza ziua",
+                        title: "", text: "Nu exista celula selectata",
                         type: "warning"
                     });
                     e.processOnServer = false;
                 }
-            }
-            else
-            {
-                swal({
-                    title: "", text: "Nu exista celula selectata",
-                    type: "warning"
-                });
-                e.processOnServer = false;
             }
         }
 
@@ -372,20 +368,20 @@
                                 <dx:PanelContent>
 
                             <div class="row">
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divAnLuna" runat="server">
                                     <label id="lblAnLuna" runat="server" oncontextMenu="ctx(this,event)">Luna/An</label><br />
                                     <dx:ASPxDateEdit ID="txtAnLuna" ClientInstanceName="txtAnLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
                                         <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtAnLuna'); }" />
                                         <CalendarProperties FirstDayOfWeek="Monday" />
                                     </dx:ASPxDateEdit>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divRol" runat="server">
                                     <label id="lblRol" runat="server" oncontextMenu="ctx(this,event)">Roluri</label><br />
                                     <dx:ASPxComboBox ID="cmbRol" ClientInstanceName="cmbRol" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdRol" TextField="RolDenumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                         <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRol'); }" />
                                     </dx:ASPxComboBox>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divAng" runat="server">
                                     <label id="lblAng" runat="server" oncontextMenu="ctx(this,event)">Angajat</label><br />
                                     <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" SelectInputTextOnClick="true"
                                                 CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
@@ -398,11 +394,11 @@
                                         </Columns>
                                     </dx:ASPxComboBox>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divStare" runat="server">
                                     <label id="lblStare" runat="server" oncontextMenu="ctx(this,event)">Stare</label><br />
                                     <dx:ASPxComboBox ID="cmbStare" ClientInstanceName="cmbStare" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"/>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divCtr" runat="server">
                                     <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)">Contract</label><br />
 
                                     <dx:ASPxDropDownEdit ClientIDMode="AutoID" ClientInstanceName="checkComboBox1" ID="cmbCtr" Width="250px" runat="server" AnimationType="None">
@@ -427,25 +423,25 @@
                                     </dx:ASPxDropDownEdit>
 
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divSub" runat="server">
                                     <label id="lblSub" runat="server" oncontextMenu="ctx(this,event)">Subcomp.</label><br />
                                     <dx:ASPxComboBox ID="cmbSub" ClientInstanceName="cmbSub" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdSubcompanie" TextField="Subcompanie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                         <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSub'); }" />
                                     </dx:ASPxComboBox>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divFil" runat="server">
                                     <label id="lblFil" runat="server" oncontextMenu="ctx(this,event)">Filiala</label><br />
                                     <dx:ASPxComboBox ID="cmbFil" ClientInstanceName="cmbFil" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdFiliala" TextField="Filiala" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                         <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbFil'); }" />
                                     </dx:ASPxComboBox>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divSec" runat="server">
                                     <label id="lblSec" runat="server" oncontextMenu="ctx(this,event)">Sectie</label><br />
                                     <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                         <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
                                     </dx:ASPxComboBox>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divDept" runat="server">
                                     <label id="lblDept" runat="server" oncontextMenu="ctx(this,event)">Dept.</label><br />
                                     <dx:ASPxDropDownEdit ClientIDMode="AutoID" ClientInstanceName="checkComboBox2" ID="cmbDept" Width="250px" runat="server" AnimationType="None">
                                         <DropDownWindowStyle BackColor="#EDEDED" />
@@ -468,15 +464,15 @@
                                         <ClientSideEvents TextChanged="SynchronizeListBoxValues2" DropDown="SynchronizeListBoxValues2" />
                                     </dx:ASPxDropDownEdit>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divSubDept" runat="server">
                                     <label id="lblSubDept" runat="server" oncontextMenu="ctx(this,event)">Subdept.</label><br />
                                     <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="250px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divBirou" runat="server">
                                     <label id="lblBirou" runat="server" oncontextMenu="ctx(this,event)">Birou</label><br />
                                     <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="250px" ValueField="F00809" TextField="F00810" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit">
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divCateg" runat="server">
                                     <label id="lblCateg" runat="server" oncontextMenu="ctx(this,event)">Categorie</label><br />
                                     <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
                                 </div>
@@ -484,14 +480,25 @@
 
                             <div class="row">
                                 <div class="col-lg-9 col-md-8 col-sm-6" style="margin-bottom:8px;"></div>
-                                <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:8px;">
+                                <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:58px;" id="rowHovercard" runat="server">
                                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                         <ClientSideEvents Click="function(s, e) {
                                                         pnlLoading.Show();
                                                         e.processOnServer = true;
                                                     }" />
-                                    </dx:ASPxButton>                                
+                                    </dx:ASPxButton>
+    	                            <div class="hovercard" id="divHovercard" runat="server">
+			                            <div class="hovercard-container">
+				                            <div class="hovercard-arrow">
+				                            </div>
+				                            <div class="hovercard-box">									
+					                            <div class="hovercard-body">
+						                            Pentru vizualizare apasati butonul Filtru
+					                            </div>
+				                            </div>
+			                            </div>
+		                            </div>
                                     &nbsp;&nbsp;
                                     <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
@@ -743,6 +750,8 @@
                                 <dx:ASPxCheckBox ID="chkPauza" ClientInstanceName="chkPauza" runat="server" Text="pauza" TextAlign="Right" />
                                 <br />
                                 <dx:ASPxCheckBox ID="chkLinie" ClientInstanceName="chkLinie" runat="server" Text="afisare pe o singura linie" TextAlign="Right" />
+                                <br />
+                                <dx:ASPxCheckBox ID="chkRoluri" ClientInstanceName="chkRoluri" runat="server" Text="toate rolurile" TextAlign="Right" />
                                 <br />
                             </td>
                         </tr>

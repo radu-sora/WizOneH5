@@ -17,7 +17,7 @@ namespace WizOne.ContracteLucru
 {
     public partial class Contract : System.Web.UI.Page
     {
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
         protected void Page_Init(object sender, EventArgs e)
         {
             try

@@ -195,33 +195,46 @@ namespace WizOne.Eval
                 grDate.KeyFieldName = "IdAuto";
                 grDate.DataSource = dt;
 
-                List<metaDate> dtSetAngajati = Session["Eval_QuizSetAngajati"] as List<metaDate>;
-                if (dtSetAngajati != null)
+
+                //Florin 2020.01.30
+
+                //List<metaDate> dtSetAngajati = Session["Eval_QuizSetAngajati"] as List<metaDate>;
+                //if (dtSetAngajati != null)
+                //{
+                //    GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
+                //    colSetAngajati.PropertiesComboBox.DataSource = dtSetAngajati;
+                //}
+                //else
+                //{
+                //    //Florin
+                //    strSQL = "select \"IdSetAng\" as \"Id\", \"DenSet\" as \"Denumire\" from \"Eval_SetAngajati\"";
+                //    DataTable dtSetAngajat = new DataTable();
+                //    dtSetAngajat = General.IncarcaDT(strSQL, null);
+                //    lstGrupuriAngajati = new List<metaDate>();
+                //    if (dtSetAngajat != null && dtSetAngajat.Rows.Count != 0)
+                //    {
+                //        foreach (DataRow rwSetAngajat in dtSetAngajat.Rows)
+                //        {
+                //            metaDate clsSetAng = new metaDate();
+                //            clsSetAng.Id = Convert.ToInt32(rwSetAngajat["Id"].ToString());
+                //            clsSetAng.Denumire = rwSetAngajat["Denumire"].ToString();
+                //            lstGrupuriAngajati.Add(clsSetAng);
+                //        }
+                //    }
+                //    Session["Eval_QuizSetAngajati"] = lstGrupuriAngajati;
+                //    GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
+                //    colSetAngajati.PropertiesComboBox.DataSource = lstGrupuriAngajati;
+                //}
+
+                DataTable dtSet = Session["Eval_QuizSetAngajati"] as DataTable;
+                if (dtSet == null || dtSet.Rows.Count == 0)
                 {
-                    GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
-                    colSetAngajati.PropertiesComboBox.DataSource = dtSetAngajati;
-                }
-                else
-                {
-                    strSQL = "select \"IdSetAng\" as \"Id\", \"DenSet\" as \"Denumire\" from \"Eval_SetAngajati\"";
-                    DataTable dtSetAngajat = new DataTable();
-                    dtSetAngajat = General.IncarcaDT(strSQL, null);
-                    lstGrupuriAngajati = new List<metaDate>();
-                    if (dtSetAngajat != null && dtSetAngajat.Rows.Count != 0)
-                    {
-                        foreach (DataRow rwSetAngajat in dtSetAngajat.Rows)
-                        {
-                            metaDate clsSetAng = new metaDate();
-                            clsSetAng.Id = Convert.ToInt32(rwSetAngajat["Id"].ToString());
-                            clsSetAng.Denumire = rwSetAngajat["Denumire"].ToString();
-                            lstGrupuriAngajati.Add(clsSetAng);
-                        }
-                    }
-                    Session["Eval_QuizSetAngajati"] = lstGrupuriAngajati;
-                    GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
-                    colSetAngajati.PropertiesComboBox.DataSource = lstGrupuriAngajati;
+                    dtSet = General.IncarcaDT(@"SELECT ""IdSetAng"" AS ""Id"", ""DenSet"" AS ""Denumire"" FROM ""Eval_SetAngajati"" ORDER BY ""DenSet"" ", null);
+                    Session["Eval_QuizSetAngajati"] = dtSet;
                 }
 
+                GridViewDataComboBoxColumn colSetAngajati = (grDate.Columns["IdGrup"] as GridViewDataComboBoxColumn);
+                colSetAngajati.PropertiesComboBox.DataSource = dtSet;
             }
             catch (Exception ex)
             {
@@ -230,14 +243,5 @@ namespace WizOne.Eval
         }
         #endregion
 
-        protected void grDate_CommandButtonInitialize(object sender, ASPxGridViewCommandButtonEventArgs e)
-        {
-
-        }
-
-        protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
-        {
-
-        }
     }
 }

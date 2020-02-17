@@ -16,7 +16,21 @@
              cmbAng.SetValue(null);
              cmbPers.SetValue(0);
              chkScutit.SetValue(0);
-             txtTipAngajat.SetValue(null);
+             txtTipAng.SetValue(null);
+             txtTicheteNr.SetValue(0);
+             txtTicheteVal.SetValue(0);
+             txtTicheteTotal.SetValue(0);
+
+             txtVenitRez.SetValue(null);
+             txtCas.SetValue(null);
+             txtCass.SetValue(null);
+             txtImp.SetValue(null);
+             txtDed.SetValue(null);
+         }
+
+         function CalcTichete()
+         {
+             txtTicheteTotal.SetValue(Math.round(txtTicheteNr.GetValue() * txtTicheteVal.GetValue()));
          }
 
     </script>
@@ -57,6 +71,7 @@
                                         <dx:ListEditItem Text="Venitul brut la Venitul Net" Value="1" Selected="true" />
                                         <dx:ListEditItem Text="Venitul net la Venitul brut" Value="2" />
                                     </Items>
+                                    <ClientSideEvents ValueChanged="function(s,e) { Goleste(); }" />
                                 </dx:ASPxComboBox>
                             </td>
                         </tr>
@@ -96,13 +111,14 @@
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td>
                                 <dx:ASPxSpinEdit ID="txtVenitCal" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false">
-                                    <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
+                                    <SpinButtons ShowIncrementButtons="false"></SpinButtons>
+                                    <ClientSideEvents KeyDown="function(s,e) { Goleste(); }" />
                                 </dx:ASPxSpinEdit>
                             </td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td><dx:ASPxLabel id="lblVenitRez" runat="server" Text="Venit rezultat" Width="100px"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="txtVenitRez" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtVenitRez" runat="server" ReadOnly="true" ClientEnabled="false" Width="100px" ClientInstanceName="txtVenitRez">
                                     <DisabledStyle BackColor="LightGray" ForeColor="Black"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
@@ -118,7 +134,7 @@
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td><dx:ASPxLabel id="lblCas" runat="server" Text="CAS"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="txtCas" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtCas" runat="server" ReadOnly="true" ClientEnabled="false" Width="100px" ClientInstanceName="txtCas">
                                     <DisabledStyle BackColor="LightGray" ForeColor="Black"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
@@ -134,7 +150,7 @@
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td><dx:ASPxLabel id="lblCass" runat="server" Text="CASS"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="txtCass" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtCass" runat="server" ReadOnly="true" ClientEnabled="false" Width="100px" ClientInstanceName="txtCass">
                                     <DisabledStyle BackColor="LightGray" ForeColor="Black"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
@@ -150,7 +166,7 @@
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td><dx:ASPxLabel id="lblImp" runat="server" Text="Impozit"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="txtImp" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtImp" runat="server" ReadOnly="true" ClientEnabled="false" Width="100px" ClientInstanceName="txtImp">
                                     <DisabledStyle BackColor="LightGray" ForeColor="Black"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
@@ -172,7 +188,7 @@
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             <td><dx:ASPxLabel id="lblDed" runat="server" Text="Deducere"/></td>
                             <td>
-                                <dx:ASPxTextBox ID="txtDed" runat="server" ReadOnly="true" Enabled="false" Width="100px">
+                                <dx:ASPxTextBox ID="txtDed" runat="server" ReadOnly="true" ClientEnabled="false" Width="100px" ClientInstanceName="txtDed">
                                     <DisabledStyle BackColor="LightGray" ForeColor="Black"></DisabledStyle>
                                 </dx:ASPxTextBox>
                             </td>
@@ -211,6 +227,45 @@
                             <td></td>
                             <td></td>
                         </tr>
+                        <tr>
+                            <td><br /><dx:ASPxLabel id="lblTicheteNr" runat="server" Text="Nr. tichete de masa"/></td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <dx:ASPxSpinEdit ID="txtTicheteNr" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false" ClientInstanceName="txtTicheteNr" Number="0" NumberType="Integer">
+                                    <SpinButtons ShowIncrementButtons="true"></SpinButtons>
+                                    <ClientSideEvents ValueChanged="function(s,e) { CalcTichete(); }" />
+                                </dx:ASPxSpinEdit>
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><br /><dx:ASPxLabel id="lblTicheteVal" runat="server" Text="Valoare tichet"/></td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <dx:ASPxSpinEdit ID="txtTicheteVal" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false" ClientInstanceName="txtTicheteVal" Number="0" NumberType="Float" DecimalPlaces="2">
+                                    <SpinButtons ShowIncrementButtons="false"></SpinButtons>
+                                    <ClientSideEvents ValueChanged="function(s,e) { CalcTichete(); }" />
+                                </dx:ASPxSpinEdit>
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><br /><dx:ASPxLabel id="lblTicheteTotal" runat="server" Text="Valoare totala tichete de masa"/></td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <dx:ASPxSpinEdit ID="txtTicheteTotal" runat="server" Width="100px" MinValue="0" MaxValue="999999" AutoPostBack="false" ClientInstanceName="txtTicheteTotal" Number="0" NumberType="Integer">
+                                    <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
+                                </dx:ASPxSpinEdit>
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
                     </table>
                 </div>
             </dx:PanelContent>

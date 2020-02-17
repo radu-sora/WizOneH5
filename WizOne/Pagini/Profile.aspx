@@ -23,15 +23,10 @@
                 case "btnDelete":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToDeleteMode_Ntf);
                     break;
-                case "btnShow":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToShowMode_Ntf);
-                    break;
             }
         }
 
         function GoToEditMode_Ntf(Value) {
-            //grDate.PerformCallback("btnEdit;" + Value);
-            var frm = getParameterByName('IdForm');
             window.parent.popGen.SetContentUrl('../Pagini/ProfileDetaliu.aspx?tip=Edit&id=' + Value);
         }
 
@@ -45,16 +40,6 @@
                 }
             });
         }
-
-        function GoToShowMode_Ntf(Value) {
-            grDate.PerformCallback("btnShow;" + Value);
-        }
-
-        function ClosePopWindow() {
-            window.parent.popGen.Hide();
-        }
-
-
     </script>
 
 
@@ -69,9 +54,6 @@
                     <dx:ASPxButton ID="btnNew" runat="server" Text="Nou" OnClick="btnNew_Click" HorizontalAlign="Right" oncontextMenu="ctx(this,event)" Visible="false" >
                         <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
                     </dx:ASPxButton>
-                    <dx:ASPxButton ID="btnArata" runat="server" Text="Arata" OnClick="btnArata_Click" HorizontalAlign="Right" oncontextMenu="ctx(this,event)" Visible="true" >
-                        <Image Url="~/Fisiere/Imagini/Icoane/intre.png"></Image>
-                    </dx:ASPxButton>
                 </td>
             </tr>
             <tr>
@@ -84,9 +66,6 @@
                         <Columns>
                             <dx:GridViewCommandColumn Width="70px" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" >
                                 <CustomButtons>
-                                    <dx:GridViewCommandColumnCustomButton ID="btnShow">
-                                        <Image ToolTip="Arata" Url="~/Fisiere/Imagini/Icoane/intre.png" />
-                                    </dx:GridViewCommandColumnCustomButton>
                                     <dx:GridViewCommandColumnCustomButton ID="btnEdit" Visibility="Invisible">
                                         <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" />
                                     </dx:GridViewCommandColumnCustomButton>

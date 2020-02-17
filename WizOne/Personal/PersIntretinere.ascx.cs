@@ -7,6 +7,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using DevExpress.Web;
+using System.IO;
+using System.Diagnostics;
 
 namespace WizOne.Personal
 {
@@ -99,7 +101,7 @@ namespace WizOne.Personal
                             {
                                 max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("F11007")), 0)) + 1;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
                             e.NewValues["F11007"] = max;
@@ -117,7 +119,7 @@ namespace WizOne.Personal
             }
             catch (Exception ex)
             {
-
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

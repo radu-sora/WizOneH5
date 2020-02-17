@@ -18,7 +18,7 @@ namespace WizOne.Personal
 {
     public partial class Lista : System.Web.UI.Page
     {
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -411,13 +411,37 @@ namespace WizOne.Personal
                 {
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti sterge angajatul deoarece acesta a fost salvat in arhiva!");
                     return;
-                }       
-                
+                }
+
+                General.ExecutaNonQuery("DELETE FROM \"Avs_CereriIstoric\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Avs_Cereri\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"BP_Istoric\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"BP_Prime\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_CereriIstoric\" WHERE \"IdCerere\" IN (SELECT \"Id\" FROM \"Curs_Inregistrare\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"MP_CereriIstoric\" WHERE \"IdCerere\" IN (SELECT \"Id\" FROM \"MP_Cereri\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"MP_DirectorRUIstoric\" WHERE \"IdCerere\" IN (SELECT \"Id\" FROM \"MP_DirectorRUCereri\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateIstoric\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm1\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm2\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm3\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm4\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm5\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm6\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm7\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm8\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm9\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateForm10\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_DateGenerale\" WHERE \"Id\" IN (SELECT \"Id\" FROM \"Org_Date\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" IN (SELECT \"Id\" FROM \"Ptj_Cereri\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_tmpCeasuri\" WHERE \"Cartela\" IN (SELECT \"Cartela\" FROM \"F100Cartele\" WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"tblInfoChiosc\" WHERE \"Cartela\" IN (SELECT \"Cartela\" FROM \"F100Cartele\" WHERE F10003 = " + id + ")", null);
+
                 General.ExecutaNonQuery("DELETE FROM \"Admin_Activitati\" WHERE \"Marca\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Admin_AngajatGrup\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Atestate\" WHERE \"Marca\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Admin_Beneficii\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Cursuri\" WHERE \"Marca\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Admin_Documente\" WHERE \"Marca\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Admin_Echipamente\" WHERE \"Marca\" = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Admin_Evaluare\" WHERE \"Marca\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Admin_Evolutie\" WHERE \"Marca\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Admin_Experienta\" WHERE \"Marca\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Admin_Limbi\" WHERE \"Marca\" = " + id, null);
@@ -504,6 +528,7 @@ namespace WizOne.Personal
                 General.ExecutaNonQuery("DELETE FROM \"MP_Cereri\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"MP_FluxSalarii\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Org_Date\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_Date\" WHERE \"F10003Candidat\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Org_DateGenerale\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Org_relPostAngajat\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"Org_relPostAngajatMarcaAuto\" WHERE F10003 = " + id, null);
@@ -531,23 +556,78 @@ namespace WizOne.Personal
                 General.ExecutaNonQuery("DELETE FROM \"Ptj_tmpCeasuriPeLinie\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM REGISTRU_VECHIME WHERE MARCA = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"relAngajatInlocuitor\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"relAngajatInlocuitor\" WHERE \"F10003Inlocuitor\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"relAngajatObiective\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"relAngajatProiect\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"relGrupAngajat2\" WHERE F10003 = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM SPORURI WHERE MARCA = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = 'F100' AND \"Id\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"tblFluturasLog\" WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"tblTipAdresa_WebService\" WHERE \"PersContact\" = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM TMP_ADEVERINTA WHERE MARCA = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM TRANSPRJ WHERE MARCA = " + id, null);
                 General.ExecutaNonQuery("DELETE FROM \"ZileHand\" WHERE MARCA = " + id, null);
 
-                General.ExecutaNonQuery("UPDATE USERS SET F70114 = 1 WHERE F10003 = " + id, null);
+                General.ExecutaNonQuery("UPDATE \"Avs_CereriIstoric\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Avs_CereriIstoric\" SET \"IdUserInlocuitor\" = NULL WHERE \"IdUserInlocuitor\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"BP_Istoric\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"BP_Istoric\" SET \"IdUserInlocuitor\" = NULL WHERE \"IdUserInlocuitor\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"BP_relRolUser\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"BP_tblIstoric\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Curs_CereriIstoric\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_tblFormatori\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Curs_tblTraineri\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"DynReportsUsers\" WHERE \"DynReportUserId\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Eval_QuizIstoric360\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Eval_RaspunsIstoric\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Eval_RaspunsIstoric\" SET \"IdUserInlocuitor\" = NULL WHERE \"IdUserInlocuitor\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Eval_RaspunsIstoric\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"GDPR_2FA\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"MP_Cereri\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("UPDATE \"MP_Cereri\" SET \"UserIntrod\" = NULL WHERE \"UserIntrod\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"MP_CereriIstoric\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"MP_CereriIstoric\" SET \"IdUserInlocuitor\" = NULL WHERE \"IdUserInlocuitor\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"MP_CereriIstoric\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("UPDATE \"MP_DirectorRUCereri\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("UPDATE \"MP_DirectorRUCereri\" SET \"UserIntrod\" = NULL WHERE \"UserIntrod\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"MP_DirectorRUIstoric\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"MP_DirectorRUIstoric\" SET \"IdUserInlocuitor\" = NULL WHERE \"IdUserInlocuitor\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"MP_DirectorRUIstoric\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ntf_tblDrepturiUsers\" WHERE F70102 IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Org_Date\" SET \"UserIntrod\" = NULL WHERE \"UserIntrod\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Org_Date\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("UPDATE \"Org_DateIstoric\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Org_DateIstoric\" SET \"IdUserInlocuitor\" = NULL WHERE \"IdUserInlocuitor\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Org_DateIstoric\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_relPostRol\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_relRolGrupAngajat\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Org_tblRoluri\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"ParoleUtilizatorIstoric\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"Proiecte\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Ptj_Cereri\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("UPDATE \"Ptj_Cereri\" SET \"UserIntrod\" = NULL WHERE \"UserIntrod\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Ptj_CereriIstoric\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Ptj_CereriIstoric\" SET \"IdUserInlocuitor\" = NULL WHERE \"IdUserInlocuitor\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Ptj_CereriIstoric\" SET \"Inlocuitor\" = NULL WHERE \"Inlocuitor\"  = " + id, null);
+                General.ExecutaNonQuery("DELETE FROM \"Ptj_IstoricBlocare\" WHERE F70102 IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("UPDATE \"Ptj_IstoricVal\" SET \"IdUser\" = NULL WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"relGrupUser2\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"relUserCentruCost\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"tblConfigUsers\" WHERE F70102 IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"tblDelegari\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"tblDelegari\" WHERE \"IdDelegat\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"tblLogSelect\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+                General.ExecutaNonQuery("DELETE FROM \"tblProfileLinii\" WHERE \"IdUser\" IN (SELECT F70102 FROM USERS WHERE F10003 = " + id + ")", null);
+
+                General.ExecutaNonQuery("DELETE FROM USERS WHERE F10003 = " + id, null);
+
+                //General.ExecutaNonQuery("UPDATE USERS SET F70114 = 1 WHERE F10003 = " + id, null);
                 Session["InformatiaCurenta"] = General.GetPersonalRestrans(Convert.ToInt32(Session["UserId"].ToString()), checkComboBoxStare.Text, 1);
 
                 grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.Message.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -590,7 +670,7 @@ namespace WizOne.Personal
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.Message.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

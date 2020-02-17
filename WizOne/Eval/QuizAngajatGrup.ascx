@@ -23,9 +23,8 @@
     <table>
         <tr>
             <td>
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" OnRowDeleting="grDate_RowDeleting" OnCommandButtonInitialize="grDate_CommandButtonInitialize"
-                    OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnInitNewRow="grDate_InitNewRow" AutoGenerateColumns="false" OnDataBinding="grDate_DataBinding"
-                    OnCustomCallback="grDate_CustomCallback" >
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" OnRowDeleting="grDate_RowDeleting"
+                    OnRowInserting="grDate_RowInserting" OnRowUpdating="grDate_RowUpdating" OnInitNewRow="grDate_InitNewRow" AutoGenerateColumns="false" OnDataBinding="grDate_DataBinding">
                      <SettingsBehavior AllowFocusedRow="true" />
                     <Settings ShowFilterRow="false" ShowColumnHeaders="true" />
                     <ClientSideEvents CustomButtonClick="function(s, e) { grDateAdresa_CustomButtonClick(s, e); }" ContextMenu="ctx" />    

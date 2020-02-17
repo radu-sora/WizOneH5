@@ -17,7 +17,7 @@ namespace WizOne.Pagini
         //int tip = 1;                //1-new; 2-edit; 3-clone
         //int id = -99;
         //int idCl = -99;
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -69,9 +69,9 @@ namespace WizOne.Pagini
                     DataTable dtCmp = General.IncarcaDT($@"SELECT * FROM (
                                         SELECT 0 AS ""Ordine"", ""Alias"" AS ""Denumire"", ""IdAuto"" as ""Id"", ""TipData"" FROM ""Ntf_tblCampuri"" WHERE ""Pagina"" = @1
                                         UNION
-                                        SELECT -2, 'Link Aproba',-78, 'Link' {tbl}
+                                        SELECT -2, 'Link1 Aproba',-78, 'Link' {tbl}
                                         UNION
-                                        SELECT -1, 'Link Respinge', -77, 'Link' {tbl} ) X ORDER BY ""Ordine"", ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
+                                        SELECT -1, 'Link2 Respinge', -77, 'Link' {tbl} ) X ORDER BY ""Ordine"", ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
 
                     cmbAddCmp.DataSource = dtCmp;
                     cmbAddCmp.DataBindItems();
@@ -133,6 +133,7 @@ namespace WizOne.Pagini
                                     cmbMesaj.Value = (dtHead.Rows[0]["Mesaj"] ?? "").ToString();
                                     chkExcel.Checked = Convert.ToBoolean(General.Nz(dtHead.Rows[0]["TrimiteXLS"], 0));
                                     txtExcel.Value = (dtHead.Rows[0]["SelectXLS"] ?? "").ToString();
+                                    txtNumeExcel.Text = (dtHead.Rows[0]["NumeExcel"] ?? "").ToString();
                                 }
 
 
@@ -275,6 +276,7 @@ namespace WizOne.Pagini
                             drHead["ContinutAtasament"] = txtAtt.Html;
                             drHead["TrimiteXLS"] = chkExcel.Checked;
                             drHead["SelectXLS"] = txtExcel.Text;
+                            drHead["NumeExcel"] = txtNumeExcel.Text;
                             drHead["USER_NO"] = Session["UserId"];
                             drHead["TIME"] = DateTime.Now;
                             dtHead.Rows.Add(drHead);
@@ -329,6 +331,7 @@ namespace WizOne.Pagini
                             dtHead.Rows[0]["ContinutAtasament"] = txtAtt.Html;
                             dtHead.Rows[0]["TrimiteXLS"] = chkExcel.Checked;
                             dtHead.Rows[0]["SelectXLS"] = txtExcel.Text;
+                            dtHead.Rows[0]["NumeExcel"] = txtNumeExcel.Text;
                             dtHead.Rows[0]["USER_NO"] = Session["UserId"];
                             dtHead.Rows[0]["TIME"] = DateTime.Now;
                         }
@@ -1103,9 +1106,9 @@ namespace WizOne.Pagini
                 DataTable dtCmp = General.IncarcaDT($@"SELECT * FROM (
                                         SELECT 0 AS ""Ordine"", ""Alias"" AS ""Denumire"", ""IdAuto"" as ""Id"", ""TipData"" FROM ""Ntf_tblCampuri"" WHERE ""Pagina"" = @1
                                         UNION
-                                        SELECT -2, 'Link Aproba',-78, 'Link' {tbl}
+                                        SELECT -2, 'Link1 Aproba',-78, 'Link' {tbl}
                                         UNION
-                                        SELECT -1, 'Link Respinge', -77, 'Link' {tbl} ) X ORDER BY ""Ordine"", ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
+                                        SELECT -1, 'Link2 Respinge', -77, 'Link' {tbl} ) X ORDER BY ""Ordine"", ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".") });
 
                 object[] obj = grDateCond.GetRowValues(grDateCond.FocusedRowIndex, new string[] { "Id", "Coloana", "Operator", "Valoare1", "Valoare2", "NrZile1", "NrZile2" }) as object[];
 

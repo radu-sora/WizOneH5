@@ -41,7 +41,7 @@ namespace WizOne.Reports
 
                     bw.Write((byte[])dt.Rows[0]["Fisier"]);
                 }
-                catch (IOException e)
+                catch (IOException)
                 {
                     return;
                 }

@@ -15,7 +15,7 @@ namespace WizOne.Eval
 {
     public partial class QuizCreate : System.Web.UI.UserControl
     {
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
         public class metaDate
         {
             public int Id { get; set; }
@@ -1645,7 +1645,7 @@ namespace WizOne.Eval
             if (hfObiectiv.TryGet("CurrentTipLista", out id))
                 return Convert.ToInt32(id);
             return -1;
-            object val = grDateObiective.GetRowValues(0, "Id;ColumnName");
+            //object val = grDateObiective.GetRowValues(0, "Id;ColumnName");
         }
 
         private string GetCurrentColNameObiectiv()

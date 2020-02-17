@@ -244,12 +244,12 @@ namespace WizOne.Personal
             ListEditItem linie = cmbStructOrg.SelectedItem;
             if (linie != null)
             {
-                int subc = linie.GetValue("F00304").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00304").ToString()) : -1;
-                int fil = linie.GetValue("F00405").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00405").ToString()) : -1;
-                int sec = linie.GetValue("F00506").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00506").ToString()) : -1;
-                int dept = linie.GetValue("F00607").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00607").ToString()) : -1;
-                int subdept = linie.GetValue("F00708").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00708").ToString()) : -1;
-                int birou = linie.GetValue("F00809").ToString().Length > 0 ? Convert.ToInt32(linie.GetValue("F00809").ToString()) : -1;
+                int subc = linie.GetFieldValue("F00304").ToString().Length > 0 ? Convert.ToInt32(linie.GetFieldValue("F00304").ToString()) : -1;
+                int fil = linie.GetFieldValue("F00405").ToString().Length > 0 ? Convert.ToInt32(linie.GetFieldValue("F00405").ToString()) : -1;
+                int sec = linie.GetFieldValue("F00506").ToString().Length > 0 ? Convert.ToInt32(linie.GetFieldValue("F00506").ToString()) : -1;
+                int dept = linie.GetFieldValue("F00607").ToString().Length > 0 ? Convert.ToInt32(linie.GetFieldValue("F00607").ToString()) : -1;
+                int subdept = linie.GetFieldValue("F00708").ToString().Length > 0 ? Convert.ToInt32(linie.GetFieldValue("F00708").ToString()) : -1;
+                int birou = linie.GetFieldValue("F00809").ToString().Length > 0 ? Convert.ToInt32(linie.GetFieldValue("F00809").ToString()) : -1;
 
                 if (subc >= 0)
                 {
@@ -459,7 +459,7 @@ namespace WizOne.Personal
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -491,7 +491,7 @@ namespace WizOne.Personal
                     valid = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -524,7 +524,7 @@ namespace WizOne.Personal
                 else
                     cmbTimpPartial.SelectedItem.Value = 1;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -547,7 +547,7 @@ namespace WizOne.Personal
                 Session["InformatiaCurentaPersonal"] = ds;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }

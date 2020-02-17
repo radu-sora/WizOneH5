@@ -21,7 +21,7 @@ namespace WizOne.Pontaj
         //tip = 1       Pontaj pe Angajat
         //tip = 2       Pontaj pe Zi
         public int tip = 1;
-        string cmp = "USER_NO,TIME,IDAUTO,";
+        //string cmp = "USER_NO,TIME,IDAUTO,";
 
         public class metaAbsTipZi
         {
@@ -136,7 +136,8 @@ namespace WizOne.Pontaj
                     cmbPtjZi.Items.Add(new ListEditItem { Text = General.Nz(dt.Rows[i]["Denumire"], "").ToString(), Value = Convert.ToInt32(General.Nz(dt.Rows[i]["Id"], 1)) + 5 });
                 }
 
-                
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
+                    divHovercard.Visible = false;
             }
             catch (Exception ex)
             {
@@ -498,6 +499,8 @@ namespace WizOne.Pontaj
                 IncarcaGrid();
                 grCC.DataSource = null;
                 grCC.DataBind();
+                if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
+                    divHovercard.Visible = false;
 
                 //Florin 2019.07.19
                 int idRol = Convert.ToInt32(cmbRolAng.Value);
@@ -1474,7 +1477,7 @@ namespace WizOne.Pontaj
                 //                GROUP BY X.""IdRol"", X.""RolDenumire""
                 //                ORDER BY X.""RolDenumire"" ";
 
-
+                //Radu 31.01.2020 - se doreste sa se puna implicit rolul cel mai mare (am adaugat ORDER BY)
                 string strSql = @"select a.""Id"", a.""Denumire"", case when a.""PoateInitializa"" = 1 then 1 else 0 end as ""PoateInitializa"", case when a.""PoateSterge"" = 1 then 1 else 0 end as ""PoateSterge"", COALESCE(a.""TipMesaj"",1) AS ""TipMesaj"" 
                                  from ""Ptj_tblRoluri"" a 
                                  inner join ""Ptj_relGrupSuper"" b on a.""Id"" = b.""IdRol"" 
@@ -1487,7 +1490,7 @@ namespace WizOne.Pontaj
                                  inner join ""relGrupAngajat"" c on b.""IdGrup""  = c.""IdGrup"" 
                                  inner join ""F100Supervizori"" d on c.F10003 = d.F10003 and (-1 * b.""IdSuper"")= d.""IdSuper"" 
                                  where d.""IdUser"" =  {0}
-                                 group by a.""Id"", a.""Denumire"", a.""PoateInitializa"",a.""PoateSterge"", a.""TipMesaj"" ";
+                                 group by a.""Id"", a.""Denumire"", a.""PoateInitializa"",a.""PoateSterge"", a.""TipMesaj"" ORDER BY a.""Id"" DESC";
 
                 strSql = string.Format(strSql, Session["UserId"]);
 
@@ -1791,7 +1794,7 @@ namespace WizOne.Pontaj
                     General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dtModif.Rows[i]["F10003"])} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dtModif.Rows[i]["Ziua"]))}");
 
                     //Florin 2020.02.07
-                    General.ExecValStr(Convert.ToInt32(dtModif.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
+                    General.ExecValStr(Convert.ToInt32(dtModif.Rows[i]["F10003"]), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
                 }
 
                 //Session["InformatiaCurenta"] = dt;
@@ -1993,6 +1996,7 @@ namespace WizOne.Pontaj
             }
         }
 
+        //Florin 2020.02.07 - am adaugat functia de validare; pt acest lucru am adaugat valorile in row si am facut selectul care se trimite ca parametru in validari din acest row;
         //Florin 2019.10.31 - am refacut intreaga functie
 
         protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
@@ -2001,10 +2005,8 @@ namespace WizOne.Pontaj
             {
                 grDate.CancelEdit();
 
-                //List<metaAbsTipZi> lst = new List<metaAbsTipZi>();
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
-                //DataTable dtVal = Session["Ptj_IstoricVal"] as DataTable;
 
                 ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
                 object[] keys = new object[] { upd.Keys[0] };
@@ -2037,10 +2039,15 @@ namespace WizOne.Pontaj
                             if (!adaugat)
                             {
                                 cmp += @", ""CuloareValoare""='" + Constante.CuloareModificatManual + "'";
+                                row["CuloareValoare"] = Constante.CuloareModificatManual;
                                 adaugat = true;
                             }
                             cmp += $@", ""ValModif{i}""=" + (int)Constante.TipModificarePontaj.ModificatManual;
                             cmp += $@", ""Val{i}""=" + (Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60))).ToString();
+
+                            row["ValModif" + i] = (int)Constante.TipModificarePontaj.ModificatManual;
+                            row["Val" + i] = Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60));
+
                             continue;
                         }
 
@@ -2061,6 +2068,7 @@ namespace WizOne.Pontaj
                                     row[numeCol] = inOut;
 
                                 cmp += $@", ""{numeCol}""=" + General.ToDataUniv(Convert.ToDateTime(row[numeCol]), true);
+                                row[numeCol] = inOut;
                             }
                             catch (Exception ex)
                             {
@@ -2114,7 +2122,10 @@ namespace WizOne.Pontaj
 
                         //daca sunt restul campurilor
                         if (newValue == null)
+                        {
                             cmp += $@", ""{numeCol}"" = NULL";
+                            row[numeCol] = DBNull.Value;
+                        }
                         else
                         {
                             switch (row.Table.Columns[numeCol].DataType.ToString())
@@ -2129,6 +2140,8 @@ namespace WizOne.Pontaj
                                     cmp += $@", ""{numeCol}""={newValue}";
                                     break;
                             }
+
+                            row[numeCol] = newValue;
                         }
                     }
                 }
@@ -2136,11 +2149,24 @@ namespace WizOne.Pontaj
                 if (cmp != "")
                     strSql += $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
 
+                //Florin 2020.02.07 - am adaugat validarile
+                string msg = "";
                 if (strSql != "")
-                    General.ExecutaNonQuery(
-                        "BEGIN " + Environment.NewLine +
-                        strSql + Environment.NewLine +
-                        "END;", null);
+                {
+                    string sqlPtj = General.CreazaSelectFromRow(row);
+                    msg = Notif.TrimiteNotificare("Pontaj.PontajDetaliat", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    if (msg != "" && msg.Substring(0, 1) == "2")
+                    {
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));
+                        e.Handled = true;
+                        return;
+                    }
+                    else
+                        General.ExecutaNonQuery(
+                            "BEGIN " + Environment.NewLine +
+                            strSql + Environment.NewLine +
+                            "END;", null);
+                }
 
 
                 DataRow dr = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
@@ -2171,7 +2197,12 @@ namespace WizOne.Pontaj
 
                 IncarcaGrid();
 
-                MessageBox.Show("Proces realizat cu succes", MessageBox.icoSuccess);
+                //Florin 2020.02.07
+                if (msg != "" && msg.Substring(0, 1) != "2")
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
+                else
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+
                 e.Handled = true;
             }
             catch (Exception ex)
@@ -2689,7 +2720,7 @@ namespace WizOne.Pontaj
                                         General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dt.Rows[i]["F10003"].ToString())} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dt.Rows[i]["Ziua"]))}");
 
                                         //Florin 2020.02.07
-                                        General.ExecValStr(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
+                                        General.ExecValStr(Convert.ToInt32(dt.Rows[i]["F10003"]), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
                                     }
                                 }
                                 //Session["InformatiaCurenta"] = dt;
@@ -4613,6 +4644,7 @@ namespace WizOne.Pontaj
 
                     ASPxGridView grDate = new ASPxGridView();
                     grDate.ID = "grDateTotaluri";
+                    grDate.ClientInstanceName = "grDateTotaluri";
                     grDate.Width = Unit.Percentage(100);
                     //grDate.Enabled = false;
                     grDate.AutoGenerateColumns = false;

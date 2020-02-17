@@ -16,8 +16,8 @@ namespace WizOne.ConcediiMedicale
 {
     public partial class Introducere : System.Web.UI.Page
     {
-        decimal timpPartial = 0;
-        bool inactiveazaDeLaLa = false;
+        //decimal timpPartial = 0;
+        //bool inactiveazaDeLaLa = false;
         protected void Page_Init(object sender, EventArgs e)
         {
             //DataList1.DataSource = General.IncarcaDT("SELECT * FROM F300 WHERE F10003 = " + (Session["MarcaCM"] != null ? Session["MarcaCM"].ToString() : "-99"), null);
@@ -1184,7 +1184,7 @@ namespace WizOne.ConcediiMedicale
                 return;
             }
             
-            int dow;
+            //int dow;
             int nrZL = 0, nrZC = 0;
             for (DateTime dt = dtb; dt <= dte; dt = dt.AddDays(1))
             {
@@ -1327,7 +1327,7 @@ namespace WizOne.ConcediiMedicale
 
         void OnSelChangeCostCenter()
         {
-            int pos, No;
+            int No;
             //ASPxComboBox cmbCC = DataList1.Items[0].FindControl("cmbCC") as ASPxComboBox;
             //ASPxTextBox txtCC = DataList1.Items[0].FindControl("txtCC") as ASPxTextBox;
 

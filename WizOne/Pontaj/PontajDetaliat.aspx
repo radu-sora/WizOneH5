@@ -534,15 +534,15 @@
             });
         }
         function AdjustSize() {
-            var dif = 230;
-            var div = document.getElementById('divPeAng');
-            var style = window.getComputedStyle(div);
-            if (style.display === 'none')
-                dif = 340;
-            var height = Math.max(0, document.documentElement.clientHeight) - dif;
+            var dif = 200 + pnlFiltrare.GetHeight();
+            
+            if (typeof grDateTotaluri !== "undefined" && ASPxClientUtils.IsExists(grDateTotaluri))
+                dif = dif + grDateTotaluri.GetHeight();
+            
             if (<%=Session["PontajulAreCC"] %> == 1) 
-                var height = Math.max(0, document.documentElement.clientHeight) - 470;
-
+                dif = dif + (grCC.GetHeight() + 50);
+            
+            var height = Math.max(0, document.documentElement.clientHeight) - dif;
             grDate.SetHeight(height);
         }
 
@@ -667,6 +667,12 @@
                     <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
+
+                          <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20">
+                              <HeaderStyle Font-Bold="true" />
+                              <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
+                            <PanelCollection>
+                                <dx:PanelContent>
 
 
                             <div id="divPeAng" runat="server" style="float:left; display:none; line-height:22px; vertical-align:middle;">
@@ -819,14 +825,16 @@
                                     </tr>
                                 </table>
                             </div>
-
+                                </dx:PanelContent>
+                            </PanelCollection>
+                        </dx:ASPxRoundPanel>
 
                         </dx:PanelContent>
                     </PanelCollection>
                 </dx:ASPxCallbackPanel>
 
 
-                <div style="float:left; padding:0px 15px;">
+                <div style="float:left; padding:0px 15px; position:relative;">
                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                         <ClientSideEvents Click="function(s, e) {
@@ -834,6 +842,17 @@
                                         e.processOnServer = true;
                                     }" />
                     </dx:ASPxButton>
+    	            <div class="hovercard" id="divHovercard" runat="server">
+			            <div class="hovercard-container">
+				            <div class="hovercard-arrow">
+				            </div>
+				            <div class="hovercard-box">									
+					            <div class="hovercard-body">
+						            Pentru vizualizare apasati butonul Filtru
+					            </div>
+				            </div>
+			            </div>
+		            </div>
                 </div>
 
                 <div style="float:left;">

@@ -120,7 +120,8 @@
                 else {
                     txtDataInc.value = values[2].getTime();
                     txtDataSf.value = values[3].getTime();
-                    txtDataDivide.value = txtDataInc.value;
+                    //txtDataDivide.value = txtDataInc.value;
+                    txtDataDivide.SetValue(null);
                     popUpDivide.Show();
                 }
             }
@@ -586,6 +587,8 @@
                                             <dx:ASPxDateEdit ID="txtDataDivide" ClientIDMode="Static" ClientInstanceName="txtDataDivide" runat="server" Width="120px">
                                                 <CalendarProperties FirstDayOfWeek="Monday" />
                                             </dx:ASPxDateEdit>
+                                            <br />
+                                            <dx:ASPxCheckBox ID="chkAnulare" ClientInstanceName="chkAnulare" runat="server" Text="Anulare concediu incepand cu aceasta data" TextAlign="Right" />
                                             <dx:ASPxHiddenField ID="txtDataSf" runat="server" ClientIDMode="Static" ClientInstanceName="txtDataSf" />
                                             <dx:ASPxHiddenField ID="txtDataInc" runat="server" ClientIDMode="Static" ClientInstanceName="txtDataInc" />
                                         </td>

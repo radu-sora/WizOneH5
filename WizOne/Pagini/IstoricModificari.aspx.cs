@@ -18,7 +18,7 @@ namespace WizOne.Pagini
 {
     public partial class IstoricModificari : System.Web.UI.Page
     {
-        int F10003 = -99;
+        //int F10003 = -99;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -71,8 +71,7 @@ namespace WizOne.Pagini
                     Session["WizTrace_Tabele"] = General.IncarcaDT(sql, null);
                     sql = "SELECT * FROM ALIASCMP";
                     Session["WizTrace_Campuri"] = General.IncarcaDT(sql, null);
-                }          
-
+                }              
             }
             catch (Exception ex)
             {

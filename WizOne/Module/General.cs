@@ -254,8 +254,11 @@ namespace WizOne.Module
             }
             catch (Exception ex)
             {
-                MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                if (strSql.IndexOf("Eval_") < 0)
+                {
+                    MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                    MemoreazaEroarea(strSql, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+                }
             }
             return dt;
         }
@@ -756,7 +759,7 @@ namespace WizOne.Module
 
                 //strSql = strSql.Replace("CRP.F10008", "dbo.nuf('F10008', CRP.F10003, CRP.F10008) AS F10008");
                 //strSql = strSql.Replace("CRP.F10009", "dbo.nuf('F10009', CRP.F10003, CRP.F10009) AS F10009");
-            }catch (Exception ex){}
+            }catch (Exception){}
 
 
             SqlCommand cmd = new SqlCommand(strSql, conn, tran);
@@ -1974,7 +1977,7 @@ namespace WizOne.Module
                 //else
                 //    return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MemoreazaEroarea(ex.ToString(), "General", "IsDate");
                 return false;
@@ -5060,22 +5063,6 @@ namespace WizOne.Module
             }
         }
 
-        public static void StergeFotografie(object sender, int id, string Tabela)
-        {
-            try
-            {
-
-                //string sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + Tabela + "' AND \"Id\" = " + id;
-                //General.ExecutaNonQuery(sql, null);          
-
-            }
-            catch (Exception ex)
-            {
-                //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-
         public static void StergeFisier(string Tabela, object cheie)
         {
             try
@@ -5156,12 +5143,9 @@ namespace WizOne.Module
                         oledbAdapter.Dispose();
                         oledbAdapter = null;
                     }
-
                 }
-
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -5234,18 +5218,13 @@ namespace WizOne.Module
                         HttpContext.Current.Response.Buffer = true;
                         ms.WriteTo(HttpContext.Current.Response.OutputStream);
                     }
-
                 }
-
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
-
         }
-
 
         public static string NumarLuniContract(decimal F10003, string F100985, DateTime F100933, DateTime F100934, int zileContractCurent)
         {
@@ -5306,7 +5285,7 @@ namespace WizOne.Module
                     mesaj = "1Mai puteti prelungi acest contract pe maxim " + months + " luni si " + days + " zile";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //srvGeneral.MemoreazaEroarea(ex.Message.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
             }
@@ -5914,7 +5893,7 @@ namespace WizOne.Module
                 return null;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), "General", new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
                 return null;
@@ -6041,11 +6020,11 @@ namespace WizOne.Module
                     bool vizibil = true, blocat = false;
                     string[] param = elem.Split('_');
                     SecuritateCtrl(elem, idUser, out vizibil, out blocat);
-                    WebControl ctl = dtList.Items[0].FindControl(param[0]) as WebControl;
+                    dynamic ctl = dtList.Items[0].FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.Visible = vizibil;
-                        ctl.Enabled = !blocat; 
+                        ctl.ClientVisible = vizibil;
+                        ctl.ClientEnabled = !blocat;           
                     }
                     else
                     {
@@ -6095,11 +6074,11 @@ namespace WizOne.Module
                     bool vizibil = true, blocat = false;
                     string[] param = elem.Split('_');
                     SecuritateCtrl(elem, idUser, out vizibil, out blocat);
-                    WebControl ctl = pnl.FindControl(param[0]) as WebControl;
+                    dynamic ctl = pnl.FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.Visible = vizibil;
-                        ctl.Enabled = !blocat;
+                        ctl.ClientVisible = vizibil;
+                        ctl.ClientEnabled = !blocat;
                     }
                     else
                     {
@@ -6149,11 +6128,11 @@ namespace WizOne.Module
                     bool vizibil = true, blocat = false;
                     string[] param = elem.Split('_');
                     SecuritateCtrl(elem, idUser, out vizibil, out blocat);
-                    WebControl ctl = dtList.Items[0].FindControl(param[0]) as WebControl;
+                    dynamic ctl = dtList.Items[0].FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.Visible = vizibil;
-                        ctl.Enabled = !blocat;
+                        ctl.ClientVisible = vizibil;
+                        ctl.ClientEnabled = !blocat;
                     }
                 }
             }
@@ -6583,7 +6562,7 @@ namespace WizOne.Module
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Constante.ctxGeneral.MemoreazaInfo(ex.ToString(), this.ToString(), new System.Diagnostics.StackTrace().GetFrame(0).GetMethod().Name);
                 return false;
@@ -7058,7 +7037,7 @@ namespace WizOne.Module
 
             try
             {
-                if (HttpContext.Current.Session[numeVar] != null && HttpContext.Current.Session[numeVar] != "")
+                if (General.Nz(HttpContext.Current.Session[numeVar],"").ToString() != "")
                     obj = HttpContext.Current.Session[numeVar];
                 else
                     obj = "";
@@ -7290,8 +7269,8 @@ namespace WizOne.Module
 
                 #region Validare start
                 //string sqlVal = @"SELECT " + f10003 + " AS F10003, " + General.ToDataUniv(an,luna) + " AS ZiuaInc, " + idStare.ToString() + " AS IdStare, " + an + " AS An, " + luna + " AS Luna " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
-                string sablon = @"SELECT {0} AS F10003, {1} AS ZiuaInc, {2} AS IdStare, {3} AS An, {4} AS Luna " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
-                string sqlVal = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna);
+                string sablon = @"SELECT {0} AS F10003, {1} AS ""ZiuaInc"", {2} AS ""IdStare"", {3} AS ""An"", {4} AS ""Luna"", {5} AS ""Actiune"" " + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+                string sqlVal = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
 
                 //string msg = Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Validare, sqlVal, "", -99, Convert.ToInt32(HttpContext.Current.Session["UserId"] ?? -99), Convert.ToInt32(HttpContext.Current.Session["User_Marca"] ?? -99));
                 string msg = Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Validare, sqlVal, "", -99, userId, userMarca);
@@ -7373,7 +7352,7 @@ namespace WizOne.Module
 
                 #region  Notificare start
 
-                string sqlNtf = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna);
+                string sqlNtf = string.Format(sablon, f10003, General.ToDataUniv(an, luna), idStare, an, luna, actiune);
                 //Notif.TrimiteNotificare(pagina, (int)Constante.TipNotificare.Notificare, sqlNtf, "Ptj_Cumulat",
                 //    Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT IdAuto FROM ""Ptj_Cumulat"" WHERE F10003 =@1 AND ""An"" =@2 AND ""Luna"" =@3", new object[] { f10003, an, luna }),-99)),
                 //    Convert.ToInt32(HttpContext.Current.Session["UserId"] ?? -99), Convert.ToInt32(HttpContext.Current.Session["User_Marca"] ?? -99));
@@ -7490,6 +7469,68 @@ namespace WizOne.Module
             return str;
         }
 
+        //Radu 04.02.2020
+        public static string GetF10003RoluriComasate(int idUser, int an, int luna, decimal F10003, List<int> lstRoluri, int zi = 0, int idDept = -99, int idAngajat = -99)
+        {
+            string str = "";
+
+            try
+            {              
+                string strSql = "";
+                string strFiltru = "";
+                if (idDept != -99) strFiltru = " AND A.\"F10007\"=" + idDept;
+                if (idAngajat != -99) strFiltru = " AND A.\"F10003\"=" + idAngajat;
+
+                foreach (int idRol in lstRoluri)
+                {
+                    strSql += "UNION ";
+                    if (Constante.tipBD == 1)
+                    {
+                        strSql += " (SELECT X.F10003 FROM ( " +
+                                " SELECT B.f10003 FROM relGrupAngajat B" +
+                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+                                " WHERE C.IdSuper =" + idUser + " AND C.IdRol=" + idRol +
+                                " GROUP BY B.f10003" +
+                                " UNION" +
+                                " SELECT B.f10003 FROM relGrupAngajat B" +
+                                " INNER JOIN Ptj_relGrupSuper C ON B.IdGrup = C.IdGrup" +
+                                " INNER JOIN F100Supervizori D ON D.F10003 = B.F10003 AND D.IdSuper = (-1 * C.IdSuper) AND (100 * " + an + " + " + luna + " BETWEEN isnull(100 * year(D.DataInceput) + MONTH(D.DataInceput), 190000) AND isnull(100 * year(D.DataSfarsit) + MONTH(D.DataSfarsit), 210000)) " +
+                                " WHERE D.IdUser =" + idUser + " AND C.IdRol=" + idRol +
+                                " GROUP BY B.F10003) X " +
+                                " WHERE X.F10003 IN (SELECT S.F10003 FROM F100 S WHERE S.F10025 <> 900 AND CONVERT(date,S.F10022) <> CONVERT(date,S.F100993) " + strFiltru.Replace("A.", "S.") + General.FiltruActivi(an, luna, zi) + ")" +
+                                " GROUP BY X.F10003)";
+                    }
+                    else
+                    {
+
+                        strSql += " (SELECT X.F10003 FROM ( " +
+                                " SELECT B.f10003 FROM \"relGrupAngajat\" B " +
+                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+                                " WHERE C.\"IdSuper\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+                                " GROUP BY B.F10003 " +
+                                " UNION " +
+                                " SELECT B.F10003 FROM \"relGrupAngajat\" B " +
+                                " INNER JOIN \"Ptj_relGrupSuper\" C ON B.\"IdGrup\" = C.\"IdGrup\" " +
+                                " INNER JOIN \"F100Supervizori\" D ON D.F10003 = B.F10003 AND D.\"IdSuper\" = (-1 * C.\"IdSuper\") AND D.\"DataInceput\" <= " + ToDataUniv(an, luna, 99) + " AND " + ToDataUniv(an, luna, 1) + " <= D.\"DataSfarsit\" " +
+                                " WHERE D.\"IdUser\" =" + idUser + " AND C.\"IdRol\"=" + idRol +
+                                " GROUP BY B.F10003) X  " +
+                                " INNER JOIN F100 A ON A.F10003=X.F10003  " +
+                                " WHERE 1=1 AND A.F10025 <> 900 AND TRUNC(A.F10022) <> TRUNC(COALESCE(A.F100993,TO_DATE('01-01-2101','DD-MM-YYYY'))) " + strFiltru + General.FiltruActivi(an, luna, zi) +
+                                " GROUP BY X.F10003)";
+                    }
+                }
+                if (strSql.Length > 5)
+                    str = " AND A.F10003 IN (" + strSql.Substring(5) + ")";
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return str;
+        }
 
         //Florin 2019.12.27
         public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, string denDept = "", int idAngajat = -99)
@@ -9297,7 +9338,7 @@ namespace WizOne.Module
 
                 smtp.Dispose();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 strErr = "Mailul nu a fost trimis.";
             }
@@ -9393,7 +9434,7 @@ namespace WizOne.Module
         }
 
 
-        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text, DataTable dt = null)
+        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text, DataTable dt = null, int valTichete = 0)
         {
             decimal tmpVB = 0;
             string rezultat = "";
@@ -9441,13 +9482,13 @@ namespace WizOne.Module
 
                 if (tipVenit == 1)           //VB -> SN
                 {
-                    varDed = DamiValDeducere(varNr, Convert.ToDecimal(venit ?? 0));
-                    CalcSN(Convert.ToDecimal(venit ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu, out tmpVB, out rezultat);
+                    varDed = DamiValDeducere(varNr, Convert.ToDecimal(venit ?? 0) + valTichete);
+                    CalcSN(Convert.ToDecimal(venit ?? 0), varCas, varCass, varSom, varImp, varDed, salMediu, valTichete, out tmpVB, out rezultat);
                 }
                 else                    //SN -> VB
                 {
                     decimal SN = Convert.ToDecimal(venit ?? 1);
-                    varDed = DamiValDeducere(varNr, SN);
+                    varDed = DamiValDeducere(varNr, SN + valTichete);
                     tmpVB = Math.Round((SN - (1.5m * varImp / 100 * varDed)) / (1 - varImp / 100 - (varImp / 100 * varDed / 2000) - ((1 - varImp / 100) * (varCas + varCass + varSom) / 100)));
                     decimal tmpSN = 0;
 
@@ -9461,8 +9502,8 @@ namespace WizOne.Module
                         {
                             i += 1;
 
-                            varDed = DamiValDeducere(varNr, tmpVB);
-                            CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu, out tmpSN, out rezultat);
+                            varDed = DamiValDeducere(varNr, tmpVB + valTichete);
+                            CalcSN(tmpVB, varCas, varCass, varSom, varImp, varDed, salMediu, valTichete, out tmpSN, out rezultat);
                             if (tmpSN != SN)
                             {
                                 if (tmpSN > SN)
@@ -9532,7 +9573,7 @@ namespace WizOne.Module
         }
 
 
-        private static void CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu, out decimal SN, out string rezultat)
+        private static void CalcSN(decimal VB, decimal varCas, decimal varCass, decimal varSom, decimal varImp, decimal varDed, decimal salMediu, int valTichete, out decimal SN, out string rezultat)
         {
             decimal tmpSN = 0m;
             string tmpRezultat = "";
@@ -9593,7 +9634,7 @@ namespace WizOne.Module
                 //    ded = Convert.ToDecimal(Math.Ceiling(Convert.ToDouble(ded / 10)) * 10);
                 //}
 
-                decimal imp = MathExt.Round(varImp / 100 * (VB - taxe - ded), MidpointRounding.AwayFromZero);
+                decimal imp = MathExt.Round(varImp / 100 * ((VB + valTichete) - taxe - ded), MidpointRounding.AwayFromZero);
                 if (imp < 0) imp = 0;
 
                 tmpSN = MathExt.Round((VB - imp - taxe), MidpointRounding.AwayFromZero);
@@ -9626,6 +9667,32 @@ namespace WizOne.Module
                     poz = 3;
                 }
 
+                #region OLD
+
+                //switch (tipAfisare)
+                //{
+                //    case "1":
+                //        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\"/60 AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        if (Constante.tipBD == 2)
+                //            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\"/60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        break;
+                //    case "2":
+                //        //masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(CAST(CAST((\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60) as decimal(18,2)) / 100 AS DECIMAL(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 + CAST(CAST((\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60) as decimal(18,2)) / 100 AS DECIMAL(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        if (Constante.tipBD == 2)
+                //            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} REPLACE(CAST(CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS number(18,2))/100 AS {conversie}(10)),',','') {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+
+                //        //masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        break;
+                //    case "3":
+                //        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(CAST(ROUND(CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" AS decimal) / 60,2) as decimal(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        if (Constante.tipBD == 2)
+                //            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(CAST(TRUNC(CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" AS number) / 60,2) as number(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        break;
+                //}
+
+                #endregion
+
                 switch (tipAfisare)
                 {
                     case "1":
@@ -9634,12 +9701,9 @@ namespace WizOne.Module
                             masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\"/60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
                         break;
                     case "2":
-                        //masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(CAST(CAST((\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60) as decimal(18,2)) / 100 AS DECIMAL(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
                         masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 + CAST(CAST((\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60) as decimal(18,2)) / 100 AS DECIMAL(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
                         if (Constante.tipBD == 2)
-                            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} REPLACE(CAST(CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS number(18,2))/100 AS {conversie}(10)),',','') {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
-
-                        //masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} REPLACE(CAST(CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS number(18,2))/100 AS {conversie}(10)),'','','''') {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
                         break;
                     case "3":
                         masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(CAST(ROUND(CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" AS decimal) / 60,2) as decimal(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
@@ -9648,9 +9712,9 @@ namespace WizOne.Module
                         break;
                 }
 
-                string sqlVal = $@"SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH ('') ";
+                string sqlVal = $@"SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"" ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH ('') ";
                 if (Constante.tipBD == 2)
-                    sqlVal = $@"SELECT LISTAGG('{Dami.Operator()}' {Dami.Operator()} {masca}) WITHIN GROUP (ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int)) FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL";
+                    sqlVal = $@"SELECT LISTAGG('{Dami.Operator()}' {Dami.Operator()} {masca}) WITHIN GROUP (ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int)) FROM (SELECT ""OreInVal"", ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"")";
 
                 string strVal = (General.ExecutaScalar(sqlVal, null) ?? "").ToString();
 
@@ -9658,6 +9722,7 @@ namespace WizOne.Module
                 {
                     strVal = substr + "(" + strVal.Substring(poz - 1) + ",2,500)";
                     strVal = strVal.Replace("'", "''");
+                    strVal = $@"CASE WHEN (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" BS WHERE BS.""DenumireScurta""=""ValStr"") = 0 THEN {strVal} ELSE ""ValStr"" END ";
                     string strSql = $@"
                         IF ((SELECT COUNT(*) FROM ""tblParametrii"" WHERE ""Nume""='SintaxaValStr') = 0)
                         INSERT INTO ""tblParametrii""(""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", USER_NO, TIME) VALUES('SintaxaValStr', '{strVal}', 'Este formula prin care se creaza ValStr in pontaj', 2, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()})

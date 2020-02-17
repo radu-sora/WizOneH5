@@ -134,6 +134,9 @@
                 case "txtSubiect":
                     txtSubiect.SetText(txtSubiect.GetText() + "#$" + cmbAddCmp.GetText() + "$#");
                     break;
+                case "pnlXLS_txtNumeExcel":
+                    txtNumeExcel.SetText(txtNumeExcel.GetText() + "#$" + cmbAddCmp.GetText() + "$#");
+                    break;
             }
         }
 
@@ -678,7 +681,7 @@
 --%>
                             <table>
                                 <tr>
-                                    <td><label id="lblNume" runat="server">Nume</label></td>
+                                    <td style="padding-right:15px;"><label id="lblNume" runat="server">Nume</label></td>
                                     <td>
                                         <dx:ASPxTextBox ID="txtNume" runat="server" ClientInstanceName="txtNume" Width="250px">
                                             <ClientSideEvents GotFocus="onGotFocus" />
@@ -718,7 +721,17 @@
                 <dx:PanelContent>
 
                     <div class="div_ver">
-                        <dx:ASPxCheckBox ID="chkExcel" runat="server" Text="Export excel" TextAlign="Left" />
+                        <table>
+                            <tr>
+                                <td style="padding-right:15px;"><label id="lblNumeExcel" runat="server">Nume Excel</label></td>
+                                <td style="padding-right:15px;">
+                                    <dx:ASPxTextBox ID="txtNumeExcel" runat="server" ClientInstanceName="txtNumeExcel" Width="250px">
+                                        <ClientSideEvents GotFocus="onGotFocus" />
+                                    </dx:ASPxTextBox>
+                                </td>
+                                <td><dx:ASPxCheckBox ID="chkExcel" runat="server" Text="Export excel" TextAlign="Left" /></td>
+                            </tr>
+                        </table>
                         <dx:ASPxMemo ID="txtExcel" ClientInstanceName="txtExcel" runat="server" Width="100%" Height="150px" >
                             <ClientSideEvents GotFocus="onGotFocus" />
                         </dx:ASPxMemo>

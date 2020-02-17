@@ -71,60 +71,59 @@
         <ClientSideEvents EndCallback="function (s,e) { OnEndCallback(s,e); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" />
         <PanelCollection>
             <dx:PanelContent>
-            <table width="55%">
+            <table style="width:55%;">
                 <tr>
-
-                    <td>
+                    <td style="padding-right:15px !important;">
                         <dx:ASPxLabel id="lblDataInceput" runat="server" style="display:inline-block;" Text="Data inceput"></dx:ASPxLabel>
-						<dx:ASPxDateEdit  ID="deDataInceput" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
+						<dx:ASPxDateEdit  ID="deDataInceput" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false">
                             <CalendarProperties FirstDayOfWeek="Monday" />
-						</dx:ASPxDateEdit>	
+						</dx:ASPxDateEdit>
                     </td>
-                    <td>
+                    <td style="padding-right:15px !important;">
                         <dx:ASPxLabel id="lblDataSfarsit" runat="server" style="display:inline-block;" Text="Data sfarsit"></dx:ASPxLabel>
-						<dx:ASPxDateEdit  ID="deDataSfarsit" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false"  >
+						<dx:ASPxDateEdit  ID="deDataSfarsit" Width="100"  runat="server" DisplayFormatString="dd.MM.yyyy" EditFormatString="dd.MM.yyyy" AutoPostBack="false">
                             <CalendarProperties FirstDayOfWeek="Monday" />
-						</dx:ASPxDateEdit>	
+						</dx:ASPxDateEdit>
                     </td>
-                    <td>
-                        <dx:ASPxLabel  ID="lblTabela" runat="server"  style="display:inline-block;"  Text="Tabela"></dx:ASPxLabel >
+                    <td style="padding-right:15px !important;">
+                        <dx:ASPxLabel  ID="lblTabela" runat="server"  style="display:inline-block;"  Text="Tabela"></dx:ASPxLabel>
                         <dx:ASPxComboBox ID="cmbTabela" runat="server" ClientInstanceName="cmbTabela" ClientIDMode="Static" Width="100px" ValueField="Id" DropDownWidth="100" 
-                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
                             <ClientSideEvents SelectedIndexChanged="function(s,e){ OnValueChangedHandler(s); }" />
                         </dx:ASPxComboBox>
                     </td>
-                    <td>
-                        <dx:ASPxLabel  ID="lblTipOp" runat="server"  style="display:inline-block;"  Text="Tip operatie"></dx:ASPxLabel >
+                    <td style="padding-right:15px !important;">
+                        <dx:ASPxLabel  ID="lblTipOp" runat="server"  style="display:inline-block;"  Text="Tip operatie"></dx:ASPxLabel>
                         <dx:ASPxComboBox ID="cmbTipOp" runat="server" ClientInstanceName="cmbTipOp" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150"  
-                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >                   
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
                         </dx:ASPxComboBox>
-                    </td>                      
-   					<td>		
-                        <dx:ASPxLabel  id="lblUtilWin" runat="server" style="display:inline-block;" Text="Utilizator Windows"></dx:ASPxLabel>	
-                        <dx:ASPxComboBox ID="cmbUtilWin" runat="server" ClientInstanceName="cmbUtilWin" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
-                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
-                        </dx:ASPxComboBox> 
-                    </td>      
-					<td>		
-                        <dx:ASPxLabel  id="lblUtilWSWO" runat="server" style="display:inline-block;" Text="Utilizator WS/WO"></dx:ASPxLabel>	
-                        <dx:ASPxComboBox ID="cmbUtilWSWO" runat="server" ClientInstanceName="cmbUtilWSWO" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
-                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
-                        </dx:ASPxComboBox> 
                     </td>
-					<td>		
-                        <dx:ASPxLabel  id="lblNumeCalc" runat="server" style="display:inline-block;" Text="Nume calculator"></dx:ASPxLabel>	
+   					<td style="padding-right:15px !important;">
+                        <dx:ASPxLabel  id="lblUtilWin" runat="server" style="display:inline-block;" Text="Utilizator Windows"></dx:ASPxLabel>
+                        <dx:ASPxComboBox ID="cmbUtilWin" runat="server" ClientInstanceName="cmbUtilWin" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
+                        </dx:ASPxComboBox>
+                    </td>
+					<td style="padding-right:15px !important;">
+                        <dx:ASPxLabel  id="lblUtilWSWO" runat="server" style="display:inline-block;" Text="Utilizator WS/WO"></dx:ASPxLabel>
+                        <dx:ASPxComboBox ID="cmbUtilWSWO" runat="server" ClientInstanceName="cmbUtilWSWO" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
+                        </dx:ASPxComboBox>
+                    </td>
+					<td style="padding-right:15px !important;">
+                        <dx:ASPxLabel  id="lblNumeCalc" runat="server" style="display:inline-block;" Text="Nume calculator"></dx:ASPxLabel>
                         <dx:ASPxComboBox ID="cmbNumeCalc" runat="server" ClientInstanceName="cmbNumeCalc" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
-                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
-                        </dx:ASPxComboBox> 
-                    </td>          
+                            TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
+                        </dx:ASPxComboBox>
+                    </td>
                     <td>
-                        <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"  >
+                        <dx:ASPxButton ID="btnFiltru" ClientInstanceName="btnFiltru" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">
                             <ClientSideEvents Click="function(s, e) { OnFiltruClick(s); }" />
                             <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                         </dx:ASPxButton>
                     </td>
                     <td>
-                        <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"  >
+                        <dx:ASPxButton ID="btnFiltruSterge" ClientInstanceName="btnFiltruSterge" ClientIDMode="Static" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">
                             <ClientSideEvents Click="function(s, e) {
                                 pnlLoading.Show();
                                 pnlCtl.PerformCallback(s.name);
@@ -134,7 +133,8 @@
                     </td>                    	
                 </tr>
             </table>
-            <table>
+            <br />
+            <table style="width:100%;">
                 <tr>
                     <td >
                         <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  >

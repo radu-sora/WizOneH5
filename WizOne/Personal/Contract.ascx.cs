@@ -323,7 +323,7 @@ namespace WizOne.Personal
                 btn.ToolTip = Dami.TraduCuvant(btn.ToolTip);
             }
 
-            //if (Dami.ValoareParam("ValidariPersonal") == "1")
+            if (Dami.ValoareParam("ValidariPersonal") == "1")
             {
                 string[] lstTextBox = new string[8] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc",
                                                     "txtZileCOCuvAnCrt", "txtNrOre"};
@@ -357,27 +357,24 @@ namespace WizOne.Personal
                         lst = Session["MP_CuloareCampOblig"] as List<int>;
                     cmb.BackColor = (lst.Count > 0 ? Color.FromArgb(lst[0], lst[1], lst[2]) : Color.LightGray);
                 }
-
-                HtmlGenericControl lgContract = Contract_DataList.Items[0].FindControl("lgContract") as HtmlGenericControl;
-                lgContract.InnerText = Dami.TraduCuvant("Contract");
-                HtmlGenericControl lgTipM = Contract_DataList.Items[0].FindControl("lgTipM") as HtmlGenericControl;
-                lgTipM.InnerText = Dami.TraduCuvant("Tip munca");
-                HtmlGenericControl lgPerioada = Contract_DataList.Items[0].FindControl("lgPerioada") as HtmlGenericControl;
-                lgPerioada.InnerText = Dami.TraduCuvant("Perioada");
-                HtmlGenericControl lgDataInc = Contract_DataList.Items[0].FindControl("lgDataInc") as HtmlGenericControl;
-                lgDataInc.InnerText = Dami.TraduCuvant("Data incetare");
-                HtmlGenericControl lgSitCOCtr = Contract_DataList.Items[0].FindControl("lgSitCOCtr") as HtmlGenericControl;
-                lgSitCOCtr.InnerText = Dami.TraduCuvant("Situatie CO");
-
-
-
                 //Florin 2019.05.31
                 //if (!IsPostBack)
                 //{
                 //    SetariNorma();
                 //}
 
-            }            
+            }
+
+            HtmlGenericControl lgContract = Contract_DataList.Items[0].FindControl("lgContract") as HtmlGenericControl;
+            lgContract.InnerText = Dami.TraduCuvant("Contract");
+            HtmlGenericControl lgTipM = Contract_DataList.Items[0].FindControl("lgTipM") as HtmlGenericControl;
+            lgTipM.InnerText = Dami.TraduCuvant("Tip munca");
+            HtmlGenericControl lgPerioada = Contract_DataList.Items[0].FindControl("lgPerioada") as HtmlGenericControl;
+            lgPerioada.InnerText = Dami.TraduCuvant("Perioada");
+            HtmlGenericControl lgDataInc = Contract_DataList.Items[0].FindControl("lgDataInc") as HtmlGenericControl;
+            lgDataInc.InnerText = Dami.TraduCuvant("Data incetare");
+            HtmlGenericControl lgSitCOCtr = Contract_DataList.Items[0].FindControl("lgSitCOCtr") as HtmlGenericControl;
+            lgSitCOCtr.InnerText = Dami.TraduCuvant("Situatie CO");
 
             General.SecuritatePersonal(Contract_DataList, Convert.ToInt32(Session["UserId"].ToString()));
 

@@ -323,7 +323,7 @@ namespace WizOne.Personal
                 btn.ToolTip = Dami.TraduCuvant(btn.ToolTip);
             }
 
-            if (Dami.ValoareParam("ValidariPersonal") == "1")
+            //if (Dami.ValoareParam("ValidariPersonal") == "1")
             {
                 string[] lstTextBox = new string[8] { "txtNrCtrInt", "txtSalariu", "txtPerProbaZL", "txtPerProbaZC", "txtNrZilePreavizDemisie", "txtNrZilePreavizConc",
                                                     "txtZileCOCuvAnCrt", "txtNrOre"};

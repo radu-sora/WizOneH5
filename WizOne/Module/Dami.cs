@@ -756,10 +756,11 @@ namespace WizOne.Module
 
             try
             {
-                if (Constante.tipBD == 1)
-                    strSql = "SELECT 1 AS X UNION SELECT 2 UNION SELECT 3";
-                else
-                    strSql = "SELECT 1 AS X FROM DUAL UNION SELECT 2 FROM DUAL UNION SELECT 3 FROM DUAL";
+                strSql = @"SELECT F10003 FROM ""Ptj_Intrari"" WHERE 1=2";
+                //if (Constante.tipBD == 1)
+                //    strSql = "SELECT 1 AS X UNION SELECT 2 UNION SELECT 3";
+                //else
+                //    strSql = "SELECT 1 AS X FROM DUAL UNION SELECT 2 FROM DUAL UNION SELECT 3 FROM DUAL";
 
             }
             catch (Exception ex)

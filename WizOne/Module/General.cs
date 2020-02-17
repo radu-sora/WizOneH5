@@ -9667,6 +9667,32 @@ namespace WizOne.Module
                     poz = 3;
                 }
 
+                #region OLD
+
+                //switch (tipAfisare)
+                //{
+                //    case "1":
+                //        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\"/60 AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        if (Constante.tipBD == 2)
+                //            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\"/60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        break;
+                //    case "2":
+                //        //masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(CAST(CAST((\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60) as decimal(18,2)) / 100 AS DECIMAL(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 + CAST(CAST((\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60) as decimal(18,2)) / 100 AS DECIMAL(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        if (Constante.tipBD == 2)
+                //            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} REPLACE(CAST(CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS number(18,2))/100 AS {conversie}(10)),',','') {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+
+                //        //masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        break;
+                //    case "3":
+                //        masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(CAST(ROUND(CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" AS decimal) / 60,2) as decimal(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        if (Constante.tipBD == 2)
+                //            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(CAST(TRUNC(CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" AS number) / 60,2) as number(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                //        break;
+                //}
+
+                #endregion
+
                 switch (tipAfisare)
                 {
                     case "1":
@@ -9675,12 +9701,9 @@ namespace WizOne.Module
                             masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\"/60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
                         break;
                     case "2":
-                        //masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(CAST(CAST((\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60) as decimal(18,2)) / 100 AS DECIMAL(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
                         masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60 + CAST(CAST((\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" % 60) as decimal(18,2)) / 100 AS DECIMAL(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
                         if (Constante.tipBD == 2)
-                            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} REPLACE(CAST(CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS number(18,2))/100 AS {conversie}(10)),',','') {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
-
-                        //masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
+                            masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(TRUNC(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" / 60) AS {conversie}(10)) {Dami.Operator()} ''.'' {Dami.Operator()} REPLACE(CAST(CAST(MOD(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" , 60) AS number(18,2))/100 AS {conversie}(10)),'','','''') {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
                         break;
                     case "3":
                         masca = $"'CASE WHEN COALESCE(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\",0)=0 THEN '''' ELSE COALESCE(''/'' {Dami.Operator()} CAST(CAST(ROUND(CAST(\"' {Dami.Operator()} \"OreInVal\" {Dami.Operator()} '\" AS decimal) / 60,2) as decimal(18,2)) AS {conversie}(10)) {Dami.Operator()} ''' {Dami.Operator()} COALESCE(\"DenumireScurta\",'') {Dami.Operator()} ''','''') END'";
@@ -9689,9 +9712,9 @@ namespace WizOne.Module
                         break;
                 }
 
-                string sqlVal = $@"SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH ('') ";
+                string sqlVal = $@"SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"" ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH ('') ";
                 if (Constante.tipBD == 2)
-                    sqlVal = $@"SELECT LISTAGG('{Dami.Operator()}' {Dami.Operator()} {masca}) WITHIN GROUP (ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int)) FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL";
+                    sqlVal = $@"SELECT LISTAGG('{Dami.Operator()}' {Dami.Operator()} {masca}) WITHIN GROUP (ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int)) FROM (SELECT ""OreInVal"", ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"")";
 
                 string strVal = (General.ExecutaScalar(sqlVal, null) ?? "").ToString();
 

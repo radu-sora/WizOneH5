@@ -50,9 +50,6 @@ namespace WizOne.Pontaj
                         divPeAng.Style["display"] = "inline-block";
                         divPeZi.Style["display"] = "none";
                         grDate.Columns["NumeComplet"].Visible = false;
-
-                        btnFiltruSterge.Visible = false;
-
                         grDate.Columns["Cheia"].Caption = Dami.TraduCuvant("Ziua");
                     }
                     else
@@ -60,14 +57,12 @@ namespace WizOne.Pontaj
                         divPeAng.Style["display"] = "none";
                         divPeZi.Style["display"] = "inline-block";
                         grDate.Columns["NumeComplet"].Visible = true;
+                        grDate.Columns["Cheia"].Caption = Dami.TraduCuvant("Marca");
 
                         btnAproba.Visible = false;
                         btnRespins.Visible = false;
                         btnInit.Visible = false;
                         btnDelete.Visible = false;
-                        btnFiltruSterge.Visible = true;
-
-                        grDate.Columns["Cheia"].Caption = Dami.TraduCuvant("Marca");
                     }
 
                     CreazaGrid();
@@ -124,7 +119,10 @@ namespace WizOne.Pontaj
                 }
 
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
-                    divHovercard.Visible = false;
+                {
+                    divHovercardAng.Visible = false;
+                    divHovercardZi.Visible = false;
+                }
             }
             catch (Exception ex)
             {
@@ -156,14 +154,15 @@ namespace WizOne.Pontaj
                 btnPtjEchipa.Text = Dami.TraduCuvant("btnPtjEchipa", "Pontajul Echipei");
                 //btnRespinge.Text = Dami.TraduCuvant("btnRespinge", "Respinge");
 
-                btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruAng.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
+                btnFiltruZi.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
 
                 lblAnLuna.InnerText = Dami.TraduCuvant("Luna/An");
                 lblRolAng.InnerText = Dami.TraduCuvant("Roluri");
                 lblAng.InnerText = Dami.TraduCuvant("Angajat");
                 lblStare.InnerText = Dami.TraduCuvant("Stare");
-                lblTip.InnerText = Dami.TraduCuvant("Tip inregistrare");
+                lblPtjAng.InnerText = Dami.TraduCuvant("Tip inregistrare");
                 lblPtjZi.InnerText = Dami.TraduCuvant("Tip inregistrare");
                 lblCateg.InnerText = Dami.TraduCuvant("Categorie");
 
@@ -457,7 +456,10 @@ namespace WizOne.Pontaj
                 grCC.DataSource = null;
                 grCC.DataBind();
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
-                    divHovercard.Visible = false;
+                {
+                    divHovercardAng.Visible = false;
+                    divHovercardZi.Visible = false;
+                }
 
                 int idRol = Convert.ToInt32(cmbRolAng.Value);
                 if (Convert.ToInt32(General.Nz(Request["tip"], 1)) == 2)

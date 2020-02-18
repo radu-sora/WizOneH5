@@ -193,13 +193,13 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxComboBox cmbAng;
         
         /// <summary>
-        /// lblTip control.
+        /// lblPtjAng control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblTip;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPtjAng;
         
         /// <summary>
         /// cmbPtjAng control.
@@ -218,6 +218,24 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl txtStare;
+        
+        /// <summary>
+        /// btnFiltruAng control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnFiltruAng;
+        
+        /// <summary>
+        /// divHovercardAng control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divHovercardAng;
         
         /// <summary>
         /// divPeZi control.
@@ -463,22 +481,22 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxComboBox cmbCateg;
         
         /// <summary>
-        /// btnFiltru control.
+        /// btnFiltruZi control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnFiltru;
+        protected global::DevExpress.Web.ASPxButton btnFiltruZi;
         
         /// <summary>
-        /// divHovercard control.
+        /// divHovercardZi control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divHovercard;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divHovercardZi;
         
         /// <summary>
         /// btnFiltruSterge control.

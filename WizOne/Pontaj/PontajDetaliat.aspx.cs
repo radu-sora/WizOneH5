@@ -2168,31 +2168,29 @@ namespace WizOne.Pontaj
                             "END;", null);
                 }
 
-
+                //Florin 2020-02-18
+                //(Dami.ValoareParam("RecalculCuloare", "0") == "0" || dr["CuloareValoare"].ToString() != "#e6c8fa")
+                //Florin 2018.05.15
+                //daca este absenta de tip zi nu mai recalculam
                 DataRow dr = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
-                if (dr != null && (Dami.ValoareParam("RecalculCuloare", "0") == "0" || dr["CuloareValoare"].ToString() != "#e6c8fa"))
+                if (dr != null && !absentaDeTipZi)
                 {
-                    //Florin 2018.05.15
-                    //daca este absenta de tip zi nu mai recalculam
-                    if (!absentaDeTipZi)
-                    {
-                        string golesteVal = Dami.ValoareParam("GolesteVal");
-                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                    string golesteVal = Dami.ValoareParam("GolesteVal");
+                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
 
-                        //Florin 2019.05.02
-                        FunctiiCeasuri.Calcul.h5 = true;
+                    //Florin 2019.05.02
+                    FunctiiCeasuri.Calcul.h5 = true;
 
-                        FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
-                        FunctiiCeasuri.Calcul.CalculInOut(dr, true, true);
+                    FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
+                    FunctiiCeasuri.Calcul.CalculInOut(dr, true, true);
 
-                        //Florin 2020.01.31
-                        General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(ziua)}");
+                    //Florin 2020.01.31
+                    General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(ziua)}");
 
-                        //Florin 2020.02.07
-                        General.ExecValStr(f10003, ziua);
-                    }
+                    //Florin 2020.02.07
+                    General.ExecValStr(f10003, ziua);
                 }
 
                 IncarcaGrid();

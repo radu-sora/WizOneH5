@@ -691,7 +691,7 @@
                         <div class="row" style="text-align:center;">
                             <div class="col-md-12">
                                 <div style="display:inline-table;">
-                                    <dx:ASPxComboBox ID="cmbTipAbs" runat="server" ClientIDMode="Static" ClientInstanceName="cmbTipAbs" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="DenumireScurta" AutoPostBack="false" TextFormatString="{0}">
+                                    <dx:ASPxComboBox ID="cmbTipAbs" runat="server" ClientIDMode="Static" ClientInstanceName="cmbTipAbs" Width="200px" DropDownWidth="350px" ValueField="Id" TextField="DenumireScurta" AutoPostBack="false" TextFormatString="{0}" AllowNull="true">
                                         <Columns>
                                             <dx:ListBoxColumn FieldName="DenumireScurta" Caption="Id" Width="50" />
                                             <dx:ListBoxColumn FieldName="Denumire" Caption="Denumire" Width="200" />

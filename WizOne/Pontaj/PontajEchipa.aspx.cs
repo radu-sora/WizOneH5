@@ -2522,7 +2522,7 @@ namespace WizOne.Pontaj
                 string sqlUpd = "";
                 string sqlIst = "";
                 string sqlValStr = "";
-                string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
+                string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
                                 ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
                                 WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
 
@@ -2594,8 +2594,6 @@ namespace WizOne.Pontaj
                                         }
                                     }
                                     catch (Exception) { }
-
-
                                 }
                             }
                         }
@@ -2610,7 +2608,8 @@ namespace WizOne.Pontaj
                             }
                         }
 
-                        sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)} {cmpModif}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                        if (cmp != "" || cmpModif != "")
+                            sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)} {cmpModif}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                         sqlValStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""={Dami.ValoareParam("SintaxaValStr")} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                         sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
                                         VALUES ({f10003}, {General.ToDataUniv(ziua)}, (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}), '{General.Nz(drMd["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)});";

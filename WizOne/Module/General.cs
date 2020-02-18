@@ -1677,6 +1677,10 @@ namespace WizOne.Module
                             DateTime dt = Convert.ToDateTime(Nz(dr[i], new DateTime(1900, 1, 1)));
                             str += ", " + ToDataUniv(dt) + " AS '" + dr.Table.Columns[i].ColumnName + "'";
                             break;
+                        case "System.Double":
+                        case "System.Decimal":
+                            str += ", " + Nz(dr[i], "null").ToString().Replace(",", ".") + " AS '" + dr.Table.Columns[i].ColumnName + "'";
+                            break;
                         default:
                             str += ", " + Nz(dr[i],"null") + " AS '" + dr.Table.Columns[i].ColumnName + "'";
                             break;

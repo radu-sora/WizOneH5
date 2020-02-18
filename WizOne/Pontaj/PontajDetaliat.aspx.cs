@@ -3749,7 +3749,7 @@ namespace WizOne.Pontaj
                     string[] arr = e.Parameters.Split(';');
                     if (arr.Length == 0 || arr[0] == "")
                     {
-                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Parametrii insuficienti");
+                        grCC.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Parametrii insuficienti");
                         return;
                     }
 

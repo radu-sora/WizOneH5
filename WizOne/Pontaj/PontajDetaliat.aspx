@@ -486,7 +486,7 @@
                         </tr>
                         <tr>
                             <td  style="padding:15px;">
-                               <dx:ASPxLabel ID="lblDataINc" runat="server" Text="Data Inceput"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblDataInc" runat="server" Text="Data Inceput"></dx:ASPxLabel> 
                             </td>
                             <td>
                                 <dx:ASPxDateEdit ID="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >

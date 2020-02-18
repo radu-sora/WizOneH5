@@ -607,13 +607,13 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxButton btnRecalcParam;
         
         /// <summary>
-        /// lblDataINc control.
+        /// lblDataInc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblDataINc;
+        protected global::DevExpress.Web.ASPxLabel lblDataInc;
         
         /// <summary>
         /// txtDataInc control.

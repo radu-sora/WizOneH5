@@ -724,5 +724,12 @@ table label {
     display: inline-block;
     float: left;
     padding-right: 15px;
+}
+
+.ptj_filtru .lw {
     width: 120px;
+}
+
+.ptj_stare {
+    float:left; margin-right:15px; width:110px; height:26px; text-align:center; border:solid 1px gray; color:#000000;
 }

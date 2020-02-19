@@ -1766,6 +1766,19 @@ namespace WizOne.Pontaj
                             grDate.Columns[arr[1]].Visible = false;
                             break;
                         case "btnFiltru":   //Radu 05.12.2019
+                            if (arr.Length > 1)
+                            {
+                                switch (General.Nz(arr[1],"").ToString())
+                                {
+                                    case "0":
+                                        if (cmbAng.SelectedIndex > 0) cmbAng.SelectedIndex -= 1;
+                                        break;
+                                    case "1":
+                                        if (cmbAng.SelectedIndex < cmbAng.Items.Count) cmbAng.SelectedIndex += 1;
+                                        break;
+                                }
+                            }
+
                             btnFiltru_Click(null, null);
                             break;
                     }
@@ -2249,28 +2262,28 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void cmbAng_ButtonClick(object source, ButtonEditClickEventArgs e)
-        {
-            try
-            {
-                switch(e.ButtonIndex)
-                {
-                    case 0:
-                        if (cmbAng.SelectedIndex > 0) cmbAng.SelectedIndex -= 1;
-                        break;
-                    case 1:
-                        if (cmbAng.SelectedIndex < cmbAng.Items.Count) cmbAng.SelectedIndex += 1;
-                        break;
-                }
+        //protected void cmbAng_ButtonClick(object source, ButtonEditClickEventArgs e)
+        //{
+        //    try
+        //    {
+        //        switch(e.ButtonIndex)
+        //        {
+        //            case 0:
+        //                if (cmbAng.SelectedIndex > 0) cmbAng.SelectedIndex -= 1;
+        //                break;
+        //            case 1:
+        //                if (cmbAng.SelectedIndex < cmbAng.Items.Count) cmbAng.SelectedIndex += 1;
+        //                break;
+        //        }
 
-                btnFiltru_Click(source, e);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        btnFiltru_Click(source, e);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         protected void txtZiua_ButtonClick(object source, ButtonEditClickEventArgs e)
         {

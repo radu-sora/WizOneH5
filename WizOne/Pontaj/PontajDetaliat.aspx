@@ -47,10 +47,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
-                <br /><br />
-
-
+            <td colspan="2" style="margin:15px 0px; display:inline-block;">
                 <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
                     <ClientSideEvents 
                         EndCallback="function (s,e) { pnlLoading.Hide(); }" 
@@ -58,29 +55,29 @@
                         BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
-                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20">
+                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie">
                                 <HeaderStyle Font-Bold="true" />
                                 <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                                 <PanelCollection>
                                     <dx:PanelContent>
-                                        <div id="divPeAng" runat="server" style="float:left; display:none; line-height:22px; vertical-align:middle;">
-                                            <div style="float:left; padding-right:15px;">
-                                                <label id="lblAnLuna" runat="server" style="display:inline-block; float:left; padding:0px 15px;">Luna/An</label>
+                                        <div id="divPeAng" runat="server" class="ptj_pe_zi">
+                                            <div class="ptj_filtru">
+                                                <label id="lblAnLuna" runat="server">Luna/An</label>
                                                     <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" >
                                                         <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtAnLuna'); }" />
                                                         <CalendarProperties FirstDayOfWeek="Monday" />
                                                 </dx:ASPxDateEdit>
                                             </div>
-                                            <div style="float:left; padding-right:15px; vertical-align:middle; display:inline-block;">
-                                                <label id="lblRolAng" runat="server" style="float:left; padding-right:15px;">Roluri</label>
+                                            <div class="ptj_filtru">
+                                                <label id="lblRolAng" runat="server">Roluri</label>
                                                 <dx:ASPxComboBox ID="cmbRolAng" ClientInstanceName="cmbRolAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRolAng'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
-                                            <div style="float:left; padding-right:15px;">
-                                                <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px;">Angajat</label>
+                                            <div class="ptj_filtru">
+                                                <label id="lblAng" runat="server">Angajat</label>
                                                 <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
-                                                            CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" OnButtonClick="cmbAng_ButtonClick" >
+                                                            CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
                                                     <Columns>
                                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
                                                         <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
@@ -96,15 +93,15 @@
                                                             <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
                                                         </dx:EditButton>
                                                     </Buttons>
-                                                    <ClientSideEvents ButtonClick="function(s, e) { pnlLoading.Show(); e.processOnServer = true; }"/>
+                                                    <ClientSideEvents ButtonClick="function(s, e) { OnCmbAngButtonClick(s,e); }"/>
                                                 </dx:ASPxComboBox>
                                             </div>
-                                            <div style="float:left; padding-right:15px; vertical-align:middle; display:inline-block;">
-                                                <label id="lblPtjAng" runat="server" style="float:left; padding-right:15px;">Tip inregistrare</label>
+                                            <div class="ptj_filtru">
+                                                <label id="lblPtjAng" runat="server">Tip inregistrare</label>
                                                 <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                             </div>
-                                            <label ID="txtStare" runat="server" Width="110" style="float:left; margin-right:15px; width:110px; height:26px; text-align:center; border:solid 1px gray; color:#000000;"></label>
-                                            <div style="float:left; padding:0px 15px; position:relative;">
+                                            <label ID="txtStare" runat="server" class="ptj_stare"></label>
+                                             <div class="ptj_filtru">
                                                 <dx:ASPxButton ID="btnFiltruAng" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                                     <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
@@ -124,7 +121,7 @@
 
                                         <div id="divPeZi" runat="server" class="ptj_pe_zi">
                                             <div class="ptj_filtru">
-                                                <label id="lblZiua" runat="server">Data</label>
+                                                <label id="lblZiua" runat="server" class="lw">Data</label>
                                                 <dx:ASPxDateEdit ID="txtZiua" runat="server" Width="150px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" OnButtonClick="txtZiua_ButtonClick">
                                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                                     <Buttons>
@@ -139,13 +136,13 @@
                                                 </dx:ASPxDateEdit>
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblRolZi" runat="server">Roluri</label>
+                                                <label id="lblRolZi" runat="server" class="lw">Roluri</label>
                                                 <dx:ASPxComboBox ID="cmbRolZi" ClientInstanceName="cmbRolZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRolZi'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblAngZi" runat="server">Angajat</label>
+                                                <label id="lblAngZi" runat="server" class="lw">Angajat</label>
                                                 <dx:ASPxComboBox ID="cmbAngZi" ClientInstanceName="cmbAngZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
                                                             CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
                                                     <Columns>
@@ -158,51 +155,51 @@
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblStare" runat="server">Stare</label>
+                                                <label id="lblStare" runat="server" class="lw">Stare</label>
                                                 <dx:ASPxComboBox ID="cmbStare" ClientInstanceName="cmbStare" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"  />
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)">Contract</label>
+                                                <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)" class="lw">Contract</label>
                                                 <dx:ASPxComboBox ID="cmbCtr" ClientInstanceName="cmbCtr" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"  />
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblSub" runat="server" oncontextMenu="ctx(this,event)">Subcomp.</label>
+                                                <label id="lblSub" runat="server" oncontextMenu="ctx(this,event)" class="lw">Subcomp.</label>
                                                 <dx:ASPxComboBox ID="cmbSub" ClientInstanceName="cmbSub" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSubcompanie" TextField="Subcompanie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSub'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblFil" runat="server" oncontextMenu="ctx(this,event)">Filiala</label>
+                                                <label id="lblFil" runat="server" oncontextMenu="ctx(this,event)" class="lw">Filiala</label>
                                                 <dx:ASPxComboBox ID="cmbFil" ClientInstanceName="cmbFil" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdFiliala" TextField="Filiala" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbFil'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblSec" runat="server" oncontextMenu="ctx(this,event)">Sectie</label>
+                                                <label id="lblSec" runat="server" oncontextMenu="ctx(this,event)" class="lw">Sectie</label>
                                                 <dx:ASPxComboBox ID="cmbSec" ClientInstanceName="cmbSec" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSectie" TextField="Sectie" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbSec'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblDept" runat="server" oncontextMenu="ctx(this,event)">Dept.</label>
+                                                <label id="lblDept" runat="server" oncontextMenu="ctx(this,event)" class="lw">Dept.</label>
                                                 <dx:ASPxComboBox ID="cmbDept" ClientInstanceName="cmbDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdDept" TextField="Dept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" >
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbDept'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblSubDept" runat="server" oncontextMenu="ctx(this,event)">Subdept.</label>
+                                                <label id="lblSubDept" runat="server" oncontextMenu="ctx(this,event)" class="lw">Subdept.</label>
                                                 <dx:ASPxComboBox ID="cmbSubDept" ClientInstanceName="cmbSubDept" ClientIDMode="Static" runat="server" Width="150px" ValueField="IdSubDept" TextField="SubDept" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblBirou" runat="server" oncontextMenu="ctx(this,event)">Birou</label>
+                                                <label id="lblBirou" runat="server" oncontextMenu="ctx(this,event)" class="lw">Birou</label>
                                                 <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="150px" ValueField="F00809" TextField="F00810" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblPtjZi" runat="server" oncontextMenu="ctx(this,event)">Tip inregistrare</label>
+                                                <label id="lblPtjZi" runat="server" oncontextMenu="ctx(this,event)" class="lw">Tip inregistrare</label>
                                                 <dx:ASPxComboBox ID="cmbPtjZi" ClientInstanceName="cmbPtjZi" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)" />
                                             </div>
                                             <div class="ptj_filtru">
-                                                <label id="lblCateg" runat="server" oncontextMenu="ctx(this,event)">Categorie</label>
+                                                <label id="lblCateg" runat="server" oncontextMenu="ctx(this,event)" class="lw">Categorie</label>
                                                 <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
                                             </div>
                                             <div style="float:left; padding:0px 15px; position:relative;">
@@ -1091,6 +1088,18 @@
             if (valStr.length > 0) valStr = valStr.substring(1);
 
             grDate.batchEditApi.SetCellValue(idx, "ValStr", valStr, null, true);
+        }
+
+        function OnCmbAngButtonClick(s, e) {
+            if (e.buttonIndex == 0) {
+                if (cmbAng.GetSelectedIndex() > 0)
+                    s.SetSelectedIndex(s.GetSelectedIndex() - 1);
+            }
+            if (e.buttonIndex == 1) {
+                if (cmbAng.GetSelectedIndex() < cmbAng.GetItemCount())
+                    s.SetSelectedIndex(s.GetSelectedIndex() + 1);
+            }
+            grDate.PerformCallback('btnFiltru'); 
         }
     </script>
 

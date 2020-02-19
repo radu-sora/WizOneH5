@@ -102,7 +102,6 @@
                                                 <label id="lblPtjAng" runat="server">Tip inregistrare</label>
                                                 <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                             </div>
-                                            <label ID="txtStare" runat="server" class="ptj_stare" style="background:<%: PontajCuloare %>"><%: PontajStare %></label>
                                              <div class="ptj_filtru">
                                                 <dx:ASPxButton ID="btnFiltruAng" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
@@ -124,7 +123,7 @@
                                         <div id="divPeZi" runat="server" class="ptj_pe_zi">
                                             <div class="ptj_filtru">
                                                 <label id="lblZiua" runat="server" class="lw">Data</label>
-                                                <dx:ASPxDateEdit ID="txtZiua" runat="server" Width="150px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" OnButtonClick="txtZiua_ButtonClick">
+                                                <dx:ASPxDateEdit ID="txtZiua" runat="server" Width="150px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" AutoPostBack="false">
                                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                                     <Buttons>
                                                         <dx:EditButton Position="Left">
@@ -134,7 +133,7 @@
                                                             <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
                                                         </dx:EditButton>
                                                     </Buttons>
-                                                    <ClientSideEvents ButtonClick="function(s, e) {pnlLoading.Show();e.processOnServer = true;}" ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtZiua'); }"  />
+                                                    <ClientSideEvents ButtonClick="function(s, e) { OnTxtZiuaButtonClick(s,e); }" ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtZiua'); }"  />
                                                 </dx:ASPxDateEdit>
                                             </div>
                                             <div class="ptj_filtru">
@@ -256,31 +255,37 @@
                         BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }"
                         Init="function(s,e) { OnGridInit(); }"
                         EndCallback="function(s,e) { OnGridEndCallback(s); }"
-                        CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }" />
+                        CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }"
+                        />
                     <Styles>
                         <BatchEditModifiedCell BackColor="Transparent">
                         </BatchEditModifiedCell>
                     </Styles>
                     <Columns>
-                        <dx:GridViewCommandColumn FixedStyle="Left" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
-                            <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
-                                    <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
-                                </dx:GridViewCommandColumnCustomButton>                                
-                            </CustomButtons>
-                        </dx:GridViewCommandColumn>
-                        <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" FixedStyle="Left" VisibleIndex="2" />
-                        <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" />
+                        <dx:GridViewBandColumn Name="Stare" HeaderStyle-HorizontalAlign="Center">
+                            <Columns>
+                                <dx:GridViewCommandColumn FixedStyle="Left" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
+                                    <CustomButtons>
+                                        <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
+                                            <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
+                                        </dx:GridViewCommandColumnCustomButton>                                
+                                    </CustomButtons>
+                                </dx:GridViewCommandColumn>
+                                <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" FixedStyle="Left" VisibleIndex="2" />
+                                <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" />
 
-                        <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="ZiLiberaLegala" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="ZiSapt" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                <dx:GridViewDataTextColumn FieldName="ZiLiberaLegala" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                <dx:GridViewDataTextColumn FieldName="ZiSapt" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
 
-                        <dx:GridViewDataTextColumn FieldName="F10022" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="F10023" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="IdStare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                        <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                <dx:GridViewDataTextColumn FieldName="F10022" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                <dx:GridViewDataTextColumn FieldName="F10023" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                <dx:GridViewDataTextColumn FieldName="IdStare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                            </Columns>
+                        </dx:GridViewBandColumn>
+                        
                     </Columns>
                     
                 </dx:ASPxGridView>
@@ -611,8 +616,9 @@
             var keyIndex = s.GetColumnByField("Cheia").index;
             var key = e.rowValues[keyIndex].value;
 
-            if (s.batchEditApi.HasChanges() && oldRowIndex != key)
+            if (s.batchEditApi.HasChanges() && oldRowIndex != key) {
                 s.UpdateEdit();
+            }
 
             oldRowIndex = key;
 
@@ -762,7 +768,7 @@
         function OnRecalcParam() {
             if (txtDataInc.GetText() == '' || txtDataSf.GetText() == '' || txtMarcaInc.GetText() == '' || txtMarcaSf.GetText() == '') {
                 swal({
-                    title: "Data insuficiente", text: "Lipsesc date pentru recalcul",
+                    title: "Date insuficiente", text: "Lipsesc date pentru recalcul",
                     type: "warning"
                 });
             }
@@ -1094,13 +1100,24 @@
 
         function OnCmbAngButtonClick(s, e) {
             if (e.buttonIndex == 0) {
-                if (cmbAng.GetSelectedIndex() > 0)
+                if (s.GetSelectedIndex() > 0)
                     s.SetSelectedIndex(s.GetSelectedIndex() - 1);
             }
             if (e.buttonIndex == 1) {
-                if (cmbAng.GetSelectedIndex() < cmbAng.GetItemCount())
+                if (s.GetSelectedIndex() < s.GetItemCount())
                     s.SetSelectedIndex(s.GetSelectedIndex() + 1);
             }
+            grDate.PerformCallback('btnFiltru'); 
+        }
+
+        function OnTxtZiuaButtonClick(s, e) {
+            var valZiua = new Date(s.GetDate());
+            var dtTmp = new Date(valZiua.getFullYear(), valZiua.getMonth(), valZiua.getDate(), 0, 0, 0, 0);
+            if (e.buttonIndex == 0) 
+                dtTmp.setDate(dtTmp.getDate() - 1);
+            if (e.buttonIndex == 1)
+                dtTmp.setDate(dtTmp.getDate() + 1);
+            s.SetValue(dtTmp);
             grDate.PerformCallback('btnFiltru'); 
         }
     </script>

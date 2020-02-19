@@ -2159,6 +2159,7 @@ namespace WizOne.Pontaj
                     {
                         grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));
                         e.Handled = true;
+                        IncarcaGrid();
                         return;
                     }
                     else

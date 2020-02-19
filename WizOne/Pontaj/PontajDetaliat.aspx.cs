@@ -22,22 +22,34 @@ namespace WizOne.Pontaj
         //tip = 2       Pontaj pe Zi
         public int tip = 1;
 
-        public class metaAbsTipZi
+        //public class metaAbsTipZi
+        //{
+        //    public int F10003 { get; set; }
+        //    public DateTime Ziua { get; set; }
+        //}
+
+        //public class metaIds
+        //{
+        //    public Nullable<int> F10003 { get; set; }
+        //    public Nullable<int> Zi { get; set; }
+        //}
+
+
+        protected string PontajStare
         {
-            public int F10003 { get; set; }
-            public DateTime Ziua { get; set; }
+            get; private set;
         }
 
-        public class metaIds
+        protected string PontajCuloare
         {
-            public Nullable<int> F10003 { get; set; }
-            public Nullable<int> Zi { get; set; }
+            get; private set;
         }
 
         protected void Page_Init(object sender, EventArgs e)
         {
             try
             {
+                PontajStare = "Gigi";
                 Session["PaginaWeb"] = "Pontaj.PontajDetaliat";
                 tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
 
@@ -482,39 +494,6 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void btnFiltruSterge_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                cmbAng.Value = null;
-                cmbSub.Value = null;
-                cmbSec.Value = null;
-                cmbFil.Value = null;
-                cmbDept.Value = null;
-                cmbSubDept.Value = null;
-                cmbBirou.Value = null;
-                cmbCateg.Value = null;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void btnRespins_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Actiuni(0);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
         protected void btnPrint_Click(object sender, EventArgs e)
         {
             try
@@ -591,10 +570,13 @@ namespace WizOne.Pontaj
 
                 if (dt.Rows.Count > 0)
                 {
-                    txtStare.InnerText = General.Nz(dt.Rows[0]["NumeStare"],"Initiat").ToString();
+                    //txtStare.InnerText = General.Nz(dt.Rows[0]["NumeStare"],"Initiat").ToString();
                     string cul = General.Nz(dt.Rows[0]["CuloareStare"], "#FFFFFF").ToString();
                     if (cul.Length == 9) cul = "#" + cul.Substring(3);
-                    txtStare.Style.Add("background", cul);
+                    //txtStare.Style.Add("background", cul);
+
+                    PontajStare = General.Nz(dt.Rows[0]["NumeStare"], "Initiat").ToString();
+                    PontajCuloare = cul;
 
                     if (General.Nz(dt.Rows[0]["DrepturiModif"], "0").ToString() == "0")
                         grCC.Enabled = false;
@@ -1645,6 +1627,7 @@ namespace WizOne.Pontaj
                     {
                         grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));
                         e.Handled = true;
+                        IncarcaGrid();
                         return;
                     }
                     else
@@ -1781,6 +1764,12 @@ namespace WizOne.Pontaj
 
                             btnFiltru_Click(null, null);
                             break;
+                        case "btnAproba":
+                            Actiuni(1);
+                            break;
+                        case "btnRespins":
+                            Actiuni(0);
+                            break;
                     }
                 }
             }
@@ -1846,18 +1835,7 @@ namespace WizOne.Pontaj
 #endregion 
 
 
-        protected void btnAproba_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Actiuni(1);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+
 
         private void Actiuni(int actiune)
         {
@@ -1867,7 +1845,7 @@ namespace WizOne.Pontaj
                 if (tip == 2) idRol = Convert.ToInt32(cmbRolZi.Value ?? 1);
 
                 if (!General.DrepturiAprobare(actiune, idRol))
-                    MessageBox.Show(Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie."), MessageBox.icoError, "Eroare !");
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu aveti drepturi pentru aceasta operatie");
                 else
                 {
                     int f10003 = Convert.ToInt32(cmbAng.Value ?? -99);
@@ -1877,9 +1855,9 @@ namespace WizOne.Pontaj
 
                     string mesaj = General.ActiuniExec(actiune, f10003, idRol, idStare, Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, "Pontaj.PontajDetaliat", Convert.ToInt32(Session["UserId"]), Convert.ToInt32(Session["User_Marca"]));
                     if (actiune == 1)
-                        MessageBox.Show(Dami.TraduCuvant(mesaj), MessageBox.icoInfo, Dami.TraduCuvant("Aprobare") + " !");
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Aprobare") + Environment.NewLine + Dami.TraduCuvant(mesaj);
                     else
-                        MessageBox.Show(Dami.TraduCuvant(mesaj), MessageBox.icoInfo, Dami.TraduCuvant("Respingere") + " !");
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Respingere") + Environment.NewLine + Dami.TraduCuvant(mesaj);
                     btnFiltru_Click(null, null);
                 }
             }

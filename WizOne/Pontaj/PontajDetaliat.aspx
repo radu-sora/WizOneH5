@@ -19,10 +19,12 @@
                 <dx:ASPxButton ID="btnPtjEchipa" ClientInstanceName="btnPtjEchipa" ClientIDMode="Static" runat="server" Text="Pontajul Echipei" AutoPostBack="false" OnClick="btnPtjEchipa_Click" oncontextMenu="ctx(this,event)">
                     <Image Url="~/Fisiere/Imagini/Icoane/chooser.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="true" OnClick="btnRespins_Click" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                    <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnRespins'); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="true" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                    <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnAproba'); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnInit" ClientInstanceName="btnInit" ClientIDMode="Static" runat="server" Text="Init" AutoPostBack="false" oncontextMenu="ctx(this,event)">
@@ -100,7 +102,7 @@
                                                 <label id="lblPtjAng" runat="server">Tip inregistrare</label>
                                                 <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                             </div>
-                                            <label ID="txtStare" runat="server" class="ptj_stare"></label>
+                                            <label ID="txtStare" runat="server" class="ptj_stare" style="background:<%: PontajCuloare %>"><%: PontajStare %></label>
                                              <div class="ptj_filtru">
                                                 <dx:ASPxButton ID="btnFiltruAng" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
@@ -241,7 +243,7 @@
             <td colspan="2">
                 <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" 
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
                     OnCustomCallback="grDate_CustomCallback" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnHtmlRowPrepared="grDate_HtmlRowPrepared" 
                     OnBatchUpdate="grDate_BatchUpdate" OnDataBound="grDate_DataBound" OnCellEditorInitialize="grDate_CellEditorInitialize" OnCustomJSProperties="grDate_CustomJSProperties" >
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
@@ -250,11 +252,11 @@
                     <SettingsSearchPanel Visible="false" />
                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                     <ClientSideEvents ContextMenu="ctx" 
-                        BatchEditEndEditing="function(s,e) { OnGridBatchEditEndEditing(s,e); }" 
-                        BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" 
+                        BatchEditEndEditing="function(s,e) { OnGridBatchEditEndEditing(s,e); }"
+                        BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }"
                         Init="function(s,e) { OnGridInit(); }"
                         EndCallback="function(s,e) { OnGridEndCallback(s); }"
-                        CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }"  />
+                        CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }" />
                     <Styles>
                         <BatchEditModifiedCell BackColor="Transparent">
                         </BatchEditModifiedCell>

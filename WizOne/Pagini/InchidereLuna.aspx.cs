@@ -87,6 +87,9 @@ namespace WizOne.Pagini
 
             try
             {
+                //Radu 19.02.2020 - verificare campuri F910 vs F100
+                VerificareCampuri();
+
                 sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'AdunaComp'";
                 DataTable dtParam = General.IncarcaDT(sql, null);
                 if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)
@@ -381,6 +384,65 @@ namespace WizOne.Pagini
             return mesaj;
         }
 
+
+        public void VerificareCampuri()
+        {
+            string sql = "", sqlMod = "";
+            if (Constante.tipBD == 1) //SQL
+            {
+                sql = "select 'F910' + a.camp AS coloana, a.character_maximum_length as lungime_F910, b.character_maximum_length as lungime_F100, "
+                    + " a.numeric_precision as lung_numeric_F910, b.numeric_precision as lung_numeric_F100 "
+                    + " from "
+                    + " (select substring(column_name, 5, 5) as camp, character_maximum_length, numeric_precision from INFORMATION_SCHEMA.COLUMNS where table_name = 'F910' AND column_name <> 'USER_NO' AND  column_name <> 'F91003') a, "
+                    + " (select substring(column_name, 5, 5) as camp, character_maximum_length, numeric_precision from INFORMATION_SCHEMA.COLUMNS where table_name = 'F100' AND UPPER(DATA_TYPE) = 'INT') b "
+                    + " where a.camp = b.camp and len(a.camp) >= 2 "
+                    + " and(a.character_maximum_length < b.character_maximum_length or a.numeric_precision < b.numeric_precision)";
+                DataTable dt = General.IncarcaDT(sql, null);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        if (dt.Rows[i][1] != null && dt.Rows[i][2] != null && dt.Rows[i][1].ToString().Length > 0  && dt.Rows[i][2].ToString().Length > 0)
+                        {//sir de caractere
+                            sqlMod = "ALTER TABLE F910 ALTER COLUMN " + dt.Rows[i][0] + " NVARCHAR(" + dt.Rows[i][2].ToString() + ")";
+                            General.ExecutaNonQuery(sqlMod, null);
+                        }
+                        if (dt.Rows[i][3] != null && dt.Rows[i][4] != null && dt.Rows[i][3].ToString().Length > 0 && dt.Rows[i][4].ToString().Length > 0)
+                        {//numeric
+                            sqlMod = "ALTER TABLE F910 ALTER COLUMN " + dt.Rows[i][0] + (Convert.ToInt32(dt.Rows[i][4].ToString()) == 10 ? " INT" : "NUMERIC(" + dt.Rows[i][4].ToString() + ")");
+                            General.ExecutaNonQuery(sqlMod, null);
+                        }
+                    }
+                }     
+            }
+            else   //Oracle
+            {
+                sql = "select 'F910' || a.camp AS coloana, a.data_length as lungime_F910, b.data_length as lungime_F100, "
+                    + "a.data_precision as lung_numeric_F910, b.data_precision as lung_numeric_F100 "
+                    + " from "
+                    + "(select substr(column_name, 5, 5) as camp,  case when data_precision is not null then null else data_length end as data_length, data_precision from cols where table_name = 'F910' AND column_name<> 'USER_NO' AND column_name<> 'F91003') a, "
+                    + " (select substr(column_name, 5, 5) as camp, case when data_precision is not null then null else data_length end as data_length, data_precision from cols where table_name = 'F100' AND UPPER(DATA_TYPE) = 'NUMBER' ) b "
+                    + " where a.camp = b.camp and length(a.camp) >= 2 "
+                    + " and(a.data_length < b.data_length or a.data_precision < b.data_precision)";
+                DataTable dt = General.IncarcaDT(sql, null);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        if (dt.Rows[i][1] != null && dt.Rows[i][2] != null && dt.Rows[i][1].ToString().Length > 0 && dt.Rows[i][2].ToString().Length > 0)
+                        {//sir de caractere
+                            sqlMod = "ALTER TABLE F910 MODIFY " + dt.Rows[i][0] + " VARCHAR2(" + dt.Rows[i][2].ToString() + ")";
+                            General.ExecutaNonQuery(sqlMod, null);
+                        }
+                        if (dt.Rows[i][3] != null && dt.Rows[i][4] != null && dt.Rows[i][3].ToString().Length > 0 && dt.Rows[i][4].ToString().Length > 0)
+                        {//numeric
+                            sqlMod = "ALTER TABLE F910 MODIFY " + dt.Rows[i][0] + "NUMBER(" + dt.Rows[i][4].ToString() + ")";
+                            General.ExecutaNonQuery(sqlMod, null);
+                        }
+                    }
+                }
+            }
+        }
 
         //public string SalvareLuna()
         //{

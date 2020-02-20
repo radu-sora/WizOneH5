@@ -22,18 +22,6 @@ namespace WizOne.Pontaj
         //tip = 2       Pontaj pe Zi
         public int tip = 1;
 
-        //public class metaAbsTipZi
-        //{
-        //    public int F10003 { get; set; }
-        //    public DateTime Ziua { get; set; }
-        //}
-
-        //public class metaIds
-        //{
-        //    public Nullable<int> F10003 { get; set; }
-        //    public Nullable<int> Zi { get; set; }
-        //}
-
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -446,7 +434,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         protected void btnFiltru_Click(object sender, EventArgs e)
         {
@@ -2212,52 +2199,6 @@ namespace WizOne.Pontaj
             }
         }
 
-        //protected void cmbAng_ButtonClick(object source, ButtonEditClickEventArgs e)
-        //{
-        //    try
-        //    {
-        //        switch(e.ButtonIndex)
-        //        {
-        //            case 0:
-        //                if (cmbAng.SelectedIndex > 0) cmbAng.SelectedIndex -= 1;
-        //                break;
-        //            case 1:
-        //                if (cmbAng.SelectedIndex < cmbAng.Items.Count) cmbAng.SelectedIndex += 1;
-        //                break;
-        //        }
-
-        //        btnFiltru_Click(source, e);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
-        protected void txtZiua_ButtonClick(object source, ButtonEditClickEventArgs e)
-        {
-            try
-            {
-                switch (e.ButtonIndex)
-                {
-                    case 0:
-                        txtZiua.Date = txtZiua.Date.AddDays(-1);
-                        break;
-                    case 1:
-                        txtZiua.Date = txtZiua.Date.AddDays(1);
-                        break;
-                }
-
-                btnFiltru_Click(source, e);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
         private List<object> ValoriChei()
         {
             List<object> lst = new List<object>();
@@ -2629,11 +2570,6 @@ namespace WizOne.Pontaj
         }
 
         #endregion
-
-        protected void grDate_CustomJSProperties(object sender, ASPxGridViewClientJSPropertiesEventArgs e)
-        {
-            e.Properties["cpIsEditing"] = grDate.IsEditing;
-        }
 
         protected void grCC_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
         {

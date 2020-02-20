@@ -686,82 +686,6 @@ namespace WizOne.Tactil
             }
         }
 
-        private DataRow GetDataAnulare(int idUser, int f10003, int tipOperatie, int idCircuit = -99)
-        {
-            DataRow ras = null;
-
-            try
-            {
-                DataTable entRol = General.GetRoluriUser(idUser);
-
-                int idRol = 1;
-                if (General.VarSession("User_Marca").ToString() == f10003.ToString())
-                {
-                    idRol = 1;
-                }
-                else
-                {
-                    if (entRol.Select("Id = 3").Count() > 0)
-                    {
-                        idRol = 3;
-                    }
-                    else
-                    {
-                        if (entRol.Select("Id = 2").Count() > 0) idRol = 2;
-                    }
-                }
-
-                ras = General.GetParamCereri(tipOperatie, idRol, idCircuit);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return ras;
-        }
-
-        //Florin 2019.12.19
-        //public void StergeInPontaj(int id, int idTipOre, string oreInVal, DateTime dtInc, DateTime dtSf, int f10003, int nrOre)
-        //{
-        //    try
-        //    {
-        //        if (idTipOre == 0 && oreInVal != "")        //daca este de tip ore refacem varStr
-        //        {
-        //            string sqlOre = $@"SELECT (CASE WHEN (CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) 
-        //                            THEN(CASE WHEN 1 = COALESCE(A.""TrimiteLa"", 0) THEN C.""IdTipOre"" ELSE D.""IdTipOre"" END) ELSE B.""IdTipOre"" END)= 0 THEN(CASE WHEN(B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL)
-        //                            THEN(CASE WHEN 1 = COALESCE(A.""TrimiteLa"", 0) THEN C.""OreInVal"" ELSE D.""OreInVal"" END) ELSE B.""OreInVal"" END) ELSE '' END) AS ValPentruOre
-        //                            FROM ""Ptj_Cereri"" A
-        //                            INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
-        //                            LEFT JOIN  ""Ptj_tblAbsente"" C ON B.""CompensareBanca"" = C.""Id""
-        //                            LEFT JOIN  ""Ptj_tblAbsente"" D ON B.""CompensarePlata"" = D.""Id""
-        //                            WHERE A.""Id"" = {id} AND A.""IdStare"" = 3";
-        //            string valPentruOre = General.Nz(General.ExecutaScalar(sqlOre, null),"").ToString();
-
-        //            for (DateTime zi = dtInc; zi <= dtSf; zi = zi.AddDays(1))
-        //            {
-        //                //string sqlStr = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"=" + General.CalculValStr(f10003, zi.Date, "", valPentruOre, (int)(nrOre * 60)) +
-        //                //        ", \"CuloareValoare\"=(SELECT \"Culoare\" FROM \"tblCulori\" WHERE \"Id\"=5) " +
-        //                //        "WHERE  F10003=" + f10003 + " AND \"Ziua\"=" + General.ToDataUniv(zi.Date) + " AND F06204=-1";
-
-        //                string sqlStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" ={General.CalculValStr(f10003, zi.Date, "", valPentruOre, (int)(nrOre * 60))}
-        //                                WHERE  F10003={f10003} AND ""Ziua"" ={General.ToDataUniv(zi.Date)}";
-        //            }
-        //        }
-        //        else
-        //        {
-        //            string sqlStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = NULL 
-        //                            WHERE F10003 = (SELECT F10003 FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})
-        //                            AND(SELECT ""DataInceput"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id}) <= ""Ziua""
-        //                            AND ""Ziua"" <= (SELECT ""DataSfarsit"" FROM ""Ptj_Cereri"" WHERE ""Id"" = {id})";
-        //            General.ExecutaNonQuery(sqlStr,null);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-        //}
-
         protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             try
@@ -780,27 +704,8 @@ namespace WizOne.Tactil
                 General.ExecutaNonQuery($@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""Comentarii""=@2, ""TrimiteLa""=@3, ""Inlocuitor""=@4 WHERE ""Id""=@5", 
                     new object[] { e.NewValues["Observatii"], e.NewValues["Comentarii"], cps, inl, id });
 
-
-                ////List<object> lst = grDate.GetSelectedFieldValues(new string[] { "Id" });
-
-                ////object[] lst = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id" }) as object[];
-                ////if (lst == null || lst.Count() == 0) return;
-
-                //if (Dami.ValoareParam("InlocuitorEditabilInAprobare", "0") == "1")
-                //{
-                //    string sqlStr = $@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""TrimiteLa""=@2, ""Comentarii""=@3, ""Inlocuitor""=@5 WHERE ""Id""=@4";
-                //    General.ExecutaNonQuery(sqlStr, new object[] { e.NewValues["Observatii"], e.NewValues["TrimiteLa"], e.NewValues["Comentarii"], id, e.NewValues["Inlocuitor"] });
-                //}
-                //else
-                //{
-                //    string sqlStr = $@"UPDATE ""Ptj_Cereri"" SET ""Observatii""=@1, ""TrimiteLa""=@2, ""Comentarii""=@3 WHERE ""Id""=@4";
-                //    General.ExecutaNonQuery(sqlStr, new object[] { e.NewValues["Observatii"], e.NewValues["TrimiteLa"], e.NewValues["Comentarii"], id });
-                //}
-
                 e.Cancel = true;
                 grDate.CancelEdit();
-
-                //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoSuccess, "");
             }
             catch (Exception ex)
             {
@@ -816,8 +721,6 @@ namespace WizOne.Tactil
                 object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "F10003", "NumeAngajat" }) as object[];
                 if (obj == null || obj.Count() == 0 || obj[0] == null || obj[1] == null)
                 {
-                    //MessageBox.Show(Dami.TraduCuvant("Nu exista linie selectata"), MessageBox.icoWarning, "");
-                    //return;
                     Session["IstoricExtins_Angajat_Marca"] = Session["User_Marca"];
                     Session["IstoricExtins_Angajat_Nume"] = Session["User_NumeComplet"];
                 }

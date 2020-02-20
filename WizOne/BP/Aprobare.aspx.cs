@@ -538,41 +538,6 @@ namespace WizOne.BP
             }
         }
 
-        private DataRow GetDataAnulare(int idUser, int f10003, int tipOperatie, int idCircuit = -99)
-        {
-            DataRow ras = null;
-
-            try
-            {
-                DataTable entRol = General.GetRoluriUser(idUser);
-
-                int idRol = 1;
-                if (General.VarSession("User_Marca").ToString() == f10003.ToString())
-                {
-                    idRol = 1;
-                }
-                else
-                {
-                    if (entRol.Select("Id = 3").Count() > 0)
-                    {
-                        idRol = 3;
-                    }
-                    else
-                    {
-                        if (entRol.Select("Id = 2").Count() > 0) idRol = 2;
-                    }
-                }
-
-                ras = General.GetParamCereri(tipOperatie, idRol, idCircuit);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return ras;
-        }
-
         protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             try

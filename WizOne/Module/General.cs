@@ -9554,7 +9554,7 @@ namespace WizOne.Module
                 if (marcaInc != null && marcaSf != null) filtru += " AND " + marcaInc + " <= ent.F10003 AND ent.F10003 <= " + marcaSf;
                 if (ziuaInc != null && ziuaSf == null) filtruPeZi += " AND " + General.TruncateDate("Ziua") + "=" + General.ToDataUniv(ziuaInc);
                 if (ziuaInc != null && ziuaSf != null) filtruPeZi += " AND " + General.ToDataUniv(ziuaInc) + " <= " + General.TruncateDate("Ziua") + " AND " + General.TruncateDate("Ziua") + " <= " + General.ToDataUniv(ziuaSf);
-                if (ziuaInc != null && ziuaSf == null) filtruCumulat += " AND ent.\"An\"=" + Convert.ToDateTime(ziuaInc).Year + " AND ent\"Luna\"=" + Convert.ToDateTime(ziuaInc).Month;
+                if (ziuaInc != null && ziuaSf == null) filtruCumulat += " AND ent.\"An\"=" + Convert.ToDateTime(ziuaInc).Year + " AND ent.\"Luna\"=" + Convert.ToDateTime(ziuaInc).Month;
                 if (ziuaInc != null && ziuaSf != null) filtruCumulat += $@" AND {Convert.ToDateTime(ziuaInc).Year * 100 + Convert.ToDateTime(ziuaInc).Month} <= (ent.""An"" * 100 + ent.""Luna"") AND (ent.""An"" * 100 + ent.""Luna"") <= {Convert.ToDateTime(ziuaSf).Year * 100 + Convert.ToDateTime(ziuaSf).Month}";
 
                 General.CalculFormulePeZi(" 1=1 " + filtru + filtruPeZi);

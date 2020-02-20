@@ -262,8 +262,7 @@ namespace WizOne.Pontaj
                     string[] arr = ids.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < arr.Length; i++)
                     {
-                        General.CalculFormuleCumulat(Convert.ToInt32(arr[i]), txtAnLuna.Date.Year, txtAnLuna.Date.Month);
-
+                        General.CalculFormuleCumulat($@"ent.F10003={arr[i]} AND ent.""An"" = {txtAnLuna.Date.Year} AND ent.""Luna""={txtAnLuna.Date.Month}");
                         Notif.TrimiteNotificare("Pontaj.PontajCumulat", (int)Constante.TipNotificare.Notificare, @"SELECT * FROM ""Ptj_Cumulat"" WHERE F10003= " + Convert.ToInt32(arr[i]) + @" AND ""An""=" + txtAnLuna.Date.Year + @" AND ""Luna""=" + txtAnLuna.Date.Month, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99) );
                     }
 

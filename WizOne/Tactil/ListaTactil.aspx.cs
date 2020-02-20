@@ -418,10 +418,8 @@ namespace WizOne.Tactil
                                 if (idStare == 3)
                                     General.StergeInPontaj(Convert.ToInt32(obj[0]), idTipOre, oreInVal, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]), Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)), Convert.ToInt32(General.Nz(Session["UserId"], -99)));
 
-                                General.CalculFormuleCumulat(Convert.ToInt32(obj[1]), Convert.ToDateTime(obj[4]).Year, Convert.ToDateTime(obj[4]).Month);
-
+                                General.CalculFormuleCumulat($@"ent.F10003 = {obj[1]} AND ent.""An""={Convert.ToDateTime(obj[4]).Year} AND ent.""Luna""={Convert.ToDateTime(obj[4]).Month}");
                                 General.SituatieZLOperatii(Convert.ToInt32(General.Nz(obj[1],-99)), Convert.ToDateTime(General.Nz(obj[4],new DateTime(2100,1,1))), 3, Convert.ToInt32(General.Nz(obj[5],0)));
-
                                 Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                                 grDate.DataBind();
@@ -431,7 +429,7 @@ namespace WizOne.Tactil
                         case "btnPlanif":
                             {
                                 #region Planificare
-                                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "F10003", "IdAbsenta", "Inlocuitor", "IdStare", "NrOre" }) as object[];
+                                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "F10003", "IdAbsenta", "Inlocuitor", "IdStare", "NrOre", "DataInceput", "DataSfarsit" }) as object[];
                                 if (obj == null || obj.Count() == 0 || obj[0] == null || obj[1] == null || obj[2] == null)
                                 {
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata");
@@ -488,18 +486,14 @@ namespace WizOne.Tactil
                                     if (Convert.ToInt32(dtCer.Rows[0]["IdStare"]) == 3)
                                     {
                                         if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
-                                        {
                                             General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(General.Nz(obj[0],1)), 5, trimiteLaInlocuitor, Convert.ToInt32(General.Nz(obj[5],0)));
 
-                                            //Se va face cand vom migra GAM
-                                            //TrimiteCerereInF300(Session["UserId"], idCer);
-                                        }
+                                        General.CalculFormule(obj[1], null, Convert.ToDateTime(obj[6]), Convert.ToDateTime(obj[7]));
                                     }
 
                                     Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, @"SELECT Z.*, 2 AS ""Actiune"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                                     grDate.DataBind();
-                                    //MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoWarning);
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
                                 }
                                 #endregion

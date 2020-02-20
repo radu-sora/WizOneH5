@@ -1259,10 +1259,7 @@ namespace WizOne.Pontaj
                     FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[i]["F10003"]), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
                     FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[i], true, true);
 
-                    //Florin 2020.01.31
-                    General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dtModif.Rows[i]["F10003"])} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dtModif.Rows[i]["Ziua"]))}");
-
-                    //Florin 2020.02.07
+                    General.CalculFormule(dtModif.Rows[i]["F10003"], null, Convert.ToDateTime(dtModif.Rows[i]["Ziua"]), null);
                     General.ExecValStr(Convert.ToInt32(dtModif.Rows[i]["F10003"]), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
                 }
 
@@ -1629,10 +1626,6 @@ namespace WizOne.Pontaj
                             "END;", null);
                 }
 
-                //Florin 2020-02-18
-                //(Dami.ValoareParam("RecalculCuloare", "0") == "0" || dr["CuloareValoare"].ToString() != "#e6c8fa")
-                //Florin 2018.05.15
-                //daca este absenta de tip zi nu mai recalculam
                 DataRow dr = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
                 if (dr != null && !absentaDeTipZi)
                 {
@@ -1640,17 +1633,11 @@ namespace WizOne.Pontaj
                     FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
                     FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
                     FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-
-                    //Florin 2019.05.02
                     FunctiiCeasuri.Calcul.h5 = true;
-
                     FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
                     FunctiiCeasuri.Calcul.CalculInOut(dr, true, true);
 
-                    //Florin 2020.01.31
-                    General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(ziua)}");
-
-                    //Florin 2020.02.07
+                    General.CalculFormule(f10003, null, ziua, null);
                     General.ExecValStr(f10003, ziua);
                 }
 
@@ -1697,35 +1684,28 @@ namespace WizOne.Pontaj
 
                                 string strSql = $@"SELECT A.* FROM ""Ptj_Intrari"" A
                                                 LEFT JOIN ""F100Contracte"" B ON A.F10003=B.F10003
-                                                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""ValStr"" = C.""DenumireScurta""
-                                                WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4 AND C.""DenumireScurta"" IS NULL";
-
-                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                                WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4";
 
                                 DateTime dtInc = new DateTime(Convert.ToInt32(arr[1].Split('/')[2]), Convert.ToInt32(arr[1].Split('/')[1]), Convert.ToInt32(arr[1].Split('/')[0]));
                                 DateTime dtSf = new DateTime(Convert.ToInt32(arr[2].Split('/')[2]), Convert.ToInt32(arr[2].Split('/')[1]), Convert.ToInt32(arr[2].Split('/')[0]));
 
                                 DataTable dt = General.IncarcaDT(strSql, new object[] { arr[3], arr[4], dtInc, dtSf });
 
+                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                FunctiiCeasuri.Calcul.golesteVal = Dami.ValoareParam("GolesteVal");
+                                //MetodeCeasuri.Calcul.sintaxaValStr = Dami.ValoareParam("SintaxaValStr", "");
+
                                 for (int i = 0; i < dt.Rows.Count; i++)
                                 {
-                                    string golesteVal = Dami.ValoareParam("GolesteVal");
-                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-
-                                    //Florin 2019.05.02
-                                    FunctiiCeasuri.Calcul.h5 = true;
-
                                     FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
                                     FunctiiCeasuri.Calcul.CalculInOut(dt.Rows[i], true, true);
+                                }
 
-                                    //Florin 2020.01.31
-                                    General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={Convert.ToInt32(dt.Rows[i]["F10003"].ToString())} AND {General.TruncateDate("Ziua")} = {General.ToDataUniv(Convert.ToDateTime(dt.Rows[i]["Ziua"]))}");
-
-                                    //Florin 2020.02.07
-                                    General.ExecValStr(Convert.ToInt32(dt.Rows[i]["F10003"]), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
+                                if (dt.Rows.Count > 0)
+                                {
+                                    General.CalculFormule(arr[3], arr[4], dtInc, dtSf);
+                                    General.ExecValStr($@"{arr[3]} <= F10003 AND F10003 <= {arr[4]} AND {General.ToDataUniv(dtInc)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dtSf)}");
                                 }
 
                                 IncarcaGrid();
@@ -1740,7 +1720,7 @@ namespace WizOne.Pontaj
                         case "colHide":
                             grDate.Columns[arr[1]].Visible = false;
                             break;
-                        case "btnFiltru":   //Radu 05.12.2019
+                        case "btnFiltru":
                             if (arr.Length > 1)
                             {
                                 switch (General.Nz(arr[1],"").ToString())
@@ -2278,31 +2258,6 @@ namespace WizOne.Pontaj
             }
         }
 
-        private void ExecCalcul(string ids)
-        {
-            try
-            {
-                DateTime ziua = DateTime.Now;
-
-                string[] arr = ids.Split(new string[] { ";"}, StringSplitOptions.RemoveEmptyEntries);
-
-                if (tip == 1 || tip == 10)
-                    ziua = Convert.ToDateTime(txtAnLuna.Value ?? DateTime.Now);
-                else
-                    ziua = Convert.ToDateTime(txtZiua.Value ?? DateTime.Now);
-
-                for (int i = 0; i < arr.Length; i++)
-                {
-                    General.CalculFormuleCumulat(Convert.ToInt32(arr[i]), ziua.Year, ziua.Month);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
         private List<object> ValoriChei()
         {
             List<object> lst = new List<object>();
@@ -2371,11 +2326,7 @@ namespace WizOne.Pontaj
                                                 "END;"
                                                 , null);
 
-                        //Radu 04.12.2019
-                        General.CalculFormule(Convert.ToInt32(lst[0].ToString()), Convert.ToDateTime(lst[1]));
-                        //recalcul f-uri la nivel de luna
-                        DateTime zi = Convert.ToDateTime(lst[1]);
-                        General.CalculFormuleCumulat(Convert.ToInt32(lst[0]), zi.Year, zi.Month);
+                        General.CalculFormule(lst[0], null, Convert.ToDateTime(lst[1]), null);
                     }
                 }           
             }

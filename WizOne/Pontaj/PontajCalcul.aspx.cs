@@ -52,7 +52,7 @@ namespace WizOne.Pontaj
             try
             {
                 DateTime ziua = Convert.ToDateTime(txtAnLuna.Value);
-                General.CalculFormuleCumulatToti(ziua.Year, ziua.Month);
+                General.CalculFormuleCumulat($@"ent.""An"" = {ziua.Year} AND ent.""Luna""={ziua.Month}");
 
                 MessageBox.Show(Dami.TraduCuvant("Proces terminat"), MessageBox.icoInfo, "Calcul formule lunare");
             }

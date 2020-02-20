@@ -311,8 +311,7 @@ namespace WizOne.Pontaj
                                                 "END;"
                                                 , null);
 
-                        //recalcul f-uri la nivel de luna
-                        General.CalculFormuleCumulat(f10003, ziua.Year, ziua.Month);
+                        General.CalculFormuleCumulat($@"ent.F10003={f10003} AND ent.""An""={ziua.Year} AND ent.""Luna""={ziua.Month}");
                     }
                 }
             }

@@ -87,6 +87,19 @@ namespace WizOne.Pagini
 
             try
             {
+                //Florin 2020.02.20 - nu lasam sa inchida luna daca nu are salvare de baza
+                string cale = Dami.ValoareParam("CaleBackUp").Trim();
+                string anLucru = Dami.ValoareParam("AnLucru");
+                string lunaLucru = Dami.ValoareParam("LunaLucru");
+                string numeFisier = anLucru.ToString() + "_" + lunaLucru.ToString().PadLeft(2, '0');
+                string ext = ".bak";
+                if (Constante.tipBD == 2) ext = ".dmp";
+                if (!File.Exists(cale + "\\" + numeFisier + ext))
+                {
+                    mesaj = "Inainte de inchidere de luna trebuie sa salvati luna";
+                    return mesaj;
+                }
+
                 sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'AdunaComp'";
                 DataTable dtParam = General.IncarcaDT(sql, null);
                 if (dtParam != null && dtParam.Rows.Count > 0 && dtParam.Rows[0][0] != null && dtParam.Rows[0][0].ToString().Length > 0)

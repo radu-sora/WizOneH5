@@ -526,16 +526,10 @@ namespace WizOne.Absente
                                 {
                                     try
                                     {
-                                        //introducem o linie de anulare in Ptj_CereriIstoric
-                                        //Florin 2018.09.20
-                                        //s-a schimbat IdSuper din Session["UserId"] in Convert.ToInt32(obj[10] ?? 0)
                                         string sqlIst = $@"INSERT INTO ""Ptj_CereriIstoric""
                                                     (""IdCerere"", ""IdCircuit"", ""IdSuper"", ""IdStare"", ""IdUser"", ""Pozitie"", ""Aprobat"", ""DataAprobare"", USER_NO, TIME, ""Inlocuitor"", ""IdUserInlocuitor"", ""Culoare"")
                                                     SELECT ""Id"", ""IdCircuit"", {-1 * Convert.ToInt32(General.Nz(obj[10],0))}, -1, {Session["UserId"]}, 22, 1, {General.CurrentDate()}, {Session["UserId"]}, {General.CurrentDate()}, 0, null, (SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = -1) FROM ""Ptj_Cereri"" WHERE ""Id""={obj[0]};";
-
                                         string sqlCer = $@"UPDATE ""Ptj_Cereri"" SET ""IdStare"" =-1, ""Culoare"" =(SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" =-1) WHERE ""Id"" ={obj[0]};";
-
-                                        //Florin 2018.04.04
                                         string sqlDel = $@"DELETE FROM ""tblFisiere"" WHERE ""Id""={obj[0]} AND ""Tabela""='Ptj_Cereri' AND ""EsteCerere"" = 1; ";
 
                                         string sqlGen = "BEGIN " + "\n\r" +
@@ -559,40 +553,11 @@ namespace WizOne.Absente
                                     oreInVal = General.Nz(drAbs["OreInVal"], "").ToString();
                                 }
 
-
                                 if (idStare == 3)
                                     General.StergeInPontaj(Convert.ToInt32(obj[0]), idTipOre, oreInVal, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]), Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)), Convert.ToInt32(General.Nz(Session["UserId"],-99)));
 
-
-                                //Florin 2019.11.13 - calcul formule si formule cumulat
-                                General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={obj[1]} AND {General.ToDataUniv(Convert.ToDateTime(obj[4]))} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(Convert.ToDateTime(obj[6]))}");
-
-
-                                ////Florin 2019.10.03
-                                //DataTable dtRun = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= @3", new object[] { obj[1], obj[4], obj[6] });
-                                //for (int i = 0; i < dtRun.Rows.Count; i++)
-                                //{
-                                //    try
-                                //    {
-                                //        string golesteVal = Dami.ValoareParam("GolesteVal");
-                                //        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                //        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                //        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                                //        FunctiiCeasuri.Calcul.h5 = true;
-                                //        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtRun.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dtRun.Rows[i]["Ziua"]));
-                                //        DataRow drInt = dtRun.Rows[i];
-                                //        FunctiiCeasuri.Calcul.CalculInOut(drInt, true, true);
-                                //    }
-                                //    catch (Exception)
-                                //    {
-                                //    }
-                                //}
-
-
-                                //General.CalculFormuleCumulat(Convert.ToInt32(obj[1]), Convert.ToDateTime(obj[4]).Year, Convert.ToDateTime(obj[4]).Month);
-
+                                General.CalculFormule(obj[1], null, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]));
                                 General.SituatieZLOperatii(Convert.ToInt32(General.Nz(obj[1],-99)), Convert.ToDateTime(General.Nz(obj[4],new DateTime(2100,1,1))), 3, Convert.ToInt32(General.Nz(obj[5],0)));
-
                                 Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
 
                                 grDate.DataBind();
@@ -602,7 +567,7 @@ namespace WizOne.Absente
                         case "btnPlanif":
                             {
                                 #region Planificare
-                                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "F10003", "IdAbsenta", "Inlocuitor", "IdStare", "NrOre" }) as object[];
+                                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "F10003", "IdAbsenta", "Inlocuitor", "IdStare", "NrOre", "DataInceput", "DataSfarsit" }) as object[];
                                 if (obj == null || obj.Count() == 0 || obj[0] == null || obj[1] == null || obj[2] == null)
                                 {
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata");
@@ -671,12 +636,9 @@ namespace WizOne.Absente
                                         if (Convert.ToInt32(dtCer.Rows[0]["IdStare"]) == 3)
                                         {
                                             if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
-                                            {
                                                 General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(General.Nz(obj[0], 1)), 5, trimiteLaInlocuitor, Convert.ToInt32(General.Nz(obj[5], 0)));
 
-                                                //Se va face cand vom migra GAM
-                                                //TrimiteCerereInF300(Session["UserId"], idCer);
-                                            }
+                                            General.CalculFormule(obj[1], null, Convert.ToDateTime(obj[6]), Convert.ToDateTime(obj[7]));
                                         }
 
                                         Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", {idStare} AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
@@ -868,19 +830,12 @@ namespace WizOne.Absente
                     }
 
                     General.StergeInPontaj(Convert.ToInt32(dtCer.Rows[0]["Id"]), idTipOre, oreInVal, dtIncDes, dtSfDes, Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)), Convert.ToInt32(General.Nz(Session["UserId"], -99)));
-
-                    General.CalculFormuleAll($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={obj[1]} AND {General.ToDataUniv(dtIncDes)} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(dtSfDes)}");
+                    General.CalculFormule(obj[1], null, dtIncDes, dtSfDes);
                 }
-
 
                 //stergem cererea veche din baza de date
                 General.ExecutaNonQuery(@"DELETE ""tblFisiere"" WHERE ""Tabela""='Ptj_Cereri' AND ""Id""=@1", new object[] { obj[0] });
-
                 Notif.TrimiteNotificare("Absente.Lista", 1, $@"SELECT Z.*, 6 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""IdCerereDivizata""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
-
-                //Page.ClientScript.RegisterStartupScript(this.GetType(), "ANY_KEY13", "CloseDeferedWindow();", true);
-                //popUpDivide.ShowOnPageLoad = false;
-
                 grDate.DataBind();
             }
             catch (Exception ex)

@@ -219,31 +219,9 @@ namespace WizOne.Pontaj
 
                     if (chkRecalc)
                     {
-                        string sqlCum = $@"
-                            SELECT A.F10003, YEAR(X.""Zi"") AS ""An"", MONTH(X.""Zi"") AS ""Luna"" 
-                            FROM ""tblZile"" X
-                            INNER JOIN F100 A ON {angIn} <= A.F10003 AND A.F10003 <= {angSf} AND A.F10022 <= X.""Zi"" AND X.""Zi"" <= A.F10023
-                            WHERE {General.ToDataUniv(ziIn)} <= X.""Zi"" AND X.""Zi"" <= {General.ToDataUniv(ziSf)}
-                            GROUP BY A.F10003, YEAR(X.""Zi""), MONTH(X.""Zi"")";
-
-                        if (Constante.tipBD == 2)
-                            sqlCum = $@"
-                            SELECT A.F10003, TO_NUMBER(TO_CHAR(X.""Zi"", 'YYYY')) AS ""An"", TO_NUMBER(TO_CHAR(X.""Zi"", 'MM')) AS ""Luna"" 
-                            FROM ""tblZile"" X
-                            INNER JOIN F100 A ON {angIn} <= A.F10003 AND A.F10003 <= {angSf} AND A.F10022 <= X.""Zi"" AND X.""Zi"" <= A.F10023
-                            WHERE {General.ToDataUniv(ziIn)} <= X.""Zi"" AND X.""Zi"" <= {General.ToDataUniv(ziSf)}
-                            GROUP BY A.F10003, TO_NUMBER(TO_CHAR(X.""Zi"", 'YYYY')), TO_NUMBER(TO_CHAR(X.""Zi"", 'MM'))";
-
-                        DataTable dt = General.IncarcaDT(sqlCum, null);
-
-                        for (int i = 0; i < dt.Rows.Count; i++)
-                        {
-                            General.CalculFormuleCumulat(Convert.ToInt32(dt.Rows[i]["F10003"]), Convert.ToInt32(dt.Rows[i]["An"]), Convert.ToInt32(dt.Rows[i]["Luna"]));
-                        }
+                        General.CalculFormuleCumulat($@"{angIn} <= ent.F10003 AND ent.F10003 <= {angSf} AND {ziIn.Year * 100 + ziIn.Month} <= (ent.""An"" * 100 + ent.""Luna"") AND (ent.""An"" * 100 + ent.""Luna"") <= {ziSf.Year * 100 + ziSf.Month}");
                         ras = true;
                     }
-
-
 
                     if (chkCtr || chkNrm || chkStr || chkCC)
                     {
@@ -356,30 +334,9 @@ namespace WizOne.Pontaj
 
                     if (chkRecalc)
                     {
-                        string sqlCum = $@"
-                            SELECT A.F10003, YEAR(X.""Zi"") AS ""An"", MONTH(X.""Zi"") AS ""Luna"" 
-                            FROM ""tblZile"" X
-                            INNER JOIN F100 A ON {angIn} <= A.F10003 AND A.F10003 <= {angSf} AND A.F10022 <= X.""Zi"" AND X.""Zi"" <= A.F10023
-                            WHERE {General.ToDataUniv(ziIn)} <= X.""Zi"" AND X.""Zi"" <= {General.ToDataUniv(ziSf)}
-                            GROUP BY A.F10003, YEAR(X.""Zi""), MONTH(X.""Zi"")";
-
-                        if (Constante.tipBD == 2)
-                            sqlCum = $@"
-                            SELECT A.F10003, TO_NUMBER(TO_CHAR(X.""Zi"", 'YYYY')) AS ""An"", TO_NUMBER(TO_CHAR(X.""Zi"", 'MM')) AS ""Luna"" 
-                            FROM ""tblZile"" X
-                            INNER JOIN F100 A ON {angIn} <= A.F10003 AND A.F10003 <= {angSf} AND A.F10022 <= X.""Zi"" AND X.""Zi"" <= A.F10023
-                            WHERE {General.ToDataUniv(ziIn)} <= X.""Zi"" AND X.""Zi"" <= {General.ToDataUniv(ziSf)}
-                            GROUP BY A.F10003, TO_NUMBER(TO_CHAR(X.""Zi"", 'YYYY')), TO_NUMBER(TO_CHAR(X.""Zi"", 'MM'))";
-
-                        DataTable dt = General.IncarcaDT(sqlCum, null);
-
-                        for (int i = 0; i < dt.Rows.Count; i++)
-                        {
-                            General.CalculFormuleCumulat(Convert.ToInt32(dt.Rows[i]["F10003"]), Convert.ToInt32(dt.Rows[i]["An"]), Convert.ToInt32(dt.Rows[i]["Luna"]));
-                        }
+                        General.CalculFormuleCumulat($@"{angIn} <= ent.F10003 AND ent.F10003 <= {angSf} AND {ziIn.Year * 100 + ziIn.Month} <= (ent.""An"" * 100 + ent.""Luna"") AND (ent.""An"" * 100 + ent.""Luna"") <= {ziSf.Year * 100 + ziSf.Month}");
                         ras = true;
                     }
-
 
                     if (chkCtr || chkNrm || chkStr || chkCC)
                     {

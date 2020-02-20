@@ -1113,7 +1113,7 @@ namespace Wizrom.Reports.Pages
                     }
                 }                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error here                
                 if (!IsPostBack) // Close the page

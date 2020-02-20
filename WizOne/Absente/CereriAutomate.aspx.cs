@@ -328,7 +328,9 @@ namespace WizOne.Absente
             }
             int x = 0, y = 1;
 
-            ScriptManager.RegisterClientScriptBlock(Page, typeof(string), "bindButton", "bindButton();", true);      
+            ScriptManager.RegisterClientScriptBlock(Page, typeof(string), "bindButton", "bindButton();", true);
+
+            string strF10003 = "";
 
             foreach (int marca in lstMarci)
             {              
@@ -485,10 +487,9 @@ namespace WizOne.Absente
                     {
                         int nr = Convert.ToInt32(dtDataSf.Visible == false ? txtNrOre.Value ?? 0: txtNr.Value ?? 0);
                         General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCer, 5, trimiteLaInlocuitor, nr);
-
-                        //Se va face cand vom migra GAM
-                        //TrimiteCerereInF300(Session["UserId"], idCer);
                     }
+
+                    strF10003 += "," + marca;
                 }
                 x++;
                 lstMarciProcesate.Add(marca);
@@ -498,7 +499,15 @@ namespace WizOne.Absente
                 #endregion
 
             }
-                   
+
+            //Florin 2020.02.20
+            if (strF10003 != "")
+            {
+                General.CalculFormulePeZi(   $@"ent.F10003 IN ({strF10003.Substring(1)}) AND {General.ToDataUniv(dtDataInc.Date)} <= {General.TruncateDate("Ziua")} AND {General.TruncateDate("Ziua")} <= {General.ToDataUniv(dtDataSf.Date)}");
+                General.CalculFormuleCumulat($@"ent.F10003 IN ({strF10003.Substring(1)}) AND {dtDataInc.Date.Year * 100 + dtDataInc.Date.Month} <= (ent.""An"" * 100 + ent.""Luna"") AND (ent.""An"" * 100 + ent.""Luna"") <= {dtDataSf.Date.Year * 100 + dtDataSf.Date.Month}");
+                General.ExecValStr($@"F10003 IN ({strF10003.Substring(1)}) AND {General.ToDataUniv(dtDataInc.Date)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dtDataSf.Date)}");
+            }
+
             lblProgres.Text = "Procesare terminata!";
             ProgressUpdatePanel.ContentTemplateContainer.Controls.Add(lblProgres);
             ProgressUpdatePanel.Update();

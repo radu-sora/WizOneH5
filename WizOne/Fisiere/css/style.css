@@ -712,3 +712,24 @@ table label {
         border-right: 0;
     }
 
+.ptj_pe_zi {
+    float:left; display:none; line-height:22px; vertical-align:middle; padding:5px 0px 15px 0px;
+}
+
+    .ptj_pe_zi .ptj_filtru {
+       float:left; padding-right:15px;
+    }
+
+.ptj_filtru label {
+    display: inline-block;
+    float: left;
+    padding-right: 15px;
+}
+
+.ptj_filtru .lw {
+    width: 120px;
+}
+
+.ptj_stare {
+    float:left; margin-right:15px; width:110px; height:26px; text-align:center; border:solid 1px gray; color:#000000;
+}

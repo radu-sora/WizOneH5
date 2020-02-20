@@ -547,19 +547,13 @@ namespace WizOne.Pontaj
 
                 General.ExecutaNonQuery("BEGIN " + sqlFin + sqlZileGolite + ";" + " END;", null);
 
-
-                //Florin 2019.05.13
-                //calcul formule cumulat
-                //General.CalculFormuleCumulatToti(1, 1, $@" {General.ToDataUniv(dataStart)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dataSf)} AND F10003 IN ({lista})");
-                //Radu 01.07.2019
-
-                DateTime dt = dataStart;
-                while (dt.Year < dataSf.Year || (dt.Year == dataSf.Year && dt.Month <= dataSf.Month))
-                {
-                    General.CalculFormuleCumulatToti(dt.Year, dt.Month, $@" F10003 IN ({lista})");
-                    dt = dt.AddMonths(1);
-                }
-
+                //DateTime dt = dataStart;
+                //while (dt.Year < dataSf.Year || (dt.Year == dataSf.Year && dt.Month <= dataSf.Month))
+                //{
+                //    General.CalculFormuleCumulatToti(dt.Year, dt.Month, $@" F10003 IN ({lista})");
+                //    dt = dt.AddMonths(1);
+                //}
+                General.CalculFormuleCumulat($@"ent.F10003 IN ({lista}) AND {dataStart.Year * 100 + dataStart.Month} <= (ent.""An"" * 100 + ent.""Luna"") AND (ent.""An"" * 100 + ent.""Luna"") <= {dataSf.Year * 100 + dataSf.Month}");
             }
             catch (Exception ex)
             {

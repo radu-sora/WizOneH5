@@ -302,8 +302,13 @@ namespace WizOne.Pagini
 
                 try
                 {
-                    if (!Directory.Exists(cale))
-                        Directory.CreateDirectory(cale);
+                    bool raspuns = General.ExecutaNonQuery(
+                        $@"Declare @vFileExists int
+                         EXEC master.dbo.xp_fileexist '{cale}', @vFileExists OUTPUT
+                         IF (@vFileExists = 0)
+	                        EXEC Master.sys.xp_create_subdir '{cale}'", null);
+                    if (!raspuns)
+                        return "Calea pentru salvarea bazei de date nu este valida." + Environment.NewLine + "Trebuie sa fie relativa la serverul de baza de date.";
                 }
                 catch (Exception)
                 {

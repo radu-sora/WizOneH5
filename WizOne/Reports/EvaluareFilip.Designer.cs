@@ -1,6 +1,6 @@
 ﻿namespace WizOne.Reports
 {
-    partial class EvaluarePeliFilip
+    partial class EvaluareFilip
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EvaluarePeliFilip));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EvaluareFilip));
             this.Detail = new DevExpress.XtraReports.UI.DetailBand();
             this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel2 = new DevExpress.XtraReports.UI.XRLabel();

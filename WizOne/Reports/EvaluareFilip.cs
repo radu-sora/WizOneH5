@@ -1,19 +1,16 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using DevExpress.XtraReports.UI;
-using System.Reflection;
+﻿using DevExpress.XtraReports.UI;
+using System;
 using System.Collections.Generic;
-using WizOne.Module;
 using System.Data;
-using System.Web;
 using System.Diagnostics;
-using System.Linq;
+using System.Drawing;
 using System.Drawing.Printing;
+using System.Web;
+using WizOne.Module;
 
 namespace WizOne.Reports
 {
-    public partial class EvaluarePeliFilip : DevExpress.XtraReports.UI.XtraReport
+    public partial class EvaluareFilip : DevExpress.XtraReports.UI.XtraReport
     {
 
         //Florin 2019.01.21
@@ -26,7 +23,7 @@ namespace WizOne.Reports
         int user_id = 1;
         string idCateg = "0";
 
-        public EvaluarePeliFilip()
+        public EvaluareFilip()
         {
             InitializeComponent();
         }
@@ -55,7 +52,6 @@ namespace WizOne.Reports
 
                 //DefaultPrinterSettingsUsing.UseLandscape = false;
                 this.Landscape = true;
-
 
                 string str = (HttpContext.Current.Session["PrintParametrii"] ?? "").ToString();
                 if (str != "")

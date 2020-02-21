@@ -53,6 +53,9 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Adeverinte_Word">
+      <HintPath>..\Artifacts\Adeverinte_Word.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Charts.v19.1.Core, Version=19.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpress.Charts.Core.19.1.4\lib\net452\DevExpress.Charts.v19.1.Core.dll</HintPath>
     </Reference>

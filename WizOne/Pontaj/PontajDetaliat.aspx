@@ -262,16 +262,16 @@
                         </BatchEditModifiedCell>
                     </Styles>
                     <Columns>
-                        <dx:GridViewBandColumn Name="Stare" HeaderStyle-HorizontalAlign="Center">
+                        <dx:GridViewBandColumn Name="Stare" HeaderStyle-HorizontalAlign="Left">
                             <Columns>
-                                <dx:GridViewCommandColumn FixedStyle="Left" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
+                                <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
                                     <CustomButtons>
                                         <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
                                             <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
                                         </dx:GridViewCommandColumnCustomButton>                                
                                     </CustomButtons>
                                 </dx:GridViewCommandColumn>
-                                <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" FixedStyle="Left" VisibleIndex="2" />
+                                <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" VisibleIndex="2" />
                                 <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" />
 
                                 <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

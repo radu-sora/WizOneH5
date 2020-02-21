@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using System.Dynamic;
 using System.Globalization;
 using System.IdentityModel.Services;
 using System.IO;
@@ -4381,8 +4382,15 @@ namespace WizOne.Module
                     dynamic ctl = dtList.Items[0].FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.ClientVisible = vizibil;
-                        ctl.ClientEnabled = !blocat;           
+                        if (!IsPropertyExist(ctl, "ClientVisible"))
+                        {
+                            ctl.Visible = vizibil;
+                        }
+                        else
+                        {
+                            ctl.ClientVisible = vizibil;
+                            ctl.ClientEnabled = !blocat;
+                        }
                     }
                     else
                     {
@@ -4400,6 +4408,14 @@ namespace WizOne.Module
                     }
                 }
             }
+        }
+
+        public static bool IsPropertyExist(dynamic settings, string name)
+        {
+            if (settings is ExpandoObject)
+                return ((IDictionary<string, object>)settings).ContainsKey(name);
+
+            return settings.GetType().GetProperty(name) != null;
         }
 
         public static void SecuritatePersonal(ASPxCallbackPanel pnl, int idUser)
@@ -4443,7 +4459,7 @@ namespace WizOne.Module
                     dynamic ctl = pnl.FindControl(param[0]);
                     if (ctl != null)
                     {
-                        if (ctl.GetType() == typeof(HtmlImage))
+                        if (!IsPropertyExist(ctl, "ClientVisible"))
                         {
                             ctl.Visible = vizibil;                           
                         }
@@ -4512,8 +4528,15 @@ namespace WizOne.Module
                     dynamic ctl = dtList.Items[0].FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.ClientVisible = vizibil;
-                        ctl.ClientEnabled = !blocat;
+                        if (!IsPropertyExist(ctl, "ClientVisible"))
+                        {
+                            ctl.Visible = vizibil;
+                        }
+                        else
+                        {
+                            ctl.ClientVisible = vizibil;
+                            ctl.ClientEnabled = !blocat;
+                        }
                     }
                 }
             }

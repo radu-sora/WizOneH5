@@ -102,7 +102,7 @@
                                                 <label id="lblPtjAng" runat="server">Tip inregistrare</label>
                                                 <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                             </div>
-                                             <div class="ptj_filtru">
+                                             <div class="ptj_filtru" style="display:inline-block;">
                                                 <dx:ASPxButton ID="btnFiltruAng" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                                     <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
@@ -208,6 +208,10 @@
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                                     <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
                                                 </dx:ASPxButton>
+                                                <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                                                    <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
+                                                    <ClientSideEvents Click="function(s, e) { EmptyFields(); }" />
+                                                </dx:ASPxButton>
     	                                        <div class="hovercard" id="divHovercardZi" runat="server">
 			                                        <div class="hovercard-container">
 				                                        <div class="hovercard-arrow"></div>
@@ -218,12 +222,6 @@
 				                                        </div>
 			                                        </div>
 		                                        </div>
-                                            </div>
-                                            <div style="float:left;">
-                                                <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                                                    <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
-                                                    <ClientSideEvents Click="function(s, e) { EmptyFields(); }" />
-                                                </dx:ASPxButton>
                                             </div>
                                         </div>
                                     </dx:PanelContent>

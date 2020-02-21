@@ -654,11 +654,12 @@ table label {
 
 
 .hovercard {
-    position: absolute;
+    position: relative;
     left: 0px;
-    top: 35px;
-    z-index: 500;
+    top: 5px;
     display: block;
+    z-index:1000000;
+    
 }
 
     .hovercard .hovercard-container {

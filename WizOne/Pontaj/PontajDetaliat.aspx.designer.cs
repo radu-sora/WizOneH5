@@ -481,15 +481,6 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxButton btnFiltruZi;
         
         /// <summary>
-        /// divHovercardZi control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divHovercardZi;
-        
-        /// <summary>
         /// btnFiltruSterge control.
         /// </summary>
         /// <remarks>
@@ -497,6 +488,15 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
+        
+        /// <summary>
+        /// divHovercardZi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divHovercardZi;
         
         /// <summary>
         /// tdGridTotaluri control.

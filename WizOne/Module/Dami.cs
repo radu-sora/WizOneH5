@@ -2095,6 +2095,10 @@ namespace WizOne.Module
             return rez;
         }
 
+        public static string TimeStamp()
+        {
+            return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0');
+        }
 
     }
 }

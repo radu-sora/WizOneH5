@@ -29,7 +29,7 @@ namespace WizOne.Reports
         }
 
 
-        private void EvaluarePeliFilip_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
+        private void EvaluareFilip_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
         {
             try
             {
@@ -707,7 +707,6 @@ namespace WizOne.Reports
             return tbl;
         }
 
-
         void table_BeforePrint(object sender, PrintEventArgs e)
         {
 
@@ -718,7 +717,6 @@ namespace WizOne.Reports
             table.WidthF = this.PageWidth - 2 * this.Margins.Left - 2 * this.Margins.Right;
 
         }
-
 
         private XRTable CreazaTabel(int idQuiz, int f10003, string super,  int id, int parinte, string numeView)
         {
@@ -915,7 +913,6 @@ namespace WizOne.Reports
             }
         }
 
-
         private int CalculRating(DataRow[] lst, int idGrup, string super, int tipCalcul)
         {
             //1 - se aplica pt obiective si foloseste ponderea pe care utilizatorul o introduce
@@ -1072,6 +1069,10 @@ namespace WizOne.Reports
             return tbl;
         }
 
+        private void EvaluareFilip_AfterPrint(object sender, EventArgs e)
+        {
+            PrintingSystem.Document.Name = "Evaluare " + lblNumeEvaluat.Text;
+        }
 
 
     }

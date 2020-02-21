@@ -1490,7 +1490,7 @@ namespace WizOne.Pontaj
                                  inner join ""relGrupAngajat"" c on b.""IdGrup""  = c.""IdGrup"" 
                                  inner join ""F100Supervizori"" d on c.F10003 = d.F10003 and (-1 * b.""IdSuper"")= d.""IdSuper"" 
                                  where d.""IdUser"" =  {0}
-                                 group by a.""Id"", a.""Denumire"", a.""PoateInitializa"",a.""PoateSterge"", a.""TipMesaj"" ORDER BY a.""Id"" DESC";
+                                 group by a.""Id"", a.""Denumire"", a.""PoateInitializa"",a.""PoateSterge"", a.""TipMesaj"" ORDER BY ""Id"" DESC";
 
                 strSql = string.Format(strSql, Session["UserId"]);
 

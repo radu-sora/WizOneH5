@@ -609,17 +609,11 @@ namespace WizOne.Module
         {
             try
             {
-                string filtru = "";
-
+                string filtru = "";              
                 Page pag = grDate.Page;
+                DataTable dt = new DataTable();
                 string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
-
-                //Radu 20.11.2019
-                if (nume.ToLower() == "personal.dateangajat")
-                {
-                    Control parent = grDate.Parent;
-                    nume = parent.TemplateControl.ToString().Replace("ASP.", "").Replace("_ascx", "").Replace("_", ".");
-                }
+                
 
                 if (nume.ToLower() == "sablon")
                 {
@@ -627,18 +621,35 @@ namespace WizOne.Module
                     filtru = " AND \"IdColoana\"='-'";
                 }
 
-                string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
-                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                                FROM ""Securitate"" A
-                                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                WHERE B.""IdUser"" = @2 AND A.""IdForm"" = @1 {0}
-                                UNION
-                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                                FROM ""Securitate"" A
-                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = @1 {0}) X
-                                GROUP BY X.""IdControl"", X.""IdColoana""";
-                strSql = string.Format(strSql, filtru);
-                DataTable dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });
+                //Radu 20.11.2019
+                if (nume.ToLower() == "personal.dateangajat")
+                {
+                    Control parent = grDate.Parent;
+                    nume = parent.TemplateControl.ToString().Replace("ASP.", "").Replace("_ascx", "").Replace("_", ".");
+                    //Radu 21.02.2020
+                    DataTable dtSec = HttpContext.Current.Session["SecuritatePersonal"] as DataTable;
+                    if (dtSec != null && dtSec.Rows.Count > 0)
+                    {
+                        dt = dtSec.Select("IdForm = '" + nume + "'") != null && dtSec.Select("IdForm = '" + nume + "'").Count() > 0 ? dtSec.Select("IdForm = '" + nume + "'").CopyToDataTable() : null;
+                    }
+                    else
+                        return;
+                }
+                else
+                {
+                    string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+                            SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                            FROM ""Securitate"" A
+                            INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+                            WHERE B.""IdUser"" = @2 AND A.""IdForm"" = @1 {0}
+                            UNION
+                            SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                            FROM ""Securitate"" A
+                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = @1 {0}) X
+                            GROUP BY X.""IdControl"", X.""IdColoana""";
+                    strSql = string.Format(strSql, filtru);
+                    dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });
+                }
 
                 foreach (DataRow dr in dt.Rows)
                 {

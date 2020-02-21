@@ -78,7 +78,7 @@ namespace WizOne.Reports
                     }
 
                     //Radu 31.01.2020 - La Print Pontaj per angajat, numele angajatului sa apara o singura data
-                    if (tip == 1)
+                    if (tip == 1 || tip == 10)
                     {
                         lblNumeAngajat.Visible = true;
                         xrLabel26.Visible = false;

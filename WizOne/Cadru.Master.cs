@@ -100,19 +100,23 @@ namespace WizOne
 
                 if (!IsPostBack)
                 {
+                    //Florin 2020.02.20 - sa se faca diferentiere intre ptj pe ang si pe zi
+                    string filtruSup = "";
+                    if (General.Nz(Request.QueryString["tip"], "").ToString() != "")
+                        filtruSup = @" AND A.""Grid""='" + Request.QueryString["tip"].ToString() + "'";
                     //incarcam lista de profile disponibile
-                    string sqlPro = @"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
+                    string sqlPro = $@"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
                                 FROM ""tblProfile"" A
                                 INNER JOIN ""tblProfileLinii"" B ON  A.""Id"" = B.""Id""
                                 INNER JOIN ""relGrupUser"" C ON B.""IdGrup"" = C.""IdGrup""
-                                WHERE A.""Pagina"" = @1 AND C.""IdUser"" = @2 AND COALESCE(A.""Activ"" ,0) = 1
+                                WHERE A.""Pagina"" = @1 AND C.""IdUser"" = @2 AND COALESCE(A.""Activ"" ,0) = 1 {filtruSup}
                                 GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"" ";
 
                     if (General.VarSession("EsteAdmin").ToString() == "1")
-                        sqlPro = @"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
+                        sqlPro = $@"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
                                 FROM ""tblProfile"" A
                                 INNER JOIN ""tblProfileLinii"" B ON  A.""Id"" = B.""Id""
-                                WHERE A.""Pagina"" = @1 AND COALESCE(A.""Activ"" ,0) = 1
+                                WHERE A.""Pagina"" = @1 AND COALESCE(A.""Activ"" ,0) = 1 {filtruSup}
                                 GROUP BY A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)), A.""Implicit"", A.""Activ"" ";
 
                     DataTable dtPro = new DataTable();

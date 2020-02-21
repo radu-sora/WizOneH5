@@ -1,14 +1,11 @@
 ﻿using DevExpress.Web;
 using System;
-using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using WizOne.Module;
-using System.Diagnostics;
 
 namespace WizOne.Pagini
 {
@@ -57,10 +54,11 @@ namespace WizOne.Pagini
                     btnNew.Visible = false;
                 }
 
+                if (Request.UrlReferrer.ToString().IndexOf("PontajDetaliat") >= 0)
+                    Session["TipPontajDetaliat"] = General.Nz(HttpUtility.ParseQueryString(Request.UrlReferrer.Query)["tip"], "").ToString();
+
                 if (!IsPostBack)
-                {
                     IncarcaGrid();
-                }
             }
             catch (Exception ex)
             {
@@ -124,7 +122,10 @@ namespace WizOne.Pagini
         {
             try
             {
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""tblProfile"" WHERE ""Pagina""=@1 ORDER BY ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", "."), Session["UserId"].ToString() });
+                string filtru = "";
+                if (General.Nz(Session["TipPontajDetaliat"], "").ToString() != "")
+                    filtru = @" AND ""Grid"" = '" + Session["TipPontajDetaliat"] + "'";
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""tblProfile"" WHERE ""Pagina""=@1 {filtru} ORDER BY ""Denumire"" ", new string[] { General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", "."), Session["UserId"].ToString() });
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["Id"] };
                 grDate.KeyFieldName = "Id";
                 grDate.DataSource = dt;

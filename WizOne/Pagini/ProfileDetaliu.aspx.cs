@@ -137,6 +137,9 @@ namespace WizOne.Pagini
                             dtHead.Rows.Add(drHead);
                             drHead["Continut"] = Session["Profil_DataGrid"];       // grDate.SaveClientLayout();
 
+                            if (General.Nz(Session["TipPontajDetaliat"], "").ToString() != "")
+                                drHead["Grid"] = Session["TipPontajDetaliat"];
+
                             foreach (DataRow dr in dt.Rows)
                             {
                                 dr["Id"] = id;
@@ -150,8 +153,6 @@ namespace WizOne.Pagini
                         break;
                 }
 
-                //var ert = Session["Profil_DataGrid"];
-                //drHead["Pagina"] = Dami.PaginaWeb();
                 drHead["Pagina"] = General.Nz(Session["PaginaWeb"], "").ToString().Replace("\\", ".");
                 drHead["Denumire"] = txtDenumire.Text;
                 drHead["Activ"] = chkActiv.Checked;

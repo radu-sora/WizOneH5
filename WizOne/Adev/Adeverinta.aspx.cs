@@ -1156,6 +1156,7 @@ namespace WizOne.Adev
 
                 //String msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, adev, Config, folder.ToString(), marca);
 
+                string lstMarci = marca.ToString();
 
                 String FileName = "";
                 switch (adev)
@@ -1163,36 +1164,43 @@ namespace WizOne.Adev
                     case 0:
                         fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        string msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 0, Config, HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/"), lstMarci.Split(';'));
                         break;
                     case 1:
                         fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        AdeverintaSanatate(marca, FileName);
+                        //AdeverintaSanatate(marca, FileName);
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 1, Config, HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/"), lstMarci.Split(';'));
                         break;                        
                     case 2:
                         fisier = dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/") + fisier;
-                        AdeverintaVenituriAnuale(marca, FileName);
+                        //AdeverintaVenituriAnuale(marca, FileName);
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 2, Config, HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/"), lstMarci.Split(';'));
                         break;
                     case 3:
                         fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10017"].ToString() + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        AdeverintaCIC(marca, FileName);
+                        //AdeverintaCIC(marca, FileName);
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 3, Config, HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/"), lstMarci.Split(';'));
                         break;
                     case 4:
                         fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10017"].ToString() + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        AdeverintaSomaj(marca, FileName);
+                        //AdeverintaSomaj(marca, FileName);
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 4, Config, HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/"), lstMarci.Split(';'));
                         break;
                     case 6:
                         fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        AdeverintaStagiu(marca, FileName);
+                        //AdeverintaStagiu(marca, FileName);
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 6, Config, HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/"), lstMarci.Split(';'));
                         break;
                     case 7:
                         fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        AdeverintaVechime(marca, FileName);
+                        //AdeverintaVechime(marca, FileName);
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 7, Config, HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/"), lstMarci.Split(';'));
                         break;
                 }
 

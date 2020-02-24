@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using System.Dynamic;
 using System.Globalization;
 using System.IdentityModel.Services;
 using System.IO;
@@ -4340,6 +4341,14 @@ namespace WizOne.Module
             }
         }
 
+        public static bool IsPropertyExist(dynamic settings, string name)
+        {    
+            if (settings is ExpandoObject)
+                return ((IDictionary<string, object>)settings).ContainsKey(name);                     
+
+            return settings.GetType().GetProperty(name) != null;
+        }
+
         public static void SecuritatePersonal(DataList dtList, int idUser)
         {
             List<string> lista = new List<string>();
@@ -4381,23 +4390,37 @@ namespace WizOne.Module
                     dynamic ctl = dtList.Items[0].FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.ClientVisible = vizibil;
-                        ctl.ClientEnabled = !blocat;           
+                        if (!IsPropertyExist(ctl, "ClientVisible"))
+                        {
+                            ctl.Visible = vizibil;
+                        }
+                        else
+                        {
+                            ctl.ClientVisible = vizibil;
+                            ctl.ClientEnabled = !blocat;
+                        }
                     }
                     //else
                     //{
-                        if (param[0].Length >= 2 && param[0].Substring(0, 2) == "lg")
-                        {
+                    if (param[0].Length >= 2 && param[0].Substring(0, 2) == "lg")
+                    {
                         //HtmlGenericControl ctl1 = dtList.Items[0].FindControl(param[0]) as HtmlGenericControl;
                         dynamic ctl1 = dtList.Items[0].FindControl(param[0]);
                         if (ctl1 != null)
+                        {
+                            if (!IsPropertyExist(ctl1, "ClientVisible"))
+                            {
+                                ctl1.Visible = vizibil;
+                            }
+                            else
                             {
                                 ctl1.ClientVisible = vizibil;
-                                HtmlTable ctlTable = dtList.Items[0].FindControl(ctl1.ID + "Table") as HtmlTable;
-                                if (ctlTable != null)
-                                    ctlTable.Visible = vizibil;
                             }
+                            HtmlTable ctlTable = dtList.Items[0].FindControl(ctl1.ID + "Table") as HtmlTable;
+                            if (ctlTable != null)
+                                ctlTable.Visible = vizibil;
                         }
+                     }
                     //}
                 }
             }
@@ -4444,9 +4467,9 @@ namespace WizOne.Module
                     dynamic ctl = pnl.FindControl(param[0]);
                     if (ctl != null)
                     {
-                        if (ctl.GetType() == typeof(HtmlImage))
+                        if (!IsPropertyExist(ctl, "ClientVisible"))
                         {
-                            ctl.Visible = vizibil;                           
+                            ctl.Visible = vizibil;
                         }
                         else
                         {
@@ -4461,7 +4484,14 @@ namespace WizOne.Module
                             dynamic ctl1 = pnl.FindControl(param[0]);
                             if (ctl1 != null)
                             {
-                                ctl1.ClientVisible = vizibil;
+                                if (!IsPropertyExist(ctl1, "ClientVisible"))
+                                {
+                                    ctl1.Visible = vizibil;
+                                }
+                                else
+                                {
+                                    ctl1.ClientVisible = vizibil;
+                                }
                                 HtmlTable ctlTable = pnl.FindControl(ctl1.ID + "Table") as HtmlTable;
                                 if (ctlTable != null)
                                     ctlTable.Visible = vizibil;
@@ -4513,8 +4543,15 @@ namespace WizOne.Module
                     dynamic ctl = dtList.Items[0].FindControl(param[0]);
                     if (ctl != null)
                     {
-                        ctl.ClientVisible = vizibil;
-                        ctl.ClientEnabled = !blocat;
+                        if (!IsPropertyExist(ctl, "ClientVisible"))
+                        {
+                            ctl.Visible = vizibil;
+                        }
+                        else
+                        {
+                            ctl.ClientVisible = vizibil;
+                            ctl.ClientEnabled = !blocat;
+                        }
                     }
                 }
             }

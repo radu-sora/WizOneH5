@@ -4384,20 +4384,21 @@ namespace WizOne.Module
                         ctl.ClientVisible = vizibil;
                         ctl.ClientEnabled = !blocat;           
                     }
-                    else
-                    {
+                    //else
+                    //{
                         if (param[0].Length >= 2 && param[0].Substring(0, 2) == "lg")
                         {
-                            HtmlGenericControl ctl1 = dtList.Items[0].FindControl(param[0]) as HtmlGenericControl;
-                            if (ctl1 != null)
+                        //HtmlGenericControl ctl1 = dtList.Items[0].FindControl(param[0]) as HtmlGenericControl;
+                        dynamic ctl1 = dtList.Items[0].FindControl(param[0]);
+                        if (ctl1 != null)
                             {
-                                ctl1.Visible = vizibil;
+                                ctl1.ClientVisible = vizibil;
                                 HtmlTable ctlTable = dtList.Items[0].FindControl(ctl1.ID + "Table") as HtmlTable;
                                 if (ctlTable != null)
                                     ctlTable.Visible = vizibil;
                             }
                         }
-                    }
+                    //}
                 }
             }
         }
@@ -4453,20 +4454,20 @@ namespace WizOne.Module
                             ctl.ClientEnabled = !blocat;
                         }
                     }
-                    else
-                    {
+                    //else
+                    //{
                         if ((param[0].Length >= 2 && param[0].Substring(0, 2) == "lg") || (param[0].Length >= 3 && param[0].Substring(0, 3) == "lbl"))
                         {
-                            HtmlGenericControl ctl1 = pnl.FindControl(param[0]) as HtmlGenericControl;
+                            dynamic ctl1 = pnl.FindControl(param[0]);
                             if (ctl1 != null)
                             {
-                                ctl1.Visible = vizibil;
+                                ctl1.ClientVisible = vizibil;
                                 HtmlTable ctlTable = pnl.FindControl(ctl1.ID + "Table") as HtmlTable;
                                 if (ctlTable != null)
                                     ctlTable.Visible = vizibil;
                             }
                         }
-                    }
+                    //}
                 }
             }
         }

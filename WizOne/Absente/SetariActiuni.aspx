@@ -93,6 +93,7 @@
                                             <dx:ListEditItem Text="prima zi din an" Value="8" />
                                             <dx:ListEditItem Text="ultima zi din an" Value="9" />
                                             <dx:ListEditItem Text="pontaj inchis" Value="13" />
+                                            <dx:ListEditItem Text="2100" Value="49" />
                                         </Items>
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>

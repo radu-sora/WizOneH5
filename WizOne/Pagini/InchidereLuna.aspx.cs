@@ -283,19 +283,17 @@ namespace WizOne.Pagini
                     }
                     else
                     {
+                        Process process = new Process();
+
                         try
                         {
-                            Process process = new Process();
                             process.StartInfo.FileName = caleExp + "\\exp.exe";
-                            string arg = "{0}/{1}@{2} file={3}.dmp log={3}.log owner={4} grants=Y rows=Y compress=Y";
-                            arg = string.Format(arg, user, pwd, conn, cale + "\\" + numeFisier, user);
+                            string arg = $"{user}/{pwd}@{conn} file={cale + "\\" + numeFisier}.dmp log={cale + "\\" + numeFisier}.log owner={user} grants=Y rows=Y compress=Y";
                             process.StartInfo.Arguments = arg;
-                            //process.StartInfo.ErrorDialog = true;
-                            process.StartInfo.RedirectStandardOutput = true;
-                            process.StartInfo.RedirectStandardError = true;
                             process.StartInfo.UseShellExecute = false;
                             process.Start();
                             process.WaitForExit();
+                            process.Close();
                         }
                         catch (Exception ex)
                         {
@@ -306,6 +304,10 @@ namespace WizOne.Pagini
                                 mesaj = ex.ToString();
                                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
                             }
+                        }
+                        finally
+                        {
+                            process.Close();
                         }
                     }
                 }

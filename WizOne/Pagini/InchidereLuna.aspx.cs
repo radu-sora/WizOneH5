@@ -272,21 +272,42 @@ namespace WizOne.Pagini
                         return "Nu este setata calea executabilului exp.exe in parametri (CaleExpOracle)";
                     }
 
-                    if (!File.Exists(caleExp + "\\exp.exe"))
-                    {
-                        //Florin 2020.02.03 - necesar deoarece apare mesajul prea repede si nu mai are timp sa fie afisat dupa mesajul de interogare cu da sau nu
-                        System.Threading.Thread.Sleep(1000);
-                        return "Calea executabilului exp.exe nu este una valida (CaleExpOracle)";
-                    }
+                    General.ExecutaNonQuery("DROP DIRECTORY DirectorBackupWO", null);
+                    General.ExecutaNonQuery($"CREATE DIRECTORY DirectorBackupWO AS '{cale}'", null);
+                    string caleValida = General.Nz(General.ExecutaScalar($@"SELECT DBMS_LOB.FILEEXISTS(BFILENAME('DIRECTORBACKUPWO','.')) FROM DUAL", null),"0").ToString();
 
-                    Process process = new Process();
-                    process.StartInfo.FileName = caleExp + "\\exp.exe";
-                    string arg = "{0}/{1}@{2} file={3}.dmp log={4}.log owner={5} grants=Y rows=Y compress=Y";
-                    arg = string.Format(arg, user, pwd, conn, cale + "\\" + numeFisier, numeFisier, user);
-                    process.StartInfo.Arguments = arg;
-                    process.StartInfo.ErrorDialog = true;
-                    process.Start();
-                    process.WaitForExit();
+                    if (caleValida == "0")
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        mesaj = "Calea pentru salvarea bazei de date nu este valida." + Environment.NewLine + "Trebuie sa fie relativa la serverul de baza de date.";
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Process process = new Process();
+                            process.StartInfo.FileName = caleExp + "\\exp.exe";
+                            string arg = "{0}/{1}@{2} file={3}.dmp log={3}.log owner={4} grants=Y rows=Y compress=Y";
+                            arg = string.Format(arg, user, pwd, conn, cale + "\\" + numeFisier, user);
+                            process.StartInfo.Arguments = arg;
+                            //process.StartInfo.ErrorDialog = true;
+                            process.StartInfo.RedirectStandardOutput = true;
+                            process.StartInfo.RedirectStandardError = true;
+                            process.StartInfo.UseShellExecute = false;
+                            process.Start();
+                            process.WaitForExit();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.Message == "The system cannot find the file specified")
+                                mesaj = "Calea executabilului 'exp.exe' nu este corecta";
+                            else
+                            {
+                                mesaj = ex.ToString();
+                                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)

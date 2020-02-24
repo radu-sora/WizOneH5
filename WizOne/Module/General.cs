@@ -4426,14 +4426,6 @@ namespace WizOne.Module
             }
         }
 
-        public static bool IsPropertyExist(dynamic settings, string name)
-        {
-            if (settings is ExpandoObject)
-                return ((IDictionary<string, object>)settings).ContainsKey(name);
-
-            return settings.GetType().GetProperty(name) != null;
-        }
-
         public static void SecuritatePersonal(ASPxCallbackPanel pnl, int idUser)
         {
             List<string> lista = new List<string>();

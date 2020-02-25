@@ -282,22 +282,18 @@
                                 <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                                 <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                             </Columns>
-                        </dx:GridViewBandColumn>
-                        
-                    </Columns>
-                    
+                        </dx:GridViewBandColumn>                      
+                    </Columns>                 
                 </dx:ASPxGridView>
-
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <table width="100%" id="tblCC" runat="server" class="ascuns">
+                <br />
+                <table id="tblCC" runat="server" class="ascuns" style="width:100%;">
                     <tr>
-                        <td class="pull-left" style="width:100%;">
-                            <br /><br />
+                        <td class="pull-left">
                             <dx:ASPxLabel ID="lblZiuaCC" runat="server" ClientIDMode="Static" ClientInstanceName="lblZiuaCC" Font-Bold="true" Visible="true" Text="" />
-                            <br /><br />
                         </td>
                         <td class="pull-right">
                             <dx:ASPxButton ID="btnSaveCC" ClientInstanceName="btnSaveCC" ClientIDMode="Static" runat="server" Text="Salveaza CC" AutoPostBack="false" oncontextMenu="ctx(this,event)" Visible="true" >
@@ -307,11 +303,10 @@
                                 }" />
                                 <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                             </dx:ASPxButton>
-                            <br /><br />
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="2" style="margin-top:15px; display:inline-block;">
                             <dx:ASPxHiddenField ID="ccValori" runat="server" ClientInstanceName="ccValori" ClientIDMode="Static"></dx:ASPxHiddenField>
                             <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" Visible="true" 
                                 OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" OnCustomColumnDisplayText="grCC_CustomColumnDisplayText">

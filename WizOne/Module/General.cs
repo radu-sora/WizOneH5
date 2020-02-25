@@ -7614,7 +7614,7 @@ namespace WizOne.Module
                         break;
                 }
 
-                string sqlVal = $@"SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"" ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH ('') ";
+                string sqlVal = $@"SELECT CONVERT(nvarchar(max),(SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"" ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH (''))) ";
                 if (Constante.tipBD == 2)
                     sqlVal = $@"SELECT LISTAGG('{Dami.Operator()}' {Dami.Operator()} {masca}) WITHIN GROUP (ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int)) FROM (SELECT ""OreInVal"", ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"")";
 

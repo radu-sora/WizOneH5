@@ -61,7 +61,7 @@ namespace WizOne.Pontaj
 
                 if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
                 {
-                    grDate.Columns[0].Visible = true;
+                    grDate.Columns[0].Columns[0].Visible = true;
                     tblCC.Attributes["class"] = "vizibil";
 
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "1")
@@ -2022,7 +2022,7 @@ namespace WizOne.Pontaj
                                         if (c.FieldName == "IdContract")
                                         {
                                             c.PropertiesComboBox.ClientInstanceName = "cmbContract";
-                                            c.PropertiesComboBox.ClientSideEvents.SelectedIndexChanged = "cmbContract_SelectedIndexChanged_Client";
+                                            c.PropertiesComboBox.ClientSideEvents.SelectedIndexChanged = "function(s,e) { cmbContract_SelectedIndexChanged_Client(s,e); }";
                                         }
 
                                         if (c.FieldName == "IdProgram")
@@ -2714,16 +2714,11 @@ namespace WizOne.Pontaj
 
                 e.Handled = true;
 
-                DataTable dtCC = SursaCC(Convert.ToInt32(lst[0]), General.ToDataUniv(Convert.ToDateTime(lst[1])));
-
-                Session["PtjCC"] = dtCC;
-                grCC.KeyFieldName = "IdAuto";
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
-                grCC.DataSource = dtCC;
+                Session["PtjCC"] = dt;
+                grCC.DataSource = dt;
                 grCC.DataBind();
 
-                //Radu 04.12.2019
-                btnFiltru_Click(null, null);
+                IncarcaGrid();
             }
             catch (Exception ex)
             {

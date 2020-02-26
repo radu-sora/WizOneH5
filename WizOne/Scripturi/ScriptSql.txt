@@ -12787,4 +12787,8 @@ GO
 DELETE FROM "tblParametrii" WHERE "Nume" = 'RecalculCuloare'
 GO
 
+UPDATE Ntf_Setari SET ContinutMail=REPLACE(ContinutMail,'#$Link Aproba$#','#$Link1 Aproba$#') WHERE ContinutMail LIKE '%#$Link Aproba$#%'
+UPDATE Ntf_Setari SET ContinutMail=REPLACE(ContinutMail,'#$Link Respinge$#','#$Link2 Respinge$#') WHERE ContinutMail LIKE '%#$Link Respinge$#%'
+GO
+
 

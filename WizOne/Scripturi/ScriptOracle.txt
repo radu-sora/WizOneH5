@@ -13667,3 +13667,8 @@ COMMIT;
 --fara tichet
 DELETE FROM "tblParametrii" WHERE "Nume" = 'RecalculCuloare';
 COMMIT;
+
+UPDATE "Ntf_Setari" SET "ContinutMail"=REPLACE("ContinutMail",'#$Link Aproba$#','#$Link1 Aproba$#') WHERE "ContinutMail" LIKE '%#$Link Aproba$#%';
+COMMIT;
+UPDATE "Ntf_Setari" SET "ContinutMail"=REPLACE("ContinutMail",'#$Link Respinge$#','#$Link2 Respinge$#') WHERE "ContinutMail" LIKE '%#$Link Respinge$#%';
+COMMIT;

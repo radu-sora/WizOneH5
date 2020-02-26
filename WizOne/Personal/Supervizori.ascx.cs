@@ -33,7 +33,7 @@ namespace WizOne.Personal
             grDateSupervizori.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
             grDateSupervizori.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
-            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateSupervizori);
+            if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateSupervizori);
         }
 
         protected void grDateSupervizori_DataBinding(object sender, EventArgs e)

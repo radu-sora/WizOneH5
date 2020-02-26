@@ -13672,4 +13672,3 @@ UPDATE "Ntf_Setari" SET "ContinutMail"=REPLACE("ContinutMail",'#$Link Aproba$#',
 COMMIT;
 UPDATE "Ntf_Setari" SET "ContinutMail"=REPLACE("ContinutMail",'#$Link Respinge$#','#$Link2 Respinge$#') WHERE "ContinutMail" LIKE '%#$Link Respinge$#%';
 COMMIT;
-

@@ -32,7 +32,7 @@ namespace WizOne.Personal
             grDateEvolutie.SettingsCommandButton.DeleteButton.Image.AlternateText = Dami.TraduCuvant("Sterge");
             grDateEvolutie.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
-            if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateEvolutie);
+            if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateEvolutie);
         }
 
         protected void grDateEvolutie_DataBinding(object sender, EventArgs e)

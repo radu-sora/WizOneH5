@@ -1756,17 +1756,19 @@ namespace WizOne.Pontaj
                 var lstValSec = new Dictionary<int, object>();
                 var lstAfisare = new Dictionary<int, object>();
                 var lstPoateModifica = new Dictionary<int, object>();
+                var lstZiSapt = new Dictionary<int, object>();
 
                 var grid = sender as ASPxGridView;
                 for (int i = grid.VisibleStartIndex; i < grid.VisibleStartIndex + grid.SettingsPager.PageSize; i++)
                 {
-                    var rowValues = grid.GetRowValues(i, new string[] { "Cheia", "ValActive", "DrepturiModif", "ValAbsente", "ValSecuritate", "Afisare", "tblRoluri_PoateModifica" }) as object[];
+                    var rowValues = grid.GetRowValues(i, new string[] { "Cheia", "ValActive", "DrepturiModif", "ValAbsente", "ValSecuritate", "Afisare", "tblRoluri_PoateModifica", "ZiSapt" }) as object[];
                     clientData.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[1] ?? "");
                     lstDrepturi.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), Convert.ToInt32(rowValues[2] ?? 0));
                     lstValAbsente.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[3] ?? "");
                     lstValSec.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[4] ?? "");
                     lstAfisare.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[5] ?? "");
                     lstPoateModifica.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[6] ?? "");
+                    lstZiSapt.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[7] ?? "");
                 }
 
                 grid.JSProperties["cp_cellsToDisable"] = clientData;
@@ -1775,6 +1777,7 @@ namespace WizOne.Pontaj
                 grid.JSProperties["cp_ValSec"] = lstValSec;
                 grid.JSProperties["cp_Afisare"] = lstAfisare;
                 grid.JSProperties["cp_PoateModifica"] = lstPoateModifica;
+                grid.JSProperties["cp_ZiSapt"] = lstZiSapt;
             }
             catch (Exception ex)
             {
@@ -2028,17 +2031,23 @@ namespace WizOne.Pontaj
                                         if (c.FieldName == "IdProgram")
                                         {
                                             c.PropertiesComboBox.ClientInstanceName = "cmbProgram";
+                                            //DataTable dtPrg = General.IncarcaDT(
+                                            //    $@"SELECT A.""IdContract"", A.""IdProgram"", B.""Denumire"" AS ""Program""
+                                            //    FROM ""Ptj_ContracteSchimburi"" A
+                                            //    INNER JOIN ""Ptj_Programe"" B ON A.""IdProgram""=B.""Id""
+                                            //    ORDER BY B.""Denumire"" ", null);
                                             DataTable dtPrg = General.IncarcaDT(
-                                                $@"SELECT A.""IdContract"", A.""IdProgram"", B.""Denumire"" AS ""Program""
+                                                $@"SELECT A.""IdContract"", A.""IdProgram"", B.""Denumire"" AS ""Program"", A.""TipSchimb"" AS ""ZiSapt""
                                                 FROM ""Ptj_ContracteSchimburi"" A
-                                                INNER JOIN ""Ptj_Programe"" B ON A.""IdProgram""=B.""Id""
-                                                ORDER BY B.""Denumire"" ", null);
+                                                INNER JOIN ""Ptj_Programe"" B ON A.""IdProgram"" = B.""Id""
+                                                GROUP BY A.""IdContract"", A.""IdProgram"", B.""Denumire"", A.""TipSchimb""
+                                                ORDER BY B.""Denumire""", null);
                                             if (dtPrg != null && dtPrg.Rows.Count > 0)
                                             {
                                                 string jsonPrg = "";
                                                 for(int g = 0; g < dtPrg.Rows.Count; g++)
                                                 {
-                                                    jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + General.Nz(dtPrg.Rows[g]["Program"],"").ToString().Trim().Replace("\n","").Replace("\r","") + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + " }";
+                                                    jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + General.Nz(dtPrg.Rows[g]["Program"],"").ToString().Trim().Replace("\n","").Replace("\r","") + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + ", ziSapt: " + dtPrg.Rows[g]["ZiSapt"] + " }";
                                                 }
                                                 if (jsonPrg.Length > 0)
                                                     Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";
@@ -2927,7 +2936,6 @@ namespace WizOne.Pontaj
 
             return strSql;
         }
-
 
     }
 }

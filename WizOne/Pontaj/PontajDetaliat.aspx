@@ -1020,23 +1020,19 @@
 
                 if (cmbProgram.FindItemByValue(idPrg))
                     cmbProgram.SetSelectedItem(cmbProgram.FindItemByValue(idPrg));
-                else {
-                    cmbProgram.SetSelectedIndex(-1);
-
-                    cmbProgram.SetText("");
-                    cmbProgram.SetValue(null);
-                }
+                else
+                    e.cancel = true;
             }
         }
 
         function LoadPrograme(idCtr) {
             if (typeof cmbProgram !== "undefined" && ASPxClientUtils.IsExists(cmbProgram)) {
+                var key = grDate.GetRowKey(grDate.GetFocusedRowIndex());
                 let programe = <%=Session["Json_Programe"] %>;
-                var arr = programe.filter(function (item) { return item.idContract == idCtr });
+                var arr = programe.filter(function (item) { return item.idContract == idCtr && item.ziSapt == grDate.cp_ZiSapt[key] });
 
                 cmbProgram.ClearItems();
 
-                var rez = "";
                 for (var i = 0; i < arr.length; i++) {
                     cmbProgram.AddItem(arr[i].program, Number(arr[i].idProgram));
                 }

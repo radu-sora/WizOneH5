@@ -651,59 +651,62 @@ namespace WizOne.Module
                     dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });
                 }
 
-                foreach (DataRow dr in dt.Rows)
+                if (dt != null)
                 {
-                    try
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        if (dr["IdColoana"].ToString() != "-")
+                        try
                         {
-                            //ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
-                            ASPxGridView ctl = grDate;
-                            if (ctl != null)
+                            if (dr["IdColoana"].ToString() != "-")
                             {
-                                GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
-                                if (col != null)
+                                //ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
+                                ASPxGridView ctl = grDate;
+                                if (ctl != null)
                                 {
-                                    col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                    col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
-                                }
-                                else
-                                {
-                                    //verificam daca sunt butoane in interiorul gridului
-                                    GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;                                
-                                    GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
-                                    if (button != null)
+                                    GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
+                                    if (col != null)
                                     {
-                                        if (Convert.ToInt32(dr["Vizibil"]) == 1)
-                                            button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
-                                        else
-                                            button.Visibility = GridViewCustomButtonVisibility.Invisible;
+                                        col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                        col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
                                     }
                                     else
                                     {
-                                        //Florin 2018.08.16
-                                        //atunci este buton BuiltIn al Devexpress-ului
-                                        if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+                                        //verificam daca sunt butoane in interiorul gridului
+                                        GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
+                                        GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
+                                        if (button != null)
                                         {
-                                            column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            if (Convert.ToInt32(dr["Vizibil"]) == 1)
+                                                button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                                            else
+                                                button.Visibility = GridViewCustomButtonVisibility.Invisible;
                                         }
-                                        if (dr["IdColoana"].ToString().ToLower() == "btnsterge")
+                                        else
                                         {
-                                            column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            //Florin 2018.08.16
+                                            //atunci este buton BuiltIn al Devexpress-ului
+                                            if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+                                            {
+                                                column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            }
+                                            if (dr["IdColoana"].ToString().ToLower() == "btnsterge")
+                                            {
+                                                column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            }
                                         }
+
+
                                     }
-                                    
-                            
                                 }
                             }
                         }
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                        //General.MemoreazaEroarea(ex + Environment.NewLine +
-                        //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
-                        //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+                        catch (Exception)
+                        {
+                            continue;
+                            //General.MemoreazaEroarea(ex + Environment.NewLine +
+                            //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+                            //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+                        }
                     }
                 }
             }

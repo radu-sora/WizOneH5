@@ -43,7 +43,7 @@ namespace WizOne.Personal
                 if (!IsPostBack)
                     Session["DocUpload_MP_Medicina"] = null;
 
-                if (General.VarSession("EsteAdmin").ToString() == "0") Dami.Securitate(grDateMedicina);
+                if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateMedicina);
             }
             catch (Exception ex)
             {

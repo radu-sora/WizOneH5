@@ -1102,19 +1102,27 @@ namespace WizOne.Personal
             try
             {
 
-                string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
-                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                                FROM ""Securitate"" A
-                                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                WHERE B.""IdUser"" = {1} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" = '{0}'
-                                UNION
-                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                                FROM ""Securitate"" A
-                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" = '{0}') X
-                                GROUP BY X.""IdControl"", X.""IdColoana""";
-                strSql = string.Format(strSql, numeTab, Session["UserId"].ToString());
+                //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                //                FROM ""Securitate"" A
+                //                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+                //                WHERE B.""IdUser"" = {1} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" = '{0}'
+                //                UNION
+                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                //                FROM ""Securitate"" A
+                //                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" = '{0}') X
+                //                GROUP BY X.""IdControl"", X.""IdColoana""";
+                //strSql = string.Format(strSql, numeTab, Session["UserId"].ToString());
+                //DataTable dt = General.IncarcaDT(strSql, null);
 
-                DataTable dt = General.IncarcaDT(strSql, null);
+                DataTable dtSec = HttpContext.Current.Session["SecuritatePersonal"] as DataTable;
+                DataTable dt = new DataTable();
+                if (dtSec != null && dtSec.Rows.Count > 0)
+                {
+                    dt = dtSec.Select("IdForm = 'Personal.Lista' AND IdControl = '" + numeTab + "'") != null && dtSec.Select("IdForm = 'Personal.Lista' AND IdControl='" + numeTab + "'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' AND IdControl = '" + numeTab + "'").CopyToDataTable() : null;
+                }
+                else
+                    return;
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -1136,19 +1144,27 @@ namespace WizOne.Personal
             try
             {
 
-                string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
-                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                                FROM ""Securitate"" A
-                                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" like '%_I%'
-                                UNION
-                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                                FROM ""Securitate"" A
-                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl""  like '%_I%') X
-                                GROUP BY X.""IdControl"", X.""IdColoana""";
-                strSql = string.Format(strSql, Session["UserId"].ToString());
+                //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                //                FROM ""Securitate"" A
+                //                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+                //                WHERE B.""IdUser"" = {0} AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl"" like '%_I%'
+                //                UNION
+                //                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                //                FROM ""Securitate"" A
+                //                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Personal.Lista' AND ""IdControl""  like '%_I%') X
+                //                GROUP BY X.""IdControl"", X.""IdColoana""";
+                //strSql = string.Format(strSql, Session["UserId"].ToString());
+                //DataTable dt = General.IncarcaDT(strSql, null);
 
-                DataTable dt = General.IncarcaDT(strSql, null);
+                DataTable dtSec = HttpContext.Current.Session["SecuritatePersonal"] as DataTable;
+                DataTable dt = new DataTable();
+                if (dtSec != null && dtSec.Rows.Count > 0)
+                {
+                    dt = dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'") != null && dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'").Count() > 0 ? dtSec.Select("IdForm = 'Personal.Lista' AND IdControl like '%_I%'").CopyToDataTable() : null;
+                }
+                else
+                    return null;
 
                 if (dt != null && dt.Rows.Count > 0)
                 {

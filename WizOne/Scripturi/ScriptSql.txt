@@ -12733,7 +12733,6 @@ GO
 UPDATE "Avs_tblAtribute" SET "Activ"=0 WHERE "Id" IN (30,31,32,33)
 GO
 
-
 ----  2.2.125  ----
 
 
@@ -12790,12 +12789,4 @@ GO
 
 UPDATE Ntf_Setari SET ContinutMail=REPLACE(ContinutMail,'#$Link Aproba$#','#$Link1 Aproba$#') WHERE ContinutMail LIKE '%#$Link Aproba$#%'
 UPDATE Ntf_Setari SET ContinutMail=REPLACE(ContinutMail,'#$Link Respinge$#','#$Link2 Respinge$#') WHERE ContinutMail LIKE '%#$Link Respinge$#%'
-GO
-
-
-----  2.2.125  ----
-
-
---fara tichet
-INSERT INTO Ptj_tblAdmin(Coloana, Alias, Latime, Vizibil, Blocat, TipColoana, Ordine, SursaCombo, AliasToolTip) VALUES('Stare','Stare',0,1,0,0,1, null,null)
 GO

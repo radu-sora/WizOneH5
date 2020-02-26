@@ -49,7 +49,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="margin:15px 0px; display:inline-block;">
+            <td colspan="2" style="margin-top:15px; display:inline-block; width:100%;">
                 <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
                     <ClientSideEvents 
                         EndCallback="function (s,e) { pnlLoading.Hide(); }" 
@@ -57,7 +57,7 @@
                         BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
-                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie">
+                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie" Width="100%">
                                 <HeaderStyle Font-Bold="true" />
                                 <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                                 <PanelCollection>
@@ -78,8 +78,7 @@
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblAng" runat="server">Angajat</label>
-                                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
-                                                            CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
+                                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true" TextFormatString="{0} {1}" >
                                                     <Columns>
                                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
                                                         <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
@@ -233,11 +232,11 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" id="tdGridTotaluri" runat="server">
+            <td colspan="2" id="tdGridTotaluri" runat="server" style="margin-top:15px !important;">
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="2" style="margin-top:15px;">
                 <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"

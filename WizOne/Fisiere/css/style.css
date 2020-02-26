@@ -714,7 +714,7 @@ table label {
     }
 
 .ptj_pe_zi {
-    float:left; display:none; line-height:22px; vertical-align:middle; padding:5px 0px 15px 0px;
+    float:left; display:none; line-height:22px; vertical-align:middle; padding:5px 0px 15px 0px; width:100%;
 }
 
     .ptj_pe_zi .ptj_filtru {

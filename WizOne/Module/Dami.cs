@@ -319,7 +319,7 @@ namespace WizOne.Module
                             {
                                 //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
                                 dynamic pnl = ctl.Parent;
-                                if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
+                                if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0 && !vizibil)
                                 {
                                     pnl.Style["display"] = "none";
                                 }
@@ -346,7 +346,7 @@ namespace WizOne.Module
                                     {
                                         //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
                                         dynamic pnl = ctl2.Parent;
-                                        if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
+                                        if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0 && !vizibil)
                                         {
                                             pnl.Style["display"] = "none";
                                         }
@@ -374,7 +374,7 @@ namespace WizOne.Module
                                         {
                                             //daca parintele este un div bootstrap, atunci ascundem div-ul cu tot cu controale
                                             dynamic pnl = ctl3.Parent;
-                                            if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0)
+                                            if (pnl.GetType() == typeof(HtmlGenericControl) && pnl.Attributes["class"].IndexOf("col-") >= 0 && !vizibil)
                                             {
                                                 pnl.Style["display"] = "none";
                                             }

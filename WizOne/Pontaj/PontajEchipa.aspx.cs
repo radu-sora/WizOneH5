@@ -161,7 +161,7 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
                 {
                     divHovercard.Visible = false;
-                    rowHovercard.Style["margin-bottom"] = "8px";
+                    //rowHovercard.Style["margin-bottom"] = "8px";
                 }
 
                 if (!IsPostBack)
@@ -592,7 +592,7 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
                 {
                     divHovercard.Visible = false;
-                    rowHovercard.Style["margin-bottom"] = "8px";
+                    //rowHovercard.Style["margin-bottom"] = "8px";
                 }
 
                 //Florin 2019.07.19

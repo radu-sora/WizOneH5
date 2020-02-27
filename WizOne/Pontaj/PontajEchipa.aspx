@@ -353,7 +353,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="2" style="width:100%;">
                 <br /><br />
 
                 <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
@@ -361,7 +361,7 @@
                     <PanelCollection>
                         <dx:PanelContent>
 
-                          <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20">
+                          <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20" Width="100%">
                               <HeaderStyle Font-Bold="true" />
                               <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                             <PanelCollection>
@@ -480,13 +480,17 @@
 
                             <div class="row">
                                 <div class="col-lg-9 col-md-8 col-sm-6" style="margin-bottom:8px;"></div>
-                                <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:58px;" id="rowHovercard" runat="server">
+                                <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:8px;" id="rowHovercard" runat="server">
                                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                         <ClientSideEvents Click="function(s, e) {
                                                         pnlLoading.Show();
                                                         e.processOnServer = true;
                                                     }" />
+                                    </dx:ASPxButton>
+                                    <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
+                                        <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
+                                        <ClientSideEvents Click="EmptyFields" />
                                     </dx:ASPxButton>
     	                            <div class="hovercard" id="divHovercard" runat="server">
 			                            <div class="hovercard-container">
@@ -499,11 +503,6 @@
 				                            </div>
 			                            </div>
 		                            </div>
-                                    &nbsp;&nbsp;
-                                    <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                        <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
-                                        <ClientSideEvents Click="EmptyFields" />
-                                    </dx:ASPxButton>                                
                                 </div>
                             </div>
 

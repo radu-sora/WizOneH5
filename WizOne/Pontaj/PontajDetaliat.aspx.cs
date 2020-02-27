@@ -61,7 +61,8 @@ namespace WizOne.Pontaj
 
                 if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
                 {
-                    grDate.Columns[0].Columns[0].Visible = true;
+                    if (grDate.Columns["Stare"] != null)
+                        grDate.Columns["Stare"].Columns[0].Visible = true;
                     tblCC.Attributes["class"] = "vizibil";
 
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "1")
@@ -550,9 +551,12 @@ namespace WizOne.Pontaj
 
                     if (tip == 1 || tip == 10)
                     {
-                        grDate.Columns["Stare"].Caption = General.Nz(dt.Rows[0]["NumeStare"], "Initiat").ToString();
-                        grDate.Columns["Stare"].HeaderStyle.BackColor = General.Culoare(cul);
-                        grDate.Columns["Stare"].HeaderStyle.ForeColor = System.Drawing.Color.Black;
+                        if (grDate.Columns["Stare"] != null)
+                        {
+                            grDate.Columns["Stare"].Caption = General.Nz(dt.Rows[0]["NumeStare"], "Initiat").ToString();
+                            grDate.Columns["Stare"].HeaderStyle.BackColor = General.Culoare(cul);
+                            grDate.Columns["Stare"].HeaderStyle.ForeColor = System.Drawing.Color.Black;
+                        }
                     }
 
                     grCC.Enabled = Convert.ToBoolean(General.Nz(dt.Rows[0]["DrepturiModif"], "0"));
@@ -1908,10 +1912,11 @@ namespace WizOne.Pontaj
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
-                                COALESCE(B.""DenumireScurta"",'') AS ""ColScurta""
+                                COALESCE(B.""DenumireScurta"",'') AS ""ColScurta"",
+                                CASE WHEN A.""Coloana"" ='Stare' THEN 0 ELSE 1 END AS ""OrdineSec""
                                 FROM ""Ptj_tblAdmin"" A
                                 LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
-                                ORDER BY A.""Ordine"" ", null);
+                                ORDER BY ""OrdineSec"", A.""Ordine"" ", null);
 
                 if (dtCol != null)
                 {
@@ -1936,6 +1941,17 @@ namespace WizOne.Pontaj
                             colField = "ValTmp" + colField.Replace("Val","");
                         }
 
+                        if (colField == "Stare")
+                        {
+                            if (i == 0 && vizibil && (tip == 1 || tip == 10))
+                            {
+                                GridViewBandColumn banda = new GridViewBandColumn();
+                                banda.Name = colField;
+                                grDate.Columns.Add(banda); 
+                            }
+                            continue;
+                        }
+
                         switch (tipCol)
                         {
                             case 0:                             //General
@@ -1955,7 +1971,11 @@ namespace WizOne.Pontaj
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
 
                                     c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-                                    grDate.Columns["Stare"].Columns.Add(c);
+
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 1:                             //CheckBox
@@ -1974,7 +1994,10 @@ namespace WizOne.Pontaj
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
 
-                                    grDate.Columns["Stare"].Columns.Add(c);
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 2:                             //ComboBox
@@ -2058,7 +2081,10 @@ namespace WizOne.Pontaj
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
 
-                                    grDate.Columns["Stare"].Columns.Add(c);
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 3:                             //Date
@@ -2077,7 +2103,10 @@ namespace WizOne.Pontaj
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
 
-                                    grDate.Columns["Stare"].Columns.Add(c);
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 4:                             //Memo
@@ -2097,7 +2126,10 @@ namespace WizOne.Pontaj
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
 
-                                    grDate.Columns["Stare"].Columns.Add(c);
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 5:                             //Color
@@ -2116,7 +2148,10 @@ namespace WizOne.Pontaj
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
 
-                                    grDate.Columns["Stare"].Columns.Add(c);
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 6:                             //Text
@@ -2136,7 +2171,10 @@ namespace WizOne.Pontaj
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
 
-                                    grDate.Columns["Stare"].Columns.Add(c);
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 7:                             //Numeric
@@ -2156,7 +2194,10 @@ namespace WizOne.Pontaj
                                     if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
                                         c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
 
-                                    grDate.Columns["Stare"].Columns.Add(c);
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 8:                             //Time
@@ -2187,7 +2228,10 @@ namespace WizOne.Pontaj
                                     if (tipCol == 9)
                                         c.PropertiesTimeEdit.SpinButtons.ShowIncrementButtons = false;
 
-                                    grDate.Columns["Stare"].Columns.Add(c);
+                                    if (grDate.Columns["Stare"] != null)
+                                        grDate.Columns["Stare"].Columns.Add(c);
+                                    else
+                                        grDate.Columns.Add(c);
                                 }
                                 break;
                         }

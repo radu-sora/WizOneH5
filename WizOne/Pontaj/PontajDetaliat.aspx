@@ -259,29 +259,25 @@
                         </BatchEditModifiedCell>
                     </Styles>
                     <Columns>
-                        <dx:GridViewBandColumn Name="Stare" HeaderStyle-HorizontalAlign="Left">
-                            <Columns>
-                                <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
-                                    <CustomButtons>
-                                        <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
-                                            <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
-                                        </dx:GridViewCommandColumnCustomButton>                                
-                                    </CustomButtons>
-                                </dx:GridViewCommandColumn>
-                                <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" VisibleIndex="2" />
-                                <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" />
+                        <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
+                                    <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
+                                </dx:GridViewCommandColumnCustomButton>                                
+                            </CustomButtons>
+                        </dx:GridViewCommandColumn>
+                        <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" VisibleIndex="2" FixedStyle="Left" />
+                        <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" FixedStyle="Left" />
 
-                                <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ZiLiberaLegala" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ZiSapt" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiLiberaLegala" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiSapt" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
 
-                                <dx:GridViewDataTextColumn FieldName="F10022" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="F10023" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="IdStare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                            </Columns>
-                        </dx:GridViewBandColumn>                      
+                        <dx:GridViewDataTextColumn FieldName="F10022" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F10023" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="IdStare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />                   
                     </Columns>                 
                 </dx:ASPxGridView>
             </td>

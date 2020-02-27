@@ -1710,7 +1710,7 @@ namespace WizOne.Module
                                         sqlIst + "; \n";
 
                             if (Constante.tipBD == 2)
-                                strSql = $@"
+                                strSql += $@"
                                     BEGIN
                                         {sqlIst};
                                         BEGIN
@@ -1723,6 +1723,9 @@ namespace WizOne.Module
                                     END;";
                         }
                     }
+
+                    if (strSql != "")
+                        ExecutaNonQuery(strSql, null);
                 }
             }
             catch (Exception ex)

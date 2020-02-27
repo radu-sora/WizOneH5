@@ -513,96 +513,96 @@ namespace WizOne.Module
 
 
 
-        public static void Securitate(Page pag)
-        {
-            try
-            {
-                string filtru = "";
+        //public static void Securitate(Page pag)
+        //{
+        //    try
+        //    {
+        //        string filtru = "";
 
-                string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
+        //        string nume = pag.Page.ToString().Replace("ASP.", "").Replace("_aspx", "").Replace("_", ".");
 
-                if (nume.ToLower() == "sablon")
-                {
-                    nume = "tbl." + HttpContext.Current.Session["Sablon_Tabela"];
-                    filtru = " AND \"IdColoana\"='-'";
-                }
+        //        if (nume.ToLower() == "sablon")
+        //        {
+        //            nume = "tbl." + HttpContext.Current.Session["Sablon_Tabela"];
+        //            filtru = " AND \"IdColoana\"='-'";
+        //        }
 
-                string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
-                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                                FROM ""Securitate"" A
-                                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                                WHERE B.""IdUser"" = @2 AND A.""IdForm"" = @1 {0}
-                                UNION
-                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
-                                FROM ""Securitate"" A
-                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = @1 {0}) X
-                                GROUP BY X.""IdControl"", X.""IdColoana""";
-                strSql = string.Format(strSql, filtru);
-                DataTable dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });
+        //        string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+        //                        SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+        //                        FROM ""Securitate"" A
+        //                        INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+        //                        WHERE B.""IdUser"" = @2 AND A.""IdForm"" = @1 {0}
+        //                        UNION
+        //                        SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+        //                        FROM ""Securitate"" A
+        //                        WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = @1 {0}) X
+        //                        GROUP BY X.""IdControl"", X.""IdColoana""";
+        //        strSql = string.Format(strSql, filtru);
+        //        DataTable dt = General.IncarcaDT(strSql, new string[] { nume, HttpContext.Current.Session["UserId"].ToString() });
 
-                foreach (DataRow dr in dt.Rows)
-                {
-                    try
-                    {
-                        if (dr["IdColoana"].ToString() == "-")
-                        {
-                            WebControl ctl = pag.FindControl(dr["IdControl"].ToString()) as WebControl;
-                            if (ctl != null)
-                            {
-                                ctl.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                ctl.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
-                            }
-                        }
-                        else
-                        {
-                            ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
-                            if (ctl != null)
-                            {
-                                GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
-                                if (col != null)
-                                {
-                                    col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                    col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
-                                }
-                                else
-                                {
-                                    //verificam daca sunt butoane in interiorul gridului
-                                    GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
-                                    GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
-                                    if (button != null)
-                                    {
-                                        if (Convert.ToInt32(dr["Vizibil"]) == 1)
-                                            button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
-                                        else
-                                            button.Visibility = GridViewCustomButtonVisibility.Invisible;
-                                    }
-                                    else
-                                    {
-                                        //Florin 2018.08.16
-                                        //atunci este buton BuiltIn al Devexpress-ului
-                                        if (dr["IdColoana"].ToString().ToLower() == "btnedit")
-                                        {
-                                            column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                        //General.MemoreazaEroarea(ex + Environment.NewLine +
-                        //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
-                        //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        foreach (DataRow dr in dt.Rows)
+        //        {
+        //            try
+        //            {
+        //                if (dr["IdColoana"].ToString() == "-")
+        //                {
+        //                    WebControl ctl = pag.FindControl(dr["IdControl"].ToString()) as WebControl;
+        //                    if (ctl != null)
+        //                    {
+        //                        ctl.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                        ctl.Enabled = (Convert.ToInt32(dr["Blocat"]) == 1 ? false : true);
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    ASPxGridView ctl = pag.FindControl(dr["IdControl"].ToString()) as ASPxGridView;
+        //                    if (ctl != null)
+        //                    {
+        //                        GridViewDataColumn col = ctl.Columns[dr["IdColoana"].ToString()] as GridViewDataColumn;
+        //                        if (col != null)
+        //                        {
+        //                            col.Visible = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                            col.ReadOnly = (Convert.ToInt32(dr["Blocat"]) == 1 ? true : false);
+        //                        }
+        //                        else
+        //                        {
+        //                            //verificam daca sunt butoane in interiorul gridului
+        //                            GridViewCommandColumn column = ctl.Columns["butoaneGrid"] as GridViewCommandColumn;
+        //                            GridViewCommandColumnCustomButton button = column.CustomButtons[dr["IdColoana"].ToString()] as GridViewCommandColumnCustomButton;
+        //                            if (button != null)
+        //                            {
+        //                                if (Convert.ToInt32(dr["Vizibil"]) == 1)
+        //                                    button.Visibility = GridViewCustomButtonVisibility.AllDataRows;
+        //                                else
+        //                                    button.Visibility = GridViewCustomButtonVisibility.Invisible;
+        //                            }
+        //                            else
+        //                            {
+        //                                //Florin 2018.08.16
+        //                                //atunci este buton BuiltIn al Devexpress-ului
+        //                                if (dr["IdColoana"].ToString().ToLower() == "btnedit")
+        //                                {
+        //                                    column.ShowEditButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            catch (Exception)
+        //            {
+        //                continue;
+        //                //General.MemoreazaEroarea(ex + Environment.NewLine +
+        //                //    General.Nz(dr["IdControl"], "").ToString() + Environment.NewLine +
+        //                //    General.Nz(dr["IdColoana"], "").ToString(), "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
         public static void Securitate(ASPxGridView grDate)

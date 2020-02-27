@@ -22,6 +22,11 @@ namespace WizOne.Pontaj
         //tip = 2       Pontaj pe Zi
         public int tip = 1;
 
+        protected string lstInOut
+        {
+            get; private set;
+        }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -63,6 +68,8 @@ namespace WizOne.Pontaj
                 {
                     if (grDate.Columns["Stare"] != null)
                         grDate.Columns["Stare"].Columns[0].Visible = true;
+                    else
+                        grDate.Columns[0].Visible = true;
                     tblCC.Attributes["class"] = "vizibil";
 
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "1")
@@ -1905,10 +1912,20 @@ namespace WizOne.Pontaj
         {
             try
             {
+                //Florin 2020.02.27
                 string cmp = "SUBSTRING";
                 if (Constante.tipBD == 2)
                     cmp = "SUBSTR";
-                DataTable dtCol = General.IncarcaDT($@"SELECT A.*, 
+                //DataTable dtCol = General.IncarcaDT($@"SELECT A.*, 
+                //                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
+                //                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
+                //                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
+                //                COALESCE(B.""DenumireScurta"",'') AS ""ColScurta"",
+                //                CASE WHEN A.""Coloana"" ='Stare' THEN 0 ELSE 1 END AS ""OrdineSec""
+                //                FROM ""Ptj_tblAdmin"" A
+                //                LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
+                //                ORDER BY ""OrdineSec"", A.""Ordine"" ", null);
+                DataTable dtCol = General.IncarcaDT($@"SELECT A.*, CASE WHEN A.Blocat < COALESCE(C.Blocat,0) THEN COALESCE(C.Blocat,0) ELSE A.Blocat END AS BlocatBis, 
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
@@ -1916,6 +1933,16 @@ namespace WizOne.Pontaj
                                 CASE WHEN A.""Coloana"" ='Stare' THEN 0 ELSE 1 END AS ""OrdineSec""
                                 FROM ""Ptj_tblAdmin"" A
                                 LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
+                                LEFT JOIN (SELECT X.""IdColoana"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+                                                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                                                                FROM ""Securitate"" A
+                                                                INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+                                                                WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'Pontaj.PontajDetaliat' AND A.""IdControl"" = 'grDate'
+                                                                UNION
+                                                                SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+                                                                FROM ""Securitate"" A
+                                                                WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Pontaj.PontajDetaliat' AND A.""IdControl"" = 'grDate') X
+                                                                GROUP BY X.""IdColoana"") C ON A.Coloana = C.IdColoana
                                 ORDER BY ""OrdineSec"", A.""Ordine"" ", null);
 
                 if (dtCol != null)
@@ -1929,7 +1956,7 @@ namespace WizOne.Pontaj
                         string colName = General.Nz(dr["ColDen"], "col" + i).ToString() + "_" + General.Nz(dr["ColScurta"], "").ToString();
                         string alias = General.Nz(dr["ColAlias"], General.Nz(dr["Coloana"], "col" + i).ToString()).ToString();
                         bool vizibil = Convert.ToBoolean(General.Nz(dr["Vizibil"], false));
-                        bool blocat = Convert.ToBoolean(General.Nz(dr["Blocat"], false));
+                        bool blocat = Convert.ToBoolean(General.Nz(dr["BlocatBis"], false));
                         int latime = Convert.ToInt32(General.Nz(dr["Latime"], 80));
                         int tipCol = Convert.ToInt32(General.Nz(dr["TipColoana"],1));
                         string tt = General.Nz(dr["ColTT"], General.Nz(dr["Coloana"], "col" + i).ToString()).ToString();
@@ -1950,6 +1977,11 @@ namespace WizOne.Pontaj
                                 grDate.Columns.Add(banda); 
                             }
                             continue;
+                        }
+
+                        if (blocat && colField.Length >= 3 && ((colField.Substring(0,2).ToLower() == "in" && General.IsNumeric(colField.ToLower().Replace("in",""))) || (colField.Substring(0, 3).ToLower() == "out" && General.IsNumeric(colField.ToLower().Replace("out", "")))))
+                        {
+                            lstInOut += colField + ";";
                         }
 
                         switch (tipCol)

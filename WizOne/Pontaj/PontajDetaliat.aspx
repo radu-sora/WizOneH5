@@ -253,13 +253,14 @@
                         Init="function(s,e) { OnGridInit(); }"
                         EndCallback="function(s,e) { OnGridEndCallback(s); }"
                         CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }"
+                         
                         />
                     <Styles>
                         <BatchEditModifiedCell BackColor="Transparent">
                         </BatchEditModifiedCell>
                     </Styles>
                     <Columns>
-                        <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
+                        <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" FixedStyle="Left" >
                             <CustomButtons>
                                 <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
                                     <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
@@ -673,6 +674,12 @@
                     e.cancel = true;
                 }
             }
+
+            var arrInOut = "In1;In2;In3;In4;In5;In6;In7;In8;In9;Out;";
+            if (col.length >= 3 && arrInOut.indexOf(col.substr(0, 3) + ';') >= 0 && '<%: lstInOut %>'.indexOf(col + ";") >= 0) {
+                e.cancel = true;
+            }
+
             if (col.length >= 6 && col.substr(0, 6) == 'ValAbs') {
                 var cmb = grDate.GetEditor('ValAbs');
                 if (cmb) {
@@ -797,7 +804,7 @@
             var evt = evt || event;
             var key = evt.keyCode || evt.which;
             inOutIndex = s.GetFocusedRowIndex();
-
+            
             if (!s.IsEditing()) {
                 var cell = grDate.GetFocusedCell();
                 var col = cell.column.fieldName;
@@ -814,75 +821,82 @@
                         case "In9":
                         case "Out":
                             {
-                                if (key == 45)              // scade o zi   tasta -
-                                {
-                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
-                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                if ('<%: lstInOut %>'.indexOf(col + ";") >= 0) {
+                                    //NOP
+                                }
+                                else {
+
+
+                                    if (key == 45)              // scade o zi   tasta -
+                                    {
+                                        var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                        if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                            grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                            var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                            grDate.batchEditApi.EndEdit();
+                                            alert('Proces realizat cu succes');
+                                        }
+                                    }
+                                    else if (key == 43)        // adauga o zi  tasta +
+                                    {
+                                        var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                        if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                            grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                            var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                            grDate.batchEditApi.EndEdit();
+                                            alert('Proces realizat cu succes');
+                                        }
+                                    }
+                                    else if (key == 93)         ////insereaza celula   tasta   ]
+                                    {
+                                        var idx = 21;
+                                        var col = cell.column.fieldName;
+                                        if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                            idx = Number(col.substr(2));
+                                        if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                            idx = Number(col.substr(3));
+
                                         grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                        for (var i = 20; i > idx; i--) {
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + (i - 1).toString()));
+                                        }
+
+                                        if (col.substr(0, 2).toLowerCase() == 'in')
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, null);
                                         grDate.batchEditApi.EndEdit();
-                                        alert('Proces realizat cu succes');
                                     }
-                                }
-                                else if (key == 43)        // adauga o zi  tasta +
-                                {
-                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
-                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                    else if (key == 91)         // sterge celula pe care este, daca este goala tasta [
+                                    {
+                                        if (grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName) != null)
+                                            return;
+
+                                        var idx = 21;
+                                        var col = cell.column.fieldName;
+                                        if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                            idx = Number(col.substr(2));
+                                        if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                            idx = Number(col.substr(3));
+
                                         grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+
+                                        if (col.substr(0, 2).toLowerCase() == 'in')
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + idx));
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (idx + 1).toString()));
+
+                                        for (var i = (idx + 1); i <= 20; i++) {
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + i));
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (i + 1).toString()));
+                                        }
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out20", null);
                                         grDate.batchEditApi.EndEdit();
-                                        alert('Proces realizat cu succes');
                                     }
-                                }
-                                else if (key == 93)         ////insereaza celula   tasta   ]
-                                {
-                                    var idx = 21;
-                                    var col = cell.column.fieldName;
-                                    if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
-                                        idx = Number(col.substr(2));
-                                    if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
-                                        idx = Number(col.substr(3));
-
-                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                    for (var i = 20; i > idx; i--) {
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + (i - 1).toString()));
-                                    }
-
-                                    if (col.substr(0, 2).toLowerCase() == 'in')
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, null);
-                                    grDate.batchEditApi.EndEdit();
-                                }
-                                else if (key == 91)         // sterge celula pe care este, daca este goala tasta [
-                                {
-                                    if (grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName) != null)
-                                        return;
-
-                                    var idx = 21;
-                                    var col = cell.column.fieldName;
-                                    if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
-                                        idx = Number(col.substr(2));
-                                    if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
-                                        idx = Number(col.substr(3));
-
-                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-
-                                    if (col.substr(0, 2).toLowerCase() == 'in')
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + idx));
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (idx + 1).toString()));
-
-                                    for (var i = (idx + 1); i <= 20; i++) {
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + i));
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (i + 1).toString()));
-                                    }
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out20", null);
-                                    grDate.batchEditApi.EndEdit();
                                 }
                             }
                     }

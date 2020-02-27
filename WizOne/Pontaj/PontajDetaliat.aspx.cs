@@ -1912,27 +1912,17 @@ namespace WizOne.Pontaj
         {
             try
             {
-                //Florin 2020.02.27
                 string cmp = "SUBSTRING";
                 if (Constante.tipBD == 2)
                     cmp = "SUBSTR";
-                //DataTable dtCol = General.IncarcaDT($@"SELECT A.*, 
-                //                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
-                //                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
-                //                CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
-                //                COALESCE(B.""DenumireScurta"",'') AS ""ColScurta"",
-                //                CASE WHEN A.""Coloana"" ='Stare' THEN 0 ELSE 1 END AS ""OrdineSec""
-                //                FROM ""Ptj_tblAdmin"" A
-                //                LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
-                //                ORDER BY ""OrdineSec"", A.""Ordine"" ", null);
-                DataTable dtCol = General.IncarcaDT($@"SELECT A.*, CASE WHEN A.Blocat < COALESCE(C.Blocat,0) THEN COALESCE(C.Blocat,0) ELSE A.Blocat END AS BlocatBis, 
+                DataTable dtCol = General.IncarcaDT($@"SELECT A.*, CASE WHEN A.""Blocat"" < COALESCE(C.""Blocat"",0) THEN COALESCE(C.""Blocat"",0) ELSE A.""Blocat"" END AS ""BlocatBis"", 
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
                                 CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
                                 COALESCE(B.""DenumireScurta"",'') AS ""ColScurta"",
                                 CASE WHEN A.""Coloana"" ='Stare' THEN 0 ELSE 1 END AS ""OrdineSec""
                                 FROM ""Ptj_tblAdmin"" A
-                                LEFT JOIN ""Ptj_tblAbsente"" B ON A.""Coloana""=B.""OreInVal""
+                                LEFT JOIN (SELECT ""OreInVal"", MAX(""Denumire"") AS ""Denumire"", MAX(""DenumireScurta"") AS ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""OreInVal""='Val4' GROUP BY ""OreInVal"") B ON A.""Coloana""=B.""OreInVal""
                                 LEFT JOIN (SELECT X.""IdColoana"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
                                                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                                                 FROM ""Securitate"" A
@@ -1942,7 +1932,8 @@ namespace WizOne.Pontaj
                                                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                                                 FROM ""Securitate"" A
                                                                 WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Pontaj.PontajDetaliat' AND A.""IdControl"" = 'grDate') X
-                                                                GROUP BY X.""IdColoana"") C ON A.Coloana = C.IdColoana
+                                                                GROUP BY X.""IdColoana"") C ON A.""Coloana"" = C.""IdColoana""
+                                WHERE COALESCE(A.""Vizibil"",0)=1
                                 ORDER BY ""OrdineSec"", A.""Ordine"" ", null);
 
                 if (dtCol != null)

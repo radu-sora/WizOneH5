@@ -164,7 +164,7 @@ namespace WizOne.Module
 
         public static DataTable IncarcaDT(string strSql, object[] lstParam, string primaryKey = "")
         {          
-            DataTable dt = new DataTable();           
+            DataTable dt = new DataTable();
 
             try
             {

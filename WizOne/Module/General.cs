@@ -1709,7 +1709,6 @@ namespace WizOne.Module
                                         sqlUp + "; \n" +
                                         sqlValStr + "; \n" +
                                         sqlIst + "; \n";
-
                             else
                                 strSql += $@"
                                     BEGIN

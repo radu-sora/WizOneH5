@@ -1702,14 +1702,14 @@ namespace WizOne.Module
 
                             }
 
-                            strSql += "IF((SELECT COUNT(*) FROM \"Ptj_Intrari\" WHERE F10003 = " + dr["F10003"] + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date) + ") = 0) \n"
+                            if (Constante.tipBD == 1)
+                                strSql += "IF((SELECT COUNT(*) FROM \"Ptj_Intrari\" WHERE F10003 = " + dr["F10003"] + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date) + ") = 0) \n"
                                         + sqlIns + "\n" +
                                         "ELSE \n" +
                                         sqlUp + "; \n" +
                                         sqlValStr + "; \n" +
                                         sqlIst + "; \n";
-
-                            if (Constante.tipBD == 2)
+                            else
                                 strSql += $@"
                                     BEGIN
                                         {sqlIst};

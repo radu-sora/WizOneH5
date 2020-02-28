@@ -675,10 +675,8 @@
                 }
             }
 
-            var arrInOut = "In1;In2;In3;In4;In5;In6;In7;In8;In9;Out;";
-            if (col.length >= 3 && arrInOut.indexOf(col.substr(0, 3) + ';') >= 0 && '<%: lstInOut %>'.indexOf(col + ";") >= 0) {
-                e.cancel = true;
-            }
+            if (col.length >= 3 && '<%: lstInOut %>'.indexOf(col + ";") >= 0)
+                e.cancel = true; 
 
             if (col.length >= 6 && col.substr(0, 6) == 'ValAbs') {
                 var cmb = grDate.GetEditor('ValAbs');

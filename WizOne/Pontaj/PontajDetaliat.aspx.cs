@@ -721,12 +721,22 @@ namespace WizOne.Pontaj
                         valTmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + P.""{arrVal[i]}""/1440 AS ""ValTmp{arrVal[i].Replace("Val", "")}"" ";
                 }
 
+                string furiTmp = "";
+                string[] arrFuri = Constante.lstFuri.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < arrFuri.Length - 1; i++)
+                {
+                    if (Constante.tipBD == 1)
+                        furiTmp += $@",CONVERT(datetime,DATEADD(minute, P.""{arrFuri[i]}"", '')) AS ""FTmp{arrFuri[i].Replace("F", "")}"" ";
+                    else
+                        furiTmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + P.""{arrFuri[i]}""/1440 AS ""FTmp{arrFuri[i].Replace("F", "")}"" ";
+                }
+
                 string op = "+";
                 if (Constante.tipBD == 2) op = "||";
 
                 if (Constante.tipBD == 1)
                     strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
-                            {cheia} AS ""Cheia"", 
+                            {cheia} AS ""Cheia"", ValStr AS ValAbs,
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS DescProgram, COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
                             CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 AND
@@ -830,7 +840,7 @@ namespace WizOne.Pontaj
                             {filtru}";
                 else
                     strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
-                            {cheia} AS ""Cheia"", 
+                            {cheia} AS ""Cheia"", '' AS ValAbs,
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS ""DescProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
                             CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 AND
@@ -1558,11 +1568,24 @@ namespace WizOne.Pontaj
                         }
 
                         //daca este ValAbs, stergem pontajul pe centrii de cost
-                        if (newValue != null && numeCol.ToLower() == "valabs")
+                        if (numeCol.ToLower() == "valabs")
                         {
-                            absentaDeTipZi = true;
-                            if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
+                            if (newValue != null)
+                            {
+                                absentaDeTipZi = true;
+                                if (Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                                     strSql += $@"DELETE FROM ""Ptj_CC"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};" + Environment.NewLine;
+                            }
+                            continue;
+                        }
+
+
+                        //daca sunt F-urile temporare FTmp
+                        if (numeCol.Length >= 4 && numeCol.Substring(0, 6).ToLower() == "ftmp" && General.IsNumeric(numeCol.Replace("ftmp", "")))
+                        {
+                            string i = numeCol.Replace("FTmp", "");
+                            cmp += $@", ""F{i}""=" + (Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60))).ToString();
+                            row["F" + i] = Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60));
                             continue;
                         }
 
@@ -1907,7 +1930,6 @@ namespace WizOne.Pontaj
             }
         }
 
-
         private void CreazaGrid()
         {
             try
@@ -1949,15 +1971,18 @@ namespace WizOne.Pontaj
                         bool vizibil = Convert.ToBoolean(General.Nz(dr["Vizibil"], false));
                         bool blocat = Convert.ToBoolean(General.Nz(dr["BlocatBis"], false));
                         int latime = Convert.ToInt32(General.Nz(dr["Latime"], 80));
-                        int tipCol = Convert.ToInt32(General.Nz(dr["TipColoana"],1));
+                        int tipCol = Convert.ToInt32(General.Nz(dr["TipColoana"], 1));
                         string tt = General.Nz(dr["ColTT"], General.Nz(dr["Coloana"], "col" + i).ToString()).ToString();
                         bool unb = false;
 
                         if (Constante.lstValuri.IndexOf(colField + ";") >= 0)
                         {
                             unb = true;
-                            colField = "ValTmp" + colField.Replace("Val","");
+                            colField = "ValTmp" + colField.Replace("Val", "");
                         }
+
+                        if (colField.ToLower() == "valabs")
+                            unb = true;
 
                         if (colField == "Stare")
                         {
@@ -1965,84 +1990,36 @@ namespace WizOne.Pontaj
                             {
                                 GridViewBandColumn banda = new GridViewBandColumn();
                                 banda.Name = colField;
-                                grDate.Columns.Add(banda); 
+                                grDate.Columns.Add(banda);
                             }
                             continue;
                         }
 
-                        if (blocat && colField.Length >= 3 && ((colField.Substring(0,2).ToLower() == "in" && General.IsNumeric(colField.ToLower().Replace("in",""))) || (colField.Substring(0, 3).ToLower() == "out" && General.IsNumeric(colField.ToLower().Replace("out", "")))))
-                        {
+                        if (blocat)
                             lstInOut += colField + ";";
-                        }
+
+                        dynamic c = new GridViewDataColumn();
 
                         switch (tipCol)
                         {
                             case 0:                             //General
                                 {
-                                    GridViewDataColumn c = new GridViewDataColumn();
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
+                                    c = new GridViewDataColumn();
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
                                     c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 1:                             //CheckBox
                                 {
-                                    GridViewDataCheckColumn c = new GridViewDataCheckColumn();
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
+                                    c = new GridViewDataCheckColumn();
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.Boolean;
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 2:                             //ComboBox
                                 {
-                                    
-                                    GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
-                                    if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-
-                                    if (colName.Length >= 6 && colName.Substring(0, 6) == "ValAbs")
-                                    {
-                                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-                                    }
-
+                                    c = new GridViewDataComboBoxColumn();
                                     c.PropertiesComboBox.AllowNull = true;
+                                    if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
 
                                     if (dr != null && dr["SursaCombo"].ToString() != "" && c.Visible == true)
                                     {
@@ -2052,7 +2029,7 @@ namespace WizOne.Pontaj
                                         ds.Tables.Add(dtCmb);
 
                                         Session["SurseCombo"] = ds;
-                                        
+
                                         c.PropertiesComboBox.DropDownWidth = 350;
                                         c.PropertiesComboBox.DataSource = dtCmb;
                                         c.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
@@ -2077,11 +2054,6 @@ namespace WizOne.Pontaj
                                         if (c.FieldName == "IdProgram")
                                         {
                                             c.PropertiesComboBox.ClientInstanceName = "cmbProgram";
-                                            //DataTable dtPrg = General.IncarcaDT(
-                                            //    $@"SELECT A.""IdContract"", A.""IdProgram"", B.""Denumire"" AS ""Program""
-                                            //    FROM ""Ptj_ContracteSchimburi"" A
-                                            //    INNER JOIN ""Ptj_Programe"" B ON A.""IdProgram""=B.""Id""
-                                            //    ORDER BY B.""Denumire"" ", null);
                                             DataTable dtPrg = General.IncarcaDT(
                                                 $@"SELECT A.""IdContract"", A.""IdProgram"", B.""Denumire"" AS ""Program"", A.""TipSchimb"" AS ""ZiSapt""
                                                 FROM ""Ptj_ContracteSchimburi"" A
@@ -2091,173 +2063,86 @@ namespace WizOne.Pontaj
                                             if (dtPrg != null && dtPrg.Rows.Count > 0)
                                             {
                                                 string jsonPrg = "";
-                                                for(int g = 0; g < dtPrg.Rows.Count; g++)
+                                                for (int g = 0; g < dtPrg.Rows.Count; g++)
                                                 {
-                                                    jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + General.Nz(dtPrg.Rows[g]["Program"],"").ToString().Trim().Replace("\n","").Replace("\r","") + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + ", ziSapt: " + dtPrg.Rows[g]["ZiSapt"] + " }";
+                                                    jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + General.Nz(dtPrg.Rows[g]["Program"], "").ToString().Trim().Replace("\n", "").Replace("\r", "") + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + ", ziSapt: " + dtPrg.Rows[g]["ZiSapt"] + " }";
                                                 }
                                                 if (jsonPrg.Length > 0)
                                                     Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";
                                             }
                                         }
                                     }
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 3:                             //Date
                                 {
-                                    GridViewDataDateColumn c = new GridViewDataDateColumn();
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
+                                    c = new GridViewDataDateColumn();
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 4:                             //Memo
                                 {
-                                    GridViewDataMemoColumn c = new GridViewDataMemoColumn();
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
+                                    c = new GridViewDataMemoColumn();
                                     c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-                                    if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 5:                             //Color
                                 {
-                                    GridViewDataColorEditColumn c = new GridViewDataColorEditColumn();
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
+                                    c = new GridViewDataColorEditColumn();
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 6:                             //Text
                                 {
-                                    GridViewDataTextColumn c = new GridViewDataTextColumn();
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
+                                    c = new GridViewDataTextColumn();
                                     c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 7:                             //Numeric
                                 {
-                                    GridViewDataSpinEditColumn c = new GridViewDataSpinEditColumn();
-                                    //c.Name = colName;
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
+                                    c = new GridViewDataSpinEditColumn();
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
                                 }
                                 break;
                             case 8:                             //Time
                             case 9:                             //Time - fara spin buttons
                                 {
-                                    GridViewDataTimeEditColumn c = new GridViewDataTimeEditColumn();
-                                    c.Name = colName;
-                                    c.FieldName = colField;
-                                    c.Caption = Dami.TraduCuvant(alias);
-                                    c.Visible = vizibil;
-                                    c.ReadOnly = blocat;
-                                    c.Width = Unit.Pixel(latime);
-                                    c.VisibleIndex = i + 4;
-                                    c.ToolTip = tt;
+                                    c = new GridViewDataTimeEditColumn();
                                     c.PropertiesTimeEdit.AllowNull = true;
-
-                                    if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;
-
                                     c.PropertiesTimeEdit.DisplayFormatString = "HH:mm";
                                     c.PropertiesTimeEdit.DisplayFormatInEditMode = true;
                                     c.PropertiesTimeEdit.EditFormatString = "HH:mm";
                                     c.PropertiesTimeEdit.EditFormat = EditFormat.DateTime;
-
-                                    if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
-                                        c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
-
-                                    //Florin 2019.12.11
                                     if (tipCol == 9)
                                         c.PropertiesTimeEdit.SpinButtons.ShowIncrementButtons = false;
 
-                                    if (grDate.Columns["Stare"] != null)
-                                        grDate.Columns["Stare"].Columns.Add(c);
-                                    else
-                                        grDate.Columns.Add(c);
+                                    if (Constante.lstFuri.IndexOf(colField + ";") >= 0)
+                                    {
+                                        unb = true;
+                                        colField = "FTmp" + colField.Replace("F", "");
+                                    }
+                                    if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;
                                 }
                                 break;
                         }
+
+                        c.Name = colName;
+                        c.FieldName = colField;
+                        c.Caption = Dami.TraduCuvant(alias);
+                        c.Visible = vizibil;
+                        c.ReadOnly = blocat;
+                        c.Width = Unit.Pixel(latime);
+                        c.VisibleIndex = i + 4;
+                        c.ToolTip = tt;
+
+                        if (c.FieldName.Length >= 6 && c.FieldName.ToLower().Substring(0, 6) == "valtmp")
+                            c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+                        if (grDate.Columns["Stare"] != null)
+                            grDate.Columns["Stare"].Columns.Add(c);
+                        else
+                            grDate.Columns.Add(c);
                     }
                 }
             }
@@ -2267,6 +2152,367 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        //private void CreazaGrid()
+        //{
+        //    try
+        //    {
+        //        string cmp = "SUBSTRING";
+        //        if (Constante.tipBD == 2)
+        //            cmp = "SUBSTR";
+        //        DataTable dtCol = General.IncarcaDT($@"SELECT A.*, CASE WHEN A.""Blocat"" < COALESCE(C.""Blocat"",0) THEN COALESCE(C.""Blocat"",0) ELSE A.""Blocat"" END AS ""BlocatBis"", 
+        //                        CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN REPLACE(B.""DenumireScurta"",' ','') ELSE A.""Coloana"" END AS ""ColDen"",
+        //                        CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("DenumireScurta")} THEN B.""DenumireScurta"" ELSE A.""Alias"" END AS ""ColAlias"",
+        //                        CASE WHEN {cmp}(A.""Coloana"",1,3)='Val' {General.FiltrulCuNull("Denumire")} THEN B.""Denumire"" ELSE (CASE WHEN 1=1 {General.FiltrulCuNull("AliasToolTip")} THEN A.""AliasToolTip"" ELSE A.""Coloana"" END) END AS ""ColTT"",
+        //                        COALESCE(B.""DenumireScurta"",'') AS ""ColScurta"",
+        //                        CASE WHEN A.""Coloana"" ='Stare' THEN 0 ELSE 1 END AS ""OrdineSec""
+        //                        FROM ""Ptj_tblAdmin"" A
+        //                        LEFT JOIN (SELECT ""OreInVal"", MAX(""Denumire"") AS ""Denumire"", MAX(""DenumireScurta"") AS ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""OreInVal""='Val4' GROUP BY ""OreInVal"") B ON A.""Coloana""=B.""OreInVal""
+        //                        LEFT JOIN (SELECT X.""IdColoana"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
+        //                                                        SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+        //                                                        FROM ""Securitate"" A
+        //                                                        INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
+        //                                                        WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'Pontaj.PontajDetaliat' AND A.""IdControl"" = 'grDate'
+        //                                                        UNION
+        //                                                        SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
+        //                                                        FROM ""Securitate"" A
+        //                                                        WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'Pontaj.PontajDetaliat' AND A.""IdControl"" = 'grDate') X
+        //                                                        GROUP BY X.""IdColoana"") C ON A.""Coloana"" = C.""IdColoana""
+        //                        WHERE COALESCE(A.""Vizibil"",0)=1
+        //                        ORDER BY ""OrdineSec"", A.""Ordine"" ", null);
+
+        //        if (dtCol != null)
+        //        {
+        //            DataSet ds = new DataSet();
+
+        //            for (int i = 0; i < dtCol.Rows.Count; i++)
+        //            {
+        //                DataRow dr = dtCol.Rows[i];
+        //                string colField = General.Nz(dr["Coloana"], "col" + i).ToString();
+        //                string colName = General.Nz(dr["ColDen"], "col" + i).ToString() + "_" + General.Nz(dr["ColScurta"], "").ToString();
+        //                string alias = General.Nz(dr["ColAlias"], General.Nz(dr["Coloana"], "col" + i).ToString()).ToString();
+        //                bool vizibil = Convert.ToBoolean(General.Nz(dr["Vizibil"], false));
+        //                bool blocat = Convert.ToBoolean(General.Nz(dr["BlocatBis"], false));
+        //                int latime = Convert.ToInt32(General.Nz(dr["Latime"], 80));
+        //                int tipCol = Convert.ToInt32(General.Nz(dr["TipColoana"],1));
+        //                string tt = General.Nz(dr["ColTT"], General.Nz(dr["Coloana"], "col" + i).ToString()).ToString();
+        //                bool unb = false;
+
+        //                if (Constante.lstValuri.IndexOf(colField + ";") >= 0)
+        //                {
+        //                    unb = true;
+        //                    colField = "ValTmp" + colField.Replace("Val","");
+        //                }
+
+        //                if (colField == "Stare")
+        //                {
+        //                    if (i == 0 && vizibil && (tip == 1 || tip == 10))
+        //                    {
+        //                        GridViewBandColumn banda = new GridViewBandColumn();
+        //                        banda.Name = colField;
+        //                        grDate.Columns.Add(banda); 
+        //                    }
+        //                    continue;
+        //                }
+
+        //                if (blocat && colField.Length >= 3 && ((colField.Substring(0,2).ToLower() == "in" && General.IsNumeric(colField.ToLower().Replace("in",""))) || (colField.Substring(0, 3).ToLower() == "out" && General.IsNumeric(colField.ToLower().Replace("out", "")))))
+        //                {
+        //                    lstInOut += colField + ";";
+        //                }
+
+        //                switch (tipCol)
+        //                {
+        //                    case 0:                             //General
+        //                        {
+        //                            GridViewDataColumn c = new GridViewDataColumn();
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                    case 1:                             //CheckBox
+        //                        {
+        //                            GridViewDataCheckColumn c = new GridViewDataCheckColumn();
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.Boolean;
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                    case 2:                             //ComboBox
+        //                        {
+
+        //                            GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+
+        //                            if (colName.Length >= 6 && colName.Substring(0, 6) == "ValAbs")
+        //                            {
+        //                                c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        //                            }
+
+        //                            c.PropertiesComboBox.AllowNull = true;
+
+        //                            if (dr != null && dr["SursaCombo"].ToString() != "" && c.Visible == true)
+        //                            {
+        //                                string sursa = (dr["SursaCombo"] as string ?? "").ToString().Trim();
+        //                                DataTable dtCmb = General.IncarcaDT(sursa, null);
+        //                                dtCmb.TableName = colField;
+        //                                ds.Tables.Add(dtCmb);
+
+        //                                Session["SurseCombo"] = ds;
+
+        //                                c.PropertiesComboBox.DropDownWidth = 350;
+        //                                c.PropertiesComboBox.DataSource = dtCmb;
+        //                                c.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
+        //                                c.PropertiesComboBox.ValueType = dtCmb.Columns[0].DataType;
+        //                                c.PropertiesComboBox.TextFormatString = "{0}";
+        //                                switch (dtCmb.Columns.Count)
+        //                                {
+        //                                    case 1:
+        //                                        c.PropertiesComboBox.TextField = dtCmb.Columns[0].ColumnName;
+        //                                        break;
+        //                                    case 2:
+        //                                        c.PropertiesComboBox.TextField = dtCmb.Columns[1].ColumnName;
+        //                                        break;
+        //                                }
+
+        //                                if (c.FieldName == "IdContract")
+        //                                {
+        //                                    c.PropertiesComboBox.ClientInstanceName = "cmbContract";
+        //                                    c.PropertiesComboBox.ClientSideEvents.SelectedIndexChanged = "function(s,e) { cmbContract_SelectedIndexChanged_Client(s,e); }";
+        //                                }
+
+        //                                if (c.FieldName == "IdProgram")
+        //                                {
+        //                                    c.PropertiesComboBox.ClientInstanceName = "cmbProgram";
+        //                                    //DataTable dtPrg = General.IncarcaDT(
+        //                                    //    $@"SELECT A.""IdContract"", A.""IdProgram"", B.""Denumire"" AS ""Program""
+        //                                    //    FROM ""Ptj_ContracteSchimburi"" A
+        //                                    //    INNER JOIN ""Ptj_Programe"" B ON A.""IdProgram""=B.""Id""
+        //                                    //    ORDER BY B.""Denumire"" ", null);
+        //                                    DataTable dtPrg = General.IncarcaDT(
+        //                                        $@"SELECT A.""IdContract"", A.""IdProgram"", B.""Denumire"" AS ""Program"", A.""TipSchimb"" AS ""ZiSapt""
+        //                                        FROM ""Ptj_ContracteSchimburi"" A
+        //                                        INNER JOIN ""Ptj_Programe"" B ON A.""IdProgram"" = B.""Id""
+        //                                        GROUP BY A.""IdContract"", A.""IdProgram"", B.""Denumire"", A.""TipSchimb""
+        //                                        ORDER BY B.""Denumire""", null);
+        //                                    if (dtPrg != null && dtPrg.Rows.Count > 0)
+        //                                    {
+        //                                        string jsonPrg = "";
+        //                                        for(int g = 0; g < dtPrg.Rows.Count; g++)
+        //                                        {
+        //                                            jsonPrg += ",{ idContract: " + dtPrg.Rows[g]["IdContract"] + ", program: '" + General.Nz(dtPrg.Rows[g]["Program"],"").ToString().Trim().Replace("\n","").Replace("\r","") + "', idProgram: " + dtPrg.Rows[g]["IdProgram"] + ", ziSapt: " + dtPrg.Rows[g]["ZiSapt"] + " }";
+        //                                        }
+        //                                        if (jsonPrg.Length > 0)
+        //                                            Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";
+        //                                    }
+        //                                }
+        //                            }
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                    case 3:                             //Date
+        //                        {
+        //                            GridViewDataDateColumn c = new GridViewDataDateColumn();
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                    case 4:                             //Memo
+        //                        {
+        //                            GridViewDataMemoColumn c = new GridViewDataMemoColumn();
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                    case 5:                             //Color
+        //                        {
+        //                            GridViewDataColorEditColumn c = new GridViewDataColorEditColumn();
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                    case 6:                             //Text
+        //                        {
+        //                            GridViewDataTextColumn c = new GridViewDataTextColumn();
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                    case 7:                             //Numeric
+        //                        {
+        //                            GridViewDataSpinEditColumn c = new GridViewDataSpinEditColumn();
+        //                            //c.Name = colName;
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                    case 8:                             //Time
+        //                    case 9:                             //Time - fara spin buttons
+        //                        {
+        //                            GridViewDataTimeEditColumn c = new GridViewDataTimeEditColumn();
+        //                            c.Name = colName;
+        //                            c.FieldName = colField;
+        //                            c.Caption = Dami.TraduCuvant(alias);
+        //                            c.Visible = vizibil;
+        //                            c.ReadOnly = blocat;
+        //                            c.Width = Unit.Pixel(latime);
+        //                            c.VisibleIndex = i + 4;
+        //                            c.ToolTip = tt;
+        //                            c.PropertiesTimeEdit.AllowNull = true;
+
+        //                            if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.DateTime;
+
+        //                            c.PropertiesTimeEdit.DisplayFormatString = "HH:mm";
+        //                            c.PropertiesTimeEdit.DisplayFormatInEditMode = true;
+        //                            c.PropertiesTimeEdit.EditFormatString = "HH:mm";
+        //                            c.PropertiesTimeEdit.EditFormat = EditFormat.DateTime;
+
+        //                            if (c.FieldName.Length > 2 && c.FieldName.Substring(0, 3) == "Val" && c.FieldName != "ValStr" && c.FieldName != "ValAbs")
+        //                                c.BatchEditModifiedCellStyle.BackColor = General.Culoare(Constante.CuloareModificatManual);
+
+        //                            //Florin 2019.12.11
+        //                            if (tipCol == 9)
+        //                                c.PropertiesTimeEdit.SpinButtons.ShowIncrementButtons = false;
+
+        //                            if (grDate.Columns["Stare"] != null)
+        //                                grDate.Columns["Stare"].Columns.Add(c);
+        //                            else
+        //                                grDate.Columns.Add(c);
+        //                        }
+        //                        break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         private List<object> ValoriChei()
         {

@@ -1981,8 +1981,8 @@ namespace WizOne.Pontaj
                             colField = "ValTmp" + colField.Replace("Val", "");
                         }
 
-                        //if (colField.ToLower() == "valabs")
-                        //    unb = true;
+                        if (colField.ToLower() == "valabs")
+                            unb = true;
 
                         if (colField == "Stare")
                         {
@@ -2084,6 +2084,7 @@ namespace WizOne.Pontaj
                                 {
                                     c = new GridViewDataMemoColumn();
                                     c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+                                    if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.String;
                                 }
                                 break;
                             case 5:                             //Color

@@ -31,8 +31,8 @@ namespace WizOne.Pagini
                 btnNew.Text = Dami.TraduCuvant("btnNew", "Nou");
                 btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("btnUpdate", "Actualizeaza");
-                grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("btnCancel", "Renunta");
+                //grDate.SettingsCommandButton.UpdateButton.Text = Dami.TraduCuvant("btnUpdate", "Actualizeaza");
+                //grDate.SettingsCommandButton.CancelButton.Text = Dami.TraduCuvant("btnCancel", "Renunta");
 
                 foreach (dynamic c in grDate.Columns)
                 {
@@ -42,6 +42,10 @@ namespace WizOne.Pagini
                     }
                     catch (Exception) { }
                 }
+
+                grDate.SettingsCommandButton.DeleteButton.Image.ToolTip = Dami.TraduCuvant("Sterge");
+                grDate.SettingsCommandButton.CancelButton.Image.ToolTip = Dami.TraduCuvant("Renunta");
+                grDate.SettingsCommandButton.UpdateButton.Image.ToolTip = Dami.TraduCuvant("Actualizeaza");
 
                 #endregion
 

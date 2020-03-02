@@ -666,18 +666,18 @@ namespace WizOne.Absente
                 }
                 else
                 {
-                    strSQl = $@"SELECT COALESCE(X.""Zi"",{General.ToDataUniv(new DateTime(1900, 1, 1))}) AS ""Zi"", CASE WHEN COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') = '' THEN '#EE8D3D' ELSE COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') END AS ""Culoare"", 'CO Planificat' AS ""AbsDen"", -3 AS ""AbsId"", 0 AS ""InCurs""
+                    strSQl = $@"SELECT COALESCE(X.""Zi"",{General.ToDataUniv(new DateTime(1900, 1, 1))}) AS ""Zi"", CASE WHEN COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') = '' THEN '#EE8D3D' ELSE COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') END AS ""Culoare"", '{Dami.TraduCuvant("CO Planificat")}' AS ""AbsDen"", -3 AS ""AbsId"", 0 AS ""InCurs""
                                 FROM ""tblZile"" X
                                 INNER JOIN ""Ptj_Cereri"" A ON A.""DataInceput"" <= X.""Zi"" AND X.""Zi"" <= A.""DataSfarsit""
                                 INNER JOIN ""Ptj_tblAbsente"" B ON A.""IdAbsenta"" = B.""Id""
                                 WHERE A.""IdStare"" = 4 AND {General.ToDataUniv(dtInc)} <= A.""DataSfarsit"" AND A.""DataInceput"" <= {General.ToDataUniv(dtSf)}
                                 AND {General.ToDataUniv(dtInc)} <= X.""Zi"" AND X.""Zi"" <= {General.ToDataUniv(dtSf)} AND A.F10003 = {f10003}
                                 UNION
-                                SELECT X.""Zi"", CASE WHEN COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareSambataSiDuminica'),'#FF0000') = '' THEN '#FF0000' ELSE COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareSambataSiDuminica'),'#FF0000') END, 'Sambata sau Duminica', -1, 0 AS ""InCurs""
+                                SELECT X.""Zi"", CASE WHEN COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareSambataSiDuminica'),'#FF0000') = '' THEN '#FF0000' ELSE COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareSambataSiDuminica'),'#FF0000') END, '{Dami.TraduCuvant("Sambata sau Duminica")}', -1, 0 AS ""InCurs""
                                 FROM ""tblZile"" X
                                 WHERE {General.ToDataUniv(dtInc)} <= X.""Zi"" AND X.""Zi"" <= {General.ToDataUniv(dtSf)} AND ""ZiSapt"" IN (6, 7)
                                 UNION
-                                SELECT X.DAY, CASE WHEN COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareZileLibereLegale'),'#FA8282') = '' THEN '#FA8282' ELSE COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareZileLibereLegale'),'#FA8282') END, 'Zi libera legala', -2, 0 AS ""InCurs""
+                                SELECT X.DAY, CASE WHEN COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareZileLibereLegale'),'#FA8282') = '' THEN '#FA8282' ELSE COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareZileLibereLegale'),'#FA8282') END, '{Dami.TraduCuvant("Zi libera legala")}', -2, 0 AS ""InCurs""
                                 FROM HOLIDAYS X
                                 WHERE {General.ToDataUniv(dtInc)} <= X.DAY AND X.DAY <= {General.ToDataUniv(dtSf)}
                                 UNION

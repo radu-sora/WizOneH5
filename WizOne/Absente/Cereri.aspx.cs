@@ -161,7 +161,7 @@ namespace WizOne.Absente
                     }
 
                     //Incarcam Absentele
-                    DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value,-99).ToString()), null);
+                    DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value,-99).ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
                     cmbAbs.DataSource = dtAbs;
                     cmbAbs.DataBind();
                     Session["Cereri_Absente_Absente"] = dtAbs;
@@ -435,7 +435,7 @@ namespace WizOne.Absente
                 {
                     case "1":               //cmbAng
                         {
-                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString()), null);
+                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
                             cmbAbs.DataSource = dtAbs;
                             cmbAbs.DataBind();
                             cmbAbs.SelectedIndex = -1;
@@ -448,6 +448,13 @@ namespace WizOne.Absente
                         break;
                     case "3":               //DataInceput
                         {
+                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                            cmbAbs.DataSource = dtAbs;
+                            cmbAbs.DataBind();
+                            cmbAbs.SelectedIndex = -1;
+                            Session["Cereri_Absente_Absente"] = dtAbs;
+
+
                             metaCereriDate itm = new metaCereriDate();
                             if (Session["Absente_Cereri_Date"] != null) itm = Session["Absente_Cereri_Date"] as metaCereriDate;
                             lblDoc.InnerText = General.Nz(itm.UploadedFileName, "").ToString();
@@ -493,7 +500,7 @@ namespace WizOne.Absente
 
 
                         //acelasi cod ca la case "1"
-                        dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString()), null);
+                        dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
                         cmbAbs.DataSource = dtAbs;
                         cmbAbs.DataBind();
                         cmbAbs.SelectedIndex = -1;

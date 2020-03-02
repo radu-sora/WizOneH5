@@ -6244,7 +6244,7 @@ namespace WizOne.Module
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                                 SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
-                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403 AND modif.data > F100.F10022
                                 ) B 
                                 ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01';
                                     
@@ -6412,7 +6412,7 @@ namespace WizOne.Module
                                 WHERE ""IdAuto"" IN 
                                 (SELECT A.""IdAuto""
                                 FROM ""Ptj_Intrari"" A
-                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403 AND modif.data > F100.F10022
                                 ) B 
                                 ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));
 

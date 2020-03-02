@@ -326,7 +326,7 @@ namespace WizOne.Tactil
                                     return;
                                 }
 
-                                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToInt32(obj[2])), null);
+                                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[4]).Date, Convert.ToInt32(obj[2])), null);
                                 if (drAbs != null)
                                 {
                                     if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Groupama))
@@ -444,7 +444,7 @@ namespace WizOne.Tactil
                                     return;
                                 }
 
-                                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToInt32(obj[2])), null);
+                                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[6]).Date, Convert.ToInt32(obj[2])), null);
                                 if (drAbs != null)
                                 {
                                     int idCircuit = Convert.ToInt32(General.Nz(drAbs["IdCircuit"], -99));
@@ -605,7 +605,7 @@ namespace WizOne.Tactil
                 DateTime dtSplit = new DateTime(2100, 1, 1);
 
                 int adunaZL = 0;
-                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToInt32(obj[2])), null);
+                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[4]).Date, Convert.ToInt32(obj[2])), null);
                 if (drAbs != null) adunaZL = Convert.ToInt32(General.Nz(drAbs["AdunaZileLibere"], 0));
 
                 string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";

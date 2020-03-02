@@ -170,7 +170,7 @@ namespace WizOne.Tactil
                     }
 
 
-                    dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(General.VarSession("User_Marca"), -99).ToString()), null);
+                    dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(General.VarSession("User_Marca"), -99).ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
 
 
 

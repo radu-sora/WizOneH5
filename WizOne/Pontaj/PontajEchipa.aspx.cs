@@ -1815,13 +1815,36 @@ namespace WizOne.Pontaj
                         for (int j = 0; j < dtAbs.Rows.Count; j++)
                             listaAbs.Add(dtAbs.Rows[j]["DenumireScurta"].ToString(), dtAbs.Rows[j]["Culoare"].ToString());
 
+                    //Radu 28.02.2020 - securitate
+                    List<string> listaSec = new List<string>();
+                    strSql = "SELECT X.\"IdControl\", X.\"IdColoana\", MAX(X.\"Vizibil\") AS \"Vizibil\", MIN(X.\"Blocat\") AS \"Blocat\" FROM( "
+                            + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
+                            + "FROM \"Securitate\" A "
+                            + "INNER JOIN \"relGrupUser\" B ON A.\"IdGrup\" = B.\"IdGrup\" "
+                            + "WHERE B.\"IdUser\" = {0} AND LOWER(A.\"IdForm\") = 'pontaj.pontaj' "
+                            + "UNION "
+                            + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
+                            + "FROM \"Securitate\" A "
+                            + "WHERE A.\"IdGrup\" = -1 AND LOWER(A.\"IdForm\") = 'pontaj.pontaj') X "
+                            + "GROUP BY X.\"IdControl\", X.\"IdColoana\"";
+                    strSql = string.Format(strSql, Session["UserId"].ToString());
+                    if (General.VarSession("EsteAdmin").ToString() == "0")
+                    {
+                        DataTable dtSec = General.IncarcaDT(strSql, null);
+                        if (dtSec != null && dtSec.Rows.Count > 0)
+                            for (int k = 0; k < dtSec.Rows.Count; k++)
+                                if (dtSec.Rows[k]["Vizibil"] != null && Convert.ToInt32(dtSec.Rows[k]["Vizibil"].ToString()) == 0)
+                                    listaSec.Add(dtSec.Rows[k]["IdColoana"].ToString());
+                    }
+
+
                     if (chkLinie.Checked)
                     {
                         int nrCol = 0;              
                         int idZile = 0, colZile = 0;
                         for (int i = 0; i < dt.Columns.Count; i++)
                         {
-                            if (lista.ContainsKey(dt.Columns[i].ColumnName))
+                            if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                             {
                                 if (idZile > 0 && colZile > 0)
                                 {
@@ -1861,7 +1884,7 @@ namespace WizOne.Pontaj
                             idZile = 0; colZile = 0;
                             for (int i = 0; i < dt.Columns.Count; i++)
                             {
-                                if (lista.ContainsKey(dt.Columns[i].ColumnName))
+                                if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                                 {
                                     if (idZile > 0 && colZile > 0)                                    
                                         ws2.Cells[row + 3, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
@@ -1900,7 +1923,7 @@ namespace WizOne.Pontaj
                         int idZile = 0, colZile = 0;
                         for (int i = 0; i < dt.Columns.Count; i++)
                         {
-                            if (lista.ContainsKey(dt.Columns[i].ColumnName))
+                            if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                             {
                                 if (idZile > 0 && colZile > 0)
                                 {
@@ -1928,7 +1951,7 @@ namespace WizOne.Pontaj
                             idZile = 0; colZile = 0;
                             for (int i = 0; i < dt.Columns.Count; i++)
                             {
-                                if (lista.ContainsKey(dt.Columns[i].ColumnName) || (dt.Columns[i].ColumnName.Contains("Ziua")))
+                                if ((lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName)) || (dt.Columns[i].ColumnName.Contains("Ziua")))
                                 {
                                     if (dt.Columns[i].ColumnName.Contains("Ziua") && dt.Columns[i].ColumnName.Contains("I"))
                                         rand = 1;
@@ -3081,30 +3104,30 @@ namespace WizOne.Pontaj
                 else
                 {
                     if (chkTotaluri.Checked)
-                        pvt = $@"INNER JOIN (SELECT * FROM 
+                        pvt = $@"INNER JOIN (SELECT F10003 {zileAs} FROM 
                                 (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003";
 
                     if (chkOre.Checked)
                     {
-                        pvtIn = $@"INNER JOIN (SELECT * FROM 
+                        pvtIn = $@"INNER JOIN (SELECT F10003 {zileAsIn} FROM 
                                 (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003";
 
-                        pvtOut = $@"INNER JOIN (SELECT * FROM 
+                        pvtOut = $@"INNER JOIN (SELECT F10003 {zileAsOut} FROM 
                                 (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003";
                     }
                     if (chkPauza.Checked)
-                        pvtPauza = $@"INNER JOIN (SELECT * FROM 
+                        pvtPauza = $@"INNER JOIN (SELECT F10003 {zileAsPauza} FROM 
                                 (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003";
 
-                    pvtCuloare = $@"INNER JOIN (SELECT * FROM 
+                    pvtCuloare = $@"INNER JOIN (SELECT F10003 {zileAsCuloare} FROM 
                                 (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvtCuloare ON X.F10003=pvtCuloare.F10003";

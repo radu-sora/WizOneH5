@@ -736,7 +736,7 @@ namespace WizOne.Pontaj
 
                 if (Constante.tipBD == 1)
                     strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
-                            {cheia} AS ""Cheia"", ValStr AS ValAbs,
+                            {cheia} AS ""Cheia"",
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS DescProgram, COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
                             CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 AND
@@ -840,7 +840,7 @@ namespace WizOne.Pontaj
                             {filtru}";
                 else
                     strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
-                            {cheia} AS ""Cheia"", '' AS ValAbs,
+                            {cheia} AS ""Cheia"",
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS ""DescProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
                             CASE WHEN A.F10022 <= {General.TruncateDate("P.Ziua")} AND {General.TruncateDate("P.Ziua")} <= A.F10023 AND
@@ -1981,8 +1981,8 @@ namespace WizOne.Pontaj
                             colField = "ValTmp" + colField.Replace("Val", "");
                         }
 
-                        if (colField.ToLower() == "valabs")
-                            unb = true;
+                        //if (colField.ToLower() == "valabs")
+                        //    unb = true;
 
                         if (colField == "Stare")
                         {

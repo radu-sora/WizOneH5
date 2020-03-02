@@ -736,7 +736,7 @@ namespace WizOne.Pontaj
                 if (Constante.tipBD == 2) op = "||";
 
                 if (Constante.tipBD == 1)
-                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
+                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} {furiTmp},
                             {cheia} AS ""Cheia"",
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS DescProgram, COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",
@@ -840,7 +840,7 @@ namespace WizOne.Pontaj
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";
                 else
-                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} ,
+                    strSql = $@"SELECT P.*, {General.FunctiiData("P.\"Ziua\"", "Z")} AS ""Zi"", A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" {valTmp} {furiTmp},
                             {cheia} AS ""Cheia"",
                             E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", G.F00406 AS ""Filiala"", H.F00507 AS ""Sectie"", I.F00608 AS ""Dept"",
                             L.""Denumire"" AS ""DescContract"", M.""Denumire"" AS ""DescProgram"", COALESCE(L.""OreSup"",1) AS ""OreSup"", COALESCE(L.""Afisare"",1) AS ""Afisare"",

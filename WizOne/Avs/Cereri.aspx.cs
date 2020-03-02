@@ -1671,9 +1671,10 @@ namespace WizOne.Avs
                 string op = "+";
                 if (Constante.tipBD == 2)
                     op = "||";
-                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 ", null);
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 join f111 on f11104 = f09002 and f11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
                 de1Nou.ClientEnabled = false;
+                de2Nou.ClientEnabled = false;
                 DataTable dtTempRev = General.IncarcaDT("select * from f111 Where F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = " 
                             + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") AND F11104 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString() + " ORDER BY F11105", null);
                 if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11105"] != null && dtTempRev.Rows[0]["F11105"].ToString().Length > 0)

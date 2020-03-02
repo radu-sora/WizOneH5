@@ -394,7 +394,7 @@ namespace WizOne.Absente
                                     return;
                                 }
 
-                                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToInt32(obj[2])), null);
+                                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[4]).Date, Convert.ToInt32(obj[2])), null);
                                 if (drAbs != null)
                                 {
                                     if (Convert.ToInt32(HttpContext.Current.Session["IdClient"]) == 34)
@@ -510,7 +510,7 @@ namespace WizOne.Absente
                                     return;
                                 }
 
-                                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToInt32(obj[2])), null);
+                                DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[6]).Date, Convert.ToInt32(obj[2])), null);
                                 if (drAbs != null)
                                 {
                                     int idCircuit = Convert.ToInt32(General.Nz(drAbs["IdCircuit"], -99));
@@ -714,7 +714,7 @@ namespace WizOne.Absente
                 {
                     int idTipOre = 0;
                     string oreInVal = "";
-                    DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToInt32(obj[2])), null);
+                    DataRow drAbs = General.IncarcaDR(General.SelectAbsente(obj[1].ToString(), Convert.ToDateTime(obj[4]).Date, Convert.ToInt32(obj[2])), null);
                     if (drAbs != null)
                     {
                         idTipOre = Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0));

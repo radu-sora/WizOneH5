@@ -1780,7 +1780,7 @@ namespace WizOne.Module
         }
 
         //Florin 2020.01.21
-        public static string SelectAbsente(string f10003, int idAbs = -99)
+        public static string SelectAbsente(string f10003, DateTime data, int idAbs = -99)
         {
             string strSql = "";
 
@@ -1788,14 +1788,21 @@ namespace WizOne.Module
             {
                 if (string.IsNullOrEmpty(f10003)) return strSql;
 
-                string dt = "GetDate()";
+                //Radu 27.02.2020 - se va lua data inceput concediu
+                //string dt = "GetDate()";
+                string dt = "";
                 string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
                 string filtru = "";
 
                 if (Constante.tipBD == 2)
                 {
                     idAuto = "ROWNUM";
-                    dt = "sysdate";
+                    //dt = "sysdate";
+                    dt = "TO_DATE('" + data.Day + "/" + data.Month + "/" + data.Year + "', 'dd/mm/yyyy')";
+                }
+                else
+                {
+                    dt = "CONVERT(DATETIME, '" + data.Day + "/" + data.Month + "/" + data.Year + "', 103)";
                 }
 
                 if (idAbs != -99) filtru = @" WHERE Y.""Id""=" + idAbs;
@@ -4626,6 +4633,10 @@ namespace WizOne.Module
                                             if (dr["IdColoana"].ToString().ToLower() == "btnsterge")
                                             {
                                                 column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            }
+                                            if (dr["IdColoana"].ToString().ToLower() == "btnnew")
+                                            {
+                                                column.ShowNewButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
                                             }
                                         }
 

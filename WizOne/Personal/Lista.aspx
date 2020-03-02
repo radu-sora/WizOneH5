@@ -112,7 +112,7 @@
             AdjustSize();
         }
 
-        function OnInitGrid(s, e) {
+        function OnInitGrid(s, e) {           
             AdjustSize();
         }
         function OnControlsInitialized(s, e) {

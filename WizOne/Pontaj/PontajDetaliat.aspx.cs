@@ -45,6 +45,7 @@ namespace WizOne.Pontaj
                         divPeAng.Style["display"] = "none";
                         divPeZi.Style["display"] = "inline-block";
                         grDate.Columns["NumeComplet"].Visible = true;
+                        grDate.Columns["NumeComplet"].Caption = Dami.TraduCuvant("NumeComplet");
                         grDate.Columns["Cheia"].Caption = Dami.TraduCuvant("Marca");
 
                         btnAproba.Visible = false;
@@ -181,7 +182,7 @@ namespace WizOne.Pontaj
                     col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
                 foreach (ListBoxColumn col in cmbAngZi.Columns)
                     col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
-
+                pnlFiltrare.HeaderText = Dami.TraduCuvant("Setare filtru de selectie");
                 #endregion
 
                 if (tip == 1 || tip == 10)

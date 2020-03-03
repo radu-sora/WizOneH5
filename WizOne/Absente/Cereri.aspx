@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
-    <script language="javascript" type="text/javascript">
+    <script>
 
         function StartUpload() {
             //pnlLoading.Show();

@@ -1138,12 +1138,13 @@ namespace WizOne.Absente
                     if (idStare == 3)
                     {
                         if ((Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 0 && General.Nz(drAbs["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(drAbs["NuTrimiteInPontaj"], 0)) == 0)
-                            General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCer, 5, trimiteLaInlocuitor, Convert.ToInt32(txtNrOre.Value ?? 0));
+                            General.TrimiteInPontaj(Convert.ToInt32(Session["UserId"] ?? -99), idCer, 5, trimiteLaInlocuitor, Convert.ToDecimal(txtNrOre.Value ?? 0));
 
                         if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 0)) == 1 && Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                             General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={Convert.ToInt32(cmbAng.Value)} AND {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Text))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Text))} ", null);
 
                         General.CalculFormule(cmbAng.Value, null, txtDataInc.Date, txtDataSf.Date);
+                        //General.ExecValStr($@"F10003={cmbAng.Value} AND {General.ToDataUniv(txtDataInc.Date)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(txtDataSf.Date)}");
                     }
 
                     #endregion

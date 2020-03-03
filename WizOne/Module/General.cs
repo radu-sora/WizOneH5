@@ -1625,10 +1625,11 @@ namespace WizOne.Module
             return zlDisp;
         }
 
-        public static void TrimiteInPontaj(int idUser, int id, int idCuloare, int trimiteLa, int nrOre)
+        public static void TrimiteInPontaj(int idUser, int id, int idCuloare, int trimiteLa, decimal nrOre)
         {
             try
             {
+                int nrMin = Convert.ToInt32(nrOre * 60);
                 string tipData = "nvarchar(10)";
                 if (Constante.tipBD == 2) tipData = "varchar2(10)";
                 DataTable dt = General.IncarcaDT($@"SELECT A.*, CASE WHEN (B.""CompensareBanca"" IS NOT NULL AND B.""CompensarePlata"" IS NOT NULL) THEN 1 ELSE 0 END AS ""EsteCuBifa"",
@@ -1641,7 +1642,7 @@ namespace WizOne.Module
                                                     LEFT JOIN  ""Ptj_tblAbsente"" C ON B.""CompensareBanca"" = C.""Id""
                                                     LEFT JOIN  ""Ptj_tblAbsente"" D ON B.""CompensarePlata"" = D.""Id""
                                                     INNER JOIN F100 E ON A.F10003=E.F10003
-                                                    WHERE A.""Id"" = @1 AND A.""IdStare"" = 3", new object[] { id, trimiteLa, nrOre });
+                                                    WHERE A.""Id"" = @1 AND A.""IdStare"" = 3", new object[] { id, trimiteLa, nrOre.ToString().Replace(",",".") });
 
                 if (dt.Rows.Count > 0)
                 {
@@ -1677,7 +1678,7 @@ namespace WizOne.Module
                                 "'" + valStr + "', " +
                                 idUser + ", " +
                                 General.CurrentDate() +
-                                ((dr["ValPentruOre"] ?? "").ToString() == "" ? "" : ", " + (nrOre * 60).ToString())
+                                ((dr["ValPentruOre"] ?? "").ToString() == "" ? "" : ", " + nrMin.ToString())
                                 + (Constante.tipBD == 1 ? "" : " FROM DUAL");
 
                             //trimte orele in Val indicat in tabela Ptj_tblAbsente - numai pt cererile de tip ore
@@ -1694,8 +1695,8 @@ namespace WizOne.Module
                             }
                             else
                             {
-                                valStr = CalculValStr((int)dr["F10003"], zi.Date, "", (dr["ValPentruOre"] ?? "").ToString(), (int)(nrOre * 60));
-                                sqlUp = $@"UPDATE ""Ptj_Intrari"" SET {dr["ValPentruOre"]}  = {nrOre * 60} WHERE F10003= {dr["F10003"]} AND ""Ziua""= {General.ToDataUniv(zi.Date)}";
+                                valStr = CalculValStr((int)dr["F10003"], zi.Date, "", (dr["ValPentruOre"] ?? "").ToString(), nrMin);
+                                sqlUp = $@"UPDATE ""Ptj_Intrari"" SET {dr["ValPentruOre"]}  = {nrMin} WHERE F10003= {dr["F10003"]} AND ""Ziua""= {General.ToDataUniv(zi.Date)}";
                                 sqlValStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = {valStr}  WHERE F10003= {dr["F10003"]} AND ""Ziua""= {General.ToDataUniv(zi.Date)}";
                                 sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
                                             SELECT {dr["F10003"]}, {ToDataUniv(zi.Date)}, {valStr}, '{General.Nz(dtAbs.Rows[i]["ValStr"], "")}', {idUser}, {General.CurrentDate()}, {idUser}, {General.CurrentDate()}, 'Din Cereri' FROM ""Ptj_Intrari"" WHERE F10003={dr["F10003"]} AND ""Ziua""={General.ToDataUniv(zi.Date)}";
@@ -2539,7 +2540,7 @@ namespace WizOne.Module
                         if (idStare == 3)
                         {
                             if ((Convert.ToInt32(General.Nz(dr["IdTipOre"], 0)) == 1 || (Convert.ToInt32(General.Nz(dr["IdTipOre"], 0)) == 0 && General.Nz(dr["OreInVal"], "").ToString() != "")) && Convert.ToInt32(General.Nz(dr["NuTrimiteInPontaj"], 0)) == 0)
-                                General.TrimiteInPontaj(idUser, Convert.ToInt32(dr["Id"]), 5, Convert.ToInt32(General.Nz(dr["TrimiteLa"], 0)), Convert.ToInt32(General.Nz(dr["NrOre"], 0)));
+                                General.TrimiteInPontaj(idUser, Convert.ToInt32(dr["Id"]), 5, Convert.ToInt32(General.Nz(dr["TrimiteLa"], 0)), Convert.ToDecimal(General.Nz(dr["NrOre"], 0)));
 
                             if (Convert.ToInt32(General.Nz(dr["IdTipOre"], 0)) == 1 && Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi") == "1")
                                 General.ExecutaNonQuery($@"DELETE FROM ""Ptj_CC"" WHERE F10003={dr["F10003"]} AND {General.ToDataUniv(Convert.ToDateTime(dr["DataInceput"]))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(dr["DataSfarsit"]))} ", null);
@@ -6255,13 +6256,13 @@ namespace WizOne.Module
                                 INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME)
                                 SELECT A.F10003, A.""Ziua"", NULL, A.""ValStr"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}, 'Pontajul Echipei - Initializare', {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                 FROM Ptj_Intrari A
-                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403 AND modif.data > F100.F10022
                                 ) B 
                                 ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01';
                                     
                                 DELETE A
                                 FROM Ptj_Intrari A
-                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                INNER JOIN (select f100.F10003, ISNULL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403 AND modif.data > F100.F10022
                                 ) B 
                                 ON A.F10003=B.F10003 AND A.Ziua> B.DATA_PLECARII AND {ziInc} <= A.Ziua AND A.Ziua <= {ziSf} AND CONVERT(date, B.DATA_PLECARII) <> '2100-01-01';";
 
@@ -6423,7 +6424,7 @@ namespace WizOne.Module
                                 WHERE ""IdAuto"" IN 
                                 (SELECT A.""IdAuto""
                                 FROM ""Ptj_Intrari"" A
-                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403 AND modif.data > F100.F10022
                                 ) B 
                                 ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));
 
@@ -6431,7 +6432,7 @@ namespace WizOne.Module
                                 WHERE ""IdAuto"" IN 
                                 (SELECT A.""IdAuto""
                                 FROM ""Ptj_Intrari"" A
-                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403
+                                INNER JOIN (select f100.F10003, NVL(MODIF.DATA, f10023) DATA_PLECARII from f100 left join(select f70403, min(f70406) - 1 data from f704 where f70404 = 4 group by f70403) modif on F100.F10003 = MODIF.F70403 AND modif.data > F100.F10022
                                 ) B 
                                 ON A.F10003=B.F10003 AND A.""Ziua"" > B.DATA_PLECARII AND {ziInc} <= A.""Ziua"" AND A.""Ziua"" <= {ziSf} AND TRUNC(B.DATA_PLECARII) <> TO_DATE('01-01-2100','DD-MM-YYYY'));";
 
@@ -7921,8 +7922,9 @@ namespace WizOne.Module
                 if (ziuaInc != null && ziuaSf == null) filtruCumulat += " AND ent.\"An\"=" + Convert.ToDateTime(ziuaInc).Year + " AND ent.\"Luna\"=" + Convert.ToDateTime(ziuaInc).Month;
                 if (ziuaInc != null && ziuaSf != null) filtruCumulat += $@" AND {Convert.ToDateTime(ziuaInc).Year * 100 + Convert.ToDateTime(ziuaInc).Month} <= (ent.""An"" * 100 + ent.""Luna"") AND (ent.""An"" * 100 + ent.""Luna"") <= {Convert.ToDateTime(ziuaSf).Year * 100 + Convert.ToDateTime(ziuaSf).Month}";
 
-                General.CalculFormulePeZi(" 1=1 " + filtru + filtruPeZi);
-                General.CalculFormuleCumulat(" 1=1 " + filtru + filtruCumulat);
+                CalculFormulePeZi(" 1=1 " + filtru + filtruPeZi);
+                CalculFormuleCumulat(" 1=1 " + filtru + filtruCumulat);
+                ExecValStr("1=1 " + filtru.Replace("ent.","") + filtruPeZi);
             }
             catch (Exception ex)
             {

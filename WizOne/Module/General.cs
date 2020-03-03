@@ -4639,7 +4639,7 @@ namespace WizOne.Module
                                             }
                                             if (dr["IdColoana"].ToString().ToLower() == "btnnew")
                                             {
-                                                column.ShowNewButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                                column.ShowNewButtonInHeader = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
                                             }
                                         }
 

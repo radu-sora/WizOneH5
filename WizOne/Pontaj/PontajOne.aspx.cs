@@ -1144,7 +1144,7 @@ namespace WizOne.Pontaj
                     }
 
                     General.CalculFormule(f10003, null, ziua, null);
-                    General.ExecValStr(f10003, ziua);
+                    //General.ExecValStr(f10003, ziua);
                 }
 
                 IncarcaGrid();
@@ -1211,7 +1211,7 @@ namespace WizOne.Pontaj
                                 }
 
                                 General.CalculFormule(arr[3], arr[4], dtInc, dtSf);
-                                General.ExecValStr($@"{arr[3]} <= F10003 AND F10003 <= {arr[4]} AND {General.ToDataUniv(dtInc)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dtSf)}");
+                                //General.ExecValStr($@"{arr[3]} <= F10003 AND F10003 <= {arr[4]} AND {General.ToDataUniv(dtInc)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dtSf)}");
 
                                 Session["InformatiaCurenta"] = dt;
                                 grDate.DataBind();

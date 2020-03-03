@@ -1238,7 +1238,7 @@ namespace WizOne.Pontaj
                 for (int i = 0; i < dtModif.Rows.Count; i++)
                 {
                     General.CalculFormule(dtModif.Rows[i]["F10003"], null, Convert.ToDateTime(dtModif.Rows[i]["Ziua"]), null);
-                    General.ExecValStr(Convert.ToInt32(dtModif.Rows[i]["F10003"]), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
+                    //General.ExecValStr(Convert.ToInt32(dtModif.Rows[i]["F10003"]), Convert.ToDateTime(dtModif.Rows[i]["Ziua"]));
                 }
 
                 btnFiltru_Click(null, null);
@@ -1619,7 +1619,7 @@ namespace WizOne.Pontaj
                     }
 
                     General.CalculFormule(f10003, null, ziua, null);
-                    General.ExecValStr(f10003, ziua);
+                    //General.ExecValStr(f10003, ziua);
                 }
 
                 IncarcaGrid();
@@ -1686,7 +1686,7 @@ namespace WizOne.Pontaj
                                 }
 
                                 General.CalculFormule(arr[3], arr[4], dtInc, dtSf);
-                                General.ExecValStr($@"{arr[3]} <= F10003 AND F10003 <= {arr[4]} AND {General.ToDataUniv(dtInc)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dtSf)}");
+                                //General.ExecValStr($@"{arr[3]} <= F10003 AND F10003 <= {arr[4]} AND {General.ToDataUniv(dtInc)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dtSf)}");
 
                                 IncarcaGrid();
                             }

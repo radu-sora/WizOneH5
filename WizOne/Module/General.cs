@@ -294,9 +294,9 @@ namespace WizOne.Module
                     da.SelectCommand = General.DamiSqlCommand(strSql, null);
                     SqlCommandBuilder cb = new SqlCommandBuilder(da);
                     cb.ConflictOption = ConflictOption.OverwriteChanges;
-                    da.Update(dt);
                     dt.AcceptChanges();
-
+                    da.Update(dt);
+                    
                     da.Dispose();
                     da = null;
                 }
@@ -309,10 +309,9 @@ namespace WizOne.Module
                     da.SelectCommand = General.DamiOleDbCommand(strSql, null);
                     OracleCommandBuilder cb = new OracleCommandBuilder(da);
                     cb.ConflictOption = ConflictOption.OverwriteChanges;
-                    var ert = cb.GetUpdateCommand();
-                    da.Update(dt);
                     dt.AcceptChanges();
-
+                    da.Update(dt);
+                    
                     da.Dispose();
                     da = null;
                 }

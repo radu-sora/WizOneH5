@@ -12788,3 +12788,14 @@ DELETE FROM "tblParametrii" WHERE "Nume" = 'RecalculCuloare'
 GO
 
 
+----  2.2.126  ----
+
+
+alter table F090 add DenumireScurta nvarchar(250)
+GO
+alter table F090 add TransferTranzactii int
+GO
+alter table F090 add TransferPontaj int
+GO
+alter table F090 add CodTranzactie int
+GO

@@ -13667,3 +13667,12 @@ COMMIT;
 --fara tichet
 DELETE FROM "tblParametrii" WHERE "Nume" = 'RecalculCuloare';
 COMMIT;
+
+
+----  2.2.126  ----
+
+
+alter table F090 add "DenumireScurta" varchar2(250);
+alter table F090 add "TransferTranzactii" number(9);
+alter table F090 add "TransferPontaj" number(9);
+alter table F090 add "CodTranzactie" number(9);

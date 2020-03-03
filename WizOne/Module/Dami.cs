@@ -693,6 +693,10 @@ namespace WizOne.Module
                                             {
                                                 column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
                                             }
+                                            if (dr["IdColoana"].ToString().ToLower() == "btnnew")
+                                            {
+                                                column.ShowNewButtonInHeader = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            }
                                         }
 
 

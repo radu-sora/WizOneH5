@@ -764,7 +764,8 @@ namespace WizOne.Module
                     str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
                 }
 
-                if (str.IndexOf("Link1") >= 0)
+                int z = 1;
+                do
                 {
                     int pozFirst = str.Substring(0, str.IndexOf("Link1")).LastIndexOf("#$");
                     string cuv = str.Substring(pozFirst, str.Substring(pozFirst).IndexOf("$#"));
@@ -783,10 +784,13 @@ namespace WizOne.Module
                     }
                     else
                         str = str.Replace("#$Link1 " + cuv + "$#", "").ToString();
-                }
 
+                    z++;
+                    if (z == 10) break;
+                } while (str.IndexOf("Link1") >= 0);
 
-                if (str.IndexOf("Link2") >= 0)
+                z = 1;
+                do
                 {
                     int pozFirst = str.Substring(0, str.IndexOf("Link2")).LastIndexOf("#$");
                     string cuv = str.Substring(pozFirst, str.Substring(pozFirst).IndexOf("$#"));
@@ -805,7 +809,11 @@ namespace WizOne.Module
                     }
                     else
                         str = str.Replace("#$Link2 " + cuv + "$#", "").ToString();
-                }
+
+                    z++;
+                    if (z == 10) break;
+                } while (str.IndexOf("Link2") >= 0);
+
 
                 //cautam daca avem de inserat tabel
                 if (str.ToLower().IndexOf("#$select") >= 0)

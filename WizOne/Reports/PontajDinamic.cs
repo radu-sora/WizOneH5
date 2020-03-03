@@ -96,7 +96,7 @@ namespace WizOne.Reports
                                     TopMargin.Controls.Add(lbl);
 
                                     col = CreazaCamp("[Ziua" + i + "]", pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()), 2);
-                                    col.NullValueText = "0";
+                                    col.NullValueText = "";
                                     //col.XlsxFormatString = "#,##";
                                     DateTime zi = new DateTime(an, luna, i);
                                     bool ziLibera = false;
@@ -198,7 +198,7 @@ namespace WizOne.Reports
                                     //col.DataBindings.Add("Text", this.DataSource, cmp);
                                     col.DataBindings.Add("Text", this.DataSource, cmp + "_Tmp");
                                     col.DataBindings["Text"].FormatString = "{0:######}";
-                                    col.NullValueText = "0";
+                                    col.NullValueText = "";
                                     col.XlsxFormatString = "#,##0";
                                 }
 

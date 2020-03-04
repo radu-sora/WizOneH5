@@ -34,14 +34,7 @@
     }
 
     function OnValueChangedHandler(s) {
-        if (s.name == "cmbAdev")
-        {
-            if (cmbAdev.GetValue() == 2) {
-                //swal({ title: 'Atentie!', text: 'Pentru adeverinta CIC este necesara completarea prealabila a paginii "Date Adeverinta CIC"!', type: 'warning' });
-            }
-        }
-        else
-            pnlCtl.PerformCallback(s.name + ";" + s.GetValue());
+        pnlCtl.PerformCallback(s.name + ";" + s.GetValue());
     }
 
     function OnTextChangedHandler(s) {
@@ -78,7 +71,7 @@
 
     function OnGenerare(s,e)
     {
-        if (cmbAdev.GetValue() == 2) {
+        if (cmbAdev.GetValue() == 3) {
             OnClickCIC();
             e.processOnServer = false;
         }

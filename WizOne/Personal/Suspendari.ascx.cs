@@ -507,6 +507,8 @@ namespace WizOne.Personal
                     //ds.Tables[2].Rows[0]["F1001102"] = Convert.ToDateTime(dtSusp.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
                     Session["InformatiaCurentaPersonal"] = ds;
                     ActualizareSusp(2);
+
+
                 }
                 else
                 {

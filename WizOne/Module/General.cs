@@ -7934,145 +7934,226 @@ namespace WizOne.Module
             DateTime date2 = DamiDataLucru().AddMonths(1).AddDays(-1);
             DateTime szdI1 = DamiDataLucru(), szdI2 = DamiDataLucru(), datasftranz = new DateTime(2100, 1, 1);
 
-            if (dataInceput <= date2 && dataSfarsit >= date1 && dataIncetare >= date1)  // sunt in luna curenta
+            try
             {
-                int datachange = 0;
-                if (dataInceput > date1)
+                if (dataInceput <= date2 && dataSfarsit >= date1 && dataIncetare >= date1)  // sunt in luna curenta
                 {
-                    szdI1 = dataInceput;           
-                    datachange = 1;
-                }
-                if (dataIncetare <= date2)
-                {
-                    dataIncetare = dataIncetare.AddDays(-1);
-                    szdI2 = dataIncetare;      
-                    datachange = 1;
-                }
-                else if (dataSfarsit < date2)
-                {
-                    szdI2 = dataSfarsit;           
-                    datachange = 1;
-                }
-
-                string sql = "SELECT 1, F30038 FROM F300 WHERE F30010 = {0} AND F30037 = {1} AND F30003 = {2}";
-                sql = string.Format(sql, cod, General.ToDataUniv(szdI1), marca);
-                DataTable dtVerif = IncarcaDT(sql, null);
-                int continua = 0;
-                if (dtVerif != null && dtVerif.Rows.Count > 0)
-                {
-                    continua = Convert.ToInt32(dtVerif.Rows[0][0].ToString());
-                    datasftranz = Convert.ToDateTime(dtVerif.Rows[0][1].ToString());            
-                }
-
-                if (continua != 1)      // nu exista tranzactia
-                {
-
-                    //calendarul pt luna curenta
-                    DataTable dtCalendar = IncarcaDT("SELECT * FROM F069 WHERE F06904 = (SELECT F01011 FROM F010) AND F06905 = (SELECT F01012 FROM F010)", null);
-                                   
-                    if (dtCalendar == null || dtCalendar.Rows.Count <= 0) return;
-
-                    int nZileLucratoare = Convert.ToInt32(dtCalendar.Rows[0]["F06907"].ToString());
-
-                    if (datachange == 1)
+                    int datachange = 0;
+                    if (dataInceput > date1)
                     {
-                        // sarbatori legale
-                        List<int> arlHolidays = new List<int>();
-
-                        // incarc sarbatorile legale:
-                        int nI = 0;
-                        sql = "SELECT * FROM HOLIDAYS WHERE MONTH(DAY) = {0} AND YEAR(DAY) = {1}";
-                        if (Constante.tipBD == 2)
-                            sql = "SELECT * FROM HOLIDAYS WHERE EXTRACT(MONTH FROM DAY) = {0} AND EXTRACT(YEAR FROM DAY) = {1}";
-                        sql =string.Format(sql, DamiDataLucru().Month, DamiDataLucru().Year);
-                        DataTable dtHolidays = IncarcaDT(sql, null);
-                        if (dtHolidays != null && dtHolidays.Rows.Count > 0)
-                            for (int i = 0; i < dtHolidays.Rows.Count; i++)
-                                arlHolidays.Add(Convert.ToDateTime(dtHolidays.Rows[i]["DAY"].ToString()).Day);
-             
-
-                        for (nI = 1; nI < szdI1.Day; nI++)
-                        {
-                            DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
-                            if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
-                                nZileLucratoare--;
-                        }
-
-                        for (nI = szdI2.Day + 1; nI <= date2.Day; nI++)
-                        {
-                            DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
-                            if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
-                                nZileLucratoare--;
-                        }
+                        szdI1 = dataInceput;
+                        datachange = 1;
+                    }
+                    if (dataIncetare <= date2)
+                    {
+                        dataIncetare = dataIncetare.AddDays(-1);
+                        szdI2 = dataIncetare;
+                        datachange = 1;
+                    }
+                    else if (dataSfarsit < date2)
+                    {
+                        szdI2 = dataSfarsit;
+                        datachange = 1;
                     }
 
-
-                    sql = "INSERT INTO F300 (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30013, F30035, F30036, F30037, F30038, F30050, F300603, F300611, USER_NO, TIME,"
-                         + " F30012, F30014, F30015, F30021, F30022, F30023, F30039, F30040, F30041, F30044, F30045, F30046, F30051, F30053, F300612, F300613, F300614, F30054)"
-                         + " SELECT 300, F10002, F10003, F10004, F10005, F10006, F10007, {0},  1, {1}, {2}, {2}, "
-                         + " {3}, {4}, CASE WHEN F10053 IS NULL OR F10053=0 THEN F00615 ELSE F10053 END, "
-                         + " {2}, 1, {5}, {6}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
-                         + " FROM F100, F006 WHERE F10003 = {7} AND F10007=F00607";
-                    sql = string.Format(sql, cod, nZileLucratoare, ToDataUniv(date1), ToDataUniv(szdI1), ToDataUniv(szdI2), HttpContext.Current.Session["UserId"].ToString(),
-                                (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), marca);
-                    ExecutaNonQuery(sql, null);
-                }
-                else if (datasftranz != szdI2)
-                {
-                    //calendarul pt luna curenta
-                    DataTable dtCalendar = IncarcaDT("SELECT * FROM F069 WHERE F06904 = (SELECT F01011 FROM F010) AND F06905 = (SELECT F01012 FROM F010)", null);
-
-                    if (dtCalendar == null || dtCalendar.Rows.Count <= 0) return;
-
-                    int nZileLucratoare = Convert.ToInt32(dtCalendar.Rows[0]["F06907"].ToString());
-
-                    if (datachange == 1)
+                    string sql = "SELECT 1, F30038 FROM F300 WHERE F30010 = {0} AND F30037 = {1} AND F30003 = {2}";
+                    sql = string.Format(sql, cod, General.ToDataUniv(szdI1), marca);
+                    DataTable dtVerif = IncarcaDT(sql, null);
+                    int continua = 0;
+                    if (dtVerif != null && dtVerif.Rows.Count > 0)
                     {
-                        // sarbatori legale
-                        List<int> arlHolidays = new List<int>();
-
-                        // incarc sarbatorile legale:
-                        int nI = 0;
-                        sql = "SELECT * FROM HOLIDAYS WHERE MONTH(DAY) = {0} AND YEAR(DAY) = {1}";
-                        if (Constante.tipBD == 2)
-                            sql = "SELECT * FROM HOLIDAYS WHERE EXTRACT(MONTH FROM DAY) = {0} AND EXTRACT(YEAR FROM DAY) = {1}";
-                        sql = string.Format(sql, DamiDataLucru().Month, DamiDataLucru().Year);
-                        DataTable dtHolidays = IncarcaDT(sql, null);
-                        if (dtHolidays != null && dtHolidays.Rows.Count > 0)
-                            for (int i = 0; i < dtHolidays.Rows.Count; i++)
-                                arlHolidays.Add(Convert.ToDateTime(dtHolidays.Rows[i]["DAY"].ToString()).Day);
-
-                        for (nI = 1; nI < szdI1.Day; nI++)
-                        {
-                            DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
-                            if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
-                                nZileLucratoare--;
-                        }
-
-                        for (nI = szdI2.Day + 1; nI <= date2.Day; nI++)
-                        {
-                            DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
-                            if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
-                                nZileLucratoare--;
-                        }
-             
+                        continua = Convert.ToInt32(dtVerif.Rows[0][0].ToString());
+                        datasftranz = Convert.ToDateTime(dtVerif.Rows[0][1].ToString());
                     }
 
-                    sql = "UPDATE F300 SET F30013 = {0}, F30038 = {1}, USER_NO = {2}, TIME = {3}"
-                        + " WHERE F30010 = {4} AND F30037 = {5} AND F30003 = {6}";
-                    sql = string.Format(sql, nZileLucratoare, ToDataUniv(szdI2), HttpContext.Current.Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), cod, ToDataUniv(szdI1), marca);
-                    ExecutaNonQuery(sql, null);
+                    if (continua != 1)      // nu exista tranzactia
+                    {
 
-                    sql = "UPDATE F111 SET F11112 = 2 WHERE F11105 = {0} AND F11106 = {1} AND F11103 = {2} AND F11112 = 1";
-                    sql = string.Format(sql, ToDataUniv(dataInceput), ToDataUniv(dataSfarsit), marca);
-                    ExecutaNonQuery(sql, null);
+                        //calendarul pt luna curenta
+                        DataTable dtCalendar = IncarcaDT("SELECT * FROM F069 WHERE F06904 = (SELECT F01011 FROM F010) AND F06905 = (SELECT F01012 FROM F010)", null);
+
+                        if (dtCalendar == null || dtCalendar.Rows.Count <= 0) return;
+
+                        int nZileLucratoare = Convert.ToInt32(dtCalendar.Rows[0]["F06907"].ToString());
+
+                        if (datachange == 1)
+                        {
+                            // sarbatori legale
+                            List<int> arlHolidays = new List<int>();
+
+                            // incarc sarbatorile legale:
+                            int nI = 0;
+                            sql = "SELECT * FROM HOLIDAYS WHERE MONTH(DAY) = {0} AND YEAR(DAY) = {1}";
+                            if (Constante.tipBD == 2)
+                                sql = "SELECT * FROM HOLIDAYS WHERE EXTRACT(MONTH FROM DAY) = {0} AND EXTRACT(YEAR FROM DAY) = {1}";
+                            sql = string.Format(sql, DamiDataLucru().Month, DamiDataLucru().Year);
+                            DataTable dtHolidays = IncarcaDT(sql, null);
+                            if (dtHolidays != null && dtHolidays.Rows.Count > 0)
+                                for (int i = 0; i < dtHolidays.Rows.Count; i++)
+                                    arlHolidays.Add(Convert.ToDateTime(dtHolidays.Rows[i]["DAY"].ToString()).Day);
+
+
+                            for (nI = 1; nI < szdI1.Day; nI++)
+                            {
+                                DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
+                                if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
+                                    nZileLucratoare--;
+                            }
+
+                            for (nI = szdI2.Day + 1; nI <= date2.Day; nI++)
+                            {
+                                DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
+                                if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
+                                    nZileLucratoare--;
+                            }
+                        }
+
+
+                        sql = "INSERT INTO F300 (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30013, F30035, F30036, F30037, F30038, F30050, F300603, F300611, USER_NO, TIME,"
+                             + " F30012, F30014, F30015, F30021, F30022, F30023, F30039, F30040, F30041, F30044, F30045, F30046, F30051, F30053, F300612, F300613, F300614, F30054)"
+                             + " SELECT 300, F10002, F10003, F10004, F10005, F10006, F10007, {0},  1, {1}, {2}, {2}, "
+                             + " {3}, {4}, CASE WHEN F10053 IS NULL OR F10053=0 THEN F00615 ELSE F10053 END, "
+                             + " {2}, 1, {5}, {6}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+                             + " FROM F100, F006 WHERE F10003 = {7} AND F10007=F00607";
+                        sql = string.Format(sql, cod, nZileLucratoare, ToDataUniv(date1), ToDataUniv(szdI1), ToDataUniv(szdI2), HttpContext.Current.Session["UserId"].ToString(),
+                                    (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), marca);
+                        ExecutaNonQuery(sql, null);
+                    }
+                    else if (datasftranz != szdI2)
+                    {
+                        //calendarul pt luna curenta
+                        DataTable dtCalendar = IncarcaDT("SELECT * FROM F069 WHERE F06904 = (SELECT F01011 FROM F010) AND F06905 = (SELECT F01012 FROM F010)", null);
+
+                        if (dtCalendar == null || dtCalendar.Rows.Count <= 0) return;
+
+                        int nZileLucratoare = Convert.ToInt32(dtCalendar.Rows[0]["F06907"].ToString());
+
+                        if (datachange == 1)
+                        {
+                            // sarbatori legale
+                            List<int> arlHolidays = new List<int>();
+
+                            // incarc sarbatorile legale:
+                            int nI = 0;
+                            sql = "SELECT * FROM HOLIDAYS WHERE MONTH(DAY) = {0} AND YEAR(DAY) = {1}";
+                            if (Constante.tipBD == 2)
+                                sql = "SELECT * FROM HOLIDAYS WHERE EXTRACT(MONTH FROM DAY) = {0} AND EXTRACT(YEAR FROM DAY) = {1}";
+                            sql = string.Format(sql, DamiDataLucru().Month, DamiDataLucru().Year);
+                            DataTable dtHolidays = IncarcaDT(sql, null);
+                            if (dtHolidays != null && dtHolidays.Rows.Count > 0)
+                                for (int i = 0; i < dtHolidays.Rows.Count; i++)
+                                    arlHolidays.Add(Convert.ToDateTime(dtHolidays.Rows[i]["DAY"].ToString()).Day);
+
+                            for (nI = 1; nI < szdI1.Day; nI++)
+                            {
+                                DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
+                                if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
+                                    nZileLucratoare--;
+                            }
+
+                            for (nI = szdI2.Day + 1; nI <= date2.Day; nI++)
+                            {
+                                DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
+                                if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
+                                    nZileLucratoare--;
+                            }
+
+                        }
+
+                        sql = "UPDATE F300 SET F30013 = {0}, F30038 = {1}, USER_NO = {2}, TIME = {3}"
+                            + " WHERE F30010 = {4} AND F30037 = {5} AND F30003 = {6}";
+                        sql = string.Format(sql, nZileLucratoare, ToDataUniv(szdI2), HttpContext.Current.Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), cod, ToDataUniv(szdI1), marca);
+                        ExecutaNonQuery(sql, null);
+
+                        sql = "UPDATE F111 SET F11112 = 2 WHERE F11105 = {0} AND F11106 = {1} AND F11103 = {2} AND F11112 = 1";
+                        sql = string.Format(sql, ToDataUniv(dataInceput), ToDataUniv(dataSfarsit), marca);
+                        ExecutaNonQuery(sql, null);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "General", "TransferTranzactii");
             }
         }
 
-        public static void TransferPontaj()
+        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, int idAbs, string denScurta)
         {
+            try
+            {  
+                string strSql = "";
+                DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dataSfarsit.Date, 3, idAbs), null);
 
+                //construim sql-ul prin care adaugam cererea in pontaj
+                for (int i = 0; i < dtAbs.Rows.Count; i++)
+                {
+                    DateTime zi = Convert.ToDateTime(dtAbs.Rows[i]["Zi"]);
+                    int ziLib = Convert.ToInt32(dtAbs.Rows[i]["ZiLibera"]);
+                    int ziLibLeg = Convert.ToInt32(dtAbs.Rows[i]["ZiLiberaLegala"]);
+                    string valStr = denScurta;
+
+                    if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)
+                    {
+                        string sqlIns = "INSERT INTO \"Ptj_Intrari\"(F10003, \"Ziua\", \"ZiSapt\", \"ZiLibera\", \"ZiLiberaLegala\", \"IdContract\", \"Norma\", F10002, F10004, F10005, F10006, F10007, F06204, \"ValStr\", USER_NO, TIME) \n" +
+                            "SELECT " +
+                            marca + ", " +
+                            General.ToDataUniv(zi.Date) + ", " +
+                            Dami.ZiSapt(zi.DayOfWeek.ToString()) + ", " +
+                            ziLib + ", " +
+                            ziLibLeg + ", " +
+                            "(SELECT X.\"IdContract\" FROM \"F100Contracte\" X WHERE X.F10003 = " + marca + " AND X.\"DataInceput\" <= " + General.ToDataUniv(zi.Date) + " AND " + General.ToDataUniv(zi.Date) + " <= X.\"DataSfarsit\"), " +
+                            " (SELECT F10043 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10002 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10004 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10005 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10006 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10007 WHERE F10003 = " + marca + "), " +
+                            "-1, " +
+                            "'" + valStr + "', " +
+                            HttpContext.Current.Session["UserId"].ToString() + ", " +
+                            General.CurrentDate() +
+                            ""
+                            + (Constante.tipBD == 1 ? "" : " FROM DUAL");
+
+                        string sqlUp = "";
+                        string sqlIst = "";
+                        string sqlValStr = "";
+                      
+                        sqlUp = "UPDATE \"Ptj_Intrari\" SET \"ValStr\"='" + valStr + "', \"Val0\"=null, \"Val1\"=null, \"Val2\"=null, \"Val3\"=null, \"Val4\"=null, \"Val5\"=null, \"Val6\"=null, \"Val7\"=null, \"Val8\"=null, \"Val9\"=null, \"Val10\"=null, \"Val11\"=null, \"Val12\"=null, \"Val13\"=null, \"Val14\"=null, \"Val15\"=null, \"Val16\"=null, \"Val17\"=null, \"Val18\"=null, \"Val19\"=null, \"Val20\"=null" +
+                                " WHERE F10003 = " + marca + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date);
+
+                        sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
+                                        VALUES({marca}, {ToDataUniv(zi.Date)}, '{valStr}', '{General.Nz(dtAbs.Rows[i]["ValStr"], "")}', {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, 'Din Cereri')";
+                        
+      
+
+                        strSql += "IF((SELECT COUNT(*) FROM \"Ptj_Intrari\" WHERE F10003 = " + marca + " AND \"Ziua\" = " + General.ToDataUniv(zi.Date) + ") = 0) \n"
+                                    + sqlIns + "\n" +
+                                    "ELSE \n" +
+                                    sqlUp + "; \n" +
+                                    sqlValStr + "; \n" +
+                                    sqlIst + "; \n";
+
+                        if (Constante.tipBD == 2)
+                            strSql = $@"
+                                BEGIN
+                                    {sqlIst};
+                                    BEGIN
+                                        {sqlUp};
+
+                                        IF (SQL%ROWCOUNT = 0) THEN 
+                                            {sqlIns};
+                                        END IF;
+                                    END;
+                                END;";
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "General", "TransferPontaj");
+            }
         }
         //end Radu
 

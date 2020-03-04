@@ -1940,13 +1940,77 @@
 			</w:ftr>
 		</pkg:xmlData>
 	</pkg:part>
+	<pkg:part pkg:name="/word/_rels/header2.xml.rels" pkg:contentType="application/vnd.openxmlformats-package.relationships+xml">
+		<pkg:xmlData>
+			<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+				<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image3.png"/>
+				<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image4.png"/>
+			</Relationships>
+		</pkg:xmlData>
+	</pkg:part>
 	<pkg:part pkg:name="/word/header2.xml" pkg:contentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml">
 		<pkg:xmlData>
 			<w:hdr xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 w15 w16se wp14">
-				<w:p w:rsidR="00CE091E" w:rsidRDefault="00CE091E">
+				<w:p w:rsidR="00CE091E" w:rsidRDefault="00C56D11">
 					<w:pPr>
 						<w:pStyle w:val="Header"/>
 					</w:pPr>
+					<w:r>
+						<w:rPr>
+							<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
+							<w:noProof/>
+							<w:sz w:val="24"/>
+							<w:lang w:val="en-GB" w:eastAsia="en-GB"/>
+						</w:rPr>
+						<w:drawing>
+							<wp:inline distT="0" distB="0" distL="0" distR="0" wp14:anchorId="5CA0540C" wp14:editId="0DC54686">
+								<wp:extent cx="[DIMXH]" cy="[DIMYH]"/>
+								<wp:effectExtent l="0" t="0" r="0" b="0"/>
+								<wp:docPr id="3" name="Picture 3"/>
+								<wp:cNvGraphicFramePr/>
+								<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+									<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+										<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+											<pic:nvPicPr>
+												<pic:cNvPr id="1" name=""/>
+												<pic:cNvPicPr/>
+											</pic:nvPicPr>
+											<pic:blipFill>
+												<a:blip r:embed="rId2">
+													<a:extLst>
+														<a:ext uri="{28A0092B-C50C-407E-A947-70E740481C1C}">
+															<a14:useLocalDpi xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" val="0"/>
+														</a:ext>
+													</a:extLst>
+												</a:blip>
+												<a:stretch>
+													<a:fillRect/>
+												</a:stretch>
+											</pic:blipFill>
+											<pic:spPr>
+												<a:xfrm>
+													<a:off x="0" y="0"/>
+													<a:ext cx="[DIMXH]" cy="[DIMYH]"/>
+												</a:xfrm>
+												<a:prstGeom prst="rect">
+													<a:avLst/>
+												</a:prstGeom>
+											</pic:spPr>
+										</pic:pic>
+									</a:graphicData>
+								</a:graphic>
+							</wp:inline>
+						</w:drawing>
+					</w:r>
+					<w:r>
+						<w:rPr>
+							<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
+							<w:noProof/>
+							<w:sz w:val="24"/>
+							<w:lang w:val="en-GB" w:eastAsia="en-GB"/>
+						</w:rPr>
+						<w:pict>[WATERMARK_VIZIBIL]</w:pict>
+					</w:r>
 				</w:p>
 			</w:hdr>
 		</pkg:xmlData>
@@ -1993,6 +2057,12 @@
 	</pkg:part>
 	<pkg:part pkg:name="/word/media/image2.png" pkg:contentType="image/png" pkg:compression="store">
 		<pkg:binaryData>[SUBSOL]</pkg:binaryData>
+	</pkg:part>
+		<pkg:part pkg:name="/word/media/image3.png" pkg:contentType="image/png" pkg:compression="store">
+		<pkg:binaryData>[HEADER]</pkg:binaryData>
+	</pkg:part>
+	<pkg:part pkg:name="/word/media/image4.png" pkg:contentType="image/png" pkg:compression="store">
+		<pkg:binaryData>[WATERMARK]</pkg:binaryData>
 	</pkg:part>
 	<pkg:part pkg:name="/word/theme/theme1.xml" pkg:contentType="application/vnd.openxmlformats-officedocument.theme+xml">
 		<pkg:xmlData>

@@ -1582,7 +1582,7 @@ namespace WizOne.Pontaj
 
 
                         //daca sunt F-urile temporare FTmp
-                        if (numeCol.Length >= 4 && numeCol.Substring(0, 6).ToLower() == "ftmp" && General.IsNumeric(numeCol.Replace("ftmp", "")))
+                        if (numeCol.IndexOf("FTmp") >= 0)
                         {
                             string i = numeCol.Replace("FTmp", "");
                             cmp += $@", ""F{i}""=" + (Convert.ToInt32(Convert.ToDateTime(newValue).Minute) + Convert.ToInt32((Convert.ToDateTime(newValue).Hour * 60))).ToString();
@@ -1771,7 +1771,9 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (e.Column.FieldName.Length >= 6 && e.Column.FieldName.Substring(0, 6) == "ValTmp")
+                //if (e.Column.FieldName.Length >= 6 && e.Column.FieldName.Substring(0, 6) == "ValTmp")
+
+                if (e.Column.FieldName.IndexOf("ValTmp") >= 0 || e.Column.FieldName.IndexOf("FTmp") >= 0)
                     e.Editor.ReadOnly = false;
             }
             catch (Exception ex)

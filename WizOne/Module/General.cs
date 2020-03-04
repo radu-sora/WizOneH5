@@ -309,9 +309,9 @@ namespace WizOne.Module
                     da.SelectCommand = General.DamiOleDbCommand(strSql, null);
                     OracleCommandBuilder cb = new OracleCommandBuilder(da);
                     cb.ConflictOption = ConflictOption.OverwriteChanges;
-                    dt.AcceptChanges();
                     da.Update(dt);
-                    
+                    dt.AcceptChanges();
+
                     da.Dispose();
                     da = null;
                 }

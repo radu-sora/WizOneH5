@@ -13676,3 +13676,12 @@ COMMIT;
 INSERT INTO "Ptj_tblAdmin" ("Coloana", "Alias", "Latime", "Vizibil", "Blocat", "TipColoana", "Ordine", "USER_NO", "TIME") 
 SELECT 'Stare', 'Stare', 0, 1, 0, 0, 1, -95, SYSDATE FROM DUAL WHERE ((SELECT COUNT(*) FROM "Ptj_tblAdmin" WHERE "Coloana"='Stare') = 0);
 COMMIT;
+
+
+----  2.2.126  ----
+
+
+alter table F090 add "DenumireScurta" varchar2(250);
+alter table F090 add "TransferTranzactii" number(9);
+alter table F090 add "TransferPontaj" number(9);
+alter table F090 add "CodTranzactie" number(9);

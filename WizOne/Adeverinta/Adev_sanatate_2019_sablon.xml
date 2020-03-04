@@ -3008,7 +3008,8 @@
 	<pkg:part pkg:name="/word/_rels/header2.xml.rels" pkg:contentType="application/vnd.openxmlformats-package.relationships+xml">
 		<pkg:xmlData>
 			<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-				<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image3.png"/>
+				<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image3.png"/>
+				<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image4.png"/>
 			</Relationships>
 		</pkg:xmlData>
 	</pkg:part>
@@ -3040,7 +3041,7 @@
 												<pic:cNvPicPr/>
 											</pic:nvPicPr>
 											<pic:blipFill>
-												<a:blip r:embed="rId1">
+												<a:blip r:embed="rId2">
 													<a:extLst>
 														<a:ext uri="{28A0092B-C50C-407E-A947-70E740481C1C}">
 															<a14:useLocalDpi xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" val="0"/>
@@ -3066,6 +3067,15 @@
 							</wp:inline>
 						</w:drawing>
 					</w:r>
+					<w:r>
+						<w:rPr>
+							<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
+							<w:noProof/>
+							<w:sz w:val="24"/>
+							<w:lang w:val="en-GB" w:eastAsia="en-GB"/>
+						</w:rPr>
+						<w:pict>[WATERMARK_VIZIBIL]</w:pict>
+					</w:r>
 				</w:p>
 			</w:hdr>
 		</pkg:xmlData>
@@ -3075,6 +3085,9 @@
 	</pkg:part>
 	<pkg:part pkg:name="/word/media/image2.png" pkg:contentType="image/png" pkg:compression="store">
 		<pkg:binaryData>[SUBSOL]</pkg:binaryData>
+	</pkg:part>
+	<pkg:part pkg:name="/word/media/image4.png" pkg:contentType="image/png" pkg:compression="store">
+		<pkg:binaryData>[WATERMARK]</pkg:binaryData>
 	</pkg:part>
 	<pkg:part pkg:name="/word/endnotes.xml" pkg:contentType="application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml">
 		<pkg:xmlData>

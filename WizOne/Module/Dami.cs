@@ -1962,8 +1962,15 @@ namespace WizOne.Module
                             DataRow drCum = General.IncarcaDR(@"SELECT * FROM ""Ptj_Cumulat"" WHERE F10003=@1 AND ""An""=@2 AND ""Luna""=@3", new object[] { f10003, dtInc.Year, dtInc.Month });
                             if (drCum != null && drCum["IdStare"] != null) idStare = Convert.ToInt32(General.Nz(drCum["IdStare"], 1));
 
-                            DataTable dt = General.IncarcaDT(
-                                $@"SELECT COALESCE(C.""IdRol"",0) AS ""IdRol""
+                            //Florin 2020.03.04 - daca starea pontajului este initiat sau respins manager permite accesul tuturor 
+                            if (idStare == 1 || idStare == 4)
+                            {
+                                zi = new DateTime(1900, 1, 1);
+                            }
+                            else
+                            {
+                                DataTable dt = General.IncarcaDT(
+                                    $@"SELECT COALESCE(C.""IdRol"",0) AS ""IdRol""
                                 FROM ""relGrupAngajat"" B
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                 WHERE C.""IdSuper""={HttpContext.Current.Session["UserId"]} AND COALESCE(C.""IdRol"",0) <= 3 AND B.F10003={f10003}
@@ -1975,21 +1982,21 @@ namespace WizOne.Module
                                 WHERE J.""IdUser""={HttpContext.Current.Session["UserId"]} AND COALESCE(C.""IdRol"",0) <= 3 AND B.F10003={f10003}
                                 ORDER BY ""IdRol"" DESC", null);
 
-                            if (dt != null && dt.Rows.Count > 0) idRol = Convert.ToInt32(General.Nz(dt.Rows[0]["IdRol"],0));
+                                if (dt != null && dt.Rows.Count > 0) idRol = Convert.ToInt32(General.Nz(dt.Rows[0]["IdRol"], 0));
 
-                            if ((idRol == 0 && (idStare == 1 || idStare == 4)) ||
-                                (idRol == 1 && (idStare == 1 || idStare == 4)) ||
-                                (idRol == 2 && (idStare == 1 || idStare == 2 || idStare == 4 || idStare == 6)) ||
-                                (idRol == 3)
-                                )
-                            {
-                                zi = new DateTime(1900, 1, 1);
+                                if ((idRol == 0 && (idStare == 1 || idStare == 4)) ||
+                                    (idRol == 1 && (idStare == 1 || idStare == 4)) ||
+                                    (idRol == 2 && (idStare == 1 || idStare == 2 || idStare == 4 || idStare == 6)) ||
+                                    (idRol == 3)
+                                    )
+                                {
+                                    zi = new DateTime(1900, 1, 1);
+                                }
+                                else
+                                {
+                                    zi = new DateTime(2222, 12, 13);
+                                }
                             }
-                            else
-                            {
-                                zi = new DateTime(2222, 12, 13);
-                            }
-
 
                             //if (drCum != null && (Convert.ToInt32(General.Nz(drCum["IdStare"], 1)) == 2 || Convert.ToInt32(General.Nz(drCum["IdStare"], 1)) == 3 || Convert.ToInt32(General.Nz(drCum["IdStare"], 1)) == 5 || Convert.ToInt32(General.Nz(drCum["IdStare"], 1)) == 7))
                             //    zi = new DateTime(2222, 12, 13);

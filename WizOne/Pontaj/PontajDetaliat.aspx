@@ -156,7 +156,7 @@
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblStare" runat="server" class="lw">Stare</label>
-                                                <dx:ASPxComboBox ID="cmbStare" ClientInstanceName="cmbStare" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"  />
+                                                <dx:ASPxComboBox ID="cmbStare" ClientInstanceName="cmbStare" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"  />
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)" class="lw">Contract</label>

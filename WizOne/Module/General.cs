@@ -294,9 +294,9 @@ namespace WizOne.Module
                     da.SelectCommand = General.DamiSqlCommand(strSql, null);
                     SqlCommandBuilder cb = new SqlCommandBuilder(da);
                     cb.ConflictOption = ConflictOption.OverwriteChanges;
-                    dt.AcceptChanges();
                     da.Update(dt);
-                    
+                    dt.AcceptChanges();
+
                     da.Dispose();
                     da = null;
                 }

@@ -2106,6 +2106,12 @@ namespace WizOne.Pontaj
                             case 7:                             //Numeric
                                 {
                                     c = new GridViewDataSpinEditColumn();
+                                    c.PropertiesSpinEdit.DecimalPlaces = 0;
+                                    c.PropertiesSpinEdit.NumberType = SpinEditNumberType.Integer;
+                                    c.PropertiesSpinEdit.MinValue = 0;
+                                    c.PropertiesSpinEdit.MaxValue = 2000;
+                                    c.PropertiesSpinEdit.DisplayFormatString = "N0";
+                                    c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
                                     if (unb) c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
                                 }
                                 break;

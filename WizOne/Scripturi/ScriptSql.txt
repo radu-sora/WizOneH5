@@ -12791,10 +12791,6 @@ UPDATE Ntf_Setari SET ContinutMail=REPLACE(ContinutMail,'#$Link Aproba$#','#$Lin
 UPDATE Ntf_Setari SET ContinutMail=REPLACE(ContinutMail,'#$Link Respinge$#','#$Link2 Respinge$#') WHERE ContinutMail LIKE '%#$Link Respinge$#%'
 GO
 
-INSERT INTO "Ptj_tblAdmin" ("Coloana", "Alias", "Latime", "Vizibil", "Blocat", "TipColoana", "Ordine", "USER_NO", "TIME") 
-SELECT 'Stare', 'Stare', 0, 1, 0, 0, 1, -95, GetDate() WHERE ((SELECT COUNT(*) FROM "Ptj_tblAdmin" WHERE "Coloana"='Stare') = 0)
-GO
-
 
 ----  2.2.126  ----
 
@@ -12806,4 +12802,8 @@ GO
 alter table F090 add TransferPontaj int
 GO
 alter table F090 add CodTranzactie int
+GO
+
+INSERT INTO "Ptj_tblAdmin" ("Coloana", "Alias", "Latime", "Vizibil", "Blocat", "TipColoana", "Ordine", "USER_NO", "TIME") 
+SELECT 'Stare', 'Stare', 0, 1, 0, 0, 1, -95, GetDate() WHERE ((SELECT COUNT(*) FROM "Ptj_tblAdmin" WHERE "Coloana"='Stare') = 0)
 GO

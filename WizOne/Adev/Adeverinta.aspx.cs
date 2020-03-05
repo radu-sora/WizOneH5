@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
 using System.Xml;
@@ -30,6 +31,7 @@ namespace WizOne.Adev
                     Session["MarcaConfigCIC"] = null;
                     config.Visible = false;
                     Session["AdevConfig"] = "false";
+                    rbTipGen1.Checked = true;
                 }
 
                 if (Session["AdevConfig"] != null)
@@ -1132,31 +1134,32 @@ namespace WizOne.Adev
 
         private void GenerareFisier(List<int> lstMarci, int adev, int anul)
         {
-           
-       
-            byte[] fisierGen = GenerareAdeverinta(lstMarci, adev, anul);
-            
-            if (fisierGen != null)
-            {
-                //ArataMesaj(Dami.TraduCuvant("Fisierul a fost generat cu success!"));
-
-                MemoryStream stream = new MemoryStream(fisierGen);
-                Response.Clear();
-                MemoryStream ms = stream;
-                //Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-                Response.AddHeader("Content-Disposition", "attachment;filename=" + fisier.Split('.')[0] + ".docx");
-                Response.Buffer = true;
-                ms.WriteTo(Response.OutputStream);
-                Response.End();
 
 
-            }
-            else
-            {
-                //ArataMesaj(Dami.TraduCuvant("Fisierul nu a fost generat!"));
-                MessageBox.Show(Dami.TraduCuvant("Fisierul nu a fost generat!"));
-            }
+            //byte[] fisierGen = GenerareAdeverinta(lstMarci, adev, anul);
+            GenerareAdeverinta(lstMarci, adev, anul);
+
+            //if (fisierGen != null)
+            //{
+            //    //ArataMesaj(Dami.TraduCuvant("Fisierul a fost generat cu success!"));
+
+            //    MemoryStream stream = new MemoryStream(fisierGen);
+            //    Response.Clear();
+            //    MemoryStream ms = stream;
+            //    //Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            //    Response.AddHeader("Content-Disposition", "attachment;filename=" + fisier.Split('.')[0] + ".docx");
+            //    Response.Buffer = true;
+            //    ms.WriteTo(Response.OutputStream);
+            //    Response.End();
+
+
+            //}
+            //else
+            //{
+            //    //ArataMesaj(Dami.TraduCuvant("Fisierul nu a fost generat!"));
+            //    MessageBox.Show(Dami.TraduCuvant("Fisierul nu a fost generat!"));
+            //}
 
         
             
@@ -1210,10 +1213,6 @@ namespace WizOne.Adev
                 Config.Add("ORAPWD", pwd);
                 Config.Add("ORALOGIN", user);
 
-                int marca = lstMarci[0];
-                string sql = "SELECT * FROM F100 WHERE F10003 = " + marca;
-                DataTable dtAng = General.IncarcaDT(sql, null);
-
                 //var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/"));
                 var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE"));
                 if (!folder.Exists)
@@ -1229,63 +1228,186 @@ namespace WizOne.Adev
 
                 //string lstMarci = marca.ToString();          
 
+                int tipGen = 0;
+                if (rbTipGen1.Checked)
+                    tipGen = 1;
+                if (rbTipGen2.Checked)
+                    tipGen = 2;
+                string data = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0');
+
                 String FileName = "";
                 switch (adev)
                 {
                     case 0:
-                        fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        //fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        fisier = "Adev_sanatate_2019_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        string msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 0, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'));
+                        string msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 0, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 1:
-                        fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        //fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        fisier = "Adev_sanatate_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaSanatate(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 1, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'));
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 1, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;                        
                     case 2:
-                        fisier = dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + (lista["MAR"] == "1" ? marca.ToString() : dtAng.Rows[0]["F10017"].ToString()) + ".xml";
+                        //fisier = dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + (lista["MAR"] == "1" ? marca.ToString() : dtAng.Rows[0]["F10017"].ToString()) + ".xml";
+                        fisier = "Adev_venituri_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/") + fisier;
                         //AdeverintaVenituriAnuale(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 2, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'));
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 2, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 3:
-                        fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        //fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        fisier = "Adev_CIC_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaCIC(marca, FileName);
-                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 3, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'));
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 3, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 4:
-                        fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        //fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        fisier = "Adev_SOMAJ_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaSomaj(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 4, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'));
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 4, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 6:
-                        fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        //fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        fisier = "Adev_Stagiu_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaStagiu(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 6, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'));
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 6, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 7:
-                        fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        //fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                        fisier = "Adev_Vechime_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaVechime(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 7, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'));
+                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 7, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                 }
 
                 //if (msg.Length > 0)
                 //    MessageBox.Show(msg, MessageBox.icoError);
 
-                XDocument doc;
-                doc = XDocument.Load(FileName);
-                FlatToOpc(doc, FileName.Split('.')[0] + ".docx");
+                if (rbTipGen1.Checked)
+                {
+                    XDocument doc;
+                    doc = XDocument.Load(FileName);
+                    FlatToOpc(doc, FileName.Split('.')[0] + ".docx");
 
-                File.Delete(FileName);
+                    File.Delete(FileName);
+
+                    byte[] fisierGen = File.ReadAllBytes(FileName.Split('.')[0] + ".docx");
+
+                    if (fisierGen != null)
+                    {
+                        //ArataMesaj(Dami.TraduCuvant("Fisierul a fost generat cu success!"));
+
+                        MemoryStream stream = new MemoryStream(fisierGen);
+                        Response.Clear();
+                        MemoryStream ms = stream;
+                        //Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                        Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                        Response.AddHeader("Content-Disposition", "attachment;filename=" + fisier.Split('.')[0] + ".docx");
+                        Response.Buffer = true;
+                        ms.WriteTo(Response.OutputStream);
+                        //try
+                        //{
+                        //    Response.End();
+                        //}
+                        //catch (Exception ex)
+                        //{ }
+
+                        HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
+                        HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+                        HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event
+
+                        File.Delete(FileName.Split('.')[0] + ".docx");
+                    }
+                    else
+                    {
+                        //ArataMesaj(Dami.TraduCuvant("Fisierul nu a fost generat!"));
+                        MessageBox.Show(Dami.TraduCuvant("Fisierul nu a fost generat!"));
+                    }
+                }
+
+                //if (rbTipGen2.Checked)
+                //{ 
+                //    foreach (int marca in lstMarci)
+                //    {
+                //        string sql = "SELECT * FROM F100 WHERE F10003 = " + marca;
+                //        DataTable dtAng = General.IncarcaDT(sql, null);
+                //        switch (adev)
+                //        {
+                //            case 0:
+                //                fisier = "Adev_sanatate_2019_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                //                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                //                break;
+                //            case 1:
+                //                fisier = "Adev_sanatate_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                //                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                //                break;
+                //            case 2:
+                //                fisier = dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + (lista["MAR"] == "1" ? marca.ToString() : dtAng.Rows[0]["F10017"].ToString()) + ".xml";
+                //                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/") + fisier;
+                //                break;
+                //            case 3:
+                //                fisier = "Adev_CIC_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                //                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                //                break;
+                //            case 4:
+                //                fisier = "Adev_SOMAJ_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                //                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                //                break;
+                //            case 6:
+                //                fisier = "Adev_Stagiu_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                //                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                //                break;
+                //            case 7:
+                //                fisier = "Adev_Vechime_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                //                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                //                break;
+                //        }
+                //        XDocument doc;
+                //        doc = XDocument.Load(FileName);
+                //        FlatToOpc(doc, FileName.Split('.')[0] + ".docx");
+
+                //        File.Delete(FileName);
+
+                //        byte[] fisierGen = File.ReadAllBytes(FileName.Split('.')[0] + ".docx");
+
+                //        if (fisierGen != null)
+                //        {
+                //            //ArataMesaj(Dami.TraduCuvant("Fisierul a fost generat cu success!"));
+
+                //            MemoryStream stream = new MemoryStream(fisierGen);
+                //            Response.Clear();
+                //            Response.ClearHeaders();
+                //            MemoryStream ms = stream;
+                //            //Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                //            Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                //            Response.AddHeader("Content-Disposition", "attachment;filename=" + fisier.Split('.')[0] + ".docx");
+                //            Response.Buffer = true;
+                //            ms.WriteTo(Response.OutputStream);
+                //            //try
+                //            //{
+                //            //    //Response.End();
+                //            //}
+                //            //catch (Exception ex)
+                //            //{ }
+                //            HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
+                //            HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+                //            HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event
 
 
-                return File.ReadAllBytes(FileName.Split('.')[0] + ".docx");
+                //            File.Delete(FileName.Split('.')[0] + ".docx");
+                //        }
+                //    }             
+                //}
+
+                return null;
             }
             catch (Exception ex)
             {

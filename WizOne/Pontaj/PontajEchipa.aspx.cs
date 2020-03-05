@@ -3047,14 +3047,14 @@ namespace WizOne.Pontaj
                         if (Constante.tipBD == 1)
                             zileVal += $@",COALESCE(CONVERT(VARCHAR(5), pvtIn.""Ziua{i}I"", 108),'') AS ""Ziua{i}I""" + $@",COALESCE(CONVERT(VARCHAR(5), pvtOut.""Ziua{i}O"", 108),'') AS ""Ziua{i}O""";
                         else
-                            zileVal += $@",TO_CHAR(pvtIn.""Ziua{i}"", 'HH24:MM') AS ""Ziua{i}I""" + $@",TO_CHAR(pvtOut.""Ziua{i}"", 'HH24:MM') AS ""Ziua{i}O""";
+                            zileVal += $@",TO_CHAR(pvtIn.""Ziua{i}I"", 'HH24:MM') AS ""Ziua{i}I""" + $@",TO_CHAR(pvtOut.""Ziua{i}O"", 'HH24:MM') AS ""Ziua{i}O""";
                     }
                     if (chkPauza.Checked)
                     {
                         if (Constante.tipBD == 1)
                             zileVal += $@",COALESCE(pvtPauza.""Ziua{i}P"",'') AS ""Ziua{i}P""";
                         else
-                            zileVal += $@",COALESCE(pvtPauza.""Ziua{i}"",0) AS ""Ziua{i}P""";
+                            zileVal += $@",COALESCE(pvtPauza.""Ziua{i}P"",'') AS ""Ziua{i}P""";
                     }
 
 

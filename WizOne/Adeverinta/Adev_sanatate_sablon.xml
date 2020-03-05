@@ -546,7 +546,7 @@
 						</w:tblPr>
 						<w:tblGrid>
 							<w:gridCol w:w="2400"/>
-							<w:gridCol w:w="5000"/>
+							<w:gridCol w:w="6000"/>
 						</w:tblGrid>
 						<w:tr w:rsidR="00CE091E" w:rsidTr="00CE091E">
 							<w:tc>
@@ -574,7 +574,7 @@
 							</w:tc>
 							<w:tc>
 								<w:tcPr>
-									<w:tcW w:w="5000" w:type="dxa"/>
+									<w:tcW w:w="6000" w:type="dxa"/>
 									<w:shd w:val="clear" w:color="auto" w:fill="auto"/>
 								</w:tcPr>
 								<w:p w:rsidR="00CE091E" w:rsidRPr="00CE091E" w:rsidRDefault="00CE091E" w:rsidP="00CE091E">

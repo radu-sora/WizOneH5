@@ -238,7 +238,20 @@
                             </td>
                         </tr>
                 </table>
-
+            <table style="margin-left:15px;">
+                <tr>
+                    <td>
+                        <dx:ASPxLabel ID="lblTipGen" runat="server" Text="Tip generare:" >                                
+                        </dx:ASPxLabel>
+                        <dx:ASPxRadioButton ID="rbTipGen1" Width="175" runat="server" RepeatDirection="Horizontal"  Text="intr-un singur fisier" Enabled="true"  ClientInstanceName="rbTipGen1"
+                                GroupName="TipGen">                                                                
+                        </dx:ASPxRadioButton>
+                        <dx:ASPxRadioButton ID="rbTipGen2"  Width="175" runat="server" RepeatDirection="Horizontal"  Text="in fisiere separate" Enabled="true" ClientInstanceName="rbTipGen2" 
+                                GroupName="TipGen">                              
+                        </dx:ASPxRadioButton>
+                    </td>
+                </tr>
+            </table>
 			<div>
                 <tr align="left">
                  <td   valign="top">

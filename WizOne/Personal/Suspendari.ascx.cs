@@ -50,6 +50,8 @@ namespace WizOne.Personal
                 GridViewDataComboBoxColumn colSusp = (grDateSuspendari.Columns["F11104"] as GridViewDataComboBoxColumn);
                 colSusp.PropertiesComboBox.DataSource = dtSusp;
 
+                Session["MP_SuspNomen"] = dtSusp;
+
                 cmbMotivSuspendare.DataSource = dtSusp;
                 cmbMotivSuspendare.DataBind();
 
@@ -344,6 +346,25 @@ namespace WizOne.Personal
                 
                 General.SalveazaDate(dtSusp, "F111");
 
+                //transfer
+                DataTable dtSuspNomen = Session["MP_SuspNomen"] as DataTable;
+                if (dtSuspNomen != null && dtSuspNomen.Rows.Count > 0)
+                {
+                    DataRow[] dr = dtSuspNomen.Select("F09002 = " + e.NewValues["F11104"]);
+                    if (dr != null && dr.Count() > 0)
+                    {
+                        int cod = (dr[0]["CodTranzactie"] as int?) ?? 0;
+                        if (dr[0]["TransferTranzactii"] != null && dr[0]["TransferTranzactii"].ToString().Length > 0 && Convert.ToInt32(dr[0]["TransferTranzactii"].ToString()) == 1)
+                            General.TransferTranzactii(Session["Marca"].ToString(), cod.ToString(),
+                                Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()));
+                        if (dr[0]["TransferPontaj"] != null && dr[0]["TransferPontaj"].ToString().Length > 0 && Convert.ToInt32(dr[0]["TransferPontaj"].ToString()) == 1)
+                            General.TransferPontaj(Session["Marca"].ToString(), Convert.ToDateTime(e.NewValues["F11105"].ToString()), 
+                                (Convert.ToDateTime(e.NewValues["F11107"].ToString()) == new DateTime(2100, 1, 1) ? Convert.ToDateTime(e.NewValues["F11106"].ToString()) : Convert.ToDateTime(e.NewValues["F11107"].ToString())),
+                                (dr[0]["DenumireScurta"] as string));
+
+                    }
+                }
+
                 try
                 {
                     General.CalculCO(Convert.ToDateTime(dtSusp.Rows[0]["F11105"]).Year, Convert.ToInt32(dtSusp.Rows[0]["F11103"].ToString()));
@@ -508,14 +529,30 @@ namespace WizOne.Personal
                     Session["InformatiaCurentaPersonal"] = ds;
                     ActualizareSusp(2);
 
+                    //transfer
+                    DataTable dtSuspNomen = Session["MP_SuspNomen"] as DataTable;
+                    if (dtSuspNomen != null && dtSuspNomen.Rows.Count > 0)
+                    {
+                        DataRow[] dr = dtSuspNomen.Select("F09002 = " + e.NewValues["F11104"]);
+                        if (dr != null && dr.Count() > 0)
+                        {
+                            int cod = (dr[0]["CodTranzactie"] as int?) ?? 0;
+                            if (dr[0]["TransferTranzactii"] != null && dr[0]["TransferTranzactii"].ToString().Length > 0 && Convert.ToInt32(dr[0]["TransferTranzactii"].ToString()) == 1)                            
+                                General.TransferTranzactii(Session["Marca"].ToString(), cod.ToString(),
+                                    Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()));
+                            if (dr[0]["TransferPontaj"] != null && dr[0]["TransferPontaj"].ToString().Length > 0 && Convert.ToInt32(dr[0]["TransferPontaj"].ToString()) == 1)
+                                General.TransferPontaj(Session["Marca"].ToString(), Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), 
+                                    (dr[0]["DenumireScurta"] as string));
 
+                        }
+                    }
                 }
                 else
                 {
                     e.Cancel = true;
                     grDateSuspendari.CancelEdit();
                 }
-                }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");

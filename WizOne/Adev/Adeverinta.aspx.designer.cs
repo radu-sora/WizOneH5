@@ -258,6 +258,33 @@ namespace WizOne.Adev
         protected global::DevExpress.Web.ASPxGridView grDate;
 
         /// <summary>
+        /// lblTipGen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblTipGen;
+
+        /// <summary>
+        /// rbTipGen1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRadioButton rbTipGen1;
+
+        /// <summary>
+        /// rbTipGen2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxRadioButton rbTipGen2;
+
+        /// <summary>
         /// lblAdev control.
         /// </summary>
         /// <remarks>

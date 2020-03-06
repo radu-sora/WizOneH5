@@ -600,15 +600,6 @@
 							</w:rPr>
 						</w:pPr>
 					</w:p>
-					<w:p w:rsidR="007B07D7" w:rsidRPr="007B07D7" w:rsidRDefault="007B07D7" w:rsidP="007B07D7">
-						<w:pPr>
-							<w:spacing w:after="0"/>
-							<w:rPr>
-								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="24"/>
-							</w:rPr>
-						</w:pPr>
-					</w:p>
 					<w:p w:rsidR="007B07D7" w:rsidRDefault="007B07D7" w:rsidP="007B07D7">
 						<w:pPr>
 							<w:spacing w:after="0"/>

@@ -1180,20 +1180,21 @@ namespace WizOne.Adev
                     lista = Session["AdevListaParam"] as Dictionary<string, string>;
 
                 string cnApp = Constante.cnnWeb;
-                string tmp = cnApp.Split(new[] { "Data source=" }, StringSplitOptions.None)[1];
+                string tmp = cnApp.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
+                string pwd = tmp.Split(';')[0];
+
+                tmp = cnApp.ToUpper().Split(new[] { "DATA SOURCE=" }, StringSplitOptions.None)[1];
                 string conn = tmp.Split(';')[0];
-                tmp = cnApp.Split(new[] { "User Id=" }, StringSplitOptions.None)[1];
+                tmp = cnApp.ToUpper().Split(new[] { "USER ID=" }, StringSplitOptions.None)[1];
                 string user = tmp.Split(';')[0];
                 string DB = "";
                 if (Constante.tipBD == 1)
                 {
-                    tmp = cnApp.Split(new[] { "Initial catalog=" }, StringSplitOptions.None)[1];
+                    tmp = cnApp.ToUpper().Split(new[] { "INITIAL CATALOG=" }, StringSplitOptions.None)[1];
                     DB = tmp.Split(';')[0];
                 }
                 else
-                    DB = user;
-                tmp = cnApp.Split(new[] { "Password=" }, StringSplitOptions.None)[1];
-                string pwd = tmp.Split(';')[0];
+                    DB = user;           
 
                 string cale = HostingEnvironment.MapPath("~/Adeverinta");
 
@@ -1208,11 +1209,21 @@ namespace WizOne.Adev
                 //foreach (string key in lista.Keys)
                 //    Config.Add(key, lista[key]);
 
-                Config.Add("DATABASE", (Constante.tipBD == 2 ? "ORACLE" : "SQLSVR"));
-                Config.Add("ORACONN", conn);
+                Config.Add("DATABASE", (Constante.tipBD == 2 ? "ORACLE" : "SQLSVR"));             
                 Config.Add("ORAUSER", DB);
                 Config.Add("ORAPWD", pwd);
                 Config.Add("ORALOGIN", user);
+
+                string host = "", port = "";
+
+                if (Constante.tipBD == 2)
+                {
+                    host = conn.Split('/')[0];
+                    conn = conn.Split('/')[1];
+                }
+                Config.Add("ORACONN", conn);
+                Config.Add("HOST_ADEV", host);
+                Config.Add("PORT_ADEV", port);
 
                 var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE"));
                 if (!folder.Exists)
@@ -1252,7 +1263,7 @@ namespace WizOne.Adev
                             fisier = "Adev_sanatate_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaSanatate(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 1, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        msg =Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 1, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;                        
                     case 2:
                         if (lstMarci.Count() == 1)
@@ -1261,7 +1272,7 @@ namespace WizOne.Adev
                             fisier = "Adev_venituri_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/VENITURI_" + anul + "/") + fisier;
                         //AdeverintaVenituriAnuale(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 2, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 2, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 3:
                         if (lstMarci.Count() == 1)
@@ -1279,7 +1290,7 @@ namespace WizOne.Adev
                             fisier = "Adev_SOMAJ_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaSomaj(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 4, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 4, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 6:
                         if (lstMarci.Count() == 1)
@@ -1288,7 +1299,7 @@ namespace WizOne.Adev
                             fisier = "Adev_Stagiu_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaStagiu(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 6, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 6, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 7:
                         if (lstMarci.Count() == 1)
@@ -1297,7 +1308,7 @@ namespace WizOne.Adev
                             fisier = "Adev_Vechime_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                         //AdeverintaVechime(marca, FileName);
-                        Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 7, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 7, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                 }
 
@@ -1423,7 +1434,7 @@ namespace WizOne.Adev
                     lstFiles.ForEach(f => System.IO.File.Move(f, Path.Combine(temp, Path.GetFileName(f))));
 
                     // create a new archive
-                    ZipFile.CreateFromDirectory(temp, archive);
+                    ZipFile.CreateFromDirectory(temp, archive);                    
                     Response.ContentType = "application/zip";
                     Response.AddHeader("Content-Disposition", "attachment; filename=" + numeArhiva + ".zip");
                     Response.TransmitFile(archive);

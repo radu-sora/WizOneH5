@@ -204,6 +204,20 @@
             }
         }
 
+        function OnMotivRefuza(s, e) {
+            if (ASPxClientUtils.Trim(txtMtvSapt.GetText()) == '') {
+                swal({
+                    title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Pentru a putea respinge este nevoie de un motiv"),
+                    type: "warning"
+                });
+            }
+            else {
+                popUpMotivSapt.Hide();
+                grDate.PerformCallback('btnRefuza;' + txtMtvSapt.GetText());
+                txtMtvSapt.SetText('');
+            }
+        }
+        
 
         var textSeparator = ",";
         //first one
@@ -308,6 +322,13 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
+                <dx:ASPxButton ID="btnValidare" ClientInstanceName="btnValidare" ClientIDMode="Static" runat="server" Text="Validare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/ExportToXls.png"></Image>
+                </dx:ASPxButton>
+                <dx:ASPxButton ID="btnRefuza" ClientInstanceName="btnRefuza" ClientIDMode="Static" runat="server" Text="Refuza" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function (s,e) { popUpMotivSapt.Show(); }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/ExportToXls.png"></Image>
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Export" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function (s,e) { popUpExport.Show(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/ExportToXls.png"></Image>
@@ -317,9 +338,7 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
-                    <ClientSideEvents Click="function(s, e) {
-                       OnRespinge(s,e);
-                    }" />
+                    <ClientSideEvents Click="function(s, e) { OnRespinge(s,e); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="true" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
@@ -784,6 +803,38 @@
                         <tr>
                             <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
                                 <dx:ASPxMemo ID="txtMtv" runat="server" ClientIDMode="Static" ClientInstanceName="txtMtv" Width="630px" Height="180px"></dx:ASPxMemo>
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
+    <dx:ASPxPopupControl ID="popUpMotivSapt" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpMotivSaptArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="650px" Height="200px" HeaderText="Motiv refuz"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpMotivSapt" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel5" runat="server">
+                    <table>
+                        <tr>
+                            <td align="right">
+                                <dx:ASPxButton ID="btnRefuzaMtv" runat="server" Text="Refuza" AutoPostBack="false" >
+                                    <ClientSideEvents Click="function(s, e) {
+                                        OnMotivRefuza(s,e);
+                                    }" />
+                                    <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
+                                </dx:ASPxButton>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
+                                <dx:ASPxMemo ID="txtMtvSapt" runat="server" ClientIDMode="Static" ClientInstanceName="txtMtvSapt" Width="630px" Height="180px"></dx:ASPxMemo>
                             </td>
                         </tr>
                     </table>

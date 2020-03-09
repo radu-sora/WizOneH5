@@ -8081,11 +8081,18 @@ namespace WizOne.Module
             }
         }
 
-        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, int idAbs, string denScurta)
+        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, string denScurta)
         {
             try
             {  
                 string strSql = "";
+                int idAbs = -99;
+                DataTable dtAbsNomen = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" = '" + denScurta + "'", null);
+                if (dtAbsNomen != null && dtAbsNomen.Rows.Count > 0)
+                    idAbs = Convert.ToInt32(dtAbsNomen.Rows[0]["Id"].ToString());
+                else
+                    return;
+
                 DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dataSfarsit.Date, 3, idAbs), null);
 
                 //construim sql-ul prin care adaugam cererea in pontaj
@@ -8106,12 +8113,12 @@ namespace WizOne.Module
                             ziLib + ", " +
                             ziLibLeg + ", " +
                             "(SELECT X.\"IdContract\" FROM \"F100Contracte\" X WHERE X.F10003 = " + marca + " AND X.\"DataInceput\" <= " + General.ToDataUniv(zi.Date) + " AND " + General.ToDataUniv(zi.Date) + " <= X.\"DataSfarsit\"), " +
-                            " (SELECT F10043 WHERE F10003 = " + marca + "), " +
-                            " (SELECT F10002 WHERE F10003 = " + marca + "), " +
-                            " (SELECT F10004 WHERE F10003 = " + marca + "), " +
-                            " (SELECT F10005 WHERE F10003 = " + marca + "), " +
-                            " (SELECT F10006 WHERE F10003 = " + marca + "), " +
-                            " (SELECT F10007 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10043 FROM F100 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10002 FROM F100 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10004 FROM F100 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10005 FROM F100 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10006 FROM F100 WHERE F10003 = " + marca + "), " +
+                            " (SELECT F10007 FROM F100 WHERE F10003 = " + marca + "), " +
                             "-1, " +
                             "'" + valStr + "', " +
                             HttpContext.Current.Session["UserId"].ToString() + ", " +
@@ -8150,6 +8157,7 @@ namespace WizOne.Module
                                         END IF;
                                     END;
                                 END;";
+                        ExecutaNonQuery(strSql, null);
                     }
                 }
                 

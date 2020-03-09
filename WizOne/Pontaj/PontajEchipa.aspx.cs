@@ -3047,14 +3047,14 @@ namespace WizOne.Pontaj
                         if (Constante.tipBD == 1)
                             zileVal += $@",COALESCE(CONVERT(VARCHAR(5), pvtIn.""Ziua{i}I"", 108),'') AS ""Ziua{i}I""" + $@",COALESCE(CONVERT(VARCHAR(5), pvtOut.""Ziua{i}O"", 108),'') AS ""Ziua{i}O""";
                         else
-                            zileVal += $@",TO_CHAR(pvtIn.""Ziua{i}"", 'HH24:MM') AS ""Ziua{i}I""" + $@",TO_CHAR(pvtOut.""Ziua{i}"", 'HH24:MM') AS ""Ziua{i}O""";
+                            zileVal += $@",TO_CHAR(pvtIn.""Ziua{i}I"", 'HH24:mi') AS ""Ziua{i}I""" + $@",TO_CHAR(pvtOut.""Ziua{i}O"", 'HH24:mi') AS ""Ziua{i}O""";
                     }
                     if (chkPauza.Checked)
                     {
                         if (Constante.tipBD == 1)
                             zileVal += $@",COALESCE(pvtPauza.""Ziua{i}P"",'') AS ""Ziua{i}P""";
                         else
-                            zileVal += $@",COALESCE(pvtPauza.""Ziua{i}"",0) AS ""Ziua{i}P""";
+                            zileVal += $@",COALESCE(TO_CHAR(pvtPauza.""Ziua{i}P""),'') AS ""Ziua{i}P""";
                     }
 
 
@@ -3103,33 +3103,63 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
+                    //if (chkTotaluri.Checked)
+                    //    pvt = $@"INNER JOIN (SELECT F10003 {zileAs} FROM 
+                    //            (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvt ON X.F10003=pvt.F10003";
+
+                    //if (chkOre.Checked)
+                    //{
+                    //    pvtIn = $@"INNER JOIN (SELECT F10003 {zileAsIn} FROM 
+                    //            (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvtIn ON X.F10003=pvtIn.F10003";
+
+                    //    pvtOut = $@"INNER JOIN (SELECT F10003 {zileAsOut} FROM 
+                    //            (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvtOut ON X.F10003=pvtOut.F10003";
+                    //}
+                    //if (chkPauza.Checked)
+                    //    pvtPauza = $@"INNER JOIN (SELECT F10003 {zileAsPauza} FROM 
+                    //            (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvtPauza ON X.F10003=pvtPauza.F10003";
+
+                    //pvtCuloare = $@"INNER JOIN (SELECT F10003 {zileAsCuloare} FROM 
+                    //            (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvtCuloare ON X.F10003=pvtCuloare.F10003";
+
+                    //Radu 06.03.2020 - corectie pivotare
                     if (chkTotaluri.Checked)
-                        pvt = $@"INNER JOIN (SELECT F10003 {zileAs} FROM 
+                        pvt = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
                                 PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
                                 ) pvt ON X.F10003=pvt.F10003";
 
                     if (chkOre.Checked)
                     {
-                        pvtIn = $@"INNER JOIN (SELECT F10003 {zileAsIn} FROM 
+                        pvtIn = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAsIn.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003";
 
-                        pvtOut = $@"INNER JOIN (SELECT F10003 {zileAsOut} FROM 
+                        pvtOut = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAsOut.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003";
                     }
                     if (chkPauza.Checked)
-                        pvtPauza = $@"INNER JOIN (SELECT F10003 {zileAsPauza} FROM 
+                        pvtPauza = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAsPauza.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003";
 
-                    pvtCuloare = $@"INNER JOIN (SELECT F10003 {zileAsCuloare} FROM 
+                    pvtCuloare = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAsCuloare.Substring(1)} )) pvt
                                 ) pvtCuloare ON X.F10003=pvtCuloare.F10003";
                 }
 

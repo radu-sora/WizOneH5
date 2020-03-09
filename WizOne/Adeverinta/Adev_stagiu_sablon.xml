@@ -333,7 +333,7 @@
 					</w:p>
 					<w:p w:rsidR="00AD1CED" w:rsidRDefault="00AD1CED" w:rsidP="00AD1CED">
 						<w:pPr>
-							<w:spacing w:after="0" w:line="360" w:lineRule="auto"/>
+							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
 							<w:jc w:val="right"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
@@ -343,56 +343,46 @@
 					</w:p>
 					<w:p w:rsidR="00AD1CED" w:rsidRDefault="00AD1CED" w:rsidP="00AD1CED">
 						<w:pPr>
-							<w:spacing w:after="0" w:line="360" w:lineRule="auto"/>
-							<w:jc w:val="right"/>
-							<w:rPr>
-								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="24"/>
-							</w:rPr>
-						</w:pPr>
-					</w:p>
-					<w:p w:rsidR="00AD1CED" w:rsidRDefault="00AD1CED" w:rsidP="00AD1CED">
-						<w:pPr>
-							<w:spacing w:after="0" w:line="360" w:lineRule="auto"/>
+							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
 							<w:jc w:val="center"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 						</w:pPr>
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>ADEVERINTA</w:t>
 						</w:r>
 					</w:p>
 					<w:p w:rsidR="00AD1CED" w:rsidRPr="00AD1CED" w:rsidRDefault="00AD1CED" w:rsidP="00AD1CED">
 						<w:pPr>
-							<w:spacing w:after="0" w:line="360" w:lineRule="auto"/>
+							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
 							<w:jc w:val="both"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 						</w:pPr>
 					</w:p>
 					<w:p w:rsidR="00AD1CED" w:rsidRDefault="00AD1CED" w:rsidP="00AD1CED">
 						<w:pPr>
-							<w:spacing w:after="0" w:line="360" w:lineRule="auto"/>
+							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
 							<w:jc w:val="both"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 						</w:pPr>
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:tab/>
 						</w:r>
@@ -400,7 +390,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>Prin</w:t>
 						</w:r>
@@ -408,7 +398,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -416,7 +406,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>prezenta</w:t>
 						</w:r>
@@ -424,7 +414,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> se </w:t>
 						</w:r>
@@ -432,7 +422,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>atestă</w:t>
 						</w:r>
@@ -440,7 +430,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -448,7 +438,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>faptul</w:t>
 						</w:r>
@@ -456,7 +446,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -464,7 +454,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>că</w:t>
 						</w:r>
@@ -472,7 +462,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -481,7 +471,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[SEX_ANGAJAT]</w:t>
 						</w:r>
@@ -490,7 +480,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -499,7 +489,7 @@
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[NUME_ANGAJAT]</w:t>
 						</w:r>
@@ -507,7 +497,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, CNP </w:t>
 						</w:r>
@@ -515,14 +505,14 @@
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[CNP]</w:t>
 						</w:r>
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, cu </w:t>
 						</w:r>
@@ -530,7 +520,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>domiciliul</w:t>
 						</w:r>
@@ -538,7 +528,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -546,7 +536,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>în</w:t>
 						</w:r>
@@ -554,7 +544,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -563,7 +553,7 @@
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[DOMICILIU_ANGAJAT]</w:t>
 						</w:r>
@@ -572,7 +562,7 @@
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, str. </w:t>
 						</w:r>
@@ -581,7 +571,7 @@
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[STRADA]</w:t>
 						</w:r>
@@ -589,7 +579,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, </w:t>
 						</w:r>
@@ -597,7 +587,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>nr</w:t>
 						</w:r>
@@ -605,7 +595,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">. </w:t>
 						</w:r>
@@ -614,7 +604,7 @@
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[NUMAR]</w:t>
 						</w:r>
@@ -622,7 +612,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, bl. </w:t>
 						</w:r>
@@ -630,14 +620,14 @@
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[BLOC]</w:t>
 						</w:r>
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, ap. </w:t>
 						</w:r>
@@ -645,14 +635,14 @@
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:b/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[APARTAMENT]</w:t>
 						</w:r>
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, </w:t>
 						</w:r>
@@ -660,7 +650,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[SECTOR_JUDET]</w:t>
 						</w:r>
@@ -668,7 +658,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> [SEC_JUD], a </w:t>
 						</w:r>
@@ -676,7 +666,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>fost</w:t>
 						</w:r>
@@ -684,7 +674,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -692,7 +682,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[SEX_ANGAJAT_2]</w:t>
 						</w:r>
@@ -700,7 +690,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -708,7 +698,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>societăţii</w:t>
 						</w:r>
@@ -716,7 +706,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -724,7 +714,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>noastre</w:t>
 						</w:r>
@@ -732,7 +722,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, [NUME_ANGAJATOR], cu contract individual de </w:t>
 						</w:r>
@@ -740,7 +730,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>muncă</w:t>
 						</w:r>
@@ -748,7 +738,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, </w:t>
 						</w:r>
@@ -756,7 +746,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>pe</w:t>
 						</w:r>
@@ -764,7 +754,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -772,7 +762,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>perioadă</w:t>
 						</w:r>
@@ -780,7 +770,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -788,7 +778,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[DURATA_CONTRACT]</w:t>
 						</w:r>
@@ -796,7 +786,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -804,7 +794,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>în</w:t>
 						</w:r>
@@ -812,7 +802,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -820,7 +810,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>perioada</w:t>
 						</w:r>
@@ -828,31 +818,31 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>: [PERIOADA_CONTRACT]</w:t>
 						</w:r>
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>.</w:t>
 						</w:r>
 					</w:p>
 					<w:p w:rsidR="00AD1CED" w:rsidRPr="00AD1CED" w:rsidRDefault="00AD1CED" w:rsidP="00AD1CED">
 						<w:pPr>
-							<w:spacing w:after="0" w:line="360" w:lineRule="auto"/>
+							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
 							<w:jc w:val="both"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 						</w:pPr>
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:tab/>
 							<w:t xml:space="preserve">In </w:t>
@@ -861,7 +851,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>ultimele</w:t>
 						</w:r>
@@ -869,7 +859,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> [NR_LUNI] </w:t>
 						</w:r>
@@ -877,7 +867,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>luni</w:t>
 						</w:r>
@@ -885,7 +875,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -893,7 +883,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>anterioare</w:t>
 						</w:r>
@@ -901,7 +891,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -909,7 +899,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>datei</w:t>
 						</w:r>
@@ -917,7 +907,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -925,7 +915,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>încetării</w:t>
 						</w:r>
@@ -933,7 +923,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -941,7 +931,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>raportului</w:t>
 						</w:r>
@@ -949,7 +939,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> de </w:t>
 						</w:r>
@@ -957,7 +947,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>muncă</w:t>
 						</w:r>
@@ -965,7 +955,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -974,7 +964,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[SEX_ANGAJAT]</w:t>
 						</w:r>
@@ -983,7 +973,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -991,7 +981,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>[NUME_ANGAJAT]</w:t>
 						</w:r>
@@ -999,7 +989,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> a </w:t>
 						</w:r>
@@ -1007,7 +997,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>realizat</w:t>
 						</w:r>
@@ -1015,7 +1005,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1023,7 +1013,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>venituri</w:t>
 						</w:r>
@@ -1031,7 +1021,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1039,7 +1029,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>pe</w:t>
 						</w:r>
@@ -1047,7 +1037,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1055,7 +1045,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>baza</w:t>
 						</w:r>
@@ -1063,7 +1053,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1071,7 +1061,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>cărora</w:t>
 						</w:r>
@@ -1079,7 +1069,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> s-a </w:t>
 						</w:r>
@@ -1087,7 +1077,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>achitat</w:t>
 						</w:r>
@@ -1095,7 +1085,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1103,7 +1093,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>contribuţia</w:t>
 						</w:r>
@@ -1111,7 +1101,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1119,7 +1109,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>pentru</w:t>
 						</w:r>
@@ -1127,7 +1117,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1135,7 +1125,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>concedii</w:t>
 						</w:r>
@@ -1143,7 +1133,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1151,7 +1141,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>si</w:t>
 						</w:r>
@@ -1159,7 +1149,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1167,7 +1157,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>indemnizaţii</w:t>
 						</w:r>
@@ -1175,7 +1165,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">/ </w:t>
 						</w:r>
@@ -1183,7 +1173,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>contribuţia</w:t>
 						</w:r>
@@ -1191,7 +1181,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1199,7 +1189,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>asiguratorie</w:t>
 						</w:r>
@@ -1207,7 +1197,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1215,7 +1205,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>pentru</w:t>
 						</w:r>
@@ -1223,7 +1213,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1231,7 +1221,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>muncă</w:t>
 						</w:r>
@@ -1239,7 +1229,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve">, </w:t>
 						</w:r>
@@ -1247,7 +1237,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>după</w:t>
 						</w:r>
@@ -1255,7 +1245,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> cum </w:t>
 						</w:r>
@@ -1263,7 +1253,7 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>urmează</w:t>
 						</w:r>
@@ -1271,10 +1261,20 @@
 						<w:r w:rsidRPr="00AD1CED">
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>:</w:t>
 						</w:r>
+					</w:p>
+					<w:p w:rsidR="00AD1CED" w:rsidRDefault="00AD1CED" w:rsidP="00AD1CED">
+						<w:pPr>
+							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
+							<w:jc w:val="right"/>
+							<w:rPr>
+								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
+								<w:sz w:val="24"/>
+							</w:rPr>
+						</w:pPr>
 					</w:p>
 					<w:tbl>
 						<w:tblPr>
@@ -1494,20 +1494,20 @@
 							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 						</w:pPr>
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:br/>
 						</w:r>
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:tab/>
 						</w:r>
@@ -1515,7 +1515,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>Prezenta</w:t>
 						</w:r>
@@ -1523,7 +1523,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1531,7 +1531,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>adeverinţă</w:t>
 						</w:r>
@@ -1539,7 +1539,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> se </w:t>
 						</w:r>
@@ -1547,7 +1547,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>eliberează</w:t>
 						</w:r>
@@ -1555,7 +1555,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1563,7 +1563,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>pentru</w:t>
 						</w:r>
@@ -1571,7 +1571,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> a-</w:t>
 						</w:r>
@@ -1579,7 +1579,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>i</w:t>
 						</w:r>
@@ -1587,7 +1587,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1595,7 +1595,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>servi</w:t>
 						</w:r>
@@ -1603,7 +1603,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> la </w:t>
 						</w:r>
@@ -1611,7 +1611,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>noul</w:t>
 						</w:r>
@@ -1619,7 +1619,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> </w:t>
 						</w:r>
@@ -1627,7 +1627,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>loc</w:t>
 						</w:r>
@@ -1635,7 +1635,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t xml:space="preserve"> de </w:t>
 						</w:r>
@@ -1643,7 +1643,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>muncă</w:t>
 						</w:r>
@@ -1651,7 +1651,7 @@
 						<w:r>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 							<w:t>.</w:t>
 						</w:r>
@@ -1663,7 +1663,7 @@
 							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 						</w:pPr>
 					</w:p>
@@ -1672,7 +1672,7 @@
 							<w:spacing w:after="0" w:line="240" w:lineRule="auto"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 						</w:pPr>
 					</w:p>
@@ -1682,7 +1682,7 @@
 							<w:jc w:val="right"/>
 							<w:rPr>
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="28"/>
+								<w:sz w:val="24"/>
 							</w:rPr>
 						</w:pPr>
 					</w:p>
@@ -1876,7 +1876,7 @@
 						</w:rPr>
 						<w:drawing>
 							<wp:inline distT="0" distB="0" distL="0" distR="0">
-								<wp:extent cx="6163535" cy="933580"/>
+								<wp:extent cx="5943600" cy="900430"/>
 								<wp:effectExtent l="0" t="0" r="8890" b="0"/>
 								<wp:docPr id="2" name="Picture 2"/>
 								<wp:cNvGraphicFramePr/>
@@ -1902,7 +1902,7 @@
 											<pic:spPr>
 												<a:xfrm>
 													<a:off x="0" y="0"/>
-													<a:ext cx="6163535" cy="933580"/>
+													<a:ext cx="5943600" cy="900430"/>
 												</a:xfrm>
 												<a:prstGeom prst="rect">
 													<a:avLst/>

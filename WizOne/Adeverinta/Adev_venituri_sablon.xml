@@ -18,7 +18,7 @@
 				<Relationship Id="rId7" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>
 				<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>
 				<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
-				<Relationship Id="rId6" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="NULL"/>
+				<Relationship Id="rId6" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image1.png"/>
 				<Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes" Target="endnotes.xml"/>
 				<Relationship Id="rId10" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"/>
 				<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes" Target="footnotes.xml"/>
@@ -590,15 +590,6 @@
 							</w:rPr>
 							<w:t xml:space="preserve"> [ANUL]</w:t>
 						</w:r>
-					</w:p>
-					<w:p w:rsidR="007B07D7" w:rsidRPr="007B07D7" w:rsidRDefault="007B07D7" w:rsidP="007B07D7">
-						<w:pPr>
-							<w:spacing w:after="0"/>
-							<w:rPr>
-								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="24"/>
-							</w:rPr>
-						</w:pPr>
 					</w:p>
 					<w:p w:rsidR="007B07D7" w:rsidRPr="007B07D7" w:rsidRDefault="007B07D7" w:rsidP="007B07D7">
 						<w:pPr>

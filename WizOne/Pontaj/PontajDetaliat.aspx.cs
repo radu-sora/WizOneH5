@@ -71,7 +71,7 @@ namespace WizOne.Pontaj
                         grDate.Columns["Stare"].Columns[0].Visible = true;
                     else
                         grDate.Columns[0].Visible = true;
-                    tblCC.Attributes["class"] = "vizibil";
+                    tblCC.Attributes["class"] = "visible";
 
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "1")
                         grCC.Columns["IdStare"].Visible = true;

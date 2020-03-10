@@ -1775,11 +1775,14 @@ namespace WizOne.Pontaj
                                             grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"],"").ToString());
                                             break;
                                         case "1":
-                                            DataTable dtApr = General.IncarcaDT($"SELECT * FROM ProccesAprobare({Session["UserId"]})", null);
-                                            if (dtApr != null && dtApr.Rows.Count > 0)
-                                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dtApr.Rows[0]["Raspuns"], "").ToString());
+                                            {
+                                                DataTable dtApr = General.IncarcaDT($"SELECT * FROM ProccesAprobare({Session["UserId"]})", null);
+                                                if (dtApr != null && dtApr.Rows.Count > 0)
+                                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dtApr.Rows[0]["Raspuns"], "").ToString());
+                                            }
                                             break;
                                         case "2":
+                                            grDate.JSProperties["cp_MesajProces"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"], "").ToString());
                                             break;
                                     }
                                 }
@@ -1790,6 +1793,13 @@ namespace WizOne.Pontaj
                                 DataTable dt = General.IncarcaDT($"SELECT * FROM ProccesRespingere({Session["UserId"]},'{arr[1].Trim()}')", null);
                                 if (dt != null && dt.Rows.Count > 0)
                                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"], "").ToString());
+                            }
+                            break;
+                        case "ProcesConfirmare":
+                            {
+                                DataTable dtApr = General.IncarcaDT($"SELECT * FROM ProccesAprobare({Session["UserId"]})", null);
+                                if (dtApr != null && dtApr.Rows.Count > 0)
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dtApr.Rows[0]["Raspuns"], "").ToString());
                             }
                             break;
                     }

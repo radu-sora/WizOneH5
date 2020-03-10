@@ -145,13 +145,14 @@
             AdjustSize();
             //document.getElementById("gridContainer").style.visibility = "";
         }
-        function OnEndCallback(s, e) {
+        function OnEndCallback(s) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: trad_string(limba, ""), text: s.cpAlertMessage,
+                    title: trad_string(limba, ""),
+                    text: s.cpAlertMessage,
                     type: "warning"
                 });
-                s.cpAlertMessage = null;
+                delete s.cpAlertMessage;
             }
 
             AdjustSize();
@@ -323,11 +324,12 @@
             </td>
             <td align="right">
                 <dx:ASPxButton ID="btnValidare" ClientInstanceName="btnValidare" ClientIDMode="Static" runat="server" Text="Validare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <Image Url="~/Fisiere/Imagini/Icoane/ExportToXls.png"></Image>
+                    <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
+                    <ClientSideEvents Click="function (s,e) { grDate.PerformCallback('btnValidare'); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRefuza" ClientInstanceName="btnRefuza" ClientIDMode="Static" runat="server" Text="Refuza" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function (s,e) { popUpMotivSapt.Show(); }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/ExportToXls.png"></Image>
+                    <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Export" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function (s,e) { popUpExport.Show(); }" />

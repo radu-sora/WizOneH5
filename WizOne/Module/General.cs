@@ -8169,5 +8169,29 @@ namespace WizOne.Module
         }
         //end Radu
 
+
+        public static void ExecutaProcedura(string numeProcedura, int idUser, string comentariu = "")
+        {
+            try
+            {
+                using (var conn = new SqlConnection(Constante.cnnWeb))
+                using (var command = new SqlCommand(numeProcedura, conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("@idUser", idUser);
+                    if (comentariu != "")
+                        command.Parameters.AddWithValue("@comentariu", comentariu);
+
+                    conn.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "Calcul", "CalculFormule");
+            }
+        }
     }
 }

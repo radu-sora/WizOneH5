@@ -12821,3 +12821,19 @@ return
 SELECT CASE WHEN @idUser < 10 THEN 0 ELSE CASE WHEN @idUser > 100 THEN 2 ELSE 1 END END AS idRaspuns, 'Hi All !' AS Raspuns
 
 GO
+
+CREATE FUNCTION ProccesAprobare (@idUser int) 
+RETURNs table AS 
+return 
+
+SELECT 'A fost aprobata' AS Raspuns
+
+GO
+
+CREATE FUNCTION ProccesRespingere (@idUser int, @comentariu nvarchar(4000)) 
+RETURNs table AS 
+return 
+
+SELECT 'A fost respinsa' AS Raspuns
+
+GO

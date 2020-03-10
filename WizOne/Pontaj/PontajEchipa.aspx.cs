@@ -1764,6 +1764,34 @@ namespace WizOne.Pontaj
                         case "btnRespinge":
                             Actiuni(0, arr[1].Trim());                   
                             break;
+                        case "btnValidare":
+                            {
+                                DataTable dt = General.IncarcaDT($"SELECT * FROM ProccesValidare({Session["UserId"]})", null);
+                                if (dt != null && dt.Rows.Count > 0)
+                                {
+                                    switch(General.Nz(dt.Rows[0]["IdRaspuns"],"").ToString())
+                                    {
+                                        case "0":
+                                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"],"").ToString());
+                                            break;
+                                        case "1":
+                                            DataTable dtApr = General.IncarcaDT($"SELECT * FROM ProccesAprobare({Session["UserId"]})", null);
+                                            if (dtApr != null && dtApr.Rows.Count > 0)
+                                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dtApr.Rows[0]["Raspuns"], "").ToString());
+                                            break;
+                                        case "2":
+                                            break;
+                                    }
+                                }
+                            }
+                            break;
+                        case "btnRefuza":
+                            {
+                                DataTable dt = General.IncarcaDT($"SELECT * FROM ProccesRespingere({Session["UserId"]},'{arr[1].Trim()}')", null);
+                                if (dt != null && dt.Rows.Count > 0)
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"], "").ToString());
+                            }
+                            break;
                     }
                 }
             }

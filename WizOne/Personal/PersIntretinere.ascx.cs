@@ -167,10 +167,10 @@ namespace WizOne.Personal
                                 //else
                                     row[x] = e.NewValues[col.ColumnName];
                                 break;
-                            case "F11006":
-                                if (e.NewValues["F11012"] != null && e.NewValues["F11012"].ToString().Length > 0 && General.VerificaCNP(e.NewValues["F11012"].ToString()))                                
-                                    row[x] = General.getDataNasterii(e.NewValues["F11012"].ToString());                                
-                                break;
+                            //case "F11006":
+                            //    if (e.NewValues["F11012"] != null && e.NewValues["F11012"].ToString().Length > 0 && General.VerificaCNP(e.NewValues["F11012"].ToString()))                                
+                            //        row[x] = General.getDataNasterii(e.NewValues["F11012"].ToString());                                
+                            //    break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];
                                 break;
@@ -237,9 +237,9 @@ namespace WizOne.Personal
                     if (col.ColumnName.ToUpper() == "F11002")
                         row[col.ColumnName] = Convert.ToInt32(ds.Tables[1].Rows[0]["F10002"].ToString());
 
-                    if (col.ColumnName.ToUpper() == "F11006")
-                        if (e.NewValues["F11012"] != null && e.NewValues["F11012"].ToString().Length > 0 && General.VerificaCNP(e.NewValues["F11012"].ToString()))
-                            row[col.ColumnName] = General.getDataNasterii(e.NewValues["F11012"].ToString());
+                    //if (col.ColumnName.ToUpper() == "F11006")
+                    //    if (e.NewValues["F11012"] != null && e.NewValues["F11012"].ToString().Length > 0 && General.VerificaCNP(e.NewValues["F11012"].ToString()))
+                    //        row[col.ColumnName] = General.getDataNasterii(e.NewValues["F11012"].ToString());
                 }
 
                 e.Cancel = true;

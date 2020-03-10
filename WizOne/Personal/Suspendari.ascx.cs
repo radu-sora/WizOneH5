@@ -359,7 +359,7 @@ namespace WizOne.Personal
                                 Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()));
                         if (dr[0]["TransferPontaj"] != null && dr[0]["TransferPontaj"].ToString().Length > 0 && Convert.ToInt32(dr[0]["TransferPontaj"].ToString()) == 1)
                             General.TransferPontaj(Session["Marca"].ToString(), Convert.ToDateTime(e.NewValues["F11105"].ToString()), 
-                                (Convert.ToDateTime(e.NewValues["F11107"].ToString()) == new DateTime(2100, 1, 1) ? Convert.ToDateTime(e.NewValues["F11106"].ToString()) : Convert.ToDateTime(e.NewValues["F11107"].ToString())),
+                                Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()),
                                 (dr[0]["DenumireScurta"] as string));
 
                     }
@@ -541,7 +541,7 @@ namespace WizOne.Personal
                                 General.TransferTranzactii(Session["Marca"].ToString(), cod.ToString(),
                                     Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()));
                             if (dr[0]["TransferPontaj"] != null && dr[0]["TransferPontaj"].ToString().Length > 0 && Convert.ToInt32(dr[0]["TransferPontaj"].ToString()) == 1)
-                                General.TransferPontaj(Session["Marca"].ToString(), Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), 
+                                General.TransferPontaj(Session["Marca"].ToString(), Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()),
                                     (dr[0]["DenumireScurta"] as string));
 
                         }

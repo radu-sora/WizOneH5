@@ -62,7 +62,7 @@ namespace WizOne.Pontaj
                 if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
                 {
                     grDate.Columns[0].Visible = true;
-                    tblCC.Attributes["class"] = "vizibil";
+                    tblCC.Attributes["class"] = "visible";
 
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "1")
                         grCC.Columns["IdStare"].Visible = true;

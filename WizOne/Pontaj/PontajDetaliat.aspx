@@ -299,6 +299,7 @@
                 <dx:ASPxLabel ID="lblZiuaCC" runat="server" ClientIDMode="Static" ClientInstanceName="lblZiuaCC" Font-Bold="true" Text="" />
             </td>
             <td class="pull-right">
+                <br />
                 <dx:ASPxButton ID="btnSaveCC" ClientInstanceName="btnSaveCC" ClientIDMode="Static" runat="server" Text="Salveaza CC" AutoPostBack="false" oncontextMenu="ctx(this,event)">
                     <ClientSideEvents Click="function(s, e) {
                         grCC.UpdateEdit();

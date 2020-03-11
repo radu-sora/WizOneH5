@@ -8081,7 +8081,7 @@ namespace WizOne.Module
         {
             try
             {
-                DateTime dtSf = (dataIncetare == new DateTime(2100, 1, 1) ? dataSfarsit : dataIncetare);
+                DateTime dtSf = (dataIncetare == new DateTime(2100, 1, 1) ? dataSfarsit : dataIncetare.AddDays(-1));
 
                 string strSql = "";
                 int idAbs = -99;
@@ -8128,9 +8128,18 @@ namespace WizOne.Module
 
                 ExecutaNonQuery(sqlIst, null);
 
+                string campuri = "";
+                for (int i = 0; i <= 20; i++)
+                    campuri += ", \"Val" + i.ToString() + "\" = NULL";
+                for (int i = 1; i <= 60; i++)
+                    campuri += ", F" + i.ToString() + " = NULL";
+                for (int i = 1; i <= 20; i++)
+                    campuri += ", \"In" + i.ToString() + "\" = NULL, \"Out" + i.ToString() + "\" = NULL";
+
+
 
                 strSql = $@"MERGE INTO ""Ptj_intrari"" USING 
-                            (select case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = caldate) = 0 then 0 else 1 end as prezenta, 
+                            (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = caldate) = 0 then 0 else 1 end as prezenta, 
                             a.*, b.* from  Z_Calendar a
                             left join 
 
@@ -8158,8 +8167,8 @@ namespace WizOne.Module
                             where caldate between  { General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} and ""AreDrepturi"" = 1
 
                             ) Tmp 
-                            ON (""Ptj_Intrari"".""Ziua"" = Tmp.caldate and prezenta = 1) 
-                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""DenumireScurta""
+                            ON (""Ptj_Intrari"".""Ziua"" = Tmp.caldate AND ""Ptj_Intrari"".F10003 = Tmp.F10003 and prezenta = 1) 
+                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""DenumireScurta"" {campuri}
                             WHEN NOT MATCHED THEN INSERT (F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""IdContract"", ""Norma"", F10002, F10004, F10005, F10006, F10007, F06204, ""ValStr"", USER_NO, TIME)
                              VALUES ({marca}, tmp.caldate, ""ZiSapt"" ,""ZiLibera"" , ""ZiLiberaLegala"", 
                             (SELECT X.""IdContract"" FROM ""F100Contracte"" X WHERE X.F10003 = {marca} AND X.""DataInceput"" <= tmp.caldate AND tmp.caldate <= X.""DataSfarsit""), 

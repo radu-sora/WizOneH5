@@ -64,7 +64,7 @@
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td>
+                        <td class="hide">
                             <button type="button" class="btn btn-default btn-sm" title="Print" onclick="onCustomLayoutPrintButtonClick()">
                                 <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
                             </button>
@@ -146,6 +146,8 @@
                                         }
                                     }" />
                             </dx:ASPxPivotGrid>
+                            <dx:ASPxPivotGridExporter ID="CustomCubePivotGridExporter" runat="server" ASPxPivotGridID="CustomCubePivotGrid">                                
+                            </dx:ASPxPivotGridExporter>
                         </td>
                     </tr>
                     <tr>
@@ -223,7 +225,7 @@
     </table>
    
     <script type="text/html" id="dx-date-simple">
-        <div data-bind="dxDateBox: { value: value.extend({ throttle: 500 }), closeOnValueChange: true, type: 'date', disabled: disabled }, dxValidator: { validationRules: validationRules || [] }"></div>
+        <div data-bind="dxDateBox: { value: value.extend({ rateLimit: 500 }), closeOnValueChange: true, type: 'date', disabled: disabled }, dxValidator: { validationRules: validationRules || [] }"></div>
     </script>
     <script>
         // Globals
@@ -345,10 +347,8 @@
         }
 
         function onCustomizeParameter(parameter, info) {
-            if (parameter.type === 'System.DateTime') {
-                // Show a calendar only without a time part
-                info.editor = $.extend({}, info.editor);
-                info.editor.extendedOptions = $.extend(info.editor.extendedOptions || {}, { type: 'date' });
+            if (parameter.type == 'System.DateTime') {
+                info.editor = { header: 'dx-date-simple' };                
             }
         }        
 
@@ -589,12 +589,12 @@
             var commandParams = { 'Type': type };
 
             if (reportType == 3) { // Cube
-                /*customCubePivotGrid.PerformCallback(commandName + JSON.stringify(commandParams), function () {
+                customCubePivotGrid.PerformCallback(commandName + JSON.stringify(commandParams), function () {
                     if (customCubePivotGrid.cpLayoutExportedTo) {
-                            
+                        window.open('Download.ashx?FileName=' + customCubePivotGrid.cpLayoutExportedTo);
                         delete customCubePivotGrid.cpLayoutExportedTo;
                     }
-                });*/
+                });
             } else if (reportType == 4) { // Table
                 customTableGridView.PerformCallback(commandName + JSON.stringify(commandParams), function () {
                     if (customTableGridView.cpLayoutExportedTo) {
@@ -667,8 +667,6 @@
                 }
 
                 if (reportType == 3) { // Cube
-                    $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(5)').hide(); // No export option.
-
                     if (chartStatus == 0) { // None
                         $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(6)').hide();
                         $('#customLayoutSection > table:first-child > tbody > tr:first-child > td:nth-child(7)').hide();

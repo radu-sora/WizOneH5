@@ -155,6 +155,18 @@
                 delete s.cpAlertMessage;
             }
 
+            if (s.cp_MesajProces != null) {
+                swal({
+                    title: "Confirmare proces", text: s.cp_MesajProces,
+                    type: "warning", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: trad_string(limba, "Da, continua!"), cancelButtonText: trad_string(limba, "Renunta"), closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        grDate.PerformCallback("ProcesConfirmare");
+                    }
+                });
+                delete s.cp_MesajProces;
+            }
+
             AdjustSize();
         }
         function OnControlsInitialized(s, e) {

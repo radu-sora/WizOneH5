@@ -146,7 +146,8 @@
                                         }
                                     }" />
                             </dx:ASPxPivotGrid>
-                            <dx:ASPxPivotGridExporter ID="CustomCubePivotGridExporter" runat="server" ASPxPivotGridID="CustomCubePivotGrid">                                
+                            <dx:ASPxPivotGridExporter ID="CustomCubePivotGridExporter" runat="server" ASPxPivotGridID="CustomCubePivotGrid" 
+                                OptionsPrint-PageSettings-Landscape="True">                                
                             </dx:ASPxPivotGridExporter>
                         </td>
                     </tr>
@@ -217,8 +218,8 @@
                             onCustomTableContextMenuItemClick(e.item);
                         }" />
                 </dx:ASPxGridView>
-                <dx:ASPxGridViewExporter ID="CustomTableGridViewExporter" runat="server" GridViewID="CustomTableGridView"
-                    TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0">                                
+                <dx:ASPxGridViewExporter ID="CustomTableGridViewExporter" runat="server" GridViewID="CustomTableGridView" 
+                    TopMargin="0" BottomMargin="0" LeftMargin="0" RightMargin="0" Landscape="true">                                
                 </dx:ASPxGridViewExporter>
             </td>            
         </tr>

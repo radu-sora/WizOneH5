@@ -8089,9 +8089,7 @@ namespace WizOne.Module
                 if (dtAbsNomen != null && dtAbsNomen.Rows.Count > 0)
                     idAbs = Convert.ToInt32(dtAbsNomen.Rows[0]["Id"].ToString());
                 else
-                    return;
-
-                DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dtSf.Date, 3, idAbs), null);
+                    return;  
 
                 string sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataInceput.Date) + " AND " + General.ToDataUniv(dtSf.Date);
                 ExecutaNonQuery(sql, null);
@@ -8133,12 +8131,13 @@ namespace WizOne.Module
                     campuri += ", \"Val" + i.ToString() + "\" = NULL";
                 for (int i = 1; i <= 60; i++)
                     campuri += ", F" + i.ToString() + " = NULL";
-                for (int i = 1; i <= 20; i++)
-                    campuri += ", \"In" + i.ToString() + "\" = NULL, \"Out" + i.ToString() + "\" = NULL";
+                //for (int i = 1; i <= 20; i++)
+                //    campuri += ", \"In" + i.ToString() + "\" = NULL, \"Out" + i.ToString() + "\" = NULL";
 
 
 
                 strSql = $@"MERGE INTO ""Ptj_intrari"" USING 
+                            (Select  case when ""AreDrepturi"" = 1 then ""DenumireScurta"" else null end  as ""Denumire"", x.* from                                
                             (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = caldate) = 0 then 0 else 1 end as prezenta, 
                             a.*, b.* from  Z_Calendar a
                             left join 
@@ -8157,18 +8156,18 @@ namespace WizOne.Module
                             INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
                             INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
                             LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
-                            WHERE { General.ToDataUniv(dataInceput.Date)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= {General.ToDataUniv(dtSf.Date)}
+                            WHERE {General.ToDataUniv(dataInceput.Date)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= {General.ToDataUniv(dtSf.Date)}
                             AND A.""Id"" = {idAbs}
                             AND COALESCE(A.""DenumireScurta"", '~') <> '~'
-                            AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 =  {marca} AND ""DataInceput"" <= { General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
+                            AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 =  {marca} AND ""DataInceput"" <= {General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
                             ) b
                             on a.caldate = b.""Zi""
 
-                            where caldate between  { General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} and ""AreDrepturi"" = 1
+                            where caldate between  {General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} ) x
 
                             ) Tmp 
                             ON (""Ptj_Intrari"".""Ziua"" = Tmp.caldate AND ""Ptj_Intrari"".F10003 = Tmp.F10003 and prezenta = 1) 
-                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""DenumireScurta"" {campuri}
+                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""Denumire"" {campuri}
                             WHEN NOT MATCHED THEN INSERT (F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""IdContract"", ""Norma"", F10002, F10004, F10005, F10006, F10007, F06204, ""ValStr"", USER_NO, TIME)
                              VALUES ({marca}, tmp.caldate, ""ZiSapt"" ,""ZiLibera"" , ""ZiLiberaLegala"", 
                             (SELECT X.""IdContract"" FROM ""F100Contracte"" X WHERE X.F10003 = {marca} AND X.""DataInceput"" <= tmp.caldate AND tmp.caldate <= X.""DataSfarsit""), 
@@ -8178,18 +8177,39 @@ namespace WizOne.Module
                              (SELECT F10005 FROM F100 WHERE F10003 = {marca}), 
                              (SELECT F10006 FROM F100 WHERE F10003 = {marca}), 
                              (SELECT F10007 FROM F100 WHERE F10003 = {marca}), 
-                             -1,  ""DenumireScurta"", {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()});";
+                             -1,  ""Denumire"", {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()});";
                 ExecutaNonQuery(strSql, null);
 
 
-                if (dataIncetare.Date != new DateTime(2100, 1, 1) && dataIncetare.Date < dataSfarsit.Date)
+                if (dataIncetare.Date != new DateTime(2100, 1, 1) && dataIncetare.Date <= dataSfarsit.Date)
                 {//stergerea pontarilor adaugate in plus
-                    sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date.AddDays(1)) + " AND " + General.ToDataUniv(dataSfarsit.Date);
+                    sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dataSfarsit.Date);
                     ExecutaNonQuery(sql, null);
-                    sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date.AddDays(1)) + " AND " + General.ToDataUniv(dataSfarsit.Date);
+                    sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dataSfarsit.Date);
                     ExecutaNonQuery(sql, null);
                 }
-                
+
+                //inserare in Ptj_cereri
+                int nrZile = 0;
+                DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dtSf.Date, 3, idAbs), null);
+                for (int i = 0; i < dtAbs.Rows.Count; i++)                  
+                    if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)                    
+                        nrZile++;
+
+                ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE F10003 = " + marca + " AND \"IdAbsenta\" = " + idAbs + " AND \"DataInceput\" = " + General.ToDataUniv(dataInceput.Date), null);
+
+                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+                string sqlInsert = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""Observatii"", ""IdStare"", USER_NO, TIME) "
+                                + @"VALUES (" +
+                                sqlIdCerere + ", " +
+                                marca + ", " +
+                                idAbs + ", " +
+                                General.ToDataUniv(dataInceput.Date) + ", " +
+                                General.ToDataUniv(dtSf.Date) + ", " +
+                                nrZile.ToString() + ", " +                                
+                                "'Transfer din Suspendari', " +
+                                "3, " + HttpContext.Current.Session["UserId"].ToString() + ", " + General.CurrentDate() + ")";
+                ExecutaNonQuery(sqlInsert, null);
             }
             catch (Exception ex)
             {

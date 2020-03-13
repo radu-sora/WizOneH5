@@ -3383,14 +3383,14 @@ namespace WizOne.Module
                 string strFiltru = "";
                 string strSql = "";
                 string op = "+";
-                string dt = "GETDATE()";
+                string dt = "cast(getdate() as date) ";
                 string filtruAng = "", condAng = "";
                 string tipData = "INT";
 
                 if (Constante.tipBD == 2)
                 {
                     op = "||";
-                    dt = "SYSDATE";
+                    dt = "trunc(sysdate) ";
                     tipData = "NUMBER(9)";
                 }
                             

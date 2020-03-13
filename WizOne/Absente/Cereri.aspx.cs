@@ -897,6 +897,24 @@ namespace WizOne.Absente
                     return;
                 }
 
+                //Radu 13.03.2020 - verificare ca idAbsenta sa fie valabil si la DataSfarsit
+                DataTable dtAbsVerif = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataSf.Value ?? DateTime.Now.Date)), null);
+                bool eroare = true;
+                if (dtAbsVerif != null && dtAbsVerif.Rows.Count > 0)
+                    for (int k = 0; k < dtAbsVerif.Rows.Count; k++)
+                        if (Convert.ToInt32(dtAbsVerif.Rows[k]["Id"].ToString()) == Convert.ToInt32(cmbAbs.Value))
+                        {
+                            eroare = false;
+                            break;
+                        }
+                if (eroare)
+                {
+                    if (tip == 1)
+                        MessageBox.Show(Dami.TraduCuvant("Acest tip de cerere nu este disponibil pe intreaga durata a solicitarii!"), MessageBox.icoWarning);
+                    else
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Acest tip de cerere nu este disponibil pe intreaga durata a solicitarii!");
+                    return;
+                }
 
                 #endregion
 

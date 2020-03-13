@@ -8171,7 +8171,7 @@ namespace WizOne.Module
 
                             ) Tmp 
                             ON (""Ptj_Intrari"".""Ziua"" = Tmp.caldate AND ""Ptj_Intrari"".F10003 = Tmp.F10003 and prezenta = 1) 
-                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""Denumire"" {campuri}
+                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""Denumire"" {campuri} , USER_NO ={HttpContext.Current.Session["UserId"].ToString()}, TIME = {General.CurrentDate()}
                             WHEN NOT MATCHED THEN INSERT (F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""IdContract"", ""Norma"", F10002, F10004, F10005, F10006, F10007, F06204, ""ValStr"", USER_NO, TIME)
                              VALUES ({marca}, tmp.caldate, ""ZiSapt"" ,""ZiLibera"" , ""ZiLiberaLegala"", 
                             (SELECT X.""IdContract"" FROM ""F100Contracte"" X WHERE X.F10003 = {marca} AND X.""DataInceput"" <= tmp.caldate AND tmp.caldate <= X.""DataSfarsit""), 

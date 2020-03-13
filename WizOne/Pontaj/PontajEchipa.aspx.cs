@@ -1859,11 +1859,11 @@ namespace WizOne.Pontaj
                             + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
                             + "FROM \"Securitate\" A "
                             + "INNER JOIN \"relGrupUser\" B ON A.\"IdGrup\" = B.\"IdGrup\" "
-                            + "WHERE B.\"IdUser\" = {0} AND LOWER(A.\"IdForm\") = 'pontaj.pontaj' "
+                            + "WHERE B.\"IdUser\" = {0} AND LOWER(A.\"IdForm\") = 'pontaj.pontajechipa' "
                             + "UNION "
                             + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
                             + "FROM \"Securitate\" A "
-                            + "WHERE A.\"IdGrup\" = -1 AND LOWER(A.\"IdForm\") = 'pontaj.pontaj') X "
+                            + "WHERE A.\"IdGrup\" = -1 AND LOWER(A.\"IdForm\") = 'pontaj.pontajechipa') X "
                             + "GROUP BY X.\"IdControl\", X.\"IdColoana\"";
                     strSql = string.Format(strSql, Session["UserId"].ToString());
                     if (General.VarSession("EsteAdmin").ToString() == "0")

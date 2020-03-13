@@ -12808,6 +12808,17 @@ INSERT INTO "Ptj_tblAdmin" ("Coloana", "Alias", "Latime", "Vizibil", "Blocat", "
 SELECT 'Stare', 'Stare', 0, 1, 0, 0, 1, -95, GetDate() WHERE ((SELECT COUNT(*) FROM "Ptj_tblAdmin" WHERE "Coloana"='Stare') = 0)
 GO
 
+EXEC sp_rename 'tblZile', 'tblZile2'
+GO
+
+CREATE VIEW tblZile
+AS 
+SELECT A.Zi, A.ZiSapt, CASE WHEN B.DAY IS NOT NULL THEN 1 ELSE 0 END AS ZiLiberaLegala FROM tblZile2 A
+LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
+GO
+
+-- Creata pentru clientul Chimpex - BEGIN
+
 --https://github.com/wizromRD/WizOne/issues/201
 --Flux aprobare saptamana pontaj #201
 INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa','-','btnValidare', Id, 0, 0, 0 FROM tblGrupUsers
@@ -12837,3 +12848,7 @@ return
 SELECT 'A fost respinsa' AS Raspuns
 
 GO
+
+-- Creata pentru clientul Chimpex - END
+
+

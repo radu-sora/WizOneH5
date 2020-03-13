@@ -13684,3 +13684,10 @@ alter table F090 add "CodTranzactie" number(9);
 INSERT INTO "Ptj_tblAdmin" ("Coloana", "Alias", "Latime", "Vizibil", "Blocat", "TipColoana", "Ordine", "USER_NO", "TIME") 
 SELECT 'Stare', 'Stare', 0, 1, 0, 0, 1, -95, SYSDATE FROM DUAL WHERE ((SELECT COUNT(*) FROM "Ptj_tblAdmin" WHERE "Coloana"='Stare') = 0);
 COMMIT;
+
+alter table "tblZile" rename to "tblZile2"; 
+CREATE VIEW "tblZile"
+AS 
+SELECT A."Zi", A."ZiSapt", CASE WHEN B.DAY IS NOT NULL THEN 1 ELSE 0 END AS "ZiLiberaLegala" FROM "tblZile2" A
+LEFT JOIN HOLIDAYS B ON A."Zi"=B.DAY;
+/

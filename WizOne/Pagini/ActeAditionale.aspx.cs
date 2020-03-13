@@ -615,23 +615,27 @@ namespace WizOne.Pagini
                                         //daca este candidat inainte trebuie sa salvam in baza de date
                                         if (General.Nz(obj[10],"0").ToString() == "1")
                                         {
-                                            int id = -99;
+                                            int id = Convert.ToInt32(General.Nz(General.ExecutaScalar($@"SELECT ""IdAuto"" FROM ""Admin_NrActAd"" WHERE F10003=@1 AND COALESCE(""Candidat"",0)=1", new object[] { obj[0] }),-99));
 
-                                            if (Constante.tipBD == 1)
+                                            if (id == -99)
                                             {
-                                                DataTable dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                OUTPUT Inserted.IdAuto
-                                                VALUES(@1, 0, @6, @2, @3, {General.CurrentDate()}, @4, @5);",
-                                                new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10], obj[1] });
+                                                if (Constante.tipBD == 1)
+                                                {
+                                                    DataTable dt = General.IncarcaDT($@"
+                                                    INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    OUTPUT Inserted.IdAuto
+                                                    VALUES(@1, 0, @6, @2, @3, {General.CurrentDate()}, @4, @5);",
+                                                    new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10], obj[1] });
 
-                                                if (dt.Rows.Count > 0)
-                                                    id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
-                                            }
-                                            else
-                                            {
-                                                id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                VALUES(@2, 0, @6, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
-                                                new object[] { "int", obj[0], Session["UserId"], obj[10], obj[1] }), 0));
+                                                    if (dt.Rows.Count > 0)
+                                                        id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
+                                                }
+                                                else
+                                                {
+                                                    id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    VALUES(@2, 0, @6, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                    new object[] { "int", obj[0], Session["UserId"], obj[10], obj[1] }), 0));
+                                                }
                                             }
 
                                             if (Convert.ToInt32(General.Nz(id, -99)) != -99)

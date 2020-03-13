@@ -12825,11 +12825,20 @@ INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Ob
 INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa','-','btnRefuza', Id, 0, 0, 0 FROM tblGrupUsers
 GO
 
-CREATE FUNCTION ProccesValidare (@idUser int) 
+CREATE FUNCTION ProccesValidare (@idUser int)
 RETURNs table AS 
 return 
 
-SELECT CASE WHEN @idUser < 10 THEN 0 ELSE CASE WHEN @idUser > 100 THEN 2 ELSE 1 END END AS idRaspuns, 'Hi All !' AS Raspuns
+SELECT CASE 
+WHEN SUM(CASE WHEN X.Denumire='Nevalidat si neblocat cu erori' THEN 1 ELSE 0 END) > 0 THEN 0
+WHEN SUM(CASE WHEN X.Denumire='Nevalidat si neblocat cu atentionari' THEN 1 ELSE 0 END) > 0 THEN 2
+ELSE 1 END AS IdRaspuns,
+CASE 
+WHEN SUM(CASE WHEN X.Denumire='Nevalidat si neblocat cu erori' THEN 1 ELSE 0 END) > 0 THEN 'Pontaj nevalidat, exista erori'
+WHEN SUM(CASE WHEN X.Denumire='Nevalidat si neblocat cu atentionari' THEN 1 ELSE 0 END) > 0 THEN 'Pontaj validat cu atentionari'
+ELSE 'Pontaj validat' END AS Raspuns
+FROM viewCategoriePontaj X
+INNER JOIN F100Supervizori Y ON X.F10003=Y.F10003 AND Y.IdUser=@idUser AND Y.IdSuper=2
 
 GO
 

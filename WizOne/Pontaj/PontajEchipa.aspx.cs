@@ -1737,9 +1737,6 @@ namespace WizOne.Pontaj
                         return;
                     }
 
-                    int tip = 1;  //validare
-                    if (General.Nz(cmbRol.Value, "1").ToString() == "3") tip = 2;    //aprobare
-
                     switch (arr[0].ToString())
                     {
                         case "btnPeAng":

@@ -339,7 +339,7 @@
     </table>
     
     <script type="text/html" id="dx-date-simple">
-        <div data-bind="dxDateBox: { value: value.extend({ throttle: 500 }), closeOnValueChange: true, type: 'date', disabled: disabled }, dxValidator: { validationRules: validationRules || [] }"></div>
+        <div data-bind="dxDateBox: { value: value.extend({ rateLimit: 500 }), closeOnValueChange: true, type: 'date', disabled: disabled }, dxValidator: { validationRules: validationRules || [] }"></div>
     </script>
     <script type="text/html" id="dxrd-savereport-dialog-content-simple">
         <div data-bind="dxTextBox: { value: $data.reportName }"></div>

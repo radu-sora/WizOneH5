@@ -299,7 +299,7 @@ namespace WizOne.Absente
                     " * " +                                                                 //aceste zile cuvenite se inmultesc cu ce urmeaza
                     " (datediff(day,(CASE WHEN cast(f10022 as date) < '" + dtInc + "' THEN '" + dtInc + "' ELSE cast(f10022 as date) END) " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
                     " ,(CASE WHEN cast(f10023 as date) < '" + dtSf + "' THEN cast(f10023 as date) ELSE '" + dtSf + "' END))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta
-                    " - (SELECT COALESCE(SUM(datediff(d,CASE WHEN F11105 < CONVERT(date,'" + an + "-01-01') THEN CONVERT(date,'" + an + "-01-01') else F11105 END,CASE WHEN F11107 > CONVERT(date,'" + an + "-12-31') THEN CONVERT(date,'" + an + "-12-31') else F11107 END)) + 1,0) from f111_2 Z where f11103=" + f10003 + " and F11105 <= F11107)" +     // AND (year(F11105)=" + an + " or year(F11107)=" + an + ")
+                    " - (SELECT COALESCE(SUM(datediff(d,CASE WHEN F11105 < CONVERT(date,'" + an + "-01-01') THEN CONVERT(date,'" + an + "-01-01') else F11105 END,CASE WHEN F11107 > CONVERT(date,'" + an + "-12-31') THEN CONVERT(date,'" + an + "-12-31') else F11107 END)) + 1,0) from f111_2 Z where f11103=" + f10003 + " and F11105 <= F11107 and F11107 >= CONVERT(date,'" + an + "-01-01') AND F11105 <= CONVERT(date,'" + an + "-12-31'))" +     // AND (year(F11105)=" + an + " or year(F11107)=" + an + ")
                     " ) " +
 
                     " /CONVERT(float,365),0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus
@@ -367,7 +367,7 @@ namespace WizOne.Absente
                     " * " +                                                                 //aceste zile cuvenite se inmultesc cu ce urmeaza
                     " (least(trunc(f10023),to_date('" + dtSf + "','DD-MM-YYYY') " +        //luam min dintre ultima zi lucrata si sfarsitul anului de referinta
                     " ) - greatest(trunc(f10022),to_date('" + dtInc + "','DD-MM-YYYY'))+1 " +  //luam maxim dintre prima zi lucrata di prima zi a anului de referinta                   
-                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('" + dtSf + "','DD-MM-YYYY')) - greatest(trunc(f11105),to_date('" + dtInc + "','DD-MM-YYYY')) + 1),0) from f111_2 Z where f11103=" + f10003 + " and F11105 <= F11107 ) " +       //AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')
+                    " - (select COALESCE(SUM(least(trunc(F11107),to_date('" + dtSf + "','DD-MM-YYYY')) - greatest(trunc(f11105),to_date('" + dtInc + "','DD-MM-YYYY')) + 1),0) from f111_2 Z where f11103=" + f10003 + " and F11105 <= F11107 and F11107 >= to_date('" + dtInc + "','DD-MM-YYYY') AND F11105 <= to_date('" + dtSf + "','DD-MM-YYYY')) " +       //AND (to_Char(F11105,'yyyy')='" + an + "' or to_Char(F11107,'yyyy')='" + an + "')
 
                     " ) " +
                     " /365,0) as ZileCuvenite " +                                           //impartim totul la 365 de zile si apoi se inmulteste cu nr de zile cuvenite, de mai sus

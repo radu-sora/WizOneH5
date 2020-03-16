@@ -607,7 +607,7 @@ namespace Wizrom.Reports.Pages
 
                         var entities = new ReportsEntities();
 
-                        // Process command
+                        // Process command (first part)
                         if (commandName == "save")
                         {
                             try
@@ -731,7 +731,7 @@ namespace Wizrom.Reports.Pages
                                 // Log error
                                 // For now, mark as unprinted only                            
                             }
-                        }
+                        }                        
 
                         if (commandName != "delete")
                         {
@@ -786,11 +786,85 @@ namespace Wizrom.Reports.Pages
                                     _report.FillDataSource();
                             }
 
+                            // For save, menu, print, export and all native callbacks
                             CustomCubePivotGrid.DataSource = _pivotGrid.DataSource;
                             CustomCubePivotGrid.DataMember = _pivotGrid.DataMember;
 
                             // Refresh chart control
                             CustomCubePivotGrid.JSProperties["cpRefreshChart"] = GetWebChartRefreshState();
+                        }
+
+                        // Process command (second part - layout & data dependent)
+                        if (commandName == "export")
+                        {
+                            try
+                            {
+                                string fileName = string.Empty;
+
+                                CustomCubePivotGridExporter.OptionsPrint.PageSettings.Margins = new System.Drawing.Printing.Margins(0, 0, 0, 0);
+
+                                switch ((int)commandParams.Type)
+                                {
+                                    case 0:
+                                        {
+                                            fileName = Context.Server.MapPath($"~/Temp/{_report.Name}.pdf");
+
+                                            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+                                            using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                                                CustomCubePivotGridExporter.ExportToPdf(fileStream);
+                                        }
+                                        break;
+                                    case 1:
+                                        {
+                                            fileName = Context.Server.MapPath($"~/Temp/{_report.Name}.xls");
+
+                                            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+                                            using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                                                CustomCubePivotGridExporter.ExportToXls(fileStream);
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            fileName = Context.Server.MapPath($"~/Temp/{_report.Name}.xlsx");
+
+                                            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+                                            using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                                                CustomCubePivotGridExporter.ExportToXlsx(fileStream);
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            fileName = Context.Server.MapPath($"~/Temp/{_report.Name}.rtf");
+
+                                            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+                                            using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                                                CustomCubePivotGridExporter.ExportToRtf(fileStream);
+                                        }
+                                        break;
+                                    case 4:
+                                        {
+                                            fileName = Context.Server.MapPath($"~/Temp/{_report.Name}.csv");
+
+                                            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+                                            using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                                                CustomCubePivotGridExporter.ExportToCsv(fileStream);
+                                        }
+                                        break;
+                                }
+
+                                if (fileName.Length > 0)
+                                    CustomCubePivotGrid.JSProperties["cpLayoutExportedTo"] = Path.GetFileName(fileName);
+                            }
+                            catch (Exception ex)
+                            {
+                                // Log error
+                                // For now, mark as unexported only
+                            }
                         }
                     }
                 }

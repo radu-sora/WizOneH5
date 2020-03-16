@@ -164,7 +164,7 @@ namespace WizOne.Module
 
         public static DataTable IncarcaDT(string strSql, object[] lstParam, string primaryKey = "")
         {          
-            DataTable dt = new DataTable();           
+            DataTable dt = new DataTable();
 
             try
             {
@@ -1783,7 +1783,7 @@ namespace WizOne.Module
         }
 
         //Florin 2020.01.21
-        public static string SelectAbsente(string f10003, int idAbs = -99)
+        public static string SelectAbsente(string f10003, DateTime data, int idAbs = -99)
         {
             string strSql = "";
 
@@ -1791,14 +1791,21 @@ namespace WizOne.Module
             {
                 if (string.IsNullOrEmpty(f10003)) return strSql;
 
-                string dt = "GetDate()";
+                //Radu 27.02.2020 - se va lua data inceput concediu
+                //string dt = "GetDate()";
+                string dt = "";
                 string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
                 string filtru = "";
 
                 if (Constante.tipBD == 2)
                 {
                     idAuto = "ROWNUM";
-                    dt = "sysdate";
+                    //dt = "sysdate";
+                    dt = "TO_DATE('" + data.Day + "/" + data.Month + "/" + data.Year + "', 'dd/mm/yyyy')";
+                }
+                else
+                {
+                    dt = "CONVERT(DATETIME, '" + data.Day + "/" + data.Month + "/" + data.Year + "', 103)";
                 }
 
                 if (idAbs != -99) filtru = @" WHERE Y.""Id""=" + idAbs;
@@ -3379,14 +3386,14 @@ namespace WizOne.Module
                 string strFiltru = "";
                 string strSql = "";
                 string op = "+";
-                string dt = "GETDATE()";
+                string dt = "cast(getdate() as date) ";
                 string filtruAng = "", condAng = "";
                 string tipData = "INT";
 
                 if (Constante.tipBD == 2)
                 {
                     op = "||";
-                    dt = "SYSDATE";
+                    dt = "trunc(sysdate) ";
                     tipData = "NUMBER(9)";
                 }
                             
@@ -4629,6 +4636,10 @@ namespace WizOne.Module
                                             if (dr["IdColoana"].ToString().ToLower() == "btnsterge")
                                             {
                                                 column.ShowDeleteButton = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
+                                            }
+                                            if (dr["IdColoana"].ToString().ToLower() == "btnnew")
+                                            {
+                                                column.ShowNewButtonInHeader = (Convert.ToInt32(dr["Vizibil"]) == 1 ? true : false);
                                             }
                                         }
 
@@ -7707,7 +7718,7 @@ namespace WizOne.Module
                         break;
                 }
 
-                string sqlVal = $@"SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"" ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH ('') ";
+                string sqlVal = $@"SELECT CONVERT(nvarchar(max),(SELECT '{Dami.Operator()}' {Dami.Operator()} {masca} FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"" ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int) For XML PATH (''))) ";
                 if (Constante.tipBD == 2)
                     sqlVal = $@"SELECT LISTAGG('{Dami.Operator()}' {Dami.Operator()} {masca}) WITHIN GROUP (ORDER BY CAST(REPLACE(""OreInVal"", 'Val','') AS int)) FROM (SELECT ""OreInVal"", ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""OreInVal"" IS NOT NULL GROUP BY ""OreInVal"", ""DenumireScurta"")";
 
@@ -7920,5 +7931,320 @@ namespace WizOne.Module
             }
         }
 
+        //Radu 03.03.2020
+        public static void TransferTranzactii(string marca, string cod, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare)
+        {
+            DateTime date1 = DamiDataLucru();
+            DateTime date2 = DamiDataLucru().AddMonths(1).AddDays(-1);
+            DateTime szdI1 = DamiDataLucru(), szdI2 = date2, datasftranz = new DateTime(2100, 1, 1);
+
+            try
+            {
+                if (dataInceput <= date2 && dataSfarsit >= date1 && dataIncetare >= date1)  // sunt in luna curenta
+                {
+                    int datachange = 0;
+                    if (dataInceput > date1)
+                    {
+                        szdI1 = dataInceput;
+                        datachange = 1;
+                    }
+                    if (dataIncetare <= date2)
+                    {
+                        dataIncetare = dataIncetare.AddDays(-1);
+                        szdI2 = dataIncetare;
+                        datachange = 1;
+                    }
+                    else if (dataSfarsit < date2)
+                    {
+                        szdI2 = dataSfarsit;
+                        datachange = 1;
+                    }
+
+                    string sql = "SELECT 1, F30038 FROM F300 WHERE F30010 = {0} AND F30037 = {1} AND F30003 = {2}";
+                    sql = string.Format(sql, cod, General.ToDataUniv(szdI1), marca);
+                    DataTable dtVerif = IncarcaDT(sql, null);
+                    int continua = 0;
+                    if (dtVerif != null && dtVerif.Rows.Count > 0)
+                    {
+                        continua = Convert.ToInt32(dtVerif.Rows[0][0].ToString());
+                        datasftranz = Convert.ToDateTime(dtVerif.Rows[0][1].ToString());
+                    }
+
+                    if (continua != 1)      // nu exista tranzactia
+                    {
+
+                        //calendarul pt luna curenta
+                        DataTable dtCalendar = IncarcaDT("SELECT * FROM F069 WHERE F06904 = (SELECT F01011 FROM F010) AND F06905 = (SELECT F01012 FROM F010)", null);
+
+                        if (dtCalendar == null || dtCalendar.Rows.Count <= 0) return;
+
+                        int nZileLucratoare = Convert.ToInt32(dtCalendar.Rows[0]["F06907"].ToString());
+
+                        if (datachange == 1)
+                        {
+                            // sarbatori legale
+                            List<int> arlHolidays = new List<int>();
+
+                            // incarc sarbatorile legale:
+                            int nI = 0;
+                            sql = "SELECT * FROM HOLIDAYS WHERE MONTH(DAY) = {0} AND YEAR(DAY) = {1}";
+                            if (Constante.tipBD == 2)
+                                sql = "SELECT * FROM HOLIDAYS WHERE EXTRACT(MONTH FROM DAY) = {0} AND EXTRACT(YEAR FROM DAY) = {1}";
+                            sql = string.Format(sql, DamiDataLucru().Month, DamiDataLucru().Year);
+                            DataTable dtHolidays = IncarcaDT(sql, null);
+                            if (dtHolidays != null && dtHolidays.Rows.Count > 0)
+                                for (int i = 0; i < dtHolidays.Rows.Count; i++)
+                                    arlHolidays.Add(Convert.ToDateTime(dtHolidays.Rows[i]["DAY"].ToString()).Day);
+
+
+                            for (nI = 1; nI < szdI1.Day; nI++)
+                            {
+                                DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
+                                if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
+                                    nZileLucratoare--;
+                            }
+
+                            for (nI = szdI2.Day + 1; nI <= date2.Day; nI++)
+                            {
+                                DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
+                                if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
+                                    nZileLucratoare--;
+                            }
+                        }
+
+
+                        sql = "INSERT INTO F300 (F30001, F30002, F30003, F30004, F30005, F30006, F30007, F30010, F30011, F30013, F30035, F30036, F30037, F30038, F30050, F300603, F300611, USER_NO, TIME,"
+                             + " F30012, F30014, F30015, F30021, F30022, F30023, F30039, F30040, F30041, F30044, F30045, F30046, F30051, F30053, F300612, F300613, F300614, F30054, F30042)"
+                             + " SELECT 300, F10002, F10003, F10004, F10005, F10006, F10007, {0},  1, {1}, {2}, {2}, "
+                             + " {3}, {4}, CASE WHEN F10053 IS NULL OR F10053=0 THEN F00615 ELSE F10053 END, "
+                             + " {2}, 1, {5}, {6}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Tranzactie din Suspendari'"
+                             + " FROM F100, F006 WHERE F10003 = {7} AND F10007=F00607";
+                        sql = string.Format(sql, cod, nZileLucratoare, ToDataUniv(date1), ToDataUniv(szdI1), ToDataUniv(szdI2), HttpContext.Current.Session["UserId"].ToString(),
+                                    (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), marca);
+                        ExecutaNonQuery(sql, null);
+                    }
+                    else if (datasftranz != szdI2)
+                    {
+                        //calendarul pt luna curenta
+                        DataTable dtCalendar = IncarcaDT("SELECT * FROM F069 WHERE F06904 = (SELECT F01011 FROM F010) AND F06905 = (SELECT F01012 FROM F010)", null);
+
+                        if (dtCalendar == null || dtCalendar.Rows.Count <= 0) return;
+
+                        int nZileLucratoare = Convert.ToInt32(dtCalendar.Rows[0]["F06907"].ToString());
+
+                        if (datachange == 1)
+                        {
+                            // sarbatori legale
+                            List<int> arlHolidays = new List<int>();
+
+                            // incarc sarbatorile legale:
+                            int nI = 0;
+                            sql = "SELECT * FROM HOLIDAYS WHERE MONTH(DAY) = {0} AND YEAR(DAY) = {1}";
+                            if (Constante.tipBD == 2)
+                                sql = "SELECT * FROM HOLIDAYS WHERE EXTRACT(MONTH FROM DAY) = {0} AND EXTRACT(YEAR FROM DAY) = {1}";
+                            sql = string.Format(sql, DamiDataLucru().Month, DamiDataLucru().Year);
+                            DataTable dtHolidays = IncarcaDT(sql, null);
+                            if (dtHolidays != null && dtHolidays.Rows.Count > 0)
+                                for (int i = 0; i < dtHolidays.Rows.Count; i++)
+                                    arlHolidays.Add(Convert.ToDateTime(dtHolidays.Rows[i]["DAY"].ToString()).Day);
+
+                            for (nI = 1; nI < szdI1.Day; nI++)
+                            {
+                                DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
+                                if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
+                                    nZileLucratoare--;
+                            }
+
+                            for (nI = szdI2.Day + 1; nI <= date2.Day; nI++)
+                            {
+                                DateTime odtTmp = new DateTime(DamiDataLucru().Year, DamiDataLucru().Month, nI);
+                                if (!arlHolidays.Contains(odtTmp.Day) && odtTmp.DayOfWeek != DayOfWeek.Saturday && odtTmp.DayOfWeek != DayOfWeek.Sunday)
+                                    nZileLucratoare--;
+                            }
+
+                        }
+
+                        sql = "UPDATE F300 SET F30013 = {0}, F30038 = {1}, USER_NO = {2}, TIME = {3}"
+                            + " WHERE F30010 = {4} AND F30037 = {5} AND F30003 = {6}";
+                        sql = string.Format(sql, nZileLucratoare, ToDataUniv(szdI2), HttpContext.Current.Session["UserId"].ToString(), (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE"), cod, ToDataUniv(szdI1), marca);
+                        ExecutaNonQuery(sql, null);
+
+                        sql = "UPDATE F111 SET F11112 = 2 WHERE F11105 = {0} AND F11106 = {1} AND F11103 = {2} AND F11112 = 1";
+                        sql = string.Format(sql, ToDataUniv(dataInceput), ToDataUniv(dataSfarsit), marca);
+                        ExecutaNonQuery(sql, null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "General", "TransferTranzactii");
+            }
+        }
+
+        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare, string denScurta)
+        {
+            try
+            {
+                DateTime dtSf = (dataIncetare == new DateTime(2100, 1, 1) ? dataSfarsit : dataIncetare.AddDays(-1));
+
+                string strSql = "";
+                int idAbs = -99;
+                DataTable dtAbsNomen = General.IncarcaDT("SELECT * FROM \"Ptj_tblAbsente\" WHERE \"DenumireScurta\" = '" + denScurta + "'", null);
+                if (dtAbsNomen != null && dtAbsNomen.Rows.Count > 0)
+                    idAbs = Convert.ToInt32(dtAbsNomen.Rows[0]["Id"].ToString());
+                else
+                    return;  
+
+                string sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataInceput.Date) + " AND " + General.ToDataUniv(dtSf.Date);
+                ExecutaNonQuery(sql, null);
+
+
+                string sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
+                                        SELECT {marca}, ""Zi"", ""DenumireScurta"", (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003 = {marca} AND ""Ziua"" = ""Zi""), 
+                                {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, 'Transfer din Suspendari'
+                                    FROM 
+                                    (select case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
+                                    b.* from  ""tblZile"" a
+                                    left join 
+                                    (SELECT P.""Zi"",
+                                    CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
+                                    CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
+                                    CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE
+                                    CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE 0 
+                                    END
+                                    END
+                                    END
+                                    END AS ""AreDrepturi"", ""DenumireScurta""
+                                    FROM ""tblZile"" P
+                                    INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
+                                    INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
+                                    LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
+                                    WHERE { General.ToDataUniv(dataInceput.Date)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <=  {General.ToDataUniv(dtSf.Date)}
+                                    AND A.""Id"" = {idAbs}
+                                    AND COALESCE(A.""DenumireScurta"", '~') <> '~'
+                                    AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {marca} AND ""DataInceput"" <= { General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
+                                    ) b
+                                    on a.""Zi"" = b.""Zi""
+
+                                    where a.""Zi"" between  { General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} and aredrepturi = 1) x   ";
+
+                ExecutaNonQuery(sqlIst, null);
+
+                string campuri = "";
+                for (int i = 0; i <= 20; i++)
+                    campuri += ", \"Val" + i.ToString() + "\" = NULL";
+                for (int i = 1; i <= 60; i++)
+                    campuri += ", F" + i.ToString() + " = NULL";
+                //for (int i = 1; i <= 20; i++)
+                //    campuri += ", \"In" + i.ToString() + "\" = NULL, \"Out" + i.ToString() + "\" = NULL";
+
+
+
+                strSql = $@"MERGE INTO ""Ptj_intrari"" USING 
+                            (Select  case when ""AreDrepturi"" = 1 then ""DenumireScurta"" else null end  as ""Denumire"", x.* from                                
+                            (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
+                            b.* from  ""tblZile"" a
+                            left join 
+
+                            (SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
+                            CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
+                            CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
+                            CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
+                            CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE
+                            CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE 0 
+                            END
+                            END
+                            END
+                            END AS ""AreDrepturi"", ""DenumireScurta""
+                            FROM ""tblZile"" P
+                            INNER JOIN ""Ptj_tblAbsente"" A ON 1=1
+                            INNER JOIN ""Ptj_ContracteAbsente"" B ON A.""Id"" = B.""IdAbsenta""
+                            LEFT JOIN HOLIDAYS D on P.""Zi""=D.DAY
+                            WHERE {General.ToDataUniv(dataInceput.Date)} <= CAST(P.""Zi"" AS date) AND CAST(P.""Zi"" AS date) <= {General.ToDataUniv(dtSf.Date)}
+                            AND A.""Id"" = {idAbs}
+                            AND COALESCE(A.""DenumireScurta"", '~') <> '~'
+                            AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 =  {marca} AND ""DataInceput"" <= {General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
+                            ) b
+                            on a.""Zi"" = b.""Zi""
+
+                            where a.""Zi"" between  {General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} ) x
+
+                            ) Tmp 
+                            ON (""Ptj_Intrari"".""Ziua"" = ""Zi"" AND ""Ptj_Intrari"".F10003 = Tmp.F10003 and prezenta = 1) 
+                            WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""Denumire"" {campuri} , USER_NO ={HttpContext.Current.Session["UserId"].ToString()}, TIME = {General.CurrentDate()}
+                            WHEN NOT MATCHED THEN INSERT (F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""IdContract"", ""Norma"", F10002, F10004, F10005, F10006, F10007, F06204, ""ValStr"", USER_NO, TIME)
+                             VALUES ({marca}, ""Zi"", ""ZiSapt"" ,""ZiLibera"" , ""ZiLiberaLegala"", 
+                            (SELECT X.""IdContract"" FROM ""F100Contracte"" X WHERE X.F10003 = {marca} AND X.""DataInceput"" <= ""Zi"" AND ""Zi"" <= X.""DataSfarsit""), 
+                            (SELECT F10043 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10002 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10004 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10005 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10006 FROM F100 WHERE F10003 = {marca}), 
+                             (SELECT F10007 FROM F100 WHERE F10003 = {marca}), 
+                             -1,  ""Denumire"", {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()});";
+                ExecutaNonQuery(strSql, null);
+
+
+                if (dataIncetare.Date != new DateTime(2100, 1, 1) && dataIncetare.Date <= dataSfarsit.Date)
+                {//stergerea pontarilor adaugate in plus
+                    sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dataSfarsit.Date);
+                    ExecutaNonQuery(sql, null);
+                    sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dataSfarsit.Date);
+                    ExecutaNonQuery(sql, null);
+                }
+
+                //inserare in Ptj_cereri
+                int nrZile = 0;
+                DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dtSf.Date, 3, idAbs), null);
+                for (int i = 0; i < dtAbs.Rows.Count; i++)                  
+                    if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)                    
+                        nrZile++;
+
+                ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE F10003 = " + marca + " AND \"IdAbsenta\" = " + idAbs + " AND \"DataInceput\" = " + General.ToDataUniv(dataInceput.Date), null);
+
+                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) + 1 FROM ""Ptj_Cereri"") ";
+                string sqlInsert = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""Observatii"", ""IdStare"", USER_NO, TIME) "
+                                + @"VALUES (" +
+                                sqlIdCerere + ", " +
+                                marca + ", " +
+                                idAbs + ", " +
+                                General.ToDataUniv(dataInceput.Date) + ", " +
+                                General.ToDataUniv(dtSf.Date) + ", " +
+                                nrZile.ToString() + ", " +                                
+                                "'Transfer din Suspendari', " +
+                                "3, " + HttpContext.Current.Session["UserId"].ToString() + ", " + General.CurrentDate() + ")";
+                ExecutaNonQuery(sqlInsert, null);
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "General", "TransferPontaj");
+            }
+        }
+        //end Radu
+
+
+        public static void ExecutaProcedura(string numeProcedura, int idUser, string comentariu = "")
+        {
+            try
+            {
+                using (var conn = new SqlConnection(Constante.cnnWeb))
+                using (var command = new SqlCommand(numeProcedura, conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("@idUser", idUser);
+                    if (comentariu != "")
+                        command.Parameters.AddWithValue("@comentariu", comentariu);
+
+                    conn.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MemoreazaEroarea(ex.ToString(), "Calcul", "CalculFormule");
+            }
+        }
     }
 }

@@ -48,11 +48,18 @@ namespace WizOne
                                 Response.Write(Dami.TraduCuvant("Date insuficiente"));
                             else
                             {
-                                string sqlUsr = $@"SELECT F70102 FROM USERS WHERE ""Mail""=@1
+                                string sqlUsr = $@"SELECT F70102, ""IdLimba"" FROM USERS WHERE ""Mail""=@1
                                                 UNION
-                                                SELECT F70102 FROM USERS WHERE F10003 IN (SELECT F10003 FROM F100 WHERE F100894=@1)";       //Radu 10.10.2019 - am pus "F10003 IN "  in loc de "F10003 = "  deoarece pot fi mai multe marci cu acelasi e-mail in F100
+                                                SELECT F70102, ""IdLimba"" FROM USERS WHERE F10003 IN (SELECT F10003 FROM F100 WHERE F100894=@1)";       //Radu 10.10.2019 - am pus "F10003 IN "  in loc de "F10003 = "  deoarece pot fi mai multe marci cu acelasi e-mail in F100
 
-                                int idUsr = Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlUsr, new object[] { mail }), -99));
+                                //int idUsr = Convert.ToInt32(General.Nz(General.ExecutaScalar(sqlUsr, new object[] { mail }), -99));
+                                int idUsr = -99;
+                                DataRow drUsr = General.IncarcaDR(sqlUsr, new object[] { mail });
+                                if (drUsr != null)
+                                {
+                                    idUsr = Convert.ToInt32(General.Nz(drUsr["F70102"], -99));
+                                    Session["IdLimba"] = General.Nz(drUsr["IdLimba"], "RO");
+                                }
 
                                 switch (numePagina)
                                 {

@@ -1671,9 +1671,10 @@ namespace WizOne.Avs
                 string op = "+";
                 if (Constante.tipBD == 2)
                     op = "||";
-                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 ", null);
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 join f111 on f11104 = f09002 and f11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
                 de1Nou.ClientEnabled = false;
+                de2Nou.ClientEnabled = false;
                 DataTable dtTempRev = General.IncarcaDT("select * from f111 Where F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = " 
                             + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") AND F11104 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString() + " ORDER BY F11105", null);
                 if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11105"] != null && dtTempRev.Rows[0]["F11105"].ToString().Length > 0)
@@ -4112,6 +4113,20 @@ namespace WizOne.Avs
                 sql100 = "UPDATE F100 SET F100925 = " + dtSuspAng.Rows[0]["F11104"].ToString() + ", F100922 = " + data1 + ", F100923 = " + data2 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
                      (Convert.ToInt32(dtSuspAng.Rows[0]["F11104"].ToString()) == 11 ? ", F10076 = " + data1 + ", F10077 = " + data2 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
                 sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data1 + " - 1 WHERE F10003 = " + f10003.ToString();
+
+                //transfer
+                DataTable dtSuspNomen = General.IncarcaDT("SELECT * FROM F090 WHERE F09002 = " + dtSuspAng.Rows[0]["F11104"].ToString(), null);
+                if (dtSuspNomen != null && dtSuspNomen.Rows.Count > 0)
+                {
+                    int cod = (dtSuspNomen.Rows[0]["CodTranzactie"] as int?) ?? 0;
+                    if (dtSuspNomen.Rows[0]["TransferTranzactii"] != null && dtSuspNomen.Rows[0]["TransferTranzactii"].ToString().Length > 0 && Convert.ToInt32(dtSuspNomen.Rows[0]["TransferTranzactii"].ToString()) == 1)
+                        General.TransferTranzactii(f10003.ToString(), cod.ToString(),
+                            Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11107"].ToString()));
+                    if (dtSuspNomen.Rows[0]["TransferPontaj"] != null && dtSuspNomen.Rows[0]["TransferPontaj"].ToString().Length > 0 && Convert.ToInt32(dtSuspNomen.Rows[0]["TransferPontaj"].ToString()) == 1)
+                        General.TransferPontaj(f10003.ToString(), Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()),
+                             Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11107"].ToString()),
+                            (dtSuspNomen.Rows[0]["DenumireScurta"] as string));                    
+                }
             }
         }
         private void ActualizareDet(int f10003, ref string sql100, ref string sql1001)

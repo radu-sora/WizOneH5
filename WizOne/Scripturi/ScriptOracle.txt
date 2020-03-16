@@ -13672,3 +13672,22 @@ UPDATE "Ntf_Setari" SET "ContinutMail"=REPLACE("ContinutMail",'#$Link Aproba$#',
 COMMIT;
 UPDATE "Ntf_Setari" SET "ContinutMail"=REPLACE("ContinutMail",'#$Link Respinge$#','#$Link2 Respinge$#') WHERE "ContinutMail" LIKE '%#$Link Respinge$#%';
 COMMIT;
+
+----  2.2.126  ----
+
+
+alter table F090 add "DenumireScurta" varchar2(250);
+alter table F090 add "TransferTranzactii" number(9);
+alter table F090 add "TransferPontaj" number(9);
+alter table F090 add "CodTranzactie" number(9);
+
+INSERT INTO "Ptj_tblAdmin" ("Coloana", "Alias", "Latime", "Vizibil", "Blocat", "TipColoana", "Ordine", "USER_NO", "TIME") 
+SELECT 'Stare', 'Stare', 0, 1, 0, 0, 1, -95, SYSDATE FROM DUAL WHERE ((SELECT COUNT(*) FROM "Ptj_tblAdmin" WHERE "Coloana"='Stare') = 0);
+COMMIT;
+
+alter table "tblZile" rename to "tblZile2"; 
+CREATE VIEW "tblZile"
+AS 
+SELECT A."Zi", A."ZiSapt", CASE WHEN B.DAY IS NOT NULL THEN 1 ELSE 0 END AS "ZiLiberaLegala" FROM "tblZile2" A
+LEFT JOIN HOLIDAYS B ON A."Zi"=B.DAY;
+/

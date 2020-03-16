@@ -14,6 +14,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Drawing;
+using System.Data.SqlClient;
 
 namespace WizOne.Pontaj
 {
@@ -161,7 +162,7 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
                 {
                     divHovercard.Visible = false;
-                    rowHovercard.Style["margin-bottom"] = "8px";
+                    //rowHovercard.Style["margin-bottom"] = "8px";
                 }
 
                 if (!IsPostBack)
@@ -592,7 +593,7 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
                 {
                     divHovercard.Visible = false;
-                    rowHovercard.Style["margin-bottom"] = "8px";
+                    //rowHovercard.Style["margin-bottom"] = "8px";
                 }
 
                 //Florin 2019.07.19
@@ -1736,8 +1737,10 @@ namespace WizOne.Pontaj
                         return;
                     }
 
-                    
-                    switch(arr[0].ToString())
+                    int tip = 1;  //validare
+                    if (General.Nz(cmbRol.Value, "1").ToString() == "3") tip = 2;    //aprobare
+
+                    switch (arr[0].ToString())
                     {
                         case "btnPeAng":
                             {
@@ -1763,6 +1766,57 @@ namespace WizOne.Pontaj
                             break;
                         case "btnRespinge":
                             Actiuni(0, arr[1].Trim());                   
+                            break;
+                        case "btnValidare":
+                            {
+                                DataTable dt = General.IncarcaDT($"SELECT * FROM ProcesValidare({Session["UserId"]})", null);
+                                if (dt != null && dt.Rows.Count > 0)
+                                {
+                                    string raspuns = General.Nz(dt.Rows[0]["Raspuns"], "").ToString();
+                                    raspuns = Dami.TraduCuvant(raspuns);
+
+                                    switch (General.Nz(dt.Rows[0]["IdRaspuns"],"").ToString())
+                                    {
+                                        case "0":
+                                            grDate.JSProperties["cpAlertMessage"] = raspuns;
+                                            break;
+                                        case "1":
+                                            {
+                                                string mesaj = ExecutaProcedura("ProcesAprobare");
+                                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
+                                            }
+                                            break;
+                                        case "2":
+                                            grDate.JSProperties["cp_MesajProces"] = raspuns;
+                                            break;
+                                    }
+                                }
+                            }
+                            break;
+                        case "btnRefuza":
+                            {
+                                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
+                                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                                {
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati selectat niciun angajat!");
+                                    return;
+                                }
+                                string ids = "";
+                                for (int i = 0; i < lst.Count(); i++)
+                                {
+                                    ids += "," + lst[i];
+                                }
+
+                                object[] obj = new object[] { arr[1].Trim(), ids.Substring(1) };
+                                string mesaj = ExecutaProcedura("ProcesRespingere", obj);
+                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
+                            }
+                            break;
+                        case "ProcesConfirmare":
+                            {
+                                string mesaj = ExecutaProcedura("ProcesAprobare");
+                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
+                            }
                             break;
                     }
                 }
@@ -1815,13 +1869,36 @@ namespace WizOne.Pontaj
                         for (int j = 0; j < dtAbs.Rows.Count; j++)
                             listaAbs.Add(dtAbs.Rows[j]["DenumireScurta"].ToString(), dtAbs.Rows[j]["Culoare"].ToString());
 
+                    //Radu 28.02.2020 - securitate
+                    List<string> listaSec = new List<string>();
+                    strSql = "SELECT X.\"IdControl\", X.\"IdColoana\", MAX(X.\"Vizibil\") AS \"Vizibil\", MIN(X.\"Blocat\") AS \"Blocat\" FROM( "
+                            + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
+                            + "FROM \"Securitate\" A "
+                            + "INNER JOIN \"relGrupUser\" B ON A.\"IdGrup\" = B.\"IdGrup\" "
+                            + "WHERE B.\"IdUser\" = {0} AND LOWER(A.\"IdForm\") = 'pontaj.pontajechipa' "
+                            + "UNION "
+                            + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
+                            + "FROM \"Securitate\" A "
+                            + "WHERE A.\"IdGrup\" = -1 AND LOWER(A.\"IdForm\") = 'pontaj.pontajechipa') X "
+                            + "GROUP BY X.\"IdControl\", X.\"IdColoana\"";
+                    strSql = string.Format(strSql, Session["UserId"].ToString());
+                    if (General.VarSession("EsteAdmin").ToString() == "0")
+                    {
+                        DataTable dtSec = General.IncarcaDT(strSql, null);
+                        if (dtSec != null && dtSec.Rows.Count > 0)
+                            for (int k = 0; k < dtSec.Rows.Count; k++)
+                                if (dtSec.Rows[k]["Vizibil"] != null && Convert.ToInt32(dtSec.Rows[k]["Vizibil"].ToString()) == 0)
+                                    listaSec.Add(dtSec.Rows[k]["IdColoana"].ToString());
+                    }
+
+
                     if (chkLinie.Checked)
                     {
                         int nrCol = 0;              
                         int idZile = 0, colZile = 0;
                         for (int i = 0; i < dt.Columns.Count; i++)
                         {
-                            if (lista.ContainsKey(dt.Columns[i].ColumnName))
+                            if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                             {
                                 if (idZile > 0 && colZile > 0)
                                 {
@@ -1861,7 +1938,7 @@ namespace WizOne.Pontaj
                             idZile = 0; colZile = 0;
                             for (int i = 0; i < dt.Columns.Count; i++)
                             {
-                                if (lista.ContainsKey(dt.Columns[i].ColumnName))
+                                if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                                 {
                                     if (idZile > 0 && colZile > 0)                                    
                                         ws2.Cells[row + 3, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
@@ -1900,7 +1977,7 @@ namespace WizOne.Pontaj
                         int idZile = 0, colZile = 0;
                         for (int i = 0; i < dt.Columns.Count; i++)
                         {
-                            if (lista.ContainsKey(dt.Columns[i].ColumnName))
+                            if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                             {
                                 if (idZile > 0 && colZile > 0)
                                 {
@@ -1928,7 +2005,7 @@ namespace WizOne.Pontaj
                             idZile = 0; colZile = 0;
                             for (int i = 0; i < dt.Columns.Count; i++)
                             {
-                                if (lista.ContainsKey(dt.Columns[i].ColumnName) || (dt.Columns[i].ColumnName.Contains("Ziua")))
+                                if ((lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName)) || (dt.Columns[i].ColumnName.Contains("Ziua")))
                                 {
                                     if (dt.Columns[i].ColumnName.Contains("Ziua") && dt.Columns[i].ColumnName.Contains("I"))
                                         rand = 1;
@@ -3024,14 +3101,14 @@ namespace WizOne.Pontaj
                         if (Constante.tipBD == 1)
                             zileVal += $@",COALESCE(CONVERT(VARCHAR(5), pvtIn.""Ziua{i}I"", 108),'') AS ""Ziua{i}I""" + $@",COALESCE(CONVERT(VARCHAR(5), pvtOut.""Ziua{i}O"", 108),'') AS ""Ziua{i}O""";
                         else
-                            zileVal += $@",TO_CHAR(pvtIn.""Ziua{i}"", 'HH24:MM') AS ""Ziua{i}I""" + $@",TO_CHAR(pvtOut.""Ziua{i}"", 'HH24:MM') AS ""Ziua{i}O""";
+                            zileVal += $@",TO_CHAR(pvtIn.""Ziua{i}I"", 'HH24:mi') AS ""Ziua{i}I""" + $@",TO_CHAR(pvtOut.""Ziua{i}O"", 'HH24:mi') AS ""Ziua{i}O""";
                     }
                     if (chkPauza.Checked)
                     {
                         if (Constante.tipBD == 1)
                             zileVal += $@",COALESCE(pvtPauza.""Ziua{i}P"",'') AS ""Ziua{i}P""";
                         else
-                            zileVal += $@",COALESCE(pvtPauza.""Ziua{i}"",0) AS ""Ziua{i}P""";
+                            zileVal += $@",COALESCE(TO_CHAR(pvtPauza.""Ziua{i}P""),'') AS ""Ziua{i}P""";
                     }
 
 
@@ -3080,6 +3157,36 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
+                    //if (chkTotaluri.Checked)
+                    //    pvt = $@"INNER JOIN (SELECT F10003 {zileAs} FROM 
+                    //            (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT  (MAX(""ValStr"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvt ON X.F10003=pvt.F10003";
+
+                    //if (chkOre.Checked)
+                    //{
+                    //    pvtIn = $@"INNER JOIN (SELECT F10003 {zileAsIn} FROM 
+                    //            (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvtIn ON X.F10003=pvtIn.F10003";
+
+                    //    pvtOut = $@"INNER JOIN (SELECT F10003 {zileAsOut} FROM 
+                    //            (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvtOut ON X.F10003=pvtOut.F10003";
+                    //}
+                    //if (chkPauza.Checked)
+                    //    pvtPauza = $@"INNER JOIN (SELECT F10003 {zileAsPauza} FROM 
+                    //            (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvtPauza ON X.F10003=pvtPauza.F10003";
+
+                    //pvtCuloare = $@"INNER JOIN (SELECT F10003 {zileAsCuloare} FROM 
+                    //            (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                    //            PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                    //            ) pvtCuloare ON X.F10003=pvtCuloare.F10003";
+
+                    //Radu 06.03.2020 - corectie pivotare
                     if (chkTotaluri.Checked)
                         pvt = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, {cmpValStr}, ""Ziua"" FROM ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
@@ -3090,23 +3197,23 @@ namespace WizOne.Pontaj
                     {
                         pvtIn = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAsIn.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003";
 
                         pvtOut = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAsOut.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003";
                     }
                     if (chkPauza.Checked)
                         pvtPauza = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""TimpPauzaReal"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                PIVOT (MAX(""TimpPauzaReal"") FOR ""Ziua"" IN ( {zileAsPauza.Substring(1)} )) pvt
                                 ) pvtPauza ON X.F10003=pvtPauza.F10003";
 
                     pvtCuloare = $@"INNER JOIN (SELECT * FROM 
                                 (SELECT F10003, ""CuloareValoare"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                                PIVOT (MAX(""CuloareValoare"") FOR ""Ziua"" IN ( {zileAsCuloare.Substring(1)} )) pvt
                                 ) pvtCuloare ON X.F10003=pvtCuloare.F10003";
                 }
 
@@ -3225,6 +3332,47 @@ namespace WizOne.Pontaj
             return strSql;
         }
 
+        private string ExecutaProcedura(string numeProcedura, object[] obj = null)
+        {
+            string mesaj = "Eroare la executia procedurii";
+            try
+            {
+                
+                using (SqlConnection conn = new SqlConnection(Constante.cnnWeb))
+                using (SqlCommand cmd = new SqlCommand(numeProcedura, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    switch(numeProcedura)
+                    {
+                        case "ProcesRespingere":
+                            if (obj.Length == 2)
+                            {
+                                cmd.Parameters.AddWithValue("@comentariu", obj[0]);
+                                cmd.Parameters.AddWithValue("@ids", obj[1]);
+                            }
+                            else
+                                return mesaj;
+                            break;
+                    }
+                    cmd.Parameters.AddWithValue("@idUser", General.Nz(Session["UserId"],-99));
+                    cmd.Parameters.Add("@mesaj", SqlDbType.NVarChar, 500).Direction = ParameterDirection.Output;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    mesaj = General.Nz(cmd.Parameters["@mesaj"].Value,"").ToString();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return mesaj;
+        }
 
         //  <dx:GridViewDataComboBoxColumn FieldName="StareDenumire" Name="StareDenumire" Caption="Stare" ReadOnly="true" Width="100px" FixedStyle="Left" VisibleIndex="1" CellStyle-HorizontalAlign="Center" />
         //   <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="Id Stare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

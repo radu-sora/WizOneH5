@@ -354,7 +354,7 @@ namespace WizOne.Absente
 
 
                 #region Construim istoricul
-                DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(marca.ToString()), null);
+                DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(marca.ToString(), Convert.ToDateTime(dtDataInc.Value ?? DateTime.Now.Date)), null);
                 DataRow[] lst = dtAbs.Select("Id=" + General.Nz(cmbAbs.Value, -99));
                 if (lst.Count() == 0)
                 {

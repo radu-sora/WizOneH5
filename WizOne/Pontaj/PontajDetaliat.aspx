@@ -49,7 +49,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="margin:15px 0px; display:inline-block;">
+            <td colspan="2" style="margin-top:15px; display:inline-block; width:100%;">
                 <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
                     <ClientSideEvents 
                         EndCallback="function (s,e) { pnlLoading.Hide(); }" 
@@ -57,7 +57,7 @@
                         BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
-                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie">
+                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie" Width="100%">
                                 <HeaderStyle Font-Bold="true" />
                                 <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                                 <PanelCollection>
@@ -78,8 +78,7 @@
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblAng" runat="server">Angajat</label>
-                                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
-                                                            CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
+                                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true" TextFormatString="{0} {1}" >
                                                     <Columns>
                                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
                                                         <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
@@ -157,7 +156,7 @@
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblStare" runat="server" class="lw">Stare</label>
-                                                <dx:ASPxComboBox ID="cmbStare" ClientInstanceName="cmbStare" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"  />
+                                                <dx:ASPxComboBox ID="cmbStare" ClientInstanceName="cmbStare" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"  />
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)" class="lw">Contract</label>
@@ -233,11 +232,11 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" id="tdGridTotaluri" runat="server">
+            <td colspan="2" id="tdGridTotaluri" runat="server" style="margin-top:15px !important;">
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="2" style="margin-top:15px;">
                 <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
@@ -254,40 +253,34 @@
                         Init="function(s,e) { OnGridInit(); }"
                         EndCallback="function(s,e) { OnGridEndCallback(s); }"
                         CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }"
+                         
                         />
                     <Styles>
                         <BatchEditModifiedCell BackColor="Transparent">
                         </BatchEditModifiedCell>
                     </Styles>
                     <Columns>
-                        <dx:GridViewBandColumn Name="Stare" HeaderStyle-HorizontalAlign="Left">
-                            <Columns>
-                                <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
-                                    <CustomButtons>
-                                        <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
-                                            <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
-                                        </dx:GridViewCommandColumnCustomButton>                                
-                                    </CustomButtons>
-                                </dx:GridViewCommandColumn>
-                                <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" VisibleIndex="2" />
-                                <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" />
+                        <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" FixedStyle="Left" >
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
+                                    <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
+                                </dx:GridViewCommandColumnCustomButton>                                
+                            </CustomButtons>
+                        </dx:GridViewCommandColumn>
+                        <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" VisibleIndex="2" FixedStyle="Left" />
+                        <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" FixedStyle="Left" />
 
-                                <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ZiLiberaLegala" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ZiSapt" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiLiberaLegala" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiSapt" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
 
-                                <dx:GridViewDataTextColumn FieldName="F10022" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="F10023" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="IdStare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                            </Columns>
-                        </dx:GridViewBandColumn>
-                        
-                    </Columns>
-                    
+                        <dx:GridViewDataTextColumn FieldName="F10022" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F10023" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="IdStare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />                   
+                    </Columns>                 
                 </dx:ASPxGridView>
-
             </td>
         </tr>
     </table>
@@ -310,7 +303,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 <br />
                 <dx:ASPxHiddenField ID="ccValori" runat="server" ClientInstanceName="ccValori" ClientIDMode="Static"></dx:ASPxHiddenField>
                 <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
@@ -680,6 +673,10 @@
                     e.cancel = true;
                 }
             }
+
+            if (col.length >= 3 && '<%: lstInOut %>'.indexOf(col + ";") >= 0)
+                e.cancel = true; 
+
             if (col.length >= 6 && col.substr(0, 6) == 'ValAbs') {
                 var cmb = grDate.GetEditor('ValAbs');
                 if (cmb) {
@@ -804,7 +801,7 @@
             var evt = evt || event;
             var key = evt.keyCode || evt.which;
             inOutIndex = s.GetFocusedRowIndex();
-
+            
             if (!s.IsEditing()) {
                 var cell = grDate.GetFocusedCell();
                 var col = cell.column.fieldName;
@@ -821,75 +818,82 @@
                         case "In9":
                         case "Out":
                             {
-                                if (key == 45)              // scade o zi   tasta -
-                                {
-                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
-                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                if ('<%: lstInOut %>'.indexOf(col + ";") >= 0) {
+                                    //NOP
+                                }
+                                else {
+
+
+                                    if (key == 45)              // scade o zi   tasta -
+                                    {
+                                        var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                        if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                            grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                            var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                            grDate.batchEditApi.EndEdit();
+                                            alert('Proces realizat cu succes');
+                                        }
+                                    }
+                                    else if (key == 43)        // adauga o zi  tasta +
+                                    {
+                                        var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                        if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                            grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                            var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                            grDate.batchEditApi.EndEdit();
+                                            alert('Proces realizat cu succes');
+                                        }
+                                    }
+                                    else if (key == 93)         ////insereaza celula   tasta   ]
+                                    {
+                                        var idx = 21;
+                                        var col = cell.column.fieldName;
+                                        if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                            idx = Number(col.substr(2));
+                                        if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                            idx = Number(col.substr(3));
+
                                         grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                        for (var i = 20; i > idx; i--) {
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + (i - 1).toString()));
+                                        }
+
+                                        if (col.substr(0, 2).toLowerCase() == 'in')
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, null);
                                         grDate.batchEditApi.EndEdit();
-                                        alert('Proces realizat cu succes');
                                     }
-                                }
-                                else if (key == 43)        // adauga o zi  tasta +
-                                {
-                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
-                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                    else if (key == 91)         // sterge celula pe care este, daca este goala tasta [
+                                    {
+                                        if (grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName) != null)
+                                            return;
+
+                                        var idx = 21;
+                                        var col = cell.column.fieldName;
+                                        if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                            idx = Number(col.substr(2));
+                                        if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                            idx = Number(col.substr(3));
+
                                         grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+
+                                        if (col.substr(0, 2).toLowerCase() == 'in')
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + idx));
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (idx + 1).toString()));
+
+                                        for (var i = (idx + 1); i <= 20; i++) {
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + i));
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (i + 1).toString()));
+                                        }
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out20", null);
                                         grDate.batchEditApi.EndEdit();
-                                        alert('Proces realizat cu succes');
                                     }
-                                }
-                                else if (key == 93)         ////insereaza celula   tasta   ]
-                                {
-                                    var idx = 21;
-                                    var col = cell.column.fieldName;
-                                    if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
-                                        idx = Number(col.substr(2));
-                                    if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
-                                        idx = Number(col.substr(3));
-
-                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                    for (var i = 20; i > idx; i--) {
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + (i - 1).toString()));
-                                    }
-
-                                    if (col.substr(0, 2).toLowerCase() == 'in')
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, null);
-                                    grDate.batchEditApi.EndEdit();
-                                }
-                                else if (key == 91)         // sterge celula pe care este, daca este goala tasta [
-                                {
-                                    if (grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName) != null)
-                                        return;
-
-                                    var idx = 21;
-                                    var col = cell.column.fieldName;
-                                    if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
-                                        idx = Number(col.substr(2));
-                                    if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
-                                        idx = Number(col.substr(3));
-
-                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-
-                                    if (col.substr(0, 2).toLowerCase() == 'in')
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + idx));
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (idx + 1).toString()));
-
-                                    for (var i = (idx + 1); i <= 20; i++) {
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + i));
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (i + 1).toString()));
-                                    }
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out20", null);
-                                    grDate.batchEditApi.EndEdit();
                                 }
                             }
                     }
@@ -1022,23 +1026,19 @@
 
                 if (cmbProgram.FindItemByValue(idPrg))
                     cmbProgram.SetSelectedItem(cmbProgram.FindItemByValue(idPrg));
-                else {
-                    cmbProgram.SetSelectedIndex(-1);
-
-                    cmbProgram.SetText("");
-                    cmbProgram.SetValue(null);
-                }
+                else
+                    e.cancel = true;
             }
         }
 
         function LoadPrograme(idCtr) {
             if (typeof cmbProgram !== "undefined" && ASPxClientUtils.IsExists(cmbProgram)) {
+                var key = grDate.GetRowKey(grDate.GetFocusedRowIndex());
                 let programe = <%=Session["Json_Programe"] %>;
-                var arr = programe.filter(function (item) { return item.idContract == idCtr });
+                var arr = programe.filter(function (item) { return item.idContract == idCtr && item.ziSapt == grDate.cp_ZiSapt[key] });
 
                 cmbProgram.ClearItems();
 
-                var rez = "";
                 for (var i = 0; i < arr.length; i++) {
                     cmbProgram.AddItem(arr[i].program, Number(arr[i].idProgram));
                 }

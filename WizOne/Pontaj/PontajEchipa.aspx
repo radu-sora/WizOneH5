@@ -145,13 +145,26 @@
             AdjustSize();
             //document.getElementById("gridContainer").style.visibility = "";
         }
-        function OnEndCallback(s, e) {
+        function OnEndCallback(s) {
             if (s.cpAlertMessage != null) {
                 swal({
-                    title: trad_string(limba, ""), text: s.cpAlertMessage,
+                    title: trad_string(limba, ""),
+                    text: s.cpAlertMessage,
                     type: "warning"
                 });
-                s.cpAlertMessage = null;
+                delete s.cpAlertMessage;
+            }
+
+            if (s.cp_MesajProces != null) {
+                swal({
+                    title: "Confirmare proces", text: s.cp_MesajProces,
+                    type: "warning", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: trad_string(limba, "Da, continua!"), cancelButtonText: trad_string(limba, "Renunta"), closeOnConfirm: true
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        grDate.PerformCallback("ProcesConfirmare");
+                    }
+                });
+                delete s.cp_MesajProces;
             }
 
             AdjustSize();
@@ -204,6 +217,20 @@
             }
         }
 
+        function OnMotivRefuza(s, e) {
+            if (ASPxClientUtils.Trim(txtMtvSapt.GetText()) == '') {
+                swal({
+                    title: trad_string(limba, "Operatie nepermisa"), text: trad_string(limba, "Pentru a putea respinge este nevoie de un motiv"),
+                    type: "warning"
+                });
+            }
+            else {
+                popUpMotivSapt.Hide();
+                grDate.PerformCallback('btnRefuza;' + txtMtvSapt.GetText());
+                txtMtvSapt.SetText('');
+            }
+        }
+        
 
         var textSeparator = ",";
         //first one
@@ -308,6 +335,14 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
+                <dx:ASPxButton ID="btnValidare" ClientInstanceName="btnValidare" ClientIDMode="Static" runat="server" Text="Validare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
+                    <ClientSideEvents Click="function (s,e) { grDate.PerformCallback('btnValidare'); }" />
+                </dx:ASPxButton>
+                <dx:ASPxButton ID="btnRefuza" ClientInstanceName="btnRefuza" ClientIDMode="Static" runat="server" Text="Refuza" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                    <ClientSideEvents Click="function (s,e) { popUpMotivSapt.Show(); }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
+                </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Export" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <ClientSideEvents Click="function (s,e) { popUpExport.Show(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/ExportToXls.png"></Image>
@@ -317,9 +352,7 @@
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
-                    <ClientSideEvents Click="function(s, e) {
-                       OnRespinge(s,e);
-                    }" />
+                    <ClientSideEvents Click="function(s, e) { OnRespinge(s,e); }" />
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="true" OnClick="btnAproba_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
@@ -353,7 +386,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="2" style="width:100%;">
                 <br /><br />
 
                 <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false" >
@@ -361,7 +394,7 @@
                     <PanelCollection>
                         <dx:PanelContent>
 
-                          <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20">
+                          <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20" Width="100%">
                               <HeaderStyle Font-Bold="true" />
                               <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                             <PanelCollection>
@@ -480,13 +513,17 @@
 
                             <div class="row">
                                 <div class="col-lg-9 col-md-8 col-sm-6" style="margin-bottom:8px;"></div>
-                                <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:58px;" id="rowHovercard" runat="server">
+                                <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:8px;" id="rowHovercard" runat="server">
                                     <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" OnClick="btnFiltru_Click" oncontextMenu="ctx(this,event)" >
                                         <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                         <ClientSideEvents Click="function(s, e) {
                                                         pnlLoading.Show();
                                                         e.processOnServer = true;
                                                     }" />
+                                    </dx:ASPxButton>
+                                    <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
+                                        <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
+                                        <ClientSideEvents Click="EmptyFields" />
                                     </dx:ASPxButton>
     	                            <div class="hovercard" id="divHovercard" runat="server">
 			                            <div class="hovercard-container">
@@ -499,11 +536,6 @@
 				                            </div>
 			                            </div>
 		                            </div>
-                                    &nbsp;&nbsp;
-                                    <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
-                                        <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
-                                        <ClientSideEvents Click="EmptyFields" />
-                                    </dx:ASPxButton>                                
                                 </div>
                             </div>
 
@@ -785,6 +817,38 @@
                         <tr>
                             <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
                                 <dx:ASPxMemo ID="txtMtv" runat="server" ClientIDMode="Static" ClientInstanceName="txtMtv" Width="630px" Height="180px"></dx:ASPxMemo>
+                            </td>
+                        </tr>
+                    </table>
+                </asp:Panel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
+    <dx:ASPxPopupControl ID="popUpMotivSapt" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
+        CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
+        EnableViewState="False" PopupElementID="popUpMotivSaptArea" PopupHorizontalAlign="WindowCenter"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="650px" Height="200px" HeaderText="Motiv refuz"
+        FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpMotivSapt" EnableHierarchyRecreation="false">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <asp:Panel ID="Panel5" runat="server">
+                    <table>
+                        <tr>
+                            <td align="right">
+                                <dx:ASPxButton ID="btnRefuzaMtv" runat="server" Text="Refuza" AutoPostBack="false" >
+                                    <ClientSideEvents Click="function(s, e) {
+                                        OnMotivRefuza(s,e);
+                                    }" />
+                                    <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
+                                </dx:ASPxButton>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: #666666;font-family: Tahoma; font-size: 10px;">
+                                <dx:ASPxMemo ID="txtMtvSapt" runat="server" ClientIDMode="Static" ClientInstanceName="txtMtvSapt" Width="630px" Height="180px"></dx:ASPxMemo>
                             </td>
                         </tr>
                     </table>

@@ -81,6 +81,29 @@ namespace WizOne.Reports
                     strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + an;
                 DataTable dtHolidays = General.IncarcaDT(strSql, null);
 
+                //Radu 16.03.2020 - securitate
+                List<string> listaSec = new List<string>();
+                strSql = "SELECT X.\"IdControl\", X.\"IdColoana\", MAX(X.\"Vizibil\") AS \"Vizibil\", MIN(X.\"Blocat\") AS \"Blocat\" FROM( "
+                        + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
+                        + "FROM \"Securitate\" A "
+                        + "INNER JOIN \"relGrupUser\" B ON A.\"IdGrup\" = B.\"IdGrup\" "
+                        + "WHERE B.\"IdUser\" = {0} AND LOWER(A.\"IdForm\") = 'pontaj.pontajechipa' "
+                        + "UNION "
+                        + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
+                        + "FROM \"Securitate\" A "
+                        + "WHERE A.\"IdGrup\" = -1 AND LOWER(A.\"IdForm\") = 'pontaj.pontajechipa') X "
+                        + "GROUP BY X.\"IdControl\", X.\"IdColoana\"";
+                strSql = string.Format(strSql, HttpContext.Current.Session["UserId"].ToString());
+                if (General.VarSession("EsteAdmin").ToString() == "0")
+                {
+                    DataTable dtSec = General.IncarcaDT(strSql, null);
+                    if (dtSec != null && dtSec.Rows.Count > 0)
+                        for (int k = 0; k < dtSec.Rows.Count; k++)
+                            if (dtSec.Rows[k]["Vizibil"] != null && Convert.ToInt32(dtSec.Rows[k]["Vizibil"].ToString()) == 0)
+                                listaSec.Add(dtSec.Rows[k]["IdColoana"].ToString());
+                }
+
+
                 if (dtPrint != null)
                 {
                     for (int k = 0; k < dtPrint.Rows.Count; k++)
@@ -179,38 +202,41 @@ namespace WizOne.Reports
                                 lblAntet.Font = new Font("Calibri", 10);
                                 break;
                             default:                    //restul
-                                lbl = CreazaCamp(dtPrint.Rows[k]["TextAfisare"].ToString(), pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()));
-                                lbl.WordWrap = true;
-                                lbl.CanGrow = false;
-                                TopMargin.Controls.Add(lbl);
-
-                                col = CreazaCamp("[" + dtPrint.Rows[k]["Camp"].ToString() + "]", pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()), 2);
-                                if (k == 0)
-                                    col.Borders = DevExpress.XtraPrinting.BorderSide.Bottom | DevExpress.XtraPrinting.BorderSide.Right | DevExpress.XtraPrinting.BorderSide.Left;
-                                else
-                                    col.Borders = DevExpress.XtraPrinting.BorderSide.Bottom | DevExpress.XtraPrinting.BorderSide.Right;
-                                Detail.Controls.Add(col);
-
-                                string cmp = dtPrint.Rows[k]["Camp"].ToString();
-                                if ((cmp.Length == 2 || cmp.Length == 3) && cmp.Substring(0, 1) == "F" && General.IsNumeric(cmp.Replace("F", "")))
+                                if (!listaSec.Contains(dtPrint.Rows[k]["Camp"].ToString()))
                                 {
-                                    //col.Text = "0";
-                                    //col.DataBindings.Add("Text", this.DataSource, cmp);
-                                    col.DataBindings.Add("Text", this.DataSource, cmp + "_Tmp");
-                                    col.DataBindings["Text"].FormatString = "{0:######}";
-                                    col.NullValueText = "";
-                                    col.XlsxFormatString = "#,##0";
+                                    lbl = CreazaCamp(dtPrint.Rows[k]["TextAfisare"].ToString(), pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()));
+                                    lbl.WordWrap = true;
+                                    lbl.CanGrow = false;
+                                    TopMargin.Controls.Add(lbl);
+
+                                    col = CreazaCamp("[" + dtPrint.Rows[k]["Camp"].ToString() + "]", pozX, Convert.ToInt32((dtPrint.Rows[k]["Lungime"] as int? ?? 40).ToString()), x, Convert.ToInt32((dtPrint.Rows[k]["Aliniere"] as int? ?? 3).ToString()), Convert.ToInt32((dtPrint.Rows[k]["MarimeText"] as int? ?? 7).ToString()), 2);
+                                    if (k == 0)
+                                        col.Borders = DevExpress.XtraPrinting.BorderSide.Bottom | DevExpress.XtraPrinting.BorderSide.Right | DevExpress.XtraPrinting.BorderSide.Left;
+                                    else
+                                        col.Borders = DevExpress.XtraPrinting.BorderSide.Bottom | DevExpress.XtraPrinting.BorderSide.Right;
+                                    Detail.Controls.Add(col);
+
+                                    string cmp = dtPrint.Rows[k]["Camp"].ToString();
+                                    if ((cmp.Length == 2 || cmp.Length == 3) && cmp.Substring(0, 1) == "F" && General.IsNumeric(cmp.Replace("F", "")))
+                                    {
+                                        //col.Text = "0";
+                                        //col.DataBindings.Add("Text", this.DataSource, cmp);
+                                        col.DataBindings.Add("Text", this.DataSource, cmp + "_Tmp");
+                                        col.DataBindings["Text"].FormatString = "{0:######}";
+                                        col.NullValueText = "";
+                                        col.XlsxFormatString = "#,##0";
+                                    }
+
+                                    col.WordWrap = true;
+                                    col.CanGrow = false;
+                                    col.TextAlignment = TextAlignment.MiddleLeft;
+
+
+                                    pozX = pozX + lbl.WidthF;
+                                    if (pozX >= this.PageWidth) this.PageWidth = (int)pozX;
+
+                                    x += 1;
                                 }
-
-                                col.WordWrap = true;
-                                col.CanGrow = false;
-                                col.TextAlignment = TextAlignment.MiddleLeft;
-
-
-                                pozX = pozX + lbl.WidthF;
-                                if (pozX >= this.PageWidth) this.PageWidth = (int)pozX;
-
-                                x += 1;
                                 break;
                         }
                     }

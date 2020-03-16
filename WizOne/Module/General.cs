@@ -8096,11 +8096,11 @@ namespace WizOne.Module
 
 
                 string sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
-                                        SELECT {marca}, caldate, ""DenumireScurta"", (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003 = {marca} AND ""Ziua"" = caldate), 
+                                        SELECT {marca}, ""Zi"", ""DenumireScurta"", (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003 = {marca} AND ""Ziua"" = ""Zi""), 
                                 {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, 'Transfer din Suspendari'
                                     FROM 
-                                    (select case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = caldate) = 0 then 0 else 1 end as prezenta, 
-                                    a.*, b.* from  Z_Calendar a
+                                    (select case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
+                                    b.* from  ""tblZile"" a
                                     left join 
                                     (SELECT P.""Zi"",
                                     CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
@@ -8120,9 +8120,9 @@ namespace WizOne.Module
                                     AND COALESCE(A.""DenumireScurta"", '~') <> '~'
                                     AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 = {marca} AND ""DataInceput"" <= { General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
                                     ) b
-                                    on a.caldate = b.""Zi""
+                                    on a.""Zi"" = b.""Zi""
 
-                                    where caldate between  { General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} and aredrepturi = 1) x   ";
+                                    where a.""Zi"" between  { General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} and aredrepturi = 1) x   ";
 
                 ExecutaNonQuery(sqlIst, null);
 
@@ -8138,8 +8138,8 @@ namespace WizOne.Module
 
                 strSql = $@"MERGE INTO ""Ptj_intrari"" USING 
                             (Select  case when ""AreDrepturi"" = 1 then ""DenumireScurta"" else null end  as ""Denumire"", x.* from                                
-                            (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = caldate) = 0 then 0 else 1 end as prezenta, 
-                            a.*, b.* from  Z_Calendar a
+                            (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
+                            b.* from  ""tblZile"" a
                             left join 
 
                             (SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
@@ -8161,16 +8161,16 @@ namespace WizOne.Module
                             AND COALESCE(A.""DenumireScurta"", '~') <> '~'
                             AND B.""IdContract"" = (SELECT MAX(""IdContract"") FROM ""F100Contracte"" WHERE F10003 =  {marca} AND ""DataInceput"" <= {General.ToDataUniv(dataInceput.Date)} AND {General.ToDataUniv(dtSf.Date)} <= ""DataSfarsit"") 
                             ) b
-                            on a.caldate = b.""Zi""
+                            on a.""Zi"" = b.""Zi""
 
-                            where caldate between  {General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} ) x
+                            where a.""Zi"" between  {General.ToDataUniv(dataInceput.Date)} AND    {General.ToDataUniv(dtSf.Date)} ) x
 
                             ) Tmp 
-                            ON (""Ptj_Intrari"".""Ziua"" = Tmp.caldate AND ""Ptj_Intrari"".F10003 = Tmp.F10003 and prezenta = 1) 
+                            ON (""Ptj_Intrari"".""Ziua"" = ""Zi"" AND ""Ptj_Intrari"".F10003 = Tmp.F10003 and prezenta = 1) 
                             WHEN MATCHED THEN UPDATE SET ""ValStr"" = ""Denumire"" {campuri} , USER_NO ={HttpContext.Current.Session["UserId"].ToString()}, TIME = {General.CurrentDate()}
                             WHEN NOT MATCHED THEN INSERT (F10003, ""Ziua"", ""ZiSapt"", ""ZiLibera"", ""ZiLiberaLegala"", ""IdContract"", ""Norma"", F10002, F10004, F10005, F10006, F10007, F06204, ""ValStr"", USER_NO, TIME)
-                             VALUES ({marca}, tmp.caldate, ""ZiSapt"" ,""ZiLibera"" , ""ZiLiberaLegala"", 
-                            (SELECT X.""IdContract"" FROM ""F100Contracte"" X WHERE X.F10003 = {marca} AND X.""DataInceput"" <= tmp.caldate AND tmp.caldate <= X.""DataSfarsit""), 
+                             VALUES ({marca}, ""Zi"", ""ZiSapt"" ,""ZiLibera"" , ""ZiLiberaLegala"", 
+                            (SELECT X.""IdContract"" FROM ""F100Contracte"" X WHERE X.F10003 = {marca} AND X.""DataInceput"" <= ""Zi"" AND ""Zi"" <= X.""DataSfarsit""), 
                             (SELECT F10043 FROM F100 WHERE F10003 = {marca}), 
                              (SELECT F10002 FROM F100 WHERE F10003 = {marca}), 
                              (SELECT F10004 FROM F100 WHERE F10003 = {marca}), 

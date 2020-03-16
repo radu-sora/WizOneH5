@@ -1168,7 +1168,7 @@ namespace WizOne.Adev
 
         public byte[] GenerareAdeverinta(List<int> lstMarci, int adev, int anul)
         {
-
+            string msg = "";
             try
             {
                 //byte[] bytes = null;
@@ -1254,7 +1254,7 @@ namespace WizOne.Adev
                         else
                             fisier = "Adev_sanatate_2019_" + data + ".xml";
                         FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
-                        string msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 0, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 0, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
                     case 1:
                         if (lstMarci.Count() == 1)
@@ -1444,7 +1444,7 @@ namespace WizOne.Adev
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, "Adev", new StackTrace().GetFrame(0).GetMethod().Name);
+                General.MemoreazaEroarea(msg.Length > 0 ? msg : ex.ToString(), "Adev", new StackTrace().GetFrame(0).GetMethod().Name);
                 return null;
             }
         }

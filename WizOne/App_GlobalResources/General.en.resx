@@ -962,59 +962,83 @@
   </data>
   <data name="Pontajechipa" xml:space="preserve">
     <value>Team timesheet</value>
-  </data>  
+  </data>
   <data name="(Selectietoate)" xml:space="preserve">
     <value>(Select all)</value>
-  </data>  
+  </data>
   <data name="Solicitat" xml:space="preserve">
     <value>Requested</value>
-  </data> 
+  </data>
   <data name="Incurs" xml:space="preserve">
     <value>Running</value>
-  </data> 
+  </data>
   <data name="Aprobat" xml:space="preserve">
     <value>Approved</value>
-  </data> 
+  </data>
   <data name="Respins" xml:space="preserve">
     <value>Rejected</value>
-  </data> 
+  </data>
   <data name="Anulat" xml:space="preserve">
     <value>Canceled</value>
-  </data> 
- <data name="Planificat" xml:space="preserve">
+  </data>
+  <data name="Planificat" xml:space="preserve">
     <value>Planned</value>
-  </data>  
- <data name="btnInchide" xml:space="preserve">
+  </data>
+  <data name="btnInchide" xml:space="preserve">
     <value>Close</value>
-  </data> 
- <data name="chkTotaluri" xml:space="preserve">
+  </data>
+  <data name="chkTotaluri" xml:space="preserve">
     <value>totals</value>
-  </data> 
- <data name="chkOre" xml:space="preserve">
+  </data>
+  <data name="chkOre" xml:space="preserve">
     <value>in and out hours</value>
-  </data> 
- <data name="chkPauza" xml:space="preserve">
+  </data>
+  <data name="chkPauza" xml:space="preserve">
     <value>pause</value>
-  </data> 
- <data name="chkLinie" xml:space="preserve">
+  </data>
+  <data name="chkLinie" xml:space="preserve">
     <value>listing on one line</value>
-  </data>  
- <data name="Foaiecolectivadeprezenta" xml:space="preserve">
+  </data>
+  <data name="Foaiecolectivadeprezenta" xml:space="preserve">
     <value>Collective sheet for attendance</value>
-  </data>  
- <data name="Numemanager" xml:space="preserve">
+  </data>
+  <data name="Numemanager" xml:space="preserve">
     <value>Manager name</value>
-  </data> 
+  </data>
   <data name="Numeoperator" xml:space="preserve">
     <value>Operator name</value>
-  </data> 
-    <data name="Activi" xml:space="preserve">
+  </data>
+  <data name="Activi" xml:space="preserve">
     <value>Active</value>
   </data>
   <data name="Toti" xml:space="preserve">
     <value>All</value>
-  </data>  
+  </data>
   <data name="Tipmunca" xml:space="preserve">
     <value>Work type</value>
-  </data>   
+  </data>
+  <data name="aaparutoeroare" xml:space="preserve">
+    <value>an error occurred</value>
+  </data>
+  <data name="DateInsuficiente" xml:space="preserve">
+    <value>Insufficient data</value>
+  </data>
+  <data name="EsteDejaAnulata" xml:space="preserve">
+    <value>is already canceled</value>
+  </data>
+  <data name="NuAvetiDrepturi" xml:space="preserve">
+    <value>you don't have permission</value>
+  </data>
+  <data name="nusaalestipuldecompensare" xml:space="preserve">
+    <value>the compensation type was not chosen</value>
+  </data>
+  <data name="nuserespectaordineadepecircuit" xml:space="preserve">
+    <value>the order on the circuit is not respected</value>
+  </data>
+  <data name="userullogatnuseregasestepecircuit" xml:space="preserve">
+    <value>the logged-in user is not on the circuit</value>
+  </data>
+  <data name="EsteDejaRespinsa" xml:space="preserve">
+    <value>is already rejected</value>
+  </data>
 </root>

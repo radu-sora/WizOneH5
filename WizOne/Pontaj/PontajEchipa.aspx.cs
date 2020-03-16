@@ -14,6 +14,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WizOne.Module;
 using System.Drawing;
+using System.Data.SqlClient;
 
 namespace WizOne.Pontaj
 {
@@ -1736,8 +1737,10 @@ namespace WizOne.Pontaj
                         return;
                     }
 
-                    
-                    switch(arr[0].ToString())
+                    int tip = 1;  //validare
+                    if (General.Nz(cmbRol.Value, "1").ToString() == "3") tip = 2;    //aprobare
+
+                    switch (arr[0].ToString())
                     {
                         case "btnPeAng":
                             {
@@ -1766,23 +1769,25 @@ namespace WizOne.Pontaj
                             break;
                         case "btnValidare":
                             {
-                                DataTable dt = General.IncarcaDT($"SELECT * FROM ProccesValidare({Session["UserId"]})", null);
+                                DataTable dt = General.IncarcaDT($"SELECT * FROM ProcesValidare({Session["UserId"]})", null);
                                 if (dt != null && dt.Rows.Count > 0)
                                 {
-                                    switch(General.Nz(dt.Rows[0]["IdRaspuns"],"").ToString())
+                                    string raspuns = General.Nz(dt.Rows[0]["Raspuns"], "").ToString();
+                                    raspuns = Dami.TraduCuvant(raspuns);
+
+                                    switch (General.Nz(dt.Rows[0]["IdRaspuns"],"").ToString())
                                     {
                                         case "0":
-                                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"],"").ToString());
+                                            grDate.JSProperties["cpAlertMessage"] = raspuns;
                                             break;
                                         case "1":
                                             {
-                                                DataTable dtApr = General.IncarcaDT($"SELECT * FROM ProccesAprobare({Session["UserId"]})", null);
-                                                if (dtApr != null && dtApr.Rows.Count > 0)
-                                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dtApr.Rows[0]["Raspuns"], "").ToString());
+                                                string mesaj = ExecutaProcedura("ProcesAprobare");
+                                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
                                             }
                                             break;
                                         case "2":
-                                            grDate.JSProperties["cp_MesajProces"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"], "").ToString());
+                                            grDate.JSProperties["cp_MesajProces"] = raspuns;
                                             break;
                                     }
                                 }
@@ -1790,16 +1795,27 @@ namespace WizOne.Pontaj
                             break;
                         case "btnRefuza":
                             {
-                                DataTable dt = General.IncarcaDT($"SELECT * FROM ProccesRespingere({Session["UserId"]},'{arr[1].Trim()}')", null);
-                                if (dt != null && dt.Rows.Count > 0)
-                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"], "").ToString());
+                                List<object> lst = grDate.GetSelectedFieldValues(new string[] { "F10003" });
+                                if (lst == null || lst.Count() == 0 || lst[0] == null)
+                                {
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati selectat niciun angajat!");
+                                    return;
+                                }
+                                string ids = "";
+                                for (int i = 0; i < lst.Count(); i++)
+                                {
+                                    ids += "," + lst[i];
+                                }
+
+                                object[] obj = new object[] { arr[1].Trim(), ids.Substring(1) };
+                                string mesaj = ExecutaProcedura("ProcesRespingere", obj);
+                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
                             }
                             break;
                         case "ProcesConfirmare":
                             {
-                                DataTable dtApr = General.IncarcaDT($"SELECT * FROM ProccesAprobare({Session["UserId"]})", null);
-                                if (dtApr != null && dtApr.Rows.Count > 0)
-                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dtApr.Rows[0]["Raspuns"], "").ToString());
+                                string mesaj = ExecutaProcedura("ProcesAprobare");
+                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
                             }
                             break;
                     }
@@ -3316,6 +3332,47 @@ namespace WizOne.Pontaj
             return strSql;
         }
 
+        private string ExecutaProcedura(string numeProcedura, object[] obj = null)
+        {
+            string mesaj = "Eroare la executia procedurii";
+            try
+            {
+                
+                using (SqlConnection conn = new SqlConnection(Constante.cnnWeb))
+                using (SqlCommand cmd = new SqlCommand(numeProcedura, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    switch(numeProcedura)
+                    {
+                        case "ProcesRespingere":
+                            if (obj.Length == 2)
+                            {
+                                cmd.Parameters.AddWithValue("@comentariu", obj[0]);
+                                cmd.Parameters.AddWithValue("@ids", obj[1]);
+                            }
+                            else
+                                return mesaj;
+                            break;
+                    }
+                    cmd.Parameters.AddWithValue("@idUser", General.Nz(Session["UserId"],-99));
+                    cmd.Parameters.Add("@mesaj", SqlDbType.NVarChar, 500).Direction = ParameterDirection.Output;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    mesaj = General.Nz(cmd.Parameters["@mesaj"].Value,"").ToString();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return mesaj;
+        }
 
         //  <dx:GridViewDataComboBoxColumn FieldName="StareDenumire" Name="StareDenumire" Caption="Stare" ReadOnly="true" Width="100px" FixedStyle="Left" VisibleIndex="1" CellStyle-HorizontalAlign="Center" />
         //   <dx:GridViewDataTextColumn FieldName="IdStare" Name="IdStare" Caption="Id Stare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />

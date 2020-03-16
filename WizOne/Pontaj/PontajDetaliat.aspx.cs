@@ -1699,7 +1699,6 @@ namespace WizOne.Pontaj
                                 }
 
                                 string strSql = $@"SELECT A.* FROM ""Ptj_Intrari"" A
-                                                LEFT JOIN ""F100Contracte"" B ON A.F10003=B.F10003
                                                 LEFT JOIN ""Ptj_tblAbsente"" C ON A.""ValStr""=C.""DenumireScurta""
                                                 WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4 AND C.""DenumireScurta"" IS NULL";
 

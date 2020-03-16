@@ -12816,3 +12816,9 @@ AS
 SELECT A.Zi, A.ZiSapt, CASE WHEN B.DAY IS NOT NULL THEN 1 ELSE 0 END AS ZiLiberaLegala FROM tblZile2 A
 LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
 GO
+
+--https://github.com/wizromRD/WizOne/issues/201
+--Flux aprobare saptamana pontaj #201
+INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa','-','btnValidare', Id, 0, 0, 0 FROM tblGrupUsers
+INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa','-','btnRefuza', Id, 0, 0, 0 FROM tblGrupUsers
+GO

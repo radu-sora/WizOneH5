@@ -486,6 +486,22 @@ namespace WizOne.Absente
                                 if (idStare == 3)
                                     General.StergeInPontaj(Convert.ToInt32(obj[0]), idTipOre, oreInVal, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]), Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)), Convert.ToInt32(General.Nz(Session["UserId"],-99)));
 
+                                DataTable dtPtj = General.IncarcaDT($@"SELECT * FROM Ptj_Intrari WHERE F10003=@1 AND @2 <= ""Ziua"" AND ""ziua"" <= @3", new object[] { obj[1], obj[4], obj[6] });
+                                if (dtPtj != null && dtPtj.Rows.Count > 0)
+                                {
+                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                    FunctiiCeasuri.Calcul.golesteVal = Dami.ValoareParam("GolesteVal");
+                                    FunctiiCeasuri.Calcul.h5 = true;
+                                    //MetodeCeasuri.Calcul.sintaxaValStr = Dami.ValoareParam("SintaxaValStr", "");
+
+                                    for (int i = 0; i < dtPtj.Rows.Count; i++)
+                                    {
+                                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtPtj.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dtPtj.Rows[i]["Ziua"]));
+                                        FunctiiCeasuri.Calcul.CalculInOut(dtPtj.Rows[i], true, true);
+                                    }
+                                }
+
                                 General.CalculFormule(obj[1], null, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]));
                                 General.SituatieZLOperatii(Convert.ToInt32(General.Nz(obj[1],-99)), Convert.ToDateTime(General.Nz(obj[4],new DateTime(2100,1,1))), 3, Convert.ToInt32(General.Nz(obj[5],0)));
                                 Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Notificare, $@"SELECT Z.*, 2 AS ""Actiune"", -1 AS ""IdStareViitoare"" FROM ""Ptj_Cereri"" Z WHERE ""Id""=" + obj[0], "Ptj_Cereri", Convert.ToInt32(obj[0]), Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));

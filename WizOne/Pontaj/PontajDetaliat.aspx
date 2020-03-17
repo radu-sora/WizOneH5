@@ -36,7 +36,7 @@
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRecalc" ClientInstanceName="btnRecalc" ClientIDMode="Static" runat="server" Text="Recalculeaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
-                    <ClientSideEvents Click="function(s, e) { popUpRecalc.Show(); }" />
+                    <ClientSideEvents Click="function(s, e) { OnRecalcClick(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
@@ -452,10 +452,10 @@
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpRecalc" EnableHierarchyRecreation="false">
         <ContentCollection>
             <dx:PopupControlContentControl runat="server">
-                <asp:Panel ID="Panel1" runat="server">
+                <asp:Panel ID="Panel1" runat="server" Width="100%">
                     <table>
                         <tr>
-                            <td class="pull-right" colspan="4">
+                            <td align="right" colspan="4">
                                 <dx:ASPxButton ID="btnRecalcParam" runat="server" Text="Recalcul" AutoPostBack="false" >
                                     <ClientSideEvents Click="function(s, e) { OnRecalcParam(); }" />
                                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
@@ -466,34 +466,34 @@
                         </tr>
                         <tr>
                             <td  style="padding:15px;">
-                               <dx:ASPxLabel ID="lblDataInc" runat="server" Text="Data Inceput"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblDataInc" runat="server" Text="Data Inceput"></dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxDateEdit ID="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                                <dx:ASPxDateEdit ID="txtDataInc" ClientInstanceName="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                 </dx:ASPxDateEdit>
                             </td>
                             <td style="padding:15px;">
-                               <dx:ASPxLabel ID="lblDataSf" runat="server" Text="Data Sfarsit"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblDataSf" runat="server" Text="Data Sfarsit"></dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxDateEdit ID="txtDataSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                                <dx:ASPxDateEdit ID="txtDataSf" ClientInstanceName="txtDataSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                 </dx:ASPxDateEdit>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                               <dx:ASPxLabel ID="lblMarcaIn" runat="server" Text="Marca Inceput"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblMarcaIn" runat="server" Text="Marca Inceput"></dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxSpinEdit ID="txtMarcaInc" runat="server" Width="100px" />
+                                <dx:ASPxSpinEdit ID="txtMarcaInc" ClientInstanceName="txtMarcaInc" runat="server" Width="100px" />
                             </td>
                             <td>
-                               <dx:ASPxLabel ID="lblMarcaSf" runat="server" Text="Marca Sfarsit"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblMarcaSf" runat="server" Text="Marca Sfarsit"></dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxSpinEdit ID="txtMarcaSf" runat="server" Width="100px" />
+                                <dx:ASPxSpinEdit ID="txtMarcaSf" ClientInstanceName="txtMarcaSf" runat="server" Width="100px" />
                             </td>
                         </tr>
                     </table>
@@ -1114,6 +1114,25 @@
                 dtTmp.setDate(dtTmp.getDate() + 1);
             s.SetValue(dtTmp);
             grDate.PerformCallback('btnFiltru'); 
+        }
+
+        function OnRecalcClick() {
+            var date = new Date(txtAnLuna.GetValue());
+            var marca = cmbAng.GetValue();
+
+            if (document.getElementById('divPeAng').style.display == 'none') {
+                date = new Date(txtZiua.GetValue());
+                marca = cmbAngZi.GetValue();
+            }
+
+            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+            txtDataInc.SetValue(firstDay);
+            txtDataSf.SetValue(lastDay);
+            txtMarcaInc.SetValue(marca);
+            txtMarcaSf.SetValue(marca);
+            popUpRecalc.Show();
         }
     </script>
 

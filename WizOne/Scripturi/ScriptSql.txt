@@ -12819,6 +12819,6 @@ GO
 
 --https://github.com/wizromRD/WizOne/issues/201
 --Flux aprobare saptamana pontaj #201
-INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa','-','btnValidare', Id, 0, 0, 0 FROM tblGrupUsers
-INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa','-','btnRefuza', Id, 0, 0, 0 FROM tblGrupUsers
+INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa', 'btnValidare', '-', Id, 0, 0, 0 FROM tblGrupUsers
+INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa', 'btnRefuza', '-', Id, 0, 0, 0 FROM tblGrupUsers
 GO

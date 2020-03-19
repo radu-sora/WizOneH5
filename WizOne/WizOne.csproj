@@ -826,6 +826,7 @@
     <Content Include="Personal\Sporuri.ascx" />
     <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\Tarife.ascx" />
+    <Content Include="Pontaj\PlanificareSchimburi.aspx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
     <Content Include="ProgrameLucru\ProgrameOreNoapte.ascx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
@@ -1757,6 +1758,13 @@
     </Compile>
     <Compile Include="Personal\Tarife.ascx.designer.cs">
       <DependentUpon>Tarife.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Pontaj\PlanificareSchimburi.aspx.cs">
+      <DependentUpon>PlanificareSchimburi.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pontaj\PlanificareSchimburi.aspx.designer.cs">
+      <DependentUpon>PlanificareSchimburi.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>

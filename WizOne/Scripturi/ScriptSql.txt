@@ -12822,3 +12822,12 @@ GO
 INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa', 'btnValidare', '-', Id, 0, 0, 0 FROM tblGrupUsers
 INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa', 'btnRefuza', '-', Id, 0, 0, 0 FROM tblGrupUsers
 GO
+
+
+----  2.2.127  ----
+
+
+ALTER TABLE "Ptj_Intrari" ADD "IdContractP" int
+GO
+ALTER TABLE "Ptj_Intrari" ADD "IdProgramP" int
+GO

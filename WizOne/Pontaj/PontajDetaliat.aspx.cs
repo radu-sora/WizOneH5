@@ -59,7 +59,7 @@ namespace WizOne.Pontaj
                         btnDelete.Visible = false;
                     }
 
-                    CreazaGrid();
+                    CreeazaGrid();
 
                     DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
@@ -1932,7 +1932,7 @@ namespace WizOne.Pontaj
             }
         }
 
-        private void CreazaGrid()
+        private void CreeazaGrid()
         {
             try
             {

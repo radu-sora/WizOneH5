@@ -13691,3 +13691,12 @@ AS
 SELECT A."Zi", A."ZiSapt", CASE WHEN B.DAY IS NOT NULL THEN 1 ELSE 0 END AS "ZiLiberaLegala" FROM "tblZile2" A
 LEFT JOIN HOLIDAYS B ON A."Zi"=B.DAY;
 /
+
+
+----  2.2.127  ----
+
+
+ALTER TABLE "Ptj_Intrari" ADD "IdContractP" number(10);
+/
+ALTER TABLE "Ptj_Intrari" ADD "IdProgramP" number(10);
+/

@@ -1227,7 +1227,7 @@ namespace WizOne.Pontaj
                                             AS 
                                             (
 	                                            SELECT Ziua, DATEADD(DAY, - ROW_NUMBER() OVER (PARTITION BY ValStr ORDER BY Ziua), Ziua) AS grp
-	                                            FROM Ptj_Intrari WHERE ValStr = 'CIC' AND F10003={ent.F30003} AND Year(Ziua)={dtLucru.Year} AND MONTH(Ziua)={dtLucru.Month} 
+	                                            FROM Ptj_Intrari WHERE ValStr = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND F10003={ent.F30003} AND Year(Ziua)={dtLucru.Year} AND MONTH(Ziua)={dtLucru.Month} 
                                             )    
                                             SELECT MIN(Ziua) AS DeLa, MAX(Ziua) AS La, DATEDIFF(day,MIN(Ziua),MAX(Ziua)) + 1 AS NrZile
                                             FROM mycte
@@ -1239,7 +1239,7 @@ namespace WizOne.Pontaj
                                                 AS 
                                                 (
 	                                                SELECT ""Ziua"", ""Ziua"" - ROW_NUMBER() OVER (PARTITION BY ""ValStr"" ORDER BY ""Ziua"")  AS grp
-                                                    FROM ""Ptj_Intrari"" WHERE ""ValStr"" = 'CIC' AND  F10003={ent.F30003} AND TO_NUMBER(TO_CHAR(Ziua,'YYYY'))={dtLucru.Year} AND TO_NUMBER(TO_CHAR(Ziua,'MM'))={dtLucru.Month}
+                                                    FROM ""Ptj_Intrari"" WHERE ""ValStr"" = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND  F10003={ent.F30003} AND TO_NUMBER(TO_CHAR(Ziua,'YYYY'))={dtLucru.Year} AND TO_NUMBER(TO_CHAR(Ziua,'MM'))={dtLucru.Month}
                                                 )    
                                                 SELECT MIN(""Ziua"") AS ""DeLa"", MAX(""Ziua"") AS ""La"", MAX(""Ziua"") - MIN(""Ziua"") + 1 AS ""NrZile""
                                                 FROM mycte

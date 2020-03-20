@@ -102,8 +102,16 @@ namespace WizOne
                 {
                     //Florin 2020.02.20 - sa se faca diferentiere intre ptj pe ang si pe zi
                     string filtruSup = "";
-                    if (General.Nz(Request.QueryString["tip"], "").ToString() != "")
-                        filtruSup = @" AND A.""Grid""='" + Request.QueryString["tip"].ToString() + "'";
+                    if (General.Nz(Request.QueryString["tip"], "").ToString() != "" && General.Nz(Session["PaginaWeb"], "").ToString().ToLower().IndexOf("pontajdetaliat")>=0)
+                    {
+                        if (Request.QueryString["tip"].ToString() == "1" || Request.QueryString["tip"].ToString() == "10")
+                            filtruSup = @" AND A.""Grid"" IN ('1','10')";
+                        else
+                            filtruSup = @" AND A.""Grid"" IN ('2','20')";
+
+                        //filtruSup = @" AND A.""Grid""='" + Request.QueryString["tip"].ToString() + "'";
+                    }
+                        
                     //incarcam lista de profile disponibile
                     string sqlPro = $@"SELECT A.""Id"", A.""Denumire"", CAST(A.""Continut"" AS varchar(4000)) AS ""Continut"", A.""Implicit"", A.""Activ"" 
                                 FROM ""tblProfile"" A

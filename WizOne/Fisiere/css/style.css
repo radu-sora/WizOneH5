@@ -654,11 +654,12 @@ table label {
 
 
 .hovercard {
-    position: absolute;
+    position: relative;
     left: 0px;
-    top: 35px;
-    z-index: 500;
+    top: 5px;
     display: block;
+    z-index:100;
+    
 }
 
     .hovercard .hovercard-container {
@@ -713,7 +714,7 @@ table label {
     }
 
 .ptj_pe_zi {
-    float:left; display:none; line-height:22px; vertical-align:middle; padding:5px 0px 15px 0px;
+    float:left; display:none; line-height:22px; vertical-align:middle; padding:5px 0px 15px 0px; width:100%;
 }
 
     .ptj_pe_zi .ptj_filtru {

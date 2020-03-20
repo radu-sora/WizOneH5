@@ -49,7 +49,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="margin:15px 0px; display:inline-block;">
+            <td colspan="2" style="margin-top:15px; display:inline-block; width:100%;">
                 <dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
                     <ClientSideEvents 
                         EndCallback="function (s,e) { pnlLoading.Hide(); }" 
@@ -57,7 +57,7 @@
                         BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
-                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie">
+                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie" Width="100%">
                                 <HeaderStyle Font-Bold="true" />
                                 <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                                 <PanelCollection>
@@ -78,8 +78,7 @@
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblAng" runat="server">Angajat</label>
-                                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true"
-                                                            CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >
+                                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true" TextFormatString="{0} {1}" >
                                                     <Columns>
                                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
                                                         <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
@@ -102,7 +101,7 @@
                                                 <label id="lblPtjAng" runat="server">Tip inregistrare</label>
                                                 <dx:ASPxComboBox ID="cmbPtjAng" ClientInstanceName="cmbPtjAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" />
                                             </div>
-                                             <div class="ptj_filtru">
+                                             <div class="ptj_filtru" style="display:inline-block;">
                                                 <dx:ASPxButton ID="btnFiltruAng" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                                     <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
@@ -157,7 +156,7 @@
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblStare" runat="server" class="lw">Stare</label>
-                                                <dx:ASPxComboBox ID="cmbStare" ClientInstanceName="cmbStare" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false"  />
+                                                <dx:ASPxComboBox ID="cmbStare" ClientInstanceName="cmbStare" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" oncontextMenu="ctx(this,event)"  />
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)" class="lw">Contract</label>
@@ -208,6 +207,10 @@
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
                                                     <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
                                                 </dx:ASPxButton>
+                                                <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                                                    <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
+                                                    <ClientSideEvents Click="function(s, e) { EmptyFields(); }" />
+                                                </dx:ASPxButton>
     	                                        <div class="hovercard" id="divHovercardZi" runat="server">
 			                                        <div class="hovercard-container">
 				                                        <div class="hovercard-arrow"></div>
@@ -219,12 +222,6 @@
 			                                        </div>
 		                                        </div>
                                             </div>
-                                            <div style="float:left;">
-                                                <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                                                    <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
-                                                    <ClientSideEvents Click="function(s, e) { EmptyFields(); }" />
-                                                </dx:ASPxButton>
-                                            </div>
                                         </div>
                                     </dx:PanelContent>
                                 </PanelCollection>
@@ -235,11 +232,11 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" id="tdGridTotaluri" runat="server">
+            <td colspan="2" id="tdGridTotaluri" runat="server" style="margin-top:15px !important;">
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="2" style="margin-top:15px;">
                 <br />
                 <dx:ASPxHiddenField ID="hfRowIndex" runat="server" ClientInstanceName="hfRowIndex" ClientIDMode="Static"></dx:ASPxHiddenField>
                 <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
@@ -256,203 +253,194 @@
                         Init="function(s,e) { OnGridInit(); }"
                         EndCallback="function(s,e) { OnGridEndCallback(s); }"
                         CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }"
+                         
                         />
                     <Styles>
                         <BatchEditModifiedCell BackColor="Transparent">
                         </BatchEditModifiedCell>
                     </Styles>
                     <Columns>
-                        <dx:GridViewBandColumn Name="Stare" HeaderStyle-HorizontalAlign="Center">
-                            <Columns>
-                                <dx:GridViewCommandColumn FixedStyle="Left" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" >
-                                    <CustomButtons>
-                                        <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
-                                            <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
-                                        </dx:GridViewCommandColumnCustomButton>                                
-                                    </CustomButtons>
-                                </dx:GridViewCommandColumn>
-                                <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" FixedStyle="Left" VisibleIndex="2" />
-                                <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" />
+                        <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" FixedStyle="Left" >
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
+                                    <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
+                                </dx:GridViewCommandColumnCustomButton>                                
+                            </CustomButtons>
+                        </dx:GridViewCommandColumn>
+                        <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" VisibleIndex="2" FixedStyle="Left" />
+                        <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="Angajat" Caption="Angajat" ReadOnly="true" Width="150px" VisibleIndex="3" Visible="false" ShowInCustomizationForm="false" PropertiesTextEdit-ClientSideEvents-ValueChanged="" FixedStyle="Left" />
 
-                                <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ZiLiberaLegala" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ZiSapt" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiLibera" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiLiberaLegala" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ZiSapt" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
 
-                                <dx:GridViewDataTextColumn FieldName="F10022" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="F10023" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="IdStare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                            </Columns>
-                        </dx:GridViewBandColumn>
-                        
-                    </Columns>
-                    
+                        <dx:GridViewDataTextColumn FieldName="F10022" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="F10023" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="IdStare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Afisare" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="ValActive" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />                   
+                    </Columns>                 
                 </dx:ASPxGridView>
+            </td>
+        </tr>
+    </table>
 
+    <table id="tblCC" runat="server" class="hidden" style="width:100%;">
+        <tr>
+            <td class="pull-left">
+                <br />
+                <dx:ASPxLabel ID="lblZiuaCC" runat="server" ClientIDMode="Static" ClientInstanceName="lblZiuaCC" Font-Bold="true" Text="" />
+            </td>
+            <td class="pull-right">
+                <br />
+                <dx:ASPxButton ID="btnSaveCC" ClientInstanceName="btnSaveCC" ClientIDMode="Static" runat="server" Text="Salveaza CC" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                    <ClientSideEvents Click="function(s, e) {
+                        grCC.UpdateEdit();
+                        grDate.PerformCallback('btnFiltru');
+                    }" />
+                    <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
+                </dx:ASPxButton>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <table width="100%" id="tblCC" runat="server" class="ascuns">
-                    <tr>
-                        <td class="pull-left" style="width:100%;">
-                            <br /><br />
-                            <dx:ASPxLabel ID="lblZiuaCC" runat="server" ClientIDMode="Static" ClientInstanceName="lblZiuaCC" Font-Bold="true" Visible="true" Text="" />
-                            <br /><br />
-                        </td>
-                        <td class="pull-right">
-                            <dx:ASPxButton ID="btnSaveCC" ClientInstanceName="btnSaveCC" ClientIDMode="Static" runat="server" Text="Salveaza CC" AutoPostBack="false" oncontextMenu="ctx(this,event)" Visible="true" >
-                                <ClientSideEvents Click="function(s, e) {
-                                    grCC.UpdateEdit();
-                                    grDate.PerformCallback('btnFiltru');
-                                }" />
-                                <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
-                            </dx:ASPxButton>
-                            <br /><br />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <dx:ASPxHiddenField ID="ccValori" runat="server" ClientInstanceName="ccValori" ClientIDMode="Static"></dx:ASPxHiddenField>
-                            <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" Visible="true" 
-                                OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" OnCustomColumnDisplayText="grCC_CustomColumnDisplayText">
-                                <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                <Settings ShowFilterRow="False" ShowColumnHeaders="true" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" VerticalScrollBarStyle="VirtualSmooth" VerticalScrollableHeight="130" />
-                                <SettingsSearchPanel Visible="false" />
-                                <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
-                                <ClientSideEvents 
-                                    ContextMenu="ctx" 
-                                    CustomButtonClick="function(s,e) { grCC_CustomButtonClick(s,e); }" 
-                                    BatchEditStartEditing="function(s,e) { OnGridCCBatchEditStartEditing(s,e); }" 
-                                    BatchEditEndEditing="function(s,e) { OnGridCCBatchEditEndEditing(s,e); }" 
-                                    EndCallback="function(s,e) { OnGridEndCallback(s); }" />
+                <br />
+                <dx:ASPxHiddenField ID="ccValori" runat="server" ClientInstanceName="ccValori" ClientIDMode="Static"></dx:ASPxHiddenField>
+                <dx:ASPxGridView ID="grCC" runat="server" ClientInstanceName="grCC" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"
+                    OnCustomCallback="grCC_CustomCallback" OnBatchUpdate="grCC_BatchUpdate" OnHtmlDataCellPrepared="grCC_HtmlDataCellPrepared" OnCustomColumnDisplayText="grCC_CustomColumnDisplayText">
+                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
+                    <Settings ShowFilterRow="False" ShowColumnHeaders="true" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" VerticalScrollBarStyle="VirtualSmooth" VerticalScrollableHeight="130" />
+                    <SettingsSearchPanel Visible="false" />
+                    <SettingsLoadingPanel Mode="ShowAsPopup" />
+                    <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
+                    <ClientSideEvents 
+                        ContextMenu="ctx" 
+                        CustomButtonClick="function(s,e) { grCC_CustomButtonClick(s,e); }" 
+                        BatchEditStartEditing="function(s,e) { OnGridCCBatchEditStartEditing(s,e); }" 
+                        BatchEditEndEditing="function(s,e) { OnGridCCBatchEditEndEditing(s,e); }" 
+                        EndCallback="function(s,e) { OnGridEndCallback(s); }" />
 
+                    <Columns>
+                        <dx:GridViewCommandColumn FixedStyle="Left" ShowEditButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true">
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnDeleteCC">
+                                    <Image ToolTip="Sterge" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
+                                </dx:GridViewCommandColumnCustomButton>
+                            </CustomButtons>
+                        </dx:GridViewCommandColumn>
+
+                        <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" ShowInCustomizationForm="false" Width="150px" VisibleIndex="1" Visible="false">
+                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                        </dx:GridViewDataComboBoxColumn>
+
+                        <dx:GridViewDataComboBoxColumn FieldName="F06204" Name="F06204" Caption="Centrul de cost" Width="250px" VisibleIndex="2" Visible="true">
+                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList">
+                                <ValidationSettings>
+                                    <RequiredField IsRequired="true" ErrorText="Camp obligatoriu" />
+                                </ValidationSettings>
+                            </PropertiesComboBox>
+                        </dx:GridViewDataComboBoxColumn>
+
+                        <dx:GridViewDataComboBoxColumn FieldName="IdProiect" Name="IdProiect" Caption="Proiect" Width="250px" VisibleIndex="3" Visible="false" >
+                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" EnableSynchronization="False" IncrementalFilteringMode="StartsWith">
+                                <ClientSideEvents SelectedIndexChanged="function(s, e) { OnProiectChanged(s); }"></ClientSideEvents>
+                            </PropertiesComboBox>
+                        </dx:GridViewDataComboBoxColumn>
+
+                        <dx:GridViewDataComboBoxColumn FieldName="IdSubproiect" Name="IdSubproiect" Caption="SubProiect" Width="250px" VisibleIndex="4" Visible="false">
+                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" EnableSynchronization="False" IncrementalFilteringMode="StartsWith">
+                                <ClientSideEvents  SelectedIndexChanged="function(s, e) { OnSubproiectChanged(s); }" EndCallback="function(s, e) { OnSubEndCallback(); }"/>
+                            </PropertiesComboBox>
+                        </dx:GridViewDataComboBoxColumn>
+
+                        <dx:GridViewDataComboBoxColumn FieldName="IdActivitate" Name="IdActivitate" Caption="Activitate" Width="250px" VisibleIndex="5" Visible="false">
+                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" >
+                            <ClientSideEvents EndCallback="function(s, e) { OnActEndCallback(); }" />
+                            </PropertiesComboBox>
+                        </dx:GridViewDataComboBoxColumn>
+                        <dx:GridViewDataComboBoxColumn FieldName="IdDept" Name="Dept" Caption="Departament" Width="250px" VisibleIndex="6" Visible="false">
+                            <PropertiesComboBox TextField="Dept" ValueField="IdDept" ValueType="System.Int32" DropDownStyle="DropDown">
                                 <Columns>
-                                    <dx:GridViewCommandColumn FixedStyle="Left" ShowEditButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true">
-                                        <CustomButtons>
-                                            <dx:GridViewCommandColumnCustomButton ID="btnDeleteCC">
-                                                <Image ToolTip="Sterge" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
-                                            </dx:GridViewCommandColumnCustomButton>
-                                        </CustomButtons>
-                                    </dx:GridViewCommandColumn>
-
-                                    <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare" ReadOnly="true" ShowInCustomizationForm="false" Width="150px" VisibleIndex="1" Visible="false">
-                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                                    </dx:GridViewDataComboBoxColumn>
-
-                                    <dx:GridViewDataComboBoxColumn FieldName="F06204" Name="F06204" Caption="Centrul de cost" Width="250px" VisibleIndex="2" Visible="true">
-                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList">
-                                            <ValidationSettings>
-                                                <RequiredField IsRequired="true" ErrorText="Camp obligatoriu" />
-                                            </ValidationSettings>
-                                        </PropertiesComboBox>
-                                    </dx:GridViewDataComboBoxColumn>
-
-                                    <dx:GridViewDataComboBoxColumn FieldName="IdProiect" Name="IdProiect" Caption="Proiect" Width="250px" VisibleIndex="3" Visible="false" >
-                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" EnableSynchronization="False" IncrementalFilteringMode="StartsWith">
-                                            <ClientSideEvents SelectedIndexChanged="function(s, e) { OnProiectChanged(s); }"></ClientSideEvents>
-                                        </PropertiesComboBox>
-                                    </dx:GridViewDataComboBoxColumn>
-
-                                    <dx:GridViewDataComboBoxColumn FieldName="IdSubproiect" Name="IdSubproiect" Caption="SubProiect" Width="250px" VisibleIndex="4" Visible="false">
-                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" EnableSynchronization="False" IncrementalFilteringMode="StartsWith">
-                                            <ClientSideEvents  SelectedIndexChanged="function(s, e) { OnSubproiectChanged(s); }" EndCallback="function(s, e) { OnSubEndCallback(); }"/>
-                                        </PropertiesComboBox>
-                                    </dx:GridViewDataComboBoxColumn>
-
-                                    <dx:GridViewDataComboBoxColumn FieldName="IdActivitate" Name="IdActivitate" Caption="Activitate" Width="250px" VisibleIndex="5" Visible="false">
-                                        <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" >
-                                        <ClientSideEvents EndCallback="function(s, e) { OnActEndCallback(); }" />
-                                        </PropertiesComboBox>
-                                    </dx:GridViewDataComboBoxColumn>
-                                    <dx:GridViewDataComboBoxColumn FieldName="IdDept" Name="Dept" Caption="Departament" Width="250px" VisibleIndex="6" Visible="false">
-                                        <PropertiesComboBox TextField="Dept" ValueField="IdDept" ValueType="System.Int32" DropDownStyle="DropDown">
-                                            <Columns>
-                                                <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
-                                                <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
-                                                <dx:ListBoxColumn FieldName="Dept" Caption="Dept" Width="130px" />
-                                            </Columns>
-                                        </PropertiesComboBox>
-                                    </dx:GridViewDataComboBoxColumn>
-                                    <dx:GridViewDataTimeEditColumn FieldName="De" Name="De" Caption="De" Width="100px" VisibleIndex="7" Visible="false" >
-                                        <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm">
-                                        </PropertiesTimeEdit>
-                                    </dx:GridViewDataTimeEditColumn>
-                                    <dx:GridViewDataTimeEditColumn FieldName="La" Name="La" Caption="La" Width="100px" VisibleIndex="8" Visible="false" >
-                                        <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm">
-                                        </PropertiesTimeEdit>
-                                    </dx:GridViewDataTimeEditColumn>
-
-                                    <dx:GridViewDataTextColumn FieldName="NrOre1" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre2" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre3" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre4" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre5" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre6" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre7" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre8" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre9" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="NrOre10" Width="100px">
-                                        <PropertiesTextEdit>
-                                            <MaskSettings Mask="<00..23>:<00..59>"  />
-                                        </PropertiesTextEdit>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                    <dx:GridViewDataTextColumn FieldName="Ziua" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                    <dx:GridViewDataTextColumn FieldName="IdAuto" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                    <dx:GridViewDataTextColumn FieldName="TIME" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
-                                    <dx:GridViewDataTextColumn FieldName="USER_NO" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                                    <dx:ListBoxColumn FieldName="Filiala" Caption="Filiala" Width="130px" />
+                                    <dx:ListBoxColumn FieldName="Sectie" Caption="Sectie" Width="130px" />
+                                    <dx:ListBoxColumn FieldName="Dept" Caption="Dept" Width="130px" />
                                 </Columns>
-                                <SettingsCommandButton>
-                                    <NewButton>
-                                        <Image Url="~/Fisiere/Imagini/Icoane/new.png" AlternateText="Adauga" ToolTip="Adauga" />
-                                    </NewButton>
-                                    <DeleteButton>
-                                        <Image Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" ToolTip="Sterge" />
-                                    </DeleteButton>
-                                </SettingsCommandButton>
-                            </dx:ASPxGridView>
-                        </td>
-                    </tr>
-                </table>
+                            </PropertiesComboBox>
+                        </dx:GridViewDataComboBoxColumn>
+                        <dx:GridViewDataTimeEditColumn FieldName="De" Name="De" Caption="De" Width="100px" VisibleIndex="7" Visible="false" >
+                            <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm">
+                            </PropertiesTimeEdit>
+                        </dx:GridViewDataTimeEditColumn>
+                        <dx:GridViewDataTimeEditColumn FieldName="La" Name="La" Caption="La" Width="100px" VisibleIndex="8" Visible="false" >
+                            <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm">
+                            </PropertiesTimeEdit>
+                        </dx:GridViewDataTimeEditColumn>
+
+                        <dx:GridViewDataTextColumn FieldName="NrOre1" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre2" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre3" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre4" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre5" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre6" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre7" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre8" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre9" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="NrOre10" Width="100px">
+                            <PropertiesTextEdit>
+                                <MaskSettings Mask="<00..23>:<00..59>"  />
+                            </PropertiesTextEdit>
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="Ziua" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="IdAuto" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="TIME" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                        <dx:GridViewDataTextColumn FieldName="USER_NO" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
+                    </Columns>
+                    <SettingsCommandButton>
+                        <NewButton>
+                            <Image Url="~/Fisiere/Imagini/Icoane/new.png" AlternateText="Adauga" ToolTip="Adauga" />
+                        </NewButton>
+                        <DeleteButton>
+                            <Image Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" ToolTip="Sterge" />
+                        </DeleteButton>
+                    </SettingsCommandButton>
+                </dx:ASPxGridView>
             </td>
         </tr>
     </table>
@@ -685,6 +673,10 @@
                     e.cancel = true;
                 }
             }
+
+            if (col.length >= 3 && '<%: lstInOut %>'.indexOf(col + ";") >= 0)
+                e.cancel = true; 
+
             if (col.length >= 6 && col.substr(0, 6) == 'ValAbs') {
                 var cmb = grDate.GetEditor('ValAbs');
                 if (cmb) {
@@ -809,7 +801,7 @@
             var evt = evt || event;
             var key = evt.keyCode || evt.which;
             inOutIndex = s.GetFocusedRowIndex();
-
+            
             if (!s.IsEditing()) {
                 var cell = grDate.GetFocusedCell();
                 var col = cell.column.fieldName;
@@ -826,75 +818,82 @@
                         case "In9":
                         case "Out":
                             {
-                                if (key == 45)              // scade o zi   tasta -
-                                {
-                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
-                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                if ('<%: lstInOut %>'.indexOf(col + ";") >= 0) {
+                                    //NOP
+                                }
+                                else {
+
+
+                                    if (key == 45)              // scade o zi   tasta -
+                                    {
+                                        var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                        if (cell.key == dt.getDate() || cell.key == (dt.getDate() - 1)) {
+                                            grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                            var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                            grDate.batchEditApi.EndEdit();
+                                            alert('Proces realizat cu succes');
+                                        }
+                                    }
+                                    else if (key == 43)        // adauga o zi  tasta +
+                                    {
+                                        var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
+                                        if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                            grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
+                                            var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                            grDate.batchEditApi.EndEdit();
+                                            alert('Proces realizat cu succes');
+                                        }
+                                    }
+                                    else if (key == 93)         ////insereaza celula   tasta   ]
+                                    {
+                                        var idx = 21;
+                                        var col = cell.column.fieldName;
+                                        if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                            idx = Number(col.substr(2));
+                                        if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                            idx = Number(col.substr(3));
+
                                         grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, dt.getHours(), dt.getMinutes(), 0, 0);
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+                                        for (var i = 20; i > idx; i--) {
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + (i - 1).toString()));
+                                        }
+
+                                        if (col.substr(0, 2).toLowerCase() == 'in')
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, null);
                                         grDate.batchEditApi.EndEdit();
-                                        alert('Proces realizat cu succes');
                                     }
-                                }
-                                else if (key == 43)        // adauga o zi  tasta +
-                                {
-                                    var dt = grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName);
-                                    if (cell.key == dt.getDate() || cell.key == (dt.getDate() + 1)) {
+                                    else if (key == 91)         // sterge celula pe care este, daca este goala tasta [
+                                    {
+                                        if (grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName) != null)
+                                            return;
+
+                                        var idx = 21;
+                                        var col = cell.column.fieldName;
+                                        if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
+                                            idx = Number(col.substr(2));
+                                        if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
+                                            idx = Number(col.substr(3));
+
                                         grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                        var dtCurr = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, dt.getHours(), dt.getMinutes(), 0, 0);
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, dtCurr);
+
+                                        if (col.substr(0, 2).toLowerCase() == 'in')
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + idx));
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (idx + 1).toString()));
+
+                                        for (var i = (idx + 1); i <= 20; i++) {
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + i));
+                                            grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (i + 1).toString()));
+                                        }
+
+                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out20", null);
                                         grDate.batchEditApi.EndEdit();
-                                        alert('Proces realizat cu succes');
                                     }
-                                }
-                                else if (key == 93)         ////insereaza celula   tasta   ]
-                                {
-                                    var idx = 21;
-                                    var col = cell.column.fieldName;
-                                    if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
-                                        idx = Number(col.substr(2));
-                                    if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
-                                        idx = Number(col.substr(3));
-
-                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-                                    for (var i = 20; i > idx; i--) {
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + (i - 1).toString()));
-                                    }
-
-                                    if (col.substr(0, 2).toLowerCase() == 'in')
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + i));
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, cell.column.fieldName, null);
-                                    grDate.batchEditApi.EndEdit();
-                                }
-                                else if (key == 91)         // sterge celula pe care este, daca este goala tasta [
-                                {
-                                    if (grDate.batchEditApi.GetCellValue(inOutIndex, cell.column.fieldName) != null)
-                                        return;
-
-                                    var idx = 21;
-                                    var col = cell.column.fieldName;
-                                    if (col.substr(0, 2).toLowerCase() == 'in' && col.length <= 4)
-                                        idx = Number(col.substr(2));
-                                    if (col.substr(0, 3).toLowerCase() == 'out' && col.length <= 5)
-                                        idx = Number(col.substr(3));
-
-                                    grDate.batchEditApi.StartEdit(inOutIndex, cell.rowVisibleIndex);
-
-                                    if (col.substr(0, 2).toLowerCase() == 'in')
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + idx));
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + idx, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (idx + 1).toString()));
-
-                                    for (var i = (idx + 1); i <= 20; i++) {
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "In" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "Out" + i));
-                                        grDate.batchEditApi.SetCellValue(inOutIndex, "Out" + i, grDate.batchEditApi.GetCellValue(inOutIndex, "In" + (i + 1).toString()));
-                                    }
-
-                                    grDate.batchEditApi.SetCellValue(inOutIndex, "Out20", null);
-                                    grDate.batchEditApi.EndEdit();
                                 }
                             }
                     }
@@ -1027,23 +1026,19 @@
 
                 if (cmbProgram.FindItemByValue(idPrg))
                     cmbProgram.SetSelectedItem(cmbProgram.FindItemByValue(idPrg));
-                else {
-                    cmbProgram.SetSelectedIndex(-1);
-
-                    cmbProgram.SetText("");
-                    cmbProgram.SetValue(null);
-                }
+                else
+                    e.cancel = true;
             }
         }
 
         function LoadPrograme(idCtr) {
             if (typeof cmbProgram !== "undefined" && ASPxClientUtils.IsExists(cmbProgram)) {
+                var key = grDate.GetRowKey(grDate.GetFocusedRowIndex());
                 let programe = <%=Session["Json_Programe"] %>;
-                var arr = programe.filter(function (item) { return item.idContract == idCtr });
+                var arr = programe.filter(function (item) { return item.idContract == idCtr && item.ziSapt == grDate.cp_ZiSapt[key] });
 
                 cmbProgram.ClearItems();
 
-                var rez = "";
                 for (var i = 0; i < arr.length; i++) {
                     cmbProgram.AddItem(arr[i].program, Number(arr[i].idProgram));
                 }

@@ -1,6 +1,6 @@
 ﻿namespace WizOne.Reports
 {
-    partial class EvaluarePeliFilip
+    partial class EvaluareFilip
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EvaluarePeliFilip));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EvaluareFilip));
             this.Detail = new DevExpress.XtraReports.UI.DetailBand();
             this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel2 = new DevExpress.XtraReports.UI.XRLabel();
@@ -254,7 +254,7 @@
             this.PageHeader.HeightF = 110.4167F;
             this.PageHeader.Name = "PageHeader";
             // 
-            // EvaluarePeliFilip
+            // EvaluareFilip
             // 
             this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
             this.Detail,
@@ -270,7 +270,8 @@
             this.PaperName = "A4Extra";
             this.RequestParameters = false;
             this.Version = "18.1";
-            this.BeforePrint += new System.Drawing.Printing.PrintEventHandler(this.EvaluarePeliFilip_BeforePrint);
+            this.BeforePrint += new System.Drawing.Printing.PrintEventHandler(this.EvaluareFilip_BeforePrint);
+            this.AfterPrint += new System.EventHandler(this.EvaluareFilip_AfterPrint);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
         }

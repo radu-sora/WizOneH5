@@ -2380,11 +2380,11 @@
     <Compile Include="Reports\Evaluare.Designer.cs">
       <DependentUpon>Evaluare.cs</DependentUpon>
     </Compile>
-    <Compile Include="Reports\EvaluarePeliFilip.cs">
+    <Compile Include="Reports\EvaluareFilip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\EvaluarePeliFilip.Designer.cs">
-      <DependentUpon>EvaluarePeliFilip.cs</DependentUpon>
+    <Compile Include="Reports\EvaluareFilip.Designer.cs">
+      <DependentUpon>EvaluareFilip.cs</DependentUpon>
     </Compile>
     <Compile Include="Reports\FluturasHarting.cs">
       <SubType>Component</SubType>
@@ -2572,8 +2572,8 @@
     <EmbeddedResource Include="Reports\EvaluareCristim.resx">
       <DependentUpon>EvaluareCristim.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\EvaluarePeliFilip.resx">
-      <DependentUpon>EvaluarePeliFilip.cs</DependentUpon>
+    <EmbeddedResource Include="Reports\EvaluareFilip.resx">
+      <DependentUpon>EvaluareFilip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\FluturasHarting.resx">
       <DependentUpon>FluturasHarting.cs</DependentUpon>

@@ -1130,18 +1130,21 @@ namespace WizOne.Pontaj
                 }
 
                 DataRow dr = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
-                if (dr != null && !absentaDeTipZi)
+                if (dr != null)
                 {
-                    string golesteVal = Dami.ValoareParam("GolesteVal");
-                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                    FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                    FunctiiCeasuri.Calcul.h5 = true;
-                    FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
-                    FunctiiCeasuri.Calcul.CalculInOut(dr, true, true);
+                    if (!absentaDeTipZi)
+                    {
+                        string golesteVal = Dami.ValoareParam("GolesteVal");
+                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
+                        FunctiiCeasuri.Calcul.h5 = true;
+                        FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
+                        FunctiiCeasuri.Calcul.CalculInOut(dr, true, true);
+                    }
 
                     General.CalculFormule(f10003, null, ziua, null);
-                    General.ExecValStr(f10003, ziua);
+                    //General.ExecValStr(f10003, ziua);
                 }
 
                 IncarcaGrid();
@@ -1187,33 +1190,29 @@ namespace WizOne.Pontaj
 
                                 string strSql = @"SELECT A.* FROM ""Ptj_Intrari"" A
                                                 LEFT JOIN ""F100Contracte"" B ON A.F10003=B.F10003
-                                                WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4";
-
-                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""ValStr""=C.""DenumireScurta""
+                                                WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4 AND C.""DenumireScurta"" IS NULL";
 
                                 DateTime dtInc = new DateTime(Convert.ToInt32(arr[1].Split('/')[2]), Convert.ToInt32(arr[1].Split('/')[1]), Convert.ToInt32(arr[1].Split('/')[0]));
                                 DateTime dtSf = new DateTime(Convert.ToInt32(arr[2].Split('/')[2]), Convert.ToInt32(arr[2].Split('/')[1]), Convert.ToInt32(arr[2].Split('/')[0]));
 
-                                //DataTable dt = General.IncarcaDT(strSql, new object[] { arr[3], arr[4], Convert.ToDateTime(arr[1]), Convert.ToDateTime(arr[2]) });
                                 DataTable dt = General.IncarcaDT(strSql, new object[] { arr[3], arr[4], dtInc, dtSf });
+
+                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
+                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
+                                FunctiiCeasuri.Calcul.golesteVal = Dami.ValoareParam("GolesteVal");
+                                FunctiiCeasuri.Calcul.h5 = true;
+                                //MetodeCeasuri.Calcul.sintaxaValStr = Dami.ValoareParam("SintaxaValStr", "");
 
                                 for (int i = 0; i < dt.Rows.Count; i++)
                                 {
-                                    if (dt.Rows[i]["CuloareValoare"].ToString() != Constante.CuloareModificatManual)
-                                    {
-                                        string golesteVal = Dami.ValoareParam("GolesteVal");
-                                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                                        FunctiiCeasuri.Calcul.h5 = true;
-                                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dt.Rows[i]["Ziua"]));
-                                        FunctiiCeasuri.Calcul.CalculInOut(dt.Rows[i], true, true);
-
-                                        General.CalculFormule(dt.Rows[i]["F10003"], null, Convert.ToDateTime(dt.Rows[i]["Ziua"]), null);
-                                        General.ExecValStr(Convert.ToInt32(dt.Rows[i]["F10003"]), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
-                                    }
+                                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), FunctiiCeasuri.Calcul.nzData(dt.Rows[i]["Ziua"]));
+                                    FunctiiCeasuri.Calcul.CalculInOut(dt.Rows[i], true, true);
                                 }
+
+                                General.CalculFormule(arr[3], arr[4], dtInc, dtSf);
+                                //General.ExecValStr($@"{arr[3]} <= F10003 AND F10003 <= {arr[4]} AND {General.ToDataUniv(dtInc)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dtSf)}");
+
                                 Session["InformatiaCurenta"] = dt;
                                 grDate.DataBind();
                             }

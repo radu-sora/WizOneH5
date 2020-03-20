@@ -1,19 +1,16 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using DevExpress.XtraReports.UI;
-using System.Reflection;
+﻿using DevExpress.XtraReports.UI;
+using System;
 using System.Collections.Generic;
-using WizOne.Module;
 using System.Data;
-using System.Web;
 using System.Diagnostics;
-using System.Linq;
+using System.Drawing;
 using System.Drawing.Printing;
+using System.Web;
+using WizOne.Module;
 
 namespace WizOne.Reports
 {
-    public partial class EvaluarePeliFilip : DevExpress.XtraReports.UI.XtraReport
+    public partial class EvaluareFilip : DevExpress.XtraReports.UI.XtraReport
     {
 
         //Florin 2019.01.21
@@ -26,13 +23,13 @@ namespace WizOne.Reports
         int user_id = 1;
         string idCateg = "0";
 
-        public EvaluarePeliFilip()
+        public EvaluareFilip()
         {
             InitializeComponent();
         }
 
 
-        private void EvaluarePeliFilip_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
+        private void EvaluareFilip_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
         {
             try
             {
@@ -55,7 +52,6 @@ namespace WizOne.Reports
 
                 //DefaultPrinterSettingsUsing.UseLandscape = false;
                 this.Landscape = true;
-
 
                 string str = (HttpContext.Current.Session["PrintParametrii"] ?? "").ToString();
                 if (str != "")
@@ -711,7 +707,6 @@ namespace WizOne.Reports
             return tbl;
         }
 
-
         void table_BeforePrint(object sender, PrintEventArgs e)
         {
 
@@ -722,7 +717,6 @@ namespace WizOne.Reports
             table.WidthF = this.PageWidth - 2 * this.Margins.Left - 2 * this.Margins.Right;
 
         }
-
 
         private XRTable CreazaTabel(int idQuiz, int f10003, string super,  int id, int parinte, string numeView)
         {
@@ -919,7 +913,6 @@ namespace WizOne.Reports
             }
         }
 
-
         private int CalculRating(DataRow[] lst, int idGrup, string super, int tipCalcul)
         {
             //1 - se aplica pt obiective si foloseste ponderea pe care utilizatorul o introduce
@@ -1076,6 +1069,10 @@ namespace WizOne.Reports
             return tbl;
         }
 
+        private void EvaluareFilip_AfterPrint(object sender, EventArgs e)
+        {
+            PrintingSystem.Document.Name = "Evaluare " + lblNumeEvaluat.Text;
+        }
 
 
     }

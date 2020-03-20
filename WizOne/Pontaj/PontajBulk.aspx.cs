@@ -330,7 +330,10 @@ namespace WizOne.Pontaj
         {
             try
             {
-                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" WHERE {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Value))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Value))} ", null);
+                string filtru = " AND F10003 = " + Session["User_Marca"];
+                if (General.Nz(Session["EsteAdmin"],"").ToString() == "1")
+                    filtru = "";
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" WHERE {General.ToDataUniv(Convert.ToDateTime(txtDataInc.Value))} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(Convert.ToDateTime(txtDataSf.Value))} {filtru}", null);
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
 
                 Session["InformatiaCurenta"] = dt;

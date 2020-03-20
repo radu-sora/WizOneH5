@@ -161,7 +161,7 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) != Convert.ToInt32(IdClienti.Clienti.Chimpex))
                 {
                     divHovercard.Visible = false;
-                    rowHovercard.Style["margin-bottom"] = "8px";
+                    //rowHovercard.Style["margin-bottom"] = "8px";
                 }
 
                 if (!IsPostBack)
@@ -592,7 +592,7 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(General.Nz(Session["IdClient"], "-99")) == Convert.ToInt32(IdClienti.Clienti.Chimpex))
                 {
                     divHovercard.Visible = false;
-                    rowHovercard.Style["margin-bottom"] = "8px";
+                    //rowHovercard.Style["margin-bottom"] = "8px";
                 }
 
                 //Florin 2019.07.19
@@ -1763,6 +1763,44 @@ namespace WizOne.Pontaj
                             break;
                         case "btnRespinge":
                             Actiuni(0, arr[1].Trim());                   
+                            break;
+                        case "btnValidare":
+                            {
+                                DataTable dt = General.IncarcaDT($"SELECT * FROM ProccesValidare({Session["UserId"]})", null);
+                                if (dt != null && dt.Rows.Count > 0)
+                                {
+                                    switch(General.Nz(dt.Rows[0]["IdRaspuns"],"").ToString())
+                                    {
+                                        case "0":
+                                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"],"").ToString());
+                                            break;
+                                        case "1":
+                                            {
+                                                DataTable dtApr = General.IncarcaDT($"SELECT * FROM ProccesAprobare({Session["UserId"]})", null);
+                                                if (dtApr != null && dtApr.Rows.Count > 0)
+                                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dtApr.Rows[0]["Raspuns"], "").ToString());
+                                            }
+                                            break;
+                                        case "2":
+                                            grDate.JSProperties["cp_MesajProces"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"], "").ToString());
+                                            break;
+                                    }
+                                }
+                            }
+                            break;
+                        case "btnRefuza":
+                            {
+                                DataTable dt = General.IncarcaDT($"SELECT * FROM ProccesRespingere({Session["UserId"]},'{arr[1].Trim()}')", null);
+                                if (dt != null && dt.Rows.Count > 0)
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dt.Rows[0]["Raspuns"], "").ToString());
+                            }
+                            break;
+                        case "ProcesConfirmare":
+                            {
+                                DataTable dtApr = General.IncarcaDT($"SELECT * FROM ProccesAprobare({Session["UserId"]})", null);
+                                if (dtApr != null && dtApr.Rows.Count > 0)
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(General.Nz(dtApr.Rows[0]["Raspuns"], "").ToString());
+                            }
                             break;
                     }
                 }

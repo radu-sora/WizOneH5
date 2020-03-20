@@ -1742,9 +1742,10 @@ namespace WizOne.Module
 
             try
             {
-                //daca absenta este de tip zi (de exemplu este CO) nu mai trebuie calculat ValStr
-                int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1 AND ""Id"" IN (@1)", new object[] { idAbsente }) ?? 0);
-                if (cnt > 0) return strCmp;
+                //Florin 2020.03.20
+                ////daca absenta este de tip zi (de exemplu este CO) nu mai trebuie calculat ValStr
+                //int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1 AND ""Id"" IN (@1)", new object[] { idAbsente }) ?? 0);
+                //if (cnt > 0) return strCmp;
 
                 strCmp = Dami.ValoareParam("SintaxaValStr", "1");
             }
@@ -7266,7 +7267,7 @@ namespace WizOne.Module
                     camp = camp + "\"";
                     str = " AND " + camp + " IS NOT NULL ";
                     if (Constante.tipBD == 1)
-                        str += $@" AND {camp} <> '' ";
+                        str += $@" AND TRIM({camp}) <> '' ";
                 }
             }
             catch (Exception ex)
@@ -7728,7 +7729,7 @@ namespace WizOne.Module
                 {
                     strVal = substr + "(" + strVal.Substring(poz - 1) + ",2,500)";
                     strVal = strVal.Replace("'", "''");
-                    strVal = $@"CASE WHEN (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" BS WHERE BS.""DenumireScurta""=""ValStr"") = 0 THEN {strVal} ELSE ""ValStr"" END ";
+                    strVal = $@"CASE WHEN (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" BS WHERE BS.""DenumireScurta""=""ValStr"" {FiltrulCuNull("BS.Denumire").Replace("'","''")}) = 0 THEN {strVal} ELSE ""ValStr"" END ";
                     string strSql = $@"
                         IF ((SELECT COUNT(*) FROM ""tblParametrii"" WHERE ""Nume""='SintaxaValStr') = 0)
                         INSERT INTO ""tblParametrii""(""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", USER_NO, TIME) VALUES('SintaxaValStr', '{strVal}', 'Este formula prin care se creaza ValStr in pontaj', 2, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()})

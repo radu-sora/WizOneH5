@@ -12799,3 +12799,37 @@ alter table F090 add TransferPontaj int
 GO
 alter table F090 add CodTranzactie int
 GO
+
+
+
+----  2.2.127 ----
+
+CREATE TABLE ImportDateSablon(
+	NumeTabela [nvarchar](200),
+	ColoanaFisier [nvarchar](200),
+	ColoanaBD [nvarchar](200) ,
+	IdAuto [int] NOT NULL
+ CONSTRAINT [PK_ImportDateSablon] PRIMARY KEY CLUSTERED 
+(
+	NumeTabela ASC,		
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+
+GO
+
+CREATE TABLE ImportDateNomen(
+	NumeTabela [nvarchar](200),
+	NumeColoana [nvarchar](200),
+	Obligatoriu [int] NULL DEFAULT 0,
+	ValoareImplicita [nvarchar](max) NULL DEFAULT '',
+	Tip [nvarchar](200) NULL,
+	IdAuto [int]  NOT NULL
+ CONSTRAINT [PK_ImportDateNomen] PRIMARY KEY CLUSTERED 
+(	
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO

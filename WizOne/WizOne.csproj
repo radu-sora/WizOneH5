@@ -805,6 +805,7 @@
     <Content Include="Pagini\CodConfirmare.aspx" />
     <Content Include="Pagini\Delegari.aspx" />
     <Content Include="Pagini\Fisiere.aspx" />
+    <Content Include="Pagini\ImportDate.aspx" />
     <Content Include="Pagini\ImportPontaj.aspx" />
     <Content Include="Pagini\ImportValori.aspx" />
     <Content Include="Pagini\InchidereLuna.aspx" />
@@ -1610,6 +1611,13 @@
     </Compile>
     <Compile Include="Pagini\Fisiere.aspx.designer.cs">
       <DependentUpon>Fisiere.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pagini\ImportDate.aspx.cs">
+      <DependentUpon>ImportDate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pagini\ImportDate.aspx.designer.cs">
+      <DependentUpon>ImportDate.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pagini\ImportPontaj.aspx.cs">
       <DependentUpon>ImportPontaj.aspx</DependentUpon>

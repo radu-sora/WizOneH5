@@ -13676,3 +13676,31 @@ alter table F090 add "DenumireScurta" varchar2(250);
 alter table F090 add "TransferTranzactii" number(9);
 alter table F090 add "TransferPontaj" number(9);
 alter table F090 add "CodTranzactie" number(9);
+
+
+
+---- 2.2.127 ----
+
+CREATE TABLE "ImportDateSablon"(
+"NumeTabela" varchar2(200),
+	"ColoanaFisier" varchar2(200),
+	"ColoanaBD" varchar2(200) ,
+	"IdAuto" NUMBER(9) NOT NULL);
+  
+  CREATE UNIQUE INDEX "PK_ImportDateSablon" ON "ImportDateSablon" ("NumeTabela", "IdAuto") ;
+
+ALTER TABLE "ImportDateSablon" ADD CONSTRAINT "PK_ImportDateSablon" PRIMARY KEY ("NumeTabela", "IdAuto");
+
+ 
+
+CREATE TABLE "ImportDateNomen"(
+	"NumeTabela" varchar2(200),
+	"NumeColoana" varchar2(200),
+	"Obligatoriu" NUMBER(9)  DEFAULT 0,
+	"ValoareImplicita" CLOB,
+	"Tip" varchar2(200) NULL,
+	"IdAuto" NUMBER(9)  NOT NULL);
+  
+    CREATE UNIQUE INDEX "PK_ImportDateNomen" ON "ImportDateNomen" ("IdAuto") ;
+
+ALTER TABLE "ImportDateNomen" ADD CONSTRAINT "PK_ImportDateNomen" PRIMARY KEY ("IdAuto");

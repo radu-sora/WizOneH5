@@ -903,9 +903,22 @@ namespace WizOne.Absente
                             string cmp = "";
                             if (Constante.tipBD == 2)
                                 cmp = "FROM DUAL";
+                            //string sqlLeg = $@"SELECT * FROM (
+                            //        SELECT ""Id"", ""Culoare"", ""Denumire"" FROM ""Ptj_tblAbsente"" 
+                            //        WHERE ""Culoare"" IS NOT NULL AND ""Culoare"" <> '#FFFFFF' AND ""Culoare"" <> '#000000'
+                            //        UNION
+                            //        SELECT - 2, CASE WHEN COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareZileLibereLegale'),'#FA8282') = '' THEN '#FA8282' ELSE COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareZileLibereLegale'),'#FA8282') END, '{Dami.TraduCuvant("Zi libera legala")}' {cmp}
+                            //        UNION
+                            //        SELECT - 1, CASE WHEN COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareSambataSiDuminica'),'#FF0000') = '' THEN '#FF0000' ELSE COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareSambataSiDuminica'),'#FF0000') END, '{Dami.TraduCuvant("Sambata sau Duminica")}' {cmp}
+                            //        UNION
+                            //        SELECT - 3, CASE WHEN COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') = '' THEN '#EE8D3D' ELSE COALESCE((SELECT ""Culoare"" FROM ""Ptj_tblStari"" WHERE ""Id"" = 4),'#EE8D3D') END, '{Dami.TraduCuvant("CO Planificat")}' {cmp}  WHERE (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE COALESCE(""Planificare"",0)=1) > 0
+                            //        ) X ORDER BY ""Id"" ";
+
                             string sqlLeg = $@"SELECT * FROM (
-                                    SELECT ""Id"", ""Culoare"", ""Denumire"" FROM ""Ptj_tblAbsente"" 
-                                    WHERE ""Culoare"" IS NOT NULL AND ""Culoare"" <> '#FFFFFF' AND ""Culoare"" <> '#000000'
+                                    SELECT ""Id"", ""Culoare"", ""Denumire"" FROM ""Ptj_tblAbsente""
+                                    left join ""Ptj_ContracteAbsente"" a on ""Id"" = ""IdAbsenta""
+                                    left join ""F100Contracte"" b on a.""IdContract"" = b.""IdContract""
+                                    WHERE ""InPontajAnual"" = 1 and b.""DataInceput"" <= {General.CurrentDate()} and {General.CurrentDate()} <= b.""DataSfarsit"" and b.F10003 = {Convert.ToInt32(Session["IstoricExtins_Angajat_Marca"] ?? -99)}
                                     UNION
                                     SELECT - 2, CASE WHEN COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareZileLibereLegale'),'#FA8282') = '' THEN '#FA8282' ELSE COALESCE((SELECT ""Valoare"" FROM ""tblParametrii"" WHERE ""Nume""='CuloareZileLibereLegale'),'#FA8282') END, '{Dami.TraduCuvant("Zi libera legala")}' {cmp}
                                     UNION

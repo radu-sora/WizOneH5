@@ -6,8 +6,7 @@
 
         function EmptyFields(s,e) {
             cmbAng.SetValue(null);
-            cmbCtr.SetValue(null);
-            cmbStare.SetValue(null);
+            cmbCtr.SetValue(null);    
 
             cmbSub.SetValue(null);
             cmbSec.SetValue(null);

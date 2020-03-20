@@ -451,7 +451,18 @@ namespace WizOne.Absente
                             dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
                             cmbAbs.DataSource = dtAbs;
                             cmbAbs.DataBind();
-                            cmbAbs.SelectedIndex = -1;
+                            bool gasit = false;
+                            if (cmbAbs.Value != null)
+                            {
+                                for (int k = 0; k < dtAbs.Rows.Count; k++)
+                                    if (Convert.ToInt32(cmbAbs.Value) == Convert.ToInt32(dtAbs.Rows[k]["Id"].ToString()))
+                                    {
+                                        gasit = true;
+                                        break;
+                                    }
+                            }
+                            if (!gasit)
+                                cmbAbs.SelectedIndex = -1;
                             Session["Cereri_Absente_Absente"] = dtAbs;
 
 

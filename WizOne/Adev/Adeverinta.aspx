@@ -634,6 +634,47 @@
                         </tr>                   
                     </table>
                   </fieldset >
+                   <fieldset >                     
+                    <legend class="legend-font-size">Setari Adeverinta deplasare</legend> 
+                    <table width="10%" >   
+                        <tr>                 
+						    <td align="left">
+							    <dx:ASPxLabel  ID="lblSubsem" Width="100" runat="server"  Text="Subsemnatul" ></dx:ASPxLabel >
+                             </td>
+                             <td align="left">
+							    <dx:ASPxTextBox  ID="txtSubsem"  Width="200" runat="server" AutoPostBack="false" >        
+                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
+							    </dx:ASPxTextBox >
+                             </td>
+                             <td align="left">
+                                <dx:ASPxLabel  ID="lblDom" Width="200" runat="server"  Text="Domeniul activitatii profesionale" ></dx:ASPxLabel >
+                            </td>
+                             <td align="left">
+                                 <dx:ASPxTextBox  ID="txtDom"  Width="200" runat="server" AutoPostBack="false" >        
+                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
+							    </dx:ASPxTextBox >
+                            </td>
+                        </tr>
+                        <tr>
+                              <td align="left">
+                                <dx:ASPxLabel  ID="lblFunc" Width="100" runat="server"  Text="Functia" ></dx:ASPxLabel >
+                            </td>
+                            <td align="left">
+							    <dx:ASPxTextBox  ID="txtFunc"  Width="200" runat="server" AutoPostBack="false" >        
+                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
+							    </dx:ASPxTextBox >
+                            </td>
+                              <td align="left">
+							    <dx:ASPxLabel  ID="lbllLoc" Width="200" runat="server"  Text="Locul de desfasurare al activitatii profesionale" ></dx:ASPxLabel >
+						    </td>
+                            <td align="right">
+							    <dx:ASPxTextBox  ID="txtLoc"  Width="200" runat="server" AutoPostBack="false" >        
+                                    <ClientSideEvents TextChanged="function(s,e){ OnTextChangedHandler(s); }" />                           
+							    </dx:ASPxTextBox >
+						    </td>
+                        </tr>
+                    </table>
+                  </fieldset >
                    <fieldset border="0">                     
                     <legend class="legend-border"></legend>   
                     <table width="40%" >

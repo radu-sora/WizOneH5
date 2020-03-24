@@ -447,7 +447,7 @@ namespace WizOne.Pagini
 
                 foreach (DataColumn col in dt.Columns)
                 {
-                    if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
+                    if (!col.AutoIncrement && grDateNomen.Columns[col.ColumnName] != null && grDateNomen.Columns[col.ColumnName].Visible)
                     {
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
 
@@ -639,9 +639,9 @@ namespace WizOne.Pagini
                                     break;
                                 case "DateTime":
                                     if (Constante.tipBD == 1)
-                                        val = "CONVERT(DATETIME, '" + ws2.Cells[j, k].Value.ToString() + "', 103)";
+                                        val = "CONVERT(DATETIME# '" + ws2.Cells[j, k].Value.ToString() + "'# 103)";
                                     else
-                                        val = "TO_DATE('" + ws2.Cells[j, k].Value.ToString() + "', dd/mm/yyyy)";
+                                        val = "TO_DATE('" + ws2.Cells[j, k].Value.ToString() + "'# dd/mm/yyyy)";
                                     break;
                             }
 
@@ -654,12 +654,13 @@ namespace WizOne.Pagini
                         k++;
                     }
 
+
                     string[] lstCampuri = (campOblig + campNonOblig).Substring(1).Split(',');
                     string camp = "", valoare = "";
                     for (int x = 0; x < lstCampuri.Length; x++)
                     {
                         camp += "," + lstCampuri[x].Split('=')[0];
-                        valoare += "," + lstCampuri[x].Split('=')[1];
+                        valoare += "," + lstCampuri[x].Split('=')[1].Replace('#', ',');
                     }
 
                     DataRow[] drAltele = dtCombinat.Select("PozitieFisier IS NULL");
@@ -684,10 +685,18 @@ namespace WizOne.Pagini
                         }
                     }
 
-                    DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + cmbTabela.Text + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND "), null);
+                    lstCampuri = (campOblig + campNonOblig).Substring(1).Split(',');
+                    camp = ""; valoare = "";
+                    for (int x = 0; x < lstCampuri.Length; x++)
+                    {
+                        camp += "," + lstCampuri[x].Split('=')[0];
+                        valoare += "," + lstCampuri[x].Split('=')[1].Replace('#', ',');
+                    }
+
+                    DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + cmbTabela.Text + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ','), null);
                     string sql = "";
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
-                        sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1) + " WHERE " + campOblig.Substring(1).Replace(",", " AND ");
+                        sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1) + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ',');
                     else                    
                         sql = "INSERT INTO \"" + cmbTabela.Text + "\" (" + camp.Substring(1) + ")  VALUES (" + valoare.Substring(1) + ")";
                     
@@ -702,7 +711,7 @@ namespace WizOne.Pagini
                             for (int x = 0; x < lstCampuri.Length; x++)
                             {
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "F10003" || lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "An" || lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Luna")
-                                    filtru += " AND " + lstCampuri[x];
+                                    filtru += " AND " + lstCampuri[x].Replace('#', ',');
                                 filtru = filtru.Substring(5);
                             }
                             General.CalculFormuleCumulat(filtru);
@@ -717,11 +726,11 @@ namespace WizOne.Pagini
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "F10003")
                                     marca = lstCampuri[x].Split('=')[1].Trim();
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Ziua")
-                                    ziua = lstCampuri[x].Split('=')[1].Trim();
+                                    ziua = lstCampuri[x].Split('=')[1].Replace('#', ',').Trim();
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataInceput")
-                                    dataInceput = lstCampuri[x].Split('=')[1].Trim();
+                                    dataInceput = lstCampuri[x].Split('=')[1].Replace('#', ',').Trim();
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataSfarsit")
-                                    dataSfarsit = lstCampuri[x].Split('=')[1].Trim();
+                                    dataSfarsit = lstCampuri[x].Split('=')[1].Replace('#', ',').Trim();
                             }
 
                             filtru = "";

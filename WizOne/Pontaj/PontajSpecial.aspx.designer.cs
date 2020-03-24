@@ -933,6 +933,24 @@ namespace WizOne.Pontaj
         protected global::DevExpress.Web.ASPxCheckBox chkDecalare;
 
         /// <summary>
+        /// chkPontare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkPontare;
+
+        /// <summary>
+        /// chkPlanif control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkPlanif;
+
+        /// <summary>
         /// btnFiltru control.
         /// </summary>
         /// <remarks>

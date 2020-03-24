@@ -189,7 +189,8 @@ namespace WizOne.Adev
             table.Rows.Add(4, "Șomaj");
             table.Rows.Add(6, "Stagiu");
             table.Rows.Add(7, "Vechime");
-     
+            table.Rows.Add(11, "Deplasare");
+
             cmbAdev.DataSource = table;
             cmbAdev.DataBind();
             //cmbAdev.SelectedIndex = 0;
@@ -442,6 +443,10 @@ namespace WizOne.Adev
                         else
                             txtBCM.Text = "";
                         break;
+                    case "ADS": txtSubsem.Text = lista[sufix]; break;
+                    case "ADF": txtFunc.Text = lista[sufix]; break;
+                    case "ADD": txtDom.Text = lista[sufix]; break;
+                    case "ADL": txtLoc.Text = lista[sufix]; break;
                 }
             if (txtNumeRL1.Text.Length > 0 || txtFunctieRL1.Text.Length > 0)
                 chkRep1.Checked = true;
@@ -859,6 +864,26 @@ namespace WizOne.Adev
                         if (!lista.ContainsKey("BCM"))
                             lista.Add("BCM", "");
                         lista["BCM"] = param[1];
+                        break;
+                    case "txtSubsem":
+                        if (!lista.ContainsKey("ADS"))
+                            lista.Add("ADS", "");
+                        lista["ADS"] = param[1];
+                        break;
+                    case "txtFunc":
+                        if (!lista.ContainsKey("ADF"))
+                            lista.Add("ADF", "");
+                        lista["ADF"] = param[1];
+                        break;
+                    case "txtDom":
+                        if (!lista.ContainsKey("ADD"))
+                            lista.Add("ADD", "");
+                        lista["ADD"] = param[1];
+                        break;
+                    case "txtLoc":
+                        if (!lista.ContainsKey("ADL"))
+                            lista.Add("ADL", "");
+                        lista["ADL"] = param[1];
                         break;
                     case "EmptyFields":
                         cmbDept.DataSource = General.IncarcaDT(@"SELECT F00607 AS ""IdDept"", F00608 AS ""Dept"" FROM F006", null);
@@ -1310,6 +1335,15 @@ namespace WizOne.Adev
                         //AdeverintaVechime(marca, FileName);
                         msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 7, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
+                    case 11:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_Deplasare_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_Deplasare_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        //AdeverintaVechime(marca, FileName);
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 11, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
                 }
 
                 //if (msg.Length > 0)
@@ -1404,6 +1438,11 @@ namespace WizOne.Adev
                                 numeArhiva = "Adev_Vechime_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
+                            case 11:
+                                fisier = "Adev_Deplasare_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                numeArhiva = "Adev_Deplasare_" + data;
+                                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                                break;
                         }
                         XDocument doc;
                         doc = XDocument.Load(FileName);
@@ -1451,6 +1490,7 @@ namespace WizOne.Adev
 
 
 
+        //NU SE MAI FOLOSESC    -   BEGIN
         private void AdeverintaSanatate(int marca, string FileName)
         {
             string sql = "";
@@ -2950,7 +2990,6 @@ namespace WizOne.Adev
         }
 
 
-        //NU SE MAI FOLOSESC    -   BEGIN
         private void AdeverintaSomaj(int marca, string FileName)
         {
             try

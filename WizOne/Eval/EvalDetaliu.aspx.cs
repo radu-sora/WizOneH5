@@ -2634,7 +2634,7 @@ namespace WizOne.Eval
                             {                             
                                 //foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
                                 //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
-                                    sumaClaim += Convert.ToInt32(General.Nz(clsUpd.IdCalificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
+                                    sumaClaim += Convert.ToInt32(General.Nz(clsUpd.Calificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
                             }                            
                             break;
                     }
@@ -2879,7 +2879,7 @@ namespace WizOne.Eval
                             {                               
                                 //foreach (Eval_CompetenteAngajatTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
                                 //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
-                                    sumaClaim += Convert.ToInt32(General.Nz(clsUpd.IdCalificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
+                                    sumaClaim += Convert.ToInt32(General.Nz(clsUpd.Calificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
 
                             }
                             break;

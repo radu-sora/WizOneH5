@@ -32,7 +32,7 @@
                     <ClientSideEvents EndCallback="function (s,e) { pnlLoading.Hide(); }" CallbackError="function (s,e) { pnlLoading.Hide(); }" BeginCallback="function (s,e) { pnlLoading.Show(); }" />
                     <PanelCollection>
                         <dx:PanelContent>
-                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="" CssClass="pnlAlign indentright20" Width="100%">
+                            <dx:ASPxRoundPanel ID="pnlFiltrare" ClientInstanceName="pnlFiltrare" runat="server" ShowHeader="true" ShowCollapseButton="true" AllowCollapsingByHeaderClick="true" HeaderText="Setare filtru de selectie" CssClass="pnlAlign indentright20" Width="100%">
                                 <HeaderStyle Font-Bold="true" />
                                 <ClientSideEvents CollapsedChanged="function (s,e) { AdjustSize(); }"  />
                                 <PanelCollection>
@@ -41,14 +41,16 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divDtInc" runat="server">
                                                 <label id="lblDtInc" runat="server" oncontextMenu="ctx(this,event)">Data Inceput</label><br />
-                                                <dx:ASPxDateEdit ID="txtDtInc" ClientInstanceName="txtDtInc" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
+                                                <dx:ASPxDateEdit ID="txtDtInc" ClientInstanceName="txtDtInc" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
                                                     <CalendarProperties FirstDayOfWeek="Monday" />
+                                                    <ClientSideEvents ValueChanged="function(s,e) { VerificaInterval(s,e); }" />
                                                 </dx:ASPxDateEdit>
                                             </div>
                                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divDtSf" runat="server">
                                                 <label id="lblDtSf" runat="server" oncontextMenu="ctx(this,event)">Data Sfarsit</label><br />
-                                                <dx:ASPxDateEdit ID="txtDtSf" ClientInstanceName="txtDtSf" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
+                                                <dx:ASPxDateEdit ID="txtDtSf" ClientInstanceName="txtDtSf" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)" >
                                                     <CalendarProperties FirstDayOfWeek="Monday" />
+                                                    <ClientSideEvents ValueChanged="function(s,e) { VerificaInterval(s,e); }" />
                                                 </dx:ASPxDateEdit>
                                             </div>
                                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divAng" runat="server">
@@ -67,7 +69,7 @@
                                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divCtr" runat="server">
                                                 <label id="lblCtr" runat="server" oncontextMenu="ctx(this,event)">Contract</label><br />
 
-                                                <dx:ASPxDropDownEdit ClientIDMode="AutoID" ClientInstanceName="checkComboBox1" ID="cmbCtr" Width="250px" runat="server" AnimationType="None">
+                                                <dx:ASPxDropDownEdit ClientInstanceName="cmbCtr" ID="cmbCtr" Width="250px" runat="server" AnimationType="None">
                                                     <DropDownWindowStyle BackColor="#EDEDED" />
                                                     <DropDownWindowTemplate>
                                                         <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox1" SelectionMode="CheckColumn" runat="server" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
@@ -109,7 +111,7 @@
                                             </div>
                                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divDept" runat="server">
                                                 <label id="lblDept" runat="server" oncontextMenu="ctx(this,event)">Dept.</label><br />
-                                                <dx:ASPxDropDownEdit ClientIDMode="AutoID" ClientInstanceName="checkComboBox2" ID="cmbDept" Width="250px" runat="server" AnimationType="None">
+                                                <dx:ASPxDropDownEdit ClientInstanceName="cmbDept" ID="cmbDept" Width="250px" runat="server" AnimationType="None">
                                                     <DropDownWindowStyle BackColor="#EDEDED" />
                                                     <DropDownWindowTemplate>
                                                         <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox2" SelectionMode="CheckColumn" runat="server" ValueField="IdDept" TextField="Dept" ValueType="System.Int32">
@@ -149,7 +151,7 @@
                                             <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:8px;">
                                                 <dx:ASPxButton ID="btnFiltru" runat="server" Text="Filtru" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupa.png"></Image>
-                                                    <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnFiltru'); }" />
+                                                    <ClientSideEvents Click="function(s, e) { OnClickFiltru(s,e); }" />
                                                 </dx:ASPxButton>
                                                 <dx:ASPxButton ID="btnFiltruSterge" runat="server" Text="Sterge Filtru" oncontextMenu="ctx(this,event)" AutoPostBack="false" >
                                                     <Image Url="~/Fisiere/Imagini/Icoane/lupaDel.png"></Image>
@@ -174,10 +176,14 @@
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" AutoFilterCondition="Contains" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false"  />
-                    <ClientSideEvents ContextMenu="ctx" Init="function(s,e) { OnGridInit(); }" EndCallback="function(s,e) { OnGridEndCallback(s); }" />                    
+                    <ClientSideEvents ContextMenu="ctx" 
+                        Init="function(s,e) { OnGridInit(); }" 
+                        EndCallback="function(s,e) { OnGridEndCallback(s); }"
+                        FocusedCellChanging="function(s,e) { OnFocusedCellChanging(s,e); }"/>                    
                     <Columns>
                         <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
-                        <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="150px" Settings-AutoFilterCondition="Contains"/>
+                        <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="250px" Settings-AutoFilterCondition="Contains"/>
+                        <dx:GridViewDataTextColumn FieldName="Contract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="250px" />
                         <dx:GridViewDataTextColumn FieldName="ZileGri" Caption="ZileGri" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                     </Columns>
                 </dx:ASPxGridView>
@@ -189,9 +195,7 @@
     <script>
         function EmptyFields() {
             cmbAng.SetValue(null);
-            cmbAngZi.SetValue(null);
             cmbCtr.SetValue(null);
-            cmbStare.SetValue(null);
 
             cmbSub.SetValue(null);
             cmbSec.SetValue(null);
@@ -326,6 +330,76 @@
                     actualValues.push(item.value);
             }
             return actualValues;
+        }
+
+        function OnFocusedCellChanging(s, e) {
+            if (e.cellInfo.column.fieldName.indexOf("Ziua") < 0) {
+                e.cancel = true;
+                return;
+            }
+
+            var val = s.batchEditApi.GetCellValue(e.cellInfo.rowVisibleIndex, e.cellInfo.column.fieldName);
+            var ctr = s.batchEditApi.GetCellValue(e.cellInfo.rowVisibleIndex, "Contract");
+            
+            if (val < 0)
+                e.cancel = true;
+            else {
+                //LoadPrograme(s,e.cellInfo.column.fieldName);
+                var indice = e.cellInfo.column.fieldName.replace("Ziua", "");
+                var key = Number(indice) - 1;
+                let programe = <%= Session["Json_Programe"] %>;
+                var arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] && item.Contract == ctr });
+
+                var cmb = s.GetEditor(e.cellInfo.column.fieldName);
+                cmb.ClearItems();
+
+                for (var i = 0; i < arr.length; i++) {
+                    cmb.AddItem(arr[i].Denumire, Number(arr[i].IdAuto));
+                }
+            }
+        }
+
+<%--        function LoadPrograme(s,fieldName) {
+            var indice = fieldName.replace("Ziua", "");
+            var key = Number(indice) - 1;
+            let programe = <%= Session["Json_Programe"] %>;
+            var arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] });
+
+            var cmb = s.GetEditor(fieldName);
+            cmb.ClearItems();
+
+            for (var i = 0; i < arr.length; i++) {
+                cmb.AddItem(arr[i].Denumire, Number(arr[i].IdAuto));
+            }
+        }--%>
+
+        function VerificaInterval(s, e) {
+            var tmpInc = new Date(txtDtInc.GetDate());
+            var tmpSf = new Date(txtDtSf.GetDate());
+            var dtInc = new Date(tmpInc.getFullYear(), tmpInc.getMonth(), tmpInc.getDate(), 0, 0, 0, 0);
+            var dtSf = new Date(tmpSf.getFullYear(), tmpSf.getMonth(), tmpSf.getDate(), 0, 0, 0, 0);
+            var dif = (dtSf - dtInc) / (1000 * 60 * 60 * 24);
+            if (dif > 30) {
+                txtDtSf.SetValue(txtDtInc.GetValue());
+                swal({
+                    title: "Atentie",
+                    text: "Diferenta intre data inceput si cea de sfarsit trebuie sa fie mai mica de 31 zile",
+                    type: "warning"
+                });
+            }
+        }
+
+        function OnClickFiltru(s, e) {
+            if (txtDtInc.GetDate() > txtDtSf.GetDate()) {
+                txtDtSf.SetValue(txtDtInc.GetValue());
+                swal({
+                    title: "Atentie",
+                    text: "Data de sfarsit este mai mica decat data de inceput",
+                    type: "warning"
+                });
+            }
+            else
+                grDate.PerformCallback('btnFiltru');
         }
 
     </script>

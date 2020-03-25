@@ -21,6 +21,7 @@ namespace WizOne.Pontaj
     public partial class PlanificareSchimburi : System.Web.UI.Page
     {
         private string arrZL = "";
+
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -116,9 +117,9 @@ namespace WizOne.Pontaj
 
                 cmbSub.DataSource = General.IncarcaDT($@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003 WHERE F00310 <= {General.ToDataUniv(DateTime.Now)} AND {General.ToDataUniv(DateTime.Now)} <= F00311", null);
                 cmbSub.DataBind();
-                cmbFil.DataSource = General.IncarcaDT($@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404= {General.Nz(cmbSub.Value, -99)} AND F00513 <= {General.ToDataUniv(DateTime.Now)} AND {General.ToDataUniv(DateTime.Now)} <= F00514", null);
+                cmbFil.DataSource = General.IncarcaDT($@"SELECT F00405 AS ""IdFiliala"", F00406 AS ""Filiala"" FROM F004 WHERE F00404= {General.Nz(cmbSub.Value, -99)} AND F00411 <= {General.ToDataUniv(DateTime.Now)} AND {General.ToDataUniv(DateTime.Now)} <= F00412", null);
                 cmbFil.DataBind();
-                cmbSec.DataSource = General.IncarcaDT($@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505= {General.Nz(cmbFil.Value, -99)} AND F00310 <= {General.ToDataUniv(DateTime.Now)} AND {General.ToDataUniv(DateTime.Now)} <= F00311", null);
+                cmbSec.DataSource = General.IncarcaDT($@"SELECT F00506 AS ""IdSectie"", F00507 AS ""Sectie"" FROM F005 WHERE F00505= {General.Nz(cmbFil.Value, -99)} AND F00513 <= {General.ToDataUniv(DateTime.Now)} AND {General.ToDataUniv(DateTime.Now)} <= F00514", null);
                 cmbSec.DataBind();
 
                 ASPxListBox lstDept = cmbDept.FindControl("listBox") as ASPxListBox;
@@ -791,11 +792,17 @@ namespace WizOne.Pontaj
                         WHERE X.F10003=A.F10003
                         FOR XML PATH ('')) AS ZileGri
                         FROM (
-                        SELECT TOP 100 PERCENT A.F10003, A.F10008 + ' ' + A.F10009 AS AngajatNume {zileVal}
+                        SELECT TOP 100 PERCENT A.F10003, A.F10008 + ' ' + A.F10009 AS AngajatNume, C.Denumire AS Contract {zileVal}
                         FROM
                         (SELECT F10003 {zileAs} FROM 
-                        (SELECT F10003, (IdContractP * 1000 + IdProgramP) AS Prog, Ziua From Ptj_Intrari WHERE {dtInc} <= CAST(Ziua AS date) AND CAST(Ziua AS date) <= {dtSf}) AS source  
-                        PIVOT (MAX(Prog) FOR Ziua IN ( {zile.Substring(1)} )) pvt
+                        (SELECT  A.Ziua, A.F10003, 
+                        COALESCE((-1 * B.Id), (A.IdContractP * 1000 + A.IdProgramP)) AS Id
+                        FROM Ptj_Intrari A
+                        LEFT JOIN Ptj_tblAbsente B ON A.ValStr=B.DenumireScurta AND B.DenumireScurta <> ''
+                        LEFT JOIN Ptj_Contracte C ON A.IdContractP = C.Id
+                        LEFT JOIN Ptj_Programe D ON A.IdProgramP=D.Id
+                        WHERE {dtInc} <= CAST(A.Ziua AS date) AND CAST(A.Ziua AS date) <= {dtSf}) AS source  
+                        PIVOT (MAX(Id) FOR Ziua IN ( {zile.Substring(1)} )) pvt
                         ) pvt
                         LEFT JOIN F100 A ON A.F10003=pvt.F10003 
                         LEFT JOIN F1001 B ON A.F10003=B.F10003 
@@ -813,6 +820,9 @@ namespace WizOne.Pontaj
                         LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
                         {strFiltru}
                         ORDER BY AngajatNume) A";
+
+                    //SELECT F10003, (IdContractP * 1000 + IdProgramP) AS Prog, Ziua From Ptj_Intrari WHERE {dtInc} <= CAST(Ziua AS date) AND CAST(Ziua AS date) <= {dtSf}
+
 
 
 
@@ -898,8 +908,94 @@ namespace WizOne.Pontaj
         {
             try
             {
+                DataTable dt = General.IncarcaDT(
+                    $@"SELECT ContractId * 1000 + ProgramId AS IdAuto, ContractDen + ' - ' + ProgramDen AS Denumire, * FROM
+                    (
+                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 1 AS ZiSapt, 
+                    CASE WHEN COALESCE(A.TipSchimb1, A.TipSchimb0) = 1 THEN COALESCE(A.Program1, Program0) ELSE B.IdProgram END AS ProgramId,
+                    C.Denumire AS ProgramDen
+                    FROM Ptj_Contracte A
+                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
+                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb1, A.TipSchimb0) = 1 THEN COALESCE(A.Program1, Program0) ELSE B.IdProgram END)
+                    UNION
+                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 2 AS ZiSapt, 
+                    CASE WHEN COALESCE(A.TipSchimb2, A.TipSchimb0) = 1 THEN COALESCE(A.Program2, Program0) ELSE B.IdProgram END AS ProgramId,
+                    C.Denumire AS ProgramDen
+                    FROM Ptj_Contracte A
+                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
+                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb2, A.TipSchimb0) = 1 THEN COALESCE(A.Program2, Program0) ELSE B.IdProgram END)
+                    UNION
+                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 3 AS ZiSapt, 
+                    CASE WHEN COALESCE(A.TipSchimb3, A.TipSchimb0) = 1 THEN COALESCE(A.Program3, Program0) ELSE B.IdProgram END AS ProgramId,
+                    C.Denumire AS ProgramDen
+                    FROM Ptj_Contracte A
+                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
+                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb3, A.TipSchimb0) = 1 THEN COALESCE(A.Program3, Program0) ELSE B.IdProgram END)
+                    UNION
+                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 4 AS ZiSapt, 
+                    CASE WHEN COALESCE(A.TipSchimb4, A.TipSchimb0) = 1 THEN COALESCE(A.Program4, Program0) ELSE B.IdProgram END AS ProgramId,
+                    C.Denumire AS ProgramDen
+                    FROM Ptj_Contracte A
+                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
+                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb4, A.TipSchimb0) = 1 THEN COALESCE(A.Program4, Program0) ELSE B.IdProgram END)
+                    UNION
+                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 5 AS ZiSapt, 
+                    CASE WHEN COALESCE(A.TipSchimb5, A.TipSchimb0) = 1 THEN COALESCE(A.Program5, Program0) ELSE B.IdProgram END AS ProgramId,
+                    C.Denumire AS ProgramDen
+                    FROM Ptj_Contracte A
+                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
+                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb5, A.TipSchimb0) = 1 THEN COALESCE(A.Program5, Program0) ELSE B.IdProgram END)
+                    UNION
+                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 6 AS ZiSapt, 
+                    CASE WHEN COALESCE(A.TipSchimb6, A.TipSchimb0) = 1 THEN COALESCE(A.Program6, Program0) ELSE B.IdProgram END AS ProgramId,
+                    C.Denumire AS ProgramDen
+                    FROM Ptj_Contracte A
+                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
+                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb6, A.TipSchimb0) = 1 THEN COALESCE(A.Program6, Program0) ELSE B.IdProgram END)
+                    UNION
+                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 7 AS ZiSapt, 
+                    CASE WHEN COALESCE(A.TipSchimb7, A.TipSchimb0) = 1 THEN COALESCE(A.Program7, Program0) ELSE B.IdProgram END AS ProgramId,
+                    C.Denumire AS ProgramDen
+                    FROM Ptj_Contracte A
+                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
+                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb7, A.TipSchimb0) = 1 THEN COALESCE(A.Program7, Program0) ELSE B.IdProgram END)
+                    UNION
+                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 8 AS ZiSapt, 
+                    CASE WHEN COALESCE(A.TipSchimb8, A.TipSchimb0) = 1 THEN COALESCE(A.Program8, Program0) ELSE B.IdProgram END AS ProgramId,
+                    C.Denumire AS ProgramDen
+                    FROM Ptj_Contracte A
+                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
+                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb8, A.TipSchimb0) = 1 THEN COALESCE(A.Program8, Program0) ELSE B.IdProgram END)
+                    ) X
+                    UNION 
+                    SELECT -1 * Id, Denumire, -99, '', -99, -99, '' FROM Ptj_tblAbsente", null);
+
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    string jsonPrg = "";
+                    for (int g = 0; g < dt.Rows.Count; g++)
+                    {
+                        jsonPrg += ",{ IdAuto: " + dt.Rows[g]["IdAuto"] + ", Denumire: \"" + General.Nz(dt.Rows[g]["Denumire"], "").ToString().Trim().Replace("\n", "").Replace("\r", "") + "\", ZiSapt: " + dt.Rows[g]["ZiSapt"] + ", Contract: '" + dt.Rows[g]["ContractDen"] + "' }";
+                    }
+                    if (jsonPrg.Length > 0)
+                        Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";
+                }
+
+                DataTable dtZi = General.IncarcaDT($@"SELECT CASE WHEN ZiLiberaLegala <> 0 THEN 8 ELSE ZiSapt END AS ZiSapt FROM tblZile WHERE {General.ToDataUniv(txtDtInc.Date)} <= Zi AND Zi <= {General.ToDataUniv(txtDtSf.Date)} ", null);
+                var lstZiSapt = new Dictionary<int, object>();
+
+                for (int i = 0; i < dtZi.Rows.Count; i++)
+                {
+                    lstZiSapt.Add(i, dtZi.Rows[i]["ZiSapt"]);
+                }
+
+                grDate.JSProperties["cp_ZiSapt"] = lstZiSapt;
+
+
+
                 //stergem coloanele Ziua
-                for(int i = 0; i < grDate.Columns.Count; i++)
+                for (int i = 0; i < grDate.Columns.Count; i++)
                 {
                     if (grDate.Columns[i].Name.Length >= 4 && grDate.Columns[i].Name.Substring(0, 4).ToLower() == "ziua")
                         grDate.Columns.Remove(grDate.Columns[i]);
@@ -914,10 +1010,13 @@ namespace WizOne.Pontaj
                     c.Name = "Ziua" + cnt;
                     c.FieldName = "Ziua" + cnt;
                     c.Caption = zi.Day.ToString().PadLeft(2, '0') + "." + zi.Month.ToString().PadLeft(2, '0');
+                    c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
+
+                    c.PropertiesComboBox.DataSource = dt;
                     c.PropertiesComboBox.AllowNull = true;
-                    c.PropertiesComboBox.ValueField = "Id";
+                    c.PropertiesComboBox.ValueField = "IdAuto";
                     c.PropertiesComboBox.ValueType = typeof(int);
-                    c.PropertiesComboBox.TextFormatString = "{0}";
+                    //c.PropertiesComboBox.TextFormatString = "{0}";
                     c.PropertiesComboBox.TextField = "Denumire";
                     grDate.Columns.Add(c);
                 }
@@ -929,7 +1028,27 @@ namespace WizOne.Pontaj
             }
         }
 
+        //protected void grDate_DataBound(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        var lstZiSapt = new Dictionary<int, object>();
 
+        //        var grid = sender as ASPxGridView;
+        //        for (int i = grid.VisibleStartIndex; i < grid.VisibleStartIndex + grid.SettingsPager.PageSize; i++)
+        //        {
+        //            var rowValues = grid.GetRowValues(i, new string[] { "F10003",  "ZiSapt" }) as object[];
+        //            lstZiSapt.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[7] ?? "");
+        //        }
+
+        //        grid.JSProperties["cp_ZiSapt"] = lstZiSapt;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
     }
 }
  

@@ -51,15 +51,7 @@ namespace WizOne.Pagini
                         colBDCol.PropertiesComboBox.DataSource = table;
 
                     }
-
-                    DataTable tbl = new DataTable();
-                    tbl.Columns.Add("Id", typeof(string));
-                    tbl.Columns.Add("Denumire", typeof(string));
-                    tbl.Rows.Add("Numeric", "Numeric");
-                    tbl.Rows.Add("String", "String");
-                    tbl.Rows.Add("DateTime", "DateTime");
-                    GridViewDataComboBoxColumn colTip = (grDateNomen.Columns["Tip"] as GridViewDataComboBoxColumn);
-                    colTip.PropertiesComboBox.DataSource = tbl;
+     
 
                     DataTable dt = new DataTable();
                     if (Session["ImportDateSablon_Grid"] == null)
@@ -75,7 +67,7 @@ namespace WizOne.Pagini
                     }
                                        
                     grDate.DataSource = dt;
-                    grDate.KeyFieldName = "IdAuto";
+                    grDate.KeyFieldName = "NumeTabela;IdAuto";
                     grDate.DataBind();
                     Session["ImportDateSablon_Grid"] = dt;
                     
@@ -248,7 +240,7 @@ namespace WizOne.Pagini
                 grDate.CancelEdit();
                 grDate.DataSource = dt;
                 //grDate.DataBind();
-                grDate.KeyFieldName = "IdAuto";
+                grDate.KeyFieldName = "NumeTabela;IdAuto";
                 Session["ImportDateSablon_Grid"] = dt;
                 General.SalveazaDate(dt, "ImportDateSablon");
 
@@ -333,7 +325,7 @@ namespace WizOne.Pagini
                     dt = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" WHERE \"NumeTabela\" = ''", null);           
 
                 grDate.DataSource = dt;
-                grDate.KeyFieldName = "IdAuto";
+                grDate.KeyFieldName = "NumeTabela;IdAuto";
                 grDate.DataBind();
                 Session["ImportDateSablon_Grid"] = dt;
                 Session["ImportDate_ColBD"] = null;
@@ -599,12 +591,29 @@ namespace WizOne.Pagini
                 }
 
                 int k = 0;
-                DataTable dtCombinat = General.IncarcaDT("SELECT \"ColoanaFisier\", \"ColoanaBD\", \"NumeColoana\", \"Obligatoriu\", \"ValoareImplicita\", NULL AS \"PozitieFisier\", \"Tip\" FROM \"ImportDateNomen\" a LEFT JOIN \"ImportDateSablon\" b ON a.\"NumeTabela\" = b.\"NumeTabela\" AND \"NumeColoana\" = \"ColoanaBD\"  WHERE a.\"NumeTabela\" = '" + cmbTabela.Text + "'", null);
+                string sql = "select max(ColoanaFisier) as ColoanaFisier,  NumeColoana,  max(Obligatoriu) as Obligatoriu, max(ValoareImplicita) as ValoareImplicita, null as PozitieFisier, max(Tip) as Tip from "
+                            + "(select ColoanaFisier, ColoanaBD as NumeColoana, 0 as Obligatoriu, '' as ValoareImplicita, null AS PozitieFisier, "
+                            + "(SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = ColoanaBD) as Tip FROM ImportDateSablon    WHERE NumeTabela = '" + cmbTabela.Text + "' "
+                            + "union "
+                            + "select '' as ColoanaFisier, NumeColoana, coalesce(Obligatoriu, 0),  ValoareImplicita, NULL AS PozitieFisier, "
+                            + "(SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = NumeColoana ) as Tip FROM ImportDateNomen    WHERE NumeTabela = '" + cmbTabela.Text + "') a "
+                            + "group by numecoloana, PozitieFisier ";
+                if (Constante.tipBD == 2)
+                    sql = "select max(\"ColoanaFisier\") as \"ColoanaFisier\",  \"NumeColoana\",  max(\"Obligatoriu\") as \"Obligatoriu\", max(\"ValoareImplicita\") as \"ValoareImplicita\", null as \"PozitieFisier\", max(\"Tip\") as \"Tip\" from "
+                            + "(select \"ColoanaFisier\", \"ColoanaBD\" as \"NumeColoana\", 0 as \"Obligatoriu\", '' as \"ValoareImplicita\", null AS \"PozitieFisier\", "
+                            + "(SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = \"ColoanaBD\") as \"Tip\" FROM \"ImportDateSablon\"    WHERE \"NumeTabela\" = '" + cmbTabela.Text + "' "
+                            + "union "
+                            + "select '' as \"ColoanaFisier\", \"NumeColoana\", coalesce(\"Obligatoriu\", 0),  \"ValoareImplicita\", NULL AS \"PozitieFisier\", "
+                            + "(SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = \"NumeColoana\" ) as \"Tip\" FROM \"ImportDateNomen\"    WHERE \"NumeTabela\" = '" + cmbTabela.Text + "') a "
+                            + "group by \"NumeColoana\", \"PozitieFisier\"";
+
+                DataTable dtCombinat = General.IncarcaDT(sql, null);
                 foreach (DataColumn col in dtCombinat.Columns)
                     col.ReadOnly = false;
 
                 for (int i = 0; i < dtCombinat.Rows.Count; i++)
-                {                   
+                {
+                    k = 0;
                     while (!ws2.Cells[0, k].Value.IsEmpty)
                     {
                         if (ws2.Cells[0, k].Value.ToString() == dtCombinat.Rows[i]["ColoanaFisier"].ToString())
@@ -629,15 +638,19 @@ namespace WizOne.Pagini
                         if (dr != null && dr.Count() > 0)
                         {
                             string val = "NULL";
-                            switch (dr[0]["Tip"].ToString())
+                            switch (dr[0]["Tip"].ToString().ToLower())
                             {
-                                case "Numeric":
+                                case "int":
+                                case "numeric":
+                                case "number":
                                     val = ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US"));
                                     break;
-                                case "String":
+                                case "nvarchar":
+                                case "varchar2":
                                     val = "'" + ws2.Cells[j, k].Value.ToString() + "'";
                                     break;
-                                case "DateTime":
+                                case "date":
+                                case "datetime":                      
                                     if (Constante.tipBD == 1)
                                         val = "CONVERT(DATETIME# '" + ws2.Cells[j, k].Value.ToString() + "'# 103)";
                                     else
@@ -647,9 +660,9 @@ namespace WizOne.Pagini
 
 
                             if (dr[0]["Obligatoriu"].ToString() == "1")
-                                campOblig += ", \"" + dr[0]["ColoanaBD"].ToString() + "\" = " + val;
+                                campOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
                             else
-                                campNonOblig += ", \"" + dr[0]["ColoanaBD"].ToString() + "\" = " + val;
+                                campNonOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
                         }
                         k++;
                     }
@@ -678,7 +691,7 @@ namespace WizOne.Pagini
                             else
                             {
                                 valAltele = (drAltele[z]["ValoareImplicita"] ?? "NULL").ToString();
-                                if (drAltele[z]["Tip"].ToString() == "String" && drAltele[z]["ValoareImplicita"] != null)
+                                if (drAltele[z]["Tip"].ToString().ToLower().Contains("varchar") && drAltele[z]["ValoareImplicita"] != null)
                                     valAltele = "'" + drAltele[z]["ValoareImplicita"].ToString() + "'";
                             }
                             campNonOblig += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
@@ -694,7 +707,7 @@ namespace WizOne.Pagini
                     }
 
                     DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + cmbTabela.Text + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ','), null);
-                    string sql = "";
+                    sql = "";
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
                         sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1) + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ',');
                     else                    

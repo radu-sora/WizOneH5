@@ -12855,7 +12855,6 @@ CREATE TABLE ImportDateNomen(
 	NumeColoana [nvarchar](200),
 	Obligatoriu [int] NULL DEFAULT 0,
 	ValoareImplicita [nvarchar](max) NULL DEFAULT '',
-	Tip [nvarchar](200) NULL,
 	IdAuto [int]  NOT NULL
  CONSTRAINT [PK_ImportDateNomen] PRIMARY KEY CLUSTERED 
 (	

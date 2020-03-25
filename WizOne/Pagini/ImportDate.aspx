@@ -156,10 +156,6 @@
                                         <dx:GridViewDataTextColumn FieldName="NumeColoana" Name="NumeColoana" Caption="Coloana"  Width="100px" />
                                         <dx:GridViewDataCheckColumn FieldName="Obligatoriu" Name="Obligatoriu" Caption="Obligatoriu"  Width="50px"  />
                                         <dx:GridViewDataTextColumn FieldName="ValoareImplicita" Name="ValoareImplicita" Caption="Valoare implicita"  Width="250px" />
-                                        <dx:GridViewDataComboBoxColumn FieldName="Tip" Name="Tip" Caption="Tip" Width="100px" >
-                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" >
-                                            </PropertiesComboBox>
-                                        </dx:GridViewDataComboBoxColumn>
                                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                                     </Columns>
                                     <SettingsCommandButton>

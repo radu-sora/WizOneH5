@@ -335,6 +335,7 @@
     <Content Include="Absente\ZileCO.aspx" />
     <Content Include="Absente\ZLP.aspx" />
     <Content Include="Adeverinta\Adev_CIC_sablon.xml" />
+    <Content Include="Adeverinta\Adev_deplasare_sablon.xml" />
     <Content Include="Adeverinta\Adev_sanatate_2019_sablon.xml" />
     <Content Include="Adeverinta\Adev_sanatate_sablon.xml" />
     <Content Include="Adeverinta\Adev_somaj_sablon.xml" />

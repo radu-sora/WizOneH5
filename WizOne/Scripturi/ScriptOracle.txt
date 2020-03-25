@@ -13697,8 +13697,7 @@ CREATE TABLE "ImportDateNomen"(
 	"NumeTabela" varchar2(200),
 	"NumeColoana" varchar2(200),
 	"Obligatoriu" NUMBER(9)  DEFAULT 0,
-	"ValoareImplicita" CLOB,
-	"Tip" varchar2(200) NULL,
+	"ValoareImplicita" varchar2(4000),
 	"IdAuto" NUMBER(9)  NOT NULL);
   
     CREATE UNIQUE INDEX "PK_ImportDateNomen" ON "ImportDateNomen" ("IdAuto") ;

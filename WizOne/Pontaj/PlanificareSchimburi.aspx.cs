@@ -178,7 +178,7 @@ namespace WizOne.Pontaj
                                         WHERE {General.ToDataUniv(ziua.Year, ziua.Month, 1)} <= A.""Zi"" AND A.""Zi"" <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}", null), "").ToString();
 
                 DataTable dtZ = General.IncarcaDT(
-    $@"SELECT ContractId * 1000 + ProgramId AS IdAuto, ContractDen + ' - ' + ProgramDen AS Denumire, * FROM
+    $@"SELECT ContractId * 1000 + ProgramId AS IdAuto, ContractDen + ' - ' + ProgramDen AS Denumire FROM
                     (
                     SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 1 AS ZiSapt, 
                     CASE WHEN COALESCE(A.TipSchimb1, A.TipSchimb0) = 1 THEN COALESCE(A.Program1, Program0) ELSE B.IdProgram END AS ProgramId,
@@ -237,7 +237,7 @@ namespace WizOne.Pontaj
                     LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb8, A.TipSchimb0) = 1 THEN COALESCE(A.Program8, Program0) ELSE B.IdProgram END)
                     ) X
                     UNION 
-                    SELECT -1 * Id, Denumire, -99, '', -99, -99, '' FROM Ptj_tblAbsente", null);
+                    SELECT -1 * Id AS IdAuto, Denumire FROM Ptj_tblAbsente", null);
 
                 for (int i = 1; i <= 3; i++)
                 {

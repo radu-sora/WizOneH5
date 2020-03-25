@@ -709,7 +709,7 @@ namespace WizOne.Pagini
                     DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + cmbTabela.Text + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ','), null);
                     sql = "";
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
-                        sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1) + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ',');
+                        sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1).Replace('#', ',') + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ',');
                     else                    
                         sql = "INSERT INTO \"" + cmbTabela.Text + "\" (" + camp.Substring(1) + ")  VALUES (" + valoare.Substring(1) + ")";
                     

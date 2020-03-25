@@ -147,7 +147,6 @@ namespace WizOne.Pontaj
                 btnInit.Text = Dami.TraduCuvant("btnInit", "Init");
                 btnDelete.Text = Dami.TraduCuvant("btnDelete", "Sterge");
                 btnRecalc.Text = Dami.TraduCuvant("btnRecalc", "Recalculeaza");
-                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnPtjEchipa.Text = Dami.TraduCuvant("btnPtjEchipa", "Pontajul Echipei");
                 //btnRespinge.Text = Dami.TraduCuvant("btnRespinge", "Respinge");
 

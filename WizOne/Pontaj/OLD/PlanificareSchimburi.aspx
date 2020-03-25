@@ -179,23 +179,11 @@
                     <ClientSideEvents ContextMenu="ctx" 
                         Init="function(s,e) { OnGridInit(); }" 
                         EndCallback="function(s,e) { OnGridEndCallback(s); }"
-                        />                    
+                        FocusedCellChanging="function(s,e) { OnFocusedCellChanging(s,e); }"/>                    
                     <Columns>
                         <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="250px" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="Contract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="250px" />
-                        <dx:GridViewDataComboBoxColumn FieldName="Ziua1" Name="Ziua1" Caption="Ziua1" Width="250px" VisibleIndex="5" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
-                        </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="Ziua2" Name="Ziua2" Caption="Ziua2" Width="250px" VisibleIndex="6" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
-                        </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="Ziua3" Name="Ziua3" Caption="Ziua3" Width="250px" VisibleIndex="7" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
-                        </dx:GridViewDataComboBoxColumn>                        
                         <dx:GridViewDataTextColumn FieldName="ZileGri" Caption="ZileGri" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                     </Columns>
                 </dx:ASPxGridView>

@@ -172,7 +172,7 @@
         <tr>
             <td colspan="2">
                 <br />
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback">
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnCellEditorInitialize="grDate_CellEditorInitialize">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" AutoFilterCondition="Contains" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false"  />
@@ -183,19 +183,7 @@
                     <Columns>
                         <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="250px" Settings-AutoFilterCondition="Contains"/>
-                        <dx:GridViewDataTextColumn FieldName="Contract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="250px" />
-                        <dx:GridViewDataComboBoxColumn FieldName="Ziua1" Name="Ziua1" Caption="Ziua1" Width="250px" VisibleIndex="5" UnboundType="Integer" ReadOnly="false" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
-                        </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="Ziua2" Name="Ziua2" Caption="Ziua2" Width="250px" VisibleIndex="6" UnboundType="Integer" ReadOnly="false" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
-                        </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataComboBoxColumn FieldName="Ziua3" Name="Ziua3" Caption="Ziua3" Width="250px" VisibleIndex="7" UnboundType="Integer" ReadOnly="false" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
-                            <Settings FilterMode="DisplayText" />
-                        </dx:GridViewDataComboBoxColumn>                        
+                        <dx:GridViewDataTextColumn FieldName="Contract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="250px" />                       
                         <dx:GridViewDataTextColumn FieldName="ZileGri" Caption="ZileGri" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                     </Columns>
                 </dx:ASPxGridView>

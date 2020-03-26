@@ -416,9 +416,6 @@ namespace WizOne.Pontaj
 
                     switch (arr[0].ToString())
                     {
-                        //case "divDtSf":
-                        //    CreeazaGrid();
-                        //    break;
                         case "btnFiltru":
                             IncarcaGrid();
                             break;
@@ -470,7 +467,7 @@ namespace WizOne.Pontaj
                 }
 
                 if (Convert.ToInt32(cmbAng.Value ?? -99) == -99)
-                    strFiltru += $" AND A.F10003 IN (SELECT F10003 FROM F100Supervizori WHERE IdUser={Session["UserId"]})";
+                    strFiltru += $@" AND A.F10003 IN (SELECT F10003 FROM ""F100Supervizori"" WHERE ""IdUser""={Session["UserId"]})";
                 else
                     strFiltru += " AND A.F10003=" + cmbAng.Value;
 
@@ -485,32 +482,118 @@ namespace WizOne.Pontaj
                     zileVal += $@",""Ziua{cnt}""";
                 }
 
+
+                //strSql = $@"SELECT A.*,
+                //        (SELECT ',Ziua' + CASE WHEN Y.Zi < CONVERT(date,X.F10022) OR CONVERT(date,X.F10023) < Y.Zi THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
+                //        FROM F100 X
+                //        INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
+                //        WHERE X.F10003=A.F10003
+                //        FOR XML PATH ('')) AS ZileGri
+                //        FROM (
+                //        SELECT TOP 100 PERCENT A.F10003, A.F10008 + ' ' + A.F10009 AS AngajatNume, C.Denumire AS Contract {zileVal}
+                //        FROM
+                //        (SELECT F10003 {zileAs} FROM 
+                //        (SELECT  A.Ziua, A.F10003, 
+                //        COALESCE((-1 * B.Id), (A.IdContractP * 1000 + A.IdProgramP)) AS Id
+                //        FROM Ptj_Intrari A
+                //        LEFT JOIN Ptj_tblAbsente B ON A.ValStr=B.DenumireScurta AND B.DenumireScurta <> ''
+                //        LEFT JOIN Ptj_Contracte C ON A.IdContractP = C.Id
+                //        LEFT JOIN Ptj_Programe D ON A.IdProgramP=D.Id
+                //        WHERE {dtInc} <= CAST(A.Ziua AS date) AND CAST(A.Ziua AS date) <= {dtSf}) AS source  
+                //        PIVOT (MAX(Id) FOR Ziua IN ( {zile.Substring(1)} )) pvt
+                //        ) pvt
+                //        LEFT JOIN F100 A ON A.F10003=pvt.F10003 
+                //        LEFT JOIN F1001 B ON A.F10003=B.F10003 
+                //        LEFT JOIN (SELECT R.F10003, MIN(R.Ziua) AS ZiuaMin FROM Ptj_Intrari R WHERE {dtInc} <= CAST(R.Ziua AS date) AND CAST(R.Ziua AS date) <= {dtSf} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
+                //        LEFT JOIN Ptj_Intrari Y ON A.F10003=Y.F10003 AND Y.Ziua=Q.ZiuaMin
+                //        LEFT JOIN Ptj_Contracte C on C.Id = Y.IdContract 
+                //        LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
+                //        {strLeg}
+                //        LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
+                //        LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304
+                //        LEFT JOIN F004 S4 ON Y.F10005 = S4.F00405
+                //        LEFT JOIN F005 S5 ON Y.F10006 = S5.F00506
+                //        LEFT JOIN F006 S6 ON Y.F10007 = S6.F00607
+                //        LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
+                //        LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+                //        {strFiltru}
+                //        ORDER BY AngajatNume) A";
+
+
+                //string zileGri = $@"(SELECT ',Ziua' + CASE WHEN Y.Zi < CONVERT(date,X.F10022) OR CONVERT(date,X.F10023) < Y.Zi THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
+                //        FROM F100 X
+                //        INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
+                //        WHERE X.F10003=A.F10003
+                //        FOR XML PATH ('')) AS ZileGri";
+                //string sqlProcent = "TOP 100 PERCENT";
+
+                //if (Constante.tipBD == 2)
+                //{
+                //    zileGri = $@"(SELECT LISTAGG(',Ziua' || CASE WHEN Y.""Zi"" < TRUNC(F10022) OR TRUNC(X.F10023) < Y.""Zi"" THEN TO_CHAR(EXTRACT(DAY FROM Y.""Zi"")) END) WITHIN GROUP (ORDER BY X.F10003)
+                //        FROM F100 X
+                //        INNER JOIN ""tblZile"" Y ON {dtInc} <= Y.""Zi"" AND Y.""Zi"" <= {dtSf}
+                //        WHERE X.F10003 = A.F10003
+                //        ) AS ""ZileGri""";
+                //    sqlProcent = "";
+                //}
+
+                //strSql = $@"SELECT A.*,
+                //        {zileGri}
+                //        FROM (
+                //        SELECT {sqlProcent} A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"" {zileVal}
+                //        FROM
+                //        (SELECT F10003 {zileAs} FROM 
+                //        (SELECT  A.""Ziua"", A.F10003, 
+                //        COALESCE((-1 * B.""Id""), (A.""IdContractP"" * 1000 + A.""IdProgramP"")) AS ""Id""
+                //        FROM ""Ptj_Intrari"" A
+                //        LEFT JOIN ""Ptj_tblAbsente"" B ON A.""ValStr""=B.""DenumireScurta"" AND B.""DenumireScurta"" <> ''
+                //        LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContractP"" = C.""Id""
+                //        LEFT JOIN ""Ptj_Programe"" D ON A.""IdProgramP""=D.""Id""
+                //        WHERE {dtInc} <= CAST(A.""Ziua"" AS date) AND CAST(A.""Ziua"" AS date) <= {dtSf}) source  
+                //        PIVOT (MAX(""Id"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                //        ) pvt
+                //        LEFT JOIN F100 A ON A.F10003=pvt.F10003 
+                //        LEFT JOIN F1001 B ON A.F10003=B.F10003 
+                //        LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari"" R WHERE {dtInc} <= CAST(R.""Ziua"" AS date) AND CAST(R.""Ziua"" AS date) <= {dtSf} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
+                //        LEFT JOIN ""Ptj_Intrari"" Y ON A.F10003=Y.F10003 AND Y.""Ziua""=Q.""ZiuaMin""
+                //        LEFT JOIN ""Ptj_Contracte"" C on C.""Id"" = Y.""IdContract""
+                //        LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
+                //        {strLeg}
+                //        LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
+                //        LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304
+                //        LEFT JOIN F004 S4 ON Y.F10005 = S4.F00405
+                //        LEFT JOIN F005 S5 ON Y.F10006 = S5.F00506
+                //        LEFT JOIN F006 S6 ON Y.F10007 = S6.F00607
+                //        LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
+                //        LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+                //        {strFiltru}
+                //        ORDER BY ""AngajatNume"") A";
+
                 if (Constante.tipBD == 1)
-                {
-                    strSql = $@"SELECT *,
+                    strSql = $@"SELECT A.*,
                         (SELECT ',Ziua' + CASE WHEN Y.Zi < CONVERT(date,X.F10022) OR CONVERT(date,X.F10023) < Y.Zi THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
                         FROM F100 X
                         INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
                         WHERE X.F10003=A.F10003
                         FOR XML PATH ('')) AS ZileGri
                         FROM (
-                        SELECT TOP 100 PERCENT A.F10003, A.F10008 + ' ' + A.F10009 AS AngajatNume, C.Denumire AS Contract {zileVal}
+                        SELECT TOP 100 PERCENT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"" {zileVal}
                         FROM
                         (SELECT F10003 {zileAs} FROM 
-                        (SELECT  A.Ziua, A.F10003, 
-                        COALESCE((-1 * B.Id), (A.IdContractP * 1000 + A.IdProgramP)) AS Id
-                        FROM Ptj_Intrari A
-                        LEFT JOIN Ptj_tblAbsente B ON A.ValStr=B.DenumireScurta AND B.DenumireScurta <> ''
-                        LEFT JOIN Ptj_Contracte C ON A.IdContractP = C.Id
-                        LEFT JOIN Ptj_Programe D ON A.IdProgramP=D.Id
-                        WHERE {dtInc} <= CAST(A.Ziua AS date) AND CAST(A.Ziua AS date) <= {dtSf}) AS source  
-                        PIVOT (MAX(Id) FOR Ziua IN ( {zile.Substring(1)} )) pvt
+                        (SELECT  A.""Ziua"", A.F10003, 
+                        COALESCE((-1 * B.""Id""), (A.""IdContractP"" * 1000 + A.""IdProgramP"")) AS ""Id""
+                        FROM ""Ptj_Intrari"" A
+                        LEFT JOIN ""Ptj_tblAbsente"" B ON A.""ValStr""=B.""DenumireScurta"" AND B.""DenumireScurta"" <> ''
+                        LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContractP"" = C.""Id""
+                        LEFT JOIN ""Ptj_Programe"" D ON A.""IdProgramP""=D.""Id""
+                        WHERE {dtInc} <= CAST(A.""Ziua"" AS date) AND CAST(A.""Ziua"" AS date) <= {dtSf}) source  
+                        PIVOT (MAX(""Id"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                         ) pvt
                         LEFT JOIN F100 A ON A.F10003=pvt.F10003 
                         LEFT JOIN F1001 B ON A.F10003=B.F10003 
-                        LEFT JOIN (SELECT R.F10003, MIN(R.Ziua) AS ZiuaMin FROM Ptj_Intrari R WHERE {dtInc} <= CAST(R.Ziua AS date) AND CAST(R.Ziua AS date) <= {dtSf} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
-                        LEFT JOIN Ptj_Intrari Y ON A.F10003=Y.F10003 AND Y.Ziua=Q.ZiuaMin
-                        LEFT JOIN Ptj_Contracte C on C.Id = Y.IdContract 
+                        LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari"" R WHERE {dtInc} <= CAST(R.""Ziua"" AS date) AND CAST(R.""Ziua"" AS date) <= {dtSf} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
+                        LEFT JOIN ""Ptj_Intrari"" Y ON A.F10003=Y.F10003 AND Y.""Ziua""=Q.""ZiuaMin""
+                        LEFT JOIN ""Ptj_Contracte"" C on C.""Id"" = Y.""IdContract""
                         LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
                         {strLeg}
                         LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
@@ -521,10 +604,43 @@ namespace WizOne.Pontaj
                         LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
                         LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
                         {strFiltru}
-                        ORDER BY AngajatNume) A";
-                }
+                        ORDER BY ""AngajatNume"") A";
                 else
-                    strSql = $@"";
+                    strSql = $@"SELECT A.*,
+                        (SELECT LISTAGG(',Ziua' || CASE WHEN Y.""Zi"" < TRUNC(F10022) OR TRUNC(X.F10023) < Y.""Zi"" THEN TO_CHAR(EXTRACT(DAY FROM Y.""Zi"")) END) WITHIN GROUP (ORDER BY X.F10003)
+                        FROM F100 X
+                        INNER JOIN ""tblZile"" Y ON {dtInc} <= Y.""Zi"" AND Y.""Zi"" <= {dtSf}
+                        WHERE X.F10003 = A.F10003
+                        ) AS ""ZileGri""
+                        FROM (
+                        SELECT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"" {zileVal}
+                        FROM
+                        (SELECT * FROM 
+                        (SELECT  A.""Ziua"", A.F10003, 
+                        COALESCE((-1 * B.""Id""), (A.""IdContractP"" * 1000 + A.""IdProgramP"")) AS ""Id""
+                        FROM ""Ptj_Intrari"" A
+                        LEFT JOIN ""Ptj_tblAbsente"" B ON A.""ValStr""=B.""DenumireScurta"" AND B.""DenumireScurta"" <> ''
+                        LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContractP"" = C.""Id""
+                        LEFT JOIN ""Ptj_Programe"" D ON A.""IdProgramP""=D.""Id""
+                        WHERE {dtInc} <= CAST(A.""Ziua"" AS date) AND CAST(A.""Ziua"" AS date) <= {dtSf}) source  
+                        PIVOT (MAX(""Id"") FOR ""Ziua"" IN ( {zileAs.Substring(1)} )) pvt
+                        ) pvt
+                        LEFT JOIN F100 A ON A.F10003=pvt.F10003 
+                        LEFT JOIN F1001 B ON A.F10003=B.F10003 
+                        LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari"" R WHERE {dtInc} <= CAST(R.""Ziua"" AS date) AND CAST(R.""Ziua"" AS date) <= {dtSf} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
+                        LEFT JOIN ""Ptj_Intrari"" Y ON A.F10003=Y.F10003 AND Y.""Ziua""=Q.""ZiuaMin""
+                        LEFT JOIN ""Ptj_Contracte"" C on C.""Id"" = Y.""IdContract""
+                        LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
+                        {strLeg}
+                        LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
+                        LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304
+                        LEFT JOIN F004 S4 ON Y.F10005 = S4.F00405
+                        LEFT JOIN F005 S5 ON Y.F10006 = S5.F00506
+                        LEFT JOIN F006 S6 ON Y.F10007 = S6.F00607
+                        LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
+                        LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
+                        {strFiltru}
+                        ORDER BY ""AngajatNume"") A";
             }
             catch (Exception ex)
             {
@@ -540,66 +656,66 @@ namespace WizOne.Pontaj
             try
             {
                 DataTable dt = General.IncarcaDT(
-                    $@"SELECT ContractId * 1000 + ProgramId AS IdAuto, ContractDen + ' - ' + ProgramDen AS Denumire, * FROM
+                    $@"SELECT ""ContractId"" * 1000 + ""ProgramId"" AS ""IdAuto"", ""ContractDen"" {Dami.Operator()} ' - ' {Dami.Operator()} ""ProgramDen"" AS ""Denumire"", X.* FROM
                     (
-                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 1 AS ZiSapt, 
-                    CASE WHEN COALESCE(A.TipSchimb1, A.TipSchimb0) = 1 THEN COALESCE(A.Program1, Program0) ELSE B.IdProgram END AS ProgramId,
-                    C.Denumire AS ProgramDen
-                    FROM Ptj_Contracte A
-                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
-                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb1, A.TipSchimb0) = 1 THEN COALESCE(A.Program1, Program0) ELSE B.IdProgram END)
+                    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 1 AS ""ZiSapt"", 
+                    CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                    C.""Denumire"" AS ""ProgramDen""
+                    FROM ""Ptj_Contracte"" A
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
-                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 2 AS ZiSapt, 
-                    CASE WHEN COALESCE(A.TipSchimb2, A.TipSchimb0) = 1 THEN COALESCE(A.Program2, Program0) ELSE B.IdProgram END AS ProgramId,
-                    C.Denumire AS ProgramDen
-                    FROM Ptj_Contracte A
-                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
-                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb2, A.TipSchimb0) = 1 THEN COALESCE(A.Program2, Program0) ELSE B.IdProgram END)
+                    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 2 AS ""ZiSapt"", 
+                    CASE WHEN COALESCE(A.""TipSchimb2"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program2"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                    C.""Denumire"" AS ""ProgramDen""
+                    FROM ""Ptj_Contracte"" A
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb2"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program2"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
-                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 3 AS ZiSapt, 
-                    CASE WHEN COALESCE(A.TipSchimb3, A.TipSchimb0) = 1 THEN COALESCE(A.Program3, Program0) ELSE B.IdProgram END AS ProgramId,
-                    C.Denumire AS ProgramDen
-                    FROM Ptj_Contracte A
-                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
-                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb3, A.TipSchimb0) = 1 THEN COALESCE(A.Program3, Program0) ELSE B.IdProgram END)
+                    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 3 AS ""ZiSapt"", 
+                    CASE WHEN COALESCE(A.""TipSchimb3"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program3"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                    C.""Denumire"" AS ""ProgramDen""
+                    FROM ""Ptj_Contracte"" A
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb3"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program3"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
-                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 4 AS ZiSapt, 
-                    CASE WHEN COALESCE(A.TipSchimb4, A.TipSchimb0) = 1 THEN COALESCE(A.Program4, Program0) ELSE B.IdProgram END AS ProgramId,
-                    C.Denumire AS ProgramDen
-                    FROM Ptj_Contracte A
-                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
-                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb4, A.TipSchimb0) = 1 THEN COALESCE(A.Program4, Program0) ELSE B.IdProgram END)
+                    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 4 AS ""ZiSapt"", 
+                    CASE WHEN COALESCE(A.""TipSchimb4"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program4"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                    C.""Denumire"" AS ""ProgramDen""
+                    FROM ""Ptj_Contracte"" A
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb4"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program4"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
-                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 5 AS ZiSapt, 
-                    CASE WHEN COALESCE(A.TipSchimb5, A.TipSchimb0) = 1 THEN COALESCE(A.Program5, Program0) ELSE B.IdProgram END AS ProgramId,
-                    C.Denumire AS ProgramDen
-                    FROM Ptj_Contracte A
-                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
-                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb5, A.TipSchimb0) = 1 THEN COALESCE(A.Program5, Program0) ELSE B.IdProgram END)
+                    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 5 AS ""ZiSapt"", 
+                    CASE WHEN COALESCE(A.""TipSchimb5"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program5"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                    C.""Denumire"" AS ""ProgramDen""
+                    FROM ""Ptj_Contracte"" A
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb5"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program5"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
-                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 6 AS ZiSapt, 
-                    CASE WHEN COALESCE(A.TipSchimb6, A.TipSchimb0) = 1 THEN COALESCE(A.Program6, Program0) ELSE B.IdProgram END AS ProgramId,
-                    C.Denumire AS ProgramDen
-                    FROM Ptj_Contracte A
-                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
-                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb6, A.TipSchimb0) = 1 THEN COALESCE(A.Program6, Program0) ELSE B.IdProgram END)
+                    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 6 AS ""ZiSapt"", 
+                    CASE WHEN COALESCE(A.""TipSchimb6"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program6"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                    C.""Denumire"" AS ""ProgramDen""
+                    FROM ""Ptj_Contracte"" A
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb6"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program6"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
-                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 7 AS ZiSapt, 
-                    CASE WHEN COALESCE(A.TipSchimb7, A.TipSchimb0) = 1 THEN COALESCE(A.Program7, Program0) ELSE B.IdProgram END AS ProgramId,
-                    C.Denumire AS ProgramDen
-                    FROM Ptj_Contracte A
-                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
-                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb7, A.TipSchimb0) = 1 THEN COALESCE(A.Program7, Program0) ELSE B.IdProgram END)
+                    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 7 AS ""ZiSapt"", 
+                    CASE WHEN COALESCE(A.""TipSchimb7"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program7"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                    C.""Denumire"" AS ""ProgramDen""
+                    FROM ""Ptj_Contracte"" A
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb7"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program7"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
-                    SELECT A.Id AS ContractId, A.Denumire AS ContractDen, 8 AS ZiSapt, 
-                    CASE WHEN COALESCE(A.TipSchimb8, A.TipSchimb0) = 1 THEN COALESCE(A.Program8, Program0) ELSE B.IdProgram END AS ProgramId,
-                    C.Denumire AS ProgramDen
-                    FROM Ptj_Contracte A
-                    LEFT JOIN Ptj_ContracteSchimburi B ON A.Id=B.IdContract
-                    LEFT JOIN Ptj_Programe C ON C.Id = (CASE WHEN COALESCE(A.TipSchimb8, A.TipSchimb0) = 1 THEN COALESCE(A.Program8, Program0) ELSE B.IdProgram END)
+                    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 8 AS ""ZiSapt"", 
+                    CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                    C.""Denumire"" AS ""ProgramDen""
+                    FROM ""Ptj_Contracte"" A
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END)
                     ) X
                     UNION 
-                    SELECT -1 * Id, Denumire, -99, '', -99, -99, '' FROM Ptj_tblAbsente", null);
+                    SELECT -1 * ""Id"", ""Denumire"", -99, '', -99, -99, '' FROM ""Ptj_tblAbsente""", null);
 
 
                 if (dt != null && dt.Rows.Count > 0)
@@ -613,7 +729,7 @@ namespace WizOne.Pontaj
                         Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";
                 }
 
-                DataTable dtZi = General.IncarcaDT($@"SELECT CASE WHEN ZiLiberaLegala <> 0 THEN 8 ELSE ZiSapt END AS ZiSapt FROM tblZile WHERE {General.ToDataUniv(txtDtInc.Date)} <= Zi AND Zi <= {General.ToDataUniv(txtDtSf.Date)} ", null);
+                DataTable dtZi = General.IncarcaDT($@"SELECT CASE WHEN ""ZiLiberaLegala"" <> 0 THEN 8 ELSE ""ZiSapt"" END AS ""ZiSapt"" FROM ""tblZile"" WHERE {General.ToDataUniv(txtDtInc.Date)} <= ""Zi"" AND ""Zi"" <= {General.ToDataUniv(txtDtSf.Date)} ", null);
                 var lstZiSapt = new Dictionary<int, object>();
 
                 for (int i = 0; i < dtZi.Rows.Count; i++)
@@ -718,7 +834,7 @@ namespace WizOne.Pontaj
                                 idPrg = Convert.ToInt32(val % 1000).ToString();
                             }
 
-                            strSql += $@"UPDATE ""Ptj_Intrari"" SET ""IdContractP""={idCtr}, ""IdProgramP""={idPrg}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND Ziua={General.ToDataUniv(lstZile[idx])};" + Environment.NewLine;
+                            strSql += $@"UPDATE ""Ptj_Intrari"" SET ""IdContractP""={idCtr}, ""IdProgramP""={idPrg}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(lstZile[idx])};" + Environment.NewLine;
                         }
                     }
                 }

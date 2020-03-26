@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
-    <script language="javascript" type="text/javascript">
+    <script>
         function LoadCtl(s)
         {
             var id = cmbViz.GetSelectedItem().value;
@@ -88,11 +88,18 @@
                     break;
             }
         }
-    </script>
 
+        function OnEditButtonClick(s, e) {
+            var date = new Date(s.GetDate());
+            var nr = 1;
 
+            if (e.buttonIndex == 0) nr = -1;
+            if (e.buttonIndex == 1) nr = 1;
+            s.SetDate(new Date(date.setMonth(date.getMonth() + nr)));
 
-    <script type="text/javascript">
+            pnlLoading.Show();
+            e.processOnServer = true;
+        }
 
         function OnGetRowValues(values) {
             pnlLoading.Show();
@@ -124,14 +131,8 @@
 
     </script>
 
-
-
-
-
-
-
-
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <table width="100%">
@@ -168,8 +169,17 @@
 
         <div class="Absente_Cereri_CampuriSup">
             <label id="lblLuna" runat="server" style="display:none;">Luna</label>
-            <dx:ASPxDateEdit ID="txtLuna" ClientInstanceName="txtLuna" ClientIDMode="Static" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" ClientVisible="false" >
+            <dx:ASPxDateEdit ID="txtLuna" ClientInstanceName="txtLuna" ClientIDMode="Static" runat="server" Width="110px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" ClientVisible="false" OnButtonClick="txtLuna_ButtonClick" >
                 <CalendarProperties FirstDayOfWeek="Monday" />
+                <Buttons>
+                    <dx:EditButton Position="Left">
+                        <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png" Height="20px" Width="12px"></Image>
+                    </dx:EditButton>
+                    <dx:EditButton Position="Right">
+                        <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
+                    </dx:EditButton>
+                </Buttons>
+                <ClientSideEvents ButtonClick="function(s, e) { OnEditButtonClick(s,e); }"/>
             </dx:ASPxDateEdit>
         </div>
 

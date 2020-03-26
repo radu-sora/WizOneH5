@@ -1,10 +1,13 @@
 ﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Web.UI;
 using WizOne.Module;
 
@@ -269,7 +272,9 @@ namespace WizOne.Pontaj
             {
                 grDate.KeyFieldName = "F10003";
 
-                DataTable dt = PontajAfiseaza();
+                string strSql = DamiSelect();
+                DataTable dt = General.IncarcaDT(strSql, null);
+
                 dt.PrimaryKey = new DataColumn[] { dt.Columns["F10003"] };
                 grDate.DataSource = dt;
                 Session["InformatiaCurenta"] = dt;
@@ -280,25 +285,6 @@ namespace WizOne.Pontaj
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-        public DataTable PontajAfiseaza()
-        {
-            string strSql = "";
-            DataTable dt = new DataTable();
-
-            try
-            {
-                strSql = DamiSelect();
-                dt = General.IncarcaDT(strSql, null);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return dt;
         }
 
         private void IncarcaAngajati()
@@ -318,7 +304,6 @@ namespace WizOne.Pontaj
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         private string SelectAngajati(string filtru = "")
         {
@@ -343,7 +328,6 @@ namespace WizOne.Pontaj
 
             return strSql;
         }
-
 
         private string SelectComun()
         {
@@ -448,279 +432,6 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void btnExp_Click(object sender, EventArgs e)
-        {
-            //try
-            //{
-            //    if (!chkTotaluri.Checked && !chkOre.Checked && !chkPauza.Checked)
-            //    {
-            //        MessageBox.Show(Dami.TraduCuvant("Lipsesc date"), MessageBox.icoInfo, "Export");
-            //    }
-            //    else
-            //    {
-            //        DataTable dt = General.IncarcaDT(DamiSelectExport(), null);
-
-            //        DevExpress.Spreadsheet.Workbook book = new DevExpress.Spreadsheet.Workbook();
-            //        DevExpress.Spreadsheet.Worksheet ws2 = book.Worksheets["Sheet1"];
-
-            //        int an = Convert.ToDateTime(txtAnLuna.Value).Year;
-            //        int luna = Convert.ToDateTime(txtAnLuna.Value).Month;
-            //        string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + an;
-            //        if (Constante.tipBD == 2)
-            //            strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + an;
-            //        DataTable dtHolidays = General.IncarcaDT(strSql, null);
-
-            //        DataTable dtCol = General.IncarcaDT("SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 ORDER BY \"Ordine\"", null);
-            //        Dictionary<string, string> lista = new Dictionary<string, string>();
-            //        Dictionary<string, string> listaLung = new Dictionary<string, string>();
-            //        Dictionary<string, int> listaId = new Dictionary<string, int>();
-            //        if (dtCol != null && dtCol.Rows.Count > 0)
-            //            for (int j = 0; j < dtCol.Rows.Count; j++)
-            //            {
-            //                lista.Add(dtCol.Rows[j]["Camp"].ToString(), dtCol.Rows[j]["TextAfisare"].ToString());
-            //                listaLung.Add(dtCol.Rows[j]["Camp"].ToString(), dtCol.Rows[j]["Lungime"].ToString());
-            //                listaId.Add(dtCol.Rows[j]["Camp"].ToString(), j + 1);
-            //            }
-
-            //        DataTable dtAbs = General.IncarcaDT("SELECT DISTINCT \"DenumireScurta\", max(\"Culoare\") AS \"Culoare\" FROM \"Ptj_tblAbsente\" WHERE \"IdTipOre\" = 1 GROUP BY \"DenumireScurta\"", null);
-            //        Dictionary<string, string> listaAbs = new Dictionary<string, string>();
-            //        if (dtAbs != null && dtAbs.Rows.Count > 0)
-            //            for (int j = 0; j < dtAbs.Rows.Count; j++)
-            //                listaAbs.Add(dtAbs.Rows[j]["DenumireScurta"].ToString(), dtAbs.Rows[j]["Culoare"].ToString());
-
-            //        //Radu 28.02.2020 - securitate
-            //        List<string> listaSec = new List<string>();
-            //        strSql = "SELECT X.\"IdControl\", X.\"IdColoana\", MAX(X.\"Vizibil\") AS \"Vizibil\", MIN(X.\"Blocat\") AS \"Blocat\" FROM( "
-            //                + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
-            //                + "FROM \"Securitate\" A "
-            //                + "INNER JOIN \"relGrupUser\" B ON A.\"IdGrup\" = B.\"IdGrup\" "
-            //                + "WHERE B.\"IdUser\" = {0} AND LOWER(A.\"IdForm\") = 'pontaj.pontajechipa' "
-            //                + "UNION "
-            //                + "SELECT A.\"IdControl\", A.\"IdColoana\", A.\"Vizibil\", A.\"Blocat\" "
-            //                + "FROM \"Securitate\" A "
-            //                + "WHERE A.\"IdGrup\" = -1 AND LOWER(A.\"IdForm\") = 'pontaj.pontajechipa') X "
-            //                + "GROUP BY X.\"IdControl\", X.\"IdColoana\"";
-            //        strSql = string.Format(strSql, Session["UserId"].ToString());
-            //        if (General.VarSession("EsteAdmin").ToString() == "0")
-            //        {
-            //            DataTable dtSec = General.IncarcaDT(strSql, null);
-            //            if (dtSec != null && dtSec.Rows.Count > 0)
-            //                for (int k = 0; k < dtSec.Rows.Count; k++)
-            //                    if (dtSec.Rows[k]["Vizibil"] != null && Convert.ToInt32(dtSec.Rows[k]["Vizibil"].ToString()) == 0)
-            //                        listaSec.Add(dtSec.Rows[k]["IdColoana"].ToString());
-            //        }
-
-
-            //        if (chkLinie.Checked)
-            //        {
-            //            int nrCol = 0;              
-            //            int idZile = 0, colZile = 0;
-            //            for (int i = 0; i < dt.Columns.Count; i++)
-            //            {
-            //                if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
-            //                {
-            //                    if (idZile > 0 && colZile > 0)
-            //                    {
-            //                        ws2.Cells[1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = lista[dt.Columns[i].ColumnName];
-            //                        ws2.Cells[1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
-            //                    }
-            //                    else
-            //                    {
-            //                        ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
-            //                        ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
-            //                    }
-
-            //                }
-            //                else if (dt.Columns[i].ColumnName.Contains("Ziua"))
-            //                {
-            //                    ws2.Cells[1, nrCol].Value = dt.Columns[i].ColumnName.Replace("Ziua", "");
-            //                    DateTime zi = new DateTime(an, luna, Convert.ToInt32(dt.Columns[i].ColumnName.Replace("Ziua", "").Replace("I", "").Replace("O", "").Replace("P", "")));
-            //                    bool ziLibera = false;
-            //                    for (int z = 0; z < dtHolidays.Rows.Count; z++)
-            //                        if (Convert.ToDateTime(dtHolidays.Rows[z][0].ToString()) == zi)
-            //                        {
-            //                            ziLibera = true;
-            //                            break;
-            //                        }
-            //                    if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[1, nrCol].FillColor = Color.FromArgb(217, 243, 253);
-            //                    ws2.Cells[1, nrCol].ColumnWidth = Convert.ToInt32(listaLung["Zilele 1-31"]);
-            //                    nrCol++;                          
-            //                    idZile = listaId["Zilele 1-31"];
-            //                    colZile = nrCol;
-            //                }
-            //            }
-
-                        
-            //            for (int row = 0; row < dt.Rows.Count; row++)
-            //            {
-            //                nrCol = 0;
-            //                idZile = 0; colZile = 0;
-            //                for (int i = 0; i < dt.Columns.Count; i++)
-            //                {
-            //                    if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
-            //                    {
-            //                        if (idZile > 0 && colZile > 0)                                    
-            //                            ws2.Cells[row + 3, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
-            //                        else                                    
-            //                            ws2.Cells[row + 3, nrCol++].Value = dt.Rows[row][i].ToString();
-            //                    }
-
-            //                    if (dt.Columns[i].ColumnName.Contains("Ziua"))
-            //                    {
-            //                        ws2.Cells[row + 3, nrCol].Value = dt.Rows[row][i].ToString();
-            //                        DateTime zi = new DateTime(an, luna, Convert.ToInt32(dt.Columns[i].ColumnName.Replace("Ziua", "").Replace("I", "").Replace("O", "").Replace("P", "")));
-            //                        bool ziLibera = false;
-            //                        for (int z = 0; z < dtHolidays.Rows.Count; z++)
-            //                            if (Convert.ToDateTime(dtHolidays.Rows[z][0].ToString()) == zi)
-            //                            {
-            //                                ziLibera = true;
-            //                                break;
-            //                            }
-            //                        if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[row + 3, nrCol].FillColor = Color.FromArgb(217, 243, 253);
-            //                        if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
-            //                            ws2.Cells[row + 3, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
-            //                        if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
-            //                            ws2.Cells[row + 3, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
-            //                        nrCol++;
-            //                        idZile = listaId["Zilele 1-31"];
-            //                        colZile = nrCol;                                    
-
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        else
-            //        {
-            //            int nrCol = 0;
-            //            int rand = 0;
-            //            int idZile = 0, colZile = 0;
-            //            for (int i = 0; i < dt.Columns.Count; i++)
-            //            {
-            //                if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
-            //                {
-            //                    if (idZile > 0 && colZile > 0)
-            //                    {
-            //                        ws2.Cells[1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = lista[dt.Columns[i].ColumnName];
-            //                        ws2.Cells[1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
-            //                    }
-            //                    else
-            //                    {
-            //                        ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
-            //                        ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
-            //                    }
-            //                }
-            //                else if (dt.Columns[i].ColumnName.Contains("Ziua") && !dt.Columns[i].ColumnName.Contains("I") && !dt.Columns[i].ColumnName.Contains("O") && !dt.Columns[i].ColumnName.Contains("P"))
-            //                {
-            //                    ws2.Cells[1, nrCol].Value = dt.Columns[i].ColumnName.Replace("Ziua", "");
-            //                    ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung["Zilele 1-31"]);
-            //                    idZile = listaId["Zilele 1-31"];
-            //                    colZile = nrCol - 1;
-            //                }
-            //            }
-
-            //            for (int row = 0; row < dt.Rows.Count; row++)
-            //            {
-            //                nrCol = -1;
-            //                idZile = 0; colZile = 0;
-            //                for (int i = 0; i < dt.Columns.Count; i++)
-            //                {
-            //                    if ((lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName)) || (dt.Columns[i].ColumnName.Contains("Ziua")))
-            //                    {
-            //                        if (dt.Columns[i].ColumnName.Contains("Ziua") && dt.Columns[i].ColumnName.Contains("I"))
-            //                            rand = 1;
-            //                        else if (dt.Columns[i].ColumnName.Contains("Ziua") && dt.Columns[i].ColumnName.Contains("O"))
-            //                            rand = 2;
-            //                        else if (dt.Columns[i].ColumnName.Contains("Ziua") && dt.Columns[i].ColumnName.Contains("P"))
-            //                            rand = 3;
-            //                        else
-            //                        {
-            //                            rand = 0;
-            //                            nrCol++;
-            //                        }
-            //                        if (idZile > 0 && colZile > 0 && lista.ContainsKey(dt.Columns[i].ColumnName))
-            //                            ws2.Cells[4 * row + 3 + rand - 1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
-            //                        else
-            //                            ws2.Cells[4 * row + 3 + rand - 1, nrCol].Value = dt.Rows[row][i].ToString();
-
-            //                        if (dt.Columns[i].ColumnName.Contains("Ziua"))
-            //                        {
-            //                            DateTime zi = new DateTime(an, luna, Convert.ToInt32(dt.Columns[i].ColumnName.Replace("Ziua", "").Replace("I", "").Replace("O", "").Replace("P", "")));
-            //                            bool ziLibera = false;
-            //                            for (int z = 0; z < dtHolidays.Rows.Count; z++)
-            //                                if (Convert.ToDateTime(dtHolidays.Rows[z][0].ToString()) == zi)
-            //                                {
-            //                                    ziLibera = true;
-            //                                    break;
-            //                                }
-            //                            if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = Color.FromArgb(217, 243, 253);
-            //                            if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
-            //                                ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
-            //                            if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
-            //                                ws2.Cells[4 * row + 3 + rand - 1, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
-            //                            idZile = listaId["Zilele 1-31"];
-            //                            colZile = nrCol;
-            //                        }
-            //                    }
-
-            //                }
-            //                idZile = listaId["Zilele 1-31"];
-            //                colZile = nrCol - 1;
-            //            }
-
-            //        }
-
-            //        //ws2.Columns.AutoFit(1, 500);
-
-            //        byte[] byteArray = book.SaveDocument(DevExpress.Spreadsheet.DocumentFormat.Xls);
-
-
-            //        DateTime ora = DateTime.Now;
-            //        string numeXLS = "ExportPontaj_" + ora.Year.ToString() + ora.Month.ToString().PadLeft(2, '0') + ora.Day.ToString().PadLeft(2, '0') + "_" + ora.Hour.ToString().PadLeft(2, '0') + ora.Minute.ToString().PadLeft(2, '0') + ora.Second.ToString().PadLeft(2, '0') + ".xls";
-
-
-            //        MemoryStream stream = new MemoryStream(byteArray);
-            //        Response.Clear();
-            //        MemoryStream ms = stream;
-            //        Response.ContentType = "application/vnd.ms-excel";
-            //        Response.AddHeader("content-disposition", "attachment;filename=" + numeXLS);
-            //        Response.Buffer = true;
-            //        ms.WriteTo(Response.OutputStream);
-            //        //Response.End();
-
-            //        btnFiltru_Click(sender, null);
-            //        MessageBox.Show(Dami.TraduCuvant("Proces realizat cu succes"), MessageBox.icoInfo, "Export");
-            //    }
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-            //    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            //}
-        }
-
-        //protected void grDate_DataBound(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        var lstZile = new Dictionary<int, object>();
-
-        //        var grid = sender as ASPxGridView;
-        //        for (int i = 0; i < grid.VisibleRowCount; i++)
-        //        {
-        //            var rowValues = grid.GetRowValues(i, new string[] { "F10003", "ZileLucrate" }) as object[];
-        //            lstZile.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[1] ?? "");
-        //        }
-
-        //        grid.JSProperties["cp_ZileLucrate"] = lstZile;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
         private string DamiSelect(bool ptDnata = false)
         {
             string strSql = "";
@@ -811,77 +522,6 @@ namespace WizOne.Pontaj
                         LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
                         {strFiltru}
                         ORDER BY AngajatNume) A";
-
-                    //SELECT F10003, (IdContractP * 1000 + IdProgramP) AS Prog, Ziua From Ptj_Intrari WHERE {dtInc} <= CAST(Ziua AS date) AND CAST(Ziua AS date) <= {dtSf}
-
-
-
-
-                    //         strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
-                    //                     LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
-                    //                     LEFT JOIN F006 I ON A.F10007 = I.F00607
-                    //                     {strLeg}  
-                    //                     WHERE 1=1 AND {dtInc} <= A.Ziua AND A.Ziua <= {dtSf} {strFiltruSpecial})
-                    //                     SELECT *,
-                    //                     (SELECT ',Ziua' + CASE WHEN Y.Zi <= X.F10023 THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
-                    //                     FROM F100 X
-                    //                     INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
-                    //                     WHERE X.F10003=A.F10003
-                    //                     FOR XML PATH ('')) AS ZileLucrate,
-                    //                     (SELECT ',Ziua' + CASE WHEN Y.Zi < CONVERT(date,X.F10022) OR CONVERT(date,X.F10023) < Y.Zi THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
-                    //                     FROM F100 X
-                    //                     INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
-                    //                     WHERE X.F10003=A.F10003
-                    //                     FOR XML PATH ('')) AS ZileGri
-                    //                     FROM (
-                    //                     SELECT TOP 100 PERCENT COALESCE({idRol},1) AS IdRol, st.Denumire AS StarePontaj, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate, A.F100901, CAST({dtInc} AS datetime) AS ZiuaInc, 
-                    //                     CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, CONVERT(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit,  A.F10008 + ' ' + A.F10009 AS AngajatNume, C.Id AS IdContract, 
-                    //                     Y.Norma, Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
-                    //                     C.Denumire AS DescContract, ISNULL(C.OreSup,0) AS OreSup, ISNULL(C.Afisare,1) AS Afisare, 
-                    //                     B.F100958, B.F100959,
-                    //                     H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
-                    //                     ISNULL(K.Culoare,'#FFFFFFFF') AS Culoare, K.Denumire AS StareDenumire,
-                    //                     A.F10078 AS Angajator, DR.F08903 AS TipContract, 
-                    //                     (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
-                    //                     dn.Norma AS AvansNorma, 
-                    //                     CASE WHEN Y.Norma <> dn.Norma THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND YEAR(F70406)={an} AND MONTH(F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS AvansData,
-                    //                     L.F06205, Fct.F71804 AS Functie,
-                    //                     X.* {zileVal} {zileF}
-                    //                     FROM Ptj_Cumulat X 
-                    //               LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
-                    //               left join SituatieZileAbsente zabs on zabs.F10003 = x.F10003 and zabs.An = x.An and zabs.IdAbsenta = (select Id from Ptj_tblAbsente where DenumireScurta = 'CO')
-                    //               left join SituatieZLP zlp on zlp.F10003 = x.F10003 and zlp.An = x.An
-                    //                     INNER JOIN (SELECT F10003 {zileAs} FROM 
-                    //                     (SELECT F10003, {cmpValStr}, Ziua From Ptj_Intrari_2 WHERE {dtInc} <= CAST(Ziua AS date) AND CAST(Ziua AS date) <= {dtSf}) AS source  
-                    //                     PIVOT  (MAX(ValStr) FOR Ziua IN ( {zile.Substring(1)} )) pvt
-                    //                     ) pvt ON X.F10003=pvt.F10003
-                    //                     LEFT JOIN F100 A ON A.F10003=X.F10003 
-                    //                     LEFT JOIN F1001 B ON A.F10003=B.F10003 
-                    //                     LEFT JOIN (SELECT R.F10003, MIN(R.Ziua) AS ZiuaMin FROM Ptj_Intrari_2 R WHERE YEAR(R.Ziua)= {an} AND MONTH(R.Ziua)= {luna} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
-                    //                     LEFT JOIN Ptj_Intrari_2 Y ON A.F10003=Y.F10003 AND Y.Ziua=Q.ZiuaMin
-                    //                     LEFT JOIN Ptj_tblStariPontaj K ON K.Id = ISNULL(X.IdStare,1) 
-                    //                     LEFT JOIN Ptj_Contracte C on C.Id = Y.IdContract 
-                    //                     LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
-                    //                     {strLeg}
-                    //                     {strInner}
-
-                    //LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
-                    //LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304
-                    //LEFT JOIN F004 S4 ON Y.F10005 = S4.F00405
-
-                    //LEFT JOIN F005 H ON Y.F10006 = H.F00506
-                    //LEFT JOIN F006 I ON Y.F10007 = I.F00607
-
-                    //LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
-                    //                     LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
-
-                    //                     LEFT JOIN F062 L ON Y.F06204Default=L.F06204
-
-                    //                     LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
-
-                    //                     WHERE X.An = {an} AND X.Luna = {luna} {filtruPlus}
-                    //                     ORDER BY AngajatNume) A
-                    //                     WHERE 1=1 {strFiltru}";
                 }
                 else
                     strSql = $@"";
@@ -1006,9 +646,14 @@ namespace WizOne.Pontaj
                     c.PropertiesComboBox.DataSource = dt;
                     c.PropertiesComboBox.AllowNull = true;
                     c.PropertiesComboBox.ValueField = "IdAuto";
-                    c.PropertiesComboBox.ValueType = typeof(int);
-                    //c.PropertiesComboBox.TextFormatString = "{0}";
+                    //c.PropertiesComboBox.ValueType = typeof(int);
                     c.PropertiesComboBox.TextField = "Denumire";
+
+                    c.Settings.AllowHeaderFilter = DevExpress.Utils.DefaultBoolean.True;
+                    c.Settings.AllowAutoFilter = DevExpress.Utils.DefaultBoolean.False;
+                    c.Settings.SortMode = DevExpress.XtraGrid.ColumnSortMode.DisplayText;
+                    c.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+
                     grDate.Columns.Add(c);
                 }
             }
@@ -1033,27 +678,80 @@ namespace WizOne.Pontaj
             }
         }
 
-        //protected void grDate_DataBound(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        var lstZiSapt = new Dictionary<int, object>();
+        protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        {
+            try
+            {
+                grDate.CancelEdit();
 
-        //        var grid = sender as ASPxGridView;
-        //        for (int i = grid.VisibleStartIndex; i < grid.VisibleStartIndex + grid.SettingsPager.PageSize; i++)
-        //        {
-        //            var rowValues = grid.GetRowValues(i, new string[] { "F10003",  "ZiSapt" }) as object[];
-        //            lstZiSapt.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[7] ?? "");
-        //        }
+                string strSql = "";
+                int i = 0;
+                var lstZile = new Dictionary<int, DateTime>();
+                for (DateTime zi = txtDtInc.Date; zi <= txtDtSf.Date; zi = zi.AddDays(1))
+                {
+                    lstZile.Add(i, zi);
+                    i++;
+                }
 
-        //        grid.JSProperties["cp_ZiSapt"] = lstZiSapt;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
+                for (int x = 0; x < e.UpdateValues.Count; x++)
+                {
+                    ASPxDataUpdateValues upd = e.UpdateValues[x] as ASPxDataUpdateValues;
+                    string f10003 = General.Nz(upd.NewValues["F10003"], -99).ToString();
+
+                    foreach (DictionaryEntry de in upd.NewValues)
+                    {
+                        string numeCol = de.Key.ToString();
+                        dynamic oldValue = upd.OldValues[numeCol];
+                        dynamic newValue = upd.NewValues[numeCol];
+                        if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
+                            oldValue = null;
+
+                        if (numeCol.ToLower().IndexOf("ziua") >= 0 && oldValue != newValue)
+                        {
+                            int idx = Convert.ToInt32(numeCol.ToLower().Replace("ziua", "")) - 1;
+                            string idCtr = "NULL";
+                            string idPrg = "NULL";
+                            int val = Convert.ToInt32(General.Nz(upd.NewValues[numeCol], 0));
+                            if (val > 0)
+                            {
+                                idCtr = Convert.ToInt32(val / 1000).ToString();
+                                idPrg = Convert.ToInt32(val % 1000).ToString();
+                            }
+
+                            strSql += $@"UPDATE ""Ptj_Intrari"" SET ""IdContractP""={idCtr}, ""IdProgramP""={idPrg}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND Ziua={General.ToDataUniv(lstZile[idx])};" + Environment.NewLine;
+                        }
+                    }
+                }
+
+                if (strSql != "")
+                {
+                    General.ExecutaNonQuery(strSql, null);
+                    IncarcaGrid();
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                }
+
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void btnExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                grDateExport.WriteXlsxToResponse("PlanificareSchimburi-" + DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss"));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
     }
 }
  

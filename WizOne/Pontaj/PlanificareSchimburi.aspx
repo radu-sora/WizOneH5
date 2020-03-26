@@ -12,8 +12,7 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Export" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function (s,e) { popUpExport.Show(); }" />
+                <dx:ASPxButton ID="btnExport" ClientInstanceName="btnExport" ClientIDMode="Static" runat="server" Text="Export" AutoPostBack="true" OnClick="btnExport_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/ExportToXls.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="False" oncontextMenu="ctx(this,event)">                                
@@ -172,18 +171,27 @@
         <tr>
             <td colspan="2">
                 <br />
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnCellEditorInitialize="grDate_CellEditorInitialize">
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnCellEditorInitialize="grDate_CellEditorInitialize" OnBatchUpdate="grDate_BatchUpdate">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" AutoFilterCondition="Contains" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false"  />
                     <ClientSideEvents ContextMenu="ctx" 
                         Init="function(s,e) { OnGridInit(); }" 
                         EndCallback="function(s,e) { OnGridEndCallback(s); }"
-                        />                    
+                        BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e) }"/>                    
                     <Columns>
-                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2" Settings-AutoFilterCondition="Contains"/>
-                        <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="250px" Settings-AutoFilterCondition="Contains"/>
-                        <dx:GridViewDataTextColumn FieldName="Contract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="250px" />                       
+                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Contract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>                            
                         <dx:GridViewDataTextColumn FieldName="ZileGri" Caption="ZileGri" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                     </Columns>
                 </dx:ASPxGridView>
@@ -191,6 +199,8 @@
             </td>
         </tr>
     </table>
+
+    <dx:ASPxGridViewExporter ID="grDateExport" GridViewID="grDate" runat="server"></dx:ASPxGridViewExporter>  
 
     <script>
         function EmptyFields() {
@@ -332,47 +342,6 @@
             return actualValues;
         }
 
-        function OnFocusedCellChanging(s, e) {
-            if (e.cellInfo.column.fieldName.indexOf("Ziua") < 0) {
-                e.cancel = true;
-                return;
-            }
-
-            var val = s.batchEditApi.GetCellValue(e.cellInfo.rowVisibleIndex, e.cellInfo.column.fieldName);
-            var ctr = s.batchEditApi.GetCellValue(e.cellInfo.rowVisibleIndex, "Contract");
-            
-            if (val < 0)
-                e.cancel = true;
-            else {
-                //LoadPrograme(s,e.cellInfo.column.fieldName);
-                var indice = e.cellInfo.column.fieldName.replace("Ziua", "");
-                var key = Number(indice) - 1;
-                let programe = <%= Session["Json_Programe"] %>;
-                var arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] && item.Contract == ctr });
-
-                var cmb = s.GetEditor(e.cellInfo.column.fieldName);
-                cmb.ClearItems();
-
-                for (var i = 0; i < arr.length; i++) {
-                    cmb.AddItem(arr[i].Denumire, Number(arr[i].IdAuto));
-                }
-            }
-        }
-
-<%--        function LoadPrograme(s,fieldName) {
-            var indice = fieldName.replace("Ziua", "");
-            var key = Number(indice) - 1;
-            let programe = <%= Session["Json_Programe"] %>;
-            var arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] });
-
-            var cmb = s.GetEditor(fieldName);
-            cmb.ClearItems();
-
-            for (var i = 0; i < arr.length; i++) {
-                cmb.AddItem(arr[i].Denumire, Number(arr[i].IdAuto));
-            }
-        }--%>
-
         function VerificaInterval(s, e) {
             var tmpInc = new Date(txtDtInc.GetDate());
             var tmpSf = new Date(txtDtSf.GetDate());
@@ -400,6 +369,37 @@
             }
             else
                 grDate.PerformCallback('btnFiltru');
+        }
+
+        function OnClick(s, e) {
+            grDate.UpdateEdit();
+        }
+
+        function OnGridBatchEditStartEditing(s, e) {
+            var col = e.focusedColumn.fieldName;
+            if (col.indexOf("Ziua") < 0) {
+                e.cancel = true;
+                return;
+            }
+
+            var val = s.batchEditApi.GetCellValue(e.visibleIndex, col);
+            var ctr = s.batchEditApi.GetCellValue(e.visibleIndex, "Contract");
+
+            if (val < 0)
+                e.cancel = true;
+            else {
+                var indice = col.replace("Ziua", "");
+                var key = Number(indice) - 1;
+                let programe = <%= Session["Json_Programe"] %>;
+                var arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] && item.Contract == ctr });
+
+                var cmb = s.GetEditor(col);
+                cmb.ClearItems();
+
+                for (var i = 0; i < arr.length; i++) {
+                    cmb.AddItem(arr[i].Denumire, Number(arr[i].IdAuto));
+                }
+            }
         }
 
     </script>

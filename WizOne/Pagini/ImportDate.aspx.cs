@@ -643,6 +643,7 @@ namespace WizOne.Pagini
                                 case "int":
                                 case "numeric":
                                 case "number":
+                                case "decimal":
                                     val = ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US"));
                                     break;
                                 case "nvarchar":

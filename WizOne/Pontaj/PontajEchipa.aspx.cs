@@ -443,18 +443,18 @@ namespace WizOne.Pontaj
             }
         }
 
-        protected void btnBack_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Iesire();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //protected void btnBack_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        Iesire();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, System.IO.Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         protected void btnPrint_Click(object sender, EventArgs e)
         {
@@ -640,18 +640,18 @@ namespace WizOne.Pontaj
         //}
 
 
-        public void Iesire()
-        {
-            try
-            {
-                Response.Redirect("~/Absente/Lista.aspx", false);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //public void Iesire()
+        //{
+        //    try
+        //    {
+        //        Response.Redirect("~/Absente/Lista.aspx", false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
         protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
@@ -2597,6 +2597,8 @@ namespace WizOne.Pontaj
                 else
                     return;
 
+                DataTable dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+
                 string sqlUpd = "";
                 string sqlIst = "";
                 string sqlValStr = "";
@@ -2614,8 +2616,7 @@ namespace WizOne.Pontaj
                     int nrMin = 0;
                     string tipAfisare = Dami.ValoareParam("TipAfisareOre", "1");
                     DataTable dtVal = Session["PontajEchipa_Valuri"] as DataTable;
-
-
+                    
                     string[] arrVal = null;
                     if (txtCol.Count > 0 && txtCol["valuri"] != null)
                         arrVal = txtCol["valuri"].ToString().Replace("_I=", "=").Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -2660,9 +2661,15 @@ namespace WizOne.Pontaj
                         if (valCalc != Convert.ToDecimal(General.Nz(dr[colNume],0)))
                         {
                             if (valCalc == 0)
+                            {
                                 cmp += ",\"" + colNume + "\"=NULL";
+                                dt.Rows[0][colNume] = DBNull.Value;
+                            }
                             else
+                            {
                                 cmp += ",\"" + colNume + "\"=" + valCalc.ToString();
+                                dt.Rows[0][colNume] = valCalc;
+                            }
 
                             cmp += ",\"" + colNume.Replace("Val", "ValModif") + "\"=4";
                             if (General.Nz(dr["VerificareNrMaxOre"],0).ToString() == "1") nrMin += valCalc;
@@ -2678,15 +2685,32 @@ namespace WizOne.Pontaj
                     }
                 }
 
-                if (sqlUpd != "")
-                    General.ExecutaNonQuery("BEGIN " + Environment.NewLine +
-                        sqlUpd + Environment.NewLine +
-                        sqlValStr + Environment.NewLine +
-                        sqlIst + Environment.NewLine +
-                        " END;", null);
 
-                General.CalculFormuleCumulat($@"ent.F10003={f10003} AND ent.""An"" = {ziua.Year} AND ent.""Luna""={ziua.Month}");
-                IncarcaGrid();
+                if (sqlUpd != "")
+                {
+                    string sqlPtj = General.CreazaSelectFromRow(dt.Rows[0]);
+                    string msg = Notif.TrimiteNotificare("Pontaj.PontajDetaliat", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                    if (msg != "" && msg.Substring(0, 1) == "2")
+                    {
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(msg.Substring(2));
+                    }
+                    else
+                    {
+                        General.ExecutaNonQuery("BEGIN " + Environment.NewLine +
+                            sqlUpd + Environment.NewLine +
+                            sqlValStr + Environment.NewLine +
+                            sqlIst + Environment.NewLine +
+                            " END;", null);
+
+                        General.CalculFormuleCumulat($@"ent.F10003={f10003} AND ent.""An"" = {ziua.Year} AND ent.""Luna""={ziua.Month}");
+                        IncarcaGrid();
+
+                        if (msg != "")
+                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
+                        else
+                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                    }
+                }
             }
             catch (Exception ex)
             {

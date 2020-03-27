@@ -6331,10 +6331,11 @@ namespace WizOne.Module
                                 LEFT JOIN DamiCC_Table dc ON dc.F10003=A.F10003 AND dc.dt=X.Zi";
                         }
 
+                        //Florin 2020.03.27 am transformat NrOre in minute - am adaugat * 60
                         string strInsCC = $@"INSERT INTO Ptj_CC(F10003, Ziua, F06204, NrOre1, IdStare, USER_NO, TIME)
                                             SELECT A.F10003, X.Zi, 
                                             CASE WHEN MAX(G.IdCentruCost) IS NOT NULL THEN MAX(G.IdCentruCost) ELSE CASE WHEN COALESCE(MAX(dc.CC), 9999) <> 9999 THEN MAX(dc.CC) ELSE MAX(H.F00615) END END AS F06204Default,
-                                            dn.Norma AS NrOre1, 
+                                            dn.Norma * 60 AS NrOre1, 
                                             CASE WHEN COALESCE((SELECT COALESCE(Valoare,0) FROM tblParametrii WHERE Nume = 'PontajCCcuAprobare'),0) = 0 THEN 3 ELSE 1 END AS IdStare, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                             FROM (SELECT * FROM tblzile Z WHERE {General.ToDataUniv(an, luna, 1)} <= Z.Zi AND Z.Zi <= {General.ToDataUniv(an, luna, 99)}) X
                                             INNER JOIN F100 A ON 1=1 AND CONVERT(date, A.F10022) <= CONVERT(date, X.Zi) AND CONVERT(date, X.Zi) <= CONVERT(date, A.F10023)
@@ -6499,10 +6500,11 @@ namespace WizOne.Module
                         if (cuNormaSL) strFiltruZileCC += @"OR C.DAY is not null";
                         if (strFiltruZileCC != "") strFiltruZileCC = "AND (" + strFiltruZileCC.Substring(2) + ")";
 
+                        //Florin 2020.03.27 am transformat NrOre in minute - am adaugat * 60
                         string strInsCC = $@"INSERT INTO ""Ptj_CC""(F10003, ""Ziua"", F06204, ""NrOre1"", ""IdStare"", USER_NO, TIME)
                                             SELECT A.F10003, X.""Zi"", 
                                             CASE WHEN MAX(G.""IdCentruCost"") IS NOT NULL THEN MAX(G.""IdCentruCost"") ELSE CASE WHEN COALESCE(MAX(""DamiCC""(A.F10003, X.""Zi"")), 9999) <> 9999 THEN MAX(""DamiCC""(A.F10003, X.""Zi"")) ELSE MAX(H.F00615) END END AS ""F06204Default"",
-                                            ""DamiNorma""(A.F10003, X.""Zi"") AS ""NrOre1"", 
+                                            ""DamiNorma""(A.F10003, X.""Zi"") * 60 AS ""NrOre1"", 
                                             CASE WHEN COALESCE((SELECT COALESCE(""Valoare"",0) FROM ""tblParametrii"" WHERE ""Nume"" = 'PontajCCcuAprobare'),0) = 0 THEN 3 ELSE 1 END AS ""IdStare"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                             FROM (SELECT Z.""Zi"", Z.""ZiSapt"" FROM ""tblzile"" Z WHERE {General.ToDataUniv(an, luna, 1)} <= Z.""Zi"" AND Z.""Zi"" <= {General.ToDataUniv(an, luna, 99)}) X
                                             INNER JOIN F100 A ON 1=1 AND TRUNC(A.F10022) <= TRUNC(X.""Zi"") AND TRUNC(X.""Zi"") <= TRUNC(A.F10023)

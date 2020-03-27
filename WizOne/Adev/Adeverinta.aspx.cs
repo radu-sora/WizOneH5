@@ -1568,27 +1568,27 @@ namespace WizOne.Adev
 
             if (Constante.tipBD == 2)
             {
-                dtCompany = General.IncarcaDT("SELECT TRIM(f00204) AS NUME,  TRIM(f06304) AS CAS_ANG from f002, f063 where f06302 = f00284", null);
+                dtCompany = General.IncarcaDT("SELECT RTRIM(LTRIM(f00204)) AS NUME,  RTRIM(LTRIM(f06304)) AS CAS_ANG from f002, f063 where f06302 = f00284", null);
 
-                dtEmpl = General.IncarcaDT("SELECT F10003 AS MARCA, trim(F10008)||' '||trim(F10009) AS NUME, "
-                    + "TRIM(F10017) AS CNP, "
+                dtEmpl = General.IncarcaDT("SELECT F10003 AS MARCA, RTRIM(LTRIM(F10008)) || ' ' || RTRIM(LTRIM(F10009)) AS NUME, "
+                    + "RTRIM(LTRIM(F10017)) AS CNP, "
                     + "F10047 AS SEX, "
                     + "TO_CHAR(F10022, 'dd/MM/yyyy') AS EMPL_DATANG, "
                     + "TO_CHAR(F100993, 'dd/MM/yyyy') AS EMPL_DATASF, "
                     + "F10025, "
                     + "CASE WHEN(F100983=1) THEN 'CI' ELSE 'BI' END AS AI, "
-                    + "TRIM(F10052) AS SN_AI, "
-                    + "TRIM(F100521) AS ELIB_AI, "
+                    + "RTRIM(LTRIM(F10052)) AS SN_AI, "
+                    + "RTRIM(LTRIM(F100521)) AS ELIB_AI, "
                     + "TO_CHAR(F100522, 'dd/mm/yyyy') AS DATA_AI, "
                     + "case when F10081 is null then "
                     + "case when F100907 is null then '' else "
-                    + "'Comuna ' || TRIM(F100907) || ', Sat ' || TRIM(F100908) end else TRIM(F10081) end AS DOMICILIU, "
-                    + "case when trim(F10083) is null or trim(F10083) = '0' or LENGTH(TRIM(F10083)) = 0 then '-' else  trim(F10083) end  AS STR, "
-                    + "case when trim(F10084) is null or trim(F10084) = '0' or LENGTH(TRIM(F10084)) = 0 then '-' else  trim(F10084) end  AS NR, "
-                    + "case when trim(F10085) is null or  trim(F10085) = '0' or LENGTH(TRIM(F10085)) = 0 then '-' else  trim(F10085) end  AS BL, "
-                    + "case when trim(F10086) is null or trim(F10086) = '0' or LENGTH(TRIM(F10086)) = 0 then '-' else  trim(F10086) end  AS AP, "
-                    + "trim(F100891) AS JUDET, "
-                    + "trim(F10082) AS SECTOR "
+                    + "'Comuna ' || RTRIM(LTRIM(F100907)) || ', Sat ' || RTRIM(LTRIM(F100908)) end else RTRIM(LTRIM(F10081)) end AS DOMICILIU, "
+                    + "case when RTRIM(LTRIM(F10083)) is null or RTRIM(LTRIM(F10083)) = '0' or LENGTH(RTRIM(LTRIM(F10083))) = 0 then '-' else  RTRIM(LTRIM(F10083)) end  AS STR, "
+                    + "case when RTRIM(LTRIM(F10084)) is null or RTRIM(LTRIM(F10084)) = '0' or LENGTH(RTRIM(LTRIM(F10084))) = 0 then '-' else  RTRIM(LTRIM(F10084)) end  AS NR, "
+                    + "case when RTRIM(LTRIM(F10085)) is null or RTRIM(LTRIM(F10085)) = '0' or LENGTH(RTRIM(LTRIM(F10085))) = 0 then '-' else  RTRIM(LTRIM(F10085)) end  AS BL, "
+                    + "case when RTRIM(LTRIM(F10086)) is null or trRTRIM(LTRIMim(F10086)) = '0' or LENGTH(RTRIM(LTRIM(F10086))) = 0 then '-' else  RTRIM(LTRIM(F10086)) end  AS AP, "
+                    + "RTRIM(LTRIM(F100891)) AS JUDET, "
+                    + "RTRIM(LTRIM(F10082)) AS SECTOR "
                     + " FROM F100 WHERE F10003=" + marca, null);
 
                 //sql = "select distinct diff, f940607, f300607, DATA from ("
@@ -1643,7 +1643,7 @@ namespace WizOne.Adev
                     + "F30036, F30037, F30038, F300607) group by F300607 order by f300607) b "
                     + "where f940607(+) = f300607) c";
 
-                string sqlCoasig = "SELECT TRIM(F11010)||' '||TRIM(F11005) AS NUME_COASIG, F11012 AS CNP_COASIG FROM F110 WHERE F11017 = 0 AND F11003=" + marca;
+                string sqlCoasig = "SELECT RTRIM(LTRIM(F11010))||' '||RTRIM(LTRIM(F11005)) AS NUME_COASIG, F11012 AS CNP_COASIG FROM F110 WHERE F11017 = 0 AND F11003=" + marca;
 
 
                 dtCM = General.IncarcaDT(sql, null);
@@ -3436,7 +3436,7 @@ namespace WizOne.Adev
             if (Constante.tipBD == 2)
             {
 
-                dtCompany = General.IncarcaDT("SELECT TRIM(f00204) || CASE WHEN(f00220=1) THEN (' ' || TRIM(f00221)) ELSE '' END, "
+                dtCompany = General.IncarcaDT("SELECT RTRIM(LTRIM(f00204)) || CASE WHEN(f00220=1) THEN (' ' || TRIM(f00221)) ELSE '' END, "
                                         + "F00207, F00241 || '/' || F00242 || '/' || F00243 FROM F002", null);
 
                 coaddress = "SELECT F00231, F00233, F00234, "
@@ -3446,7 +3446,7 @@ namespace WizOne.Adev
                     + "CASE WHEN F00236 = 0 THEN '' ELSE TO_CHAR(F00236) END, "
                     + "CASE WHEN F00232 IS NULL THEN '' ELSE F00232 END, F00237, "
                     + "F00207 AS CUI, "
-                    + "TRIM(f00204) || CASE WHEN(f00220=1) THEN (' ' || TRIM(f00221)) ELSE '' END AS CONAME, "
+                    + "RTRIM(LTRIM(f00204)) || CASE WHEN(f00220=1) THEN (' ' || RTRIM(LTRIM(f00221))) ELSE '' END AS CONAME, "
                     + "F00241 || '/' || F00242 || '/' || F00243 AS COFISC, F00261||' '||F00262 AS DIRECTOR, F00281 AS TELEFON FROM F002";
                 dtCoAdress = General.IncarcaDT(coaddress, null);
 
@@ -3473,24 +3473,24 @@ namespace WizOne.Adev
                 if (coaddress.Substring(coaddress.Length - 2, 2) == ", ")
                     coaddress = coaddress.Substring(0, coaddress.Length - 2);
 
-                dtEmpl = General.IncarcaDT("SELECT trim(F10008)||' '||trim(F10009) AS NUME, "
-                    + "TRIM(F10017) AS CNP, "
+                dtEmpl = General.IncarcaDT("SELECT RTRIM(LTRIM(F10008))||' '||RTRIM(LTRIM(F10009)) AS NUME, "
+                    + "RTRIM(LTRIM(F10017)) AS CNP, "
                     + "F10047 AS SEX, "
                     + "TO_CHAR(F10022, 'dd/MM/yyyy') AS EMPL_DATANG, "
                     + "TO_CHAR(F100993, 'dd/MM/yyyy') AS EMPL_DATASF, "
                     + "F10025, "
                     + "CASE WHEN(F100983=1) THEN 'CI' ELSE 'BI' END AS AI, "
-                    + "TRIM(F10052) AS SN_AI, "
-                    + "trim(F10081) AS DOMICILIU, "
-                    + "trim(F10083) AS STR, "
-                    + "trim(F10084) AS NR, "
-                    + "trim(F10085) AS BL, "
-                    + "trim(F10086) AS AP, "
+                    + "RTRIM(LTRIM(F10052)) AS SN_AI, "
+                    + "RTRIM(LTRIM(F10081)) AS DOMICILIU, "
+                    + "RTRIM(LTRIM(F10083)) AS STR, "
+                    + "RTRIM(LTRIM(F10084)) AS NR, "
+                    + "RTRIM(LTRIM(F10085)) AS BL, "
+                    + "RTRIM(LTRIM(F10086)) AS AP, "
                     + "F10043 AS NORMA, "
                     + "CASE WHEN F1009741=1 THEN 'nedeterminata' ELSE 'determinata' END AS DURATA, "
                     + "F100985 || ' din data de ' ||TO_CHAR(F100986, 'dd.MM.yyyy') AS NRINSPECTORAT, "
-                    + "trim(F100891) AS JUDET, "
-                    + "trim(F10082) AS SECTOR "        
+                    + "RTRIM(LTRIM(F100891)) AS JUDET, "
+                    + "RTRIM(LTRIM(F10082)) AS SECTOR "
                     + " FROM F100 WHERE F10003=" + marca, null);
 
                 string temp = "";
@@ -4222,7 +4222,7 @@ namespace WizOne.Adev
                 }
                 if (Constante.tipBD == 2)
                 {
-                    dtCompany = General.IncarcaDT("SELECT TRIM(f00204) AS NUME,  TRIM(f06304) AS CAS_ANG from f002, f063 where f06302 = f00284", null);
+                    dtCompany = General.IncarcaDT("SELECT RTRIM(LTRIM(f00204)) AS NUME,  RTRIM(LTRIM(f06304)) AS CAS_ANG from f002, f063 where f06302 = f00284", null);
                 }
 
                 if (Constante.tipBD == 1)
@@ -4231,28 +4231,28 @@ namespace WizOne.Adev
                 }
                 if (Constante.tipBD == 2)
                 {
-                    dtCompany = General.IncarcaDT("SELECT TRIM(f00204) AS NUME,  TRIM(f06304) AS CAS_ANG from f002, f063 where f06302 = f00284", null);
+                    dtCompany = General.IncarcaDT("SELECT RTRIM(LTRIM(f00204)) AS NUME,  RTRIM(LTRIM(f06304)) AS CAS_ANG from f002, f063 where f06302 = f00284", null);
 
-                    dtEmpl = General.IncarcaDT("SELECT F10003 AS MARCA, trim(F10008)||' '||trim(F10009) AS NUME, "
-                        + "TRIM(F10017) AS CNP, "
+                    dtEmpl = General.IncarcaDT("SELECT F10003 AS MARCA, RTRIM(LTRIM(F10008))||' '||RTRIM(LTRIM(F10009)) AS NUME, "
+                        + "RTRIM(LTRIM(F10017)) AS CNP, "
                         + "F10047 AS SEX, "
                         + "TO_CHAR(F10022, 'dd/MM/yyyy') AS EMPL_DATANG, "
                         + "TO_CHAR(F100993, 'dd/MM/yyyy') AS EMPL_DATASF, "
                         + "F10025, "
                         + "CASE WHEN(F100983=1) THEN 'CI' ELSE 'BI' END AS AI, "
-                        + "TRIM(F10052) AS SN_AI, "
-                        + "TRIM(F100521) AS ELIB_AI, "
+                        + "RTRIM(LTRIM(F10052)) AS SN_AI, "
+                        + "RTRIM(LTRIM(F100521)) AS ELIB_AI, "
                         + "TO_CHAR(F100522, 'dd/mm/yyyy') AS DATA_AI, "
                         //+ "trim(F10081) AS DOMICILIU, "
                         + "case when F10081 is null then "
                         + "case when F100907 is null then '' else "
-                        + "'Comuna ' || TRIM(F100907) || ', Sat ' || TRIM(F100908) end else TRIM(F10081) end AS DOMICILIU, "
-                        + "case when trim(F10083) is null or trim(F10083) = '0' or LENGTH(TRIM(F10083)) = 0 then '-' else  trim(F10083) end  AS STR, "
-                        + "case when trim(F10084) is null or trim(F10084) = '0' or LENGTH(TRIM(F10084)) = 0 then '-' else  trim(F10084) end  AS NR, "
-                        + "case when trim(F10085) is null or  trim(F10085) = '0' or LENGTH(TRIM(F10085)) = 0 then '-' else  trim(F10085) end  AS BL, "
-                        + "case when trim(F10086) is null or trim(F10086) = '0' or LENGTH(TRIM(F10086)) = 0 then '-' else  trim(F10086) end  AS AP, "
-                        + "trim(F100891) AS JUDET, "
-                        + "trim(F10082) AS SECTOR , F1009741 "
+                        + "'Comuna ' || RTRIM(LTRIM(F100907)) || ', Sat ' || RTRIM(LTRIM(F100908)) end else RTRIM(LTRIM(F10081)) end AS DOMICILIU, "
+                        + "case when RTRIM(LTRIM(F10083)) is null or RTRIM(LTRIM(F10083)) = '0' or LENGTH(RTRIM(LTRIM(F10083))) = 0 then '-' else  RTRIM(LTRIM(F10083)) end  AS STR, "
+                        + "case when RTRIM(LTRIM(F10084)) is null or RTRIM(LTRIM(F10084)) = '0' or LENGTH(RTRIM(LTRIM(F10084))) = 0 then '-' else  RTRIM(LTRIM(F10084)) end  AS NR, "
+                        + "case when RTRIM(LTRIM(F10085)) is null or RTRIM(LTRIM(F10085)) = '0' or LENGTH(RTRIM(LTRIM(F10085))) = 0 then '-' else  RTRIM(LTRIM(F10085)) end  AS BL, "
+                        + "case when RTRIM(LTRIM(F10086)) is null or RTRIM(LTRIM(F10086)) = '0' or LENGTH(RTRIM(LTRIM(F10086))) = 0 then '-' else  RTRIM(LTRIM(F10086)) end  AS AP, "
+                        + "RTRIM(LTRIM(F100891)) AS JUDET, "
+                        + "RTRIM(LTRIM(F10082)) AS SECTOR , F1009741 "
                         + " FROM F100 WHERE F10003=" + marca, null);
 
 
@@ -4284,7 +4284,7 @@ namespace WizOne.Adev
                             + "F30036, F30037, F30038, F300607) group by F300607 order by f300607) b "
                             + "where f940607(+) = f300607) c";
 
-                    string sqlCoasig = "SELECT TRIM(F11010)||' '||TRIM(F11005) AS NUME_COASIG, F11012 AS CNP_COASIG FROM F110 WHERE F11017 = 0 AND F11003=" + marca;
+                    string sqlCoasig = "SELECT RTRIM(LTRIM(F11010))||' '||RTRIM(LTRIM(F11005)) AS NUME_COASIG, F11012 AS CNP_COASIG FROM F110 WHERE F11017 = 0 AND F11003=" + marca;
 
                     dtCM = General.IncarcaDT(sql, null);
 

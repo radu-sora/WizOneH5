@@ -467,7 +467,7 @@ namespace WizOne.Pontaj
                     if (Constante.tipBD == 1)
                         cond = " ISNUMERIC(\"ValStr\") = 1 ";
                     else
-                        cond = " TRIM(TRANSLATE(\"ValStr\",'0123456789', ' ')) is null ";
+                        cond = " RTRIM(LTRIM(TRANSLATE(\"ValStr\",'0123456789', ' '))) is null ";
 
                     string sql = "";
                     string oraIn = "", oraOut = "", firstIn = "", lastOut = "";

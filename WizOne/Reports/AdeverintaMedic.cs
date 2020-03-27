@@ -67,7 +67,7 @@ namespace WizOne.Reports
 
             sql = "";
             if (Constante.tipBD == 2)
-                sql = "SELECT TRIM(F11010)||' '||TRIM(F11005) AS NUME_COASIG, F11012 AS CNP_COASIG FROM F110 WHERE F11017 = 0 AND F11003=" + HttpContext.Current.Session["User_Marca"].ToString();
+                sql = "SELECT RTRIM(LTRIM(F11010))||' '||TRTRIM(LTRIMRIM(F11005)) AS NUME_COASIG, F11012 AS CNP_COASIG FROM F110 WHERE F11017 = 0 AND F11003=" + HttpContext.Current.Session["User_Marca"].ToString();
             else
                 sql = "SELECT CAST(LTRIM(RTRIM(F11010)) AS VARCHAR(256)) +CAST(' ' AS VARCHAR(256))+CAST(LTRIM(RTRIM(F11005)) AS VARCHAR(256)) AS NUME_COASIG, F11012 AS CNP_COASIG FROM F110 WHERE F11017 = 0 AND F11003=" + HttpContext.Current.Session["User_Marca"].ToString();
 

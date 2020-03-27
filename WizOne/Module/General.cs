@@ -6524,7 +6524,7 @@ namespace WizOne.Module
                     string strUp = @"UPDATE ""Ptj_Intrari"" A SET 
                                         A.""ValStr"" = CASE WHEN ((SELECT COUNT(*) FROM F100 Z WHERE Z.F10003=A.F10003 AND TRUNC(F10022) <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= TRUNC(F10023) ) = 1 AND TRUNC(A.""Ziua"") <= TRUNC(""DamiDataPlecare""(A.F10003, A.""Ziua""))) THEN CAST(nvl((""DamiNorma""(A.F10003, A.""Ziua"")),(select f10043 from f100 where f10003 = A.F10003)) as int) ELSE null END , 
                                         A.""Val0"" =   CASE WHEN ((SELECT COUNT(*) FROM F100 Z WHERE Z.F10003=A.F10003 AND TRUNC(F10022) <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= TRUNC(F10023) ) = 1 AND TRUNC(A.""Ziua"") <= TRUNC(""DamiDataPlecare""(A.F10003, A.""Ziua""))) THEN CAST(nvl((""DamiNorma""(A.F10003, A.""Ziua"")),(select f10043 from f100 where f10003 = A.F10003)) * 60 as int) ELSE null END 
-                                        WHERE TO_CHAR(A.""Ziua"",'yyyy')={0} AND TO_CHAR(A.""Ziua"",'mm')={1} AND (A.""ValStr"" IS NULL OR TRIM(A.""ValStr"") = '') AND A.F06204=-1 
+                                        WHERE TO_CHAR(A.""Ziua"",'yyyy')={0} AND TO_CHAR(A.""Ziua"",'mm')={1} AND (A.""ValStr"" IS NULL OR RTRIM(LTRIM(A.""ValStr"")) = '') AND A.F06204=-1 
                                         {2} {3} {4}";
 
                     strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruUpdate.Replace("X.Ziua", "A.\"Ziua\""));
@@ -7267,7 +7267,7 @@ namespace WizOne.Module
                     camp = camp + "\"";
                     str = " AND " + camp + " IS NOT NULL ";
                     if (Constante.tipBD == 1)
-                        str += $@" AND TRIM({camp}) <> '' ";
+                        str += $@" AND RTRIM(LTRIM({camp})) <> '' ";
                 }
             }
             catch (Exception ex)

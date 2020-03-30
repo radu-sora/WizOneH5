@@ -92,8 +92,11 @@ namespace WizOne.Pontaj
                     }
                 }
 
+
                 if (tip == 2 || tip == 20)
                     grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
+                else
+                    grDate.SettingsPager.PageSize = 31;
 
                 cmbPtjAng.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Toate inregistrarile"), Value = 1 });
                 cmbPtjAng.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Erori"), Value = 2 });
@@ -308,12 +311,13 @@ namespace WizOne.Pontaj
 
                 }
 
-
-                if (tip == 1 || tip == 10)
-                {
-                    grDate.SettingsPager.PageSize = 31;
-                }
-                else
+                //Florin 2020.03.30
+                //if (tip == 1 || tip == 10)
+                //{
+                //    grDate.SettingsPager.PageSize = 31;
+                //}
+                //else
+                if (tip == 2 || tip == 20)
                 {
                     string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
                     cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003 " +
@@ -1942,7 +1946,7 @@ namespace WizOne.Pontaj
                                 COALESCE(B.""DenumireScurta"",'') AS ""ColScurta"",
                                 CASE WHEN A.""Coloana"" ='Stare' THEN 0 ELSE 1 END AS ""OrdineSec""
                                 FROM ""Ptj_tblAdmin"" A
-                                LEFT JOIN (SELECT ""OreInVal"", MAX(""Denumire"") AS ""Denumire"", MAX(""DenumireScurta"") AS ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""OreInVal""='Val4' GROUP BY ""OreInVal"") B ON A.""Coloana""=B.""OreInVal""
+                                LEFT JOIN (SELECT ""OreInVal"", MAX(""Denumire"") AS ""Denumire"", MAX(""DenumireScurta"") AS ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE 1=1 {General.FiltrulCuNull("OreInVal")} GROUP BY ""OreInVal"") B ON A.""Coloana""=B.""OreInVal""
                                 LEFT JOIN (SELECT X.""IdColoana"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
                                                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                                                 FROM ""Securitate"" A

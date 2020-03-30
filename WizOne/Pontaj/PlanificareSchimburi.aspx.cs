@@ -159,18 +159,18 @@ namespace WizOne.Pontaj
                     lstCtr.DataBind();
                 }
 
-                DateTime ziua = Convert.ToDateTime(txtDtInc.Value);
-                if (Constante.tipBD == 1)
-                    arrZL = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN A.ZiSapt=6 OR A.ZiSapt=7 OR B.DAY IS NOT NULL THEN 'Ziua' + CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2)) + ';' ELSE '' END 
-                                        FROM tblzile A
-                                        LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
-                                        WHERE {General.ToDataUniv(ziua.Year, ziua.Month,1)} <= A.Zi AND A.Zi <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}
-                                        FOR XML PATH ('')", null), "").ToString();
-                else
-                    arrZL = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") || ';'
-                                        FROM ""tblZile"" A
-                                        LEFT JOIN HOLIDAYS B ON A.""Zi""=B.DAY
-                                        WHERE {General.ToDataUniv(ziua.Year, ziua.Month, 1)} <= A.""Zi"" AND A.""Zi"" <= {General.ToDataUniv(ziua.Year, ziua.Month, 99)}", null), "").ToString();
+                //DateTime ziua = Convert.ToDateTime(txtDtInc.Value);
+                //if (Constante.tipBD == 1)
+                //    arrZL = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN A.ZiSapt=6 OR A.ZiSapt=7 OR B.DAY IS NOT NULL THEN 'Ziua' + CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2)) + ';' ELSE '' END 
+                //                        FROM tblzile A
+                //                        LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
+                //                        WHERE {General.ToDataUniv(txtDtInc.Date)} <= A.Zi AND A.Zi <= {General.ToDataUniv(txtDtSf.Date)}
+                //                        FOR XML PATH ('')", null), "").ToString();
+                //else
+                //    arrZL = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") || ';'
+                //                        FROM ""tblZile"" A
+                //                        LEFT JOIN HOLIDAYS B ON A.""Zi""=B.DAY
+                //                        WHERE {General.ToDataUniv(txtDtInc.Date)} <= A.""Zi"" AND A.""Zi"" <= {General.ToDataUniv(txtDtSf.Date)}", null), "").ToString();
             }
             catch (Exception ex)
             {
@@ -382,8 +382,8 @@ namespace WizOne.Pontaj
             {
                 if (e.DataColumn.FieldName.Length >= 4 && e.DataColumn.FieldName.ToLower().Substring(0, 4) == "ziua")
                 {
-                    if (arrZL.Length > 0 && arrZL.IndexOf(e.DataColumn.FieldName + ";") >= 0)
-                        e.Cell.BackColor = System.Drawing.Color.Aquamarine;
+                    //if (arrZL.Length > 0 && arrZL.IndexOf(e.DataColumn.FieldName + ";") >= 0)
+                    //    e.Cell.BackColor = System.Drawing.Color.Aquamarine;
                     
                     string val = General.Nz(grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri"), "").ToString();
                     if (val != "" && (val + ",").IndexOf("," + e.DataColumn.FieldName + ",") >= 0)
@@ -603,7 +603,7 @@ namespace WizOne.Pontaj
                         LEFT JOIN F006 S6 ON Y.F10007 = S6.F00607
                         LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
                         LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
-                        {strFiltru}
+                        WHERE 1=1 {strFiltru}
                         ORDER BY ""AngajatNume"") A";
                 else
                     strSql = $@"SELECT A.*,
@@ -639,7 +639,7 @@ namespace WizOne.Pontaj
                         LEFT JOIN F006 S6 ON Y.F10007 = S6.F00607
                         LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
                         LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
-                        {strFiltru}
+                        WHERE 1=1 {strFiltru}
                         ORDER BY ""AngajatNume"") A";
             }
             catch (Exception ex)
@@ -729,15 +729,18 @@ namespace WizOne.Pontaj
                         Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";
                 }
 
-                DataTable dtZi = General.IncarcaDT($@"SELECT CASE WHEN ""ZiLiberaLegala"" <> 0 THEN 8 ELSE ""ZiSapt"" END AS ""ZiSapt"" FROM ""tblZile"" WHERE {General.ToDataUniv(txtDtInc.Date)} <= ""Zi"" AND ""Zi"" <= {General.ToDataUniv(txtDtSf.Date)} ", null);
+                DataTable dtZi = General.IncarcaDT(
+                    $@"SELECT ""Zi"", CASE WHEN ""ZiLiberaLegala"" <> 0 THEN 8 ELSE ""ZiSapt"" END AS ""ZiSapt"",
+                    CASE WHEN ""ZiLiberaLegala"" <> 0 OR ""ZiSapt"" = 6 OR ""ZiSapt"" = 7 THEN 1 ELSE 0 END AS ""Libera""
+                    FROM ""tblZile"" WHERE {General.ToDataUniv(txtDtInc.Date)} <= ""Zi"" AND ""Zi"" <= {General.ToDataUniv(txtDtSf.Date)} ", null);
                 var lstZiSapt = new Dictionary<int, object>();
 
-                for (int i = 0; i < dtZi.Rows.Count; i++)
-                {
-                    lstZiSapt.Add(i, dtZi.Rows[i]["ZiSapt"]);
-                }
+                //for (int i = 0; i < dtZi.Rows.Count; i++)
+                //{
+                //    lstZiSapt.Add(i, dtZi.Rows[i]["ZiSapt"]);
+                //}
 
-                grDate.JSProperties["cp_ZiSapt"] = lstZiSapt;
+                //grDate.JSProperties["cp_ZiSapt"] = lstZiSapt;
 
 
 
@@ -748,21 +751,45 @@ namespace WizOne.Pontaj
                         grDate.Columns.Remove(grDate.Columns[i]);
                 }
 
-                //adaugam colonele din noul interval
+                ////adaugam coloanele din noul interval
+                //int cnt = 0;
+                //for (DateTime zi = txtDtInc.Date; zi <= txtDtSf.Date; zi = zi.AddDays(1))
+                //{
+                //    cnt++;
+                //    GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
+                //    c.Name = "Ziua" + cnt;
+                //    c.FieldName = "Ziua" + cnt;
+                //    c.Caption = zi.Day.ToString().PadLeft(2, '0') + "." + zi.Month.ToString().PadLeft(2, '0');
+                //    c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
+
+                //    c.PropertiesComboBox.DataSource = dt;
+                //    c.PropertiesComboBox.AllowNull = true;
+                //    c.PropertiesComboBox.ValueField = "IdAuto";
+                //    //c.PropertiesComboBox.ValueType = typeof(int);
+                //    c.PropertiesComboBox.TextField = "Denumire";
+
+                //    c.Settings.AllowHeaderFilter = DevExpress.Utils.DefaultBoolean.True;
+                //    c.Settings.AllowAutoFilter = DevExpress.Utils.DefaultBoolean.False;
+                //    c.Settings.SortMode = DevExpress.XtraGrid.ColumnSortMode.DisplayText;
+                //    c.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
+
+                //    grDate.Columns.Add(c);
+                //}
+
+                //adaugam coloanele din noul interval
                 int cnt = 0;
-                for (DateTime zi = txtDtInc.Date; zi <= txtDtSf.Date; zi = zi.AddDays(1))
+                for (int i = 0; i < dtZi.Rows.Count; i++)
                 {
                     cnt++;
                     GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
                     c.Name = "Ziua" + cnt;
                     c.FieldName = "Ziua" + cnt;
-                    c.Caption = zi.Day.ToString().PadLeft(2, '0') + "." + zi.Month.ToString().PadLeft(2, '0');
+                    c.Caption = Convert.ToDateTime(dtZi.Rows[i]["Zi"]).Day.ToString().PadLeft(2, '0') + "." + Convert.ToDateTime(dtZi.Rows[i]["Zi"]).Month.ToString().PadLeft(2, '0');
                     c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
 
                     c.PropertiesComboBox.DataSource = dt;
                     c.PropertiesComboBox.AllowNull = true;
                     c.PropertiesComboBox.ValueField = "IdAuto";
-                    //c.PropertiesComboBox.ValueType = typeof(int);
                     c.PropertiesComboBox.TextField = "Denumire";
 
                     c.Settings.AllowHeaderFilter = DevExpress.Utils.DefaultBoolean.True;
@@ -770,8 +797,15 @@ namespace WizOne.Pontaj
                     c.Settings.SortMode = DevExpress.XtraGrid.ColumnSortMode.DisplayText;
                     c.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
 
+                    if (General.Nz(dtZi.Rows[i]["Libera"],0).ToString() == "1")
+                        c.CellStyle.BackColor = Color.Aquamarine;
+
                     grDate.Columns.Add(c);
+
+                    lstZiSapt.Add(i, dtZi.Rows[i]["ZiSapt"]);
                 }
+
+                grDate.JSProperties["cp_ZiSapt"] = lstZiSapt;
             }
             catch (Exception ex)
             {
@@ -863,8 +897,8 @@ namespace WizOne.Pontaj
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

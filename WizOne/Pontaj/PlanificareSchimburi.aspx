@@ -74,19 +74,19 @@
                                                         <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox1" SelectionMode="CheckColumn" runat="server" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                                             <Border BorderStyle="None" />
                                                             <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
-                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged1(); }" />
+                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged1(s,e); }" />
                                                         </dx:ASPxListBox>
                                                         <table style="width: 100%">
                                                             <tr>
                                                                 <td style="padding: 4px">
                                                                     <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Close" Style="float: right">
-                                                                        <ClientSideEvents Click="function(s, e){ checkComboBox1.HideDropDown(); }" />
+                                                                        <ClientSideEvents Click="function(s, e){ cmbCtr.HideDropDown(); }" />
                                                                     </dx:ASPxButton>
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                     </DropDownWindowTemplate>
-                                                    <ClientSideEvents TextChanged="function(s, e){ SynchronizeListBoxValues1(); }" DropDown="function(s, e){ SynchronizeListBoxValues1(); }" />
+                                                    <ClientSideEvents TextChanged="function(s, e){ SynchronizeListBoxValues1(s); }" DropDown="function(s, e){ SynchronizeListBoxValues1(s); }" />
                                                 </dx:ASPxDropDownEdit>
 
                                             </div>
@@ -116,19 +116,19 @@
                                                         <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox2" SelectionMode="CheckColumn" runat="server" ValueField="IdDept" TextField="Dept" ValueType="System.Int32">
                                                             <Border BorderStyle="None" />
                                                             <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
-                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged2(); }" />
+                                                            <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged2(s,e); }" />
                                                         </dx:ASPxListBox>
                                                         <table style="width: 100%">
                                                             <tr>
                                                                 <td style="padding: 4px">
                                                                     <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Close" Style="float: right">
-                                                                        <ClientSideEvents Click="function(s, e){ checkComboBox2.HideDropDown(); }" />
+                                                                        <ClientSideEvents Click="function(s, e){ cmbDept.HideDropDown(); }" />
                                                                     </dx:ASPxButton>
                                                                 </td>
                                                             </tr>
                                                         </table>
                                                     </DropDownWindowTemplate>
-                                                    <ClientSideEvents TextChanged="function(s, e){ SynchronizeListBoxValues2(); }" DropDown="function(s, e){ SynchronizeListBoxValues2(); }" />
+                                                    <ClientSideEvents TextChanged="function(s, e){ SynchronizeListBoxValues2(s); }" DropDown="function(s, e){ SynchronizeListBoxValues2(s); }" />
                                                 </dx:ASPxDropDownEdit>
                                             </div>
                                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divSubDept" runat="server">
@@ -204,6 +204,11 @@
 
     <script>
         function EmptyFields() {
+
+            var este = false;
+            if (cmbSub.GetValue() != null)
+                este = true;
+
             cmbAng.SetValue(null);
             cmbCtr.SetValue(null);
 
@@ -215,7 +220,8 @@
             cmbBirou.SetValue(null);
             cmbCateg.SetValue(null);
 
-            pnlCtl.PerformCallback('EmptyFields');
+            if (este)
+                pnlCtl.PerformCallback('EmptyFields');
         }
 
         function OnGridInit() {
@@ -268,9 +274,9 @@
         }
         function UpdateText1() {
             var selectedItems = checkListBox1.GetSelectedItems();
-            checkComboBox1.SetText(GetSelectedItemsText1(selectedItems));
+            cmbCtr.SetText(GetSelectedItemsText1(selectedItems));
         }
-        function SynchronizeListBoxValues1(dropDown, args) {
+        function SynchronizeListBoxValues1(dropDown) {
             checkListBox1.UnselectAll();
             var texts = dropDown.GetText().split(textSeparator);
             var values = GetValuesByTexts1(texts);
@@ -314,7 +320,7 @@
         }
         function UpdateText2() {
             var selectedItems = checkListBox2.GetSelectedItems();
-            checkComboBox2.SetText(GetSelectedItemsText2(selectedItems));
+            cmbDept.SetText(GetSelectedItemsText2(selectedItems));
         }
         function SynchronizeListBoxValues2(dropDown, args) {
             checkListBox2.UnselectAll();

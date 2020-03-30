@@ -33,7 +33,7 @@ namespace WizOne.Reports
             this.ExportOptions.Xls.TextExportMode = DevExpress.XtraPrinting.TextExportMode.Value;
             this.ExportOptions.Xlsx.TextExportMode = DevExpress.XtraPrinting.TextExportMode.Value;
 
-            TopMargin.HeightF = 169.25f;
+            TopMargin.HeightF = 171f;
 
         }
 
@@ -248,6 +248,7 @@ namespace WizOne.Reports
                     lblSemnatura.HeightF += 15;
                 }
 
+                lblAntet.WidthF = this.PageWidth;
 
                 this.PageWidth += margine;
                 lblPagina.WidthF = this.PageWidth;
@@ -271,7 +272,7 @@ namespace WizOne.Reports
             try
             {
                 int pozY = 0;
-                if (tip == 1) pozY = 100;
+                if (tip == 1) pozY = 152;
 
                 lbl.Text = txt;
                 lbl.Font = new Font("Calibri", (float)fontSize);

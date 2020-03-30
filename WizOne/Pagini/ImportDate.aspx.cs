@@ -166,7 +166,7 @@ namespace WizOne.Pagini
                     workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
 
              
-                    DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets["Sheet1"];
+                    DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
 
                     DataTable table = new DataTable();
                     table.Columns.Add("Id", typeof(string));
@@ -564,7 +564,7 @@ namespace WizOne.Pagini
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
                 workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
 
-                DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets["Sheet1"];
+                DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
 
                 DataTable dtSablon = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" WHERE \"NumeTabela\" = '" + cmbTabela.Text + "'", null);
                 DataTable dtNomen = General.IncarcaDT("SELECT * FROM \"ImportDateNomen\" WHERE \"NumeTabela\" = '" + cmbTabela.Text + "' AND \"Obligatoriu\" = 1", null);
@@ -630,10 +630,24 @@ namespace WizOne.Pagini
                 k = 0;
                 while (!ws2.Cells[j, k].Value.IsEmpty)
                 {
+                    if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                    {
+                        k = 0;
+                        j++;
+                        continue;
+                    }
+
                     string campOblig = "";
                     string campNonOblig = "";
                     while (!ws2.Cells[j, k].Value.IsEmpty)
                     {
+
+                        if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                        {
+                            k++;
+                            continue;
+                        }
+
                         DataRow[] dr = dtCombinat.Select("PozitieFisier=" + k);
                         if (dr != null && dr.Count() > 0)
                         {
@@ -664,6 +678,8 @@ namespace WizOne.Pagini
                                     break;
                             }
 
+
+                            val = val.Replace(",", "#&*");
 
                             if (dr[0]["Obligatoriu"].ToString() == "1")
                                 campOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
@@ -843,7 +859,7 @@ namespace WizOne.Pagini
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
                 workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
 
-                DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets["Sheet1"];
+                DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
                 Dictionary<int, int> lstIndex = new Dictionary<int, int>();
 
                 int k = 0;
@@ -869,9 +885,22 @@ namespace WizOne.Pagini
                 k = 0;
                 while (!ws2.Cells[j, k].Value.IsEmpty)
                 {
+                    if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                    {
+                        j++;
+                        k = 0;
+                        continue;
+                    }
+
                     dt.Rows.Add(sir);
                     while (!ws2.Cells[j, k].Value.IsEmpty)
                     {
+                        if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                        {
+                            k++;
+                            continue;
+                        }
+
                         if (lstIndex.ContainsKey(k))                        
                             dt.Rows[j - 1][lstIndex[k]] = ws2.Cells[j, k].Value;                        
                         k++;

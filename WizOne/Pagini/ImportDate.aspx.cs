@@ -644,18 +644,23 @@ namespace WizOne.Pagini
                                 case "numeric":
                                 case "number":
                                 case "decimal":
-                                    val = ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US"));
+                                    if (ws2.Cells[j, k].Value !=  null && ws2.Cells[j, k].Value.ToString().Length > 0)
+                                        val = ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US"));
                                     break;
                                 case "nvarchar":
                                 case "varchar2":
-                                    val = "'" + ws2.Cells[j, k].Value.ToString() + "'";
+                                    if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
+                                        val = "'" + ws2.Cells[j, k].Value.ToString() + "'";
                                     break;
                                 case "date":
-                                case "datetime":                      
-                                    if (Constante.tipBD == 1)
-                                        val = "CONVERT(DATETIME# '" + ws2.Cells[j, k].Value.ToString() + "'# 103)";
-                                    else
-                                        val = "TO_DATE('" + ws2.Cells[j, k].Value.ToString() + "'# dd/mm/yyyy)";
+                                case "datetime":
+                                    if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
+                                    {
+                                        if (Constante.tipBD == 1)
+                                            val = "CONVERT(DATETIME#&* '" + ws2.Cells[j, k].Value.ToString() + "'#&* 103)";
+                                        else
+                                            val = "TO_DATE('" + ws2.Cells[j, k].Value.ToString() + "'#&* dd/mm/yyyy)";
+                                    }
                                     break;
                             }
 
@@ -674,7 +679,7 @@ namespace WizOne.Pagini
                     for (int x = 0; x < lstCampuri.Length; x++)
                     {
                         camp += "," + lstCampuri[x].Split('=')[0];
-                        valoare += "," + lstCampuri[x].Split('=')[1].Replace('#', ',');
+                        valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
                     }
 
                     DataRow[] drAltele = dtCombinat.Select("PozitieFisier IS NULL");
@@ -695,6 +700,8 @@ namespace WizOne.Pagini
                                 if (drAltele[z]["Tip"].ToString().ToLower().Contains("varchar") && drAltele[z]["ValoareImplicita"] != null)
                                     valAltele = "'" + drAltele[z]["ValoareImplicita"].ToString() + "'";
                             }
+                            if (valAltele.Length <= 0)
+                                valAltele = "NULL";
                             campNonOblig += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
                         }
                     }
@@ -704,13 +711,13 @@ namespace WizOne.Pagini
                     for (int x = 0; x < lstCampuri.Length; x++)
                     {
                         camp += "," + lstCampuri[x].Split('=')[0];
-                        valoare += "," + lstCampuri[x].Split('=')[1].Replace('#', ',');
+                        valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
                     }
 
-                    DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + cmbTabela.Text + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ','), null);
+                    DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + cmbTabela.Text + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ","), null);
                     sql = "";
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
-                        sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1).Replace('#', ',') + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace('#', ',');
+                        sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
                     else                    
                         sql = "INSERT INTO \"" + cmbTabela.Text + "\" (" + camp.Substring(1) + ")  VALUES (" + valoare.Substring(1) + ")";
                     
@@ -725,7 +732,7 @@ namespace WizOne.Pagini
                             for (int x = 0; x < lstCampuri.Length; x++)
                             {
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "F10003" || lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "An" || lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Luna")
-                                    filtru += " AND " + lstCampuri[x].Replace('#', ',');
+                                    filtru += " AND " + lstCampuri[x].Replace("#&*", ",");
                                 filtru = filtru.Substring(5);
                             }
                             General.CalculFormuleCumulat(filtru);
@@ -740,11 +747,11 @@ namespace WizOne.Pagini
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "F10003")
                                     marca = lstCampuri[x].Split('=')[1].Trim();
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Ziua")
-                                    ziua = lstCampuri[x].Split('=')[1].Replace('#', ',').Trim();
+                                    ziua = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataInceput")
-                                    dataInceput = lstCampuri[x].Split('=')[1].Replace('#', ',').Trim();
+                                    dataInceput = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
                                 if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataSfarsit")
-                                    dataSfarsit = lstCampuri[x].Split('=')[1].Replace('#', ',').Trim();
+                                    dataSfarsit = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
                             }
 
                             filtru = "";

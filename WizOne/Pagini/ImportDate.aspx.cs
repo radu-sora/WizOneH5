@@ -773,13 +773,8 @@ namespace WizOne.Pagini
                                 {
                                     for (int x = 0; x < dtModif.Rows.Count; x++)
                                     {
-                                        string golesteVal = Dami.ValoareParam("GolesteVal");
-                                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                                        FunctiiCeasuri.Calcul.h5 = true;
-                                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[x]["F10003"]), Convert.ToDateTime(dtModif.Rows[x]["Ziua"]));
-                                        FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[x], true, true);
+                                        Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[x]["F10003"]), Convert.ToDateTime(dtModif.Rows[x]["Ziua"]));
+                                        Calcul.CalculInOut(dtModif.Rows[x], true, true);
 
                                         General.CalculFormule(dtModif.Rows[x]["F10003"], null, Convert.ToDateTime(dtModif.Rows[x]["Ziua"]), null);
                                         General.ExecValStr(Convert.ToInt32(dtModif.Rows[x]["F10003"]), Convert.ToDateTime(dtModif.Rows[x]["Ziua"]));

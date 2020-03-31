@@ -15,7 +15,6 @@ namespace WizOne.Pontaj
 {
     public partial class PlanificareSchimburi : System.Web.UI.Page
     {
-        private string arrZL = "";
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -158,19 +157,6 @@ namespace WizOne.Pontaj
                         ORDER BY ""Id"" ", null);
                     lstCtr.DataBind();
                 }
-
-                //DateTime ziua = Convert.ToDateTime(txtDtInc.Value);
-                //if (Constante.tipBD == 1)
-                //    arrZL = General.Nz(General.ExecutaScalar($@"SELECT CASE WHEN A.ZiSapt=6 OR A.ZiSapt=7 OR B.DAY IS NOT NULL THEN 'Ziua' + CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2)) + ';' ELSE '' END 
-                //                        FROM tblzile A
-                //                        LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
-                //                        WHERE {General.ToDataUniv(txtDtInc.Date)} <= A.Zi AND A.Zi <= {General.ToDataUniv(txtDtSf.Date)}
-                //                        FOR XML PATH ('')", null), "").ToString();
-                //else
-                //    arrZL = General.Nz(General.ExecutaScalar($@"SELECT LISTAGG(CASE WHEN A.""ZiSapt""=6 OR A.""ZiSapt""=7 OR B.DAY IS NOT NULL THEN 'Ziua' || CAST({General.FunctiiData("A.\"Zi\"", "Z")} AS varchar(2))  ELSE '' END,  ';') WITHIN GROUP (ORDER BY A.""Zi"") || ';'
-                //                        FROM ""tblZile"" A
-                //                        LEFT JOIN HOLIDAYS B ON A.""Zi""=B.DAY
-                //                        WHERE {General.ToDataUniv(txtDtInc.Date)} <= A.""Zi"" AND A.""Zi"" <= {General.ToDataUniv(txtDtSf.Date)}", null), "").ToString();
             }
             catch (Exception ex)
             {
@@ -382,9 +368,6 @@ namespace WizOne.Pontaj
             {
                 if (e.DataColumn.FieldName.Length >= 4 && e.DataColumn.FieldName.ToLower().Substring(0, 4) == "ziua")
                 {
-                    //if (arrZL.Length > 0 && arrZL.IndexOf(e.DataColumn.FieldName + ";") >= 0)
-                    //    e.Cell.BackColor = System.Drawing.Color.Aquamarine;
-                    
                     string val = General.Nz(grDate.GetRowValuesByKeyValue(e.KeyValue, "ZileGri"), "").ToString();
                     if (val != "" && (val + ",").IndexOf("," + e.DataColumn.FieldName + ",") >= 0)
                     {
@@ -481,93 +464,6 @@ namespace WizOne.Pontaj
                     zileAs += ", " + strZi + " AS \"Ziua" + cnt.ToString() + "\"";
                     zileVal += $@",""Ziua{cnt}""";
                 }
-
-
-                //strSql = $@"SELECT A.*,
-                //        (SELECT ',Ziua' + CASE WHEN Y.Zi < CONVERT(date,X.F10022) OR CONVERT(date,X.F10023) < Y.Zi THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
-                //        FROM F100 X
-                //        INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
-                //        WHERE X.F10003=A.F10003
-                //        FOR XML PATH ('')) AS ZileGri
-                //        FROM (
-                //        SELECT TOP 100 PERCENT A.F10003, A.F10008 + ' ' + A.F10009 AS AngajatNume, C.Denumire AS Contract {zileVal}
-                //        FROM
-                //        (SELECT F10003 {zileAs} FROM 
-                //        (SELECT  A.Ziua, A.F10003, 
-                //        COALESCE((-1 * B.Id), (A.IdContractP * 1000 + A.IdProgramP)) AS Id
-                //        FROM Ptj_Intrari A
-                //        LEFT JOIN Ptj_tblAbsente B ON A.ValStr=B.DenumireScurta AND B.DenumireScurta <> ''
-                //        LEFT JOIN Ptj_Contracte C ON A.IdContractP = C.Id
-                //        LEFT JOIN Ptj_Programe D ON A.IdProgramP=D.Id
-                //        WHERE {dtInc} <= CAST(A.Ziua AS date) AND CAST(A.Ziua AS date) <= {dtSf}) AS source  
-                //        PIVOT (MAX(Id) FOR Ziua IN ( {zile.Substring(1)} )) pvt
-                //        ) pvt
-                //        LEFT JOIN F100 A ON A.F10003=pvt.F10003 
-                //        LEFT JOIN F1001 B ON A.F10003=B.F10003 
-                //        LEFT JOIN (SELECT R.F10003, MIN(R.Ziua) AS ZiuaMin FROM Ptj_Intrari R WHERE {dtInc} <= CAST(R.Ziua AS date) AND CAST(R.Ziua AS date) <= {dtSf} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
-                //        LEFT JOIN Ptj_Intrari Y ON A.F10003=Y.F10003 AND Y.Ziua=Q.ZiuaMin
-                //        LEFT JOIN Ptj_Contracte C on C.Id = Y.IdContract 
-                //        LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
-                //        {strLeg}
-                //        LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
-                //        LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304
-                //        LEFT JOIN F004 S4 ON Y.F10005 = S4.F00405
-                //        LEFT JOIN F005 S5 ON Y.F10006 = S5.F00506
-                //        LEFT JOIN F006 S6 ON Y.F10007 = S6.F00607
-                //        LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
-                //        LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
-                //        {strFiltru}
-                //        ORDER BY AngajatNume) A";
-
-
-                //string zileGri = $@"(SELECT ',Ziua' + CASE WHEN Y.Zi < CONVERT(date,X.F10022) OR CONVERT(date,X.F10023) < Y.Zi THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
-                //        FROM F100 X
-                //        INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
-                //        WHERE X.F10003=A.F10003
-                //        FOR XML PATH ('')) AS ZileGri";
-                //string sqlProcent = "TOP 100 PERCENT";
-
-                //if (Constante.tipBD == 2)
-                //{
-                //    zileGri = $@"(SELECT LISTAGG(',Ziua' || CASE WHEN Y.""Zi"" < TRUNC(F10022) OR TRUNC(X.F10023) < Y.""Zi"" THEN TO_CHAR(EXTRACT(DAY FROM Y.""Zi"")) END) WITHIN GROUP (ORDER BY X.F10003)
-                //        FROM F100 X
-                //        INNER JOIN ""tblZile"" Y ON {dtInc} <= Y.""Zi"" AND Y.""Zi"" <= {dtSf}
-                //        WHERE X.F10003 = A.F10003
-                //        ) AS ""ZileGri""";
-                //    sqlProcent = "";
-                //}
-
-                //strSql = $@"SELECT A.*,
-                //        {zileGri}
-                //        FROM (
-                //        SELECT {sqlProcent} A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"" {zileVal}
-                //        FROM
-                //        (SELECT F10003 {zileAs} FROM 
-                //        (SELECT  A.""Ziua"", A.F10003, 
-                //        COALESCE((-1 * B.""Id""), (A.""IdContractP"" * 1000 + A.""IdProgramP"")) AS ""Id""
-                //        FROM ""Ptj_Intrari"" A
-                //        LEFT JOIN ""Ptj_tblAbsente"" B ON A.""ValStr""=B.""DenumireScurta"" AND B.""DenumireScurta"" <> ''
-                //        LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContractP"" = C.""Id""
-                //        LEFT JOIN ""Ptj_Programe"" D ON A.""IdProgramP""=D.""Id""
-                //        WHERE {dtInc} <= CAST(A.""Ziua"" AS date) AND CAST(A.""Ziua"" AS date) <= {dtSf}) source  
-                //        PIVOT (MAX(""Id"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
-                //        ) pvt
-                //        LEFT JOIN F100 A ON A.F10003=pvt.F10003 
-                //        LEFT JOIN F1001 B ON A.F10003=B.F10003 
-                //        LEFT JOIN (SELECT R.F10003, MIN(R.""Ziua"") AS ""ZiuaMin"" FROM ""Ptj_Intrari"" R WHERE {dtInc} <= CAST(R.""Ziua"" AS date) AND CAST(R.""Ziua"" AS date) <= {dtSf} GROUP BY R.F10003) Q ON Q.F10003=A.F10003
-                //        LEFT JOIN ""Ptj_Intrari"" Y ON A.F10003=Y.F10003 AND Y.""Ziua""=Q.""ZiuaMin""
-                //        LEFT JOIN ""Ptj_Contracte"" C on C.""Id"" = Y.""IdContract""
-                //        LEFT JOIN F089 DR ON DR.F08902 = A.F1009741 
-                //        {strLeg}
-                //        LEFT JOIN F002 S2 ON Y.F10002 = S2.F00202
-                //        LEFT JOIN F003 S3 ON Y.F10004 = S3.F00304
-                //        LEFT JOIN F004 S4 ON Y.F10005 = S4.F00405
-                //        LEFT JOIN F005 S5 ON Y.F10006 = S5.F00506
-                //        LEFT JOIN F006 S6 ON Y.F10007 = S6.F00607
-                //        LEFT JOIN F007 S7 ON B.F100958 = S7.F00708
-                //        LEFT JOIN F008 S8 ON B.F100959 = S8.F00809
-                //        {strFiltru}
-                //        ORDER BY ""AngajatNume"") A";
 
                 if (Constante.tipBD == 1)
                     strSql = $@"SELECT A.*,
@@ -735,46 +631,12 @@ namespace WizOne.Pontaj
                     FROM ""tblZile"" WHERE {General.ToDataUniv(txtDtInc.Date)} <= ""Zi"" AND ""Zi"" <= {General.ToDataUniv(txtDtSf.Date)} ", null);
                 var lstZiSapt = new Dictionary<int, object>();
 
-                //for (int i = 0; i < dtZi.Rows.Count; i++)
-                //{
-                //    lstZiSapt.Add(i, dtZi.Rows[i]["ZiSapt"]);
-                //}
-
-                //grDate.JSProperties["cp_ZiSapt"] = lstZiSapt;
-
-
-
                 //stergem coloanele Ziua
                 for (int i = 0; i < grDate.Columns.Count; i++)
                 {
                     if (grDate.Columns[i].Name.Length >= 4 && grDate.Columns[i].Name.Substring(0, 4).ToLower() == "ziua")
                         grDate.Columns.Remove(grDate.Columns[i]);
                 }
-
-                ////adaugam coloanele din noul interval
-                //int cnt = 0;
-                //for (DateTime zi = txtDtInc.Date; zi <= txtDtSf.Date; zi = zi.AddDays(1))
-                //{
-                //    cnt++;
-                //    GridViewDataComboBoxColumn c = new GridViewDataComboBoxColumn();
-                //    c.Name = "Ziua" + cnt;
-                //    c.FieldName = "Ziua" + cnt;
-                //    c.Caption = zi.Day.ToString().PadLeft(2, '0') + "." + zi.Month.ToString().PadLeft(2, '0');
-                //    c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
-
-                //    c.PropertiesComboBox.DataSource = dt;
-                //    c.PropertiesComboBox.AllowNull = true;
-                //    c.PropertiesComboBox.ValueField = "IdAuto";
-                //    //c.PropertiesComboBox.ValueType = typeof(int);
-                //    c.PropertiesComboBox.TextField = "Denumire";
-
-                //    c.Settings.AllowHeaderFilter = DevExpress.Utils.DefaultBoolean.True;
-                //    c.Settings.AllowAutoFilter = DevExpress.Utils.DefaultBoolean.False;
-                //    c.Settings.SortMode = DevExpress.XtraGrid.ColumnSortMode.DisplayText;
-                //    c.SettingsHeaderFilter.Mode = GridHeaderFilterMode.CheckedList;
-
-                //    grDate.Columns.Add(c);
-                //}
 
                 //adaugam coloanele din noul interval
                 int cnt = 0;
@@ -895,10 +757,8 @@ namespace WizOne.Pontaj
             {
                 grDateExport.WriteXlsxToResponse("PlanificareSchimburi-" + DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss"));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                //General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

@@ -16,10 +16,10 @@ using System.Threading;
 
 namespace WizOne.Absente
 {
-    public partial class Cereri : System.Web.UI.Page
+    public partial class Cereri : Page
     {
 
-        public class metaCereriDate
+        internal class metaCereriDate
         {
             public object Angajat { get; set; }
             public object Absenta { get; set; }

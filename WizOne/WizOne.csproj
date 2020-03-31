@@ -206,10 +206,6 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="FunctiiCeasuri, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Artifacts\FunctiiCeasuri.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp, Version=5.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Artifacts\itextsharp.dll</HintPath>
@@ -1537,6 +1533,7 @@
     <Compile Include="Info.aspx.designer.cs">
       <DependentUpon>Info.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Module\Calcul.cs" />
     <Compile Include="Module\ConcediiMedicale.cs" />
     <Compile Include="Module\Evaluare.cs" />
     <Compile Include="Module\IdClienti.cs" />

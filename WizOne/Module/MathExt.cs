@@ -24,12 +24,12 @@ namespace WizOne.Module
     public class MathExt
     {
 
-        public static decimal Round(decimal d, MidpointRounding mode)
+        internal static decimal Round(decimal d, MidpointRounding mode)
 	    {
 	        return MathExt.Round(d, 0, mode);
 	    }
 
-        public static decimal Round(decimal d, int decimals, MidpointRounding mode)
+        internal static decimal Round(decimal d, int decimals, MidpointRounding mode)
         {
             decimal dec = 0;
 

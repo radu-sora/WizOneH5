@@ -514,7 +514,7 @@ namespace WizOne.Reports
                     INNER JOIN Eval_Quiz B ON A.IdQuiz=B.Id
                     INNER JOIN Eval_RaspunsIstoric C ON A.IdQuiz=C.IdQuiz AND
                     A.F10003=C.F10003 AND A.Pozitie=C.Pozitie INNER JOIN USERS D ON C.IdUser=D.F70102 WHERE A.F10003=@2 AND
-                    COALESCE(B.CategorieQuiz,0) IN (1,2) AND (isnull(A.comentariu,'')<>'') AND B.Anul =(SELECT Anul FROM Eval_Quiz WHERE Id = @1)", null);
+                    COALESCE(B.CategorieQuiz,0) IN (1,2) AND (isnull(A.comentariu,'')<>'') AND B.Anul =(SELECT Anul FROM Eval_Quiz WHERE Id = @1)", new object[] { idQuiz, f10003 });
                 if (dtComent != null)
                 {
                     for (int k = 0; k < dtComent.Rows.Count; k++)

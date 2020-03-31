@@ -18,7 +18,7 @@ namespace WizOne.Absente
 
         bool esteHr = false;
 
-        public class metaDate
+        internal class metaDate
         {
             public int Id { get; set; }
             public string Denumire { get; set; }
@@ -489,16 +489,10 @@ namespace WizOne.Absente
                                 DataTable dtPtj = General.IncarcaDT($@"SELECT * FROM Ptj_Intrari WHERE F10003=@1 AND @2 <= ""Ziua"" AND ""ziua"" <= @3", new object[] { obj[1], obj[4], obj[6] });
                                 if (dtPtj != null && dtPtj.Rows.Count > 0)
                                 {
-                                    FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                    FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                    FunctiiCeasuri.Calcul.golesteVal = Dami.ValoareParam("GolesteVal");
-                                    FunctiiCeasuri.Calcul.h5 = true;
-                                    //MetodeCeasuri.Calcul.sintaxaValStr = Dami.ValoareParam("SintaxaValStr", "");
-
                                     for (int i = 0; i < dtPtj.Rows.Count; i++)
                                     {
-                                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtPtj.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dtPtj.Rows[i]["Ziua"]));
-                                        FunctiiCeasuri.Calcul.CalculInOut(dtPtj.Rows[i], true, true);
+                                        Calcul.AlocaContract(Convert.ToInt32(dtPtj.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dtPtj.Rows[i]["Ziua"]));
+                                        Calcul.CalculInOut(dtPtj.Rows[i], true, true);
                                     }
                                 }
 

@@ -1925,14 +1925,14 @@ namespace WizOne.Pontaj
                                 if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                                 {
                                     if (idZile > 0 && colZile > 0)                                    
-                                        ws2.Cells[row + 3, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
+                                        ws2.Cells[row + 2, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
                                     else                                    
-                                        ws2.Cells[row + 3, nrCol++].Value = dt.Rows[row][i].ToString();
+                                        ws2.Cells[row + 2, nrCol++].Value = dt.Rows[row][i].ToString();
                                 }
 
                                 if (dt.Columns[i].ColumnName.Contains("Ziua"))
                                 {
-                                    ws2.Cells[row + 3, nrCol].Value = dt.Rows[row][i].ToString();
+                                    ws2.Cells[row + 2, nrCol].Value = dt.Rows[row][i].ToString();
                                     DateTime zi = new DateTime(an, luna, Convert.ToInt32(dt.Columns[i].ColumnName.Replace("Ziua", "").Replace("I", "").Replace("O", "").Replace("P", "")));
                                     bool ziLibera = false;
                                     for (int z = 0; z < dtHolidays.Rows.Count; z++)
@@ -1941,11 +1941,11 @@ namespace WizOne.Pontaj
                                             ziLibera = true;
                                             break;
                                         }
-                                    if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[row + 3, nrCol].FillColor = Color.FromArgb(217, 243, 253);
+                                    if (zi.DayOfWeek.ToString().ToLower() == "saturday" || zi.DayOfWeek.ToString().ToLower() == "sunday" || ziLibera) ws2.Cells[row + 2, nrCol].FillColor = Color.FromArgb(217, 243, 253);
                                     if (listaAbs.ContainsKey(dt.Rows[row][i].ToString()))
-                                        ws2.Cells[row + 3, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
+                                        ws2.Cells[row + 2, nrCol].FillColor = General.Culoare(listaAbs[dt.Rows[row][i].ToString()]);
                                     if (dt.Rows[row][i] != null && dt.Rows[row]["CuloareValoare" + zi.Day].ToString().ToUpper() == Constante.CuloareModificatManual.ToUpper())
-                                        ws2.Cells[row + 3, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
+                                        ws2.Cells[row + 2, nrCol].FillColor = General.Culoare(Constante.CuloareModificatManual);
                                     nrCol++;
                                     idZile = listaId["Zilele 1-31"];
                                     colZile = nrCol;                                    

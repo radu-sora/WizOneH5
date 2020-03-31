@@ -70,7 +70,7 @@
             this.lblAntet,
             this.lblPerioada,
             this.lblTitlu});
-            this.TopMargin.HeightF = 200.4166F;
+            this.TopMargin.HeightF = 170F;
             this.TopMargin.Name = "TopMargin";
             this.TopMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.TopMargin.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
@@ -78,11 +78,11 @@
             // lblAntet
             // 
             this.lblAntet.Font = new System.Drawing.Font("Times New Roman", 14F);
-            this.lblAntet.LocationFloat = new DevExpress.Utils.PointFloat(41.6667F, 76.29167F);
+            this.lblAntet.LocationFloat = new DevExpress.Utils.PointFloat(3.178914E-05F, 77F);
             this.lblAntet.Multiline = true;
             this.lblAntet.Name = "lblAntet";
             this.lblAntet.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lblAntet.SizeF = new System.Drawing.SizeF(652.2084F, 23F);
+            this.lblAntet.SizeF = new System.Drawing.SizeF(796.9999F, 74.99998F);
             this.lblAntet.StylePriority.UseFont = false;
             this.lblAntet.StylePriority.UseTextAlignment = false;
             xrSummary1.FormatString = "{0:#}";
@@ -92,7 +92,7 @@
             // lblPerioada
             // 
             this.lblPerioada.Font = new System.Drawing.Font("Times New Roman", 14F);
-            this.lblPerioada.LocationFloat = new DevExpress.Utils.PointFloat(0F, 53.29167F);
+            this.lblPerioada.LocationFloat = new DevExpress.Utils.PointFloat(0F, 54F);
             this.lblPerioada.Name = "lblPerioada";
             this.lblPerioada.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.lblPerioada.SizeF = new System.Drawing.SizeF(797.0001F, 23F);
@@ -103,7 +103,7 @@
             // lblTitlu
             // 
             this.lblTitlu.Font = new System.Drawing.Font("Times New Roman", 14F);
-            this.lblTitlu.LocationFloat = new DevExpress.Utils.PointFloat(0F, 30.29166F);
+            this.lblTitlu.LocationFloat = new DevExpress.Utils.PointFloat(0F, 30.99999F);
             this.lblTitlu.Name = "lblTitlu";
             this.lblTitlu.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.lblTitlu.SizeF = new System.Drawing.SizeF(797.0001F, 23.00001F);
@@ -122,7 +122,7 @@
             // lblSemnatura
             // 
             this.lblSemnatura.Borders = DevExpress.XtraPrinting.BorderSide.None;
-            this.lblSemnatura.LocationFloat = new DevExpress.Utils.PointFloat(3.178914E-05F, 7.291667F);
+            this.lblSemnatura.LocationFloat = new DevExpress.Utils.PointFloat(3.178914E-05F, 0F);
             this.lblSemnatura.Multiline = true;
             this.lblSemnatura.Name = "lblSemnatura";
             this.lblSemnatura.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 120, 5, 0, 100F);
@@ -216,7 +216,7 @@
             this.ReportFooter.Borders = DevExpress.XtraPrinting.BorderSide.None;
             this.ReportFooter.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
             this.lblSemnatura});
-            this.ReportFooter.HeightF = 38.62502F;
+            this.ReportFooter.HeightF = 23.00002F;
             this.ReportFooter.Name = "ReportFooter";
             this.ReportFooter.StylePriority.UseBorders = false;
             // 
@@ -235,7 +235,7 @@
             this.DefaultPrinterSettingsUsing.UseLandscape = true;
             this.FormattingRuleSheet.AddRange(new DevExpress.XtraReports.UI.FormattingRule[] {
             this.formattingRule1});
-            this.Margins = new System.Drawing.Printing.Margins(15, 15, 200, 33);
+            this.Margins = new System.Drawing.Printing.Margins(15, 15, 170, 33);
             this.PageHeight = 1169;
             this.PageWidth = 827;
             this.PaperKind = System.Drawing.Printing.PaperKind.Custom;

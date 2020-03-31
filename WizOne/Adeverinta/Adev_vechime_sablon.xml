@@ -689,15 +689,7 @@
 								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
 								<w:sz w:val="20"/>
 							</w:rPr>
-							<w:t>. [NRINSPECTORAT</w:t>
-						</w:r>
-						<w:proofErr w:type="gramStart"/>
-						<w:r>
-							<w:rPr>
-								<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>
-								<w:sz w:val="20"/>
-							</w:rPr>
-							<w:t>] ,</w:t>
+							<w:t>. [NRINSPECTORAT] ,</w:t>
 						</w:r>
 						<w:proofErr w:type="gramEnd"/>
 						<w:r>

@@ -31,13 +31,13 @@ namespace WizOne.Module
     public class General
     {
 
-        internal class metaCereriRol
+        public class metaCereriRol
         {
             public int Id { get; set; }
             public int Rol { get; set; }
         }
 
-        internal class metaPontaj
+        public class metaPontaj
         {
             public int F10003 { get; set; }
             public int Luna { get; set; }
@@ -92,7 +92,7 @@ namespace WizOne.Module
             sw.Dispose();
         }
 
-        internal static void CreazaLog(string msg, string strMetoda = "")
+        public static void CreazaLog(string msg, string strMetoda = "")
         {
             StackTrace st = new StackTrace();
             StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogNtf.txt", true);
@@ -109,7 +109,7 @@ namespace WizOne.Module
             sw.Dispose();
         }
 
-        internal static void CreazaLogCereri(string msg, string f10003, string dataInceput)
+        public static void CreazaLogCereri(string msg, string f10003, string dataInceput)
         {
             StackTrace st = new StackTrace();
             StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogCereri.txt", true);
@@ -127,7 +127,7 @@ namespace WizOne.Module
             sw.Dispose();
         }
 
-        internal static void CreazaLogFormuleCumulat(string msg, string strMetoda = "")
+        public static void CreazaLogFormuleCumulat(string msg, string strMetoda = "")
         {
             StackTrace st = new StackTrace();
             StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "woLogFormuleCumulat.txt", true);
@@ -144,7 +144,7 @@ namespace WizOne.Module
             sw.Dispose();
         }
 
-        internal static string Strip(string txt)
+        public static string Strip(string txt)
         {
             string rez = txt;
 
@@ -324,7 +324,7 @@ namespace WizOne.Module
             return ras;
         }
 
-        internal static string TrimiteMail(List<string> lstTO, List<string> lstCC, List<string> lstBCC, string subiect, string corpMail)
+        public static string TrimiteMail(List<string> lstTO, List<string> lstCC, List<string> lstBCC, string subiect, string corpMail)
         {
             string strErr = "";
             string strMsg = "";
@@ -444,7 +444,7 @@ namespace WizOne.Module
             return strErr;
         }
 
-        internal static string TrimiteMail(string lstTO, string lstCC, string lstBCC, string subiect, string corpMail)
+        public static string TrimiteMail(string lstTO, string lstCC, string lstBCC, string subiect, string corpMail)
         {
             string strErr = "";
             string strMsg = "";
@@ -568,7 +568,7 @@ namespace WizOne.Module
             return strErr;
         }
 
-        internal static SqlCommand DamiSqlCommand(string strSql, object[] lstParam, int executa = 0)
+        public static SqlCommand DamiSqlCommand(string strSql, object[] lstParam, int executa = 0)
         {
             SqlConnection conn = new SqlConnection(Constante.cnnWeb);
             conn.Open();
@@ -654,7 +654,7 @@ namespace WizOne.Module
             return cmd;
         }
 
-        internal static OracleCommand DamiOleDbCommand(string strSql, object[] lstParam, int executa = 0)
+        public static OracleCommand DamiOleDbCommand(string strSql, object[] lstParam, int executa = 0)
         {
             OracleConnection conn = new OracleConnection(Constante.cnnWeb);
             conn.Open();
@@ -707,7 +707,7 @@ namespace WizOne.Module
             return cmd;
         }
 
-        internal static dynamic DamiOracleScalar(string strSql, object[] lstParam)
+        public static dynamic DamiOracleScalar(string strSql, object[] lstParam)
         {
             dynamic rez = null;
 
@@ -785,7 +785,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        internal static void ExecutaNonQueryOracle(string procNume, object[] lstParam)
+        public static void ExecutaNonQueryOracle(string procNume, object[] lstParam)
         {
             OracleConnection conn = new OracleConnection(Constante.cnnWeb);
             conn.Open();
@@ -827,7 +827,7 @@ namespace WizOne.Module
         }
 
         // For a projection with many columns (T must be a model class)
-        internal static List<T> RunSqlQuery<T>(string sql, params object[] paramList) where T : class, new()
+        public static List<T> RunSqlQuery<T>(string sql, params object[] paramList) where T : class, new()
         {
             var command = Constante.tipBD == 1 ?
                 new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
@@ -897,7 +897,7 @@ namespace WizOne.Module
         }
 
         // For a projection with one column (T must be a primitive or a string)
-        internal static List<T> RunSqlColumn<T>(string sql, params object[] paramList)
+        public static List<T> RunSqlColumn<T>(string sql, params object[] paramList)
         {
             var command = Constante.tipBD == 1 ?
                 new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
@@ -954,7 +954,7 @@ namespace WizOne.Module
         }
 
         // For a projection with many columns and a single result (T must be a model class)
-        internal static T RunSqlSingle<T>(string sql, params object[] paramList) where T : class, new()
+        public static T RunSqlSingle<T>(string sql, params object[] paramList) where T : class, new()
         {
             var command = Constante.tipBD == 1 ?
                 new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
@@ -1023,7 +1023,7 @@ namespace WizOne.Module
         }
 
         // For scalar and non-query (T must be a primitive or a string)
-        internal static T RunSqlScalar<T>(string sql, string pk, params object[] paramList)
+        public static T RunSqlScalar<T>(string sql, string pk, params object[] paramList)
         {
             var command = Constante.tipBD == 1 ?
                 new SqlCommand(sql.Replace("@", "@p"), new SqlConnection(Constante.cnnWeb)) as DbCommand :
@@ -1088,7 +1088,7 @@ namespace WizOne.Module
             return result != null ? (T)result : default;
         }        
 
-        internal static void SetLimba()
+        public static void SetLimba()
         {
             try
             {
@@ -1121,7 +1121,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        internal static string VerificaComplexitateParola(string password)
+        public static string VerificaComplexitateParola(string password)
         {
             string ras = "";
 
@@ -1219,7 +1219,7 @@ namespace WizOne.Module
             return ras;
         }
 
-        internal static bool IsValidEmail(string email)
+        public static bool IsValidEmail(string email)
         {
             var boolRez = true;
 
@@ -1235,7 +1235,7 @@ namespace WizOne.Module
             return boolRez;
         }
 
-        internal static string CreazaSelectFromRow(DataRow dr)
+        public static string CreazaSelectFromRow(DataRow dr)
         {
             string str = "";
             
@@ -1276,7 +1276,7 @@ namespace WizOne.Module
             return str;
         }
 
-        internal static string ToDataOrcl(object obj)
+        public static string ToDataOrcl(object obj)
         {
             string rez = "";
 
@@ -1380,7 +1380,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        internal static string TruncateDate(string camp)
+        public static string TruncateDate(string camp)
         {
             string rez = camp;
 
@@ -1518,7 +1518,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static int SituatieZLOperatii(int F10003, DateTime zi, int tipOperatie, int nrZile)
+        public static int SituatieZLOperatii(int F10003, DateTime zi, int tipOperatie, int nrZile)
         {
             //1  -  situatie ZL disponibile
             //2  -  adaugare
@@ -1622,7 +1622,7 @@ namespace WizOne.Module
             return zlDisp;
         }
 
-        internal static void TrimiteInPontaj(int idUser, int id, int idCuloare, int trimiteLa, decimal nrOre)
+        public static void TrimiteInPontaj(int idUser, int id, int idCuloare, int trimiteLa, decimal nrOre)
         {
             try
             {
@@ -1734,7 +1734,7 @@ namespace WizOne.Module
 
 
         //Florin 2019.12.23
-        internal static string CalculValStr(int f10003, DateTime ziua, string idAbsente, string valCamp, int valMinute)
+        public static string CalculValStr(int f10003, DateTime ziua, string idAbsente, string valCamp, int valMinute)
         {
             string strCmp = "";
 
@@ -1755,7 +1755,7 @@ namespace WizOne.Module
             return strCmp;
         }
 
-        internal static DataTable GetRoluriUser(int idUser)
+        public static DataTable GetRoluriUser(int idUser)
         {
             DataTable dt = new DataTable();
 
@@ -1782,7 +1782,7 @@ namespace WizOne.Module
         }
 
         //Florin 2020.01.21
-        internal static string SelectAbsente(string f10003, DateTime data, int idAbs = -99)
+        public static string SelectAbsente(string f10003, DateTime data, int idAbs = -99)
         {
             string strSql = "";
 
@@ -1873,7 +1873,7 @@ namespace WizOne.Module
             return strSql;
         }
 
-        internal static void SelectCereriIstoric(int f10003, int idInloc, int idCircuit, int estePlanificare, out string sqlSelect, out int trimiteLaInlocuitor, int idCerere = -99)
+        public static void SelectCereriIstoric(int f10003, int idInloc, int idCircuit, int estePlanificare, out string sqlSelect, out int trimiteLaInlocuitor, int idCerere = -99)
         {
             string sqlIst = "";
             int trimite = 0;
@@ -2021,7 +2021,7 @@ namespace WizOne.Module
             trimiteLaInlocuitor = trimite;
         }
 
-        internal static void CalcZile(DateTime? dtInc, DateTime? dtSf, string adunaZL, out int nr, out int nrViitor)
+        public static void CalcZile(DateTime? dtInc, DateTime? dtSf, string adunaZL, out int nr, out int nrViitor)
         {
             int tmpNr = 0;
             int tmpNrViitor = 0;
@@ -2067,7 +2067,7 @@ namespace WizOne.Module
         }
 
         //Florin 2018.08.20 
-        internal static int CalcZile(int f10003, DateTime? dtInc, DateTime? dtSf, int idRol, int idAbsenta)
+        public static int CalcZile(int f10003, DateTime? dtInc, DateTime? dtSf, int idRol, int idAbsenta)
         {
             int nrZile = 0;
 
@@ -2084,7 +2084,7 @@ namespace WizOne.Module
             return nrZile;
         }
 
-        internal static string SelectAbsentaInCereri(int f10003, DateTime? dtInc, DateTime? dtSf, int idRol, int idAbsenta)
+        public static string SelectAbsentaInCereri(int f10003, DateTime? dtInc, DateTime? dtSf, int idRol, int idAbsenta)
         {
             string strSql = "";
 
@@ -2118,7 +2118,7 @@ namespace WizOne.Module
             return strSql;
         }
 
-        internal static DataTable GetSituatieZileAbsente(int F10003, int an = 1900)
+        public static DataTable GetSituatieZileAbsente(int F10003, int an = 1900)
         {
             DataTable dt = new DataTable();
 
@@ -2137,7 +2137,7 @@ namespace WizOne.Module
             return dt;
         }
 
-        internal static DataTable GetSituatieZileAbsente(int F10003, int idAbs, int an = 1900)
+        public static DataTable GetSituatieZileAbsente(int F10003, int idAbs, int an = 1900)
         {
             DataTable dt = new DataTable();
 
@@ -2157,7 +2157,7 @@ namespace WizOne.Module
         }
 
 
-        internal static byte[] CreazaExcel(string strSelect)
+        public static byte[] CreazaExcel(string strSelect)
         {
             byte[] ras = null;
 
@@ -2198,7 +2198,7 @@ namespace WizOne.Module
             return ras;
         }
 
-        internal static Color Culoare(string culoare)
+        public static Color Culoare(string culoare)
         {
             Color color = Color.FromArgb(255, 255, 255);
             ColorConverter cc = new ColorConverter();
@@ -2208,7 +2208,7 @@ namespace WizOne.Module
                 return (Color)cc.ConvertFromString(culoare);
         }
 
-        internal static Color? CuloarePontaj(int tip)
+        public static Color? CuloarePontaj(int tip)
         {
             Color? col = null;
 
@@ -2244,7 +2244,7 @@ namespace WizOne.Module
 
         }
 
-        internal static string MetodeCereri(int tipActiune, List<metaCereriRol> arr, int idUser, int userMarca, string motiv = "", int idRol = 0)
+        public static string MetodeCereri(int tipActiune, List<metaCereriRol> arr, int idUser, int userMarca, string motiv = "", int idRol = 0)
         {
             string log = "";
             //string tmpLog = "A intrat in metoda - tipActiune: " + tipActiune;
@@ -2571,7 +2571,7 @@ namespace WizOne.Module
 
 
         //Radu 19.07.2018
-        internal static string MetodeCereriDiverse(int tipActiune, List<int> arr, int idUser, int userMarca, string motiv = "")
+        public static string MetodeCereriDiverse(int tipActiune, List<int> arr, int idUser, int userMarca, string motiv = "")
         {
             string log = "";
 
@@ -2765,7 +2765,7 @@ namespace WizOne.Module
 
         }
 
-        internal static string Encrypt_QueryString(string str)
+        public static string Encrypt_QueryString(string str)
         {
             try
             {
@@ -2788,7 +2788,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static string Decrypt_QueryString(string str)
+        public static string Decrypt_QueryString(string str)
         {
             try
             {
@@ -2816,7 +2816,7 @@ namespace WizOne.Module
         }
 
        //Radu
-        internal static DataTable GetTipContract()
+        public static DataTable GetTipContract()
         {
             DataTable table = new DataTable();
 
@@ -2846,7 +2846,7 @@ namespace WizOne.Module
             return table;
         }
 
-        internal static DataTable ListaMP_GradInvaliditate()
+        public static DataTable ListaMP_GradInvaliditate()
         {
             try
             {
@@ -2868,7 +2868,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetDurataContract()
+        public static DataTable GetDurataContract()
         {
             string sql = @"SELECT * FROM F089 ";
             if (Constante.tipBD == 2)
@@ -2876,7 +2876,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetPrelungireContract()
+        public static DataTable GetPrelungireContract()
         {
             DataTable table = new DataTable();
 
@@ -2898,7 +2898,7 @@ namespace WizOne.Module
             return table;
         }
 
-        internal static DataTable GetExceptieIncetare()
+        public static DataTable GetExceptieIncetare()
         {
             string sql = @"SELECT * FROM F094 ";
             if (Constante.tipBD == 2)
@@ -2906,7 +2906,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetCASS()
+        public static DataTable GetCASS()
         {
             string sql = @"SELECT * FROM F063 ";
             if (Constante.tipBD == 2)
@@ -2914,7 +2914,7 @@ namespace WizOne.Module
             return General.IncarcaDT("SELECT F06303, F06302 FROM F063", null);
         }
 
-        internal static DataTable GetTipAngajat()
+        public static DataTable GetTipAngajat()
         {
             string sql = @"SELECT * FROM F716";
             if (Constante.tipBD == 2)
@@ -2922,7 +2922,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetTimpPartial(string tip)
+        public static DataTable GetTimpPartial(string tip)
         {
             DataTable table = new DataTable();
 
@@ -2942,7 +2942,7 @@ namespace WizOne.Module
             return table;
         }
 
-        internal static DataTable GetTipNorma(string param)
+        public static DataTable GetTipNorma(string param)
         {
             string sql = @"SELECT * FROM F092 WHERE F09202 = " + param;
             if (Constante.tipBD == 2)
@@ -2950,7 +2950,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetNorma()
+        public static DataTable GetNorma()
         {
             DataTable table = new DataTable();
 
@@ -2963,7 +2963,7 @@ namespace WizOne.Module
             return table;
         }
 
-        internal static DataTable GetDurataTimpMunca(string param)
+        public static DataTable GetDurataTimpMunca(string param)
         {
             string cond = " WHERE F09105 IN (0, 1, 2)";
             if (param == "1")
@@ -2976,7 +2976,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetRepartizareTimpMunca()
+        public static DataTable GetRepartizareTimpMunca()
         {
             string sql = @"SELECT * FROM F093";
             if (Constante.tipBD == 2)
@@ -2984,7 +2984,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetIntervalRepartizareTimpMunca()
+        public static DataTable GetIntervalRepartizareTimpMunca()
         {
             string sql = @"SELECT * FROM F096";
             if (Constante.tipBD == 2)
@@ -2992,14 +2992,14 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetCOR()
+        public static DataTable GetCOR()
         {
             DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             DataTable table = ds.Tables[0];          
             return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)"), null);     
         }
 
-        internal static DataTable GetFunctie()
+        public static DataTable GetFunctie()
         {
             string sql = @"SELECT * FROM F718";
             if (Constante.tipBD == 2)
@@ -3007,7 +3007,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetMeserie()
+        public static DataTable GetMeserie()
         {
             string sql = @"SELECT * FROM F717";
             if (Constante.tipBD == 2)
@@ -3015,7 +3015,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetMotivPlecare()
+        public static DataTable GetMotivPlecare()
         {
             string sql = @"SELECT * FROM F721";
             if (Constante.tipBD == 2)
@@ -3023,7 +3023,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetStructOrgModif(DateTime data)
+        public static DataTable GetStructOrgModif(DateTime data)
         {
             DataTable table = new DataTable();
 
@@ -3069,12 +3069,12 @@ namespace WizOne.Module
             return table;
         }
 
-        internal static DataTable GetStructOrgModifGen(string data)
+        public static DataTable GetStructOrgModifGen(string data)
         {
             return GetStructOrgModif(Convert.ToDateTime(data));
         }
 
-        internal static DataTable GetStructOrgAng(int marca)
+        public static DataTable GetStructOrgAng(int marca)
         {
             DataTable table = new DataTable();
 
@@ -3100,7 +3100,7 @@ namespace WizOne.Module
             return table;
         }  
 
-        internal static DataTable GetCetatenie()
+        public static DataTable GetCetatenie()
         {
             string sql = @"SELECT * FROM F732";
             if (Constante.tipBD == 2)
@@ -3108,7 +3108,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
         
-        internal static DataTable GetTipAutMunca()
+        public static DataTable GetTipAutMunca()
         {
             string sql = @"SELECT * FROM F088";
             if (Constante.tipBD == 2)
@@ -3116,12 +3116,12 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetTipDoc(int idTara)
+        public static DataTable GetTipDoc(int idTara)
         {
             return General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\" from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 where d.F73302 = " + idTara.ToString(), null);
         }
 
-        internal static DataTable GetCategPermis()
+        public static DataTable GetCategPermis()
         {
             string sql = @"SELECT * FROM F714";
             if (Constante.tipBD == 2)
@@ -3129,7 +3129,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetMotivScutireImpozit()
+        public static DataTable GetMotivScutireImpozit()
         {
             string sql = @"SELECT * FROM F804";
             if (Constante.tipBD == 2)
@@ -3137,7 +3137,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetMotivScutireCAS()
+        public static DataTable GetMotivScutireCAS()
         {
             string sql = @"SELECT * FROM F802";
             if (Constante.tipBD == 2)
@@ -3145,7 +3145,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetStudii()
+        public static DataTable GetStudii()
         {
             string sql = @"SELECT * FROM F712";
             if (Constante.tipBD == 2)
@@ -3153,7 +3153,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetTitluAcademic()
+        public static DataTable GetTitluAcademic()
         {
             string sql = @"SELECT * FROM F713";
             if (Constante.tipBD == 2)
@@ -3161,7 +3161,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable ListaMP_DeduceriSomaj()
+        public static DataTable ListaMP_DeduceriSomaj()
         {
             try
             {
@@ -3183,13 +3183,13 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetBanci()
+        public static DataTable GetBanci()
         {
             string sql = @"SELECT CAST(F07503 AS INT) AS F07503, F07509 FROM F075 GROUP BY F07503, F07509";
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetSucursale(int banca)
+        public static DataTable GetSucursale(int banca)
         {
             string sql = @"SELECT * FROM F075 WHERE F07503 = " + banca.ToString();
             if (Constante.tipBD == 2)
@@ -3197,7 +3197,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetStareCivila()
+        public static DataTable GetStareCivila()
         {
             string sql = @"SELECT * FROM F710";
             if (Constante.tipBD == 2)
@@ -3205,7 +3205,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetCategAng_61()
+        public static DataTable GetCategAng_61()
         {
             string sql = @"SELECT * FROM F724 WHERE F72411 IN (0,1)";
             if (Constante.tipBD == 2)
@@ -3213,7 +3213,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetCategAng_62()
+        public static DataTable GetCategAng_62()
         {
             string sql = @"SELECT * FROM F724 WHERE F72411 IN (0,2)";
             if (Constante.tipBD == 2)
@@ -3221,7 +3221,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetCentriCost()
+        public static DataTable GetCentriCost()
         {
             string sql = @"SELECT * FROM F062";
             if (Constante.tipBD == 2)
@@ -3229,7 +3229,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable ListaContacteF100()
+        public static DataTable ListaContacteF100()
         {
             try
             {
@@ -3251,7 +3251,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetObiecteDinArie(string numeArie)
+        public static DataTable GetObiecteDinArie(string numeArie)
         {
             string strSql = "";
             try
@@ -3275,7 +3275,7 @@ namespace WizOne.Module
             return General.IncarcaDT(strSql, null);
         }
 
-        internal static DataTable GetF100NumeComplet()
+        public static DataTable GetF100NumeComplet()
         {
             string strSql = "";
 
@@ -3318,7 +3318,7 @@ namespace WizOne.Module
 
         }
 
-        internal static DataTable GetF090()
+        public static DataTable GetF090()
         {
             string sql = @"SELECT * FROM F090";
             if (Constante.tipBD == 2)
@@ -3326,7 +3326,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetF733()
+        public static DataTable GetF733()
         {
             string sql = @"SELECT * FROM F733";
             if (Constante.tipBD == 2)
@@ -3334,7 +3334,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetF737()
+        public static DataTable GetF737()
         {
             string sql = @"SELECT * FROM F737";
             if (Constante.tipBD == 2)
@@ -3343,7 +3343,7 @@ namespace WizOne.Module
         }
 
 
-        internal static DataTable ListaStariAngajat()
+        public static DataTable ListaStariAngajat()
         {
             try
             {
@@ -3370,7 +3370,7 @@ namespace WizOne.Module
         }
 
 
-        internal static DataTable GetPersonalRestrans(int idUser, string strStare, int tip)
+        public static DataTable GetPersonalRestrans(int idUser, string strStare, int tip)
         {
             //tip
             //1 = lista obisnuita
@@ -3530,7 +3530,7 @@ namespace WizOne.Module
             return strSql;
         }
 
-        internal static object IncarcaFotografie(object sender, int id, string Tabela)
+        public static object IncarcaFotografie(object sender, int id, string Tabela)
         {
             try
             {
@@ -3550,7 +3550,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void IncarcaFisier(string fileName, object fis, string Tabela, object cheie)
+        public static void IncarcaFisier(string fileName, object fis, string Tabela, object cheie)
         {
             try
             {
@@ -3621,7 +3621,7 @@ namespace WizOne.Module
         }
 
 
-        internal static void ArataFisier(string Tabela, object cheie)
+        public static void ArataFisier(string Tabela, object cheie)
         {
             try
             {
@@ -3693,7 +3693,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static string NumarLuniContract(decimal F10003, string F100985, DateTime F100933, DateTime F100934, int zileContractCurent)
+        public static string NumarLuniContract(decimal F10003, string F100985, DateTime F100933, DateTime F100934, int zileContractCurent)
         {
             string mesaj = "";
 
@@ -3760,7 +3760,7 @@ namespace WizOne.Module
             return mesaj;
         }
 
-        internal static void DateDiff(DateTime endDate, DateTime startDate, out int years, out int months, out int days)
+        public static void DateDiff(DateTime endDate, DateTime startDate, out int years, out int months, out int days)
         {
             days = endDate.Day - startDate.Day;
             months = endDate.Month - startDate.Month;
@@ -3779,7 +3779,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DateTime getDataNasterii(string cnp)
+        public static DateTime getDataNasterii(string cnp)
         {
 
             string luna = cnp.Substring(3, 2);
@@ -3810,7 +3810,7 @@ namespace WizOne.Module
             return new DateTime(Convert.ToInt16(an), Convert.ToInt16(luna), Convert.ToInt16(ziua));
         }
 
-        internal static DateTime DamiDataLucru()
+        public static DateTime DamiDataLucru()
         {
             DateTime dt = DateTime.Now;
 
@@ -3945,7 +3945,7 @@ namespace WizOne.Module
             return luna;
         }
 
-        internal static string ToDataUnivPontaj(DateTime? dt, int tip = 1, int cuTimp = 0)
+        public static string ToDataUnivPontaj(DateTime? dt, int tip = 1, int cuTimp = 0)
         {
             string rez = "";
 
@@ -3988,7 +3988,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        internal static DataTable ListaTipContract()
+        public static DataTable ListaTipContract()
         {
             try
             {
@@ -4006,7 +4006,7 @@ namespace WizOne.Module
         }
 
 
-        internal static DataTable ListaAfisare()
+        public static DataTable ListaAfisare()
         {
             try
             {
@@ -4025,7 +4025,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable ListaRaportare()
+        public static DataTable ListaRaportare()
         {
             try
             {
@@ -4046,7 +4046,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable ListaVal_uri()
+        public static DataTable ListaVal_uri()
         {
             try
             {
@@ -4067,7 +4067,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable ListaFuri()
+        public static DataTable ListaFuri()
         {
             try
             {
@@ -4088,7 +4088,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable ListaModVerif()
+        public static DataTable ListaModVerif()
         {
             try
             {
@@ -4111,7 +4111,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable ListaTipSchimburi()
+        public static DataTable ListaTipSchimburi()
         {
             try
             {
@@ -4131,7 +4131,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetPrograme()
+        public static DataTable GetPrograme()
         {
             string sql = @"SELECT * FROM ""Ptj_Programe"" ";
             if (Constante.tipBD == 2)
@@ -4139,7 +4139,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable ListaTipPontare()
+        public static DataTable ListaTipPontare()
         {
             try
             {
@@ -4163,7 +4163,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable ListaRotunjirePrgLucru()
+        public static DataTable ListaRotunjirePrgLucru()
         {
             try
             {
@@ -4188,7 +4188,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetPtj_AliasFOrdonat()
+        public static DataTable GetPtj_AliasFOrdonat()
         {
             try
             {
@@ -4202,7 +4202,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable ListaNumere(int valMin, int valMax)
+        public static DataTable ListaNumere(int valMin, int valMax)
         {
             try
             {
@@ -4224,7 +4224,7 @@ namespace WizOne.Module
         }
 
 
-        internal static byte[] ArataFisier(string Tabela, object cheie, out string numeFisier, out string extensie)
+        public static byte[] ArataFisier(string Tabela, object cheie, out string numeFisier, out string extensie)
         {
             numeFisier = "";
             extensie = "";
@@ -4262,7 +4262,7 @@ namespace WizOne.Module
 
         }
 
-        internal static DataTable GetF005()
+        public static DataTable GetF005()
         {
             try
             {
@@ -4278,7 +4278,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetF006()
+        public static DataTable GetF006()
         {
             try
             {
@@ -4294,7 +4294,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetLocPrescriere()
+        public static DataTable GetLocPrescriere()
         {
             try
             {
@@ -4318,7 +4318,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetTipConcediu()
+        public static DataTable GetTipConcediu()
         {
             try
             {
@@ -4334,7 +4334,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static DataTable GetCoduriTransfer()
+        public static DataTable GetCoduriTransfer()
         {
             try
             {
@@ -4351,7 +4351,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static bool IsPropertyExist(dynamic settings, string name)
+        public static bool IsPropertyExist(dynamic settings, string name)
         {    
             if (settings is ExpandoObject)
                 return ((IDictionary<string, object>)settings).ContainsKey(name);                     
@@ -4359,7 +4359,7 @@ namespace WizOne.Module
             return settings.GetType().GetProperty(name) != null;
         }
 
-        internal static void SecuritatePersonal(DataList dtList, int idUser)
+        public static void SecuritatePersonal(DataList dtList, int idUser)
         {
             List<string> lista = new List<string>();
             //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
@@ -4440,7 +4440,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void SecuritatePersonal(ASPxCallbackPanel pnl, int idUser)
+        public static void SecuritatePersonal(ASPxCallbackPanel pnl, int idUser)
         {
             List<string> lista = new List<string>();
             //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
@@ -4519,7 +4519,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void SecuritatePersonal(ListView dtList, int idUser)
+        public static void SecuritatePersonal(ListView dtList, int idUser)
         {
             List<string> lista = new List<string>();
             //string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
@@ -4578,7 +4578,7 @@ namespace WizOne.Module
         }
 
         //Radu 25.02.2020
-        internal static void SecuritatePersonal(ASPxGridView grDate)
+        public static void SecuritatePersonal(ASPxGridView grDate)
         {
             try
             {
@@ -4660,7 +4660,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void SecuritateCtrl(string numeTab, int idUser, out bool vizibil, out bool blocat)
+        public static void SecuritateCtrl(string numeTab, int idUser, out bool vizibil, out bool blocat)
         {
             vizibil = true;
             blocat = false;
@@ -4702,7 +4702,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static int GetnrInreg()
+        public static int GetnrInreg()
         {
             string sql = "";
             int id = 0;
@@ -4722,7 +4722,7 @@ namespace WizOne.Module
             return id;
         }
 
-        internal static void LogAdeverinta(Reports.AdeverintaMedic dlreport)
+        public static void LogAdeverinta(Reports.AdeverintaMedic dlreport)
         {
 
             int nrInreg = 0;
@@ -4741,7 +4741,7 @@ namespace WizOne.Module
             File.Delete(HostingEnvironment.MapPath("~/Temp/") + numeFis);
         }
 
-        internal static void LogAdeverinta(Reports.AdeverintaGenerala dlreport)
+        public static void LogAdeverinta(Reports.AdeverintaGenerala dlreport)
         {
 
             int nrInreg = 0;
@@ -4760,7 +4760,7 @@ namespace WizOne.Module
             File.Delete(HostingEnvironment.MapPath("~/Temp/") + numeFis);
         }
 
-        internal static DataTable ListaLuniDesc(int lunaMax = 12)
+        public static DataTable ListaLuniDesc(int lunaMax = 12)
         {
             try
             {
@@ -4785,7 +4785,7 @@ namespace WizOne.Module
         }
 
 
-        internal static DataTable GetAngajati(int idUser, int an, int luna)
+        public static DataTable GetAngajati(int idUser, int an, int luna)
         {
             DataTable dt = new DataTable();
             string sql = "";
@@ -4829,7 +4829,7 @@ namespace WizOne.Module
             return dt;
         }
 
-        internal static DataTable ListaAvansLich()
+        public static DataTable ListaAvansLich()
         {
             try
             {
@@ -4851,7 +4851,7 @@ namespace WizOne.Module
         }
 
 
-        internal static string AdaugaCerere(int idUser, int f10003, int an, int luna, int tip, decimal sumaNeta, int moneda, decimal curs, decimal totalNet, int avs, string exp)
+        public static string AdaugaCerere(int idUser, int f10003, int an, int luna, int tip, decimal sumaNeta, int moneda, decimal curs, decimal totalNet, int avs, string exp)
         {
 
             int idUrm = -99;
@@ -5040,7 +5040,7 @@ namespace WizOne.Module
 
         }
 
-        internal static bool VerificaCNP(string cnp)
+        public static bool VerificaCNP(string cnp)
         {
             //Un CNP este alcatuit astfel :
             //|S| |AA| |LL| |ZZ| |JJ| |ZZZ| |C|
@@ -5098,7 +5098,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static string SelectOracle(string tabela, string coloana)
+        public static string SelectOracle(string tabela, string coloana)
         {
             string sql = "", sql_tmp = "";
 
@@ -5121,7 +5121,7 @@ namespace WizOne.Module
             return sql;
         }
 
-        internal static string SelectListaCampuriOracle(string tabela, string coloana)
+        public static string SelectListaCampuriOracle(string tabela, string coloana)
         {
             string sql = "", sql_tmp = "";
 
@@ -5143,7 +5143,7 @@ namespace WizOne.Module
             return sql;
         }
 
-        internal static string SelectOraclePersonal(string marca)
+        public static string SelectOraclePersonal(string marca)
         {
             string sql = " select * from cols where table_name = 'F100' and upper(column_name) not like 'SYS%' order by column_name";
             DataTable dt100 = IncarcaDT(sql, null);
@@ -5176,7 +5176,7 @@ namespace WizOne.Module
             return sql;
         }
 
-        internal static DataTable GetSablon()
+        public static DataTable GetSablon()
         {
             string op = "+";
             if (Constante.tipBD == 2) op = "||";
@@ -5187,7 +5187,7 @@ namespace WizOne.Module
             return dt;
         }
 
-        internal static DataTable GetLocatieInt()
+        public static DataTable GetLocatieInt()
         {
             string sql = @"SELECT * FROM LOCATII ";
             if (Constante.tipBD == 2)
@@ -5195,7 +5195,7 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        internal static DataTable GetCategTarife(string data)
+        public static DataTable GetCategTarife(string data)
         {
             DataTable table = new DataTable();
             string cmpData = "";
@@ -5228,7 +5228,7 @@ namespace WizOne.Module
             return table;
         }
 
-        internal static DataTable GetTarife(string categ, string data)
+        public static DataTable GetTarife(string categ, string data)
         {
             DataTable table = new DataTable();
 
@@ -5264,7 +5264,7 @@ namespace WizOne.Module
             return table;
         }
 
-        internal static DataTable GetTarifeSp(string categ, string data)
+        public static DataTable GetTarifeSp(string categ, string data)
         {
             DataTable table = new DataTable();
 
@@ -5307,7 +5307,7 @@ namespace WizOne.Module
         }
 
 
-        internal static DataTable GetSporuri(string param, string data)
+        public static DataTable GetSporuri(string param, string data)
         {
             string cmpData = "";
             if (data != null && data.Length > 0)
@@ -5332,7 +5332,7 @@ namespace WizOne.Module
 
         //end Radu
 
-        internal static string SelectInlocuitori(int f10003, DateTime? dtINc, DateTime? dtSf)
+        public static string SelectInlocuitori(int f10003, DateTime? dtINc, DateTime? dtSf)
         {
 
             string strSql = "";
@@ -5426,7 +5426,7 @@ namespace WizOne.Module
 
         }
 
-        internal static void InitSessionVariables()
+        public static void InitSessionVariables()
         {
             try
             {
@@ -5554,7 +5554,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static object VarSession(string numeVar)
+        public static object VarSession(string numeVar)
         {
             object obj = null;
 
@@ -5574,7 +5574,7 @@ namespace WizOne.Module
             return obj;
         }
 
-        internal static string SqlCuSelectieToate(string select)
+        public static string SqlCuSelectieToate(string select)
         {
             string strSql = select;
             string cond = Constante.tipBD == 2 ? " FROM DUAL " : "";
@@ -5597,7 +5597,7 @@ namespace WizOne.Module
             return strSql; 
         }
 
-        internal static string FiltruActivi(int an, int luna, int zi = 0)
+        public static string FiltruActivi(int an, int luna, int zi = 0)
         {
             string strSql = "";
 
@@ -5661,7 +5661,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static bool DrepturiAprobare(int actiune, int idRol)
+        public static bool DrepturiAprobare(int actiune, int idRol)
         {
             bool rez = true;
 
@@ -5682,7 +5682,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        internal static string ActiuniExec(int actiune, int f10003, int idRol, int idStare, int an, int luna, string pagina, int userId, int userMarca, string motiv = "")
+        public static string ActiuniExec(int actiune, int f10003, int idRol, int idStare, int an, int luna, string pagina, int userId, int userMarca, string motiv = "")
         {
             //    Actiune
             // 1   -  aprobat
@@ -5845,7 +5845,7 @@ namespace WizOne.Module
         }
 
 
-        internal static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, int idDept = -99, int idAngajat = -99)
+        public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, int idDept = -99, int idAngajat = -99)
         {
             string str = "";
 
@@ -5910,7 +5910,7 @@ namespace WizOne.Module
         }
 
         //Radu 04.02.2020
-        internal static string GetF10003RoluriComasate(int idUser, int an, int luna, decimal F10003, List<int> lstRoluri, int zi = 0, int idDept = -99, int idAngajat = -99)
+        public static string GetF10003RoluriComasate(int idUser, int an, int luna, decimal F10003, List<int> lstRoluri, int zi = 0, int idDept = -99, int idAngajat = -99)
         {
             string str = "";
 
@@ -5973,7 +5973,7 @@ namespace WizOne.Module
         }
 
         //Florin 2019.12.27
-        internal static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, string denDept = "", int idAngajat = -99)
+        public static string GetF10003Roluri(int idUser, int an, int luna, int alMeu, decimal F10003, int idRol, int zi = 0, string denDept = "", int idAngajat = -99)
         {
             string str = "";
 
@@ -6040,7 +6040,7 @@ namespace WizOne.Module
         }
 
 
-        internal static void PontajInitGeneral(int idUser, int an, int luna)
+        public static void PontajInitGeneral(int idUser, int an, int luna)
         {
             try
             {
@@ -6141,7 +6141,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static string SelectDepartamente()
+        public static string SelectDepartamente()
         {
             string strSql = "";
 
@@ -6173,7 +6173,7 @@ namespace WizOne.Module
             return strSql;
         }
 
-        internal static DataTable GetAbsentePeContract(int idAbs)
+        public static DataTable GetAbsentePeContract(int idAbs)
         {
             //tip
             //0 - absente de tip zi
@@ -6217,7 +6217,7 @@ namespace WizOne.Module
             return dt;
         }
 
-        internal static bool PontajInit(int idUser, int an, int luna, int idRol, bool cuNormaZL = false, bool cuCCCu = false, string denDept = "", int idAng = -99, int idSubcompanie = -99, int idFiliala = -99, int idSectie = -99, string denContract = "", bool cuNormaSD = false, bool cuNormaSL = false, bool cuCCFara = false, int stergePontariAngPlecati = 0, int cuInOut = 0)
+        public static bool PontajInit(int idUser, int an, int luna, int idRol, bool cuNormaZL = false, bool cuCCCu = false, string denDept = "", int idAng = -99, int idSubcompanie = -99, int idFiliala = -99, int idSectie = -99, string denContract = "", bool cuNormaSD = false, bool cuNormaSL = false, bool cuCCFara = false, int stergePontariAngPlecati = 0, int cuInOut = 0)
         {
             bool ras = false;
 
@@ -6715,7 +6715,7 @@ namespace WizOne.Module
         }
 
 
-        internal static void AddUserIstoric(string idUser, int tip = 1)
+        public static void AddUserIstoric(string idUser, int tip = 1)
         {//Radu 11.11.2019 - idUser se transmite ca parametru
             //tip
             //tip = 1 se salveaza istoric parola logare
@@ -6737,7 +6737,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static string CreazaCod2FA()
+        public static string CreazaCod2FA()
         {
             string ras = "";
 
@@ -6768,7 +6768,7 @@ namespace WizOne.Module
         }
 
 
-        internal static void SetTheme()
+        public static void SetTheme()
         {
             try
             {
@@ -6792,7 +6792,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void InregistreazaLogarea(int succes, string usr, string motiv = "")
+        public static void InregistreazaLogarea(int succes, string usr, string motiv = "")
         {
             try
             {
@@ -6835,7 +6835,7 @@ namespace WizOne.Module
 
 
 
-        internal static void SchimbaInPlanificat(DateTime dtRef, int id, int modifStruc, int modifFunctie, int modifCOR, int modifSalariu)
+        public static void SchimbaInPlanificat(DateTime dtRef, int id, int modifStruc, int modifFunctie, int modifCOR, int modifSalariu)
         {
             try
             {
@@ -6907,7 +6907,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void CalculCO(int an, int marca = -99, bool cuActualizareInF100 = true)
+        public static void CalculCO(int an, int marca = -99, bool cuActualizareInF100 = true)
         {
             try
             {
@@ -6952,7 +6952,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static string SelectCalculCO(int an, string f10003 = "a.F10003", string filtruIns = "", DateTime? F10022 = null, string f10072 = "", string vechime = "", bool esteNou = false)
+        public static string SelectCalculCO(int an, string f10003 = "a.F10003", string filtruIns = "", DateTime? F10022 = null, string f10072 = "", string vechime = "", bool esteNou = false)
         {
             string strSql = "";
 
@@ -7171,7 +7171,7 @@ namespace WizOne.Module
             return strSql;
         }
 
-        internal static void ModificaFunctieAngajat(int f10003, int idFunc, DateTime dtInc, DateTime dtSf)
+        public static void ModificaFunctieAngajat(int f10003, int idFunc, DateTime dtInc, DateTime dtSf)
         {
             try
             {
@@ -7238,7 +7238,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        internal static void SignOut()
+        public static void SignOut()
         {
             try
             {
@@ -7278,7 +7278,7 @@ namespace WizOne.Module
             return str;
         }
 
-        internal static string URLEncode(string expresie)
+        public static string URLEncode(string expresie)
         {
             string rez = "";
 
@@ -7298,7 +7298,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        internal static string URLDecode(string expresie)
+        public static string URLDecode(string expresie)
         {
             string rez = "";
 
@@ -7407,7 +7407,7 @@ namespace WizOne.Module
             return strErr;
         }
 
-        internal static void StergeInPontaj(int id, int idTipOre, string oreInVal, DateTime dtInc, DateTime dtSf, int f10003, int nrOre, int idUser)
+        public static void StergeInPontaj(int id, int idTipOre, string oreInVal, DateTime dtInc, DateTime dtSf, int f10003, int nrOre, int idUser)
         {
             try
             {
@@ -7467,7 +7467,7 @@ namespace WizOne.Module
         }
 
 
-        internal static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text, DataTable dt = null, int valTichete = 0)
+        public static void CalcSalariu(int tipVenit, object venit, int f10003, out decimal venitCalculat, out string text, DataTable dt = null, int valTichete = 0)
         {
             decimal tmpVB = 0;
             string rezultat = "";
@@ -7557,7 +7557,7 @@ namespace WizOne.Module
             text = rezultat;
         }
 
-        internal static DataTable GetVariabileVB(int f10003)
+        public static DataTable GetVariabileVB(int f10003)
         {
             DataTable dt = new DataTable();
 
@@ -7683,7 +7683,7 @@ namespace WizOne.Module
 
         }
 
-        internal static void SintaxaValStr()
+        public static void SintaxaValStr()
         {
             try
             {
@@ -7755,7 +7755,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrMinute, int tip)
+        public static string VerificareDepasireNorma(int f10003, DateTime dtInc, int? nrMinute, int tip)
         {
             //tip
             //tip - 1  vine din cererei - unde trebuie sa luam in caclul si valorile care deja exista in pontaj
@@ -7798,7 +7798,7 @@ namespace WizOne.Module
             return msg;
         }
 
-        internal static void ExecValStr(int f10003, DateTime ziua)
+        public static void ExecValStr(int f10003, DateTime ziua)
         {
             try
             {
@@ -7811,7 +7811,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void ExecValStr(string filtru)
+        public static void ExecValStr(string filtru)
         {
             try
             {
@@ -7908,7 +7908,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void CalculFormule(object marcaInc, object marcaSf = null, DateTime? ziuaInc = null, DateTime? ziuaSf = null)
+        public static void CalculFormule(object marcaInc, object marcaSf = null, DateTime? ziuaInc = null, DateTime? ziuaSf = null)
         {
             try
             {
@@ -7933,7 +7933,7 @@ namespace WizOne.Module
         }
 
         //Radu 03.03.2020
-        internal static void TransferTranzactii(string marca, string cod, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare)
+        public static void TransferTranzactii(string marca, string cod, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare)
         {
             DateTime date1 = DamiDataLucru();
             DateTime date2 = DamiDataLucru().AddMonths(1).AddDays(-1);
@@ -8082,7 +8082,7 @@ namespace WizOne.Module
             }
         }
 
-        internal static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare, string denScurta)
+        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare, string denScurta)
         {
             try
             {
@@ -8224,7 +8224,7 @@ namespace WizOne.Module
         //end Radu
 
 
-        internal static void ExecutaProcedura(string numeProcedura, int idUser, string comentariu = "")
+        public static void ExecutaProcedura(string numeProcedura, int idUser, string comentariu = "")
         {
             try
             {

@@ -12863,3 +12863,24 @@ CREATE TABLE TemplateCampuri(
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
+
+insert into template
+select  CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) , 'Sablon ' + convert(nvarchar, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))), numetabela from ImportDateSablon
+group by NumeTabela
+
+GO
+
+insert into TemplateCampuri
+select a.id, b.coloanaBD, b.ColoanaFisier, c.Obligatoriu, c.ValoareImplicita , CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))
+from template a
+left join ImportDateSablon b on a.NumeTabela = b.NumeTabela
+left join ImportDateNomen c on b.ColoanaBD = c.NumeColoana and a.NumeTabela = c.NumeTabela
+
+GO
+
+DROP table ImportDateSablon
+GO
+
+DROP TABLE ImportDateNomen
+GO

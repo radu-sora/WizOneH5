@@ -19,7 +19,7 @@
     }
 
     function OnEndCallback(s, e) {
-        cmbSablon.PerformCallback();
+        //cmbSablon.PerformCallback();
     }
 
     function OnClickViz(s, e) {    
@@ -75,9 +75,9 @@
                         </tr>  
 					    <tr>				
 						    <td >
-							    <dx:ASPxLabel  ID="lblSablon" Width="100" runat="server"  Text="Selectare sablon import" ></dx:ASPxLabel >	
+							    <dx:ASPxLabel  ID="lblSablon" Width="200" runat="server"  Text="Selectare sablon import" ></dx:ASPxLabel >	
 							    <dx:ASPxComboBox Width="100%"  ID="cmbSablon" ClientInstanceName="cmbSablon"  runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" OnCallback="cmbSablon_Callback" >                                                              
-                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { grDateNomen.PerformCallback(); }" />
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { grDateNomen.PerformCallback(); grDateViz.PerformCallback(); }" />
 							    </dx:ASPxComboBox>
 						    </td>
 					    </tr>                    
@@ -137,7 +137,7 @@
                     <table width="70%" >    
                         <tr>
                             <td align="left">
-                                <dx:ASPxGridView ID="grDateViz" runat="server" ClientInstanceName="grDateViz" Width="100%"   >
+                                <dx:ASPxGridView ID="grDateViz" runat="server" ClientInstanceName="grDateViz" Width="100%" OnCustomCallback="grDateViz_CustomCallback"  >
                                     <SettingsBehavior AllowSelectByRowClick="false" AllowFocusedRow="false" AllowSelectSingleRowOnly="false" AllowSort="false" />
                                     <Settings ShowFilterRow="false" ShowGroupPanel="False" />
                                     <SettingsSearchPanel Visible="False" />    
@@ -159,7 +159,7 @@
     <dx:ASPxPopupControl ID="popUpViz" runat="server" AllowDragging="False" AllowResize="False" ClientIDMode="Static"
         CloseAction="CloseButton" ContentStyle-HorizontalAlign="Center" ContentStyle-VerticalAlign="Top"
         EnableViewState="False" PopupElementID="popUpVizArea" PopupHorizontalAlign="WindowCenter"
-        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="700px" Height="500px" HeaderText="Previzualizare"
+        PopupVerticalAlign="WindowCenter" ShowFooter="False" ShowOnPageLoad="false" Width="700px" Height="500px" HeaderText="Detalii sablon"
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpViz" EnableHierarchyRecreation="false">
         <ContentCollection>
             <dx:PopupControlContentControl runat="server">

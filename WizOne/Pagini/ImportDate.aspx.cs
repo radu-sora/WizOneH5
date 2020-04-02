@@ -36,6 +36,12 @@ namespace WizOne.Pagini
 
                 if (IsPostBack)
                 {
+                    //if (Session["ImportDate_Sablon"] != null)
+                    //{
+                    //    cmbSablon.Value = Convert.ToInt32(Session["ImportDate_Sablon"].ToString());
+                    //    Session["ImportDate_Reload"] = "0";
+                    //}
+
                     if (Session["ImportDate_ColFisier"] != null)
                     {
                         DataTable table = Session["ImportDate_ColFisier"] as DataTable;
@@ -100,13 +106,22 @@ namespace WizOne.Pagini
                 }
                 else
                 {
-                    DataTable dt = new DataTable();     
+                    DataTable dt = new DataTable();
+                    dt = General.IncarcaDT("SELECT * FROM \"Template\" ", null);               
 
-                    dt = General.IncarcaDT("SELECT * FROM \"ImportDateNomen\" ", null);
-                    grDateNomen.DataSource = dt;
-                    grDateNomen.KeyFieldName = "IdAuto";
-                    grDateNomen.DataBind();
-                    Session["ImportDateNomen_Grid"] = dt;                                
+                    grDate.DataSource = dt;
+                    grDate.KeyFieldName = "Id";
+                    grDate.DataBind();
+                    Session["ImportDateSablon_Grid"] = dt;
+
+                    //dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" ", null);
+                    //grDateNomen.DataSource = dt;
+                    //grDateNomen.KeyFieldName = "Id;IdAuto";
+                    //grDateNomen.DataBind();
+                    //Session["ImportDateNomen_Grid"] = dt;   
+                    
+                    //Session["ImportDate_Reload"] = "1";
+
                 }             
                 SqlDataSource ds = new SqlDataSource();
                 ds.EnableCaching = false;
@@ -310,11 +325,96 @@ namespace WizOne.Pagini
             }
         }
 
-        protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        protected void grDateViz_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
             try
             {
+                var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Temp/ImportDate"));
+                if (folder.GetFiles().Count() <= 0)
+                {
+                    return;
+                }
 
+                //if (Session["ImportDate_Reload"].ToString() == "0")
+                //{
+                //    Session["ImportDate_Reload"] = "1";
+                //    return;
+                //}
+
+                DataTable dt = new DataTable();
+                for (int i = 0; i < grDateNomen.VisibleRowCount; i++)
+                {
+                    DataRowView obj = grDateNomen.GetRow(i) as DataRowView;
+                    dt.Columns.Add(obj["ColoanaFisier"].ToString(), typeof(string));
+                }
+
+                DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
+                workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+
+                DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
+                Dictionary<int, int> lstIndex = new Dictionary<int, int>();
+
+                int k = 0;
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    k = 0;
+                    while (!ws2.Cells[0, k].Value.IsEmpty)
+                    {
+                        if (ws2.Cells[0, k].Value.ToString().Trim() == dt.Columns[i].ColumnName)
+                        {
+                            lstIndex.Add(k, i);
+                            break;
+                        }
+                        k++;
+                    }
+                }
+
+                string[] sir = new string[dt.Columns.Count];
+                for (int i = 0; i < sir.Length; i++)
+                    sir[i] = "";
+
+                int j = 1;
+                k = 0;
+                while (!ws2.Cells[j, k].Value.IsEmpty)
+                {
+                    if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                    {
+                        j++;
+                        k = 0;
+                        continue;
+                    }
+
+                    dt.Rows.Add(sir);
+                    while (!ws2.Cells[j, k].Value.IsEmpty)
+                    {
+                        if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                        {
+                            k++;
+                            continue;
+                        }
+
+                        if (lstIndex.ContainsKey(k))
+                            dt.Rows[j - 1][lstIndex[k]] = ws2.Cells[j, k].Value;
+                        k++;
+                    }
+                    j++;
+                    k = 0;
+                }
+
+                grDateViz.DataSource = dt;
+                grDateViz.DataBind();
+                Session["ImportDate_Previz"] = dt;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDate_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
+        {
+            try
+            { 
             }
             catch (Exception ex)
             {
@@ -474,10 +574,13 @@ namespace WizOne.Pagini
         {
             try
             {
+                //if (Session["ImportDate_Reload"].ToString() == "0")                
+                //    return;                
 
+                Session["ImportDate_Sablon"] = cmbSablon.Value;
                 DataTable dt = new DataTable();
                 if (cmbSablon.Value != null)
-                    dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value) , null);
+                    dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value), null);
                 else
                     dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" =  -1", null);
 
@@ -488,8 +591,6 @@ namespace WizOne.Pagini
                 Session["ImportDate_ColBD"] = null;
                 Session["ImportDate_ColFisier"] = null;
                 IncarcaGrid();
-
-           
             }
             catch (Exception ex)
             {
@@ -820,82 +921,33 @@ namespace WizOne.Pagini
                         
         }
 
+
+
         protected void btnViz_Click(object sender, EventArgs e)
         {
             try
-            {
-                if (grDate.VisibleRowCount <= 0)
+            {     
+                int id = -99;
+                if (cmbSablon.Value != null)
+                    id = Convert.ToInt32(cmbSablon.Value);
+                else
+                {
+                    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "NumeSablon", "NumeTabela" }) as object[];
+                    if (obj != null && obj.Count() > 0)
+                        id = Convert.ToInt32(obj[0]);
+                }
+                if (id < 0)
+                {
+                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista sablon selectat");
                     return;
-
-                var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Temp/ImportDate"));
-                if (folder.GetFiles().Count() <= 0)
-                {
-                    return;
                 }
 
-                DataTable dt = new DataTable();
-                for (int i = 0; i < grDate.VisibleRowCount; i++)
-                {
-                    DataRowView obj = grDate.GetRow(i) as DataRowView;
-                    dt.Columns.Add(obj["ColoanaFisier"].ToString(), typeof(string));
-                }
+                DataTable dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" = " + id, null);
 
-                DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
-                workbook.LoadDocument(folder.FullName + "\\Temp.xlsx", DevExpress.Spreadsheet.DocumentFormat.Xlsx);
-
-                DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
-                Dictionary<int, int> lstIndex = new Dictionary<int, int>();
-
-                int k = 0;
-                for (int i = 0; i < dt.Columns.Count; i++)
-                {
-                    k = 0;
-                    while (!ws2.Cells[0, k].Value.IsEmpty)
-                    {
-                        if (ws2.Cells[0, k].Value.ToString().Trim() == dt.Columns[i].ColumnName)
-                        {
-                            lstIndex.Add(k, i);
-                            break;
-                        }
-                        k++;
-                    }
-                }
-
-                string[] sir = new string[dt.Columns.Count];
-                for (int i = 0; i < sir.Length; i++)
-                    sir[i] = "";
-
-                int j = 1;
-                k = 0;
-                while (!ws2.Cells[j, k].Value.IsEmpty)
-                {
-                    if (ws2.Cells[j, k].Value.ToString().Length <= 0)
-                    {
-                        j++;
-                        k = 0;
-                        continue;
-                    }
-
-                    dt.Rows.Add(sir);
-                    while (!ws2.Cells[j, k].Value.IsEmpty)
-                    {
-                        if (ws2.Cells[j, k].Value.ToString().Length <= 0)
-                        {
-                            k++;
-                            continue;
-                        }
-
-                        if (lstIndex.ContainsKey(k))                        
-                            dt.Rows[j - 1][lstIndex[k]] = ws2.Cells[j, k].Value;                        
-                        k++;
-                    }
-                    j++;
-                    k = 0;
-                }
-
-                grDateViz.DataSource = dt;
-                grDateViz.DataBind();
-                Session["ImportDate_Previz"] = dt;
+                grDateNomen.KeyFieldName = "Id;IdAuto";
+                grDateNomen.DataSource = dt;
+                grDateNomen.DataBind();
+                Session["ImportDateNomen_Grid"] = dt;
             }
             catch (Exception ex)
             {

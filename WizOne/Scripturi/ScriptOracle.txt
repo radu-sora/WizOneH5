@@ -13691,3 +13691,35 @@ AS
 SELECT A."Zi", A."ZiSapt", CASE WHEN B.DAY IS NOT NULL THEN 1 ELSE 0 END AS "ZiLiberaLegala" FROM "tblZile2" A
 LEFT JOIN HOLIDAYS B ON A."Zi"=B.DAY;
 /
+
+
+----  2.2.127  ----
+
+
+ALTER TABLE "Ptj_Intrari" ADD "IdContractP" number(10);
+/
+ALTER TABLE "Ptj_Intrari" ADD "IdProgramP" number(10);
+/
+
+CREATE TABLE "ImportDateSablon"(
+"NumeTabela" varchar2(200),
+	"ColoanaFisier" varchar2(200),
+	"ColoanaBD" varchar2(200) ,
+	"IdAuto" NUMBER(9) NOT NULL);
+  
+  CREATE UNIQUE INDEX "PK_ImportDateSablon" ON "ImportDateSablon" ("NumeTabela", "IdAuto") ;
+
+ALTER TABLE "ImportDateSablon" ADD CONSTRAINT "PK_ImportDateSablon" PRIMARY KEY ("NumeTabela", "IdAuto");
+
+ 
+
+CREATE TABLE "ImportDateNomen"(
+	"NumeTabela" varchar2(200),
+	"NumeColoana" varchar2(200),
+	"Obligatoriu" NUMBER(9)  DEFAULT 0,
+	"ValoareImplicita" varchar2(4000),
+	"IdAuto" NUMBER(9)  NOT NULL);
+  
+    CREATE UNIQUE INDEX "PK_ImportDateNomen" ON "ImportDateNomen" ("IdAuto") ;
+
+ALTER TABLE "ImportDateNomen" ADD CONSTRAINT "PK_ImportDateNomen" PRIMARY KEY ("IdAuto");

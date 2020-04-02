@@ -174,7 +174,7 @@ namespace WizOne.Pagini
                             (SELECT TOP 1 Zi FROM tblZile WHERE Zi<DataModif AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
                             ELSE '2100-01-01' END AS ColData 
                             UNION
-                            SELECT CASE WHEN ""Norma"" = 1 THEN 
+                            SELECT CASE WHEN ""Norma"" = 1 OR ""Suspendare""=1 OR ""SuspendareRev"" =1 THEN 
                             (SELECT TOP 1 Zi FROM tblZile WHERE Zi<=DATEADD(d,-1,X.DataModif) AND ZiSapt<=5 AND Zi NOT IN (SELECT day FROM Holidays) ORDER BY Zi Desc)
                             ELSE '2100-01-01' END AS ColData 
                             ) x) AS TermenDepasire
@@ -226,7 +226,7 @@ namespace WizOne.Pagini
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN Admin_NrActAd J ON A.IdActAd=J.IdAuto
                             WHERE A.IdStare = 3 AND A.DataModif >= '2019-01-01' {companie} {filtruSup}
-                            GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, J.Revisal, B.F10025
+                            GROUP BY A.F10003, B.F10008, B.F10009, A.DataModif, J.DocNr, J.DocData, COALESCE(J.Tiparit,0), COALESCE(J.Semnat,0), COALESCE(J.Revisal,0), J.IdAuto, B.F10022, B.F100993, J.Candidat, J.IdAutoAtasamente, B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT B.F10003, COALESCE(B.F10008, '') + ' ' + COALESCE(B.F10009, '') AS NumeComplet, B.F10022, 1 AS Candidat,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -253,7 +253,7 @@ namespace WizOne.Pagini
                             CASE WHEN ""Candidat"" = 1 then 
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (F10022 - 1) AND ""ZiSapt"" <= 5)
                             when ""Motiv"" = 1 then X.""DataModif""
-                            WHEN ""Norma""=1 THEN
+                            WHEN ""Norma""=1 OR ""Suspendare""=1 OR ""SuspendareRev"" =1 THEN
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= (X.""DataModif"" - 1) AND ""ZiSapt"" <= 5)
                             when ""Salariul"" = 1 OR ""Spor"" = 1 OR ""SporVechime"" = 1 then
                             (SELECT max(""Zi"") FROM ""tblZile"" join holidays on ""tblZile"".""Zi"" = holidays.day  WHERE ""Zi"" <= x.""DataModif"" + 19 AND ""ZiSapt"" <= 5)
@@ -308,7 +308,7 @@ namespace WizOne.Pagini
                             INNER JOIN F100 B ON A.F10003 = B.F10003
                             LEFT JOIN ""Admin_NrActAd"" J ON A.""IdActAd""=J.""IdAuto""
                             WHERE A.""IdStare"" = 3 AND A.""DataModif"" >= TO_DATE('01-01-2019', 'DD-MM-YYYY') {companie}
-                            GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente""
+                            GROUP BY A.F10003, B.F10008, B.F10009, A.""DataModif"", J.""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0), COALESCE(J.""Semnat"",0), COALESCE(J.""Revisal"",0), J.""IdAuto"", B.F10022, B.F100993, J.""Candidat"", J.""IdAutoAtasamente"", B.F10025, CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END
                             UNION
                             SELECT A.F10003, COALESCE(A.F10008, '') || ' ' || COALESCE(A.F10009, '') AS ""NumeComplet"", A.F10022, 1 AS ""Candidat"",
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -549,7 +549,7 @@ namespace WizOne.Pagini
                                                     OUTPUT Inserted.IdAuto
                                                     VALUES(@1, 
                                                     COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
-                                                    INNER JOIN ""Avs_Cereri"" B ON A.""IdAuto""=B.""IdActAd"" AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33)
+                                                    LEFT JOIN ""Avs_Cereri"" B ON A.""IdAuto""=B.""IdActAd"" AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33)
                                                     WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0),0) + 1, 
                                                     {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
                                                     new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
@@ -562,7 +562,7 @@ namespace WizOne.Pagini
                                                     id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
                                                     VALUES(@2, 
                                                     COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
-                                                    INNER JOIN ""Avs_Cereri"" B ON A.""IdAuto""=B.""IdActAd"" AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33)
+                                                    LEFT JOIN ""Avs_Cereri"" B ON A.""IdAuto""=B.""IdActAd"" AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33)
                                                     WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0),0) + 1, 
                                                     {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
                                                     new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));

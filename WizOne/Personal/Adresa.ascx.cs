@@ -262,13 +262,13 @@ namespace WizOne.Personal
 
                     if (e.NewValues["NumeNivel2"] != null && (e.NewValues["NumeNivel2"].ToString().IndexOf("ORAS") == 0 || e.NewValues["NumeNivel2"].ToString().IndexOf("MUNICIPIU") == 0))
                     {
-                        ds.Tables[1].Rows[0]["F10081"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
+                        ds.Tables[1].Rows[0]["F10081"] = e.NewValues["NumeNivel2"] ?? "";
                         ds.Tables[1].Rows[0]["F100907"] = DBNull.Value;
                     }
                     else
                     {
                         ds.Tables[1].Rows[0]["F100907"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
-                        ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
+                        ds.Tables[1].Rows[0]["F10081"] = "";
                     }
                     if (e.NewValues.Contains("NumeNivel3"))
                     {
@@ -403,13 +403,13 @@ namespace WizOne.Personal
                     {
                         if (e.NewValues["NumeNivel2"] != null && (e.NewValues["NumeNivel2"].ToString().IndexOf("ORAS") == 0 || e.NewValues["NumeNivel2"].ToString().IndexOf("MUNICIPIU") == 0))
                         {
-                            ds.Tables[1].Rows[0]["F10081"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
+                            ds.Tables[1].Rows[0]["F10081"] = e.NewValues["NumeNivel2"] ?? "";
                             ds.Tables[1].Rows[0]["F100907"] = DBNull.Value;
                         }
                         else    //if (e.NewValues.Contains("Comuna"))
                         {
                             ds.Tables[1].Rows[0]["F100907"] = e.NewValues["NumeNivel2"] ?? DBNull.Value;
-                            ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
+                            ds.Tables[1].Rows[0]["F10081"] = "";
                         }
                     }
                     if (e.NewValues.Contains("NumeNivel3"))
@@ -480,7 +480,7 @@ namespace WizOne.Personal
 
                     ds.Tables[1].Rows[0]["F100891"] = DBNull.Value;
                     ds.Tables[1].Rows[0]["F100895"] = DBNull.Value;
-                    ds.Tables[1].Rows[0]["F10081"] = DBNull.Value;
+                    ds.Tables[1].Rows[0]["F10081"] = "";
                     ds.Tables[1].Rows[0]["F100907"] = DBNull.Value;
                     ds.Tables[1].Rows[0]["F100908"] = DBNull.Value;
                     ds.Tables[1].Rows[0]["F10082"] = DBNull.Value;

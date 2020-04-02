@@ -144,7 +144,6 @@ namespace WizOne.Module
             sw.Dispose();
         }
 
-
         public static string Strip(string txt)
         {
             string rez = txt;
@@ -162,7 +161,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        public static DataTable IncarcaDT(string strSql, object[] lstParam, string primaryKey = "")
+        public static DataTable IncarcaDT(string strSql, object[] lstParam = null, string primaryKey = "")
         {          
             DataTable dt = new DataTable();
 
@@ -215,7 +214,7 @@ namespace WizOne.Module
             return dt;
         }
 
-        public static DataRow IncarcaDR(string strSql, object[] lstParam)
+        public static DataRow IncarcaDR(string strSql, object[] lstParam = null)
         {
             DataRow dr = null;
 
@@ -233,7 +232,7 @@ namespace WizOne.Module
             return dr;
         }
 
-        public static object ExecutaScalar(string strSql, object[] lstParam)
+        public static object ExecutaScalar(string strSql, object[] lstParam = null)
         {
             object str = null;
 
@@ -251,7 +250,7 @@ namespace WizOne.Module
         }
 
 
-        public static bool ExecutaNonQuery(string sql, object[] lstParam)
+        public static bool ExecutaNonQuery(string sql, object[] lstParam = null)
         {
             try
             {
@@ -1122,7 +1121,6 @@ namespace WizOne.Module
             return rez;
         }
 
-
         public static string VerificaComplexitateParola(string password)
         {
             string ras = "";
@@ -1742,9 +1740,10 @@ namespace WizOne.Module
 
             try
             {
-                //daca absenta este de tip zi (de exemplu este CO) nu mai trebuie calculat ValStr
-                int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1 AND ""Id"" IN (@1)", new object[] { idAbsente }) ?? 0);
-                if (cnt > 0) return strCmp;
+                //Florin 2020.03.20
+                ////daca absenta este de tip zi (de exemplu este CO) nu mai trebuie calculat ValStr
+                //int cnt = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(*) FROM ""Ptj_tblAbsente"" WHERE ""IdTipOre""=1 AND ""Id"" IN (@1)", new object[] { idAbsente }) ?? 0);
+                //if (cnt > 0) return strCmp;
 
                 strCmp = Dami.ValoareParam("SintaxaValStr", "1");
             }
@@ -6330,10 +6329,11 @@ namespace WizOne.Module
                                 LEFT JOIN DamiCC_Table dc ON dc.F10003=A.F10003 AND dc.dt=X.Zi";
                         }
 
+                        //Florin 2020.03.27 am transformat NrOre in minute - am adaugat * 60
                         string strInsCC = $@"INSERT INTO Ptj_CC(F10003, Ziua, F06204, NrOre1, IdStare, USER_NO, TIME)
                                             SELECT A.F10003, X.Zi, 
                                             CASE WHEN MAX(G.IdCentruCost) IS NOT NULL THEN MAX(G.IdCentruCost) ELSE CASE WHEN COALESCE(MAX(dc.CC), 9999) <> 9999 THEN MAX(dc.CC) ELSE MAX(H.F00615) END END AS F06204Default,
-                                            dn.Norma AS NrOre1, 
+                                            dn.Norma * 60 AS NrOre1, 
                                             CASE WHEN COALESCE((SELECT COALESCE(Valoare,0) FROM tblParametrii WHERE Nume = 'PontajCCcuAprobare'),0) = 0 THEN 3 ELSE 1 END AS IdStare, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                             FROM (SELECT * FROM tblzile Z WHERE {General.ToDataUniv(an, luna, 1)} <= Z.Zi AND Z.Zi <= {General.ToDataUniv(an, luna, 99)}) X
                                             INNER JOIN F100 A ON 1=1 AND CONVERT(date, A.F10022) <= CONVERT(date, X.Zi) AND CONVERT(date, X.Zi) <= CONVERT(date, A.F10023)
@@ -6498,10 +6498,11 @@ namespace WizOne.Module
                         if (cuNormaSL) strFiltruZileCC += @"OR C.DAY is not null";
                         if (strFiltruZileCC != "") strFiltruZileCC = "AND (" + strFiltruZileCC.Substring(2) + ")";
 
+                        //Florin 2020.03.27 am transformat NrOre in minute - am adaugat * 60
                         string strInsCC = $@"INSERT INTO ""Ptj_CC""(F10003, ""Ziua"", F06204, ""NrOre1"", ""IdStare"", USER_NO, TIME)
                                             SELECT A.F10003, X.""Zi"", 
                                             CASE WHEN MAX(G.""IdCentruCost"") IS NOT NULL THEN MAX(G.""IdCentruCost"") ELSE CASE WHEN COALESCE(MAX(""DamiCC""(A.F10003, X.""Zi"")), 9999) <> 9999 THEN MAX(""DamiCC""(A.F10003, X.""Zi"")) ELSE MAX(H.F00615) END END AS ""F06204Default"",
-                                            ""DamiNorma""(A.F10003, X.""Zi"") AS ""NrOre1"", 
+                                            ""DamiNorma""(A.F10003, X.""Zi"") * 60 AS ""NrOre1"", 
                                             CASE WHEN COALESCE((SELECT COALESCE(""Valoare"",0) FROM ""tblParametrii"" WHERE ""Nume"" = 'PontajCCcuAprobare'),0) = 0 THEN 3 ELSE 1 END AS ""IdStare"", {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()}
                                             FROM (SELECT Z.""Zi"", Z.""ZiSapt"" FROM ""tblzile"" Z WHERE {General.ToDataUniv(an, luna, 1)} <= Z.""Zi"" AND Z.""Zi"" <= {General.ToDataUniv(an, luna, 99)}) X
                                             INNER JOIN F100 A ON 1=1 AND TRUNC(A.F10022) <= TRUNC(X.""Zi"") AND TRUNC(X.""Zi"") <= TRUNC(A.F10023)
@@ -6523,7 +6524,7 @@ namespace WizOne.Module
                     string strUp = @"UPDATE ""Ptj_Intrari"" A SET 
                                         A.""ValStr"" = CASE WHEN ((SELECT COUNT(*) FROM F100 Z WHERE Z.F10003=A.F10003 AND TRUNC(F10022) <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= TRUNC(F10023) ) = 1 AND TRUNC(A.""Ziua"") <= TRUNC(""DamiDataPlecare""(A.F10003, A.""Ziua""))) THEN CAST(nvl((""DamiNorma""(A.F10003, A.""Ziua"")),(select f10043 from f100 where f10003 = A.F10003)) as int) ELSE null END , 
                                         A.""Val0"" =   CASE WHEN ((SELECT COUNT(*) FROM F100 Z WHERE Z.F10003=A.F10003 AND TRUNC(F10022) <= TRUNC(""Ziua"") AND TRUNC(""Ziua"") <= TRUNC(F10023) ) = 1 AND TRUNC(A.""Ziua"") <= TRUNC(""DamiDataPlecare""(A.F10003, A.""Ziua""))) THEN CAST(nvl((""DamiNorma""(A.F10003, A.""Ziua"")),(select f10043 from f100 where f10003 = A.F10003)) * 60 as int) ELSE null END 
-                                        WHERE TO_CHAR(A.""Ziua"",'yyyy')={0} AND TO_CHAR(A.""Ziua"",'mm')={1} AND (A.""ValStr"" IS NULL OR TRIM(A.""ValStr"") = '') AND A.F06204=-1 
+                                        WHERE TO_CHAR(A.""Ziua"",'yyyy')={0} AND TO_CHAR(A.""Ziua"",'mm')={1} AND (A.""ValStr"" IS NULL OR RTRIM(LTRIM(A.""ValStr"")) = '') AND A.F06204=-1 
                                         {2} {3} {4}";
 
                     strUp = string.Format(strUp, an, luna, usr, strFiltru, strFiltruUpdate.Replace("X.Ziua", "A.\"Ziua\""));
@@ -7266,7 +7267,7 @@ namespace WizOne.Module
                     camp = camp + "\"";
                     str = " AND " + camp + " IS NOT NULL ";
                     if (Constante.tipBD == 1)
-                        str += $@" AND {camp} <> '' ";
+                        str += $@" AND RTRIM(LTRIM({camp})) <> '' ";
                 }
             }
             catch (Exception ex)
@@ -7728,7 +7729,7 @@ namespace WizOne.Module
                 {
                     strVal = substr + "(" + strVal.Substring(poz - 1) + ",2,500)";
                     strVal = strVal.Replace("'", "''");
-                    strVal = $@"CASE WHEN (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" BS WHERE BS.""DenumireScurta""=""ValStr"") = 0 THEN {strVal} ELSE ""ValStr"" END ";
+                    strVal = $@"CASE WHEN (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" BS WHERE BS.""DenumireScurta""=""ValStr"" {FiltrulCuNull("BS.Denumire").Replace("'","''")}) = 0 THEN {strVal} ELSE ""ValStr"" END ";
                     string strSql = $@"
                         IF ((SELECT COUNT(*) FROM ""tblParametrii"" WHERE ""Nume""='SintaxaValStr') = 0)
                         INSERT INTO ""tblParametrii""(""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", USER_NO, TIME) VALUES('SintaxaValStr', '{strVal}', 'Este formula prin care se creaza ValStr in pontaj', 2, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()})

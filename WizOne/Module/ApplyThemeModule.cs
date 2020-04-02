@@ -7,7 +7,7 @@ using System.Web.UI;
 
 namespace WizOne.Module
 {
-    public class ApplyThemeModule
+    internal class ApplyThemeModule
     {
 
         public ApplyThemeModule()

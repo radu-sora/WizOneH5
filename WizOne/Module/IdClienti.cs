@@ -3,11 +3,11 @@
     public class IdClienti
     {
 
-		//34 - Groupama
+        //34 - Groupama
         //65 - Banca Comerciala Carpatica
         //13 - Asirom
 
-        public enum Clienti : int
+        internal enum Clienti : int
         {
             Asirom = 13,
 		    Honeywell = 14,

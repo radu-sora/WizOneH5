@@ -1,25 +1,13 @@
-using DevExpress.Xpo;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using DevExpress.Web;
-using System.Globalization;
-using System.Web.Hosting;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 
 namespace WizOne.Module
 {
 
-    public static class ConcediiMedicale
+    internal static class ConcediiMedicale
     {
 
         public struct CM

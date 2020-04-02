@@ -245,6 +245,12 @@ namespace WizOne.Pontaj
                     return;
                 }
 
+                if (!chkPontare.Checked && !chkPlanif.Checked)
+                {
+                    MessageBox.Show(Dami.TraduCuvant("Nu ati specificat pentru pontare si/sau planificare!"), MessageBox.icoError);
+                    return;
+                }
+
                 //for (int i = 1; i <= Convert.ToInt32(cmbNrZileSablon.Value); i++)
                 //{
                 //    ASPxTextBox tx = FindControlRecursive(this, "txtZiua" + i.ToString()) as ASPxTextBox;
@@ -461,7 +467,7 @@ namespace WizOne.Pontaj
                     if (Constante.tipBD == 1)
                         cond = " ISNUMERIC(\"ValStr\") = 1 ";
                     else
-                        cond = " TRIM(TRANSLATE(\"ValStr\",'0123456789', ' ')) is null ";
+                        cond = " RTRIM(LTRIM(TRANSLATE(\"ValStr\",'0123456789', ' '))) is null ";
 
                     string sql = "";
                     string oraIn = "", oraOut = "", firstIn = "", lastOut = "";
@@ -517,11 +523,26 @@ namespace WizOne.Pontaj
                         sirValZileGolite += ", \"" + val + "\" = NULL";
                     }
 
+                    if (!chkPontare.Checked)
+                    {
+                        oraIn = "";
+                        oraOut = "";
+                        firstIn = "";
+                        lastOut = "";
+                        sirVal = "";
+                    }
+
+                    string planif = "";
+                    if (chkPlanif.Checked)
+                    {
+                        planif = ", \"IdContractP\" =  \"IdContract\" , \"IdProgramP\" = " + (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0 ? sablon["IdProgram" + i].ToString() : "NULL");
+                    }
+
                     if (data.Length > 0)
                     {
                         data = data.Substring(1);
 
-                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " + oraIn + oraOut + firstIn + lastOut + sirVal + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = " + (chkPontare.Checked ? "'" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "NULL") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
                     }
                     if (lstZileGolite != null && lstZileGolite.Count > 0)
                     {
@@ -538,7 +559,7 @@ namespace WizOne.Pontaj
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" + oraIn + oraOut + firstIn + lastOut + sirVal + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = " + (chkPontare.Checked ? "'" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "NULL") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
                     }
                     else
                         sqlFin += sql + ";";

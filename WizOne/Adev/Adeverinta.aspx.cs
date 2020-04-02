@@ -108,15 +108,19 @@ namespace WizOne.Adev
                 else
                     lista = Session["AdevListaParam"] as Dictionary<string, string>;
 
-                DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
-                cmbAng.DataSource = dtAng;
-                cmbAng.DataBind();
-
-                cmbAngBulk.DataSource = dtAng;
-                cmbAngBulk.DataBind();
-
+        
                 if (!IsPostBack)
                 {
+
+                    DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
+                    cmbAng.DataSource = dtAng;
+                    cmbAng.DataBind();
+
+                    cmbAngBulk.DataSource = dtAng;
+                    cmbAngBulk.DataBind();
+
+                    Session["Adev_Angajati"] = dtAng;
+
                     UpdateControls(lista);
                     if (!lista.ContainsKey("XML"))
                         lista.Add("XML", "1");
@@ -136,6 +140,14 @@ namespace WizOne.Adev
                         grDate.DataSource = Session["InformatiaCurenta_Adev"];
                         grDate.DataBind();
                     }
+
+
+                    DataTable dtAng = Session["Adev_Angajati"] as DataTable;
+                    cmbAng.DataSource = dtAng;
+                    cmbAng.DataBind();
+
+                    cmbAngBulk.DataSource = dtAng;
+                    cmbAngBulk.DataBind();
 
                 }
 
@@ -195,9 +207,9 @@ namespace WizOne.Adev
             cmbAdev.DataBind();
             //cmbAdev.SelectedIndex = 0;
 
-            DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
-            cmbAng.DataSource = dtAng;
-            cmbAng.DataBind();
+            //DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
+            //cmbAng.DataSource = dtAng;
+            //cmbAng.DataBind();
 
             foreach (string sufix in lista.Keys)
                 switch (sufix)
@@ -707,10 +719,13 @@ namespace WizOne.Adev
                         cond += " AND " + tmp;
                 }
 
-                if (cond.Length <= 0)
-                    cond = " WHERE (Y.F10025 = 0 OR Y.F10025 = 999) ";
-                else
-                    cond += " AND (Y.F10025 = 0 OR Y.F10025 = 999) ";
+                if (chkActivi.Checked)
+                {
+                    if (cond.Length <= 0)
+                        cond = " WHERE (Y.F10025 = 0 OR Y.F10025 = 999) ";
+                    else
+                        cond += " AND (Y.F10025 = 0 OR Y.F10025 = 999) ";
+                }
 
                 strSql += cond;
 
@@ -5771,6 +5786,16 @@ namespace WizOne.Adev
             cmbAng.DataSource = dtAng;
             cmbAng.DataBind();
             cmbAng.SelectedIndex = -1;
+
+            cmbAngBulk.DataSource = null;
+            cmbAngBulk.DataSource = dtAng;
+            cmbAngBulk.DataBind();
+            cmbAngBulk.SelectedIndex = -1;
+
+            Session["Adev_Angajati"] = dtAng;
+
+            grDate.DataSource = null;
+            grDate.DataBind();
 
         }
 

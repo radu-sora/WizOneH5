@@ -51,22 +51,22 @@ namespace WizOne.Pagini
         protected global::DevExpress.Web.ASPxUploadControl btnDocUpload;
 
         /// <summary>
-        /// lblTabela control.
+        /// lblSablon control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblTabela;
+        protected global::DevExpress.Web.ASPxLabel lblSablon;
 
         /// <summary>
-        /// cmbTabela control.
+        /// cmbSablon control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbTabela;
+        protected global::DevExpress.Web.ASPxComboBox cmbSablon;
 
         /// <summary>
         /// grDate control.
@@ -78,13 +78,13 @@ namespace WizOne.Pagini
         protected global::DevExpress.Web.ASPxGridView grDate;
 
         /// <summary>
-        /// grDateNomen control.
+        /// grDateViz control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDateNomen;
+        protected global::DevExpress.Web.ASPxGridView grDateViz;
 
         /// <summary>
         /// popUpViz control.
@@ -114,12 +114,12 @@ namespace WizOne.Pagini
         protected global::DevExpress.Web.ASPxButton btnIesire;
 
         /// <summary>
-        /// grDateViz control.
+        /// grDateNomen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDateViz;
+        protected global::DevExpress.Web.ASPxGridView grDateNomen;
     }
 }

@@ -39,7 +39,7 @@ namespace WizOne.Pagini
                     if (Session["ImportDate_ColFisier"] != null)
                     {
                         DataTable table = Session["ImportDate_ColFisier"] as DataTable;
-                        GridViewDataComboBoxColumn colFileCol = (grDate.Columns["ColoanaFisier"] as GridViewDataComboBoxColumn);
+                        GridViewDataComboBoxColumn colFileCol = (grDateNomen.Columns["ColoanaFisier"] as GridViewDataComboBoxColumn);
                         colFileCol.PropertiesComboBox.DataSource = table;
 
                     }
@@ -47,7 +47,7 @@ namespace WizOne.Pagini
                     if (Session["ImportDate_ColBD"] != null)
                     {
                         DataTable table = Session["ImportDate_ColBD"] as DataTable;
-                        GridViewDataComboBoxColumn colBDCol = (grDate.Columns["ColoanaBD"] as GridViewDataComboBoxColumn);
+                        GridViewDataComboBoxColumn colBDCol = (grDateNomen.Columns["ColoanaBD"] as GridViewDataComboBoxColumn);
                         colBDCol.PropertiesComboBox.DataSource = table;
 
                     }
@@ -56,10 +56,7 @@ namespace WizOne.Pagini
                     DataTable dt = new DataTable();
                     if (Session["ImportDateSablon_Grid"] == null)
                     {
-                        if (cmbTabela.Text.Length > 0)
-                            dt = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" WHERE \"NumeTabela\" = '" + cmbTabela.Text + "'", null);
-                        else
-                            dt = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" WHERE \"NumeTabela\" = ''", null);
+                        dt = General.IncarcaDT("SELECT * FROM \"Template\" ", null);
                     }
                     else
                     {
@@ -67,14 +64,17 @@ namespace WizOne.Pagini
                     }
                                        
                     grDate.DataSource = dt;
-                    grDate.KeyFieldName = "NumeTabela;IdAuto";
+                    grDate.KeyFieldName = "Id";
                     grDate.DataBind();
                     Session["ImportDateSablon_Grid"] = dt;
                     
 
                     if (Session["ImportDateNomen_Grid"] == null)
                     {
-                        dt = General.IncarcaDT("SELECT * FROM \"ImportDateNomen\" ", null);
+                        if (cmbSablon.Value != null)
+                            dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Ïd\" = " + Convert.ToInt32(cmbSablon.Value), null);
+                        else
+                            dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Ïd\" = -1 ", null);
                     }
                     else
                     {
@@ -82,7 +82,7 @@ namespace WizOne.Pagini
                     }
 
                     grDateNomen.DataSource = dt;
-                    grDateNomen.KeyFieldName = "IdAuto";
+                    grDateNomen.KeyFieldName = "Id;IdAuto";
                     grDateNomen.DataBind();
                     Session["ImportDateNomen_Grid"] = dt;
 
@@ -92,32 +92,28 @@ namespace WizOne.Pagini
                         grDateViz.DataSource = dtViz;
                         grDateViz.DataBind();
                     }
+                    else
+                    {
+                        grDateViz.DataSource = null;
+                        grDateViz.DataBind();
+                    }
                 }
                 else
                 {
-                    DataTable dt = new DataTable();
-                    //dt = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" ", null);
-                    //grDate.DataSource = dt;
-                    //grDate.KeyFieldName = "IdAuto";
-                    //grDate.DataBind();
-                    //Session["ImportDateSablon_Grid"] = dt;
+                    DataTable dt = new DataTable();     
 
                     dt = General.IncarcaDT("SELECT * FROM \"ImportDateNomen\" ", null);
                     grDateNomen.DataSource = dt;
                     grDateNomen.KeyFieldName = "IdAuto";
                     grDateNomen.DataBind();
                     Session["ImportDateNomen_Grid"] = dt;                                
-                }
-
-                string id = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
-                if (Constante.tipBD == 2)
-                    id = "ROWNUM";
+                }             
                 SqlDataSource ds = new SqlDataSource();
                 ds.EnableCaching = false;
                 ds.ConnectionString = Constante.cnnWeb;
-                ds.SelectCommand = "SELECT " + id + "\"Id\", a.* from (select distinct \"NumeTabela\" as \"Denumire\" FROM \"ImportDateNomen\") a ORDER BY \"Denumire\"";
-                cmbTabela.DataSource = ds;
-                cmbTabela.DataBind();
+                ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\" FROM \"Template\" ORDER BY \"Denumire\"";
+                cmbSablon.DataSource = ds;
+                cmbSablon.DataBind();
             }
             catch (Exception ex)
             {               
@@ -141,7 +137,7 @@ namespace WizOne.Pagini
                 string path = folder.FullName + "\\Temp.xlsx";
                 File.WriteAllBytes(path, btnDocUpload.UploadedFiles[0].FileBytes);  
 
-                if (cmbTabela.Text.Length > 0)
+                if (cmbSablon.Text.Length > 0)
                     IncarcaGrid();
 
             }
@@ -179,7 +175,7 @@ namespace WizOne.Pagini
                         i++;
                     }
 
-                    GridViewDataComboBoxColumn colFileCol = (grDate.Columns["ColoanaFisier"] as GridViewDataComboBoxColumn);
+                    GridViewDataComboBoxColumn colFileCol = (grDateNomen.Columns["ColoanaFisier"] as GridViewDataComboBoxColumn);
                     colFileCol.PropertiesComboBox.DataSource = table;
                     Session["ImportDate_ColFisier"] = table;
 
@@ -187,17 +183,21 @@ namespace WizOne.Pagini
                     table.Columns.Add("Id", typeof(string));
                     table.Columns.Add("Denumire", typeof(string));
 
-                    string sql = "SELECT * FROM \"" + cmbTabela.Text + "\"";
+                    string sql = "SELECT * FROM \"Template\" WHERE \"Id\" =  " + Convert.ToInt32(cmbSablon.Value);
+                    DataTable dtSablon = General.IncarcaDT(sql, null);
+                    if (dtSablon != null && dtSablon.Rows.Count > 0)
+                    {
+                        sql = "SELECT * FROM \"" + dtSablon.Rows[0]["NumeTabela"].ToString().Trim() + "\"";
+                        DataTable dt = General.IncarcaDT(sql, null);
+                        for (int k = 0; k < dt.Columns.Count; k++)
+                            table.Rows.Add(dt.Columns[k].ColumnName, dt.Columns[k].ColumnName);
 
-                    DataTable dt = General.IncarcaDT(sql, null);
-                    for (int k = 0; k < dt.Columns.Count; k++)
-                        table.Rows.Add(dt.Columns[k].ColumnName, dt.Columns[k].ColumnName);
+                        GridViewDataComboBoxColumn colDBCol = (grDateNomen.Columns["ColoanaBD"] as GridViewDataComboBoxColumn);
+                        colDBCol.PropertiesComboBox.DataSource = table;
+                        Session["ImportDate_ColBD"] = table;
 
-                    GridViewDataComboBoxColumn colDBCol = (grDate.Columns["ColoanaBD"] as GridViewDataComboBoxColumn);
-                    colDBCol.PropertiesComboBox.DataSource = table;
-                    Session["ImportDate_ColBD"] = table;
-
-                    grDate.DataBind();
+                        grDateNomen.DataBind();
+                    }
                 }
             }
             catch (Exception ex)
@@ -221,12 +221,9 @@ namespace WizOne.Pagini
                     {
                         switch (col.ColumnName)
                         {
-                            case "IdAuto":
-                                row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                                break;
-                            case "NumeTabela":
-                                row[x] = cmbTabela.Text;
-                                break;
+                            case "Id":
+                                row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("Id")), 0)) + 1;
+                                break;                       
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;
@@ -240,7 +237,7 @@ namespace WizOne.Pagini
                 grDate.CancelEdit();
                 grDate.DataSource = dt;
                 //grDate.DataBind();
-                grDate.KeyFieldName = "NumeTabela;IdAuto";
+                grDate.KeyFieldName = "Id";
                 Session["ImportDateSablon_Grid"] = dt;
                 General.SalveazaDate(dt, "ImportDateSablon");
 
@@ -318,26 +315,6 @@ namespace WizOne.Pagini
             try
             {
 
-                DataTable dt = new DataTable();                
-                if (cmbTabela.Text.Length > 0)
-                    dt = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" WHERE \"NumeTabela\" = '" + cmbTabela.Text + "'", null);
-                else
-                    dt = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" WHERE \"NumeTabela\" = ''", null);           
-
-                grDate.DataSource = dt;
-                grDate.KeyFieldName = "NumeTabela;IdAuto";
-                grDate.DataBind();
-                Session["ImportDateSablon_Grid"] = dt;
-                Session["ImportDate_ColBD"] = null;
-                Session["ImportDate_ColFisier"] = null;
-                IncarcaGrid();
-    
-                //DataTable dt = new DataTable();
-                ////dt = General.IncarcaDT("SELECT * FROM \"tblTichete_WebService\" WHERE \"Companie\" = '" + cmbCompanie.Text + "'", null);
-                //grDate.DataSource = dt;
-                //grDate.DataBind();
-                //grDate.KeyFieldName = "IdAuto";
-                //Session["ImportDateSablon_Grid"] = dt;
             }
             catch (Exception ex)
             {
@@ -350,17 +327,16 @@ namespace WizOne.Pagini
             try
             {
                 DataTable dt = Session["ImportDateSablon_Grid"] as DataTable;
-                if (dt.Columns["IdAuto"] != null)
+                if (dt.Columns["Id"] != null)
                 {
                     if (dt != null && dt.Rows.Count > 0)
                     {
-                        int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-                        e.NewValues["IdAuto"] = max;
+                        int max = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("Id")), 0)) + 1;
+                        e.NewValues["Id"] = max;
                     }
                     else
-                        e.NewValues["IdAuto"] = 1;
+                        e.NewValues["Id"] = 1;
                 }
-                e.NewValues["NumeTabela"] = cmbTabela.Text;
             }
             catch (Exception ex)
             {
@@ -399,6 +375,9 @@ namespace WizOne.Pagini
                             case "IdAuto":
                                 row[x] = Convert.ToInt32(General.Nz(dt.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                                 break;
+                            case "Id":
+                                row[x] = Convert.ToInt32(cmbSablon.Value);
+                                break;
                             default:
                                 row[x] = e.NewValues[col.ColumnName];
                                 break;
@@ -412,7 +391,7 @@ namespace WizOne.Pagini
                 grDateNomen.CancelEdit();
                 grDateNomen.DataSource = dt;
                 //grDate.DataBind();
-                grDateNomen.KeyFieldName = "IdAuto";
+                grDateNomen.KeyFieldName = "IdAuto:Id";
                 Session["ImportDateNomen_Grid"] = dt;
 
                 General.SalveazaDate(dt, "ImportDateNomen");
@@ -495,12 +474,22 @@ namespace WizOne.Pagini
         {
             try
             {
+
                 DataTable dt = new DataTable();
-                //dt = General.IncarcaDT("SELECT * FROM \"tblTichete_WebService\" WHERE \"Companie\" = '" + cmbCompanie.Text + "'", null);
+                if (cmbSablon.Value != null)
+                    dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value) , null);
+                else
+                    dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" =  -1", null);
+
                 grDateNomen.DataSource = dt;
+                grDateNomen.KeyFieldName = "Id;IdAuto";
                 grDateNomen.DataBind();
-                grDateNomen.KeyFieldName = "IdAuto";
                 Session["ImportDateNomen_Grid"] = dt;
+                Session["ImportDate_ColBD"] = null;
+                Session["ImportDate_ColFisier"] = null;
+                IncarcaGrid();
+
+           
             }
             catch (Exception ex)
             {
@@ -555,9 +544,9 @@ namespace WizOne.Pagini
                     return;
                 }  
                 
-                if (cmbTabela.Text.Length <= 0)
+                if (cmbSablon.Text.Length <= 0)
                 {
-                    MessageBox.Show("Nu ati selectat tabela!", MessageBox.icoError, "");
+                    MessageBox.Show("Nu ati selectat sablonul!", MessageBox.icoError, "");
                     return;
                 }
 
@@ -566,245 +555,240 @@ namespace WizOne.Pagini
 
                 DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
 
-                DataTable dtSablon = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" WHERE \"NumeTabela\" = '" + cmbTabela.Text + "'", null);
-                DataTable dtNomen = General.IncarcaDT("SELECT * FROM \"ImportDateNomen\" WHERE \"NumeTabela\" = '" + cmbTabela.Text + "' AND \"Obligatoriu\" = 1", null);
-                string err = "";
-                for (int i = 0; i < dtNomen.Rows.Count; i++)
-                {
-                    bool gasit = false;
-                    for (int l = 0; l < dtSablon.Rows.Count; l++)
-                    {
-                        if (dtNomen.Rows[i]["NumeColoana"].ToString() == dtSablon.Rows[l]["ColoanaBD"].ToString())
-                        {
-                            gasit = true;
-                            break;
-                        }
-                    }
-                    if (!gasit)
-                        err += ", " + dtNomen.Rows[i]["NumeColoana"].ToString();
-                }
+                //DataTable dtSablon = General.IncarcaDT("SELECT * FROM \"ImportDateSablon\" WHERE \"NumeTabela\" = '" + cmbTabela.Text + "'", null);
+                //DataTable dtNomen = General.IncarcaDT("SELECT * FROM \"ImportDateNomen\" WHERE \"NumeTabela\" = '" + cmbTabela.Text + "' AND \"Obligatoriu\" = 1", null);
+                //string err = "";
+                //for (int i = 0; i < dtNomen.Rows.Count; i++)
+                //{
+                //    bool gasit = false;
+                //    for (int l = 0; l < dtSablon.Rows.Count; l++)
+                //    {
+                //        if (dtNomen.Rows[i]["NumeColoana"].ToString() == dtSablon.Rows[l]["ColoanaBD"].ToString())
+                //        {
+                //            gasit = true;
+                //            break;
+                //        }
+                //    }
+                //    if (!gasit)
+                //        err += ", " + dtNomen.Rows[i]["NumeColoana"].ToString();
+                //}
 
-                if (err.Length > 0)
-                {
-                    MessageBox.Show("Pentru tabela " + cmbTabela.Text + ", nu ati precizat corespondenta pentru urmatoarele coloane obligatorii: " + err.Substring(1) + "!", MessageBox.icoError, "");
-                    return;
-                }
+                //if (err.Length > 0)
+                //{
+                //    MessageBox.Show("Pentru tabela " + cmbTabela.Text + ", nu ati precizat corespondenta pentru urmatoarele coloane obligatorii: " + err.Substring(1) + "!", MessageBox.icoError, "");
+                //    return;
+                //}
 
-                int k = 0;
-                string sql = "select max(ColoanaFisier) as ColoanaFisier,  NumeColoana,  max(Obligatoriu) as Obligatoriu, max(ValoareImplicita) as ValoareImplicita, null as PozitieFisier, max(Tip) as Tip from "
-                            + "(select ColoanaFisier, ColoanaBD as NumeColoana, 0 as Obligatoriu, '' as ValoareImplicita, null AS PozitieFisier, "
-                            + "(SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = ColoanaBD) as Tip FROM ImportDateSablon    WHERE NumeTabela = '" + cmbTabela.Text + "' "
-                            + "union "
-                            + "select '' as ColoanaFisier, NumeColoana, coalesce(Obligatoriu, 0),  ValoareImplicita, NULL AS PozitieFisier, "
-                            + "(SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = NumeColoana ) as Tip FROM ImportDateNomen    WHERE NumeTabela = '" + cmbTabela.Text + "') a "
-                            + "group by numecoloana, PozitieFisier ";
-                if (Constante.tipBD == 2)
-                    sql = "select max(\"ColoanaFisier\") as \"ColoanaFisier\",  \"NumeColoana\",  max(\"Obligatoriu\") as \"Obligatoriu\", max(\"ValoareImplicita\") as \"ValoareImplicita\", null as \"PozitieFisier\", max(\"Tip\") as \"Tip\" from "
-                            + "(select \"ColoanaFisier\", \"ColoanaBD\" as \"NumeColoana\", 0 as \"Obligatoriu\", '' as \"ValoareImplicita\", null AS \"PozitieFisier\", "
-                            + "(SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = \"ColoanaBD\") as \"Tip\" FROM \"ImportDateSablon\"    WHERE \"NumeTabela\" = '" + cmbTabela.Text + "' "
-                            + "union "
-                            + "select '' as \"ColoanaFisier\", \"NumeColoana\", coalesce(\"Obligatoriu\", 0),  \"ValoareImplicita\", NULL AS \"PozitieFisier\", "
-                            + "(SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = \"NumeColoana\" ) as \"Tip\" FROM \"ImportDateNomen\"    WHERE \"NumeTabela\" = '" + cmbTabela.Text + "') a "
-                            + "group by \"NumeColoana\", \"PozitieFisier\"";
+                //int k = 0;
+                //string sql = "select max(ColoanaFisier) as ColoanaFisier,  NumeColoana,  max(Obligatoriu) as Obligatoriu, max(ValoareImplicita) as ValoareImplicita, null as PozitieFisier, max(Tip) as Tip from "
+                //            + "(select ColoanaFisier, ColoanaBD as NumeColoana, 0 as Obligatoriu, '' as ValoareImplicita, null AS PozitieFisier, "
+                //            + "(SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = ColoanaBD) as Tip FROM ImportDateSablon    WHERE NumeTabela = '" + cmbTabela.Text + "' "
+                //            + "union "
+                //            + "select '' as ColoanaFisier, NumeColoana, coalesce(Obligatoriu, 0),  ValoareImplicita, NULL AS PozitieFisier, "
+                //            + "(SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = NumeColoana ) as Tip FROM ImportDateNomen    WHERE NumeTabela = '" + cmbTabela.Text + "') a "
+                //            + "group by numecoloana, PozitieFisier ";
+                //if (Constante.tipBD == 2)
+                //    sql = "select max(\"ColoanaFisier\") as \"ColoanaFisier\",  \"NumeColoana\",  max(\"Obligatoriu\") as \"Obligatoriu\", max(\"ValoareImplicita\") as \"ValoareImplicita\", null as \"PozitieFisier\", max(\"Tip\") as \"Tip\" from "
+                //            + "(select \"ColoanaFisier\", \"ColoanaBD\" as \"NumeColoana\", 0 as \"Obligatoriu\", '' as \"ValoareImplicita\", null AS \"PozitieFisier\", "
+                //            + "(SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = \"ColoanaBD\") as \"Tip\" FROM \"ImportDateSablon\"    WHERE \"NumeTabela\" = '" + cmbTabela.Text + "' "
+                //            + "union "
+                //            + "select '' as \"ColoanaFisier\", \"NumeColoana\", coalesce(\"Obligatoriu\", 0),  \"ValoareImplicita\", NULL AS \"PozitieFisier\", "
+                //            + "(SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + cmbTabela.Text + "' and COLUMN_NAME = \"NumeColoana\" ) as \"Tip\" FROM \"ImportDateNomen\"    WHERE \"NumeTabela\" = '" + cmbTabela.Text + "') a "
+                //            + "group by \"NumeColoana\", \"PozitieFisier\"";
 
-                DataTable dtCombinat = General.IncarcaDT(sql, null);
-                foreach (DataColumn col in dtCombinat.Columns)
-                    col.ReadOnly = false;
+                //DataTable dtCombinat = General.IncarcaDT(sql, null);
+                //foreach (DataColumn col in dtCombinat.Columns)
+                //    col.ReadOnly = false;
 
-                for (int i = 0; i < dtCombinat.Rows.Count; i++)
-                {
-                    k = 0;
-                    while (!ws2.Cells[0, k].Value.IsEmpty)
-                    {
-                        if (ws2.Cells[0, k].Value.ToString() == dtCombinat.Rows[i]["ColoanaFisier"].ToString())
-                        {
-                            dtCombinat.Rows[i]["PozitieFisier"] = k;
-                            break;
-                        }
-                        k++;
-                    }
-                }
-
-
-                int j = 1;
-                k = 0;
-                while (!ws2.Cells[j, k].Value.IsEmpty)
-                {
-                    if (ws2.Cells[j, k].Value.ToString().Length <= 0)
-                    {
-                        k = 0;
-                        j++;
-                        continue;
-                    }
-
-                    string campOblig = "";
-                    string campNonOblig = "";
-                    while (!ws2.Cells[j, k].Value.IsEmpty)
-                    {
-
-                        if (ws2.Cells[j, k].Value.ToString().Length <= 0)
-                        {
-                            k++;
-                            continue;
-                        }
-
-                        DataRow[] dr = dtCombinat.Select("PozitieFisier=" + k);
-                        if (dr != null && dr.Count() > 0)
-                        {
-                            string val = "NULL";
-                            switch (dr[0]["Tip"].ToString().ToLower())
-                            {
-                                case "int":
-                                case "numeric":
-                                case "number":
-                                case "decimal":
-                                    if (ws2.Cells[j, k].Value !=  null && ws2.Cells[j, k].Value.ToString().Length > 0)
-                                        val = ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US"));
-                                    break;
-                                case "nvarchar":
-                                case "varchar2":
-                                    if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
-                                        val = "'" + ws2.Cells[j, k].Value.ToString() + "'";
-                                    break;
-                                case "date":
-                                case "datetime":
-                                    if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
-                                    {
-                                        if (Constante.tipBD == 1)
-                                            val = "CONVERT(DATETIME#&* '" + ws2.Cells[j, k].Value.ToString() + "'#&* 103)";
-                                        else
-                                            val = "TO_DATE('" + ws2.Cells[j, k].Value.ToString() + "'#&* dd/mm/yyyy)";
-                                    }
-                                    break;
-                            }
+                //for (int i = 0; i < dtCombinat.Rows.Count; i++)
+                //{
+                //    k = 0;
+                //    while (!ws2.Cells[0, k].Value.IsEmpty)
+                //    {
+                //        if (ws2.Cells[0, k].Value.ToString() == dtCombinat.Rows[i]["ColoanaFisier"].ToString())
+                //        {
+                //            dtCombinat.Rows[i]["PozitieFisier"] = k;
+                //            break;
+                //        }
+                //        k++;
+                //    }
+                //}
 
 
-                            val = val.Replace(",", "#&*");
+                //int j = 1;
+                //k = 0;
+                //while (!ws2.Cells[j, k].Value.IsEmpty)
+                //{
+                //    if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                //    {
+                //        k = 0;
+                //        j++;
+                //        continue;
+                //    }
 
-                            if (dr[0]["Obligatoriu"].ToString() == "1")
-                                campOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
-                            else
-                                campNonOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
-                        }
-                        k++;
-                    }
+                //    string campOblig = "";
+                //    string campNonOblig = "";
+                //    while (!ws2.Cells[j, k].Value.IsEmpty)
+                //    {
+
+                //        if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                //        {
+                //            k++;
+                //            continue;
+                //        }
+
+                //        DataRow[] dr = dtCombinat.Select("PozitieFisier=" + k);
+                //        if (dr != null && dr.Count() > 0)
+                //        {
+                //            string val = "NULL";
+                //            switch (dr[0]["Tip"].ToString().ToLower())
+                //            {
+                //                case "int":
+                //                case "numeric":
+                //                case "number":
+                //                case "decimal":
+                //                    if (ws2.Cells[j, k].Value !=  null && ws2.Cells[j, k].Value.ToString().Length > 0)
+                //                        val = ws2.Cells[j, k].Value.ToString(new CultureInfo("en-US"));
+                //                    break;
+                //                case "nvarchar":
+                //                case "varchar2":
+                //                    if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
+                //                        val = "'" + ws2.Cells[j, k].Value.ToString() + "'";
+                //                    break;
+                //                case "date":
+                //                case "datetime":
+                //                    if (ws2.Cells[j, k].Value != null && ws2.Cells[j, k].Value.ToString().Length > 0)
+                //                    {
+                //                        if (Constante.tipBD == 1)
+                //                            val = "CONVERT(DATETIME#&* '" + ws2.Cells[j, k].Value.ToString() + "'#&* 103)";
+                //                        else
+                //                            val = "TO_DATE('" + ws2.Cells[j, k].Value.ToString() + "'#&* dd/mm/yyyy)";
+                //                    }
+                //                    break;
+                //            }
 
 
-                    string[] lstCampuri = (campOblig + campNonOblig).Substring(1).Split(',');
-                    string camp = "", valoare = "";
-                    for (int x = 0; x < lstCampuri.Length; x++)
-                    {
-                        camp += "," + lstCampuri[x].Split('=')[0];
-                        valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
-                    }
+                //            val = val.Replace(",", "#&*");
 
-                    DataRow[] drAltele = dtCombinat.Select("PozitieFisier IS NULL");
-                    if (drAltele != null && drAltele.Count() > 0)
-                    {
-                        string valAltele = "";
-                        for (int z = 0; z < drAltele.Count(); z++)
-                        {
-                            if (drAltele[z]["ValoareImplicita"] != null && drAltele[z]["ValoareImplicita"].ToString().Contains("ent."))
-                            {
-                                valAltele = drAltele[z]["ValoareImplicita"].ToString();
-                                for (int y = 0; y < camp.Substring(1).Split(',').Length; y++)                                
-                                    valAltele = valAltele.Replace("ent." + camp.Substring(1).Split(',')[y].Replace("\"", "").Trim(), valoare.Substring(1).Split(',')[y]);                                
-                            }
-                            else
-                            {
-                                valAltele = (drAltele[z]["ValoareImplicita"] ?? "NULL").ToString();
-                                if (drAltele[z]["Tip"].ToString().ToLower().Contains("varchar") && drAltele[z]["ValoareImplicita"] != null)
-                                    valAltele = "'" + drAltele[z]["ValoareImplicita"].ToString() + "'";
-                            }
-                            if (valAltele.Length <= 0)
-                                valAltele = "NULL";
-                            campNonOblig += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
-                        }
-                    }
+                //            if (dr[0]["Obligatoriu"].ToString() == "1")
+                //                campOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
+                //            else
+                //                campNonOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
+                //        }
+                //        k++;
+                //    }
 
-                    lstCampuri = (campOblig + campNonOblig).Substring(1).Split(',');
-                    camp = ""; valoare = "";
-                    for (int x = 0; x < lstCampuri.Length; x++)
-                    {
-                        camp += "," + lstCampuri[x].Split('=')[0];
-                        valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
-                    }
 
-                    DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + cmbTabela.Text + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ","), null);
-                    sql = "";
-                    if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
-                        sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
-                    else                    
-                        sql = "INSERT INTO \"" + cmbTabela.Text + "\" (" + camp.Substring(1) + ")  VALUES (" + valoare.Substring(1) + ")";
+                //    string[] lstCampuri = (campOblig + campNonOblig).Substring(1).Split(',');
+                //    string camp = "", valoare = "";
+                //    for (int x = 0; x < lstCampuri.Length; x++)
+                //    {
+                //        camp += "," + lstCampuri[x].Split('=')[0];
+                //        valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
+                //    }
+
+                //    DataRow[] drAltele = dtCombinat.Select("PozitieFisier IS NULL");
+                //    if (drAltele != null && drAltele.Count() > 0)
+                //    {
+                //        string valAltele = "";
+                //        for (int z = 0; z < drAltele.Count(); z++)
+                //        {
+                //            if (drAltele[z]["ValoareImplicita"] != null && drAltele[z]["ValoareImplicita"].ToString().Contains("ent."))
+                //            {
+                //                valAltele = drAltele[z]["ValoareImplicita"].ToString();
+                //                for (int y = 0; y < camp.Substring(1).Split(',').Length; y++)                                
+                //                    valAltele = valAltele.Replace("ent." + camp.Substring(1).Split(',')[y].Replace("\"", "").Trim(), valoare.Substring(1).Split(',')[y]);                                
+                //            }
+                //            else
+                //            {
+                //                valAltele = (drAltele[z]["ValoareImplicita"] ?? "NULL").ToString();
+                //                if (drAltele[z]["Tip"].ToString().ToLower().Contains("varchar") && drAltele[z]["ValoareImplicita"] != null)
+                //                    valAltele = "'" + drAltele[z]["ValoareImplicita"].ToString() + "'";
+                //            }
+                //            if (valAltele.Length <= 0)
+                //                valAltele = "NULL";
+                //            campNonOblig += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
+                //        }
+                //    }
+
+                //    lstCampuri = (campOblig + campNonOblig).Substring(1).Split(',');
+                //    camp = ""; valoare = "";
+                //    for (int x = 0; x < lstCampuri.Length; x++)
+                //    {
+                //        camp += "," + lstCampuri[x].Split('=')[0];
+                //        valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
+                //    }
+
+                //    DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + cmbTabela.Text + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ","), null);
+                //    sql = "";
+                //    if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
+                //        sql = "UPDATE \"" + cmbTabela.Text + "\" SET " + campNonOblig.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
+                //    else                    
+                //        sql = "INSERT INTO \"" + cmbTabela.Text + "\" (" + camp.Substring(1) + ")  VALUES (" + valoare.Substring(1) + ")";
                     
-                    General.ExecutaNonQuery(sql, null);
-                    k = 0;
-                    j++;
+                //    General.ExecutaNonQuery(sql, null);
+                //    k = 0;
+                //    j++;
                     
-                    switch (cmbTabela.Text)
-                    {
-                        case "Ptj_Cumulat":
-                            string filtru = "";
-                            for (int x = 0; x < lstCampuri.Length; x++)
-                            {
-                                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "F10003" || lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "An" || lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Luna")
-                                    filtru += " AND " + lstCampuri[x].Replace("#&*", ",");
-                                filtru = filtru.Substring(5);
-                            }
-                            General.CalculFormuleCumulat(filtru);
-                            break;
-                        case "Ptj_Intrari":
-                        case "Ptj_Cereri": 
-                            string idStare = "", marca = "", ziua = "", dataInceput = "", dataSfarsit = "";
-                            for (int x = 0; x < lstCampuri.Length; x++)
-                            {
-                                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "IdStare")
-                                    idStare = lstCampuri[x].Split('=')[1].Trim();
-                                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "F10003")
-                                    marca = lstCampuri[x].Split('=')[1].Trim();
-                                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Ziua")
-                                    ziua = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
-                                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataInceput")
-                                    dataInceput = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
-                                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataSfarsit")
-                                    dataSfarsit = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
-                            }
+                //    switch (cmbTabela.Text)
+                //    {
+                //        case "Ptj_Cumulat":
+                //            string filtru = "";
+                //            for (int x = 0; x < lstCampuri.Length; x++)
+                //            {
+                //                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "F10003" || lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "An" || lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Luna")
+                //                    filtru += " AND " + lstCampuri[x].Replace("#&*", ",");
+                //                filtru = filtru.Substring(5);
+                //            }
+                //            General.CalculFormuleCumulat(filtru);
+                //            break;
+                //        case "Ptj_Intrari":
+                //        case "Ptj_Cereri": 
+                //            string idStare = "", marca = "", ziua = "", dataInceput = "", dataSfarsit = "";
+                //            for (int x = 0; x < lstCampuri.Length; x++)
+                //            {
+                //                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "IdStare")
+                //                    idStare = lstCampuri[x].Split('=')[1].Trim();
+                //                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "F10003")
+                //                    marca = lstCampuri[x].Split('=')[1].Trim();
+                //                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Ziua")
+                //                    ziua = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
+                //                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataInceput")
+                //                    dataInceput = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
+                //                if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataSfarsit")
+                //                    dataSfarsit = lstCampuri[x].Split('=')[1].Replace("#&*", ",").Trim();
+                //            }
 
-                            filtru = "";
-                            if (ziua.Length > 0)
-                                filtru = " AND \"Ziua\" = " + ziua;
-                            if (dataInceput.Length > 0)
-                                filtru = " AND \"Ziua\" >= " + dataInceput;
-                            if (dataSfarsit.Length > 0)
-                                filtru += " AND \"Ziua\" <= " + dataSfarsit;
+                //            filtru = "";
+                //            if (ziua.Length > 0)
+                //                filtru = " AND \"Ziua\" = " + ziua;
+                //            if (dataInceput.Length > 0)
+                //                filtru = " AND \"Ziua\" >= " + dataInceput;
+                //            if (dataSfarsit.Length > 0)
+                //                filtru += " AND \"Ziua\" <= " + dataSfarsit;
 
-                            if (cmbTabela.Text == "Ptj_Intrari")
-                                idStare = "3";
+                //            if (cmbTabela.Text == "Ptj_Intrari")
+                //                idStare = "3";
 
-                            if (idStare == "3")
-                            {
-                                DataTable dtModif = General.IncarcaDT("SELECT * FROM \"Ptj_Intrari\" WHERE F10003 = " + marca + filtru, null);
+                //            if (idStare == "3")
+                //            {
+                //                DataTable dtModif = General.IncarcaDT("SELECT * FROM \"Ptj_Intrari\" WHERE F10003 = " + marca + filtru, null);
 
-                                if (dtModif != null && dtModif.Rows.Count > 0)
-                                {
-                                    for (int x = 0; x < dtModif.Rows.Count; x++)
-                                    {
-                                        string golesteVal = Dami.ValoareParam("GolesteVal");
-                                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                                        FunctiiCeasuri.Calcul.h5 = true;
-                                        FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[x]["F10003"]), Convert.ToDateTime(dtModif.Rows[x]["Ziua"]));
-                                        FunctiiCeasuri.Calcul.CalculInOut(dtModif.Rows[x], true, true);
+                //                if (dtModif != null && dtModif.Rows.Count > 0)
+                //                {
+                //                    for (int x = 0; x < dtModif.Rows.Count; x++)
+                //                    {
+                //                        Calcul.AlocaContract(Convert.ToInt32(dtModif.Rows[x]["F10003"]), Convert.ToDateTime(dtModif.Rows[x]["Ziua"]));
+                //                        Calcul.CalculInOut(dtModif.Rows[x], true, true);
 
-                                        General.CalculFormule(dtModif.Rows[x]["F10003"], null, Convert.ToDateTime(dtModif.Rows[x]["Ziua"]), null);
-                                        General.ExecValStr(Convert.ToInt32(dtModif.Rows[x]["F10003"]), Convert.ToDateTime(dtModif.Rows[x]["Ziua"]));
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                }
+                //                        General.CalculFormule(dtModif.Rows[x]["F10003"], null, Convert.ToDateTime(dtModif.Rows[x]["Ziua"]), null);
+                //                        General.ExecValStr(Convert.ToInt32(dtModif.Rows[x]["F10003"]), Convert.ToDateTime(dtModif.Rows[x]["Ziua"]));
+                //                    }
+                //                }
+                //            }
+                //            break;
+                //    }
+                //}
 
                 MessageBox.Show("Import terminat cu succes!", MessageBox.icoSuccess);
 
@@ -820,19 +804,19 @@ namespace WizOne.Pagini
         }
 
         
-        protected void cmbTabela_Callback(object sender, CallbackEventArgsBase e)
+        protected void cmbSablon_Callback(object sender, CallbackEventArgsBase e)
         {      
-            cmbTabela.DataSource = null;
-            cmbTabela.DataBind();
-            string id = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
-            if (Constante.tipBD == 2)
-                id = "ROWNUM";
-            SqlDataSource ds = new SqlDataSource();
-            ds.EnableCaching = false;
-            ds.ConnectionString = Constante.cnnWeb;
-            ds.SelectCommand = "SELECT " + id + "\"Id\", a.* from (select distinct \"NumeTabela\" as \"Denumire\" FROM \"ImportDateNomen\") a ORDER BY \"Denumire\"";
-            cmbTabela.DataSource = ds;
-            cmbTabela.DataBind();
+            //cmbTabela.DataSource = null;
+            //cmbTabela.DataBind();
+            //string id = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
+            //if (Constante.tipBD == 2)
+            //    id = "ROWNUM";
+            //SqlDataSource ds = new SqlDataSource();
+            //ds.EnableCaching = false;
+            //ds.ConnectionString = Constante.cnnWeb;
+            //ds.SelectCommand = "SELECT " + id + "\"Id\", a.* from (select distinct \"NumeTabela\" as \"Denumire\" FROM \"ImportDateNomen\") a ORDER BY \"Denumire\"";
+            //cmbTabela.DataSource = ds;
+            //cmbTabela.DataBind();
                         
         }
 

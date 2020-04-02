@@ -19,7 +19,7 @@
     }
 
     function OnEndCallback(s, e) {
-        cmbTabela.PerformCallback();
+        cmbSablon.PerformCallback();
     }
 
     function OnClickViz(s, e) {    
@@ -41,7 +41,7 @@
                         <dx:ASPxButton ID="btnImport" ClientInstanceName="btnImport" ClientIDMode="Static" runat="server" Text="Import" AutoPostBack="true" OnClick="btnImport_Click"  oncontextMenu="ctx(this,event)" >
                             <Image Url="~/Fisiere/Imagini/Icoane/incarca.png"></Image>
                         </dx:ASPxButton>
-                        <dx:ASPxButton ID="btnViz" ClientInstanceName="btnViz" ClientIDMode="Static" runat="server" Text="Previzualizare" AutoPostBack="true" OnClick="btnViz_Click"  oncontextMenu="ctx(this,event)" >
+                        <dx:ASPxButton ID="btnViz" ClientInstanceName="btnViz" ClientIDMode="Static" runat="server" Text="Detalii sablon" AutoPostBack="true" OnClick="btnViz_Click"  oncontextMenu="ctx(this,event)" >
                             <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
                             <ClientSideEvents Click="function(s,e){ OnClickViz(s, e); }" /> 
                         </dx:ASPxButton>
@@ -75,16 +75,16 @@
                         </tr>  
 					    <tr>				
 						    <td >
-							    <dx:ASPxLabel  ID="lblTabela" Width="100" runat="server"  Text="Tabela" ></dx:ASPxLabel >	
-							    <dx:ASPxComboBox Width="100%"  ID="cmbTabela" ClientInstanceName="cmbTabela"  runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" OnCallback="cmbTabela_Callback" >                                                              
-                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { grDate.PerformCallback(); }" />
+							    <dx:ASPxLabel  ID="lblSablon" Width="100" runat="server"  Text="Selectare sablon import" ></dx:ASPxLabel >	
+							    <dx:ASPxComboBox Width="100%"  ID="cmbSablon" ClientInstanceName="cmbSablon"  runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" OnCallback="cmbSablon_Callback" >                                                              
+                                    <ClientSideEvents SelectedIndexChanged="function(s, e) { grDateNomen.PerformCallback(); }" />
 							    </dx:ASPxComboBox>
 						    </td>
 					    </tr>                    
                     </table>
                     </fieldset >
                     <fieldset border="0">                     
-                    <legend class="legend-border">Corespondenta</legend>            
+                    <legend class="legend-border">Sabloane</legend>            
                     <table width="30%" >    
                         <tr>
                             <td align="left">
@@ -96,16 +96,9 @@
                                     <ClientSideEvents ContextMenu="ctx" />                                
                                     <Columns>
                                         <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
-                                        <dx:GridViewDataTextColumn FieldName="NumeTabela" Name="NumeTabela" Caption="Tabela"  Width="75px" Visible="false"/>
-                                        <dx:GridViewDataComboBoxColumn FieldName="ColoanaFisier" Name="ColoanaFisier" Caption="Coloana din fisier" Width="150px" >
-                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" >
-                                            </PropertiesComboBox>
-                                        </dx:GridViewDataComboBoxColumn> 
-                                        <dx:GridViewDataComboBoxColumn FieldName="ColoanaBD" Name="ColoanaBD" Caption="Coloana din BD" Width="150px" >
-                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" >
-                                            </PropertiesComboBox>
-                                        </dx:GridViewDataComboBoxColumn>                                                                                                                                       
-                                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
+                                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  Width="75px" />
+                                        <dx:GridViewDataTextColumn FieldName="NumeSablon" Name="NumeSablon" Caption="Nume sablon"  Width="100px"/>                                                                                                                                                           
+                                        <dx:GridViewDataTextColumn FieldName="NumeTabela" Name="NumeTabela" Caption="Nume tabela"  Width="100px"/>                                       
                                     </Columns>
                                     <SettingsCommandButton>
                                         <UpdateButton ButtonType="Link" Text="Actualizeaza">
@@ -140,53 +133,20 @@
                     </fieldset >
 
                     <fieldset border="0">                     
-                    <legend class="legend-border">Nomenclator</legend>            
-                    <table width="50%" >    
+                    <legend class="legend-border">Previzualizare</legend>            
+                    <table width="70%" >    
                         <tr>
                             <td align="left">
-                                <dx:ASPxGridView ID="grDateNomen" runat="server" ClientInstanceName="grDateNomen" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnDataBinding="grDateNomen_DataBinding" OnInitNewRow="grDateNomen_InitNewRow" OnCustomCallback="grDateNomen_CustomCallback"
-                                    OnRowInserting="grDateNomen_RowInserting" OnRowUpdating="grDateNomen_RowUpdating" OnRowDeleting="grDateNomen_RowDeleting">
-                                    <SettingsBehavior AllowFocusedRow="true" />
-                                    <Settings ShowFilterRow="true" ShowColumnHeaders="true"  />                                   
-                                    <SettingsEditing Mode="Inline" />      
-                                    <ClientSideEvents ContextMenu="ctx" EndCallback="OnEndCallback"/>                                
-                                    <Columns>
-                                        <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
-                                        <dx:GridViewDataTextColumn FieldName="NumeTabela" Name="NumeTabela" Caption="Tabela"  Width="100px" />
-                                        <dx:GridViewDataTextColumn FieldName="NumeColoana" Name="NumeColoana" Caption="Coloana"  Width="100px" />
-                                        <dx:GridViewDataCheckColumn FieldName="Obligatoriu" Name="Obligatoriu" Caption="Obligatoriu"  Width="50px"  />
-                                        <dx:GridViewDataTextColumn FieldName="ValoareImplicita" Name="ValoareImplicita" Caption="Valoare implicita"  Width="250px" />
-                                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
-                                    </Columns>
-                                    <SettingsCommandButton>
-                                        <UpdateButton ButtonType="Link" Text="Actualizeaza">
-                                            <Styles>
-                                                <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
-                                                </Style>
-                                            </Styles>
-                                        </UpdateButton>
-                                        <CancelButton ButtonType="Link" Text="Renunta">
-                                        </CancelButton>
-
-                                        <EditButton Image-ToolTip="Edit">
-                                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
-                                            <Styles>
-                                                <Style Paddings-PaddingRight="5px" />
-                                            </Styles>
-                                        </EditButton>
-                                        <DeleteButton Image-ToolTip="Sterge">
-                                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
-                                        </DeleteButton>
-                                        <NewButton Image-ToolTip="Rand nou">
-                                            <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
-                                            <Styles>
-                                                <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
-                                            </Styles>
-                                        </NewButton>
-                                    </SettingsCommandButton>
+                                <dx:ASPxGridView ID="grDateViz" runat="server" ClientInstanceName="grDateViz" Width="100%"   >
+                                    <SettingsBehavior AllowSelectByRowClick="false" AllowFocusedRow="false" AllowSelectSingleRowOnly="false" AllowSort="false" />
+                                    <Settings ShowFilterRow="false" ShowGroupPanel="False" />
+                                    <SettingsSearchPanel Visible="False" />    
+                                    <Columns>	              
+						            </Columns>
                                 </dx:ASPxGridView>
+                    
                             </td>
-                        </tr>  
+                        </tr> 
                     </table>
                     </fieldset >
                 </td> 
@@ -219,16 +179,56 @@
                         </tr>
                         <tr>
                             <td>
-                                <dx:ASPxGridView ID="grDateViz" runat="server" ClientInstanceName="grDateViz" Width="100%"   >
-                                    <SettingsBehavior AllowSelectByRowClick="false" AllowFocusedRow="false" AllowSelectSingleRowOnly="false" AllowSort="false" />
-                                    <Settings ShowFilterRow="false" ShowGroupPanel="False" />
-                                    <SettingsSearchPanel Visible="False" />    
-                                    <Columns>	              
-						            </Columns>
+                                <dx:ASPxGridView ID="grDateNomen" runat="server" ClientInstanceName="grDateNomen" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnDataBinding="grDateNomen_DataBinding" OnInitNewRow="grDateNomen_InitNewRow" OnCustomCallback="grDateNomen_CustomCallback"
+                                    OnRowInserting="grDateNomen_RowInserting" OnRowUpdating="grDateNomen_RowUpdating" OnRowDeleting="grDateNomen_RowDeleting">
+                                    <SettingsBehavior AllowFocusedRow="true" />
+                                    <Settings ShowFilterRow="true" ShowColumnHeaders="true"  />                                   
+                                    <SettingsEditing Mode="Inline" />      
+                                    <ClientSideEvents ContextMenu="ctx" EndCallback="OnEndCallback"/>                                
+                                    <Columns>
+                                        <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
+                                        <dx:GridViewDataComboBoxColumn FieldName="ColoanaFisier" Name="ColoanaFisier" Caption="Coloana din fisier" Width="150px" >
+                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" >
+                                            </PropertiesComboBox>
+                                        </dx:GridViewDataComboBoxColumn> 
+                                        <dx:GridViewDataComboBoxColumn FieldName="ColoanaBD" Name="ColoanaBD" Caption="Coloana din BD" Width="150px" >
+                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" >
+                                            </PropertiesComboBox>
+                                        </dx:GridViewDataComboBoxColumn> 
+                                        <dx:GridViewDataCheckColumn FieldName="Obligatoriu" Name="Obligatoriu" Caption="Obligatoriu"  Width="50px"  />
+                                        <dx:GridViewDataTextColumn FieldName="ValoareImplicita" Name="ValoareImplicita" Caption="Valoare implicita"  Width="250px" />
+                                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
+                                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  Width="75px" Visible="false"/>
+                                    </Columns>
+                                    <SettingsCommandButton>
+                                        <UpdateButton ButtonType="Link" Text="Actualizeaza">
+                                            <Styles>
+                                                <Style Paddings-PaddingRight="10" Paddings-PaddingTop="10">
+                                                </Style>
+                                            </Styles>
+                                        </UpdateButton>
+                                        <CancelButton ButtonType="Link" Text="Renunta">
+                                        </CancelButton>
+
+                                        <EditButton Image-ToolTip="Edit">
+                                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                                            <Styles>
+                                                <Style Paddings-PaddingRight="5px" />
+                                            </Styles>
+                                        </EditButton>
+                                        <DeleteButton Image-ToolTip="Sterge">
+                                            <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
+                                        </DeleteButton>
+                                        <NewButton Image-ToolTip="Rand nou">
+                                            <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                                            <Styles>
+                                                <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+                                            </Styles>
+                                        </NewButton>
+                                    </SettingsCommandButton>
                                 </dx:ASPxGridView>
-                    
                             </td>
-                        </tr>
+                        </tr> 
                     </table>
                 </asp:Panel>
             </dx:PopupControlContentControl>

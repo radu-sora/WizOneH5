@@ -4006,45 +4006,45 @@ namespace WizOne.Module
         }
 
 
-        public static DataTable ListaAfisare()
-        {
-            try
-            {
-                DataTable table = new DataTable();
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
-                table.Rows.Add(1, "Trunchiere la ore");
-                table.Rows.Add(2, "Cu minute");
-                table.Rows.Add(3, "Cu zecimale");
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //public static DataTable ListaAfisare()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
+        //        table.Rows.Add(1, "Trunchiere la ore");
+        //        table.Rows.Add(2, "Cu minute");
+        //        table.Rows.Add(3, "Cu zecimale");
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
-        public static DataTable ListaRaportare()
-        {
-            try
-            {
-                DataTable table = new DataTable();
+        //public static DataTable ListaRaportare()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
 
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "Pe inceput schimb");
-                table.Rows.Add(2, "Pe sfarsit schimb");
+        //        table.Rows.Add(1, "Pe inceput schimb");
+        //        table.Rows.Add(2, "Pe sfarsit schimb");
 
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
         public static DataTable ListaVal_uri()
         {

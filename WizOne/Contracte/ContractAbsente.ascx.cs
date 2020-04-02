@@ -16,31 +16,31 @@ namespace WizOne.ContracteLucru
         {       
             DataTable table = new DataTable();
 
-            DataSet ds = Session["InformatiaCurentaContracte"] as DataSet;
-            table = ds.Tables[0];
-            DataList1.DataSource = table;
-            DataList1.DataBind();
+            //DataSet ds = Session["InformatiaCurentaContracte"] as DataSet;
+            //table = ds.Tables[0];
+            //DataList1.DataSource = table;
+            //DataList1.DataBind();
 
-            //Florin 2019.09.06
-            if (table != null && table.Rows.Count > 0)
-            {
-                if (General.Nz(table.Rows[0]["Afisare"], "").ToString() != "")
-                {
-                    ASPxComboBox cmbAfis = DataList1.Items[0].FindControl("cmbAfis") as ASPxComboBox;
-                    cmbAfis.Value = Convert.ToInt32(table.Rows[0]["Afisare"]);
-                }
+            ////Florin 2019.09.06
+            //if (table != null && table.Rows.Count > 0)
+            //{
+            //    if (General.Nz(table.Rows[0]["Afisare"], "").ToString() != "")
+            //    {
+            //        ASPxComboBox cmbAfis = DataList1.Items[0].FindControl("cmbAfis") as ASPxComboBox;
+            //        cmbAfis.Value = Convert.ToInt32(table.Rows[0]["Afisare"]);
+            //    }
 
-                if (General.Nz(table.Rows[0]["TipRaportareOreNoapte"], "").ToString() != "")
-                {
-                    ASPxComboBox cmbRap = DataList1.Items[0].FindControl("cmbRap") as ASPxComboBox;
-                    cmbRap.Value = Convert.ToInt32(table.Rows[0]["TipRaportareOreNoapte"]);
-                }
+            //    if (General.Nz(table.Rows[0]["TipRaportareOreNoapte"], "").ToString() != "")
+            //    {
+            //        ASPxComboBox cmbRap = DataList1.Items[0].FindControl("cmbRap") as ASPxComboBox;
+            //        cmbRap.Value = Convert.ToInt32(table.Rows[0]["TipRaportareOreNoapte"]);
+            //    }
 
-                //  Value='<%#Eval("Afisare") %>'
-                //  Value='<%#Eval("TipRaportareOreNoapte") %>'
-            }
+            //    //  Value='<%#Eval("Afisare") %>'
+            //    //  Value='<%#Eval("TipRaportareOreNoapte") %>'
+            //}
 
-            grDateCtrAbs.DataBind();
+            //grDateCtrAbs.DataBind();
 
         }
 
@@ -59,28 +59,28 @@ namespace WizOne.ContracteLucru
 
         private void IncarcaGrid()
         {
-            string sqlFinal = "SELECT * FROM \"Ptj_ContracteAbsente\" WHERE \"IdContract\" = " + Session["IdContract"].ToString();
-            DataTable dt = new DataTable();
-            DataSet ds = Session["InformatiaCurentaContracte"] as DataSet;
-            if (ds.Tables.Contains("Ptj_ContracteAbsente"))
-            {
-                dt = ds.Tables["Ptj_ContracteAbsente"];
-            }
-            else
-            {
-                dt = General.IncarcaDT(sqlFinal, null);
-                dt.TableName = "Ptj_ContracteAbsente";
-                dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
-                ds.Tables.Add(dt);
-            }
-            grDateCtrAbs.KeyFieldName = "IdAuto";
-            grDateCtrAbs.DataSource = dt;
+            //string sqlFinal = "SELECT * FROM \"Ptj_ContracteAbsente\" WHERE \"IdContract\" = " + Session["IdContract"].ToString();
+            //DataTable dt = new DataTable();
+            //DataSet ds = Session["InformatiaCurentaContracte"] as DataSet;
+            //if (ds.Tables.Contains("Ptj_ContracteAbsente"))
+            //{
+            //    dt = ds.Tables["Ptj_ContracteAbsente"];
+            //}
+            //else
+            //{
+            //    dt = General.IncarcaDT(sqlFinal, null);
+            //    dt.TableName = "Ptj_ContracteAbsente";
+            //    dt.PrimaryKey = new DataColumn[] { dt.Columns["IdAuto"] };
+            //    ds.Tables.Add(dt);
+            //}
+            //grDateCtrAbs.KeyFieldName = "IdAuto";
+            //grDateCtrAbs.DataSource = dt;
 
-            DataTable dtAbs = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsente"" ", null);
-            GridViewDataComboBoxColumn colAbs = (grDateCtrAbs.Columns["IdAbsenta"] as GridViewDataComboBoxColumn);
-            colAbs.PropertiesComboBox.DataSource = dtAbs;
+            //DataTable dtAbs = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsente"" ", null);
+            //GridViewDataComboBoxColumn colAbs = (grDateCtrAbs.Columns["IdAbsenta"] as GridViewDataComboBoxColumn);
+            //colAbs.PropertiesComboBox.DataSource = dtAbs;
 
-            Session["InformatiaCurentaContracte"] = ds;
+            //Session["InformatiaCurentaContracte"] = ds;
         }
 
         protected void pnlCtlContractAbsente_Callback(object source, CallbackEventArgsBase e)
@@ -221,9 +221,9 @@ namespace WizOne.ContracteLucru
                 {
                     ds.Tables["Ptj_ContracteAbsente"].Rows.Add(row);
                     e.Cancel = true;
-                    grDateCtrAbs.CancelEdit();
-                    grDateCtrAbs.DataSource = ds.Tables["Ptj_ContracteAbsente"];
-                    grDateCtrAbs.KeyFieldName = "IdAuto";
+                    //grDateCtrAbs.CancelEdit();
+                    //grDateCtrAbs.DataSource = ds.Tables["Ptj_ContracteAbsente"];
+                    //grDateCtrAbs.KeyFieldName = "IdAuto";
                     Session["InformatiaCurentaContracte"] = ds;
                 }
                 else
@@ -252,11 +252,11 @@ namespace WizOne.ContracteLucru
 
                 foreach (DataColumn col in ds.Tables["Ptj_ContracteAbsente"].Columns)
                 {
-                    if (!col.AutoIncrement && grDateCtrAbs.Columns[col.ColumnName] != null && grDateCtrAbs.Columns[col.ColumnName].Visible)
-                    {
-                        var edc = e.NewValues[col.ColumnName];
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
-                    }
+                    //if (!col.AutoIncrement && grDateCtrAbs.Columns[col.ColumnName] != null && grDateCtrAbs.Columns[col.ColumnName].Visible)
+                    //{
+                    //    var edc = e.NewValues[col.ColumnName];
+                    //    row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                    //}
 
                     switch (col.ColumnName.ToUpper())
                     {
@@ -274,10 +274,10 @@ namespace WizOne.ContracteLucru
 
                 if (valid)
                 {
-                    e.Cancel = true;
-                    grDateCtrAbs.CancelEdit();
-                    Session["InformatiaCurentaContracte"] = ds;
-                    grDateCtrAbs.DataSource = ds.Tables["Ptj_ContracteAbsente"];
+                    //e.Cancel = true;
+                    //grDateCtrAbs.CancelEdit();
+                    //Session["InformatiaCurentaContracte"] = ds;
+                    //grDateCtrAbs.DataSource = ds.Tables["Ptj_ContracteAbsente"];
                 }
                 else
                     ArataMesaj(Dami.TraduCuvant(errMsg));
@@ -303,9 +303,9 @@ namespace WizOne.ContracteLucru
                 row.Delete();
 
                 e.Cancel = true;
-                grDateCtrAbs.CancelEdit();
-                Session["InformatiaCurentaContracte"] = ds;
-                grDateCtrAbs.DataSource = ds.Tables["Ptj_ContracteAbsente"];
+                //grDateCtrAbs.CancelEdit();
+                //Session["InformatiaCurentaContracte"] = ds;
+                //grDateCtrAbs.DataSource = ds.Tables["Ptj_ContracteAbsente"];
 
 
             }
@@ -317,12 +317,12 @@ namespace WizOne.ContracteLucru
 
         private void ArataMesaj(string mesaj)
         {
-            pnlCtlContractAbsente.Controls.Add(new LiteralControl());
-            WebControl script = new WebControl(HtmlTextWriterTag.Script);
-            pnlCtlContractAbsente.Controls.Add(script);
-            script.Attributes["id"] = "dxss_123456";
-            script.Attributes["type"] = "text/javascript";
-            script.Controls.Add(new LiteralControl("var str = '" + mesaj + "'; alert(str);"));
+            //pnlCtlContractAbsente.Controls.Add(new LiteralControl());
+            //WebControl script = new WebControl(HtmlTextWriterTag.Script);
+            //pnlCtlContractAbsente.Controls.Add(script);
+            //script.Attributes["id"] = "dxss_123456";
+            //script.Attributes["type"] = "text/javascript";
+            //script.Controls.Add(new LiteralControl("var str = '" + mesaj + "'; alert(str);"));
 
         }
 

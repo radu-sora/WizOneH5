@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.ContracteLucru {
+namespace WizOne.Contracte {
     
     
-    public partial class Contract {
+    public partial class Lista {
         
         /// <summary>
         /// txtTitlu control.

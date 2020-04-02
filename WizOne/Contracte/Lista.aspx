@@ -1,14 +1,60 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Contract.aspx.cs" Inherits="WizOne.ContracteLucru.Contract" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Cadru.Master" AutoEventWireup="true" CodeBehind="Lista.aspx.cs" Inherits="WizOne.Contracte.Lista" %>
 
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+    <table style="width:100%">
+        <tr>
+            <td class="pull-left">
+                <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
+            </td>
+            <td class="pull-right">
+                <dx:ASPxButton ID="btnNew" ClientInstanceName="btnNew" ClientIDMode="Static" runat="server" Text="Nou" AutoPostBack="true" OnClick="btnNew_Click" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                </dx:ASPxButton>
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
+                    <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
+                </dx:ASPxButton>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"> 
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback">
+                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" />
+                    <Settings ShowFilterRow="True" ShowGroupPanel="False" />
+                    <SettingsSearchPanel Visible="False" />
+                    <ClientSideEvents CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }" EndCallback="function(s,e) { onGridEndCallback(s); }" ContextMenu="ctx"/>
+                    <Columns>
+                        <dx:GridViewCommandColumn Width="50px" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" >
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnEdit">
+                                    <Image ToolTip="Modifica" Url="~/Fisiere/Imagini/Icoane/edit.png" />
+                                </dx:GridViewCommandColumnCustomButton>
+                            </CustomButtons>
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnDuplica">
+                                    <Image ToolTip="Duplica" Url="~/Fisiere/Imagini/Icoane/clone.png" />
+                                </dx:GridViewCommandColumnCustomButton>
+                            </CustomButtons>
+                            <CustomButtons>
+                                <dx:GridViewCommandColumnCustomButton ID="btnSterge">
+                                    <Image ToolTip="Sterge" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
+                                </dx:GridViewCommandColumnCustomButton>
+                            </CustomButtons>
+                        </dx:GridViewCommandColumn>
+                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  Width="50px"/>
+                        <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Nume" />
+                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
+                    </Columns>
+                </dx:ASPxGridView>                    
+            </td>
+        </tr>
+    </table>
 
-
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-
-    <script language="javascript" type="text/javascript">
-
+    <script>
         function grDate_CustomButtonClick(s, e) {
-            switch (e.buttonID){
+            var val = s.batchEditApi.GetCellValue(e.visibleIndex, "Id");
+            alert(val);
+            switch (e.buttonID) {
                 case "btnEdit":
                     grDate.GetRowValues(e.visibleIndex, 'Id', GoToEditMode);
                     break;
@@ -40,62 +86,16 @@
             });
         }
 
+        function onGridEndCallback(s) {
+            if (s.cpAlertMessage) {
+                swal({
+                    title: trad_string(limba, "Atentie"),
+                    text: s.cpAlertMessage,
+                    type: "warning"
+                });
+                delete s.cpAlertMessage;
+            }
+        }
 
     </script>
-
-</asp:Content>
-
-
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
-    <table width="100%">
-        <tr>
-            <td align="left">
-                <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
-            </td>
-            <td align="right">
-                <dx:ASPxButton ID="btnNew" ClientInstanceName="btnNew" ClientIDMode="Static" runat="server" Text="Nou" AutoPostBack="true" OnClick="btnNew_Click" oncontextMenu="ctx(this,event)" >
-                    <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
-                </dx:ASPxButton>
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
-                    <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
-                </dx:ASPxButton>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"> 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" OnDataBinding="grDate_DataBinding" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared">
-                    <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" />
-                    <Settings ShowFilterRow="True" ShowGroupPanel="False" />
-                    <SettingsSearchPanel Visible="False" />
-                    <ClientSideEvents CustomButtonClick="grDate_CustomButtonClick"  ContextMenu="ctx"/>
-                    <Columns>
-                        <dx:GridViewCommandColumn Width="50px" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" >
-                            <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnEdit">
-                                    <Image ToolTip="Modifica" Url="~/Fisiere/Imagini/Icoane/edit.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                            </CustomButtons>
-                            <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnDuplica">
-                                    <Image ToolTip="Duplica" Url="~/Fisiere/Imagini/Icoane/clone.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                            </CustomButtons>
-                            <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnSterge">
-                                    <Image ToolTip="Sterge" Url="~/Fisiere/Imagini/Icoane/sterge.png" />
-                                </dx:GridViewCommandColumnCustomButton>
-                            </CustomButtons>
-                        </dx:GridViewCommandColumn>
-                        <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  Width="50px"/>
-                        <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Nume" />
-                        <dx:GridViewDataComboBoxColumn FieldName="TipContract" Name="TipContract" Caption="Tip contract" >
-                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
-                        </dx:GridViewDataComboBoxColumn>
-                        <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
-                    </Columns>
-                </dx:ASPxGridView>                    
-            </td>
-        </tr>
-    </table>
 </asp:Content>

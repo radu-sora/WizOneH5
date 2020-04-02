@@ -359,12 +359,10 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\reports.css" />
-    <Content Include="ContracteLucru\Contract.aspx" />
-    <Content Include="ContracteLucru\ContractAbsente.ascx" />
-    <Content Include="ContracteLucru\ContractCiclic.ascx" />
-    <Content Include="ContracteLucru\ContractDetaliu.aspx" />
-    <Content Include="ContracteLucru\ContractVal.ascx" />
-    <Content Include="ContracteLucru\ContractZilnic.ascx" />
+    <Content Include="Contracte\Lista.aspx" />
+    <Content Include="Contracte\ContractAbsente.ascx" />
+    <Content Include="Contracte\Detalii.aspx" />
+    <Content Include="Contracte\ContractZilnic.ascx" />
     <Content Include="Default.aspx" />
     <Content Include="Eval\ActivitatiObiective.aspx" />
     <Content Include="Eval\Calificative.aspx" />
@@ -1290,46 +1288,32 @@
     <Compile Include="ConcediiMedicale\Istoric.aspx.designer.cs">
       <DependentUpon>Istoric.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ContracteLucru\Contract.aspx.cs">
-      <DependentUpon>Contract.aspx</DependentUpon>
+    <Compile Include="Contracte\Lista.aspx.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ContracteLucru\Contract.aspx.designer.cs">
-      <DependentUpon>Contract.aspx</DependentUpon>
+    <Compile Include="Contracte\Lista.aspx.designer.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ContracteLucru\ContractAbsente.ascx.cs">
+    <Compile Include="Contracte\ContractAbsente.ascx.cs">
       <DependentUpon>ContractAbsente.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ContracteLucru\ContractAbsente.ascx.designer.cs">
+    <Compile Include="Contracte\ContractAbsente.ascx.designer.cs">
       <DependentUpon>ContractAbsente.ascx</DependentUpon>
     </Compile>
-    <Compile Include="ContracteLucru\ContractCiclic.ascx.cs">
-      <DependentUpon>ContractCiclic.ascx</DependentUpon>
+    <Compile Include="Contracte\Detalii.aspx.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ContracteLucru\ContractCiclic.ascx.designer.cs">
-      <DependentUpon>ContractCiclic.ascx</DependentUpon>
+    <Compile Include="Contracte\Detalii.aspx.designer.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ContracteLucru\ContractDetaliu.aspx.cs">
-      <DependentUpon>ContractDetaliu.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractDetaliu.aspx.designer.cs">
-      <DependentUpon>ContractDetaliu.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractVal.ascx.cs">
-      <DependentUpon>ContractVal.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractVal.ascx.designer.cs">
-      <DependentUpon>ContractVal.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractZilnic.ascx.cs">
+    <Compile Include="Contracte\ContractZilnic.ascx.cs">
       <DependentUpon>ContractZilnic.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ContracteLucru\ContractZilnic.ascx.designer.cs">
+    <Compile Include="Contracte\ContractZilnic.ascx.designer.cs">
       <DependentUpon>ContractZilnic.ascx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">

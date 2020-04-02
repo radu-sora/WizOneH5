@@ -13723,3 +13723,31 @@ CREATE TABLE "ImportDateNomen"(
     CREATE UNIQUE INDEX "PK_ImportDateNomen" ON "ImportDateNomen" ("IdAuto") ;
 
 ALTER TABLE "ImportDateNomen" ADD CONSTRAINT "PK_ImportDateNomen" PRIMARY KEY ("IdAuto");
+
+
+----  2.2.127  ----
+
+
+DROP TABLE "Ptj_ContracteVal" PURGE;
+/
+DROP TABLE "Ptj_ContracteCiclice" PURGE;
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "CicluDataInceput";
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "CicluLungime";
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "ScadeVal0";
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "ScadeFaraDepasireNorma";
+/
+
+ALTER TABLE "Ptj_Contracte" DROP CONSTRAINT "Ptj_Contracte_PK";
+DROP INDEX "Ptj_Contracte_PK";
+
+ALTER TABLE "Ptj_Contracte" MODIFY ("Id" NOT NULL ENABLE);  
+CREATE UNIQUE INDEX "Ptj_Contracte_PK" ON "Ptj_Contracte" ("Id") ;
+ALTER TABLE "Ptj_Contracte" ADD CONSTRAINT "Ptj_Contracte_PK" PRIMARY KEY ("Id");
+/
+
+UPDATE "tblMeniuri" SET "Pagina"='Contracte\Lista' WHERE "Pagina"='ContracteLucru\Contract';
+COMMIT;

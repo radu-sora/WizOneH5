@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ContractAbsente.ascx.cs" Inherits="WizOne.ContracteLucru.ContractAbsente" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ContractAbsente.ascx.cs" Inherits="WizOne.Contracte.ContractAbsente" %>
 
 
 <script type="text/javascript">

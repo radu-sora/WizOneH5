@@ -37,8 +37,8 @@
 				<dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" PostBackUrl="Lista.aspx" >
 					<Image Url="../Fisiere/Imagini/Icoane/iesire.png"></Image>
 				</dx:ASPxButton>
-			</td>		
-		</tr>			
+			</td>
+		</tr>
 	</table>
 				
     <div>

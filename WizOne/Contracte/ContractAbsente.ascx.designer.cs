@@ -7,37 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.ContracteLucru {
+namespace WizOne.Contracte {
     
     
-    public partial class ContractDetaliu {
+    public partial class ContractAbsente {
         
         /// <summary>
-        /// btnSave control.
+        /// pnlCtlContractAbsente control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSave;
-        
-        /// <summary>
-        /// btnExit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnExit;
-        
-        /// <summary>
-        /// pnlCtl control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtlContractAbsente;
         
         /// <summary>
         /// DataList1 control.
@@ -49,12 +31,12 @@ namespace WizOne.ContracteLucru {
         protected global::System.Web.UI.WebControls.DataList DataList1;
         
         /// <summary>
-        /// ASPxPageControl2 control.
+        /// grDateCtrAbs control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxPageControl ASPxPageControl2;
+        protected global::DevExpress.Web.ASPxGridView grDateCtrAbs;
     }
 }

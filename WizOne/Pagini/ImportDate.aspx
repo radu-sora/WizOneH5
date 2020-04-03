@@ -16,6 +16,7 @@
 
     function EndUpload(s) {
         s.cpDocUploadName = null;
+        cmbSablon.SetValue(null);
     }
 
     function OnEndCallback(s, e) {
@@ -61,6 +62,7 @@
                     <table width="10%" >
                         <tr>
                             <td align="center">
+                                <dx:ASPxLabel  ID="lblButon" Width="200" runat="server"  Text="Incarcare fisier import" ></dx:ASPxLabel >	
                                 <dx:ASPxUploadControl ID="btnDocUpload" runat="server" ClientIDMode="Static" ShowProgressPanel="true" Height="28px"
                                     BrowseButton-Text="" FileUploadMode="OnPageLoad" UploadMode="Advanced" AutoStartUpload="true" ToolTip="Incarca document" ShowTextBox="false"
                                     ClientInstanceName="UploadImage" OnFileUploadComplete="btnDocUpload_FileUploadComplete" ValidationSettings-ShowErrors="false" meta:resourcekey="btnDocUploadResource1">
@@ -182,7 +184,7 @@
                                 <dx:ASPxGridView ID="grDateNomen" runat="server" ClientInstanceName="grDateNomen" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnDataBinding="grDateNomen_DataBinding" OnInitNewRow="grDateNomen_InitNewRow" OnCustomCallback="grDateNomen_CustomCallback"
                                     OnRowInserting="grDateNomen_RowInserting" OnRowUpdating="grDateNomen_RowUpdating" OnRowDeleting="grDateNomen_RowDeleting">
                                     <SettingsBehavior AllowFocusedRow="true" />
-                                    <Settings ShowFilterRow="true" ShowColumnHeaders="true"  />                                   
+                                    <Settings ShowFilterRow="false" ShowColumnHeaders="true"  />                                   
                                     <SettingsEditing Mode="Inline" />      
                                     <ClientSideEvents ContextMenu="ctx" EndCallback="OnEndCallback"/>                                
                                     <Columns>

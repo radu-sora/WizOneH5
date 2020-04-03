@@ -1010,7 +1010,17 @@ namespace WizOne.Absente
             //}
         }
 
-
-
+        protected void txtLuna_ButtonClick(object source, ButtonEditClickEventArgs e)
+        {
+            try
+            {
+                btnLoad_Click(source, e);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

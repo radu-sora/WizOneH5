@@ -12,7 +12,7 @@ using System.Web;
 namespace WizOne.Module
 {
     #region Classes
-    public class Eval_RaspunsLinii
+    internal class Eval_RaspunsLinii
     {
         public int IdQuiz { get; set; }
         public int F10003 { get; set; }
@@ -334,7 +334,8 @@ namespace WizOne.Module
             DescriereInRatingGlobal = columns.Contains("DescriereInRatingGlobal") == true ? dr["DescriereInRatingGlobal"].ToString() : "";
         }
     }
-    public class Eval_QuizIntrebari
+
+    internal class Eval_QuizIntrebari
     {
         public int Id { get; set; }
         public string Descriere { get; set; }
@@ -388,7 +389,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_Raspuns
+    internal class Eval_Raspuns
     {
         public int IdQuiz { get; set; }
         public int F10003 { get; set; }
@@ -431,7 +432,7 @@ namespace WizOne.Module
 
     }
 
-    public class Eval_Circuit
+    internal class Eval_Circuit
     {
         public int IdQuiz { get; set; }
         public int Super1 { get; set; }
@@ -493,7 +494,7 @@ namespace WizOne.Module
         }
     }
 
-    public class tblSupervizori
+    internal class tblSupervizori
     {
         public int Id { get; set; }
         public string Denumire { get; set; }
@@ -519,7 +520,7 @@ namespace WizOne.Module
         }
     }
 
-    public class USERS
+    internal class USERS
     {
         public int F70101 { get; set; }
         public int F70102 { get; set; }
@@ -571,7 +572,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_Drepturi
+    internal class Eval_Drepturi
     {
         public int IdQuiz { get; set; }
         public int Pozitie { get; set; }
@@ -594,7 +595,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_tblTipValoriLinii
+    internal class Eval_tblTipValoriLinii
     {
         public int Id { get; set; }
         public string Valoare { get; set; }
@@ -617,7 +618,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_SetAngajati
+    internal class Eval_SetAngajati
     {
         public int IdSetAng { get; set; }
         public string CodSet { get; set; }
@@ -640,7 +641,7 @@ namespace WizOne.Module
         }
     }
 
-    public class vwEval_ConfigObiectivCol
+    internal class vwEval_ConfigObiectivCol
     {
         public string ColumnName { get; set; }
         public int IdTipValoare { get; set; }
@@ -664,7 +665,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_DictionaryItem
+    internal class Eval_DictionaryItem
     {
         public int DictionaryItemId { get; set; }
         public int DictionaryId { get; set; }
@@ -684,7 +685,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_ConfigObTemplate
+    internal class Eval_ConfigObTemplate
     {
         public int TemplateId { get; set; }
         public string TemplateName { get; set; }
@@ -710,7 +711,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_ConfigObTemplateDetail
+    internal class Eval_ConfigObTemplateDetail
     {
         public int Id { get; set; }
         public int TemplateId { get; set; }
@@ -746,7 +747,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_ConfigObiective
+    internal class Eval_ConfigObiective
     {
         [Key]
         public int Id { get; set; }
@@ -768,8 +769,7 @@ namespace WizOne.Module
         }
     }
 
-
-    public class Eval_ObiIndividuale
+    internal class Eval_ObiIndividuale
     {
         public int IdPeriod { get; set; }
         public int F10003 { get; set; }
@@ -819,7 +819,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_ObiIndividualeTemp
+    internal class Eval_ObiIndividualeTemp
     {
         public int IdPeriod { get; set; }
         public decimal? Pondere { get; set; }
@@ -899,7 +899,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_SetCalificativDet
+    internal class Eval_SetCalificativDet
     {
         public int IdSet { get; set; }
         public int IdCalificativ { get; set; }
@@ -929,7 +929,7 @@ namespace WizOne.Module
     }
 
     #region Competente
-    public class Eval_ConfigCompetente
+    internal class Eval_ConfigCompetente
     {
         public int Id { get; set; }
         public string ColumnName { get; set; }
@@ -952,7 +952,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_ConfigCompTemplate
+    internal class Eval_ConfigCompTemplate
     {
         public int TemplateId { get; set; }
         public string TemplateName { get; set; }
@@ -969,7 +969,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_ConfigCompTemplateDetail
+    internal class Eval_ConfigCompTemplateDetail
     {
         public int Id { get; set; }
         public int TemplateId { get; set; }
@@ -998,7 +998,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_CompetenteAngajat
+    internal class Eval_CompetenteAngajat
     {
         public int IdPeriod { get; set; }
         public int F10003 { get; set; }
@@ -1033,7 +1033,7 @@ namespace WizOne.Module
         }
     }
 
-    public class Eval_CompetenteAngajatTemp
+    internal class Eval_CompetenteAngajatTemp
     {
         public int IdPeriod { get; set; }
         public int IdCategCompetenta { get; set; }
@@ -1085,7 +1085,7 @@ namespace WizOne.Module
         }
     }
 
-    public class vwEval_ConfigCompetenteCol
+    internal class vwEval_ConfigCompetenteCol
     {
         public string ColumnName { get; set; }
         public int IdNomenclator { get; set; }
@@ -1109,19 +1109,20 @@ namespace WizOne.Module
     #endregion
 
 
-    public class metaQuizAngajat
+    internal class metaQuizAngajat
     {
         public int IdQuiz { get; set; }
         public int F10003 { get; set; }
     }
 
-    public class metaEvalDenumireSuper
+    internal class metaEvalDenumireSuper
     {
         public int Pozitie { get; set; }
         public string Denumire { get; set; }
         public int FaraDrepturi { get; set; }
     }
-    public static class Evaluare
+
+    internal static class Evaluare
     {
 
         public static DataTable GetEval_Quiz(int? IdPerioada, DateTime? dtInceput, DateTime? dtSfarsit)

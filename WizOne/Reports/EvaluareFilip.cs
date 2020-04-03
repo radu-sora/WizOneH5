@@ -491,19 +491,30 @@ namespace WizOne.Reports
                             }
                     }
 
-
+                //Florin 2020.03.26 - s-a modificat selectul
                 //Florin 2019.10.25 - adaugam toti cei care au avut comentarii in chest 360 sau proiect
                 string coment = "";
-                DataTable dtComent = General.IncarcaDT($@"
-                    SELECT DISTINCT COALESCE(D.""NumeComplet"", D.F70104) AS""Nume""
-                    FROM ""Eval_ObiIndividualeTemp"" A
-                    INNER JOIN ""Eval_Quiz"" B ON A.""IdQuiz""=B.""Id""
-                    INNER JOIN ""Eval_RaspunsIstoric"" C ON A.""IdQuiz""=C.""IdQuiz"" AND A.F10003=C.F10003 AND A.""Pozitie""=C.""Pozitie""
-                    INNER JOIN USERS D ON C.""IdUser""=D.F70102
-                    INNER JOIN ""Eval_QuizIntrebari"" E ON A.""IdQuiz""=E.""IdQuiz"" AND E.""Id""=A.""IdLinieQuiz""
-                    WHERE A.F10003=@2 AND 
-                    COALESCE(B.""CategorieQuiz"",0) IN (1,2) AND (A.""Obiectiv"" IS NOT NULL OR A.""Activitate"" IS NOT NULL)
-                    AND B.""Anul"" =(SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" =@1)", new object[] { idQuiz, f10003 });
+                //DataTable dtComent = General.IncarcaDT($@"
+                //    SELECT DISTINCT COALESCE(D.""NumeComplet"", D.F70104) AS""Nume""
+                //    FROM ""Eval_ObiIndividualeTemp"" A
+                //    INNER JOIN ""Eval_Quiz"" B ON A.""IdQuiz""=B.""Id""
+                //    INNER JOIN ""Eval_RaspunsIstoric"" C ON A.""IdQuiz""=C.""IdQuiz"" AND A.F10003=C.F10003 AND A.""Pozitie""=C.""Pozitie""
+                //    INNER JOIN USERS D ON C.""IdUser""=D.F70102
+                //    INNER JOIN ""Eval_QuizIntrebari"" E ON A.""IdQuiz""=E.""IdQuiz"" AND E.""Id""=A.""IdLinieQuiz""
+                //    WHERE A.F10003=@2 AND 
+                //    COALESCE(B.""CategorieQuiz"",0) IN (1,2) AND (A.""Obiectiv"" IS NOT NULL OR A.""Activitate"" IS NOT NULL)
+                //    AND B.""Anul"" =(SELECT ""Anul"" FROM ""Eval_Quiz"" WHERE ""Id"" =@1)", new object[] { idQuiz, f10003 });
+                DataTable dtComent = General.IncarcaDT($@"SELECT DISTINCT COALESCE(D.NumeComplet, D.F70104) AS Nume FROM Eval_ObiIndividualeTemp A INNER JOIN Eval_Quiz B ON A.IdQuiz=B.Id INNER JOIN Eval_RaspunsIstoric C ON A.IdQuiz=C.IdQuiz AND
+                    A.F10003=C.F10003 AND A.Pozitie=C.Pozitie INNER JOIN USERS D ON C.IdUser=D.F70102 INNER JOIN Eval_QuizIntrebari E ON A.IdQuiz=E.IdQuiz AND E.Id=A.IdLinieQuiz WHERE A.F10003=@2 AND
+                    COALESCE(B.CategorieQuiz,0) IN (1,2) AND (A.Obiectiv IS NOT NULL OR A.Activitate IS NOT NULL) AND B.Anul =(SELECT Anul FROM Eval_Quiz WHERE Id = @1) UNION SELECT DISTINCT COALESCE(D.NumeComplet, D.F70104) AS Nume FROM (select idquiz, f10003, super, substring(super,6,2) Pozitie, comentariu from (select * from Eval_RaspunsLinii where idquiz=91 and f10003=3 and
+                    tipdata=8) p
+                    unpivot
+                    (comentariu for super in (Super1, Super2, Super3, Super4, Super5, Super6, Super7, Super8, Super9, Super10, Super11,Super12, Super13, Super14, Super15, Super16, Super17, Super18, Super19, Super20) ) as unpvt
+                    ) A
+                    INNER JOIN Eval_Quiz B ON A.IdQuiz=B.Id
+                    INNER JOIN Eval_RaspunsIstoric C ON A.IdQuiz=C.IdQuiz AND
+                    A.F10003=C.F10003 AND A.Pozitie=C.Pozitie INNER JOIN USERS D ON C.IdUser=D.F70102 WHERE A.F10003=@2 AND
+                    COALESCE(B.CategorieQuiz,0) IN (1,2) AND (isnull(A.comentariu,'')<>'') AND B.Anul =(SELECT Anul FROM Eval_Quiz WHERE Id = @1)", new object[] { idQuiz, f10003 });
                 if (dtComent != null)
                 {
                     for (int k = 0; k < dtComent.Rows.Count; k++)

@@ -19,15 +19,14 @@ namespace WizOne.Module
 {
     public class Notif
     {
-        public class metaAdreseMail
+        internal class metaAdreseMail
         {
             public string Mail { get; set; }
             public string Destinatie { get; set; }
             public int IncludeLinkAprobare { get; set; }
         }
 
-
-        public static string TrimiteNotificare(string numePagina, int tipNotificare, string strSelect, string tblAtasamente_Tabela, int tblAtasamente_Id, int userId, int userMarca)
+        internal static string TrimiteNotificare(string numePagina, int tipNotificare, string strSelect, string tblAtasamente_Tabela, int tblAtasamente_Id, int userId, int userMarca)
         {
             string rez = "";
 
@@ -226,147 +225,6 @@ namespace WizOne.Module
             return rez;
         }
 
-        //private static string CreazaSelect(int id, string strSelect, string numePagina, int userId, int userMarca)
-        //{
-        //    string strSql = "";
-
-        //    try
-        //    {
-        //        //cream filtrul
-        //        string strCond = "";
-        //        DataTable dtCond = General.IncarcaDT(@"SELECT * FROM ""Ntf_Conditii"" WHERE ""Id""=@1", new string[] { id.ToString() });
-        //        DataTable dtCmp = General.IncarcaDT(@"SELECT * FROM ""Ntf_tblCampuri"" WHERE ""Pagina""=@1", new string[] { numePagina });
-        //        foreach (DataRow dr in dtCond.Rows)
-        //        {
-        //            if ((dr["Coloana"] ?? "").ToString() != "" && (dr["Operator"] ?? "").ToString() != "")
-        //            {
-        //                DataRow[] lstTip = dtCmp.Select("Alias='" + dr["Coloana"] + "'");
-        //                if (lstTip.Count() == 0) continue;
-        //                string col = (lstTip[0]["CampSelect"] ?? "").ToString();
-        //                if (col == "") continue;
-        //                string tipData = "string";
-        //                if ((lstTip[0]["TipData"] ?? "").ToString() != "") tipData = (lstTip[0]["TipData"] ?? "").ToString();
-
-        //                if (dr["Operator"].ToString() != "fara valoare" && dr["Operator"].ToString() != "cu valoare" && (dr["Valoare1"] ?? "").ToString() == "") continue;
-
-
-        //                switch (dr["Operator"].ToString())
-        //                {
-        //                    case "fara valoare":
-        //                        strCond += " AND ((" + col + ") IS NULL OR (" + col + ") = '' OR (" + col + ") = 0)";
-        //                        break;
-        //                    case "cu valoare":
-        //                        strCond += " AND ((" + col + ") IS NOT NULL AND (" + col + ") <> '' AND (" + col + ") <> 0)";
-        //                        break;
-        //                    case "in":
-        //                        {
-        //                            string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-        //                            strCond += " AND ((" + col + ") IN (" + arr[0] + "))";
-        //                        }
-        //                        break;
-        //                    case "not in":
-        //                        {
-        //                            string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-        //                            strCond += " AND ((" + col + ") NOT IN (" + arr[0] + "))";
-        //                        }
-        //                        break;
-        //                    case "intre":
-        //                        {
-        //                            if ((dr["Valoare1"] ?? "").ToString() != "" && (dr["Valoare2"] ?? "").ToString() != "")
-        //                            {
-        //                                string[] arr1 = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-        //                                string[] arr2 = AflaValoarea(dr["Valoare2"].ToString(), dtCmp);
-        //                                if (tipData == "int")
-        //                                    strCond += " AND ((" + arr1[0] + ") <= (" + col + ") AND (" + col + ") <= (" + arr2[0] + "))";
-        //                                else
-        //                                {
-        //                                    if (tipData == "datetime")
-        //                                    {
-        //                                        if (Constante.tipBD == 1)
-        //                                            strCond += " AND CONVERT(date,(DATEADD(d," + (dr["NrZile1"] ?? "0").ToString() + ",(" + arr1[0] + "))) <= CONVERT(date,(" + col + ")) AND CONVERT(date,(" + col + ")) <= CONVERT(date,DATEADD(d," + (dr["NrZile2"] ?? "0").ToString() + ",(" + arr2[0] + "))))";
-        //                                        else
-        //                                            strCond += " AND ((TRUNC(" + arr1[0] + ") + " + (dr["NrZile1"] ?? "0").ToString() + ") <= (" + col + ") AND (" + col + ") <= (TRUNC(" + arr2[0] + ") + " + (dr["NrZile2"] ?? "0").ToString() + "))";
-        //                                    }
-        //                                }
-        //                            }
-        //                        }
-        //                        break;
-        //                    case "incepe cu":
-        //                        {
-        //                            string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-        //                            if (arr[1] == "3")
-        //                                strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") + '%')";
-        //                            else
-        //                                strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' + '%')";
-        //                        }
-        //                        break;
-        //                    case "contine":
-        //                        {
-        //                            string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-        //                            if (arr[1] == "3")
-        //                                strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + ") + '%')";
-        //                            else
-        //                                strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "' + '%')";
-        //                        }
-        //                        break;
-        //                    case "se termina cu":
-        //                        {
-        //                            string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-        //                            if (arr[1] == "3")
-        //                                strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + "))";
-        //                            else
-        //                                strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "')";
-        //                        }
-        //                        break;
-        //                    case "<>":
-        //                    case ">":
-        //                    case ">=":
-        //                    case "<":
-        //                    case "<=":
-        //                    case "=":
-        //                        {
-        //                            string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-        //                            if (arr[1] == "2")
-        //                                strCond += " AND ((" + col + ")" + dr["Operator"] + "('" + arr[0] + "'))";
-        //                            else
-        //                                strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
-        //                        }
-        //                        break;
-        //                }
-        //            }
-        //        }
-        //        if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog(strCond, "CreazaFiltrul");
-
-
-        //        //cream campurile
-        //        string strCamp = "";
-        //        for (int i = 0; i < dtCmp.Rows.Count; i++)
-        //        {
-        //            if ((dtCmp.Rows[i]["CampSelect"] ?? "").ToString() != "" && (dtCmp.Rows[i]["Alias"] ?? "").ToString() != "")
-        //                strCamp += ", (" + dtCmp.Rows[i]["CampSelect"] + ") AS '" + dtCmp.Rows[i]["Alias"] + "'";
-        //        }
-
-        //        if (strCamp != "") strCamp = strCamp.Substring(1);
-        //        if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog(strCamp, "CreazaCampurile");
-
-
-        //        //cream selectul
-        //        if (strCamp != "")
-        //        {
-        //            strSql = "SELECT " + strCamp + " FROM (" + strSelect + ") ent WHERE 1 = 1 " + strCond;
-        //            strSql = strSql.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER",userId.ToString());
-        //            if (Dami.ValoareParam("LogNotificari") == "1") General.CreazaLog(strSql, "CreazaSelect");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-
-        //    return strSql;
-        //}
-
-
         private static void CreazaSelect(int id, string strSelect, string numePagina, int userId, int userMarca, out string ntf_Campuri, out string ntf_Conditii)
         {
             string strSql = "";
@@ -548,7 +406,6 @@ namespace WizOne.Module
             ntf_Campuri = strCamp;
             ntf_Conditii = strCond;
         }
-
 
         private static string[] AflaValoarea(string camp, DataTable dtCmp)
         {
@@ -742,8 +599,6 @@ namespace WizOne.Module
 
         }
 
-        //Florin 2020.02.06
-
         private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
         {
             string str = text;
@@ -759,54 +614,60 @@ namespace WizOne.Module
                 }
 
                 int z = 1;
-                do
+                if (str.IndexOf("Link1") >= 0)
                 {
-                    int pozFirst = str.Substring(0, str.IndexOf("Link1")).LastIndexOf("#$");
-                    string cuv = str.Substring(pozFirst, str.Substring(pozFirst).IndexOf("$#"));
-                    string cuvOriginal = cuv;
-
-                    if (cuv != "") cuv = cuv.Replace("Link1 ", "").Replace("Link1", "").Replace("#$", "").Replace("$#", "").Trim();
-
-                    if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
+                    do
                     {
-                        string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
+                        int pozFirst = str.Substring(0, str.IndexOf("Link1")).LastIndexOf("#$");
+                        string cuv = str.Substring(pozFirst, str.Substring(pozFirst).IndexOf("$#"));
+                        string cuvOriginal = cuv;
 
-                        string rsp = General.Encrypt_QueryString(arg);
-                        string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-                        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
-                        str = str.Replace(cuvOriginal + "$#", lnk).ToString();
-                    }
-                    else
-                        str = str.Replace("#$Link1 " + cuv + "$#", "").ToString();
+                        if (cuv != "") cuv = cuv.Replace("Link1 ", "").Replace("Link1", "").Replace("#$", "").Replace("$#", "").Trim();
 
-                    z++;
-                    if (z == 10) break;
-                } while (str.IndexOf("Link1") >= 0);
+                        if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
+                        {
+                            string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
+
+                            string rsp = General.Encrypt_QueryString(arg);
+                            string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
+                            string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+                            str = str.Replace(cuvOriginal + "$#", lnk).ToString();
+                        }
+                        else
+                            str = str.Replace("#$Link1 " + cuv + "$#", "").ToString();
+
+                        z++;
+                        if (z == 10) break;
+                    } while (str.IndexOf("Link1") >= 0);
+                }
 
                 z = 1;
-                do
+                if (str.IndexOf("Link2") >= 0)
                 {
-                    int pozFirst = str.Substring(0, str.IndexOf("Link2")).LastIndexOf("#$");
-                    string cuv = str.Substring(pozFirst, str.Substring(pozFirst).IndexOf("$#"));
-                    string cuvOriginal = cuv;
-
-                    if (cuv != "") cuv = cuv.Replace("Link2 ", "").Replace("Link2", "").Replace("#$", "").Replace("$#", "").Trim();
-
-                    if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
+                    do
                     {
-                        string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
+                        int pozFirst = str.Substring(0, str.IndexOf("Link2")).LastIndexOf("#$");
+                        string cuv = str.Substring(pozFirst, str.Substring(pozFirst).IndexOf("$#"));
+                        string cuvOriginal = cuv;
 
-                        string rsp = General.Encrypt_QueryString(arg);
-                        string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-                        string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
-                        str = str.Replace(cuvOriginal + "$#", lnk).ToString();
-                    }
-                    else
-                        str = str.Replace("#$Link2 " + cuv + "$#", "").ToString();
+                        if (cuv != "") cuv = cuv.Replace("Link2 ", "").Replace("Link2", "").Replace("#$", "").Replace("$#", "").Trim();
 
-                    z++;
-                    if (z == 10) break;
-                } while (str.IndexOf("Link2") >= 0);
+                        if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
+                        {
+                            string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
+
+                            string rsp = General.Encrypt_QueryString(arg);
+                            string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
+                            string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
+                            str = str.Replace(cuvOriginal + "$#", lnk).ToString();
+                        }
+                        else
+                            str = str.Replace("#$Link2 " + cuv + "$#", "").ToString();
+
+                        z++;
+                        if (z == 10) break;
+                    } while (str.IndexOf("Link2") >= 0);
+                }
 
                 //cautam daca avem de inserat tabel
                 if (str.ToLower().IndexOf("#$select") >= 0)
@@ -859,114 +720,6 @@ namespace WizOne.Module
 
             return str;
         }
-
-
-        //private static string InlocuiesteCampuri(string text, DataTable dtSel, int userId, int userMarca, string numePagina = "", int id = -99, string lstAdr = "", int inlocLinkAprobare = 0)
-        //{
-        //    string str = text;
-
-        //    try
-        //    {
-        //        string strSelect = "";
-        //        string strOriginal = "";
-
-        //        //cautam daca avem de inserat tabel
-        //        if (str.ToLower().IndexOf("#$select") >= 0)
-        //        {
-        //            int start = str.ToLower().IndexOf("#$select");
-        //            strSelect = str.Substring(start, str.Substring(start).IndexOf("$#")).Replace("#$", "");
-        //            strOriginal = strSelect;
-        //            strSelect = WebUtility.HtmlDecode(strSelect);
-        //            strSelect = strSelect.Replace("GLOBAL.MARCA", userMarca.ToString()).Replace("GLOBAL.IDUSER", userId.ToString());
-        //        }
-
-        //        for (int i = 0; i < dtSel.Columns.Count; i++)
-        //        {
-        //            str = str.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
-        //            strSelect = strSelect.Replace("#$" + dtSel.Columns[i] + "$#", (dtSel.Rows[0][dtSel.Columns[i]] ?? "").ToString());
-        //        }
-
-        //        if (str.IndexOf("#$Link") >= 0)
-        //        {
-        //            string cuv = str.Substring(str.IndexOf("#$Link"), str.Substring(str.IndexOf("#$Link")).IndexOf("$#"));
-        //            if (cuv != "") cuv = cuv.Replace("#$Link", "").Replace("$#", "").Trim();
-
-        //            if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
-        //            {
-        //                string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/1/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
-
-        //                string rsp = General.Encrypt_QueryString(arg);
-        //                string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-        //                string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + cuv + "</a>";
-        //                str = str.Replace("#$Link " + cuv + "$#", lnk).ToString();
-        //            }
-        //            else
-        //                str = str.Replace("#$Link " + cuv + "$#", "").ToString();
-        //        }
-
-
-        //        if (str.IndexOf("Link Respinge") >= 0)
-        //        {
-        //            if ((numePagina.IndexOf("Absente.Lista") >= 0 || numePagina.IndexOf("Pontaj.PontajEchipa") >= 0 || numePagina.IndexOf("Pontaj.PontajDetaliat") >= 0) && id != -99 && lstAdr != "" && inlocLinkAprobare == 1)
-        //            {
-        //                string arg = DateTime.Now.Second.ToString().PadLeft(2, '0') + "/Wiz/" + lstAdr + "/" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + "/2/One/" + DateTime.Now.Hour.ToString().PadLeft(2, '0') + "/" + id.ToString().PadLeft(8, '0') + "/" + HttpContext.Current.Session["IdClient"].ToString().PadLeft(8, '0') + "/" + numePagina;
-
-        //                string rsp = General.Encrypt_QueryString(arg);
-        //                string hostUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + VirtualPathUtility.ToAbsolute("~/");
-        //                string lnk = "<a href='" + hostUrl + "/Raspuns.aspx?arg=" + rsp + "' target='_blank'>" + Dami.TraduCuvant("Respinge") + "</a>";
-        //                str = str.Replace("#$Link Respinge$#", lnk).ToString();
-        //            }
-        //            else
-        //                str = str.Replace("#$Link Respinge$#", "").ToString();
-        //        }
-
-
-        //        //cautam daca avem de inserat tabel
-        //        if (str.ToLower().IndexOf("#$select") >= 0)
-        //        {
-        //            DataTable dtTbl = General.IncarcaDT(WebUtility.HtmlDecode(strSelect), null);
-        //            string tbl = "";
-        //            tbl += @"<table style=""border: solid 1px #ccc; width:100%;"">" + Environment.NewLine;
-
-
-        //            //adaugam capul de tabel
-        //            tbl += @"<thead style=""background-color:lightblue;"">" + Environment.NewLine;
-        //            tbl += "<tr>" + Environment.NewLine;
-        //            for (int x = 0; x < dtTbl.Columns.Count; x++)
-        //            {
-        //                tbl += "<td>" + dtTbl.Columns[x].ColumnName + "</td>" + Environment.NewLine;
-        //            }
-        //            tbl += "</tr>" + Environment.NewLine;
-        //            tbl += @"</thead>" + Environment.NewLine;
-
-
-        //            //adaugam corpul tabelului
-        //            tbl += @"<tbody>" + Environment.NewLine;
-        //            for (int x = 0; x < dtTbl.Rows.Count; x++)
-        //            {
-        //                tbl += "<tr>" + Environment.NewLine;
-        //                for (int y = 0; y < dtTbl.Columns.Count; y++)
-        //                {
-        //                    tbl += @"<td style=""border: solid 1px #ccc;"">" + dtTbl.Rows[x][dtTbl.Columns[y]] + "</td>" + Environment.NewLine;
-        //                }
-        //                tbl += "</tr>" + Environment.NewLine;
-        //            }
-        //            tbl += @"</tbody>" + Environment.NewLine;
-
-
-        //            tbl += "</table>" + Environment.NewLine;
-
-        //            str = str.Replace("#$" + strOriginal + "$#", tbl);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-
-        //    return str;
-        //}
-
 
         private static void TrimiteMail(string mail, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel)
         {
@@ -1113,7 +866,6 @@ namespace WizOne.Module
                 General.MemoreazaEroarea(ex, "Notif", new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
-
 
         private static void TrimiteMail(List<metaAdreseMail> lstAdr, string subiect, string corpMail, int trimiteAtt, string numeAtt, string corpAtt, int trimiteXls, string selectXls, string numeExcel)
         {
@@ -1294,451 +1046,6 @@ namespace WizOne.Module
             }
         }
 
-
-        //public void CreeazaXLS(string strSelect)
-        //{
-        //    try
-        //    {
-        //        DataTable dt = General.IncarcaDT(strSelect, null);
-
-
-        //        //IEnumerable<metaIstoricExtinsLunar> q = null;
-
-        //        //q = GetIstoricExtinsLunar(idUser, -99, dataStart, dataSfarsit, structura, f10003);
-
-        //        Microsoft.Office.Interop.Excel.Workbook book = new Microsoft.Office.Interop.Excel.Workbook();
-
-        //        //File.Create(cale).Close();
-
-        //        //book.LoadDocument(cale);
-
-        //        //book.Worksheets.Remove(book.Worksheets["Sheet1"]);
-        //        //book.Worksheets.Insert(0, "Sheet1");
-
-        //        Microsoft.Office.Interop.Excel.Worksheet ws2 = book.Worksheets["Sheet1"];
-
-        //        //IEnumerable<metaIstoricExtinsLunar> lst = q.ToList();
-
-        //        int i = 1;
-        //        int nr = 0;
-        //        DateTime dt = dataStart;
-
-        //        int nrZile = (dataSfarsit - dataStart).Days;
-        //        nrZile++;
-
-        //        Color color = Color.FromArgb(255, 255, 255);
-        //        foreach (var el in lst)
-        //        {
-        //            bool cont = false;
-        //            if ((el.F10003 == f10003 || ((el.Ziua1 == null || el.Ziua1.Trim() == "#FFFF0000") && (el.Ziua2 == null || el.Ziua2.Trim() == "#FFFF0000") && (el.Ziua3 == null || el.Ziua3.Trim() == "#FFFF0000") && (el.Ziua4 == null || el.Ziua4.Trim() == "#FFFF0000") && (el.Ziua5 == null || el.Ziua5.Trim() == "#FFFF0000") &&
-        //                (el.Ziua6 == null || el.Ziua6.Trim() == "#FFFF0000") && (el.Ziua7 == null || el.Ziua7.Trim() == "#FFFF0000") && (el.Ziua8 == null || el.Ziua8.Trim() == "#FFFF0000") && (el.Ziua9 == null || el.Ziua9.Trim() == "#FFFF0000") && (el.Ziua10 == null || el.Ziua10.Trim() == "#FFFF0000") &&
-        //                (el.Ziua11 == null || el.Ziua11.Trim() == "#FFFF0000") && (el.Ziua12 == null || el.Ziua12.Trim() == "#FFFF0000") && (el.Ziua13 == null || el.Ziua13.Trim() == "#FFFF0000") && (el.Ziua14 == null || el.Ziua14.Trim() == "#FFFF0000") && (el.Ziua15 == null || el.Ziua15.Trim() == "#FFFF0000") &&
-        //                (el.Ziua16 == null || el.Ziua16.Trim() == "#FFFF0000") && (el.Ziua17 == null || el.Ziua17.Trim() == "#FFFF0000") && (el.Ziua18 == null || el.Ziua18.Trim() == "#FFFF0000") && (el.Ziua19 == null || el.Ziua19.Trim() == "#FFFF0000") && (el.Ziua20 == null || el.Ziua20.Trim() == "#FFFF0000") &&
-        //                (el.Ziua21 == null || el.Ziua21.Trim() == "#FFFF0000") && (el.Ziua22 == null || el.Ziua22.Trim() == "#FFFF0000") && (el.Ziua23 == null || el.Ziua23.Trim() == "#FFFF0000") && (el.Ziua24 == null || el.Ziua24.Trim() == "#FFFF0000") && (el.Ziua25 == null || el.Ziua25.Trim() == "#FFFF0000") &&
-        //                (el.Ziua26 == null || el.Ziua26.Trim() == "#FFFF0000") && (el.Ziua27 == null || el.Ziua27.Trim() == "#FFFF0000") && (el.Ziua28 == null || el.Ziua28.Trim() == "#FFFF0000") && (el.Ziua29 == null || el.Ziua29.Trim() == "#FFFF0000") && (el.Ziua30 == null || el.Ziua30.Trim() == "#FFFF0000") && (el.Ziua31 == null || el.Ziua31.Trim() == "#FFFF0000"))))
-        //            {
-        //                cont = true;
-        //                if (i > 1)
-        //                    continue;
-        //            }
-        //            nr++;
-        //            ws2.Cells["A" + i].Value = (i == 1 ? "Angajat" : el.NumeComplet);
-
-        //            if (i == 1 && !cont)
-        //                ws2.Cells["A" + (i + 1).ToString()].Value = el.NumeComplet;
-
-        //            if (nrZile >= 1)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["B" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua1 != null) ws2.Cells["B" + (i + 1).ToString()].FillColor = Culoare(el.Ziua1);
-        //                }
-        //                else
-        //                    if (el.Ziua1 != null) ws2.Cells["B" + i].FillColor = Culoare(el.Ziua1);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 2)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["C" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua2 != null) ws2.Cells["C" + (i + 1).ToString()].FillColor = Culoare(el.Ziua2);
-        //                }
-        //                else
-        //                    if (el.Ziua2 != null) ws2.Cells["C" + i].FillColor = Culoare(el.Ziua2);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 3)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["D" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua3 != null) ws2.Cells["D" + (i + 1).ToString()].FillColor = Culoare(el.Ziua3);
-        //                }
-        //                else
-        //                    if (el.Ziua3 != null) ws2.Cells["D" + i].FillColor = Culoare(el.Ziua3);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 4)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["E" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua4 != null) ws2.Cells["E" + (i + 1).ToString()].FillColor = Culoare(el.Ziua4);
-        //                }
-        //                else
-        //                    if (el.Ziua4 != null) ws2.Cells["E" + i].FillColor = Culoare(el.Ziua4);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 5)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["F" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua5 != null) ws2.Cells["F" + (i + 1).ToString()].FillColor = Culoare(el.Ziua5);
-        //                }
-        //                else
-        //                    if (el.Ziua5 != null) ws2.Cells["F" + i].FillColor = Culoare(el.Ziua5);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 6)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["G" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua6 != null) ws2.Cells["G" + (i + 1).ToString()].FillColor = Culoare(el.Ziua6);
-        //                }
-        //                else
-        //                    if (el.Ziua6 != null) ws2.Cells["G" + i].FillColor = Culoare(el.Ziua6);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 7)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["H" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua7 != null) ws2.Cells["H" + (i + 1).ToString()].FillColor = Culoare(el.Ziua7);
-        //                }
-        //                else
-        //                    if (el.Ziua7 != null) ws2.Cells["H" + i].FillColor = Culoare(el.Ziua7);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 8)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["I" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua8 != null) ws2.Cells["I" + (i + 1).ToString()].FillColor = Culoare(el.Ziua8);
-        //                }
-        //                else
-        //                    if (el.Ziua8 != null) ws2.Cells["I" + i].FillColor = Culoare(el.Ziua8);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 9)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["J" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua9 != null) ws2.Cells["J" + (i + 1).ToString()].FillColor = Culoare(el.Ziua9);
-        //                }
-        //                else
-        //                    if (el.Ziua9 != null) ws2.Cells["J" + i].FillColor = Culoare(el.Ziua9);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 10)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["K" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua10 != null) ws2.Cells["K" + (i + 1).ToString()].FillColor = Culoare(el.Ziua10);
-        //                }
-        //                else
-        //                    if (el.Ziua10 != null) ws2.Cells["K" + i].FillColor = Culoare(el.Ziua10);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 11)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["L" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua11 != null) ws2.Cells["L" + (i + 1).ToString()].FillColor = Culoare(el.Ziua11);
-        //                }
-        //                else
-        //                    if (el.Ziua11 != null) ws2.Cells["L" + i].FillColor = Culoare(el.Ziua11);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 12)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["M" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua12 != null) ws2.Cells["M" + (i + 1).ToString()].FillColor = Culoare(el.Ziua12);
-        //                }
-        //                else
-        //                    if (el.Ziua12 != null) ws2.Cells["M" + i].FillColor = Culoare(el.Ziua12);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 13)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["N" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua13 != null) ws2.Cells["N" + (i + 1).ToString()].FillColor = Culoare(el.Ziua13);
-        //                }
-        //                else
-        //                    if (el.Ziua13 != null) ws2.Cells["N" + i].FillColor = Culoare(el.Ziua13);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 14)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["O" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua14 != null) ws2.Cells["O" + (i + 1).ToString()].FillColor = Culoare(el.Ziua14);
-        //                }
-        //                else
-        //                    if (el.Ziua14 != null) ws2.Cells["O" + i].FillColor = Culoare(el.Ziua14);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 15)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["P" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua15 != null) ws2.Cells["P" + (i + 1).ToString()].FillColor = Culoare(el.Ziua15);
-        //                }
-        //                else
-        //                    if (el.Ziua15 != null) ws2.Cells["P" + i].FillColor = Culoare(el.Ziua15);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 16)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["Q" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua16 != null) ws2.Cells["Q" + (i + 1).ToString()].FillColor = Culoare(el.Ziua16);
-        //                }
-        //                else
-        //                    if (el.Ziua16 != null) ws2.Cells["Q" + i].FillColor = Culoare(el.Ziua16);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 17)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["R" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua17 != null) ws2.Cells["R" + (i + 1).ToString()].FillColor = Culoare(el.Ziua17);
-        //                }
-        //                else
-        //                    if (el.Ziua17 != null) ws2.Cells["R" + i].FillColor = Culoare(el.Ziua17);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 18)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["S" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua18 != null) ws2.Cells["S" + (i + 1).ToString()].FillColor = Culoare(el.Ziua18);
-        //                }
-        //                else
-        //                    if (el.Ziua18 != null) ws2.Cells["S" + i].FillColor = Culoare(el.Ziua18);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 19)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["T" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua19 != null) ws2.Cells["T" + (i + 1).ToString()].FillColor = Culoare(el.Ziua19);
-        //                }
-        //                else
-        //                    if (el.Ziua19 != null) ws2.Cells["T" + i].FillColor = Culoare(el.Ziua19);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 20)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["U" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua20 != null) ws2.Cells["U" + (i + 1).ToString()].FillColor = Culoare(el.Ziua20);
-        //                }
-        //                else
-        //                    if (el.Ziua20 != null) ws2.Cells["U" + i].FillColor = Culoare(el.Ziua20);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 21)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["V" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua21 != null) ws2.Cells["V" + (i + 1).ToString()].FillColor = Culoare(el.Ziua21);
-        //                }
-        //                else
-        //                    if (el.Ziua21 != null) ws2.Cells["V" + i].FillColor = Culoare(el.Ziua21);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 22)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["W" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua22 != null) ws2.Cells["W" + (i + 1).ToString()].FillColor = Culoare(el.Ziua22);
-        //                }
-        //                else
-        //                    if (el.Ziua22 != null) ws2.Cells["W" + i].FillColor = Culoare(el.Ziua22);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 23)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["X" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua23 != null) ws2.Cells["X" + (i + 1).ToString()].FillColor = Culoare(el.Ziua23);
-        //                }
-        //                else
-        //                    if (el.Ziua23 != null) ws2.Cells["X" + i].FillColor = Culoare(el.Ziua23);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 24)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["Y" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua24 != null) ws2.Cells["Y" + (i + 1).ToString()].FillColor = Culoare(el.Ziua24);
-        //                }
-        //                else
-        //                    if (el.Ziua24 != null) ws2.Cells["Y" + i].FillColor = Culoare(el.Ziua24);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 25)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["Z" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua25 != null) ws2.Cells["Z" + (i + 1).ToString()].FillColor = Culoare(el.Ziua25);
-        //                }
-        //                else
-        //                    if (el.Ziua25 != null) ws2.Cells["Z" + i].FillColor = Culoare(el.Ziua25);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 26)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["AA" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua26 != null) ws2.Cells["AA" + (i + 1).ToString()].FillColor = Culoare(el.Ziua26);
-        //                }
-        //                else
-        //                    if (el.Ziua26 != null) ws2.Cells["AA" + i].FillColor = Culoare(el.Ziua26);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 27)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["AB" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua27 != null) ws2.Cells["AB" + (i + 1).ToString()].FillColor = Culoare(el.Ziua27);
-        //                }
-        //                else
-        //                    if (el.Ziua27 != null) ws2.Cells["AB" + i].FillColor = Culoare(el.Ziua27);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 28)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["AC" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua28 != null) ws2.Cells["AC" + (i + 1).ToString()].FillColor = Culoare(el.Ziua28);
-        //                }
-        //                else
-        //                    if (el.Ziua28 != null) ws2.Cells["AC" + i].FillColor = Culoare(el.Ziua28);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 29)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["AD" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua29 != null) ws2.Cells["AD" + (i + 1).ToString()].FillColor = Culoare(el.Ziua29);
-        //                }
-        //                else
-        //                    if (el.Ziua29 != null) ws2.Cells["AD" + i].FillColor = Culoare(el.Ziua29);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile >= 30)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["AE" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua30 != null) ws2.Cells["AE" + (i + 1).ToString()].FillColor = Culoare(el.Ziua30);
-        //                }
-        //                else
-        //                    if (el.Ziua30 != null) ws2.Cells["AE" + i].FillColor = Culoare(el.Ziua30);
-        //            }
-        //            dt = dt.AddDays(1);
-        //            if (nrZile == 31)
-        //            {
-        //                if (i == 1)
-        //                {
-        //                    ws2.Cells["AF" + i].Value = dt.Day.ToString().PadLeft(2, '0') + "." + dt.Month.ToString().PadLeft(2, '0');
-        //                    if (el.Ziua31 != null) ws2.Cells["AF" + (i + 1).ToString()].FillColor = Culoare(el.Ziua31);
-        //                }
-        //                else
-        //                    if (el.Ziua31 != null) ws2.Cells["AF" + i].FillColor = Culoare(el.Ziua31);
-        //            }
-        //            if (i == 1) i += 2;
-        //            else i++;
-        //        }
-
-        //        ws2.Columns.AutoFit(0, 31);
-
-
-        //        srvGeneral ctx = new srvGeneral();
-        //        IEnumerable<metaLegendaCulori> r = ctx.LegendaCulori(2);
-        //        IEnumerable<metaLegendaCulori> lstCulori = r.ToList();
-
-        //        i = 1;
-        //        string col1 = "", col2 = "";
-
-        //        col1 = (nrZile <= 5 ? "I" : (nrZile > 5 && nrZile <= 10 ? "N" : (nrZile > 10 && nrZile <= 15 ? "S" : (nrZile > 15 && nrZile <= 20 ? "X" : (nrZile > 20 && nrZile <= 25 ? "AC" : "AI")))));
-        //        col2 = (nrZile <= 5 ? "J" : (nrZile > 5 && nrZile <= 10 ? "O" : (nrZile > 10 && nrZile <= 15 ? "T" : (nrZile > 15 && nrZile <= 20 ? "Y" : (nrZile > 20 && nrZile <= 25 ? "AD" : "AJ")))));
-
-        //        foreach (var el in lstCulori)
-        //        {
-        //            if (i == 1)
-        //            {
-        //                ws2.Cells[col1 + i.ToString()].Value = "Legenda";
-        //                ws2.Cells[col1 + (i + 1).ToString()].Value = el.Descriere;
-        //            }
-        //            else
-        //                ws2.Cells[col1 + i.ToString()].Value = el.Descriere;
-
-        //            if (i == 1)
-        //                ws2.Cells[col2 + (i + 1).ToString()].FillColor = Culoare(el.Culoare);
-        //            else
-        //                ws2.Cells[col2 + i.ToString()].FillColor = Culoare(el.Culoare);
-
-        //            if (i == 1) i += 2;
-        //            else i++;
-        //        }
-
-        //        ws2.Columns.AutoFit(nrZile + 3, nrZile + 3);
-        //        ws2.Columns[nrZile + 4].Width = 60;
-
-
-        //        book.Worksheets.ActiveWorksheet = book.Worksheets["Sheet1"];
-        //        book.SaveDocument(cale);
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-
-        //}
-
-
         private static string CreazaHTML(string corpAtt)
         {
             string str = corpAtt;
@@ -1812,8 +1119,5 @@ namespace WizOne.Module
 
             return str;
         }
-
-
-
     }
 }

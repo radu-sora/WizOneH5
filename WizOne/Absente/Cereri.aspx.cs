@@ -16,10 +16,10 @@ using System.Threading;
 
 namespace WizOne.Absente
 {
-    public partial class Cereri : System.Web.UI.Page
+    public partial class Cereri : Page
     {
 
-        public class metaCereriDate
+        internal class metaCereriDate
         {
             public object Angajat { get; set; }
             public object Absenta { get; set; }
@@ -1027,7 +1027,7 @@ namespace WizOne.Absente
                     string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrZile"",0)),0) AS ""ZileAn"" FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
                     DataRow drAn = General.IncarcaDR(sqlAn, new object[] { Convert.ToInt32(cmbAng.Value), txtDataInc.Date.Year, Convert.ToInt32(cmbAbs.Value) });
 
-                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(General.Nz(drAn[0], 0)) > Convert.ToInt32(drAbs["NrMaxAn"]))
+                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(General.Nz(drAn[0], 0)) >= Convert.ToInt32(drAbs["NrMaxAn"]))
                     {
                         if (tip == 1)
                             MessageBox.Show(Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite in an"), MessageBox.icoWarning);

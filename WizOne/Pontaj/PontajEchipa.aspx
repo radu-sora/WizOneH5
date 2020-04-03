@@ -742,8 +742,7 @@
                                 <span style="font-weight:bold; font-size:14px;">Absente de tip ora</span>
                             </div>
                         </div>
-                        <div class="row" id="pnlValuri" runat="server" style="margin:20px 50px 50px 50px;">
-                        </div>
+                        <div class="row" id="pnlValuri" runat="server" style="margin:20px 50px 50px 50px;"/>
                     </div>
                     <dx:ASPxHiddenField ID="txtValuri" runat="server"></dx:ASPxHiddenField>
                 </asp:Panel>

@@ -12787,6 +12787,10 @@ GO
 DELETE FROM "tblParametrii" WHERE "Nume" = 'RecalculCuloare'
 GO
 
+UPDATE Ntf_Setari SET ContinutMail=REPLACE(ContinutMail,'#$Link Aproba$#','#$Link1 Aproba$#') WHERE ContinutMail LIKE '%#$Link Aproba$#%'
+UPDATE Ntf_Setari SET ContinutMail=REPLACE(ContinutMail,'#$Link Respinge$#','#$Link2 Respinge$#') WHERE ContinutMail LIKE '%#$Link Respinge$#%'
+GO
+
 
 ----  2.2.126  ----
 
@@ -12800,9 +12804,35 @@ GO
 alter table F090 add CodTranzactie int
 GO
 
+INSERT INTO "Ptj_tblAdmin" ("Coloana", "Alias", "Latime", "Vizibil", "Blocat", "TipColoana", "Ordine", "USER_NO", "TIME") 
+SELECT 'Stare', 'Stare', 0, 1, 0, 0, 1, -95, GetDate() WHERE ((SELECT COUNT(*) FROM "Ptj_tblAdmin" WHERE "Coloana"='Stare') = 0)
+GO
+
+EXEC sp_rename 'tblZile', 'tblZile2'
+GO
+
+CREATE VIEW tblZile
+AS 
+SELECT A.Zi, A.ZiSapt, CASE WHEN B.DAY IS NOT NULL THEN 1 ELSE 0 END AS ZiLiberaLegala FROM tblZile2 A
+LEFT JOIN HOLIDAYS B ON A.Zi=B.DAY
+GO
+
+--https://github.com/wizromRD/WizOne/issues/201
+--Flux aprobare saptamana pontaj #201
+INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa', 'btnValidare', '-', Id, 0, 0, 0 FROM tblGrupUsers
+INSERT INTO Securitate(IdForm, IdControl, IdColoana, IdGrup, Vizibil, Blocat, Obligatoriu) SELECT 'Pontaj.PontajEchipa', 'btnRefuza', '-', Id, 0, 0, 0 FROM tblGrupUsers
+GO
 
 
-----  2.2.127 ----
+----  2.2.127  ----
+
+
+ALTER TABLE "Ptj_Intrari" ADD "IdContractP" int
+GO
+ALTER TABLE "Ptj_Intrari" ADD "IdProgramP" int
+GO
+
+
 
 CREATE TABLE ImportDateSablon(
 	NumeTabela [nvarchar](200),

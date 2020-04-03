@@ -59,7 +59,7 @@ namespace WizOne.Pontaj
                         btnDelete.Visible = false;
                     }
 
-                    CreazaGrid();
+                    CreeazaGrid();
 
                     DataTable dtVal = General.IncarcaDT(Constante.tipBD == 1 ? @"SELECT TOP 0 * FROM ""Ptj_IstoricVal"" " : @"SELECT * FROM ""Ptj_IstoricVal"" WHERE ROWNUM = 0 ", null);
                     Session["Ptj_IstoricVal"] = dtVal;
@@ -67,10 +67,7 @@ namespace WizOne.Pontaj
 
                 if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
                 {
-                    if (grDate.Columns["Stare"] != null)
-                        grDate.Columns["Stare"].Columns[0].Visible = true;
-                    else
-                        grDate.Columns[0].Visible = true;
+                    grDate.Columns[0].Visible = true;
                     tblCC.Attributes["class"] = "visible";
 
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "1")
@@ -95,8 +92,11 @@ namespace WizOne.Pontaj
                     }
                 }
 
+
                 if (tip == 2 || tip == 20)
                     grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
+                else
+                    grDate.SettingsPager.PageSize = 31;
 
                 cmbPtjAng.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Toate inregistrarile"), Value = 1 });
                 cmbPtjAng.Items.Add(new ListEditItem { Text = Dami.TraduCuvant("Erori"), Value = 2 });
@@ -147,7 +147,6 @@ namespace WizOne.Pontaj
                 btnInit.Text = Dami.TraduCuvant("btnInit", "Init");
                 btnDelete.Text = Dami.TraduCuvant("btnDelete", "Sterge");
                 btnRecalc.Text = Dami.TraduCuvant("btnRecalc", "Recalculeaza");
-                btnSave.Text = Dami.TraduCuvant("btnSave", "Salveaza");
                 btnPtjEchipa.Text = Dami.TraduCuvant("btnPtjEchipa", "Pontajul Echipei");
                 //btnRespinge.Text = Dami.TraduCuvant("btnRespinge", "Respinge");
 
@@ -312,12 +311,13 @@ namespace WizOne.Pontaj
 
                 }
 
-
-                if (tip == 1 || tip == 10)
-                {
-                    grDate.SettingsPager.PageSize = 31;
-                }
-                else
+                //Florin 2020.03.30
+                //if (tip == 1 || tip == 10)
+                //{
+                //    grDate.SettingsPager.PageSize = 31;
+                //}
+                //else
+                if (tip == 2 || tip == 20)
                 {
                     string dataRef = DateTime.Now.Day.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "/" + DateTime.Now.Year.ToString();
                     cmbSub.DataSource = General.IncarcaDT(@"SELECT F00304 AS ""IdSubcompanie"", F00305 AS ""Subcompanie"" FROM F003 " +
@@ -1644,13 +1644,8 @@ namespace WizOne.Pontaj
                 {
                     if (!absentaDeTipZi)
                     {
-                        string golesteVal = Dami.ValoareParam("GolesteVal");
-                        FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                        FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                        FunctiiCeasuri.Calcul.golesteVal = golesteVal;
-                        FunctiiCeasuri.Calcul.h5 = true;
-                        FunctiiCeasuri.Calcul.AlocaContract(f10003, ziua);
-                        FunctiiCeasuri.Calcul.CalculInOut(dr, true, true);
+                        Calcul.AlocaContract(f10003, ziua);
+                        Calcul.CalculInOut(dr, true, true);
                     }
 
                     General.CalculFormule(f10003, null, ziua, null);
@@ -1699,7 +1694,6 @@ namespace WizOne.Pontaj
                                 }
 
                                 string strSql = $@"SELECT A.* FROM ""Ptj_Intrari"" A
-                                                LEFT JOIN ""F100Contracte"" B ON A.F10003=B.F10003
                                                 LEFT JOIN ""Ptj_tblAbsente"" C ON A.""ValStr""=C.""DenumireScurta""
                                                 WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4 AND C.""DenumireScurta"" IS NULL";
 
@@ -1708,27 +1702,16 @@ namespace WizOne.Pontaj
 
                                 DataTable dt = General.IncarcaDT(strSql, new object[] { arr[3], arr[4], dtInc, dtSf });
 
-                                FunctiiCeasuri.Calcul.cnApp = Module.Constante.cnnWeb;
-                                FunctiiCeasuri.Calcul.tipBD = Constante.tipBD;
-                                FunctiiCeasuri.Calcul.golesteVal = Dami.ValoareParam("GolesteVal");
-                                FunctiiCeasuri.Calcul.h5 = true;
-                                //MetodeCeasuri.Calcul.sintaxaValStr = Dami.ValoareParam("SintaxaValStr", "");
-
                                 for (int i = 0; i < dt.Rows.Count; i++)
                                 {
-                                    FunctiiCeasuri.Calcul.AlocaContract(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
-                                    FunctiiCeasuri.Calcul.CalculInOut(dt.Rows[i], true, true);
+                                    Calcul.AlocaContract(Convert.ToInt32(dt.Rows[i]["F10003"].ToString()), Convert.ToDateTime(dt.Rows[i]["Ziua"]));
+                                    Calcul.CalculInOut(dt.Rows[i], true, true);
                                 }
 
                                 General.CalculFormule(arr[3], arr[4], dtInc, dtSf);
-                                //General.ExecValStr($@"{arr[3]} <= F10003 AND F10003 <= {arr[4]} AND {General.ToDataUniv(dtInc)} <= ""Ziua"" AND ""Ziua"" <= {General.ToDataUniv(dtSf)}");
-
                                 IncarcaGrid();
                             }
                             break;
-                        //case "btnInit":
-                        //    MetodeInitializare(1);
-                        //    break;
                         case "btnDelete":
                             MetodeInitializare(2);
                             break;
@@ -1933,7 +1916,7 @@ namespace WizOne.Pontaj
             }
         }
 
-        private void CreazaGrid()
+        private void CreeazaGrid()
         {
             try
             {
@@ -1947,7 +1930,7 @@ namespace WizOne.Pontaj
                                 COALESCE(B.""DenumireScurta"",'') AS ""ColScurta"",
                                 CASE WHEN A.""Coloana"" ='Stare' THEN 0 ELSE 1 END AS ""OrdineSec""
                                 FROM ""Ptj_tblAdmin"" A
-                                LEFT JOIN (SELECT ""OreInVal"", MAX(""Denumire"") AS ""Denumire"", MAX(""DenumireScurta"") AS ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""OreInVal""='Val4' GROUP BY ""OreInVal"") B ON A.""Coloana""=B.""OreInVal""
+                                LEFT JOIN (SELECT ""OreInVal"", MAX(""Denumire"") AS ""Denumire"", MAX(""DenumireScurta"") AS ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE 1=1 {General.FiltrulCuNull("OreInVal")} GROUP BY ""OreInVal"") B ON A.""Coloana""=B.""OreInVal""
                                 LEFT JOIN (SELECT X.""IdColoana"", MIN(X.""Blocat"") AS ""Blocat"" FROM (
                                                                 SELECT A.""IdControl"", A.""IdColoana"", A.""Vizibil"", A.""Blocat""
                                                                 FROM ""Securitate"" A

@@ -36,12 +36,8 @@
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnRecalc" ClientInstanceName="btnRecalc" ClientIDMode="Static" runat="server" Text="Recalculeaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
-                    <ClientSideEvents Click="function(s, e) { popUpRecalc.Show(); }" />
+                    <ClientSideEvents Click="function(s, e) { OnRecalcClick(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
-                </dx:ASPxButton>
-                <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
-                    <ClientSideEvents Click="function(s, e) { grDate.UpdateEdit(); }" />
-                    <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)">
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
@@ -452,10 +448,10 @@
         FooterText=" " CloseOnEscape="True" ClientInstanceName="popUpRecalc" EnableHierarchyRecreation="false">
         <ContentCollection>
             <dx:PopupControlContentControl runat="server">
-                <asp:Panel ID="Panel1" runat="server">
+                <asp:Panel ID="Panel1" runat="server" Width="100%">
                     <table>
                         <tr>
-                            <td class="pull-right" colspan="4">
+                            <td align="right" colspan="4">
                                 <dx:ASPxButton ID="btnRecalcParam" runat="server" Text="Recalcul" AutoPostBack="false" >
                                     <ClientSideEvents Click="function(s, e) { OnRecalcParam(); }" />
                                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
@@ -466,34 +462,34 @@
                         </tr>
                         <tr>
                             <td  style="padding:15px;">
-                               <dx:ASPxLabel ID="lblDataInc" runat="server" Text="Data Inceput"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblDataInc" runat="server" Text="Data Inceput"></dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxDateEdit ID="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                                <dx:ASPxDateEdit ID="txtDataInc" ClientInstanceName="txtDataInc" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                 </dx:ASPxDateEdit>
                             </td>
                             <td style="padding:15px;">
-                               <dx:ASPxLabel ID="lblDataSf" runat="server" Text="Data Sfarsit"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblDataSf" runat="server" Text="Data Sfarsit"></dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxDateEdit ID="txtDataSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
+                                <dx:ASPxDateEdit ID="txtDataSf" ClientInstanceName="txtDataSf" runat="server" Width="100px" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" >
                                     <CalendarProperties FirstDayOfWeek="Monday" />
                                 </dx:ASPxDateEdit>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                               <dx:ASPxLabel ID="lblMarcaIn" runat="server" Text="Marca Inceput"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblMarcaIn" runat="server" Text="Marca Inceput"></dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxSpinEdit ID="txtMarcaInc" runat="server" Width="100px" />
+                                <dx:ASPxSpinEdit ID="txtMarcaInc" ClientInstanceName="txtMarcaInc" runat="server" Width="100px" />
                             </td>
                             <td>
-                               <dx:ASPxLabel ID="lblMarcaSf" runat="server" Text="Marca Sfarsit"></dx:ASPxLabel> 
+                               <dx:ASPxLabel ID="lblMarcaSf" runat="server" Text="Marca Sfarsit"></dx:ASPxLabel>
                             </td>
                             <td>
-                                <dx:ASPxSpinEdit ID="txtMarcaSf" runat="server" Width="100px" />
+                                <dx:ASPxSpinEdit ID="txtMarcaSf" ClientInstanceName="txtMarcaSf" runat="server" Width="100px" />
                             </td>
                         </tr>
                     </table>
@@ -709,50 +705,31 @@
         }
 
         function OnGridBatchEditEndEditing(s, e) {
-            if (!s.batchEditApi.GetEditCellInfo().column) return;
+            var column = s.batchEditApi.GetEditCellInfo().column;
+            if (!column) return;
 
-            var col = s.batchEditApi.GetEditCellInfo().column.fieldName;
-            var arr = "In1,In2,In3,In4,In5,In6,In7,In8,In9,In10,In11,In12,In13,In14,In15,In16,In17,In18,In19,In20,Out1,Out2,Out3,Out4,Out5,Out6,Out7,Out8,Out9,Out10,Out11,Out12,Out13,Out14,Out15,Out16,Out17,Out18,Out19,Out20,";
+            var oldVal = s.batchEditApi.GetCellValue(e.visibleIndex, column.fieldName);
+            var newVal = e.rowValues[column.index].value;
 
-            if (col.length >= 4) {
-                switch (col.substr(0, 6)) {
-                    case "ValTmp":
-                        {
-                            var column = s.batchEditApi.GetEditCellInfo().column;
+            if (column.fieldName.indexOf("ValTmp") >= 0 && new Date(oldVal).getTime() != new Date(newVal).getTime())
+            {
+                grDate.batchEditApi.SetCellValue(e.visibleIndex, "ValAbs", null, null, true);
 
-                            var oldVal = s.batchEditApi.GetCellValue(e.visibleIndex, col);
-                            var newVal = e.rowValues[column.index].value;
+                var keyIndex = s.GetColumnByField("Cheia").index;
+                var key = e.rowValues[keyIndex].value;
+                var idAfisare = 1;
+                if (typeof s.cp_Afisare[key] != "undefined" && s.cp_Afisare[key] != null) {
+                    idAfisare = s.cp_Afisare[key]
+                }
+                OnEditMode(e, e.visibleIndex, idAfisare);
+            }
 
-                            if (oldVal != newVal) {
-                                grDate.batchEditApi.SetCellValue(e.visibleIndex, "ValAbs", null, null, true);
+            if (column.fieldName.indexOf("ValAbs") >= 0 && oldVal != newVal)
+            {
+                grDate.batchEditApi.SetCellValue(e.visibleIndex, "ValStr", newVal, null, true);
 
-                                var keyIndex = s.GetColumnByField("Cheia").index;
-                                var key = e.rowValues[keyIndex].value;
-                                var idAfisare = 1;
-                                if (typeof s.cp_Afisare[key] != "undefined" && s.cp_Afisare[key] != null) {
-                                    idAfisare = s.cp_Afisare[key]
-                                }
-                                OnEditMode(e, e.visibleIndex, idAfisare);
-                            }
-                        }
-                        break;
-                    case "ValAbs":
-                        {
-                            var column = grDate.GetColumnByField("ValAbs");
-                            if (!e.rowValues[column.index]) return;
-
-                            var oldVal = s.batchEditApi.GetCellValue(e.visibleIndex, col);
-                            var newVal = e.rowValues[column.index].value;
-
-                            if (oldVal != newVal) {
-                                grDate.batchEditApi.SetCellValue(e.visibleIndex, "ValStr", newVal, null, true);
-
-                                for (i = 0; i <= 20; i++) {
-                                    grDate.batchEditApi.SetCellValue(e.visibleIndex, "ValTmp" + i, null, null, true);
-                                }
-                            }
-                        }
-                        break;
+                for (i = 0; i <= 20; i++) {
+                    grDate.batchEditApi.SetCellValue(e.visibleIndex, "ValTmp" + i, null, null, true);
                 }
             }
         }
@@ -1114,6 +1091,25 @@
                 dtTmp.setDate(dtTmp.getDate() + 1);
             s.SetValue(dtTmp);
             grDate.PerformCallback('btnFiltru'); 
+        }
+
+        function OnRecalcClick() {
+            var date = new Date(txtAnLuna.GetValue());
+            var marca = cmbAng.GetValue();
+
+            if (document.getElementById('divPeAng').style.display == 'none') {
+                date = new Date(txtZiua.GetValue());
+                marca = cmbAngZi.GetValue();
+            }
+
+            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+            txtDataInc.SetValue(firstDay);
+            txtDataSf.SetValue(lastDay);
+            txtMarcaInc.SetValue(marca);
+            txtMarcaSf.SetValue(marca);
+            popUpRecalc.Show();
         }
     </script>
 

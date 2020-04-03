@@ -10,7 +10,7 @@ namespace WizOne.Contracte
 {
     public partial class Lista : System.Web.UI.Page
     {
-        protected void Page_Init(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
@@ -33,9 +33,11 @@ namespace WizOne.Contracte
                 }
                 else
                 {
-                    grDate.DataSource = Session["InformatiaCurenta"];
-                    grDate.KeyFieldName = "Id";
-                    grDate.DataBind();
+                    if (grDate.IsCallback)
+                    {
+                        grDate.DataSource = Session["InformatiaCurenta"];
+                        grDate.DataBind();
+                    }
                 }
             }
             catch (Exception ex)
@@ -99,13 +101,14 @@ namespace WizOne.Contracte
                                 General.ExecutaNonQuery(
                                     $@"BEGIN
                                         INSERT INTO ""Ptj_ContracteSchimburi""(""IdContract"", ""TipSchimb"", ""Denumire"", ""IdProgram"", ""OraInceput"", ""OraInceputDeLa"", ""OraInceputLa"", ""OraSfarsit"", ""OraSfarsitDeLa"", ""OraSfarsitLa"", ""ModVerificare"", USER_NO, TIME)
-                                        SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Contracte""),0) + 1, ""TipSchimb"", ""Denumire"", ""IdProgram"", ""OraInceput"", ""OraInceputDeLa"", ""OraInceputLa"", ""OraSfarsit"", ""OraSfarsitDeLa"", ""OraSfarsitLa"", ""ModVerificare"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_ContracteAbsente"" WHERE ""IdContract""=@1;
+                                        SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Contracte""),0) + 1, ""TipSchimb"", ""Denumire"", ""IdProgram"", ""OraInceput"", ""OraInceputDeLa"", ""OraInceputLa"", ""OraSfarsit"", ""OraSfarsitDeLa"", ""OraSfarsitLa"", ""ModVerificare"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_ContracteSchimburi"" WHERE ""IdContract""=@1;
                                         INSERT INTO ""Ptj_ContracteAbsente""(""IdContract"", ""IdAbsenta"", ZL, SL, S, D, ""InPontajAnual"", ""Camp"", USER_NO, TIME)
                                         SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Contracte""),0) + 1, ""IdAbsenta"", ZL, SL, S, D, ""InPontajAnual"", ""Camp"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_ContracteAbsente"" WHERE ""IdContract""=@1;
                                         INSERT INTO ""Ptj_Contracte""(""Id"", ""Denumire"", ""TipContract"", ""OraInSchimbare"", ""OraOutSchimbare"", ""TipSchimb0"", ""Program0"", ""TipSchimb1"", ""Program1"", ""TipSchimb2"", ""Program2"", ""TipSchimb3"", ""Program3"",""TipSchimb4"", ""Program4"", ""TipSchimb5"", ""Program5"", ""TipSchimb6"", ""Program6"", ""TipSchimb7"", ""Program7"", ""TipSchimb8"", ""Program8"", ""OreSup"", ""Afisare"", ""TipRaportareOreNoapte"", ""PontareAutomata"", ""OraInInitializare"", ""OraOutInitializare"", USER_NO, TIME)
                                         SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Contracte""),0) + 1, ""Denumire"" {Dami.Operator()} ' - Copie', ""TipContract"", ""OraInSchimbare"", ""OraOutSchimbare"", ""TipSchimb0"", ""Program0"", ""TipSchimb1"", ""Program1"", ""TipSchimb2"", ""Program2"", ""TipSchimb3"", ""Program3"",""TipSchimb4"", ""Program4"", ""TipSchimb5"", ""Program5"", ""TipSchimb6"", ""Program6"", ""TipSchimb7"", ""Program7"", ""TipSchimb8"", ""Program8"", ""OreSup"", ""Afisare"", ""TipRaportareOreNoapte"", ""PontareAutomata"", ""OraInInitializare"", ""OraOutInitializare"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_Contracte"" WHERE ""Id""=@1;
                                     END;", new object[] { idCtr});
                                 IncarcaGrid();
+                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes");
                             }
                             break;
                         case "btnSterge":
@@ -132,11 +135,11 @@ namespace WizOne.Contracte
                                     $@"BEGIN
                                         DELETE FROM ""F100Contracte2"" WHERE ""IdContract""=@1;
                                         DELETE FROM ""Ptj_ContracteAbsente"" WHERE ""IdContract""=@1;
-                                        DELETE FROM ""Ptj_ContracteCiclice"" WHERE ""IdContract""=@1;
                                         DELETE FROM ""Ptj_ContracteSchimburi"" WHERE ""IdContract""=@1;
                                         DELETE FROM ""Ptj_Contracte"" WHERE ""Id""=@1;
                                     END;", new object[] { idCtr });
                                 IncarcaGrid();
+                                //grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes");
                             }
                             break;
                     }

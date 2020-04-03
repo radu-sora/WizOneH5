@@ -256,12 +256,12 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ContentControl ContentControl2;
         
         /// <summary>
-        /// dxImage_NewYork control.
+        /// grDate1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxImage dxImage_NewYork;
+        protected global::DevExpress.Web.ASPxGridView grDate1;
     }
 }

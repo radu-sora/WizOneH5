@@ -12881,6 +12881,8 @@ ALTER TABLE Ptj_Contracte DROP COLUMN ScadeVal0
 GO
 ALTER TABLE Ptj_Contracte DROP COLUMN ScadeFaraDepasireNorma
 GO
+ALTER TABLE Ptj_Contracte DROP COLUMN TipContract
+GO
 
 ALTER TABLE Ptj_Contracte DROP CONSTRAINT Ptj_Contracte_PK
 GO

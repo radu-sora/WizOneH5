@@ -13740,6 +13740,8 @@ ALTER TABLE "Ptj_Contracte" DROP COLUMN "ScadeVal0";
 /
 ALTER TABLE "Ptj_Contracte" DROP COLUMN "ScadeFaraDepasireNorma";
 /
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "TipContract";
+/
 
 ALTER TABLE "Ptj_Contracte" DROP CONSTRAINT "Ptj_Contracte_PK";
 DROP INDEX "Ptj_Contracte_PK";

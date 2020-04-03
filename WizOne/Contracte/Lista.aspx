@@ -18,11 +18,13 @@
         </tr>
         <tr>
             <td colspan="2"> 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback">
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" SettingsPager-PageSize="50">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" />
                     <Settings ShowFilterRow="True" ShowGroupPanel="False" />
                     <SettingsSearchPanel Visible="False" />
-                    <ClientSideEvents CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }" EndCallback="function(s,e) { onGridEndCallback(s); }" ContextMenu="ctx"/>
+                    <ClientSideEvents ContextMenu="ctx"
+                        CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }" 
+                        EndCallback="function(s,e) { onGridEndCallback(s); }" />
                     <Columns>
                         <dx:GridViewCommandColumn Width="50px" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" >
                             <CustomButtons>
@@ -52,44 +54,25 @@
 
     <script>
         function grDate_CustomButtonClick(s, e) {
-            var val = s.batchEditApi.GetCellValue(e.visibleIndex, "Id");
-            alert(val);
-            switch (e.buttonID) {
-                case "btnEdit":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToEditMode);
-                    break;
-                case "btnDuplica":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToCloneMode);
-                    break;
-                case "btnSterge":
-                    grDate.GetRowValues(e.visibleIndex, 'Id', GoToDeleteMode);
-                    break;
+            if (e.buttonID == "btnSterge")
+            {
+                    swal({
+                        title: "Sunteti sigur/a ?", text: "Informatia va fi stearsa si nu va putea fi recuperata !",
+                        type: "warning", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da, sterge!", cancelButtonText: "Renunta", closeOnConfirm: true
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            grDate.PerformCallback(e.buttonID + ";" + s.GetRowKey(e.visibleIndex));
+                        }
+                    });
             }
-        }
-
-        function GoToEditMode(Value) {
-            grDate.PerformCallback("btnEdit;" + Value);
-        }
-
-        function GoToCloneMode(Value) {
-            grDate.PerformCallback("btnDuplica;" + Value);
-        }
-
-        function GoToDeleteMode(Value) {
-            swal({
-                title: "Sunteti sigur/a ?", text: "Informatia va fi stearsa si nu va putea fi recuperata !",
-                type: "warning", showCancelButton: true, confirmButtonColor: "#DD6B55", confirmButtonText: "Da, sterge!", cancelButtonText: "Renunta", closeOnConfirm: true
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    grDate.PerformCallback("btnSterge;" + Value);
-                }
-            });
+            else
+                grDate.PerformCallback(e.buttonID + ";" + s.GetRowKey(e.visibleIndex));
         }
 
         function onGridEndCallback(s) {
             if (s.cpAlertMessage) {
                 swal({
-                    title: trad_string(limba, "Atentie"),
+                    title: "Atentie",
                     text: s.cpAlertMessage,
                     type: "warning"
                 });

@@ -18,7 +18,7 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>
-			    <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" PostBackUrl="Contract.aspx" >
+			    <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" PostBackUrl="Lista.aspx" >
 				    <Image Url="../Fisiere/Imagini/Icoane/iesire.png"></Image>
 			    </dx:ASPxButton>
 		    </td>
@@ -93,26 +93,126 @@
                                     <dx:ASPxGridView ID="grDateAbs" runat="server" ClientInstanceName="grDateAbs" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateAbs_BatchUpdate" SettingsPager-PageSize="50">
                                         <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                         <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
-                                        <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
+                                        <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                         <SettingsSearchPanel Visible="false" />
                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
                                         <ClientSideEvents ContextMenu="ctx" />
                                         <Columns>
                                             <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
                                             
-                                            <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" Width="250px" >
+                                            <dx:GridViewDataComboBoxColumn FieldName="IdAbsenta" Name="IdAbsenta" Caption="Absenta" Width="350px" >
                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                                             </dx:GridViewDataComboBoxColumn>   
-                                            <dx:GridViewDataCheckColumn FieldName="ZL" Name="ZL" Caption="Zile Lucr." Width="60px"  />
-                                            <dx:GridViewDataCheckColumn FieldName="S" Name="S" Caption="Sambata" Width="60px"  />
-                                            <dx:GridViewDataCheckColumn FieldName="D" Name="D" Caption="Duminica" Width="60px"  />
-                                            <dx:GridViewDataCheckColumn FieldName="SL" Name="SL" Caption="Sarb. Legale" Width="60px" />
-                                            <dx:GridViewDataCheckColumn FieldName="InPontajAnual" Name="InPontajAnual" Caption="Istoric extins" Width="60px"  />
+                                            <dx:GridViewDataCheckColumn FieldName="ZL" Name="ZL" Caption="Zile lucratoare" Width="90px" HeaderStyle-HorizontalAlign="Center"/>
+                                            <dx:GridViewDataCheckColumn FieldName="S" Name="S" Caption="Sambata" Width="90px" HeaderStyle-HorizontalAlign="Center"/>
+                                            <dx:GridViewDataCheckColumn FieldName="D" Name="D" Caption="Duminica" Width="90px" HeaderStyle-HorizontalAlign="Center"/>
+                                            <dx:GridViewDataCheckColumn FieldName="SL" Name="SL" Caption="Sarb. Legale" Width="90px" HeaderStyle-HorizontalAlign="Center"/>
+                                            <dx:GridViewDataCheckColumn FieldName="InPontajAnual" Name="InPontajAnual" Caption="Istoric extins" Width="90px" HeaderStyle-HorizontalAlign="Center"/>
 
                                             <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/> 
                                             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
                                             <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />              
+                                        </Columns>
+                                        <SettingsCommandButton>
+                                            <EditButton Image-ToolTip="Edit">
+                                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/edit.png" AlternateText="Edit" />
+                                                <Styles>
+                                                    <Style Paddings-PaddingRight="5px" />
+                                                </Styles>
+                                            </EditButton>
+                                            <DeleteButton Image-ToolTip="Sterge">
+                                                <Image ToolTip="Edit" Url="~/Fisiere/Imagini/Icoane/sterge.png" AlternateText="Sterge" />
+                                            </DeleteButton>
+                                            <NewButton Image-ToolTip="Rand nou">
+                                                <Image Url="~/Fisiere/Imagini/Icoane/New.png"></Image>
+                                                <Styles>
+                                                    <Style Paddings-PaddingLeft="5px" Paddings-PaddingRight="5px" />
+                                                </Styles>
+                                            </NewButton>
+                                        </SettingsCommandButton>
+                                    </dx:ASPxGridView>
+                                
+                                </dx:ContentControl>
+                            </ContentCollection>
+                        </dx:TabPage>
+                        <dx:TabPage Text="Programe">
+                            <ContentCollection>
+                                <dx:ContentControl ID="ContentControl2" runat="server">
+
+                                    <dx:ASPxGridView ID="grDate1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                        <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
+                                        <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                        <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
+                                        <SettingsSearchPanel Visible="false" />
+                                        <SettingsLoadingPanel Mode="ShowAsPopup" />
+                                        <ClientSideEvents ContextMenu="ctx" />
+                                        <Columns>
+                                                                                        <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
+
+                                            
+                                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract"  Width="100px" Visible="false"/>                                    
+                                            <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb"  Width="100px" Visible="false"/>    
+                                            <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Nume"  Width="200px" />                
+                                            <dx:GridViewDataComboBoxColumn FieldName="IdProgram" Name="IdProgram" Caption="Program" Width="140px">
+                                                <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" >
+                                                    <Columns>                         
+                                                        <dx:ListBoxColumn FieldName="Denumire" />
+                                                        <dx:ListBoxColumn FieldName="OraIntrare1" Caption="Ora inceput" />
+                                                        <dx:ListBoxColumn FieldName="OraIesire1" Caption="Ora Sfarsit" />
+                                                    </Columns>
+                                                </PropertiesComboBox>
+                                            </dx:GridViewDataComboBoxColumn>
+                                            <dx:GridViewDataDateColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="60px"  ReadOnly="true"> 
+                                                <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                                                    <DropDownButton Visible="False">
+                                                    </DropDownButton>
+                                                    <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                                                </PropertiesDateEdit>  
+                                            </dx:GridViewDataDateColumn>
+                                            <dx:GridViewDataDateColumn FieldName="OraInceputDeLa" Name="OraInceputDeLa" Caption="Ora In &gt;"   Width="60px" >
+                                                <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                                                    <DropDownButton Visible="False">
+                                                    </DropDownButton>
+                                                    <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                                                </PropertiesDateEdit>    
+                                            </dx:GridViewDataDateColumn>                    
+                                            <dx:GridViewDataDateColumn FieldName="OraInceputLa" Name="OraInceputLa" Caption="Ora In &lt;"   Width="60px" >
+                                                <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                                                    <DropDownButton Visible="False">
+                                                    </DropDownButton>
+                                                    <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                                                </PropertiesDateEdit>  
+                                            </dx:GridViewDataDateColumn>                    
+                                            <dx:GridViewDataDateColumn FieldName="OraSfarsit" Name="OraSfarsit" Caption="Ora Sf"   Width="60px"   ReadOnly="true"> 
+                                                <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                                                    <DropDownButton Visible="False">
+                                                    </DropDownButton>
+                                                    <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                                                </PropertiesDateEdit>  
+                                            </dx:GridViewDataDateColumn> 
+                                            <dx:GridViewDataDateColumn FieldName="OraSfarsitDeLa" Name="OraSfarsitDeLa" Caption="Ora Sf &gt;"   Width="60px"> 
+                                                <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                                                    <DropDownButton Visible="False">
+                                                    </DropDownButton>
+                                                    <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                                                </PropertiesDateEdit>  
+                                            </dx:GridViewDataDateColumn> 
+                                            <dx:GridViewDataDateColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Sf &lt;"   Width="60px" > 
+                                                <PropertiesDateEdit DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom">
+                                                    <DropDownButton Visible="False">
+                                                    </DropDownButton>
+                                                    <ClientSideEvents DropDown="function(s, e) {  s.HideDropDown();   }" />                        
+                                                </PropertiesDateEdit>  
+                                            </dx:GridViewDataDateColumn>                 
+                                            <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="100px" >
+                                                <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                                            </dx:GridViewDataComboBoxColumn>  
+
+                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>      
+                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
+                                            <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />              
                                         </Columns>
                                         <SettingsCommandButton>
                                             <UpdateButton ButtonType="Link" Text="Actualizeaza">
@@ -141,13 +241,7 @@
                                             </NewButton>
                                         </SettingsCommandButton>
                                     </dx:ASPxGridView>
-                                </dx:ContentControl>
-                            </ContentCollection>
-                        </dx:TabPage>
-                        <dx:TabPage Text="Programe">
-                            <ContentCollection>
-                                <dx:ContentControl ID="ContentControl2" runat="server">
-                                    <dx:ASPxImage runat="server" ID="dxImage_NewYork" ImageUrl="~/Content/TabControl/Images/Cities/BrooklynBridge.jpg" CssClass="dxtc-image-newyork" />
+
                                 </dx:ContentControl>
                             </ContentCollection>
                         </dx:TabPage>
@@ -158,7 +252,6 @@
     </table>
 
     <script>
-
     </script>
 
 </asp:Content>

@@ -148,10 +148,9 @@
                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
                                         <ClientSideEvents ContextMenu="ctx" />
                                         <Columns>
-                                                                                        <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
-
                                             
-                                            <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
+                                            <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
+                                            
                                             <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract"  Width="100px" Visible="false"/>                                    
                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb"  Width="100px" Visible="false"/>    
                                             <dx:GridViewDataTextColumn FieldName="Denumire" Name="Denumire" Caption="Nume"  Width="200px" />                

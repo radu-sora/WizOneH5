@@ -1,8 +1,12 @@
 ﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Web.UI;
 using WizOne.Module;
 
@@ -54,10 +58,10 @@ namespace WizOne.Contracte
 
                         txtOraSchIn.Value = General.Nz(dr["OraInSchimbare"], null);
                         txtOraSchOut.Value = General.Nz(dr["OraOutSchimbare"], null);
-                        chkOreSup.Value = General.Nz(dr["OreSup"], null);
+                        chkOreSup.Value = Convert.ToBoolean(General.Nz(dr["OreSup"], false));
                         cmbAfisare.Value = General.Nz(dr["Afisare"], null);
                         cmbRap.Value = General.Nz(dr["TipRaportareOreNoapte"], null);
-                        chkPontareAuto.Value = General.Nz(dr["PontareAutomata"], null);
+                        chkPontareAuto.Value = General.Nz(dr["PontareAutomata"], false);
                         txtOraIn.Value = General.Nz(dr["OraInInitializare"], null);
                         txtOraOut.Value = General.Nz(dr["OraOutInitializare"], null);
                     }
@@ -65,6 +69,25 @@ namespace WizOne.Contracte
                     grDateAbs.KeyFieldName = "IdAuto";
                     grDateAbs.DataSource = dtAbs;
                     grDateAbs.DataBind();
+
+                    string sqlPrg = @"SELECT Id, Denumire, convert(varchar(5), OraIntrare, 108) AS OraIntrare, convert(varchar(5), OraIesire, 108) AS OraIesire FROM Ptj_Programe";
+                    if (Constante.tipBD == 2)
+                        sqlPrg = @"SELECT ""Id"", ""Denumire"", TO_CHAR(""OraIntrare"", 'HH24:mi') AS ""OraIntrare"", TO_CHAR(""OraIesire"", 'HH24:mi') AS ""OraIesire"" FROM ""Ptj_Programe""";
+                    DataTable dtPrg = General.IncarcaDT(sqlPrg, null);
+
+                    for (int i = 1; i <= 8; i++)
+                    {
+                        ASPxGridView grDate = tabCtr.FindControl("grDate" + i) as ASPxGridView;
+                        if (grDate != null)
+                        {
+                            GridViewDataComboBoxColumn colPrg = (grDate.Columns["IdProgram"] as GridViewDataComboBoxColumn);
+                            colPrg.PropertiesComboBox.DataSource = dtPrg;
+
+                            grDate.KeyFieldName = "IdAuto";
+                            grDate.DataSource = dtSch.Select("TipSchimb=" + i).CopyToDataTable();
+                            grDate.DataBind();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -158,11 +181,90 @@ namespace WizOne.Contracte
         {
             try
             {
+                bool suntModif = false;
 
+                grDateAbs.CancelEdit();
+                DataSet ds = Session["InformatiaCurenta"] as DataSet;
+                DataTable dt = ds.Tables["Ptj_ContracteAbsente"];
+                if (dt == null) return;
+
+                int idCtr = Convert.ToInt32(General.Nz(Session["IdContract"], -99));
+
+                //daca avem linii noi
+                for (int i = 0; i < e.InsertValues.Count; i++)
+                {
+                    ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
+                    DataRow dr = dt.NewRow();
+
+                    dr["IdContract"] = idCtr;
+                    dr["IdAbsenta"] = upd.NewValues["IdAbsenta"] ?? -99;
+                    dr["ZL"] = upd.NewValues["ZL"] ?? 9999;
+                    dr["SL"] = upd.NewValues["SL"] ?? DBNull.Value;
+                    dr["S"] = upd.NewValues["S"] ?? DBNull.Value;
+                    dr["D"] = upd.NewValues["D"] ?? DBNull.Value;
+                    dr["InPontajAnual"] = upd.NewValues["InPontajAnual"] ?? DBNull.Value;
+                    dr["USER_NO"] = Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+
+                    dt.Rows.Add(dr);
+
+                    suntModif = true;
+                }
+
+
+                //daca avem linii modificate
+                for (int i = 0; i < e.UpdateValues.Count; i++)
+                {
+                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow dr = dt.Rows.Find(keys);
+                    if (dr == null) continue;
+
+                    dr["IdAbsenta"] = upd.NewValues["IdAbsenta"] ?? -99;
+                    dr["ZL"] = upd.NewValues["ZL"] ?? 9999;
+                    dr["SL"] = upd.NewValues["SL"] ?? DBNull.Value;
+                    dr["S"] = upd.NewValues["S"] ?? DBNull.Value;
+                    dr["D"] = upd.NewValues["D"] ?? DBNull.Value;
+                    dr["InPontajAnual"] = upd.NewValues["InPontajAnual"] ?? DBNull.Value;
+                    dr["USER_NO"] = Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+
+                    suntModif = true;
+                }
+
+
+                //daca avem linii modificate
+                for (int i = 0; i < e.DeleteValues.Count; i++)
+                {
+                    ASPxDataDeleteValues upd = e.DeleteValues[i] as ASPxDataDeleteValues;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow dr = dt.Rows.Find(keys);
+                    if (dr == null) continue;
+
+                    dt.Rows.Remove(dr);
+
+                    suntModif = true;
+                }
+
+                if (suntModif == true)
+                    General.SalveazaDate(dt, "Ptj_ContracteAbsente");
+
+                e.Handled = true;
+
+                Session["PtjCC"] = ds;
             }
             catch (Exception ex)
             {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                e.Handled = true;
             }
         }
 
@@ -170,7 +272,175 @@ namespace WizOne.Contracte
         {
             try
             {
+                bool suntModif = false;
+                ASPxGridView grDate = sender as ASPxGridView;
+                int idx = Convert.ToInt32(grDate.ID.Replace("grDate", ""));
 
+                grDate.CancelEdit();
+                DataSet ds = Session["InformatiaCurenta"] as DataSet;
+                DataTable dt = ds.Tables["Ptj_ContracteSchimburi"].Select("TipSchimb=" + idx).CopyToDataTable();
+                if (dt == null) return;
+
+                int idCtr = Convert.ToInt32(General.Nz(Session["IdContract"], -99));
+                
+
+                //daca avem linii noi
+                for (int i = 0; i < e.InsertValues.Count; i++)
+                {
+                    ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
+                    DataRow dr = dt.NewRow();
+
+                    dr["IdContract"] = idCtr;
+                    dr["TipSchimb"] = idx;
+                    dr["IdProgram"] = upd.NewValues["IdProgram"] ?? 9999;
+                    dr["OraInceput"] = upd.NewValues["OraInceput"] ?? DBNull.Value;
+                    dr["OraInceputDeLa"] = upd.NewValues["OraInceputDeLa"] ?? DBNull.Value;
+                    dr["OraInceputLa"] = upd.NewValues["OraInceputLa"] ?? DBNull.Value;
+                    dr["OraSfarsit"] = upd.NewValues["OraSfarsit"] ?? DBNull.Value;
+                    dr["OraSfarsitDeLa"] = upd.NewValues["OraSfarsitDeLa"] ?? DBNull.Value;
+                    dr["OraSfarsitLa"] = upd.NewValues["OraSfarsitLa"] ?? DBNull.Value;
+                    dr["ModVerificare"] = upd.NewValues["ModVerificare"] ?? DBNull.Value;
+                    dr["USER_NO"] = Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+
+                    dt.Rows.Add(dr);
+
+                    suntModif = true;
+                }
+
+
+                //daca avem linii modificate
+                for (int i = 0; i < e.UpdateValues.Count; i++)
+                {
+                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow dr = dt.Rows.Find(keys);
+                    if (dr == null) continue;
+
+                    dr["TipSchimb"] = idx;
+                    dr["IdProgram"] = upd.NewValues["IdProgram"] ?? 9999;
+                    dr["OraInceput"] = upd.NewValues["OraInceput"] ?? DBNull.Value;
+                    dr["OraInceputDeLa"] = upd.NewValues["OraInceputDeLa"] ?? DBNull.Value;
+                    dr["OraInceputLa"] = upd.NewValues["OraInceputLa"] ?? DBNull.Value;
+                    dr["OraSfarsit"] = upd.NewValues["OraSfarsit"] ?? DBNull.Value;
+                    dr["OraSfarsitDeLa"] = upd.NewValues["OraSfarsitDeLa"] ?? DBNull.Value;
+                    dr["OraSfarsitLa"] = upd.NewValues["OraSfarsitLa"] ?? DBNull.Value;
+                    dr["ModVerificare"] = upd.NewValues["ModVerificare"] ?? DBNull.Value;
+                    dr["USER_NO"] = Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+
+                    suntModif = true;
+                }
+
+
+                //daca avem linii modificate
+                for (int i = 0; i < e.DeleteValues.Count; i++)
+                {
+                    ASPxDataDeleteValues upd = e.DeleteValues[i] as ASPxDataDeleteValues;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow dr = dt.Rows.Find(keys);
+                    if (dr == null) continue;
+
+                    dt.Rows.Remove(dr);
+
+                    suntModif = true;
+                }
+
+                if (suntModif == true)
+                    General.SalveazaDate(dt, "Ptj_ContracteSchimburi");
+
+                e.Handled = true;
+
+                Session["PtjCC"] = ds;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                e.Handled = true;
+            }
+        }
+
+
+
+        //protected void btnSave_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        DataSet ds = Session["InformatiaCurenta"] as DataSet;
+        //        DataTable dt = ds.Tables["Ptj_Contracte"];
+
+        //        DataRow dr = dt.Rows[0];
+        //        dr["Denumire"] = txtDenumire.Value ?? DBNull.Value;
+        //        dr["OraInSchimbare"] = txtOraSchIn.Value ?? DBNull.Value;
+        //        dr["OraOutSchimbare"] = txtOraSchOut.Value ?? DBNull.Value;
+        //        dr["OreSup"] = chkOreSup.Value ?? DBNull.Value;
+        //        dr["Afisare"] = cmbAfisare.Value ?? DBNull.Value;
+        //        dr["TipRaportareOreNoapte"] = cmbRap.Value ?? DBNull.Value;
+        //        dr["PontareAutomata"] = chkPontareAuto.Value ?? DBNull.Value;
+        //        dr["OraInInitializare"] = txtOraIn.Value ?? DBNull.Value;
+        //        dr["OraOutInitializare"] = txtOraOut.Value ?? DBNull.Value;
+        //        dr["USER_NO"] = Session["UserId"];
+        //        dr["TIME"] = DateTime.Now;
+
+        //        General.SalveazaDate(dt, "Ptj_Contracte");
+
+        //        grDateAbs.UpdateEdit();
+
+        //        for(int i = 1; i < 8; i++)
+        //        {
+        //            ASPxGridView grDate = tabCtr.FindControl("grDate" + i) as ASPxGridView;
+        //            if (grDate != null)
+        //            {
+        //                grDate.UpdateEdit();
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
+        //    }
+        //}
+
+        protected void pnlSectiune_Callback(object sender, CallbackEventArgsBase e)
+        {
+            try
+            {
+                DataSet ds = Session["InformatiaCurenta"] as DataSet;
+                DataTable dt = ds.Tables["Ptj_Contracte"];
+
+                DataRow dr = dt.Rows[0];
+                dr["Denumire"] = txtDenumire.Value ?? DBNull.Value;
+                dr["OraInSchimbare"] = txtOraSchIn.Value ?? DBNull.Value;
+                dr["OraOutSchimbare"] = txtOraSchOut.Value ?? DBNull.Value;
+                dr["OreSup"] = chkOreSup.Value ?? DBNull.Value;
+                dr["Afisare"] = cmbAfisare.Value ?? DBNull.Value;
+                dr["TipRaportareOreNoapte"] = cmbRap.Value ?? DBNull.Value;
+                dr["PontareAutomata"] = chkPontareAuto.Value ?? DBNull.Value;
+                dr["OraInInitializare"] = txtOraIn.Value ?? DBNull.Value;
+                dr["OraOutInitializare"] = txtOraOut.Value ?? DBNull.Value;
+                dr["USER_NO"] = Session["UserId"];
+                dr["TIME"] = DateTime.Now;
+
+                General.SalveazaDate(dt, "Ptj_Contracte");
+
+                grDateAbs.UpdateEdit();
+
+                for (int i = 1; i < 8; i++)
+                {
+                    ASPxGridView grDate = tabCtr.FindControl("grDate" + i) as ASPxGridView;
+                    if (grDate != null)
+                    {
+                        grDate.UpdateEdit();
+                    }
+                }
             }
             catch (Exception ex)
             {

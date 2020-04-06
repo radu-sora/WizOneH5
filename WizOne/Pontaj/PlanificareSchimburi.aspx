@@ -143,6 +143,10 @@
                                                 <label id="lblCateg" runat="server" oncontextMenu="ctx(this,event)">Categorie</label><br />
                                                 <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="250px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" oncontextMenu="ctx(this,event)" />                                
                                             </div>
+                                            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12" style="margin-bottom:8px;position: inherit" id="divCtrAll" runat="server">
+                                                <label id="lblCtrAll" runat="server" oncontextMenu="ctx(this,event)">Toate contractele</label><br />
+                                                <dx:ASPxCheckBox ID="chkCtrAll" ClientInstanceName="chkCtrAll" runat="server" />
+                                            </div>
                                         </div>
 
                                         <div class="row">
@@ -397,7 +401,12 @@
                 var indice = col.replace("Ziua", "");
                 var key = Number(indice) - 1;
                 let programe = <%= Session["Json_Programe"] %>;
-                var arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] && item.Contract == ctr });
+                alert(chkCtrAll.GetValue());
+                var arr;
+                if (chkCtrAll.GetValue())
+                    arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] });
+                else
+                    arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] && item.Contract == ctr });
 
                 var cmb = s.GetEditor(col);
                 cmb.ClearItems();

@@ -94,12 +94,13 @@
                                                 </div>
                                             </div>
                                     
-                                            <dx:ASPxGridView ID="grDateAbs" runat="server" ClientInstanceName="grDateAbs" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateAbs_BatchUpdate" SettingsPager-PageSize="50">
+                                            <dx:ASPxGridView ID="grDateAbs" runat="server" ClientInstanceName="grDateAbs" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateAbs_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                 <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
+                                                <SettingsPager Mode="ShowAllRecords" />
                                                 <ClientSideEvents ContextMenu="ctx" />
                                                 <Columns>
                                                     <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
@@ -114,9 +115,9 @@
                                                     <dx:GridViewDataCheckColumn FieldName="InPontajAnual" Name="InPontajAnual" Caption="Istoric extins" Width="90px" HeaderStyle-HorizontalAlign="Center"/>
 
                                                     <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/> 
-                                                    <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
+                                                    <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
                                                     <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false" />						
-                                                    <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />              
+                                                    <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">
@@ -138,11 +139,12 @@
                                     <ContentCollection>
                                         <dx:ContentControl ID="ContentControl2" runat="server">
 
-                                            <dx:ASPxGridView ID="grDate1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                            <dx:ASPxGridView ID="grDate1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
+                                                <SettingsPager Mode="ShowAllRecords"/>
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
                                                 <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                 <Columns>
@@ -178,7 +180,7 @@
                                                             </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Out La" Width="80px">
                                                                 <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
-                                                            </dx:GridViewDataTimeEditColumn>                
+                                                            </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="150px">
                                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                     <Items>
@@ -190,13 +192,13 @@
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>  
 
-                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>                                    
+                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb" Visible="false" ShowInCustomizationForm="false"/> 
-                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
-                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>						
+                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                         </Columns>
-                                                    </dx:GridViewBandColumn>                            
+                                                    </dx:GridViewBandColumn>
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">
@@ -210,10 +212,11 @@
                                                     </NewButton>
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
+                                           
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate2" runat="server" ClientInstanceName="grDate2" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                            <dx:ASPxGridView ID="grDate2" runat="server" ClientInstanceName="grDate2" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -251,7 +254,7 @@
                                                             </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Out La" Width="80px">
                                                                 <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
-                                                            </dx:GridViewDataTimeEditColumn>                
+                                                            </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="150px">
                                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                     <Items>
@@ -263,13 +266,13 @@
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>  
 
-                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>                                    
+                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb" Visible="false" ShowInCustomizationForm="false"/> 
-                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
-                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>						
+                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                         </Columns>
-                                                    </dx:GridViewBandColumn>                            
+                                                    </dx:GridViewBandColumn>
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">
@@ -284,9 +287,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate3" runat="server" ClientInstanceName="grDate3" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                            <dx:ASPxGridView ID="grDate3" runat="server" ClientInstanceName="grDate3" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -324,7 +327,7 @@
                                                             </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Out La" Width="80px">
                                                                 <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
-                                                            </dx:GridViewDataTimeEditColumn>                
+                                                            </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="150px">
                                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                     <Items>
@@ -336,13 +339,13 @@
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>  
 
-                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>                                    
+                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb" Visible="false" ShowInCustomizationForm="false"/> 
-                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
-                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>						
+                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                         </Columns>
-                                                    </dx:GridViewBandColumn>                            
+                                                    </dx:GridViewBandColumn>
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">
@@ -357,9 +360,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="ASPxGridView1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                            <dx:ASPxGridView ID="grDate4" runat="server" ClientInstanceName="grDate4" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -397,7 +400,7 @@
                                                             </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Out La" Width="80px">
                                                                 <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
-                                                            </dx:GridViewDataTimeEditColumn>                
+                                                            </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="150px">
                                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                     <Items>
@@ -409,13 +412,13 @@
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>  
 
-                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>                                    
+                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb" Visible="false" ShowInCustomizationForm="false"/> 
-                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
-                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>						
+                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                         </Columns>
-                                                    </dx:GridViewBandColumn>                            
+                                                    </dx:GridViewBandColumn>
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">
@@ -430,9 +433,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="ASPxGridView2" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                            <dx:ASPxGridView ID="grDate5" runat="server" ClientInstanceName="grDate5" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -470,7 +473,7 @@
                                                             </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Out La" Width="80px">
                                                                 <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
-                                                            </dx:GridViewDataTimeEditColumn>                
+                                                            </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="150px">
                                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                     <Items>
@@ -482,13 +485,13 @@
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>  
 
-                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>                                    
+                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb" Visible="false" ShowInCustomizationForm="false"/> 
-                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
-                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>						
+                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                         </Columns>
-                                                    </dx:GridViewBandColumn>                            
+                                                    </dx:GridViewBandColumn>
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">
@@ -503,9 +506,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="ASPxGridView3" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                            <dx:ASPxGridView ID="grDate6" runat="server" ClientInstanceName="grDate6" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -543,7 +546,7 @@
                                                             </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Out La" Width="80px">
                                                                 <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
-                                                            </dx:GridViewDataTimeEditColumn>                
+                                                            </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="150px">
                                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                     <Items>
@@ -555,13 +558,13 @@
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>  
 
-                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>                                    
+                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb" Visible="false" ShowInCustomizationForm="false"/> 
-                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
-                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>						
+                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                         </Columns>
-                                                    </dx:GridViewBandColumn>                            
+                                                    </dx:GridViewBandColumn>
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">
@@ -576,9 +579,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="ASPxGridView4" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                            <dx:ASPxGridView ID="grDate7" runat="server" ClientInstanceName="grDate7" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -616,7 +619,7 @@
                                                             </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Out La" Width="80px">
                                                                 <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
-                                                            </dx:GridViewDataTimeEditColumn>                
+                                                            </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="150px">
                                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                     <Items>
@@ -628,13 +631,13 @@
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>  
 
-                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>                                    
+                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb" Visible="false" ShowInCustomizationForm="false"/> 
-                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
-                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>						
+                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                         </Columns>
-                                                    </dx:GridViewBandColumn>                            
+                                                    </dx:GridViewBandColumn>
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">
@@ -649,9 +652,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="ASPxGridView5" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">        
+                                            <dx:ASPxGridView ID="grDate8" runat="server" ClientInstanceName="grDate8" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -689,7 +692,7 @@
                                                             </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora Out La" Width="80px">
                                                                 <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
-                                                            </dx:GridViewDataTimeEditColumn>                
+                                                            </dx:GridViewDataTimeEditColumn>
                                                             <dx:GridViewDataComboBoxColumn FieldName="ModVerificare" Name="ModVerificare" Caption="Verificare" Width="150px">
                                                                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
                                                                     <Items>
@@ -701,13 +704,13 @@
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>  
 
-                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>                                    
+                                                            <dx:GridViewDataTextColumn FieldName="IdContract" Name="IdContract" Caption="Contract" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataTextColumn FieldName="TipSchimb" Name="TipSchimb" Caption="Schimb" Visible="false" ShowInCustomizationForm="false"/> 
-                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>      
-                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>						
+                                                            <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ShowInCustomizationForm="false"/>
+                                                            <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false" ShowInCustomizationForm="false"/>
                                                             <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false" ShowInCustomizationForm="false" />  
                                                         </Columns>
-                                                    </dx:GridViewBandColumn>                            
+                                                    </dx:GridViewBandColumn>
                                                 </Columns>
                                                 <SettingsCommandButton>
                                                     <DeleteButton Image-ToolTip="Sterge">

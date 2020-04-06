@@ -292,48 +292,48 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ASPxGridView grDate3;
         
         /// <summary>
-        /// ASPxGridView1 control.
+        /// grDate4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView ASPxGridView1;
+        protected global::DevExpress.Web.ASPxGridView grDate4;
         
         /// <summary>
-        /// ASPxGridView2 control.
+        /// grDate5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView ASPxGridView2;
+        protected global::DevExpress.Web.ASPxGridView grDate5;
         
         /// <summary>
-        /// ASPxGridView3 control.
+        /// grDate6 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView ASPxGridView3;
+        protected global::DevExpress.Web.ASPxGridView grDate6;
         
         /// <summary>
-        /// ASPxGridView4 control.
+        /// grDate7 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView ASPxGridView4;
+        protected global::DevExpress.Web.ASPxGridView grDate7;
         
         /// <summary>
-        /// ASPxGridView5 control.
+        /// grDate8 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView ASPxGridView5;
+        protected global::DevExpress.Web.ASPxGridView grDate8;
     }
 }

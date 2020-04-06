@@ -14,6 +14,9 @@ namespace WizOne.Contracte
 {
     public partial class Detalii : Page
     {
+        int idCtr = -99;
+        bool esteNou = false;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -33,6 +36,9 @@ namespace WizOne.Contracte
                     colAbs.PropertiesComboBox.DataSource = dtCmb;
 
                     int idCtr = Convert.ToInt32(General.Nz(Session["IdContract"],-99));
+                    if (idCtr == -99)
+                        esteNou = true;
+
                     DataSet ds = new DataSet();
                     DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""=@1", new object[] { idCtr });
                     dt.TableName = "Ptj_Contracte";
@@ -188,8 +194,6 @@ namespace WizOne.Contracte
                 DataTable dt = ds.Tables["Ptj_ContracteAbsente"];
                 if (dt == null) return;
 
-                int idCtr = Convert.ToInt32(General.Nz(Session["IdContract"], -99));
-
                 //daca avem linii noi
                 for (int i = 0; i < e.InsertValues.Count; i++)
                 {
@@ -280,9 +284,6 @@ namespace WizOne.Contracte
                 DataSet ds = Session["InformatiaCurenta"] as DataSet;
                 DataTable dt = ds.Tables["Ptj_ContracteSchimburi"].Select("TipSchimb=" + idx).CopyToDataTable();
                 if (dt == null) return;
-
-                int idCtr = Convert.ToInt32(General.Nz(Session["IdContract"], -99));
-                
 
                 //daca avem linii noi
                 for (int i = 0; i < e.InsertValues.Count; i++)
@@ -413,10 +414,16 @@ namespace WizOne.Contracte
         {
             try
             {
+                if (idCtr == -99)
+                    idCtr = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) FROM ""Ptj_Contracte""", null),0));
+
                 DataSet ds = Session["InformatiaCurenta"] as DataSet;
                 DataTable dt = ds.Tables["Ptj_Contracte"];
 
                 DataRow dr = dt.Rows[0];
+                if (esteNou)
+                    dr = dt.NewRow();
+                
                 dr["Denumire"] = txtDenumire.Value ?? DBNull.Value;
                 dr["OraInSchimbare"] = txtOraSchIn.Value ?? DBNull.Value;
                 dr["OraOutSchimbare"] = txtOraSchOut.Value ?? DBNull.Value;
@@ -428,6 +435,9 @@ namespace WizOne.Contracte
                 dr["OraOutInitializare"] = txtOraOut.Value ?? DBNull.Value;
                 dr["USER_NO"] = Session["UserId"];
                 dr["TIME"] = DateTime.Now;
+
+                if (esteNou)
+                    dt.Rows.Add(dr);
 
                 General.SalveazaDate(dt, "Ptj_Contracte");
 
@@ -441,6 +451,8 @@ namespace WizOne.Contracte
                         grDate.UpdateEdit();
                     }
                 }
+
+                ASPxWebControl.RedirectOnCallback("~/Contracte/Lista.aspx");
             }
             catch (Exception ex)
             {

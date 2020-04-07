@@ -16,6 +16,7 @@
                     //pnlLeg.SetVisible(false);
                     document.getElementById('<%= lblLuna.ClientID %>').style.display = "none";
                     txtLuna.SetVisible(false);
+                    document.getElementById('pnlNav').style.display = "none";
                     document.getElementById('<%= lblFil.ClientID %>').style.display = "none";
                     cmbFil.SetVisible(false);
                     btnLoad.SetVisible(false);
@@ -35,6 +36,7 @@
                     //pnlLeg.SetVisible(false);
                     document.getElementById('<%= lblLuna.ClientID %>').style.display = "none";
                     txtLuna.SetVisible(false);
+                    document.getElementById('pnlNav').style.display = "none";
                     document.getElementById('<%= lblFil.ClientID %>').style.display = "none";
                     cmbFil.SetVisible(false);
                     btnLoad.SetVisible(false);
@@ -54,6 +56,7 @@
                     //pnlLeg.SetVisible(true);
                     document.getElementById('<%= lblLuna.ClientID %>').style.display = "none";
                     txtLuna.SetVisible(false);
+                    document.getElementById('pnlNav').style.display = "none";
                     document.getElementById('<%= lblFil.ClientID %>').style.display = "none";
                     cmbFil.SetVisible(false);
                     btnLoad.SetVisible(true);
@@ -73,6 +76,7 @@
                     //pnlLeg.SetVisible(false);
                     document.getElementById('<%= lblLuna.ClientID %>').style.display = "inline-block";
                     txtLuna.SetVisible(true);
+                    document.getElementById('pnlNav').style.display = "inline-block";
                     document.getElementById('<%= lblFil.ClientID %>').style.display = "inline-block";
                     cmbFil.SetVisible(true);
                     btnLoad.SetVisible(true);
@@ -96,6 +100,14 @@
             if (e.buttonIndex == 0) nr = -1;
             if (e.buttonIndex == 1) nr = 1;
             s.SetDate(new Date(date.setMonth(date.getMonth() + nr)));
+
+            pnlLoading.Show();
+            e.processOnServer = true;
+        }
+
+        function OnNavButtonClick(e, nr) {
+            var date = new Date(txtLuna.GetDate());
+            txtLuna.SetDate(new Date(date.setMonth(date.getMonth() + nr)));
 
             pnlLoading.Show();
             e.processOnServer = true;
@@ -172,15 +184,24 @@
             <dx:ASPxDateEdit ID="txtLuna" ClientInstanceName="txtLuna" ClientIDMode="Static" runat="server" Width="110px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" ClientVisible="false" OnButtonClick="txtLuna_ButtonClick" >
                 <CalendarProperties FirstDayOfWeek="Monday" />
                 <Buttons>
-                    <dx:EditButton Position="Left">
+                    <dx:EditButton Position="Left" Visible="false">
                         <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png" Height="20px" Width="12px"></Image>
                     </dx:EditButton>
-                    <dx:EditButton Position="Right">
+                    <dx:EditButton Position="Right" Visible="false">
                         <Image Url="~/Fisiere/Imagini/Icoane/sgDr.png" Height="20px" Width="12px"></Image>
                     </dx:EditButton>
                 </Buttons>
                 <ClientSideEvents ButtonClick="function(s, e) { OnEditButtonClick(s,e); }"/>
             </dx:ASPxDateEdit>
+        </div>
+
+        <div id="pnlNav" style="display:inline-block; float:left; display:none; margin:27px 15px 0px 0px;">
+            <dx:ASPxButton ID="btnLunaAnt" ClientInstanceName="btnLunaAnt" ClientIDMode="Static" runat="server" Text="Luna precedenta" OnClick="btnLunaNav_Click" oncontextMenu="ctx(this,event)">
+                <ClientSideEvents Click="function(s, e) { OnNavButtonClick(e,-1); }" />
+            </dx:ASPxButton>
+            <dx:ASPxButton ID="btnLunaUrm" ClientInstanceName="btnLunaUrm" ClientIDMode="Static" runat="server" Text="Luna urmatoare" OnClick="btnLunaNav_Click" oncontextMenu="ctx(this,event)">
+                <ClientSideEvents Click="function(s, e) { OnNavButtonClick(e,1); }" />
+            </dx:ASPxButton>
         </div>
 
         <div class="Absente_Cereri_CampuriSup">

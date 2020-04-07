@@ -2707,8 +2707,8 @@ namespace WizOne.Pontaj
 
                         if (msg != "")
                             grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes, dar cu urmatorul avertisment: " + msg);
-                        else
-                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
+                        //else
+                        //    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
                     }
                 }
             }

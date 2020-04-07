@@ -360,9 +360,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\reports.css" />
     <Content Include="Contracte\Lista.aspx" />
-    <Content Include="Contracte\ContractAbsente.ascx" />
     <Content Include="Contracte\Detalii.aspx" />
-    <Content Include="Contracte\ContractZilnic.ascx" />
     <Content Include="Default.aspx" />
     <Content Include="Eval\ActivitatiObiective.aspx" />
     <Content Include="Eval\Calificative.aspx" />
@@ -1297,26 +1295,12 @@
     <Compile Include="Contracte\Lista.aspx.designer.cs">
       <DependentUpon>Lista.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Contracte\ContractAbsente.ascx.cs">
-      <DependentUpon>ContractAbsente.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Contracte\ContractAbsente.ascx.designer.cs">
-      <DependentUpon>ContractAbsente.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Contracte\Detalii.aspx.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Contracte\Detalii.aspx.designer.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Contracte\ContractZilnic.ascx.cs">
-      <DependentUpon>ContractZilnic.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Contracte\ContractZilnic.ascx.designer.cs">
-      <DependentUpon>ContractZilnic.ascx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

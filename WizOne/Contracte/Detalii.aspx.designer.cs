@@ -13,13 +13,13 @@ namespace WizOne.Contracte {
     public partial class Detalii {
         
         /// <summary>
-        /// pnlSectiune control.
+        /// pnlCtl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlSectiune;
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
         
         /// <summary>
         /// txtTitlu control.
@@ -263,6 +263,51 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ContentControl ContentControl2;
+        
+        /// <summary>
+        /// lblDuplica control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblDuplica;
+        
+        /// <summary>
+        /// cmbZiDeLa control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbZiDeLa;
+        
+        /// <summary>
+        /// lblPentru control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblPentru;
+        
+        /// <summary>
+        /// cmbZiPentru control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDropDownEdit cmbZiPentru;
+        
+        /// <summary>
+        /// btnDuplica control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnDuplica;
         
         /// <summary>
         /// grDate1 control.

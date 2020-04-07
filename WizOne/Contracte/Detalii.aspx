@@ -5,7 +5,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-<dx:ASPxCallbackPanel ID="pnlSectiune" ClientIDMode="Static" ClientInstanceName="pnlSectiune" ScrollBars="None" runat="server" OnCallback="pnlSectiune_Callback" SettingsLoadingPanel-Enabled="false">
+<dx:ASPxCallbackPanel ID="pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" ScrollBars="None" runat="server" OnCallback="pnlCtl_Callback" SettingsLoadingPanel-Enabled="false">
     <ClientSideEvents EndCallback="function (s,e) { OnPanelEndCallback(); }"/>
     <PanelCollection>
         <dx:PanelContent>
@@ -18,7 +18,7 @@
                         <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
                             <ClientSideEvents Click="function(s, e) {
                                 pnlLoading.Show();
-                                pnlSectiune.PerformCallback('btnSave');
+                                pnlCtl.PerformCallback('btnSave');
                             }" />
                             <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                         </dx:ASPxButton>
@@ -144,6 +144,64 @@
                                 <dx:TabPage Text="Programe">
                                     <ContentCollection>
                                         <dx:ContentControl ID="ContentControl2" runat="server">
+
+                                            <div class="row">
+                                                <div class="col-md-12" style="margin:15px 0px;">
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblDuplica" runat="server" Text="Duplica" Width="60"/>
+							                            <dx:ASPxComboBox ID="cmbZiDeLa" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="100">
+                                                            <Items>
+                                                                <dx:ListEditItem Text="Luni" Value="1" />
+                                                                <dx:ListEditItem Text="Marti" Value="2" />
+                                                                <dx:ListEditItem Text="Miercuri" Value="3" />
+                                                                <dx:ListEditItem Text="Joi" Value="4" />
+                                                                <dx:ListEditItem Text="Vineri" Value="5" />
+                                                                <dx:ListEditItem Text="Sambata" Value="6" />
+                                                                <dx:ListEditItem Text="Duminica" Value="7" />
+                                                                <dx:ListEditItem Text="Sarbatori legale" Value="8" />
+                                                            </Items>
+							                            </dx:ASPxComboBox> 
+                                                    </div>
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblPentru" runat="server" Text="pentru" Width="50"/>
+                                                        <dx:ASPxDropDownEdit ID="cmbZiPentru" ClientInstanceName="cmbZiPentru" Width="250px" runat="server" AnimationType="None">
+                                                            <DropDownWindowStyle BackColor="#EDEDED" />
+                                                            <DropDownWindowTemplate>
+                                                                <dx:ASPxListBox Width="100%" Height="220px" ID="listBox" ClientInstanceName="checkListBox1" SelectionMode="CheckColumn" runat="server" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+                                                                    <Border BorderStyle="None" />
+                                                                    <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />
+                                                                    <ClientSideEvents SelectedIndexChanged="function(s, e){ OnListBoxSelectionChanged1(s,e); }" />
+                                                                    <Items>
+                                                                        <dx:ListEditItem Text="(Selectie toate)" />
+                                                                        <dx:ListEditItem Text="Luni" Value="1" />
+                                                                        <dx:ListEditItem Text="Marti" Value="2" />
+                                                                        <dx:ListEditItem Text="Miercuri" Value="3" />
+                                                                        <dx:ListEditItem Text="Joi" Value="4" />
+                                                                        <dx:ListEditItem Text="Vineri" Value="5" />
+                                                                        <dx:ListEditItem Text="Sambata" Value="6" />
+                                                                        <dx:ListEditItem Text="Duminica" Value="7" />
+                                                                        <dx:ListEditItem Text="Sarbatori legale" Value="8" />
+                                                                    </Items>
+                                                                </dx:ASPxListBox>
+                                                                <table style="width: 100%">
+                                                                    <tr>
+                                                                        <td style="padding: 4px">
+                                                                            <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Close" Style="float: right">
+                                                                                <ClientSideEvents Click="function(s, e){ cmbZiPentru.HideDropDown(); }" />
+                                                                            </dx:ASPxButton>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </DropDownWindowTemplate>
+                                                            <ClientSideEvents TextChanged="function(s, e){ SynchronizeListBoxValues1(s); }" DropDown="function(s, e){ SynchronizeListBoxValues1(s); }" />
+                                                        </dx:ASPxDropDownEdit>
+                                                    </div>
+                                                    <dx:ASPxButton ID="btnDuplica" runat="server" Text="Duplica" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
+                                                        <Image Url="~/Fisiere/Imagini/Icoane/clone.png"></Image>
+                                                        <ClientSideEvents Click="function(s, e) { pnlCtl.PerformCallback('btnDuplica'); }" />
+                                                    </dx:ASPxButton>
+                                                </div>
+                                            </div>
 
                                             <dx:ASPxGridView ID="grDate1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
@@ -772,6 +830,51 @@
 
         function OnPanelEndCallback() {
             pnlLoading.Hide();
+        }
+
+        var textSeparator = ",";
+        //first one
+        function OnListBoxSelectionChanged1(listBox, args) {
+            if (args.index == 0)
+                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+            UpdateSelectAllItemState1();
+            UpdateText1();
+        }
+        function UpdateSelectAllItemState1() {
+            IsAllSelected1() ? checkListBox1.SelectIndices([0]) : checkListBox1.UnselectIndices([0]);
+        }
+        function IsAllSelected1() {
+            var selectedDataItemCount = checkListBox1.GetItemCount() - (checkListBox1.GetItem(0).selected ? 0 : 1);
+            return checkListBox1.GetSelectedItems().length == selectedDataItemCount;
+        }
+        function UpdateText1() {
+            var selectedItems = checkListBox1.GetSelectedItems();
+            cmbZiPentru.SetText(GetSelectedItemsText1(selectedItems));
+        }
+        function SynchronizeListBoxValues1(dropDown) {
+            checkListBox1.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts1(texts);
+            checkListBox1.SelectValues(values);
+            UpdateSelectAllItemState1();
+            UpdateText1(); // for remove non-existing texts
+        }
+        function GetSelectedItemsText1(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index != 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function GetValuesByTexts1(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox1.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
         }
 
     </script>

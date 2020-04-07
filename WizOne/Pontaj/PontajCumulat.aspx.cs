@@ -37,33 +37,51 @@ namespace WizOne.Pontaj
 
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        GridViewDataSpinEditColumn c = new GridViewDataSpinEditColumn();
-                        c.Name = "col" + i;
-                        c.FieldName = dt.Rows[i]["Coloana"].ToString();
-                        c.Caption = Dami.TraduCuvant(dt.Rows[i]["Caption"].ToString());
-                        c.ToolTip = Dami.TraduCuvant(dt.Rows[i]["ToolTip"].ToString());
-                        c.ReadOnly = true;
-                        //c.Width = Unit.Pixel(100);
-                        c.VisibleIndex = 100 + i;
+                        //Radu 06.04.2020
+                        if (dt.Rows[i]["Coloana"].ToString().IndexOf("F") == 0 && dt.Rows[i]["Coloana"].ToString().Length <= 3)
+                        {
+                            GridViewDataSpinEditColumn c = new GridViewDataSpinEditColumn();
+                            c.Name = "col" + i;
+                            c.FieldName = dt.Rows[i]["Coloana"].ToString();
+                            c.Caption = Dami.TraduCuvant(dt.Rows[i]["Caption"].ToString());
+                            c.ToolTip = Dami.TraduCuvant(dt.Rows[i]["ToolTip"].ToString());
+                            c.ReadOnly = true;
+                            //c.Width = Unit.Pixel(100);
+                            c.VisibleIndex = 100 + i;
 
-                        //Florin 2019.06.24
-                        ////c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] ?? 0);
-                        //c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["Editabil"].ToString()));
-                        c.ReadOnly = !Convert.ToBoolean(General.Nz(dt.Rows[i]["Editabil"], 0));
+                            //Florin 2019.06.24
+                            ////c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] ?? 0);
+                            //c.ReadOnly = Convert.ToBoolean(dt.Rows[i]["Editabil"] == DBNull.Value ? 0 : Convert.ToInt32(dt.Rows[i]["Editabil"].ToString()));
+                            c.ReadOnly = !Convert.ToBoolean(General.Nz(dt.Rows[i]["Editabil"], 0));
 
-                        c.PropertiesSpinEdit.MaxLength = 10;
-                        c.PropertiesSpinEdit.NumberFormat = SpinEditNumberFormat.Number;
-                        c.PropertiesSpinEdit.DisplayFormatString = "N0";
-                        c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
+                            c.PropertiesSpinEdit.MaxLength = 10;
+                            c.PropertiesSpinEdit.NumberFormat = SpinEditNumberFormat.Number;
+                            c.PropertiesSpinEdit.DisplayFormatString = "N0";
+                            c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
 
-                        grDate.Columns.Add(c);
+                            grDate.Columns.Add(c);
 
-                        ASPxSummaryItem s = new ASPxSummaryItem();
-                        s.FieldName = dt.Rows[i]["Coloana"].ToString();
-                        s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+                            ASPxSummaryItem s = new ASPxSummaryItem();
+                            s.FieldName = dt.Rows[i]["Coloana"].ToString();
+                            s.SummaryType = DevExpress.Data.SummaryItemType.Sum;
 
-                        grDate.TotalSummary.Add(s);
+                            grDate.TotalSummary.Add(s);
+                        }
+                        else
+                        {
+                            GridViewDataTextColumn c = new GridViewDataTextColumn();
+                            c.Name = "col" + i;
+                            c.FieldName = dt.Rows[i]["Coloana"].ToString();
+                            c.Caption = Dami.TraduCuvant(dt.Rows[i]["Caption"].ToString());
+                            c.ToolTip = Dami.TraduCuvant(dt.Rows[i]["ToolTip"].ToString());
+                            c.ReadOnly = true;
+                            //c.Width = Unit.Pixel(100);
+                            c.VisibleIndex = 100 + i;
 
+                            c.ReadOnly = !Convert.ToBoolean(General.Nz(dt.Rows[i]["Editabil"], 0));
+
+                            grDate.Columns.Add(c);
+                        }
                     }
                 }
             }
@@ -213,6 +231,13 @@ namespace WizOne.Pontaj
                             else
                                 cmp += ", NULL AS \"" + de.Key.ToString() + "\"";
                         }
+                        else
+                        {//Radu 06.04.2020
+                            if (upd.NewValues[de.Key.ToString()] != null)
+                                cmp += ",'" + upd.NewValues[de.Key.ToString()].ToString() + "' AS \"" + de.Key.ToString() + "\"";
+                            else
+                                cmp += ", NULL AS \"" + de.Key.ToString() + "\"";
+                        }
                     }
                     string strSql = "";
                     if (cmp != "")
@@ -245,6 +270,13 @@ namespace WizOne.Pontaj
                         {
                             if (upd.NewValues[de.Key.ToString()] != null)
                                 row[de.Key.ToString()] = Convert.ToDecimal(upd.NewValues[de.Key.ToString()]);
+                            else
+                                row[de.Key.ToString()] = DBNull.Value;
+                        }
+                        else
+                        {//Radu 06.04.2020
+                            if (upd.NewValues[de.Key.ToString()] != null)
+                                row[de.Key.ToString()] = upd.NewValues[de.Key.ToString()].ToString();
                             else
                                 row[de.Key.ToString()] = DBNull.Value;
                         }

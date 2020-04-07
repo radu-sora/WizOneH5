@@ -15,9 +15,9 @@ namespace WizOne
         protected void Page_Load(object sender, EventArgs e)
         {
             int idCtr = 3;
-            DataTable dtCmb = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_tblAbsente"" ORDER BY ""Denumire""  ", null);
-            GridViewDataComboBoxColumn colAbs = (grDateAbs.Columns["IdAbsenta"] as GridViewDataComboBoxColumn);
-            colAbs.PropertiesComboBox.DataSource = dtCmb;
+            //DataTable dtCmb = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_tblAbsente"" ORDER BY ""Denumire""  ", null);
+            //GridViewDataComboBoxColumn colAbs = (grDateAbs.Columns["IdAbsenta"] as GridViewDataComboBoxColumn);
+            //colAbs.PropertiesComboBox.DataSource = dtCmb;
 
             DataTable dtAbs = General.IncarcaDT(@"SELECT * FROM ""Ptj_ContracteAbsente"" WHERE ""IdContract""=@1", new object[] { idCtr });
             dtAbs.TableName = "Ptj_ContracteAbsente";

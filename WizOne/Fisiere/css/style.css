@@ -740,7 +740,7 @@ table label {
     float: left;
     padding-right: 15px;
     display: flex;
-    align-items: flex-end;
+    align-items:center;
 }
 
     .ctl_inline label {

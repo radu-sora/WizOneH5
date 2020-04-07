@@ -55,7 +55,7 @@ namespace WizOne.Contracte {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblId;
+        protected global::DevExpress.Web.ASPxLabel lblId;
         
         /// <summary>
         /// txtId control.
@@ -73,7 +73,7 @@ namespace WizOne.Contracte {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDenumire;
+        protected global::DevExpress.Web.ASPxLabel lblDenumire;
         
         /// <summary>
         /// txtDenumire control.
@@ -109,7 +109,7 @@ namespace WizOne.Contracte {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblOraSchIn;
+        protected global::DevExpress.Web.ASPxLabel lblOraSchIn;
         
         /// <summary>
         /// txtOraSchIn control.
@@ -127,7 +127,7 @@ namespace WizOne.Contracte {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblOraSchOut;
+        protected global::DevExpress.Web.ASPxLabel lblOraSchOut;
         
         /// <summary>
         /// txtOraSchOut control.
@@ -145,7 +145,7 @@ namespace WizOne.Contracte {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblOreSup;
+        protected global::DevExpress.Web.ASPxLabel lblOreSup;
         
         /// <summary>
         /// chkOreSup control.
@@ -163,7 +163,7 @@ namespace WizOne.Contracte {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAfisare;
+        protected global::DevExpress.Web.ASPxLabel lblAfisare;
         
         /// <summary>
         /// cmbAfisare control.
@@ -175,49 +175,13 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ASPxComboBox cmbAfisare;
         
         /// <summary>
-        /// lblRap control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRap;
-        
-        /// <summary>
-        /// cmbRap control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbRap;
-        
-        /// <summary>
-        /// lblPontareAuto control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPontareAuto;
-        
-        /// <summary>
-        /// chkPontareAuto control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox chkPontareAuto;
-        
-        /// <summary>
         /// lblOraInInit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblOraInInit;
+        protected global::DevExpress.Web.ASPxLabel lblOraInInit;
         
         /// <summary>
         /// txtOraIn control.
@@ -235,7 +199,7 @@ namespace WizOne.Contracte {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblOraOut;
+        protected global::DevExpress.Web.ASPxLabel lblOraOut;
         
         /// <summary>
         /// txtOraOut control.
@@ -245,6 +209,42 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTimeEdit txtOraOut;
+        
+        /// <summary>
+        /// lblPontareAuto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblPontareAuto;
+        
+        /// <summary>
+        /// chkPontareAuto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkPontareAuto;
+        
+        /// <summary>
+        /// lblRap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxLabel lblRap;
+        
+        /// <summary>
+        /// cmbRap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbRap;
         
         /// <summary>
         /// grDateAbs control.

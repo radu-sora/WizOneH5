@@ -5,7 +5,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-<dx:ASPxCallbackPanel ID="pnlSectiune" ClientIDMode="Static" ClientInstanceName="pnlSectiune" ScrollBars="Vertical" runat="server" OnCallback="pnlSectiune_Callback" SettingsLoadingPanel-Enabled="false">
+<dx:ASPxCallbackPanel ID="pnlSectiune" ClientIDMode="Static" ClientInstanceName="pnlSectiune" ScrollBars="None" runat="server" OnCallback="pnlSectiune_Callback" SettingsLoadingPanel-Enabled="false">
     <ClientSideEvents EndCallback="function (s,e) { OnPanelEndCallback(); }"/>
     <PanelCollection>
         <dx:PanelContent>
@@ -29,14 +29,16 @@
 	            </tr>
                 <tr>
                     <td colspan="2">
-                        <div  style="margin:15px 0px; display:inline-block;">
-                            <div class="ctl_inline">
-                                <label id="lblId" runat="server">Id</label>
-                                <dx:ASPxTextBox ID="txtId" Width="50" runat="server" ClientEnabled="false"/>
-                            </div>
-                            <div class="ctl_inline">
-                                <label id="lblDenumire" runat="server">Denumire</label>
-                                <dx:ASPxTextBox ID="txtDenumire" Width="400" runat="server" AutoPostBack="false"/>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-bottom:20px;">
+                                <div class="ctl_inline">
+                                    <dx:ASPxLabel ID="lblId" runat="server" Text="Id" Width="30"/>
+                                    <dx:ASPxTextBox ID="txtId" Width="50" runat="server" ClientEnabled="false"/>
+                                </div>
+                                <div class="ctl_inline">
+                                    <dx:ASPxLabel ID="lblDenumire" runat="server" Text="Denumire" Width="70"/>
+                                    <dx:ASPxTextBox ID="txtDenumire" Width="400" runat="server" AutoPostBack="false"/>
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -48,55 +50,59 @@
                                 <dx:TabPage Text="Absente">
                                     <ContentCollection>
                                         <dx:ContentControl ID="ContentControl1" runat="server">
-                                            <div  style="margin:15px 0px; display:inline-block;">
-                                                <div class="ctl_inline">
-                                                    <label id="lblOraSchIn" runat="server">Ora Schimbare In</label>
-							                        <dx:ASPxTimeEdit ID="txtOraSchIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblOraSchIn" runat="server" Text="Ora Sch. In" Width="75"/>
+							                            <dx:ASPxTimeEdit ID="txtOraSchIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                                    </div>
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblOraSchOut" runat="server" Text="Ora Sch. Out" Width="80"/>
+							                            <dx:ASPxTimeEdit ID="txtOraSchOut" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                                    </div>
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblOreSup" runat="server" Text="Ore suplimentare" Width="120"/>
+                                                        <dx:ASPxCheckBox ID="chkOreSup" runat="server" AutoPostBack="false"/>
+                                                    </div>
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblAfisare" runat="server" Text="Afisare Ore" Width="130"/>
+							                            <dx:ASPxComboBox ID="cmbAfisare" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150">
+                                                            <Items>
+                                                                <dx:ListEditItem Text="Trunchiere la ore" Value="1" />
+                                                                <dx:ListEditItem Text="Cu minute" Value="2" />
+                                                                <dx:ListEditItem Text="Cu zecimale" Value="3" />
+                                                            </Items>
+							                            </dx:ASPxComboBox>
+                                                    </div>
                                                 </div>
-                                                <div class="ctl_inline">
-                                                    <label id="lblOraSchOut" runat="server">Ora Schimbare Out</label>
-							                        <dx:ASPxTimeEdit ID="txtOraSchOut" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
-                                                </div>
-                                                <div class="ctl_inline">
-                                                    <label id="lblOreSup" runat="server">Ore suplimentare</label>
-                                                    <dx:ASPxCheckBox ID="chkOreSup" runat="server" AutoPostBack="false"/>
-                                                </div>
-                                                <div class="ctl_inline">
-                                                    <label id="lblAfisare" runat="server">Afisare ore</label>
-							                        <dx:ASPxComboBox ID="cmbAfisare" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150">
-                                                        <Items>
-                                                            <dx:ListEditItem Text="Trunchiere la ore" Value="1" />
-                                                            <dx:ListEditItem Text="Cu minute" Value="2" />
-                                                            <dx:ListEditItem Text="Cu zecimale" Value="3" />
-                                                        </Items>
-							                        </dx:ASPxComboBox>
-                                                </div>
-                                                <div class="ctl_inline">
-                                                    <label id="lblRap" runat="server">Tip raportare ore noapte</label>
-    							                    <dx:ASPxComboBox ID="cmbRap" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150">
-                                                        <Items>
-                                                            <dx:ListEditItem Text="Pe inceput de schimb" Value="1" />
-                                                            <dx:ListEditItem Text="Pe sfarsit de schimb" Value="2" />
-                                                        </Items>
-                                                    </dx:ASPxComboBox>
-                                                </div>
-                                                <div class="ctl_inline">
-                                                    <label id="lblPontareAuto" runat="server">Initializare automata</label>
-                                                    <dx:ASPxCheckBox ID="chkPontareAuto" runat="server" AutoPostBack="false"/>
-                                                </div>
-                                                <div class="ctl_inline">
-                                                    <label id="lblOraInInit" runat="server">Ora intrare</label>
-                                                    <dx:ASPxTimeEdit  ID="txtOraIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
-                                                </div>
-                                                <div class="ctl_inline">
-                                                    <label id="lblOraOut" runat="server">Ora iesire</label>
-                                                    <dx:ASPxTimeEdit  ID="txtOraOut" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                                <div class="col-md-12" style="margin:10px 0px;">
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblOraInInit" runat="server" Text="Ora Intrare" Width="75"/>
+                                                        <dx:ASPxTimeEdit  ID="txtOraIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                                    </div>
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblOraOut" runat="server" Text="Ora Iesire" Width="80"/>
+                                                        <dx:ASPxTimeEdit  ID="txtOraOut" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                                    </div>
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblPontareAuto" runat="server" Text="Initializare automata" Width="120"/>
+                                                        <dx:ASPxCheckBox ID="chkPontareAuto" runat="server" AutoPostBack="false"/>
+                                                    </div>
+                                                    <div class="ctl_inline">
+                                                        <dx:ASPxLabel ID="lblRap" runat="server" Text="Raportare ore noapte" Width="130"/>
+    							                        <dx:ASPxComboBox ID="cmbRap" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150">
+                                                            <Items>
+                                                                <dx:ListEditItem Text="Pe inceput de schimb" Value="1" />
+                                                                <dx:ListEditItem Text="Pe sfarsit de schimb" Value="2" />
+                                                            </Items>
+                                                        </dx:ASPxComboBox>
+                                                    </div>
                                                 </div>
                                             </div>
                                     
-                                            <dx:ASPxGridView ID="grDateAbs" runat="server" ClientInstanceName="grDateAbs" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateAbs_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDateAbs" runat="server" ClientInstanceName="grDateAbs" ClientIDMode="Static" Width="900px" AutoGenerateColumns="false" OnBatchUpdate="grDateAbs_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" VerticalScrollBarMode="Visible" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -139,12 +145,12 @@
                                     <ContentCollection>
                                         <dx:ContentControl ID="ContentControl2" runat="server">
 
-                                            <dx:ASPxGridView ID="grDate1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDate1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
-                                                <SettingsPager Mode="ShowAllRecords"/>
+                                                <SettingsPager Mode="ShowAllRecords"></SettingsPager>
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
                                                 <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                 <Columns>
@@ -214,9 +220,9 @@
                                             </dx:ASPxGridView>
                                            
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate2" runat="server" ClientInstanceName="grDate2" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDate2" runat="server" ClientInstanceName="grDate2" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -287,9 +293,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate3" runat="server" ClientInstanceName="grDate3" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDate3" runat="server" ClientInstanceName="grDate3" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -360,9 +366,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate4" runat="server" ClientInstanceName="grDate4" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDate4" runat="server" ClientInstanceName="grDate4" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -380,7 +386,7 @@
                                                                         <dx:ListBoxColumn FieldName="OraIntrare" Caption="Ora intrare" Width="80" />
                                                                         <dx:ListBoxColumn FieldName="OraIesire" Caption="Ora iesire" Width="80" />
                                                                     </Columns>
-                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate1); }" />
+                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate4); }" />
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="80px">
@@ -433,9 +439,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate5" runat="server" ClientInstanceName="grDate5" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDate5" runat="server" ClientInstanceName="grDate5" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -453,7 +459,7 @@
                                                                         <dx:ListBoxColumn FieldName="OraIntrare" Caption="Ora intrare" Width="80" />
                                                                         <dx:ListBoxColumn FieldName="OraIesire" Caption="Ora iesire" Width="80" />
                                                                     </Columns>
-                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate1); }" />
+                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate5); }" />
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="80px">
@@ -506,9 +512,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate6" runat="server" ClientInstanceName="grDate6" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDate6" runat="server" ClientInstanceName="grDate6" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -526,7 +532,7 @@
                                                                         <dx:ListBoxColumn FieldName="OraIntrare" Caption="Ora intrare" Width="80" />
                                                                         <dx:ListBoxColumn FieldName="OraIesire" Caption="Ora iesire" Width="80" />
                                                                     </Columns>
-                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate1); }" />
+                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate6); }" />
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="80px">
@@ -579,9 +585,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate7" runat="server" ClientInstanceName="grDate7" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDate7" runat="server" ClientInstanceName="grDate7" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -599,7 +605,7 @@
                                                                         <dx:ListBoxColumn FieldName="OraIntrare" Caption="Ora intrare" Width="80" />
                                                                         <dx:ListBoxColumn FieldName="OraIesire" Caption="Ora iesire" Width="80" />
                                                                     </Columns>
-                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate1); }" />
+                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate7); }" />
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="80px">
@@ -652,9 +658,9 @@
                                                 </SettingsCommandButton>
                                             </dx:ASPxGridView>
                                             <br /><br />
-                                            <dx:ASPxGridView ID="grDate8" runat="server" ClientInstanceName="grDate8" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                            <dx:ASPxGridView ID="grDate8" runat="server" ClientInstanceName="grDate8" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
                                                 <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
-                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" HorizontalScrollBarMode="Auto" ShowStatusBar="Hidden" />
+                                                <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                 <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                 <SettingsSearchPanel Visible="false" />
                                                 <SettingsLoadingPanel Mode="ShowAsPopup" />
@@ -672,7 +678,7 @@
                                                                         <dx:ListBoxColumn FieldName="OraIntrare" Caption="Ora intrare" Width="80" />
                                                                         <dx:ListBoxColumn FieldName="OraIesire" Caption="Ora iesire" Width="80" />
                                                                     </Columns>
-                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate1); }" />
+                                                                    <ClientSideEvents SelectedIndexChanged="function(s,e) { OnProgramSelectedIndexChanged(s,grDate8); }" />
                                                                 </PropertiesComboBox>
                                                             </dx:GridViewDataComboBoxColumn>
                                                             <dx:GridViewDataTimeEditColumn FieldName="OraInceput" Name="OraInceput" Caption="Ora In" Width="80px">

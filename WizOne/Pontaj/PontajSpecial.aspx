@@ -56,12 +56,14 @@
                     lbl.GetMainElement().title = "";
                 }
                 else {
-                    lbl.SetText(cmbProgr.GetValue());
+                    //lbl.SetText(cmbProgr.GetValue());
+                    lbl.SetText("-");
                     var tipProgr = "<%=Session["PtjSpecial_ProgrameJS"] %>";
                     var resProgr = tipProgr.split(";");
                     for (var i = 0; i < resProgr.length; i++) {
                         var linieProgr = resProgr[i].split(",");
                         if (linieProgr[0] == cmbProgr.GetValue()) {
+                            lbl.SetText(linieProgr[2]);
                             lbl.GetMainElement().title = linieProgr[1];
                         }
                 }

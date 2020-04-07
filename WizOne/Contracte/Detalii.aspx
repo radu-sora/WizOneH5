@@ -45,7 +45,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <dx:ASPxPageControl ID="tabCtr" ClientInstanceName="tabCtr" runat="server" Width="100%" Height="100%" CssClass="dxtcFixed" ActiveTabIndex="0">
+                        <dx:ASPxPageControl ID="tabCtr" ClientInstanceName="tabCtr" runat="server" Width="100%" Height="100%" CssClass="dxtcFixed" ActiveTabIndex="0" AutoPostBack="false" OnCallback="tabCtr_Callback">
                             <TabPages>
                                 <dx:TabPage Text="Absente">
                                     <ContentCollection>
@@ -145,6 +145,7 @@
                                     <ContentCollection>
                                         <dx:ContentControl ID="ContentControl2" runat="server">
 
+
                                             <div class="row">
                                                 <div class="col-md-12" style="margin:15px 0px;">
                                                     <div class="ctl_inline">
@@ -198,7 +199,7 @@
                                                     </div>
                                                     <dx:ASPxButton ID="btnDuplica" runat="server" Text="Duplica" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
                                                         <Image Url="~/Fisiere/Imagini/Icoane/clone.png"></Image>
-                                                        <ClientSideEvents Click="function(s, e) { pnlCtl.PerformCallback('btnDuplica'); }" />
+                                                        <ClientSideEvents Click="function(s, e) { tabCtr.PerformCallback('btnDuplica'); }" />
                                                     </dx:ASPxButton>
                                                 </div>
                                             </div>

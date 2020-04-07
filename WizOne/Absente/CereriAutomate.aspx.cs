@@ -444,7 +444,16 @@ namespace WizOne.Absente
 
 
                 if (Dami.ValoareParam("LogCereri", "0") == "1") General.CreazaLogCereri(strGen, marca.ToString(), dtDataInc.Value.ToString());
-                               
+
+
+                string msg = Notif.TrimiteNotificare("Absente.Lista", (int)Constante.TipNotificare.Validare, sqlCer + ", 1 AS \"Actiune\", 1 AS \"IdStareViitoare\" " + (Constante.tipBD == 1 ? "" : " FROM DUAL"), "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
+                if (msg != "" && msg.Substring(0, 1) == "2")
+                {
+
+                    err += "Pentru angajatul cu marca " + marca + ":" + msg.Substring(2) + "\n";
+                    lstMarciProcesate.Add(marca);
+                    continue;                
+                }
                 
                 int idCer = 1;
                 int idStare = 1;

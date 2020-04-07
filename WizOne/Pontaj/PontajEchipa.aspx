@@ -585,6 +585,8 @@
                         <dx:GridViewDataTextColumn FieldName="DescContract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="5" Width="150px" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="F06205" Caption="Centrul de Cost" ReadOnly="true" FixedStyle="Left" VisibleIndex="6" Width="150px" Settings-AutoFilterCondition="Contains"/>
                           
+                        <dx:GridViewDataTextColumn FieldName="Comentarii" Caption="Comentarii" ReadOnly="true"  />
+
                         <dx:GridViewDataTextColumn FieldName="Companie" Caption="Companie" ReadOnly="true" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="Subcompanie" Caption="Subcompanie" ReadOnly="true" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="Filiala" Caption="Filiala" ReadOnly="true" Visible="false" />

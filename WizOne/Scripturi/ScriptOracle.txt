@@ -13723,3 +13723,8 @@ CREATE TABLE "ImportDateNomen"(
     CREATE UNIQUE INDEX "PK_ImportDateNomen" ON "ImportDateNomen" ("IdAuto") ;
 
 ALTER TABLE "ImportDateNomen" ADD CONSTRAINT "PK_ImportDateNomen" PRIMARY KEY ("IdAuto");
+
+
+----	2.2.128	----
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('DezactivareUtilizatori', '', '1 - blocare utilizatori inactivi la logare; 2- blocare utilizatori inactivi si suspendati la logare', 0, -99, SYSDATE);

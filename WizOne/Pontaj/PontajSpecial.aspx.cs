@@ -112,12 +112,15 @@ namespace WizOne.Pontaj
                     cmbSablon.DataBind();
                     Session["PtjSpecial_Sabloane"] = dt;
 
-                    DataTable dtProgr = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Programe""", null);
+                    string strSQL = @"SELECT ""Id"", ""Denumire"", COALESCE(""DenumireScurta"", CONVERT(VARCHAR,""Id"")) AS ""DenumireScurta"" FROM ""Ptj_Programe""";
+                    if (Constante.tipBD == 2)
+                        strSQL = @"SELECT ""Id"", ""Denumire"", COALESCE(""DenumireScurta"", TO_CHAR(""Id"")) AS ""DenumireScurta"" FROM ""Ptj_Programe""";
+                    DataTable dtProgr = General.IncarcaDT(strSQL, null);
                     Session["PtjSpecial_Programe"] = dtProgr;
                     string progr = "";
                     for (int i = 0; i < dtProgr.Rows.Count; i++)
                     {
-                        progr += dtProgr.Rows[i]["Id"].ToString() + "," + dtProgr.Rows[i]["Denumire"].ToString();
+                        progr += dtProgr.Rows[i]["Id"].ToString() + "," + dtProgr.Rows[i]["Denumire"].ToString() + "," + dtProgr.Rows[i]["DenumireScurta"].ToString();
                         if (i < dtProgr.Rows.Count - 1)
                             progr += ";";
                     }
@@ -732,9 +735,15 @@ namespace WizOne.Pontaj
                                             {
                                                 lx.Visible = true;
                                                 int idProgr = dr[0]["IdProgram" + i.ToString()] as int? ?? -1;
-                                                lx.Text = (idProgr > 0 ? idProgr.ToString() : "-");
+                                                DataTable dtPr = Session["PtjSpecial_Programe"] as DataTable;
+                                                DataRow[] drPr = dtPr.Select("Id = " + idProgr);
+                                                string denScurta = idProgr > 0 ? idProgr.ToString() : "-";
+                                                if (drPr != null && drPr.Count() > 0)
+                                                    denScurta = drPr[0]["DenumireScurta"].ToString();
+                                                //lx.Text = (idProgr > 0 ? idProgr.ToString() : "-");
+                                                lx.Text = denScurta;
                                                 if (dtProgr != null && dtProgr.Rows.Count > 0 && lx.Text != "-")
-                                                    lx.ToolTip = dtProgr.Select("Id=" + lx.Text)[0]["Denumire"] as string ?? "";                                              
+                                                    lx.ToolTip = dtProgr.Select("Id=" + idProgr)[0]["Denumire"] as string ?? "";                                              
                                             }
                                         }
                                     chkS.Checked = Convert.ToInt32(dr[0]["S"] == null ? "0" : dr[0]["S"].ToString()) == 1 ? true : false;

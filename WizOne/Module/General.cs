@@ -2092,7 +2092,7 @@ namespace WizOne.Module
             {
                 strSql = $@"SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                     CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
-                    CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE 
+                    CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE 
                     CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
                     CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                     CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
@@ -8108,7 +8108,7 @@ namespace WizOne.Module
                                     b.* from  ""tblZile"" a
                                     left join 
                                     (SELECT P.""Zi"",
-                                    CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE
+                                    CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE
                                     CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
                                     CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                                     CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
@@ -8149,7 +8149,7 @@ namespace WizOne.Module
 
                             (SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                             CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
-                            CASE WHEN COALESCE(b.SL,0) <> 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 1 ELSE
+                            CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE
                             CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
                             CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                             CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 

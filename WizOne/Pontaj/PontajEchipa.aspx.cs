@@ -2678,13 +2678,13 @@ namespace WizOne.Pontaj
 
                     if (cmp != "")
                     {
-                        sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET {cmp.Substring(1)}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                        //Florin 2020.04.08 - am adaugat Valstr=null
+                        sqlUpd = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null {cmp}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                         sqlValStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""={Dami.ValoareParam("SintaxaValStr")} WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
                         sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", ""Observatii"", USER_NO, TIME) 
                                         VALUES ({f10003}, {General.ToDataUniv(ziua)}, (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}), '{General.Nz(dtVal.Rows[0]["ValStr"], "")}', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)}, 'Pontajul echipei - modificare pontaj', {Session["UserId"]}, {General.ToDataUniv(DateTime.Now, true)});";
                     }
                 }
-
 
                 if (sqlUpd != "")
                 {
@@ -2702,7 +2702,22 @@ namespace WizOne.Pontaj
                             sqlIst + Environment.NewLine +
                             " END;", null);
 
-                        General.CalculFormuleCumulat($@"ent.F10003={f10003} AND ent.""An"" = {ziua.Year} AND ent.""Luna""={ziua.Month}");
+                        //Florin 2020.04.08 Begin - am adaugat recalculul
+                        if (General.Nz(cmbTipAbs.Value, "").ToString().Trim() == "")
+                        {
+                            DataRow dr = General.IncarcaDR($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)}", null);
+                            if (dr != null)
+                            {
+                                Calcul.AlocaContract(f10003, ziua);
+                                Calcul.CalculInOut(dr, true, true);
+                            }
+                        }
+
+                        //General.CalculFormuleCumulat($@"ent.F10003={f10003} AND ent.""An"" = {ziua.Year} AND ent.""Luna""={ziua.Month}");
+                        General.CalculFormule(f10003, null, ziua, null);
+                        //Florin 2020.04.08 End
+
+
                         IncarcaGrid();
 
                         if (msg != "")

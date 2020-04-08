@@ -2302,7 +2302,7 @@ namespace WizOne.Module
                     if (General.Nz(entCer.Rows[i]["IdTipOre"], "").ToString() == "1")
                     {
                         if (General.Nz(entCer.Rows[i]["DenumireScurta"], "").ToString().Trim() != "")
-                            cmp += ",\"ValStr\"='" + entCer.Rows[i]["DenumireScurta"].ToString().Trim() + "', \"Val0\" = 0 ";
+                            cmp += $@",""ValStr""='{entCer.Rows[i]["DenumireScurta"].ToString().Trim()}',""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null ";
                     }
                     else
                     {

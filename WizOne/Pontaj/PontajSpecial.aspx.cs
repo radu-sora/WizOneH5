@@ -547,7 +547,7 @@ namespace WizOne.Pontaj
                         data = data.Substring(1);
 
                         //sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
-                        sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
+                        sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
 
                     }
                     if (lstZileGolite != null && lstZileGolite.Count > 0)
@@ -561,13 +561,13 @@ namespace WizOne.Pontaj
                                 dataZileGolite += ", TO_DATE('" + ziGolita.Day.ToString().PadLeft(2, '0') + "/" + ziGolita.Month.ToString().PadLeft(2, '0') + "/" + ziGolita.Year.ToString() + "', 'dd/mm/yyyy') ";
                         }
                         //sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
-                        sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
+                        sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
                     }
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
                         //sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1));";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1));";
                     }
                     else
                         sqlFin += sql + ";";

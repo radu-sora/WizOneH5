@@ -323,9 +323,7 @@ namespace WizOne.Contracte
                 {
                     ASPxGridView grDate = tabCtr.FindControl("grDate" + i) as ASPxGridView;
                     if (grDate != null)
-                    {
                         grDate.UpdateEdit();
-                    }
                 }
                     
                 //salvam in Ptj_Contracte
@@ -464,6 +462,11 @@ namespace WizOne.Contracte
             {
                 if (cmbZiDeLa.Value != null && cmbZiPentru.Value != null)
                 {
+
+                    ASPxGridView grDate = tabCtr.FindControl("grDate" + cmbZiDeLa.Value) as ASPxGridView;
+                    if (grDate != null)
+                        grDate.UpdateEdit();
+
                     string schDes = cmbZiPentru.Text.Replace(";", ",").Replace("Luni", "1").Replace("Marti", "2").Replace("Miercuri", "3").Replace("Joi", "4").Replace("Vineri", "5").Replace("Sambata", "6").Replace("Duminica", "7").Replace("Sarbatori legale", "8").Replace(cmbZiDeLa.Value + ",", "");
                     DataSet ds = Session["InformatiaCurenta"] as DataSet;
                     DataTable dt = ds.Tables["Ptj_ContracteSchimburi"];

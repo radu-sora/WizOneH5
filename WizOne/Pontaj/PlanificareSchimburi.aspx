@@ -401,7 +401,6 @@
                 var indice = col.replace("Ziua", "");
                 var key = Number(indice) - 1;
                 let programe = <%= Session["Json_Programe"] %>;
-                alert(chkCtrAll.GetValue());
                 var arr;
                 if (chkCtrAll.GetValue())
                     arr = programe.filter(function (item) { return item.IdAuto > 0 && item.ZiSapt == grDate.cp_ZiSapt[key] });

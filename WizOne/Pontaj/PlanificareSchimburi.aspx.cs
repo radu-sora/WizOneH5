@@ -611,7 +611,7 @@ namespace WizOne.Pontaj
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END)
                     ) X
                     UNION 
-                    SELECT -1 * ""Id"", ""Denumire"", -99, '', -99, -99, '', '' FROM ""Ptj_tblAbsente""", null);
+                    SELECT -1 * ""Id"", COALESCE(""DenumireScurta"",""Denumire""), -99, '', -99, -99, '', '' FROM ""Ptj_tblAbsente""", null);
 
 
                 if (dt != null && dt.Rows.Count > 0)

@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using DevExpress.Web;
+using System;
 using System.Data;
-using DevExpress.Web;
-using WizOne.Module;
-using System.Data.SqlClient;
-using System.Reflection;
-using System.IO;
-using System.Globalization;
-using System.Web.UI.HtmlControls;
-using DevExpress.Data;
-using System.Web.Hosting;
 using System.Diagnostics;
+using System.IO;
+using System.Web.UI;
+using WizOne.Module;
 
-namespace WizOne.ProgrameLucru
+namespace WizOne.Programe
 {
-    public partial class ProgrameDetaliu : System.Web.UI.Page
+    public partial class Detalii : System.Web.UI.Page
     {
 
         protected void Page_Init(object sender, EventArgs e)

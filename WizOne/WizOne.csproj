@@ -905,7 +905,7 @@
     <Content Include="Programe\Lista.aspx" />
     <Content Include="Programe\ProgrameAlteOre.ascx" />
     <Content Include="Programe\ProgrameDateGenerale.ascx" />
-    <Content Include="Programe\ProgrameDetaliu.aspx" />
+    <Content Include="Programe\Detalii.aspx" />
     <Content Include="Programe\ProgrameInPeste.ascx" />
     <Content Include="Programe\ProgrameInSub.ascx" />
     <Content Include="Programe\ProgrameOreNormale.ascx" />
@@ -913,7 +913,6 @@
     <Content Include="Programe\ProgrameOutPeste.ascx" />
     <Content Include="Programe\ProgrameOutSub.ascx" />
     <Content Include="Programe\ProgramePauza.ascx" />
-    <Content Include="Programe\ProgrameValuri.ascx" />
     <Content Include="Raspuns.aspx" />
     <Content Include="Recrutare\Candidati.aspx" />
     <Content Include="Recrutare\DateGenerale.ascx" />
@@ -2225,12 +2224,12 @@
     <Compile Include="Programe\ProgrameDateGenerale.ascx.designer.cs">
       <DependentUpon>ProgrameDateGenerale.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Programe\ProgrameDetaliu.aspx.cs">
-      <DependentUpon>ProgrameDetaliu.aspx</DependentUpon>
+    <Compile Include="Programe\Detalii.aspx.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Programe\ProgrameDetaliu.aspx.designer.cs">
-      <DependentUpon>ProgrameDetaliu.aspx</DependentUpon>
+    <Compile Include="Programe\Detalii.aspx.designer.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Programe\ProgrameInPeste.ascx.cs">
       <DependentUpon>ProgrameInPeste.ascx</DependentUpon>
@@ -2280,13 +2279,6 @@
     </Compile>
     <Compile Include="Programe\ProgramePauza.ascx.designer.cs">
       <DependentUpon>ProgramePauza.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Programe\ProgrameValuri.ascx.cs">
-      <DependentUpon>ProgrameValuri.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Programe\ProgrameValuri.ascx.designer.cs">
-      <DependentUpon>ProgrameValuri.ascx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pagini\SchimbaParola.aspx.cs">

@@ -97,8 +97,23 @@ namespace WizOne.Programe
                             }
                             break;
                         case "btnDuplica":
-                            DuplicarePrg(Convert.ToInt32(arr[1]));
-                            grDate.DataBind();
+                            {
+                                General.ExecutaNonQuery(
+                                    $@"BEGIN
+                                        INSERT INTO ""Ptj_ProgrameTrepte""(""IdProgram"", ""TipInOut"", ""OraInceput"", ""OraSfarsit"", ""Valoare"", USER_NO, TIME)
+                                        SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Programe""),0) + 1, ""TipInOut"", ""OraInceput"", ""OraSfarsit"", ""Valoare"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_ProgrameTrepte"" WHERE ""IdProgram""=@1;
+                                        INSERT INTO ""Ptj_ProgramePauza""(""IdProgram"", ""OraInceput"", ""OraInceputDeLa"", ""OraInceputLa"", ""OraSfarist"", ""OraSfaristDeLa"", ""OraSfaristLa"", ""TimpDedus"", ""TimpMin"", ""TimpMax"", ""FaraMarja"", USER_NO, TIME)
+                                        SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Programe""),0) + 1, ""OraInceput"", ""OraInceputDeLa"", ""OraInceputLa"", ""OraSfarsit"", ""OraSfarsitDeLa"", ""OraSfarsitLa"", ""TimpDedus"", ""TimpMin"", ""TimpMax"", ""FaraMarja"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_ProgramePauza"" WHERE ""IdPRogram""=@1;
+                                        INSERT INTO ""Ptj_ProgrameOreNoapte""(""IdProgram"", ""Rotunjire"", ""OraINceput"", ""OraSfarsit"", ""ValMin"", ""ValMax"", ""ValFixa"", ""Multiplicator"", ""Camp"", USER_NO, TIME)
+                                        SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Programe""),0) + 1, ""Rotunjire"", ""OraInceput"", ""OraSfarsit"", ""ValMin"", ""ValMax"", ""ValFixa"", ""Multiplicator"", ""Camp"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_ProgrameOreNoapte"" WHERE ""IdPRogram""=@1;
+                                        INSERT INTO ""Ptj_ProgrameAlteOre""(""IdProgram"", ""Rotunjire"", ""OraINceput"", ""OraSfarsit"", ""ValMin"", ""ValMax"", ""ValFixa"", ""Multiplicator"", ""Camp"", USER_NO, TIME)
+                                        SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Programe""),0) + 1, ""Rotunjire"", ""OraInceput"", ""OraSfarsit"", ""ValMin"", ""ValMax"", ""ValFixa"", ""Multiplicator"", ""Camp"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_ProgrameAlteOre"" WHERE ""IdPRogram""=@1;
+                                        INSERT INTO ""Ptj_Programe""(""Id"", ""Denumire"", ""DataInceput"", ""DataSfarsit"", ""OraIntrare"", ""OraIesire"", ""Norma"", ""TipPontare"", ""ONRotunjire"", ""ONCamp"", ""OSRotunjire"", ""OSValMin"", ""OSValMax"", ""OSCamp"", ""OSCampSub"", ""OSCampPeste"", ""INSubDiferentaRaportare"", ""INSubMinPlata"", ""INSubMaxPlata"", ""INSubCampPlatit"", ""INSubCampNeplatit"", ""INPesteDiferentaRaportare"", ""INPesteDiferentaPlata"", ""INPesteCampPlatit"", ""INPesteCampNeplatit"", ""OUTSubDiferentaRaportare"", ""OUTSubDiferentaPlata"", ""OUTSubCampPlatit"", ""OUTSubCampNeplatit"", ""OUTPesteDiferentaRaportare"", ""OUTPesteMinPlata"", ""OUTPesteMaxPlata"", ""OUTPesteCampPlatit"", ""OUTPesteCampNeplatit"", ""PauzaTimp"", ""PauzaDedusa"", ""DeNoapte"", ""Flexibil"", ""PauzaMin"", ""ONValStr"", ""VAL2"", ""VAL1"", ""VAL4"", ""VAL3"", ""VAL0"", ""VAL4ROT"", ""VAL3ROT"", ""Val2Rot"", ""VAL0ROT"", ""VAL1ROT"", ""PauzaScutita"", ""OreLucrateMin"", ""TipRaportareOreNoapte"", ""DenumireScurta"", USER_NO, TIME)
+                                        SELECT COALESCE((SELECT MAX(""Id"") FROM ""Ptj_Programe""),0) + 1, ""Denumire"", ""DataInceput"", ""DataSfarsit"", ""OraIntrare"", ""OraIesire"", ""Norma"", ""TipPontare"", ""ONRotunjire"", ""ONCamp"", ""OSRotunjire"", ""OSValMin"", ""OSValMax"", ""OSCamp"", ""OSCampSub"", ""OSCampPeste"", ""INSubDiferentaRaportare"", ""INSubMinPlata"", ""INSubMaxPlata"", ""INSubCampPlatit"", ""INSubCampNeplatit"", ""INPesteDiferentaRaportare"", ""INPesteDiferentaPlata"", ""INPesteCampPlatit"", ""INPesteCampNeplatit"", ""OUTSubDiferentaRaportare"", ""OUTSubDiferentaPlata"", ""OUTSubCampPlatit"", ""OUTSubCampNeplatit"", ""OUTPesteDiferentaRaportare"", ""OUTPesteMinPlata"", ""OUTPesteMaxPlata"", ""OUTPesteCampPlatit"", ""OUTPesteCampNeplatit"", ""PauzaTimp"", ""PauzaDedusa"", ""DeNoapte"", ""Flexibil"", ""PauzaMin"", ""ONValStr"", ""VAL2"", ""VAL1"", ""VAL4"", ""VAL3"", ""VAL0"", ""VAL4ROT"", ""VAL3ROT"", ""Val2Rot"", ""VAL0ROT"", ""VAL1ROT"", ""PauzaScutita"", ""OreLucrateMin"", ""TipRaportareOreNoapte"", ""DenumireScurta"", {Session["UserId"]}, {General.CurrentDate()} FROM ""Ptj_Programe"" WHERE ""Id""=@1;
+                                    END;", new object[] { idPrg });
+                                IncarcaGrid();
+                                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes");
+                            }
                             break;
                         case "btnSterge":
                             {
@@ -109,23 +124,24 @@ namespace WizOne.Programe
                                     return;
                                 }
 
-                                string strSql = $@"SELECT CONVERT(nvarchar(10),F10003) + ',' FROM ""F100Contracte"" WHERE ""IdContract""=@1 AND CAST(""DataInceput"" AS DATE) <= {General.CurrentDate()} AND {General.CurrentDate()} <= CAST(""DataSfarsit"" AS DATE) FOR XML PATH ('')";
+                                string strSql = $@"SELECT CONVERT(nvarchar(10),""IdContract"") + ',' FROM ""Ptj_ContracteSchimburi"" WHERE ""IdProgram""=@1 FOR XML PATH ('')";
                                 if (Constante.tipBD == 2)
-                                    strSql = $@"SELECT LISTAGG(F10003, ',') WITHIN GROUP (ORDER BY F10003) AS Marci FROM ""F100Contracte"" WHERE ""IdContract""=@1 AND CAST(""DataInceput"" AS DATE) <= {General.CurrentDate()} AND {General.CurrentDate()} <= CAST(""DataSfarsit"" AS DATE)";
+                                    strSql = $@"SELECT LISTAGG(""IdContract"", ',') WITHIN GROUP (ORDER BY ""IdContract"") AS Contracte FROM ""Ptj_ContracteSchimburi"" WHERE ""IdProgram""=@1";
 
-                                string marci = General.Nz(General.ExecutaScalar(strSql, new object[] { idPrg }), "").ToString();
-                                if (marci != "")
+                                string ctrs = General.Nz(General.ExecutaScalar(strSql, new object[] { idPrg }), "").ToString();
+                                if (ctrs != "")
                                 {
-                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Urmatoarele marci au atribut acest contract:" + Environment.NewLine + marci);
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Urmatoarele contracte au atribut acest program:" + Environment.NewLine + ctrs);
                                     return;
                                 }
 
                                 General.ExecutaNonQuery(
                                     $@"BEGIN
-                                        DELETE FROM ""F100Contracte2"" WHERE ""IdContract""=@1;
-                                        DELETE FROM ""Ptj_ContracteAbsente"" WHERE ""IdContract""=@1;
-                                        DELETE FROM ""Ptj_ContracteSchimburi"" WHERE ""IdContract""=@1;
-                                        DELETE FROM ""Ptj_Contracte"" WHERE ""Id""=@1;
+                                        DELETE FROM ""Ptj_ProgrameAlteOre"" WHERE ""IdProgram""=@1;
+                                        DELETE FROM ""Ptj_ProgrameOreNoapte"" WHERE ""IdProgram""=@1;
+                                        DELETE FROM ""Ptj_ProgramePauza"" WHERE ""IdProgram""=@1;
+                                        DELETE FROM ""Ptj_ProgrameTrepte"" WHERE ""IdProgram""=@1;
+                                        DELETE FROM ""Ptj_Programe"" WHERE ""Id""=@1;
                                     END;", new object[] { idPrg });
                                 IncarcaGrid();
                             }
@@ -138,7 +154,6 @@ namespace WizOne.Programe
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
         }
-
 
         protected void btnNew_Click(object sender, EventArgs e)
         {
@@ -161,135 +176,5 @@ namespace WizOne.Programe
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
         }
-
-        public void ProgramSterge(int id)
-        {
-            try
-            {
-                General.ExecutaNonQuery("DELETE FROM \"Ptj_ProgrameAlteOre\" WHERE \"IdProgram\" = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"Ptj_ProgramePauza\" WHERE \"IdProgram\" = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"Ptj_ProgrameTrepte\" WHERE \"IdProgram\" = " + id, null);
-
-                General.ExecutaNonQuery("DELETE FROM \"Ptj_Programe\" WHERE \"Id\" = " + id, null);
-
-                //Florin 2019.08.21
-                General.ExecutaNonQuery("DELETE FROM \"Ptj_ProgrameOreNoapte\" WHERE \"IdProgram\" = " + id, null);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
-            }
-        }
-
-        public int ProgramUrmatorulId()
-        {
-            try
-            {
-                int val = 0;
-                string sql = "SELECT MAX(\"Id\") FROM \"Ptj_Programe\"";
-                DataTable dt = General.IncarcaDT(sql, null);
-                if (dt != null && dt.Rows. Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)                
-                    val = Convert.ToInt32(dt.Rows[0][0].ToString());                    
-                
-                return (val + 1);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
-                return 1;
-            }
-        }
-
-
-        private void DuplicarePrg(int id)
-        {
-
-            int idUrm = ProgramUrmatorulId();
-
-            string[] listaTabele = { "Ptj_Programe", "Ptj_ProgrameAlteOre", "Ptj_ProgramePauza", "Ptj_ProgrameTrepte", "Ptj_ProgrameOreNoapte" };
-
-            foreach (string tabela in listaTabele)
-            {
-                DataTable dtrPrg = General.IncarcaDT("SELECT * FROM \"" + tabela + "\" WHERE " + (tabela == "Ptj_Programe" ? "\"Id\" = " : "\"IdProgram\" = ") + id, null);
-
-                string sqlPrg = "";
-                if (dtrPrg != null && dtrPrg.Rows.Count > 0)
-                {
-                    sqlPrg = "INSERT INTO \"" + tabela + "\" (";
-                    for (int i = 0; i < dtrPrg.Columns.Count; i++)
-                    {
-                        if (dtrPrg.Columns[i].ColumnName != "IdAuto")
-                        {
-                            sqlPrg += "\"" + dtrPrg.Columns[i].ColumnName + "\"";
-                            if (i < dtrPrg.Columns.Count - 1)
-                                sqlPrg += ", ";
-                        }
-                        else
-                            if (sqlPrg.Length > 2 && i == dtrPrg.Columns.Count - 1)
-                            sqlPrg = sqlPrg.Substring(0, sqlPrg.Length - 2);
-                    }
-                    sqlPrg += ") VALUES (";
-                    for (int i = 0; i < dtrPrg.Columns.Count; i++)
-                    {
-                        if (dtrPrg.Columns[i].ColumnName != "IdAuto")
-                        {
-                            switch (dtrPrg.Columns[i].ColumnName)
-                            {
-                                case "Id":
-                                case "IdProgram":
-                                    sqlPrg += idUrm;
-                                    break;
-                                case "Denumire":
-                                    sqlPrg += "'" + dtrPrg.Rows[0]["Denumire"].ToString() + " - Copie'";
-                                    break;
-                                case "USER_NO":
-                                    sqlPrg += Convert.ToInt32(Session["UserId"].ToString());
-                                    break;
-                                case "TIME":
-                                    sqlPrg += (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
-                                    break;
-                                default:
-                                    if (dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName] == null || dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName].ToString().Length <= 0)
-                                        sqlPrg += "NULL";
-                                    else
-                                    {
-                                        switch (dtrPrg.Columns[i].DataType.ToString())
-                                        {
-                                            case "System.String":
-                                                sqlPrg += "'" + dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName].ToString() + "'";
-                                                break;
-                                            case "System.DateTime":
-                                                DateTime dt = Convert.ToDateTime(General.Nz(dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName], new DateTime(2100, 1, 1)));
-                                                sqlPrg += General.ToDataUniv(dt);
-                                                break;
-                                            default:
-                                                sqlPrg += dtrPrg.Rows[0][dtrPrg.Columns[i].ColumnName].ToString();
-                                                break;
-                                        }
-                                    }
-                                    break;
-                            }
-                            if (i < dtrPrg.Columns.Count - 1)
-                                sqlPrg += ", ";
-                        }
-                        else
-                        {
-                            if (sqlPrg.Length > 2 && i == dtrPrg.Columns.Count - 1)
-                                sqlPrg = sqlPrg.Substring(0, sqlPrg.Length - 2);
-                        }
-                    }
-
-                    sqlPrg += ")";
-                }
-                if (sqlPrg.Length > 0)
-                    General.IncarcaDT(sqlPrg, null);
-            }
-        }
-
-
-
-
     }
 }

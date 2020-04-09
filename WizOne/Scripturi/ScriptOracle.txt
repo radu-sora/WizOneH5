@@ -13756,3 +13756,32 @@ COMMIT;
 
 UPDATE "tblMeniuri" SET "Pagina"='Programe\Lista' WHERE "Pagina"='ProgrameLucru\Programe';
 COMMIT;
+
+ALTER TABLE "Ptj_Programe" DROP CONSTRAINT "Ptj_Programe_PK";
+DROP INDEX "Ptj_Programe_PK";
+
+ALTER TABLE "Ptj_Programe" MODIFY ("Id" NOT NULL ENABLE);  
+CREATE UNIQUE INDEX "Ptj_Programe_PK" ON "Ptj_Programe" ("Id") ;
+ALTER TABLE "Ptj_Programe" ADD CONSTRAINT "Ptj_Programe_PK" PRIMARY KEY ("Id");
+/
+
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL0
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL1
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL2
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL3
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL4
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL0ROT
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL1ROT
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL2ROT
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL3ROT
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL4ROT
+/

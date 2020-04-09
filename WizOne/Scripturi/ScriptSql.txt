@@ -12957,4 +12957,8 @@ LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb8", A."Ti
 ) X
 WHERE X."ProgramId" IS NOT NULL
 AND ("ContractId" * 1000000 + "ProgramId" * 10 + "ZiSapt") NOT IN 
-(SELECT "IdContract" * 1000000 + "IdProgram" * 10 + "TipSchimb" FROM "Ptj_ContracteSchimburi")                  
+(SELECT "IdContract" * 1000000 + "IdProgram" * 10 + "TipSchimb" FROM "Ptj_ContracteSchimburi") 
+GO
+
+UPDATE tblMeniuri SET Pagina='Programe\Lista' WHERE Pagina = 'ProgrameLucru\Programe'
+GO

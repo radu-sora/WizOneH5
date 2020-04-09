@@ -139,7 +139,6 @@ namespace WizOne.Contracte
                                         DELETE FROM ""Ptj_Contracte"" WHERE ""Id""=@1;
                                     END;", new object[] { idCtr });
                                 IncarcaGrid();
-                                //grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces finalizat cu succes");
                             }
                             break;
                     }
@@ -159,6 +158,7 @@ namespace WizOne.Contracte
                 if (url != "")
                 {
                     Session["IdContract"] = -99;
+                    Session["InformatiaCurenta"] = null;
                     if (Page.IsCallback)
                         ASPxWebControl.RedirectOnCallback(url);
                     else

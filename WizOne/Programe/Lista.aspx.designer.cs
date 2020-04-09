@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.ProgrameLucru {
+namespace WizOne.Programe {
     
     
-    public partial class Programe {
+    public partial class Lista {
         
         /// <summary>
         /// txtTitlu control.

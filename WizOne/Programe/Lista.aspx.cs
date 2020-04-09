@@ -1,64 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using DevExpress.Web;
+using System;
 using System.Data;
-using DevExpress.Web;
-using WizOne.Module;
-using System.Data.SqlClient;
-using System.Reflection;
 using System.IO;
-using System.Globalization;
-using System.Web.UI.HtmlControls;
+using System.Linq;
+using System.Web.UI;
+using WizOne.Module;
 
-namespace WizOne.ProgrameLucru
+namespace WizOne.Programe
 {
-    public partial class Programe : System.Web.UI.Page
+    public partial class Lista : System.Web.UI.Page
     {
-        //string cmp = "USER_NO,TIME,IDAUTO,";
         protected void Page_Init(object sender, EventArgs e)
         {
             try
             {
-
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
-                //if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Constante.IdLimba = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
                 btnNew.Text = Dami.TraduCuvant("btnNew", "Nou");
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 btnEdit.Image.ToolTip = Dami.TraduCuvant("btnEdit", "Modifica");
-                foreach (GridViewColumn c in grDate.Columns)
-                {
-                    try
-                    {
-                        if (c.GetType() == typeof(GridViewDataColumn))
-                        {
-                            GridViewDataColumn col = c as GridViewDataColumn;
-                            col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
-                        }
-                    }
-                    catch (Exception) { }
-                }
+                foreach (var col in grDate.Columns.OfType<GridViewDataColumn>())
+                    col.Caption = Dami.TraduCuvant(col.FieldName ?? col.Caption, col.Caption);
 
                 #endregion
 
                 txtTitlu.Text = (Session["Titlu"] ?? "").ToString();
 
-
-                foreach (dynamic c in grDate.Columns)
+                if (!IsPostBack)
                 {
-                    try
-                    {
-                        c.Caption = Dami.TraduCuvant(c.FieldName ?? c.Caption, c.Caption);
-                    }
-                    catch (Exception) { }
+                    IncarcaGrid();
                 }
-                grDate.DataBind();
-
-
+                else
+                {
+                    if (grDate.IsCallback)
+                    {
+                        grDate.DataSource = Session["InformatiaCurenta"];
+                        grDate.DataBind();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -66,35 +46,16 @@ namespace WizOne.ProgrameLucru
             }
         }
 
-        protected void grDate_DataBinding(object sender, EventArgs e)
-        {
-            try
-            {
-                IncarcaGrid();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-
         private void IncarcaGrid()
         {
             try
             {
-                string sqlFinal = "SELECT * FROM \"Ptj_Programe\" ORDER BY \"Id\"";
-                DataTable dt = new DataTable();
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Programe"" ORDER BY ""Id""", null);
 
-                dt = General.IncarcaDT(sqlFinal, null);
-
-                grDate.KeyFieldName = "IdAuto";
-                grDate.DataSource = dt;     
-
-                DataTable dtCtr = General.ListaTipPontare();
-                GridViewDataComboBoxColumn colCtr = (grDate.Columns["TipPontare"] as GridViewDataComboBoxColumn);
-                colCtr.PropertiesComboBox.DataSource = dtCtr;
+                grDate.KeyFieldName = "Id";
+                grDate.DataSource = dt;
+                grDate.DataBind();
+                Session["InformatiaCurenta"] = dt;
             }
             catch (Exception ex)
             {
@@ -115,15 +76,18 @@ namespace WizOne.ProgrameLucru
                         return;
                     }
 
+                    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "Denumire" }) as object[];
+
+                    int idPrg = Convert.ToInt32(arr[1]);
+
                     switch (arr[0])
                     {
                         case "btnEdit":
                             {
-                                string url = "~/ProgrameLucru/ProgrameDetaliu.aspx";
+                                string url = "~/Programe/Detalii.aspx";
                                 if (url != "")
                                 {
-                                    Session["InformatiaCurentaPrograme"] = null;
-                                    Session["ProgramNou"] = null;
+                                    Session["InformatiaCurenta"] = null;
                                     Session["IdProgram"] = arr[1];
                                     if (Page.IsCallback)
                                         ASPxWebControl.RedirectOnCallback(url);
@@ -137,8 +101,34 @@ namespace WizOne.ProgrameLucru
                             grDate.DataBind();
                             break;
                         case "btnSterge":
-                            ProgramSterge(Convert.ToInt32(arr[1].ToString()));
-                            grDate.DataBind();
+                            {
+                                int are = Convert.ToInt32(General.ExecutaScalar(@"SELECT COUNT(""IdProgram"") FROM ""Ptj_Intrari"" WHERE ""IdProgram""=@1", new object[] { idPrg }));
+                                if (are > 0)
+                                {
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Acest program a fost deja folosit in pontaj." + Environment.NewLine + "Nu se mai poate sterge.");
+                                    return;
+                                }
+
+                                string strSql = $@"SELECT CONVERT(nvarchar(10),F10003) + ',' FROM ""F100Contracte"" WHERE ""IdContract""=@1 AND CAST(""DataInceput"" AS DATE) <= {General.CurrentDate()} AND {General.CurrentDate()} <= CAST(""DataSfarsit"" AS DATE) FOR XML PATH ('')";
+                                if (Constante.tipBD == 2)
+                                    strSql = $@"SELECT LISTAGG(F10003, ',') WITHIN GROUP (ORDER BY F10003) AS Marci FROM ""F100Contracte"" WHERE ""IdContract""=@1 AND CAST(""DataInceput"" AS DATE) <= {General.CurrentDate()} AND {General.CurrentDate()} <= CAST(""DataSfarsit"" AS DATE)";
+
+                                string marci = General.Nz(General.ExecutaScalar(strSql, new object[] { idPrg }), "").ToString();
+                                if (marci != "")
+                                {
+                                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Urmatoarele marci au atribut acest contract:" + Environment.NewLine + marci);
+                                    return;
+                                }
+
+                                General.ExecutaNonQuery(
+                                    $@"BEGIN
+                                        DELETE FROM ""F100Contracte2"" WHERE ""IdContract""=@1;
+                                        DELETE FROM ""Ptj_ContracteAbsente"" WHERE ""IdContract""=@1;
+                                        DELETE FROM ""Ptj_ContracteSchimburi"" WHERE ""IdContract""=@1;
+                                        DELETE FROM ""Ptj_Contracte"" WHERE ""Id""=@1;
+                                    END;", new object[] { idPrg });
+                                IncarcaGrid();
+                            }
                             break;
                     }
                 }
@@ -149,28 +139,16 @@ namespace WizOne.ProgrameLucru
             }
         }
 
-        protected void grDate_HtmlDataCellPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
-            }
-        }
 
         protected void btnNew_Click(object sender, EventArgs e)
         {
             try
             {
-                string url = "~/ProgrameLucru/ProgrameDetaliu.aspx";
+                string url = "~/Programe/Detalii.aspx";
                 if (url != "")
                 {
-                    Session["IdProgram"] = ProgramUrmatorulId().ToString();
-                    Session["ProgramNou"] = "1";
-                    Session["InformatiaCurentaPrograme"] = null;
+                    Session["IdProgram"] = -99;
+                    Session["InformatiaCurenta"] = null;
                     if (Page.IsCallback)
                         ASPxWebControl.RedirectOnCallback(url);
                     else

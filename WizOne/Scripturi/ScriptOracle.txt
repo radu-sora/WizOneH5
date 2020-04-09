@@ -13753,3 +13753,6 @@ ALTER TABLE "Ptj_Contracte" ADD CONSTRAINT "Ptj_Contracte_PK" PRIMARY KEY ("Id")
 
 UPDATE "tblMeniuri" SET "Pagina"='Contracte\Lista' WHERE "Pagina"='ContracteLucru\Contract';
 COMMIT;
+
+UPDATE "tblMeniuri" SET "Pagina"='Programe\Lista' WHERE "Pagina"='ProgrameLucru\Programe';
+COMMIT;

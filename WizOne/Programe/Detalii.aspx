@@ -59,6 +59,12 @@
                                                                 <CalendarProperties FirstDayOfWeek="Monday" />
 							                                </dx:ASPxDateEdit>
                                                         </div>
+                                                        <div class="ctl_inline">
+                                                            <dx:ASPxLabel ID="lblDtSf" runat="server" Text="Data Inceput" Width="75"/>
+							                                <dx:ASPxDateEdit ID="txtDtSf" runat="server" AutoPostBack="false" Width="100" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom">                                         
+                                                                <CalendarProperties FirstDayOfWeek="Monday" />
+							                                </dx:ASPxDateEdit>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </dx:ContentControl>
@@ -72,4 +78,10 @@
             </dx:PanelContent>
         </PanelCollection>
     </dx:ASPxCallbackPanel>
+
+    <script>
+        function OnPanelEndCallback() {
+            pnlLoading.Hide();
+        }
+    </script>
 </asp:Content>	

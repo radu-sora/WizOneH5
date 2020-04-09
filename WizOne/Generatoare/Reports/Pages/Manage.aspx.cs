@@ -42,11 +42,6 @@ namespace Wizrom.Reports.Pages
         {            
             var reportId = General.RunSqlScalar<int>("INSERT INTO [DynReports]([Name], [Description], [DynReportTypeId], [RegUserId]) VALUES (@1, @2, @3, @4)", "DynReportId",
                 report.Name, report.Description, report.TypeId, Session["UserId"].ToString());
-            // For adding new reports into user groups if necessary.
-            General.RunSqlColumn<int>("SELECT DISTINCT [IdGrup] FROM [relGrupUser] WHERE [IdUser] = @1", Session["UserId"]).ForEach(groupId =>
-            {                
-                General.RunSqlScalar<int>($"INSERT INTO [relGrupRaport2]([IdGrup], [IdRaport], [AreParola]) VALUES (@1, @2, @3)", null, groupId, reportId, report.Restricted);
-            });
         }
 
         public void SetReport(ReportViewModel report)

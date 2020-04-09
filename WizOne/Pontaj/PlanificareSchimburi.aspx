@@ -393,7 +393,7 @@
             }
 
             var val = s.batchEditApi.GetCellValue(e.visibleIndex, col);
-            var ctr = s.batchEditApi.GetCellValue(e.visibleIndex, "Contract");
+            //var ctr = s.batchEditApi.GetCellValue(e.visibleIndex, "Contract");
 
             if (val < 0)
                 e.cancel = true;

@@ -54,8 +54,10 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="ctl_inline">
-                                                            <dx:ASPxLabel ID="lblOraSchIn" runat="server" Text="Ora Sch. In" Width="75"/>
-							                                <dx:ASPxTimeEdit ID="txtOraSchIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                                            <dx:ASPxLabel ID="lblDtInc" runat="server" Text="Data Inceput" Width="75"/>
+							                                <dx:ASPxDateEdit ID="txtDtInc" runat="server" AutoPostBack="false" Width="100" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom">                                         
+                                                                <CalendarProperties FirstDayOfWeek="Monday" />
+							                                </dx:ASPxDateEdit>
                                                         </div>
                                                     </div>
                                                 </div>

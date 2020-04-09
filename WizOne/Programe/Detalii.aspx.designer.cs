@@ -121,21 +121,21 @@ namespace WizOne.Programe {
         protected global::DevExpress.Web.ContentControl ContentControl1;
         
         /// <summary>
-        /// lblOraSchIn control.
+        /// lblDtInc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblOraSchIn;
+        protected global::DevExpress.Web.ASPxLabel lblDtInc;
         
         /// <summary>
-        /// txtOraSchIn control.
+        /// txtDtInc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit txtOraSchIn;
+        protected global::DevExpress.Web.ASPxDateEdit txtDtInc;
     }
 }

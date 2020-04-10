@@ -4163,44 +4163,44 @@ namespace WizOne.Module
         //    }
         //}
 
-        public static DataTable ListaRotunjirePrgLucru()
-        {
-            try
-            {
-                DataTable table = new DataTable();
+        //public static DataTable ListaRotunjirePrgLucru()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
 
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "rotunjire la minute");
-                table.Rows.Add(2, "rotunjire la ora");
-                table.Rows.Add(3, "trunchiere la ora");
-                table.Rows.Add(4, "rotunjire la 45 minute");
-                table.Rows.Add(5, "rotunjire la 10 minute");
-                table.Rows.Add(6, "rotunjire la 5 minute");
+        //        table.Rows.Add(1, "rotunjire la minute");
+        //        table.Rows.Add(2, "rotunjire la ora");
+        //        table.Rows.Add(3, "trunchiere la ora");
+        //        table.Rows.Add(4, "rotunjire la 45 minute");
+        //        table.Rows.Add(5, "rotunjire la 10 minute");
+        //        table.Rows.Add(6, "rotunjire la 5 minute");
 
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
-        public static DataTable GetPtj_AliasFOrdonat()
-        {
-            try
-            {
-                return General.IncarcaDT("SELECT \"Coloana\" AS \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
-            }
+        //public static DataTable GetPtj_AliasFOrdonat()
+        //{
+        //    try
+        //    {
+        //        return General.IncarcaDT("SELECT \"Coloana\" AS \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
+        //    }
 
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
         public static DataTable ListaNumere(int valMin, int valMax)
         {

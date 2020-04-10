@@ -1,12 +1,9 @@
 ﻿using DevExpress.Web;
 using DevExpress.Web.Data;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Web.UI;
 using WizOne.Module;
 
@@ -24,8 +21,6 @@ namespace WizOne.Contracte
                 #region Traducere
 
                 string ctlPost = Request.Params["__EVENTTARGET"];
-                //if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup")>=0) Constante.IdLimba = ctlPost.Substring(ctlPost.LastIndexOf("$")+1).Replace("a", "");
-
 
                 #endregion
 
@@ -78,28 +73,6 @@ namespace WizOne.Contracte
 
                     IncarcaGriduriSchimburi();
                 }
-
-                //if (IsCallback)
-                //{
-                //    DataTable dtCmb = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_tblAbsente"" ORDER BY ""Denumire""  ", null);
-                //    GridViewDataComboBoxColumn colAbs = (grDateAbs.Columns["IdAbsenta"] as GridViewDataComboBoxColumn);
-                //    colAbs.PropertiesComboBox.DataSource = dtCmb;
-
-                //    string sqlPrg = @"SELECT Id, Denumire, convert(varchar(5), OraIntrare, 108) AS OraIntrare, convert(varchar(5), OraIesire, 108) AS OraIesire FROM Ptj_Programe";
-                //    if (Constante.tipBD == 2)
-                //        sqlPrg = @"SELECT ""Id"", ""Denumire"", TO_CHAR(""OraIntrare"", 'HH24:mi') AS ""OraIntrare"", TO_CHAR(""OraIesire"", 'HH24:mi') AS ""OraIesire"" FROM ""Ptj_Programe""";
-                //    DataTable dtPrg = General.IncarcaDT(sqlPrg, null);
-
-                //    for (int i = 1; i <= 8; i++)
-                //    {
-                //        ASPxGridView grDate = tabCtr.FindControl("grDate" + i) as ASPxGridView;
-                //        if (grDate != null)
-                //        {
-                //            GridViewDataComboBoxColumn colPrg = (grDate.Columns["IdProgram"] as GridViewDataComboBoxColumn);
-                //            colPrg.PropertiesComboBox.DataSource = dtPrg;
-                //        }
-                //    }
-                //}
             }
             catch (Exception ex)
             {

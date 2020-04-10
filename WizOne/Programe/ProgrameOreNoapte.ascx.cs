@@ -56,14 +56,14 @@ namespace WizOne.ProgrameLucru
             grDateOreNopate.KeyFieldName = "IdAuto";
             grDateOreNopate.DataSource = dt;
 
-            DataTable dtRot = General.ListaRotunjirePrgLucru();
-            GridViewDataComboBoxColumn colRot = (grDateOreNopate.Columns["Rotunjire"] as GridViewDataComboBoxColumn);
-            colRot.PropertiesComboBox.DataSource = dtRot;
+            //DataTable dtRot = General.ListaRotunjirePrgLucru();
+            //GridViewDataComboBoxColumn colRot = (grDateOreNopate.Columns["Rotunjire"] as GridViewDataComboBoxColumn);
+            //colRot.PropertiesComboBox.DataSource = dtRot;
 
 
-            DataTable dtAlias = General.GetPtj_AliasFOrdonat();
-            GridViewDataComboBoxColumn colAlias = (grDateOreNopate.Columns["Camp"] as GridViewDataComboBoxColumn);
-            colAlias.PropertiesComboBox.DataSource = dtAlias;
+            //DataTable dtAlias = General.GetPtj_AliasFOrdonat();
+            //GridViewDataComboBoxColumn colAlias = (grDateOreNopate.Columns["Camp"] as GridViewDataComboBoxColumn);
+            //colAlias.PropertiesComboBox.DataSource = dtAlias;
 
             Session["InformatiaCurentaPrograme"] = ds;
         }

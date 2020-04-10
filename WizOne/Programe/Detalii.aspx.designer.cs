@@ -13,13 +13,13 @@ namespace WizOne.Programe {
     public partial class Detalii {
         
         /// <summary>
-        /// ASPxCallbackPanel1 control.
+        /// pnlCall control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel ASPxCallbackPanel1;
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCall;
         
         /// <summary>
         /// txtTitlu control.
@@ -103,31 +103,13 @@ namespace WizOne.Programe {
         protected global::DevExpress.Web.ASPxTextBox txtDenumireScurta;
         
         /// <summary>
-        /// tabCtr control.
+        /// pnlGen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxPageControl tabCtr;
-        
-        /// <summary>
-        /// ContentControl1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ContentControl ContentControl1;
-        
-        /// <summary>
-        /// lblDtInc control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblDtInc;
+        protected global::DevExpress.Web.ASPxFormLayout pnlGen;
         
         /// <summary>
         /// txtDtInc control.
@@ -139,15 +121,6 @@ namespace WizOne.Programe {
         protected global::DevExpress.Web.ASPxDateEdit txtDtInc;
         
         /// <summary>
-        /// lblDtSf control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblDtSf;
-        
-        /// <summary>
         /// txtDtSf control.
         /// </summary>
         /// <remarks>
@@ -155,5 +128,185 @@ namespace WizOne.Programe {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtDtSf;
+        
+        /// <summary>
+        /// txtNorma control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxSpinEdit txtNorma;
+        
+        /// <summary>
+        /// cmbTipPont control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbTipPont;
+        
+        /// <summary>
+        /// txtPauza control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTimeEdit txtPauza;
+        
+        /// <summary>
+        /// chkNoapte control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkNoapte;
+        
+        /// <summary>
+        /// chkFlex control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkFlex;
+        
+        /// <summary>
+        /// txtOraIn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTimeEdit txtOraIn;
+        
+        /// <summary>
+        /// txtOraOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTimeEdit txtOraOut;
+        
+        /// <summary>
+        /// cmbONRotunjire control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbONRotunjire;
+        
+        /// <summary>
+        /// cmbONCamp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbONCamp;
+        
+        /// <summary>
+        /// cmbOSRotunjire control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbOSRotunjire;
+        
+        /// <summary>
+        /// cmbOSCamp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbOSCamp;
+        
+        /// <summary>
+        /// txtOSValMin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTimeEdit txtOSValMin;
+        
+        /// <summary>
+        /// cmbOSCampSub control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbOSCampSub;
+        
+        /// <summary>
+        /// txtOSValMax control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTimeEdit txtOSValMax;
+        
+        /// <summary>
+        /// cmbOSCampPeste control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbOSCampPeste;
+        
+        /// <summary>
+        /// grDateNoapte control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDateNoapte;
+        
+        /// <summary>
+        /// grDateAlte control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView grDateAlte;
+        
+        /// <summary>
+        /// ASPxGridView2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView ASPxGridView2;
+        
+        /// <summary>
+        /// ASPxGridView3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView ASPxGridView3;
+        
+        /// <summary>
+        /// ASPxGridView4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView ASPxGridView4;
     }
 }

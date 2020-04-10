@@ -10,214 +10,71 @@ namespace WizOne.Programe
 {
     public partial class Detalii : System.Web.UI.Page
     {
-
-        protected void Page_Init(object sender, EventArgs e)
-        {
-
-            string id = Session["IdProgram"] as string;
-            string esteNou = Session["ProgramNou"] as string;
-
-            //DataSet ds = Session["InformatiaCurentaPrograme"] as DataSet;
-            //DataTable dtCtr = new DataTable();
-
-            //if (ds == null)
-            //{
-            //    ds = new DataSet();
-            //    if (esteNou != "1")
-            //    {
-            //        dtCtr = General.IncarcaDT("SELECT * FROM \"Ptj_Programe\" WHERE \"Id\" = " + id, null);
-            //    }
-            //    else
-            //    {
-            //        dtCtr = General.IncarcaDT("SELECT * FROM \"Ptj_Programe\" WHERE \"Id\" = (SELECT MAX(\"Id\") FROM \"Ptj_Programe\")", null);
-            //        object[] rowCtr = new object[dtCtr.Columns.Count];
-
-            //        int x = 0;
-            //        foreach (DataColumn col in dtCtr.Columns)
-            //        {
-            //            switch (col.ColumnName.ToUpper())
-            //            {
-            //                case "ID":
-            //                    rowCtr[x] = Convert.ToInt32(Session["IdProgram"].ToString());
-            //                    break;
-            //                case "DENOAPTE":
-            //                    rowCtr[x] = 0;
-            //                    break;
-            //                case "FLEXIBIL":
-            //                    rowCtr[x] = 0;
-            //                    break;
-            //                case "NORMA":
-            //                    rowCtr[x] = 8;
-            //                    break;
-            //                case "TIPPONTARE":
-            //                    rowCtr[x] = 1;
-            //                    break;
-            //                case "PAUZADEDUSA":
-            //                    rowCtr[x] = 0;
-            //                    break;
-            //                case "ONVALSTR":
-            //                    rowCtr[x] = 1;
-            //                    break;
-            //                case "DATAINCEPUT":
-            //                    rowCtr[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            //                    break;
-            //                case "DATASFARSIT":
-            //                    rowCtr[x] = new DateTime(2200, 12, 31);
-            //                    break;
-            //                case "ORAINTRARE":
-            //                    rowCtr[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 8, 0, 0);
-            //                    break;
-            //                case "ORAIESIRE":
-            //                    rowCtr[x] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 16, 0, 0);
-            //                    break;
-            //                case "IDAUTO":
-            //                    //Florin 2019.09.06
-            //                    //rowCtr[x] = Convert.ToInt32(General.Nz(dtCtr.AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
-            //                    rowCtr[x] = Convert.ToInt32(General.Nz(dtCtr.Compute("max([IdAuto])", string.Empty), 0)) + 1;
-            //                    break;
-            //                case "USER_NO":
-            //                    rowCtr[x] = Session["UserId"];
-            //                    break;
-            //                case "TIME":
-            //                    rowCtr[x] = DateTime.Now;
-            //                    break;
-            //            }
-            //            x++;
-            //        }
-            //        if (dtCtr.Rows.Count > 0)
-            //            dtCtr.Rows.RemoveAt(0);
-            //        dtCtr.Rows.Add(rowCtr);
-            //        dtCtr.PrimaryKey = new DataColumn[] { dtCtr.Columns["IdAuto"] };
-            //    }
-
-            //    //Florin 2019.09.18 - am adaugat TableName
-            //    dtCtr.TableName = "Ptj_Programe";
-            //    ds.Tables.Add(dtCtr);
-            //    Session["InformatiaCurentaPrograme"] = ds;
-            //}
-            //if (!IsPostBack)
-            //{
-            //    DataTable table = new DataTable();
-            //    table = ds.Tables[0];
-            //    DataList1.DataSource = table;
-            //    DataList1.DataBind();
-
-            //    ASPxTextBox txtId = DataList1.Items[0].FindControl("txtId") as ASPxTextBox;
-            //    txtId.Enabled = false;
-            //}
-
-        }
+        int idPrg = -99;
+        bool esteNou = false;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
+                #region Traducere
 
-            //    #region Traducere
+                string ctlPost = Request.Params["__EVENTTARGET"];
 
-            //    string ctlPost = Request.Params["__EVENTTARGET"];
-            //    //if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup")>=0) Constante.IdLimba = ctlPost.Substring(ctlPost.LastIndexOf("$")+1).Replace("a", "");
+                #endregion
 
+                idPrg = Convert.ToInt32(General.Nz(Session["IdProgram"], -99));
+                if (idPrg == -99)
+                    esteNou = true;
 
-            //    #endregion
+                if (!IsPostBack)
+                {
+                    DataSet ds = new DataSet();
+                    string[] tbls = { "Ptj_Programe", "Ptj_ProgrameAlteOre", "Ptj_ProgrameOreNoapte", "Ptj_ProgramePauze", "Ptj_ProgrameTrepte", };
+                    for(int i = 0; i < tbls.Length; i++)
+                    {
+                        string cmp = "IdProgram";
+                        string cheie = "IdAuto";
+                        if (i == 0)
+                        {
+                            cmp = cheie = "Id";
+                        }
 
-            //    TabPage tabPage1 = new TabPage();
-            //    tabPage1.Name = "ProgrameDateGenerale";
-            //    tabPage1.Text = "Date generale";
-            //    Control ctrl1 = new Control();
-            //    ctrl1 = this.LoadControl(tabPage1.Name + ".ascx");
-            //    tabPage1.Controls.Add(ctrl1);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage1);
+                        DataTable dt = General.IncarcaDT($@"SELECT * FROM ""{tbls[i]}"" WHERE ""{cmp}""=@1", new object[] { idPrg });
+                        dt.TableName = tbls[i];
+                        dt.PrimaryKey = new DataColumn[] { dt.Columns[cheie] };
+                        ds.Tables.Add(dt);
+                    }
 
-            //    TabPage tabPage2 = new TabPage();
-            //    tabPage2.Name = "ProgrameOreNormale";
-            //    tabPage2.Text = "Ore Normale";
-            //    Control ctrl2 = new Control();
-            //    ctrl2 = this.LoadControl(tabPage2.Name + ".ascx");
-            //    tabPage2.Controls.Add(ctrl2);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage2);
+                    Session["InformatiaCurenta"] = ds;
+                    pnlGen.DataSource = ds.Tables["Ptj_Programe"];
+                    pnlGen.DataBind();
 
-            //    TabPage tabPage3 = new TabPage();
-            //    tabPage3.Name = "ProgrameOreSup";
-            //    tabPage3.Text = "Ore Suplimentare";
-            //    Control ctrl3 = new Control();
-            //    ctrl3 = this.LoadControl(tabPage3.Name + ".ascx");
-            //    tabPage3.Controls.Add(ctrl3);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage3);
+                    //pnlGen.FindItemByFieldName("PauzaMin").Visible = false;
 
+                    DataTable dtLa = General.IncarcaDT(@"SELECT ""Coloana"" AS ""Denumire"", COALESCE(""Alias"", ""Coloana"") AS ""Alias""  FROM ""Ptj_tblAdmin"" ORDER BY COALESCE(""Alias"", ""Coloana"")");
+                    cmbONCamp.DataSource = dtLa;
+                    cmbONCamp.DataBind();
+                    cmbOSCamp.DataSource = dtLa;
+                    cmbOSCamp.DataBind();
+                    cmbOSCampSub.DataSource = dtLa;
+                    cmbOSCampSub.DataBind();
+                    cmbOSCampPeste.DataSource = dtLa;
+                    cmbOSCampPeste.DataBind();
 
-            //    //Florin 2019.08.21
-            //    TabPage tabPage11 = new TabPage();
-            //    tabPage11.Name = "ProgrameOreNoapte";
-            //    tabPage11.Text = "Ore Noapte";
-            //    Control ctrl11 = new Control();
-            //    ctrl11 = this.LoadControl(tabPage11.Name + ".ascx");
-            //    tabPage11.Controls.Add(ctrl11);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage11);
+                    grDateNoapte.KeyFieldName = "IdAuto";
+                    grDateNoapte.DataSource = ds.Tables["Ptj_ProgrameOreNoapte"];
+                    grDateNoapte.DataBind();
 
-
-            //    TabPage tabPage4 = new TabPage();
-            //    tabPage4.Name = "ProgrameAlteOre";
-            //    tabPage4.Text = "Alte Ore";
-            //    Control ctrl4 = new Control();
-            //    ctrl4 = this.LoadControl(tabPage4.Name + ".ascx");
-            //    tabPage4.Controls.Add(ctrl4);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage4);
-
-            //    TabPage tabPage5 = new TabPage();
-            //    tabPage5.Name = "ProgramePauza";
-            //    tabPage5.Text = "Pauze";
-            //    Control ctrl5 = new Control();
-            //    ctrl5 = this.LoadControl(tabPage5.Name + ".ascx");
-            //    tabPage5.Controls.Add(ctrl5);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage5);
-
-            //    TabPage tabPage6 = new TabPage();
-            //    tabPage6.Name = "ProgrameInSub";
-            //    tabPage6.Text = "Intrare anticipata";
-            //    Control ctrl6 = new Control();
-            //    ctrl6 = this.LoadControl(tabPage6.Name + ".ascx");
-            //    tabPage6.Controls.Add(ctrl6);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage6);
-
-            //    TabPage tabPage7 = new TabPage();
-            //    tabPage7.Name = "ProgrameInPeste";
-            //    tabPage7.Text = "Intrare tarzie";
-            //    Control ctrl7 = new Control();
-            //    ctrl7 = this.LoadControl(tabPage7.Name + ".ascx");
-            //    tabPage7.Controls.Add(ctrl7);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage7);
-
-            //    TabPage tabPage8 = new TabPage();
-            //    tabPage8.Name = "ProgrameOutSub";
-            //    tabPage8.Text = "Iesire anticipata";
-            //    Control ctrl8 = new Control();
-            //    ctrl8 = this.LoadControl(tabPage8.Name + ".ascx");
-            //    tabPage8.Controls.Add(ctrl8);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage8);
-
-            //    TabPage tabPage9 = new TabPage();
-            //    tabPage9.Name = "ProgrameOutPeste";
-            //    tabPage9.Text = "Iesire tarzie";
-            //    Control ctrl9 = new Control();
-            //    ctrl9 = this.LoadControl(tabPage9.Name + ".ascx");
-            //    tabPage9.Controls.Add(ctrl9);
-            //    this.ASPxPageControl2.TabPages.Add(tabPage9);
-
-            //    //Florin 2019.05.21
-            //    //TabPage tabPage10 = new TabPage();
-            //    //tabPage10.Name = "ProgrameValuri";
-            //    //tabPage10.Text = "Val-uri din pontaj";
-            //    //Control ctrl10 = new Control();
-            //    //ctrl10 = this.LoadControl(tabPage10.Name + ".ascx");
-            //    //tabPage10.Controls.Add(ctrl10);
-            //    //this.ASPxPageControl2.TabPages.Add(tabPage10);
-
-            //}
-            //catch (Exception ex)
-            //{           
-            //    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
-            //}
+                    grDateAlte.KeyFieldName = "IdAuto";
+                    grDateAlte.DataSource = ds.Tables["Ptj_ProgrameAlteOre"];
+                    grDateAlte.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
         }
 
 
@@ -271,7 +128,7 @@ namespace WizOne.Programe
         }
 
 
-        protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
+        protected void pnlCall_Callback(object source, CallbackEventArgsBase e)
         {
             //string[] param = e.Parameter.Split(';');
             //DataSet ds = Session["InformatiaCurentaPrograme"] as DataSet;
@@ -292,15 +149,20 @@ namespace WizOne.Programe
             //}
         }
 
-        protected void tabCtr_Callback(object sender, CallbackEventArgsBase e)
+        protected void tabCtl_Callback(object sender, CallbackEventArgsBase e)
         {
         }
 
-
-
-
+        protected void grDateNoapte_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        {
 
         }
+
+        protected void grDateAlte_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        {
+
+        }
+    }
 
 
 

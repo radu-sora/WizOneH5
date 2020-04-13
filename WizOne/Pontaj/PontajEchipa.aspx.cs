@@ -295,7 +295,7 @@ namespace WizOne.Pontaj
                 {
                     Session["InformatiaCurenta"] = null;
 
-                    txtAnLuna.Value = DateTime.Now;
+                    txtAnLuna.Value = DateTime.Now;                
                     
                     IncarcaRoluri();
                     IncarcaAngajati();

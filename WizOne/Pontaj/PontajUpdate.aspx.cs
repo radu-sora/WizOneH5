@@ -263,7 +263,7 @@ namespace WizOne.Pontaj
                         if (chkSL == true)
                         {
                             act += ",A.ZiLibera = 1, A.ZiLiberaLegala = 1";
-                            inn += "LEFT JOIN HOLIDAYS ON CAST(DATE, DAY)= CAST(DATE, A.Ziua)";
+                            inn += "JOIN HOLIDAYS ON CAST(DAY AS DATE)= CAST(A.Ziua AS DATE)";
                         }
 
 
@@ -358,7 +358,7 @@ namespace WizOne.Pontaj
                                   + " (SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) END";
 
                         //Radu 07.04.2020
-                        if (chkSL == true) act += ", A.\"ZiLibera\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE DAY = A.\"Ziua\") THEN 0 ELSE 1 END, A.\"ZiLiberaLegala\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE DAY = A.\"Ziua\") THEN 0 ELSE 1 END";                       
+                        if (chkSL == true) act += ", A.\"ZiLibera\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE TRUNC(DAY) = TRUNC(A.\"Ziua\")) THEN 0 ELSE 1 END, A.\"ZiLiberaLegala\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE TRUNC(DAY) = TRUNC(A.\"Ziua\")) THEN 0 ELSE 1 END";                       
 
 
                         if (chkStr == true)
@@ -446,7 +446,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (txtDataInc.Value == null || txtDataSf.Value == null || txtMarcaInc.Value == null || txtMarcaSf.Value == null || (chkCtr.Checked == false && chkStr.Checked == false && chkNrm.Checked == false && chkPerAng.Checked == false && chkRecalc.Checked == false && chkCC.Checked == false))
+                if (txtDataInc.Value == null || txtDataSf.Value == null || txtMarcaInc.Value == null || txtMarcaSf.Value == null || (chkCtr.Checked == false && chkStr.Checked == false && chkNrm.Checked == false && chkPerAng.Checked == false && chkRecalc.Checked == false && chkCC.Checked == false && chkSL.Checked == false))
                 {
                     if (param == 1)
                         MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoError, "");

@@ -85,6 +85,9 @@ namespace WizOne.Pontaj
 
                     }
                 }
+
+                int nrRanduri = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
+                grDate.SettingsPager.PageSize = nrRanduri;
             }
             catch (Exception ex)
             {
@@ -117,6 +120,7 @@ namespace WizOne.Pontaj
                 lblDept.InnerText = Dami.TraduCuvant("Dept.");
                 lblSubDept.InnerText = Dami.TraduCuvant("Subdept.");
                 lblBirou.InnerText = Dami.TraduCuvant("Birou");
+                lblCateg.InnerText = Dami.TraduCuvant("Categorie");
 
                 btnFiltru.Text = Dami.TraduCuvant("btnFiltru", "Filtru");
                 btnFiltruSterge.Text = Dami.TraduCuvant("btnFiltruSterge", "Sterge Filtru");
@@ -178,6 +182,9 @@ namespace WizOne.Pontaj
                 cmbSubDept.DataBind();
                 cmbBirou.DataSource = General.IncarcaDT("SELECT F00809, F00810 FROM F008", null);
                 cmbBirou.DataBind();
+
+                cmbCateg.DataSource = General.IncarcaDT(@"SELECT ""Denumire"" AS ""Id"", ""Denumire"" FROM ""viewCategoriePontaj"" GROUP BY ""Denumire"" ", null);
+                cmbCateg.DataBind();
 
                 cmbStare.DataSource = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblStariPontaj"" ", null);
                 cmbStare.DataBind();
@@ -465,6 +472,12 @@ namespace WizOne.Pontaj
                 if (Convert.ToInt32(cmbDept.Value ?? -99) != -99) strFiltru += " AND A.F10007 = " + cmbDept.Value;
                 if (Convert.ToInt32(cmbSubDept.Value ?? -99) != -99) strFiltru += " AND B.F100958 = " + cmbSubDept.Value;
                 if (Convert.ToInt32(cmbBirou.Value ?? -99) != -99) strFiltru += " AND B.F100959 = " + cmbBirou.Value;
+                string inn = "";
+                if (cmbCateg.Value != null)
+                {
+                    strFiltru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
+                    inn = @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
+                }
 
                 strFiltru += General.GetF10003Roluri(Convert.ToInt32(Session["UserId"]), an, luna, 0, -99, Convert.ToInt32(cmbRol.Value ?? -99), 0, Convert.ToInt32(cmbDept.Value ?? -99), -99);
 
@@ -478,6 +491,7 @@ namespace WizOne.Pontaj
                         FROM ""Ptj_Cumulat"" C
                         INNER JOIN F100 A ON C.F10003=A.F10003
                         INNER JOIN F1001 B ON A.F10003=B.F10003
+                        {inn}
                         LEFT JOIN (SELECT X.F10003, MAX(X.""IdContract"") AS ""IdContract"" FROM ""F100Contracte"" X WHERE {General.TruncateDate("X.DataInceput")} <= {General.ToDataUniv(an, luna, 99)} AND {General.ToDataUniv(an, luna, 1)} <= {General.TruncateDate("X.DataSfarsit")} GROUP BY X.F10003) D ON A.F10003=D.F10003
                         WHERE 1=1 {strFiltru}";
             }

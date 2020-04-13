@@ -782,7 +782,7 @@
                                 <br />
                                 <dx:ASPxCheckBox ID="chkPauza" ClientInstanceName="chkPauza" runat="server" Text="pauza" TextAlign="Right" />
                                 <br />
-                                <dx:ASPxCheckBox ID="chkLinie" ClientInstanceName="chkLinie" runat="server" Text="afisare pe o singura linie" TextAlign="Right" />
+                                <dx:ASPxCheckBox ID="chkLinie" ClientInstanceName="chkLinie" runat="server" Text="afisare pe o singura linie" Checked="true"  TextAlign="Right" />
                                 <br />
                                 <dx:ASPxCheckBox ID="chkRoluri" ClientInstanceName="chkRoluri" runat="server" Text="toate rolurile" TextAlign="Right" />
                                 <br />

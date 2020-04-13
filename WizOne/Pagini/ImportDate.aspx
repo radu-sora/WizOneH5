@@ -41,6 +41,10 @@
                     <td align="right">
                         <dx:ASPxButton ID="btnImport" ClientInstanceName="btnImport" ClientIDMode="Static" runat="server" Text="Import" AutoPostBack="true" OnClick="btnImport_Click"  oncontextMenu="ctx(this,event)" >
                             <Image Url="~/Fisiere/Imagini/Icoane/incarca.png"></Image>
+                            <ClientSideEvents Click="function (s,e) { 
+                                pnlLoading.Show();
+                                e.processOnServer = true;
+                             }" />
                         </dx:ASPxButton>
                         <dx:ASPxButton ID="btnViz" ClientInstanceName="btnViz" ClientIDMode="Static" runat="server" Text="Detalii sablon" AutoPostBack="true" OnClick="btnViz_Click"  oncontextMenu="ctx(this,event)" >
                             <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>

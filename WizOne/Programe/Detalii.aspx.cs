@@ -2,6 +2,7 @@
 using DevExpress.Web.Data;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -198,7 +199,9 @@ namespace WizOne.Programe
         {
             try
             {
-
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("IdProgram", idPrg.ToString());
+                BatchUpdate(sender, e, dic);
             }
             catch (Exception ex)
             {
@@ -210,7 +213,9 @@ namespace WizOne.Programe
         {
             try
             {
-
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("IdProgram", idPrg.ToString());
+                BatchUpdate(sender, e, dic);
             }
             catch (Exception ex)
             {
@@ -222,7 +227,9 @@ namespace WizOne.Programe
         {
             try
             {
-
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("IdProgram", idPrg.ToString());
+                BatchUpdate(sender, e, dic);
             }
             catch (Exception ex)
             {
@@ -234,7 +241,17 @@ namespace WizOne.Programe
         {
             try
             {
-
+                try
+                {
+                    Dictionary<string, string> dic = new Dictionary<string, string>();
+                    dic.Add("IdProgram", idPrg.ToString());
+                    dic.Add("TipInOut", "InPeste");
+                    BatchUpdate(sender, e, dic);
+                }
+                catch (Exception ex)
+                {
+                    General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+                }
             }
             catch (Exception ex)
             {
@@ -246,7 +263,10 @@ namespace WizOne.Programe
         {
             try
             {
-
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("IdProgram", idPrg.ToString());
+                dic.Add("TipInOut", "OUTSub");
+                BatchUpdate(sender, e, dic);
             }
             catch (Exception ex)
             {
@@ -254,7 +274,7 @@ namespace WizOne.Programe
             }
         }
 
-        private void BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        private void BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e, Dictionary<string, string> dic)
         {
             try
             {
@@ -300,9 +320,11 @@ namespace WizOne.Programe
                         }
                     }
 
-                    dr["IdContract"] = idPrg;
-                    dr["TipSchimb"] = idx;
-                    dr["IdProgram"] = upd.NewValues["IdProgram"];
+                    foreach (KeyValuePair<string, string> l in dic)
+                    {
+                        dr[l.Key] = l.Value;
+                    }
+
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
 

@@ -359,12 +359,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\reports.css" />
-    <Content Include="ContracteLucru\Contract.aspx" />
-    <Content Include="ContracteLucru\ContractAbsente.ascx" />
-    <Content Include="ContracteLucru\ContractCiclic.ascx" />
-    <Content Include="ContracteLucru\ContractDetaliu.aspx" />
-    <Content Include="ContracteLucru\ContractVal.ascx" />
-    <Content Include="ContracteLucru\ContractZilnic.ascx" />
+    <Content Include="Contracte\Lista.aspx" />
+    <Content Include="Contracte\Detalii.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Eval\ActivitatiObiective.aspx" />
     <Content Include="Eval\Calificative.aspx" />
@@ -826,7 +822,6 @@
     <Content Include="Personal\Tarife.ascx" />
     <Content Include="Pontaj\PlanificareSchimburi.aspx" />
     <Content Include="Pontaj\PontajSpecial.aspx" />
-    <Content Include="ProgrameLucru\ProgrameOreNoapte.ascx" />
     <Content Include="Reports\ImprimaTactil.aspx" />
     <Content Include="Revisal\RapoarteRevisal.aspx" />
     <Content Include="Revisal\Revisal.aspx" />
@@ -906,18 +901,8 @@
     <Content Include="Pontaj\PontajEchipa.aspx" />
     <Content Include="Pontaj\PontajOne.aspx" />
     <Content Include="Pontaj\PontajUpdate.aspx" />
-    <Content Include="ProgrameLucru\Programe.aspx" />
-    <Content Include="ProgrameLucru\ProgrameAlteOre.ascx" />
-    <Content Include="ProgrameLucru\ProgrameDateGenerale.ascx" />
-    <Content Include="ProgrameLucru\ProgrameDetaliu.aspx" />
-    <Content Include="ProgrameLucru\ProgrameInPeste.ascx" />
-    <Content Include="ProgrameLucru\ProgrameInSub.ascx" />
-    <Content Include="ProgrameLucru\ProgrameOreNormale.ascx" />
-    <Content Include="ProgrameLucru\ProgrameOreSup.ascx" />
-    <Content Include="ProgrameLucru\ProgrameOutPeste.ascx" />
-    <Content Include="ProgrameLucru\ProgrameOutSub.ascx" />
-    <Content Include="ProgrameLucru\ProgramePauza.ascx" />
-    <Content Include="ProgrameLucru\ProgrameValuri.ascx" />
+    <Content Include="Programe\Lista.aspx" />
+    <Content Include="Programe\Detalii.aspx" />
     <Content Include="Raspuns.aspx" />
     <Content Include="Recrutare\Candidati.aspx" />
     <Content Include="Recrutare\DateGenerale.ascx" />
@@ -926,6 +911,8 @@
     <Content Include="Reports\Imprima.aspx" />
     <Content Include="DefaultTactil.aspx" />
     <Content Include="Tactil\PontajDetaliatTactil.aspx" />
+    <Content Include="WebForm1.aspx" />
+    <Content Include="WebForm2.aspx" />
     <Content Include="WebService\Detalii.aspx" />
     <Content Include="WebService\Sodexo.aspx" />
     <EntityDeploy Include="Generatoare\Reports\Models\ReportsModel.edmx">
@@ -1290,47 +1277,19 @@
     <Compile Include="ConcediiMedicale\Istoric.aspx.designer.cs">
       <DependentUpon>Istoric.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ContracteLucru\Contract.aspx.cs">
-      <DependentUpon>Contract.aspx</DependentUpon>
+    <Compile Include="Contracte\Lista.aspx.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ContracteLucru\Contract.aspx.designer.cs">
-      <DependentUpon>Contract.aspx</DependentUpon>
+    <Compile Include="Contracte\Lista.aspx.designer.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ContracteLucru\ContractAbsente.ascx.cs">
-      <DependentUpon>ContractAbsente.ascx</DependentUpon>
+    <Compile Include="Contracte\Detalii.aspx.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ContracteLucru\ContractAbsente.ascx.designer.cs">
-      <DependentUpon>ContractAbsente.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractCiclic.ascx.cs">
-      <DependentUpon>ContractCiclic.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractCiclic.ascx.designer.cs">
-      <DependentUpon>ContractCiclic.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractDetaliu.aspx.cs">
-      <DependentUpon>ContractDetaliu.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractDetaliu.aspx.designer.cs">
-      <DependentUpon>ContractDetaliu.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractVal.ascx.cs">
-      <DependentUpon>ContractVal.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractVal.ascx.designer.cs">
-      <DependentUpon>ContractVal.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractZilnic.ascx.cs">
-      <DependentUpon>ContractZilnic.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ContracteLucru\ContractZilnic.ascx.designer.cs">
-      <DependentUpon>ContractZilnic.ascx</DependentUpon>
+    <Compile Include="Contracte\Detalii.aspx.designer.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -1778,13 +1737,6 @@
     </Compile>
     <Compile Include="Pontaj\PontajSpecial.aspx.designer.cs">
       <DependentUpon>PontajSpecial.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOreNoapte.ascx.cs">
-      <DependentUpon>ProgrameOreNoapte.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOreNoapte.ascx.designer.cs">
-      <DependentUpon>ProgrameOreNoapte.ascx</DependentUpon>
     </Compile>
     <Compile Include="Reports\AdeverintaGenerala.cs">
       <SubType>Component</SubType>
@@ -2234,89 +2186,19 @@
     <Compile Include="Pontaj\PontajUpdate.aspx.designer.cs">
       <DependentUpon>PontajUpdate.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ProgrameLucru\Programe.aspx.cs">
-      <DependentUpon>Programe.aspx</DependentUpon>
+    <Compile Include="Programe\Lista.aspx.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ProgrameLucru\Programe.aspx.designer.cs">
-      <DependentUpon>Programe.aspx</DependentUpon>
+    <Compile Include="Programe\Lista.aspx.designer.cs">
+      <DependentUpon>Lista.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ProgrameLucru\ProgrameAlteOre.ascx.cs">
-      <DependentUpon>ProgrameAlteOre.ascx</DependentUpon>
+    <Compile Include="Programe\Detalii.aspx.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ProgrameLucru\ProgrameAlteOre.ascx.designer.cs">
-      <DependentUpon>ProgrameAlteOre.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameDateGenerale.ascx.cs">
-      <DependentUpon>ProgrameDateGenerale.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameDateGenerale.ascx.designer.cs">
-      <DependentUpon>ProgrameDateGenerale.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameDetaliu.aspx.cs">
-      <DependentUpon>ProgrameDetaliu.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameDetaliu.aspx.designer.cs">
-      <DependentUpon>ProgrameDetaliu.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameInPeste.ascx.cs">
-      <DependentUpon>ProgrameInPeste.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameInPeste.ascx.designer.cs">
-      <DependentUpon>ProgrameInPeste.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameInSub.ascx.cs">
-      <DependentUpon>ProgrameInSub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameInSub.ascx.designer.cs">
-      <DependentUpon>ProgrameInSub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOreNormale.ascx.cs">
-      <DependentUpon>ProgrameOreNormale.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOreNormale.ascx.designer.cs">
-      <DependentUpon>ProgrameOreNormale.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOreSup.ascx.cs">
-      <DependentUpon>ProgrameOreSup.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOreSup.ascx.designer.cs">
-      <DependentUpon>ProgrameOreSup.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOutPeste.ascx.cs">
-      <DependentUpon>ProgrameOutPeste.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOutPeste.ascx.designer.cs">
-      <DependentUpon>ProgrameOutPeste.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOutSub.ascx.cs">
-      <DependentUpon>ProgrameOutSub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameOutSub.ascx.designer.cs">
-      <DependentUpon>ProgrameOutSub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgramePauza.ascx.cs">
-      <DependentUpon>ProgramePauza.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgramePauza.ascx.designer.cs">
-      <DependentUpon>ProgramePauza.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameValuri.ascx.cs">
-      <DependentUpon>ProgrameValuri.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProgrameLucru\ProgrameValuri.ascx.designer.cs">
-      <DependentUpon>ProgrameValuri.ascx</DependentUpon>
+    <Compile Include="Programe\Detalii.aspx.designer.cs">
+      <DependentUpon>Detalii.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pagini\SchimbaParola.aspx.cs">
@@ -2441,6 +2323,20 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm2.aspx.cs">
+      <DependentUpon>WebForm2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm2.aspx.designer.cs">
+      <DependentUpon>WebForm2.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebService\Detalii.aspx.cs">
       <DependentUpon>Detalii.aspx</DependentUpon>

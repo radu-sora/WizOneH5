@@ -623,56 +623,56 @@ namespace WizOne.Pontaj
                     CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,1))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 2 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb2"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program2"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,2))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb2"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program2"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 3 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb3"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program3"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,3))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb3"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program3"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 4 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb4"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program4"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,4))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb4"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program4"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 5 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb5"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program5"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,5))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb5"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program5"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 6 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb6"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program6"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,6))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb6"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program6"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 7 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb7"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program7"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,7))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb7"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program7"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 8 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,8))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END)
                     ) X
                     UNION 

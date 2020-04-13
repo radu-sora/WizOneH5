@@ -4006,45 +4006,45 @@ namespace WizOne.Module
         }
 
 
-        public static DataTable ListaAfisare()
-        {
-            try
-            {
-                DataTable table = new DataTable();
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
-                table.Rows.Add(1, "Trunchiere la ore");
-                table.Rows.Add(2, "Cu minute");
-                table.Rows.Add(3, "Cu zecimale");
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //public static DataTable ListaAfisare()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
+        //        table.Rows.Add(1, "Trunchiere la ore");
+        //        table.Rows.Add(2, "Cu minute");
+        //        table.Rows.Add(3, "Cu zecimale");
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
-        public static DataTable ListaRaportare()
-        {
-            try
-            {
-                DataTable table = new DataTable();
+        //public static DataTable ListaRaportare()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
 
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "Pe inceput schimb");
-                table.Rows.Add(2, "Pe sfarsit schimb");
+        //        table.Rows.Add(1, "Pe inceput schimb");
+        //        table.Rows.Add(2, "Pe sfarsit schimb");
 
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
         public static DataTable ListaVal_uri()
         {
@@ -4139,68 +4139,68 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable ListaTipPontare()
-        {
-            try
-            {
-                DataTable table = new DataTable();
+        //public static DataTable ListaTipPontare()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
 
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, Dami.TraduCuvant("Pontare automata"));
-                table.Rows.Add(2, Dami.TraduCuvant("Pontare automata la minim o citire card"));
-                table.Rows.Add(3, Dami.TraduCuvant("Pontare doar prima intrare si ultima iesire"));
-                table.Rows.Add(4, Dami.TraduCuvant("Pontare toate intrarile si iesirile"));
-                table.Rows.Add(5, Dami.TraduCuvant("Pontare prima intrare, ultima iesire - pauze > x minute"));
+        //        table.Rows.Add(1, Dami.TraduCuvant("Pontare automata"));
+        //        table.Rows.Add(2, Dami.TraduCuvant("Pontare automata la minim o citire card"));
+        //        table.Rows.Add(3, Dami.TraduCuvant("Pontare doar prima intrare si ultima iesire"));
+        //        table.Rows.Add(4, Dami.TraduCuvant("Pontare toate intrarile si iesirile"));
+        //        table.Rows.Add(5, Dami.TraduCuvant("Pontare prima intrare, ultima iesire - pauze > x minute"));
 
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
-        public static DataTable ListaRotunjirePrgLucru()
-        {
-            try
-            {
-                DataTable table = new DataTable();
+        //public static DataTable ListaRotunjirePrgLucru()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
 
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "rotunjire la minute");
-                table.Rows.Add(2, "rotunjire la ora");
-                table.Rows.Add(3, "trunchiere la ora");
-                table.Rows.Add(4, "rotunjire la 45 minute");
-                table.Rows.Add(5, "rotunjire la 10 minute");
-                table.Rows.Add(6, "rotunjire la 5 minute");
+        //        table.Rows.Add(1, "rotunjire la minute");
+        //        table.Rows.Add(2, "rotunjire la ora");
+        //        table.Rows.Add(3, "trunchiere la ora");
+        //        table.Rows.Add(4, "rotunjire la 45 minute");
+        //        table.Rows.Add(5, "rotunjire la 10 minute");
+        //        table.Rows.Add(6, "rotunjire la 5 minute");
 
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
-        public static DataTable GetPtj_AliasFOrdonat()
-        {
-            try
-            {
-                return General.IncarcaDT("SELECT \"Coloana\" AS \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
-            }
+        //public static DataTable GetPtj_AliasFOrdonat()
+        //{
+        //    try
+        //    {
+        //        return General.IncarcaDT("SELECT \"Coloana\" AS \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
+        //    }
 
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
         public static DataTable ListaNumere(int valMin, int valMax)
         {

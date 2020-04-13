@@ -7,13 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Absente
-{
-
-
-    public partial class IstoricExtins
-    {
-
+namespace WizOne.Absente {
+    
+    
+    public partial class IstoricExtins {
+        
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -22,7 +20,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-
+        
         /// <summary>
         /// btnBack control.
         /// </summary>
@@ -31,7 +29,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnBack;
-
+        
         /// <summary>
         /// lblAngajat control.
         /// </summary>
@@ -40,7 +38,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel lblAngajat;
-
+        
         /// <summary>
         /// lblViz control.
         /// </summary>
@@ -49,7 +47,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblViz;
-
+        
         /// <summary>
         /// cmbViz control.
         /// </summary>
@@ -58,7 +56,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbViz;
-
+        
         /// <summary>
         /// lblLuna control.
         /// </summary>
@@ -67,7 +65,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblLuna;
-
+        
         /// <summary>
         /// txtLuna control.
         /// </summary>
@@ -76,7 +74,25 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtLuna;
-
+        
+        /// <summary>
+        /// btnLunaAnt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnLunaAnt;
+        
+        /// <summary>
+        /// btnLunaUrm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnLunaUrm;
+        
         /// <summary>
         /// lblAn control.
         /// </summary>
@@ -85,7 +101,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAn;
-
+        
         /// <summary>
         /// cmbAn control.
         /// </summary>
@@ -94,7 +110,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbAn;
-
+        
         /// <summary>
         /// lblFil control.
         /// </summary>
@@ -103,7 +119,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblFil;
-
+        
         /// <summary>
         /// cmbFil control.
         /// </summary>
@@ -112,7 +128,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbFil;
-
+        
         /// <summary>
         /// btnLoad control.
         /// </summary>
@@ -121,7 +137,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnLoad;
-
+        
         /// <summary>
         /// btnExport control.
         /// </summary>
@@ -130,7 +146,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExport;
-
+        
         /// <summary>
         /// grDate control.
         /// </summary>
@@ -139,7 +155,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDate;
-
+        
         /// <summary>
         /// grView control.
         /// </summary>
@@ -148,7 +164,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grView;
-
+        
         /// <summary>
         /// grAnual control.
         /// </summary>
@@ -157,7 +173,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTable grAnual;
-
+        
         /// <summary>
         /// grLunar control.
         /// </summary>
@@ -166,7 +182,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grLunar;
-
+        
         /// <summary>
         /// grLeg control.
         /// </summary>
@@ -175,7 +191,7 @@ namespace WizOne.Absente
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grLeg;
-
+        
         /// <summary>
         /// ExportGrid control.
         /// </summary>

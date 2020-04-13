@@ -364,6 +364,33 @@ namespace WizOne.Pontaj {
         protected global::DevExpress.Web.ASPxComboBox cmbCateg;
         
         /// <summary>
+        /// divCtrAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCtrAll;
+        
+        /// <summary>
+        /// lblCtrAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCtrAll;
+        
+        /// <summary>
+        /// chkCtrAll control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCheckBox chkCtrAll;
+        
+        /// <summary>
         /// btnFiltru control.
         /// </summary>
         /// <remarks>

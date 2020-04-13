@@ -15,7 +15,6 @@ namespace WizOne.Pontaj
 {
     public partial class PlanificareSchimburi : System.Web.UI.Page
     {
-
         protected void Page_Init(object sender, EventArgs e)
         {
             try

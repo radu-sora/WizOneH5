@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Pontaj {
-    
-    
-    public partial class PontajCumulat {
-        
+namespace WizOne.Pontaj
+{
+
+
+    public partial class PontajCumulat
+    {
+
         /// <summary>
         /// txtTitlu control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxLabel txtTitlu;
-        
+
         /// <summary>
         /// btnSave control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnSave;
-        
+
         /// <summary>
         /// btnExit control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnExit;
-        
+
         /// <summary>
         /// pnlCtl control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
-        
+
         /// <summary>
         /// lblAnLuna control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAnLuna;
-        
+
         /// <summary>
         /// txtAnLuna control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDateEdit txtAnLuna;
-        
+
         /// <summary>
         /// lblRol control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblRol;
-        
+
         /// <summary>
         /// cmbRol control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbRol;
-        
+
         /// <summary>
         /// lblStare control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStare;
-        
+
         /// <summary>
         /// cmbStare control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbStare;
-        
+
         /// <summary>
         /// lblCtr control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCtr;
-        
+
         /// <summary>
         /// cmbCtr control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbCtr;
-        
+
         /// <summary>
         /// lblSub control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSub;
-        
+
         /// <summary>
         /// cmbSub control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSub;
-        
+
         /// <summary>
         /// lblFil control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblFil;
-        
+
         /// <summary>
         /// cmbFil control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbFil;
-        
+
         /// <summary>
         /// lblSec control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSec;
-        
+
         /// <summary>
         /// cmbSec control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSec;
-        
+
         /// <summary>
         /// lblDept control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblDept;
-        
+
         /// <summary>
         /// cmbDept control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbDept;
-        
+
         /// <summary>
         /// lblSubDept control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblSubDept;
-        
+
         /// <summary>
         /// cmbSubDept control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbSubDept;
-        
+
         /// <summary>
         /// lblBirou control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblBirou;
-        
+
         /// <summary>
         /// cmbBirou control.
         /// </summary>
@@ -227,7 +229,25 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbBirou;
-        
+
+        /// <summary>
+        /// lblCateg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblCateg;
+
+        /// <summary>
+        /// cmbCateg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxComboBox cmbCateg;
+
         /// <summary>
         /// btnFiltru control.
         /// </summary>
@@ -236,7 +256,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltru;
-        
+
         /// <summary>
         /// btnFiltruSterge control.
         /// </summary>
@@ -245,7 +265,7 @@ namespace WizOne.Pontaj {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnFiltruSterge;
-        
+
         /// <summary>
         /// grDate control.
         /// </summary>

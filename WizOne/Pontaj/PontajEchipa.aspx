@@ -585,6 +585,8 @@
                         <dx:GridViewDataTextColumn FieldName="DescContract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="5" Width="150px" Settings-AutoFilterCondition="Contains"/>
                         <dx:GridViewDataTextColumn FieldName="F06205" Caption="Centrul de Cost" ReadOnly="true" FixedStyle="Left" VisibleIndex="6" Width="150px" Settings-AutoFilterCondition="Contains"/>
                           
+                        <dx:GridViewDataTextColumn FieldName="Comentarii" Caption="Comentarii" ReadOnly="true"  />
+
                         <dx:GridViewDataTextColumn FieldName="Companie" Caption="Companie" ReadOnly="true" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="Subcompanie" Caption="Subcompanie" ReadOnly="true" Visible="false" />
                         <dx:GridViewDataTextColumn FieldName="Filiala" Caption="Filiala" ReadOnly="true" Visible="false" />
@@ -780,7 +782,7 @@
                                 <br />
                                 <dx:ASPxCheckBox ID="chkPauza" ClientInstanceName="chkPauza" runat="server" Text="pauza" TextAlign="Right" />
                                 <br />
-                                <dx:ASPxCheckBox ID="chkLinie" ClientInstanceName="chkLinie" runat="server" Text="afisare pe o singura linie" TextAlign="Right" />
+                                <dx:ASPxCheckBox ID="chkLinie" ClientInstanceName="chkLinie" runat="server" Text="afisare pe o singura linie" Checked="true"  TextAlign="Right" />
                                 <br />
                                 <dx:ASPxCheckBox ID="chkRoluri" ClientInstanceName="chkRoluri" runat="server" Text="toate rolurile" TextAlign="Right" />
                                 <br />

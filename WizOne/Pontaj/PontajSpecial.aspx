@@ -56,12 +56,14 @@
                     lbl.GetMainElement().title = "";
                 }
                 else {
-                    lbl.SetText(cmbProgr.GetValue());
+                    //lbl.SetText(cmbProgr.GetValue());
+                    lbl.SetText("-");
                     var tipProgr = "<%=Session["PtjSpecial_ProgrameJS"] %>";
                     var resProgr = tipProgr.split(";");
                     for (var i = 0; i < resProgr.length; i++) {
                         var linieProgr = resProgr[i].split(",");
                         if (linieProgr[0] == cmbProgr.GetValue()) {
+                            lbl.SetText(linieProgr[2]);
                             lbl.GetMainElement().title = linieProgr[1];
                         }
                 }
@@ -387,8 +389,8 @@
                                 <tr>
                                     <td>
                                         <div style="float:left; padding-right:15px; padding-bottom:10px;">
-                                            <dx:ASPxCheckBox ID="chkPontare"  runat="server" style="display:inline-block; float:left;   width:100px; padding-bottom:10px; vertical-align:text-bottom;" Text="Pentru pontare"  TextAlign="Left" ClientInstanceName="chkbx5" />                                    
-                                            <dx:ASPxCheckBox ID="chkPlanif"  runat="server" style="display:inline-block; float:left;  width:100px; padding-bottom:10px; vertical-align:text-bottom;" Text="Pentru planificare"  TextAlign="Left" ClientInstanceName="chkbx6" />   
+                                            <dx:ASPxCheckBox ID="chkPontare"  runat="server" style="display:inline-block; float:left;   width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Pentru pontare"  TextAlign="Left" ClientInstanceName="chkbx5" oncontextMenu="ctx(this,event)"/>                                    
+                                            <dx:ASPxCheckBox ID="chkPlanif"  runat="server" style="display:inline-block; float:left;  width:150px; padding-bottom:10px; vertical-align:text-bottom;" Text="Pentru planificare"  TextAlign="Left" ClientInstanceName="chkbx6" oncontextMenu="ctx(this,event)"/>   
                                         </div>
                                     </td>
                                 </tr>

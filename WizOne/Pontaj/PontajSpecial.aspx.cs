@@ -80,6 +80,7 @@ namespace WizOne.Pontaj
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
+                Session["PaginaWeb"] = "Pontaj.PontajSpecial";
 
                 if (!IsPostBack)
                 {
@@ -111,12 +112,15 @@ namespace WizOne.Pontaj
                     cmbSablon.DataBind();
                     Session["PtjSpecial_Sabloane"] = dt;
 
-                    DataTable dtProgr = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_Programe""", null);
+                    string strSQL = @"SELECT ""Id"", ""Denumire"", COALESCE(""DenumireScurta"", CONVERT(VARCHAR,""Id"")) AS ""DenumireScurta"" FROM ""Ptj_Programe""";
+                    if (Constante.tipBD == 2)
+                        strSQL = @"SELECT ""Id"", ""Denumire"", COALESCE(""DenumireScurta"", TO_CHAR(""Id"")) AS ""DenumireScurta"" FROM ""Ptj_Programe""";
+                    DataTable dtProgr = General.IncarcaDT(strSQL, null);
                     Session["PtjSpecial_Programe"] = dtProgr;
                     string progr = "";
                     for (int i = 0; i < dtProgr.Rows.Count; i++)
                     {
-                        progr += dtProgr.Rows[i]["Id"].ToString() + "," + dtProgr.Rows[i]["Denumire"].ToString();
+                        progr += dtProgr.Rows[i]["Id"].ToString() + "," + dtProgr.Rows[i]["Denumire"].ToString() + "," + dtProgr.Rows[i]["DenumireScurta"].ToString();
                         if (i < dtProgr.Rows.Count - 1)
                             progr += ";";
                     }
@@ -535,14 +539,16 @@ namespace WizOne.Pontaj
                     string planif = "";
                     if (chkPlanif.Checked)
                     {
-                        planif = ", \"IdContractP\" =  \"IdContract\" , \"IdProgramP\" = " + (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0 ? sablon["IdProgram" + i].ToString() : "NULL");
+                        planif = (chkPontare.Checked ? ", " : "") + " \"IdContractP\" =  \"IdContract\" , \"IdProgramP\" = " + (sablon["IdProgram" + i] != null && sablon["IdProgram" + i].ToString().Length > 0 ? sablon["IdProgram" + i].ToString() : "NULL");
                     }
-
+                    // "ValStr" not in (select coalesce("DenumireScurta",'xyz') from "Ptj_tblAbsente" where "IdTipOre"=1)
                     if (data.Length > 0)
                     {
                         data = data.Substring(1);
 
-                        sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = " + (chkPontare.Checked ? "'" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "NULL") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        //sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        sql = "UPDATE \"Ptj_Intrari\" SET " + (chkPontare.Checked ? " \"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "' " : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE \"Ziua\" IN (" + data + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
+
                     }
                     if (lstZileGolite != null && lstZileGolite.Count > 0)
                     {
@@ -554,12 +560,14 @@ namespace WizOne.Pontaj
                             else
                                 dataZileGolite += ", TO_DATE('" + ziGolita.Day.ToString().PadLeft(2, '0') + "/" + ziGolita.Month.ToString().PadLeft(2, '0') + "/" + ziGolita.Year.ToString() + "', 'dd/mm/yyyy') ";
                         }
-                        sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        //sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = '' OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%')";
+                        sqlZileGolite = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL, \"In1\" = NULL, \"Out1\" = NULL, \"FirstInPaid\" = NULL, \"LastOutPaid\" = NULL " + sirValZileGolite + " WHERE \"Ziua\" IN (" + dataZileGolite.Substring(1) + ") AND F10003 IN (" + lista + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1))";
                     }
                     if (sqlSDSL.Length > 0)
                     {
                         sqlSDSL = sqlSDSL.Substring(2);
-                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = " + (chkPontare.Checked ? "'" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "NULL") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
+                        //sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (\"ValStr\" IS NULL OR \"ValStr\" = ''  OR \"ValStr\" = ' ' OR " + cond + " OR \"ValStr\" LIKE '%/%');";
+                        sqlFin += sql + ";" + "UPDATE \"Ptj_Intrari\" SET  " + (chkPontare.Checked ? "\"ValStr\" = '" + (sablon["Ziua" + i] != null ? sablon["Ziua" + i].ToString() : "") + "'" : "") + oraIn + oraOut + firstIn + lastOut + sirVal + planif + " WHERE (" + sqlSDSL + ") AND (coalesce(\"ValStr\",'zyx') not in (select coalesce(\"DenumireScurta\", 'xyz') from \"Ptj_tblAbsente\" where \"IdTipOre\" = 1));";
                     }
                     else
                         sqlFin += sql + ";";
@@ -697,7 +705,8 @@ namespace WizOne.Pontaj
                                 if (tx != null) tx.Visible = true;
                                 if (lx != null) lx.Visible = true;
                             }
-                        break;
+                        txtValuri.Clear();
+                        break;                
                     case "cmbSablon":
                         AscundeCtl();                    
                         if (cmbSablon.Value != null)
@@ -726,9 +735,15 @@ namespace WizOne.Pontaj
                                             {
                                                 lx.Visible = true;
                                                 int idProgr = dr[0]["IdProgram" + i.ToString()] as int? ?? -1;
-                                                lx.Text = (idProgr > 0 ? idProgr.ToString() : "-");
+                                                DataTable dtPr = Session["PtjSpecial_Programe"] as DataTable;
+                                                DataRow[] drPr = dtPr.Select("Id = " + idProgr);
+                                                string denScurta = idProgr > 0 ? idProgr.ToString() : "-";
+                                                if (drPr != null && drPr.Count() > 0)
+                                                    denScurta = drPr[0]["DenumireScurta"].ToString();
+                                                //lx.Text = (idProgr > 0 ? idProgr.ToString() : "-");
+                                                lx.Text = denScurta;
                                                 if (dtProgr != null && dtProgr.Rows.Count > 0 && lx.Text != "-")
-                                                    lx.ToolTip = dtProgr.Select("Id=" + lx.Text)[0]["Denumire"] as string ?? "";                                              
+                                                    lx.ToolTip = dtProgr.Select("Id=" + idProgr)[0]["Denumire"] as string ?? "";                                              
                                             }
                                         }
                                     chkS.Checked = Convert.ToInt32(dr[0]["S"] == null ? "0" : dr[0]["S"].ToString()) == 1 ? true : false;
@@ -797,7 +812,12 @@ namespace WizOne.Pontaj
                                     //if (tx.Text.Length > 0)
                                     //{
                                         linii[0]["Ziua" + i.ToString()] = tx.Text;
-                                       
+                                        if (tx.Text.Length <= 0)
+                                        {
+                                            linii[0]["IdProgram" + i.ToString()] = DBNull.Value;
+                                            linii[0]["ValZiua" + i.ToString()] = DBNull.Value;
+                                        }
+
                                         foreach (var item in txtValuri)
                                         {                                          
                                             if (item.Key == "txtZiua" + i.ToString())

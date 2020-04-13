@@ -13000,3 +13000,61 @@ ALTER TABLE Ptj_Programe DROP COLUMN VAL3ROT
 GO
 ALTER TABLE Ptj_Programe DROP COLUMN VAL4ROT
 GO
+
+CREATE TABLE Template(
+	Id [int] NOT NULL,
+	NumeSablon [nvarchar](200),
+	NumeTabela [nvarchar](200)
+ CONSTRAINT [PK_Template] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+GO
+
+CREATE TABLE TemplateCampuri(
+	Id [int] NOT NULL,
+	ColoanaBD [nvarchar](200),
+	ColoanaFisier [nvarchar](200),
+	Obligatoriu [int] NULL DEFAULT 0,
+	ValoareImplicita [nvarchar](max) NULL DEFAULT '',
+	IdAuto [int]  NOT NULL
+ CONSTRAINT [PK_TemplateCampuri] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC,
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+insert into template
+select  CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) , 'Sablon ' + convert(nvarchar, CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))), numetabela from ImportDateSablon
+group by NumeTabela
+
+GO
+
+insert into TemplateCampuri
+select a.id, b.coloanaBD, b.ColoanaFisier, c.Obligatoriu, c.ValoareImplicita , CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))
+from template a
+left join ImportDateSablon b on a.NumeTabela = b.NumeTabela
+left join ImportDateNomen c on b.ColoanaBD = c.NumeColoana and a.NumeTabela = c.NumeTabela
+
+GO
+
+DROP table ImportDateSablon
+GO
+
+DROP TABLE ImportDateNomen
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('DezactivareUtilizatori', '', '1 - blocare utilizatori inactivi la logare; 2- blocare utilizatori inactivi si suspendati la logare', 0, -99, GetDate())
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AlcatuireNumeUtilizator', '', 'Exemple:  F10008+'' ''+F10009; F100901 etc', 0, -99, GetDate())
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, GetDate())
+GO

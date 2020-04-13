@@ -34,11 +34,13 @@
                                     </div>
                                     <div class="ctl_inline">
                                         <dx:ASPxLabel ID="lblDenumire" runat="server" Text="Denumire" Width="70"/>
-                                        <dx:ASPxTextBox ID="txtDenumire" Width="400" runat="server" AutoPostBack="false"/>
+                                        <dx:ASPxTextBox ID="txtDenumire" ClientIDMode="Static" Width="400" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                                            <ValidationSettings RequiredField-IsRequired="true" RequiredField-ErrorText="Este obligatoriu" Display="Dynamic"/>
+                                        </dx:ASPxTextBox>
                                     </div>
                                     <div class="ctl_inline">
                                         <dx:ASPxLabel ID="lblDenumireScurta" runat="server" Text="Denumire scurta" Width="110"/>
-                                        <dx:ASPxTextBox ID="txtDenumireScurta" Width="100" runat="server" AutoPostBack="false"/>
+                                        <dx:ASPxTextBox ID="txtDenumireScurta" ClientIDMode="Static" Width="100" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"/>
                                     </div>
                                 </div>
                             </div>
@@ -52,16 +54,16 @@
                                     <dx:TabbedLayoutGroup>
                                         <SettingsTabPages EnableTabScrolling="false" />
                                         <Items>
-                                            <dx:LayoutGroup Caption="Date Generale" UseDefaultPaddings="true" ColumnCount="3">
+                                            <dx:LayoutGroup Name="tabGeneral" Caption="Date Generale" UseDefaultPaddings="true" ColumnCount="3">
                                                 <Items>
                                                     <dx:LayoutGroup Caption="Valabilitate" ColCount="2" SettingsItemCaptions-Location="Top">
                                                         <Items>
                                                             <dx:LayoutItem Caption="Data Inceput" FieldName="DataInceput">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxDateEdit ID="txtDtInc" runat="server" AutoPostBack="false" Width="100" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom">                                         
+							                                            <dx:ASPxDateEdit ID="txtDtInc" ClientIDMode="Static" runat="server" AutoPostBack="false" Width="100" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)">                                         
                                                                             <CalendarProperties FirstDayOfWeek="Monday" />
-                                                                            <ValidationSettings RequiredField-IsRequired="true" RequiredField-ErrorText="Este obligatoriu"></ValidationSettings>
+                                                                            <ValidationSettings RequiredField-IsRequired="true" RequiredField-ErrorText="Este obligatoriu"/>
 							                                            </dx:ASPxDateEdit>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -69,7 +71,7 @@
                                                             <dx:LayoutItem Caption="Tip Pontare" FieldName="TipPontare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbTipPont" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbTipPont" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" oncontextMenu="ctx(this,event)">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="Pontare automata" />
                                                                                 <dx:ListEditItem Value="2" Text="Pontare automata la minim o citire card" />
@@ -84,7 +86,7 @@
                                                             <dx:LayoutItem Caption="Data Sfarsit" FieldName="DataSfarsit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxDateEdit ID="txtDtSf" runat="server" AutoPostBack="false" Width="100" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom">                                         
+							                                            <dx:ASPxDateEdit ID="txtDtSf" ClientIDMode="Static" runat="server" AutoPostBack="false" Width="100" DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" oncontextMenu="ctx(this,event)">                                         
                                                                             <CalendarProperties FirstDayOfWeek="Monday" />
                                                                             <ValidationSettings RequiredField-IsRequired="true" RequiredField-ErrorText="Este obligatoriu"></ValidationSettings>
 							                                            </dx:ASPxDateEdit>
@@ -94,47 +96,42 @@
                                                             <dx:LayoutItem Caption="Norma" FieldName="Norma">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxSpinEdit ID="txtNorma" runat="server" Width="100" SpinButtons-ShowIncrementButtons="false" MaxLength="4">
-                                                                        </dx:ASPxSpinEdit>
+                                                                        <dx:ASPxSpinEdit ID="txtNorma" ClientIDMode="Static" runat="server" Width="100" SpinButtons-ShowIncrementButtons="false" MaxLength="4" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Flexibil" FieldName="Flexibil">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxCheckBox ID="chkFlex"  runat="server" />
+                                                                        <dx:ASPxCheckBox ID="chkFlex" ClientIDMode="Static" runat="server" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Ore de noapte?" FieldName="DeNoapte">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxCheckBox ID="chkNoapte" runat="server">
-                                                                        </dx:ASPxCheckBox>
+                                                                        <dx:ASPxCheckBox ID="chkNoapte" ClientIDMode="Static" runat="server" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Ora Intrare" FieldName="OraIntrare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="txtOraIn" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOraIn" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Pauza minima" FieldName="PauzaMin">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="txtPauza" runat="server" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtPauza" ClientIDMode="Static" runat="server" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Ora Iesire" FieldName="OraIesire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="txtOraOut" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOraOut" ClientInstanceName="txtOraOut" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -146,7 +143,7 @@
                                                             <dx:LayoutItem Caption="Rotunjire" FieldName="ONRotunjire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbONRotunjire" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbONRotunjire" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" oncontextMenu="ctx(this,event)">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="rotunjire la minute" />
                                                                                 <dx:ListEditItem Value="2" Text="rotunjire la ora" />
@@ -162,8 +159,7 @@
                                                             <dx:LayoutItem Caption="Transfer la" FieldName="ONCamp">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbONCamp" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String">
-							                                            </dx:ASPxComboBox>
+							                                            <dx:ASPxComboBox ID="cmbONCamp" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -175,7 +171,7 @@
                                                             <dx:LayoutItem Caption="Rotunjire" FieldName="OSRotunjire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOSRotunjire" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbOSRotunjire" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" oncontextMenu="ctx(this,event)">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="rotunjire la minute" />
                                                                                 <dx:ListEditItem Value="2" Text="rotunjire la ora" />
@@ -191,39 +187,35 @@
                                                             <dx:LayoutItem Caption="Transfer la" FieldName="OSCamp">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOSCamp" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String">
-							                                            </dx:ASPxComboBox>
+							                                            <dx:ASPxComboBox ID="cmbOSCamp" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Val Min" FieldName="OSValMin">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="txtOSValMin" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOSValMin" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Trimite ce este sub val. min. la" FieldName="OSCampSub">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOSCampSub" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String">
-							                                            </dx:ASPxComboBox>
+							                                            <dx:ASPxComboBox ID="cmbOSCampSub" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Val Max" FieldName="OSValMax">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="txtOSValMax" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOSValMax" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Trimite ce este peste val. max. la" FieldName="OSCampPeste">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOSCampPeste" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbOSCampPeste" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -231,12 +223,12 @@
                                                     </dx:LayoutGroup>
                                                 </Items>
                                             </dx:LayoutGroup>
-                                            <dx:LayoutGroup Caption="Ore Noapte" SettingsItemCaptions-Location="Top">
+                                            <dx:LayoutGroup Name="tabOreNoapte" Caption="Ore Noapte" SettingsItemCaptions-Location="Top">
                                                 <Items>
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateNoapte" runat="server" ClientInstanceName="grDateNoapte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
+                                                                <dx:ASPxGridView ID="grDateNoapte" runat="server" ClientInstanceName="grDateNoapte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -301,12 +293,12 @@
                                                     </dx:LayoutItem>                                                    
                                                 </Items>
                                             </dx:LayoutGroup>
-                                            <dx:LayoutGroup Caption="Alte Ore" SettingsItemCaptions-Location="Top">
+                                            <dx:LayoutGroup Name="tabAlte" Caption="Alte Ore" SettingsItemCaptions-Location="Top">
                                                 <Items>
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateAlte" runat="server" ClientInstanceName="grDateAlte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
+                                                                <dx:ASPxGridView ID="grDateAlte" runat="server" ClientInstanceName="grDateAlte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -373,38 +365,35 @@
                                                     </dx:LayoutItem>                                                    
                                                 </Items>
                                             </dx:LayoutGroup>
-                                            <dx:LayoutGroup Caption="Pauze" SettingsItemCaptions-Location="Top">
+                                            <dx:LayoutGroup Name="tabPauze" Caption="Pauze" SettingsItemCaptions-Location="Top">
                                                 <Items>
                                                     <dx:LayoutGroup Caption="" SettingsItemCaptions-Location="Left" ColumnCount="4">
                                                         <Items>
                                                             <dx:LayoutItem Caption="Timp pauza" FieldName="PauzaTimp">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit1" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtPauzaTimp" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Pauza dedusa" FieldName="PauzaDedusa">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxCheckBox ID="ASPxCheckBox1"  runat="server" />
+                                                                        <dx:ASPxCheckBox ID="chkPauzaDedusa" ClientIDMode="Static" runat="server" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Orwe minim lucrate" FieldName="OreLucrateMin">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit2" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOreLucrateMin" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Pauza scutita" FieldName="PauzaScutita">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit3" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtPauzaScutita" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -413,7 +402,7 @@
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDatePauze" runat="server" ClientInstanceName="grDatePauza" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
+                                                                <dx:ASPxGridView ID="grDatePauze" runat="server" ClientInstanceName="grDatePauza" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -473,45 +462,42 @@
                                                     </dx:LayoutItem>                                                    
                                                 </Items>
                                             </dx:LayoutGroup>
-                                            <dx:LayoutGroup Caption="Intrare" SettingsItemCaptions-Location="Top" ColumnCount="3">
+                                            <dx:LayoutGroup Name="tabIntrare" Caption="Intrare" SettingsItemCaptions-Location="Top" ColumnCount="3">
                                                 <Items>
                                                     <dx:LayoutGroup Caption="Anticipata" SettingsItemCaptions-Location="Left">
                                                         <Items>
                                                             <dx:LayoutItem Caption="Diferenta raportare" FieldName="INSubDiferentaRaportare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit4" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtInSubRap" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Minim pentru plata" FieldName="INSubMinPlata">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit5" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtInSubMinPLata" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Maximum platit" FieldName="INSubMaxPlata">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit6" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtInSubMaxPLata" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="INSubCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbInPlatit" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbInPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="INSubCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbInNeplatit" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbInNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -522,37 +508,35 @@
                                                             <dx:LayoutItem Caption="Diferenta raportare" FieldName="INPesteDiferentaRaportare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit7" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtInPesteRap" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Diferenta plata" FieldName="INPesteDiferentaPlata">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit8" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtInPesteDif" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="INPesteCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbInPlatitTr" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbInPlatitTr" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="INPesteCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbInNeplatitTr" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbInNeplatitTr" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateIntrare" runat="server" ClientInstanceName="grDateIntrare" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
+                                                                <dx:ASPxGridView ID="grDateIntrare" runat="server" ClientInstanceName="grDateIntrare" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -598,44 +582,42 @@
                                                     </dx:LayoutGroup>                                                            
                                                 </Items>
                                             </dx:LayoutGroup>
-                                            <dx:LayoutGroup Caption="Iesire" SettingsItemCaptions-Location="Top" ColumnCount="3">
+                                            <dx:LayoutGroup Name="tabIesire" Caption="Iesire" SettingsItemCaptions-Location="Top" ColumnCount="3">
                                                 <Items>
                                                     <dx:LayoutGroup Caption="Anticipata" SettingsItemCaptions-Location="Left">
                                                         <Items>
                                                             <dx:LayoutItem Caption="Diferenta raportare" FieldName="OUTSubDiferentaRaportare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit12" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOutSubRap" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Diferenta plata" FieldName="OUTSubDiferentaPlata">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit13" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOutSubDif" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="OUTSubCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOutPlatit" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbOutPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="OUTSubCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOutNeplatit" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbOutNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxGridView ID="grDateIesire" runat="server" ClientInstanceName="grDateIesire" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
+                                                                        <dx:ASPxGridView ID="grDateIesire" runat="server" ClientInstanceName="grDateIesire" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
                                                                             <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                             <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                             <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -684,38 +666,35 @@
                                                             <dx:LayoutItem Caption="Diferenta raportare" FieldName="OUTPesteDiferentaRaportare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit9" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOutPesteRap" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Minim pentru plata" FieldName="OUTPesteMinPlata">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit10" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOutPestePlata" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Maximum platit" FieldName="OUTPesteMaxPlata">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ASPxTimeEdit11" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom"  oncontextMenu="ctx(this,event)"> 
-							                                            </dx:ASPxTimeEdit>
+							                                            <dx:ASPxTimeEdit ID="txtOutPesteMax" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="OUTPesteCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOutPlatitTr" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbOutPlatitTr" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="OUTPesteCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOutNeplatitTr" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
+							                                            <dx:ASPxComboBox ID="cmbOutNeplatitTr" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>

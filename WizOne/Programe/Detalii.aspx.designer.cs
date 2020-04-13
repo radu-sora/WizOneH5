@@ -283,40 +283,40 @@ namespace WizOne.Programe {
         protected global::DevExpress.Web.ASPxGridView grDateAlte;
         
         /// <summary>
-        /// ASPxTimeEdit1 control.
+        /// txtPauzaTimp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit1;
+        protected global::DevExpress.Web.ASPxTimeEdit txtPauzaTimp;
         
         /// <summary>
-        /// ASPxCheckBox1 control.
+        /// chkPauzaDedusa control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCheckBox ASPxCheckBox1;
+        protected global::DevExpress.Web.ASPxCheckBox chkPauzaDedusa;
         
         /// <summary>
-        /// ASPxTimeEdit2 control.
+        /// txtOreLucrateMin control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit2;
+        protected global::DevExpress.Web.ASPxTimeEdit txtOreLucrateMin;
         
         /// <summary>
-        /// ASPxTimeEdit3 control.
+        /// txtPauzaScutita control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit3;
+        protected global::DevExpress.Web.ASPxTimeEdit txtPauzaScutita;
         
         /// <summary>
         /// grDatePauze control.
@@ -328,31 +328,31 @@ namespace WizOne.Programe {
         protected global::DevExpress.Web.ASPxGridView grDatePauze;
         
         /// <summary>
-        /// ASPxTimeEdit4 control.
+        /// txtInSubRap control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit4;
+        protected global::DevExpress.Web.ASPxTimeEdit txtInSubRap;
         
         /// <summary>
-        /// ASPxTimeEdit5 control.
+        /// txtInSubMinPLata control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit5;
+        protected global::DevExpress.Web.ASPxTimeEdit txtInSubMinPLata;
         
         /// <summary>
-        /// ASPxTimeEdit6 control.
+        /// txtInSubMaxPLata control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit6;
+        protected global::DevExpress.Web.ASPxTimeEdit txtInSubMaxPLata;
         
         /// <summary>
         /// cmbInPlatit control.
@@ -373,22 +373,22 @@ namespace WizOne.Programe {
         protected global::DevExpress.Web.ASPxComboBox cmbInNeplatit;
         
         /// <summary>
-        /// ASPxTimeEdit7 control.
+        /// txtInPesteRap control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit7;
+        protected global::DevExpress.Web.ASPxTimeEdit txtInPesteRap;
         
         /// <summary>
-        /// ASPxTimeEdit8 control.
+        /// txtInPesteDif control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit8;
+        protected global::DevExpress.Web.ASPxTimeEdit txtInPesteDif;
         
         /// <summary>
         /// cmbInPlatitTr control.
@@ -418,22 +418,22 @@ namespace WizOne.Programe {
         protected global::DevExpress.Web.ASPxGridView grDateIntrare;
         
         /// <summary>
-        /// ASPxTimeEdit12 control.
+        /// txtOutSubRap control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit12;
+        protected global::DevExpress.Web.ASPxTimeEdit txtOutSubRap;
         
         /// <summary>
-        /// ASPxTimeEdit13 control.
+        /// txtOutSubDif control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit13;
+        protected global::DevExpress.Web.ASPxTimeEdit txtOutSubDif;
         
         /// <summary>
         /// cmbOutPlatit control.
@@ -463,31 +463,31 @@ namespace WizOne.Programe {
         protected global::DevExpress.Web.ASPxGridView grDateIesire;
         
         /// <summary>
-        /// ASPxTimeEdit9 control.
+        /// txtOutPesteRap control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit9;
+        protected global::DevExpress.Web.ASPxTimeEdit txtOutPesteRap;
         
         /// <summary>
-        /// ASPxTimeEdit10 control.
+        /// txtOutPestePlata control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit10;
+        protected global::DevExpress.Web.ASPxTimeEdit txtOutPestePlata;
         
         /// <summary>
-        /// ASPxTimeEdit11 control.
+        /// txtOutPesteMax control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTimeEdit ASPxTimeEdit11;
+        protected global::DevExpress.Web.ASPxTimeEdit txtOutPesteMax;
         
         /// <summary>
         /// cmbOutPlatitTr control.

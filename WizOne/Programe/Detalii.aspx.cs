@@ -1,11 +1,13 @@
 ﻿using DevExpress.Web;
 using DevExpress.Web.Data;
+using DevExpress.Web.Internal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Web.UI;
 using WizOne.Module;
 
@@ -127,10 +129,32 @@ namespace WizOne.Programe
                         txtDenumireScurta.Value = General.Nz(dr["DenumireScurta"], null);
                     }
                 }
+
+                //var parinte = txtOraOut.Parent;
+                //if (parinte.GetType() == typeof(LayoutItemControl))
+                //    parinte.Visible = false;
+                //object ert = GetLayoutItem(txtDenumire);
+                //ert.Visible = false;
+
+                var gigi = pnlTab.Controls.OfType<ASPxFormLayout>();
+                var ert23 = pnlTab.FindItemOrGroupByName("txtOraOut");
+                var www = pnlTab.FindControl("txtOraOut");
+                var ttt = pnlTab.Controls.IndexOf(txtOraOut);
             }
             catch (Exception ex)
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected object GetLayoutItem(Control c)
+        {
+            Control current = c;
+            for (; ; )
+            {
+                current = current.Parent;
+                if (current.GetType() == typeof(TableLayoutItemControl))
+                    return (current as LayoutItemControl).LayoutItem;
             }
         }
 

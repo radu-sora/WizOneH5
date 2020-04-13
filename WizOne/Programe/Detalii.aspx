@@ -236,7 +236,7 @@
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateNoapte" runat="server" ClientInstanceName="grDateNoapte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateNoapte_BatchUpdate">
+                                                                <dx:ASPxGridView ID="grDateNoapte" runat="server" ClientInstanceName="grDateNoapte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -306,7 +306,7 @@
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateAlte" runat="server" ClientInstanceName="grDateAlte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateAlte_BatchUpdate">
+                                                                <dx:ASPxGridView ID="grDateAlte" runat="server" ClientInstanceName="grDateAlte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -413,7 +413,7 @@
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDatePauze" runat="server" ClientInstanceName="grDatePauza" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDatePauze_BatchUpdate">
+                                                                <dx:ASPxGridView ID="grDatePauze" runat="server" ClientInstanceName="grDatePauza" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -552,7 +552,7 @@
                                                             <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateIntrare" runat="server" ClientInstanceName="grDateIntrare" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateIntrare_BatchUpdate">
+                                                                <dx:ASPxGridView ID="grDateIntrare" runat="server" ClientInstanceName="grDateIntrare" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -635,7 +635,7 @@
                                                             <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxGridView ID="grDateIesire" runat="server" ClientInstanceName="grDateIesire" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDateIesire_BatchUpdate">
+                                                                        <dx:ASPxGridView ID="grDateIesire" runat="server" ClientInstanceName="grDateIesire" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                                             <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                             <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                             <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />

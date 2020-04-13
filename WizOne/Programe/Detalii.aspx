@@ -69,7 +69,7 @@
                                                             <dx:LayoutItem Caption="Tip Pontare" FieldName="TipPontare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbTipPont" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbTipPont" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="Pontare automata" />
                                                                                 <dx:ListEditItem Value="2" Text="Pontare automata la minim o citire card" />
@@ -94,7 +94,7 @@
                                                             <dx:LayoutItem Caption="Norma" FieldName="Norma">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxSpinEdit ID="txtNorma" runat="server" Width="100" SpinButtons-ShowIncrementButtons="false">
+                                                                        <dx:ASPxSpinEdit ID="txtNorma" runat="server" Width="100" SpinButtons-ShowIncrementButtons="false" MaxLength="4">
                                                                         </dx:ASPxSpinEdit>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -146,7 +146,7 @@
                                                             <dx:LayoutItem Caption="Rotunjire" FieldName="ONRotunjire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbONRotunjire" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbONRotunjire" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="rotunjire la minute" />
                                                                                 <dx:ListEditItem Value="2" Text="rotunjire la ora" />
@@ -162,7 +162,7 @@
                                                             <dx:LayoutItem Caption="Transfer la" FieldName="ONCamp">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbONCamp" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbONCamp" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String">
 							                                            </dx:ASPxComboBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -175,7 +175,7 @@
                                                             <dx:LayoutItem Caption="Rotunjire" FieldName="OSRotunjire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOSRotunjire" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbOSRotunjire" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="rotunjire la minute" />
                                                                                 <dx:ListEditItem Value="2" Text="rotunjire la ora" />
@@ -191,7 +191,7 @@
                                                             <dx:LayoutItem Caption="Transfer la" FieldName="OSCamp">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOSCamp" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbOSCamp" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String">
 							                                            </dx:ASPxComboBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -207,7 +207,7 @@
                                                             <dx:LayoutItem Caption="Trimite ce este sub val. min. la" FieldName="OSCampSub">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOSCampSub" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32">
+							                                            <dx:ASPxComboBox ID="cmbOSCampSub" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String">
 							                                            </dx:ASPxComboBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -223,7 +223,7 @@
                                                             <dx:LayoutItem Caption="Trimite ce este peste val. max. la" FieldName="OSCampPeste">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOSCampPeste" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbOSCampPeste" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -248,7 +248,7 @@
                                                                         <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
                                             
                                                                         <dx:GridViewDataComboBoxColumn FieldName="Rotunjire" Name="Rotunjire" Caption="Rotunjire" Width="200px" >
-                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
+                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList">
                                                                                 <Items>
                                                                                     <dx:ListEditItem Value="1" Text="rotunjire la minute" />
                                                                                     <dx:ListEditItem Value="2" Text="rotunjire la ora" />
@@ -276,7 +276,7 @@
                                                                         </dx:GridViewDataTimeEditColumn>
                                                                         <dx:GridViewDataSpinEditColumn FieldName="Multiplicator" Name="Multiplicator" Caption="Multiplicator" Width="75px" PropertiesSpinEdit-SpinButtons-ClientVisible="false" PropertiesSpinEdit-MinValue="0" PropertiesSpinEdit-MaxValue="9" PropertiesSpinEdit-MaxLength="1"/>
                                                                         <dx:GridViewDataComboBoxColumn FieldName="Camp" Name="Camp" Caption="Trimite la" Width="150px" >
-                                                                            <PropertiesComboBox TextField="Alias" ValueField="Denumire" ValueType="System.String" DropDownStyle="DropDown" />
+                                                                            <PropertiesComboBox TextField="Alias" ValueField="Denumire" ValueType="System.String" DropDownStyle="DropDownList" />
                                                                         </dx:GridViewDataComboBoxColumn>
 
                                                                         <dx:GridViewDataTextColumn FieldName="IdProgram" Name="IdProgram" Caption="IdProgram" Visible="false" ShowInCustomizationForm="false"/>
@@ -318,7 +318,7 @@
                                                                         <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
                                             
                                                                         <dx:GridViewDataComboBoxColumn FieldName="Rotunjire" Name="Rotunjire" Caption="Rotunjire" Width="200px" >
-                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown">
+                                                                            <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList">
                                                                                 <Items>
                                                                                     <dx:ListEditItem Value="1" Text="rotunjire la minute" />
                                                                                     <dx:ListEditItem Value="2" Text="rotunjire la ora" />
@@ -348,7 +348,7 @@
                                                                             <PropertiesTextEdit DisplayFormatInEditMode="true" DisplayFormatString="N2"></PropertiesTextEdit>
                                                                         </dx:GridViewDataTextColumn>
                                                                         <dx:GridViewDataComboBoxColumn FieldName="Camp" Name="Camp" Caption="Trimite la" Width="150px" >
-                                                                            <PropertiesComboBox TextField="Alias" ValueField="Denumire" ValueType="System.String" DropDownStyle="DropDown" />
+                                                                            <PropertiesComboBox TextField="Alias" ValueField="Denumire" ValueType="System.String" DropDownStyle="DropDownList" />
                                                                         </dx:GridViewDataComboBoxColumn> 
 
                                                                         <dx:GridViewDataTextColumn FieldName="IdProgram" Name="IdProgram" Caption="IdProgram" Visible="false" ShowInCustomizationForm="false"/>
@@ -504,14 +504,14 @@
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="INSubCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbInPlatit" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbInPlatit" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="INSubCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbInNeplatit" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbInNeplatit" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -538,14 +538,14 @@
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="INPesteCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbInPlatitTr" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbInPlatitTr" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="INPesteCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbInNeplatitTr" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbInNeplatitTr" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -621,14 +621,14 @@
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="OUTSubCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOutPlatit" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbOutPlatit" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="OUTSubCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOutNeplatit" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbOutNeplatit" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -708,14 +708,14 @@
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="OUTPesteCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOutPlatitTr" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbOutPlatitTr" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="OUTPesteCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="cmbOutNeplatitTr" runat="server" DropDownStyle="DropDown" TextField="Alias" ValueField="Denumire" ValueType="System.Int32"/>
+							                                            <dx:ASPxComboBox ID="cmbOutNeplatitTr" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>

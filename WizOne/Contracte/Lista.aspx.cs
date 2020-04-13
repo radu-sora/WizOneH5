@@ -171,6 +171,5 @@ namespace WizOne.Contracte
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath));
             }
         }
-
     }
 }

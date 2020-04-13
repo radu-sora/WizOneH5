@@ -34,7 +34,7 @@ namespace WizOne.Programe
                 {
                     #region Incarcam DataSet-ul
                     DataSet ds = new DataSet();
-                    string[] tbls = { "Ptj_Programe", "Ptj_ProgrameAlteOre", "Ptj_ProgrameOreNoapte", "Ptj_ProgramePauze", "Ptj_ProgrameTrepte", };
+                    string[] tbls = { "Ptj_Programe", "Ptj_ProgrameAlteOre", "Ptj_ProgrameOreNoapte", "Ptj_ProgramePauza", "Ptj_ProgrameTrepte", };
                     for(int i = 0; i < tbls.Length; i++)
                     {
                         string cmp = "IdProgram";
@@ -99,7 +99,7 @@ namespace WizOne.Programe
                     grDateAlte.DataBind();
 
                     grDatePauze.KeyFieldName = "IdAuto";
-                    grDatePauze.DataSource = ds.Tables["Ptj_ProgramePauze"];
+                    grDatePauze.DataSource = ds.Tables["Ptj_ProgramePauza"];
                     grDatePauze.DataBind();
 
                     DataTable dtNoRows = General.IncarcaDT(@"SELECT * FROM ""Ptj_ProgrameTrepte"" WHERE 1=2");
@@ -134,22 +134,18 @@ namespace WizOne.Programe
             }
         }
 
-
         protected void pnlCall_Callback(object source, CallbackEventArgsBase e)
         {
             try
             {
                 if (idPrg == -99)
-                    idPrg = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Contracte""", null), 0));
+                    idPrg = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Programe""", null), 0));
 
-                string[] grids = { "grDateNoapte", "grDateAlte", "grDatePauze", "grDateIntrare", "grDateIesire" };
-
-                for (int i = 0; i < grids.Length; i++)
-                {
-                    ASPxGridView grDate = pnlTab.FindControl(grids[i]) as ASPxGridView;
-                    if (grDate != null)
-                        grDate.UpdateEdit();
-                }
+                grDateNoapte.UpdateEdit();
+                grDateAlte.UpdateEdit();
+                grDatePauze.UpdateEdit();
+                grDateIntrare.UpdateEdit();
+                grDateIesire.UpdateEdit();
 
                 #region Salvam Ptj_Programe
 
@@ -173,7 +169,10 @@ namespace WizOne.Programe
                     dynamic ctl = pnlTab.FindNestedControlByFieldName(colNume);
                     if (ctl != null)
                     {
-                        dr[colNume] = ctl.Value;
+                        if (General.IsDate(ctl.Value) && ctl.Value != null && Convert.ToDateTime(ctl.Value).Year == 100)
+                            dr[colNume] = ChangeToCurrentYear(Convert.ToDateTime(ctl.Value));
+                        else
+                            dr[colNume] = ctl.Value ?? DBNull.Value;
                     }
                 }
 
@@ -185,7 +184,7 @@ namespace WizOne.Programe
                 General.SalveazaDate(dt, "Ptj_Programe");
                 General.SalveazaDate(ds.Tables["Ptj_ProgrameAlteOre"], "Ptj_ProgrameAlteOre");
                 General.SalveazaDate(ds.Tables["Ptj_ProgrameOreNoapte"], "Ptj_ProgrameOreNoapte");
-                General.SalveazaDate(ds.Tables["Ptj_ProgramePauze"], "Ptj_ProgramePauze");
+                General.SalveazaDate(ds.Tables["Ptj_ProgramePauza"], "Ptj_ProgramePauza");
                 General.SalveazaDate(ds.Tables["Ptj_ProgrameTrepte"], "Ptj_ProgrameTrepte");
                 ASPxWebControl.RedirectOnCallback("~/Programe/Lista.aspx");
             }
@@ -202,9 +201,29 @@ namespace WizOne.Programe
                 ASPxGridView grDate = sender as ASPxGridView;
                 Dictionary<string, string> dic = new Dictionary<string, string>();
                 dic.Add("IdProgram", idPrg.ToString());
-                if (grDate.ID == "grDateIntrare") dic.Add("TipInOut", "InPeste");
-                if (grDate.ID == "grDateIesire") dic.Add("TipInOut", "OUTSub");
-                BatchUpdate(sender, e, dic);
+                
+                string numeTabela = "";
+                switch (grDate.ID)
+                {
+                    case "grDateNoapte":
+                        numeTabela = "Ptj_ProgrameOreNoapte";
+                        break;
+                    case "grDateAlte":
+                        numeTabela = "Ptj_ProgrameAlteOre";
+                        break;
+                    case "grDatePauze":
+                        numeTabela = "Ptj_ProgramePauza";
+                        break;
+                    case "grDateIntrare":
+                        numeTabela = "Ptj_ProgrameTrepte";
+                        dic.Add("TipInOut", "InPeste");
+                        break;
+                    case "grDateIesire":
+                        numeTabela = "Ptj_ProgrameTrepte";
+                        dic.Add("TipInOut", "OUTSub");
+                        break;
+                }
+                BatchUpdate(sender, e, numeTabela, dic);
             }
             catch (Exception ex)
             {
@@ -212,81 +231,15 @@ namespace WizOne.Programe
             }
         }
 
-        //protected void grDateAlte_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
-        //{
-        //    try
-        //    {
-        //        Dictionary<string, string> dic = new Dictionary<string, string>();
-        //        dic.Add("IdProgram", idPrg.ToString());
-        //        BatchUpdate(sender, e, dic);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
-        //protected void grDatePauze_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
-        //{
-        //    try
-        //    {
-        //        Dictionary<string, string> dic = new Dictionary<string, string>();
-        //        dic.Add("IdProgram", idPrg.ToString());
-        //        BatchUpdate(sender, e, dic);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
-        //protected void grDateIntrare_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
-        //{
-        //    try
-        //    {
-        //        try
-        //        {
-        //            Dictionary<string, string> dic = new Dictionary<string, string>();
-        //            dic.Add("IdProgram", idPrg.ToString());
-        //            dic.Add("TipInOut", "InPeste");
-        //            BatchUpdate(sender, e, dic);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
-        //protected void grDateIesire_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
-        //{
-        //    try
-        //    {
-        //        Dictionary<string, string> dic = new Dictionary<string, string>();
-        //        dic.Add("IdProgram", idPrg.ToString());
-        //        dic.Add("TipInOut", "OUTSub");
-        //        BatchUpdate(sender, e, dic);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-        //    }
-        //}
-
-        private void BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e, Dictionary<string, string> dic)
+        private void BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e, string numeTabela, Dictionary<string, string> dic)
         {
             try
             {
                 ASPxGridView grDate = sender as ASPxGridView;
-                int idx = Convert.ToInt32(grDate.ID.Replace("grDate", ""));
 
                 grDate.CancelEdit();
                 DataSet ds = Session["InformatiaCurenta"] as DataSet;
-                DataTable dt = ds.Tables["Ptj_ContracteSchimburi"];
+                DataTable dt = ds.Tables[numeTabela];
                 if (dt == null) return;
 
                 //daca avem linii noi
@@ -294,7 +247,7 @@ namespace WizOne.Programe
                 {
                     ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
 
-                    if (upd.NewValues["IdProgram"] == null) continue;
+                    bool modif = false;
 
                     DataRow dr = dt.NewRow();
 
@@ -308,6 +261,7 @@ namespace WizOne.Programe
                         }
                         else
                         {
+                            modif = true;
                             switch (dr.Table.Columns[numeCol].DataType.ToString())
                             {
                                 case "System.DateTime":
@@ -331,23 +285,16 @@ namespace WizOne.Programe
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
 
+                    if (!modif) continue;
                     dt.Rows.Add(dr);
                 }
-
 
                 //daca avem linii modificate
                 for (int i = 0; i < e.UpdateValues.Count; i++)
                 {
                     ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
 
-                    foreach (DictionaryEntry de in upd.NewValues)
-                    {
-                        string numeCol = de.Key.ToString();
-                        dynamic oldValue = upd.OldValues[numeCol];
-                        dynamic newValue = upd.NewValues[numeCol];
-                        if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
-                            oldValue = null;
-                    }
+                    bool modif = false;
 
                     object[] keys = new object[upd.Keys.Count];
                     for (int x = 0; x < upd.Keys.Count; x++)
@@ -356,35 +303,47 @@ namespace WizOne.Programe
                     DataRow dr = dt.Rows.Find(keys);
                     if (dr == null) continue;
 
-                    dr["TipSchimb"] = idx;
-                    dr["IdProgram"] = upd.NewValues["IdProgram"] ?? 9999;
-                    if (upd.NewValues["OraInceput"] != null)
-                        dr["OraInceput"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceput"]));
-                    else
-                        dr["OraInceput"] = DBNull.Value;
-                    if (upd.NewValues["OraInceputDeLa"] != null)
-                        dr["OraInceputDeLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceputDeLa"]));
-                    else
-                        dr["OraInceputDeLa"] = DBNull.Value;
-                    if (upd.NewValues["OraInceputLa"] != null)
-                        dr["OraInceputLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceputLa"]));
-                    else
-                        dr["OraInceputLa"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsit"] != null)
-                        dr["OraSfarsit"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsit"]));
-                    else
-                        dr["OraSfarsit"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsitDeLa"] != null)
-                        dr["OraSfarsitDeLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsitDeLa"]));
-                    else
-                        dr["OraSfarsitDeLa"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsitLa"] != null)
-                        dr["OraSfarsitLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsitLa"]));
-                    else
-                        dr["OraSfarsitLa"] = DBNull.Value;
-                    dr["ModVerificare"] = upd.NewValues["ModVerificare"] ?? DBNull.Value;
+                    foreach (DictionaryEntry de in upd.NewValues)
+                    {
+                        string numeCol = de.Key.ToString();
+                        dynamic oldValue = upd.OldValues[numeCol];
+                        dynamic newValue = upd.NewValues[numeCol];
+                        if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
+                            oldValue = null;
+
+                        if (newValue == oldValue) continue;
+
+                        if (newValue == null)
+                        {
+                            dr[numeCol] = DBNull.Value;
+                        }
+                        else
+                        {
+                            modif = true;
+                            switch (dr.Table.Columns[numeCol].DataType.ToString())
+                            {
+                                case "System.DateTime":
+                                    if (Convert.ToDateTime(newValue).Year == 100)
+                                        dr[numeCol] = ChangeToCurrentYear(newValue);
+                                    else
+                                        dr[numeCol] = newValue;
+                                    break;
+                                default:
+                                    dr[numeCol] = newValue;
+                                    break;
+                            }
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, string> l in dic)
+                    {
+                        dr[l.Key] = l.Value;
+                    }
+
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
+
+                    if (!modif) continue;
                 }
 
 
@@ -428,7 +387,5 @@ namespace WizOne.Programe
 
             return dt;
         }
-
-
     }
 }

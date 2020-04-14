@@ -2090,6 +2090,7 @@ namespace WizOne.Module
 
             try
             {
+                //#311 si #344
                 strSql = $@"SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                     CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                     CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE 
@@ -8099,7 +8100,7 @@ namespace WizOne.Module
                 string sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataInceput.Date) + " AND " + General.ToDataUniv(dtSf.Date);
                 ExecutaNonQuery(sql, null);
 
-
+                //#311 si #344
                 string sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
                                         SELECT {marca}, ""Zi"", ""DenumireScurta"", (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003 = {marca} AND ""Ziua"" = ""Zi""), 
                                 {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, 'Transfer din Suspendari'
@@ -8140,7 +8141,7 @@ namespace WizOne.Module
                 //    campuri += ", \"In" + i.ToString() + "\" = NULL, \"Out" + i.ToString() + "\" = NULL";
 
 
-
+                //#311 si #344
                 strSql = $@"MERGE INTO ""Ptj_intrari"" USING 
                             (Select  case when ""AreDrepturi"" = 1 then ""DenumireScurta"" else null end  as ""Denumire"", x.* from                                
                             (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 

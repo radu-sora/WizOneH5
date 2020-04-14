@@ -559,7 +559,10 @@ namespace WizOne.Personal
 
                         //Radu 09.04.2020
                         string resetareParola = Dami.ValoareParam("ResetareParola", "0");
-
+                        string mail = "NULL", numeComplet = "NULL";
+                        if (ds.Tables[1].Rows[0]["F100894"] != null && ds.Tables[1].Rows[0]["F100894"].ToString().Length > 0)
+                            mail = ds.Tables[1].Rows[0]["F100894"].ToString();
+                        numeComplet = General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString() + " "  + General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString();
 
                         //Radu 29.10.2019 - se scoate INSERT-ul in relGrupUser2
                         //General.ExecutaNonQuery($@"
@@ -569,8 +572,8 @@ namespace WizOne.Personal
                         //    END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
                         General.ExecutaNonQuery($@"
                         BEGIN
-                            INSERT INTO USERS (F70101, F70102, F70103, F70104, F70113, F10003, USER_NO, TIME) VALUES(701, (SELECT MAX(COALESCE(F70102,0)) + 1 FROM USERS), @1, @2, @3, @4, @5, {General.CurrentDate()})                            
-                        END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, resetareParola, Session["Marca"], Session["UserId"] });
+                            INSERT INTO USERS (F70101, F70102, F70103, F70104, F70113, F10003, ""Mail"", ""NumeComplet"", ""IdLimba"", USER_NO, TIME) VALUES(701, @1, @2, @3, @4, @5, @6, @7, 'RO', @8, {General.CurrentDate()})                            
+                        END;", new object[] { Dami.NextId("USERS").ToString(), cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, resetareParola, Session["Marca"], mail, numeComplet, Session["UserId"] });
                     }
 
                     #region OLD

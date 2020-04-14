@@ -84,6 +84,9 @@ namespace WizOne.Pontaj
                         }
                     }
                 }
+
+                int nrRanduri = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ", "10"));
+                grDate.SettingsPager.PageSize = nrRanduri;
             }
             catch (Exception ex)
             {

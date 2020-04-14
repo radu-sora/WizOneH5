@@ -25,7 +25,8 @@ namespace WizOne.Programe
                 #region Traducere
 
                 string ctlPost = Request.Params["__EVENTTARGET"];
-
+                Session["PaginaWeb"] = "Programe.Detalii";
+                txtTitlu.Text = General.VarSession("Titlu").ToString();
                 #endregion
 
                 idPrg = Convert.ToInt32(General.Nz(Session["IdProgram"], -99));
@@ -59,30 +60,30 @@ namespace WizOne.Programe
 
                     #region Incarcam ComboBox-urile
                     DataTable dtLa = General.IncarcaDT(@"SELECT ""Coloana"" AS ""Denumire"", COALESCE(""Alias"", ""Coloana"") AS ""Alias""  FROM ""Ptj_tblAdmin"" ORDER BY COALESCE(""Alias"", ""Coloana"")");
-                    cmbONCamp.DataSource = dtLa;
-                    cmbONCamp.DataBind();
-                    cmbOSCamp.DataSource = dtLa;
-                    cmbOSCamp.DataBind();
-                    cmbOSCampSub.DataSource = dtLa;
-                    cmbOSCampSub.DataBind();
-                    cmbOSCampPeste.DataSource = dtLa;
-                    cmbOSCampPeste.DataBind();
-                    cmbInPlatit.DataSource = dtLa;
-                    cmbInPlatit.DataBind();
-                    cmbInNeplatit.DataSource = dtLa;
-                    cmbInNeplatit.DataBind();
-                    cmbInPlatitTr.DataSource = dtLa;
-                    cmbInPlatitTr.DataBind();
-                    cmbInNeplatitTr.DataSource = dtLa;
-                    cmbInNeplatitTr.DataBind();
-                    cmbOutPlatit.DataSource = dtLa;
-                    cmbOutPlatit.DataBind();
-                    cmbOutNeplatit.DataSource = dtLa;
-                    cmbOutNeplatit.DataBind();
-                    cmbOutPlatitTr.DataSource = dtLa;
-                    cmbOutPlatitTr.DataBind();
-                    cmbOutNeplatitTr.DataSource = dtLa;
-                    cmbOutNeplatitTr.DataBind();
+                    ctlONCamp.DataSource = dtLa;
+                    ctlONCamp.DataBind();
+                    ctlOSCamp.DataSource = dtLa;
+                    ctlOSCamp.DataBind();
+                    ctlOSCampSub.DataSource = dtLa;
+                    ctlOSCampSub.DataBind();
+                    ctlOSCampPeste.DataSource = dtLa;
+                    ctlOSCampPeste.DataBind();
+                    ctlINSubCampPlatit.DataSource = dtLa;
+                    ctlINSubCampPlatit.DataBind();
+                    ctlINSubCampNeplatit.DataSource = dtLa;
+                    ctlINSubCampNeplatit.DataBind();
+                    ctlINPesteCampPlatit.DataSource = dtLa;
+                    ctlINPesteCampPlatit.DataBind();
+                    ctlINPesteCampNeplatit.DataSource = dtLa;
+                    ctlINPesteCampNeplatit.DataBind();
+                    ctlOUTSubCampPlatit.DataSource = dtLa;
+                    ctlOUTSubCampPlatit.DataBind();
+                    ctlOUTSubCampNeplatit.DataSource = dtLa;
+                    ctlOUTSubCampNeplatit.DataBind();
+                    ctlOUTPesteCampPlatit.DataSource = dtLa;
+                    ctlOUTPesteCampPlatit.DataBind();
+                    ctlOUTPesteCampNeplatit.DataSource = dtLa;
+                    ctlOUTPesteCampNeplatit.DataBind();
 
                     GridViewDataComboBoxColumn colNoapte = (grDateNoapte.Columns["Camp"] as GridViewDataComboBoxColumn);
                     colNoapte.PropertiesComboBox.DataSource = dtLa;
@@ -129,17 +130,6 @@ namespace WizOne.Programe
                         txtDenumireScurta.Value = General.Nz(dr["DenumireScurta"], null);
                     }
                 }
-
-                //var parinte = txtOraOut.Parent;
-                //if (parinte.GetType() == typeof(LayoutItemControl))
-                //    parinte.Visible = false;
-                //object ert = GetLayoutItem(txtDenumire);
-                //ert.Visible = false;
-
-                var gigi = pnlTab.Controls.OfType<ASPxFormLayout>();
-                var ert23 = pnlTab.FindItemOrGroupByName("txtOraOut");
-                var www = pnlTab.FindControl("txtOraOut");
-                var ttt = pnlTab.Controls.IndexOf(txtOraOut);
             }
             catch (Exception ex)
             {
@@ -147,16 +137,16 @@ namespace WizOne.Programe
             }
         }
 
-        protected object GetLayoutItem(Control c)
-        {
-            Control current = c;
-            for (; ; )
-            {
-                current = current.Parent;
-                if (current.GetType() == typeof(TableLayoutItemControl))
-                    return (current as LayoutItemControl).LayoutItem;
-            }
-        }
+        //protected object GetLayoutItem(Control c)
+        //{
+        //    Control current = c;
+        //    for (; ; )
+        //    {
+        //        current = current.Parent;
+        //        if (current.GetType() == typeof(TableLayoutItemControl))
+        //            return (current as LayoutItemControl).LayoutItem;
+        //    }
+        //}
 
         protected void pnlCall_Callback(object source, CallbackEventArgsBase e)
         {
@@ -194,7 +184,7 @@ namespace WizOne.Programe
                     if (ctl != null)
                     {
                         if (General.IsDate(ctl.Value) && ctl.Value != null && Convert.ToDateTime(ctl.Value).Year == 100)
-                            dr[colNume] = ChangeToCurrentYear(Convert.ToDateTime(ctl.Value));
+                            dr[colNume] = General.ChangeToCurrentYear(Convert.ToDateTime(ctl.Value));
                         else
                             dr[colNume] = ctl.Value ?? DBNull.Value;
                     }
@@ -247,7 +237,7 @@ namespace WizOne.Programe
                         dic.Add("TipInOut", "OUTSub");
                         break;
                 }
-                BatchUpdate(sender, e, numeTabela, dic);
+                General.BatchUpdate(sender, e, numeTabela, dic);
             }
             catch (Exception ex)
             {
@@ -255,161 +245,5 @@ namespace WizOne.Programe
             }
         }
 
-        private void BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e, string numeTabela, Dictionary<string, string> dic)
-        {
-            try
-            {
-                ASPxGridView grDate = sender as ASPxGridView;
-
-                grDate.CancelEdit();
-                DataSet ds = Session["InformatiaCurenta"] as DataSet;
-                DataTable dt = ds.Tables[numeTabela];
-                if (dt == null) return;
-
-                //daca avem linii noi
-                for (int i = 0; i < e.InsertValues.Count; i++)
-                {
-                    ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
-
-                    bool modif = false;
-
-                    DataRow dr = dt.NewRow();
-
-                    foreach (DictionaryEntry de in upd.NewValues)
-                    {
-                        string numeCol = de.Key.ToString();
-                        dynamic newValue = upd.NewValues[numeCol];
-                        if (newValue == null)
-                        {
-                            dr[numeCol] = DBNull.Value;
-                        }
-                        else
-                        {
-                            modif = true;
-                            switch (dr.Table.Columns[numeCol].DataType.ToString())
-                            {
-                                case "System.DateTime":
-                                    if (Convert.ToDateTime(newValue).Year == 100)
-                                        dr[numeCol] = ChangeToCurrentYear(newValue);
-                                    else
-                                        dr[numeCol] = newValue;
-                                    break;
-                                default:
-                                    dr[numeCol] = newValue;
-                                    break;
-                            }
-                        }
-                    }
-
-                    foreach (KeyValuePair<string, string> l in dic)
-                    {
-                        dr[l.Key] = l.Value;
-                    }
-
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-
-                    if (!modif) continue;
-                    dt.Rows.Add(dr);
-                }
-
-                //daca avem linii modificate
-                for (int i = 0; i < e.UpdateValues.Count; i++)
-                {
-                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
-
-                    bool modif = false;
-
-                    object[] keys = new object[upd.Keys.Count];
-                    for (int x = 0; x < upd.Keys.Count; x++)
-                    { keys[x] = upd.Keys[x]; }
-
-                    DataRow dr = dt.Rows.Find(keys);
-                    if (dr == null) continue;
-
-                    foreach (DictionaryEntry de in upd.NewValues)
-                    {
-                        string numeCol = de.Key.ToString();
-                        dynamic oldValue = upd.OldValues[numeCol];
-                        dynamic newValue = upd.NewValues[numeCol];
-                        if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
-                            oldValue = null;
-
-                        if (newValue == oldValue) continue;
-
-                        if (newValue == null)
-                        {
-                            dr[numeCol] = DBNull.Value;
-                        }
-                        else
-                        {
-                            modif = true;
-                            switch (dr.Table.Columns[numeCol].DataType.ToString())
-                            {
-                                case "System.DateTime":
-                                    if (Convert.ToDateTime(newValue).Year == 100)
-                                        dr[numeCol] = ChangeToCurrentYear(newValue);
-                                    else
-                                        dr[numeCol] = newValue;
-                                    break;
-                                default:
-                                    dr[numeCol] = newValue;
-                                    break;
-                            }
-                        }
-                    }
-
-                    foreach (KeyValuePair<string, string> l in dic)
-                    {
-                        dr[l.Key] = l.Value;
-                    }
-
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-
-                    if (!modif) continue;
-                }
-
-
-                //daca avem linii modificate
-                for (int i = 0; i < e.DeleteValues.Count; i++)
-                {
-                    ASPxDataDeleteValues upd = e.DeleteValues[i] as ASPxDataDeleteValues;
-
-                    object[] keys = new object[upd.Keys.Count];
-                    for (int x = 0; x < upd.Keys.Count; x++)
-                    { keys[x] = upd.Keys[x]; }
-
-                    DataRow dr = dt.Rows.Find(keys);
-                    if (dr == null) continue;
-
-                    dr.Delete();
-                }
-
-                e.Handled = true;
-                Session["InformatiaCurenta"] = ds;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-                e.Handled = true;
-            }
-        }
-
-        private DateTime ChangeToCurrentYear(DateTime val)
-        {
-            DateTime dt = val;
-
-            try
-            {
-                dt = new DateTime(2100, 1, 1, val.Hour, val.Minute, 0);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return dt;
-        }
     }
 }

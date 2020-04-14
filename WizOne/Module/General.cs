@@ -1,7 +1,9 @@
 ﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using Oracle.ManagedDataAccess.Client;
 using ProceseSec;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -8247,5 +8249,163 @@ namespace WizOne.Module
                 MemoreazaEroarea(ex.ToString(), "Calcul", "CalculFormule");
             }
         }
+
+        public static void BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e, string numeTabela, Dictionary<string, string> dic)
+        {
+            try
+            {
+                ASPxGridView grDate = sender as ASPxGridView;
+
+                grDate.CancelEdit();
+                DataSet ds = HttpContext.Current.Session["InformatiaCurenta"] as DataSet;
+                DataTable dt = ds.Tables[numeTabela];
+                if (dt == null) return;
+
+                //daca avem linii noi
+                for (int i = 0; i < e.InsertValues.Count; i++)
+                {
+                    ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
+
+                    bool modif = false;
+
+                    DataRow dr = dt.NewRow();
+
+                    foreach (DictionaryEntry de in upd.NewValues)
+                    {
+                        string numeCol = de.Key.ToString();
+                        dynamic newValue = upd.NewValues[numeCol];
+                        if (newValue == null)
+                        {
+                            dr[numeCol] = DBNull.Value;
+                        }
+                        else
+                        {
+                            modif = true;
+                            switch (dr.Table.Columns[numeCol].DataType.ToString())
+                            {
+                                case "System.DateTime":
+                                    if (Convert.ToDateTime(newValue).Year == 100)
+                                        dr[numeCol] = ChangeToCurrentYear(newValue);
+                                    else
+                                        dr[numeCol] = newValue;
+                                    break;
+                                default:
+                                    dr[numeCol] = newValue;
+                                    break;
+                            }
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, string> l in dic)
+                    {
+                        dr[l.Key] = l.Value;
+                    }
+
+                    dr["USER_NO"] = HttpContext.Current.Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+
+                    if (!modif) continue;
+                    dt.Rows.Add(dr);
+                }
+
+                //daca avem linii modificate
+                for (int i = 0; i < e.UpdateValues.Count; i++)
+                {
+                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
+
+                    bool modif = false;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow dr = dt.Rows.Find(keys);
+                    if (dr == null) continue;
+
+                    foreach (DictionaryEntry de in upd.NewValues)
+                    {
+                        string numeCol = de.Key.ToString();
+                        dynamic oldValue = upd.OldValues[numeCol];
+                        dynamic newValue = upd.NewValues[numeCol];
+                        if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
+                            oldValue = null;
+
+                        if (newValue == oldValue) continue;
+
+                        if (newValue == null)
+                        {
+                            dr[numeCol] = DBNull.Value;
+                        }
+                        else
+                        {
+                            modif = true;
+                            switch (dr.Table.Columns[numeCol].DataType.ToString())
+                            {
+                                case "System.DateTime":
+                                    if (Convert.ToDateTime(newValue).Year == 100)
+                                        dr[numeCol] = ChangeToCurrentYear(newValue);
+                                    else
+                                        dr[numeCol] = newValue;
+                                    break;
+                                default:
+                                    dr[numeCol] = newValue;
+                                    break;
+                            }
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, string> l in dic)
+                    {
+                        dr[l.Key] = l.Value;
+                    }
+
+                    dr["USER_NO"] = HttpContext.Current.Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+
+                    if (!modif) continue;
+                }
+
+
+                //daca avem linii modificate
+                for (int i = 0; i < e.DeleteValues.Count; i++)
+                {
+                    ASPxDataDeleteValues upd = e.DeleteValues[i] as ASPxDataDeleteValues;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow dr = dt.Rows.Find(keys);
+                    if (dr == null) continue;
+
+                    dr.Delete();
+                }
+
+                e.Handled = true;
+                HttpContext.Current.Session["InformatiaCurenta"] = ds;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "BatchUpdate", new StackTrace().GetFrame(0).GetMethod().Name);
+                e.Handled = true;
+            }
+        }
+
+        public static DateTime ChangeToCurrentYear(DateTime val)
+        {
+            DateTime dt = val;
+
+            try
+            {
+                dt = new DateTime(2100, 1, 1, val.Hour, val.Minute, 0);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "ChangeToCurrentYear", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return dt;
+        }
+
     }
 }

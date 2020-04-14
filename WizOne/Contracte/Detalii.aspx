@@ -30,11 +30,11 @@
                                 <div class="col-md-12" style="margin-bottom:20px;">
                                     <div class="ctl_inline">
                                         <dx:ASPxLabel ID="lblId" runat="server" Text="Id" Width="30"/>
-                                        <dx:ASPxTextBox ID="txtId" Width="50" runat="server" ClientEnabled="false"/>
+                                        <dx:ASPxTextBox ID="txtId" Width="50" runat="server" ClientEnabled="false" oncontextMenu="ctx(this,event)"/>
                                     </div>
                                     <div class="ctl_inline">
                                         <dx:ASPxLabel ID="lblDenumire" runat="server" Text="Denumire" Width="70"/>
-                                        <dx:ASPxTextBox ID="txtDenumire" Width="400" runat="server" AutoPostBack="false"/>
+                                        <dx:ASPxTextBox ID="txtDenumire" Width="400" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"/>
                                     </div>
                                 </div>
                             </div>
@@ -51,11 +51,11 @@
                                                     <div class="col-md-12">
                                                         <div class="ctl_inline">
                                                             <dx:ASPxLabel ID="lblOraSchIn" runat="server" Text="Ora Sch. In" Width="75"/>
-							                                <dx:ASPxTimeEdit ID="txtOraSchIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+							                                <dx:ASPxTimeEdit ID="txtOraSchIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false" oncontextMenu="ctx(this,event)"/>
                                                         </div>
                                                         <div class="ctl_inline">
                                                             <dx:ASPxLabel ID="lblOraSchOut" runat="server" Text="Ora Sch. Out" Width="80"/>
-							                                <dx:ASPxTimeEdit ID="txtOraSchOut" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+							                                <dx:ASPxTimeEdit ID="txtOraSchOut" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false" oncontextMenu="ctx(this,event)"/>
                                                         </div>
                                                         <div class="ctl_inline">
                                                             <dx:ASPxLabel ID="lblOreSup" runat="server" Text="Ore suplimentare" Width="120"/>
@@ -63,7 +63,7 @@
                                                         </div>
                                                         <div class="ctl_inline">
                                                             <dx:ASPxLabel ID="lblAfisare" runat="server" Text="Afisare Ore" Width="130"/>
-							                                <dx:ASPxComboBox ID="cmbAfisare" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150">
+							                                <dx:ASPxComboBox ID="cmbAfisare" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150" oncontextMenu="ctx(this,event)">
                                                                 <Items>
                                                                     <dx:ListEditItem Text="Trunchiere la ore" Value="1" />
                                                                     <dx:ListEditItem Text="Cu minute" Value="2" />
@@ -75,19 +75,19 @@
                                                     <div class="col-md-12" style="margin:10px 0px;">
                                                         <div class="ctl_inline">
                                                             <dx:ASPxLabel ID="lblOraInInit" runat="server" Text="Ora Intrare" Width="75"/>
-                                                            <dx:ASPxTimeEdit  ID="txtOraIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                                            <dx:ASPxTimeEdit  ID="txtOraIn" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false" oncontextMenu="ctx(this,event)"/>
                                                         </div>
                                                         <div class="ctl_inline">
                                                             <dx:ASPxLabel ID="lblOraOut" runat="server" Text="Ora Iesire" Width="80"/>
-                                                            <dx:ASPxTimeEdit  ID="txtOraOut" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false"/>
+                                                            <dx:ASPxTimeEdit  ID="txtOraOut" runat="server" AutoPostBack="false" Width="50" SpinButtons-ShowIncrementButtons="false" oncontextMenu="ctx(this,event)"/>
                                                         </div>
                                                         <div class="ctl_inline">
                                                             <dx:ASPxLabel ID="lblPontareAuto" runat="server" Text="Initializare automata" Width="120"/>
-                                                            <dx:ASPxCheckBox ID="chkPontareAuto" runat="server" AutoPostBack="false"/>
+                                                            <dx:ASPxCheckBox ID="chkPontareAuto" runat="server" AutoPostBack="false" oncontextMenu="ctx(this,event)"/>
                                                         </div>
                                                         <div class="ctl_inline">
                                                             <dx:ASPxLabel ID="lblRap" runat="server" Text="Raportare ore noapte" Width="130"/>
-    							                            <dx:ASPxComboBox ID="cmbRap" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150">
+    							                            <dx:ASPxComboBox ID="cmbRap" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150" oncontextMenu="ctx(this,event)">
                                                                 <Items>
                                                                     <dx:ListEditItem Text="Pe inceput de schimb" Value="1" />
                                                                     <dx:ListEditItem Text="Pe sfarsit de schimb" Value="2" />

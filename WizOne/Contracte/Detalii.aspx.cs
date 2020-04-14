@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using DevExpress.Web.Data;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -21,7 +22,8 @@ namespace WizOne.Contracte
                 #region Traducere
 
                 string ctlPost = Request.Params["__EVENTTARGET"];
-
+                Session["PaginaWeb"] = "Programe.Lista";
+                txtTitlu.Text = General.VarSession("Titlu").ToString();
                 #endregion
 
                 idCtr = Convert.ToInt32(General.Nz(Session["IdContract"], -99));
@@ -58,7 +60,7 @@ namespace WizOne.Contracte
                         chkOreSup.Value = Convert.ToBoolean(General.Nz(dr["OreSup"], false));
                         cmbAfisare.Value = General.Nz(dr["Afisare"], null);
                         cmbRap.Value = General.Nz(dr["TipRaportareOreNoapte"], null);
-                        chkPontareAuto.Value = General.Nz(dr["PontareAutomata"], false);
+                        chkPontareAuto.Value = Convert.ToBoolean(General.Nz(dr["PontareAutomata"], false));
                         txtOraIn.Value = General.Nz(dr["OraInInitializare"], null);
                         txtOraOut.Value = General.Nz(dr["OraOutInitializare"], null);
                     }
@@ -84,73 +86,9 @@ namespace WizOne.Contracte
         {
             try
             {
-                grDateAbs.CancelEdit();
-                DataSet ds = Session["InformatiaCurenta"] as DataSet;
-                DataTable dt = ds.Tables["Ptj_ContracteAbsente"];
-                if (dt == null) return;
-
-                //daca avem linii noi
-                for (int i = 0; i < e.InsertValues.Count; i++)
-                {
-                    ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
-
-                    if (upd.NewValues["IdAbsenta"] == null) continue;
-
-                    DataRow dr = dt.NewRow();
-                    dr["IdContract"] = idCtr;
-                    dr["IdAbsenta"] = upd.NewValues["IdAbsenta"] ?? -99;
-                    dr["ZL"] = upd.NewValues["ZL"] ?? 9999;
-                    dr["SL"] = upd.NewValues["SL"] ?? DBNull.Value;
-                    dr["S"] = upd.NewValues["S"] ?? DBNull.Value;
-                    dr["D"] = upd.NewValues["D"] ?? DBNull.Value;
-                    dr["InPontajAnual"] = upd.NewValues["InPontajAnual"] ?? DBNull.Value;
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-
-                    dt.Rows.Add(dr);
-                }
-
-
-                //daca avem linii modificate
-                for (int i = 0; i < e.UpdateValues.Count; i++)
-                {
-                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
-
-                    object[] keys = new object[upd.Keys.Count];
-                    for (int x = 0; x < upd.Keys.Count; x++)
-                    { keys[x] = upd.Keys[x]; }
-
-                    DataRow dr = dt.Rows.Find(keys);
-                    if (dr == null) continue;
-
-                    dr["IdAbsenta"] = upd.NewValues["IdAbsenta"] ?? -99;
-                    dr["ZL"] = upd.NewValues["ZL"] ?? 9999;
-                    dr["SL"] = upd.NewValues["SL"] ?? DBNull.Value;
-                    dr["S"] = upd.NewValues["S"] ?? DBNull.Value;
-                    dr["D"] = upd.NewValues["D"] ?? DBNull.Value;
-                    dr["InPontajAnual"] = upd.NewValues["InPontajAnual"] ?? DBNull.Value;
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-                }
-
-
-                //daca avem linii modificate
-                for (int i = 0; i < e.DeleteValues.Count; i++)
-                {
-                    ASPxDataDeleteValues upd = e.DeleteValues[i] as ASPxDataDeleteValues;
-
-                    object[] keys = new object[upd.Keys.Count];
-                    for (int x = 0; x < upd.Keys.Count; x++)
-                    { keys[x] = upd.Keys[x]; }
-
-                    DataRow dr = dt.Rows.Find(keys);
-                    if (dr == null) continue;
-
-                    dr.Delete();
-                }
-
-                e.Handled = true;
-                Session["InformatiaCurenta"] = ds;
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("IdContract", idCtr.ToString());
+                General.BatchUpdate(sender, e, "Ptj_ContracteAbsente", dic);
             }
             catch (Exception ex)
             {
@@ -166,115 +104,10 @@ namespace WizOne.Contracte
                 ASPxGridView grDate = sender as ASPxGridView;
                 int idx = Convert.ToInt32(grDate.ID.Replace("grDate", ""));
 
-                grDate.CancelEdit();
-                DataSet ds = Session["InformatiaCurenta"] as DataSet;
-                DataTable dt = ds.Tables["Ptj_ContracteSchimburi"];
-                if (dt == null) return;
-
-                //daca avem linii noi
-                for (int i = 0; i < e.InsertValues.Count; i++)
-                {
-                    ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
-
-                    if (upd.NewValues["IdProgram"] == null) continue;
-
-                    DataRow dr = dt.NewRow();
-                    dr["IdContract"] = idCtr;
-                    dr["TipSchimb"] = idx;
-                    dr["IdProgram"] = upd.NewValues["IdProgram"];
-                    if (upd.NewValues["OraInceput"] != null)
-                        dr["OraInceput"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceput"]));
-                    else
-                        dr["OraInceput"] = DBNull.Value;
-                    if (upd.NewValues["OraInceputDeLa"] != null)
-                        dr["OraInceputDeLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceputDeLa"]));
-                    else
-                        dr["OraInceputDeLa"] = DBNull.Value;
-                    if (upd.NewValues["OraInceputLa"] != null)
-                        dr["OraInceputLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceputLa"]));
-                    else
-                        dr["OraInceputLa"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsit"] != null)
-                        dr["OraSfarsit"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsit"]));
-                    else
-                        dr["OraSfarsit"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsitDeLa"] != null)
-                        dr["OraSfarsitDeLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsitDeLa"]));
-                    else
-                        dr["OraSfarsitDeLa"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsitLa"] != null)
-                        dr["OraSfarsitLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsitLa"]));
-                    else
-                        dr["OraSfarsitLa"] = DBNull.Value;
-                    dr["ModVerificare"] = upd.NewValues["ModVerificare"] ?? DBNull.Value;
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-
-                    dt.Rows.Add(dr);
-                }
-
-
-                //daca avem linii modificate
-                for (int i = 0; i < e.UpdateValues.Count; i++)
-                {
-                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
-
-                    object[] keys = new object[upd.Keys.Count];
-                    for (int x = 0; x < upd.Keys.Count; x++)
-                    { keys[x] = upd.Keys[x]; }
-
-                    DataRow dr = dt.Rows.Find(keys);
-                    if (dr == null) continue;
-
-                    dr["TipSchimb"] = idx;
-                    dr["IdProgram"] = upd.NewValues["IdProgram"] ?? 9999;
-                    if (upd.NewValues["OraInceput"] != null)
-                        dr["OraInceput"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceput"]));
-                    else
-                        dr["OraInceput"] = DBNull.Value;
-                    if (upd.NewValues["OraInceputDeLa"] != null)
-                        dr["OraInceputDeLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceputDeLa"]));
-                    else
-                        dr["OraInceputDeLa"] = DBNull.Value;
-                    if (upd.NewValues["OraInceputLa"] != null)
-                        dr["OraInceputLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraInceputLa"]));
-                    else
-                        dr["OraInceputLa"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsit"] != null)
-                        dr["OraSfarsit"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsit"]));
-                    else
-                        dr["OraSfarsit"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsitDeLa"] != null)
-                        dr["OraSfarsitDeLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsitDeLa"]));
-                    else
-                        dr["OraSfarsitDeLa"] = DBNull.Value;
-                    if (upd.NewValues["OraSfarsitLa"] != null)
-                        dr["OraSfarsitLa"] = ChangeToCurrentYear(Convert.ToDateTime(upd.NewValues["OraSfarsitLa"]));
-                    else
-                        dr["OraSfarsitLa"] = DBNull.Value;
-                    dr["ModVerificare"] = upd.NewValues["ModVerificare"] ?? DBNull.Value;
-                    dr["USER_NO"] = Session["UserId"];
-                    dr["TIME"] = DateTime.Now;
-                }
-
-
-                //daca avem linii modificate
-                for (int i = 0; i < e.DeleteValues.Count; i++)
-                {
-                    ASPxDataDeleteValues upd = e.DeleteValues[i] as ASPxDataDeleteValues;
-
-                    object[] keys = new object[upd.Keys.Count];
-                    for (int x = 0; x < upd.Keys.Count; x++)
-                    { keys[x] = upd.Keys[x]; }
-
-                    DataRow dr = dt.Rows.Find(keys);
-                    if (dr == null) continue;
-
-                    dr.Delete();
-                }
-
-                e.Handled = true;
-                Session["InformatiaCurenta"] = ds;
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("IdContract", idCtr.ToString());
+                dic.Add("TipSchimb", idx.ToString());
+                General.BatchUpdate(sender, e, "Ptj_ContracteSchimburi", dic);
             }
             catch (Exception ex)
             {
@@ -371,22 +204,6 @@ namespace WizOne.Contracte
             }
         }
 
-        private DateTime ChangeToCurrentYear(DateTime val)
-        {
-            DateTime dt = val;
-            
-            try
-            {
-                dt = new DateTime(2100, 1, 1, val.Hour, val.Minute, 0);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return dt;
-        }
-
         private void IncarcaGriduriSchimburi()
         {
             try
@@ -435,6 +252,8 @@ namespace WizOne.Contracte
             {
                 if (cmbZiDeLa.Value != null && cmbZiPentru.Value != null)
                 {
+                    if (idCtr == -99)
+                        idCtr = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Contracte""", null), 0));
 
                     ASPxGridView grDate = tabCtr.FindControl("grDate" + cmbZiDeLa.Value) as ASPxGridView;
                     if (grDate != null)

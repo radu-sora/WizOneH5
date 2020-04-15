@@ -3694,7 +3694,7 @@ namespace WizOne.Eval
                                 colDecimal.Caption = Dami.TraduCuvant(clsConfigDetail.ColumnName);
                                 colDecimal.Width = clsConfigDetail.Width;
 
-                                colDecimal.PropertiesTextEdit.DisplayFormatString = "n2";
+                                colDecimal.PropertiesTextEdit.DisplayFormatString = "n3";
                                 colDecimal.PropertiesTextEdit.MaskSettings.Mask = "<0..99999>.<0..999g>";
 
                                 grDateCompetente.Columns.Add(colDecimal);

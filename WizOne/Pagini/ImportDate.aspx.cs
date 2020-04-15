@@ -506,7 +506,7 @@ namespace WizOne.Pagini
                 grDateNomen.CancelEdit();
                 grDateNomen.DataSource = dt;
                 //grDate.DataBind();
-                grDateNomen.KeyFieldName = "IdAuto:Id";
+                grDateNomen.KeyFieldName = "IdAuto;Id";
                 Session["ImportDateNomen_Grid"] = dt;
 
                 General.SalveazaDate(dt, "TemplateCampuri");
@@ -732,7 +732,7 @@ namespace WizOne.Pagini
                 //            + "group by \"NumeColoana\", \"PozitieFisier\"";
 
                 sql = " select ColoanaFisier, ColoanaBD as NumeColoana, Obligatoriu, ValoareImplicita, null as PozitieFisier, "
-                      + " (SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = 'Ptj_Cereri' and COLUMN_NAME = ColoanaBD) as Tip "
+                      + " (SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = ColoanaBD) as Tip "
                       + "  from TemplateCampuri a " 
                       + "  left join Template b on a.id = b.Id where b.NumeTabela = '" + numeTabela + "' ";
                 if (Constante.tipBD == 2)

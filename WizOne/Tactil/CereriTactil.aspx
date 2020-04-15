@@ -64,6 +64,10 @@
                  hfNrMinute.Set('NrMinute', diff);
              }
          }
+
+         function Salvare() {
+             pnlCtl.PerformCallback(4);
+         } 
     </script>
 
     <table style="width:100%;">
@@ -260,11 +264,11 @@
                         <td width="130"></td>
 
                         <td width="275" align="left"  id="tdNrZile" runat="server">
-                                    <dx:ASPxTextBox ID="txtNrZile" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  Enabled="false"/>                                    
+                                    <dx:ASPxTextBox ID="txtNrZile" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;" Enabled="false"/>                                    
  
                         </td>
                         <td width="120"></td>
-                        <td width="300" align="left"  id="tdNrZileRamase" runat="server">
+                        <td width="300" align="left"  id="tdNrZileRamase" runat="server" >
                                     <dx:ASPxTextBox ID="txtNrZileRamase" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  Enabled="false"/>                                    
  
                         </td>
@@ -315,7 +319,7 @@
 
                     <div class="col-sm-4">
                         <div class="badgeTactil">
-                            <asp:LinkButton runat="server" ID="lnkSave" OnClick="lnkSave_Click"  >      
+                            <asp:LinkButton runat="server" ID="lnkSave" OnClientClick="Salvare()"  >      
                                 <div>
                                     <img src ="../Fisiere/Imagini/bdgAprobare.jpg" alt = "Trimite la aprobare" />
                                 </div>

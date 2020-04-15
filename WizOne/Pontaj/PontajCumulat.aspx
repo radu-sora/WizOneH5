@@ -14,6 +14,7 @@
             cmbDept.SetValue(null);
             cmbSubDept.SetValue(null);
             cmbBirou.SetValue(null);
+            cmbCateg.SetValue(null);
         }
 
         function OnBatchEditStartEditing(s, e) {
@@ -127,6 +128,10 @@
                                         <div style="float:left; padding-right:15px;">
                                             <label id="lblBirou" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Birou</label>
                                             <dx:ASPxComboBox ID="cmbBirou" ClientInstanceName="cmbBirou" ClientIDMode="Static" runat="server" Width="150px" ValueField="F00809" TextField="F00810" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" />
+                                        </div>
+                                        <div style="float:left; padding-right:15px;">
+                                            <label id="lblCateg" runat="server" style="display:inline-block; float:left; padding-right:15px; min-width:48px; width:80px;">Categorie</label>
+                                            <dx:ASPxComboBox ID="cmbCateg" ClientInstanceName="cmbCateg" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.String" AutoPostBack="false" AllowNull="true" />
                                         </div>
                                     </td>
                                 </tr>

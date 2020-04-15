@@ -52,6 +52,8 @@ namespace WizOne.Tactil
                     Dami.AccesApp();
 
 
+                lnkSave.Attributes.Add("onClick", "return false;");
+
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
@@ -261,6 +263,7 @@ namespace WizOne.Tactil
                 }
                 else
                 {
+                    AfiseazaCtl();
                     if (IsCallback)
                     {
 
@@ -1452,7 +1455,35 @@ namespace WizOne.Tactil
                                 tdNrOre.Width = "1200";
                         }
                     }
-                }   
+                }
+
+                DataTable dtAbsSpn = Session["Absente_Tactil"] as DataTable;
+                if (dtAbsSpn != null && dtAbsSpn.Rows.Count > 0)
+                {
+                    DataRow[] dtRow = dtAbsSpn.Select("Id=" + (cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value) : Convert.ToInt32(cmbAbs.Value)));
+                    //if (dtRow.ElementAt(0)["DenumireScurta"] != null &&
+                    //                      ((dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 2 && dtRow.ElementAt(0)["DenumireScurta"].ToString().Substring(0, 2) == "CO")
+                    //                          || (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP")))
+                    if ((dtRow.ElementAt(0)["DenumireScurta"] != null && (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP"))
+                        || Convert.ToInt32(dtRow.ElementAt(0)["Id"].ToString()) == Convert.ToInt32(Dami.ValoareParam("IdAbsentaCO", "1")))
+                    {
+                        lblZileRamase.Visible = true;
+                        //tdNrZileRamase.Visible = true;
+                        txtNrZileRamase.Visible = true;
+                    }
+                    else
+                    {
+                        lblZileRamase.Visible = false;
+                        //tdNrZileRamase.Visible = false;
+                        txtNrZileRamase.Visible = false;
+                    }
+                    //if (dtRow.ElementAt(0)["AdunaZileLibere"] != null && dtRow.ElementAt(0)["AdunaZileLibere"].ToString() == "1")                            
+                    //    lblZile.InnerText = "Nr. zile calendaristice";                            
+                    //else
+                    //    lblZile.InnerText = "Nr. zile ";
+
+
+                }
 
                 if (idOre == "0")
                 {

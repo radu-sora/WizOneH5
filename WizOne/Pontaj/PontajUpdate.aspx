@@ -123,7 +123,10 @@
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                         <td><dx:ASPxCheckBox ID="chkRecalc" runat="server" Text="Recalcul totaluri" TextAlign="Right" /></td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td><dx:ASPxCheckBox ID="chkCC" runat="server" Text="Centrul de cost" TextAlign="Right" /></td>   
+                        <td><dx:ASPxCheckBox ID="chkCC" runat="server" Text="Centrul de cost" TextAlign="Right" /></td>  
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><dx:ASPxCheckBox ID="chkSL" runat="server" Text="Sarbatori legale" TextAlign="Right" /></td>   
+                        
                     </tr>
                 </table>
 

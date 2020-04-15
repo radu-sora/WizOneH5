@@ -212,6 +212,7 @@ namespace WizOne.Pontaj
                         return;
                     case "cmbRol":
                     case "txtAnLuna":
+                    case "Data":
                         IncarcaAngajati();
                         esteStruc = false;
                         break;
@@ -276,7 +277,15 @@ namespace WizOne.Pontaj
         {
             try
             {
-                DataTable dt = General.IncarcaDT(SelectAngajati(), null);
+                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+                if (Constante.tipBD == 2) cmp = "ROWNUM";
+
+                string strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* 
+                            FROM ({SelectComun()}) X 
+                            WHERE X.F10022 <= {General.ToDataUniv(txtDtSf.Date)} AND {General.ToDataUniv(txtDtInc.Date)} <= X.F10023 
+                            ORDER BY X.""NumeComplet"" ";
+
+                DataTable dt = General.IncarcaDT(strSql, null);
 
                 cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
@@ -288,30 +297,6 @@ namespace WizOne.Pontaj
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-        private string SelectAngajati(string filtru = "")
-        {
-            string strSql = "";
-
-            try
-            {
-                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
-                if (Constante.tipBD == 2) cmp = "ROWNUM";
-
-                strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* 
-                            FROM ({SelectComun()}) X 
-                            WHERE X.F10022 <= {General.ToDataUniv(txtDtSf.Date)} AND {General.ToDataUniv(txtDtInc.Date)} <= X.F10023 
-                            {filtru}
-                            ORDER BY X.""NumeComplet"" ";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return strSql;
         }
 
         private string SelectComun()
@@ -825,9 +810,31 @@ namespace WizOne.Pontaj
             }
             catch (Exception)
             {
+                //NOP by Florin
             }
         }
 
+        protected void grDate_DataBound(object sender, EventArgs e)
+        {
+            try
+            {
+                var lstZileGri = new Dictionary<int, object>();
+
+                var grid = sender as ASPxGridView;
+                for (int i = grid.VisibleStartIndex; i < grid.VisibleStartIndex + grid.SettingsPager.PageSize; i++)
+                {
+                    var rowValues = grid.GetRowValues(i, new string[] { "F10003", "ZileGri"}) as object[];
+                    lstZileGri.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[1] ?? "");
+                }
+
+                grid.JSProperties["cp_zileGri"] = lstZileGri;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }
  

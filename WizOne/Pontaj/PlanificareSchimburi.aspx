@@ -175,7 +175,7 @@
         <tr>
             <td colspan="2">
                 <br />
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnCellEditorInitialize="grDate_CellEditorInitialize" OnBatchUpdate="grDate_BatchUpdate">
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false" OnHtmlDataCellPrepared="grDate_HtmlDataCellPrepared" OnCustomCallback="grDate_CustomCallback" OnCellEditorInitialize="grDate_CellEditorInitialize" OnBatchUpdate="grDate_BatchUpdate" OnDataBound="grDate_DataBound">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                     <Settings ShowStatusBar="Hidden" HorizontalScrollBarMode="Visible" ShowFilterRow="True" VerticalScrollBarMode="Visible" AutoFilterCondition="Contains" />
                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false"  />
@@ -366,6 +366,8 @@
                     type: "warning"
                 });
             }
+            else
+                pnlCtl.PerformCallback("Data");
         }
 
         function OnClickFiltru(s, e) {
@@ -391,6 +393,11 @@
                 e.cancel = true;
                 return;
             }
+
+            var keyIndex = s.GetColumnByField("F10003").index;
+            var key = e.rowValues[keyIndex].value;
+            if (typeof s.cp_zileGri[key] != "undefined" && s.cp_zileGri[key] != null && s.cp_zileGri[key].indexOf(col + ",") >= 0)
+                e.cancel = true;
 
             var val = s.batchEditApi.GetCellValue(e.visibleIndex, col);
             //var ctr = s.batchEditApi.GetCellValue(e.visibleIndex, "Contract");

@@ -48,7 +48,7 @@
                     </tr> 
                     <tr>
                         <td colspan="2">
-                            <dx:ASPxFormLayout ID="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Office365">
+                            <dx:ASPxFormLayout ID="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Office365" ShowItemCaptionColon="false">
                                 <SettingsAdaptivity></SettingsAdaptivity>
                                 <Items>
                                     <dx:TabbedLayoutGroup>

@@ -770,11 +770,15 @@ namespace WizOne.Pontaj
                             SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
                             FROM ""Securitate"" A
                             INNER JOIN ""relGrupUser"" B ON A.""IdGrup"" = B.""IdGrup""
-                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            WHERE B.""IdUser"" = {Session["UserId"]} AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp'
+                            GROUP BY REPLACE(A.""IdColoana"", 'Tmp', '')
+                            HAVING MIN(COALESCE(A.""Blocat"",0))= 1
                             UNION
                             SELECT REPLACE(A.""IdColoana"", 'Tmp', '')
                             FROM ""Securitate"" A
-                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp' AND COALESCE(A.""Blocat"",0)=1
+                            WHERE A.""IdGrup"" = -1 AND A.""IdForm"" = 'pontaj.pontajdetaliat' AND SUBSTRING(A.""IdColoana"", 1, 6) = 'ValTmp'
+                            GROUP BY REPLACE(A.""IdColoana"", 'Tmp', '')
+                            HAVING MIN(COALESCE(A.""Blocat"",0))= 1
                             ) A
                             GROUP BY A.""Coloana""
                             ORDER BY A.""Coloana""

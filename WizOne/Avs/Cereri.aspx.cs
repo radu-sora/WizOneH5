@@ -4032,9 +4032,11 @@ namespace WizOne.Avs
                         break;
                     case (int)Constante.Atribute.Suspendare:
                         DateTime dtLuc = General.DamiDataLucru();
+                        DataTable dtSuspNomen = General.IncarcaDT("SELECT * FROM F090 WHERE F09002 = " + dtCer.Rows[0]["MotivSuspId"].ToString(), null);                        
                         sql100 = "UPDATE F100 SET F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + ", F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
                              (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10076 = " + data11 + ", F10077 = " + data12 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
-                        sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data11 + " - 1 WHERE F10003 = " + f10003.ToString();
+                        if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC")
+                            sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data11 + " - 1 WHERE F10003 = " + f10003.ToString();
                         string sql111 = $@"INSERT INTO F111 (F11101, F11102, F11103, F11104, F11105, F11106, F11107, YEAR, MONTH, USER_NO, TIME)
                                VALUES (111, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, {dtCer.Rows[0]["MotivSuspId"].ToString()},{data11}, {data12}, {data13},
                                {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
@@ -4042,8 +4044,10 @@ namespace WizOne.Avs
                         ActualizareSusp(f10003, ref sql100, ref sql1001);
                         break;
                     case (int)Constante.Atribute.RevenireSuspendare:
+                        dtSuspNomen = General.IncarcaDT("SELECT * FROM F090 WHERE F09002 = " + dtCer.Rows[0]["MotivSuspId"].ToString(), null);
                         sql100 = "UPDATE F100 SET F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + data13 + (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ",F10076 = " + data11 + ", F10077 = " + data13 + " - 1" : "") + ", F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " WHERE F10003 = " + f10003.ToString();
-                        sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();                      
+                        if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC")
+                            sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();                      
                         sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data11;
                         General.IncarcaDT(sql111, null);
                         ActualizareSusp(f10003, ref sql100, ref sql1001);
@@ -4110,12 +4114,14 @@ namespace WizOne.Avs
                     data1 = "TO_DATE('" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Year.ToString() + "', 'dd/mm/yyyy')";
                     data2 = "TO_DATE('" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()).Year.ToString() + "', 'dd/mm/yyyy')";
                }
+                DataTable dtSuspNomen = General.IncarcaDT("SELECT * FROM F090 WHERE F09002 = " + dtSuspAng.Rows[0]["F11104"].ToString(), null);
+
                 sql100 = "UPDATE F100 SET F100925 = " + dtSuspAng.Rows[0]["F11104"].ToString() + ", F100922 = " + data1 + ", F100923 = " + data2 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
                      (Convert.ToInt32(dtSuspAng.Rows[0]["F11104"].ToString()) == 11 ? ", F10076 = " + data1 + ", F10077 = " + data2 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
-                sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data1 + " - 1 WHERE F10003 = " + f10003.ToString();
-
-                //transfer
-                DataTable dtSuspNomen = General.IncarcaDT("SELECT * FROM F090 WHERE F09002 = " + dtSuspAng.Rows[0]["F11104"].ToString(), null);
+                if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC")
+                    sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data1 + " - 1 WHERE F10003 = " + f10003.ToString();
+          
+                //transfer          
                 if (dtSuspNomen != null && dtSuspNomen.Rows.Count > 0)
                 {
                     int cod = (dtSuspNomen.Rows[0]["CodTranzactie"] as int?) ?? 0;

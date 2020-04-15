@@ -144,10 +144,15 @@ namespace WizOne.Personal
                 ds.Tables[1].Rows[0]["F100923"] = deDataSfarsitSusp.Date;
                 ds.Tables[1].Rows[0]["F100924"] = deDataIncetareSusp.Date;
                 //Radu 17.01.2020
-                ds.Tables[0].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
-                ds.Tables[0].Rows[0]["F1001102"] = deDataInceputSusp.Date.AddDays(-1);
-                ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];        
-                ds.Tables[2].Rows[0]["F1001102"] = deDataInceputSusp.Date.AddDays(-1);
+                DataTable dtSuspNomen = Session["MP_SuspNomen"] as DataTable;
+                DataRow[] drSusp = dtSuspNomen.Select("F09002 = " + Convert.ToInt32(cmbMotivSuspendare.Value).ToString());
+                if (drSusp[0]["F09004"].ToString() != "Art52Alin1LiteraC")
+                {
+                    ds.Tables[0].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                    ds.Tables[0].Rows[0]["F1001102"] = deDataInceputSusp.Date.AddDays(-1);
+                    ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                    ds.Tables[2].Rows[0]["F1001102"] = deDataInceputSusp.Date.AddDays(-1);
+                }
                 Session["InformatiaCurentaPersonal"] = ds;
 
                 AdaugaIstoricSuspendare(Convert.ToInt32(Session["Marca"].ToString()), Convert.ToInt32(cmbMotivSuspendare.Value ?? -99), deDataInceputSusp.Date, deDataSfarsitSusp.Date, deDataIncetareSusp.Date, Convert.ToInt32(Session["UserId"].ToString()));
@@ -598,11 +603,15 @@ namespace WizOne.Personal
                 ds.Tables[1].Rows[0]["F100923"] = dtSuspAng.Rows[0]["F11106"];
                 ds.Tables[1].Rows[0]["F100924"] = dtSuspAng.Rows[0]["F11107"];
                 //Radu 17.01.2020
-                ds.Tables[0].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
-                ds.Tables[0].Rows[0]["F1001102"] = Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
-                ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
-                ds.Tables[2].Rows[0]["F1001102"] = Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
-
+                DataTable dtSuspNomen = Session["MP_SuspNomen"] as DataTable;
+                DataRow[] drSusp = dtSuspNomen.Select("F09002 = " + dtSuspAng.Rows[0]["F11104"].ToString());
+                if (drSusp[0]["F09004"].ToString() != "Art52Alin1LiteraC")
+                {
+                    ds.Tables[0].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                    ds.Tables[0].Rows[0]["F1001102"] = Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
+                    ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
+                    ds.Tables[2].Rows[0]["F1001102"] = Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
+                }
                 if (Convert.ToInt32(dtSuspAng.Rows[0]["F11104"].ToString()) == 11 && Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1))  //introducere CIC
                 {
                     ds.Tables[0].Rows[0]["F10076"] = ds.Tables[0].Rows[0]["F100922"];
@@ -623,11 +632,15 @@ namespace WizOne.Personal
                 else
                 {
                     //Radu 21.01.2020
-                    ds.Tables[0].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
-                    ds.Tables[0].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
-                    ds.Tables[2].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
-                    ds.Tables[2].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
-
+                    DataTable dtSuspNomen = Session["MP_SuspNomen"] as DataTable;
+                    DataRow[] drSusp = dtSuspNomen.Select("F09002 = " + dtSuspAng.Rows[0]["F11104"].ToString());
+                    if (drSusp[0]["F09004"].ToString() != "Art52Alin1LiteraC")
+                    {
+                        ds.Tables[0].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
+                        ds.Tables[0].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
+                        ds.Tables[2].Rows[0]["F1001101"] = Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1) ? ds.Tables[0].Rows[0]["F10022"] : ds.Tables[0].Rows[0]["F100924"];
+                        ds.Tables[2].Rows[0]["F1001102"] = new DateTime(2100, 1, 1);
+                    }
                     if (dt.Select("1 = 1", "F11105 DESC") != null && dt.Select("1 = 1", "F11105 DESC").Count() > 0 && Convert.ToInt32(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"].ToString()) == 11 && Convert.ToDateTime(dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"]) != new DateTime(2100, 1, 1))  //revenire din CIC
                     {
                         ds.Tables[0].Rows[0]["F10076"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11105"];

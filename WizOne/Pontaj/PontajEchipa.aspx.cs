@@ -186,7 +186,7 @@ namespace WizOne.Pontaj
                         c.VisibleIndex = 100 + i;
 
                         //c.PropertiesEdit.DisplayFormatString = "N0";
-                        c.PropertiesTextEdit.DisplayFormatString = "N0";
+                        c.PropertiesTextEdit.DisplayFormatString = "N" + General.Nz(dt.Rows[i]["NumarZecimale"], 0);
 
                         grDate.Columns.Add(c);
                     }

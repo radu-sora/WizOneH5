@@ -97,7 +97,7 @@
                                                     </div>
                                                 </div>
                                     
-                                                <dx:ASPxGridView ID="grDateAbs" runat="server" ClientInstanceName="grDateAbs" ClientIDMode="Static" Width="900px" AutoGenerateColumns="false" OnBatchUpdate="grDateAbs_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDateAbs" runat="server" ClientInstanceName="grDateAbs" ClientIDMode="Static" Width="900px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -201,7 +201,7 @@
                                                     </div>
                                                 </div>
 
-                                                <dx:ASPxGridView ID="grDate1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDate1" runat="server" ClientInstanceName="grDate1" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -276,7 +276,7 @@
                                                 </dx:ASPxGridView>
                                            
                                                 <br /><br />
-                                                <dx:ASPxGridView ID="grDate2" runat="server" ClientInstanceName="grDate2" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDate2" runat="server" ClientInstanceName="grDate2" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -349,7 +349,7 @@
                                                     </SettingsCommandButton>
                                                 </dx:ASPxGridView>
                                                 <br /><br />
-                                                <dx:ASPxGridView ID="grDate3" runat="server" ClientInstanceName="grDate3" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDate3" runat="server" ClientInstanceName="grDate3" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -422,7 +422,7 @@
                                                     </SettingsCommandButton>
                                                 </dx:ASPxGridView>
                                                 <br /><br />
-                                                <dx:ASPxGridView ID="grDate4" runat="server" ClientInstanceName="grDate4" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDate4" runat="server" ClientInstanceName="grDate4" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -495,7 +495,7 @@
                                                     </SettingsCommandButton>
                                                 </dx:ASPxGridView>
                                                 <br /><br />
-                                                <dx:ASPxGridView ID="grDate5" runat="server" ClientInstanceName="grDate5" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDate5" runat="server" ClientInstanceName="grDate5" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -568,7 +568,7 @@
                                                     </SettingsCommandButton>
                                                 </dx:ASPxGridView>
                                                 <br /><br />
-                                                <dx:ASPxGridView ID="grDate6" runat="server" ClientInstanceName="grDate6" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDate6" runat="server" ClientInstanceName="grDate6" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -641,7 +641,7 @@
                                                     </SettingsCommandButton>
                                                 </dx:ASPxGridView>
                                                 <br /><br />
-                                                <dx:ASPxGridView ID="grDate7" runat="server" ClientInstanceName="grDate7" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDate7" runat="server" ClientInstanceName="grDate7" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -714,7 +714,7 @@
                                                     </SettingsCommandButton>
                                                 </dx:ASPxGridView>
                                                 <br /><br />
-                                                <dx:ASPxGridView ID="grDate8" runat="server" ClientInstanceName="grDate8" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDateSch_BatchUpdate">
+                                                <dx:ASPxGridView ID="grDate8" runat="server" ClientInstanceName="grDate8" ClientIDMode="Static" Width="1000px" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate">
                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" />
                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />

@@ -82,32 +82,25 @@ namespace WizOne.Contracte
             }
         }
 
-        protected void grDateAbs_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
-        {
-            try
-            {
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-                dic.Add("IdContract", idCtr.ToString());
-                General.BatchUpdate(sender, e, "Ptj_ContracteAbsente", dic);
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-                e.Handled = true;
-            }
-        }
-
-        protected void grDateSch_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
+        protected void grDate_BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e)
         {
             try
             {
                 ASPxGridView grDate = sender as ASPxGridView;
-                int idx = Convert.ToInt32(grDate.ID.Replace("grDate", ""));
-
                 Dictionary<string, string> dic = new Dictionary<string, string>();
-                dic.Add("IdContract", idCtr.ToString());
-                dic.Add("TipSchimb", idx.ToString());
-                General.BatchUpdate(sender, e, "Ptj_ContracteSchimburi", dic);
+                switch (grDate.ID)
+                {
+                    case "grDateAbs":
+                        dic.Add("IdContract", idCtr.ToString());
+                        General.BatchUpdate(sender, e, "Ptj_ContracteAbsente", dic);
+                        break;
+                    default:
+                        int idx = Convert.ToInt32(grDate.ID.Replace("grDate", ""));
+                        dic.Add("IdContract", idCtr.ToString());
+                        dic.Add("TipSchimb", idx.ToString());
+                        General.BatchUpdate(sender, e, "Ptj_ContracteSchimburi", dic);
+                        break;
+                }
             }
             catch (Exception ex)
             {
@@ -149,19 +142,19 @@ namespace WizOne.Contracte
                 dr["TipRaportareOreNoapte"] = cmbRap.Value ?? DBNull.Value;
                 dr["PontareAutomata"] = chkPontareAuto.Value ?? DBNull.Value;
                 if (txtOraSchIn.Value != null)
-                    dr["OraInSchimbare"] = ChangeToCurrentYear(txtOraSchIn.DateTime);
+                    dr["OraInSchimbare"] = General.ChangeToCurrentYear(txtOraSchIn.DateTime);
                 else
                     dr["OraInSchimbare"] = DBNull.Value;
                 if (txtOraSchOut.Value != null)
-                    dr["OraOutSchimbare"] = ChangeToCurrentYear(txtOraSchOut.DateTime);
+                    dr["OraOutSchimbare"] = General.ChangeToCurrentYear(txtOraSchOut.DateTime);
                 else
                     dr["OraOutSchimbare"] = DBNull.Value;
                 if (txtOraIn.Value != null)
-                    dr["OraInInitializare"] = ChangeToCurrentYear(txtOraIn.DateTime);
+                    dr["OraInInitializare"] = General.ChangeToCurrentYear(txtOraIn.DateTime);
                 else
                     dr["OraInInitializare"] = DBNull.Value;
                 if (txtOraOut.Value != null)
-                    dr["OraOutInitializare"] = ChangeToCurrentYear(txtOraOut.DateTime);
+                    dr["OraOutInitializare"] = General.ChangeToCurrentYear(txtOraOut.DateTime);
                 else
                     dr["OraOutInitializare"] = DBNull.Value;
 

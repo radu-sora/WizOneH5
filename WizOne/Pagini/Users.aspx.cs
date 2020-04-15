@@ -90,6 +90,8 @@ namespace WizOne.Pagini
                     grDate.DataSource = Session["InformatiaCurenta"];
                     grDate.KeyFieldName = "F70102";
                     grDate.DataBind();
+
+                    Session["Utilizatori_Parola"] = null;
                 }
                 else
                 {
@@ -149,9 +151,16 @@ namespace WizOne.Pagini
                 object pin = DBNull.Value;
                 CriptDecript prc = new CriptDecript();
 
+                if (Session["Utilizatori_Parola"] != null)
+                {
+                    e.NewValues["F70103"] = Session["Utilizatori_Parola"].ToString();
+                    Session["Utilizatori_Parola"] = null;
+                }
+
                 if (e.NewValues["F70103"] != null)
                 {
-                    pwd = prc.EncryptString(Constante.cheieCriptare, e.NewValues["F70103"].ToString(), 1);
+                    //pwd = prc.EncryptString(Constante.cheieCriptare, e.NewValues["F70103"].ToString(), 1);
+                    pwd = e.NewValues["F70103"].ToString();
                 }
                 else
                 {
@@ -378,7 +387,11 @@ namespace WizOne.Pagini
                 string pwd = prc.EncryptString(Constante.cheieCriptare, cnpsw.Text, 1);
 
                 int index = grDate.EditingRowVisibleIndex;
-                string kp = grDate.GetRowValues(index, "F70102").ToString();
+
+                //Radu 07.04.2020
+                string kp = "-99";
+                if (index >= 0)
+                    kp = grDate.GetRowValues(index, "F70102").ToString();
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.Rows.Find(kp);
@@ -388,27 +401,33 @@ namespace WizOne.Pagini
                     var ras = General.VerificaComplexitateParola(cnpsw.Text);
                     if (ras != "")
                     {
-                        MessageBox.Show(ras, MessageBox.icoWarning, "Parola invalida");
+                        //MessageBox.Show(ras, MessageBox.icoWarning, "Parola invalida");
+                        grDate.JSProperties["cpAlertMessage"] = ras;
                         return;
                     }
                 }
 
                 //Florin - 2019.11.18
-                switch (tip)
+                if (dr != null)     //Radu 07.04.2020
                 {
-                    case 1:
-                        //General.AddUserIstoric(General.Nz(Session["UserId"], -99).ToString());
-                        //Radu 06.01.2020
-                        General.AddUserIstoric(General.Nz(dr["F70102"], -99).ToString());
-                        dr["F70103"] = pwd;
-                        break;
-                    case 2:
-                        dr["Parola"] = pwd;
-                        break;
-                    case 3:
-                        dr["PINInfoChiosc"] = pwd;
-                        break;
+                    switch (tip)
+                    {
+                        case 1:
+                            //General.AddUserIstoric(General.Nz(Session["UserId"], -99).ToString());
+                            //Radu 06.01.2020
+                            General.AddUserIstoric(General.Nz(dr["F70102"], -99).ToString());
+                            dr["F70103"] = pwd;
+                            break;
+                        case 2:
+                            dr["Parola"] = pwd;
+                            break;
+                        case 3:
+                            dr["PINInfoChiosc"] = pwd;
+                            break;
+                    }
                 }
+                else
+                    Session["Utilizatori_Parola"] = pwd;
 
                 Session["InformatiaCurenta"] = dt;
                 ASPxPopupControl1.ShowOnPageLoad = false;

@@ -42,6 +42,7 @@ namespace WizOne.Pontaj
                 chkPerAng.Text = Dami.TraduCuvant("Perioada angajare");
                 chkRecalc.Text = Dami.TraduCuvant("Recalcul totaluri");
                 chkCC.Text = Dami.TraduCuvant("Centrul de cost");
+                chkSL.Text = Dami.TraduCuvant("Sarbatori legale");
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
@@ -157,7 +158,7 @@ namespace WizOne.Pontaj
         }
 
 
-        public bool ActualizeazaDateGenerale(int idUser, int angIn, int angSf, DateTime ziIn, DateTime ziSf, bool chkCtr, bool chkNrm, bool chkStr, bool chkPerAng, bool chkRecalc, bool chkCC)
+        public bool ActualizeazaDateGenerale(int idUser, int angIn, int angSf, DateTime ziIn, DateTime ziSf, bool chkCtr, bool chkNrm, bool chkStr, bool chkPerAng, bool chkRecalc, bool chkCC, bool chkSL)
         {
             bool ras = false;
 
@@ -223,7 +224,7 @@ namespace WizOne.Pontaj
                         ras = true;
                     }
 
-                    if (chkCtr || chkNrm || chkStr || chkCC)
+                    if (chkCtr || chkNrm || chkStr || chkCC || chkSL)
                     {
                         strSql += @"UPDATE A 
                                 SET {4} 
@@ -259,7 +260,12 @@ namespace WizOne.Pontaj
                             if (Dami.ValoareParam("TipCalculDate") == "2")
                                 inn += " LEFT JOIN DamiDept_Table ddt ON ddt.F10003=A.F10003 AND ddt.dt=A.Ziua";
                         }
-
+                        //Radu 07.04.2020
+                        if (chkSL == true)
+                        {
+                            act += ",A.ZiLibera = 1, A.ZiLiberaLegala = 1";
+                            inn += "JOIN HOLIDAYS ON CAST(DAY AS DATE)= CAST(A.Ziua AS DATE)";
+                        }
 
                         if (act != "") act = act.Substring(1);
                         strSql = string.Format(strSql, angIn, angSf, General.ToDataUniv(ziIn), General.ToDataUniv(ziSf), act, inn);
@@ -338,7 +344,7 @@ namespace WizOne.Pontaj
                         ras = true;
                     }
 
-                    if (chkCtr || chkNrm || chkStr || chkCC)
+                    if (chkCtr || chkNrm || chkStr || chkCC || chkSL)
                     {
                         strSql += @"UPDATE ""Ptj_Intrari"" A
                                 SET {4} 
@@ -350,6 +356,10 @@ namespace WizOne.Pontaj
                         if (chkCC == true)
                             act += ",A.\"F06204Default\"=CASE WHEN NOT EXISTS(SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) THEN COALESCE(\"DamiCC\"(A.F10003, A.\"Ziua\"), (SELECT C.F10053 FROM F100 C WHERE C.F10003=A.F10003)) ELSE "
                                   + " (SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) END";
+
+                        //Radu 07.04.2020
+                        if (chkSL == true) act += ", A.\"ZiLibera\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE TRUNC(DAY) = TRUNC(A.\"Ziua\")) THEN 0 ELSE 1 END, A.\"ZiLiberaLegala\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE TRUNC(DAY) = TRUNC(A.\"Ziua\")) THEN 0 ELSE 1 END";
+
 
                         if (chkStr == true)
                         {
@@ -465,7 +475,7 @@ namespace WizOne.Pontaj
 
                 if (ActualizeazaDateGenerale(Convert.ToInt32(Session["UserId"]), Convert.ToInt32(txtMarcaInc.Value), Convert.ToInt32(txtMarcaSf.Value),
                     Convert.ToDateTime(txtDataInc.Value), Convert.ToDateTime(txtDataSf.Value), Convert.ToBoolean(chkCtr.Checked),
-                    Convert.ToBoolean(chkNrm.Checked), Convert.ToBoolean(chkStr.Checked), Convert.ToBoolean(chkPerAng.Checked), Convert.ToBoolean(chkRecalc.Checked), Convert.ToBoolean(chkCC.Checked)))
+                    Convert.ToBoolean(chkNrm.Checked), Convert.ToBoolean(chkStr.Checked), Convert.ToBoolean(chkPerAng.Checked), Convert.ToBoolean(chkRecalc.Checked), Convert.ToBoolean(chkCC.Checked), Convert.ToBoolean(chkSL.Checked)))
                 {
                     if (param == 1)
                         MessageBox.Show(Dami.TraduCuvant("Proces finalizat cu succes !"), MessageBox.icoSuccess, "");

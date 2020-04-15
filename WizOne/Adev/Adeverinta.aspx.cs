@@ -202,6 +202,7 @@ namespace WizOne.Adev
             table.Rows.Add(6, "Stagiu");
             table.Rows.Add(7, "Vechime");
             table.Rows.Add(11, "Deplasare");
+            table.Rows.Add(12, "Sănătate 2020");
 
             cmbAdev.DataSource = table;
             cmbAdev.DataBind();
@@ -1359,6 +1360,15 @@ namespace WizOne.Adev
                         //AdeverintaVechime(marca, FileName);
                         msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 11, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
                         break;
+                    case 12:
+                        if (lstMarci.Count() == 1)
+                            fisier = "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + lstMarci[0] + ".xml";
+                        else
+                            fisier = "Adev_sanatate_2020_" + data + ".xml";
+                        FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                        //AdeverintaVechime(marca, FileName);
+                        msg = Adeverinte.Print_Adeverinte.Print_Adeverinte_Main(1, 12, Config, HostingEnvironment.MapPath("~/Adeverinta/"), listaM.Split(';'), tipGen);
+                        break;
                 }
 
                 //if (msg.Length > 0)
@@ -1456,6 +1466,11 @@ namespace WizOne.Adev
                             case 11:
                                 fisier = "Adev_Deplasare_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
                                 numeArhiva = "Adev_Deplasare_" + data;
+                                FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
+                                break;
+                            case 12:
+                                fisier = "Adev_sanatate_2020_" + dtAng.Rows[0]["F10008"].ToString().Replace(' ', '_') + "_" + dtAng.Rows[0]["F10009"].ToString().Replace(' ', '_') + "_" + marca + ".xml";
+                                numeArhiva = "Adev_sanatate_2020_" + data;
                                 FileName = HostingEnvironment.MapPath("~/Adeverinta/ADEVERINTE/") + fisier;
                                 break;
                         }

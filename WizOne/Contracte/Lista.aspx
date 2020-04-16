@@ -18,7 +18,7 @@
         </tr>
         <tr>
             <td colspan="2"> 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" SettingsPager-PageSize="50">
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" SettingsPager-PageSize="50" Theme="Metropolis" Styles-AlternatingRow-BackColor="#FCFCFC"  Styles-Header-BackColor="#e9e9e9"  Styles-Header-Font-Bold="true">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" />
                     <Settings ShowFilterRow="True" ShowGroupPanel="False" />
                     <SettingsSearchPanel Visible="False" />

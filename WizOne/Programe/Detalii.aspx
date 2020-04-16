@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </td>
-                    </tr> 
+                    </tr>
                     <tr>
                         <td colspan="2">
                             <dx:ASPxFormLayout ID="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Metropolis" ShowItemCaptionColon="false">
@@ -103,14 +103,14 @@
                                                             <dx:LayoutItem Caption="Flexibil" FieldName="Flexibil">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxCheckBox ID="ctlFlexibil" ClientIDMode="Static" runat="server" oncontextMenu="ctx(this,event)"/>
+                                                                        <dx:ASPxCheckBox ID="ctlFlexibil" ClientIDMode="Static" runat="server" ToggleSwitchDisplayMode="Always" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Ore de noapte?" FieldName="DeNoapte">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxCheckBox ID="ctlDeNoapte" ClientIDMode="Static" runat="server" oncontextMenu="ctx(this,event)"/>
+                                                                        <dx:ASPxCheckBox ID="ctlDeNoapte" ClientIDMode="Static" runat="server" ToggleSwitchDisplayMode="Always" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -298,7 +298,7 @@
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateAlte" runat="server" ClientInstanceName="grDateAlte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)" Theme="Office365">
+                                                                <dx:ASPxGridView ID="grDateAlte" runat="server" ClientInstanceName="grDateAlte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)" Theme="Metropolis">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -379,7 +379,7 @@
                                                             <dx:LayoutItem Caption="Pauza dedusa" FieldName="PauzaDedusa">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxCheckBox ID="ctlPauzaDedusa" ClientIDMode="Static" runat="server" oncontextMenu="ctx(this,event)"/>
+                                                                        <dx:ASPxCheckBox ID="ctlPauzaDedusa" ClientIDMode="Static" runat="server" ToggleSwitchDisplayMode="Always" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -402,7 +402,7 @@
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDatePauze" runat="server" ClientInstanceName="grDatePauza" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
+                                                                <dx:ASPxGridView ID="grDatePauze" runat="server" ClientInstanceName="grDatePauza" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" Theme="Metropolis" oncontextMenu="ctx(this,event)">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -431,7 +431,7 @@
                                                                         <dx:GridViewDataTimeEditColumn FieldName="OraSfarsitLa" Name="OraSfarsitLa" Caption="Ora sfarsit la" Width="110px">
                                                                             <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
                                                                         </dx:GridViewDataTimeEditColumn>
-                                                                        <dx:GridViewDataCheckColumn FieldName="TimpDedus" Name="TimpDedus" Caption="Timp dedus"  Width="110px"  />
+                                                                        <dx:GridViewDataCheckColumn FieldName="TimpDedus" Name="TimpDedus" Caption="Timp dedus"  Width="110px" PropertiesCheckEdit-ToggleSwitchDisplayMode="Always"/>
                                                                         <dx:GridViewDataTimeEditColumn FieldName="TimpMin" Name="TimpMin" Caption="Timp min" Width="110px">
                                                                             <PropertiesTimeEdit DisplayFormatInEditMode="true" DisplayFormatString="HH:mm" EditFormat="DateTime" EditFormatString="HH:mm" SpinButtons-ShowIncrementButtons="false"/>
                                                                         </dx:GridViewDataTimeEditColumn>
@@ -536,7 +536,7 @@
                                                             <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateIntrare" runat="server" ClientInstanceName="grDateIntrare" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
+                                                                <dx:ASPxGridView ID="grDateIntrare" runat="server" ClientInstanceName="grDateIntrare" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" Theme="Metropolis" oncontextMenu="ctx(this,event)">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -617,7 +617,7 @@
                                                             <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxGridView ID="grDateIesire" runat="server" ClientInstanceName="grDateIesire" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
+                                                                        <dx:ASPxGridView ID="grDateIesire" runat="server" ClientInstanceName="grDateIesire" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" Theme="Metropolis" oncontextMenu="ctx(this,event)">
                                                                             <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                             <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                             <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />

@@ -48,7 +48,7 @@
                     </tr> 
                     <tr>
                         <td colspan="2">
-                            <dx:ASPxFormLayout ID="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Office365" ShowItemCaptionColon="false">
+                            <dx:ASPxFormLayout ID="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Metropolis" ShowItemCaptionColon="false">
                                 <SettingsAdaptivity></SettingsAdaptivity>
                                 <Items>
                                     <dx:TabbedLayoutGroup>
@@ -228,7 +228,7 @@
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateNoapte" runat="server" ClientInstanceName="grDateNoapte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
+                                                                <dx:ASPxGridView ID="grDateNoapte" runat="server" ClientInstanceName="grDateNoapte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)" Theme="Metropolis">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
@@ -298,7 +298,7 @@
                                                     <dx:LayoutItem Caption="">
                                                         <LayoutItemNestedControlCollection>
                                                             <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                <dx:ASPxGridView ID="grDateAlte" runat="server" ClientInstanceName="grDateAlte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)">
+                                                                <dx:ASPxGridView ID="grDateAlte" runat="server" ClientInstanceName="grDateAlte" ClientIDMode="Static" AutoGenerateColumns="false" OnBatchUpdate="grDate_BatchUpdate" oncontextMenu="ctx(this,event)" Theme="Office365">
                                                                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                                                                     <Settings ShowFilterRow="False" ShowGroupPanel="False" ShowStatusBar="Hidden" VerticalScrollBarMode="Auto" />
                                                                     <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />

@@ -226,23 +226,23 @@ namespace WizOne.Module
             try
             {
                 DataTable dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
-
-                //contract ciclic
-                if (dtCtr.Rows.Count > 0 && Convert.ToInt32(General.Nz(dtCtr.Rows[0]["TipContract"], -99)) == 2)
-                {
-                    if (dt != null && dtCtr.Rows[0]["CicluDataInceput"].ToString() != "" && dt >= Convert.ToDateTime(dtCtr.Rows[0]["CicluDataInceput"]))
-                    {
-                        TimeSpan ts = Convert.ToDateTime(dt) - Convert.ToDateTime(dtCtr.Rows[0]["CicluDataInceput"]);
-                        int nrZile = Convert.ToInt32(ts.TotalDays);
-                        int lung = 1;
-                        if (dtCtr.Rows[0]["CicluLungime"].ToString() != "") lung = Convert.ToInt32(dtCtr.Rows[0]["CicluLungime"]);
-                        int zi = (nrZile % lung) + 1;
-                        DataTable dtCic = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ContracteCiclice"" WHERE ""IdContract""={0} AND ""ZiCiclu"" = {1}", idCtr, zi));
-                        if (dtCic.Rows.Count > 0 && dtCtr.Rows[0]["IdContractZilnic"].ToString() != "") idCtr = Convert.ToInt32(General.Nz(dtCtr.Rows[0]["IdContractZilnic"], -99));
-                        dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
-                    }
-                }
-
+                
+                //Florin 2020.04.16 - nu se mai foloseste odata cu optimizarea contracte si programe
+                ////contract ciclic
+                //if (dtCtr.Rows.Count > 0 && Convert.ToInt32(General.Nz(dtCtr.Rows[0]["TipContract"], -99)) == 2)
+                //{
+                //    if (dt != null && dtCtr.Rows[0]["CicluDataInceput"].ToString() != "" && dt >= Convert.ToDateTime(dtCtr.Rows[0]["CicluDataInceput"]))
+                //    {
+                //        TimeSpan ts = Convert.ToDateTime(dt) - Convert.ToDateTime(dtCtr.Rows[0]["CicluDataInceput"]);
+                //        int nrZile = Convert.ToInt32(ts.TotalDays);
+                //        int lung = 1;
+                //        if (dtCtr.Rows[0]["CicluLungime"].ToString() != "") lung = Convert.ToInt32(dtCtr.Rows[0]["CicluLungime"]);
+                //        int zi = (nrZile % lung) + 1;
+                //        DataTable dtCic = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ContracteCiclice"" WHERE ""IdContract""={0} AND ""ZiCiclu"" = {1}", idCtr, zi));
+                //        if (dtCic.Rows.Count > 0 && dtCtr.Rows[0]["IdContractZilnic"].ToString() != "") idCtr = Convert.ToInt32(General.Nz(dtCtr.Rows[0]["IdContractZilnic"], -99));
+                //        dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
+                //    }
+                //}
 
                 int ziLibera = Convert.ToInt32(General.ExecutaScalar(string.Format(@"SELECT COUNT(*) FROM HOLIDAYS WHERE DAY={0}", General.ToDataUniv(dt))));
                 int sapt = Dami.ZiSapt(dt.Value.DayOfWeek.ToString());

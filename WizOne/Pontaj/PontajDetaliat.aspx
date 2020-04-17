@@ -10,36 +10,36 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td class="pull-right">
-                <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" Visible="false">
+                <dx:ASPxButton ID="btnBack" ClientInstanceName="btnBack" ClientIDMode="Static" runat="server" Text="Inapoi" AutoPostBack="true" OnClick="btnBack_Click" oncontextMenu="ctx(this,event)" Visible="false" UseSubmitBehavior="false">
                     <Image Url="~/Fisiere/Imagini/Icoane/sgSt.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="true" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnPrint" ClientInstanceName="btnPrint" ClientIDMode="Static" runat="server" Text="Imprima" AutoPostBack="true" OnClick="btnPrint_Click" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <Image Url="~/Fisiere/Imagini/Icoane/print.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnPtjEchipa" ClientInstanceName="btnPtjEchipa" ClientIDMode="Static" runat="server" Text="Pontajul Echipei" AutoPostBack="false" OnClick="btnPtjEchipa_Click" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnPtjEchipa" ClientInstanceName="btnPtjEchipa" ClientIDMode="Static" runat="server" Text="Pontajul Echipei" AutoPostBack="false" OnClick="btnPtjEchipa_Click" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <Image Url="~/Fisiere/Imagini/Icoane/chooser.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnRespins" ClientInstanceName="btnRespins" ClientIDMode="Static" runat="server" Text="Respinge" AutoPostBack="false" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnRespins'); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/renunta.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnAproba" ClientInstanceName="btnAproba" ClientIDMode="Static" runat="server" Text="Aproba" AutoPostBack="false" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnAproba'); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/aprobare.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnInit" ClientInstanceName="btnInit" ClientIDMode="Static" runat="server" Text="Init" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnInit" ClientInstanceName="btnInit" ClientIDMode="Static" runat="server" Text="Init" AutoPostBack="false" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <ClientSideEvents Click="function (s,e) { popUpInit.Show(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/initializare.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnDelete" ClientInstanceName="btnDelete" ClientIDMode="Static" runat="server" Text="Sterge" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnDelete" ClientInstanceName="btnDelete" ClientIDMode="Static" runat="server" Text="Sterge" AutoPostBack="false" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <ClientSideEvents Click="function(s, e) { grDate.PerformCallback('btnDelete'); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnRecalc" ClientInstanceName="btnRecalc" ClientIDMode="Static" runat="server" Text="Recalculeaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnRecalc" ClientInstanceName="btnRecalc" ClientIDMode="Static" runat="server" Text="Recalculeaza" AutoPostBack="false" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <ClientSideEvents Click="function(s, e) { OnRecalcClick(); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/calcul.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)">
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" UseSubmitBehavior="false">
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
                 </dx:ASPxButton>
             </td>
@@ -61,20 +61,20 @@
                                         <div id="divPeAng" runat="server" class="ptj_pe_zi">
                                             <div class="ptj_filtru">
                                                 <label id="lblAnLuna" runat="server">Luna/An</label>
-                                                    <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom" >
+                                                    <dx:ASPxDateEdit ID="txtAnLuna" runat="server" Width="100px" DisplayFormatString="MM/yyyy" PickerType="Months" EditFormatString="MM/yyyy" EditFormat="Custom">
                                                         <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback('txtAnLuna'); }" />
                                                         <CalendarProperties FirstDayOfWeek="Monday" />
                                                 </dx:ASPxDateEdit>
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblRolAng" runat="server">Roluri</label>
-                                                <dx:ASPxComboBox ID="cmbRolAng" ClientInstanceName="cmbRolAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" >
+                                                <dx:ASPxComboBox ID="cmbRolAng" ClientInstanceName="cmbRolAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="Id" TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
                                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlCtl.PerformCallback('cmbRolAng'); }" />
                                                 </dx:ASPxComboBox>
                                             </div>
                                             <div class="ptj_filtru">
                                                 <label id="lblAng" runat="server">Angajat</label>
-                                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true" TextFormatString="{0} {1}" >
+                                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false" SelectInputTextOnClick="true" TextFormatString="{0} {1}">
                                                     <Columns>
                                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
                                                         <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />

@@ -18,10 +18,11 @@
         </tr>
         <tr>
             <td colspan="2"> 
-                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" SettingsPager-PageSize="50" Theme="Metropolis" Styles-AlternatingRow-BackColor="#FCFCFC"  Styles-Header-BackColor="#e9e9e9"  Styles-Header-Font-Bold="true">
+                <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" Width="100%" AutoGenerateColumns="false" OnCustomCallback="grDate_CustomCallback" SettingsPager-PageSize="50" Theme="Metropolis">
                     <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="false" AllowSelectSingleRowOnly="true" />
                     <Settings ShowFilterRow="True" ShowGroupPanel="False" />
                     <SettingsSearchPanel Visible="False" />
+                    <Styles AlternatingRow-BackColor="#FCFCFC" Header-BackColor="#e9e9e9" Header-Font-Bold="true"/>
                     <ClientSideEvents ContextMenu="ctx"
                         CustomButtonClick="function(s,e) { grDate_CustomButtonClick(s,e); }" 
                         EndCallback="function(s,e) { onGridEndCallback(s); }" />

@@ -13723,6 +13723,10 @@ CREATE TABLE "ImportDateNomen"(
     CREATE UNIQUE INDEX "PK_ImportDateNomen" ON "ImportDateNomen" ("IdAuto") ;
 
 ALTER TABLE "ImportDateNomen" ADD CONSTRAINT "PK_ImportDateNomen" PRIMARY KEY ("IdAuto");
+/
+
+ALTER TABLE "Ptj_tblFormuleCumulat" ADD "NumarZecimale" number(10);
+/
 
 
 ----  2.2.128  ----

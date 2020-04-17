@@ -48,7 +48,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <dx:ASPxFormLayout ID="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Metropolis" ShowItemCaptionColon="false">
+                            <dx:ASPxFormLayout ID="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Office365" ShowItemCaptionColon="false">
                                 <SettingsAdaptivity></SettingsAdaptivity>
                                 <Items>
                                     <dx:TabbedLayoutGroup>
@@ -235,6 +235,7 @@
                                                                     <SettingsSearchPanel Visible="false" />
                                                                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                                                                     <SettingsPager Mode="ShowAllRecords" />
+                                                                    <Styles Header-BackColor="#fafafa" />
                                                                     <ClientSideEvents ContextMenu="ctx" />
                                                                     <Columns>
                                                                         <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
@@ -305,6 +306,7 @@
                                                                     <SettingsSearchPanel Visible="false" />
                                                                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                                                                     <SettingsPager Mode="ShowAllRecords" />
+                                                                    <Styles Header-BackColor="#fafafa" />
                                                                     <ClientSideEvents ContextMenu="ctx" />
                                                                     <Columns>
                                                                         <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
@@ -409,6 +411,7 @@
                                                                     <SettingsSearchPanel Visible="false" />
                                                                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                                                                     <SettingsPager Mode="ShowAllRecords" />
+                                                                    <Styles Header-BackColor="#fafafa" />
                                                                     <ClientSideEvents ContextMenu="ctx" />
                                                                     <Columns>
                                                                         <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
@@ -543,6 +546,7 @@
                                                                     <SettingsSearchPanel Visible="false" />
                                                                     <SettingsLoadingPanel Mode="ShowAsPopup" />
                                                                     <SettingsPager Mode="ShowAllRecords" />
+                                                                    <Styles Header-BackColor="#fafafa" />
                                                                     <ClientSideEvents ContextMenu="ctx" />
                                                                     <Columns>
                                                                         <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>
@@ -624,6 +628,7 @@
                                                                             <SettingsSearchPanel Visible="false" />
                                                                             <SettingsLoadingPanel Mode="ShowAsPopup" />
                                                                             <SettingsPager Mode="ShowAllRecords" />
+                                                                            <Styles Header-BackColor="#fafafa" />
                                                                             <ClientSideEvents ContextMenu="ctx" />
                                                                             <Columns>
                                                                                 <dx:GridViewCommandColumn FixedStyle="Left" ShowDeleteButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" ShowNewButtonInHeader="true"/>

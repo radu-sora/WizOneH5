@@ -12858,6 +12858,8 @@ CREATE TABLE ImportDateNomen(
 ) ON [PRIMARY]
 GO
 
+ALTER TABLE Ptj_tblFormuleCumulat ADD NumarZecimale int
+GO
 
 ----  2.2.128  ----
 
@@ -13044,7 +13046,4 @@ GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AlcatuireNumeUtilizator', '', 'Exemple:  F10008+'' ''+F10009; F100901 etc', 0, -99, GetDate())
 GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, GetDate())
-GO
-
-ALTER TABLE Ptj_tblFormuleCumulat ADD NumarZecimale int
 GO

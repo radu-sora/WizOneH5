@@ -32,6 +32,7 @@ namespace WizOne.Contracte
 
                 if (!IsPostBack)
                 {
+                    #region Incarcam DataSet-ul
                     DataSet ds = new DataSet();
                     DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""=@1", new object[] { idCtr });
                     dt.TableName = "Ptj_Contracte";
@@ -48,32 +49,30 @@ namespace WizOne.Contracte
                     ds.Tables.Add(dtSch);
                     Session["InformatiaCurenta"] = ds;
 
-                    if (dt.Rows.Count > 0)
-                    {
-                        DataRow dr = dt.Rows[0];
+                    pnlTab.DataSource = ds.Tables["Ptj_Contracte"];
+                    pnlTab.DataBind();
+                    #endregion
 
-                        txtId.Value = dr["Id"];
-                        txtDenumire.Value = General.Nz(dr["Denumire"], null);
-
-                        txtOraSchIn.Value = General.Nz(dr["OraInSchimbare"], null);
-                        txtOraSchOut.Value = General.Nz(dr["OraOutSchimbare"], null);
-                        chkOreSup.Value = Convert.ToBoolean(General.Nz(dr["OreSup"], false));
-                        cmbAfisare.Value = General.Nz(dr["Afisare"], null);
-                        cmbRap.Value = General.Nz(dr["TipRaportareOreNoapte"], null);
-                        chkPontareAuto.Value = Convert.ToBoolean(General.Nz(dr["PontareAutomata"], false));
-                        txtOraIn.Value = General.Nz(dr["OraInInitializare"], null);
-                        txtOraOut.Value = General.Nz(dr["OraOutInitializare"], null);
-                    }
-
+                    #region Incarcam ComboBox-urile
                     DataTable dtCmb = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_tblAbsente"" ORDER BY ""Denumire""  ", null);
                     GridViewDataComboBoxColumn colAbs = (grDateAbs.Columns["IdAbsenta"] as GridViewDataComboBoxColumn);
                     colAbs.PropertiesComboBox.DataSource = dtCmb;
+                    #endregion
 
+                    #region Incarcam Gridurile
                     grDateAbs.KeyFieldName = "IdAuto";
                     grDateAbs.DataSource = dtAbs;
                     grDateAbs.DataBind();
-
                     IncarcaGriduriSchimburi();
+                    #endregion
+
+                    if (ds.Tables["Ptj_Contracte"].Rows.Count > 0)
+                    {
+                        DataRow dr = ds.Tables["Ptj_Contracte"].Rows[0];
+
+                        txtId.Value = dr["Id"];
+                        txtDenumire.Value = General.Nz(dr["Denumire"], null);
+                    }
                 }
             }
             catch (Exception ex)
@@ -109,87 +108,155 @@ namespace WizOne.Contracte
             }
         }
 
-        protected void pnlCtl_Callback(object sender, CallbackEventArgsBase e)
+        protected void pnlCall_Callback(object sender, CallbackEventArgsBase e)
         {
             try
             {
-                if (idCtr == -99)
-                    idCtr = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Contracte""", null), 0));
-
-                grDateAbs.UpdateEdit();
-
-                for (int i = 1; i < 8; i++)
+                switch (e.Parameter)
                 {
-                    ASPxGridView grDate = tabCtr.FindControl("grDate" + i) as ASPxGridView;
-                    if (grDate != null)
-                        grDate.UpdateEdit();
+                    case "btnSave":
+                        {
+                            if (idCtr == -99)
+                                idCtr = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Contracte""", null), 0));
+
+                            grDateAbs.UpdateEdit();
+
+                            for (int i = 1; i < 8; i++)
+                            {
+                                ASPxGridView grDate = pnlTab.FindNestedControlByFieldName("grDate" + i) as ASPxGridView;
+                                if (grDate != null)
+                                    grDate.UpdateEdit();
+                            }
+
+                            //salvam in Ptj_Contracte
+                            DataSet ds = Session["InformatiaCurenta"] as DataSet;
+                            DataTable dt = ds.Tables["Ptj_Contracte"];
+                            DataTable dtSch = ds.Tables["Ptj_ContracteSchimburi"];
+
+                            DataRow dr = dt.NewRow();
+                            if (esteNou)
+                                dr["Id"] = idCtr;
+                            else
+                                dr = dt.Rows[0];
+
+                            dr["Denumire"] = txtDenumire.Value ?? DBNull.Value;
+                            dr["OreSup"] = chkOreSup.Value ?? DBNull.Value;
+                            dr["TipRaportareOreNoapte"] = cmbRap.Value ?? DBNull.Value;
+                            dr["PontareAutomata"] = chkPontareAuto.Value ?? DBNull.Value;
+                            if (txtOraSchIn.Value != null)
+                                dr["OraInSchimbare"] = General.ChangeToCurrentYear(txtOraSchIn.DateTime);
+                            else
+                                dr["OraInSchimbare"] = DBNull.Value;
+                            if (txtOraSchOut.Value != null)
+                                dr["OraOutSchimbare"] = General.ChangeToCurrentYear(txtOraSchOut.DateTime);
+                            else
+                                dr["OraOutSchimbare"] = DBNull.Value;
+                            if (txtOraIn.Value != null)
+                                dr["OraInInitializare"] = General.ChangeToCurrentYear(txtOraIn.DateTime);
+                            else
+                                dr["OraInInitializare"] = DBNull.Value;
+                            if (txtOraOut.Value != null)
+                                dr["OraOutInitializare"] = General.ChangeToCurrentYear(txtOraOut.DateTime);
+                            else
+                                dr["OraOutInitializare"] = DBNull.Value;
+
+                            for (int i = 1; i <= 8; i++)
+                            {
+                                int cnt = dtSch.Select("TipSchimb=" + i).Length;
+                                switch (cnt)
+                                {
+                                    case 0:
+                                        dr["TipSchimb" + i] = DBNull.Value;
+                                        dr["Program" + i] = DBNull.Value;
+                                        break;
+                                    case 1:
+                                        dr["TipSchimb" + i] = 1;
+                                        DataTable dtTmp = dtSch.Select("TipSchimb=" + i).CopyToDataTable();
+                                        dr["Program" + i] = dtTmp.Rows[0]["IdProgram"];
+                                        break;
+                                    default:
+                                        dr["TipSchimb" + i] = 2;
+                                        dr["Program" + i] = DBNull.Value;
+                                        break;
+                                }
+                            }
+
+                            dr["USER_NO"] = Session["UserId"];
+                            dr["TIME"] = DateTime.Now;
+
+                            if (esteNou)
+                                dt.Rows.Add(dr);
+
+                            General.SalveazaDate(dt, "Ptj_Contracte");
+                            General.SalveazaDate(ds.Tables["Ptj_ContracteAbsente"], "Ptj_ContracteAbsente");
+                            General.SalveazaDate(ds.Tables["Ptj_ContracteSchimburi"], "Ptj_ContracteSchimburi");
+
+                            ASPxWebControl.RedirectOnCallback("~/Contracte/Lista.aspx");
+                        }
+                        break;
+                    case "btnDuplica":
+                        {
+                            if (cmbZiDeLa.Value != null && cmbZiPentru.Value != null)
+                            {
+                                if (idCtr == -99)
+                                    idCtr = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Contracte""", null), 0));
+
+                                ASPxGridView grDate = pnlTab.FindNestedControlByFieldName("grDate" + cmbZiDeLa.Value) as ASPxGridView;
+                                if (grDate != null)
+                                    grDate.UpdateEdit();
+
+                                string schDes = cmbZiPentru.Text.Replace(";", ",").Replace("Luni", "1").Replace("Marti", "2").Replace("Miercuri", "3").Replace("Joi", "4").Replace("Vineri", "5").Replace("Sambata", "6").Replace("Duminica", "7").Replace("Sarbatori legale", "8").Replace(cmbZiDeLa.Value + ",", "");
+                                DataSet ds = Session["InformatiaCurenta"] as DataSet;
+                                DataTable dt = ds.Tables["Ptj_ContracteSchimburi"];
+
+                                //stergem liniile existente
+                                for (int i = dt.Rows.Count - 1; i >= 0; i--)
+                                {
+                                    DataRow dr = dt.Rows[i];
+                                    if (dr.RowState != DataRowState.Deleted)
+                                    {
+                                        if (schDes.IndexOf(dr["TipSchimb"].ToString()) >= 0)
+                                            dr.Delete();
+                                    }
+                                }
+
+                                //adaugam liniile
+                                DataTable dtZi = dt.Select("TipSchimb = " + cmbZiDeLa.Value).CopyToDataTable();
+                                string[] arr = schDes.Split(',');
+                                for (int i = 0; i < arr.Length; i++)
+                                {
+                                    for (int j = 0; j < dtZi.Rows.Count; j++)
+                                    {
+                                        DataRow dr = dt.NewRow();
+                                        DataRow drOri = dtZi.Rows[j];
+
+                                        dr["IdContract"] = idCtr;
+                                        dr["TipSchimb"] = arr[i];
+                                        dr["IdProgram"] = drOri["IdProgram"];
+                                        dr["OraInceput"] = drOri["OraInceput"];
+                                        dr["OraInceputDeLa"] = drOri["OraInceputDeLa"];
+                                        dr["OraInceputLa"] = drOri["OraInceputLa"];
+                                        dr["OraSfarsit"] = drOri["OraSfarsit"];
+                                        dr["OraSfarsitDeLa"] = drOri["OraSfarsitDeLa"];
+                                        dr["OraSfarsitLa"] = drOri["OraSfarsitLa"];
+                                        dr["ModVerificare"] = drOri["ModVerificare"];
+                                        dr["USER_NO"] = Session["UserId"];
+                                        dr["TIME"] = DateTime.Now;
+
+                                        dt.Rows.Add(dr);
+                                    }
+                                }
+
+                                Session["InformatiaCurenta"] = ds;
+                                IncarcaGriduriSchimburi();
+
+                                DataTable dtCmb = General.IncarcaDT(@"SELECT ""Id"", ""Denumire"" FROM ""Ptj_tblAbsente"" ORDER BY ""Denumire""  ", null);
+                                GridViewDataComboBoxColumn colAbs = (grDateAbs.Columns["IdAbsenta"] as GridViewDataComboBoxColumn);
+                                colAbs.PropertiesComboBox.DataSource = dtCmb;
+                            }
+                        }
+                        break;
                 }
-                    
-                //salvam in Ptj_Contracte
-                DataSet ds = Session["InformatiaCurenta"] as DataSet;
-                DataTable dt = ds.Tables["Ptj_Contracte"];
-                DataTable dtSch = ds.Tables["Ptj_ContracteSchimburi"];
-
-                DataRow dr = dt.NewRow();
-                if (esteNou)
-                    dr["Id"] = idCtr;
-                else
-                    dr = dt.Rows[0];
-
-                dr["Denumire"] = txtDenumire.Value ?? DBNull.Value;
-                dr["OreSup"] = chkOreSup.Value ?? DBNull.Value;
-                dr["Afisare"] = cmbAfisare.Value ?? DBNull.Value;
-                dr["TipRaportareOreNoapte"] = cmbRap.Value ?? DBNull.Value;
-                dr["PontareAutomata"] = chkPontareAuto.Value ?? DBNull.Value;
-                if (txtOraSchIn.Value != null)
-                    dr["OraInSchimbare"] = General.ChangeToCurrentYear(txtOraSchIn.DateTime);
-                else
-                    dr["OraInSchimbare"] = DBNull.Value;
-                if (txtOraSchOut.Value != null)
-                    dr["OraOutSchimbare"] = General.ChangeToCurrentYear(txtOraSchOut.DateTime);
-                else
-                    dr["OraOutSchimbare"] = DBNull.Value;
-                if (txtOraIn.Value != null)
-                    dr["OraInInitializare"] = General.ChangeToCurrentYear(txtOraIn.DateTime);
-                else
-                    dr["OraInInitializare"] = DBNull.Value;
-                if (txtOraOut.Value != null)
-                    dr["OraOutInitializare"] = General.ChangeToCurrentYear(txtOraOut.DateTime);
-                else
-                    dr["OraOutInitializare"] = DBNull.Value;
-
-                for (int i = 1; i <= 8; i++)
-                {
-                    int cnt = dtSch.Select("TipSchimb=" + i).Length;
-                    switch (cnt)
-                    {
-                        case 0:
-                            dr["TipSchimb" + i] = DBNull.Value;
-                            dr["Program" + i] = DBNull.Value;
-                            break;
-                        case 1:
-                            dr["TipSchimb" + i] = 1;
-                            DataTable dtTmp = dtSch.Select("TipSchimb=" + i).CopyToDataTable();
-                            dr["Program" + i] = dtTmp.Rows[0]["IdProgram"];
-                            break;
-                        default:
-                            dr["TipSchimb" + i] = 2;
-                            dr["Program" + i] = DBNull.Value;
-                            break;
-                    }
-                }
-
-                dr["USER_NO"] = Session["UserId"];
-                dr["TIME"] = DateTime.Now;
-
-                if (esteNou)
-                    dt.Rows.Add(dr);
-
-                General.SalveazaDate(dt, "Ptj_Contracte");
-                General.SalveazaDate(ds.Tables["Ptj_ContracteAbsente"], "Ptj_ContracteAbsente");
-                General.SalveazaDate(ds.Tables["Ptj_ContracteSchimburi"], "Ptj_ContracteSchimburi");
-
-                ASPxWebControl.RedirectOnCallback("~/Contracte/Lista.aspx");
             }
             catch (Exception ex)
             {
@@ -218,7 +285,7 @@ namespace WizOne.Contracte
 
                 for (int i = 1; i <= 8; i++)
                 {
-                    ASPxGridView grDate = tabCtr.FindControl("grDate" + i) as ASPxGridView;
+                    ASPxGridView grDate = pnlTab.FindNestedControlByFieldName("grDate" + i) as ASPxGridView;
                     if (grDate != null)
                     {
                         GridViewDataComboBoxColumn colPrg = (grDate.Columns["IdProgram"] as GridViewDataComboBoxColumn);
@@ -239,69 +306,69 @@ namespace WizOne.Contracte
             }
         }
 
-        protected void tabCtr_Callback(object sender, CallbackEventArgsBase e)
-        {
-            try
-            {
-                if (cmbZiDeLa.Value != null && cmbZiPentru.Value != null)
-                {
-                    if (idCtr == -99)
-                        idCtr = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Contracte""", null), 0));
+        //protected void tabCtr_Callback(object sender, CallbackEventArgsBase e)
+        //{
+        //    try
+        //    {
+        //        if (cmbZiDeLa.Value != null && cmbZiPentru.Value != null)
+        //        {
+        //            if (idCtr == -99)
+        //                idCtr = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Contracte""", null), 0));
 
-                    ASPxGridView grDate = tabCtr.FindControl("grDate" + cmbZiDeLa.Value) as ASPxGridView;
-                    if (grDate != null)
-                        grDate.UpdateEdit();
+        //            ASPxGridView grDate = tabCtr.FindControl("grDate" + cmbZiDeLa.Value) as ASPxGridView;
+        //            if (grDate != null)
+        //                grDate.UpdateEdit();
 
-                    string schDes = cmbZiPentru.Text.Replace(";", ",").Replace("Luni", "1").Replace("Marti", "2").Replace("Miercuri", "3").Replace("Joi", "4").Replace("Vineri", "5").Replace("Sambata", "6").Replace("Duminica", "7").Replace("Sarbatori legale", "8").Replace(cmbZiDeLa.Value + ",", "");
-                    DataSet ds = Session["InformatiaCurenta"] as DataSet;
-                    DataTable dt = ds.Tables["Ptj_ContracteSchimburi"];
+        //            string schDes = cmbZiPentru.Text.Replace(";", ",").Replace("Luni", "1").Replace("Marti", "2").Replace("Miercuri", "3").Replace("Joi", "4").Replace("Vineri", "5").Replace("Sambata", "6").Replace("Duminica", "7").Replace("Sarbatori legale", "8").Replace(cmbZiDeLa.Value + ",", "");
+        //            DataSet ds = Session["InformatiaCurenta"] as DataSet;
+        //            DataTable dt = ds.Tables["Ptj_ContracteSchimburi"];
 
-                    //stergem liniile existente
-                    for (int i = dt.Rows.Count - 1; i >= 0; i--)
-                    {
-                        DataRow dr = dt.Rows[i];
-                        if (dr.RowState != DataRowState.Deleted)
-                        {
-                            if (schDes.IndexOf(dr["TipSchimb"].ToString()) >= 0)
-                                dr.Delete();
-                        }
-                    }
+        //            //stergem liniile existente
+        //            for (int i = dt.Rows.Count - 1; i >= 0; i--)
+        //            {
+        //                DataRow dr = dt.Rows[i];
+        //                if (dr.RowState != DataRowState.Deleted)
+        //                {
+        //                    if (schDes.IndexOf(dr["TipSchimb"].ToString()) >= 0)
+        //                        dr.Delete();
+        //                }
+        //            }
 
-                    //adaugam liniile
-                    DataTable dtZi = dt.Select("TipSchimb = " + cmbZiDeLa.Value).CopyToDataTable();
-                    string[] arr = schDes.Split(',');
-                    for (int i = 0; i < arr.Length; i++)
-                    {
-                        for (int j = 0; j < dtZi.Rows.Count; j++)
-                        {
-                            DataRow dr = dt.NewRow();
-                            DataRow drOri = dtZi.Rows[j];
+        //            //adaugam liniile
+        //            DataTable dtZi = dt.Select("TipSchimb = " + cmbZiDeLa.Value).CopyToDataTable();
+        //            string[] arr = schDes.Split(',');
+        //            for (int i = 0; i < arr.Length; i++)
+        //            {
+        //                for (int j = 0; j < dtZi.Rows.Count; j++)
+        //                {
+        //                    DataRow dr = dt.NewRow();
+        //                    DataRow drOri = dtZi.Rows[j];
 
-                            dr["IdContract"] = idCtr;
-                            dr["TipSchimb"] = arr[i];
-                            dr["IdProgram"] = drOri["IdProgram"];
-                            dr["OraInceput"] = drOri["OraInceput"];
-                            dr["OraInceputDeLa"] = drOri["OraInceputDeLa"];
-                            dr["OraInceputLa"] = drOri["OraInceputLa"];
-                            dr["OraSfarsit"] = drOri["OraSfarsit"];
-                            dr["OraSfarsitDeLa"] = drOri["OraSfarsitDeLa"];
-                            dr["OraSfarsitLa"] = drOri["OraSfarsitLa"];
-                            dr["ModVerificare"] = drOri["ModVerificare"];
-                            dr["USER_NO"] = Session["UserId"];
-                            dr["TIME"] = DateTime.Now;
+        //                    dr["IdContract"] = idCtr;
+        //                    dr["TipSchimb"] = arr[i];
+        //                    dr["IdProgram"] = drOri["IdProgram"];
+        //                    dr["OraInceput"] = drOri["OraInceput"];
+        //                    dr["OraInceputDeLa"] = drOri["OraInceputDeLa"];
+        //                    dr["OraInceputLa"] = drOri["OraInceputLa"];
+        //                    dr["OraSfarsit"] = drOri["OraSfarsit"];
+        //                    dr["OraSfarsitDeLa"] = drOri["OraSfarsitDeLa"];
+        //                    dr["OraSfarsitLa"] = drOri["OraSfarsitLa"];
+        //                    dr["ModVerificare"] = drOri["ModVerificare"];
+        //                    dr["USER_NO"] = Session["UserId"];
+        //                    dr["TIME"] = DateTime.Now;
 
-                            dt.Rows.Add(dr);
-                        }
-                    }
+        //                    dt.Rows.Add(dr);
+        //                }
+        //            }
 
-                    Session["InformatiaCurenta"] = ds;
-                    IncarcaGriduriSchimburi();
-                }
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //            Session["InformatiaCurenta"] = ds;
+        //            IncarcaGriduriSchimburi();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
     }
 }

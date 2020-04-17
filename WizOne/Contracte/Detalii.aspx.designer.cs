@@ -13,13 +13,13 @@ namespace WizOne.Contracte {
     public partial class Detalii {
         
         /// <summary>
-        /// pnlCtl control.
+        /// pnlCall control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCall;
         
         /// <summary>
         /// txtTitlu control.
@@ -85,31 +85,13 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ASPxTextBox txtDenumire;
         
         /// <summary>
-        /// tabCtr control.
+        /// pnlTab control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxPageControl tabCtr;
-        
-        /// <summary>
-        /// ContentControl1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ContentControl ContentControl1;
-        
-        /// <summary>
-        /// lblOraSchIn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblOraSchIn;
+        protected global::DevExpress.Web.ASPxFormLayout pnlTab;
         
         /// <summary>
         /// txtOraSchIn control.
@@ -121,15 +103,6 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ASPxTimeEdit txtOraSchIn;
         
         /// <summary>
-        /// lblOraSchOut control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblOraSchOut;
-        
-        /// <summary>
         /// txtOraSchOut control.
         /// </summary>
         /// <remarks>
@@ -137,15 +110,6 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTimeEdit txtOraSchOut;
-        
-        /// <summary>
-        /// lblOreSup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblOreSup;
         
         /// <summary>
         /// chkOreSup control.
@@ -157,31 +121,13 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ASPxCheckBox chkOreSup;
         
         /// <summary>
-        /// lblAfisare control.
+        /// cmbRap control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblAfisare;
-        
-        /// <summary>
-        /// cmbAfisare control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbAfisare;
-        
-        /// <summary>
-        /// lblOraInInit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblOraInInit;
+        protected global::DevExpress.Web.ASPxComboBox cmbRap;
         
         /// <summary>
         /// txtOraIn control.
@@ -193,15 +139,6 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ASPxTimeEdit txtOraIn;
         
         /// <summary>
-        /// lblOraOut control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblOraOut;
-        
-        /// <summary>
         /// txtOraOut control.
         /// </summary>
         /// <remarks>
@@ -209,15 +146,6 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxTimeEdit txtOraOut;
-        
-        /// <summary>
-        /// lblPontareAuto control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblPontareAuto;
         
         /// <summary>
         /// chkPontareAuto control.
@@ -229,24 +157,6 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ASPxCheckBox chkPontareAuto;
         
         /// <summary>
-        /// lblRap control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblRap;
-        
-        /// <summary>
-        /// cmbRap control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbRap;
-        
-        /// <summary>
         /// grDateAbs control.
         /// </summary>
         /// <remarks>
@@ -256,24 +166,6 @@ namespace WizOne.Contracte {
         protected global::DevExpress.Web.ASPxGridView grDateAbs;
         
         /// <summary>
-        /// ContentControl2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ContentControl ContentControl2;
-        
-        /// <summary>
-        /// lblDuplica control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblDuplica;
-        
-        /// <summary>
         /// cmbZiDeLa control.
         /// </summary>
         /// <remarks>
@@ -281,15 +173,6 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxComboBox cmbZiDeLa;
-        
-        /// <summary>
-        /// lblPentru control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblPentru;
         
         /// <summary>
         /// cmbZiPentru control.

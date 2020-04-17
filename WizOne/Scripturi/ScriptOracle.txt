@@ -13725,12 +13725,141 @@ CREATE TABLE "ImportDateNomen"(
 ALTER TABLE "ImportDateNomen" ADD CONSTRAINT "PK_ImportDateNomen" PRIMARY KEY ("IdAuto");
 
 
-----	2.2.128	----
+----  2.2.128  ----
+
+
+DROP TABLE "Ptj_ContracteVal" PURGE;
+/
+DROP TABLE "Ptj_ContracteCiclice" PURGE;
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "CicluDataInceput";
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "CicluLungime";
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "ScadeVal0";
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "ScadeFaraDepasireNorma";
+/
+ALTER TABLE "Ptj_Contracte" DROP COLUMN "TipContract";
+/
+
+ALTER TABLE "Ptj_Contracte" DROP CONSTRAINT "Ptj_Contracte_PK";
+DROP INDEX "Ptj_Contracte_PK";
+
+ALTER TABLE "Ptj_Contracte" MODIFY ("Id" NOT NULL ENABLE);  
+CREATE UNIQUE INDEX "Ptj_Contracte_PK" ON "Ptj_Contracte" ("Id") ;
+ALTER TABLE "Ptj_Contracte" ADD CONSTRAINT "Ptj_Contracte_PK" PRIMARY KEY ("Id");
+/
+
+UPDATE "tblMeniuri" SET "Pagina"='Contracte\Lista' WHERE "Pagina"='ContracteLucru\Contract';
+COMMIT;
+
+
+INSERT INTO "Ptj_ContracteSchimburi"("IdContract", "TipSchimb", "Denumire", "IdProgram", "OraInceput", "OraInceputDeLa", "OraInceputLa", "OraSfarsit", "OraSfarsitDeLa", "OraSfarsitLa", "ModVerificare")
+SELECT "ContractId", "ZiSapt", "ProgramDen", "ProgramId", "OraInceput", "OraInceputDeLa", "OraInceputLa", "OraSfarsit", "OraSfarsitDeLa", "OraSfarsitLa", "ModVerificare"
+FROM (
+SELECT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 1 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN COALESCE(A."Program1", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", B.*
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=1 
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb1", A."TipSchimb0") = 1 THEN COALESCE(A."Program1", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 2 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN COALESCE(A."Program2", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", B.*
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=2
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb2", A."TipSchimb0") = 1 THEN COALESCE(A."Program2", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 3 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN COALESCE(A."Program3", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", B.*
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=3
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb3", A."TipSchimb0") = 1 THEN COALESCE(A."Program3", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 4 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN COALESCE(A."Program4", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", B.*
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=4
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb4", A."TipSchimb0") = 1 THEN COALESCE(A."Program4", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 5 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN COALESCE(A."Program5", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", B.*
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=5
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb5", A."TipSchimb0") = 1 THEN COALESCE(A."Program5", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 6 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN COALESCE(A."Program6", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", B.*
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=6
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb6", A."TipSchimb0") = 1 THEN COALESCE(A."Program6", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 7 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN COALESCE(A."Program7", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", B.*
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=7
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb7", A."TipSchimb0") = 1 THEN COALESCE(A."Program7", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+UNION
+SELECT A."Id" AS "ContractId", A."Denumire" AS "ContractDen", 8 AS "ZiSapt", 
+CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN COALESCE(A."Program8", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END AS "ProgramId",
+C."Denumire" AS "ProgramDen", B.*
+FROM "Ptj_Contracte" A
+LEFT JOIN "Ptj_ContracteSchimburi" B ON A."Id"=B."IdContract" AND B."TipSchimb"=8
+LEFT JOIN "Ptj_ContracteSchimburi" D ON A."Id"=D."IdContract" AND D."TipSchimb"=0 
+LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb8", A."TipSchimb0") = 1 THEN COALESCE(A."Program8", A."Program0") ELSE COALESCE(B."IdProgram", D."IdProgram") END)
+) X
+WHERE X."ProgramId" IS NOT NULL
+AND ("ContractId" * 1000000 + "ProgramId" * 10 + "ZiSapt") NOT IN 
+(SELECT "IdContract" * 1000000 + "IdProgram" * 10 + "TipSchimb" FROM "Ptj_ContracteSchimburi");
+COMMIT;
+
+UPDATE "tblMeniuri" SET "Pagina"='Programe\Lista' WHERE "Pagina"='ProgrameLucru\Programe';
+COMMIT;
+
+ALTER TABLE "Ptj_Programe" DROP CONSTRAINT "Ptj_Programe_PK";
+DROP INDEX "Ptj_Programe_PK";
+
+ALTER TABLE "Ptj_Programe" MODIFY ("Id" NOT NULL ENABLE);  
+CREATE UNIQUE INDEX "Ptj_Programe_PK" ON "Ptj_Programe" ("Id") ;
+ALTER TABLE "Ptj_Programe" ADD CONSTRAINT "Ptj_Programe_PK" PRIMARY KEY ("Id");
+/
+
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL0
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL1
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL2
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL3
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL4
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL0ROT
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL1ROT
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL2ROT
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL3ROT
+/
+ALTER TABLE "Ptj_Programe" DROP COLUMN VAL4ROT
+/
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('DezactivareUtilizatori', '', '1 - blocare utilizatori inactivi la logare; 2- blocare utilizatori inactivi si suspendati la logare', 0, -99, SYSDATE);
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AlcatuireNumeUtilizator', '', 'Exemple:  F10008 || '' '' || F10009; F100901 etc', 0, -99, SYSDATE);
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, SYSDATE);
 COMMIT;
-
-ALTER TABLE "Ptj_tblFormuleCumulat" ADD "NumarZecimale" number(10);
-/

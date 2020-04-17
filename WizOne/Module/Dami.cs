@@ -216,7 +216,14 @@ namespace WizOne.Module
 
                                         break;
                                     }
-                                }                            
+
+                                    //verificam daca nu cumva se gaseste intr-un container de tip ASPxRoundPanel
+                                    foreach (ASPxFormLayout pnlCtl3 in pnlCtl.Controls.OfType<ASPxFormLayout>())
+                                    {
+                                        var ly = pnlCtl3.FindItemByFieldName(idCtl.Replace("ctl", ""));
+                                        if (ly != null) ly.Visible = false;
+                                    }
+                                }
                             }
                         }
                         else

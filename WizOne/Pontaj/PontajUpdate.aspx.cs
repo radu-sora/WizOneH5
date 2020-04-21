@@ -446,7 +446,7 @@ namespace WizOne.Pontaj
         {
             try
             {
-                if (txtDataInc.Value == null || txtDataSf.Value == null || txtMarcaInc.Value == null || txtMarcaSf.Value == null || (chkCtr.Checked == false && chkStr.Checked == false && chkNrm.Checked == false && chkPerAng.Checked == false && chkRecalc.Checked == false && chkCC.Checked == false))
+                if (txtDataInc.Value == null || txtDataSf.Value == null || txtMarcaInc.Value == null || txtMarcaSf.Value == null || (chkCtr.Checked == false && chkStr.Checked == false && chkNrm.Checked == false && chkPerAng.Checked == false && chkRecalc.Checked == false && chkCC.Checked == false && chkSL.Checked == false))
                 {
                     if (param == 1)
                         MessageBox.Show(Dami.TraduCuvant("Lipsesc date !"), MessageBox.icoError, "");

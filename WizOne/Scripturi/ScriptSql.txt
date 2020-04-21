@@ -12863,6 +12863,7 @@ CREATE TABLE ImportDateNomen(
 ) ON [PRIMARY]
 GO
 
+ALTER TABLE Ptj_tblFormuleCumulat ADD NumarZecimale int
 
 ----	2.2.128	----
 

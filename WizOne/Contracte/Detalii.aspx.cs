@@ -123,7 +123,7 @@ namespace WizOne.Contracte
 
                             for (int i = 1; i < 8; i++)
                             {
-                                ASPxGridView grDate = pnlTab.FindNestedControlByFieldName("grDate" + i) as ASPxGridView;
+                                ASPxGridView grDate = pnlPrg.FindNestedControlByFieldName("grDate" + i) as ASPxGridView;
                                 if (grDate != null)
                                     grDate.UpdateEdit();
                             }
@@ -201,7 +201,7 @@ namespace WizOne.Contracte
                                 if (idCtr == -99)
                                     idCtr = Convert.ToInt32(General.Nz(General.ExecutaScalar(@"SELECT COALESCE(MAX(""Id""),0) + 1 FROM ""Ptj_Contracte""", null), 0));
 
-                                ASPxGridView grDate = pnlTab.FindNestedControlByFieldName("grDate" + cmbZiDeLa.Value) as ASPxGridView;
+                                ASPxGridView grDate = pnlPrg.FindNestedControlByFieldName("grDate" + cmbZiDeLa.Value) as ASPxGridView;
                                 if (grDate != null)
                                     grDate.UpdateEdit();
 
@@ -285,7 +285,7 @@ namespace WizOne.Contracte
 
                 for (int i = 1; i <= 8; i++)
                 {
-                    ASPxGridView grDate = pnlTab.FindNestedControlByFieldName("grDate" + i) as ASPxGridView;
+                    ASPxGridView grDate = pnlPrg.FindNestedControlByFieldName("grDate" + i) as ASPxGridView;
                     if (grDate != null)
                     {
                         GridViewDataComboBoxColumn colPrg = (grDate.Columns["IdProgram"] as GridViewDataComboBoxColumn);

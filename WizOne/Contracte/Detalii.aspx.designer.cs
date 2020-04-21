@@ -13,15 +13,6 @@ namespace WizOne.Contracte {
     public partial class Detalii {
         
         /// <summary>
-        /// pnlCall control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxCallbackPanel pnlCall;
-        
-        /// <summary>
         /// txtTitlu control.
         /// </summary>
         /// <remarks>
@@ -164,6 +155,33 @@ namespace WizOne.Contracte {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView grDateAbs;
+        
+        /// <summary>
+        /// pnlCall control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCall;
+        
+        /// <summary>
+        /// PanelContent3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.PanelContent PanelContent3;
+        
+        /// <summary>
+        /// pnlPrg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxFormLayout pnlPrg;
         
         /// <summary>
         /// cmbZiDeLa control.

@@ -31,7 +31,7 @@ namespace WizOne.Pontaj
                     //DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.ALIAS,CS.COLOANA) ""Caption"" 
                     //                                    FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_AliasF"" AF ON CS.""Coloana"" = AF.""Denumire""
                     //                                    ORDER BY CS.""Ordine""  ", null);
-                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.""Alias"",CS.""Coloana"") ""Caption"",  coalesce(af.""AliasToolTip"", coalesce(AF.""Alias"",CS.""Coloana"")) ""ToolTip"" 
+                    DataTable dt = General.IncarcaDT(@"SELECT CS.*, COALESCE(AF.""Alias"",CS.""Coloana"") ""Caption"",  coalesce(af.""AliasToolTip"", coalesce(AF.""Alias"",CS.""Coloana"")) ""ToolTip"", AF.NumarZecimale 
                                                         FROM ""Ptj_CumulatSetari"" CS LEFT JOIN ""Ptj_tblFormuleCumulat"" AF ON CS.""Coloana"" = AF.""Coloana""
                                                         ORDER BY CS.""Ordine""  ", null);
 
@@ -56,7 +56,7 @@ namespace WizOne.Pontaj
 
                             c.PropertiesSpinEdit.MaxLength = 10;
                             c.PropertiesSpinEdit.NumberFormat = SpinEditNumberFormat.Number;
-                            c.PropertiesSpinEdit.DisplayFormatString = "N0";
+                            c.PropertiesSpinEdit.DisplayFormatString = "N" + General.Nz(dt.Rows[i]["NumarZecimale"], 0);
                             c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
 
                             grDate.Columns.Add(c);

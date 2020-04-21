@@ -465,6 +465,8 @@ namespace WizOne.Pontaj
                     zileVal += $@",""Ziua{cnt}""";
                 }
 
+                //COALESCE((-1 * B.""Id""), (A.""IdContractP"" * 1000 + A.""IdProgramP"")) AS ""Id""
+
                 if (Constante.tipBD == 1)
                     strSql = $@"SELECT A.*,
                         (SELECT ',Ziua' + CASE WHEN Y.Zi < CONVERT(date,X.F10022) OR CONVERT(date,X.F10023) < Y.Zi THEN CONVERT(nvarchar(10), DAY(Y.Zi)) END
@@ -477,7 +479,7 @@ namespace WizOne.Pontaj
                         FROM
                         (SELECT F10003 {zileAs} FROM 
                         (SELECT  A.""Ziua"", A.F10003, 
-                        COALESCE((-1 * B.""Id""), (A.""IdContractP"" * 1000 + A.""IdProgramP"")) AS ""Id""
+                        COALESCE((-1 * B.""Id""), A.""IdProgramP"") AS ""Id""
                         FROM ""Ptj_Intrari"" A
                         LEFT JOIN ""Ptj_tblAbsente"" B ON A.""ValStr""=B.""DenumireScurta"" AND B.""DenumireScurta"" <> ''
                         LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContractP"" = C.""Id""
@@ -513,7 +515,7 @@ namespace WizOne.Pontaj
                         FROM
                         (SELECT * FROM 
                         (SELECT  A.""Ziua"", A.F10003, 
-                        COALESCE((-1 * B.""Id""), (A.""IdContractP"" * 1000 + A.""IdProgramP"")) AS ""Id""
+                        COALESCE((-1 * B.""Id""), A.""IdProgramP"") AS ""Id""
                         FROM ""Ptj_Intrari"" A
                         LEFT JOIN ""Ptj_tblAbsente"" B ON A.""ValStr""=B.""DenumireScurta"" AND B.""DenumireScurta"" <> ''
                         LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContractP"" = C.""Id""
@@ -551,8 +553,72 @@ namespace WizOne.Pontaj
         {
             try
             {
+                #region OLD
+                //DataTable dt = General.IncarcaDT(
+                //    $@"SELECT ""ContractId"" * 1000 + ""ProgramId"" AS ""IdAuto"", ""ProgDenScurta"" AS ""Denumire"", X.* FROM
+                //    (
+                //    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 1 AS ""ZiSapt"", 
+                //    CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                //    C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
+                //    FROM ""Ptj_Contracte"" A
+                //    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                //    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END)
+                //    UNION
+                //    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 2 AS ""ZiSapt"", 
+                //    CASE WHEN COALESCE(A.""TipSchimb2"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program2"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                //    C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
+                //    FROM ""Ptj_Contracte"" A
+                //    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                //    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb2"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program2"", A.""Program0"") ELSE B.""IdProgram"" END)
+                //    UNION
+                //    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 3 AS ""ZiSapt"", 
+                //    CASE WHEN COALESCE(A.""TipSchimb3"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program3"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                //    C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
+                //    FROM ""Ptj_Contracte"" A
+                //    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                //    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb3"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program3"", A.""Program0"") ELSE B.""IdProgram"" END)
+                //    UNION
+                //    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 4 AS ""ZiSapt"", 
+                //    CASE WHEN COALESCE(A.""TipSchimb4"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program4"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                //    C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
+                //    FROM ""Ptj_Contracte"" A
+                //    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                //    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb4"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program4"", A.""Program0"") ELSE B.""IdProgram"" END)
+                //    UNION
+                //    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 5 AS ""ZiSapt"", 
+                //    CASE WHEN COALESCE(A.""TipSchimb5"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program5"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                //    C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
+                //    FROM ""Ptj_Contracte"" A
+                //    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                //    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb5"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program5"", A.""Program0"") ELSE B.""IdProgram"" END)
+                //    UNION
+                //    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 6 AS ""ZiSapt"", 
+                //    CASE WHEN COALESCE(A.""TipSchimb6"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program6"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                //    C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
+                //    FROM ""Ptj_Contracte"" A
+                //    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                //    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb6"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program6"", A.""Program0"") ELSE B.""IdProgram"" END)
+                //    UNION
+                //    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 7 AS ""ZiSapt"", 
+                //    CASE WHEN COALESCE(A.""TipSchimb7"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program7"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                //    C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
+                //    FROM ""Ptj_Contracte"" A
+                //    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                //    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb7"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program7"", A.""Program0"") ELSE B.""IdProgram"" END)
+                //    UNION
+                //    SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 8 AS ""ZiSapt"", 
+                //    CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
+                //    C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
+                //    FROM ""Ptj_Contracte"" A
+                //    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                //    LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END)
+                //    ) X
+                //    UNION 
+                //    SELECT -1 * ""Id"", COALESCE(""DenumireScurta"",""Denumire""), -99, '', -99, -99, '', '' FROM ""Ptj_tblAbsente""", null);
+                #endregion
+
                 DataTable dt = General.IncarcaDT(
-                    $@"SELECT ""ContractId"" * 1000 + ""ProgramId"" AS ""IdAuto"", ""ProgDenScurta"" AS ""Denumire"", X.* FROM
+                    $@"SELECT DISTINCT ""ProgramId"" AS ""IdAuto"", ""ProgDenScurta"" AS ""Denumire"", ""ZiSapt"" FROM
                     (
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 1 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
@@ -611,7 +677,7 @@ namespace WizOne.Pontaj
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END)
                     ) X
                     UNION 
-                    SELECT -1 * ""Id"", ""Denumire"", -99, '', -99, -99, '', '' FROM ""Ptj_tblAbsente""", null);
+                    SELECT -1 * ""Id"", COALESCE(""DenumireScurta"",""Denumire""), -99 FROM ""Ptj_tblAbsente""", null);
 
 
                 if (dt != null && dt.Rows.Count > 0)
@@ -619,7 +685,8 @@ namespace WizOne.Pontaj
                     string jsonPrg = "";
                     for (int g = 0; g < dt.Rows.Count; g++)
                     {
-                        jsonPrg += ",{ IdAuto: " + dt.Rows[g]["IdAuto"] + ", Denumire: \"" + General.Nz(dt.Rows[g]["Denumire"], "").ToString().Trim().Replace("\n", "").Replace("\r", "") + "\", ZiSapt: " + dt.Rows[g]["ZiSapt"] + ", Contract: '" + dt.Rows[g]["ContractDen"] + "' }";
+                        //jsonPrg += ",{ IdAuto: " + dt.Rows[g]["IdAuto"] + ", Denumire: \"" + General.Nz(dt.Rows[g]["Denumire"], "").ToString().Trim().Replace("\n", "").Replace("\r", "") + "\", ZiSapt: " + dt.Rows[g]["ZiSapt"] + ", Contract: '" + dt.Rows[g]["ContractDen"] + "' }";
+                        jsonPrg += ",{ IdAuto: " + dt.Rows[g]["IdAuto"] + ", Denumire: \"" + General.Nz(dt.Rows[g]["Denumire"], "").ToString().Trim().Replace("\n", "").Replace("\r", "") + "\", ZiSapt: " + dt.Rows[g]["ZiSapt"] + " }";
                     }
                     if (jsonPrg.Length > 0)
                         Session["Json_Programe"] = "[" + jsonPrg.Substring(1) + "]";

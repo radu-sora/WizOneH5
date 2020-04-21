@@ -202,7 +202,8 @@ namespace WizOne.Pagini
                             LEFT JOIN Admin_NrActAd JJ ON AA.IdActAd=JJ.IdAuto
                             WHERE AA.IdStare = 3 AND AA.F10003=A.F10003 AND AA.DataModif=A.DataModif AND COALESCE(JJ.DocNr,-99)=COALESCE(J.DocNr,-99) AND COALESCE(JJ.DocData,'1900-01-01')=COALESCE(J.DocData,'1900-01-01')
                             AND COALESCE((SELECT CHARINDEX(',' + CAST(AA.IdAtribut AS nvarchar(20)) + ',', ',' + Valoare + ',') FROM tblParametrii WHERE Nume='IdExcluseCircuitDoc'),0) = 0                            
-                            GROUP BY AA.Id, AA.F10003, BB.F10008, BB.F10009, AA.DataModif, JJ.DocNr, JJ.DocData, COALESCE(JJ.Tiparit,0), COALESCE(JJ.Semnat,0), COALESCE(JJ.Revisal,0), JJ.IdAuto
+                            AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END) 
+                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END
                             FOR XML PATH ('')) AS IdAvans, B.F10022, B.F100993, J.IdAutoAtasamente,
                             0 AS CandidatAngajat, 
                             COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
@@ -278,13 +279,15 @@ namespace WizOne.Pagini
                             CAST(J.""DocNr"" AS varchar2(20)) AS ""DocNr"", J.""DocData"", COALESCE(J.""Tiparit"",0) AS ""Tiparit"", COALESCE(J.""Semnat"",0) AS ""Semnat"", COALESCE(J.""Revisal"",0) AS ""Revisal"",
                             J.""IdAuto"" AS ""IdAutoAct"", 
                             CASE WHEN (SELECT COUNT(*) FROM ""Atasamente"" FIS WHERE FIS.""IdAuto""=J.""IdAutoAtasamente"") = 0 THEN 0 ELSE 1 END AS ""AreAtas"",
-                            (SELECT ',' || LISTAGG(AA.""Id"", ',') WITHIN GROUP (ORDER BY AA.""Id"") AS ""Id""
+                            (SELECT LISTAGG(AA.""Id"", ',') WITHIN GROUP (ORDER BY AA.""Id"") AS ""Id""
                             FROM ""Avs_Cereri"" AA
                             LEFT JOIN F100 BB ON AA.F10003 = BB.F10003
                             LEFT JOIN ""Admin_NrActAd"" JJ ON AA.""IdActAd""=JJ.""IdAuto""
                             WHERE AA.""IdStare"" = 3 AND AA.F10003=A.F10003 AND AA.""DataModif""=A.""DataModif"" AND COALESCE(JJ.""DocNr"",-99)=COALESCE(J.""DocNr"",-99) 
                             AND NVL(JJ.""DocData"",'01-01-2000') = NVL(J.""DocData"",'01-01-2000')
                             AND COALESCE((SELECT INSTR(',' || CAST(AA.""IdAtribut"" AS varchar2(20)) || ',', ',' || ""Valoare"" || ',') FROM ""tblParametrii"" WHERE ""Nume"" ='IdExcluseCircuitDoc'),0) = 0
+                            AND (CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END) = (CASE WHEN A.""IdAtribut"" IN (4, 30, 31) THEN A.""IdAtribut"" ELSE 0 END) 
+                            GROUP BY AA.""Id"", AA.F10003, BB.F10008, BB.F10009, AA.""DataModif"", JJ.""DocNr"", JJ.""DocData"", COALESCE(JJ.""Tiparit"",0), COALESCE(JJ.""Semnat"",0), COALESCE(JJ.""Revisal"",0), JJ.""IdAuto"", CASE WHEN AA.""IdAtribut"" IN (4, 30, 31) THEN AA.""IdAtribut"" ELSE 0 END
                             ) AS ""IdAvans"", B.F10022, B.F100993, J.""IdAutoAtasamente"",
                             0 AS ""CandidatAngajat"", 
                             COALESCE((SELECT MAX(CASE WHEN B0.F02504 IS NOT NULL OR B1.F02504 IS NOT NULL OR B2.F02504 IS NOT NULL OR B3.F02504 IS NOT NULL OR B4.F02504 IS NOT NULL OR 
@@ -549,9 +552,8 @@ namespace WizOne.Pagini
                                                     OUTPUT Inserted.IdAuto
                                                     VALUES(@1, 
                                                     COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
-                                                    LEFT JOIN ""Avs_Cereri"" B ON A.""IdAuto""=B.""IdActAd"" AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33)
-                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0),0) + 1, 
-                                                    {General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
+                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT B.""IdActAd"" FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33))),0) + 1, 
+                                                    { General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
                                                     new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
 
                                                     if (dt.Rows.Count > 0)
@@ -562,8 +564,7 @@ namespace WizOne.Pagini
                                                     id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
                                                     VALUES(@2, 
                                                     COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
-                                                    LEFT JOIN ""Avs_Cereri"" B ON A.""IdAuto""=B.""IdActAd"" AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33)
-                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0),0) + 1, 
+                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT B.""IdActAd"" FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33))),0) + 1, 
                                                     {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
                                                     new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
                                                 }

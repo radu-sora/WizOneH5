@@ -222,7 +222,7 @@ namespace WizOne.Personal
                     {
                         try
                         {
-                            if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                            if (Convert.ToDateTime(dtInc).Date <= Convert.ToDateTime(e.NewValues["DataSfarsit"]).Date && Convert.ToDateTime(e.NewValues["DataInceput"]).Date <= Convert.ToDateTime(dtSf).Date)
                             {
                                 grDateContracte.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
                                 e.Cancel = true;
@@ -253,6 +253,10 @@ namespace WizOne.Personal
                                     row[x] = Convert.ToInt32(General.Nz(ds.Tables["F100Contracte2"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                                 else
                                     row[x] = Dami.NextId("F100Contracte2");
+                                break;
+                            case "DATAINCEPUT":
+                            case "DATASFARSIT":
+                                row[x] = Convert.ToDateTime(e.NewValues[col.ColumnName]).Date;
                                 break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];
@@ -307,7 +311,7 @@ namespace WizOne.Personal
                 {
                     try
                     {
-                        if (Convert.ToDateTime(e.NewValues["DataInceput"]) > Convert.ToDateTime(e.NewValues["DataSfarsit"]))
+                        if (Convert.ToDateTime(e.NewValues["DataInceput"]).Date > Convert.ToDateTime(e.NewValues["DataSfarsit"]).Date)
                         {
                             grDateContracte.JSProperties["cpAlertMessage"] = "Data inceput este mai mare decat data sfarsit!";
                             e.Cancel = true;
@@ -347,7 +351,7 @@ namespace WizOne.Personal
                     {
                         try
                         {
-                            if (Convert.ToDateTime(dtInc) <= Convert.ToDateTime(e.NewValues["DataSfarsit"]) && Convert.ToDateTime(e.NewValues["DataInceput"]) <= Convert.ToDateTime(dtSf))
+                            if (Convert.ToDateTime(dtInc).Date <= Convert.ToDateTime(e.NewValues["DataSfarsit"]).Date && Convert.ToDateTime(e.NewValues["DataInceput"]).Date <= Convert.ToDateTime(dtSf).Date)
                             {
                                 grDateContracte.JSProperties["cpAlertMessage"] = "Intervalul ales se intersecteaza cu altul deja existent!";
                                 e.Cancel = true;
@@ -371,7 +375,10 @@ namespace WizOne.Personal
                     if (!col.AutoIncrement && grDateContracte.Columns[col.ColumnName] != null && grDateContracte.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+                        if (col.ColumnName.ToUpper() == "DATAINCEPUT" || col.ColumnName.ToUpper() == "DATASFARSIT")
+                            row[col.ColumnName] = Convert.ToDateTime(e.NewValues[col.ColumnName]).Date;
+                        else
+                            row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
 
                 }

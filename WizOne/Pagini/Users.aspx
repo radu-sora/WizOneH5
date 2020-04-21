@@ -84,10 +84,10 @@
                                 <dx:GridViewDataTextColumn FieldName="F70103" Name="F70103" Caption="Parola" VisibleIndex="4"  Width="90">
                                     <PropertiesTextEdit Password="True" ClientInstanceName="psweditor" />
                                     <EditItemTemplate>
-                                        <dx:ASPxTextBox ID="pswtextbox"  Width="85" runat="server" Text='<%# Bind("F70103") %>' Visible="false" Password="True">
+                                       <dx:ASPxTextBox ID="ASPxTextBox1"  Width="85" runat="server" Text='<%# Bind("F70103") %>' Visible="false" Password="True">
                                             <ClientSideEvents Validation="function(s,e){e.isValid = s.GetText().length>5;}" />
                                         </dx:ASPxTextBox>
-                                        <asp:LinkButton ID="LinkButton1" runat="server" OnClientClick="popup.ShowAtElement(this); hfStatus.Set('Id', 1); return false;" Visible="true">Edit parola</asp:LinkButton>
+                                        <asp:LinkButton ID="LinkButton2" runat="server" OnClientClick="popup.ShowAtElement(this); hfStatus.Set('Id', 1); return false;" Visible="true">Edit parola</asp:LinkButton>
                                     </EditItemTemplate>
                                 </dx:GridViewDataTextColumn>
                                 <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" VisibleIndex="5">

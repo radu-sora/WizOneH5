@@ -42,6 +42,7 @@ namespace WizOne.Pontaj
                 chkPerAng.Text = Dami.TraduCuvant("Perioada angajare");
                 chkRecalc.Text = Dami.TraduCuvant("Recalcul totaluri");
                 chkCC.Text = Dami.TraduCuvant("Centrul de cost");
+                chkSL.Text = Dami.TraduCuvant("Sarbatori legale");
                 #endregion
 
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
@@ -266,7 +267,6 @@ namespace WizOne.Pontaj
                             inn += "JOIN HOLIDAYS ON CAST(DAY AS DATE)= CAST(A.Ziua AS DATE)";
                         }
 
-
                         if (act != "") act = act.Substring(1);
                         strSql = string.Format(strSql, angIn, angSf, General.ToDataUniv(ziIn), General.ToDataUniv(ziSf), act, inn);
 
@@ -358,7 +358,7 @@ namespace WizOne.Pontaj
                                   + " (SELECT MAX(C.\"IdCentruCost\") AS \"F06204Default\" FROM \"F100CentreCost\" C WHERE A.F10003 = C.F10003 AND CAST(C.\"DataInceput\" AS Date) <= CAST(A.\"Ziua\" AS Date) AND CAST(A.\"Ziua\" AS Date) <= CAST(C.\"DataSfarsit\" AS Date)) END";
 
                         //Radu 07.04.2020
-                        if (chkSL == true) act += ", A.\"ZiLibera\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE TRUNC(DAY) = TRUNC(A.\"Ziua\")) THEN 0 ELSE 1 END, A.\"ZiLiberaLegala\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE TRUNC(DAY) = TRUNC(A.\"Ziua\")) THEN 0 ELSE 1 END";                       
+                        if (chkSL == true) act += ", A.\"ZiLibera\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE TRUNC(DAY) = TRUNC(A.\"Ziua\")) THEN 0 ELSE 1 END, A.\"ZiLiberaLegala\" = CASE WHEN NOT EXISTS(SELECT 1 FROM HOLIDAYS WHERE TRUNC(DAY) = TRUNC(A.\"Ziua\")) THEN 0 ELSE 1 END";
 
 
                         if (chkStr == true)

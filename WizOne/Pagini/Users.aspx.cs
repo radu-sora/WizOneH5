@@ -92,7 +92,6 @@ namespace WizOne.Pagini
                     grDate.DataBind();
 
                     Session["Utilizatori_Parola"] = null;
-
                 }
                 else
                 {
@@ -161,6 +160,7 @@ namespace WizOne.Pagini
                 if (e.NewValues["F70103"] != null)
                 {
                     //pwd = prc.EncryptString(Constante.cheieCriptare, e.NewValues["F70103"].ToString(), 1);
+                    pwd = e.NewValues["F70103"].ToString();
                 }
                 else
                 {
@@ -322,8 +322,6 @@ namespace WizOne.Pagini
             {
                 //Florin 2019.11.18
                 //e.NewValues["F70102"] = Dami.NextId("USERS");
-
-                //'<%#!grDate.IsNewRowEditing%>'
             }
             catch (Exception ex)
             {
@@ -388,16 +386,16 @@ namespace WizOne.Pagini
                 CriptDecript prc = new CriptDecript();
                 string pwd = prc.EncryptString(Constante.cheieCriptare, cnpsw.Text, 1);
 
-                int index = grDate.EditingRowVisibleIndex;                
+                int index = grDate.EditingRowVisibleIndex;
 
                 //Radu 07.04.2020
                 string kp = "-99";
                 if (index >= 0)
-                    kp = grDate.GetRowValues(index, "F70102").ToString();                       
+                    kp = grDate.GetRowValues(index, "F70102").ToString();
 
                 DataTable dt = Session["InformatiaCurenta"] as DataTable;
                 DataRow dr = dt.Rows.Find(kp);
-                         
+
                 if (tip != 3 && General.VarSession("ParolaComplexa").ToString() == "1")
                 {
                     var ras = General.VerificaComplexitateParola(cnpsw.Text);
@@ -428,7 +426,7 @@ namespace WizOne.Pagini
                             break;
                     }
                 }
-                else 
+                else
                     Session["Utilizatori_Parola"] = pwd;
 
                 Session["InformatiaCurenta"] = dt;

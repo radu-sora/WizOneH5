@@ -2092,10 +2092,11 @@ namespace WizOne.Module
 
             try
             {
+                //#311 si #344
                 strSql = $@"SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                     CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                     CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE 
-                    CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
+                    CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 THEN 1 ELSE 
                     CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                     CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
                     END
@@ -6927,24 +6928,39 @@ namespace WizOne.Module
                 else
                     f10003 = "a.F10003";
 
-                string strSql = SelectCalculCO(an, f10003, filtruIns);
-                General.ExecutaNonQuery(strSql, null);
+                //Radu 21.04.2020
+                //string strSql = SelectCalculCO(an, f10003, filtruIns);
+                //General.ExecutaNonQuery(strSql, null);
+
 
                 if (cuActualizareInF100)
                 {
-                    string strUpd = $@"UPDATE A 
-                        SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
-                        FROM F100 A
-                        INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
-                    if (Constante.tipBD == 2)
-                        strUpd = $@"UPDATE F100 A
-                                    SET (A.F100642, A.F100995, A.F100996) =
-                                      (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
-                                       FROM ""Ptj_tblZileCO"" B
-                                       WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
-                                    WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
+                    //Radu 21.04.2020
+                    //string strUpd = $@"UPDATE A 
+                    //    SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
+                    //    FROM F100 A
+                    //    INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
+                    //if (Constante.tipBD == 2)
+                    //    strUpd = $@"UPDATE F100 A
+                    //                SET (A.F100642, A.F100995, A.F100996) =
+                    //                  (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
+                    //                   FROM ""Ptj_tblZileCO"" B
+                    //                   WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
+                    //                WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
 
-                    General.ExecutaNonQuery(strUpd, null);
+                    //General.ExecutaNonQuery(strUpd, null);
+                    if (marca != -99)
+                    {
+                        if (Constante.tipBD == 1)
+                            General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
+                                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
+                                                + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
+                        else
+                        {
+                            DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
+                            General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -8101,7 +8117,7 @@ namespace WizOne.Module
                 string sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataInceput.Date) + " AND " + General.ToDataUniv(dtSf.Date);
                 ExecutaNonQuery(sql, null);
 
-
+                //#311 si #344
                 string sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
                                         SELECT {marca}, ""Zi"", ""DenumireScurta"", (SELECT ""ValStr"" FROM ""Ptj_Intrari"" WHERE F10003 = {marca} AND ""Ziua"" = ""Zi""), 
                                 {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, {HttpContext.Current.Session["UserId"].ToString() }, {General.CurrentDate()}, 'Transfer din Suspendari'
@@ -8111,7 +8127,7 @@ namespace WizOne.Module
                                     left join 
                                     (SELECT P.""Zi"",
                                     CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE
-                                    CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
+                                    CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 THEN 1 ELSE 
                                     CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                                     CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
                                     END
@@ -8142,7 +8158,7 @@ namespace WizOne.Module
                 //    campuri += ", \"In" + i.ToString() + "\" = NULL, \"Out" + i.ToString() + "\" = NULL";
 
 
-
+                //#311 si #344
                 strSql = $@"MERGE INTO ""Ptj_intrari"" USING 
                             (Select  case when ""AreDrepturi"" = 1 then ""DenumireScurta"" else null end  as ""Denumire"", x.* from                                
                             (select {marca} as F10003, case when (SELECT count(*) FROM ""Ptj_Intrari"" WHERE f10003 = {marca} and ""Ziua"" = a.""Zi"") = 0 then 0 else 1 end as prezenta, 
@@ -8152,7 +8168,7 @@ namespace WizOne.Module
                             (SELECT P.""Zi"", P.""ZiSapt"", CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLiberaLegala"",
                             CASE WHEN P.""ZiSapt""=6 OR P.""ZiSapt""=7 OR D.DAY IS NOT NULL THEN 1 ELSE 0 END AS ""ZiLibera"", 
                             CASE WHEN COALESCE(b.SL,0) = 0 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 1 THEN 0 ELSE
-                            CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 AND (CASE WHEN D.DAY IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 1 ELSE 
+                            CASE WHEN COALESCE(b.ZL,0) <> 0 AND P.""ZiSapt"" < 6 THEN 1 ELSE 
                             CASE WHEN COALESCE(b.S,0) <> 0 AND P.""ZiSapt"" = 6 THEN 1 ELSE 
                             CASE WHEN COALESCE(b.D,0) <> 0 AND P.""ZiSapt"" = 7 THEN 1 ELSE 0 
                             END

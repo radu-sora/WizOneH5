@@ -391,7 +391,12 @@ namespace WizOne.Absente
 
                 strSql = "BEGIN " + strSql + " END;";
 
-                General.ExecutaNonQuery(strSql, null);
+                //Radu 21.04.2020
+                //General.ExecutaNonQuery(strSql, null);
+                if (Constante.tipBD == 1)
+                    General.ExecutaNonQuery("EXEC CalculZLPProc @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1", null);
+                else
+                    General.ExecutaNonQuery("exec \"CalculZLPProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1);", null);
             }
             catch (Exception ex)
             {

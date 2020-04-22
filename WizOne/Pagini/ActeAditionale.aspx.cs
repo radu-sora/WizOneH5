@@ -552,7 +552,7 @@ namespace WizOne.Pagini
                                                     OUTPUT Inserted.IdAuto
                                                     VALUES(@1, 
                                                     COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
-                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT B.""IdActAd"" FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" IN (4, 30, 31, 32, 33))),0) + 1, 
+                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT COALESCE(B.""IdActAd"",-99) FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" IN (4, 30, 31, 32, 33))),0) + 1, 
                                                     { General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
                                                     new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
 
@@ -564,7 +564,7 @@ namespace WizOne.Pagini
                                                     id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
                                                     VALUES(@2, 
                                                     COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
-                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT B.""IdActAd"" FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" IN (4, 30, 31, 32, 33))),0) + 1, 
+                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT COALESCE(B.""IdActAd"",-99) FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" IN (4, 30, 31, 32, 33))),0) + 1, 
                                                     {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
                                                     new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
                                                 }

@@ -362,6 +362,7 @@
     <Content Include="Contracte\Lista.aspx" />
     <Content Include="Contracte\Detalii.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="DefaultTactilFaraCard.aspx" />
     <Content Include="Eval\ActivitatiObiective.aspx" />
     <Content Include="Eval\Calificative.aspx" />
     <Content Include="Eval\Competente.aspx" />
@@ -1295,6 +1296,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultTactilFaraCard.aspx.cs">
+      <DependentUpon>DefaultTactilFaraCard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DefaultTactilFaraCard.aspx.designer.cs">
+      <DependentUpon>DefaultTactilFaraCard.aspx</DependentUpon>
     </Compile>
     <Compile Include="Eval\ActivitatiObiective.aspx.cs">
       <DependentUpon>ActivitatiObiective.aspx</DependentUpon>

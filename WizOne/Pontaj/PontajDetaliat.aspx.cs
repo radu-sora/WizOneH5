@@ -821,7 +821,8 @@ namespace WizOne.Pontaj
                                 INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
                                 WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta""=P.""ValStr"" AND
                                 X.F10003=P.F10003 AND X.""IdStare""=3 AND Y.""IdTipOre""=1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
-                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
+                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica"",
+                            ABSE.""DenumireScurta"" AS ""ValAbs""                            
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
                             LEFT JOIN F1001 C ON A.F10003=C.F10003
@@ -840,6 +841,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402
+                            LEFT JOIN ""Ptj_tblAbsente"" ABSE ON P.""ValStr""=ABSE.""DenumireScurta"" AND ABSE.""DenumireScurta""<>''
                             {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";
@@ -919,7 +921,8 @@ namespace WizOne.Pontaj
                                 INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
                                 WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta""=P.""ValStr"" AND
                                 X.F10003=P.F10003 AND X.""IdStare""=3 AND Y.""IdTipOre""=1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
-                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
+                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica"",
+                            ABSE.""DenumireScurta"" AS ""ValAbs""                            
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
                             LEFT JOIN F1001 C ON A.F10003=C.F10003
@@ -938,6 +941,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
+                            LEFT JOIN ""Ptj_tblAbsente"" ABSE ON P.""ValStr""=ABSE.""DenumireScurta""
                             {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";

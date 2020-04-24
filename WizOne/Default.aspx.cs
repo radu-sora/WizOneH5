@@ -160,6 +160,8 @@ namespace WizOne
 
                     divOuter.Controls.Add(divCap);
                 }
+
+                Session["TipInfoChiosc"] = "0";
             }
             catch (Exception ex)
             {

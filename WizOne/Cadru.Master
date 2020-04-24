@@ -423,7 +423,7 @@
 
         /* Main functions */
         $(window).on('load', function () {
-            var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;
+            var timeOutSecunde = <%= Session["TimeOutSecunde"] %>;           
             var firstLoad = <%= Session["PrimaIntrare"] %> === 1;
             var myModal = $("#myModal");
             var anunt = $('#anunt');
@@ -441,7 +441,11 @@
                         timeLeftInfo.text(timeLeft).parent().removeClass('text-danger');
                     }
                 }, function () {
-                    window.location = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+                        var tipInfoChiosc = <%= Session["TipInfoChiosc"] %>;
+                        var pagina = '<%: ResolveClientUrl("~/DefaultTactil.aspx") %>';
+                        if (tipInfoChiosc == 1 || tipInfoChiosc == 2)
+                            pagina = '<%: ResolveClientUrl("~/DefaultTactilFaraCard.aspx") %>';
+                        window.location = pagina;
                     });
                 timerControl.start();
             }

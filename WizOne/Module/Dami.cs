@@ -481,7 +481,15 @@ namespace WizOne.Module
             try
             {
                 if (HttpContext.Current.Session["SecApp"].ToString() != "OK_Tactil")
-                    HttpContext.Current.Response.Redirect("~/DefaultTactil.aspx");
+                {
+                    //Radu 24.04.2020
+                    string tip = Dami.ValoareParam("TipInfoChiosc", "0");
+                    if (tip == "0")
+                        HttpContext.Current.Response.Redirect("~/DefaultTactil.aspx");
+                    else
+                        HttpContext.Current.Response.Redirect("~/DefaultTactilFaraCard.aspx");
+
+                }
             }
             catch (Exception ex)
             {

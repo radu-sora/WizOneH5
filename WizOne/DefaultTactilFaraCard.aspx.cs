@@ -27,7 +27,9 @@ namespace WizOne
                 }
 
                 string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-     
+
+                Session["TipInfoChiosc"] = tip;
+
                 if (tip == "2")
                 {
                     btn0.ClientVisible = false;

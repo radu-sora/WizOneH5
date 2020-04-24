@@ -1838,7 +1838,7 @@ namespace WizOne.Avs
 
                         if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaSalariu || Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaGarantii)
                         {
-                            if (!IbanValid(txt1Nou.Text))
+                            if (e.Parameter.Split(';')[1] == "txt1Nou" && !IbanValid(txt1Nou.Text))
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Cont IBAN invalid!");
                                 txt1Nou.Value = "";

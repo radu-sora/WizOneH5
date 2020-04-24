@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DevExpress.CodeParser;
+using Newtonsoft.Json.Linq;
 using ProceseSec;
 using System;
 using System.Data;
@@ -68,7 +69,12 @@ namespace WizOne
 
                 if (Constante.esteTactil)
                 {
-                    Response.Redirect("DefaultTactil.aspx", false);
+                    //Radu 23.04.2020
+                    string tip = Dami.ValoareParam("TipInfoChiosc", "0");
+                    if (tip == "0")
+                        Response.Redirect("DefaultTactil.aspx", false);
+                    else
+                        Response.Redirect("DefaultTactilFaraCard.aspx", false);
                     return;
                 }
 

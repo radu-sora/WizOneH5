@@ -3199,6 +3199,18 @@ namespace WizOne.Pontaj
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
                     strLeg = " LEFT JOIN (SELECT F10003 AS MARCA2, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.MARCA2 ";
                 }
+                //Florin 2019.12.27
+                //if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
+                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += " AND A.\"DescContract\" IN ('" + cmbCtr.Value.ToString().Replace(",", "','") + "')";
+
+                string strFiltruSpecial = "";
+                if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
+                {
+                    //strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F10061", "C.CATEG1").Replace("A.F10062", "C.CATEG2");
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""", @"C.""Denumire""").Replace(@"A.""Dept""", "I.F00608");
+                }
+                else
+                    strLeg = "";
 
                 //Florin 2019.09.23
                 //Radu 12.02.2020 - am inlocuit conditia
@@ -3215,19 +3227,6 @@ namespace WizOne.Pontaj
                     strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                 }
 
-                //Florin 2019.12.27
-                //if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
-                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += " AND A.\"DescContract\" IN ('" + cmbCtr.Value.ToString().Replace(",", "','") + "')";
-
-                string strFiltruSpecial = "";
-                if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                {
-                    //strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F10061", "C.CATEG1").Replace("A.F10062", "C.CATEG2");
-                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""", @"C.""Denumire""").Replace(@"A.""Dept""", "I.F00608");
-                }
-                else
-                    strLeg = "";
-                
                 if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
                 if (Convert.ToInt32(cmbAng.Value ?? -99) == -99)
                 {//Radu 04.02.2020

@@ -12924,3 +12924,11 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, GetDate())
 GO
+
+alter table tblInfoChiosc add IdTerminal varchar(50)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('TipInfoChiosc', '0', '0 - obisnuit (cu detectare cartela); 1 - fara detectare cartela si cu PIN; 2 - fara detectare cartela si fara PIN', 0, -99, GETDATE())
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('IntervalConectareInfoChiosc', '5', 'Intervalul maxim (in secunde), in trecut fata de momentul curent, in care poate fi luata in considerare cartela citita de InfoChiosc', 0, -99, GETDATE())
+GO

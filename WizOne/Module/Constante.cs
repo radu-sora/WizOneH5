@@ -103,6 +103,7 @@
         internal static string campuriGDPR_Strip = "";
 
         internal static bool esteTactil = false;
+        internal static string idTerminal = "";
 
         internal static string versiune = "1.1.001";
 

@@ -375,55 +375,26 @@
                             </dx:GridViewDataTimeEditColumn>
 
                             <dx:GridViewDataTextColumn FieldName="NrOre1" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre2" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre3" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre4" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre5" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre6" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre7" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre8" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre9" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
                             <dx:GridViewDataTextColumn FieldName="NrOre10" Width="100px">
-                                <PropertiesTextEdit>
-                                    <MaskSettings Mask="<00..23>:<00..59>"  />
-                                </PropertiesTextEdit>
                             </dx:GridViewDataTextColumn>
+
                             <dx:GridViewDataTextColumn FieldName="F10003" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                             <dx:GridViewDataTextColumn FieldName="Ziua" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                             <dx:GridViewDataTextColumn FieldName="IdAuto" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
@@ -919,25 +890,34 @@
 
         var timeColumnField = "";
         function OnGridCCBatchEditStartEditing(s, e) {
+            if (<%: tipAfisareCC %> > 1) {
+                timeColumnField = e.focusedColumn.fieldName;
 
-            timeColumnField = e.focusedColumn.fieldName;
-
-            if (timeColumnField.substring(0, 5) == "NrOre") {
-                var timeColumn = s.GetColumnByField(timeColumnField);
-                if (!e.rowValues.hasOwnProperty(timeColumn.index))
-                    return;
-                var cellInfo = e.rowValues[timeColumn.index];
-                cellInfo.value = minutesToString(cellInfo.value);
+                if (timeColumnField.substring(0, 5) == "NrOre") {
+                    var timeColumn = s.GetColumnByField(timeColumnField);
+                    if (!e.rowValues.hasOwnProperty(timeColumn.index))
+                        return;
+                    var cellInfo = e.rowValues[timeColumn.index];
+                    if (<%: tipAfisareCC %> == 2)
+                        cellInfo.value = Math.floor(cellInfo.value / 60).toString();
+                    else
+                        cellInfo.value = minutesToString(cellInfo.value);
+                }
             }
         }
 
         function OnGridCCBatchEditEndEditing(s, e) {
-            if (timeColumnField.substring(0, 5) == "NrOre") {
-                var timeColumn = s.GetColumnByField(timeColumnField);
-                if (!e.rowValues.hasOwnProperty(timeColumn.index))
-                    return;
-                var cellInfo = e.rowValues[timeColumn.index];
-                cellInfo.value = stringToMinutes(s.GetEditValue(timeColumnField));
+            if (<%: tipAfisareCC %> > 1) {
+                if (timeColumnField.substring(0, 5) == "NrOre") {
+                    var timeColumn = s.GetColumnByField(timeColumnField);
+                    if (!e.rowValues.hasOwnProperty(timeColumn.index))
+                        return;
+                    var cellInfo = e.rowValues[timeColumn.index];
+                    if (<%: tipAfisareCC %> == 2)
+                        cellInfo.value = (cellInfo.value * 60).toString();
+                    else
+                        cellInfo.value = stringToMinutes(s.GetEditValue(timeColumnField));
+                }
             }
         }
 

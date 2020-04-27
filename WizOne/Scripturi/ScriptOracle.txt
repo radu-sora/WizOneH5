@@ -13867,3 +13867,9 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO,
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AlcatuireNumeUtilizator', '', 'Exemple:  F10008 || '' '' || F10009; F100901 etc', 0, -99, SYSDATE);
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, SYSDATE);
 COMMIT;
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ProceseCeasuri_Creasoft_URL', 'https://wifi.creasoft.ro/api/', 'Adresa web de unde se va consuma API-ul companiei Creasoft', 0, -99, GetDate());
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ProceseCeasuri_Creasoft_User', null, 'Este necesar pt conectarea la API-ul companiei Creasoft', 0, -99, GetDate());
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ProceseCeasuri_Creasoft_Parola', null, 'Este necesar pt conectarea la API-ul companiei Creasoft', 0, -99, GetDate());
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ProceseCeasuri_Creasoft_Companie', null, 'Este necesar pt conectarea la API-ul companiei Creasoft', 0, -99, GetDate());
+COMMIT;

@@ -1058,7 +1058,12 @@ namespace WizOne.Tactil
         {
             try
             {
-                Response.Redirect("../DefaultTactil.aspx", false);
+                //Radu 24.04.2020
+                string tip = Dami.ValoareParam("TipInfoChiosc", "0");
+                if (tip == "0")
+                    Response.Redirect("../DefaultTactil.aspx", false);
+                else
+                    Response.Redirect("../DefaultTactilFaraCard.aspx", false);
             }
             catch (Exception ex)
             {

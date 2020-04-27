@@ -95,6 +95,7 @@ namespace WizOne.Pontaj
                             grCC.Columns[cmp].ToolTip = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["AliasToolTip"], "").ToString());
                             grCC.Columns[cmp].Caption = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["Alias"], dtAd.Rows[i]["Camp"]).ToString());
 
+                            //Florin 2020.04.27
                             if (cmp.ToLower().IndexOf("nrore") >= 0)
                             {
                                 GridViewDataTextColumn col = grCC.Columns[cmp] as GridViewDataTextColumn;
@@ -3082,18 +3083,7 @@ namespace WizOne.Pontaj
 
             try
             {
-                //string strCmp = "";
-                //for (int i = 1; i <= 10; i++)
-                //{
-                //    if (Constante.tipBD == 1)
-                //        strCmp += $@",CONVERT(datetime,DATEADD(minute, NrOre{i}, '')) AS NrOre{i}_Tmp ";
-                //    else
-                //        strCmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + NrOre{i}/1440 AS ""NrOre{i}_Tmp"" ";
-                //}
-
-                dt = General.IncarcaDT($@"SELECT *
-                        FROM ""Ptj_CC"" A 
-                        WHERE A.F10003={f10003} AND A.""Ziua""={ziua}", null);
+                dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" A WHERE A.F10003={f10003} AND A.""Ziua""={ziua}", null);
             }
             catch (Exception ex)
             {

@@ -457,7 +457,7 @@ namespace WizOne.Pontaj
                         FROM F100 X
                         INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
                         WHERE X.F10003=A.F10003
-                        FOR XML PATH ('')) AS ZileGri
+                        FOR XML PATH ('')) + ',' AS ZileGri
                         FROM (
                         SELECT TOP 100 PERCENT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"" {zileVal}
                         FROM

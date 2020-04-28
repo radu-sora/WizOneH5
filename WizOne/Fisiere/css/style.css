@@ -734,3 +734,23 @@ table label {
 .ptj_stare {
     float:left; margin-right:15px; width:110px; height:26px; text-align:center; border:solid 1px gray; color:#000000;
 }
+
+
+.ctl_inline {
+    float: left;
+    padding-right: 15px;
+    display: flex;
+    align-items:center;
+}
+
+    .ctl_inline label {
+        display: inline-block;
+        float: left;
+        padding-right: 15px;
+    }
+
+    .ctl_inline .lw {
+        width: 120px;
+    }
+
+    

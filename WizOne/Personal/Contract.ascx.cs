@@ -1618,27 +1618,30 @@ namespace WizOne.Personal
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                     esteNou = true;
 
-                string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, vechime, esteNou);
-                General.ExecutaNonQuery(strSql, null);
+                //string strSql = General.SelectCalculCO(an, f10003, filtruIns, f10022, f10072, vechime, esteNou);
+                //Radu 21.04.2020
 
-                DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });
+                string strSql ="select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-12-31'), 1, " + f10072 + ")";
+                DataTable dtCO = General.IncarcaDT(strSql, null);
+
+                //DataRow dtCO = General.IncarcaDR(@"SELECT * FROM ""Ptj_tblZileCO"" WHERE F10003=@1 AND ""An""=@2", new object[] { f10003, an });
                 if (dtCO != null)
                 {
                     //F100642
                     //txtZileCOCuvAnCrt
                     ASPxTextBox txtZileCOCuvAnCrt = Contract_DataList.Items[0].FindControl("txtZileCOCuvAnCrt") as ASPxTextBox;
                     if (txtZileCOCuvAnCrt != null)
-                        txtZileCOCuvAnCrt.Value = General.Nz(dtCO["CuveniteAn"], txtZileCOCuvAnCrt.Text).ToString();
+                        txtZileCOCuvAnCrt.Value = General.Nz(dtCO.Rows[0]["ZileCuveniteAn"], txtZileCOCuvAnCrt.Text).ToString();
                     //F100995
                     //txtZileCOAnCrt
                     ASPxTextBox txtZileCOAnCrt = Contract_DataList.Items[0].FindControl("txtZileCOAnCrt") as ASPxTextBox;
                     if (txtZileCOAnCrt != null)
-                        txtZileCOAnCrt.Value = General.Nz(dtCO["Cuvenite"], "").ToString();
+                        txtZileCOAnCrt.Value = General.Nz(dtCO.Rows[0]["ZileCuvenite"], "").ToString();
                     //F100996
                     //txtZileCOAnAnt
                     ASPxTextBox txtZileCOAnAnt = Contract_DataList.Items[0].FindControl("txtZileCOAnAnt") as ASPxTextBox;
                     if (txtZileCOAnAnt != null)
-                        txtZileCOAnAnt.Value = General.Nz(dtCO["SoldAnterior"], "").ToString();
+                        txtZileCOAnAnt.Value = General.Nz(dtCO.Rows[0]["ZileAnPrecedent"], "").ToString();
                 }
                 else
                     CalcGrila(f10072);

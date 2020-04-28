@@ -28,16 +28,49 @@ background: url('../imagini/bg_intro.png') no-repeat;
 color:#00588a;
 }
 
+.outerbuttons {
+    width: 470px;
+    height: 650px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100px;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    background: url('../imagini/WizOne.png') no-repeat;
+    background-position-x: 40px;
+    color: #00588a;
+}
+
 .inner
 {
     position:absolute;
     top:110px;
     left:55px;
+    height: 550px;
     width:290px;
     display:inline-block;
     text-align:left;
     font-size:18px;
     color:#00588a;
+}
+
+.innerbuttons {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 400px;
+    height: 500px;
+    display: inline-block;
+    text-align: center;
+    font-size: 21px;
+    color: #00588a;
+}
+
+.divider {
+    margin-right: 30px;
+    margin-bottom: 30px;
 }
      
 .inner span

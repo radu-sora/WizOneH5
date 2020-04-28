@@ -1,7 +1,9 @@
 ﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using Oracle.ManagedDataAccess.Client;
 using ProceseSec;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -1693,7 +1695,7 @@ namespace WizOne.Module
                             else
                             {
                                 valStr = CalculValStr((int)dr["F10003"], zi.Date, "", (dr["ValPentruOre"] ?? "").ToString(), nrMin);
-                                sqlUp = $@"UPDATE ""Ptj_Intrari"" SET {dr["ValPentruOre"]}  = {nrMin} WHERE F10003= {dr["F10003"]} AND ""Ziua""= {General.ToDataUniv(zi.Date)}";
+                                sqlUp = $@"UPDATE ""Ptj_Intrari"" SET {dr["ValPentruOre"]} = COALESCE({dr["ValPentruOre"]},0) + {nrMin} WHERE F10003= {dr["F10003"]} AND ""Ziua""= {General.ToDataUniv(zi.Date)}";
                                 sqlValStr = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr"" = {valStr}  WHERE F10003= {dr["F10003"]} AND ""Ziua""= {General.ToDataUniv(zi.Date)}";
                                 sqlIst = $@"INSERT INTO ""Ptj_IstoricVal""(F10003, ""Ziua"", ""ValStr"", ""ValStrOld"", ""IdUser"", ""DataModif"", USER_NO, TIME, ""Observatii"") 
                                             SELECT {dr["F10003"]}, {ToDataUniv(zi.Date)}, {valStr}, '{General.Nz(dtAbs.Rows[i]["ValStr"], "")}', {idUser}, {General.CurrentDate()}, {idUser}, {General.CurrentDate()}, 'Din Cereri' FROM ""Ptj_Intrari"" WHERE F10003={dr["F10003"]} AND ""Ziua""={General.ToDataUniv(zi.Date)}";
@@ -4007,45 +4009,45 @@ namespace WizOne.Module
         }
 
 
-        public static DataTable ListaAfisare()
-        {
-            try
-            {
-                DataTable table = new DataTable();
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
-                table.Rows.Add(1, "Trunchiere la ore");
-                table.Rows.Add(2, "Cu minute");
-                table.Rows.Add(3, "Cu zecimale");
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //public static DataTable ListaAfisare()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
+        //        table.Rows.Add(1, "Trunchiere la ore");
+        //        table.Rows.Add(2, "Cu minute");
+        //        table.Rows.Add(3, "Cu zecimale");
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
-        public static DataTable ListaRaportare()
-        {
-            try
-            {
-                DataTable table = new DataTable();
+        //public static DataTable ListaRaportare()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
 
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "Pe inceput schimb");
-                table.Rows.Add(2, "Pe sfarsit schimb");
+        //        table.Rows.Add(1, "Pe inceput schimb");
+        //        table.Rows.Add(2, "Pe sfarsit schimb");
 
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
         public static DataTable ListaVal_uri()
         {
@@ -4140,68 +4142,68 @@ namespace WizOne.Module
             return General.IncarcaDT(sql, null);
         }
 
-        public static DataTable ListaTipPontare()
-        {
-            try
-            {
-                DataTable table = new DataTable();
+        //public static DataTable ListaTipPontare()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
 
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, Dami.TraduCuvant("Pontare automata"));
-                table.Rows.Add(2, Dami.TraduCuvant("Pontare automata la minim o citire card"));
-                table.Rows.Add(3, Dami.TraduCuvant("Pontare doar prima intrare si ultima iesire"));
-                table.Rows.Add(4, Dami.TraduCuvant("Pontare toate intrarile si iesirile"));
-                table.Rows.Add(5, Dami.TraduCuvant("Pontare prima intrare, ultima iesire - pauze > x minute"));
+        //        table.Rows.Add(1, Dami.TraduCuvant("Pontare automata"));
+        //        table.Rows.Add(2, Dami.TraduCuvant("Pontare automata la minim o citire card"));
+        //        table.Rows.Add(3, Dami.TraduCuvant("Pontare doar prima intrare si ultima iesire"));
+        //        table.Rows.Add(4, Dami.TraduCuvant("Pontare toate intrarile si iesirile"));
+        //        table.Rows.Add(5, Dami.TraduCuvant("Pontare prima intrare, ultima iesire - pauze > x minute"));
 
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
-        public static DataTable ListaRotunjirePrgLucru()
-        {
-            try
-            {
-                DataTable table = new DataTable();
+        //public static DataTable ListaRotunjirePrgLucru()
+        //{
+        //    try
+        //    {
+        //        DataTable table = new DataTable();
 
-                table.Columns.Add("Id", typeof(int));
-                table.Columns.Add("Denumire", typeof(string));
+        //        table.Columns.Add("Id", typeof(int));
+        //        table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(1, "rotunjire la minute");
-                table.Rows.Add(2, "rotunjire la ora");
-                table.Rows.Add(3, "trunchiere la ora");
-                table.Rows.Add(4, "rotunjire la 45 minute");
-                table.Rows.Add(5, "rotunjire la 10 minute");
-                table.Rows.Add(6, "rotunjire la 5 minute");
+        //        table.Rows.Add(1, "rotunjire la minute");
+        //        table.Rows.Add(2, "rotunjire la ora");
+        //        table.Rows.Add(3, "trunchiere la ora");
+        //        table.Rows.Add(4, "rotunjire la 45 minute");
+        //        table.Rows.Add(5, "rotunjire la 10 minute");
+        //        table.Rows.Add(6, "rotunjire la 5 minute");
 
-                return table;
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //        return table;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
-        public static DataTable GetPtj_AliasFOrdonat()
-        {
-            try
-            {
-                return General.IncarcaDT("SELECT \"Coloana\" AS \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
-            }
+        //public static DataTable GetPtj_AliasFOrdonat()
+        //{
+        //    try
+        //    {
+        //        return General.IncarcaDT("SELECT \"Coloana\" AS \"Denumire\", CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END AS \"Alias\"  FROM \"Ptj_tblAdmin\" ORDER BY CASE WHEN \"Alias\" IS NULL THEN \"Coloana\" ELSE \"Alias\" END", null);
+        //    }
 
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
-                return null;
-            }
-        }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "General", new StackTrace().GetFrame(0).GetMethod().Name);
+        //        return null;
+        //    }
+        //}
 
         public static DataTable ListaNumere(int valMin, int valMax)
         {
@@ -6926,24 +6928,39 @@ namespace WizOne.Module
                 else
                     f10003 = "a.F10003";
 
-                string strSql = SelectCalculCO(an, f10003, filtruIns);
-                General.ExecutaNonQuery(strSql, null);
+                //Radu 21.04.2020
+                //string strSql = SelectCalculCO(an, f10003, filtruIns);
+                //General.ExecutaNonQuery(strSql, null);
+
 
                 if (cuActualizareInF100)
                 {
-                    string strUpd = $@"UPDATE A 
-                        SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
-                        FROM F100 A
-                        INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
-                    if (Constante.tipBD == 2)
-                        strUpd = $@"UPDATE F100 A
-                                    SET (A.F100642, A.F100995, A.F100996) =
-                                      (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
-                                       FROM ""Ptj_tblZileCO"" B
-                                       WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
-                                    WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
+                    //Radu 21.04.2020
+                    //string strUpd = $@"UPDATE A 
+                    //    SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
+                    //    FROM F100 A
+                    //    INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
+                    //if (Constante.tipBD == 2)
+                    //    strUpd = $@"UPDATE F100 A
+                    //                SET (A.F100642, A.F100995, A.F100996) =
+                    //                  (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
+                    //                   FROM ""Ptj_tblZileCO"" B
+                    //                   WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
+                    //                WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
 
-                    General.ExecutaNonQuery(strUpd, null);
+                    //General.ExecutaNonQuery(strUpd, null);
+                    if (marca != -99)
+                    {
+                        if (Constante.tipBD == 1)
+                            General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
+                                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
+                                                + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
+                        else
+                        {
+                            DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
+                            General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -8248,5 +8265,163 @@ namespace WizOne.Module
                 MemoreazaEroarea(ex.ToString(), "Calcul", "CalculFormule");
             }
         }
+
+        public static void BatchUpdate(object sender, DevExpress.Web.Data.ASPxDataBatchUpdateEventArgs e, string numeTabela, Dictionary<string, string> dic)
+        {
+            try
+            {
+                ASPxGridView grDate = sender as ASPxGridView;
+
+                grDate.CancelEdit();
+                DataSet ds = HttpContext.Current.Session["InformatiaCurenta"] as DataSet;
+                DataTable dt = ds.Tables[numeTabela];
+                if (dt == null) return;
+
+                //daca avem linii noi
+                for (int i = 0; i < e.InsertValues.Count; i++)
+                {
+                    ASPxDataInsertValues upd = e.InsertValues[i] as ASPxDataInsertValues;
+
+                    bool modif = false;
+
+                    DataRow dr = dt.NewRow();
+
+                    foreach (DictionaryEntry de in upd.NewValues)
+                    {
+                        string numeCol = de.Key.ToString();
+                        dynamic newValue = upd.NewValues[numeCol];
+                        if (newValue == null)
+                        {
+                            dr[numeCol] = DBNull.Value;
+                        }
+                        else
+                        {
+                            modif = true;
+                            switch (dr.Table.Columns[numeCol].DataType.ToString())
+                            {
+                                case "System.DateTime":
+                                    if (Convert.ToDateTime(newValue).Year == 100)
+                                        dr[numeCol] = ChangeToCurrentYear(newValue);
+                                    else
+                                        dr[numeCol] = newValue;
+                                    break;
+                                default:
+                                    dr[numeCol] = newValue;
+                                    break;
+                            }
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, string> l in dic)
+                    {
+                        dr[l.Key] = l.Value;
+                    }
+
+                    dr["USER_NO"] = HttpContext.Current.Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+
+                    if (!modif) continue;
+                    dt.Rows.Add(dr);
+                }
+
+                //daca avem linii modificate
+                for (int i = 0; i < e.UpdateValues.Count; i++)
+                {
+                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
+
+                    bool modif = false;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow dr = dt.Rows.Find(keys);
+                    if (dr == null) continue;
+
+                    foreach (DictionaryEntry de in upd.NewValues)
+                    {
+                        string numeCol = de.Key.ToString();
+                        dynamic oldValue = upd.OldValues[numeCol];
+                        dynamic newValue = upd.NewValues[numeCol];
+                        if (oldValue != null && upd.OldValues[numeCol].GetType() == typeof(System.DBNull))
+                            oldValue = null;
+
+                        if (newValue == oldValue) continue;
+
+                        if (newValue == null)
+                        {
+                            dr[numeCol] = DBNull.Value;
+                        }
+                        else
+                        {
+                            modif = true;
+                            switch (dr.Table.Columns[numeCol].DataType.ToString())
+                            {
+                                case "System.DateTime":
+                                    if (Convert.ToDateTime(newValue).Year == 100)
+                                        dr[numeCol] = ChangeToCurrentYear(newValue);
+                                    else
+                                        dr[numeCol] = newValue;
+                                    break;
+                                default:
+                                    dr[numeCol] = newValue;
+                                    break;
+                            }
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, string> l in dic)
+                    {
+                        dr[l.Key] = l.Value;
+                    }
+
+                    dr["USER_NO"] = HttpContext.Current.Session["UserId"];
+                    dr["TIME"] = DateTime.Now;
+
+                    if (!modif) continue;
+                }
+
+
+                //daca avem linii modificate
+                for (int i = 0; i < e.DeleteValues.Count; i++)
+                {
+                    ASPxDataDeleteValues upd = e.DeleteValues[i] as ASPxDataDeleteValues;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow dr = dt.Rows.Find(keys);
+                    if (dr == null) continue;
+
+                    dr.Delete();
+                }
+
+                e.Handled = true;
+                HttpContext.Current.Session["InformatiaCurenta"] = ds;
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "BatchUpdate", new StackTrace().GetFrame(0).GetMethod().Name);
+                e.Handled = true;
+            }
+        }
+
+        public static DateTime ChangeToCurrentYear(DateTime val)
+        {
+            DateTime dt = val;
+
+            try
+            {
+                dt = new DateTime(2100, 1, 1, val.Hour, val.Minute, 0);
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, "ChangeToCurrentYear", new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return dt;
+        }
+
     }
 }

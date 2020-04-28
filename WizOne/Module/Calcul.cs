@@ -226,23 +226,23 @@ namespace WizOne.Module
             try
             {
                 DataTable dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
-
-                //contract ciclic
-                if (dtCtr.Rows.Count > 0 && Convert.ToInt32(General.Nz(dtCtr.Rows[0]["TipContract"], -99)) == 2)
-                {
-                    if (dt != null && dtCtr.Rows[0]["CicluDataInceput"].ToString() != "" && dt >= Convert.ToDateTime(dtCtr.Rows[0]["CicluDataInceput"]))
-                    {
-                        TimeSpan ts = Convert.ToDateTime(dt) - Convert.ToDateTime(dtCtr.Rows[0]["CicluDataInceput"]);
-                        int nrZile = Convert.ToInt32(ts.TotalDays);
-                        int lung = 1;
-                        if (dtCtr.Rows[0]["CicluLungime"].ToString() != "") lung = Convert.ToInt32(dtCtr.Rows[0]["CicluLungime"]);
-                        int zi = (nrZile % lung) + 1;
-                        DataTable dtCic = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ContracteCiclice"" WHERE ""IdContract""={0} AND ""ZiCiclu"" = {1}", idCtr, zi));
-                        if (dtCic.Rows.Count > 0 && dtCtr.Rows[0]["IdContractZilnic"].ToString() != "") idCtr = Convert.ToInt32(General.Nz(dtCtr.Rows[0]["IdContractZilnic"], -99));
-                        dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
-                    }
-                }
-
+                
+                //Florin 2020.04.16 - nu se mai foloseste odata cu optimizarea contracte si programe
+                ////contract ciclic
+                //if (dtCtr.Rows.Count > 0 && Convert.ToInt32(General.Nz(dtCtr.Rows[0]["TipContract"], -99)) == 2)
+                //{
+                //    if (dt != null && dtCtr.Rows[0]["CicluDataInceput"].ToString() != "" && dt >= Convert.ToDateTime(dtCtr.Rows[0]["CicluDataInceput"]))
+                //    {
+                //        TimeSpan ts = Convert.ToDateTime(dt) - Convert.ToDateTime(dtCtr.Rows[0]["CicluDataInceput"]);
+                //        int nrZile = Convert.ToInt32(ts.TotalDays);
+                //        int lung = 1;
+                //        if (dtCtr.Rows[0]["CicluLungime"].ToString() != "") lung = Convert.ToInt32(dtCtr.Rows[0]["CicluLungime"]);
+                //        int zi = (nrZile % lung) + 1;
+                //        DataTable dtCic = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ContracteCiclice"" WHERE ""IdContract""={0} AND ""ZiCiclu"" = {1}", idCtr, zi));
+                //        if (dtCic.Rows.Count > 0 && dtCtr.Rows[0]["IdContractZilnic"].ToString() != "") idCtr = Convert.ToInt32(General.Nz(dtCtr.Rows[0]["IdContractZilnic"], -99));
+                //        dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
+                //    }
+                //}
 
                 int ziLibera = Convert.ToInt32(General.ExecutaScalar(string.Format(@"SELECT COUNT(*) FROM HOLIDAYS WHERE DAY={0}", General.ToDataUniv(dt))));
                 int sapt = Dami.ZiSapt(dt.Value.DayOfWeek.ToString());
@@ -710,38 +710,46 @@ namespace WizOne.Module
 
                 if (lastOut != null)
                 {
-                    if (entPrg != null && entPrg["OraIesire"] != null && entPrg["OraIesire"].ToString() != "")
+                    //Florin 2020.04.21 - Am adaugat conditia flexibil=1
+                    if (Convert.ToInt32(General.Nz(entPrg["Flexibil"], -99)) == 1)
                     {
-                        if (new DateTime(2100, 1, 1, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, 0) <= oraOutSchimbare)
+                        dtSch = lastOut;
+                    }
+                    else
+                    {
+                        if (entPrg != null && entPrg["OraIesire"] != null && entPrg["OraIesire"].ToString() != "")
                         {
-                            dtSch = lastOut;                //este schimbul 3
-                        }
-                        else
-                        {
-                            //este schimbul 1,2
-                            //2016.02.22 Florin - la schimbul 2 poate sa iasa si la ora 2 a doua zi
-                            if (firstIn != null && new DateTime(2100, 1, 1, lastOut.Value.Hour, lastOut.Value.Minute, 0) <= oraOutSchimbare
-                                && new DateTime(2100, 1, 1, firstIn.Value.Hour, firstIn.Value.Minute, 0) > oraInSchimbare)
+                            if (new DateTime(2100, 1, 1, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, 0) <= oraOutSchimbare)
                             {
-                                //dtSch = lastOut;
-                                //Radu 20.02.2017
-                                dtSch = new DateTime(zi.Value.AddDays(1).Year, zi.Value.AddDays(1).Month, zi.Value.AddDays(1).Day, lastOut.Value.Hour, lastOut.Value.Minute, lastOut.Value.Second);
+                                dtSch = lastOut;                //este schimbul 3
                             }
                             else
                             {
-                                dtSch = new DateTime(zi.Value.Year, zi.Value.Month, zi.Value.Day, lastOut.Value.Hour, lastOut.Value.Minute, lastOut.Value.Second);
+                                //este schimbul 1,2
+                                //2016.02.22 Florin - la schimbul 2 poate sa iasa si la ora 2 a doua zi
+                                if (firstIn != null && new DateTime(2100, 1, 1, lastOut.Value.Hour, lastOut.Value.Minute, 0) <= oraOutSchimbare
+                                    && new DateTime(2100, 1, 1, firstIn.Value.Hour, firstIn.Value.Minute, 0) > oraInSchimbare)
+                                {
+                                    //dtSch = lastOut;
+                                    //Radu 20.02.2017
+                                    dtSch = new DateTime(zi.Value.AddDays(1).Year, zi.Value.AddDays(1).Month, zi.Value.AddDays(1).Day, lastOut.Value.Hour, lastOut.Value.Minute, lastOut.Value.Second);
+                                }
+                                else
+                                {
+                                    dtSch = new DateTime(zi.Value.Year, zi.Value.Month, zi.Value.Day, lastOut.Value.Hour, lastOut.Value.Minute, lastOut.Value.Second);
+                                }
                             }
-                        }
 
-                        if (dtSch != null)
-                        {
-                            //Radu 20.02.2017
-                            if (new DateTime(2100, 1, 1, lastOut.Value.Hour, lastOut.Value.Minute, 0) <= oraOutSchimbare && Convert.ToDateTime(entPrg["OraIesire"]).Hour > Convert.ToDateTime(entPrg["OraIntrare"]).Hour)   //Radu 10.10.2019 - am inlocuit a doua conditie (sa fie schimbul 1 sau 2)
-                                endTime = new DateTime(dtSch.Value.AddDays(-1).Year, dtSch.Value.AddDays(-1).Month, dtSch.Value.AddDays(-1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
-                            else if (firstIn != null && Convert.ToDateTime(entPrg["OraIesire"]).Hour < Convert.ToDateTime(entPrg["OraIntrare"]).Hour && firstIn.Value.Day == lastOut.Value.Day)  //Radu 12.09.2019 - prima conditie = sa fie program de noapte (schimb 3), a doua conditie - nu a lucrat peste miezul noptii
-                                endTime = new DateTime(dtSch.Value.AddDays(1).Year, dtSch.Value.AddDays(1).Month, dtSch.Value.AddDays(1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
-                            else
-                                endTime = new DateTime(dtSch.Value.Year, dtSch.Value.Month, dtSch.Value.Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
+                            if (dtSch != null)
+                            {
+                                //Radu 20.02.2017
+                                if (new DateTime(2100, 1, 1, lastOut.Value.Hour, lastOut.Value.Minute, 0) <= oraOutSchimbare && Convert.ToDateTime(entPrg["OraIesire"]).Hour > Convert.ToDateTime(entPrg["OraIntrare"]).Hour)   //Radu 10.10.2019 - am inlocuit a doua conditie (sa fie schimbul 1 sau 2)
+                                    endTime = new DateTime(dtSch.Value.AddDays(-1).Year, dtSch.Value.AddDays(-1).Month, dtSch.Value.AddDays(-1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
+                                else if (firstIn != null && Convert.ToDateTime(entPrg["OraIesire"]).Hour < Convert.ToDateTime(entPrg["OraIntrare"]).Hour && firstIn.Value.Day == lastOut.Value.Day)  //Radu 12.09.2019 - prima conditie = sa fie program de noapte (schimb 3), a doua conditie - nu a lucrat peste miezul noptii
+                                    endTime = new DateTime(dtSch.Value.AddDays(1).Year, dtSch.Value.AddDays(1).Month, dtSch.Value.AddDays(1).Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
+                                else
+                                    endTime = new DateTime(dtSch.Value.Year, dtSch.Value.Month, dtSch.Value.Day, Convert.ToDateTime(entPrg["OraIesire"]).Hour, Convert.ToDateTime(entPrg["OraIesire"]).Minute, Convert.ToDateTime(entPrg["OraIesire"]).Second);
+                            }
                         }
                     }
 

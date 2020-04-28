@@ -15,7 +15,6 @@ namespace WizOne.Pontaj
 {
     public partial class PlanificareSchimburi : System.Web.UI.Page
     {
-
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -213,6 +212,7 @@ namespace WizOne.Pontaj
                         return;
                     case "cmbRol":
                     case "txtAnLuna":
+                    case "Data":
                         IncarcaAngajati();
                         esteStruc = false;
                         break;
@@ -277,7 +277,15 @@ namespace WizOne.Pontaj
         {
             try
             {
-                DataTable dt = General.IncarcaDT(SelectAngajati(), null);
+                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
+                if (Constante.tipBD == 2) cmp = "ROWNUM";
+
+                string strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* 
+                            FROM ({SelectComun()}) X 
+                            WHERE X.F10022 <= {General.ToDataUniv(txtDtSf.Date)} AND {General.ToDataUniv(txtDtInc.Date)} <= X.F10023 
+                            ORDER BY X.""NumeComplet"" ";
+
+                DataTable dt = General.IncarcaDT(strSql, null);
 
                 cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
@@ -289,30 +297,6 @@ namespace WizOne.Pontaj
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }
-
-        private string SelectAngajati(string filtru = "")
-        {
-            string strSql = "";
-
-            try
-            {
-                string cmp = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1)))";
-                if (Constante.tipBD == 2) cmp = "ROWNUM";
-
-                strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* 
-                            FROM ({SelectComun()}) X 
-                            WHERE X.F10022 <= {General.ToDataUniv(txtDtSf.Date)} AND {General.ToDataUniv(txtDtInc.Date)} <= X.F10023 
-                            {filtru}
-                            ORDER BY X.""NumeComplet"" ";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-
-            return strSql;
         }
 
         private string SelectComun()
@@ -473,7 +457,7 @@ namespace WizOne.Pontaj
                         FROM F100 X
                         INNER JOIN tblZile Y ON {dtInc} <= Y.Zi AND Y.Zi <= {dtSf}
                         WHERE X.F10003=A.F10003
-                        FOR XML PATH ('')) AS ZileGri
+                        FOR XML PATH ('')) + ',' AS ZileGri
                         FROM (
                         SELECT TOP 100 PERCENT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"" {zileVal}
                         FROM
@@ -624,56 +608,56 @@ namespace WizOne.Pontaj
                     CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,1))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb1"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program1"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 2 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb2"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program2"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,2))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb2"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program2"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 3 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb3"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program3"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,3))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb3"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program3"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 4 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb4"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program4"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,4))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb4"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program4"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 5 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb5"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program5"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,5))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb5"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program5"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 6 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb6"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program6"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,6))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb6"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program6"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 7 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb7"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program7"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,7))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb7"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program7"", A.""Program0"") ELSE B.""IdProgram"" END)
                     UNION
                     SELECT A.""Id"" AS ""ContractId"", A.""Denumire"" AS ""ContractDen"", 8 AS ""ZiSapt"", 
                     CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END AS ""ProgramId"",
                     C.""Denumire"" AS ""ProgramDen"", COALESCE(C.""DenumireScurta"", C.""Denumire"") AS ""ProgDenScurta""
                     FROM ""Ptj_Contracte"" A
-                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract""
+                    LEFT JOIN ""Ptj_ContracteSchimburi"" B ON A.""Id""=B.""IdContract"" AND B.""TipSchimb"" IN (SELECT MAX(X.""TipSchimb"") FROM ""Ptj_ContracteSchimburi"" X WHERE X.""IdContract""=A.""Id"" AND X.""TipSchimb"" IN (0,8))
                     LEFT JOIN ""Ptj_Programe"" C ON C.""Id"" = (CASE WHEN COALESCE(A.""TipSchimb8"", A.""TipSchimb0"") = 1 THEN COALESCE(A.""Program8"", A.""Program0"") ELSE B.""IdProgram"" END)
                     ) X
                     UNION 
@@ -826,9 +810,31 @@ namespace WizOne.Pontaj
             }
             catch (Exception)
             {
+                //NOP by Florin
             }
         }
 
+        protected void grDate_DataBound(object sender, EventArgs e)
+        {
+            try
+            {
+                var lstZileGri = new Dictionary<int, object>();
+
+                var grid = sender as ASPxGridView;
+                for (int i = grid.VisibleStartIndex; i < grid.VisibleStartIndex + grid.SettingsPager.PageSize; i++)
+                {
+                    var rowValues = grid.GetRowValues(i, new string[] { "F10003", "ZileGri"}) as object[];
+                    lstZileGri.Add(Convert.ToInt32(rowValues[0] ?? (-1 * i)), rowValues[1] ?? "");
+                }
+
+                grid.JSProperties["cp_zileGri"] = lstZileGri;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }
  

@@ -1664,6 +1664,9 @@ namespace WizOne.Avs
                     op = "||";
                 DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 ", null);        
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
+                string circuit = Dami.ValoareParam("FinalizareCuActeAditionale", "0");
+                if (circuit == "1")
+                    de3Nou.ClientEnabled = false;
             }
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.RevenireSuspendare)
             {
@@ -1671,7 +1674,8 @@ namespace WizOne.Avs
                 string op = "+";
                 if (Constante.tipBD == 2)
                     op = "||";
-                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 join f111 on f11104 = f09002 and f11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 join f111 on f11104 = f09002 and f11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() 
+                    + " WHERE F11107 IS NULL OR F11107 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") , null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
                 de1Nou.ClientEnabled = false;
                 de2Nou.ClientEnabled = false;
@@ -1838,7 +1842,7 @@ namespace WizOne.Avs
 
                         if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaSalariu || Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaGarantii)
                         {
-                            if (!IbanValid(txt1Nou.Text))
+                            if (e.Parameter.Split(';')[1] == "txt1Nou" && !IbanValid(txt1Nou.Text))
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Cont IBAN invalid!");
                                 txt1Nou.Value = "";
@@ -2202,12 +2206,41 @@ namespace WizOne.Avs
                     }
                 }
 
+                if (idAtr == (int)Constante.Atribute.Suspendare)
+                {
+                    if (Convert.ToDateTime(de1Nou.Value).Date != Convert.ToDateTime(txtDataMod.Value).Date)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii trebuie sa fie egala cu Data inceput suspendare!");
+                        return false;
+                    }
+
+                    DataTable dtAng = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString());
+                    if (General.Nz(dtAng.Rows[0]["F1009741"], "").ToString() == "2")
+                    {
+                        if (Convert.ToDateTime(dtAng.Rows[0]["F10023"].ToString()).Date < Convert.ToDateTime(de2Nou.Value).Date)
+                        {
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data sfarsit estimata este ulterioara datei ultimei zile de plata!");
+                            return false;
+                        }
+                    }
+
+                }
+
                 if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
                 {
                     if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de3Nou.Value).Date && val == 1)
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
                         SetDataRevisal(1, Convert.ToDateTime(de3Nou.Value).AddDays(-1), Convert.ToInt32(cmbAtribute.Value), out dataRev);
+                        return false;
+                    }
+                }
+
+                if (idAtr == (int)Constante.Atribute.RevenireSuspendare)
+                {
+                    if (Convert.ToDateTime(de3Nou.Value).Date != Convert.ToDateTime(txtDataMod.Value).Date)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii trebuie sa fie egala cu Data incetare suspendare!");
                         return false;
                     }
                 }

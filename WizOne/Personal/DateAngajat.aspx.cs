@@ -445,6 +445,7 @@ namespace WizOne.Personal
                     MessageBox.Show(msg.Substring(2), MessageBox.icoWarning);
                     return;
                 }
+                                         
 
 
                 //Florin 2018-10-30
@@ -504,12 +505,14 @@ namespace WizOne.Personal
                     }
 
 
+                    InserareAngajat(Session["Marca"].ToString(), ds.Tables[1], ds.Tables[2]);
+
                     //Florin 2019.06.24
                     //Mihnea 2019.06.13
                     int tip_pass = 0;
                     tip_pass = Convert.ToInt32(Dami.ValoareParam("Parola_creare_user", "0"));
 
-                    int creareUtilizator = (Session["MP_CreareUtilizator"] as int? ?? 0);
+                    int creareUtilizator = (Session["MP_CreareUtilizator"] as int? ?? 0);                                
 
                     if (creareUtilizator == 1)
                     {//Radu 05.12.2019 - crearea utilizatorului se va face numai daca a fost bifata optiunea din popup Sablon
@@ -535,13 +538,31 @@ namespace WizOne.Personal
                         }
 
                         if (pass == "") pass = "0";
-                        string userNume = "";
-                        if (General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString() != "" || General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString() != "")
-                            userNume = General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString().Replace("-", "").Replace(" ", "") + "." + General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString().Replace("-", "").Replace(" ", "");
 
-                        //daca numele de utilizator exista, adaugam un 2 in coada
-                        if (Convert.ToInt32(General.ExecutaScalar("SELECT COUNT(*) FROM USERS WHERE F70104=@1", new object[] { userNume })) != 0)
-                            userNume += "2";
+                        string userNume = "";
+                        //Radu 09.04.2020
+                        string paramUser = Dami.ValoareParam("AlcatuireNumeUtilizator", "");
+                        if (paramUser.Length > 0)
+                        {
+                            DataTable dtUserParam = General.IncarcaDT("SELECT " + paramUser + " FROM F100 WHERE F10003 = " + ds.Tables[1].Rows[0]["F10003"].ToString(), null);
+                            userNume = dtUserParam.Rows[0][0].ToString();
+                        }
+                        else
+                        {
+                            if (General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString() != "" || General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString() != "")
+                                userNume = General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString().Replace("-", "").Replace(" ", "") + "." + General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString().Replace("-", "").Replace(" ", "");                            
+                        }
+                        //daca numele de utilizator exista, adaugam un nr in coada
+                        DataTable dtUser = General.IncarcaDT("SELECT COUNT(*) FROM USERS WHERE UPPER(F70104) like UPPER('" + userNume + "%')", null);
+                        if (Convert.ToInt32(dtUser.Rows[0][0].ToString()) != 0)
+                            userNume += (Convert.ToInt32(dtUser.Rows[0][0].ToString()) + 1).ToString();
+
+                        //Radu 09.04.2020
+                        string resetareParola = Dami.ValoareParam("ResetareParola", "0");
+                        string mail = "NULL", numeComplet = "NULL";
+                        if (ds.Tables[1].Rows[0]["F100894"] != null && ds.Tables[1].Rows[0]["F100894"].ToString().Length > 0)
+                            mail = ds.Tables[1].Rows[0]["F100894"].ToString();
+                        numeComplet = General.Nz(ds.Tables[1].Rows[0]["F10008"], "").ToString() + " "  + General.Nz(ds.Tables[1].Rows[0]["F10009"], "").ToString();
 
                         //Radu 29.10.2019 - se scoate INSERT-ul in relGrupUser2
                         //General.ExecutaNonQuery($@"
@@ -551,8 +572,8 @@ namespace WizOne.Personal
                         //    END;", new object[] { cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
                         General.ExecutaNonQuery($@"
                         BEGIN
-                            INSERT INTO USERS (F70101, F70102, F70103, F70104, F10003, USER_NO, TIME) VALUES(701, @1, @2, @3, @4, @5, {General.CurrentDate()})                            
-                        END;", new object[] { Dami.NextId("USERS").ToString(), cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, Session["Marca"], Session["UserId"] });
+                            INSERT INTO USERS (F70101, F70102, F70103, F70104, F70113, F10003, ""Mail"", ""NumeComplet"", ""IdLimba"", USER_NO, TIME) VALUES(701, @1, @2, @3, @4, @5, @6, @7, 'RO', @8, {General.CurrentDate()})                            
+                        END;", new object[] { Dami.NextId("USERS").ToString(), cls.EncryptString(Constante.cheieCriptare, pass, Constante.ENCRYPT), userNume, resetareParola, Session["Marca"], mail, numeComplet, Session["UserId"] });
                     }
 
                     #region OLD
@@ -614,9 +635,8 @@ namespace WizOne.Personal
                     //}
 
                     #endregion
+                                                      
 
-
-                    InserareAngajat(Session["Marca"].ToString(), ds.Tables[1], ds.Tables[2]);
                     Session["esteNou"] = "false";
 
                     try
@@ -646,7 +666,8 @@ namespace WizOne.Personal
                     {                     
                         General.SalveazaDate(ds.Tables[i], ds.Tables[i].TableName);
                     }
-                }
+                }             
+
 
                 //Florin 2018-10-30
                 //calculam CO daca se modifica data plecare

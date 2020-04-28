@@ -752,7 +752,7 @@ namespace WizOne.Eval
                         //    lstEval_Raspuns.FirstOrDefault().LuatLaCunostinta = 2;
                         //Session["lstEval_Raspuns"] = lstEval_Raspuns;
 
-                        General.ExecutaNonQuery(@"UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta"" = @1 WHERE ""IdQuiz""=@2 AND F10003 = @3", new object[] { valueControl, Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"],1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                        General.ExecutaNonQuery($@"UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta"" = @1, ""LuatData""={General.CurrentDate()}, ""LuatUser""={Session["UserId"]} WHERE ""IdQuiz""=@2 AND F10003 = @3", new object[] { valueControl, Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"],1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                         pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
                         return;
                     }

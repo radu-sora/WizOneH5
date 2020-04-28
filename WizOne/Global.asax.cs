@@ -66,6 +66,9 @@ namespace WizOne
                 DevExpress.Web.ASPxWebControl.CallbackError += new EventHandler(Application_Error);
 
                 Constante.esteTactil = Convert.ToBoolean(General.Nz(ConfigurationManager.AppSettings["EsteTactil"], false));
+
+                //Radu 23.04.2020
+                Constante.idTerminal = Convert.ToString(General.Nz(ConfigurationManager.AppSettings["IdTerminal"], false));
             }
             catch (Exception ex)
             {

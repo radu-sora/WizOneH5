@@ -7,128 +7,128 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Pagini
+namespace WizOne
 {
 
 
-    public partial class ImportDate
+    public partial class DefaultTactilFaraCard
     {
 
         /// <summary>
-        /// btnImport control.
+        /// form1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnImport;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// btnViz control.
+        /// pnlCtl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnViz;
+        protected global::DevExpress.Web.ASPxCallbackPanel pnlCtl;
 
         /// <summary>
-        /// btnExit control.
+        /// btn7 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnExit;
+        protected global::DevExpress.Web.ASPxButton btn7;
 
         /// <summary>
-        /// lblButon control.
+        /// btn8 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblButon;
+        protected global::DevExpress.Web.ASPxButton btn8;
 
         /// <summary>
-        /// btnDocUpload control.
+        /// btn9 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxUploadControl btnDocUpload;
+        protected global::DevExpress.Web.ASPxButton btn9;
 
         /// <summary>
-        /// lblSablon control.
+        /// btn4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblSablon;
+        protected global::DevExpress.Web.ASPxButton btn4;
 
         /// <summary>
-        /// cmbSablon control.
+        /// btn5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbSablon;
+        protected global::DevExpress.Web.ASPxButton btn5;
 
         /// <summary>
-        /// grDate control.
+        /// btn6 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDate;
+        protected global::DevExpress.Web.ASPxButton btn6;
 
         /// <summary>
-        /// grDateViz control.
+        /// btn1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDateViz;
+        protected global::DevExpress.Web.ASPxButton btn1;
 
         /// <summary>
-        /// popUpViz control.
+        /// btn2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl popUpViz;
+        protected global::DevExpress.Web.ASPxButton btn2;
 
         /// <summary>
-        /// Panel1 control.
+        /// btn3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel1;
+        protected global::DevExpress.Web.ASPxButton btn3;
 
         /// <summary>
-        /// btnIesire control.
+        /// btn0 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnIesire;
+        protected global::DevExpress.Web.ASPxButton btn0;
 
         /// <summary>
-        /// grDateNomen control.
+        /// btnLog control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView grDateNomen;
+        protected global::DevExpress.Web.ASPxButton btnLog;
     }
 }

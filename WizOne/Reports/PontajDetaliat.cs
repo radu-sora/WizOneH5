@@ -84,27 +84,21 @@ namespace WizOne.Reports
                         xrLabel26.Visible = false;
                         xrLabel3.Visible = false;
                         xrLabel26.WidthF = 0;
-                        xrLabel3.WidthF = 0;    
-                     
-                        for (int k = 27; k <= 68; k++)
+                        xrLabel3.WidthF = 0;
+                        //Radu 21.04.2020
+                        xrLabel89.Visible = false;
+                        xrLabel90.Visible = false;
+                        xrLabel89.WidthF = 0;
+                        xrLabel90.WidthF = 0;
+
+                        for (int k = 4; k <= 88; k++)
                         {
+                            if (k == 26)
+                                continue;
                             XRLabel lbl = new XRLabel();
                             lbl = TopMargin.FindControl("xrLabel" + k, false) as XRLabel;                       
-                            lbl.LeftF -= 100;
-                        }
-
-                        for (int k = 4; k <= 25; k++)
-                        {
-                            XRLabel lbl = new XRLabel();
-                            lbl = Detail.FindControl("xrLabel" + k, false) as XRLabel;
-                            lbl.LeftF -= 100;
-                        }
-                        for (int k = 69; k <= 88; k++)
-                        {
-                            XRLabel lbl = new XRLabel();
-                            lbl = Detail.FindControl("xrLabel" + k, false) as XRLabel;
-                            lbl.LeftF -= 100;
-                        }
+                            lbl.LeftF -= 140;
+                        }                                
                     }        
                 }
             }

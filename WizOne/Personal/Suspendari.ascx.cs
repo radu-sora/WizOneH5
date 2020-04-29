@@ -607,10 +607,12 @@ namespace WizOne.Personal
                 DataRow[] drSusp = dtSuspNomen.Select("F09002 = " + dtSuspAng.Rows[0]["F11104"].ToString());
                 if (drSusp[0]["F09004"].ToString() != "Art52Alin1LiteraC")
                 {
-                    ds.Tables[0].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
-                    ds.Tables[0].Rows[0]["F1001102"] = Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
-                    ds.Tables[2].Rows[0]["F1001101"] = ds.Tables[0].Rows[0]["F10022"];
-                    ds.Tables[2].Rows[0]["F1001102"] = Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()).Date.AddDays(-1);
+                    DateTime dtIntrare, dtIesire;
+                    General.CalculDateCategorieAsigurat(Convert.ToInt32(Session["Marca"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11107"].ToString()), out dtIntrare, out dtIesire);
+                    ds.Tables[0].Rows[0]["F1001101"] = dtIntrare;
+                    ds.Tables[0].Rows[0]["F1001102"] = dtIesire;
+                    ds.Tables[2].Rows[0]["F1001101"] = dtIntrare;
+                    ds.Tables[2].Rows[0]["F1001102"] = dtIesire;
                 }
                 if (Convert.ToInt32(dtSuspAng.Rows[0]["F11104"].ToString()) == 11 && Convert.ToDateTime(ds.Tables[0].Rows[0]["F100924"]) == new DateTime(2100, 1, 1))  //introducere CIC
                 {

@@ -13740,3 +13740,16 @@ alter table "tblInfoChiosc" add "IdTerminal" varchar2(50);
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('TipInfoChiosc', '0', '0 - obisnuit (cu detectare cartela); 1 - fara detectare cartela si cu PIN; 2 - fara detectare cartela si fara PIN', 0, -99, SYSDATE);
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('IntervalConectareInfoChiosc', '5', 'Intervalul maxim (in secunde), in trecut fata de momentul curent, in care poate fi luata in considerare cartela citita de InfoChiosc', 0, -99, SYSDATE);
+
+
+insert into F806 (F80601, F80602, F80603, F80604) 
+select 806, 1, 1, 'Invatamant primar' from dual
+where not exists(select * 
+                 from F806 
+                 where F80603 = 1);
+                 
+insert into F806 (F80601, F80602, F80603, F80604) 
+select 806, 1, 2, 'Invatamant gimnazial' from dual
+where not exists(select * 
+                 from F806 
+                 where F80603 = 2);   

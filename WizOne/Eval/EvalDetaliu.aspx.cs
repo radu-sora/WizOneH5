@@ -2705,6 +2705,8 @@ namespace WizOne.Eval
                 ASPxGridView grid = sender as ASPxGridView;
                 grid.CancelEdit();
                 GridViewDataComboBoxColumn colCompetenta = (grid.Columns["IdCompetenta"] as GridViewDataComboBoxColumn);
+                //Florin 2020.04.29
+                GridViewDataComboBoxColumn colCalificativ = (grid.Columns["IdCalificativ"] as GridViewDataComboBoxColumn);
 
                 List<Eval_CompetenteAngajatTemp> lst = Session["lstEval_CompetenteAngajatTemp"] as List<Eval_CompetenteAngajatTemp>;
 
@@ -2744,6 +2746,8 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (colCalificativ != null)
+                                    clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
                                 clsNew.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -2798,6 +2802,8 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (colCalificativ != null)
+                                    clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
                                 clsUpd.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");

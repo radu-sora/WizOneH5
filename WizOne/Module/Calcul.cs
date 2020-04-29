@@ -68,7 +68,7 @@ namespace WizOne.Module
 
                 string cmp = "";
                 //if (General.Nz(ent["NormaProgram"], "").ToString() != "") cmp += ",\"NormaProgram\"=" + ent["NormaProgram"];
-                cmp += @", ""NormaProgram""=(SELECT Norma FROM ""Ptj_Programe"" WHERE ""Id""=COALESCE(""IdProgram"",-99))";
+                cmp += @", ""NormaProgram""=(SELECT ""Norma"" FROM ""Ptj_Programe"" WHERE ""Id""=COALESCE(""IdProgram"",-99))";
 
                 cmp += VerificareCereriH5(f10003, ziua, Convert.ToInt32(General.Nz(ent["ZiSapt"], 1)), Convert.ToInt32(General.Nz(ent["ziLibera"], 0)), Convert.ToInt32(General.Nz(ent["ziLiberaLegala"], 0)));
 

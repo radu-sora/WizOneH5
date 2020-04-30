@@ -91,14 +91,25 @@ namespace WizOne.Reports
                         xrLabel89.WidthF = 0;
                         xrLabel90.WidthF = 0;
 
-                        for (int k = 4; k <= 88; k++)
+                        for (int k = 27; k <= 68; k++)
                         {
-                            if (k == 26)
-                                continue;
                             XRLabel lbl = new XRLabel();
-                            lbl = TopMargin.FindControl("xrLabel" + k, false) as XRLabel;                       
+                            lbl = TopMargin.FindControl("xrLabel" + k, false) as XRLabel;
                             lbl.LeftF -= 140;
-                        }                                
+                        }
+
+                        for (int k = 4; k <= 25; k++)
+                        {
+                            XRLabel lbl = new XRLabel();
+                            lbl = Detail.FindControl("xrLabel" + k, false) as XRLabel;
+                            lbl.LeftF -= 140;
+                        }
+                        for (int k = 69; k <= 88; k++)
+                        {
+                            XRLabel lbl = new XRLabel();
+                            lbl = Detail.FindControl("xrLabel" + k, false) as XRLabel;
+                            lbl.LeftF -= 140;
+                        }
                     }        
                 }
             }

@@ -8423,5 +8423,39 @@ namespace WizOne.Module
             return dt;
         }
 
+
+        public static void CalculDateCategorieAsigurat(int marca, DateTime dtStart, DateTime dtEstim, DateTime dtSfarsit, out DateTime dtIntrare, out DateTime dtIesire)
+        {
+            dtIntrare = new DateTime(2100, 1, 1);
+            dtIesire = new DateTime(2100, 1, 1);
+
+            if (dtSfarsit.Date != new DateTime(2100, 1, 1))
+            {
+                dtIntrare = dtSfarsit;
+                dtIesire = new DateTime(2100, 1, 1);
+            }
+            else
+            {
+                DataTable dtSusp = IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + marca + " AND F11107 IS NOT NULL AND F11107 <> "
+                    + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " ORDER BY F11107 DESC ", null);
+                DataTable dtAng = IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + marca, null);
+                dtIntrare = Convert.ToDateTime(dtAng.Rows[0]["F10022"].ToString());
+                dtIesire = dtStart.AddDays(-1);
+                DateTime data = dtStart;
+                for (int i = 0; i < dtSusp.Rows.Count; i++)
+                {
+                    if (Convert.ToDateTime(dtSusp.Rows[i]["F11107"].ToString()).Date == data.Date)
+                        data = Convert.ToDateTime(dtSusp.Rows[i]["F11105"].ToString());
+                    else
+                    {
+                        dtIntrare = Convert.ToDateTime(dtSusp.Rows[i]["F11107"].ToString());
+                        dtIesire = Convert.ToDateTime(dtSusp.Rows[i]["F11105"].ToString()).AddDays(-1);
+                    }
+                }
+
+            }
+
+        }
+
     }
 }

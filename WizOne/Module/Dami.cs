@@ -1424,7 +1424,7 @@ namespace WizOne.Module
                     case 13:                    //pontaj in curs de aprobare
                         {
                             int idStare = 1;
-                            DataRow drCum = General.IncarcaDR(@"SELECT * FROM ""Ptj_Cumulat"" WHERE F10003=@1 AND ""An""=@2 AND ""Luna""=@3", new object[] { f10003, dtInc.Year, dtInc.Month });
+                            DataRow drCum = General.IncarcaDR(@"SELECT ""IdStare"" FROM ""Ptj_Cumulat"" WHERE F10003=@1 AND ""An""=@2 AND ""Luna""=@3", new object[] { f10003, dtInc.Year, dtInc.Month });
                             if (drCum != null && drCum["IdStare"] != null) idStare = Convert.ToInt32(General.Nz(drCum["IdStare"], 1));
 
                             //Florin 2020.03.04 - daca starea pontajului este initiat sau respins manager permite accesul tuturor 

@@ -3005,12 +3005,15 @@ namespace WizOne.Pontaj
                     strInner += $@"OUTER APPLY dbo.DamiNorma(X.F10003, {dtSf}) dn 
                                 OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
 
-
                 //Florin 2019.09.23 s-a scos de mai jos LEFT JOIN F724 etc.
                 //Radu 19.09.2019 - am inlocuit F724 cu viewCategoriePontaj
                 //LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                 //LEFT JOIN F724 CB ON A.F10062 = CB.F72402
                 if (Constante.tipBD == 1)
+                {
+                    //Florin 2020.04.30 - am modificat X.* cu colCumulat
+                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT ',X.' + ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"", 0) = 1 ORDER BY COALESCE(""OrdineAfisare"", 999999) FOR XML Path('')"), "").ToString();
+
                     strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
                                 LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
@@ -3039,8 +3042,7 @@ namespace WizOne.Pontaj
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
                                 dn.Norma AS AvansNorma, 
                                 CASE WHEN Y.Norma <> dn.Norma THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND YEAR(F70406)={an} AND MONTH(F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS AvansData,
-                                L.F06205, Fct.F71804 AS Functie,
-                                X.* {zileVal} {zileF}
+                                L.F06205, Fct.F71804 AS Functie, X.F10003, X.IdStare, X.Comentarii {colCumulat} {zileVal} {zileF}
                                 FROM Ptj_Cumulat X 
 		                        LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
 		                        left join SituatieZileAbsente zabs on zabs.F10003 = x.F10003 and zabs.An = x.An and zabs.IdAbsenta = (select Id from Ptj_tblAbsente where DenumireScurta = 'CO')
@@ -3076,7 +3078,12 @@ namespace WizOne.Pontaj
                                 WHERE X.An = {an} AND X.Luna = {luna} {filtruPlus}
                                 ORDER BY AngajatNume) A
                                 WHERE 1=1 {strFiltru}";
+                }
                 else
+                {
+                    //Florin 2020.04.30 - am modificat X.* cu colCumulat
+                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT LISTAGG(',X.' || ""Coloana"") WITHIN GROUP (ORDER BY COALESCE(""OrdineAfisare"", 999999)) FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"", 0) = 1 ORDER BY COALESCE(""OrdineAfisare"", 999999)"), "").ToString();
+
                     strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
                                 LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContract""=C.""Id""
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
@@ -3105,8 +3112,7 @@ namespace WizOne.Pontaj
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
                                 ""DamiNorma""(X.F10003, {dtSf}) AS ""AvansNorma"", 
                                 CASE WHEN ""Norma"" <> ""DamiNorma""(X.F10003, {dtSf}) THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND EXTRACT(YEAR FROM F70406)={an} AND EXTRACT(MONTH FROM F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS ""AvansData"",
-                                L.F06205, Fct.F71804 AS ""Functie"",                                
-                                X.* {zileVal} {zileF}
+                                L.F06205, Fct.F71804 AS ""Functie"", X.F10003, X.""IdStare"", X.""Comentarii"" {colCumulat} {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
                                 LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
                                 left join (SELECT * FROM ""SituatieZileAbsente"" WHERE ""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An""
@@ -3141,6 +3147,7 @@ namespace WizOne.Pontaj
                                 WHERE X.""An""= {an} AND X.""Luna"" = {luna} {filtruPlus}
                                 ORDER BY ""AngajatNume"") A
                                 WHERE 1=1 {strFiltru}";
+                }
             }
             catch (Exception ex)
             {

@@ -13867,3 +13867,86 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO,
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AlcatuireNumeUtilizator', '', 'Exemple:  F10008 || '' '' || F10009; F100901 etc', 0, -99, SYSDATE);
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, SYSDATE);
 COMMIT;
+
+---   129
+
+ALTER TABLE "Ptj_Cumulat" ADD F61 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F62 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F63 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F64 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F65 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F66 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F67 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F68 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F69 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F70 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F71 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F72 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F73 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F74 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F75 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F76 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F77 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F78 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F79 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F80 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F81 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F82 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F83 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F84 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F85 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F86 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F87 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F88 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F89 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F90 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F91 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F92 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F93 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F94 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F95 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F96 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F97 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F98 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F99 numeric(18,2)
+/
+ALTER TABLE "Ptj_Cumulat" ADD F100 numeric(18,2)
+/

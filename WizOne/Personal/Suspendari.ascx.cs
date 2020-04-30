@@ -657,6 +657,15 @@ namespace WizOne.Personal
                         Session["MP_SuspDataIncp"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11105"];
                         Session["MP_SuspDataSf"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11106"];
                         Session["MP_SuspDataInct"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"];
+
+                        ds.Tables[0].Rows[0]["F100922"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11105"];
+                        ds.Tables[0].Rows[0]["F100923"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11106"];
+                        ds.Tables[0].Rows[0]["F100924"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"];
+                        ds.Tables[0].Rows[0]["F100925"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"];
+                        ds.Tables[1].Rows[0]["F100922"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11105"];
+                        ds.Tables[1].Rows[0]["F100923"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11106"];
+                        ds.Tables[1].Rows[0]["F100924"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11107"];
+                        ds.Tables[1].Rows[0]["F100925"] = dt.Select("1 = 1", "F11105 DESC").CopyToDataTable().Rows[0]["F11104"];
                     }
                 }
                 //if (param == 2)

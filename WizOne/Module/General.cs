@@ -7747,7 +7747,7 @@ namespace WizOne.Module
                 {
                     strVal = substr + "(" + strVal.Substring(poz - 1) + ",2,500)";
                     strVal = strVal.Replace("'", "''");
-                    strVal = $@"CASE WHEN (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" BS WHERE BS.""DenumireScurta""=""ValStr"" {FiltrulCuNull("BS.Denumire").Replace("'","''")}) = 0 THEN {strVal} ELSE ""ValStr"" END ";
+                    strVal = $@"CASE WHEN (SELECT COUNT(*) FROM ""Ptj_tblAbsente"" BS WHERE BS.""DenumireScurta""=""ValStr"" {FiltrulCuNull("BS.DenumireScurta").Replace("'","''")}) = 0 THEN {strVal} ELSE ""ValStr"" END ";
                     string strSql = $@"
                         IF ((SELECT COUNT(*) FROM ""tblParametrii"" WHERE ""Nume""='SintaxaValStr') = 0)
                         INSERT INTO ""tblParametrii""(""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", USER_NO, TIME) VALUES('SintaxaValStr', '{strVal}', 'Este formula prin care se creaza ValStr in pontaj', 2, {HttpContext.Current.Session["UserId"]}, {General.CurrentDate()})

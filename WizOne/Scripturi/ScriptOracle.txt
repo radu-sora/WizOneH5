@@ -13891,3 +13891,21 @@ COMMIT;
 
 ALTER TABLE "Ptj_tblFormuleCumulat" ADD "AdaugaZileLibere" NUMBER(10) DEFAULT 1;
 /
+
+
+
+
+insert into F806 (F80601, F80602, F80603, F80604) 
+select 806, 1, 1, 'Invatamant primar' from dual
+where not exists(select * 
+                 from F806 
+                 where F80603 = 1);
+                 
+insert into F806 (F80601, F80602, F80603, F80604) 
+select 806, 1, 2, 'Invatamant gimnazial' from dual
+where not exists(select * 
+                 from F806 
+                 where F80603 = 2);   
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('LungimeCartela', '10', 'Numarul maxim de caractere care se preiau de la cititor', 0, -99, SYSDATE);
+

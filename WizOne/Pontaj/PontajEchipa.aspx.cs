@@ -1050,7 +1050,6 @@ namespace WizOne.Pontaj
                             ent.F30002 = 1;
                             ent.F30003 = Convert.ToInt32(entS.Rows[i]["F10003"].ToString());
 
-
                             ent.F30012 = 0;
                             ent.F30013 = 0;
                             ent.F30014 = 0;
@@ -1070,7 +1069,6 @@ namespace WizOne.Pontaj
                             ent.F300613 = 0;
                             ent.F300614 = 0;
                             ent.F30054 = 0;
-
 
                             DataTable entF100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + entS.Rows[i]["F10003"].ToString(), null);
                             if (entF100 != null && entF100.Rows.Count > 0)
@@ -1222,12 +1220,23 @@ namespace WizOne.Pontaj
                                         ent.F30015 = 0;
                                         ent.F30010 = (short?)Convert.ToInt32(entFor.Rows[j]["CodF300"].ToString());
 
+                                        string left = "";
+                                        string filtruSup = "";
+                                        if (entFor.Columns["AdaugaZileLibere"] != null && Convert.ToInt32(General.Nz(entFor.Rows[j]["AdaugaZileLibere"],1)) == 0)
+                                        {
+                                            left = @"LEFT JOIN ""tblZile"" B ON A.""Ziua""=B.""Zi""
+                                                    LEFT JOIN HOLIDAYS C ON A.""Ziua""= C.DAY";
+                                            filtruSup = @" AND COALESCE(B.""Zisapt"",-99) NOT IN (6,7) AND C.DAY IS NULL";
+                                        }
+
                                         string strInt = 
                                             $@"WITH mycte
                                             AS 
                                             (
-	                                            SELECT Ziua, DATEADD(DAY, - ROW_NUMBER() OVER (PARTITION BY ValStr ORDER BY Ziua), Ziua) AS grp
-	                                            FROM Ptj_Intrari WHERE ValStr = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND F10003={ent.F30003} AND Year(Ziua)={dtLucru.Year} AND MONTH(Ziua)={dtLucru.Month} 
+	                                            SELECT A.Ziua, DATEADD(DAY, - ROW_NUMBER() OVER (PARTITION BY A.ValStr ORDER BY A.Ziua), A.Ziua) AS grp
+	                                            FROM Ptj_Intrari A
+                                                {left}
+                                                WHERE A.ValStr = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND A.F10003={ent.F30003} AND Year(A.Ziua)={dtLucru.Year} AND MONTH(A.Ziua)={dtLucru.Month} {filtruSup}
                                             )    
                                             SELECT MIN(Ziua) AS DeLa, MAX(Ziua) AS La, DATEDIFF(day,MIN(Ziua),MAX(Ziua)) + 1 AS NrZile
                                             FROM mycte
@@ -1238,8 +1247,10 @@ namespace WizOne.Pontaj
                                                 $@"WITH mycte
                                                 AS 
                                                 (
-	                                                SELECT ""Ziua"", ""Ziua"" - ROW_NUMBER() OVER (PARTITION BY ""ValStr"" ORDER BY ""Ziua"")  AS grp
-                                                    FROM ""Ptj_Intrari"" WHERE ""ValStr"" = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND  F10003={ent.F30003} AND TO_NUMBER(TO_CHAR(Ziua,'YYYY'))={dtLucru.Year} AND TO_NUMBER(TO_CHAR(Ziua,'MM'))={dtLucru.Month}
+	                                                SELECT A.""Ziua"", A.""Ziua"" - ROW_NUMBER() OVER (PARTITION BY A.""ValStr"" ORDER BY A.""Ziua"")  AS grp
+                                                    FROM ""Ptj_Intrari"" 
+                                                    {left}
+                                                    WHERE A.""ValStr"" = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND A.F10003={ent.F30003} AND TO_NUMBER(TO_CHAR(A.""Ziua"",'YYYY'))={dtLucru.Year} AND TO_NUMBER(TO_CHAR(A.""Ziua"",'MM'))={dtLucru.Month} {filtruSup}
                                                 )    
                                                 SELECT MIN(""Ziua"") AS ""DeLa"", MAX(""Ziua"") AS ""La"", MAX(""Ziua"") - MIN(""Ziua"") + 1 AS ""NrZile""
                                                 FROM mycte
@@ -1317,7 +1328,7 @@ namespace WizOne.Pontaj
                                         }
                                     }
                                 }
-                                catch (Exception) { }
+                                catch (Exception ex) { }
                             }
                         }
                     }

@@ -13888,3 +13888,6 @@ COMMIT;
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('CircuitDocumenteDataInceput', null, 'Se foloseste in circuit documente si este data de la care se afiseaza informatia in grid. Formatul este DD-MM-YYYY', 3, -99, GetDate());
 COMMIT;
+
+ALTER TABLE "Ptj_tblFormuleCumulat" ADD "AdaugaZileLibere" NUMBER(10) DEFAULT 1;
+/

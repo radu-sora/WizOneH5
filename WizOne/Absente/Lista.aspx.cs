@@ -486,7 +486,7 @@ namespace WizOne.Absente
                                 if (idStare == 3)
                                     General.StergeInPontaj(Convert.ToInt32(obj[0]), idTipOre, oreInVal, Convert.ToDateTime(obj[4]), Convert.ToDateTime(obj[6]), Convert.ToInt32(obj[1]), Convert.ToInt32(General.Nz(obj[7], 0)), Convert.ToInt32(General.Nz(Session["UserId"],-99)));
 
-                                DataTable dtPtj = General.IncarcaDT($@"SELECT * FROM Ptj_Intrari WHERE F10003=@1 AND @2 <= ""Ziua"" AND ""ziua"" <= @3", new object[] { obj[1], obj[4], obj[6] });
+                                DataTable dtPtj = General.IncarcaDT($@"SELECT * FROM ""Ptj_Intrari"" WHERE F10003=@1 AND @2 <= ""Ziua"" AND ""Ziua"" <= @3", new object[] { obj[1], obj[4], obj[6] });
                                 if (dtPtj != null && dtPtj.Rows.Count > 0)
                                 {
                                     for (int i = 0; i < dtPtj.Rows.Count; i++)

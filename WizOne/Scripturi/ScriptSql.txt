@@ -12942,7 +12942,7 @@ BEGIN
        VALUES (806, 1, 1, 'Invatamant primar')
    END
 END
-
+GO
 BEGIN
    IF NOT EXISTS (SELECT * FROM f806 
                    WHERE F80603 = 2)
@@ -12951,3 +12951,7 @@ BEGIN
        VALUES (806, 1, 2, 'Invatamant gimnazial')
    END
 END
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('LungimeCartela', '10', 'Numarul maxim de caractere care se preiau de la cititor', 0, -99, GETDATE());
+GO

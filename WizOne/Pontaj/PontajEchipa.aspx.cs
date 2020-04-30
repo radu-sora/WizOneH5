@@ -2985,7 +2985,7 @@ namespace WizOne.Pontaj
                 for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)
                 {
                     string strZi = "[" + an + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "]";
-                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "'";
+                    if (Constante.tipBD == 2) strZi = "TO_DATE('" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "', 'dd-mm-yyyy')";
 
                     zile += ", " + strZi;
                     zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";
@@ -3247,7 +3247,7 @@ namespace WizOne.Pontaj
                 for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)
                 {
                     string strZi = "[" + an + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "]";
-                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "'";
+                    if (Constante.tipBD == 2) strZi = "TO_DATE('" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "', 'dd-mm-yyyy')";
 
                     zile += ", " + strZi;
                     zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";

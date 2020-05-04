@@ -1664,9 +1664,6 @@ namespace WizOne.Avs
                     op = "||";
                 DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 ", null);        
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
-                string circuit = Dami.ValoareParam("FinalizareCuActeAditionale", "0");
-                if (circuit == "1")
-                    de3Nou.ClientEnabled = false;
             }
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.RevenireSuspendare)
             {
@@ -1674,8 +1671,8 @@ namespace WizOne.Avs
                 string op = "+";
                 if (Constante.tipBD == 2)
                     op = "||";
-                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 join f111 on f11104 = f09002 and f11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() 
-                    + " WHERE F11107 IS NULL OR F11107 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") , null);
+                DataTable dtTemp = General.IncarcaDT("select F09002 AS \"Id\", F09004 " + op + " ' - ' " + op + " F09003 AS \"Denumire\" from f090 join f111 on f11104 = f09002 and f11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString()
+                     + " WHERE F11107 IS NULL OR F11107 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')"), null);
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
                 de1Nou.ClientEnabled = false;
                 de2Nou.ClientEnabled = false;
@@ -1842,7 +1839,7 @@ namespace WizOne.Avs
 
                         if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaSalariu || Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.BancaGarantii)
                         {
-                            if (e.Parameter.Split(';')[1] == "txt1Nou" && !IbanValid(txt1Nou.Text))
+                            if (!IbanValid(txt1Nou.Text))
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Cont IBAN invalid!");
                                 txt1Nou.Value = "";
@@ -2206,41 +2203,12 @@ namespace WizOne.Avs
                     }
                 }
 
-                if (idAtr == (int)Constante.Atribute.Suspendare)
-                {
-                    if (Convert.ToDateTime(de1Nou.Value).Date != Convert.ToDateTime(txtDataMod.Value).Date)
-                    {
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii trebuie sa fie egala cu Data inceput suspendare!");
-                        return false;
-                    }
-
-                    DataTable dtAng = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString());
-                    if (General.Nz(dtAng.Rows[0]["F1009741"], "").ToString() == "2")
-                    {
-                        if (Convert.ToDateTime(dtAng.Rows[0]["F10023"].ToString()).Date < Convert.ToDateTime(de2Nou.Value).Date)
-                        {
-                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data sfarsit estimata este ulterioara datei ultimei zile de plata!");
-                            return false;
-                        }
-                    }
-
-                }
-
                 if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
                 {
                     if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de3Nou.Value).Date && val == 1)
                     {
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
                         SetDataRevisal(1, Convert.ToDateTime(de3Nou.Value).AddDays(-1), Convert.ToInt32(cmbAtribute.Value), out dataRev);
-                        return false;
-                    }
-                }
-
-                if (idAtr == (int)Constante.Atribute.RevenireSuspendare)
-                {
-                    if (Convert.ToDateTime(de3Nou.Value).Date != Convert.ToDateTime(txtDataMod.Value).Date)
-                    {
-                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii trebuie sa fie egala cu Data incetare suspendare!");
                         return false;
                     }
                 }
@@ -4069,7 +4037,13 @@ namespace WizOne.Avs
                         sql100 = "UPDATE F100 SET F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + ", F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
                              (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10076 = " + data11 + ", F10077 = " + data12 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
                         if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC")
-                            sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data11 + " - 1 WHERE F10003 = " + f10003.ToString();
+                        {
+                            DateTime dtIntrare, dtIesire;
+                            General.CalculDateCategorieAsigurat(f10003, Convert.ToDateTime(dtCer.Rows[0]["DataInceputSusp"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataSfEstimSusp"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataIncetareSusp"].ToString()), out dtIntrare, out dtIesire);
+                            string dataIn = (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtIntrare.Day.ToString().PadLeft(2, '0') + "/" + dtIntrare.Month.ToString().PadLeft(2, '0') + "/" + dtIntrare.Year.ToString() + "', 103)" : "TO_DATE('" + dtIntrare.Day.ToString().PadLeft(2, '0') + "/" + dtIntrare.Month.ToString().PadLeft(2, '0') + "/" + dtIntrare.Year.ToString() + "', 'dd/mm/yyyy')");
+                            string dataOut = (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtIesire.Day.ToString().PadLeft(2, '0') + "/" + dtIesire.Month.ToString().PadLeft(2, '0') + "/" + dtIesire.Year.ToString() + "', 103)" : "TO_DATE('" + dtIesire.Day.ToString().PadLeft(2, '0') + "/" + dtIesire.Month.ToString().PadLeft(2, '0') + "/" + dtIesire.Year.ToString() + "', 'dd/mm/yyyy')");
+                            sql1001 = "UPDATE F1001 SET F1001101 = " + dataIn + ", F1001102 = " + dataOut + " WHERE F10003 = " + f10003.ToString();
+                        }
                         string sql111 = $@"INSERT INTO F111 (F11101, F11102, F11103, F11104, F11105, F11106, F11107, YEAR, MONTH, USER_NO, TIME)
                                VALUES (111, '{General.Nz(dtF100.Rows[0]["F10017"], "")}', {f10003}, {dtCer.Rows[0]["MotivSuspId"].ToString()},{data11}, {data12}, {data13},
                                {dtLuc.Year}, {dtLuc.Month}, {Session["UserId"]}, {General.CurrentDate()})";
@@ -4152,8 +4126,14 @@ namespace WizOne.Avs
                 sql100 = "UPDATE F100 SET F100925 = " + dtSuspAng.Rows[0]["F11104"].ToString() + ", F100922 = " + data1 + ", F100923 = " + data2 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
                      (Convert.ToInt32(dtSuspAng.Rows[0]["F11104"].ToString()) == 11 ? ", F10076 = " + data1 + ", F10077 = " + data2 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
                 if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC")
-                    sql1001 = "UPDATE F1001 SET F1001101 = (SELECT F10022 FROM F100 WHERE F100.F10003 = " + f10003.ToString() + "), F1001102 = " + data1 + " - 1 WHERE F10003 = " + f10003.ToString();
-          
+                {
+                    DateTime dtIntrare, dtIesire;
+                    General.CalculDateCategorieAsigurat(f10003, Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11107"].ToString()), out dtIntrare, out dtIesire);
+                    string dataIn = (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtIntrare.Day.ToString().PadLeft(2, '0') + "/" + dtIntrare.Month.ToString().PadLeft(2, '0') + "/" + dtIntrare.Year.ToString() + "', 103)" : "TO_DATE('" + dtIntrare.Day.ToString().PadLeft(2, '0') + "/" + dtIntrare.Month.ToString().PadLeft(2, '0') + "/" + dtIntrare.Year.ToString() + "', 'dd/mm/yyyy')");
+                    string dataOut = (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dtIesire.Day.ToString().PadLeft(2, '0') + "/" + dtIesire.Month.ToString().PadLeft(2, '0') + "/" + dtIesire.Year.ToString() + "', 103)" : "TO_DATE('" + dtIesire.Day.ToString().PadLeft(2, '0') + "/" + dtIesire.Month.ToString().PadLeft(2, '0') + "/" + dtIesire.Year.ToString() + "', 'dd/mm/yyyy')");
+                    sql1001 = "UPDATE F1001 SET F1001101 = " + dataIn + ", F1001102 = " + dataOut + " WHERE F10003 = " + f10003.ToString();
+                }
+
                 //transfer          
                 if (dtSuspNomen != null && dtSuspNomen.Rows.Count > 0)
                 {

@@ -1524,18 +1524,19 @@ namespace WizOne.Avs
                 ArataCtl(8, "Banca actuala", "Banca noua", "Sucursala actuala", "Sucursala noua", "IBAN actual", "Nr. card actual", "IBAN nou", "Nr. card nou", "", "");
                 DataTable dtTemp1 = General.IncarcaDT("select F07503 AS \"Id\", F07509 AS \"Denumire\" from F100, F075 WHERE F10018 = F07503 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " group by F07503 , F07509 ", null);
                 DataTable dtTemp2 = General.IncarcaDT("select F07503 AS \"Id\", F07509 AS \"Denumire\" from F075 group by F07503 , F07509", null);
+                   
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
                 DataTable dtTemp = General.IncarcaDT("SELECT F10020, F10055 FROM F100 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 txt1Act.Text = dtTemp.Rows[0][0].ToString();
                 txt2Act.Text = dtTemp.Rows[0][1].ToString();
 
-                dtTemp1 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F100, F075 WHERE F10019 = F07504 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dtTemp1 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F100, F075 WHERE F10019 = F07504 and f10018=f07503 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 dtTemp2 = null;
                 if (Session["Valoare1Noua"] != null)
                     dtTemp2 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F075 WHERE F07503 = " + Session["Valoare1Noua"].ToString().Split(';')[1], null);
                 else
                     if (cmb1Nou.Value != null && cmb1Nou.SelectedIndex >= 0)
-                    dtTemp2 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F075 WHERE F07503 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString(), null);
+                        dtTemp2 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F075 WHERE F07503 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString(), null);
 
                 IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
                 lblDoc.Visible = true;
@@ -1549,17 +1550,20 @@ namespace WizOne.Avs
                 ArataCtl(9, "Banca actuala", "Banca noua", "Sucursala actuala", "Sucursala noua", "IBAN actual", "IBAN nou", "", "", "", "");
                 DataTable dtTemp1 = General.IncarcaDT("select F07503 AS \"Id\", F07509 AS \"Denumire\" from F1001, F075 WHERE F1001026 = F07503 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + "  group by F07503 , F07509", null);
                 DataTable dtTemp2 = General.IncarcaDT("select F07503 AS \"Id\", F07509 AS \"Denumire\" from F075  group by F07503 , F07509", null);
+
+
                 IncarcaComboBox(cmb1Act, cmb1Nou, dtTemp1, dtTemp2);
                 DataTable dtTemp = General.IncarcaDT("SELECT F1001028 FROM F1001 WHERE F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 txt1Act.Text = dtTemp.Rows[0][0].ToString();
 
-                dtTemp1 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F1001, F075 WHERE F1001027 = F07504 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
+                dtTemp1 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F1001, F075 WHERE F1001027 = F07504 AND F1001026 = F07503 AND F10003 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString(), null);
                 dtTemp2 = null;
                 if (Session["Valoare1Noua"] != null)
                     dtTemp2 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F075 WHERE F07503 = " + Session["Valoare1Noua"].ToString().Split(';')[1], null);
                 else
                     if (cmb1Nou.Value != null && cmb1Nou.SelectedIndex >= 0)
-                    dtTemp2 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F075 WHERE F07503 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString(), null);
+                        dtTemp2 = General.IncarcaDT("select F07504 AS \"Id\", F07505 AS \"Denumire\" from F075 WHERE F07503 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString(), null);
+          
                 IncarcaComboBox(cmb2Act, cmb2Nou, dtTemp1, dtTemp2);
             }
 
@@ -1758,6 +1762,23 @@ namespace WizOne.Avs
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");                               
                             }
+
+                        if (idAtr == (int)Constante.Atribute.Suspendare || idAtr == (int)Constante.Atribute.Detasare)
+                        {
+                            if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de1Nou.Value).Date)
+                            {
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
+                            }
+                        }
+
+                        if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
+                        {
+                            if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de3Nou.Value).Date)
+                            {
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
+                            }
+                        }
+
                         break;
                     case "2":
                         if (e.Parameter.Split(';')[1] == "cmb1Nou")
@@ -1903,6 +1924,22 @@ namespace WizOne.Avs
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
                             }
+
+                        if (idAtr == (int)Constante.Atribute.Suspendare || idAtr == (int)Constante.Atribute.Detasare)
+                        {
+                            if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de1Nou.Value).Date)
+                            {
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
+                            }
+                        }
+
+                        if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
+                        {
+                            if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de3Nou.Value).Date)
+                            {
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
+                            }
+                        }
                         break;
                     case "8":               //cmbRol
                         {

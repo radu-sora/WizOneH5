@@ -13180,3 +13180,6 @@ GO
 
 ALTER TABLE Ptj_tblAdminCC ADD TipColoana int
 GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('PontajCCTipAfisareNrOre', '1', 'Poate avea valorile 1, 2 sau 3. 1 - se afiseaza minute; 2 - se afiseaza ore; 3 - se afiseaza in formatul HH:MM. Daca nu este setata nici o valoare, default este 1', 0);
+GO

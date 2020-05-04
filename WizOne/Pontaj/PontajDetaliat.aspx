@@ -522,11 +522,13 @@
                     lblZiuaCC.SetText('Centrii de cost - Ziua ' + cheie);
                     ccValori.Set('cheia', cheie);
                     grCC.PerformCallback('btnCC;' + cheie);
-                    var valAbs = s.batchEditApi.GetCellValue(e.visibleIndex, "ValAbs");
-                    if (valAbs != null)
-                        document.getElementById("divGrid").style.display = "inline-block";
-                    else
-                        document.getElementById("divGrid").style.display = "none";
+                    if (<%: pontajCCSterge %> == 1) {
+                        var valAbs = s.batchEditApi.GetCellValue(e.visibleIndex, "ValAbs");
+                        if (valAbs != null)
+                            document.getElementById("divGrid").style.display = "inline-block";
+                        else
+                            document.getElementById("divGrid").style.display = "none";
+                    }
                     break;
             }
         }
@@ -712,11 +714,13 @@
                 }
             }
 
-            var valAbs = s.batchEditApi.GetCellValue(e.visibleIndex, "ValAbs");
-            if (valAbs != null || (column.fieldName.indexOf("ValAbs") >= 0 && newVal != null))
-                document.getElementById("divGrid").style.display = "inline-block";
-            else
-                document.getElementById("divGrid").style.display = "none";	
+            if (<%: pontajCCSterge %> == 1) {
+                var valAbs = s.batchEditApi.GetCellValue(e.visibleIndex, "ValAbs");
+                if (valAbs != null || (column.fieldName.indexOf("ValAbs") >= 0 && newVal != null))
+                    document.getElementById("divGrid").style.display = "inline-block";
+                else
+                    document.getElementById("divGrid").style.display = "none";
+            }
         }
 
         function OnRecalcParam() {

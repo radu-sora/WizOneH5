@@ -32,6 +32,11 @@ namespace WizOne.Pontaj
             get; private set;
         }
 
+        protected int pontajCCSterge
+        {
+            get; private set;
+        }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -82,7 +87,7 @@ namespace WizOne.Pontaj
                     GridViewDataComboBoxColumn colStari = (grCC.Columns["IdStare"] as GridViewDataComboBoxColumn);
                     colStari.PropertiesComboBox.DataSource = dtStari;
 
-                    tipAfisareCC = Convert.ToInt32(Dami.ValoareParam("PontajCCTipAfisareNrOre", "7"));
+                    tipAfisareCC = Convert.ToInt32(Dami.ValoareParam("PontajCCTipAfisareNrOre", "1"));
                     if (!IsPostBack)
                     {
                         DataTable dtAd = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAdminCC"" ", null);
@@ -116,6 +121,8 @@ namespace WizOne.Pontaj
                             }
                         }
                     }
+
+                    pontajCCSterge = Convert.ToInt32(Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi","0"));
                 }
 
 
@@ -3280,145 +3287,6 @@ namespace WizOne.Pontaj
             }
 
             return strSql;
-        }
-
-        private void CreeazaGridCC()
-        {
-            try
-            {
-                DataTable dtCol = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAdminCC"" WHERE ""Camp"" LIKE 'NrOre%' AND COALESCE(""Vizibil"",0)=1 ORDER BY ""Ordine"" ", null);
-                Session["Ptj_tblAdminCC"] = dtCol;
-                //for (int i = 0; i < dtAd.Rows.Count; i++)
-                //{
-                //    string cmp = dtAd.Rows[i]["Camp"].ToString();
-
-                //    grCC.Columns[cmp].Visible = Convert.ToBoolean(dtAd.Rows[i]["Vizibil"]);
-                //    grCC.Columns[cmp].ToolTip = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["AliasToolTip"], "").ToString());
-                //    grCC.Columns[cmp].Caption = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["Alias"], dtAd.Rows[i]["Camp"]).ToString());
-                //}
-
-                for (int i = 0; i < dtCol.Rows.Count; i++)
-                {
-                    DataRow dr = dtCol.Rows[i];
-                    string colField = General.Nz(dr["Camp"], "col" + i).ToString();
-                    string colName = General.Nz(dr["Camp"], "col" + i).ToString();
-                    string alias = Dami.TraduCuvant(General.Nz(dtCol.Rows[i]["Alias"], dtCol.Rows[i]["Camp"]).ToString());
-                    string tt = Dami.TraduCuvant(General.Nz(dtCol.Rows[i]["AliasToolTip"], dtCol.Rows[i]["Camp"]).ToString());
-                    int tipCol = Convert.ToInt32(General.Nz(dr["TipColoana"], 1));
-
-                    dynamic c = new GridViewDataColumn();
-
-                    if (colName.ToLower().IndexOf("nrore") >= 0 && tipCol != 7 && tipCol != 8 && tipCol != 9)
-                        tipCol = 7;
-
-                    switch (tipCol)
-                    {
-                        case 0:                             //General
-                            {
-                                c = new GridViewDataColumn();
-                                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-                            }
-                            break;
-                        case 1:                             //CheckBox
-                            {
-                                c = new GridViewDataCheckColumn();
-                            }
-                            break;
-                        case 2:                             //ComboBox
-                            {
-                                c = new GridViewDataComboBoxColumn();
-                                c.PropertiesComboBox.AllowNull = true;
-
-                                if (dr != null && dr["SursaCombo"].ToString() != "" && c.Visible == true)
-                                {
-                                    string sursa = (dr["SursaCombo"] as string ?? "").ToString().Trim();
-                                    DataTable dtCmb = General.IncarcaDT(sursa, null);
-                                    dtCmb.TableName = colField;
-                                    //ds.Tables.Add(dtCmb);
-
-                                    //Session["SurseCombo"] = ds;
-
-                                    c.PropertiesComboBox.DropDownWidth = 350;
-                                    c.PropertiesComboBox.DataSource = dtCmb;
-                                    c.PropertiesComboBox.ValueField = dtCmb.Columns[0].ColumnName;
-                                    c.PropertiesComboBox.ValueType = dtCmb.Columns[0].DataType;
-                                    c.PropertiesComboBox.TextFormatString = "{0}";
-                                    switch (dtCmb.Columns.Count)
-                                    {
-                                        case 1:
-                                            c.PropertiesComboBox.TextField = dtCmb.Columns[0].ColumnName;
-                                            break;
-                                        case 2:
-                                            c.PropertiesComboBox.TextField = dtCmb.Columns[1].ColumnName;
-                                            break;
-                                    }
-                                }
-                            }
-                            break;
-                        case 3:                             //Date
-                            {
-                                c = new GridViewDataDateColumn();
-                            }
-                            break;
-                        case 4:                             //Memo
-                            {
-                                c = new GridViewDataMemoColumn();
-                                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-                            }
-                            break;
-                        case 5:                             //Color
-                            {
-                                c = new GridViewDataColorEditColumn();
-                            }
-                            break;
-                        case 6:                             //Text
-                            {
-                                c = new GridViewDataTextColumn();
-                                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-                            }
-                            break;
-                        case 7:                             //Numeric
-                            {
-                                c = new GridViewDataSpinEditColumn();
-                                c.PropertiesSpinEdit.DecimalPlaces = 0;
-                                c.PropertiesSpinEdit.NumberType = SpinEditNumberType.Integer;
-                                c.PropertiesSpinEdit.MinValue = 0;
-                                c.PropertiesSpinEdit.MaxValue = 2000;
-                                c.PropertiesSpinEdit.DisplayFormatString = "N0";
-                                c.PropertiesSpinEdit.DisplayFormatInEditMode = true;
-                                GridViewDataSpinEditColumn cc = new GridViewDataSpinEditColumn();
-                            }
-                            break;
-                        case 8:                             //Time
-                        case 9:                             //Time - fara spin buttons
-                            {
-                                c = new GridViewDataTimeEditColumn();
-                                c.PropertiesTimeEdit.AllowNull = true;
-                                c.PropertiesTimeEdit.DisplayFormatString = "HH:mm";
-                                c.PropertiesTimeEdit.DisplayFormatInEditMode = true;
-                                c.PropertiesTimeEdit.EditFormatString = "HH:mm";
-                                c.PropertiesTimeEdit.EditFormat = EditFormat.DateTime;
-                                if (tipCol == 9)
-                                    c.PropertiesTimeEdit.SpinButtons.ShowIncrementButtons = false;
-                            }
-                            break;
-                    }
-
-                    c.Name = colName;
-                    c.FieldName = colField;
-                    c.Caption = Dami.TraduCuvant(alias);
-                    c.VisibleIndex = i + 4;
-                    c.ToolTip = tt;
-                    c.Width = Unit.Pixel(100);
-
-                    grCC.Columns.Add(c);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
         }
 
     }

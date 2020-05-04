@@ -502,13 +502,13 @@ namespace WizOne.Eval
                     return;
                 }
 
-                if (obj[3] != null && obj[3].ToString() == "1")
-                {
-                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica starea deoarece chestionarul este finalizat!");
-                    return;
-                }
+                //Florin 2020.04.27
+                //if (obj[3] != null && obj[3].ToString() == "1")
+                //{                //    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica starea deoarece chestionarul este finalizat!");
+                //    return;
+                //}
 
-                if (obj[2] == null || obj[2].ToString().Length <= 0 || Convert.ToInt32(obj[2].ToString()) < 2)
+                if ((obj[2] == null || obj[2].ToString().Length <= 0 || Convert.ToInt32(obj[2].ToString()) < 2) && General.Nz(obj[3],0).ToString() == "0")
                 {
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu se poate modifica starea deoarece chestionarul este pe prima pozitie!");
                     return;
@@ -539,15 +539,21 @@ namespace WizOne.Eval
 
                 string strSql = 
                     $@"BEGIN
-
-                    UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta""=null, ""Pozitie""=""Pozitie""-1 
-                    WHERE ""IdQuiz""=@1 AND F10003=@2 ;
-                    
-                    UPDATE ""Eval_RaspunsIstoric"" SET ""Aprobat""=null, ""DataAprobare""=null
-                    WHERE ""IdQuiz""=@1 AND F10003=@2 AND 
-                    COALESCE((SELECT COALESCE(""Pozitie"",0) FROM ""Eval_Raspuns"" WHERE ""IdQuiz""=@1 AND F10003=@2),0) <= ""Pozitie"";
-                    
+                        UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta""=null, ""Pozitie""=""Pozitie""-1, ""Finalizat""=0 WHERE ""IdQuiz""=@1 AND F10003=@2;
+                        UPDATE ""Eval_RaspunsIstoric"" SET ""Aprobat""=null, ""DataAprobare""=null
+                        WHERE ""IdQuiz""=@1 AND F10003=@2 AND 
+                        COALESCE((SELECT COALESCE(""Pozitie"",0) FROM ""Eval_Raspuns"" WHERE ""IdQuiz""=@1 AND F10003=@2),0) <= ""Pozitie"";
                     END;";
+
+                //Florin 2020.04.27
+                if (obj[3] != null && obj[3].ToString() == "1")
+                    strSql = $@"
+                        BEGIN
+                            UPDATE Eval_Raspuns SET LuatLaCunostinta=null, Finalizat=0 WHERE IdQuiz=@1 AND F10003=@2;
+                            UPDATE Eval_RaspunsIstoric SET Aprobat=null, DataAprobare=null
+                            WHERE IdQuiz=@1 AND F10003=@2 AND 
+                            COALESCE((SELECT COALESCE(TotalCircuit,0) FROM Eval_Raspuns WHERE IdQuiz=@1 AND F10003=@2),0) = Pozitie;
+                        END;";
 
                 General.ExecutaNonQuery(strSql, new object[] { obj[0], obj[1] });
 

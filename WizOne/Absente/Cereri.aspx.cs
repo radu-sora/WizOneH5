@@ -1286,7 +1286,7 @@ namespace WizOne.Absente
                         txtNrOre.NumberType = SpinEditNumberType.Float;
                         txtNrOre.ClientVisible = false;
 
-                        txtNrOreInMinute.ClientVisible = true;
+                        txtNrOreTime.ClientVisible = true;
 
                         lblNrOre.InnerText = Dami.TraduCuvant("Nr. minute");
                     }

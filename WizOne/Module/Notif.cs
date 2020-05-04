@@ -251,122 +251,132 @@ namespace WizOne.Module
 
                         if (dr["Operator"].ToString() != "fara valoare" && dr["Operator"].ToString() != "cu valoare" && (dr["Valoare1"] ?? "").ToString() == "") continue;
 
-
-                        switch (dr["Operator"].ToString())
+                        if (tipData == "string")
                         {
-                            case "fara valoare":
-                                strCond += " AND ((" + col + ") IS NULL OR (" + col + ") = '' OR (" + col + ") = 0)";
-                                break;
-                            case "cu valoare":
-                                strCond += " AND ((" + col + ") IS NOT NULL AND (" + col + ") <> '' AND (" + col + ") <> 0)";
-                                break;
-                            case "in":
-                                {
-                                    string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    strCond += " AND ((" + col + ") IN (" + arr[0] + "))";
-                                }
-                                break;
-                            case "not in":
-                                {
-                                    string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    strCond += " AND ((" + col + ") NOT IN (" + arr[0] + "))";
-                                }
-                                break;
-                            case "intre":
-                                {
-                                    if ((dr["Valoare1"] ?? "").ToString() != "" && (dr["Valoare2"] ?? "").ToString() != "")
+                            switch (dr["Operator"].ToString())
+                            {
+                                case "incepe cu":
                                     {
-                                        string[] arr1 = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                        string[] arr2 = AflaValoarea(dr["Valoare2"].ToString(), dtCmp);
-                                        if (tipData == "int")
-                                            strCond += " AND ((" + arr1[0] + ") <= (" + col + ") AND (" + col + ") <= (" + arr2[0] + "))";
+                                        string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
+                                        if (Constante.tipBD == 1)
+                                        {
+                                            if (arr[1] == "3")
+                                                strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") + '%')";
+                                            else
+                                                strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' + '%')";
+                                        }
                                         else
                                         {
-                                            if (tipData == "datetime")
+                                            if (arr[1] == "3")
+                                                strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") || '%')";
+                                            else
+                                                strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' || '%')";
+                                        }
+                                    }
+                                    break;
+                                case "contine":
+                                    {
+                                        string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
+                                        if (Constante.tipBD == 1)
+                                        {
+                                            if (arr[1] == "3")
+                                                strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + ") + '%')";
+                                            else
+                                                strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "' + '%')";
+                                        }
+                                        else
+                                        {
+                                            if (arr[1] == "3")
+                                                strCond += " AND ((" + col + ") LIKE '%' || (" + arr[0] + ") || '%')";
+                                            else
+                                                strCond += " AND ((" + col + ") LIKE '%' || '" + arr[0] + "' || '%')";
+
+                                        }
+                                    }
+                                    break;
+                                case "se termina cu":
+                                    {
+                                        string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
+                                        if (Constante.tipBD == 1)
+                                        {
+                                            if (arr[1] == "3")
+                                                strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + "))";
+                                            else
+                                                strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "')";
+                                        }
+                                        else
+                                        {
+                                            if (arr[1] == "3")
+                                                strCond += " AND ((" + col + ") LIKE '%' || (" + arr[0] + "))";
+                                            else
+                                                strCond += " AND ((" + col + ") LIKE '%' || '" + arr[0] + "')";
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch (dr["Operator"].ToString())
+                            {
+                                case "fara valoare":
+                                    //strCond += " AND ((" + col + ") IS NULL OR (" + col + ") = '' OR (" + col + ") = 0)";
+                                    strCond += " AND (" + col + ") IS NULL";
+                                    break;
+                                case "cu valoare":
+                                    //strCond += " AND ((" + col + ") IS NOT NULL AND (" + col + ") <> '' AND (" + col + ") <> 0)";
+                                    strCond += " AND (" + col + ") IS NOT NULL";
+                                    break;
+                                case "in":
+                                    {
+                                        string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
+                                        strCond += " AND ((" + col + ") IN (" + arr[0] + "))";
+                                    }
+                                    break;
+                                case "not in":
+                                    {
+                                        string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
+                                        strCond += " AND ((" + col + ") NOT IN (" + arr[0] + "))";
+                                    }
+                                    break;
+                                case "intre":
+                                    {
+                                        if ((dr["Valoare1"] ?? "").ToString() != "" && (dr["Valoare2"] ?? "").ToString() != "")
+                                        {
+                                            string[] arr1 = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
+                                            string[] arr2 = AflaValoarea(dr["Valoare2"].ToString(), dtCmp);
+                                            if (tipData == "int")
+                                                strCond += " AND ((" + arr1[0] + ") <= (" + col + ") AND (" + col + ") <= (" + arr2[0] + "))";
+                                            else
                                             {
-                                                if (Constante.tipBD == 1)
-                                                    strCond += " AND CONVERT(date,(DATEADD(d," + (dr["NrZile1"] ?? 0).ToString() + ",(" + arr1[0] + "))) <= CONVERT(date,(" + col + ")) AND CONVERT(date,(" + col + ")) <= CONVERT(date,DATEADD(d," + (dr["NrZile2"] ?? 0).ToString() + ",(" + arr2[0] + "))))";
-                                                else
-                                                    strCond += " AND ((TRUNC(" + arr1[0] + ") + " + (dr["NrZile1"] ?? 0).ToString() + ") <= (" + col + ") AND (" + col + ") <= (TRUNC(" + arr2[0] + ") + " + (dr["NrZile2"] ?? 0).ToString() + "))";
+                                                if (tipData == "datetime")
+                                                {
+                                                    if (Constante.tipBD == 1)
+                                                        strCond += " AND CONVERT(date,(DATEADD(d," + General.Nz(dr["NrZile1"], 0) + ",(" + arr1[0] + ")))) <= CONVERT(date,(" + col + ")) AND CONVERT(date,(" + col + ")) <= CONVERT(date,DATEADD(d," + General.Nz(dr["NrZile2"], 0) + ",(" + arr2[0] + ")))";
+                                                    else
+                                                        strCond += " AND ((TRUNC(" + arr1[0] + ") + " + General.Nz(dr["NrZile1"], 0) + ") <= (" + col + ") AND (" + col + ") <= (TRUNC(" + arr2[0] + ") + " + General.Nz(dr["NrZile2"], 0) + "))";
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                break;
-                            case "incepe cu":
-                                {
-                                    string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (Constante.tipBD == 1)
+                                    break;
+                                case "<>":
+                                case ">":
+                                case ">=":
+                                case "<":
+                                case "<=":
+                                case "=":
                                     {
-                                        if (arr[1] == "3")
-                                            strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") + '%')";
-                                        else
-                                            strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' + '%')";
+                                        string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
+                                        //Florin 2019.10.15
+                                        strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
+                                        //if (arr[1] == "2")
+                                        //    strCond += " AND ((" + col + ")" + dr["Operator"] + "('" + arr[0] + "'))";
+                                        //else
+                                        //    strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
                                     }
-                                    else
-                                    {
-                                        if (arr[1] == "3")
-                                            strCond += " AND ((" + col + ") LIKE (" + arr[0] + ") || '%')";
-                                        else
-                                            strCond += " AND ((" + col + ") LIKE '" + arr[0] + "' || '%')";
-                                    }
-                                }
-                                break;
-                            case "contine":
-                                {
-                                    string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (Constante.tipBD == 1)
-                                    {
-                                        if (arr[1] == "3")
-                                            strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + ") + '%')";
-                                        else
-                                            strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "' + '%')";
-                                    }
-                                    else
-                                    {
-                                        if (arr[1] == "3")
-                                            strCond += " AND ((" + col + ") LIKE '%' || (" + arr[0] + ") || '%')";
-                                        else
-                                            strCond += " AND ((" + col + ") LIKE '%' || '" + arr[0] + "' || '%')";
-
-                                    }
-                                }
-                                break;
-                            case "se termina cu":
-                                {
-                                    string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    if (Constante.tipBD == 1)
-                                    {
-                                        if (arr[1] == "3")
-                                            strCond += " AND ((" + col + ") LIKE '%' + (" + arr[0] + "))";
-                                        else
-                                            strCond += " AND ((" + col + ") LIKE '%' + '" + arr[0] + "')";
-                                    }
-                                    else
-                                    {
-                                        if (arr[1] == "3")
-                                            strCond += " AND ((" + col + ") LIKE '%' || (" + arr[0] + "))";
-                                        else
-                                            strCond += " AND ((" + col + ") LIKE '%' || '" + arr[0] + "')";
-                                    }
-                                }
-                                break;
-                            case "<>":
-                            case ">":
-                            case ">=":
-                            case "<":
-                            case "<=":
-                            case "=":
-                                {
-                                    string[] arr = AflaValoarea(dr["Valoare1"].ToString(), dtCmp);
-                                    //Florin 2019.10.15
-                                    strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
-                                    //if (arr[1] == "2")
-                                    //    strCond += " AND ((" + col + ")" + dr["Operator"] + "('" + arr[0] + "'))";
-                                    //else
-                                    //    strCond += " AND ((" + col + ")" + dr["Operator"] + "(" + arr[0] + "))";
-                                }
-                                break;
+                                    break;
+                            }
                         }
                     }
                 }

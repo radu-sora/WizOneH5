@@ -265,13 +265,13 @@ namespace WizOne.Absente {
         protected global::DevExpress.Web.ASPxSpinEdit txtNrOre;
         
         /// <summary>
-        /// txtNrOreInMinute control.
+        /// txtNrOreTime control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtNrOreInMinute;
+        protected global::DevExpress.Web.ASPxTimeEdit txtNrOreTime;
         
         /// <summary>
         /// lblOraInc control.

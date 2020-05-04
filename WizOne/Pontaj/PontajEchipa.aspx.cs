@@ -1220,39 +1220,43 @@ namespace WizOne.Pontaj
                                         ent.F30015 = 0;
                                         ent.F30010 = (short?)Convert.ToInt32(entFor.Rows[j]["CodF300"].ToString());
 
-                                        string left = "";
-                                        string filtruSup = "";
-                                        if (entFor.Columns["AdaugaZileLibere"] != null && Convert.ToInt32(General.Nz(entFor.Rows[j]["AdaugaZileLibere"],1)) == 0)
-                                        {
-                                            left = @"LEFT JOIN ""tblZile"" B ON A.""Ziua""=B.""Zi""
-                                                    LEFT JOIN HOLIDAYS C ON A.""Ziua""= C.DAY";
-                                            filtruSup = @" AND COALESCE(B.""Zisapt"",-99) NOT IN (6,7) AND C.DAY IS NULL";
-                                        }
+                                        //string left = "";
+                                        //string filtruSup = "";
+                                        //if (entFor.Columns["AdaugaZileLibere"] != null && Convert.ToInt32(General.Nz(entFor.Rows[j]["AdaugaZileLibere"],1)) == 0)
+                                        //{
+                                        //    left = @"LEFT JOIN ""tblZile"" B ON A.""Ziua""=B.""Zi""
+                                        //            LEFT JOIN HOLIDAYS C ON A.""Ziua""= C.DAY";
+                                        //    filtruSup = @" AND COALESCE(B.""Zisapt"",-99) NOT IN (6,7) AND C.DAY IS NULL";
+                                        //}
 
-                                        string strInt = 
+                                        string strInt =
                                             $@"WITH mycte
                                             AS 
                                             (
-	                                            SELECT A.Ziua, DATEADD(DAY, - ROW_NUMBER() OVER (PARTITION BY A.ValStr ORDER BY A.Ziua), A.Ziua) AS grp
-	                                            FROM Ptj_Intrari A
-                                                {left}
-                                                WHERE A.ValStr = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND A.F10003={ent.F30003} AND Year(A.Ziua)={dtLucru.Year} AND MONTH(A.Ziua)={dtLucru.Month} {filtruSup}
+                                             SELECT A.Ziua, DATEADD(DAY, - ROW_NUMBER() OVER (PARTITION BY A.ValStr ORDER BY A.Ziua), A.Ziua) AS grp,
+                                            CASE WHEN (COALESCE(B.""ZiSapt"",-99) NOT IN (6,7) AND C.DAY IS NULL) THEN 1 ELSE {General.Nz(entFor.Rows[j]["AdaugaZileLibere"], 0)} END AS Nr
+                                             FROM Ptj_Intrari A
+                                                LEFT JOIN ""tblZile"" B ON A.""Ziua""=B.""Zi""
+                                                LEFT JOIN HOLIDAYS C ON A.""Ziua""= C.DAY
+                                                WHERE A.ValStr = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND A.F10003={ent.F30003} AND Year(A.Ziua)={dtLucru.Year} AND MONTH(A.Ziua)={dtLucru.Month}
                                             )    
-                                            SELECT MIN(Ziua) AS DeLa, MAX(Ziua) AS La, DATEDIFF(day,MIN(Ziua),MAX(Ziua)) + 1 AS NrZile
+                                            SELECT MIN(Ziua) AS DeLa, MAX(Ziua) AS La, DATEDIFF(day,MIN(Ziua),MAX(Ziua)) + 1 AS NrZile2, SUM(Nr) AS NrZile
                                             FROM mycte
                                             GROUP BY grp
                                             ORDER BY DeLa";
                                         if (Constante.tipBD == 2)
-                                            strInt = 
+                                            strInt =
                                                 $@"WITH mycte
                                                 AS 
                                                 (
-	                                                SELECT A.""Ziua"", A.""Ziua"" - ROW_NUMBER() OVER (PARTITION BY A.""ValStr"" ORDER BY A.""Ziua"")  AS grp
-                                                    FROM ""Ptj_Intrari"" 
-                                                    {left}
-                                                    WHERE A.""ValStr"" = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND A.F10003={ent.F30003} AND TO_NUMBER(TO_CHAR(A.""Ziua"",'YYYY'))={dtLucru.Year} AND TO_NUMBER(TO_CHAR(A.""Ziua"",'MM'))={dtLucru.Month} {filtruSup}
+                                                 SELECT A.""Ziua"", A.""Ziua"" - ROW_NUMBER() OVER (PARTITION BY A.""ValStr"" ORDER BY A.""Ziua"")  AS grp,
+                                                    CASE WHEN (COALESCE(B.""ZiSapt"",-99) NOT IN (6,7) AND C.DAY IS NULL) THEN 1 ELSE {General.Nz(entFor.Rows[j]["AdaugaZileLibere"], 0)} END AS ""Nr""
+                                                    FROM ""Ptj_Intrari"" A
+                                                    LEFT JOIN ""tblZile"" B ON A.""Ziua""=B.""Zi""
+                                                    LEFT JOIN HOLIDAYS C ON A.""Ziua""= C.DAY
+                                                    WHERE A.""ValStr"" = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND A.F10003={ent.F30003} AND TO_NUMBER(TO_CHAR(A.""Ziua"",'YYYY'))={dtLucru.Year} AND TO_NUMBER(TO_CHAR(A.""Ziua"",'MM'))={dtLucru.Month}
                                                 )    
-                                                SELECT MIN(""Ziua"") AS ""DeLa"", MAX(""Ziua"") AS ""La"", MAX(""Ziua"") - MIN(""Ziua"") + 1 AS ""NrZile""
+                                                SELECT MIN(""Ziua"") AS ""DeLa"", MAX(""Ziua"") AS ""La"", MAX(""Ziua"") - MIN(""Ziua"") + 1 AS ""NrZile2"", SUM(""Nr"") AS ""NrZile""
                                                 FROM mycte
                                                 GROUP BY grp
                                                 ORDER BY ""DeLa"" ";

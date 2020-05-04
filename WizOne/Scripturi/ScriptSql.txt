@@ -13177,3 +13177,6 @@ ALTER TABLE Ptj_Cumulat ADD F99 numeric(18,2)
 GO
 ALTER TABLE Ptj_Cumulat ADD F100 numeric(18,2)
 GO
+
+ALTER TABLE Ptj_tblAdminCC ADD TipColoana int
+GO

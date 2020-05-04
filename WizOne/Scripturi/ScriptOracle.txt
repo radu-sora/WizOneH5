@@ -13727,3 +13727,6 @@ ALTER TABLE "ImportDateNomen" ADD CONSTRAINT "PK_ImportDateNomen" PRIMARY KEY ("
 
 ALTER TABLE "Ptj_tblFormuleCumulat" ADD "NumarZecimale" number(10);
 /
+
+ALTER TABLE "Ptj_tblFormuleCumulat" ADD "AdaugaZileLibere" NUMBER(10) DEFAULT 1;
+/

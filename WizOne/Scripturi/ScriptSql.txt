@@ -12865,3 +12865,6 @@ GO
 
 ALTER TABLE Ptj_tblFormuleCumulat ADD NumarZecimale int
 GO
+
+ALTER TABLE Ptj_tblFormuleCumulat ADD AdaugaZileLibere int DEFAULT 1
+GO

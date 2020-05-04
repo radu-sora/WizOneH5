@@ -8276,6 +8276,7 @@ namespace WizOne.Module
                         dtIntrare = Convert.ToDateTime(dtSusp.Rows[i]["F11107"].ToString());
                         if (i > 0)
                             dtIesire = Convert.ToDateTime(dtSusp.Rows[i - 1]["F11105"].ToString()).AddDays(-1);
+                        break;
                     }
                 }
 

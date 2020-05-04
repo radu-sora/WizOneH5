@@ -515,6 +515,22 @@ namespace WizOne.Eval
 
                 //End Florin 2019.10.02
 
+                //Florin 2020.05.04
+                string sqlTemp = "";
+                DataTable dtTemp = General.IncarcaDT($@"SELECT * FROM ""Eval_QuizIntrebari"" WHERE ""IdQuiz""={idUrm} AND (COALESCE(""TemplateIdObiectiv"",0)>0 OR COALESCE(""TemplateIdCompetenta"",0)>0)");
+                for(int i=0; i<dtTemp.Rows.Count; i++)
+                {
+                    if (Convert.ToInt32(General.Nz(dtTemp.Rows[i]["TemplateIdObiectiv"],"-99")) > 0)
+                        sqlTemp += $@"UPDATE ""Eval_QuizIntrebari"" SET ""TemplateIdObiectiv""=(SELECT MIN(""TemplateId"") FROM ""Eval_ConfigObTemplate"" WHERE ""TemplateId"" NOT IN (SELECT DISTINCT ""TemplateIdObiectiv"" FROM ""Eval_QuizIntrebari"" WHERE ""TemplateIdObiectiv"" IS NOT NULL)) WHERE ""Id""={dtTemp.Rows[i]["Id"]};" + Environment.NewLine;
+                    if (Convert.ToInt32(General.Nz(dtTemp.Rows[i]["TemplateIdCompetenta"], "-99")) > 0)
+                        sqlTemp += $@"UPDATE ""Eval_QuizIntrebari"" SET ""TemplateIdCompetenta""=(SELECT MIN(""TemplateId"") FROM ""Eval_ConfigCompTemplate"" WHERE ""TemplateId"" NOT IN (SELECT DISTINCT ""TemplateIdCompetenta"" FROM ""Eval_QuizIntrebari"" WHERE ""TemplateIdCompetenta"" IS NOT NULL)) WHERE ""Id""={dtTemp.Rows[i]["Id"]};" + Environment.NewLine;
+                }
+                if (sqlTemp != "")
+                    General.ExecutaNonQuery("BEGIN" + Environment.NewLine +
+                        sqlTemp + Environment.NewLine +
+                        "END;");
+
+
                 int idUrmCirc = 2;
                 idUrmCirc = Dami.NextId("Eval_Circuit");
 

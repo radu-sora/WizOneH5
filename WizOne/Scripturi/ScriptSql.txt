@@ -13183,3 +13183,87 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('PontajCCTipAfisareNrOre', '1', 'Poate avea valorile 1, 2 sau 3. 1 - se afiseaza minute; 2 - se afiseaza ore; 3 - se afiseaza in formatul HH:MM. Daca nu este setata nici o valoare, default este 1', 0);
 GO
+
+
+
+CREATE TABLE tblTipInvatamant(
+	Id [int] NOT NULL,
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblTipInvatamant] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE tblTipInstitutie(
+	Id [int] NOT NULL,
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblTipInstitutie] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE tblProfilStudii(
+	Id [int] NOT NULL,
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblProfilStudii] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE tblDomeniuStudii(
+	Id [int] NOT NULL,
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblDomeniuStudii] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+CREATE TABLE F100Studii(
+	F10003 [int] ,
+	IdTipInvatamant [int],
+	IdNivel [int],
+	NivelISCED [int],
+	IdTipInstitutie [int], 
+	NumeInstitutie varchar(250),
+	NrClase int,
+	SirutaLocalitate int,
+	DeLaData datetime,
+	LaData datetime,
+	Specializare varchar(250),
+	IdProfil int,
+	IdDomeniu int,
+	Calificare varchar(250),	
+	IdAuto [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_F100Studii] PRIMARY KEY CLUSTERED 
+(	
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+alter table F712 add F71206 int
+GO
+

@@ -13868,10 +13868,6 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO,
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, SYSDATE);
 COMMIT;
 
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('DezactivareUtilizatori', '', '1 - blocare utilizatori inactivi la logare; 2- blocare utilizatori inactivi si suspendati la logare', 0, -99, SYSDATE);
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AlcatuireNumeUtilizator', '', 'Exemple:  F10008 || '' '' || F10009; F100901 etc', 0, -99, SYSDATE);
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, SYSDATE);
-COMMIT;
 
 alter table "tblInfoChiosc" add "IdTerminal" varchar2(50);
 /
@@ -13996,3 +13992,86 @@ ALTER TABLE "Ptj_tblAdminCC" ADD "TipColoana" number(10);
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('PontajCCTipAfisareNrOre', '1', 'Poate avea valorile 1, 2 sau 3. 1 - se afiseaza minute; 2 - se afiseaza ore; 3 - se afiseaza in formatul HH:MM. Daca nu este setata nici o valoare, default este 1', 0);
 COMMIT;
+
+
+
+
+CREATE TABLE "tblTipInvatamant"(
+"Id" NUMBER(9) NOT NULL,
+	"Denumire" varchar2(250),
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_tblTipInvatamant" ON "tblTipInvatamant" ("Id") ;
+
+ALTER TABLE "tblTipInvatamant" ADD CONSTRAINT "PK_tblTipInvatamant" PRIMARY KEY ("Id");
+
+
+
+
+
+
+CREATE TABLE "tblTipInstitutie"(
+"Id" NUMBER(9) NOT NULL,
+	"Denumire" varchar2(250),
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_tblTipInstitutie" ON "tblTipInstitutie" ("Id") ;
+
+ALTER TABLE "tblTipInstitutie" ADD CONSTRAINT "PK_tblTipInstitutie" PRIMARY KEY ("Id");
+
+
+
+
+CREATE TABLE "tblProfilStudii"(
+"Id" NUMBER(9) NOT NULL,
+	"Denumire" varchar2(250),
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_tblProfilStudii" ON "tblProfilStudii" ("Id") ;
+
+ALTER TABLE "tblProfilStudii" ADD CONSTRAINT "PK_tblProfilStudii" PRIMARY KEY ("Id");
+
+
+
+
+
+CREATE TABLE "tblDomeniuStudii"(
+"Id" NUMBER(9) NOT NULL,
+	"Denumire" varchar2(250),
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_tblDomeniuStudii" ON "tblDomeniuStudii" ("Id") ;
+
+ALTER TABLE "tblDomeniuStudii" ADD CONSTRAINT "PK_tblDomeniuStudii" PRIMARY KEY ("Id");
+
+
+
+CREATE TABLE "F100Studii"(
+	F10003 NUMBER(9) ,
+	"IdTipInvatamant"  NUMBER(9),
+	"IdNivel"  NUMBER(9),
+	"NivelISCED"  NUMBER(9),
+	"IdTipInstitutie"  NUMBER(9), 
+	"NumeInstitutie" varchar2(250),
+	"NrClase"  NUMBER(9),
+	"SirutaLocalitate"  NUMBER(9),
+	"DeLaData" date,
+	"LaData" date,
+	"Specializare" varchar2(250),
+	"IdProfil"  NUMBER(9),
+	"IdDomeniu"  NUMBER(9),
+	"Calificare" varchar2(250),	
+	"IdAuto"  NUMBER(9) NOT NULL,
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_F100Studii" ON "F100Studii" ("IdAuto") ;
+
+ALTER TABLE "F100Studii" ADD CONSTRAINT "PK_F100Studii" PRIMARY KEY ("IdAuto");
+
+
+alter table F712 add F71206 NUMBER(9);

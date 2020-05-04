@@ -32,6 +32,19 @@ namespace WizOne.Personal
             grDateStudii.SettingsCommandButton.NewButton.Image.ToolTip = Dami.TraduCuvant("Rand nou");
 
             if (General.VarSession("EsteAdmin").ToString() == "0") General.SecuritatePersonal(grDateStudii);
+
+            if (!IsPostBack)
+            {
+                DataTable dt = General.IncarcaDT("SELECT * FROM F712", null);
+                string sir = "";
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    sir += dt.Rows[i]["F71202"].ToString() + "," + dt.Rows[i]["F71206"].ToString();
+                    if (i < dt.Rows.Count - 1)
+                        sir += ";";
+                }
+                Session["MP_ComboStudii"] = sir;
+            }
         }
 
         protected void grDateStudii_DataBinding(object sender, EventArgs e)
@@ -71,7 +84,7 @@ namespace WizOne.Personal
             GridViewDataComboBoxColumn colTipInv = (grDateStudii.Columns["IdTipInvatamant"] as GridViewDataComboBoxColumn);
             colTipInv.PropertiesComboBox.DataSource = dtTipInv;
 
-            DataTable dtNiv = General.IncarcaDT("Select * FROM \"tblNivelStudii\"", null);
+            DataTable dtNiv = General.IncarcaDT("Select * FROM F712", null);
             GridViewDataComboBoxColumn colNiv = (grDateStudii.Columns["IdNivel"] as GridViewDataComboBoxColumn);
             colNiv.PropertiesComboBox.DataSource = dtNiv;
 
@@ -142,7 +155,7 @@ namespace WizOne.Personal
                     {
                         switch (col.ColumnName.ToUpper())
                         {
-                            case "MARCA":
+                            case "F10003":
                                 row[x] = Session["Marca"];
                                 break;
                             case "IDAUTO":
@@ -302,6 +315,18 @@ namespace WizOne.Personal
             {
                 nrAni = nrLuni / 12;
                 nrLuni = nrLuni % 12;
+            }
+        }
+
+
+        protected void grDateStudii_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            var grid = sender as ASPxGridView;
+            e.Editor.ReadOnly = false;
+            if (e.Column.FieldName == "IdNivel")
+            {
+                var tb = e.Editor as ASPxComboBox;
+                tb.ClientSideEvents.SelectedIndexChanged = "OnIndexChangedStudii";
             }
         }
 

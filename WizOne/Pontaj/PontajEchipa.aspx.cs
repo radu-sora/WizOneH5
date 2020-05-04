@@ -2602,9 +2602,9 @@ namespace WizOne.Pontaj
                 string sqlUpd = "";
                 string sqlIst = "";
                 string sqlValStr = "";
-                //string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
-                //                ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
-                //                WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
+                string sqlDel = $@"UPDATE ""Ptj_Intrari"" SET ""ValStr""=null,""Val0""=null,""Val1""=null,""Val2""=null,""Val3""=null,""Val4""=null,""Val5""=null,""Val6""=null,""Val7""=null,""Val8""=null,""Val9""=null,""Val10""=null,
+                                ""Val11""=null,""Val12""=null,""Val13""=null,""Val14""=null,""Val15""=null,""Val16""=null,""Val17""=null,""Val18""=null,""Val19""=null,""Val20""=null
+                                WHERE F10003={f10003} AND ""Ziua""={General.ToDataUniv(ziua)};";
 
                 if (General.Nz(cmbTipAbs.Value, "").ToString() != "")
                 {
@@ -2686,8 +2686,8 @@ namespace WizOne.Pontaj
                     }
                 }
 
-                if (sqlUpd != "")
-                {
+                //if (sqlUpd != "")
+                //{
                     string sqlPtj = General.CreazaSelectFromRow(dt.Rows[0]);
                     string msg = Notif.TrimiteNotificare("Pontaj.PontajDetaliat", (int)Constante.TipNotificare.Validare, sqlPtj, "", -99, Convert.ToInt32(Session["UserId"] ?? -99), Convert.ToInt32(Session["User_Marca"] ?? -99));
                     if (msg != "" && msg.Substring(0, 1) == "2")
@@ -2697,6 +2697,7 @@ namespace WizOne.Pontaj
                     else
                     {
                         General.ExecutaNonQuery("BEGIN " + Environment.NewLine +
+                            sqlDel + Environment.NewLine +
                             sqlUpd + Environment.NewLine +
                             sqlValStr + Environment.NewLine +
                             sqlIst + Environment.NewLine +
@@ -2725,7 +2726,7 @@ namespace WizOne.Pontaj
                         //else
                         //    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes");
                     }
-                }
+                //}
             }
             catch (Exception ex)
             {

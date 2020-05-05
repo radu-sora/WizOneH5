@@ -13038,3 +13038,6 @@ GO
 
 alter table F712 add F71206 int
 GO
+
+ALTER TABLE USERS ADD UtilizatorNonAD int default 0
+GO

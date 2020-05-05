@@ -4053,8 +4053,8 @@ namespace WizOne.Avs
                     case (int)Constante.Atribute.RevenireSuspendare:
                         dtSuspNomen = General.IncarcaDT("SELECT * FROM F090 WHERE F09002 = " + dtCer.Rows[0]["MotivSuspId"].ToString(), null);
                         sql100 = "UPDATE F100 SET F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + data13 + (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ",F10076 = " + data11 + ", F10077 = " + data13 + " - 1" : "") + ", F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " WHERE F10003 = " + f10003.ToString();
-                        if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC")
-                            sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();                      
+                        if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC" && dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin3")
+                            sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();
                         sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data11;
                         General.IncarcaDT(sql111, null);
                         ActualizareSusp(f10003, ref sql100, ref sql1001);
@@ -4125,7 +4125,7 @@ namespace WizOne.Avs
 
                 sql100 = "UPDATE F100 SET F100925 = " + dtSuspAng.Rows[0]["F11104"].ToString() + ", F100922 = " + data1 + ", F100923 = " + data2 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
                      (Convert.ToInt32(dtSuspAng.Rows[0]["F11104"].ToString()) == 11 ? ", F10076 = " + data1 + ", F10077 = " + data2 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
-                if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC")
+                if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC" && dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin3")
                 {
                     DateTime dtIntrare, dtIesire;
                     General.CalculDateCategorieAsigurat(f10003, Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11107"].ToString()), out dtIntrare, out dtIesire);

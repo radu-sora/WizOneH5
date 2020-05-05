@@ -377,6 +377,26 @@ namespace WizOne.Personal
                     }
                 }
 
+                if (Session["esteNou"] == null || Session["esteNou"].ToString().Length <= 0 || Session["esteNou"].ToString() == "false")
+                {
+                    DataTable dtIncetare = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + ds.Tables[0].Rows[0]["F10003"].ToString(), null);
+                    if (Convert.ToDateTime(dtIncetare.Rows[0]["F10023"].ToString()).Date != Convert.ToDateTime(ds.Tables[0].Rows[0]["F10023"].ToString()).Date)
+                    {
+                        DataTable dtSusp = General.IncarcaDT("SELECT COUNT(*) FROM F111 WHERE F11103 = " + ds.Tables[0].Rows[0]["F10003"].ToString() + " AND (F11107 IS NULL OR F11107 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103))" : "TO_DATE('01/01/2100', 'dd/mm/yyyy'))"), null);
+                        if (dtSusp != null && dtSusp.Rows.Count > 0 && Convert.ToInt32(dtSusp.Rows[0][0].ToString()) > 0)
+                        {
+                            MessageBox.Show(Dami.TraduCuvant("Nu puteti inceta acest contract deoarece angajatul are cel putin o suspendare activa!"), MessageBox.icoError, "Atentie!");
+                            //ds.Tables[0].Rows[0]["F10023"] = dtIncetare.Rows[0]["F10023"];
+                            //ds.Tables[0].Rows[0]["F10025"] = dtIncetare.Rows[0]["F10025"];
+                            //ds.Tables[0].Rows[0]["F100993"] = dtIncetare.Rows[0]["F100993"];
+                            //ds.Tables[1].Rows[0]["F10023"] = dtIncetare.Rows[0]["F10023"];
+                            //ds.Tables[1].Rows[0]["F10025"] = dtIncetare.Rows[0]["F10025"];
+                            //ds.Tables[1].Rows[0]["F100993"] = dtIncetare.Rows[0]["F100993"];
+                            return;
+                        }
+                    }
+                }
+
                 if (ds.Tables[0].Rows[0]["F1009741"] != null && ds.Tables[0].Rows[0]["F1009741"].ToString().Length > 0 && ds.Tables[0].Rows[0]["F1009741"].ToString() == "2")
                 {
                     if (Convert.ToDateTime(ds.Tables[0].Rows[0]["F100933"].ToString()).Date > Convert.ToDateTime(ds.Tables[0].Rows[0]["F100934"].ToString()).Date)

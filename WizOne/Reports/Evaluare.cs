@@ -436,17 +436,19 @@ namespace WizOne.Reports
                         semn += (dtSem.Rows[i]["Nume"] != DBNull.Value ? dtSem.Rows[i]["Nume"].ToString() : "") + "   " + (dtSem.Rows[i]["Post"] != DBNull.Value ? dtSem.Rows[i]["Post"].ToString() : "") + "   " + (dtSem.Rows[i]["DataAprobare"] != DBNull.Value ? dtSem.Rows[i]["DataAprobare"].ToString() : "") + "\r\n";
                     }
 
-                if (dtTit != null && dtTit.Rows.Count > 0 && dtTit.Rows[0]["LuatLaCunostinta"] != null && (dtTit.Rows[0]["LuatLaCunostinta"].ToString() == "1" || dtTit.Rows[0]["LuatLaCunostinta"].ToString() == "2"))
+                //Florin 2020.05.05
+                if (dtTit != null && dtTit.Rows.Count > 0 && General.Nz(dtTit.Rows[0]["LuatLaCunostinta"],"0").ToString() == "1")
                 {
                     //data luarii la cunostinta
                     string luat = "Angajatul nu a luat la cunostinta evaluarea.";
-                    sql = "SELECT * FROM \"Eval_Raspuns\" WHERE \"IdQuiz\" = " + idQuiz + " AND F10003 = " + f10003;
-                    DataTable dtLuat = General.IncarcaDT(sql, null);
+                    DataTable dtLuat = General.IncarcaDT($@"SELECT * FROM ""Eval_Raspuns"" WHERE ""IdQuiz""={idQuiz} AND F10003={f10003}", null);
                     if (dtLuat != null && dtLuat.Rows.Count > 0)
                     {
-                        if (Convert.ToInt32((dtLuat.Rows[0]["LuatLaCunostinta"] != DBNull.Value ? dtLuat.Rows[0]["LuatLaCunostinta"].ToString() : "0").ToString()) == 1 ||
-                            Convert.ToInt32((dtLuat.Rows[0]["LuatLaCunostinta"] != DBNull.Value ? dtLuat.Rows[0]["LuatLaCunostinta"].ToString() : "0").ToString()) == 2) luat = "Angajatul a luat la cunostinta evaluarea in data de " + (dtLuat.Rows[0]["LuatData"] == null ? "" : dtLuat.Rows[0]["LuatData"].ToString());
-                        if (Convert.ToInt32((dtLuat.Rows[0]["LuatAutomat"] != DBNull.Value ? dtLuat.Rows[0]["LuatAutomat"].ToString() : "0").ToString()) == 1) luat = "Proces automat de luare la cunostinta.";
+                        if (General.Nz(dtLuat.Rows[0]["LuatLaCunostinta"], "0").ToString() == "1")
+                            luat = "Angajatul a luat la cunostinta evaluarea in data de " + General.Nz(dtLuat.Rows[0]["LuatData"], "");
+                        else if (General.Nz(dtLuat.Rows[0]["LuatLaCunostinta"], "0").ToString() == "2")
+                            luat = "Angajatul a contestat evaluarea in data de " + General.Nz(dtLuat.Rows[0]["LuatData"],"");
+                        else if (General.Nz(dtLuat.Rows[0]["LuatAutomat"], "0").ToString() == "1") luat = "Proces automat de luare la cunostinta.";
                     }
 
                     semn += luat;

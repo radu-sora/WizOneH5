@@ -489,7 +489,7 @@ namespace WizOne.Eval
         {
             try
             {
-                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdQuiz", "F10003", "PozitiePeCircuit", "Finalizat", "CategorieQuiz" }) as object[];
+                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdQuiz", "F10003", "PozitiePeCircuit", "Finalizat", "CategorieQuiz", "ALuatLaCunostinta" }) as object[];
                 if (obj == null || obj.Count() == 0)
                 {
                     grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu exista linie selectata1");
@@ -549,10 +549,10 @@ namespace WizOne.Eval
                 if (obj[3] != null && obj[3].ToString() == "1")
                     strSql = $@"
                         BEGIN
-                            UPDATE Eval_Raspuns SET LuatLaCunostinta=null, Finalizat=0 WHERE IdQuiz=@1 AND F10003=@2;
-                            UPDATE Eval_RaspunsIstoric SET Aprobat=null, DataAprobare=null
-                            WHERE IdQuiz=@1 AND F10003=@2 AND 
-                            COALESCE((SELECT COALESCE(TotalCircuit,0) FROM Eval_Raspuns WHERE IdQuiz=@1 AND F10003=@2),0) = Pozitie;
+                            UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta""=null, ""LuatUser""=null, ""LuatData""=null, ""LuatAutomat""=null, ""Finalizat""=0 WHERE ""IdQuiz""=@1 AND F10003=@2;
+                            UPDATE ""Eval_RaspunsIstoric"" SET ""Aprobat""=null, ""DataAprobare""=null
+                            WHERE ""IdQuiz""=@1 AND F10003=@2 AND 
+                            COALESCE((SELECT COALESCE(""TotalCircuit"",0) FROM ""Eval_Raspuns"" WHERE ""IdQuiz""=@1 AND F10003=@2),0) = ""Pozitie"";
                         END;";
 
                 General.ExecutaNonQuery(strSql, new object[] { obj[0], obj[1] });

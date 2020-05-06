@@ -13267,3 +13267,84 @@ GO
 alter table F712 add F71206 int
 GO
 
+
+-- #391 - Completare date in template evaluare
+-- https://github.com/wizromRD/WizOne/issues/391
+
+--  Competente
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplate WHERE TemplateId=@i)=0)
+	INSERT INTO Eval_ConfigCompTemplate(TemplateId, TemplateName) VALUES(@i, 'Template ' + CONVERT(nvarchar(10),@i));
+    SET @i = @i + 1
+END
+GO
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Competenta')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(1, @i, 'Competenta', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Pondere')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(2, @i, 'Pondere', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Calificativ')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(3, @i, 'Calificativ', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Explicatii')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(4, @i, 'Explicatii', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='ExplicatiiCalificativ')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(5, @i, 'ExplicatiiCalificativ', 100, 0, 0, 0, 0, -99);
+
+    SET @i = @i + 1
+END
+GO
+
+--  Obiective
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i)=0)
+	INSERT INTO Eval_ConfigObTemplate(TemplateId, TemplateName, NrMinObiective, NrMaxObiective, PoateAdauga, PoateSterge, PoateModifica) VALUES(@i, 'Template ' + CONVERT(nvarchar(10),@i), 0, 900, 0, 0, 0);
+    SET @i = @i + 1
+END
+GO
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Obiectiv')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(1, @i, 'Obiectiv', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Activitate')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(2, @i, 'Activitate', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Pondere')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(3, @i, 'Pondere', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Descriere')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(4, @i, 'Descriere', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Target')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(5, @i, 'Target', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Termen')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(6, @i, 'Termen', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Realizat')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(7, @i, 'Realizat', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Calificativ')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(8, @i, 'Calificativ', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ExplicatiiCalificativ')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(9, @i, 'ExplicatiiCalificativ', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ColoanaSuplimentara1')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(10, @i, 'ColoanaSuplimentara1', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ColoanaSuplimentara2')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(11, @i, 'ColoanaSuplimentara2', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ColoanaSuplimentara3')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(12, @i, 'ColoanaSuplimentara3', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ColoanaSuplimentara4')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(13, @i, 'ColoanaSuplimentara4', 100, 0, 0, 0, 0, -99, -99);
+
+    SET @i = @i + 1
+END
+GO

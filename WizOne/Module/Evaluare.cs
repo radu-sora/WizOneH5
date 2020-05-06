@@ -404,7 +404,7 @@ namespace WizOne.Module
         public int LuatLaCunostinta { get; set; }
         public int IdAuto { get; set; }
         public int LuatUser { get; set; }
-        public int LuatData { get; set; }
+        public DateTime? LuatData { get; set; }
         public int LuatAutomat { get; set; }
 
         public Eval_Raspuns() { }
@@ -426,7 +426,9 @@ namespace WizOne.Module
             LuatLaCunostinta = columns.Contains("LuatLaCunostinta") == true ? Convert.ToInt32(dr["LuatLaCunostinta"].ToString() == string.Empty ? "-99" : dr["LuatLaCunostinta"].ToString()) : -99;
             IdAuto = columns.Contains("IdAuto") == true ? Convert.ToInt32(dr["IdAuto"].ToString() == string.Empty ? "-99" : dr["IdAuto"].ToString()) : -99;
             LuatUser = columns.Contains("LuatUser") == true ? Convert.ToInt32(dr["LuatUser"].ToString() == string.Empty ? "-99" : dr["LuatUser"].ToString()) : -99;
-            LuatData = columns.Contains("LuatData") == true ? Convert.ToInt32(dr["LuatData"].ToString() == string.Empty ? "-99" : dr["LuatData"].ToString()) : -99;
+            LuatData = null;
+            if (columns.Contains("LuatData") && dr["LuatData"] != DBNull.Value)
+                LuatData = Convert.ToDateTime(dr["LuatData"]);
             LuatAutomat = columns.Contains("LuatAutomat") == true ? Convert.ToInt32(dr["LuatAutomat"].ToString() == string.Empty ? "-99" : dr["LuatAutomat"].ToString()) : -99;
         }
 

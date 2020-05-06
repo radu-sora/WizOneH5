@@ -1,4 +1,5 @@
-﻿using DevExpress.Data.PivotGrid;
+﻿using DevExpress.Data;
+using DevExpress.Data.PivotGrid;
 using DevExpress.DataAccess;
 using DevExpress.DataAccess.Sql;
 using DevExpress.DataAccess.Wizard.Services;
@@ -251,7 +252,9 @@ namespace Wizrom.Reports.Pages
                 Footer = aspxGridView.Settings.ShowFooter,
                 PapeSize = aspxGridView.SettingsPager.PageSize,
                 Layout = aspxGridView.SaveClientLayout(),
-                ContextMenuOptions = contextMenuOptions
+                ContextMenuOptions = contextMenuOptions,
+                GroupSummary = aspxGridView.GroupSummary.Select(si => new { si.FieldName, si.SummaryType, si.ShowInGroupFooterColumn }).ToList(),
+                TotalSummary = aspxGridView.TotalSummary.Select(si => new { si.FieldName, si.SummaryType }).ToList()
             });
         }
 
@@ -274,6 +277,12 @@ namespace Wizrom.Reports.Pages
                         aspxGridView.Settings.ShowFilterRowMenu = gridLayout.FilterRowMenu;
                         aspxGridView.Settings.ShowFooter = gridLayout.Footer;
                         aspxGridView.LoadClientLayout((string)gridLayout.Layout);
+                        aspxGridView.GroupSummary.Clear();
+                        aspxGridView.GroupSummary.AddRange((gridLayout.GroupSummary.ToObject<List<dynamic>>() as List<dynamic>).
+                            Select(si => new ASPxSummaryItem((string)si.FieldName, (SummaryItemType)(int)si.SummaryType) { ShowInGroupFooterColumn = (string)si.ShowInGroupFooterColumn }).ToList());
+                        aspxGridView.TotalSummary.Clear();
+                        aspxGridView.TotalSummary.AddRange((gridLayout.TotalSummary.ToObject<List<dynamic>>() as List<dynamic>).
+                            Select(si => new ASPxSummaryItem((string)si.FieldName, (SummaryItemType)(int)si.SummaryType)).ToList());
                     }
 
                     aspxGridView.SettingsBehavior.FilterRowMode = gridLayout.FilterRowMode;
@@ -281,7 +290,7 @@ namespace Wizrom.Reports.Pages
                     aspxGridView.SettingsBehavior.MergeGroupsMode = gridLayout.MergeGroups;
                     aspxGridView.Settings.ShowGroupFooter = gridLayout.GroupFooter;
                     aspxGridView.Styles.AlternatingRow.Enabled = gridLayout.AlternatingRowColor;
-                    aspxGridView.Settings.GridLines = gridLayout.GridLines;
+                    aspxGridView.Settings.GridLines = gridLayout.GridLines;                    
 
                     contextMenuOptions = gridLayout.ContextMenuOptions.ToObject<Dictionary<string, List<int>>>() as Dictionary<string, List<int>>;
 

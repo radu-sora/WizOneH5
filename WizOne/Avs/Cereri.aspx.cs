@@ -4036,7 +4036,7 @@ namespace WizOne.Avs
                         DataTable dtSuspNomen = General.IncarcaDT("SELECT * FROM F090 WHERE F09002 = " + dtCer.Rows[0]["MotivSuspId"].ToString(), null);                        
                         sql100 = "UPDATE F100 SET F100925 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + ", F100922 = " + data11 + ", F100923 = " + data12 + ", F100924 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") +
                              (Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()) == 11 ? ", F10076 = " + data11 + ", F10077 = " + data12 + " - 1" : "") + " WHERE F10003 = " + f10003.ToString();
-                        if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC")
+                        if (dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin1LiteraC" && dtSuspNomen.Rows[0]["F09004"].ToString() != "Art52Alin3")
                         {
                             DateTime dtIntrare, dtIesire;
                             General.CalculDateCategorieAsigurat(f10003, Convert.ToDateTime(dtCer.Rows[0]["DataInceputSusp"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataSfEstimSusp"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataIncetareSusp"].ToString()), out dtIntrare, out dtIesire);

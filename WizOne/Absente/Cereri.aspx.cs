@@ -1288,7 +1288,7 @@ namespace WizOne.Absente
 
                         txtNrOreTime.ClientVisible = true;
 
-                        lblNrOre.InnerText = Dami.TraduCuvant("Nr. minute");
+                        lblNrOre.InnerText = Dami.TraduCuvant("Nr. ore");
                     }
                 }
                 else

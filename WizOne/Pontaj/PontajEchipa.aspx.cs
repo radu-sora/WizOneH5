@@ -1896,6 +1896,9 @@ namespace WizOne.Pontaj
                                     listaSec.Add(dtSec.Rows[k]["IdColoana"].ToString());
                     }
 
+                    foreach (DataColumn col in dt.Columns)
+                        col.ReadOnly = false;
+
 
                     if (chkLinie.Checked)
                     {
@@ -1948,7 +1951,10 @@ namespace WizOne.Pontaj
                                     int nrZec = 0;
                                     string format = "0.";
                                     if (listaZec.ContainsKey(dt.Columns[i].ColumnName))
+                                    {
                                         nrZec = listaZec[dt.Columns[i].ColumnName];
+                                        dt.Rows[row][i] = MathExt.Round(Convert.ToDecimal(dt.Rows[row][i].ToString()), nrZec, MidpointRounding.AwayFromZero);
+                                    }
                                     if (nrZec > 0)
                                         for (int z = 1; z <= nrZec; z++)
                                             format += "#";
@@ -2042,7 +2048,10 @@ namespace WizOne.Pontaj
                                     int nrZec = 0;
                                     string format = "0.";
                                     if (listaZec.ContainsKey(dt.Columns[i].ColumnName))
+                                    {
                                         nrZec = listaZec[dt.Columns[i].ColumnName];
+                                        dt.Rows[row][i] = MathExt.Round(Convert.ToDecimal(dt.Rows[row][i].ToString()), nrZec, MidpointRounding.AwayFromZero);
+                                    }
                                     if (nrZec > 0)
                                         for (int z = 1; z <= nrZec; z++)
                                             format += "#";
@@ -3318,7 +3327,7 @@ namespace WizOne.Pontaj
 
                 for (int i = 1; i <= 60; i++)
                 {
-                    zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}""";
+                    zileF += $@",COALESCE(X.""F{i}"",0) AS ""F{i}""";
                 }
 
 

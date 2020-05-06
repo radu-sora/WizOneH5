@@ -3058,7 +3058,7 @@ namespace WizOne.Pontaj
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
                                 dn.Norma AS AvansNorma, 
                                 CASE WHEN Y.Norma <> dn.Norma THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND YEAR(F70406)={an} AND MONTH(F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS AvansData,
-                                L.F06205, Fct.F71804 AS Functie, X.F10003, X.IdStare, X.Comentarii {colCumulat} {zileVal} {zileF}
+                                L.F06205, Fct.F71804 AS Functie, X.F10003, X.IdStare {colCumulat} {zileVal} {zileF}
                                 FROM Ptj_Cumulat X 
 		                        LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
 		                        left join SituatieZileAbsente zabs on zabs.F10003 = x.F10003 and zabs.An = x.An and zabs.IdAbsenta = (select Id from Ptj_tblAbsente where DenumireScurta = 'CO')
@@ -3128,7 +3128,7 @@ namespace WizOne.Pontaj
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
                                 ""DamiNorma""(X.F10003, {dtSf}) AS ""AvansNorma"", 
                                 CASE WHEN ""Norma"" <> ""DamiNorma""(X.F10003, {dtSf}) THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND EXTRACT(YEAR FROM F70406)={an} AND EXTRACT(MONTH FROM F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS ""AvansData"",
-                                L.F06205, Fct.F71804 AS ""Functie"", X.F10003, X.""IdStare"", X.""Comentarii"" {colCumulat} {zileVal} {zileF}
+                                L.F06205, Fct.F71804 AS ""Functie"", X.F10003, X.""IdStare"" {colCumulat} {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
                                 LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
                                 left join (SELECT * FROM ""SituatieZileAbsente"" WHERE ""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An""

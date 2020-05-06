@@ -13987,14 +13987,8 @@ ALTER TABLE "Ptj_Cumulat" ADD F99 numeric(18,2)
 ALTER TABLE "Ptj_Cumulat" ADD F100 numeric(18,2)
 /
 
-ALTER TABLE "Ptj_tblAdminCC" ADD "TipColoana" number(10);
-/
-
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('PontajCCTipAfisareNrOre', '1', 'Poate avea valorile 1, 2 sau 3. 1 - se afiseaza minute; 2 - se afiseaza ore; 3 - se afiseaza in formatul HH:MM. Daca nu este setata nici o valoare, default este 1', 0);
 COMMIT;
-
-
-
 
 CREATE TABLE "tblTipInvatamant"(
 "Id" NUMBER(9) NOT NULL,

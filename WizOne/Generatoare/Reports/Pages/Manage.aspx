@@ -36,7 +36,7 @@
             <Header Font-Bold="true" Wrap="True" />
         </Styles>
         <Columns>
-            <dx:GridViewCommandColumn Caption=" " ShowClearFilterButton="true" Width="60px" Name="butoaneGrid">
+            <dx:GridViewCommandColumn Caption=" " Name="butoaneGrid" ShowClearFilterButton="true" Width="60px">
                 <CustomButtons>
                     <dx:GridViewCommandColumnCustomButton ID="ReportEditButton" Image-Url="~/Fisiere/Imagini/Icoane/edit.png" Image-ToolTip="Editare" Text=" " />
                     <dx:GridViewCommandColumnCustomButton ID="ReportDeleteButton" Image-Url="~/Fisiere/Imagini/Icoane/sterge.png" Image-ToolTip="Stergere" Text=" " />

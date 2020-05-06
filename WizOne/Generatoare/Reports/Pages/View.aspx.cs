@@ -869,7 +869,7 @@ namespace Wizrom.Reports.Pages
                                 if (fileName.Length > 0)
                                     CustomCubePivotGrid.JSProperties["cpLayoutExportedTo"] = Path.GetFileName(fileName);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 // Log error
                                 // For now, mark as unexported only

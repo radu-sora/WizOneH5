@@ -2722,8 +2722,8 @@ namespace WizOne.Pontaj
                                 break;
                         }
 
-                        if (valCalc != Convert.ToDecimal(General.Nz(dr[colNume],0)))
-                        {
+                        //if (valCalc != Convert.ToDecimal(General.Nz(dr[colNume],0)))
+                        //{
                             if (valCalc == 0)
                             {
                                 cmp += ",\"" + colNume + "\"=NULL";
@@ -2737,7 +2737,7 @@ namespace WizOne.Pontaj
 
                             cmp += ",\"" + colNume.Replace("Val", "ValModif") + "\"=4";
                             if (General.Nz(dr["VerificareNrMaxOre"],0).ToString() == "1") nrMin += valCalc;
-                        }
+                        //}
                     }
 
                     if (cmp != "")

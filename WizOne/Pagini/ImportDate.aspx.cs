@@ -804,7 +804,7 @@ namespace WizOne.Pagini
                     string campNonOblig = "";
                     string campNonObligAct = "";
                     //while (!ws2.Cells[j, k].Value.IsEmpty)
-                    for (int x = 0; x < nrCol; x++)
+                    for (int x = 0; x <= nrCol; x++)
                     {
 
                         //if (ws2.Cells[j, k].Value.ToString().Length <= 0)

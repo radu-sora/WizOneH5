@@ -1683,17 +1683,20 @@ namespace WizOne.Avs
                 IncarcaComboBox(cmb1Act, cmb1Nou, null, dtTemp);
                 de1Nou.ClientEnabled = false;
                 de2Nou.ClientEnabled = false;
-                DataTable dtTempRev = General.IncarcaDT("select * from f111 Where F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = " 
-                            + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") AND F11104 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString() + " ORDER BY F11105", null);
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11105"] != null && dtTempRev.Rows[0]["F11105"].ToString().Length > 0)
-                    de1Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11105"].ToString());
-                else
-                    de1Nou.Value = new DateTime(2100, 1, 1);
+                if (cmb1Nou.SelectedIndex >= 0)
+                {
+                    DataTable dtTempRev = General.IncarcaDT("select * from f111 Where F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = "
+                                + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") AND F11104 = " + cmb1Nou.Items[cmb1Nou.SelectedIndex].Value.ToString() + " ORDER BY F11105", null);
+                    if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11105"] != null && dtTempRev.Rows[0]["F11105"].ToString().Length > 0)
+                        de1Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11105"].ToString());
+                    else
+                        de1Nou.Value = new DateTime(2100, 1, 1);
 
-                if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11106"] != null && dtTempRev.Rows[0]["F11106"].ToString().Length > 0)
-                    de2Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11106"].ToString());
-                else
-                    de2Nou.Value = new DateTime(2100, 1, 1);
+                    if (dtTempRev != null && dtTempRev.Rows.Count > 0 && dtTempRev.Rows[0]["F11106"] != null && dtTempRev.Rows[0]["F11106"].ToString().Length > 0)
+                        de2Nou.Value = Convert.ToDateTime(dtTempRev.Rows[0]["F11106"].ToString());
+                    else
+                        de2Nou.Value = new DateTime(2100, 1, 1);
+                }
             }
             if (Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Detasare)
             {
@@ -1750,6 +1753,7 @@ namespace WizOne.Avs
                 switch (tip)
                 {
                     case "1":
+                        txtDataMod.Date = DateTime.Now;
                         AscundeCtl();
                         IncarcaDate();
                         string data = "";
@@ -1873,6 +1877,7 @@ namespace WizOne.Avs
                             Session["Avs_MarcaFiltru"] = cmbAngFiltru.SelectedIndex;
                             Session["Avs_AtributFiltru"] = cmbAtributeFiltru.SelectedIndex;
                             IncarcaGrid();
+                            txtDataMod.Date = DateTime.Now;
                         }
                         break;
                     case "5":
@@ -1937,6 +1942,7 @@ namespace WizOne.Avs
                         break;
                     case "9":               //cmbAng
                         {
+                            txtDataMod.Date = DateTime.Now;
                             DataTable dtAtr = General.IncarcaDT(SelectAtribute(), new object[] { Session["UserId"], General.Nz(cmbRol.Value, -99), General.Nz(cmbAng.Value, -99) });
                             cmbAtribute.DataSource = dtAtr;
                             cmbAtribute.DataBind();

@@ -588,7 +588,7 @@
                                                 <CalendarProperties FirstDayOfWeek="Monday" />
                                             </dx:ASPxDateEdit>
                                             <br />
-                                            <dx:ASPxCheckBox ID="chkAnulare" ClientInstanceName="chkAnulare" runat="server" Text="Anulare concediu incepand cu aceasta data" TextAlign="Right" />
+                                            <dx:ASPxCheckBox ID="chkAnulare" ClientInstanceName="chkAnulare" runat="server" Text="Anulare concediu incepand cu ziua urmatoare acestei date" TextAlign="Right" />
                                             <dx:ASPxHiddenField ID="txtDataSf" runat="server" ClientIDMode="Static" ClientInstanceName="txtDataSf" />
                                             <dx:ASPxHiddenField ID="txtDataInc" runat="server" ClientIDMode="Static" ClientInstanceName="txtDataInc" />
                                         </td>

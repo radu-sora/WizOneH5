@@ -1757,27 +1757,12 @@ namespace WizOne.Avs
                         SetDataRevisal(1, Convert.ToDateTime(txtDataMod.Value), Convert.ToInt32(cmbAtribute.Value), out data);
                         if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
                                 || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
-                                idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
+                                idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare
+                                || idAtr == (int)Constante.Atribute.Suspendare || idAtr == (int)Constante.Atribute.Detasare || idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
                             if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date)
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");                               
-                            }
-
-                        if (idAtr == (int)Constante.Atribute.Suspendare || idAtr == (int)Constante.Atribute.Detasare)
-                        {
-                            if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de1Nou.Value).Date)
-                            {
-                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
-                            }
-                        }
-
-                        if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
-                        {
-                            if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de3Nou.Value).Date)
-                            {
-                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
-                            }
-                        }
+                            }       
 
                         break;
                     case "2":
@@ -1919,27 +1904,12 @@ namespace WizOne.Avs
                         idAtr = Convert.ToInt32(cmbAtribute.Value);
                         if (idAtr == (int)Constante.Atribute.Functie || idAtr == (int)Constante.Atribute.CodCOR || idAtr == (int)Constante.Atribute.Norma || idAtr == (int)Constante.Atribute.PrelungireCIM
                           || idAtr == (int)Constante.Atribute.PrelungireCIM_Vanz || idAtr == (int)Constante.Atribute.ContrITM || idAtr == (int)Constante.Atribute.ContrIn ||
-                          idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare)
+                          idAtr == (int)Constante.Atribute.Salariul || idAtr == (int)Constante.Atribute.Sporuri || idAtr == (int)Constante.Atribute.MotivPlecare
+                          || idAtr == (int)Constante.Atribute.Suspendare || idAtr == (int)Constante.Atribute.Detasare || idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
                             if (Convert.ToDateTime(deDataRevisal.Value).Date < DateTime.Now.Date)
                             {
                                 pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
-                            }
-
-                        if (idAtr == (int)Constante.Atribute.Suspendare || idAtr == (int)Constante.Atribute.Detasare)
-                        {
-                            if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de1Nou.Value).Date)
-                            {
-                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
-                            }
-                        }
-
-                        if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)
-                        {
-                            if (Convert.ToDateTime(deDataRevisal.Value).Date >= Convert.ToDateTime(de3Nou.Value).Date)
-                            {
-                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Termen depunere Revisal depasit!");
-                            }
-                        }
+                            }             
                         break;
                     case "8":               //cmbRol
                         {
@@ -2347,6 +2317,16 @@ namespace WizOne.Avs
                     }
                 }
 
+                //Radu 05.05.2020
+                if (idAtr == (int)Constante.Atribute.MotivPlecare)
+                {
+                    DataTable dtSusp = General.IncarcaDT("SELECT COUNT(*) FROM F111 WHERE F11103 = " + F10003 + " AND (F11107 IS NULL OR F11107 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103))" : "TO_DATE('01/01/2100', 'dd/mm/yyyy'))"), null);
+                    if (dtSusp != null && dtSusp.Rows.Count > 0 && Convert.ToInt32(dtSusp.Rows[0][0].ToString()) > 0)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti inceta acest contract deoarece angajatul are cel putin o suspendare activa!");
+                        return false;
+                    }
+                }    
 
                 if (cmbAng.Value == null) strErr += ", angajat";
                 if (idAtr == -99) strErr += ", atribut";

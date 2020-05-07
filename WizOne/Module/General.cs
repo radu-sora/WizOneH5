@@ -6929,38 +6929,38 @@ namespace WizOne.Module
                     f10003 = "a.F10003";
 
                 //Radu 21.04.2020
-                //string strSql = SelectCalculCO(an, f10003, filtruIns);
-                //General.ExecutaNonQuery(strSql, null);
+                string strSql = SelectCalculCO(an, f10003, filtruIns);
+                General.ExecutaNonQuery(strSql, null);
 
 
                 if (cuActualizareInF100)
                 {
                     //Radu 21.04.2020
-                    //string strUpd = $@"UPDATE A 
-                    //    SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
-                    //    FROM F100 A
-                    //    INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
-                    //if (Constante.tipBD == 2)
-                    //    strUpd = $@"UPDATE F100 A
-                    //                SET (A.F100642, A.F100995, A.F100996) =
-                    //                  (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
-                    //                   FROM ""Ptj_tblZileCO"" B
-                    //                   WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
-                    //                WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
+                    string strUpd = $@"UPDATE A 
+                        SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
+                        FROM F100 A
+                        INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
+                    if (Constante.tipBD == 2)
+                        strUpd = $@"UPDATE F100 A
+                                    SET (A.F100642, A.F100995, A.F100996) =
+                                      (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
+                                       FROM ""Ptj_tblZileCO"" B
+                                       WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
+                                    WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
 
-                    //General.ExecutaNonQuery(strUpd, null);
-                    if (marca != -99)
-                    {
-                        if (Constante.tipBD == 1)
-                            General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
-                                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
-                                                + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
-                        else
-                        {
-                            DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
-                            General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
-                        }
-                    }
+                    General.ExecutaNonQuery(strUpd, null);
+                    //if (marca != -99)
+                    //{
+                    //    if (Constante.tipBD == 1)
+                    //        General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
+                    //                            + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
+                    //                            + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
+                    //    else
+                    //    {
+                    //        DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
+                    //        General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex)
@@ -8437,7 +8437,8 @@ namespace WizOne.Module
             else
             {
                 DataTable dtSusp = IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + marca + " AND F11107 IS NOT NULL AND F11107 <> "
-                    + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " ORDER BY F11107 DESC ", null);
+                    + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " AND " 
+                    + " F11104 NOT IN (SELECT F09002 FROM F090 WHERE F09004 = 'Art52Alin1LiteraC' OR F09004 = 'Art52Alin3') ORDER BY F11107 DESC ", null);
                 DataTable dtAng = IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + marca, null);
                 dtIntrare = Convert.ToDateTime(dtAng.Rows[0]["F10022"].ToString());
                 dtIesire = dtStart.AddDays(-1);

@@ -1881,6 +1881,14 @@ namespace WizOne.Pontaj
                         for (int j = 0; j < dtAbs.Rows.Count; j++)
                             listaAbs.Add(dtAbs.Rows[j]["DenumireScurta"].ToString(), dtAbs.Rows[j]["Culoare"].ToString());
 
+                    //Radu 05.05.2020
+                    DataTable dtZec = General.IncarcaDT("SELECT * FROM \"Ptj_tblFormuleCumulat\"", null);
+                    Dictionary<string, int> listaZec = new Dictionary<string, int>();
+                    if (dtZec != null && dtZec.Rows.Count > 0)
+                        for (int j = 0; j < dtZec.Rows.Count; j++)
+                            if (!listaZec.ContainsKey(dtZec.Rows[j]["Coloana"].ToString()))
+                                listaZec.Add(dtZec.Rows[j]["Coloana"].ToString(), Convert.ToInt32(General.Nz(dtZec.Rows[j]["NumarZecimale"], "0").ToString()));
+                    
                     //Radu 28.02.2020 - securitate
                     List<string> listaSec = new List<string>();
                     strSql = "SELECT X.\"IdControl\", X.\"IdColoana\", MAX(X.\"Vizibil\") AS \"Vizibil\", MIN(X.\"Blocat\") AS \"Blocat\" FROM( "
@@ -1902,6 +1910,9 @@ namespace WizOne.Pontaj
                                 if (dtSec.Rows[k]["Vizibil"] != null && Convert.ToInt32(dtSec.Rows[k]["Vizibil"].ToString()) == 0)
                                     listaSec.Add(dtSec.Rows[k]["IdColoana"].ToString());
                     }
+
+                    foreach (DataColumn col in dt.Columns)
+                        col.ReadOnly = false;
 
 
                     if (chkLinie.Checked)
@@ -1952,10 +1963,28 @@ namespace WizOne.Pontaj
                             {
                                 if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                                 {
-                                    if (idZile > 0 && colZile > 0)                                    
+                                    int nrZec = 0;
+                                    string format = "0.";
+                                    if (listaZec.ContainsKey(dt.Columns[i].ColumnName))
+                                    {
+                                        nrZec = listaZec[dt.Columns[i].ColumnName];
+                                        dt.Rows[row][i] = MathExt.Round(Convert.ToDecimal(dt.Rows[row][i].ToString()), nrZec, MidpointRounding.AwayFromZero);
+                                    }
+                                    if (nrZec > 0)
+                                        for (int z = 1; z <= nrZec; z++)
+                                            format += "#";
+                                    if (idZile > 0 && colZile > 0)
+                                    {
+                                        if (nrZec > 0)
+                                            ws2.Cells[row + 2, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].NumberFormat = format;
                                         ws2.Cells[row + 2, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
-                                    else                                    
+                                    }
+                                    else
+                                    {
+                                        if (nrZec > 0)
+                                            ws2.Cells[row + 2, nrCol].NumberFormat = format;
                                         ws2.Cells[row + 2, nrCol++].Value = dt.Rows[row][i].ToString();
+                                    }
                                 }
 
                                 if (dt.Columns[i].ColumnName.Contains("Ziua"))
@@ -2030,10 +2059,30 @@ namespace WizOne.Pontaj
                                         rand = 0;
                                         nrCol++;
                                     }
+
+                                    int nrZec = 0;
+                                    string format = "0.";
+                                    if (listaZec.ContainsKey(dt.Columns[i].ColumnName))
+                                    {
+                                        nrZec = listaZec[dt.Columns[i].ColumnName];
+                                        dt.Rows[row][i] = MathExt.Round(Convert.ToDecimal(dt.Rows[row][i].ToString()), nrZec, MidpointRounding.AwayFromZero);
+                                    }
+                                    if (nrZec > 0)
+                                        for (int z = 1; z <= nrZec; z++)
+                                            format += "#";
+
                                     if (idZile > 0 && colZile > 0 && lista.ContainsKey(dt.Columns[i].ColumnName))
+                                    {
+                                        if (nrZec > 0)
+                                            ws2.Cells[4 * row + 3 + rand - 1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].NumberFormat = format;
                                         ws2.Cells[4 * row + 3 + rand - 1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
+                                    }
                                     else
+                                    {
+                                        if (nrZec > 0)
+                                            ws2.Cells[4 * row + 3 + rand - 1, nrCol].NumberFormat = format;
                                         ws2.Cells[4 * row + 3 + rand - 1, nrCol].Value = dt.Rows[row][i].ToString();
+                                    }
 
                                     if (dt.Columns[i].ColumnName.Contains("Ziua"))
                                     {
@@ -3301,7 +3350,7 @@ namespace WizOne.Pontaj
 
                 for (int i = 1; i <= 100; i++)
                 {
-                    zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}""";
+                    zileF += $@",COALESCE(X.""F{i}"",0) AS ""F{i}""";
                 }
 
 

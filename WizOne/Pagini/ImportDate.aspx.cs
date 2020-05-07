@@ -804,7 +804,7 @@ namespace WizOne.Pagini
                     string campNonOblig = "";
                     string campNonObligAct = "";
                     //while (!ws2.Cells[j, k].Value.IsEmpty)
-                    for (int x = 0; x < nrCol; x++)
+                    for (int x = 0; x <= nrCol; x++)
                     {
 
                         //if (ws2.Cells[j, k].Value.ToString().Length <= 0)
@@ -855,7 +855,7 @@ namespace WizOne.Pagini
                             else
                             {
                                 campNonOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
-                                if (dr[0]["OmiteLaActualizare"] == null || Convert.ToInt32(dr[0]["OmiteLaActualizare"].ToString()) == 0)
+                                if (dr[0]["OmiteLaActualizare"] == null || dr[0]["OmiteLaActualizare"].ToString().Length <= 0 || Convert.ToInt32(dr[0]["OmiteLaActualizare"].ToString()) == 0)
                                     campNonObligAct += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
                             }
                         }

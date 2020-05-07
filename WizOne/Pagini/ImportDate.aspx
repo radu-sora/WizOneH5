@@ -22,11 +22,13 @@
 
     function OnEndCallback(s, e) {
         //cmbSablon.PerformCallback();
+        //pnlLoading.Hide();
     }
 
     function OnClickViz(s, e) {    
         popUpViz.Show();
-        e.processOnServer = true;
+        //e.processOnServer = true;
+        grDateNomen.PerformCallback("1");       
     }
 
 </script>
@@ -40,14 +42,13 @@
         <table width="100%">
                 <tr>
                     <td align="right">
-                        <dx:ASPxButton ID="btnImport" ClientInstanceName="btnImport" ClientIDMode="Static" runat="server" Text="Import" AutoPostBack="true" OnClick="btnImport_Click"  oncontextMenu="ctx(this,event)" >
+                        <dx:ASPxButton ID="btnImport" ClientInstanceName="btnImport" ClientIDMode="Static" runat="server" Text="Import" AutoPostBack="false"  oncontextMenu="ctx(this,event)" >
                             <Image Url="~/Fisiere/Imagini/Icoane/incarca.png"></Image>
-                            <ClientSideEvents Click="function (s,e) { 
-                                pnlLoading.Show();
-                                e.processOnServer = true;
+                            <ClientSideEvents Click="function (s,e) {                                
+                                grDateViz.PerformCallback('1');
                              }" />
                         </dx:ASPxButton>
-                        <dx:ASPxButton ID="btnViz" ClientInstanceName="btnViz" ClientIDMode="Static" runat="server" Text="Definire sablon" AutoPostBack="false" OnClick="btnViz_Click"  oncontextMenu="ctx(this,event)" >
+                        <dx:ASPxButton ID="btnViz" ClientInstanceName="btnViz" ClientIDMode="Static" runat="server" Text="Definire sablon" AutoPostBack="false"  oncontextMenu="ctx(this,event)" >
                             <Image Url="~/Fisiere/Imagini/Icoane/arata.png"></Image>
                             <ClientSideEvents Click="function(s,e){ OnClickViz(s, e); }" /> 
                         </dx:ASPxButton>
@@ -104,7 +105,8 @@
                                 <dx:ASPxGridView ID="grDateViz" runat="server" ClientInstanceName="grDateViz" Width="100%" OnCustomCallback="grDateViz_CustomCallback"  >
                                     <SettingsBehavior AllowSelectByRowClick="false" AllowFocusedRow="false" AllowSelectSingleRowOnly="false" AllowSort="false" />
                                     <Settings ShowFilterRow="false" ShowGroupPanel="False" />
-                                    <SettingsSearchPanel Visible="False" />    
+                                    <SettingsSearchPanel Visible="False" />  
+                                    <ClientSideEvents ContextMenu="ctx" EndCallback="OnEndCallback"/>    
                                     <Columns>	              
 						            </Columns>
                                 </dx:ASPxGridView>

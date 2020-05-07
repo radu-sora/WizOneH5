@@ -340,6 +340,12 @@ namespace WizOne.Pagini
                     return;
                 }
 
+                if (e.Parameters.Equals("1"))
+                {
+                    btnImport_Click();
+                    return;
+                }
+
 
                 var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Temp/ImportDate"));
                 if (folder.GetFiles().Count() <= 0)
@@ -357,7 +363,8 @@ namespace WizOne.Pagini
                 for (int i = 0; i < grDateNomen.VisibleRowCount; i++)
                 {
                     DataRowView obj = grDateNomen.GetRow(i) as DataRowView;
-                    dt.Columns.Add(obj["ColoanaFisier"].ToString(), typeof(string));
+                    if (obj["ColoanaFisier"] != null && obj["ColoanaFisier"].ToString().Length > 0)
+                        dt.Columns.Add(obj["ColoanaFisier"].ToString(), typeof(string));
                 }
 
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
@@ -612,6 +619,13 @@ namespace WizOne.Pagini
                 //if (Session["ImportDate_Reload"].ToString() == "0")                
                 //    return;                
 
+                if (e.Parameters.Equals("1"))
+                {
+                    btnViz_Click();
+                    return;
+                }
+
+
                 Session["ImportDate_Sablon"] = cmbSablon.Value;
                 DataTable dt = new DataTable();
                 if (cmbSablon.Value != null)
@@ -668,7 +682,9 @@ namespace WizOne.Pagini
             }
         }
 
-        protected void btnImport_Click(object sender, EventArgs e)
+        //protected void btnImport_Click(object sender, EventArgs e)
+
+        protected void btnImport_Click()
         {
             try
             {   
@@ -884,7 +900,7 @@ namespace WizOne.Pagini
                             if (valAltele.Length <= 0)
                                 valAltele = "NULL";
                             campNonOblig += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
-                            if (drAltele[z]["OmiteLaActualizare"] == null || Convert.ToInt32(drAltele[z]["OmiteLaActualizare"].ToString()) == 0)
+                            if (drAltele[z]["OmiteLaActualizare"] == null || drAltele[z]["OmiteLaActualizare"].ToString().Length <= 0 || Convert.ToInt32(drAltele[z]["OmiteLaActualizare"].ToString()) == 0)
                                 campNonObligAct += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
                         }
                     }
@@ -1015,9 +1031,9 @@ namespace WizOne.Pagini
                         
         }
 
+        //protected void btnViz_Click(object sender, EventArgs e)
 
-
-        protected void btnViz_Click(object sender, EventArgs e)
+        protected void btnViz_Click()
         {
             try
             {     

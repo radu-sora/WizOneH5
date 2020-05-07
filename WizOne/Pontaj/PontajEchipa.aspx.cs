@@ -3008,7 +3008,7 @@ namespace WizOne.Pontaj
                     zileVal += $@",COALESCE(""Ziua{i}"",'') AS ""Ziua{i}""";
                 }
 
-                for (int i = 1; i <= 60; i++)
+                for (int i = 1; i <= 100; i++)
                 {
                     zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}_Tmp""";
                 }
@@ -3299,7 +3299,7 @@ namespace WizOne.Pontaj
                     zileAsCuloare += ", " + strZi + " AS \"CuloareValoare" + i.ToString() + "\"";
                 }
 
-                for (int i = 1; i <= 60; i++)
+                for (int i = 1; i <= 100; i++)
                 {
                     zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}""";
                 }

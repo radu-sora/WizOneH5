@@ -14069,3 +14069,46 @@ ALTER TABLE "F100Studii" ADD CONSTRAINT "PK_F100Studii" PRIMARY KEY ("IdAuto");
 
 
 alter table F712 add F71206 NUMBER(9);
+/
+
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F61',0,66,'F61','F61',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F62',0,66,'F62','F62',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F63',0,66,'F63','F63',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F64',0,66,'F64','F64',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F65',0,66,'F65','F65',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F66',0,66,'F66','F66',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F67',0,66,'F67','F67',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F68',0,66,'F68','F68',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F69',0,66,'F69','F69',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F70',0,66,'F70','F70',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F71',0,66,'F71','F71',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F72',0,66,'F72','F72',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F73',0,66,'F73','F73',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F74',0,66,'F74','F74',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F75',0,66,'F75','F75',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F76',0,66,'F76','F76',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F77',0,66,'F77','F77',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F78',0,66,'F78','F78',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F79',0,66,'F79','F79',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F80',0,66,'F80','F80',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F81',0,66,'F81','F81',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F82',0,66,'F82','F82',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F83',0,66,'F83','F83',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F84',0,66,'F84','F84',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F85',0,66,'F85','F85',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F86',0,66,'F86','F86',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F87',0,66,'F87','F87',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F88',0,66,'F88','F88',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F89',0,66,'F89','F89',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F90',0,66,'F90','F90',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F91',0,66,'F91','F91',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F92',0,66,'F92','F92',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F93',0,66,'F93','F93',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F94',0,66,'F94','F94',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F95',0,66,'F95','F95',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F96',0,66,'F96','F96',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F97',0,66,'F97','F97',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F98',0,66,'F98','F98',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F99',0,66,'F99','F99',40,3,7);
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F100',0,66,'F100','F100',40,3,7);
+COMMIT;

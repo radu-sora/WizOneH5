@@ -14069,3 +14069,7 @@ ALTER TABLE "F100Studii" ADD CONSTRAINT "PK_F100Studii" PRIMARY KEY ("IdAuto");
 
 
 alter table F712 add F71206 NUMBER(9);
+
+ALTER TABLE USERS ADD "UtilizatorNonAD" NUMBER(9) default 0;
+
+ALTER TABLE "TemplateCampuri" ADD "OmiteLaActualizare" NUMBER(9);

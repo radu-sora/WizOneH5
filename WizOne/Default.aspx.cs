@@ -555,6 +555,17 @@ namespace WizOne
                         tipVerif = "2";
                 }
 
+
+                //Radu 04.05.2020 - daca UtilizatorNonAD = 1 atunci parola trebuie citita din USERS indiferent de tipul de verificare acces in aplicatie
+                DataTable dtUser = General.IncarcaDT("SELECT * FROM USERS WHERE UPPER(F70104) = '" + utilizator.ToUpper() + "'", null);           
+                if (dtUser != null && dtUser.Rows.Count > 0  && dtUser.Rows[0]["UtilizatorNonAD"] != null && dtUser.Rows[0]["UtilizatorNonAD"].ToString().Length > 0 && Convert.ToInt32(dtUser.Rows[0]["UtilizatorNonAD"].ToString()) == 1)
+                {
+                    if (tipVerif == "2")
+                        tipVerif = "1";
+                    if (tipVerif == "4")
+                        tipVerif = "3";
+                }
+
                 switch (tipVerif)
                 {
                     case "1":

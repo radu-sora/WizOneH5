@@ -13343,3 +13343,10 @@ BEGIN
     SET @i = @i + 1
 END
 GO
+
+
+ALTER TABLE USERS ADD UtilizatorNonAD int default 0
+GO
+
+
+ALTER TABLE TemplateCampuri ADD OmiteLaActualizare int

@@ -13262,6 +13262,9 @@ GO
 alter table F712 add F71206 int
 GO
 
+insert into MP_tblTaburi (Denumire, Pagina, ordine) values ('Studii (nou)', 'StudiiNou', 33)
+GO
+
 
 -- #391 - Completare date in template evaluare
 -- https://github.com/wizromRD/WizOne/issues/391

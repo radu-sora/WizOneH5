@@ -13738,6 +13738,7 @@ DROP TABLE "Ptj_ContracteVal" PURGE;
 /
 DROP TABLE "Ptj_ContracteCiclice" PURGE;
 /
+
 ALTER TABLE "Ptj_Contracte" DROP COLUMN "CicluDataInceput";
 /
 ALTER TABLE "Ptj_Contracte" DROP COLUMN "CicluLungime";
@@ -14042,10 +14043,6 @@ CREATE TABLE "tblTipInvatamant"(
 ALTER TABLE "tblTipInvatamant" ADD CONSTRAINT "PK_tblTipInvatamant" PRIMARY KEY ("Id");
 
 
-
-
-
-
 CREATE TABLE "tblTipInstitutie"(
 "Id" NUMBER(9) NOT NULL,
 	"Denumire" varchar2(250),
@@ -14057,8 +14054,6 @@ CREATE TABLE "tblTipInstitutie"(
 ALTER TABLE "tblTipInstitutie" ADD CONSTRAINT "PK_tblTipInstitutie" PRIMARY KEY ("Id");
 
 
-
-
 CREATE TABLE "tblProfilStudii"(
 "Id" NUMBER(9) NOT NULL,
 	"Denumire" varchar2(250),
@@ -14068,9 +14063,6 @@ CREATE TABLE "tblProfilStudii"(
   CREATE UNIQUE INDEX "PK_tblProfilStudii" ON "tblProfilStudii" ("Id") ;
 
 ALTER TABLE "tblProfilStudii" ADD CONSTRAINT "PK_tblProfilStudii" PRIMARY KEY ("Id");
-
-
-
 
 
 CREATE TABLE "tblDomeniuStudii"(

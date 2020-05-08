@@ -12870,7 +12870,7 @@ ALTER TABLE Ptj_tblFormuleCumulat ADD AdaugaZileLibere int DEFAULT 1
 GO
 
 
-
+----  2.2.128  ----
 
 BEGIN
    IF NOT EXISTS (SELECT * FROM f806 

@@ -13728,6 +13728,8 @@ ALTER TABLE "ImportDateNomen" ADD CONSTRAINT "PK_ImportDateNomen" PRIMARY KEY ("
 ALTER TABLE "Ptj_tblFormuleCumulat" ADD "NumarZecimale" number(10);
 /
 
+ALTER TABLE "Ptj_tblFormuleCumulat" ADD "AdaugaZileLibere" NUMBER(10) DEFAULT 1;
+/
 
 ----  2.2.128  ----
 
@@ -13884,11 +13886,6 @@ COMMIT;
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('CircuitDocumenteDataInceput', null, 'Se foloseste in circuit documente si este data de la care se afiseaza informatia in grid. Formatul este DD-MM-YYYY', 3, -99, GetDate());
 COMMIT;
-
-ALTER TABLE "Ptj_tblFormuleCumulat" ADD "AdaugaZileLibere" NUMBER(10) DEFAULT 1;
-/
-
-
 
 
 insert into F806 (F80601, F80602, F80603, F80604) 

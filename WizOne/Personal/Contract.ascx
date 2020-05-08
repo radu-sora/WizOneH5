@@ -42,10 +42,10 @@
                         });
                     }
                     else {
-                        if (DateTo.getTime() != DateMax.getTime()) {
+                        //if (DateTo.getTime() != DateMax.getTime()) {
                             DateTo.setDate(DateTo.getDate() - 1);
                             deUltimaZiLucr.SetDate(DateTo);
-                        }
+                        //}
                     }
                 }
                 break;

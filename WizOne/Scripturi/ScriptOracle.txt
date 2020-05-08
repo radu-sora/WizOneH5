@@ -13866,6 +13866,43 @@ ALTER TABLE "Ptj_Programe" DROP COLUMN VAL3ROT
 ALTER TABLE "Ptj_Programe" DROP COLUMN VAL4ROT
 /
 
+CREATE TABLE "Template"(
+"Id" NUMBER(9) NOT NULL,
+                "NumeSablon" varchar2(200),
+                "NumeTabela" varchar2(200));
+    
+  
+  CREATE UNIQUE INDEX "PK_Template" ON "Template" ("Id") ;
+
+ALTER TABLE "Template" ADD CONSTRAINT "PK_Template" PRIMARY KEY ("Id");
+
+CREATE TABLE "TemplateCampuri"(
+                "Id" NUMBER(9) NOT NULL,
+                "ColoanaBD" varchar2(200),
+                "ColoanaFisier" varchar2(200),
+                "Obligatoriu" NUMBER(9) DEFAULT 0,
+                "ValoareImplicita" varchar2(4000) DEFAULT '',
+                "IdAuto" NUMBER(9)  NOT NULL);
+  
+  CREATE UNIQUE INDEX "PK_TemplateCampuri" ON "TemplateCampuri" ("Id", "IdAuto") ;
+
+ALTER TABLE "TemplateCampuri" ADD CONSTRAINT "PK_TemplateCampuri" PRIMARY KEY ("Id", "IdAuto");
+
+insert into "Template"
+select max(ROWNUM) , 'Sablon ' || max(ROWNUM), "NumeTabela" from "ImportDateSablon"
+group by "NumeTabela";
+
+
+insert into "TemplateCampuri"
+select a."Id", b."ColoanaBD", b."ColoanaFisier", c."Obligatoriu", c."ValoareImplicita" , ROWNUM
+from "Template" a
+left join "ImportDateSablon" b on a."NumeTabela" = b."NumeTabela"
+left join "ImportDateNomen" c on b."ColoanaBD" = c."NumeColoana" and a."NumeTabela" = c."NumeTabela";
+
+DROP table "ImportDateSablon";
+DROP TABLE "ImportDateNomen";
+/
+
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('DezactivareUtilizatori', '', '1 - blocare utilizatori inactivi la logare; 2- blocare utilizatori inactivi si suspendati la logare', 0, -99, SYSDATE);
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('AlcatuireNumeUtilizator', '', 'Exemple:  F10008 || '' '' || F10009; F100901 etc', 0, -99, SYSDATE);
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('ResetareParola', '0', 'Pentru utilizatorii nou-creati: 0 - nu trebuie sa schimbe parola la prima logare; 1 - trebuie s-o schimbe', 0, -99, SYSDATE);

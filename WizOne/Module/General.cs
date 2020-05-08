@@ -8262,7 +8262,8 @@ namespace WizOne.Module
             else
             {
                 DataTable dtSusp = IncarcaDT("SELECT * FROM F111 WHERE F11103 = " + marca + " AND F11107 IS NOT NULL AND F11107 <> "
-                    + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " ORDER BY F11107 DESC ", null);
+                + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " AND "
+                + " F11104 NOT IN (SELECT F09002 FROM F090 WHERE F09004 = 'Art52Alin1LiteraC' OR F09004 = 'Art52Alin3') ORDER BY F11107 DESC ", null);
                 DataTable dtAng = IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + marca, null);
                 dtIntrare = Convert.ToDateTime(dtAng.Rows[0]["F10022"].ToString());
                 dtIesire = dtStart.AddDays(-1);

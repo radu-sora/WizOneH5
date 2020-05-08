@@ -73,7 +73,11 @@ namespace WizOne.Reports
                 int x = 1;
                 bool act = false;
 
-                string sql = "SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 ORDER BY \"Ordine\"";
+                //string sql = "SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 ORDER BY \"Ordine\"";
+                string sql = @"SELECT A.*, COALESCE(B.""NumarZecimale"",0) AS ""NumarZecimale"" FROM ""Ptj_tblPrint"" A 
+                                LEFT JOIN ""Ptj_tblFormuleCumulat"" B ON B.""Coloana""=A.""Camp""
+                                WHERE ""Activ"" = 1 ORDER BY ""Ordine"" ";
+
                 DataTable dtPrint = General.IncarcaDT(sql, null);
 
                 string strSql = "SELECT CONVERT(DATE, DAY, 103) AS DAY FROM HOLIDAYS WHERE YEAR(DAY) = " + an;
@@ -220,11 +224,24 @@ namespace WizOne.Reports
                                     if ((cmp.Length == 2 || cmp.Length == 3) && cmp.Substring(0, 1) == "F" && General.IsNumeric(cmp.Replace("F", "")))
                                     {
                                         //col.Text = "0";
-                                        //col.DataBindings.Add("Text", this.DataSource, cmp);
-                                        col.DataBindings.Add("Text", this.DataSource, cmp + "_Tmp");
-                                        col.DataBindings["Text"].FormatString = "{0:######}";
+                                        col.DataBindings.Add("Text", this.DataSource, cmp);
+                                        //col.DataBindings.Add("Text", this.DataSource, cmp + "_Tmp");
                                         col.NullValueText = "";
-                                        col.XlsxFormatString = "#,##0";
+                                        switch (Convert.ToInt32(General.Nz(dtPrint.Rows[k]["NumarZecimale"], 0)))
+                                        {
+                                            case 0:
+                                                col.DataBindings["Text"].FormatString = "{0:######}";
+                                                col.XlsxFormatString = "0";
+                                                break;
+                                            case 1:
+                                                col.DataBindings["Text"].FormatString = "{0:n1}";
+                                                col.XlsxFormatString = "#,#0";
+                                                break;
+                                            case 2:
+                                                col.DataBindings["Text"].FormatString = "{0:n2}";
+                                                col.XlsxFormatString = "#,##0";
+                                                break;
+                                        }
                                     }
 
                                     col.WordWrap = true;

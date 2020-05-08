@@ -108,6 +108,8 @@
                             <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                     </dx:GridViewDataDateColumn>
                     <dx:GridViewDataCheckColumn FieldName="Principal" Name="Principal" Caption="Principal"  Width="50px"  />
+                    <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px" />						
+                    <dx:GridViewDataDateColumn FieldName="TIME" Name="TIME" Caption="TIME" Visible="false"  Width="100px" />     
                 </Columns>
                 <SettingsCommandButton>
                     <UpdateButton ButtonType="Link" Text="Actualizeaza">

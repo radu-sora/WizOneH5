@@ -331,6 +331,22 @@ namespace WizOne.Pagini
         {
             try
             {
+                if (e.Parameters.Equals("clear"))
+                {
+                    grDateViz.DataSource = null;
+                    grDateViz.DataBind();
+                    grDateViz.Columns.Clear();
+                    Session["ImportDate_Previz"] = null;
+                    return;
+                }
+
+                if (e.Parameters.Equals("1"))
+                {
+                    btnImport_Click();
+                    return;
+                }
+
+
                 var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/Temp/ImportDate"));
                 if (folder.GetFiles().Count() <= 0)
                 {
@@ -347,7 +363,8 @@ namespace WizOne.Pagini
                 for (int i = 0; i < grDateNomen.VisibleRowCount; i++)
                 {
                     DataRowView obj = grDateNomen.GetRow(i) as DataRowView;
-                    dt.Columns.Add(obj["ColoanaFisier"].ToString(), typeof(string));
+                    if (obj["ColoanaFisier"] != null && obj["ColoanaFisier"].ToString().Length > 0)
+                        dt.Columns.Add(obj["ColoanaFisier"].ToString(), typeof(string));
                 }
 
                 DevExpress.Spreadsheet.Workbook workbook = new DevExpress.Spreadsheet.Workbook();
@@ -602,6 +619,13 @@ namespace WizOne.Pagini
                 //if (Session["ImportDate_Reload"].ToString() == "0")                
                 //    return;                
 
+                if (e.Parameters.Equals("1"))
+                {
+                    btnViz_Click();
+                    return;
+                }
+
+
                 Session["ImportDate_Sablon"] = cmbSablon.Value;
                 DataTable dt = new DataTable();
                 if (cmbSablon.Value != null)
@@ -658,7 +682,9 @@ namespace WizOne.Pagini
             }
         }
 
-        protected void btnImport_Click(object sender, EventArgs e)
+        //protected void btnImport_Click(object sender, EventArgs e)
+
+        protected void btnImport_Click()
         {
             try
             {   
@@ -731,12 +757,12 @@ namespace WizOne.Pagini
                 //            + "(SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = \"NumeColoana\" ) as \"Tip\" FROM \"ImportDateNomen\"    WHERE \"NumeTabela\" = '" + numeTabela + "') a "
                 //            + "group by \"NumeColoana\", \"PozitieFisier\"";
 
-                sql = " select ColoanaFisier, ColoanaBD as NumeColoana, Obligatoriu, ValoareImplicita, null as PozitieFisier, "
+                sql = " select ColoanaFisier, ColoanaBD as NumeColoana, Obligatoriu, OmiteLaActualizare, ValoareImplicita, null as PozitieFisier, "
                       + " (SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = ColoanaBD) as Tip "
                       + "  from TemplateCampuri a " 
                       + "  left join Template b on a.id = b.Id where b.NumeTabela = '" + numeTabela + "' ";
                 if (Constante.tipBD == 2)
-                    sql = " select \"ColoanaFisier\", \"ColoanaBD\" as \"NumeColoana\", \"Obligatoriu\", \"ValoareImplicita\", null as \"PozitieFisier\", "
+                    sql = " select \"ColoanaFisier\", \"ColoanaBD\" as \"NumeColoana\", \"Obligatoriu\", \"OmiteLaActualizare\", \"ValoareImplicita\", null as \"PozitieFisier\", "
                       + " (SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = \"ColoanaBD\") as \"Tip\" "
                       + "  from \"TemplateCampuri\" a "
                       + "  left join \"Template\" b on a.\"Id\" = b.\"Id\" where b.\"NumeTabela\" = '" + numeTabela + "' ";
@@ -776,8 +802,9 @@ namespace WizOne.Pagini
 
                     string campOblig = "";
                     string campNonOblig = "";
+                    string campNonObligAct = "";
                     //while (!ws2.Cells[j, k].Value.IsEmpty)
-                    for (int x = 0; x < nrCol; x++)
+                    for (int x = 0; x <= nrCol; x++)
                     {
 
                         //if (ws2.Cells[j, k].Value.ToString().Length <= 0)
@@ -822,11 +849,15 @@ namespace WizOne.Pagini
                             if (dr[0]["Obligatoriu"].ToString() == "1")
                             {
                                 campOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
-                                if (val == "NULL")                                
-                                    msgErr = "Lipsa valoare camp " + dr[0]["NumeColoana"].ToString();                                
+                                if (val == "NULL")
+                                    msgErr = "Lipsa valoare camp " + dr[0]["NumeColoana"].ToString();
                             }
                             else
+                            {
                                 campNonOblig += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
+                                if (dr[0]["OmiteLaActualizare"] == null || dr[0]["OmiteLaActualizare"].ToString().Length <= 0 || Convert.ToInt32(dr[0]["OmiteLaActualizare"].ToString()) == 0)
+                                    campNonObligAct += ", \"" + dr[0]["NumeColoana"].ToString() + "\" = " + val;
+                            }
                         }
                         k++;
                     }
@@ -869,6 +900,8 @@ namespace WizOne.Pagini
                             if (valAltele.Length <= 0)
                                 valAltele = "NULL";
                             campNonOblig += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
+                            if (drAltele[z]["OmiteLaActualizare"] == null || drAltele[z]["OmiteLaActualizare"].ToString().Length <= 0 || Convert.ToInt32(drAltele[z]["OmiteLaActualizare"].ToString()) == 0)
+                                campNonObligAct += ", \"" + drAltele[z]["NumeColoana"].ToString() + "\" = " + valAltele;
                         }
                     }
 
@@ -886,7 +919,7 @@ namespace WizOne.Pagini
                     sql = "";
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
                     {
-                        sql = "UPDATE \"" + numeTabela + "\" SET " + campNonOblig.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");                      
+                        sql = "UPDATE \"" + numeTabela + "\" SET " + campNonObligAct.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");                      
                         dtViz.Rows[j - 1]["Actiune"] = "UPDATE";                       
                     }
                     else
@@ -998,9 +1031,9 @@ namespace WizOne.Pagini
                         
         }
 
+        //protected void btnViz_Click(object sender, EventArgs e)
 
-
-        protected void btnViz_Click(object sender, EventArgs e)
+        protected void btnViz_Click()
         {
             try
             {     

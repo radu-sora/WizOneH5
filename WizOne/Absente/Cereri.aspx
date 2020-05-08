@@ -62,18 +62,6 @@
             if (cmbOraInc.GetValue() && cmbOraSf.GetValue()) {
                 var oraInc = Number(cmbOraInc.GetValue().substring(0, 2)) * 60 + Number(cmbOraInc.GetValue().substring(3, 5));
                 var oraSf = Number(cmbOraSf.GetValue().substring(0, 2)) * 60 + Number(cmbOraSf.GetValue().substring(3, 5));
-                //if (oraInc >= oraSf) {
-                //    s.SetValue("");
-                //    swal({
-                //        title: "", text: "Ora inceput este mai mare decat ora sfarsit",
-                //        type: "warning"
-                //    });
-                //}
-                //else {
-                //    var dif = (oraSf - oraInc) / 60;
-                //    txtNrOre.SetValue(dif.toFixed(4));
-                //    txtNrOreInMinute.SetValue(oraSf - oraInc);
-                //}
 
                 if (oraInc == oraSf) {
                     s.SetValue("");
@@ -91,7 +79,8 @@
 
                 var rez = diff/60;
                 txtNrOre.SetValue(rez.toFixed(4));
-                txtNrOreInMinute.SetValue(diff);
+                var dt = new Date(2200, 1, 1, diff/60, diff%60);
+                txtNrOreTime.SetDate(dt);
             }
         }
 
@@ -156,7 +145,7 @@
                         <label id="lblTip" runat="server" style="display:inline-block;">Tip Cerere</label>
                         <dx:ASPxComboBox ID="cmbAbs" runat="server" ClientInstanceName="cmbAbs" ClientIDMode="Static" Width="215px" ValueField="Id" DropDownWidth="200" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false" meta:resourcekey="cmbAbsResource1" >
-                            <ClientSideEvents SelectedIndexChanged="function(s, e) { txtNrOre.SetValue(); txtNrOreInMinute.SetValue(); pnlCtl.PerformCallback(2); }" />
+                            <ClientSideEvents SelectedIndexChanged="function(s, e) { txtNrOre.SetValue(); txtNrOreTime.SetValue(); pnlCtl.PerformCallback(2); }" />
                         </dx:ASPxComboBox>
                     </div>
 
@@ -254,7 +243,7 @@
                         <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="70px" ClientVisible="false" MinValue="0" MaxValue="999">
                             <SpinButtons ShowIncrementButtons="false"></SpinButtons> 
                         </dx:ASPxSpinEdit>
-                        <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="70px" ClientVisible="false" ClientEnabled="false" />
+                        <dx:ASPxTimeEdit ID="txtNrOreTime" ClientInstanceName="txtNrOreTime" runat="server" Width="70px" ClientVisible="false" ClientEnabled="false" SpinButtons-ShowIncrementButtons="false"/>
                     </div>
 
                     <div class="Absente_Cereri_CampuriSup">

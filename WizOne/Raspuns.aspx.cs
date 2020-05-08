@@ -107,7 +107,7 @@ namespace WizOne
                                         break;
                                     case "Pontaj.PontajEchipa":
                                         {
-                                            DataRow drCum = General.IncarcaDR(@"SELECT * FROM ""Ptj_Cumulat"" WHERE ""IdAuto""=@1", new object[] { idCerere });
+                                            DataRow drCum = General.IncarcaDR(@"SELECT F10003, ""An"", ""Luna"", ""IdStare"" FROM ""Ptj_Cumulat"" WHERE ""IdAuto""=@1", new object[] { idCerere });
                                             if (drCum == null)
                                             {
                                                 Response.Write(Dami.TraduCuvant("Date insuficiente"));

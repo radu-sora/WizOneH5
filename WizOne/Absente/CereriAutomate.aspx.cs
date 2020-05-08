@@ -26,10 +26,7 @@ namespace WizOne.Absente
         {
             try
             {
-                    
-
                 grDate.SettingsPager.PageSize = Convert.ToInt32(Dami.ValoareParam("NrRanduriPePaginaPTJ","10"));
-
             }
             catch (Exception ex)
             {
@@ -417,7 +414,7 @@ namespace WizOne.Absente
                 {
                     sqlCer = CreazaSelectCuValori(marca, 1, lstOre.ContainsKey(marca) ? lstOre[marca] : -99);
 
-                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", USER_NO, TIME) 
+                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", USER_NO, TIME, ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") 
                                 OUTPUT Inserted.Id, Inserted.IdStare ";
 
                     strGen = "BEGIN TRAN " +
@@ -429,7 +426,7 @@ namespace WizOne.Absente
                 else
                 {
                     sqlCer = CreazaSelectCuValori(marca, 2);
-                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"", USER_NO, TIME) ";
+                    sqlPre = @"INSERT INTO ""Ptj_Cereri""(""Id"", F10003, ""IdAbsenta"", ""DataInceput"", ""DataSfarsit"", ""NrZile"", ""NrZileViitor"", ""Observatii"", ""IdStare"", ""IdCircuit"", ""UserIntrod"", ""Culoare"", ""Inlocuitor"", ""TotalSuperCircuit"", ""Pozitie"", ""TrimiteLa"", ""NrOre"", ""OraInceput"", ""OraSfarsit"", ""AreAtas"", USER_NO, TIME, ""CampExtra1"", ""CampExtra2"", ""CampExtra3"", ""CampExtra4"", ""CampExtra5"", ""CampExtra6"", ""CampExtra7"", ""CampExtra8"", ""CampExtra9"", ""CampExtra10"", ""CampExtra11"", ""CampExtra12"", ""CampExtra13"", ""CampExtra14"", ""CampExtra15"", ""CampExtra16"", ""CampExtra17"", ""CampExtra18"", ""CampExtra19"", ""CampExtra20"") ";
 
                     strGen = "BEGIN " +
                                 sqlIst + "; " + Environment.NewLine +
@@ -1168,6 +1165,7 @@ namespace WizOne.Absente
             }
         }
 
+        //Florin 2020-04-30
         public string CreazaSelectCuValori(int marca, int tip = 1, decimal nrOre = -99)
         {
             //tip = 1 intoarce un select
@@ -1185,50 +1183,6 @@ namespace WizOne.Absente
                     idCircuit = (lst[0]["IdCircuit"] == null ? "NULL" : lst[0]["IdCircuit"].ToString());
                 }
 
-                string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
-
-                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { cmbAbs.Value });
-                for (int i = 0; i < dtEx.Rows.Count; i++)
-                {
-                    DataRow dr = dtEx.Rows[i];
-                    ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + i) as ASPxEdit;
-                    if (General.Nz(dr["IdCampExtra"], "").ToString() != "")
-                    {
-                        if (ctl != null && ctl.Value != null && ctl.Value.ToString() != "")
-                        {
-                            switch (General.Nz(dr["TipCamp"], "").ToString())
-                            {
-                                case "0":
-                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
-                                    break;
-                                case "1":
-                                    if (Convert.ToBoolean(ctl.Value) == true)
-                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Da'";
-                                    else
-                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Nu'";
-                                    break;
-                                case "3":
-                                    DateTime zi = Convert.ToDateTime(ctl.Value);
-                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "'";
-                                    break;
-                                default:
-                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
-                                    break;
-                            }
-                        }
-                    }
-                }
-
-                string valExtra = "";
-                for (int i = 0; i < lstExtra.Count(); i++)
-                {
-                    if (tip == 1)
-                        valExtra += "," + lstExtra[i] + "  AS \"CampExtra" + (i + 1).ToString() + "\" ";
-                    else
-                        valExtra += "," + lstExtra[i];
-                }
-
-                //string dual = "";
                 string strTop = "";
                 if (Constante.tipBD == 1) strTop = "TOP 1";
 
@@ -1255,7 +1209,6 @@ namespace WizOne.Absente
                     sqlIdStare = $@"(SELECT * FROM ({sqlIdStare}) WHERE ROWNUM=1)";
                     sqlPozitie = $@"(SELECT * FROM ({sqlPozitie}) WHERE ROWNUM=1)";
                     sqlCuloare = $@"(SELECT * FROM ({sqlCuloare}) WHERE ROWNUM=1)";
-                    //dual = " FROM DUAL";
                 }
 
                 string sqlOraInc = "NULL";
@@ -1281,53 +1234,103 @@ namespace WizOne.Absente
                         sqlOraSf = "TO_DATE('" + dtDataSf.Date.Day + "-" + dtDataSf.Date.Month + "-" + dtDataSf.Date.Year + " " + General.Nz(cmbOraSf.Value, "").ToString() + ":00','DD-MM-YYYY HH24:MI:SS')";
                 }
 
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("id", sqlIdCerere);
+                dic.Add("f10003", marca.ToString());
+                dic.Add("idabsenta", cmbAbs.Value.ToString());
+                dic.Add("datainceput", General.ToDataUniv(dtDataInc.Date));
+                dic.Add("datasfarsit", General.ToDataUniv(dtDataSf.Date));
+                dic.Add("nrzile", (nrZile == null ? "NULL" : nrZile));
+                dic.Add("nrzileviitor", "NULL");
+                dic.Add("observatii", (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'"));
+                dic.Add("idstare", (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()));
+                dic.Add("idcircuit", idCircuit);
+                dic.Add("userintrod", General.Nz(Session["UserId"], "-99").ToString());
+                dic.Add("culoare", (sqlCuloare == null ? "NULL" : sqlCuloare));
+                dic.Add("inlocuitor", (sqlInloc == null ? "NULL" : sqlInloc));
+                dic.Add("totalsupercircuit", (sqlTotal == null ? "NULL" : sqlTotal));
+                dic.Add("pozitie", (sqlPozitie == null ? "NULL" : sqlPozitie));
+                dic.Add("trimitela", "NULL");
+                dic.Add("nrore", (sqlNrOre == null ? "NULL" : sqlNrOre));
+                dic.Add("orainceput", sqlOraInc);
+                dic.Add("orasfarsit", sqlOraSf);
+                dic.Add("areatas", "0");
+                dic.Add("user_no", General.Nz(Session["UserId"], "-99").ToString());
+                dic.Add("time", General.CurrentDate());
 
-                sqlCer = @"SELECT " +
-                                sqlIdCerere + " AS \"Id\", " +
-                                marca + " AS \"F10003\", " +
-                                cmbAbs.Value + " AS \"IdAbsenta\", " +
-                                General.ToDataUniv(dtDataInc.Date) + " AS \"DataInceput\", " +
-                                General.ToDataUniv(dtDataSf.Date) + " AS \"DataSfarsit\", " +
-                                (nrZile == null ? "NULL" : nrZile) + " AS \"NrZile\", " +
-                                 "NULL"  + " AS \"NrZileViitor\", " +
-                                (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'") + " AS \"Observatii\", " +
-                                (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + " AS \"IdStare\", " +
-                                (idCircuit) + " AS \"IdCircuit\", " +
-                                Session["UserId"] + " AS \"UserIntrod\", " +
-                                (sqlCuloare == null ? "NULL" : sqlCuloare) + " AS \"Culoare\", " +
-                                (sqlInloc == null ? "NULL" : sqlInloc) + " AS \"Inlocuitor\", " +
-                                (sqlTotal == null ? "NULL" : sqlTotal) + " AS \"TotalSuperCircuit\", " +
-                                (sqlPozitie == null ? "NULL" : sqlPozitie) + " AS \"Pozitie\", " +
-                                //trimiteLaInlocuitor + " AS \"TrimiteLa\", " +
-                                " NULL AS \"TrimiteLa\", " +
-                                (sqlNrOre == null ? "NULL" : sqlNrOre) + " AS \"NrOre\", " +
-                                sqlOraInc + " AS \"OraInceput\", " +
-                                sqlOraSf + " AS \"OraSfarsit\", " +
-                                " 0 AS \"AreAtas\"" +
-                                valExtra + ", " + Session["UserId"] + " AS USER_NO, " + General.CurrentDate() + " AS TIME";
-                if (tip == 2)
-                    sqlCer = @"VALUES(" +
-                    sqlIdCerere + ", " +
-                    marca + ", " +
-                    cmbAbs.Value + ", " +
-                    General.ToDataUniv(dtDataInc.Date) + ", " +
-                    General.ToDataUniv(dtDataSf.Date) + ", " +
-                    (nrZile == null ? "NULL" : nrZile) + ", " +
-                    "NULL" + ", " +
-                    (txtObs.Value == null ? "NULL" : "'" + txtObs.Value.ToString() + "'") + ", " +
-                    (sqlIdStare == null ? "NULL" : sqlIdStare.ToString()) + ", " +
-                    (idCircuit) + ", " +
-                    Session["UserId"] + ", " +
-                    (sqlCuloare == null ? "NULL" : sqlCuloare) + ", " +
-                    (sqlInloc == null ? "NULL" : sqlInloc) + ", " +
-                    (sqlTotal == null ? "NULL" : sqlTotal) + ", " +
-                    (sqlPozitie == null ? "NULL" : sqlPozitie) + ", " +
-                    " NULL, " +
-                    (sqlNrOre == null ? "NULL" : sqlNrOre) + ", " +
-                    sqlOraInc + ", " +
-                    sqlOraSf + ", " +
-                     " 0 " +
-                    valExtra + ", " + Session["UserId"] + ", " + General.CurrentDate() + ")";
+                #region Campuri Extra
+
+                string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
+
+                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { cmbAbs.Value });
+                for (int i = 0; i < dtEx.Rows.Count; i++)
+                {
+                    DataRow dr = dtEx.Rows[i];
+                    ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + General.Nz(dr["IdCampExtra"], 0)) as ASPxEdit;
+                    if (General.Nz(dr["IdCampExtra"], "").ToString() != "")
+                    {
+                        if (ctl != null && ctl.Value != null && ctl.Value.ToString() != "")
+                        {
+                            switch (General.Nz(dr["TipCamp"], "").ToString())
+                            {
+                                case "0":
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
+                                    break;
+                                case "1":
+                                    if (Convert.ToBoolean(ctl.Value) == true)
+                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Da'";
+                                    else
+                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Nu'";
+                                    break;
+                                case "3":
+                                    DateTime zi = Convert.ToDateTime(ctl.Value);
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "'";
+                                    break;
+                                default:
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            if (General.Nz(dr["Sursa"], "").ToString() != "")
+                                lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "(" + General.Nz(dr["Sursa"], "").ToString() + ")";
+                        }
+                    }
+                }
+
+                string valExtra = "";
+                for (int i = 0; i < lstExtra.Count(); i++)
+                {
+                    string val = lstExtra[i];
+                    if (val.ToLower().IndexOf("ent.")>=0)
+                    {
+                        foreach (KeyValuePair<string, string> l in dic)
+                        {
+                            val = val.ToUpper().Replace("ENT." + l.Key.ToUpper(), l.Value);
+                        }
+                    }
+                    if (tip == 1)
+                        valExtra += "," + val + "  AS \"CampExtra" + (i + 1).ToString() + "\" ";
+                    else
+                        valExtra += "," + val;
+                }
+
+                #endregion
+
+                string strSelect = "";
+                foreach(KeyValuePair<string,string> l in dic)
+                {
+                    if (tip == 1)
+                        strSelect += "," + l.Value + " AS \"" + l.Key + "\"";
+                    else
+                        strSelect += "," + l.Value;
+                }
+
+                if (tip == 1)
+                    sqlCer = "SELECT " + strSelect.Substring(1) + valExtra;
+                else
+                    sqlCer = "VALUES(" + strSelect.Substring(1) + valExtra + ")";
             }
             catch (Exception ex)
             {
@@ -1472,7 +1475,9 @@ namespace WizOne.Absente
                     lbl.Style.Add("width", "80px");
                     ctlDiv.Controls.Add(lbl);
 
-                    string ctlId = "ctlDinamic" + i;
+                    //Florin 2020.04.30
+                    //string ctlId = "ctlDinamic" + i;
+                    string ctlId = "ctlDinamic" + General.Nz(dr["IdCampExtra"],0);
                     switch (General.Nz(dr["TipCamp"], "").ToString())
                     {
                         case "0":                   //text

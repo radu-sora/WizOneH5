@@ -295,7 +295,7 @@ namespace WizOne.Pontaj
                 {
                     Session["InformatiaCurenta"] = null;
 
-                    txtAnLuna.Value = DateTime.Now;
+                    txtAnLuna.Value = DateTime.Now;                
                     
                     IncarcaRoluri();
                     IncarcaAngajati();
@@ -1050,7 +1050,6 @@ namespace WizOne.Pontaj
                             ent.F30002 = 1;
                             ent.F30003 = Convert.ToInt32(entS.Rows[i]["F10003"].ToString());
 
-
                             ent.F30012 = 0;
                             ent.F30013 = 0;
                             ent.F30014 = 0;
@@ -1070,7 +1069,6 @@ namespace WizOne.Pontaj
                             ent.F300613 = 0;
                             ent.F300614 = 0;
                             ent.F30054 = 0;
-
 
                             DataTable entF100 = General.IncarcaDT("SELECT * FROM F100 WHERE F10003 = " + entS.Rows[i]["F10003"].ToString(), null);
                             if (entF100 != null && entF100.Rows.Count > 0)
@@ -1222,13 +1220,22 @@ namespace WizOne.Pontaj
                                         ent.F30015 = 0;
                                         ent.F30010 = (short?)Convert.ToInt32(entFor.Rows[j]["CodF300"].ToString());
 
+                                        //string left = "";
+                                        //string filtruSup = "";
+                                        //if (entFor.Columns["AdaugaZileLibere"] != null && Convert.ToInt32(General.Nz(entFor.Rows[j]["AdaugaZileLibere"],1)) == 0)
+                                        //{
+                                        //    left = @"LEFT JOIN ""tblZile"" B ON A.""Ziua""=B.""Zi""
+                                        //            LEFT JOIN HOLIDAYS C ON A.""Ziua""= C.DAY";
+                                        //    filtruSup = @" AND COALESCE(B.""Zisapt"",-99) NOT IN (6,7) AND C.DAY IS NULL";
+                                        //}
+
                                         string strInt =
                                             $@"WITH mycte
                                             AS 
                                             (
-                                                SELECT A.Ziua, DATEADD(DAY, - ROW_NUMBER() OVER (PARTITION BY A.ValStr ORDER BY A.Ziua), A.Ziua) AS grp,
-                                                CASE WHEN (COALESCE(B.""ZiSapt"",-99) NOT IN (6,7) AND C.DAY IS NULL) THEN 1 ELSE {General.Nz(entFor.Rows[j]["AdaugaZileLibere"], 0)} END AS Nr
-                                                FROM Ptj_Intrari A
+                                             SELECT A.Ziua, DATEADD(DAY, - ROW_NUMBER() OVER (PARTITION BY A.ValStr ORDER BY A.Ziua), A.Ziua) AS grp,
+                                            CASE WHEN (COALESCE(B.""ZiSapt"",-99) NOT IN (6,7) AND C.DAY IS NULL) THEN 1 ELSE {General.Nz(entFor.Rows[j]["AdaugaZileLibere"], 0)} END AS Nr
+                                             FROM Ptj_Intrari A
                                                 LEFT JOIN ""tblZile"" B ON A.""Ziua""=B.""Zi""
                                                 LEFT JOIN HOLIDAYS C ON A.""Ziua""= C.DAY
                                                 WHERE A.ValStr = '{entFor.Rows[j]["TransferF300Detaliat"]}' AND A.F10003={ent.F30003} AND Year(A.Ziua)={dtLucru.Year} AND MONTH(A.Ziua)={dtLucru.Month}
@@ -1242,7 +1249,7 @@ namespace WizOne.Pontaj
                                                 $@"WITH mycte
                                                 AS 
                                                 (
-                                                    SELECT A.""Ziua"", A.""Ziua"" - ROW_NUMBER() OVER (PARTITION BY A.""ValStr"" ORDER BY A.""Ziua"")  AS grp,
+                                                 SELECT A.""Ziua"", A.""Ziua"" - ROW_NUMBER() OVER (PARTITION BY A.""ValStr"" ORDER BY A.""Ziua"")  AS grp,
                                                     CASE WHEN (COALESCE(B.""ZiSapt"",-99) NOT IN (6,7) AND C.DAY IS NULL) THEN 1 ELSE {General.Nz(entFor.Rows[j]["AdaugaZileLibere"], 0)} END AS ""Nr""
                                                     FROM ""Ptj_Intrari"" A
                                                     LEFT JOIN ""tblZile"" B ON A.""Ziua""=B.""Zi""
@@ -1325,7 +1332,7 @@ namespace WizOne.Pontaj
                                         }
                                     }
                                 }
-                                catch (Exception) { }
+                                catch (Exception ex) { }
                             }
                         }
                     }
@@ -1874,6 +1881,14 @@ namespace WizOne.Pontaj
                         for (int j = 0; j < dtAbs.Rows.Count; j++)
                             listaAbs.Add(dtAbs.Rows[j]["DenumireScurta"].ToString(), dtAbs.Rows[j]["Culoare"].ToString());
 
+                    //Radu 05.05.2020
+                    DataTable dtZec = General.IncarcaDT("SELECT * FROM \"Ptj_tblFormuleCumulat\"", null);
+                    Dictionary<string, int> listaZec = new Dictionary<string, int>();
+                    if (dtZec != null && dtZec.Rows.Count > 0)
+                        for (int j = 0; j < dtZec.Rows.Count; j++)
+                            if (!listaZec.ContainsKey(dtZec.Rows[j]["Coloana"].ToString()))
+                                listaZec.Add(dtZec.Rows[j]["Coloana"].ToString(), Convert.ToInt32(General.Nz(dtZec.Rows[j]["NumarZecimale"], "0").ToString()));
+                    
                     //Radu 28.02.2020 - securitate
                     List<string> listaSec = new List<string>();
                     strSql = "SELECT X.\"IdControl\", X.\"IdColoana\", MAX(X.\"Vizibil\") AS \"Vizibil\", MIN(X.\"Blocat\") AS \"Blocat\" FROM( "
@@ -1895,6 +1910,9 @@ namespace WizOne.Pontaj
                                 if (dtSec.Rows[k]["Vizibil"] != null && Convert.ToInt32(dtSec.Rows[k]["Vizibil"].ToString()) == 0)
                                     listaSec.Add(dtSec.Rows[k]["IdColoana"].ToString());
                     }
+
+                    foreach (DataColumn col in dt.Columns)
+                        col.ReadOnly = false;
 
 
                     if (chkLinie.Checked)
@@ -1945,10 +1963,28 @@ namespace WizOne.Pontaj
                             {
                                 if (lista.ContainsKey(dt.Columns[i].ColumnName) && !listaSec.Contains(dt.Columns[i].ColumnName))
                                 {
-                                    if (idZile > 0 && colZile > 0)                                    
+                                    int nrZec = 0;
+                                    string format = "0.";
+                                    if (listaZec.ContainsKey(dt.Columns[i].ColumnName))
+                                    {
+                                        nrZec = listaZec[dt.Columns[i].ColumnName];
+                                        dt.Rows[row][i] = MathExt.Round(Convert.ToDecimal(dt.Rows[row][i].ToString()), nrZec, MidpointRounding.AwayFromZero);
+                                    }
+                                    if (nrZec > 0)
+                                        for (int z = 1; z <= nrZec; z++)
+                                            format += "#";
+                                    if (idZile > 0 && colZile > 0)
+                                    {
+                                        if (nrZec > 0)
+                                            ws2.Cells[row + 2, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].NumberFormat = format;
                                         ws2.Cells[row + 2, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
-                                    else                                    
+                                    }
+                                    else
+                                    {
+                                        if (nrZec > 0)
+                                            ws2.Cells[row + 2, nrCol].NumberFormat = format;
                                         ws2.Cells[row + 2, nrCol++].Value = dt.Rows[row][i].ToString();
+                                    }
                                 }
 
                                 if (dt.Columns[i].ColumnName.Contains("Ziua"))
@@ -2023,10 +2059,30 @@ namespace WizOne.Pontaj
                                         rand = 0;
                                         nrCol++;
                                     }
+
+                                    int nrZec = 0;
+                                    string format = "0.";
+                                    if (listaZec.ContainsKey(dt.Columns[i].ColumnName))
+                                    {
+                                        nrZec = listaZec[dt.Columns[i].ColumnName];
+                                        dt.Rows[row][i] = MathExt.Round(Convert.ToDecimal(dt.Rows[row][i].ToString()), nrZec, MidpointRounding.AwayFromZero);
+                                    }
+                                    if (nrZec > 0)
+                                        for (int z = 1; z <= nrZec; z++)
+                                            format += "#";
+
                                     if (idZile > 0 && colZile > 0 && lista.ContainsKey(dt.Columns[i].ColumnName))
+                                    {
+                                        if (nrZec > 0)
+                                            ws2.Cells[4 * row + 3 + rand - 1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].NumberFormat = format;
                                         ws2.Cells[4 * row + 3 + rand - 1, colZile + (listaId[dt.Columns[i].ColumnName] - idZile)].Value = dt.Rows[row][i].ToString();
+                                    }
                                     else
+                                    {
+                                        if (nrZec > 0)
+                                            ws2.Cells[4 * row + 3 + rand - 1, nrCol].NumberFormat = format;
                                         ws2.Cells[4 * row + 3 + rand - 1, nrCol].Value = dt.Rows[row][i].ToString();
+                                    }
 
                                     if (dt.Columns[i].ColumnName.Contains("Ziua"))
                                     {
@@ -2666,8 +2722,8 @@ namespace WizOne.Pontaj
                                 break;
                         }
 
-                        if (valCalc != Convert.ToDecimal(General.Nz(dr[colNume],0)))
-                        {
+                        //if (valCalc != Convert.ToDecimal(General.Nz(dr[colNume],0)))
+                        //{
                             if (valCalc == 0)
                             {
                                 cmp += ",\"" + colNume + "\"=NULL";
@@ -2681,7 +2737,7 @@ namespace WizOne.Pontaj
 
                             cmp += ",\"" + colNume.Replace("Val", "ValModif") + "\"=4";
                             if (General.Nz(dr["VerificareNrMaxOre"],0).ToString() == "1") nrMin += valCalc;
-                        }
+                        //}
                     }
 
                     if (cmp != "")
@@ -2994,14 +3050,14 @@ namespace WizOne.Pontaj
                 for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)
                 {
                     string strZi = "[" + an + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "]";
-                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "'";
+                    if (Constante.tipBD == 2) strZi = "TO_DATE('" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "', 'dd-mm-yyyy')";
 
                     zile += ", " + strZi;
                     zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";
                     zileVal += $@",COALESCE(""Ziua{i}"",'') AS ""Ziua{i}""";
                 }
 
-                for (int i = 1; i <= 60; i++)
+                for (int i = 1; i <= 100; i++)
                 {
                     zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}_Tmp""";
                 }
@@ -3014,12 +3070,15 @@ namespace WizOne.Pontaj
                     strInner += $@"OUTER APPLY dbo.DamiNorma(X.F10003, {dtSf}) dn 
                                 OUTER APPLY dbo.DamiDataPlecare(X.F10003, {dtSf}) ddp ";
 
-
                 //Florin 2019.09.23 s-a scos de mai jos LEFT JOIN F724 etc.
                 //Radu 19.09.2019 - am inlocuit F724 cu viewCategoriePontaj
                 //LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                 //LEFT JOIN F724 CB ON A.F10062 = CB.F72402
                 if (Constante.tipBD == 1)
+                {
+                    //Florin 2020.04.30 - am modificat X.* cu colCumulat
+                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT ',X.' + ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"", 0) = 1 ORDER BY COALESCE(""OrdineAfisare"", 999999) FOR XML Path('')"), "").ToString();
+
                     strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
                                 LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
@@ -3041,15 +3100,14 @@ namespace WizOne.Pontaj
                                 CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, CONVERT(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit,  A.F10008 + ' ' + A.F10009 AS AngajatNume, C.Id AS IdContract, 
                                 Y.Norma, Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.Denumire AS DescContract, ISNULL(C.OreSup,0) AS OreSup, ISNULL(C.Afisare,1) AS Afisare, 
-                                B.F100958, B.F100959,
+                                B.F100958, B.F100959, 
                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
                                 ISNULL(K.Culoare,'#FFFFFFFF') AS Culoare, K.Denumire AS StareDenumire,
                                 A.F10078 AS Angajator, DR.F08903 AS TipContract, 
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
                                 dn.Norma AS AvansNorma, 
                                 CASE WHEN Y.Norma <> dn.Norma THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND YEAR(F70406)={an} AND MONTH(F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS AvansData,
-                                L.F06205, Fct.F71804 AS Functie,
-                                X.* {zileVal} {zileF}
+                                L.F06205, Fct.F71804 AS Functie, X.F10003, X.IdStare {colCumulat} {zileVal} {zileF}
                                 FROM Ptj_Cumulat X 
 		                        LEFT JOIN Ptj_tblStari st on st.Id = x.IdStare
 		                        left join SituatieZileAbsente zabs on zabs.F10003 = x.F10003 and zabs.An = x.An and zabs.IdAbsenta = (select Id from Ptj_tblAbsente where DenumireScurta = 'CO')
@@ -3085,7 +3143,12 @@ namespace WizOne.Pontaj
                                 WHERE X.An = {an} AND X.Luna = {luna} {filtruPlus}
                                 ORDER BY AngajatNume) A
                                 WHERE 1=1 {strFiltru}";
+                }
                 else
+                {
+                    //Florin 2020.04.30 - am modificat X.* cu colCumulat
+                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT LISTAGG(',X.' || ""Coloana"") WITHIN GROUP (ORDER BY COALESCE(""OrdineAfisare"", 999999)) FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"", 0) = 1 ORDER BY COALESCE(""OrdineAfisare"", 999999)"), "").ToString();
+
                     strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
                                 LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContract""=C.""Id""
                                 LEFT JOIN F006 I ON A.F10007 = I.F00607
@@ -3107,15 +3170,14 @@ namespace WizOne.Pontaj
                                 A.F10022 AS ""DataInceput"", ""DamiDataPlecare""(X.F10003, {dtSf}) AS ""DataSfarsit"",  A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", C.""Id"" AS ""IdContract"", 
                                 Y.""Norma"", Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, 
                                 C.""Denumire"" AS ""DescContract"", NVL(C.""OreSup"",0) AS ""OreSup"", NVL(C.""Afisare"",1) AS ""Afisare"", 
-                                B.F100958, B.F100959,
+                                B.F100958, B.F100959, 
                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
                                 NVL(K.""Culoare"",'#FFFFFFFF') AS ""Culoare"", K.""Denumire"" AS ""StareDenumire"",
                                 A.F10078 AS ""Angajator"", DR.F08903 AS ""TipContract"", 
                                 (SELECT MAX(US.F70104) FROM USERS US WHERE US.F10003=X.F10003) AS EID,
                                 ""DamiNorma""(X.F10003, {dtSf}) AS ""AvansNorma"", 
                                 CASE WHEN ""Norma"" <> ""DamiNorma""(X.F10003, {dtSf}) THEN (SELECT MAX(F70406) FROM F704 WHERE F70403=pvt.F10003 AND F70404=6 AND EXTRACT(YEAR FROM F70406)={an} AND EXTRACT(MONTH FROM F70406)={luna}) ELSE {General.ToDataUniv(2100, 1, 1)} END AS ""AvansData"",
-                                L.F06205, Fct.F71804 AS ""Functie"",                                
-                                X.* {zileVal} {zileF}
+                                L.F06205, Fct.F71804 AS ""Functie"", X.F10003, X.""IdStare"" {colCumulat} {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 
                                 LEFT JOIN ""Ptj_tblStari"" st on st.""Id"" = x.""IdStare""
                                 left join (SELECT * FROM ""SituatieZileAbsente"" WHERE ""IdAbsenta"" = (select ""Id"" from ""Ptj_tblAbsente"" where ""DenumireScurta"" = 'CO')) zabs on zabs.F10003 = x.F10003 and zabs.""An"" = x.""An""
@@ -3150,6 +3212,7 @@ namespace WizOne.Pontaj
                                 WHERE X.""An""= {an} AND X.""Luna"" = {luna} {filtruPlus}
                                 ORDER BY ""AngajatNume"") A
                                 WHERE 1=1 {strFiltru}";
+                }
             }
             catch (Exception ex)
             {
@@ -3208,6 +3271,18 @@ namespace WizOne.Pontaj
                     strFiltru += " AND A.F100959 = " + cmbBirou.Value;
                     strLeg = " LEFT JOIN (SELECT F10003 AS MARCA2, F100958, F100959 FROM F1001) Z ON A.F10003 = Z.MARCA2 ";
                 }
+                //Florin 2019.12.27
+                //if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
+                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += " AND A.\"DescContract\" IN ('" + cmbCtr.Value.ToString().Replace(",", "','") + "')";
+
+                string strFiltruSpecial = "";
+                if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
+                {
+                    //strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F10061", "C.CATEG1").Replace("A.F10062", "C.CATEG2");
+                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""", @"C.""Denumire""").Replace(@"A.""Dept""", "I.F00608");
+                }
+                else
+                    strLeg = "";
 
                 //Florin 2019.09.23
                 //Radu 12.02.2020 - am inlocuit conditia
@@ -3224,19 +3299,6 @@ namespace WizOne.Pontaj
                     strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                 }
 
-                //Florin 2019.12.27
-                //if (Convert.ToInt32(cmbCtr.Value ?? -99) != -99) strFiltru += " AND A.\"IdContract\" = " + cmbCtr.Value;
-                if (General.Nz(cmbCtr.Value, "").ToString() != "") strFiltru += " AND A.\"DescContract\" IN ('" + cmbCtr.Value.ToString().Replace(",", "','") + "')";
-
-                string strFiltruSpecial = "";
-                if (Dami.ValoareParam("PontajulEchipeiFiltruAplicat") == "1")
-                {
-                    //strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F10061", "C.CATEG1").Replace("A.F10062", "C.CATEG2");
-                    strFiltruSpecial = strFiltru.Replace("A.F10095", "Z.F10095").Replace("A.F1006", "C.F1006").Replace(@"A.""DescContract""", @"C.""Denumire""").Replace(@"A.""Dept""", "I.F00608");
-                }
-                else
-                    strLeg = "";
-                
                 if (Convert.ToInt32(cmbStare.Value ?? -99) != -99) strFiltru += " AND COALESCE(A.\"IdStare\",1) = " + cmbStare.Value;
                 if (Convert.ToInt32(cmbAng.Value ?? -99) == -99)
                 {//Radu 04.02.2020
@@ -3257,7 +3319,7 @@ namespace WizOne.Pontaj
                 for (int i = 1; i <= DateTime.DaysInMonth(an, luna); i++)
                 {
                     string strZi = "[" + an + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "]";
-                    if (Constante.tipBD == 2) strZi = "'" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "'";
+                    if (Constante.tipBD == 2) strZi = "TO_DATE('" + i.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + luna.ToString().PadLeft(2, Convert.ToChar("0")) + "-" + an.ToString() + "', 'dd-mm-yyyy')";
 
                     zile += ", " + strZi;
                     zileAs += ", " + strZi + " AS \"Ziua" + i.ToString() + "\"";
@@ -3286,9 +3348,9 @@ namespace WizOne.Pontaj
                     zileAsCuloare += ", " + strZi + " AS \"CuloareValoare" + i.ToString() + "\"";
                 }
 
-                for (int i = 1; i <= 60; i++)
+                for (int i = 1; i <= 100; i++)
                 {
-                    zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}""";
+                    zileF += $@",COALESCE(X.""F{i}"",0) AS ""F{i}""";
                 }
 
 

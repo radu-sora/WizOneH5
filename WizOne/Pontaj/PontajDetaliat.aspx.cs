@@ -27,6 +27,16 @@ namespace WizOne.Pontaj
             get; private set;
         }
 
+        protected int tipAfisareCC
+        {
+            get; private set;
+        }
+
+        protected int pontajCCSterge
+        {
+            get; private set;
+        }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             try
@@ -77,6 +87,7 @@ namespace WizOne.Pontaj
                     GridViewDataComboBoxColumn colStari = (grCC.Columns["IdStare"] as GridViewDataComboBoxColumn);
                     colStari.PropertiesComboBox.DataSource = dtStari;
 
+                    tipAfisareCC = Convert.ToInt32(Dami.ValoareParam("PontajCCTipAfisareNrOre", "1"));
                     if (!IsPostBack)
                     {
                         DataTable dtAd = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAdminCC"" ", null);
@@ -86,10 +97,32 @@ namespace WizOne.Pontaj
                             string cmp = dtAd.Rows[i]["Camp"].ToString();
 
                             grCC.Columns[cmp].Visible = Convert.ToBoolean(dtAd.Rows[i]["Vizibil"]);
-                            grCC.Columns[cmp].ToolTip = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["AliasToolTip"],"").ToString());
+                            grCC.Columns[cmp].ToolTip = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["AliasToolTip"], "").ToString());
                             grCC.Columns[cmp].Caption = Dami.TraduCuvant(General.Nz(dtAd.Rows[i]["Alias"], dtAd.Rows[i]["Camp"]).ToString());
+
+                            //Florin 2020.04.27
+                            if (cmp.ToLower().IndexOf("nrore") >= 0)
+                            {
+                                GridViewDataTextColumn col = grCC.Columns[cmp] as GridViewDataTextColumn;
+                                switch (tipAfisareCC)
+                                {
+                                    case 1:         //minutes
+                                        col.PropertiesTextEdit.MaskSettings.Mask = "<0..999>";
+                                        col.PropertiesTextEdit.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.None;
+                                        break;
+                                    case 2:         //houres
+                                        col.PropertiesTextEdit.MaskSettings.Mask = "<0..99>";
+                                        col.PropertiesTextEdit.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.None;
+                                        break;
+                                    case 3:         //HH:MM
+                                        col.PropertiesTextEdit.MaskSettings.Mask = "<00..23>:<00..59>";
+                                        break;
+                                }
+                            }
                         }
                     }
+
+                    pontajCCSterge = Convert.ToInt32(Dami.ValoareParam("PontajCCStergeDacaAbsentaDeTipZi","0"));
                 }
 
 
@@ -821,7 +854,8 @@ namespace WizOne.Pontaj
                                 INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
                                 WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta""=P.""ValStr"" AND
                                 X.F10003=P.F10003 AND X.""IdStare""=3 AND Y.""IdTipOre""=1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
-                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
+                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica"",
+                            ABSE.""DenumireScurta"" AS ""ValAbs""                            
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
                             LEFT JOIN F1001 C ON A.F10003=C.F10003
@@ -840,6 +874,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402
+                            LEFT JOIN ""Ptj_tblAbsente"" ABSE ON P.""ValStr""=ABSE.""DenumireScurta"" AND ABSE.""DenumireScurta""<>''
                             {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";
@@ -919,7 +954,8 @@ namespace WizOne.Pontaj
                                 INNER JOIN ""Ptj_tblAbsente"" Y ON X.""IdAbsenta""=Y.""Id""
                                 WHERE X.""DataInceput"" <= P.""Ziua"" AND P.""Ziua"" <= X.""DataSfarsit"" AND Y.""DenumireScurta""=P.""ValStr"" AND
                                 X.F10003=P.F10003 AND X.""IdStare""=3 AND Y.""IdTipOre""=1 AND COALESCE(Y.""NuTrimiteInPontaj"",0) != 1) = 0
-                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica""
+                            THEN -55 ELSE (SELECT CASE WHEN COALESCE(""PoateSterge"",0) = 0 THEN -33 ELSE COALESCE(""TipMesaj"",1) END FROM ""Ptj_tblRoluri"" WHERE ""Id""={idRol}) END AS ""tblRoluri_PoateModifica"",
+                            ABSE.""DenumireScurta"" AS ""ValAbs""                            
                             FROM ""Ptj_Intrari"" P
                             LEFT JOIN F100 A ON A.F10003 = P.F10003
                             LEFT JOIN F1001 C ON A.F10003=C.F10003
@@ -938,6 +974,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
+                            LEFT JOIN ""Ptj_tblAbsente"" ABSE ON P.""ValStr""=ABSE.""DenumireScurta""
                             {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";
@@ -3053,18 +3090,7 @@ namespace WizOne.Pontaj
 
             try
             {
-                string strCmp = "";
-                for (int i = 1; i <= 10; i++)
-                {
-                    if (Constante.tipBD == 1)
-                        strCmp += $@",CONVERT(datetime,DATEADD(minute, NrOre{i}, '')) AS NrOre{i}_Tmp ";
-                    else
-                        strCmp += $@",TO_DATE('01-01-1900','DD-MM-YYYY') + NrOre{i}/1440 AS ""NrOre{i}_Tmp"" ";
-                }
-
-                dt = General.IncarcaDT($@"SELECT * {strCmp}
-                        FROM ""Ptj_CC"" A 
-                        WHERE A.F10003={f10003} AND A.""Ziua""={ziua}", null);
+                dt = General.IncarcaDT($@"SELECT * FROM ""Ptj_CC"" A WHERE A.F10003={f10003} AND A.""Ziua""={ziua}", null);
             }
             catch (Exception ex)
             {
@@ -3099,10 +3125,26 @@ namespace WizOne.Pontaj
 
         protected void grCC_CustomColumnDisplayText(object sender, ASPxGridViewColumnDisplayTextEventArgs e)
         {
-            if (e != null && e.Column != null && e.Column.FieldName != null & e.Column.FieldName.ToString().Length >= 5 && e.Column.FieldName.Substring(0,5) == "NrOre")
+            if (e != null && e.Column != null && e.Column.FieldName != null & e.Column.FieldName.ToString().Length >= 5 && e.Column.FieldName.Substring(0, 5) == "NrOre")
             {
-                var ts = TimeSpan.FromMinutes(Convert.ToDouble(General.Nz(e.Value,0)));
-                e.DisplayText = string.Format("{0:00}:{1:00}", (int)ts.TotalHours, ts.Minutes);
+                switch (tipAfisareCC)
+                {
+                    case 1:         //minutes
+                        //NOP
+                        break;
+                    case 2:         //houres
+                        {
+                            var ts = TimeSpan.FromMinutes(Convert.ToDouble(General.Nz(e.Value, 0)));
+                            e.DisplayText = ((int)ts.TotalHours).ToString();
+                        }
+                        break;
+                    case 3:         //HH:MM
+                        {
+                            var ts = TimeSpan.FromMinutes(Convert.ToDouble(General.Nz(e.Value, 0)));
+                            e.DisplayText = string.Format("{0:00}:{1:00}", (int)ts.TotalHours, ts.Minutes);
+                        }
+                        break;
+                }
             }
         }
 

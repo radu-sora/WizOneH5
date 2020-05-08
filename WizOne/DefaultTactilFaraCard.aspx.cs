@@ -114,8 +114,8 @@ namespace WizOne
 
                 cartela = cartela.PadLeft(max, '0');
 
-                //int lung = Convert.ToInt32(General.Nz(Dami.ValoareParam("LungimeCartela","0"),"0"));
-                //if (lung > 0 && cartela.Length >= lung) cartela = cartela.Substring(cartela.Length - lung);
+                int lung = Convert.ToInt32(General.Nz(Dami.ValoareParam("LungimeCartela","0"),"0"));
+                if (lung > 0 && cartela.Length >= lung) cartela = cartela.Substring(cartela.Length - lung);
 
                 string sir = "";
                 for (int i = 1; i <= max; i++)

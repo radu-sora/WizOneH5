@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -752,7 +753,7 @@ namespace WizOne.Eval
                         //    lstEval_Raspuns.FirstOrDefault().LuatLaCunostinta = 2;
                         //Session["lstEval_Raspuns"] = lstEval_Raspuns;
 
-                        General.ExecutaNonQuery($@"UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta"" = @1, ""LuatData""={General.CurrentDate()}, ""LuatUser""={Session["UserId"]} WHERE ""IdQuiz""=@2 AND F10003 = @3", new object[] { valueControl, Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"],1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
+                        General.ExecutaNonQuery($@"UPDATE ""Eval_Raspuns"" SET ""LuatLaCunostinta"" = @1, ""LuatData""={General.CurrentDate()}, ""LuatUser""={Session["UserId"]}, USER_NO={Session["UserId"]}, TIME={General.CurrentDate()} WHERE ""IdQuiz""=@2 AND F10003 = @3", new object[] { valueControl, Convert.ToInt32(General.Nz(Session["CompletareChestionar_IdQuiz"],1)), Convert.ToInt32(General.Nz(Session["CompletareChestionar_F10003"], 1)) });
                         pnlSectiune.JSProperties["cpAlertMessage"] = "Proces realizat cu succes!";
                         return;
                     }
@@ -2283,6 +2284,9 @@ namespace WizOne.Eval
                 grid.CancelEdit();
                 GridViewDataComboBoxColumn colObiectiv = (grid.Columns["IdObiectiv"] as GridViewDataComboBoxColumn);
 
+                //Radu 07.05.2020
+                GridViewDataComboBoxColumn colCalificativ = (grid.Columns["IdCalificativ"] as GridViewDataComboBoxColumn);
+
                 List<Eval_ObiIndividualeTemp> lst = Session["lstEval_ObiIndividualeTemp"] as List<Eval_ObiIndividualeTemp>;
 
                 for (int x = 0; x < e.InsertValues.Count; x++)
@@ -2370,6 +2374,8 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsNew.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (colCalificativ != null)
+                                    clsNew.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsNew.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
                                 clsNew.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -2397,7 +2403,7 @@ namespace WizOne.Eval
                     if (areValori)
                         lst.Add(clsNew);
                 }
-                int sumaClaim = 0;
+                decimal sumaClaim = 0;
                 int marca = -99;
                 int idQuiz = -99;
            
@@ -2471,6 +2477,8 @@ namespace WizOne.Eval
                                 break;
                             case "IdCalificativ":
                                 clsUpd.IdCalificativ = ins.NewValues[de.Key.ToString()] == null ? -99 : Convert.ToInt32(ins.NewValues[de.Key.ToString()]);
+                                if (colCalificativ != null)
+                                    clsUpd.Calificativ = colCalificativ.PropertiesComboBox.Items.FindByValue(clsUpd.IdCalificativ).Text;
                                 break;
                             case "Calificativ":
                                 clsUpd.Calificativ = ins.NewValues[de.Key.ToString()] == null ? "" : ins.NewValues[de.Key.ToString()].ToString().Replace("'", "");
@@ -2631,10 +2639,13 @@ namespace WizOne.Eval
                             break;
                         case "21":      //CLAIM                          
                             if (clsUpd.IdQuiz != 8 && clsUpd.IdQuiz != 11 && clsUpd.IdQuiz != 24)
-                            {                             
+                            {
                                 //foreach (Eval_ObiIndividualeTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
                                 //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
-                                    sumaClaim += Convert.ToInt32(General.Nz(clsUpd.Calificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
+                                //sumaClaim += Convert.ToInt32(General.Nz(clsUpd.Calificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
+                                //Radu 07.05.2020
+                                decimal val = decimal.Parse(General.Nz(clsUpd.Calificativ, 0).ToString(), CultureInfo.InvariantCulture);
+                                sumaClaim += val * (decimal)clsUpd.Pondere;
                             }                            
                             break;
                     }
@@ -2651,7 +2662,7 @@ namespace WizOne.Eval
                             val.SetValue(linieSumaOb, sumaClaim.ToString(), null);
                     }
 
-                    double notaFinala = sumaClaim;
+                    decimal notaFinala = sumaClaim;
                     Eval_QuizIntrebari txtNotaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("FINAL NOTE") && p.IdQuiz == idQuiz).FirstOrDefault();
                     if (txtNotaFinala != null)
                     {
@@ -2662,8 +2673,8 @@ namespace WizOne.Eval
                             string s = val.GetValue(linieNotaFinala, null).ToString();
                             if (s.Length > 0)
                             {
-                                double rez = 0;
-                                double.TryParse(s, out rez);
+                                decimal rez = 0;
+                                decimal.TryParse(s, out rez);
                                 notaFinala += rez;
                             }
                             val.SetValue(linieNotaFinala, notaFinala.ToString(), null);
@@ -2764,7 +2775,7 @@ namespace WizOne.Eval
 
                     lst.Add(clsNew);
                 }
-                int sumaClaim = 0;
+                decimal sumaClaim = 0;
                 int marca = -99;
                 int idQuiz = -99;
                 string categComp = "";
@@ -2882,10 +2893,13 @@ namespace WizOne.Eval
                             break;
                         case "21":  //CLAIM
                             if (clsUpd.IdQuiz != 8 && clsUpd.IdQuiz != 11 && clsUpd.IdQuiz != 24)
-                            {                               
+                            {
                                 //foreach (Eval_CompetenteAngajatTemp linie in lst.Where(p => p.F10003 == clsUpd.F10003 && p.IdQuiz == clsUpd.IdQuiz
                                 //                                                    && p.IdLinieQuiz == clsUpd.IdLinieQuiz && p.Pozitie == clsUpd.Pozitie))
-                                    sumaClaim += Convert.ToInt32(General.Nz(clsUpd.Calificativ, 0)) * Convert.ToInt32(General.Nz(clsUpd.Pondere, 0));
+
+                                //Florin 2020.05.06
+                                decimal val = decimal.Parse(General.Nz(clsUpd.Calificativ, 0).ToString(), CultureInfo.InvariantCulture);
+                                sumaClaim += val * clsUpd.Pondere;
 
                             }
                             break;
@@ -2910,7 +2924,7 @@ namespace WizOne.Eval
                     }
 
 
-                    double notaFinala = sumaClaim;
+                    decimal notaFinala = sumaClaim;
                     Eval_QuizIntrebari txtNotaFinala = lstEval_QuizIntrebari.Where(p => p.Descriere.ToUpper().Contains("FINAL NOTE") && p.IdQuiz == idQuiz).FirstOrDefault();
                     if (txtNotaFinala != null)
                     {
@@ -2921,8 +2935,8 @@ namespace WizOne.Eval
                             string s = val.GetValue(linieNotaFinala, null).ToString();
                             if (s.Length > 0)
                             {
-                                double rez = 0;
-                                double.TryParse(s, out rez);
+                                decimal rez = 0;
+                                decimal.TryParse(s, out rez);
                                 notaFinala += rez;
                             }
                             val.SetValue(linieNotaFinala, notaFinala.ToString(), null);

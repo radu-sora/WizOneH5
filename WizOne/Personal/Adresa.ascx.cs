@@ -380,13 +380,18 @@ namespace WizOne.Personal
                                         tipArtera = Convert.ToInt32((row[col.ColumnName] == DBNull.Value ? "0" : row[col.ColumnName].ToString()));
                                     }
                                 }
-                                break;
+                                break; 
                             default:
                                 row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                                 break;
                         }
                     }
                 }
+
+                                     
+                row["USER_NO"] = Session["UserId"];               
+                row["TIME"] = DateTime.Now;
+              
 
                 if (General.Nz(e.NewValues["Principal"],0).ToString() == "1")
                 {

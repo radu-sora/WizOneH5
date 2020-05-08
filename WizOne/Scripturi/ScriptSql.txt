@@ -12868,3 +12868,368 @@ GO
 
 ALTER TABLE Ptj_tblFormuleCumulat ADD AdaugaZileLibere int DEFAULT 1
 GO
+
+
+
+
+BEGIN
+   IF NOT EXISTS (SELECT * FROM f806 
+                   WHERE F80603 = 1)
+   BEGIN
+       INSERT INTO f806 (F80601, F80602, F80603, F80604)
+       VALUES (806, 1, 1, 'Invatamant primar')
+   END
+END
+GO
+BEGIN
+   IF NOT EXISTS (SELECT * FROM f806 
+                   WHERE F80603 = 2)
+   BEGIN
+       INSERT INTO f806 (F80601, F80602, F80603, F80604)
+       VALUES (806, 1, 2, 'Invatamant gimnazial')
+   END
+END
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('LungimeCartela', '10', 'Numarul maxim de caractere care se preiau de la cititor', 0, -99, GETDATE());
+GO
+
+-- https://github.com/wizromRD/WizOne/issues/369
+-- De adaugat in Ptj_Cumulat F-uri pana la 100 #369
+
+ALTER TABLE Ptj_Cumulat ADD F61 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F62 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F63 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F64 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F65 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F66 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F67 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F68 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F69 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F70 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F71 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F72 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F73 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F74 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F75 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F76 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F77 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F78 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F79 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F80 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F81 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F82 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F83 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F84 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F85 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F86 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F87 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F88 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F89 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F90 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F91 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F92 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F93 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F94 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F95 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F96 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F97 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F98 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F99 numeric(18,2)
+GO
+ALTER TABLE Ptj_Cumulat ADD F100 numeric(18,2)
+GO
+
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F61',0,66,'F61','F61',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F62',0,66,'F62','F62',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F63',0,66,'F63','F63',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F64',0,66,'F64','F64',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F65',0,66,'F65','F65',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F66',0,66,'F66','F66',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F67',0,66,'F67','F67',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F68',0,66,'F68','F68',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F69',0,66,'F69','F69',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F70',0,66,'F70','F70',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F71',0,66,'F71','F71',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F72',0,66,'F72','F72',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F73',0,66,'F73','F73',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F74',0,66,'F74','F74',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F75',0,66,'F75','F75',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F76',0,66,'F76','F76',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F77',0,66,'F77','F77',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F78',0,66,'F78','F78',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F79',0,66,'F79','F79',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F80',0,66,'F80','F80',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F81',0,66,'F81','F81',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F82',0,66,'F82','F82',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F83',0,66,'F83','F83',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F84',0,66,'F84','F84',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F85',0,66,'F85','F85',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F86',0,66,'F86','F86',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F87',0,66,'F87','F87',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F88',0,66,'F88','F88',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F89',0,66,'F89','F89',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F90',0,66,'F90','F90',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F91',0,66,'F91','F91',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F92',0,66,'F92','F92',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F93',0,66,'F93','F93',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F94',0,66,'F94','F94',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F95',0,66,'F95','F95',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F96',0,66,'F96','F96',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F97',0,66,'F97','F97',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F98',0,66,'F98','F98',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F99',0,66,'F99','F99',40,3,7)
+GO
+INSERT INTO "Ptj_tblPrint" ("Id", "Denumire", "Activ", "Ordine", "TextAfisare", "Camp", "Lungime", "Aliniere", "MarimeText") VALUES ((select max("Id")+1 from "Ptj_tblPrint"),'F100',0,66,'F100','F100',40,3,7)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('PontajCCTipAfisareNrOre', '1', 'Poate avea valorile 1, 2 sau 3. 1 - se afiseaza minute; 2 - se afiseaza ore; 3 - se afiseaza in formatul HH:MM. Daca nu este setata nici o valoare, default este 1', 0);
+GO
+
+CREATE TABLE tblTipInvatamant(
+	Id [int] NOT NULL,
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblTipInvatamant] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE tblTipInstitutie(
+	Id [int] NOT NULL,
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblTipInstitutie] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE tblProfilStudii(
+	Id [int] NOT NULL,
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblProfilStudii] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE tblDomeniuStudii(
+	Id [int] NOT NULL,
+	Denumire [nvarchar](250),
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_tblDomeniuStudii] PRIMARY KEY CLUSTERED 
+(	
+	Id ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+CREATE TABLE F100Studii(
+	F10003 [int] ,
+	IdTipInvatamant [int],
+	IdNivel [int],
+	NivelISCED [int],
+	IdTipInstitutie [int], 
+	NumeInstitutie varchar(250),
+	NrClase int,
+	SirutaLocalitate int,
+	DeLaData datetime,
+	LaData datetime,
+	Specializare varchar(250),
+	IdProfil int,
+	IdDomeniu int,
+	Calificare varchar(250),	
+	IdAuto [int] NOT NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_F100Studii] PRIMARY KEY CLUSTERED 
+(	
+	IdAuto ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+alter table F712 add F71206 int
+GO
+
+insert into MP_tblTaburi (Denumire, Pagina, ordine) values ('Studii (nou)', 'StudiiNou', 33)
+GO
+
+
+-- #391 - Completare date in template evaluare
+-- https://github.com/wizromRD/WizOne/issues/391
+
+--  Competente
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplate WHERE TemplateId=@i)=0)
+	INSERT INTO Eval_ConfigCompTemplate(TemplateId, TemplateName) VALUES(@i, 'Template ' + CONVERT(nvarchar(10),@i));
+    SET @i = @i + 1
+END
+GO
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Competenta')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(1, @i, 'Competenta', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Pondere')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(2, @i, 'Pondere', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Calificativ')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(3, @i, 'Calificativ', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='Explicatii')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(4, @i, 'Explicatii', 100, 0, 0, 0, 0, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigCompTemplateDetail WHERE TemplateId=@i AND ColumnName='ExplicatiiCalificativ')=0)
+	INSERT INTO Eval_ConfigCompTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, IdNomenclator) VALUES(5, @i, 'ExplicatiiCalificativ', 100, 0, 0, 0, 0, -99);
+
+    SET @i = @i + 1
+END
+GO
+
+--  Obiective
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplate WHERE TemplateId=@i)=0)
+	INSERT INTO Eval_ConfigObTemplate(TemplateId, TemplateName, NrMinObiective, NrMaxObiective, PoateAdauga, PoateSterge, PoateModifica) VALUES(@i, 'Template ' + CONVERT(nvarchar(10),@i), 0, 900, 0, 0, 0);
+    SET @i = @i + 1
+END
+GO
+
+DECLARE @i INT
+SET @i = 1
+WHILE (@i <= 300)
+BEGIN
+    IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Obiectiv')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(1, @i, 'Obiectiv', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Activitate')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(2, @i, 'Activitate', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Pondere')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(3, @i, 'Pondere', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Descriere')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(4, @i, 'Descriere', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Target')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(5, @i, 'Target', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Termen')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(6, @i, 'Termen', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Realizat')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(7, @i, 'Realizat', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='Calificativ')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(8, @i, 'Calificativ', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ExplicatiiCalificativ')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(9, @i, 'ExplicatiiCalificativ', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ColoanaSuplimentara1')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(10, @i, 'ColoanaSuplimentara1', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ColoanaSuplimentara2')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(11, @i, 'ColoanaSuplimentara2', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ColoanaSuplimentara3')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(12, @i, 'ColoanaSuplimentara3', 100, 0, 0, 0, 0, -99, -99);
+	IF ((SELECT COUNT(*) FROM Eval_ConfigObTemplateDetail WHERE TemplateId=@i AND ColumnName='ColoanaSuplimentara4')=0)
+	INSERT INTO Eval_ConfigObTemplateDetail(Id, TemplateId, ColumnName, Width, Obligatoriu, Citire, Editare, Vizibil, TipValoare, IdNomenclator) VALUES(13, @i, 'ColoanaSuplimentara4', 100, 0, 0, 0, 0, -99, -99);
+
+    SET @i = @i + 1
+END
+GO
+
+ALTER TABLE USERS ADD UtilizatorNonAD int default 0
+GO
+
+ALTER TABLE TemplateCampuri ADD OmiteLaActualizare int
+GO

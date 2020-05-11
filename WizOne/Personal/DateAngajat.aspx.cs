@@ -680,7 +680,7 @@ namespace WizOne.Personal
                     
                 for (int i = 1; i < ds.Tables.Count; i++)
                 {//Radu 10.06.2019
-                    if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni")
+                    if (ds.Tables[i].TableName == "Admin_Beneficii" || ds.Tables[i].TableName == "Admin_Medicina" || ds.Tables[i].TableName == "Admin_Sanctiuni" || ds.Tables[i].TableName == "F100Studii")
                         SalvareSpeciala(ds.Tables[i].TableName);
                     else
                     {                     
@@ -807,7 +807,16 @@ namespace WizOne.Personal
                             General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
                         }
                     }
-
+                    if (tabela == "F100Studii")
+                    {
+                        Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
+                        if (lstFiles != null && lstFiles.ContainsKey(idAuto))
+                        {
+                            sql = "DELETE FROM \"tblFisiere\" WHERE \"Tabela\" = '" + tabela + "' AND \"Id\" = " + dt.Rows[i]["IdAuto"].ToString();
+                            General.ExecutaNonQuery(sql, null);
+                            General.IncarcaFisier(lstFiles[idAuto].UploadedFileName.ToString(), lstFiles[idAuto].UploadedFile, tabela, idAuto);
+                        }
+                    }
 ;
                 }
                 else
@@ -888,6 +897,12 @@ namespace WizOne.Personal
                         if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
                             General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);                   
                     }
+                    if (tabela == "F100Studii")
+                    {
+                        Dictionary<int, Personal.StudiiNou.metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, Personal.StudiiNou.metaUploadFile>;
+                        if (lstFiles != null && lstFiles.ContainsKey(idAuto1))
+                            General.IncarcaFisier(lstFiles[idAuto1].UploadedFileName.ToString(), lstFiles[idAuto1].UploadedFile, tabela, idAuto);
+                    }
 
 
                 }
@@ -900,8 +915,9 @@ namespace WizOne.Personal
             
             if (tabela == "Admin_Sanctiuni")
                 Session["List_DocUpload_MP_Sanctiuni"] = null;
-            
 
+            if (tabela == "F100Studii")
+                Session["List_DocUpload_MP_Studii"] = null;
         }
 
 
@@ -1638,6 +1654,8 @@ namespace WizOne.Personal
                 Session["List_DocUpload_MP_Medicina"] = null;
                 Session["DocUpload_MP_Sanctiuni"] = null;
                 Session["List_DocUpload_MP_Sanctiuni"] = null;
+                Session["DocUpload_MP_Studii"] = null;
+                Session["List_DocUpload_MP_Studii"] = null;
                 Session["AdresaSelectata"] = null;
                 Session["CodCORSelectat"] = null;
                 Session["esteNou"] = null;

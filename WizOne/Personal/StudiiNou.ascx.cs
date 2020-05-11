@@ -14,6 +14,13 @@ namespace WizOne.Personal
 {
     public partial class StudiiNou : System.Web.UI.UserControl
     {
+        public class metaUploadFile
+        {
+            public object UploadedFile { get; set; }
+            public object UploadedFileName { get; set; }
+            public object UploadedFileExtension { get; set; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             grDateStudii.DataBind();
@@ -45,6 +52,9 @@ namespace WizOne.Personal
                 }
                 Session["MP_ComboStudii"] = sir;
             }
+
+            if (!IsPostBack)
+                Session["DocUpload_MP_Studii"] = null;
         }
 
         protected void grDateStudii_DataBinding(object sender, EventArgs e)
@@ -149,6 +159,7 @@ namespace WizOne.Personal
 
                 object[] row = new object[ds.Tables["F100Studii"].Columns.Count];
                 int x = 0;
+                int idAuto = 0;
                 foreach (DataColumn col in ds.Tables["F100Studii"].Columns)
                 {
                     if (!col.AutoIncrement)
@@ -163,6 +174,7 @@ namespace WizOne.Personal
                                     row[x] = Convert.ToInt32(General.Nz(ds.Tables["F100Studii"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                                 else
                                     row[x] = Dami.NextId("F100Studii");
+                                idAuto = Convert.ToInt32(row[x].ToString());
                                 break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];
@@ -179,6 +191,16 @@ namespace WizOne.Personal
                     x++;
                 }
 
+                metaUploadFile itm = Session["DocUpload_MP_Studii"] as metaUploadFile;
+                if (itm != null)
+                { 
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    lstFiles.Add(idAuto, itm);
+                    Session["List_DocUpload_MP_Studii"] = lstFiles;
+                }
+                Session["DocUpload_MP_Studii"] = null;
                 ds.Tables["F100Studii"].Rows.Add(row);
                 e.Cancel = true;
                 grDateStudii.CancelEdit();
@@ -203,6 +225,8 @@ namespace WizOne.Personal
                 for (int i = 0; i < e.Keys.Count; i++)
                 { keys[i] = e.Keys[i]; }
 
+                var idAuto = e.Keys["IdAuto"];
+
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
                 DataRow row = ds.Tables["F100Studii"].Rows.Find(keys);
@@ -216,6 +240,20 @@ namespace WizOne.Personal
                     }
 
                 }
+
+                metaUploadFile itm = Session["DocUpload_MP_Studii"] as metaUploadFile;
+                if (itm != null)
+                {             
+                    Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, metaUploadFile>;
+                    if (lstFiles == null)
+                        lstFiles = new Dictionary<int, metaUploadFile>();
+                    if (lstFiles.ContainsKey(Convert.ToInt32(idAuto.ToString())))
+                        lstFiles[Convert.ToInt32(idAuto.ToString())] = itm;
+                    else
+                        lstFiles.Add(Convert.ToInt32(idAuto.ToString()), itm);
+                    Session["List_DocUpload_MP_Studii"] = lstFiles;
+                }
+                Session["DocUpload_MP_Studii"] = null;
 
                 e.Cancel = true;
                 grDateStudii.CancelEdit();
@@ -239,6 +277,11 @@ namespace WizOne.Personal
                 DataSet ds = Session["InformatiaCurentaPersonal"] as DataSet;
 
                 DataRow row = ds.Tables["F100Studii"].Rows.Find(keys);
+
+                Dictionary<int, metaUploadFile> lstFiles = Session["List_DocUpload_MP_Studii"] as Dictionary<int, metaUploadFile>;
+                if (lstFiles != null && lstFiles.ContainsKey(Convert.ToInt32(keys[0].ToString())))
+                    lstFiles.Remove(Convert.ToInt32(keys[0].ToString()));
+                Session["List_DocUpload_MP_Studii"] = lstFiles;
 
                 row.Delete();
 
@@ -327,6 +370,93 @@ namespace WizOne.Personal
             {
                 var tb = e.Editor as ASPxComboBox;
                 tb.ClientSideEvents.SelectedIndexChanged = "OnIndexChangedStudii";
+            }
+        }
+
+        protected void btnDocUploadStudii_FileUploadComplete(object sender, DevExpress.Web.FileUploadCompleteEventArgs e)
+        {
+            try
+            {
+                if (!e.IsValid) return;
+                ASPxUploadControl btnDocUpload = (ASPxUploadControl)sender;
+
+                metaUploadFile itm = new metaUploadFile();
+                itm.UploadedFile = btnDocUpload.UploadedFiles[0].FileBytes;
+                itm.UploadedFileName = btnDocUpload.UploadedFiles[0].FileName;
+                itm.UploadedFileExtension = btnDocUpload.UploadedFiles[0].ContentType;
+
+                Session["DocUpload_MP_Studii"] = itm;
+
+                btnDocUpload.JSProperties["cpDocUploadName"] = btnDocUpload.UploadedFiles[0].FileName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        protected void grDateStudii_HtmlEditFormCreated(object sender, ASPxGridViewEditFormEventArgs e)
+        {
+            try
+            {
+                ASPxComboBox cmbTipInv = grDateStudii.FindEditFormTemplateControl("cmbTipInv") as ASPxComboBox;
+                if (cmbTipInv != null)
+                {
+                    DataTable dtTipInv = General.IncarcaDT("Select * FROM \"tblTipInvatamant\"", null);
+                    cmbTipInv.DataSource = dtTipInv;
+                    cmbTipInv.DataBindItems();
+                }
+
+                ASPxComboBox cmbNivStudii = grDateStudii.FindEditFormTemplateControl("cmbNivStudii") as ASPxComboBox;
+                if (cmbNivStudii != null)
+                {
+                    DataTable dtNiv = General.IncarcaDT("Select * FROM F712", null);
+                    cmbNivStudii.DataSource = dtNiv;
+                    cmbNivStudii.DataBindItems();
+                }
+
+                ASPxComboBox cmbTipInst = grDateStudii.FindEditFormTemplateControl("cmbTipInst") as ASPxComboBox;
+                if (cmbTipInst != null)
+                {
+                    DataTable dtTipInst = General.IncarcaDT("Select * FROM \"tblTipInstitutie\"", null);
+                    cmbTipInst.DataSource = dtTipInst;
+                    cmbTipInst.DataBindItems();
+                }
+
+                ASPxComboBox cmbProfil = grDateStudii.FindEditFormTemplateControl("cmbProfil") as ASPxComboBox;
+                if (cmbProfil != null)
+                {
+                    DataTable dtProfil = General.IncarcaDT("Select * FROM \"tblProfilStudii\"", null);
+                    cmbProfil.DataSource = dtProfil;
+                    cmbProfil.DataBindItems();
+                }
+
+                ASPxComboBox cmbDomeniu = grDateStudii.FindEditFormTemplateControl("cmbDomeniu") as ASPxComboBox;
+                if (cmbDomeniu != null)
+                {
+                    DataTable dtDom = General.IncarcaDT("Select * FROM \"tblDomeniuStudii\"", null);
+                    cmbDomeniu.DataSource = dtDom;
+                    cmbDomeniu.DataBindItems();
+                }
+
+                ASPxComboBox cmbLocalitate = grDateStudii.FindEditFormTemplateControl("cmbLocalitate") as ASPxComboBox;
+                if (cmbTipInv != null)
+                {
+                    DataTable dtLoc = General.IncarcaDT("select a.siruta, a.denloc as \"Nivel3\", b.denloc as \"Nivel2\", c.denloc as \"Nivel1\" from localitati a "
+                                                + "left  join Localitati b on a.sirsup = b.siruta "
+                                                + "left join Localitati c on b.SIRSUP = c.SIRUTA "
+                                                + "where a.niv = 3", null);
+                    cmbLocalitate.DataSource = dtLoc;
+                    cmbLocalitate.DataBindItems();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
 

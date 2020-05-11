@@ -2722,8 +2722,8 @@ namespace WizOne.Pontaj
                                 break;
                         }
 
-                        if (valCalc != Convert.ToDecimal(General.Nz(dr[colNume],0)))
-                        {
+                        //if (valCalc != Convert.ToDecimal(General.Nz(dr[colNume],0)))
+                        //{
                             if (valCalc == 0)
                             {
                                 cmp += ",\"" + colNume + "\"=NULL";
@@ -2737,7 +2737,7 @@ namespace WizOne.Pontaj
 
                             cmp += ",\"" + colNume.Replace("Val", "ValModif") + "\"=4";
                             if (General.Nz(dr["VerificareNrMaxOre"],0).ToString() == "1") nrMin += valCalc;
-                        }
+                        //}
                     }
 
                     if (cmp != "")
@@ -3057,7 +3057,7 @@ namespace WizOne.Pontaj
                     zileVal += $@",COALESCE(""Ziua{i}"",'') AS ""Ziua{i}""";
                 }
 
-                for (int i = 1; i <= 60; i++)
+                for (int i = 1; i <= 100; i++)
                 {
                     zileF += $@",CAST(COALESCE(X.""F{i}"",0) AS numeric(10)) AS ""F{i}_Tmp""";
                 }
@@ -3348,7 +3348,7 @@ namespace WizOne.Pontaj
                     zileAsCuloare += ", " + strZi + " AS \"CuloareValoare" + i.ToString() + "\"";
                 }
 
-                for (int i = 1; i <= 60; i++)
+                for (int i = 1; i <= 100; i++)
                 {
                     zileF += $@",COALESCE(X.""F{i}"",0) AS ""F{i}""";
                 }

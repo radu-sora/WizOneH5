@@ -25,6 +25,7 @@
         //pnlLoading.Hide();
     }
 
+
     function OnClickViz(s, e) {    
         popUpViz.Show();
         //e.processOnServer = true;
@@ -156,7 +157,7 @@
                                         <SettingsBehavior AllowFocusedRow="true" />
                                         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                                   
                                         <SettingsEditing Mode="Inline" />      
-                                        <ClientSideEvents ContextMenu="ctx" />                                
+                                        <ClientSideEvents ContextMenu="ctx" FocusedRowChanged="function(s,e){ grDateNomen.PerformCallback(2); }"/>                                
                                         <Columns>
                                             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
                                             <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  Width="75px" />

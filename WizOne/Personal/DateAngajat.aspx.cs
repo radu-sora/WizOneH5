@@ -210,6 +210,8 @@ namespace WizOne.Personal
                 Session["MP_DataSfarsit36"] = General.Nz(General.ExecutaScalar(sql36, new object[] { Session["Marca"], ds.Tables[1].Rows[0]["F100985"] }), "01/01/2100").ToString();
                 var ert = Session["MP_DataSfarsit36"];
 
+           
+
             }
             catch (Exception ex)
             {

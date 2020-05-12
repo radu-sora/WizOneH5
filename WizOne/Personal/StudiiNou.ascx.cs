@@ -162,14 +162,14 @@ namespace WizOne.Personal
                 int idAuto = 0;
                 foreach (DataColumn col in ds.Tables["F100Studii"].Columns)
                 {
-                    if (!col.AutoIncrement)
+                    //if (!col.AutoIncrement)
                     {
                         switch (col.ColumnName.ToUpper())
                         {
                             case "F10003":
                                 row[x] = Session["Marca"];
                                 break;
-                            case "IDAUTO":
+                            case "IDAUTO":   
                                 if (Constante.tipBD == 1)
                                     row[x] = Convert.ToInt32(General.Nz(ds.Tables["F100Studii"].AsEnumerable().Where(p => p.RowState != DataRowState.Deleted).Max(p => p.Field<int?>("IdAuto")), 0)) + 1;
                                 else

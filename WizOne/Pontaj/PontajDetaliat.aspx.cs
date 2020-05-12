@@ -874,8 +874,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402
-                            LEFT JOIN ""Ptj_tblAbsente"" ABSE ON P.""ValStr""=ABSE.""DenumireScurta"" AND ABSE.""DenumireScurta""<>''
-                            {strLeg}
+                            LEFT JOIN (SELECT ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE COALESCE(""DenumireScurta"",'') <>'' GROUP BY ""DenumireScurta"") ABSE ON P.""ValStr""=ABSE.""DenumireScurta""
+                            { strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";
                 else
@@ -974,7 +974,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
-                            LEFT JOIN ""Ptj_tblAbsente"" ABSE ON P.""ValStr""=ABSE.""DenumireScurta""
+                            LEFT JOIN (SELECT ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""DenumireScurta"" IS NOT NULL GROUP BY ""DenumireScurta"") ABSE ON P.""ValStr""=ABSE.""DenumireScurta""
                             {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";

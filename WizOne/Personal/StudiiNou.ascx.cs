@@ -175,6 +175,11 @@ namespace WizOne.Personal
                                 else
                                     row[x] = Dami.NextId("F100Studii");
                                 idAuto = Convert.ToInt32(row[x].ToString());
+                                if (idAuto < 1000000)
+                                {
+                                    idAuto += 1000000;
+                                    row[x] = idAuto;
+                                }
                                 break;
                             case "USER_NO":
                                 row[x] = Session["UserId"];

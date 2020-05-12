@@ -126,7 +126,7 @@ namespace WizOne.Pagini
                 SqlDataSource ds = new SqlDataSource();
                 ds.EnableCaching = false;
                 ds.ConnectionString = Constante.cnnWeb;
-                ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\" FROM \"Template\" ORDER BY \"Denumire\"";
+                ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\", \"NumeTabela\" as \"Tabela\" FROM \"Template\" ORDER BY \"Denumire\"";
                 cmbSablon.DataSource = ds;
                 cmbSablon.DataBind();
 

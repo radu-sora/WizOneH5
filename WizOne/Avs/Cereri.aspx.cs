@@ -2219,6 +2219,20 @@ namespace WizOne.Avs
                     }
                 }
 
+                if (idAtr == (int)Constante.Atribute.Salariul)
+                {
+                    string data1 = Convert.ToDateTime(txtDataMod.Value).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(txtDataMod.Value).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(txtDataMod.Value).Year.ToString();
+                    string sqlVerif = "SELECT COUNT(*) FROM F111 WHERE F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = "
+                                    + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") AND F11105 <= " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + data1 + "', 103)" : "TO_DATE('" + data1 + "', 'dd/mm/yyyy')")
+                                     + " AND " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + data1 + "', 103)" : "TO_DATE('" + data1 + "', 'dd/mm/yyyy')") + " <= F11106";
+                    DataTable dtVerif = General.IncarcaDT(sqlVerif, null);
+                    if (dtVerif != null && dtVerif.Rows.Count > 0 && dtVerif.Rows[0][0] != null && Convert.ToInt32(dtVerif.Rows[0][0].ToString()) > 0)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data modificarii este intr-o perioada in care angajatul este suspendat!");
+                        return false;
+                    }
+                }
+
                 if (idAtr == (int)Constante.Atribute.Suspendare)
                 {
                     if (Convert.ToDateTime(de1Nou.Value).Date != Convert.ToDateTime(txtDataMod.Value).Date)
@@ -2235,6 +2249,19 @@ namespace WizOne.Avs
                             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Data sfarsit estimata este ulterioara datei ultimei zile de plata!");
                             return false;
                         }
+                    }
+
+                    string data1 = Convert.ToDateTime(de1Nou.Value).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de1Nou.Value).Year.ToString();
+                    string data2 = Convert.ToDateTime(de2Nou.Value).Day.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de2Nou.Value).Month.ToString().PadLeft(2, '0') + "/" + Convert.ToDateTime(de2Nou.Value).Year.ToString();
+                    string sqlVerif = "SELECT COUNT(*) FROM F111 WHERE F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = "
+                                    + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") AND ((F11105 <= " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + data1 + "', 103)" : "TO_DATE('" + data1 + "', 'dd/mm/yyyy')")
+                                     + " AND " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + data1 + "', 103)" : "TO_DATE('" + data1 + "', 'dd/mm/yyyy')") + " <= F11106) "
+                                     + " OR (F11105 <= " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + data2 + "', 103)" : "TO_DATE('" + data2 + "', 'dd/mm/yyyy')") + " AND " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + data2 + "', 103)" : "TO_DATE('" + data2 + "', 'dd/mm/yyyy')") + " <= F11106))";
+                    DataTable dtVerif = General.IncarcaDT(sqlVerif, null);
+                    if (dtVerif != null && dtVerif.Rows.Count > 0 && dtVerif.Rows[0][0] != null && Convert.ToInt32(dtVerif.Rows[0][0].ToString()) > 0)
+                    {
+                        pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Intervalul introdus se suprapune cu cel al unei suspendari active!");
+                        return false;
                     }
 
                 }

@@ -162,7 +162,7 @@ namespace WizOne.Personal
                 int idAuto = 0;
                 foreach (DataColumn col in ds.Tables["F100Studii"].Columns)
                 {
-                    if (!col.AutoIncrement)
+                    //if (!col.AutoIncrement)
                     {
                         switch (col.ColumnName.ToUpper())
                         {

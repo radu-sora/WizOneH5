@@ -1734,8 +1734,11 @@ namespace WizOne.Pontaj
                                     return;
                                 }
 
+                                string filtruSup = @" AND C.""DenumireScurta""<>'' ";
+                                if (Constante.tipBD == 2) filtruSup = "";
+
                                 string strSql = $@"SELECT A.* FROM ""Ptj_Intrari"" A
-                                                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""ValStr""=C.""DenumireScurta""
+                                                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""ValStr""=C.""DenumireScurta"" {filtruSup}
                                                 WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4 AND C.""DenumireScurta"" IS NULL";
 
                                 DateTime dtInc = new DateTime(Convert.ToInt32(arr[1].Split('/')[2]), Convert.ToInt32(arr[1].Split('/')[1]), Convert.ToInt32(arr[1].Split('/')[0]));

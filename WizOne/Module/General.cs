@@ -3504,7 +3504,7 @@ namespace WizOne.Module
             return q;
         }
 
-        private static string DamiAngajati(int idUser, string filtru, string cond)
+        public static string DamiAngajati(int idUser, string filtru, string cond)
         {
             string strSql = "";
 

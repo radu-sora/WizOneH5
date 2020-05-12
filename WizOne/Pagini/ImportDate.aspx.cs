@@ -126,7 +126,7 @@ namespace WizOne.Pagini
                 SqlDataSource ds = new SqlDataSource();
                 ds.EnableCaching = false;
                 ds.ConnectionString = Constante.cnnWeb;
-                ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\" FROM \"Template\" ORDER BY \"Denumire\"";
+                ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\", \"NumeTabela\" as \"Tabela\" FROM \"Template\" ORDER BY \"Denumire\"";
                 cmbSablon.DataSource = ds;
                 cmbSablon.DataBind();
 
@@ -215,7 +215,7 @@ namespace WizOne.Pagini
 
                         grDateNomen.DataBind();
                     }
-                }
+                }      
             }
             catch (Exception ex)
             {
@@ -625,13 +625,26 @@ namespace WizOne.Pagini
                     return;
                 }
 
+                int id = -1;
+
+                if (cmbSablon.Value != null)
+                    id = Convert.ToInt32(cmbSablon.Value);
+
+                if (e.Parameters.Equals("2"))
+                {                    
+                    object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "NumeSablon", "NumeTabela" }) as object[];
+                    if (obj != null && obj.Count() > 0)
+                        id = Convert.ToInt32(obj[0]);
+                }
 
                 Session["ImportDate_Sablon"] = cmbSablon.Value;
                 DataTable dt = new DataTable();
-                if (cmbSablon.Value != null)
-                    dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value), null);
-                else
-                    dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" =  -1", null);
+                //if (cmbSablon.Value != null)      
+                //    dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" = " + Convert.ToInt32(cmbSablon.Value), null);
+                //else
+                //    dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" =  -1", null);
+
+                dt = General.IncarcaDT("SELECT * FROM \"TemplateCampuri\" WHERE \"Id\" = " + id, null);
 
                 grDateNomen.DataSource = dt;
                 grDateNomen.KeyFieldName = "Id;IdAuto";
@@ -1067,5 +1080,7 @@ namespace WizOne.Pagini
             }
 
         }
+
+   
     }
 }

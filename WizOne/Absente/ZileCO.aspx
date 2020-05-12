@@ -85,7 +85,7 @@
                             </div>
                             <label id="lblAng" runat="server" style="display:inline-block; float:left; padding-right:15px;">Angajat</label>
                             <div style="float:left; padding-right:15px;">
-                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="150px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
+                                <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="150px"  ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
                                             CallbackPageSize="15" AllowNull="true" EnableCallbackMode="true" TextFormatString="{0} {1}"  >
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
@@ -113,8 +113,9 @@
                             <ClientSideEvents EndCallback="function(s,e) { OnEndCallback(s,e); }" Init="OnInitGrid" ContextMenu="ctx" />
 
                             <Columns>
-                                 <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" >                            
-                                    <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown">
+                                 <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" >           
+                                     <Settings SortMode="DisplayText" />
+                                    <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown">                                        
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>
                                 <dx:GridViewDataComboBoxColumn FieldName="An" Name="An" Caption="An">

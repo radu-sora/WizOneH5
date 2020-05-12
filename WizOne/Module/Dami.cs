@@ -110,6 +110,12 @@ namespace WizOne.Module
                     filtru = " AND \"IdColoana\"='-'";
                 }
 
+                //Radu 11.05.2020
+                if (nume.ToLower() == "personal.dateangajat")
+                {
+                    nume = "personal.lista";                   
+                }
+
                 //Florin 2018-05-18
                 //S-a modificat din MIN in MAX
                 string strSql = @"SELECT X.""IdControl"", X.""IdColoana"", MAX(X.""Vizibil"") AS ""Vizibil"", MIN(X.""Blocat"") AS ""Blocat"" FROM (

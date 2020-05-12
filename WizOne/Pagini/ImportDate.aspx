@@ -25,6 +25,7 @@
         //pnlLoading.Hide();
     }
 
+
     function OnClickViz(s, e) {    
         popUpViz.Show();
         //e.processOnServer = true;
@@ -89,6 +90,11 @@
                             </td>
                             <td>
 							    <dx:ASPxComboBox Width="150"  ID="cmbSablon" ClientInstanceName="cmbSablon"  runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" AutoPostBack="false"  ValueType="System.Int32" OnCallback="cmbSablon_Callback" >                                                              
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="Id" Caption="Id" Visible="false" />
+                                        <dx:ListBoxColumn FieldName="Denumire" Caption="Denumire" Width="130px" />
+                                        <dx:ListBoxColumn FieldName="Tabela" Caption="Tabela" Width="130px" />                                   
+                                    </Columns>
                                     <ClientSideEvents SelectedIndexChanged="function(s, e) { grDateNomen.PerformCallback(); grDateViz.PerformCallback(); }" />
 							    </dx:ASPxComboBox>
 						    </td>
@@ -156,7 +162,7 @@
                                         <SettingsBehavior AllowFocusedRow="true" />
                                         <Settings ShowFilterRow="False" ShowColumnHeaders="true"  />                                   
                                         <SettingsEditing Mode="Inline" />      
-                                        <ClientSideEvents ContextMenu="ctx" />                                
+                                        <ClientSideEvents ContextMenu="ctx" FocusedRowChanged="function(s,e){ grDateNomen.PerformCallback(2); }"/>                                
                                         <Columns>
                                             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />                                    
                                             <dx:GridViewDataTextColumn FieldName="Id" Name="Id" Caption="Id"  Width="75px" />

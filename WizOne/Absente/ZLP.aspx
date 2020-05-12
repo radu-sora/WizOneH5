@@ -115,6 +115,7 @@
 
                             <Columns>
                                 <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" >
+                                      <Settings SortMode="DisplayText" />
                                     <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown">
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>

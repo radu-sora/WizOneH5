@@ -13335,7 +13335,7 @@ CREATE TABLE F100Studii(
 	IdProfil int,
 	IdDomeniu int,
 	Calificare varchar(250),	
-	IdAuto [int] NOT NULL,
+	IdAuto [int] NOT NULL IDENTITY,
 	[USER_NO] [int] NULL,
 	[TIME] [datetime] NULL,
  CONSTRAINT [PK_F100Studii] PRIMARY KEY CLUSTERED 

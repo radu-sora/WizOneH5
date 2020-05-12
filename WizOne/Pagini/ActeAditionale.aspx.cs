@@ -253,7 +253,7 @@ namespace WizOne.Pagini
                             LEFT JOIN Admin_NrActAd J ON B.F10003=J.F10003
                             WHERE (B.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
                             ) AS Y
-                            WHERE 1=1 " + filtru;
+                            WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"],-99)), "", "")}) " + filtru;
 
                     #endregion
                 }
@@ -337,7 +337,7 @@ namespace WizOne.Pagini
                             LEFT JOIN ""Admin_NrActAd"" J ON A.F10003=J.F10003
                             WHERE (A.F10025 = 900 OR COALESCE(J.""Candidat"",0) = 1) {companie}) X
                             ) 
-                            WHERE 1=1 " + filtru;
+                            WHERE F10003 IN ({General.DamiAngajati(Convert.ToInt32(General.Nz(Session["UserId"], -99)), "", "")}) " + filtru;
 
                     #endregion
                 }

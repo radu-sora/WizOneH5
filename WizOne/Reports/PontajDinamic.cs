@@ -76,7 +76,7 @@ namespace WizOne.Reports
                 //string sql = "SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 ORDER BY \"Ordine\"";
                 string sql = @"SELECT A.*, COALESCE(B.""NumarZecimale"",0) AS ""NumarZecimale"" FROM ""Ptj_tblPrint"" A 
                                 LEFT JOIN ""Ptj_tblFormuleCumulat"" B ON B.""Coloana""=A.""Camp""
-                                WHERE ""Activ"" = 1 ORDER BY ""Ordine"" ";
+                                WHERE A.""Activ"" = 1 ORDER BY A.""Ordine"" ";
 
                 DataTable dtPrint = General.IncarcaDT(sql, null);
 

@@ -240,7 +240,7 @@
                                                                                         <SettingsSearchPanel Visible="false" />
                                                                                         <SettingsPager Mode="ShowAllRecords"></SettingsPager>
                                                                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                                                                        <Styles Header-BackColor="#fafafa" />
+                                                                                        <Styles Header-BackColor="#fafafa" BatchEditModifiedCell-BackColor="Transparent"/>
                                                                                         <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                                                         <Columns>
                                                                                             <dx:GridViewBandColumn Caption="Luni" HeaderStyle-ForeColor="DarkBlue" HeaderStyle-BackColor="Transparent" HeaderStyle-HorizontalAlign="Center" HeaderStyle-Font-Size="Large">
@@ -319,7 +319,7 @@
                                                                                         <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                                                         <SettingsSearchPanel Visible="false" />
                                                                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                                                                        <Styles Header-BackColor="#fafafa" />
+                                                                                        <Styles Header-BackColor="#fafafa" BatchEditModifiedCell-BackColor="Transparent"/>
                                                                                         <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                                                         <Columns>
                                                                                             <dx:GridViewBandColumn Caption="Marti" HeaderStyle-ForeColor="DarkBlue" HeaderStyle-BackColor="Transparent" HeaderStyle-HorizontalAlign="Center" HeaderStyle-Font-Size="Large">
@@ -398,7 +398,7 @@
                                                                                         <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                                                         <SettingsSearchPanel Visible="false" />
                                                                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                                                                        <Styles Header-BackColor="#fafafa" />
+                                                                                        <Styles Header-BackColor="#fafafa" BatchEditModifiedCell-BackColor="Transparent"/>
                                                                                         <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                                                         <Columns>
                                                                                             <dx:GridViewBandColumn Caption="Miercuri" HeaderStyle-ForeColor="DarkBlue" HeaderStyle-BackColor="Transparent" HeaderStyle-HorizontalAlign="Center" HeaderStyle-Font-Size="Large">
@@ -477,7 +477,7 @@
                                                                                         <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                                                         <SettingsSearchPanel Visible="false" />
                                                                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                                                                        <Styles Header-BackColor="#fafafa" />
+                                                                                        <Styles Header-BackColor="#fafafa" BatchEditModifiedCell-BackColor="Transparent"/>
                                                                                         <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                                                         <Columns>
                                                                                             <dx:GridViewBandColumn Caption="Joi" HeaderStyle-ForeColor="DarkBlue" HeaderStyle-BackColor="Transparent" HeaderStyle-HorizontalAlign="Center" HeaderStyle-Font-Size="Large">
@@ -556,7 +556,7 @@
                                                                                         <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                                                         <SettingsSearchPanel Visible="false" />
                                                                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                                                                        <Styles Header-BackColor="#fafafa" />
+                                                                                        <Styles Header-BackColor="#fafafa" BatchEditModifiedCell-BackColor="Transparent"/>
                                                                                         <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                                                         <Columns>
                                                                                             <dx:GridViewBandColumn Caption="Vineri" HeaderStyle-ForeColor="DarkBlue" HeaderStyle-BackColor="Transparent" HeaderStyle-HorizontalAlign="Center" HeaderStyle-Font-Size="Large">
@@ -635,7 +635,7 @@
                                                                                         <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                                                         <SettingsSearchPanel Visible="false" />
                                                                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                                                                        <Styles Header-BackColor="#fafafa" />
+                                                                                        <Styles Header-BackColor="#fafafa" BatchEditModifiedCell-BackColor="Transparent"/>
                                                                                         <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                                                         <Columns>
                                                                                             <dx:GridViewBandColumn Caption="Sambata" HeaderStyle-ForeColor="DarkBlue" HeaderStyle-BackColor="Transparent" HeaderStyle-HorizontalAlign="Center" HeaderStyle-Font-Size="Large">
@@ -714,7 +714,7 @@
                                                                                         <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                                                         <SettingsSearchPanel Visible="false" />
                                                                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                                                                        <Styles Header-BackColor="#fafafa" />
+                                                                                        <Styles Header-BackColor="#fafafa" BatchEditModifiedCell-BackColor="Transparent"/>
                                                                                         <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                                                         <Columns>
                                                                                             <dx:GridViewBandColumn Caption="Duminica" HeaderStyle-ForeColor="DarkBlue" HeaderStyle-BackColor="Transparent" HeaderStyle-HorizontalAlign="Center" HeaderStyle-Font-Size="Large">
@@ -793,7 +793,7 @@
                                                                                         <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" BatchEditSettings-HighlightDeletedRows="false" />
                                                                                         <SettingsSearchPanel Visible="false" />
                                                                                         <SettingsLoadingPanel Mode="ShowAsPopup" />
-                                                                                        <Styles Header-BackColor="#fafafa" />
+                                                                                        <Styles Header-BackColor="#fafafa" BatchEditModifiedCell-BackColor="Transparent"/>
                                                                                         <ClientSideEvents BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e); }" ContextMenu="ctx" />
                                                                                         <Columns>
                                                                                             <dx:GridViewBandColumn Caption="Sarbatori Legale" HeaderStyle-ForeColor="DarkBlue" HeaderStyle-BackColor="Transparent" HeaderStyle-HorizontalAlign="Center" HeaderStyle-Font-Size="Large">

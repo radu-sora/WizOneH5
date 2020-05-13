@@ -874,8 +874,8 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402
-                            LEFT JOIN ""Ptj_tblAbsente"" ABSE ON P.""ValStr""=ABSE.""DenumireScurta"" AND ABSE.""DenumireScurta""<>''
-                            {strLeg}
+                            LEFT JOIN (SELECT ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE COALESCE(""DenumireScurta"",'') <>'' GROUP BY ""DenumireScurta"") ABSE ON P.""ValStr""=ABSE.""DenumireScurta""
+                            { strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";
                 else
@@ -974,7 +974,7 @@ namespace WizOne.Pontaj
                             LEFT JOIN F718 Fct ON A.F10071=Fct.F71802
                             LEFT JOIN F724 CA ON A.F10061 = CA.F72402 
                             LEFT JOIN F724 CB ON A.F10062 = CB.F72402 
-                            LEFT JOIN ""Ptj_tblAbsente"" ABSE ON P.""ValStr""=ABSE.""DenumireScurta""
+                            LEFT JOIN (SELECT ""DenumireScurta"" FROM ""Ptj_tblAbsente"" WHERE ""DenumireScurta"" IS NOT NULL GROUP BY ""DenumireScurta"") ABSE ON P.""ValStr""=ABSE.""DenumireScurta""
                             {strLeg}
                             WHERE CAST(P.""Ziua"" AS DATE) <= A.F10023
                             {filtru}";
@@ -1734,8 +1734,11 @@ namespace WizOne.Pontaj
                                     return;
                                 }
 
+                                string filtruSup = @" AND C.""DenumireScurta""<>'' ";
+                                if (Constante.tipBD == 2) filtruSup = "";
+
                                 string strSql = $@"SELECT A.* FROM ""Ptj_Intrari"" A
-                                                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""ValStr""=C.""DenumireScurta""
+                                                LEFT JOIN ""Ptj_tblAbsente"" C ON A.""ValStr""=C.""DenumireScurta"" {filtruSup}
                                                 WHERE @1 <= A.F10003 AND A.F10003 <= @2 AND @3 <= A.""Ziua"" AND A.""Ziua"" <= @4 AND C.""DenumireScurta"" IS NULL";
 
                                 DateTime dtInc = new DateTime(Convert.ToInt32(arr[1].Split('/')[2]), Convert.ToInt32(arr[1].Split('/')[1]), Convert.ToInt32(arr[1].Split('/')[0]));

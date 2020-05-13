@@ -121,7 +121,7 @@ function OnItemPressed(s, e) {
 
 
 function OnNewClick(s, e) {
-    s.AddNewRow();
+    grDate.AddNewRow();
 }
 
 

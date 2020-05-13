@@ -45,6 +45,7 @@ namespace Wizrom.Reports.Pages
                 report.Name, report.Description, report.TypeId, Session["UserId"].ToString());
         }
 
+        //Florin 2020.05.13 - am comentat bucata de mai jos; nu trebuie insert in relGrupRapoarte2
         public void SetReport(ReportViewModel report)
         {
             General.RunSqlScalar<int>("UPDATE [DynReports] SET [Name] = @1, [Description] = @2, [DynReportTypeId] = @3 WHERE [DynReportId] = @4", null,

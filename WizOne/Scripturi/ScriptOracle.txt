@@ -14157,3 +14157,11 @@ ALTER TABLE USERS ADD "UtilizatorNonAD" NUMBER(9) default 0;
 /
 ALTER TABLE "TemplateCampuri" ADD "OmiteLaActualizare" NUMBER(9);
 /
+
+
+----	2.2.129	----
+
+ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('NrOptiuniExportSAP', '3', 'Numar de optiuni pentru pagina Export SAP (intre 1 si 5)', 0);
+
+
+ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('CaleConfigPeopleSoft', '', 'Calea catre fisierul Config pagina Export SAP', 0);

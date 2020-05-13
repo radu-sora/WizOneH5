@@ -52,36 +52,7 @@ namespace WizOne.Pagini
             }
             catch (Exception ex)
             {
-                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
-
-        protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
-        {
-            try
-            {
-                switch(e.Parameter)
-                {
-                    case "btnExportSAP":
-                        if (!chk1.Checked && !chk2.Checked && !chk3.Checked && !chk4.Checked && !chk5.Checked)
-                        {
-                            pnlCtl.JSProperties["cpAlertMessage"] = "Nu ati bifat nicio optiune!";
-                            return;
-                        }
-
-                        if (chk2.Checked && chk3.Checked)
-                        {
-                            pnlCtl.JSProperties["cpAlertMessage"] = "Nu puteti bifa ambele tipuri de Pontaj (Estimat si Lichidare) in acelasi timp!";
-                            return;
-                        }
-                        Export();
-                        break;                 
-                }
-            }
-            catch (Exception ex)
-            {
-                pnlCtl.JSProperties["cpAlertMessage"] = ex.ToString();
+                MessageBox.Show(ex.ToString());
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
@@ -93,13 +64,13 @@ namespace WizOne.Pagini
             btnExportSAP.Enabled = false;
             string mesaj = ExportDateSAP();
 
-            btnExportSAP.Enabled = true;         
-            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant(mesaj);
+            btnExportSAP.Enabled = true;
+            MessageBox.Show(Dami.TraduCuvant(mesaj));
         }
 
         public string ExportDateSAP()
         {
-            string mesaj = "", sql = "", fileName = "";
+            string mesaj = "", fileName = "";
 
             try
             {
@@ -111,11 +82,12 @@ namespace WizOne.Pagini
                 }
 
                 string DB = Constante.BD;
-                string param = (chk1.Checked ? "1" : "0") + (chk2.Checked ? "1" : "0") + (chk3.Checked ? "1" : "0") + (chk4.Checked ? "1" : "0") + (chk5.Checked ? "1" : "0");
+                //string DB = "WIZONE_HGR_H5";
+                string param = (chk1.Checked ? "1" : "0") + (chk2.Checked ? "1" : "0") + (chk3.Checked ? "1" : "0") + (chk4.ClientVisible ? (chk4.Checked ? "1" : "0") : "") + (chk5.ClientVisible ? (chk5.Checked ? "1" : "0") : "");
 
                 wizone_exchange.Exchange.Export_Data(Session["UserId"].ToString(), DB, cale, param, out mesaj, out fileName);
 
-                string output_path = (fileName.Length > 0 ? System.IO.Path.GetDirectoryName(cale) + @"\" + fileName : "");
+                string output_path = (fileName.Length > 0 ? System.IO.Path.GetDirectoryName(cale) + @"\upld" + @"\" + fileName : "");
                 if (output_path.Length > 0)
                 {
                     var folder = new DirectoryInfo(HostingEnvironment.MapPath("~/FisiereSAP"));
@@ -133,13 +105,14 @@ namespace WizOne.Pagini
                         Response.ContentType = "text/plain";
                         Response.AddHeader("Content-Disposition", "attachment;filename=" + fileName);
                         Response.Buffer = true;
-                        ms.WriteTo(Response.OutputStream);                 
+                        ms.WriteTo(Response.OutputStream);
 
                         HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
                         HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
                         HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event
 
                         File.Delete(HostingEnvironment.MapPath("~/FisiereSAP/" + fileName));
+                        File.Delete(System.IO.Path.GetDirectoryName(cale) + @"\upld" + @"\" + fileName);
                     }
                     else
                     {
@@ -159,6 +132,29 @@ namespace WizOne.Pagini
         }
 
 
-       
+        protected void btnExportSAP_Click(object sender, EventArgs e)
+        {
+            try
+            {       
+                if (!chk1.Checked && !chk2.Checked && !chk3.Checked && !chk4.Checked && !chk5.Checked)
+                {
+                    MessageBox.Show("Nu ati bifat nicio optiune!");
+                    return;
+                }
+
+                if (chk2.Checked && chk3.Checked)
+                {
+                    MessageBox.Show("Nu puteti bifa ambele tipuri de Pontaj (Estimat si Lichidare) in acelasi timp!");
+                    return;
+                }
+                Export();                
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
     }
 }

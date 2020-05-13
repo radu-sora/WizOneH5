@@ -4,33 +4,14 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
     <script type="text/javascript">
-        function OnEndCallback(s, e) {
-            if (s.cpAlertMessage != null) {
-                swal({
-                    title: "Atentie !", text: s.cpAlertMessage,
-                    type: "warning"
-                });
-                s.cpAlertMessage = null;
-            }
-            pnlLoading.Hide();
-        }
+
     </script>
 
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 <script type="text/javascript">
-    function OnClick(s) {   
-        swal({
-            title: 'Sunteti sigur/a ?', text: 'Vreti sa continuati procesul?',
-            type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: 'Da, continua!', cancelButtonText: 'Renunta', closeOnConfirm: true
-        }, function (isConfirm) {
-                if (isConfirm) {
-                    pnlLoading.Show();
-                pnlCtl.PerformCallback(s.name);
-            }
-        });
-    }
+
 </script>
 	<style type="text/css">
         .legend-border
@@ -49,9 +30,7 @@
                     </td>
         </table>
 
-       <dx:ASPxCallbackPanel ID = "pnlCtl" ClientIDMode="Static" ClientInstanceName="pnlCtl" runat="server" OnCallback="pnlCtl_Callback" ClientSideEvents-EndCallback="OnEndCallback" SettingsLoadingPanel-Enabled="false">
-          <PanelCollection>
-            <dx:PanelContent>
+
 
 			<div>
                 <tr>
@@ -61,8 +40,7 @@
                     <table width="10%" >
                         <tr>
                             <td align="center">
-                                <dx:ASPxButton ID="btnExportSAP" ClientInstanceName="btnExportSAP" ClientIDMode="Static" runat="server" Text="Export SAP" Width="10" Height="10" AutoPostBack="False" oncontextMenu="ctx(this,event)">
-                                    <ClientSideEvents Click="function(s,e){ OnClick(s); }" /> 
+                                <dx:ASPxButton ID="btnExportSAP" ClientInstanceName="btnExportSAP" ClientIDMode="Static" runat="server" Text="Export SAP" Width="10" Height="10" OnClick="btnExportSAP_Click" AutoPostBack="true" oncontextMenu="ctx(this,event)">                            
                                     <Paddings Padding="0px" />
                                 </dx:ASPxButton>
                             </td>
@@ -97,9 +75,7 @@
                 </td> 
             </tr>      
 		</div>
-            </dx:PanelContent>
-            </PanelCollection>
-        </dx:ASPxCallbackPanel>
+
 
     </body>
 

@@ -55,9 +55,9 @@ namespace Wizrom.Reports.Pages
                 "UNION " +
                 "SELECT DISTINCT [IdGrup] FROM [relGrupRaport2] WHERE [IdRaport] = @2", Session["UserId"], report.Id).ForEach(groupId =>
             {
-                if (General.RunSqlScalar<int>($"UPDATE [relGrupRaport2] SET [AreParola] = @1 WHERE [IdGrup] = @2 AND [IdRaport] = @3", null, report.Restricted, groupId, report.Id) == 0)
-                    General.RunSqlScalar<int>($"INSERT INTO [relGrupRaport2] ([IdGrup], [IdRaport], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null, 
-                        groupId, report.Id, report.Restricted, Session["UserId"], DateTime.Now);
+                //if (General.RunSqlScalar<int>($"UPDATE [relGrupRaport2] SET [AreParola] = @1 WHERE [IdGrup] = @2 AND [IdRaport] = @3", null, report.Restricted, groupId, report.Id) == 0)
+                //    General.RunSqlScalar<int>($"INSERT INTO [relGrupRaport2] ([IdGrup], [IdRaport], [AreParola], [USER_NO], [TIME]) VALUES (@1, @2, @3, @4, @5)", null, 
+                //        groupId, report.Id, report.Restricted, Session["UserId"], DateTime.Now);
             });            
         }
 

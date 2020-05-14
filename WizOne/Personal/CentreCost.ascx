@@ -28,6 +28,7 @@
             <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
             <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca"  Width="75px" Visible="false"/>
             <dx:GridViewDataComboBoxColumn FieldName="IdCentruCost" Name="IdCentruCost" Caption="Centru de cost"  Width="250px" >
+                <Settings SortMode="DisplayText" />
                 <PropertiesComboBox TextField="F06205" ValueField="F06204" ValueType="System.Int32" DropDownStyle="DropDown" />
             </dx:GridViewDataComboBoxColumn>
                                                                                         

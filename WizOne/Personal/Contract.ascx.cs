@@ -205,7 +205,7 @@ namespace WizOne.Personal
             }
 
             ASPxComboBox cmbNivelFunctie = Contract_DataList.Items[0].FindControl("cmbNivelFunctie") as ASPxComboBox;
-            cmbNivelFunctie.DataSource = General.IncarcaDT("SELECT * FROM \"tblNivelFunctie\"", null);
+            cmbNivelFunctie.DataSource = General.IncarcaDT("SELECT * FROM \"tblNivelFunctie\" ORDER BY \"Denumire\"", null);
             cmbNivelFunctie.DataBind();
 
             if (!IsPostBack)

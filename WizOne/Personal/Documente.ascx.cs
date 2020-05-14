@@ -94,7 +94,7 @@ namespace WizOne.Personal
                     FROM F733 D
                     INNER JOIN F732 C ON c.F73202 = d.F73306
                     INNER JOIN F086 B ON b.F08602 = c.F73202
-                    INNER JOIN F085 A ON a.F08502 = b.F08603", null);
+                    INNER JOIN F085 A ON a.F08502 = b.F08603 ORDER BY ""Denumire""", null);
 
                     string tipDoc = "";
                     for (int i = 0; i < dtTipDoc.Rows.Count; i++)

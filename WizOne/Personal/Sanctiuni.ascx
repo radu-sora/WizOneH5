@@ -116,6 +116,7 @@
                         </dx:GridViewCommandColumn>
 
                         <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Sanctiune aplicata"  Width="280px" VisibleIndex="4" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="NumeCompus" ValueField="IdObiect" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput" Width="100px" VisibleIndex="5" >

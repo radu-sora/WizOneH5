@@ -52,6 +52,7 @@
                         </dx:GridViewCommandColumn>
 
                         <dx:GridViewDataComboBoxColumn FieldName="IdCategory" Name="IdCategory" Caption="Categorie" Width="150px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="NameCategory" ValueField="IdCategory" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>					
 					    <dx:GridViewDataDateColumn FieldName="DateAttach" Name="DateAttach" Caption="Data" Width="100px" >
@@ -103,6 +104,8 @@
                                     <tr>
                                         <td rowspan="5" style="vertical-align:top;padding:10px !important;"><dx:ASPxMemo ID="txtDesc" runat="server" Width="500px" Height="150" Text='<%# Bind("DescrAttach") %>' /></td>
                                         <td style="padding:10px !important;"><dx:ASPxComboBox ID="cmbCateg" runat="server" Width="215px" ValueField="IdCategory" DropDownWidth="200" TextField="NameCategory" ValueType="System.Int32" AutoPostBack="false" Value='<%# Bind("IdCategory") %>' />
+                                            
+                                           
                                     </tr>
                                     <tr>
                                         <td style="padding:10px !important;">Data</td>

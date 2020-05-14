@@ -284,9 +284,9 @@ namespace WizOne.Personal
                 ASPxComboBox cmbCateg = grDateAtasamente.FindEditFormTemplateControl("cmbCateg") as ASPxComboBox;
                 if (cmbCateg != null)
                 {
-                    string sql = @"SELECT * FROM ""CategoriiAtasamente"" ";
+                    string sql = @"SELECT * FROM ""CategoriiAtasamente"" ORDER BY ""NameCategory""";
                     if (Constante.tipBD == 2)
-                        sql = General.SelectOracle("CategoriiAtasamente", "IdCategory");
+                        sql = General.SelectOracle("CategoriiAtasamente", "IdCategory") + @" ORDER BY ""NameCategory"" ";
                     DataTable dtCateg = General.IncarcaDT(sql, null);
                     cmbCateg.DataSource = dtCateg;
                     cmbCateg.DataBindItems();

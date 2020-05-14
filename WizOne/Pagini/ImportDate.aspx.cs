@@ -200,7 +200,17 @@ namespace WizOne.Pagini
                     table.Columns.Add("Id", typeof(string));
                     table.Columns.Add("Denumire", typeof(string));
 
-                    string sql = "SELECT * FROM \"Template\" WHERE \"Id\" =  " + Convert.ToInt32(cmbSablon.Value);
+                    int id = -1;
+                    if (cmbSablon.Value != null)
+                        id = Convert.ToInt32(cmbSablon.Value);
+                    else
+                    {
+                        object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "Id", "NumeSablon", "NumeTabela" }) as object[];
+                        if (obj != null && obj.Count() > 0)
+                            id = Convert.ToInt32(obj[0]);
+                    }
+
+                    string sql = "SELECT * FROM \"Template\" WHERE \"Id\" =  " + id;
                     DataTable dtSablon = General.IncarcaDT(sql, null);
                     if (dtSablon != null && dtSablon.Rows.Count > 0)
                     {
@@ -786,7 +796,7 @@ namespace WizOne.Pagini
                       + " (SELECT DATA_TYPE FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = \"ColoanaBD\") as \"Tip\" "
                       + "  from \"TemplateCampuri\" a "
                       + "  left join \"Template\" b on a.\"Id\" = b.\"Id\" where b.\"NumeTabela\" = '" + numeTabela + "' ";
-
+                               
                 DataTable dtCombinat = General.IncarcaDT(sql, null);
                 foreach (DataColumn col in dtCombinat.Columns)
                     col.ReadOnly = false;
@@ -805,6 +815,19 @@ namespace WizOne.Pagini
                     }
                 }
 
+                bool utilizator = false, timp = false;                
+                sql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = 'USER_NO'";
+                if (Constante.tipBD == 2)
+                    sql = "SELECT COUNT(*) FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = 'USER_NO'";
+                DataTable dtVer = General.IncarcaDT(sql, null);
+                if (dtVer != null && dtVer.Rows.Count > 0 && dtVer.Rows[0][0] != null && Convert.ToInt32(dtVer.Rows[0][0].ToString()) > 0)
+                    utilizator = true;
+                sql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = 'TIME'";
+                if (Constante.tipBD == 2)
+                    sql = "SELECT COUNT(*) FROM user_tab_columns WHERE  TABLE_NAME = '" + numeTabela + "' and COLUMN_NAME = 'TIME'";
+                dtVer = General.IncarcaDT(sql, null);
+                if (dtVer != null && dtVer.Rows.Count > 0 && dtVer.Rows[0][0] != null && Convert.ToInt32(dtVer.Rows[0][0].ToString()) > 0)
+                    timp = true;
 
                 int j = 1;
                 k = 0;
@@ -935,6 +958,27 @@ namespace WizOne.Pagini
                         valoare += "," + lstCampuri[x].Split('=')[1].Replace("#&*", ",");
                     }
 
+                    if (utilizator)
+                    {
+                        if (!campNonObligAct.Contains("\"USER_NO\""))
+                            campNonObligAct += ", USER_NO = " + Session["UserId"].ToString();
+                        if (!camp.Contains("\"USER_NO\""))
+                        {
+                            camp += ", USER_NO ";
+                            valoare += ", " + Session["UserId"].ToString();
+                        }
+                    }
+                    if (timp)
+                    {
+                        if (!campNonObligAct.Contains("\"TIME\""))
+                            campNonObligAct += ", TIME = " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                        if (!camp.Contains("\"TIME\""))
+                        {
+                            camp += ", TIME ";
+                            valoare += ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE");
+                        }
+                    }
+
                     DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + numeTabela + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ","), null);
                     sql = "";
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)
@@ -1027,6 +1071,21 @@ namespace WizOne.Pagini
                 {
                     file.Delete();
                 }
+
+                //scriere in log
+                StreamWriter sw = new StreamWriter(HostingEnvironment.MapPath("~/Temp/") + "ImportDateLog.csv", false);   
+                for (int i = 0; i < dtViz.Columns.Count; i++)                
+                    sw.Write(dtViz.Columns[i].ColumnName + "\t");                
+                sw.Write("\r\n");
+                for (int p = 0; p < dtViz.Rows.Count; p++)
+                {
+                    for (int q = 0; q < dtViz.Columns.Count; q++)
+                        sw.Write(dtViz.Rows[p][q] + "\t");
+                    sw.Write("\r\n");
+                } 
+                sw.Close();
+                sw.Dispose();
+
             }
             catch (Exception ex)
             {

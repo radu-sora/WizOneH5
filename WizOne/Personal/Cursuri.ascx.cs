@@ -73,24 +73,24 @@ namespace WizOne.Personal
             grDateCursuri.KeyFieldName = "IdAuto";
             grDateCursuri.DataSource = dt;
 
-            string sql = @"SELECT * FROM ""Admin_TipCurs"" ";
+            string sql = @"SELECT * FROM ""Admin_TipCurs"" ORDER BY ""TipCurs""";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("Admin_TipCurs", "IdAuto");
+                sql = General.SelectOracle("Admin_TipCurs", "IdAuto") + " ORDER BY \"TipCurs\"";
             DataTable dtTipAutorizatie = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colTipAutorizatie = (grDateCursuri.Columns["IdTipCurs"] as GridViewDataComboBoxColumn);
             colTipAutorizatie.PropertiesComboBox.DataSource = dtTipAutorizatie;
 
-            sql = @"SELECT * FROM ""Admin_DescrCurs"" ";
+            sql = @"SELECT * FROM ""Admin_DescrCurs"" ORDER BY  ""DescriereCurs""";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("Admin_DescrCurs", "IdAuto");
+                sql = General.SelectOracle("Admin_DescrCurs", "IdAuto") + " ORDER BY \"DescriereCurs\"";
             DataTable dtDescriereAutorizatie = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colDescriereAutorizatie = (grDateCursuri.Columns["IdDescriereCurs"] as GridViewDataComboBoxColumn);
             colDescriereAutorizatie.PropertiesComboBox.DataSource = dtDescriereAutorizatie;
 
             //Radu 11.02.2020
-            sql = @"SELECT * FROM ""tblMonede"" ";
+            sql = @"SELECT * FROM ""tblMonede"" ORDER BY ""Abreviere""";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("tblMonede", "Id");
+                sql = General.SelectOracle("tblMonede", "Id") + " ORDER BY \"Abreviere\"";
             DataTable dtMonede = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colMonede = (grDateCursuri.Columns["IdMoneda"] as GridViewDataComboBoxColumn);
             colMonede.PropertiesComboBox.DataSource = dtMonede;

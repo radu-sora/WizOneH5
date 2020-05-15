@@ -20,11 +20,13 @@
                         <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat"  Width="75px" Visible="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                         <dx:GridViewDataComboBoxColumn FieldName="IdContact" Name="IdContact" Caption="Tip contact" Width="100px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="Valoare" Name="Valoare" Caption="Valoare"  Width="250px" />
                         <dx:GridViewDataTextColumn FieldName="Interior" Name="Interior" Caption="Interior"  Width="250px" />
                          <dx:GridViewDataComboBoxColumn FieldName="IdLocatie" Name="IdLocatie" Caption="Locatie"  Width="100px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="LOCATIE" ValueField="NUMAR" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>          
                         <dx:GridViewDataCheckColumn FieldName="BifaTrimitereEmail" Name="BifaTrimitereEmail" Caption="BifaTrimitereEmail"  Width="70px"  />
@@ -33,6 +35,7 @@
                             </PropertiesTextEdit>
                         </dx:GridViewDataTextColumn>
                          <dx:GridViewDataComboBoxColumn FieldName="EstePrincipal" Name="EstePrincipal" Caption="Principal"  Width="75px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn> 
                         <dx:GridViewDataTextColumn FieldName="ValoareString" Name="ValoareString" Caption="ValoareString" Visible="false"  Width="100px" />	

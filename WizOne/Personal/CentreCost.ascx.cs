@@ -74,9 +74,9 @@ namespace WizOne.Personal
             grDateCentreCost.KeyFieldName = "IdAuto";
             grDateCentreCost.DataSource = dt;
 
-            string sql = @"SELECT * FROM F062 ";
+            string sql = @"SELECT * FROM F062 ORDER BY F06205";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F062", "F06204");
+                sql = General.SelectOracle("F062", "F06204") + " ORDER BY F06205";
             DataTable dtCC = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colCC = (grDateCentreCost.Columns["IdCentruCost"] as GridViewDataComboBoxColumn);
             colCC.PropertiesComboBox.DataSource = dtCC;

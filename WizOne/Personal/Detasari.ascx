@@ -129,6 +129,7 @@
             <dx:GridViewDataTextColumn FieldName="F11204" Name="F11204" Caption="Nume angajator"  Width="150px"/>
             <dx:GridViewDataTextColumn FieldName="F11205" Name="F11205" Caption="CUI"  Width="100px"/>
             <dx:GridViewDataComboBoxColumn FieldName="F11206" Name="F11206" Caption="Nationalitate" ReadOnly="true" Width="250px" >
+				<Settings SortMode="DisplayText" />
                 <PropertiesComboBox TextField="F73304" ValueField="F73302" ValueType="System.Int32" DropDownStyle="DropDown" />
             </dx:GridViewDataComboBoxColumn>
                                                                                         

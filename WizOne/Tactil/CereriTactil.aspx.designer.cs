@@ -276,6 +276,15 @@ namespace WizOne.Tactil
         protected global::DevExpress.Web.ASPxTextBox txtNrOreInMinute;
 
         /// <summary>
+        /// txtNrOreTime control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTimeEdit txtNrOreTime;
+
+        /// <summary>
         /// tdOraInc control.
         /// </summary>
         /// <remarks>

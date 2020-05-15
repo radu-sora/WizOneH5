@@ -78,6 +78,7 @@
                     <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Angajat"  Width="75px" Visible="false"/>
                     <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                     <dx:GridViewDataComboBoxColumn FieldName="IdTipAdresa" Name="IdTipAdresa" Caption="Tip adresa" Width="100px">
+                        <Settings SortMode="DisplayText" />
                         <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                     </dx:GridViewDataComboBoxColumn>
                     <dx:GridViewCommandColumn Width="50px" ButtonType="Image" ShowEditButton="false"  Caption=" ">
@@ -95,6 +96,7 @@
                     <dx:GridViewDataTextColumn FieldName="NumeNivel3" Name="NumeNivel3" Caption="Localitate/Sector" ReadOnly="true" Width="150px" />
                     <dx:GridViewDataTextColumn FieldName="SirutaNivel3" Name="SirutaNivel3" Caption="Sat" Visible="false" Width="200px" />
                     <dx:GridViewDataComboBoxColumn FieldName="IdTipStrada" Name="IdTipStrada" Caption="Tip artera" Width="150px" >
+                        <Settings SortMode="DisplayText" />
                         <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                     </dx:GridViewDataComboBoxColumn>
                     <dx:GridViewDataTextColumn FieldName="Strada" Name="Strada" Caption="Artera" Width="150px" />

@@ -287,7 +287,7 @@ namespace WizOne.Avs
                             + "union "
                             + "select CONVERT(DATETIME, '01/' + convert(varchar, MONTH) + '/' + convert(varchar, year) , 103) as DataModif, ValV,  {30} "
                             + "ValN, {31} '' as explicatii, (SELECT F70104 FROM USERS WHERE F70102 = MAX({20}.USER_NO)) AS Utilizator, MAX(TIME) AS Data, " + criptat.Replace("F704.USER_NO", "MAX({20}.USER_NO)") + " from {20}, " 
-                            + "(" + test + ") Test  where F91003 = {26} "
+                            + "(" + test + ") Test  where F91003 = {26} AND F91025 IN (0, 900, 999) "
                             + "and CONVERT(DATETIME, '01/' + convert(varchar, MONTH) + '/' + convert(varchar, year) , 103) = DM and (ValV <> ValN {35}) group by ValV, ValN, {34}"
                             + "CONVERT(DATETIME, '01/' + convert(varchar, MONTH) + '/' + convert(varchar, year) , 103)) t  {24} {25}   ";
                 else
@@ -302,7 +302,7 @@ namespace WizOne.Avs
                             + "union "
                             + "select TO_DATE('01/' || TO_CHAR(MONTH) || '/' || TO_CHAR(year), 'dd/mm/yyyy') as \"DataModif\", \"ValV\",  {30} "
                             + "\"ValN\", {31} '' as \"Explicatii\", (SELECT F70104 FROM USERS WHERE F70102 = MAX({20}.USER_NO)) AS \"Utilizator\", MAX(TIME) AS \"Data\", " + criptat.Replace("F704.USER_NO", "MAX({20}.USER_NO)") + " from {20}, " 
-                            + "(" + test + ") Test  where F91003 = {26} "
+                            + "(" + test + ") Test  where F91003 = {26} AND F91025 IN (0, 900, 999) "
                             + "and TO_DATE('01/' || TO_CHAR(MONTH) || '/' || TO_CHAR(year), 'dd/mm/yyyy') = DM and (\"ValV\" <> \"ValN\" {35}) group by \"ValV\", \"CodValV\", {34}"
                             + "TO_DATE('01/' || TO_CHAR(MONTH) || '/' || TO_CHAR(year), 'dd/mm/yyyy')) t   {24} {25}   ";
 

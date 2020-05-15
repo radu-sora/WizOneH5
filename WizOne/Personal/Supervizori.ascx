@@ -30,9 +30,11 @@
             <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca"  Width="75px" Visible="false"/>
             <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume complet"  Width="150px" Visible="false"/>
             <dx:GridViewDataComboBoxColumn FieldName="IdSuper" Name="IdSuper" Caption="Supervizor"  Width="250px" >
+                <Settings SortMode="DisplayText" />
                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
             </dx:GridViewDataComboBoxColumn>
             <dx:GridViewDataComboBoxColumn FieldName="IdUser" Name="IdUser" Caption="Utilizator"  Width="250px" >
+                <Settings SortMode="DisplayText" />
                 <PropertiesComboBox TextField="F70104" ValueField="F70102" ValueType="System.Int32" DropDownStyle="DropDown" />
             </dx:GridViewDataComboBoxColumn> 
             <dx:GridViewDataDateColumn FieldName="DataInceput" Name="DataInceput" Caption="Data inceput"  Width="100px" >

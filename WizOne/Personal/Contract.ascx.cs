@@ -140,7 +140,7 @@ namespace WizOne.Personal
                 if (General.Nz(ds.Tables[0].Rows[0]["F100926"], "").ToString() != "")
                     cmbTipNorma.Value = Convert.ToInt32(ds.Tables[0].Rows[0]["F100926"]);
 
-                if (Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
+                if (ds.Tables[0].Rows[0]["F10010"] == null || Convert.ToInt32(ds.Tables[0].Rows[0]["F10010"].ToString()) == 0)
                 {
                     cmbIntRepTimpMunca.ClientEnabled = false;
                     txtNrOre.ClientEnabled = false;
@@ -153,7 +153,7 @@ namespace WizOne.Personal
                     txtNrOre.Text = "0";
                 }
               
-                if (Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
+                if (ds.Tables[0].Rows[0]["F1009741"] != null && Convert.ToInt32(ds.Tables[0].Rows[0]["F1009741"].ToString()) == 1)
                 {
                     deDeLaData.ClientEnabled = false;
                     deLaData.ClientEnabled = false;
@@ -205,7 +205,7 @@ namespace WizOne.Personal
             }
 
             ASPxComboBox cmbNivelFunctie = Contract_DataList.Items[0].FindControl("cmbNivelFunctie") as ASPxComboBox;
-            cmbNivelFunctie.DataSource = General.IncarcaDT("SELECT * FROM \"tblNivelFunctie\"", null);
+            cmbNivelFunctie.DataSource = General.IncarcaDT("SELECT * FROM \"tblNivelFunctie\" ORDER BY \"Denumire\"", null);
             cmbNivelFunctie.DataBind();
 
             if (!IsPostBack)

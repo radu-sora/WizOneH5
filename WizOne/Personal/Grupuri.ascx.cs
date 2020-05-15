@@ -77,9 +77,9 @@ namespace WizOne.Personal
             grDateGrupuri.KeyFieldName = "IdAuto";
             grDateGrupuri.DataSource = dt;
 
-            string sql = @"SELECT * FROM ""tblGrupAngajati"" ";
+            string sql = @"SELECT * FROM ""tblGrupAngajati"" ORDER BY ""Denumire""";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("tblGrupAngajati", "Id");
+                sql = General.SelectOracle("tblGrupAngajati", "Id") + " ORDER BY \"Denumire\"";
             DataTable dtGrup = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colGrup = (grDateGrupuri.Columns["IdGrup"] as GridViewDataComboBoxColumn);
             colGrup.PropertiesComboBox.DataSource = dtGrup;

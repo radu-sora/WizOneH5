@@ -43,9 +43,9 @@ namespace WizOne.Personal
                 #endregion
 
                 //General.SecuritatePersonal(DataList1, Convert.ToInt32(Session["UserId"].ToString()));
-                string sql = @"SELECT * FROM F090";
+                string sql = @"SELECT * FROM F090 ORDER BY F09003";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F090", "F09002");
+                    sql = General.SelectOracle("F090", "F09002") + " ORDER BY F09003";
                 DataTable dtSusp = General.IncarcaDT(sql, null);
                 GridViewDataComboBoxColumn colSusp = (grDateSuspendari.Columns["F11104"] as GridViewDataComboBoxColumn);
                 colSusp.PropertiesComboBox.DataSource = dtSusp;

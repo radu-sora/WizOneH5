@@ -31,6 +31,7 @@
             <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
 
             <dx:GridViewDataComboBoxColumn FieldName="IdContract" Name="IdContract" Caption="Contract"  Width="350px" >
+                <Settings SortMode="DisplayText" />
                 <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
             </dx:GridViewDataComboBoxColumn>
                                                                                         

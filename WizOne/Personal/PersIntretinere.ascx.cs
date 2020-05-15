@@ -50,16 +50,16 @@ namespace WizOne.Personal
 
         private void IncarcaGrid()
         {
-            string sql = @"SELECT * FROM F711";
+            string sql = @"SELECT * FROM F711 ORDER BY F71104";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F711", "F71102");
+                sql = General.SelectOracle("F711", "F71102") + " ORDER BY F71104";
             DataTable dtRel = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colRel = (grDatePersIntr.Columns["F11004"] as GridViewDataComboBoxColumn);
             colRel.PropertiesComboBox.DataSource = dtRel;
 
-            sql = @"SELECT * FROM F715";
+            sql = @"SELECT * FROM F715 ORDER BY F71504";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F715", "F71502");
+                sql = General.SelectOracle("F715", "F71502") + " ORDER BY F71504";
             DataTable dtInv = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colInv = (grDatePersIntr.Columns["F11014"] as GridViewDataComboBoxColumn);
             colInv.PropertiesComboBox.DataSource = dtInv;

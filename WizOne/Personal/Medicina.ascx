@@ -51,6 +51,7 @@
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataComboBoxColumn FieldName="IdObiect" Name="IdObiect" Caption="Medicina muncii/PSI"  Width="250px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="NumeCompus" ValueField="IdObiect" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataDateColumn FieldName="DataElib" Name="DataElib" Caption="Data eliberarii"  Width="100px" >

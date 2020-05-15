@@ -82,9 +82,9 @@ namespace WizOne.Personal
             grDateDetasari.KeyFieldName = "IdAuto";
             grDateDetasari.DataSource = dt;
 
-            string sql = @"SELECT * FROM F733 ";
+            string sql = @"SELECT * FROM F733 ORDER BY F73304";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F733", "F73302");
+                sql = General.SelectOracle("F733", "F73302") + " ORDER BY F73304";
             DataTable dtDet = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colDet = (grDateDetasari.Columns["F11206"] as GridViewDataComboBoxColumn);
             colDet.PropertiesComboBox.DataSource = dtDet;

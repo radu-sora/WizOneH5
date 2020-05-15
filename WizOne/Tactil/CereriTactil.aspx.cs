@@ -1440,6 +1440,8 @@ namespace WizOne.Tactil
                                 tdNrOreInMinute.Visible = true;
                                 txtNrOreInMinute.Visible = true;
                                 txtNrOreInMinute.ClientEnabled = false;
+                                //txtNrOreTime.Visible = true;
+                                //txtNrOreTime.ClientEnabled = false;
                                 tdNrOre.Visible = false;
                                 txtNrOre.Visible = false;
                                 lblOraInc.Visible = true;
@@ -1454,7 +1456,7 @@ namespace WizOne.Tactil
                                 cmbOraSf.DataBind();
                                 tdNrOre.Width = "300";
                                 tdNrOreInMinute.Width = "550";
-                                H3.InnerText = "Nr. minute";
+                                H3.InnerText = "Nr. ore";
                             }
                             else
                                 tdNrOre.Width = "1200";

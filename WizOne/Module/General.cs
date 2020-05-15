@@ -8270,6 +8270,7 @@ namespace WizOne.Module
         {
             try
             {
+                int idAuto = 100000000;
                 ASPxGridView grDate = sender as ASPxGridView;
 
                 grDate.CancelEdit();
@@ -8319,6 +8320,12 @@ namespace WizOne.Module
 
                     dr["USER_NO"] = HttpContext.Current.Session["UserId"];
                     dr["TIME"] = DateTime.Now;
+
+                    if (dt.Columns["IdAuto"] != null)
+                    {
+                        idAuto += 1;
+                        dr["IdAuto"] = idAuto;
+                    }
 
                     if (!modif) continue;
                     dt.Rows.Add(dr);
@@ -8378,11 +8385,17 @@ namespace WizOne.Module
                     dr["USER_NO"] = HttpContext.Current.Session["UserId"];
                     dr["TIME"] = DateTime.Now;
 
+                    if (dt.Columns["IdAuto"] != null)
+                    {
+                        idAuto += 1;
+                        dr["IdAuto"] = idAuto;
+                    }
+
                     if (!modif) continue;
                 }
 
 
-                //daca avem linii modificate
+                //daca avem linii sterse
                 for (int i = 0; i < e.DeleteValues.Count; i++)
                 {
                     ASPxDataDeleteValues upd = e.DeleteValues[i] as ASPxDataDeleteValues;

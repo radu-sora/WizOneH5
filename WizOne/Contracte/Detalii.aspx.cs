@@ -221,6 +221,7 @@ namespace WizOne.Contracte
                                 }
 
                                 //adaugam liniile
+                                int idAuto = 100050000;
                                 DataTable dtZi = dt.Select("TipSchimb = " + cmbZiDeLa.Value).CopyToDataTable();
                                 string[] arr = schDes.Split(',');
                                 for (int i = 0; i < arr.Length; i++)
@@ -240,10 +241,12 @@ namespace WizOne.Contracte
                                         dr["OraSfarsitDeLa"] = drOri["OraSfarsitDeLa"];
                                         dr["OraSfarsitLa"] = drOri["OraSfarsitLa"];
                                         dr["ModVerificare"] = drOri["ModVerificare"];
+                                        dr["IdAuto"] = idAuto;
                                         dr["USER_NO"] = Session["UserId"];
                                         dr["TIME"] = DateTime.Now;
 
                                         dt.Rows.Add(dr);
+                                        idAuto += 1;
                                     }
                                 }
 

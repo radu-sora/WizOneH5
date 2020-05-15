@@ -6931,38 +6931,38 @@ namespace WizOne.Module
                     f10003 = "a.F10003";
 
                 //Radu 21.04.2020
-                string strSql = SelectCalculCO(an, f10003, filtruIns);
-                General.ExecutaNonQuery(strSql, null);
+                //string strSql = SelectCalculCO(an, f10003, filtruIns);
+                //General.ExecutaNonQuery(strSql, null);
 
 
                 if (cuActualizareInF100)
                 {
                     //Radu 21.04.2020
-                    string strUpd = $@"UPDATE A 
-                        SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
-                        FROM F100 A
-                        INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
-                    if (Constante.tipBD == 2)
-                        strUpd = $@"UPDATE F100 A
-                                    SET (A.F100642, A.F100995, A.F100996) =
-                                      (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
-                                       FROM ""Ptj_tblZileCO"" B
-                                       WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
-                                    WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
+                    //string strUpd = $@"UPDATE A 
+                    //    SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
+                    //    FROM F100 A
+                    //    INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
+                    //if (Constante.tipBD == 2)
+                    //    strUpd = $@"UPDATE F100 A
+                    //                SET (A.F100642, A.F100995, A.F100996) =
+                    //                  (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
+                    //                   FROM ""Ptj_tblZileCO"" B
+                    //                   WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
+                    //                WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
 
-                    General.ExecutaNonQuery(strUpd, null);
-                    //if (marca != -99)
-                    //{
-                    //    if (Constante.tipBD == 1)
-                    //        General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
-                    //                            + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
-                    //                            + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
-                    //    else
-                    //    {
-                    //        DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
-                    //        General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
-                    //    }
-                    //}
+                    //General.ExecutaNonQuery(strUpd, null);
+                    if (marca != -99)
+                    {
+                        if (Constante.tipBD == 1)
+                            General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
+                                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
+                                                + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
+                        else
+                        {
+                            DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
+                            General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
+                        }
+                    }
                 }
             }
             catch (Exception ex)

@@ -39,8 +39,8 @@ namespace WizOne.Absente
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 GridViewDataComboBoxColumn colAn = (grDate.Columns["An"] as GridViewDataComboBoxColumn);
-                colAn.PropertiesComboBox.DataSource = Dami.ListaAni(2000, 2020);
-                cmbAn.DataSource = Dami.ListaAni(2000, 2020);
+                colAn.PropertiesComboBox.DataSource = Dami.ListaAni(2000, 2030);
+                cmbAn.DataSource = Dami.ListaAni(2000, 2030);
                 cmbAn.DataBind();
                 
 

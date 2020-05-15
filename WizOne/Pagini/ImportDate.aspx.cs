@@ -979,6 +979,9 @@ namespace WizOne.Pagini
                         }
                     }
 
+                    campNonObligAct = campNonObligAct.Replace("GLOBAL.IDUSER", Session["UserId"].ToString());
+                    valoare = valoare.Replace("GLOBAL.IDUSER", Session["UserId"].ToString());
+
                     DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + numeTabela + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ","), null);
                     sql = "";
                     if (dtTest != null && dtTest.Rows.Count > 0 && dtTest.Rows[0][0] != null && Convert.ToInt32(dtTest.Rows[0][0].ToString()) > 0)

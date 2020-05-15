@@ -171,7 +171,6 @@ namespace WizOne.Pontaj
                     grDate.Attributes.Add("onclick", String.Format("eventKeyPress(event, {0});", grDate.ClientInstanceName));
                     Session["Ptj_NrRanduri"] = 10;
 
-                    //Florin 2020.05.15 - am scos conditia dupa vizibil si le ascundem in grid
                     //Adaugam f-urile
                     DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"",0) = 1 ORDER BY COALESCE(""OrdineAfisare"",999999) ", null);
                     for(int i =0; i< dt.Rows.Count; i++)
@@ -185,7 +184,6 @@ namespace WizOne.Pontaj
                         c.ReadOnly = true;
                         c.Width = Unit.Pixel(Convert.ToInt32(General.Nz(dt.Rows[i]["Latime"], 100)));
                         c.VisibleIndex = 100 + i;
-                        c.Visible = Convert.ToBoolean(General.Nz(dt.Rows[i]["Vizibil"], 0));
 
                         //c.PropertiesEdit.DisplayFormatString = "N0";
                         c.PropertiesTextEdit.DisplayFormatString = "N" + General.Nz(dt.Rows[i]["NumarZecimale"], 0);

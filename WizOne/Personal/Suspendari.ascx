@@ -85,6 +85,7 @@
                     <Columns>
                         <dx:GridViewCommandColumn Width="150px" ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid"/>
                         <dx:GridViewDataComboBoxColumn FieldName="F11104" Name="F11104" Caption="Motiv"  Width="250px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="F09003" ValueField="F09002" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                                                                                         

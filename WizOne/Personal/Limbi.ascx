@@ -19,6 +19,7 @@
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false"/>
                         <dx:GridViewDataComboBoxColumn FieldName="IdLimba" Name="IdLimba" Caption="Limba"  Width="100px" >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Denumire" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn> 
                          <dx:GridViewDataTextColumn FieldName="Nivel" Name="Nivel" Caption="Nivel vorbit"  Width="100px" />

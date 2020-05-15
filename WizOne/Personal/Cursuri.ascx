@@ -23,6 +23,7 @@
                         <dx:GridViewDataTextColumn FieldName="Marca" Name="Marca" Caption="Angajat"  Width="75px" Visible="false" ReadOnly="True"/>
                         <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto"  Width="75px" Visible="false" />
                         <dx:GridViewDataComboBoxColumn FieldName="IdTipCurs" Name="IdTipCurs" Caption="Tip curs" Width="100px"  >
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="TipCurs" ValueField="IdAuto" ValueType="System.Int32" DropDownStyle="DropDown" />
                         </dx:GridViewDataComboBoxColumn>
                         <dx:GridViewDataTextColumn FieldName="NumeComplet" Name="NumeComplet" Caption="Nume complet"  Width="250px"  />
@@ -44,6 +45,7 @@
                         <dx:GridViewDataTextColumn Caption="Numar Ore" FieldName="NrOre" Name="NrOre"  Width="100px">
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn Caption="Descriere curs" FieldName="IdDescriereCurs" Name="IdDescriereCurs"  Width="250px" ShowInCustomizationForm="True">
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="DescriereCurs" ValueField="IdAuto" DropDownStyle="DropDown" ValueType="System.Int32">
                             </PropertiesComboBox>
                         </dx:GridViewDataComboBoxColumn>
@@ -60,6 +62,7 @@
                         <dx:GridViewDataTextColumn Caption="Buget" FieldName="Buget" Name="Buget" Width="100px" ShowInCustomizationForm="True">
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataComboBoxColumn Caption="Moneda" FieldName="IdMoneda" Name="IdMoneda"  Width="75px" ShowInCustomizationForm="True">
+                            <Settings SortMode="DisplayText" />
                             <PropertiesComboBox TextField="Abreviere" ValueField="Id" DropDownStyle="DropDown" ValueType="System.Int32">
                             </PropertiesComboBox>
                         </dx:GridViewDataComboBoxColumn>

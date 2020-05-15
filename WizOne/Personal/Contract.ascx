@@ -1318,6 +1318,8 @@
                 <asp:ObjectDataSource runat="server" ID="dsCOR" TypeName="WizOne.Module.General" SelectMethod="GetCOR"/>
                 <asp:ObjectDataSource runat="server" ID="dsFunctie" TypeName="WizOne.Module.General" SelectMethod="GetFunctie"/>
                 <asp:ObjectDataSource runat="server" ID="dsMeserie" TypeName="WizOne.Module.General" SelectMethod="GetMeserie"/>
+                <asp:ObjectDataSource runat="server" ID="dsMSI" TypeName="WizOne.Module.General" SelectMethod="GetMotivScutireImpozit"/>     
+                <asp:ObjectDataSource runat="server" ID="dsMSCAS" TypeName="WizOne.Module.General" SelectMethod="GetMotivScutireCAS"/>
 			  </fieldset>
             </td>
            <td valign="top" width="310">      
@@ -1493,9 +1495,7 @@
 					    </tr>
 				        </table>
                         <asp:ObjectDataSource runat="server" ID="dsMP" TypeName="WizOne.Module.General" SelectMethod="GetMotivPlecare"/>
-                        <asp:ObjectDataSource runat="server" ID="dsGI" TypeName="WizOne.Module.General" SelectMethod="ListaMP_GradInvaliditate"/>
-                        <asp:ObjectDataSource runat="server" ID="dsMSI" TypeName="WizOne.Module.General" SelectMethod="GetMotivScutireImpozit"/>
-                        <asp:ObjectDataSource runat="server" ID="dsMSCAS" TypeName="WizOne.Module.General" SelectMethod="GetMotivScutireCAS"/>
+                        <asp:ObjectDataSource runat="server" ID="dsGI" TypeName="WizOne.Module.General" SelectMethod="ListaMP_GradInvaliditate"/>                                    
 			        </fieldset>           
              </td>
               <td valign="top">   

@@ -95,9 +95,9 @@ namespace WizOne.Personal
             grDateComponente.KeyFieldName = "F02104";
             grDateComponente.DataSource = dt;
 
-            sql = @"SELECT F02104 AS Id, CONVERT(VARCHAR, F02104) + ' - ' + F02105 as Denumire FROM F021 WHERE F02104 BETWEEN 4001 AND 4010";
+            sql = @"SELECT F02104 AS Id, CONVERT(VARCHAR, F02104) + ' - ' + F02105 as Denumire FROM F021 WHERE F02104 BETWEEN 4001 AND 4010 ORDER BY Denumire";
             if (Constante.tipBD == 2)
-                sql = @"SELECT F02104 AS ""Id"", F02104 || ' - ' || F02105 as ""Denumire"" FROM F021 WHERE F02104 BETWEEN 4001 AND 4010";
+                sql = @"SELECT F02104 AS ""Id"", F02104 || ' - ' || F02105 as ""Denumire"" FROM F021 WHERE F02104 BETWEEN 4001 AND 4010 ORDER BY ""Denumire""";
             DataTable dtGrup = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colComp = (grDateComponente.Columns["F02104"] as GridViewDataComboBoxColumn);
             colComp.PropertiesComboBox.DataSource = dtGrup;

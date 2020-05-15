@@ -2830,15 +2830,15 @@ namespace WizOne.Module
                 table.Columns.Add("Denumire", typeof(string));
              
                 table.Rows.Add(0, "Altele");
-                table.Rows.Add(1, "Ctr. individual de munca");
-                table.Rows.Add(2, "Ctr. de munca temporar");
-                table.Rows.Add(3, "Ctr. de munca la domiciliu");
-                table.Rows.Add(4, "Ctr. de ucenicie la locul de munca");
-                table.Rows.Add(8, "Ctr. mandat");
                 table.Rows.Add(9, "Cenzor/CA");
                 table.Rows.Add(97, "Ctr. Agent");
+                table.Rows.Add(99, "Ctr./conventii cf. Cod Civil");
+                table.Rows.Add(3, "Ctr. de munca la domiciliu");
+                table.Rows.Add(2, "Ctr. de munca temporar");            
+                table.Rows.Add(4, "Ctr. de ucenicie la locul de munca");
+                table.Rows.Add(1, "Ctr. individual de munca"); 
+                table.Rows.Add(8, "Ctr. mandat");                                    
                 table.Rows.Add(98, "Drepturi de autor si drepturi conexe");
-                table.Rows.Add(99, "Ctr./conventii cf. Cod Civil");   
 
             }
             catch (Exception ex)
@@ -2857,10 +2857,10 @@ namespace WizOne.Module
 
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
-
-                table.Rows.Add(1, "Valid");
+                            
                 table.Rows.Add(2, "Invalid grad I");
                 table.Rows.Add(3, "Invalid grad II");
+                table.Rows.Add(1, "Valid");
 
                 return table;
             }
@@ -2873,9 +2873,9 @@ namespace WizOne.Module
 
         public static DataTable GetDurataContract()
         {
-            string sql = @"SELECT * FROM F089 ";
+            string sql = @"SELECT * FROM F089 ORDER BY F08903";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F089", "F08902");
+                sql = General.SelectOracle("F089", "F08902") + " ORDER BY F08903";
             return General.IncarcaDT(sql, null);
         }
 
@@ -2890,8 +2890,9 @@ namespace WizOne.Module
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
 
-                table.Rows.Add(0, "NU");
                 table.Rows.Add(1, "DA");
+                table.Rows.Add(0, "NU");
+         
             }
             catch (Exception ex)
             {
@@ -2903,25 +2904,25 @@ namespace WizOne.Module
 
         public static DataTable GetExceptieIncetare()
         {
-            string sql = @"SELECT * FROM F094 ";
+            string sql = @"SELECT * FROM F094 ORDER BY F09403";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F094", "F09402");
+                sql = General.SelectOracle("F094", "F09402") + " ORDER BY F09403";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetCASS()
         {
-            string sql = @"SELECT * FROM F063 ";
+            string sql = @"SELECT * FROM F063 ORDER BY F06303";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F063", "F06302");
-            return General.IncarcaDT("SELECT F06303, F06302 FROM F063", null);
+                sql = General.SelectOracle("F063", "F06302") + " ORDER BY F06303";
+            return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetTipAngajat()
         {
-            string sql = @"SELECT * FROM F716";
+            string sql = @"SELECT * FROM F716 ORDER BY F71604";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F716", "F71602");
+                sql = General.SelectOracle("F716", "F71602") + " ORDER BY F71604 ";
             return General.IncarcaDT(sql, null);
         }
 
@@ -2947,9 +2948,9 @@ namespace WizOne.Module
 
         public static DataTable GetTipNorma(string param)
         {
-            string sql = @"SELECT * FROM F092 WHERE F09202 = " + param;
+            string sql = @"SELECT * FROM F092 WHERE F09202 = " + param + " ORDER BY F09203";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F092", "F09202") + " WHERE F09202 = " + param;
+                sql = General.SelectOracle("F092", "F09202") + " WHERE F09202 = " + param + " ORDER BY F09203";
             return General.IncarcaDT(sql, null);
         }
 
@@ -2973,25 +2974,25 @@ namespace WizOne.Module
                 cond = " WHERE F09105 = 1";
             if (param == "2")
                 cond = " WHERE F09105 = 2";
-            string sql = @"SELECT * FROM F091 " + cond;
+            string sql = @"SELECT * FROM F091 " + cond + " ORDER BY F09103";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F091", "F09102") + cond;
+                sql = General.SelectOracle("F091", "F09102") + cond + " ORDER BY F09103";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetRepartizareTimpMunca()
         {
-            string sql = @"SELECT * FROM F093";
+            string sql = @"SELECT * FROM F093 ORDER BY F09303";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F093", "F09302");
+                sql = General.SelectOracle("F093", "F09302") + " ORDER BY F09303";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetIntervalRepartizareTimpMunca()
         {
-            string sql = @"SELECT * FROM F096";
+            string sql = @"SELECT * FROM F096 ORDER BY F09603";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F096", "F09602");
+                sql = General.SelectOracle("F096", "F09602") + " ORDER BY F09603";
             return General.IncarcaDT(sql, null);
         }
 
@@ -2999,30 +3000,30 @@ namespace WizOne.Module
         {
             DataSet ds = HttpContext.Current.Session["InformatiaCurentaPersonal"] as DataSet;
             DataTable table = ds.Tables[0];          
-            return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)"), null);     
+            return General.IncarcaDT("SELECT F72204, F72202 FROM F722 WHERE F72206 = " + (table.Rows[0]["F1001082"] as string ?? "(SELECT MAX(F72206) FROM F722)") + " ORDER BY F72204", null);     
         }
 
         public static DataTable GetFunctie()
         {
-            string sql = @"SELECT * FROM F718";
+            string sql = @"SELECT * FROM F718 ORDER BY F71804";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F718", "F71802");
+                sql = General.SelectOracle("F718", "F71802") + " ORDER BY F71804";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetMeserie()
         {
-            string sql = @"SELECT * FROM F717";
+            string sql = @"SELECT * FROM F717 ORDER BY F71704";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F717", "F71702");
+                sql = General.SelectOracle("F717", "F71702") + " ORDER BY F71704";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetMotivPlecare()
         {
-            string sql = @"SELECT * FROM F721";
+            string sql = @"SELECT * FROM F721 ORDER BY F72104";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F721", "F72102");
+                sql = General.SelectOracle("F721", "F72102") + " ORDER BY F72104";
             return General.IncarcaDT(sql, null);
         }
 
@@ -3105,62 +3106,62 @@ namespace WizOne.Module
 
         public static DataTable GetCetatenie()
         {
-            string sql = @"SELECT * FROM F732";
+            string sql = @"SELECT * FROM F732 ORDER BY F73204";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F732", "F73202");
+                sql = General.SelectOracle("F732", "F73202") + " ORDER BY F73204";
             return General.IncarcaDT(sql, null);
         }
         
         public static DataTable GetTipAutMunca()
         {
-            string sql = @"SELECT * FROM F088";
+            string sql = @"SELECT * FROM F088 ORDER BY F08803";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F088", "F08802");
+                sql = General.SelectOracle("F088", "F08802") + " ORDER BY F08803";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetTipDoc(int idTara)
         {
-            return General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\" from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 where d.F73302 = " + idTara.ToString(), null);
+            return General.IncarcaDT("select CAST(a.F08502 AS INT) AS \"Id\", a.F08503 as \"Denumire\" from F085 a join F086 b on a.F08502 = b.F08603 join F732 c on b.F08602 = c.F73202 join F733 d on c.F73202 = d.F73306 where d.F73302 = " + idTara.ToString() + " ORDER BY \"Denumire\"", null);
         }
 
         public static DataTable GetCategPermis()
         {
-            string sql = @"SELECT * FROM F714";
+            string sql = @"SELECT * FROM F714 ORDER BY F71404";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F714", "F71402");
+                sql = General.SelectOracle("F714", "F71402") + " ORDER BY F71404";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetMotivScutireImpozit()
         {
-            string sql = @"SELECT * FROM F804";
+            string sql = @"SELECT * FROM F804 ORDER BY F80404";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F804", "F80403");
+                sql = General.SelectOracle("F804", "F80403") + " ORDER BY F80404";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetMotivScutireCAS()
         {
-            string sql = @"SELECT * FROM F802";
+            string sql = @"SELECT * FROM F802 ORDER BY F80204";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F802", "F80203");
+                sql = General.SelectOracle("F802", "F80203") + " ORDER BY F80204";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetStudii()
         {
-            string sql = @"SELECT * FROM F712";
+            string sql = @"SELECT * FROM F712 ORDER BY F71204";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F712", "F71202");
+                sql = General.SelectOracle("F712", "F71202") + " ORDER BY F71204";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetTitluAcademic()
         {
-            string sql = @"SELECT * FROM F713";
+            string sql = @"SELECT * FROM F713 ORDER BY F71304";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F713", "F71302");
+                sql = General.SelectOracle("F713", "F71302") + " ORDER BY F71304";
             return General.IncarcaDT(sql, null);
         }
 
@@ -3172,9 +3173,9 @@ namespace WizOne.Module
 
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
-
-                table.Rows.Add(0, "Nu");
+                               
                 table.Rows.Add(1, "Absolvent");
+                table.Rows.Add(0, "Nu");
                 table.Rows.Add(2, "Somer");
 
                 return table;
@@ -3188,39 +3189,39 @@ namespace WizOne.Module
 
         public static DataTable GetBanci()
         {
-            string sql = @"SELECT CAST(F07503 AS INT) AS F07503, F07509 FROM F075 GROUP BY F07503, F07509";
+            string sql = @"SELECT CAST(F07503 AS INT) AS F07503, F07509 FROM F075 GROUP BY F07503, F07509 ORDER BY F07509";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetSucursale(int banca)
         {
-            string sql = @"SELECT * FROM F075 WHERE F07503 = " + banca.ToString();
+            string sql = @"SELECT * FROM F075 WHERE F07503 = " + banca.ToString() + " ORDER BY F07505";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F075", "F07504") + " WHERE F07503 = " + banca.ToString();
+                sql = General.SelectOracle("F075", "F07504") + " WHERE F07503 = " + banca.ToString() + " ORDER BY F07505";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetStareCivila()
         {
-            string sql = @"SELECT * FROM F710";
+            string sql = @"SELECT * FROM F710 ORDER BY F71004";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F710", "F71002");
+                sql = General.SelectOracle("F710", "F71002") + " ORDER BY F71004";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetCategAng_61()
         {
-            string sql = @"SELECT * FROM F724 WHERE F72411 IN (0,1)";
+            string sql = @"SELECT * FROM F724 WHERE F72411 IN (0,1) ORDER BY F72404";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F724", "F72402") + " WHERE F72411 IN (0,1)";
+                sql = General.SelectOracle("F724", "F72402") + " WHERE F72411 IN (0,1) ORDER BY F72404";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetCategAng_62()
         {
-            string sql = @"SELECT * FROM F724 WHERE F72411 IN (0,2)";
+            string sql = @"SELECT * FROM F724 WHERE F72411 IN (0,2) ORDER BY F72404";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F724", "F72402") + " WHERE F72411 IN (0,2)";
+                sql = General.SelectOracle("F724", "F72402") + " WHERE F72411 IN (0,2) ORDER BY F72404";
             return General.IncarcaDT(sql, null);
         }
 
@@ -3241,9 +3242,10 @@ namespace WizOne.Module
                 table.Columns.Add("Id", typeof(int));
                 table.Columns.Add("Denumire", typeof(string));
 
+                table.Rows.Add(3, "Mail");
                 table.Rows.Add(1, "Telefon 1");
                 table.Rows.Add(2, "Telefon 2");
-                table.Rows.Add(3, "Mail");
+        
 
                 return table;
             }
@@ -3265,7 +3267,7 @@ namespace WizOne.Module
                 strSql = @"select a.""IdCategorie"", CAST (a.""Id"" AS INT) as ""IdObiect"", b.""Denumire"" {1} '/' {1} a.""Denumire"" as ""NumeCompus"", a.""ValoareEstimata"", a.""Denumire"" as ""NumeObiect""
                                 from ""Admin_Obiecte"" a
                                 inner join ""Admin_Categorii"" b on a.""IdCategorie"" = b.""Id""
-                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = '{0}')";
+                                where b.""IdArie"" = (select ""Valoare"" from ""tblParametrii"" where ""Nume"" = '{0}') ORDER BY ""NumeCompus""";
 
                 strSql = string.Format(strSql, numeArie, op);
                
@@ -3331,17 +3333,17 @@ namespace WizOne.Module
 
         public static DataTable GetF733()
         {
-            string sql = @"SELECT * FROM F733";
+            string sql = @"SELECT * FROM F733 ORDER BY F73304";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F733", "F73302");
+                sql = General.SelectOracle("F733", "F73302") + " ORDER BY F73304";
             return General.IncarcaDT(sql, null);
         }
 
         public static DataTable GetF737()
         {
-            string sql = @"SELECT * FROM F737";
+            string sql = @"SELECT * FROM F737 ORDER BY F73703";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("F737", "F73702");
+                sql = General.SelectOracle("F737", "F73702") + " ORDER BY F73703";
             return General.IncarcaDT(sql, null);
         }
 
@@ -5192,9 +5194,9 @@ namespace WizOne.Module
 
         public static DataTable GetLocatieInt()
         {
-            string sql = @"SELECT * FROM LOCATII ";
+            string sql = @"SELECT * FROM LOCATII ORDER BY LOCATIE";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("LOCATII", "NUMAR");
+                sql = General.SelectOracle("LOCATII", "NUMAR") + " ORDER BY LOCATIE";
             return General.IncarcaDT(sql, null);
         }
 
@@ -5218,9 +5220,9 @@ namespace WizOne.Module
 
             try
             {
-                string sql = @"SELECT * FROM F011 WHERE F01105 = 1 " + cmpData;
+                string sql = @"SELECT * FROM F011 WHERE F01105 = 1 " + cmpData + " ORDER BY F01107";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F011", "F01104") + " WHERE F01105 = 1 " + cmpData;
+                    sql = General.SelectOracle("F011", "F01104") + " WHERE F01105 = 1 " + cmpData + " ORDER BY F01107";
                 table = IncarcaDT(sql, null);
             }
             catch (Exception ex)
@@ -5253,9 +5255,9 @@ namespace WizOne.Module
             try
             {
 
-                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ + cmpData;
+                string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
                 if (Constante.tipBD == 2)
-                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ + cmpData;
+                    sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = " + categ + cmpData + " ORDER BY F01107";
                 table = IncarcaDT(sql, null);
 
             }
@@ -5292,12 +5294,12 @@ namespace WizOne.Module
                 string sql = @"SELECT 0 AS F01105, '---' AS F01107 UNION SELECT F01105, F01107 FROM F011  WHERE F01104 = (  select distinct f01104 from f025
                                 left join f021 on f02510 = f02104
                                 left join f011 on f02106 = f01104
-                                where  f02504 = " + categ + cmpData + @")";
+                                where  f02504 = " + categ + cmpData + @") ORDER BY F01107";
                 if (Constante.tipBD == 2)
                     sql = "SELECT 0 AS F01105, '---' AS F01107 FROM DUAL UNION " + General.SelectOracle("F011", "F01105") + " WHERE F01104 = (  select distinct f01104 from f025 "
                                + " left join f021 on f02510 = f02104 "
                                + " left join f011 on f02106 = f01104 "
-                               + " where f02504 = " + categ + ")";
+                               + " where f02504 = " + categ + ") ORDER BY F01107";
                 table = IncarcaDT(sql, null);
 
             }
@@ -5327,9 +5329,9 @@ namespace WizOne.Module
                 }
             }
 
-            string sql = @"SELECT 0 AS F02504, '---' AS F02505 UNION  SELECT F02504, F02505 FROM F025  WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") + cmpData ;
+            string sql = @"SELECT 0 AS F02504, '---' AS F02505 UNION  SELECT F02504, F02505 FROM F025  WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") + cmpData + " ORDER BY F02505" ;
             if (Constante.tipBD == 2)
-                sql = " SELECT 0 AS F02504, '---' AS F02505 FROM DUAL UNION " +  General.SelectOracle("F025", "F02504") + " WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") + cmpData;
+                sql = " SELECT 0 AS F02504, '---' AS F02505 FROM DUAL UNION " +  General.SelectOracle("F025", "F02504") + " WHERE " + (param == "0" ? " (F02526 IS NULL OR F02526 = 0) " : " F02526 = 1 ") + cmpData + " ORDER BY F02505";
             return General.IncarcaDT(sql, null);
         }
 
@@ -6929,38 +6931,38 @@ namespace WizOne.Module
                     f10003 = "a.F10003";
 
                 //Radu 21.04.2020
-                string strSql = SelectCalculCO(an, f10003, filtruIns);
-                General.ExecutaNonQuery(strSql, null);
+                //string strSql = SelectCalculCO(an, f10003, filtruIns);
+                //General.ExecutaNonQuery(strSql, null);
 
 
                 if (cuActualizareInF100)
                 {
                     //Radu 21.04.2020
-                    string strUpd = $@"UPDATE A 
-                        SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
-                        FROM F100 A
-                        INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
-                    if (Constante.tipBD == 2)
-                        strUpd = $@"UPDATE F100 A
-                                    SET (A.F100642, A.F100995, A.F100996) =
-                                      (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
-                                       FROM ""Ptj_tblZileCO"" B
-                                       WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
-                                    WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
+                    //string strUpd = $@"UPDATE A 
+                    //    SET A.F100642 = B.""CuveniteAn"", A.F100995 = B.""Cuvenite"", A.F100996 = B.""SoldAnterior"" 
+                    //    FROM F100 A
+                    //    INNER JOIN ""Ptj_tblZileCO"" B ON A.F10003 = B.F10003 AND B.""An"" = {an}";
+                    //if (Constante.tipBD == 2)
+                    //    strUpd = $@"UPDATE F100 A
+                    //                SET (A.F100642, A.F100995, A.F100996) =
+                    //                  (SELECT B.""CuveniteAn"", B.""Cuvenite"", B.""SoldAnterior""
+                    //                   FROM ""Ptj_tblZileCO"" B
+                    //                   WHERE A.F10003 = B.F10003 AND B.""An"" = {an})
+                    //                WHERE EXISTS(SELECT 1 FROM ""Ptj_tblZileCO"" B WHERE A.F10003 = B.F10003 AND B.""An"" = {an})";
 
-                    General.ExecutaNonQuery(strUpd, null);
-                    //if (marca != -99)
-                    //{
-                    //    if (Constante.tipBD == 1)
-                    //        General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
-                    //                            + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
-                    //                            + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
-                    //    else
-                    //    {
-                    //        DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
-                    //        General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
-                    //    }
-                    //}
+                    //General.ExecutaNonQuery(strUpd, null);
+                    if (marca != -99)
+                    {
+                        if (Constante.tipBD == 1)
+                            General.ExecutaNonQuery("DECLARE   @f10003 INT,  @zi datetime,  @mod int,     @grila int "
+                                                + " SELECT TOP 1 @f10003 = " + f10003 + ", @zi = '" + an + "-12-31', @mod = 1, @grila = F10072 FROM F100 WHERE F10003 =  " + f10003
+                                                + " EXEC CalculCOProc @f10003, @zi, @mod, @grila ", null);
+                        else
+                        {
+                            DataTable dtAng = General.IncarcaDT("SELECT F10072 FROM F100 WHERE F10003 = " + f10003);
+                            General.ExecutaNonQuery("exec \"CalculCOProc\" (" + f10003 + ", TO_DATE('31/12/" + an + "', 'dd/mm/yyyy'), 1, " + dtAng.Rows[0][0].ToString() + ");", null);
+                        }
+                    }
                 }
             }
             catch (Exception ex)

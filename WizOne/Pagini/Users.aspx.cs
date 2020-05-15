@@ -220,6 +220,7 @@ namespace WizOne.Pagini
                     dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
                     dr["Parola"] = parola;
                     dr["PINInfoChiosc"] = pin;
+                    dr["UtilizatorNonAD"] = e.NewValues["UtilizatorNonAD"] ?? 0;
 
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;
@@ -297,6 +298,7 @@ namespace WizOne.Pagini
                     dr["SchimbaParola"] = e.NewValues["SchimbaParola"] ?? 0;
                     //dr["Parola"] = e.NewValues["Parola"] ?? DBNull.Value;
                     //dr["PINInfoChiosc"] = e.NewValues["PINInfoChiosc"] ?? DBNull.Value;
+                    dr["UtilizatorNonAD"] = e.NewValues["UtilizatorNonAD"] ?? 0;
 
                     dr["USER_NO"] = Session["UserId"];
                     dr["TIME"] = DateTime.Now;

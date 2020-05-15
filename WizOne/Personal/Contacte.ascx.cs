@@ -69,16 +69,16 @@ namespace WizOne.Personal
             grDateContacte.KeyFieldName = "IdAuto";
             grDateContacte.DataSource = dt;
 
-            string sql = @"SELECT * FROM ""tblContacte"" ";
+            string sql = @"SELECT * FROM ""tblContacte"" ORDER BY ""Denumire""";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("tblContacte", "Id");
+                sql = General.SelectOracle("tblContacte", "Id") + " ORDER BY \"Denumire\"";
             DataTable dtContact = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colContact = (grDateContacte.Columns["IdContact"] as GridViewDataComboBoxColumn);
             colContact.PropertiesComboBox.DataSource = dtContact;
 
-            sql = @"SELECT * FROM LOCATII ";
+            sql = @"SELECT * FROM LOCATII ORDER BY LOCATIE";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("LOCATII", "NUMAR");
+                sql = General.SelectOracle("LOCATII", "NUMAR") + " ORDER BY LOCATIE";
             DataTable dtLocatii = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colLocatii = (grDateContacte.Columns["IdLocatie"] as GridViewDataComboBoxColumn);
             colLocatii.PropertiesComboBox.DataSource = dtLocatii;

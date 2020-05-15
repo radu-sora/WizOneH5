@@ -76,13 +76,13 @@ namespace WizOne.Personal
             grDateSupervizori.DataSource = dt;
             //grDateSupervizori.DataBind();
 
-            DataTable dtSuper = General.IncarcaDT(@"SELECT CAST(""Id"" AS INT) AS ""Id"", CASE WHEN ""Alias"" IS NULL THEN ""Denumire"" ELSE ""Alias"" END AS ""Denumire"" FROM ""tblSupervizori"" ", null);
+            DataTable dtSuper = General.IncarcaDT(@"SELECT CAST(""Id"" AS INT) AS ""Id"", CASE WHEN ""Alias"" IS NULL THEN ""Denumire"" ELSE ""Alias"" END AS ""Denumire"" FROM ""tblSupervizori"" ORDER BY ""Denumire""", null);
             GridViewDataComboBoxColumn colSuper = (grDateSupervizori.Columns["IdSuper"] as GridViewDataComboBoxColumn);
             colSuper.PropertiesComboBox.DataSource = dtSuper;
 
-            string sql = @"SELECT * FROM USERS";
+            string sql = @"SELECT * FROM USERS ORDER BY F70104";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("USERS", "F70102");
+                sql = General.SelectOracle("USERS", "F70102") + " ORDER BY F70104";
             DataTable dtUser = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colUser = (grDateSupervizori.Columns["IdUser"] as GridViewDataComboBoxColumn);
             colUser.PropertiesComboBox.DataSource = dtUser;

@@ -69,9 +69,9 @@ namespace WizOne.Personal
             grDateAtestate.KeyFieldName = "IdAuto";
             grDateAtestate.DataSource = dt;
 
-            string sql = @"SELECT * FROM ""Admin_TipAutorizatie"" ";
+            string sql = @"SELECT * FROM ""Admin_TipAutorizatie"" ORDER BY ""TipAutorizatie"" ";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("Admin_TipAutorizatie", "IdAuto");
+                sql = General.SelectOracle("Admin_TipAutorizatie", "IdAuto") + @" ORDER BY ""TipAutorizatie""";
             DataTable dtTipAutorizatie = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colTipAutorizatie = (grDateAtestate.Columns["IdTipAutorizatie"] as GridViewDataComboBoxColumn);
             colTipAutorizatie.PropertiesComboBox.DataSource = dtTipAutorizatie;

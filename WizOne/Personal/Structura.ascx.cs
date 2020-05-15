@@ -65,10 +65,10 @@ namespace WizOne.Personal
                     DataRow[] drCC = dtSrc.Select("F00607=" + table.Rows[0]["F10007"].ToString());
                     int cc = (drCC != null && drCC.Count() > 0 && drCC[0]["CC"] != null && drCC[0]["CC"].ToString().Length > 0 ? Convert.ToInt32(drCC[0]["CC"].ToString()) : 9999);
                     sql = @"SELECT * FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F06209 " +
-                        (cc != 9999 ? " AND F06204 = " + cc  : "" );
+                        (cc != 9999 ? " AND F06204 = " + cc  : "" ) + " ORDER BY F06205";
                     if (Constante.tipBD == 2)
                         sql = General.SelectOracle("F062", "F06204") + " WHERE F06208 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F06209 " +
-                            (cc != 9999 ? " AND F06204 = " + cc : ""); ;
+                            (cc != 9999 ? " AND F06204 = " + cc : "") + " ORDER BY F06205"; ;
                     DataTable dtCC = General.IncarcaDT(sql, null);
                     cmbCC.DataSource = dtCC;
                     cmbCC.DataBind();
@@ -89,25 +89,25 @@ namespace WizOne.Personal
                     int cc = (drCC != null && drCC.Count() > 0 && drCC[0]["CC"] != null && drCC[0]["CC"].ToString().Length > 0 ? Convert.ToInt32(drCC[0]["CC"].ToString()) : 9999);
                     if (hfCC.Contains("CC")) cc = Convert.ToInt32(General.Nz(hfCC["CC"], 9999));
                     sql = @"SELECT * FROM F062 WHERE F06208 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F06209 " +
-                        (cc != 9999 ? " AND F06204 = " + cc : "");
+                        (cc != 9999 ? " AND F06204 = " + cc : "") + " ORDER BY F06205";
                     if (Constante.tipBD == 2)
                         sql = General.SelectOracle("F062", "F06204") + " WHERE F06208 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F06209 " +
-                            (cc != 9999 ? " AND F06204 = " + cc : ""); ;
+                            (cc != 9999 ? " AND F06204 = " + cc : "") + " ORDER BY F06205";
                     DataTable dtCC = General.IncarcaDT(sql, null);
                     cmbCC.DataSource = dtCC;
                     cmbCC.DataBind();
                 }
 
-                sql = @"SELECT * FROM F080 WHERE F08020 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F08021";
+                sql = @"SELECT * FROM F080 WHERE F08020 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F08021 ORDER BY F08003";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F080", "F08002") + " WHERE F08020 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F08021 ";
+                    sql = General.SelectOracle("F080", "F08002") + " WHERE F08020 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F08021 ORDER BY F08003";
                 DataTable dtPL = General.IncarcaDT(sql, null);
                 cmbPL.DataSource = dtPL;
                 cmbPL.DataBind();
 
-                sql = @"SELECT * FROM LOCATIE_MUNCA";
+                sql = @"SELECT * FROM LOCATIE_MUNCA ORDER BY LOCATIE_MUNCA";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("LOCATIE_MUNCA", "ID_LOCATIE");
+                    sql = General.SelectOracle("LOCATIE_MUNCA", "ID_LOCATIE") + " ORDER BY LOCATIE_MUNCA";
                 DataTable dtLoc = General.IncarcaDT(sql, null);
                 cmbLocatie.DataSource = dtLoc;
                 cmbLocatie.DataBind();
@@ -115,20 +115,20 @@ namespace WizOne.Personal
                 DataTable dtBir = General.IncarcaDT("SELECT CAST(F00809 AS INT) AS F00809, F00810 FROM F008 WHERE 1=1 " + (Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0")) <= 0 
                     ? (Constante.tipBD == 1 ? " AND F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00815" : " AND F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00815")
                     : " AND F00808 = " + Convert.ToInt32(General.Nz(table.Rows[0]["F100958"], "0"))
-                    + (Constante.tipBD == 1 ? " AND F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00815" : " AND F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00815")), null);
+                    + (Constante.tipBD == 1 ? " AND F00814 <= CONVERT(DATETIME, '" + dataRef + "', 103) AND CONVERT(DATETIME, '" + dataRef + "', 103) <= F00815" : " AND F00814 <= TO_DATE('" + dataRef + "', 'dd/mm/yyyy') AND TO_DATE('" + dataRef + "', 'dd/mm/yyyy') <= F00815")) + " ORDER BY F00810", null);
                 cmbBir.DataSource = dtBir;
                 cmbBir.DataBind();
 
-                sql = @"SELECT * FROM F801";
+                sql = @"SELECT * FROM F801 ORDER BY F80104";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F801", "F80103");
+                    sql = General.SelectOracle("F801", "F80103") + " ORDER BY F80104";
                 DataTable dtCAEN = General.IncarcaDT(sql, null);
                 cmbCAEN.DataSource = dtCAEN;
                 cmbCAEN.DataBind();
 
-                sql = @"SELECT * FROM F803";
+                sql = @"SELECT * FROM F803 ORDER BY F80304";
                 if (Constante.tipBD == 2)
-                    sql = General.SelectOracle("F803", "F80303");
+                    sql = General.SelectOracle("F803", "F80303") + " ORDER BY F80304";
                 DataTable dtUnit = General.IncarcaDT(sql, null);
                 cmbUnitStat.DataSource = dtUnit;
                 cmbUnitStat.DataBind();

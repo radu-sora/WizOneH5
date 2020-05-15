@@ -76,9 +76,9 @@ namespace WizOne.Personal
             grDateContracte.KeyFieldName = "IdAuto";
             grDateContracte.DataSource = dt;
 
-            string sql = @"SELECT * FROM ""Ptj_Contracte"" ";
+            string sql = @"SELECT * FROM ""Ptj_Contracte"" ORDER BY ""Denumire""";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("Ptj_Contracte", "Id");
+                sql = General.SelectOracle("Ptj_Contracte", "Id") + " ORDER BY \"Denumire\"";
             DataTable dtCtr = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colCtr = (grDateContracte.Columns["IdContract"] as GridViewDataComboBoxColumn);
             colCtr.PropertiesComboBox.DataSource = dtCtr;

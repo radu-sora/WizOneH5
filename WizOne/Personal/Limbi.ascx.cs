@@ -68,9 +68,9 @@ namespace WizOne.Personal
             grDateLimbi.KeyFieldName = "IdAuto";
             grDateLimbi.DataSource = dt;
 
-            string sql = @"SELECT * FROM ""tblLimbi"" ";
+            string sql = @"SELECT * FROM ""tblLimbi"" ORDER BY ""Denumire"" ";
             if (Constante.tipBD == 2)
-                sql = General.SelectOracle("tblLimbi", "IdAuto");
+                sql = General.SelectOracle("tblLimbi", "IdAuto") + @" ORDER BY ""Denumire""";
             DataTable dtLimba = General.IncarcaDT(sql, null);
             GridViewDataComboBoxColumn colLimba = (grDateLimbi.Columns["IdLimba"] as GridViewDataComboBoxColumn);
             colLimba.PropertiesComboBox.DataSource = dtLimba;

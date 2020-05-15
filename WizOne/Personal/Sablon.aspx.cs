@@ -26,7 +26,7 @@ namespace WizOne.Personal
                 string op = "+";
                 if (Constante.tipBD == 2) op = "||";
 
-                string sql = "SELECT CAST(F09903 AS INT) AS \"Id\", F09908 " + op + " ' ' " + op + " F09909 AS \"Denumire\" FROM F099";
+                string sql = "SELECT CAST(F09903 AS INT) AS \"Id\", F09908 " + op + " ' ' " + op + " F09909 AS \"Denumire\" FROM F099 ORDER BY \"Denumire\"";
                 DataTable dt = General.IncarcaDT(sql, null);
                 cmbSablon.DataSource = dt;
                 cmbSablon.DataBind();

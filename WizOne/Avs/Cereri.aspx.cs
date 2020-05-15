@@ -1858,6 +1858,17 @@ namespace WizOne.Avs
                                 txt1Nou.Value = "";
                             }
                         }
+
+                        if (e.Parameter.Split(';')[1] == "de2Nou" && Convert.ToInt32(cmbAtribute.Value) == (int)Constante.Atribute.Suspendare)
+                        {
+                            string sqlVerif = "SELECT COUNT(*) FROM F111 WHERE F11103 = " + cmbAng.Items[cmbAng.SelectedIndex].Value.ToString() + " AND (F11107 IS NULL OR F11107 = "
+                                            + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ") ";
+                            DataTable dtVerif = General.IncarcaDT(sqlVerif, null);
+                            if (dtVerif != null && dtVerif.Rows.Count > 0 && dtVerif.Rows[0][0] != null && Convert.ToInt32(dtVerif.Rows[0][0].ToString()) > 0)
+                            {
+                                pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atentie!\nAngajatul are cel putin o suspendare activa!");
+                            }
+                        }
                         break;
                     case "3":
                         {
@@ -2263,7 +2274,6 @@ namespace WizOne.Avs
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Intervalul introdus se suprapune cu cel al unei suspendari active!");
                         return false;
                     }
-
                 }
 
                 if (idAtr == (int)Constante.Atribute.RevenireSuspendare || idAtr == (int)Constante.Atribute.RevenireDetasare)

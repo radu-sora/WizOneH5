@@ -126,7 +126,7 @@ namespace WizOne.Pagini
                 SqlDataSource ds = new SqlDataSource();
                 ds.EnableCaching = false;
                 ds.ConnectionString = Constante.cnnWeb;
-                ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\", \"NumeTabela\" as \"Tabela\" FROM \"Template\" ORDER BY \"Denumire\"";
+                ds.SelectCommand = "SELECT \"Id\",  \"NumeSablon\" as \"Denumire\", coalesce(DESCRIERE, \"NumeTabela\") as \"Tabela\" FROM \"Template\" left join \"ALIASTAB\" on NUME = \"NumeTabela\" ORDER BY \"Denumire\"";
                 cmbSablon.DataSource = ds;
                 cmbSablon.DataBind();
 
@@ -204,10 +204,17 @@ namespace WizOne.Pagini
                     DataTable dtSablon = General.IncarcaDT(sql, null);
                     if (dtSablon != null && dtSablon.Rows.Count > 0)
                     {
-                        sql = "SELECT * FROM \"" + dtSablon.Rows[0]["NumeTabela"].ToString().Trim() + "\"";
+                        //sql = "SELECT * FROM \"" + dtSablon.Rows[0]["NumeTabela"].ToString().Trim() + "\"";
+                        if (Constante.tipBD == 1)
+                            sql = " SELECT coalesce(DESCRIERE, COLUMN_NAME) FROM INFORMATION_SCHEMA.COLUMNS left join ALIASCMP ON TABELA = TABLE_NAME AND COLUMN_NAME = CAMP WHERE  TABLE_NAME = '" + dtSablon.Rows[0]["NumeTabela"].ToString().Trim() + "'";
+                        else
+                            sql = "SELECT COALESCE(DESCRIERE, COLUMN_NAME) FROM user_tab_columns left join ALIASCMP ON TABELA = TABLE_NAME AND CAMP = COLUMN_NAME WHERE  TABLE_NAME = '" + dtSablon.Rows[0]["NumeTabela"].ToString().Trim() + "'";
+
                         DataTable dt = General.IncarcaDT(sql, null);
-                        for (int k = 0; k < dt.Columns.Count; k++)
-                            table.Rows.Add(dt.Columns[k].ColumnName, dt.Columns[k].ColumnName);
+                        //for (int k = 0; k < dt.Columns.Count; k++)
+                        //    table.Rows.Add(dt.Columns[k].ColumnName, dt.Columns[k].ColumnName);
+                        for (int k = 0; k < dt.Rows.Count; k++)
+                            table.Rows.Add(dt.Rows[k][0].ToString(), dt.Rows[k][0].ToString());
 
                         GridViewDataComboBoxColumn colDBCol = (grDateNomen.Columns["ColoanaBD"] as GridViewDataComboBoxColumn);
                         colDBCol.PropertiesComboBox.DataSource = table;

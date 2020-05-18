@@ -121,7 +121,7 @@ namespace WizOne.Contracte
 
                             grDateAbs.UpdateEdit();
 
-                            for (int i = 1; i < 8; i++)
+                            for (int i = 1; i <= 8; i++)
                             {
                                 ASPxGridView grDate = pnlPrg.FindNestedControlByFieldName("grDate" + i) as ASPxGridView;
                                 if (grDate != null)

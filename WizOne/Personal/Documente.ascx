@@ -81,7 +81,7 @@
             }
         }
         cmbTipDoc.SetSelectedIndex(0);
-        cmbCetatenie.SetSelectedIndex(tara);
+        cmbCetatenie.SetValue(tara);
 
         if (tara == 3) {
             cmbTipAutMunca.SetEnabled(true);

@@ -43,7 +43,7 @@ namespace WizOne.Pagini
                     Session["Avs_MarcaFiltru"] = null;
                     Session["Avs_AtributFiltru"] = null;
 
-                    if (General.Nz(Session["PrimaIntrare"], "0").ToString() == "1")
+                    if (Convert.ToInt32(General.Nz(Session["IdClient"], -99)) == (int)IdClienti.Clienti.Pelifilip && General.Nz(Session["PrimaIntrare"], "0").ToString() == "1")
                     {
                         pnlMsgWelcome.Style["display"] = "inline-block";
                         General.ExecutaNonQuery("UPDATE USERS SET F70105=0 WHERE F70102=@1", new object[] { Session["UserId"] });

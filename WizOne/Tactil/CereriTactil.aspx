@@ -222,8 +222,8 @@
  
                         </td>
                         <td width="10" align="left"  id="tdNrOreInMinute" runat="server" visible="false">
-                                    <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"   />                                    
-                                <dx:ASPxTimeEdit ID="txtNrOreTime" ClientInstanceName="txtNrOreTime" runat="server" Width="70px" ClientVisible="false" ClientEnabled="false" SpinButtons-ShowIncrementButtons="false"/>
+                                    <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;" ClientVisible="false"  />                                    
+                                <dx:ASPxTimeEdit ID="txtNrOreTime" ClientInstanceName="txtNrOreTime" runat="server" Width="200px"  Height="75"  style="font-size:30px;"  HorizontalAlign="Center"   SpinButtons-ShowIncrementButtons="false"/>
  
                         </td>
                           <td width="100" align="right"  id="tdOraInc" runat="server"  visible="false">                          

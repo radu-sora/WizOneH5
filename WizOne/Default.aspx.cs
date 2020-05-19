@@ -71,7 +71,7 @@ namespace WizOne
                 {
                     //Radu 23.04.2020
                     string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-                    if (tip == "0")
+                    if (tip == "0" || tip == "3")
                         Response.Redirect("DefaultTactil.aspx", false);
                     else
                         Response.Redirect("DefaultTactilFaraCard.aspx", false);
@@ -821,6 +821,9 @@ namespace WizOne
 
                 //Florin 2020.01.03
                 Session["Eval_tblCategorieObiective"] = null;
+
+                //Radu 15.05.2020
+                Session["TipInfoChiosc"] = 0;
 
 
                 string strSql = @"SELECT ""Nume"", ""Valoare"", ""Explicatie"", ""IdModul"", ""Criptat"" FROM ""tblParametrii""

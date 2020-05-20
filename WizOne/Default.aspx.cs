@@ -71,10 +71,12 @@ namespace WizOne
                 {
                     //Radu 23.04.2020
                     string tip = Dami.ValoareParam("TipInfoChiosc", "0");
-                    if (tip == "0" || tip == "3")
+                    if (tip == "0")
                         Response.Redirect("DefaultTactil.aspx", false);
-                    else
+                    else if (tip == "1" || tip == "2")
                         Response.Redirect("DefaultTactilFaraCard.aspx", false);
+                    else if (tip == "3")
+                        Response.Redirect("DefaultTactilExtra.aspx", false);
                     return;
                 }
 

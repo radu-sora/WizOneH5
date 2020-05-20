@@ -13442,10 +13442,10 @@ GO
 
 ----	2.2.129	----
 
- INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('NrOptiuniExportSAP', '3', 'Numar de optiuni pentru pagina Export SAP (intre 1 si 5)', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('NrOptiuniExportSAP', '3', 'Numar de optiuni pentru pagina Export SAP (intre 1 si 5)', 0);
 GO
 
- INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('CaleConfigPeopleSoft', '', 'Calea catre fisierul Config pagina Export SAP', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('CaleConfigPeopleSoft', '', 'Calea catre fisierul Config pagina Export SAP', 0);
 GO
 
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(80, 'Tipul de invatamant', 'Tipul de invatamant', 'Pagini\SablonNomen[tblTipInvatamant]', 1, 'm1.png')
@@ -13454,10 +13454,15 @@ GO
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Tipul institutiei de invatamant', 'Tipul institutiei de invatamant', 'Pagini\SablonNomen[tblTipInstitutie]', 1, 'm1.png')
 GO
 
-
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(82, 'Profil studii', 'Profil studii', 'Pagini\SablonNomen[tblProfilStudii]', 1, 'm1.png')
 GO
 
-
 INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(83, 'Domeniu studii', 'Domeniu studii', 'Pagini\SablonNomen[tblDomeniuStudii]', 1, 'm1.png')
+GO
+
+DELETE FROM "tblParametrii" WHERE "Nume"='NumeImprimanta'
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TactilImprimanta', '', 'Numele imprimantei la care se vor imprima documentele din info chiosc; daca nu este specificat nimic atunci se foloseste imprimanta default', 0);
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TactilImprimantaFluturas', '', 'Numele imprimantei la care se va imprima fluturasul din info chiosc; daca nu este specificat nimic atunci se foloseste imprimanta default', 0);
 GO

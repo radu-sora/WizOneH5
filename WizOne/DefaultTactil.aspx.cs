@@ -1,4 +1,6 @@
 ﻿using DevExpress.Web;
+using DevExpress.XtraBars.Docking2010.Views.NativeMdi;
+using DevExpress.XtraRichEdit.API.Native;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -12,11 +14,15 @@ namespace WizOne
     {
         //static string arrIncercari = "";
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            SetFocus(txtPan1);
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
-            {
-                txtPan1.Focus();
+            {             
 
                 if (!IsPostBack)
                 {
@@ -32,6 +38,11 @@ namespace WizOne
 
                 Session["IdLimba"] = Dami.ValoareParam("LimbaStart");
                 if (General.VarSession("IdLimba").ToString() == "") Session["IdLimba"] = "RO";
+
+                //txtPan1.Attributes.Add("autofocus", "autofocus");
+                txtPan1.Focus();
+            
+                
             }
             catch (Exception ex)
             {
@@ -79,7 +90,7 @@ namespace WizOne
                 //Radu 20.05.2019 - anumite cititoare returneaza un numar variabil de caractere
                 //if (txtPan1.Value.Trim().Length >= max)
                 //{
-                if (txtPan1.Value.Trim().Length > max)
+                if (txtPan1.Value.Trim().Length > max)            
                 {
                     MessageBox.Show("Cod invalid! Va rugam apropiati din nou cardul de cititor", MessageBox.icoWarning, "");
                     txtPan1.Value = null;
@@ -110,6 +121,8 @@ namespace WizOne
                             btn9.ClientVisible = true;
                             btnLog.ClientVisible = true;
                             panouExt.Visible = false;
+
+                  
                         }
                         else
                             VerificaCartela();
@@ -137,7 +150,7 @@ namespace WizOne
                 if (valMax.Length > 0)
                     max = Convert.ToInt32(valMax);
 
-                string cartela = txtPan1.Value;               
+                string cartela = txtPan1.Value; 
 
                 int lung = Convert.ToInt32(General.Nz(Dami.ValoareParam("LungimeCartela","0"),"0"));
                 if (lung > 0 && cartela.Length >= lung) cartela = cartela.Substring(cartela.Length - lung);
@@ -294,7 +307,7 @@ namespace WizOne
         }
 
         private void AscundeButoane()
-        {
+        {            
             btn0.ClientVisible = false;
             btn1.ClientVisible = false;
             btn2.ClientVisible = false;
@@ -309,7 +322,7 @@ namespace WizOne
             panouExt.Visible = true;
             txtPan1.Value = null;
             txtPan1.Focus();
-            
+
         }
 
 
@@ -321,6 +334,11 @@ namespace WizOne
         //</div>
 
 
+
+                        //<dx:ASPxButton ID = "btn7" ClientInstanceName="btn7" ClientIDMode="Static" ClientVisible="false" TabIndex="7" runat="server" Height="30px" Text="7" style="font-size:30px;text-align:center" AutoPostBack="false" CssClass="divider"  RenderMode="Outline" oncontextMenu="ctx(this,event)" meta:resourcekey="btn7" >
+                        //        <ClientSideEvents Click = "function(s, e) { RetinePIN(7); }" />
+                        //    <Paddings PaddingBottom="10px" PaddingRight="20px" />
+                        //</dx:ASPxButton>
 
     }
 }

@@ -587,6 +587,29 @@ namespace WizOne.Pontaj
         {
             try
             {
+                //Florinn 2020.05.20
+                DataRow drCnt = General.IncarcaDR($@"
+                    SELECT
+                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999)) AS ""NrAng"",
+                    (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}");
+                if (drCnt != null)
+                {
+                    decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
+                    decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
+
+                    if (nrAng != 0)
+                    {
+                        decimal rez = ((nrAng - nrPtj)/nrAng) * 100;
+                        if (rez > 15)
+                        {
+                            grDate.DataSource = null;
+                            grDate.DataBind();
+                            MessageBox.Show("Pontajul nu este initializat." + Environment.NewLine + "Va rugam ca mai intai sa efectuati initializarea", MessageBox.icoInfo,"Initializare");
+                            return;
+                        }
+                    }
+                }
+
                 RetineFiltru("1");
                 SetColoane();
                 IncarcaGrid();

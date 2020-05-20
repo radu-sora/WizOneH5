@@ -515,7 +515,6 @@ namespace WizOne.Tactil
                             }
                             else
                             {
-
                                 Reports.PrintCereri dlreport = new Reports.PrintCereri();
                                 dlreport.PaperKind = System.Drawing.Printing.PaperKind.A4;
                                 dlreport.Margins.Top = 10;
@@ -523,8 +522,12 @@ namespace WizOne.Tactil
                                 dlreport.Margins.Left = 50;
                                 dlreport.Margins.Right = 50;
                                 dlreport.PrintingSystem.ShowMarginsWarning = false;
-                                dlreport.PrinterName = Dami.ValoareParam("NumeImprimanta", "");
                                 dlreport.ShowPrintMarginsWarning = false;
+
+                                string numeImprimanta = Dami.ValoareParam("TactilImprimanta").Trim();
+                                if (numeImprimanta != "")
+                                    dlreport.PrinterName = numeImprimanta;
+
                                 dlreport.CreateDocument();
                                 ReportPrintTool pt = new ReportPrintTool(dlreport);
                                 pt.Print();

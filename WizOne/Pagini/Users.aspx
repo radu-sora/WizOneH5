@@ -133,10 +133,11 @@
                                         <asp:LinkButton ID="LinkButton1" runat="server" OnClientClick="popup.ShowAtElement(this); hfStatus.Set('Id', 3); return false;" Visible='<%#!grDate.IsNewRowEditing%>'>Edit parola</asp:LinkButton>
                                     </EditItemTemplate>
                                 </dx:GridViewDataTextColumn>
+                                 <dx:GridViewDataCheckColumn FieldName="UtilizatorNonAD" Name="UtilizatorNonAD" Caption="Utilizator non-AD" VisibleIndex="19"/>
 
-                                <dx:GridViewDataTextColumn FieldName="F70122" Name="F70122" Caption="Data editare" VisibleIndex="19" Visible="false" ShowInCustomizationForm="false"/>
-                                <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" VisibleIndex="20" Visible="false" ShowInCustomizationForm="false"/>
-                                <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" VisibleIndex="21" Visible="false" ShowInCustomizationForm="false"/>
+                                <dx:GridViewDataTextColumn FieldName="F70122" Name="F70122" Caption="Data editare" VisibleIndex="20" Visible="false" ShowInCustomizationForm="false"/>
+                                <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" VisibleIndex="21" Visible="false" ShowInCustomizationForm="false"/>
+                                <dx:GridViewDataTextColumn FieldName="TIME" Name="TIME" Caption="TIME" VisibleIndex="22" Visible="false" ShowInCustomizationForm="false"/>
 
                                 <dx:GridViewCommandColumn Width="50px" ShowDeleteButton="true" ShowEditButton="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                             </Columns>

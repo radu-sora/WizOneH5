@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DevExpress.Web;
+using DevExpress.XtraBars.Docking2010.Views.NativeMdi;
+using DevExpress.XtraRichEdit.API.Native;
+using System;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -7,24 +10,39 @@ using WizOne.Module;
 
 namespace WizOne
 {
-    public partial class DefaultTactil : System.Web.UI.Page
+    public partial class DefaultTactilExtra : System.Web.UI.Page
     {
         //static string arrIncercari = "";
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            SetFocus(txtPan1);
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             try
-            {
-                txtPan1.Focus();
+            {             
 
                 if (!IsPostBack)
                 {
                     Session.Clear();
                     General.InitSessionVariables();
+
+                    string tip = Dami.ValoareParam("TipInfoChiosc", "0");
+
+                    Session["TipInfoChiosc"] = tip;
+
+                    AscundeButoane();
                 }
 
                 Session["IdLimba"] = Dami.ValoareParam("LimbaStart");
                 if (General.VarSession("IdLimba").ToString() == "") Session["IdLimba"] = "RO";
+
+                //txtPan1.Attributes.Add("autofocus", "autofocus");
+                txtPan1.Focus();
+            
+                
             }
             catch (Exception ex)
             {
@@ -72,7 +90,7 @@ namespace WizOne
                 //Radu 20.05.2019 - anumite cititoare returneaza un numar variabil de caractere
                 //if (txtPan1.Value.Trim().Length >= max)
                 //{
-                if (txtPan1.Value.Trim().Length > max)
+                if (txtPan1.Value.Trim().Length > max)            
                 {
                     MessageBox.Show("Cod invalid! Va rugam apropiati din nou cardul de cititor", MessageBox.icoWarning, "");
                     txtPan1.Value = null;
@@ -87,7 +105,27 @@ namespace WizOne
                         txtPan1.Focus();
                     }
                     else
-                        VerificaCartela();
+                    {//Radu 18.05.2020
+                        string tip = Session["TipInfoChiosc"].ToString();
+                        if (tip == "3")
+                        {
+                            btn0.ClientVisible = true;
+                            btn1.ClientVisible = true;
+                            btn2.ClientVisible = true;
+                            btn3.ClientVisible = true;
+                            btn4.ClientVisible = true;
+                            btn5.ClientVisible = true;
+                            btn6.ClientVisible = true;
+                            btn7.ClientVisible = true;
+                            btn8.ClientVisible = true;
+                            btn9.ClientVisible = true;
+                            btnLog.ClientVisible = true;
+                            panouExt.Visible = false;
+           
+                        }
+                        else
+                            VerificaCartela();
+                    }
                 }
                 //}
             }
@@ -98,7 +136,7 @@ namespace WizOne
             }
         }
 
-        private void VerificaCartela()
+        private void VerificaCartela(string pin = "")
         {
             //codul de mai jos este aproximativ la fel cu cel din default.aspx -> functia Verifica cu deosebirea
             //ca s-a adaugat F100Cartele si filtrarea se face dupa cartela
@@ -111,7 +149,7 @@ namespace WizOne
                 if (valMax.Length > 0)
                     max = Convert.ToInt32(valMax);
 
-                string cartela = txtPan1.Value;               
+                string cartela = txtPan1.Value; 
 
                 int lung = Convert.ToInt32(General.Nz(Dami.ValoareParam("LungimeCartela","0"),"0"));
                 if (lung > 0 && cartela.Length >= lung) cartela = cartela.Substring(cartela.Length - lung);
@@ -135,7 +173,8 @@ namespace WizOne
                                     CRP.F10008 As ""Nume"", CRP.F10009 AS ""Prenume"", CRP.F10022 AS F10022,
                                     (SELECT MAX(""Tema"") FROM ""tblConfigUsers"" WHERE F70102=A.F70102) AS ""Tema"",
                                     CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=0)=0 THEN 0 ELSE 1 END AS ""EsteAdmin"",
-                                    CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=99)=0 THEN 0 ELSE 1 END AS ""EsteInGrup99""
+                                    CASE WHEN (SELECT COUNT(*) FROM ""relGrupUser"" WHERE ""IdUser""=A.F70102 AND ""IdGrup""=99)=0 THEN 0 ELSE 1 END AS ""EsteInGrup99"",
+                                    ""PINInfoChiosc""
                                     FROM USERS A
                                     LEFT JOIN F100 CRP ON A.F10003=CRP.F10003
                                     LEFT JOIN F006 C ON CRP.F10007=C.F00607
@@ -146,6 +185,26 @@ namespace WizOne
 
                 DataRow drUsr = General.IncarcaDR(strSql, null);
                 //DataRow drUsr = General.IncarcaDR(strSql, new object[] { cartela });
+
+                if (drUsr == null)
+                {
+                    MessageBox.Show("Utilizator inexistent!", MessageBox.icoError, "Atentie !");
+                    AscundeButoane();
+                    return;
+                }
+
+                string tip = Session["TipInfoChiosc"].ToString();
+                if (tip == "3")
+                {//verificare PIN                    
+                    if (General.Nz(drUsr["PINInfoChiosc"], "").ToString() != pin)
+                    {
+                        MessageBox.Show("PIN incorect!", MessageBox.icoError, "Atentie !");
+                        AscundeButoane();
+                        return;
+                    }
+                    AscundeButoane();
+                }
+
 
                 //Radu 14.01.2020
                 //1 - blocare utilizatori inactivi la logare
@@ -162,7 +221,7 @@ namespace WizOne
                         if (inactiv == "1")
                         {
                             General.InregistreazaLogarea(0, txtPan1.Value, "Angajatul asociat acestui utilizator este inactiv!");
-                            MessageBox.Show("Angajatul asociat acestui utilizator este inactiv! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                            MessageBox.Show("Angajatul asociat acestui utilizator este inactiv! Contactati administratorul de sistem!", MessageBox.icoWarning);                            
                             txtPan1.Focus();
                             err = true;
                         }
@@ -173,7 +232,7 @@ namespace WizOne
                         if (suspendatinactiv == "1")
                         {
                             General.InregistreazaLogarea(0, txtPan1.Value, "Angajatul asociat acestui utilizator este suspendat!");
-                            MessageBox.Show("Angajatul asociat acestui utilizator este suspendat! Contactati administratorul de sistem!", MessageBox.icoWarning);
+                            MessageBox.Show("Angajatul asociat acestui utilizator este suspendat! Contactati administratorul de sistem!", MessageBox.icoWarning);                           
                             txtPan1.Focus();
                             err = true;
                         }
@@ -207,12 +266,13 @@ namespace WizOne
                         if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0)
                             Session["TimeOutSecunde"] = Convert.ToInt32(dt.Rows[0][0].ToString());
                         Response.Redirect("~/Tactil/Main.aspx", false);
+         
                     }
                     else
                     {
                         General.InregistreazaLogarea(0, txtPan1.Value, "Utilizator inexistent in aplicatie");
                         MessageBox.Show("Utilizator inexistent in aplicatie! Contactati administratorul de sistem!", MessageBox.icoWarning);
-                        txtPan1.Focus();
+                        AscundeButoane();
                     }
                 }
 
@@ -226,6 +286,58 @@ namespace WizOne
             }
         }
 
+
+        protected void btnLog_Click(object sender, EventArgs e)
+        {
+            string PIN = "";
+            if (hfPIN.Contains("PIN")) 
+                PIN = General.Nz(hfPIN["PIN"], "").ToString();
+
+            if (PIN.Length > 0)
+            {
+                VerificaCartela(PIN);
+                hfPIN.Set("PIN", null);
+            }
+            else
+            {
+                MessageBox.Show(Dami.TraduCuvant("Nu ati introdus PIN-ul!"), MessageBox.icoError, "Atentie !");
+                return;
+            }
+        }
+
+        private void AscundeButoane()
+        {            
+            btn0.ClientVisible = false;
+            btn1.ClientVisible = false;
+            btn2.ClientVisible = false;
+            btn3.ClientVisible = false;
+            btn4.ClientVisible = false;
+            btn5.ClientVisible = false;
+            btn6.ClientVisible = false;
+            btn7.ClientVisible = false;
+            btn8.ClientVisible = false;
+            btn9.ClientVisible = false;
+            btnLog.ClientVisible = false;
+            panouExt.Visible = true;
+            txtPan1.Value = null;
+            txtPan1.Focus();
+
+        }
+
+
+        //      <div class="outer">
+        //          <div class="inner">
+        //              Pentru accesarea aplicatiei va rugam apropiati cardul de cititor
+        //          </div>
+        //          <input type = "text" id="txtPan1" name="txtPan1" runat="server" autofocus="autofocus" autocomplete="off" class="hide" maxlength="15" onserverchange="txtPan1_TextChanged" onblur="this.focus()"  />
+        //</div>
+
+
+
+                        //<dx:ASPxButton ID = "btn7" ClientInstanceName="btn7" ClientIDMode="Static" ClientVisible="false" TabIndex="7" runat="server" Height="30px" Text="7" style="font-size:30px;text-align:center" AutoPostBack="false" CssClass="divider"  RenderMode="Outline" oncontextMenu="ctx(this,event)" meta:resourcekey="btn7" >
+                        //        <ClientSideEvents Click = "function(s, e) { RetinePIN(7); }" />
+                        //    <Paddings PaddingBottom="10px" PaddingRight="20px" />
+                        //</dx:ASPxButton>
 
     }
 }

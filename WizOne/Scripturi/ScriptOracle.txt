@@ -14175,3 +14175,5 @@ COMMIT;
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('InOutInExportPontaj', '3', 'Se foloseste in exportul din pontajul echipei si In/Out-ul care apare in export ia valorile astfel: 1 - FirstIn/LastOut; 2 - FirstInRap/LastOutRap; 3 - FirstInPaid/LastOutPaid', 2);
 COMMIT;
+
+alter table "Ptj_tblAbsenteConfig" add "AfisareInfoChiosc" number(9);

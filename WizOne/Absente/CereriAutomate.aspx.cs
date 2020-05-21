@@ -613,7 +613,7 @@ namespace WizOne.Absente
                         Session["CereriAut_Angajati"] = dtAng;
                         Session["CereriAut_AngajatiToti"] = dtAng;
                         cmbAng.DataBind();
-                        cmbAng.SelectedIndex = 0;
+                        cmbAng.SelectedIndex = -1;
 
                         DataTable dt = null;
                         string sir = Session["CereriAut_Sir"].ToString();
@@ -623,6 +623,8 @@ namespace WizOne.Absente
                         cmbAbs.DataBind();
                         Session["CereriAut_Absente"] = dt;                     
                         AfisareCtl("cmbAbs;0");
+                        grDate.DataSource = null;
+                        grDate.DataBind();
                         break;
                     case "btnFiltru":
                         IncarcaGrid();

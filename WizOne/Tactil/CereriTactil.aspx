@@ -242,43 +242,83 @@
                     </tr>
                 </table>
 
+            <div class="col-sm-4">   
+                <div class="col-sm-4">  
+                    <div class="col-sm-4">   
+                        <div class="col-sm-4">  
+                            <div class="col-sm-4">  
+                                <div class="col-sm-4">   
+                                    <div class="col-sm-4"> 
+                                    <div id="divDateExtraOre" runat="server" />  
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
                 <div class="row text-center align-center">     
                         <div class="Absente_divOuter">
                       
-                            <div class="col-sm-4">
-                                <div class="badgeTactil" id="lblZile" runat="server">
+                            <div class="col-sm-3">
+                                <div  id="lblZile" runat="server">
                                     <h3  id ="H1" runat="server">Nr. zile</h3>
+                                     <div class="col-sm-1">   
+                                         <div class="col-sm-1">  
+                                             <div class="col-sm-1">   
+                                                 <div class="col-sm-1">  
+                                                     <div class="col-sm-1">  
+                                                         <div class="col-sm-1">   
+                                                             <div class="col-sm-1"> 
+                                                                <dx:ASPxTextBox ID="txtNrZile" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;" Enabled="false">
+                                        
+                                                                </dx:ASPxTextBox>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                </div>
-                            </div>
 
-                            <div class="col-sm-4">
-                                <div class="badgeTactil" id="lblZileRamase" runat="server">
+                            </div>
+                             <div id="divDateExtra" runat="server" />  
+                            <div class="col-sm-3">
+                                <div class="badgeTactil" id="lblZileRamase" runat="server" visible="false">
                                     <h3  id ="H2" runat="server">Nr. zile ramase</h3>
                                </div>
                             </div>
+
 
 
                         </div>
 
                 </div>
 
+                    
+            
+
                 <table style="width:100%;" >
                     <tr>
                         <td width="130"></td>
 
                         <td width="275" align="left"  id="tdNrZile" runat="server">
-                                    <dx:ASPxTextBox ID="txtNrZile" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;" Enabled="false"/>                                    
+                                                                        
  
                         </td>
                         <td width="120"></td>
-                        <td width="300" align="left"  id="tdNrZileRamase" runat="server" >
-                                    <dx:ASPxTextBox ID="txtNrZileRamase" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  Enabled="false"/>                                    
+                        <td width="300" align="left"  id="tdNrZileRamase" runat="server" visible="false" >
+                                    <dx:ASPxTextBox ID="txtNrZileRamase" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  ClientVisible="false" Enabled="false"/>                                    
  
                         </td>
                          <td width="350"></td>
 
                     </tr>
                 </table>
+
 
                 <table style="width:100%;" >
                     <tr>

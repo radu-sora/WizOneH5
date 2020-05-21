@@ -1863,7 +1863,7 @@ namespace WizOne.Pontaj
                         strSql = "SELECT TRUNC(DAY) AS DAY FROM HOLIDAYS WHERE EXTRACT(YEAR FROM DAY) = " + an;
                     DataTable dtHolidays = General.IncarcaDT(strSql, null);
 
-                    DataTable dtCol = General.IncarcaDT("SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 ORDER BY \"Ordine\"", null);
+                    DataTable dtCol = General.IncarcaDT("SELECT * FROM \"Ptj_tblPrint\" WHERE \"Activ\" = 1 AND \"Id\" NOT IN (2, 3, 4) ORDER BY \"Ordine\"", null);
                     Dictionary<string, string> lista = new Dictionary<string, string>();
                     Dictionary<string, string> listaLung = new Dictionary<string, string>();
                     Dictionary<string, int> listaId = new Dictionary<string, int>();
@@ -1930,8 +1930,12 @@ namespace WizOne.Pontaj
                                 }
                                 else
                                 {
-                                    ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
-                                    ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    //ws2.Cells[1, nrCol].Value = lista[dt.Columns[i].ColumnName];
+                                    //ws2.Cells[1, nrCol++].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    ws2.Cells[1, listaId[dt.Columns[i].ColumnName] - 1].Value = lista[dt.Columns[i].ColumnName];
+                                    ws2.Cells[1, listaId[dt.Columns[i].ColumnName] - 1].ColumnWidth = Convert.ToInt32(listaLung[dt.Columns[i].ColumnName]);
+                                    if (listaId[dt.Columns[i].ColumnName] > nrCol)
+                                        nrCol = listaId[dt.Columns[i].ColumnName];
                                 }
 
                             }
@@ -1981,9 +1985,14 @@ namespace WizOne.Pontaj
                                     }
                                     else
                                     {
+                                        //if (nrZec > 0)
+                                        //    ws2.Cells[row + 2, nrCol].NumberFormat = format;
+                                        //ws2.Cells[row + 2, nrCol++].Value = dt.Rows[row][i].ToString();
                                         if (nrZec > 0)
-                                            ws2.Cells[row + 2, nrCol].NumberFormat = format;
-                                        ws2.Cells[row + 2, nrCol++].Value = dt.Rows[row][i].ToString();
+                                            ws2.Cells[row + 2, listaId[dt.Columns[i].ColumnName] - 1].NumberFormat = format;
+                                        ws2.Cells[row + 2, listaId[dt.Columns[i].ColumnName] - 1].Value = dt.Rows[row][i].ToString();
+                                        if (listaId[dt.Columns[i].ColumnName] > nrCol)
+                                            nrCol = listaId[dt.Columns[i].ColumnName];
                                     }
                                 }
 
@@ -3466,7 +3475,7 @@ namespace WizOne.Pontaj
                                 SELECT *
                                 FROM (
                                  SELECT TOP 100 PERCENT X.F10003, CONVERT(VARCHAR, A.F10022, 103) AS DataInceput, convert(VARCHAR, ddp.DataPlecare, 103) AS DataSfarsit, A.F10008 + ' ' + A.F10009 AS AngajatNume, st.Denumire AS StarePontaj, isnull(zabs.Ramase, 0) as ZileCONeefectuate, isnull(zlp.Ramase, 0) as ZLPNeefectuate,
-                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
+                                 H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, F06205, {cmpCateg}
                                 B.F100958, B.F100959, Y.IdContract, A.F100901 AS EID, X.IdStare , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.Denumire AS DescContract, X.Comentarii
                                 {zileVal}  {zileF}
                                 FROM Ptj_Cumulat X 
@@ -3514,7 +3523,7 @@ namespace WizOne.Pontaj
                                 SELECT  *                                
                                 FROM (
                                 SELECT X.F10003, TO_CHAR(A.F10022, 'dd/mm/yyyy') AS ""DataInceput"", TO_CHAR(""DamiDataPlecare""(X.F10003, {dtSf}), 'dd/mm/yyyy') AS ""DataSfarsit"", A.F10008 || ' ' || A.F10009 AS ""AngajatNume"", st.""Denumire"" AS ""StarePontaj"", COALESCE(zabs.""Ramase"", 0) as ""ZileCONeefectuate"", COALESCE(zlp.""Ramase"", 0) as ""ZLPNeefectuate"",
-                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, {cmpCateg}
+                                H.F00507 AS ""Sectie"",I.F00608 AS ""Dept"", S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"", F10061, F10062, F06205, {cmpCateg}
                                 B.F100958, B.F100959, Y.""IdContract"", A.F100901 AS EID, X.""IdStare"" , Y.F10002, Y.F10004, Y.F10005, Y.F10006, Y.F10007, C.""Denumire"" AS ""DescContract"", X.""Comentarii""
                                 {zileVal} {zileF}
                                 FROM ""Ptj_Cumulat"" X 

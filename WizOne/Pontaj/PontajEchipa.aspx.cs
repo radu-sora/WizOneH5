@@ -3386,6 +3386,25 @@ namespace WizOne.Pontaj
                     zileF += $@",COALESCE(X.""F{i}"",0) AS ""F{i}""";
                 }
 
+                //Florin 2020.05.21
+                string cmpExpIn = "FirstInPaid";
+                string cmpExpOut = "LastOutPaid";
+                string tipExp = Dami.ValoareParam("InOutInExportPontaj");
+                switch(tipExp)
+                {
+                    case "1":
+                        cmpExpIn = "FirstIn";
+                        cmpExpOut = "LastOut";
+                        break;
+                    case "2":
+                        cmpExpIn = "FirstInRap";
+                        cmpExpOut = "LastOutRap";
+                        break;
+                    case "4":
+                        cmpExpIn = "FirstInPaid";
+                        cmpExpOut = "LastOutPaid";
+                        break;
+                }
 
                 if (Constante.tipBD == 1)
                 {
@@ -3398,13 +3417,13 @@ namespace WizOne.Pontaj
                     if (chkOre.Checked)
                     {
                         pvtIn = $@"INNER JOIN (SELECT F10003 {zileAsIn} FROM 
-                                (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                                (SELECT F10003, ""{cmpExpIn}"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""{cmpExpIn}"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003";
 
                         pvtOut = $@"INNER JOIN (SELECT F10003 {zileAsOut} FROM 
-                                (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
+                                (SELECT F10003, ""{cmpExpOut}"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""{cmpExpOut}"") FOR ""Ziua"" IN ( {zile.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003";
                     }
                     if (chkPauza.Checked)
@@ -3459,13 +3478,13 @@ namespace WizOne.Pontaj
                     if (chkOre.Checked)
                     {
                         pvtIn = $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""FirstInPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""FirstInPaid"") FOR ""Ziua"" IN ( {zileAsIn.Substring(1)} )) pvt
+                                (SELECT F10003, ""{cmpExpIn}"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""{cmpExpIn}"") FOR ""Ziua"" IN ( {zileAsIn.Substring(1)} )) pvt
                                 ) pvtIn ON X.F10003=pvtIn.F10003";
 
                         pvtOut = $@"INNER JOIN (SELECT * FROM 
-                                (SELECT F10003, ""LastOutPaid"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
-                                PIVOT (MAX(""LastOutPaid"") FOR ""Ziua"" IN ( {zileAsOut.Substring(1)} )) pvt
+                                (SELECT F10003, ""{cmpExpOut}"", ""Ziua"" From ""Ptj_Intrari_2"" WHERE {dtInc} <= CAST(""Ziua"" AS date) AND CAST(""Ziua"" AS date) <= {dtSf}) source  
+                                PIVOT (MAX(""{cmpExpOut}"") FOR ""Ziua"" IN ( {zileAsOut.Substring(1)} )) pvt
                                 ) pvtOut ON X.F10003=pvtOut.F10003";
                     }
                     if (chkPauza.Checked)

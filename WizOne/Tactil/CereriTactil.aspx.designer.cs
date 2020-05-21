@@ -321,6 +321,15 @@ namespace WizOne.Tactil
         protected global::DevExpress.Web.ASPxComboBox cmbOraSf;
 
         /// <summary>
+        /// divDateExtraOre control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDateExtraOre;
+
+        /// <summary>
         /// lblZile control.
         /// </summary>
         /// <remarks>
@@ -337,6 +346,24 @@ namespace WizOne.Tactil
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl H1;
+
+        /// <summary>
+        /// txtNrZile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox txtNrZile;
+
+        /// <summary>
+        /// divDateExtra control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDateExtra;
 
         /// <summary>
         /// lblZileRamase control.
@@ -364,15 +391,6 @@ namespace WizOne.Tactil
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlTableCell tdNrZile;
-
-        /// <summary>
-        /// txtNrZile control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox txtNrZile;
 
         /// <summary>
         /// tdNrZileRamase control.

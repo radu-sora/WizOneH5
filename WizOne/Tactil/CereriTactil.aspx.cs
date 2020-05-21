@@ -224,9 +224,9 @@ namespace WizOne.Tactil
                             if ((dtRow.ElementAt(0)["DenumireScurta"] != null && (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP"))
                                 || Convert.ToInt32(dtRow.ElementAt(0)["Id"].ToString()) == Convert.ToInt32(Dami.ValoareParam("IdAbsentaCO", "1")))
                             {
-                                lblZileRamase.Visible = true;
+                                //lblZileRamase.Visible = true;
                                 //tdNrZileRamase.Visible = true;
-                                txtNrZileRamase.Visible = true;
+                                //txtNrZileRamase.Visible = true;
                             }
                             else
                             {
@@ -520,9 +520,9 @@ namespace WizOne.Tactil
                             if ((dtRow.ElementAt(0)["DenumireScurta"] != null && (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP"))
                                 || Convert.ToInt32(dtRow.ElementAt(0)["Id"].ToString()) == Convert.ToInt32(Dami.ValoareParam("IdAbsentaCO", "1")))
                             {
-                                lblZileRamase.Visible = true;
+                                //lblZileRamase.Visible = true;
                                 //tdNrZileRamase.Visible = true;
-                                txtNrZileRamase.Visible = true;
+                                //txtNrZileRamase.Visible = true;
                             }
                             else
                             {
@@ -847,15 +847,19 @@ namespace WizOne.Tactil
 
                 string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
 
-                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { General.VarSession("User_Marca") });
+                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND ""AfisareInfoChiosc"" = 1", new object[] { General.Nz((cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value) : Convert.ToInt32(cmbAbs.Value)), "-99") });
                 for (int i = 0; i < dtEx.Rows.Count; i++)
                 {
                     DataRow dr = dtEx.Rows[i];
-                    //ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + i) as ASPxEdit;
-                    //if (Convert.ToInt32(General.Nz(dr["Obligatoriu"], 0)) == 1)
-                    //{
-                    //    if (ctl == null || ctl.Value == null || ctl.Value.ToString() == "") strErr += ", " + General.Nz(dr["Denumire"], "date extra").ToString();
-                    //}
+                    ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + i) as ASPxEdit;
+
+                    if (Session["CereriTactil"].ToString() == "AbsenteOra" || Session["CereriTactil"].ToString() == "BiletVoie")                    
+                        ctl = divDateExtraOre.FindControl("ctlDinamic" + i) as ASPxEdit;   
+                    
+                    if (Convert.ToInt32(General.Nz(dr["Obligatoriu"], 0)) == 1)
+                    {
+                        if (ctl == null || ctl.Value == null || ctl.Value.ToString() == "") strErr += ", " + General.Nz(dr["Denumire"], "date extra").ToString();
+                    }
 
                 }
 
@@ -1476,9 +1480,9 @@ namespace WizOne.Tactil
                     if ((dtRow.ElementAt(0)["DenumireScurta"] != null && (dtRow.ElementAt(0)["DenumireScurta"].ToString().Length >= 3 && dtRow.ElementAt(0)["DenumireScurta"].ToString() == "ZLP"))
                         || Convert.ToInt32(dtRow.ElementAt(0)["Id"].ToString()) == Convert.ToInt32(Dami.ValoareParam("IdAbsentaCO", "1")))
                     {
-                        lblZileRamase.Visible = true;
+                        //lblZileRamase.Visible = true;
                         //tdNrZileRamase.Visible = true;
-                        txtNrZileRamase.Visible = true;
+                        //txtNrZileRamase.Visible = true;
                     }
                     else
                     {
@@ -1634,11 +1638,12 @@ namespace WizOne.Tactil
         {
             try
             {
-                //divDateExtra.Controls.Clear();
+                divDateExtra.Controls.Clear();
+                divDateExtraOre.Controls.Clear();
 
                 string ids = "";
 
-                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { General.Nz(General.VarSession("User_Marca"), "-99") });
+                DataTable dt = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND ""AfisareInfoChiosc"" = 1", new object[] { General.Nz((cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value) : Convert.ToInt32(cmbAbs.Value)), "-99") });
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     DataRow dr = dt.Rows[i];
@@ -1650,6 +1655,8 @@ namespace WizOne.Tactil
                     //lbl.ID = "lblDinamic" + i;
                     lbl.Text = dr["Denumire"].ToString();
                     lbl.Style.Add("margin", "10px 0px !important");
+                    lbl.Font.Size = 16;                    
+                    lbl.Width = Unit.Pixel(250);
                     ctlDiv.Controls.Add(lbl);
 
                     string ctlId = "ctlDinamic" + i;
@@ -1660,7 +1667,9 @@ namespace WizOne.Tactil
                             txt.ID = ctlId;
                             txt.ClientIDMode = ClientIDMode.Static;
                             txt.ClientInstanceName = "ctlDinamic" + i;
-                            txt.Width = Unit.Pixel(70);
+                            txt.Width = Unit.Pixel(200);
+                            txt.Height = Unit.Pixel(75);
+                            txt.Font.Size = 30;
                             txt.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
                             if (General.Nz(dr["Sursa"], "").ToString() != "")
                             {
@@ -1680,6 +1689,8 @@ namespace WizOne.Tactil
                             chk.ClientInstanceName = "ctlDinamic" + i;
                             chk.Checked = false;
                             chk.AllowGrayed = false;
+                            chk.Width = Unit.Pixel(200);
+                            chk.Height = Unit.Pixel(75);
                             chk.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
                             if (General.Nz(dr["Sursa"], "").ToString() != "")
                             {
@@ -1696,11 +1707,17 @@ namespace WizOne.Tactil
                             ASPxDateEdit dte = new ASPxDateEdit();
                             dte.ID = ctlId;
                             dte.ClientIDMode = ClientIDMode.Static;
-                            dte.ClientInstanceName = "ctlDinamic" + i;
-                            dte.Width = Unit.Pixel(100);
+                            dte.ClientInstanceName = "ctlDinamic" + i;                         
                             dte.DisplayFormatString = "dd/MM/yyyy";
                             dte.EditFormat = EditFormat.Custom;
                             dte.EditFormatString = "dd/MM/yyyy";
+                            dte.Width = Unit.Pixel(250);
+                            dte.Height = Unit.Pixel(75);
+                            dte.ButtonStyle.Width = 75;
+                            dte.Font.Size = 24;
+                            dte.CalendarProperties.DayStyle.Font.Size = 30;
+                            dte.CalendarProperties.DayStyle.Paddings.Padding = Unit.Pixel(30);
+                            dte.CalendarProperties.MonthGridPaddings.Padding = Unit.Pixel(30);
                             dte.ReadOnly = General.Nz(dr["ReadOnly"], "0").ToString() == "0" ? false : true;
                             if (General.Nz(dr["Sursa"], "").ToString() != "")
                             {
@@ -1714,8 +1731,12 @@ namespace WizOne.Tactil
                             ctlDiv.Controls.Add(dte);
                             break;
                     }
+                      
 
-                    //divDateExtra.Controls.Add(ctlDiv);
+                    if (Session["CereriTactil"].ToString() == "AbsenteOra" || Session["CereriTactil"].ToString() == "BiletVoie")
+                        divDateExtraOre.Controls.Add(ctlDiv);
+                    else
+                        divDateExtra.Controls.Add(ctlDiv);
 
                     ids += ctlId + ";";
                 }
@@ -1814,37 +1835,40 @@ namespace WizOne.Tactil
 
                 string[] lstExtra = new string[20] { "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null" };
 
-                //DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1", new object[] { id });
-                //for (int i = 0; i < dtEx.Rows.Count; i++)
-                //{
-                //    DataRow dr = dtEx.Rows[i];
-                //    ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + i) as ASPxEdit;
-                //    if (General.Nz(dr["IdCampExtra"], "").ToString() != "")
-                //    {
-                //        if (ctl != null && ctl.Value != null && ctl.Value.ToString() != "")
-                //        {
-                //            switch (General.Nz(dr["TipCamp"], "").ToString())
-                //            {
-                //                case "0":
-                //                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
-                //                    break;
-                //                case "1":
-                //                    if (Convert.ToBoolean(ctl.Value) == true)
-                //                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Da'";
-                //                    else
-                //                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Nu'";
-                //                    break;
-                //                case "3":
-                //                    DateTime zi = Convert.ToDateTime(ctl.Value);
-                //                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "'";
-                //                    break;
-                //                default:
-                //                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
-                //                    break;
-                //            }
-                //        }
-                //    }
-                //}
+                DataTable dtEx = General.IncarcaDT(@"SELECT * FROM ""Ptj_tblAbsenteConfig"" WHERE ""IdAbsenta""=@1 AND ""AfisareInfoChiosc"" = 1", new object[] { General.Nz((cmbSelAbs.Visible == true ? Convert.ToInt32(cmbSelAbs.Value) : Convert.ToInt32(cmbAbs.Value)), "-99") });
+                for (int i = 0; i < dtEx.Rows.Count; i++)
+                {
+                    DataRow dr = dtEx.Rows[i];
+                    ASPxEdit ctl = divDateExtra.FindControl("ctlDinamic" + i) as ASPxEdit;
+                    if (Session["CereriTactil"].ToString() == "AbsenteOra" || Session["CereriTactil"].ToString() == "BiletVoie")
+                        ctl = divDateExtraOre.FindControl("ctlDinamic" + i) as ASPxEdit;
+
+                    if (General.Nz(dr["IdCampExtra"], "").ToString() != "")
+                    {
+                        if (ctl != null && ctl.Value != null && ctl.Value.ToString() != "")
+                        {
+                            switch (General.Nz(dr["TipCamp"], "").ToString())
+                            {
+                                case "0":
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString().Replace("'", "''") + "'";
+                                    break;
+                                case "1":
+                                    if (Convert.ToBoolean(ctl.Value) == true)
+                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Da'";
+                                    else
+                                        lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'Nu'";
+                                    break;
+                                case "3":
+                                    DateTime zi = Convert.ToDateTime(ctl.Value);
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + zi.Day.ToString().PadLeft(2, '0') + "/" + zi.Month.ToString().PadLeft(2, '0') + "/" + zi.Year.ToString() + "'";
+                                    break;
+                                default:
+                                    lstExtra[Convert.ToInt32(dr["IdCampExtra"]) - 1] = "'" + ctl.Value.ToString() + "'";
+                                    break;
+                            }
+                        }
+                    }
+                }
 
                 string valExtra = "";
                 for (int i = 0; i < lstExtra.Count(); i++)

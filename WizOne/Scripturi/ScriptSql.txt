@@ -13450,3 +13450,10 @@ GO
 
 ALTER TABLE Ptj_ContracteSchimburi ADD CONSTRAINT Ptj_ContracteSchimburi_PK PRIMARY KEY(IdContract, IdProgram, TipSchimb)
 GO
+
+DELETE FROM "tblParametrii" WHERE "Nume"='NumeImprimanta'
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TactilImprimanta', '', 'Numele imprimantei la care se vor imprima documentele din info chiosc; daca nu este specificat nimic atunci se foloseste imprimanta default', 0);
+GO
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('TactilImprimantaFluturas', '', 'Numele imprimantei la care se va imprima fluturasul din info chiosc; daca nu este specificat nimic atunci se foloseste imprimanta default', 0);
+GO

@@ -150,10 +150,15 @@ namespace WizOne.Tactil
                         dlreport.Margins.Left = 50;
                         dlreport.Margins.Right = 50;
                         dlreport.PrintingSystem.ShowMarginsWarning = false;
-                        //dlreport.PrinterName = "Microsoft XPS Document Writer";
-                        //dlreport.PrinterName = "NPI045772 (HP LaserJet P2055dn)";
-                        dlreport.PrinterName = Dami.ValoareParam("NumeImprimanta", "");
                         dlreport.ShowPrintMarginsWarning = false;
+
+                        //Florin 2020.05.22
+                        string numeImprimanta = Dami.ValoareParam("TactilImprimantaFluturas").Trim();
+                        if (numeImprimanta == "")
+                            numeImprimanta = Dami.ValoareParam("TactilImprimanta").Trim();
+                        if (numeImprimanta != "")
+                            dlreport.PrinterName = numeImprimanta;
+
                         dlreport.CreateDocument();
 
                         ReportPrintTool pt = new ReportPrintTool(dlreport);

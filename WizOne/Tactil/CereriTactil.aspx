@@ -62,6 +62,8 @@
                  //txtNrOre.SetValue(rez.toFixed(4));
                  txtNrOreInMinute.SetValue(diff);
                  hfNrMinute.Set('NrMinute', diff);
+                 var dt = new Date(2200, 1, 1, diff / 60, diff % 60);
+                 txtNrOreTime.SetDate(dt);
              }
          }
 
@@ -191,7 +193,7 @@
                         <td width="275" align="left">
                                     <dx:ASPxDateEdit ID="txtDataInc"   runat="server"  style="font-size:30px;left:auto" Width="250px" HorizontalAlign="Center"   ButtonStyle-Width="75" Height="75"  DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataIncResource1" >
                              
-                                        <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback(3); }" />
+                                        <ClientSideEvents ValueChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(3); }" />
                                 
                                         <CalendarProperties>                                
                                             <MonthGridPaddings Padding="30px" />
@@ -206,7 +208,7 @@
                         <td width="300" align="left" id="tdDataSf" runat="server">
                                     <dx:ASPxDateEdit ID="txtDataSf" runat="server"  style="font-size:30px;" Width="250px" HorizontalAlign="Center"     ButtonStyle-Width="75" Height="75"  DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataSfResource1" >
                                
-                                        <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback(6); }" />   
+                                        <ClientSideEvents ValueChanged="function(s, e) { VerifInterval(s,e);  pnlCtl.PerformCallback(6); }" />   
                                        <CalendarProperties>                                
                                             <MonthGridPaddings Padding="30px" />
                                             <DayStyle Font-Size="30px">
@@ -220,7 +222,8 @@
  
                         </td>
                         <td width="10" align="left"  id="tdNrOreInMinute" runat="server" visible="false">
-                                    <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  />                                    
+                                    <dx:ASPxTextBox ID="txtNrOreInMinute" ClientInstanceName="txtNrOreInMinute" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;" ClientVisible="false"  />                                    
+                                <dx:ASPxTimeEdit ID="txtNrOreTime" ClientInstanceName="txtNrOreTime" runat="server" Width="200px"  Height="75"  style="font-size:30px;"  HorizontalAlign="Center"   SpinButtons-ShowIncrementButtons="false"/>
  
                         </td>
                           <td width="100" align="right"  id="tdOraInc" runat="server"  visible="false">                          
@@ -239,43 +242,83 @@
                     </tr>
                 </table>
 
+            <div class="col-sm-4">   
+                <div class="col-sm-4">  
+                    <div class="col-sm-4">   
+                        <div class="col-sm-4">  
+                            <div class="col-sm-4">  
+                                <div class="col-sm-4">   
+                                    <div class="col-sm-4"> 
+                                    <div id="divDateExtraOre" runat="server" />  
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
                 <div class="row text-center align-center">     
                         <div class="Absente_divOuter">
                       
-                            <div class="col-sm-4">
-                                <div class="badgeTactil" id="lblZile" runat="server">
+                            <div class="col-sm-3">
+                                <div  id="lblZile" runat="server">
                                     <h3  id ="H1" runat="server">Nr. zile</h3>
+                                     <div class="col-sm-1">   
+                                         <div class="col-sm-1">  
+                                             <div class="col-sm-1">   
+                                                 <div class="col-sm-1">  
+                                                     <div class="col-sm-1">  
+                                                         <div class="col-sm-1">   
+                                                             <div class="col-sm-1"> 
+                                                                <dx:ASPxTextBox ID="txtNrZile" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;" Enabled="false">
+                                        
+                                                                </dx:ASPxTextBox>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                </div>
-                            </div>
 
-                            <div class="col-sm-4">
-                                <div class="badgeTactil" id="lblZileRamase" runat="server">
+                            </div>
+                             <div id="divDateExtra" runat="server" />  
+                            <div class="col-sm-3">
+                                <div class="badgeTactil" id="lblZileRamase" runat="server" visible="false">
                                     <h3  id ="H2" runat="server">Nr. zile ramase</h3>
                                </div>
                             </div>
+
 
 
                         </div>
 
                 </div>
 
+                    
+            
+
                 <table style="width:100%;" >
                     <tr>
                         <td width="130"></td>
 
                         <td width="275" align="left"  id="tdNrZile" runat="server">
-                                    <dx:ASPxTextBox ID="txtNrZile" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;" Enabled="false"/>                                    
+                                                                        
  
                         </td>
                         <td width="120"></td>
-                        <td width="300" align="left"  id="tdNrZileRamase" runat="server" >
-                                    <dx:ASPxTextBox ID="txtNrZileRamase" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  Enabled="false"/>                                    
+                        <td width="300" align="left"  id="tdNrZileRamase" runat="server" visible="false" >
+                                    <dx:ASPxTextBox ID="txtNrZileRamase" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  ClientVisible="false" Enabled="false"/>                                    
  
                         </td>
                          <td width="350"></td>
 
                     </tr>
                 </table>
+
 
                 <table style="width:100%;" >
                     <tr>

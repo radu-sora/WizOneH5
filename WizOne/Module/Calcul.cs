@@ -711,7 +711,7 @@ namespace WizOne.Module
                 if (lastOut != null)
                 {
                     //Florin 2020.04.21 - Am adaugat conditia flexibil=1
-                    if (Convert.ToInt32(General.Nz(entPrg["Flexibil"], -99)) == 1)
+                    if (entPrg != null && Convert.ToInt32(General.Nz(entPrg["Flexibil"], -99)) == 1)
                     {
                         dtSch = lastOut;
                     }

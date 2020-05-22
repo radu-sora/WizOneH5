@@ -7886,6 +7886,8 @@ namespace WizOne.Module
 
         public static void CalculFormuleCumulat(string filtru)
         {
+            string sqlCum = "";
+
             try
             {
                 string strSql = "";
@@ -7916,7 +7918,7 @@ namespace WizOne.Module
 
                 if (strSql != "")
                 {
-                    string sqlCum = "BEGIN" + "\n\r" + strSql + "\n\r" + "END;";
+                    sqlCum = "BEGIN" + "\n\r" + strSql + "\n\r" + "END;";
                     General.ExecutaNonQuery(sqlCum, null);
 
                     if (Dami.ValoareParam("LogFormuleCumulat") == "1") General.CreazaLogFormuleCumulat(sqlCum, "PontajDetaliat");
@@ -7925,6 +7927,7 @@ namespace WizOne.Module
             catch (Exception ex)
             {
                 MemoreazaEroarea(ex.ToString(), "Calcul", "CalculFormuleCumulat");
+                MemoreazaEroarea(sqlCum, "Calcul", "CalculFormuleCumulat");
             }
         }
 

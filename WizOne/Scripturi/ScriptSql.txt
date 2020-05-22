@@ -13435,3 +13435,18 @@ GO
 
 ALTER TABLE TemplateCampuri ADD OmiteLaActualizare int
 GO
+
+ALTER TABLE Ptj_ContracteSchimburi DROP CONSTRAINT Ptj_ContracteSchimburi_PK
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi ALTER COLUMN IdContract int NOT NULL
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi ALTER COLUMN IdProgram int NOT NULL
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi ALTER COLUMN TipSchimb int NOT NULL
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi ADD CONSTRAINT Ptj_ContracteSchimburi_PK PRIMARY KEY(IdContract, IdProgram, TipSchimb)
+GO

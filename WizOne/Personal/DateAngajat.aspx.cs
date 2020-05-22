@@ -693,7 +693,7 @@ namespace WizOne.Personal
 
                 //Florin 2018-10-30
                 //calculam CO daca se modifica data plecare
-                if (calcCO)
+                //if (calcCO)   Radu 22.05.2020 - calculul CO sa se efectueze la fiecare salvare, deoarece se pot modifica multi factori care influenteaza zilele de CO
                 {
                     try
                     {

@@ -1593,7 +1593,7 @@
 						    </td>	
                             <td></td>	
 						    <td>
-							    <dx:ASPxTextBox  ID="txtZileCOCuvAnCrt" Width="75"  runat="server" Text='<%# Eval("F100642") %>' TabIndex="61" AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtZileCOCuvAnCrt" Width="75"  runat="server" Text='<%# Eval("F100642") %>' TabIndex="61" AutoPostBack="false" ReadOnly="true" >
                                     
 							    </dx:ASPxTextBox>
 						    </td>
@@ -1604,7 +1604,7 @@
 						    </td>	
                             <td></td>	
 						    <td>
-							    <dx:ASPxTextBox  ID="txtZileCOAnCrt" Width="75"  runat="server" Text='<%# Eval("F100995") %>' TabIndex="62" AutoPostBack="false" >
+							    <dx:ASPxTextBox  ID="txtZileCOAnCrt" Width="75"  runat="server" Text='<%# Eval("F100995") %>' TabIndex="62" AutoPostBack="false" ReadOnly="true" >
                                     
 							    </dx:ASPxTextBox>
 						    </td>

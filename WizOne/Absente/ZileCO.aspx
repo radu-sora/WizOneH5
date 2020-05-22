@@ -123,7 +123,7 @@
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>
 
-                                <dx:GridViewDataTextColumn FieldName="Cuvenite" Name="Cuvenite" Caption="Cuvenite" >
+                                <dx:GridViewDataTextColumn FieldName="Cuvenite" Name="Cuvenite" Caption="Cuvenite" ReadOnly="true" >
                                     <PropertiesTextEdit DisplayFormatInEditMode="true" DisplayFormatString="N0" MaskSettings-IncludeLiterals="None" MaskSettings-PromptChar="c">
                                         <ValidationSettings ErrorDisplayMode="ImageWithTooltip" />
                                     </PropertiesTextEdit>
@@ -138,7 +138,7 @@
                                         <ValidationSettings ErrorDisplayMode="ImageWithTooltip" />
                                     </PropertiesTextEdit>
                                 </dx:GridViewDataTextColumn>
-                                <dx:GridViewDataTextColumn FieldName="CuveniteAn" Name="CuveniteAn" Caption="Cuvenite An" >
+                                <dx:GridViewDataTextColumn FieldName="CuveniteAn" Name="CuveniteAn" Caption="Cuvenite An" ReadOnly="true" >
                                     <PropertiesTextEdit DisplayFormatInEditMode="true" DisplayFormatString="N0" MaskSettings-IncludeLiterals="None">
                                         <ValidationSettings ErrorDisplayMode="ImageWithTooltip" />
                                     </PropertiesTextEdit>

@@ -12832,8 +12832,6 @@ GO
 ALTER TABLE "Ptj_Intrari" ADD "IdProgramP" int
 GO
 
-
-
 CREATE TABLE ImportDateSablon(
 	NumeTabela [nvarchar](200),
 	ColoanaFisier [nvarchar](200),
@@ -12845,9 +12843,6 @@ CREATE TABLE ImportDateSablon(
 	IdAuto ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
-
-
 GO
 
 CREATE TABLE ImportDateNomen(
@@ -12866,10 +12861,6 @@ GO
 ALTER TABLE Ptj_tblFormuleCumulat ADD NumarZecimale int
 GO
 
-ALTER TABLE Ptj_tblFormuleCumulat ADD AdaugaZileLibere int DEFAULT 1
-GO
-
-
 ----  2.2.128  ----
 
 
@@ -12877,6 +12868,7 @@ DROP TABLE Ptj_ContracteVal
 GO
 DROP TABLE Ptj_ContracteCiclice
 GO
+
 
 ALTER TABLE Ptj_Contracte DROP COLUMN CicluDataInceput
 GO
@@ -13059,7 +13051,7 @@ GO
 alter table tblInfoChiosc add IdTerminal varchar(50)
 GO
 
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('TipInfoChiosc', '0', '0 - obisnuit (cu detectare cartela); 1 - fara detectare cartela si cu PIN; 2 - fara detectare cartela si fara PIN', 0, -99, GETDATE())
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('TipInfoChiosc', '0', '0 - obisnuit (cu detectare cartela); 1 - fara detectare cartela si cu PIN; 2 - fara detectare cartela si fara PIN; 3 - cu detectare cartela si cu PIN', 0, -99, GETDATE())
 GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('IntervalConectareInfoChiosc', '5', 'Intervalul maxim (in secunde), in trecut fata de momentul curent, in care poate fi luata in considerare cartela citita de InfoChiosc', 0, -99, GETDATE())
 GO
@@ -13075,6 +13067,11 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('CircuitDocumenteDataInceput', null, 'Se foloseste in circuit documente si este data de la care se afiseaza informatia in grid. Formatul este DD-MM-YYYY', 3, -99, GetDate())
 GO
+
+ALTER TABLE Ptj_tblFormuleCumulat ADD AdaugaZileLibere int DEFAULT 1
+GO
+
+
 
 
 BEGIN
@@ -13351,11 +13348,6 @@ GO
 insert into MP_tblTaburi (Denumire, Pagina, ordine) values ('Studii (nou)', 'StudiiNou', 33)
 GO
 
-ALTER TABLE USERS ADD UtilizatorNonAD int default 0
-GO
-
-ALTER TABLE TemplateCampuri ADD OmiteLaActualizare int
-GO
 
 -- #391 - Completare date in template evaluare
 -- https://github.com/wizromRD/WizOne/issues/391
@@ -13436,4 +13428,25 @@ BEGIN
 
     SET @i = @i + 1
 END
+GO
+
+ALTER TABLE USERS ADD UtilizatorNonAD int default 0
+GO
+
+ALTER TABLE TemplateCampuri ADD OmiteLaActualizare int
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi DROP CONSTRAINT Ptj_ContracteSchimburi_PK
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi ALTER COLUMN IdContract int NOT NULL
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi ALTER COLUMN IdProgram int NOT NULL
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi ALTER COLUMN TipSchimb int NOT NULL
+GO
+
+ALTER TABLE Ptj_ContracteSchimburi ADD CONSTRAINT Ptj_ContracteSchimburi_PK PRIMARY KEY(IdContract, IdProgram, TipSchimb)
 GO

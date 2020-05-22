@@ -13912,7 +13912,7 @@ COMMIT;
 alter table "tblInfoChiosc" add "IdTerminal" varchar2(50);
 /
 
-INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('TipInfoChiosc', '0', '0 - obisnuit (cu detectare cartela); 1 - fara detectare cartela si cu PIN; 2 - fara detectare cartela si fara PIN', 0, -99, SYSDATE);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('TipInfoChiosc', '0', '0 - obisnuit (cu detectare cartela); 1 - fara detectare cartela si cu PIN; 2 - fara detectare cartela si fara PIN; 3 - cu detectare cartela si cu PIN', 0, -99, SYSDATE);
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul", USER_NO, TIME) VALUES('IntervalConectareInfoChiosc', '5', 'Intervalul maxim (in secunde), in trecut fata de momentul curent, in care poate fi luata in considerare cartela citita de InfoChiosc', 0, -99, SYSDATE);
 COMMIT;
 
@@ -14145,4 +14145,16 @@ insert into "MP_tblTaburi" ("Denumire", "Pagina", "Ordine") values ('Studii (nou
 ALTER TABLE USERS ADD "UtilizatorNonAD" NUMBER(9) default 0;
 /
 ALTER TABLE "TemplateCampuri" ADD "OmiteLaActualizare" NUMBER(9);
+/
+
+ALTER TABLE "Ptj_ContracteSchimburi" DROP CONSTRAINT "Ptj_ContracteSchimburi_PK";
+DROP INDEX "Ptj_ContracteSchimburi_PK";
+ALTER TABLE "Ptj_ContracteSchimburi" MODIFY ("IdContract" NUMBER(10) NOT NULL ENABLE); 
+ALTER TABLE "Ptj_ContracteSchimburi" MODIFY ("IdProgram" NUMBER(10) NOT NULL ENABLE); 
+ALTER TABLE "Ptj_ContracteSchimburi" MODIFY ("TipSchimb" NUMBER(10) NOT NULL ENABLE); 
+/
+CREATE UNIQUE INDEX "Ptj_ContracteSchimburi_PK" ON "Ptj_ContracteSchimburi" ("IdContract", "IdProgram", "TipSchimb") ;
+ALTER TABLE "Ptj_ContracteSchimburi" ADD CONSTRAINT "Ptj_ContracteSchimburi_PK" PRIMARY KEY ("IdContract", "IdProgram", "TipSchimb");
+/
+ALTER TABLE "Ptj_ContracteSchimburi" MODIFY ("TipSchimb" NUMBER(10) NULL); 
 /

@@ -42,7 +42,7 @@ namespace WizOne.Contracte
                     dtAbs.PrimaryKey = new DataColumn[] { dtAbs.Columns["IdAuto"] };
                     DataTable dtSch = General.IncarcaDT(@"SELECT * FROM ""Ptj_ContracteSchimburi"" WHERE ""IdContract""=@1", new object[] { idCtr });
                     dtSch.TableName = "Ptj_ContracteSchimburi";
-                    dtSch.PrimaryKey = new DataColumn[] { dtSch.Columns["IdAuto"] };
+                    dtSch.PrimaryKey = new DataColumn[] { dtSch.Columns["IdContract"], dtSch.Columns["IdProgram"], dtSch.Columns["TipSchimb"] };
 
                     ds.Tables.Add(dt);
                     ds.Tables.Add(dtAbs);
@@ -121,7 +121,7 @@ namespace WizOne.Contracte
 
                             grDateAbs.UpdateEdit();
 
-                            for (int i = 1; i < 8; i++)
+                            for (int i = 1; i <= 8; i++)
                             {
                                 ASPxGridView grDate = pnlPrg.FindNestedControlByFieldName("grDate" + i) as ASPxGridView;
                                 if (grDate != null)
@@ -221,6 +221,7 @@ namespace WizOne.Contracte
                                 }
 
                                 //adaugam liniile
+                                //int idAuto = 100050000;
                                 DataTable dtZi = dt.Select("TipSchimb = " + cmbZiDeLa.Value).CopyToDataTable();
                                 string[] arr = schDes.Split(',');
                                 for (int i = 0; i < arr.Length; i++)
@@ -240,10 +241,12 @@ namespace WizOne.Contracte
                                         dr["OraSfarsitDeLa"] = drOri["OraSfarsitDeLa"];
                                         dr["OraSfarsitLa"] = drOri["OraSfarsitLa"];
                                         dr["ModVerificare"] = drOri["ModVerificare"];
+                                        //dr["IdAuto"] = idAuto;
                                         dr["USER_NO"] = Session["UserId"];
                                         dr["TIME"] = DateTime.Now;
 
                                         dt.Rows.Add(dr);
+                                        //idAuto += 1;
                                     }
                                 }
 
@@ -281,7 +284,7 @@ namespace WizOne.Contracte
                     sqlNoRows = @"SELECT * FROM ""Ptj_ContracteSchimburi"" WHERE ROWNUM < 1";
                 DataTable dtNoRows = General.IncarcaDT(sqlNoRows, null);
                 dtNoRows.TableName = "Ptj_NoRows";
-                dtNoRows.PrimaryKey = new DataColumn[] { dtNoRows.Columns["IdAuto"] };
+                dtNoRows.PrimaryKey = new DataColumn[] { dtNoRows.Columns["IdContract"], dtNoRows.Columns["IdProgram"], dtNoRows.Columns["TipSchimb"] };
 
                 for (int i = 1; i <= 8; i++)
                 {
@@ -291,7 +294,7 @@ namespace WizOne.Contracte
                         GridViewDataComboBoxColumn colPrg = (grDate.Columns["IdProgram"] as GridViewDataComboBoxColumn);
                         colPrg.PropertiesComboBox.DataSource = dtPrg;
 
-                        grDate.KeyFieldName = "IdAuto";
+                        grDate.KeyFieldName = "IdContract; IdProgram; TipSchimb";
                         if (dtSch.Select("TipSchimb=" + i).Length > 0)
                             grDate.DataSource = dtSch.Select("TipSchimb=" + i).CopyToDataTable();
                         else

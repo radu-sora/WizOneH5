@@ -492,8 +492,10 @@ namespace WizOne.Module
                     string tip = Dami.ValoareParam("TipInfoChiosc", "0");
                     if (tip == "0")
                         HttpContext.Current.Response.Redirect("~/DefaultTactil.aspx");
-                    else
+                    else if (tip == "1" || tip == "2")
                         HttpContext.Current.Response.Redirect("~/DefaultTactilFaraCard.aspx");
+                    else if (tip == "3")
+                        HttpContext.Current.Response.Redirect("~/DefaultTactilExtra.aspx");
 
                 }
             }

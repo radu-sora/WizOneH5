@@ -1898,7 +1898,7 @@ namespace WizOne.Module
                         SELECT C.""IdAuto"" AS ""IdCircuit"",A.*
                         FROM ""Ptj_tblAbsente"" A
                         INNER JOIN ""Ptj_Circuit"" C ON a.""IdGrupAbsenta"" = c.""IdGrupAbsente""
-                        INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod""
+                        INNER JOIN ""F100Supervizori"" B ON b.""IdSuper"" = -1 * c.""UserIntrod"" AND B.""DataInceput"" <= {General.CurrentDate()} AND {General.CurrentDate()} <= B.""DataSfarsit""
                         INNER JOIN ""relGrupAngajat"" D ON c.""IdGrupAngajat"" = d.""IdGrup"" AND b.F10003=d.F10003
                         INNER JOIN ""Ptj_relAngajatAbsenta"" E ON a.""Id"" = e.""IdAbsenta"" AND c.""IdGrupAngajat"" = e.""IdGrup""
                         INNER JOIN ""F100Contracte"" H ON H.F10003={f10003} AND CAST(H.""DataInceput"" as date) <= {General.ToDataUniv(data)} AND {General.ToDataUniv(data)} <= CAST(H.""DataSfarsit"" as date)

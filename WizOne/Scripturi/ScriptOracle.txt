@@ -14177,3 +14177,11 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('
 COMMIT;
 
 alter table "Ptj_tblAbsenteConfig" add "AfisareInfoChiosc" number(9);
+/
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_Frecventa', '15', 'Frecventa de verificare: daca setez 15, inseamna ca o sa verificam 1 din 15 angajati', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_TimpAfisare', '5', 'cate secunde sa fie afisat numele persoanei pe ecran', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_InOut', 'IO', 'se specifica ce tranzactii sunt luate in considerare; I - daor intrarile; O - doar iesirile; IO - intrari si iesiri', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_NrCeas', '', 'se enumera terminalele care sunt incluse in procesul de control al angajatilor; restul se ignora; daca nu este nici o valoare se iau in calcul toate;', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_FontSize', '', 'se foloseste in procesul de control al angajatilor si reprezinta fontul cu care se afiseaza mesajele pe ecran', 0);
+COMMIT;

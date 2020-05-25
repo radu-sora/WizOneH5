@@ -258,9 +258,12 @@
                     <Columns>
                         <dx:GridViewCommandColumn VisibleIndex="0" ButtonType="Image" Caption=" " Name="butoaneGrid" Width="50px" Visible="false" FixedStyle="Left" >
                             <CustomButtons>
-                                <dx:GridViewCommandColumnCustomButton ID="btnGoToCC">
+                                <dx:GridViewCommandColumnCustomButton ID="btnGoToCC" Visibility="Invisible">
                                     <Image ToolTip="Centrii de Cost" Url="~/Fisiere/Imagini/Icoane/stare.png" />
-                                </dx:GridViewCommandColumnCustomButton>                                
+                                </dx:GridViewCommandColumnCustomButton>
+                                <dx:GridViewCommandColumnCustomButton ID="btnSaveLine" Visibility="Invisible">
+                                    <Image ToolTip="Salvare pe rand" Url="~/Fisiere/Imagini/Icoane/salveaza.png" />
+                                </dx:GridViewCommandColumnCustomButton>  
                             </CustomButtons>
                         </dx:GridViewCommandColumn>
                         <dx:GridViewDataTextColumn FieldName="Cheia" Caption=" " ReadOnly="true" Visible="true" ShowInCustomizationForm="true" VisibleIndex="2" FixedStyle="Left" />
@@ -529,6 +532,9 @@
                         else
                             document.getElementById("divGrid").style.display = "none";
                     }
+                    break;
+                case "btnSaveLine":
+                    grDate.UpdateEdit();
                     break;
             }
         }

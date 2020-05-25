@@ -77,7 +77,11 @@ namespace WizOne.Pontaj
 
                 if (Dami.ValoareParam("PontajulAreCC") == "1" && (tip == 1 || tip == 10))
                 {
-                    grDate.Columns[0].Visible = true;
+                    //Florin 2020.05.25
+                    GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
+                    grCmd.Visible = true;
+                    grCmd.CustomButtons[0].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                    
                     tblCC.Attributes["class"] = "visible";
 
                     if (Dami.ValoareParam("PontajCCcuAprobare", "0") == "1")
@@ -167,7 +171,7 @@ namespace WizOne.Pontaj
             try
             {
                 Dami.AccesApp();
-                
+
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
@@ -254,7 +258,7 @@ namespace WizOne.Pontaj
                                 try
                                 {
                                     DateTime dt = new DateTime(Convert.ToInt32(lst["An"]), Convert.ToInt32(lst["Luna"]), Convert.ToInt32(lst["Ziua"]));
-                                    if (General.Nz(Request.QueryString["Ziua"], "").ToString() != "") dt = new DateTime(Convert.ToInt32(lst["An"]), Convert.ToInt32(lst["Luna"]), Convert.ToInt32(General.Nz(Request.QueryString["Ziua"], "").ToString().Replace("Ziua","")));
+                                    if (General.Nz(Request.QueryString["Ziua"], "").ToString() != "") dt = new DateTime(Convert.ToInt32(lst["An"]), Convert.ToInt32(lst["Luna"]), Convert.ToInt32(General.Nz(Request.QueryString["Ziua"], "").ToString().Replace("Ziua", "")));
                                     txtAnLuna.Value = dt;
                                 }
                                 catch (Exception)
@@ -312,12 +316,12 @@ namespace WizOne.Pontaj
                 }
                 else
                 {
-                    if (General.Nz(Session["SurseCombo"],"").ToString() != "")
+                    if (General.Nz(Session["SurseCombo"], "").ToString() != "")
                     {
                         DataSet ds = Session["SurseCombo"] as DataSet;
                         if (ds.Tables.Count > 0)
                         {
-                            for(int i =0; i < ds.Tables.Count; i++)
+                            for (int i = 0; i < ds.Tables.Count; i++)
                             {
                                 GridViewDataComboBoxColumn colAbs = (grDate.Columns[ds.Tables[i].TableName] as GridViewDataComboBoxColumn);
                                 if (colAbs != null) colAbs.PropertiesComboBox.DataSource = ds.Tables[i];
@@ -449,7 +453,6 @@ namespace WizOne.Pontaj
                         }
                     }
 
-
                     if (IsPostBack && tip == 1)
                         IncarcaCC();
                 }
@@ -484,13 +487,15 @@ namespace WizOne.Pontaj
                 //Florinn 2020.05.20
                 DataRow drCnt = General.IncarcaDR($@"
                     SELECT
-                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999)) AS ""NrAng"",
+                    (SELECT COUNT(*) FROM F100 WHERE F10025 IN (0,999) AND F10022 <= {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)}  AND  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)} <= F10023) AS ""NrAng"",
                     (SELECT COUNT(DISTINCT F10003) FROM ""Ptj_Intrari"" WHERE {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month)} <= ""Ziua"" AND ""Ziua"" <=  {General.ToDataUniv(txtAnLuna.Date.Year, txtAnLuna.Date.Month, 99)}) AS ""NrPtj"" {General.FromDual()}");
                 if (drCnt != null)
                 {
                     decimal nrAng = Convert.ToDecimal(General.Nz(drCnt["NrAng"], 0));
                     decimal nrPtj = Convert.ToDecimal(General.Nz(drCnt["NrPtj"], 0));
 
+                    if (tip == 1 || tip == 10)
+                        nrAng = DateTime.DaysInMonth(txtAnLuna.Date.Year, txtAnLuna.Date.Month);
                     if (nrAng != 0)
                     {
                         decimal rez = ((nrAng - nrPtj) / nrAng) * 100;
@@ -630,6 +635,18 @@ namespace WizOne.Pontaj
                     //else
                     //    grCC.Enabled = true;
                 }
+
+                //Florin 2020.05.25
+                GridViewCommandColumn grCmd = grDate.Columns[0] as GridViewCommandColumn;
+                if ((tip == 2 || tip == 20) && dt.Rows.Count == 1)
+                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.AllDataRows;
+                else
+                    grCmd.CustomButtons[1].Visibility = GridViewCustomButtonVisibility.Invisible;
+
+                if (grCmd.CustomButtons[0].Visibility != GridViewCustomButtonVisibility.Invisible || grCmd.CustomButtons[1].Visibility != GridViewCustomButtonVisibility.Invisible)
+                    grCmd.Visible = true;
+                else
+                    grCmd.Visible = false;
             }
             catch (Exception ex)
             {

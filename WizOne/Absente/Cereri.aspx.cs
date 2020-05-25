@@ -161,7 +161,7 @@ namespace WizOne.Absente
                     }
 
                     //Incarcam Absentele
-                    DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value,-99).ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                    DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value,-99).ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date),-99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                     cmbAbs.DataSource = dtAbs;
                     cmbAbs.DataBind();
                     Session["Cereri_Absente_Absente"] = dtAbs;
@@ -435,7 +435,7 @@ namespace WizOne.Absente
                 {
                     case "1":               //cmbAng
                         {
-                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date), -99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                             cmbAbs.DataSource = dtAbs;
                             cmbAbs.DataBind();
                             cmbAbs.SelectedIndex = -1;
@@ -448,7 +448,7 @@ namespace WizOne.Absente
                         break;
                     case "3":               //DataInceput
                         {
-                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                            dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date), -99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                             cmbAbs.DataSource = dtAbs;
                             cmbAbs.DataBind();
                             bool gasit = false;
@@ -511,7 +511,7 @@ namespace WizOne.Absente
 
 
                         //acelasi cod ca la case "1"
-                        dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date)), null);
+                        dtAbs = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataInc.Value ?? DateTime.Now.Date), -99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                         cmbAbs.DataSource = dtAbs;
                         cmbAbs.DataBind();
                         cmbAbs.SelectedIndex = -1;
@@ -909,7 +909,7 @@ namespace WizOne.Absente
                 }
 
                 //Radu 13.03.2020 - verificare ca idAbsenta sa fie valabil si la DataSfarsit
-                DataTable dtAbsVerif = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataSf.Value ?? DateTime.Now.Date)), null);
+                DataTable dtAbsVerif = General.IncarcaDT(General.SelectAbsente(General.Nz(cmbAng.Value, "-99").ToString(), Convert.ToDateTime(txtDataSf.Value ?? DateTime.Now.Date), -99, Convert.ToInt32(cmbRol.Value ?? -99)), null);
                 bool eroare = true;
                 if (dtAbsVerif != null && dtAbsVerif.Rows.Count > 0)
                     for (int k = 0; k < dtAbsVerif.Rows.Count; k++)

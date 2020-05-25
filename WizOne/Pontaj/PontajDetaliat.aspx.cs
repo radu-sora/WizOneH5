@@ -1163,6 +1163,7 @@ namespace WizOne.Pontaj
                     dtSf = General.ToDataUniv(txtZiua.Date);
                 }
 
+                //Florin 25.05.2020 - am adaugat conditia DataInceput si DataSfarsit la F100Supervizori
                 string strSql = $@"SELECT {cmp} AS ""IdAuto"", X.* FROM (
                                 SELECT B.F10003 AS F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} a.F10009 AS ""NumeComplet"", A.F10008 AS ""Nume"", A.F10009 AS ""Prenume"", 
                                 A.F10017 AS ""CNP"", A.F10022 AS ""DataAngajarii"",A.F10011 AS ""NrContract"", E.F00204 AS ""Companie"", F.F00305 AS ""Subcompanie"", 
@@ -1186,7 +1187,7 @@ namespace WizOne.Pontaj
                                 FROM ""relGrupAngajat"" B
                                 INNER JOIN ""Ptj_relGrupSuper"" C ON b.""IdGrup"" = c.""IdGrup""
                                 INNER JOIN F100 A ON b.F10003 = a.F10003
-                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"")
+                                INNER JOIN ""F100Supervizori"" J ON B.F10003 = J.F10003 AND C.""IdSuper"" = (-1 * J.""IdSuper"") AND CAST(J.""DataInceput"" AS Date) <= {dtSf} AND {dtInc} <= CAST(J.""DataSfarsit"" AS Date)
                                 LEFT JOIN F718 D ON A.F10071 = D.F71802
                                 LEFT JOIN F002 E ON A.F10002 = E.F00202
                                 LEFT JOIN F003 F ON A.F10004 = F.F00304

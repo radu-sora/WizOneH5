@@ -4149,7 +4149,7 @@ namespace WizOne.Avs
                             sql1001 = "UPDATE F1001 SET F1001101 = " + data13 + ", F1001102 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + " WHERE F10003 = " + f10003.ToString();                      
                         sql111 = "UPDATE F111 SET F11107 = " + data13 + " WHERE F11103 = " + f10003 + " AND F11104 = " + dtCer.Rows[0]["MotivSuspId"].ToString() + " AND F11105 = " + data11;
                         General.IncarcaDT(sql111, null);
-                        ActualizareSusp(f10003, ref sql100, ref sql1001);
+                        ActualizareSusp(f10003, ref sql100, ref sql1001, Convert.ToInt32(dtCer.Rows[0]["MotivSuspId"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataInceputSusp"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataSfEstimSusp"].ToString()), Convert.ToDateTime(dtCer.Rows[0]["DataIncetareSusp"].ToString()));
                         break;
                     case (int)Constante.Atribute.Detasare:
                         dtLuc = General.DamiDataLucru();
@@ -4196,10 +4196,20 @@ namespace WizOne.Avs
         }
 
         //Radu 30.01.2020
-        private void ActualizareSusp(int f10003, ref string sql100, ref string sql1001)
+        private void ActualizareSusp(int f10003, ref string sql100, ref string sql1001, int idMotiv = -1, DateTime? dataStart = null, DateTime? dataSfarsit = null, DateTime? dataIncetare = null)
         {
             DataTable dtSuspAng = General.IncarcaDT("select * from f111 Where F11103 = " + f10003.ToString() + " AND (F11107 IS NULL OR F11107 = "
                 + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103)" : "TO_DATE('01/01/2100', 'dd/mm/yyyy')") + ")  ORDER BY F11105", null);
+
+            if (idMotiv > 0)
+                dtSuspAng = General.IncarcaDT("select * from f111 Where F11103 = " + f10003.ToString() + " AND F11104 = " + idMotiv + " AND  F11105 = "
+                + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dataStart.Value.Day.ToString().PadLeft(2, '0') + "/" + dataStart.Value.Month.ToString().PadLeft(2, '0') + "/" + dataStart.Value.Year.ToString() + "', 103)" 
+                : "TO_DATE('" + dataStart.Value.Day.ToString().PadLeft(2, '0') + "/" + dataStart.Value.Month.ToString().PadLeft(2, '0') + "/" + dataStart.Value.Year.ToString() + "', 'dd/mm/yyyy')") + " AND " 
+                + " F11106 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dataSfarsit.Value.Day.ToString().PadLeft(2, '0') + "/" + dataSfarsit.Value.Month.ToString().PadLeft(2, '0') + "/" + dataSfarsit.Value.Year.ToString() + "', 103)"
+                : "TO_DATE('" + dataSfarsit.Value.Day.ToString().PadLeft(2, '0') + "/" + dataSfarsit.Value.Month.ToString().PadLeft(2, '0') + "/" + dataSfarsit.Value.Year.ToString() + "', 'dd/mm/yyyy')") + " AND "
+                + " F11107 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '" + dataIncetare.Value.Day.ToString().PadLeft(2, '0') + "/" + dataIncetare.Value.Month.ToString().PadLeft(2, '0') + "/" + dataIncetare.Value.Year.ToString() + "', 103)"
+                : "TO_DATE('" + dataIncetare.Value.Day.ToString().PadLeft(2, '0') + "/" + dataIncetare.Value.Month.ToString().PadLeft(2, '0') + "/" + dataIncetare.Value.Year.ToString() + "', 'dd/mm/yyyy')") + "  ORDER BY F11105", null);
+
             if (dtSuspAng != null && dtSuspAng.Rows.Count > 0)
             {
                 string data1 = "", data2 = "";

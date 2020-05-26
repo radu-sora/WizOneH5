@@ -390,7 +390,7 @@ namespace WizOne.Pagini
                 DevExpress.Spreadsheet.Worksheet ws2 = workbook.Worksheets[0];
                 Dictionary<int, int> lstIndex = new Dictionary<int, int>();
 
-                int k = 0;
+                int k = 0, nrCol = 0;                
                 for (int i = 0; i < dt.Columns.Count; i++)
                 {
                     k = 0;
@@ -403,9 +403,11 @@ namespace WizOne.Pagini
                         }
                         k++;
                     }
+                    if (k > nrCol)
+                        nrCol = k;
                 }
 
-                Session["ImportDate_NrColoane"] = k;
+                Session["ImportDate_NrColoane"] = nrCol;
 
                 string[] sir = new string[dt.Columns.Count];
                 for (int i = 0; i < sir.Length; i++)
@@ -415,21 +417,22 @@ namespace WizOne.Pagini
                 k = 0;
                 while (!ws2.Cells[j, k].Value.IsEmpty)
                 {
-                    if (ws2.Cells[j, k].Value.ToString().Length <= 0)
-                    {
-                        j++;
-                        k = 0;
-                        continue;
-                    }
+                    //if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                    //{
+                    //    j++;
+                    //    k = 0;
+                    //    continue;
+                    //}
 
                     dt.Rows.Add(sir);
-                    while (!ws2.Cells[j, k].Value.IsEmpty)
+                    //while (!ws2.Cells[j, k].Value.IsEmpty)
+                    for (int x = 0; x <= nrCol; x++)
                     {
-                        if (ws2.Cells[j, k].Value.ToString().Length <= 0)
-                        {
-                            k++;
-                            continue;
-                        }
+                        //if (ws2.Cells[j, k].Value.ToString().Length <= 0)
+                        //{
+                        //    k++;
+                        //    continue;
+                        //}
 
                         if (lstIndex.ContainsKey(k))
                             dt.Rows[j - 1][lstIndex[k]] = ws2.Cells[j, k].Value;

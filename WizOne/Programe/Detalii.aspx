@@ -48,7 +48,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <dx:ASPxFormLayout ID="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Office365" ShowItemCaptionColon="false">
+                            <dx:ASPxFormLayout ID="pnlTab" ClientInstanceName="pnlTab" runat="server" AlignItemCaptionsInAllGroups="True" UseDefaultPaddings="true" AlignItemCaptions="true" Width="100%" Theme="Office365" ShowItemCaptionColon="false">
                                 <SettingsAdaptivity></SettingsAdaptivity>
                                 <Items>
                                     <dx:TabbedLayoutGroup>
@@ -103,7 +103,9 @@
                                                             <dx:LayoutItem Caption="Flexibil" FieldName="Flexibil">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxCheckBox ID="ctlFlexibil" ClientIDMode="Static" runat="server" ToggleSwitchDisplayMode="Always" oncontextMenu="ctx(this,event)"/>
+                                                                        <dx:ASPxCheckBox ID="ctlFlexibil" ClientIDMode="Static" runat="server" ToggleSwitchDisplayMode="Always" oncontextMenu="ctx(this,event)">
+                                                                            <ClientSideEvents CheckedChanged="function(s,e) { OnFlexibilCheckedChanged(s,e) }" />
+                                                                        </dx:ASPxCheckBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -114,7 +116,7 @@
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
-                                                            <dx:LayoutItem Caption="Ora Intrare" FieldName="OraIntrare">
+                                                            <dx:LayoutItem Caption="Ora Intrare" FieldName="OraIntrare" Name="OraIntrare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
 							                                            <dx:ASPxTimeEdit ID="ctlOraIntrare" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
@@ -128,7 +130,7 @@
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
-                                                            <dx:LayoutItem Caption="Ora Iesire" FieldName="OraIesire">
+                                                            <dx:LayoutItem Caption="Ora Iesire" FieldName="OraIesire" Name="OraIesire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
 							                                            <dx:ASPxTimeEdit ID="ctlOraIesire" ClientInstanceName="txtOraOut" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
@@ -721,6 +723,16 @@
     <script>
         function OnPanelEndCallback() {
             pnlLoading.Hide();
+        }
+        function OnFlexibilCheckedChanged(s, e) {
+            if (s.GetChecked()) {
+                pnlTab.GetItemByName("OraIntrare").SetCaption("Ora Intrare: De La");
+                pnlTab.GetItemByName("OraIesire").SetCaption("Ora Intrare: La");
+            }
+            else {
+                pnlTab.GetItemByName("OraIntrare").SetCaption("Ora Intrare");
+                pnlTab.GetItemByName("OraIesire").SetCaption("Ora Iesire"); 
+            }
         }
     </script>
 </asp:Content>	

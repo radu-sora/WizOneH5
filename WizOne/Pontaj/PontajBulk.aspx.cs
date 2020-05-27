@@ -31,10 +31,11 @@ namespace WizOne.Pontaj
                 if (!string.IsNullOrEmpty(ctlPost) && ctlPost.IndexOf("LangSelectorPopup") >= 0) Session["IdLimba"] = ctlPost.Substring(ctlPost.LastIndexOf("$") + 1).Replace("a", "");
 
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
-                
+
 
                 #endregion
 
+                Session["PaginaWeb"] = "Pontaj.PontajBulk";
                 txtTitlu.Text = General.VarSession("Titlu").ToString();
 
                 if (Session["User_Marca"] == null || Session["User_Marca"].ToString() == "-99" || Session["User_Marca"].ToString().Trim() == "")

@@ -994,7 +994,9 @@ namespace WizOne.Absente
 
                 if (Convert.ToInt32(General.Nz(drAbs["IdTipOre"], 1)) == 0)
                 {
-                    //daca este absenta de tip ora atunci se verifica doar campul NrMax; campul NrMaxAn nu are sens
+                    //daca este absenta de tip ora 
+
+                    //verificam NrMax pe cerere
                     if (Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) < Convert.ToInt32(txtNrOre.Value))
                     {
                         //strErr += " " + Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " ore");
@@ -1002,6 +1004,21 @@ namespace WizOne.Absente
                             MessageBox.Show(Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de") + " " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " " + Dami.TraduCuvant("ore"), MessageBox.icoWarning);
                         else
                             pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de" + " " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " " + Dami.TraduCuvant("ore"));
+
+                        return;
+                    }
+
+                    //Florin 2020.05.27
+                    //verificam nr max pe an
+                    string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) AS ""OreAn"" FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
+                    DataRow drAn = General.IncarcaDR(sqlAn, new object[] { Convert.ToInt32(cmbAng.Value), txtDataInc.Date.Year, Convert.ToInt32(cmbAbs.Value) });
+
+                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(General.Nz(drAn[0], 0)) >= Convert.ToInt32(drAbs["NrMaxAn"]))
+                    {
+                        if (tip == 1)
+                            MessageBox.Show(Dami.TraduCuvant("Nr total de ore depaseste nr maxim de ore cuvenite in an"), MessageBox.icoWarning);
+                        else
+                            pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nr total de ore depaseste nr maxim de ore cuvenite in an");
 
                         return;
                     }

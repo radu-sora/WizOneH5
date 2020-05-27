@@ -1216,7 +1216,12 @@ namespace WizOne.Pontaj
                                 ORDER BY X.""NumeComplet"" ";
 
                 DataTable dt = General.IncarcaDT(strSql, null);
-                
+
+                int valAng = Convert.ToInt32(cmbAng.Value ?? -99);
+                if (dt.Select("F10003=" + valAng).Count() == 0) valAng = -99;
+                int valAngZi = Convert.ToInt32(cmbAngZi.Value ?? -99);
+                if (dt.Select("F10003=" + valAngZi).Count() == 0) valAngZi = -99;
+
                 cmbAng.DataSource = null;
                 cmbAng.DataSource = dt;
                 cmbAng.DataBind();
@@ -1227,7 +1232,19 @@ namespace WizOne.Pontaj
 
                 Session["Pontaj_Angajati"] = dt;
 
-                if (tip == 1 && txtAnLuna.Value != null && dt != null && dt.Rows.Count > 0) cmbAng.SelectedIndex = 0;
+                //if (tip == 1 && txtAnLuna.Value != null && dt != null && dt.Rows.Count > 0) cmbAng.SelectedIndex = 0;
+                if (tip == 1 || tip == 10)
+                {
+                    if (valAng == -99)
+                        cmbAng.SelectedIndex = 0;
+                    else
+                        cmbAng.Value = valAng;
+                }
+
+                if ((tip == 2 || tip == 20) && valAngZi != -99)
+                    cmbAngZi.Value = valAngZi;
+                else
+                    cmbAngZi.Value = null;
             }
             catch (Exception ex)
             {

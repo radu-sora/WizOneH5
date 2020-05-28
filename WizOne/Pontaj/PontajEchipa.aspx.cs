@@ -1315,13 +1315,6 @@ namespace WizOne.Pontaj
                                         decimal val = 0;
                                         try
                                         {
-                                            if (i==14)
-                                            {
-                                                string edc1 = "";
-                                            }
-                                            var ert = entFor.Rows[j]["Coloana"].ToString();
-                                            var edc = entS.Rows[0]["F52"];
-                                            var wsx = Convert.ToDecimal(entS.Rows[i]["F52"]);
                                             val = Convert.ToDecimal(entS.Rows[i][entFor.Rows[j]["Coloana"].ToString()]);
                                         }
                                         catch (Exception) { }

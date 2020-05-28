@@ -13483,3 +13483,6 @@ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('
 GO
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ControlAngajati_FontSize', '', 'se enumera terminalele care sunt incluse in procesul de control al angajatilor; restul se ignora; daca nu este nici o valoare se iau in calcul toate;', 0);
 GO
+
+ALTER TABLE "Ptj_Intrari" ADD "TimpOSReal" int
+GO

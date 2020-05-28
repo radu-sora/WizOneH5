@@ -71,7 +71,7 @@
                                                             <dx:LayoutItem Caption="Tip Pontare" FieldName="TipPontare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlTipPontare" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" oncontextMenu="ctx(this,event)">
+							                                            <dx:ASPxComboBox ID="ctlTipPontare" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AllowNull="true" oncontextMenu="ctx(this,event)">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="Pontare automata" />
                                                                                 <dx:ListEditItem Value="2" Text="Pontare automata la minim o citire card" />
@@ -145,7 +145,7 @@
                                                             <dx:LayoutItem Caption="Rotunjire" FieldName="ONRotunjire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlONRotunjire" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" oncontextMenu="ctx(this,event)">
+							                                            <dx:ASPxComboBox ID="ctlONRotunjire" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AllowNull="true" oncontextMenu="ctx(this,event)">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="rotunjire la minute" />
                                                                                 <dx:ListEditItem Value="2" Text="rotunjire la ora" />
@@ -161,7 +161,7 @@
                                                             <dx:LayoutItem Caption="Transfer la" FieldName="ONCamp">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlONCamp" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlONCamp" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -173,7 +173,7 @@
                                                             <dx:LayoutItem Caption="Rotunjire" FieldName="OSRotunjire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlOSRotunjire" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" oncontextMenu="ctx(this,event)">
+							                                            <dx:ASPxComboBox ID="ctlOSRotunjire" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AllowNull="true" oncontextMenu="ctx(this,event)">
                                                                             <Items>
                                                                                 <dx:ListEditItem Value="1" Text="rotunjire la minute" />
                                                                                 <dx:ListEditItem Value="2" Text="rotunjire la ora" />
@@ -189,21 +189,21 @@
                                                             <dx:LayoutItem Caption="Transfer la" FieldName="OSCamp">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlOSCamp" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlOSCamp" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Val Min" FieldName="OSValMin">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxTimeEdit ID="ctlOSValMin" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxTimeEdit ID="ctlOSValMin" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Trimite ce este sub val. min. la" FieldName="OSCampSub">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlOSCampSub" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlOSCampSub" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -217,7 +217,7 @@
                                                             <dx:LayoutItem Caption="Trimite ce este peste val. max. la" FieldName="OSCampPeste">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlOSCampPeste" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlOSCampPeste" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -495,14 +495,14 @@
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="INSubCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlINSubCampPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlINSubCampPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="INSubCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlINSubCampNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlINSubCampNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -527,14 +527,14 @@
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="INPesteCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlINPesteCampPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlINPesteCampPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="INPesteCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlINPesteCampNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlINPesteCampNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -609,14 +609,14 @@
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="OUTSubCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlOUTSubCampPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlOUTSubCampPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="OUTSubCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlOUTSubCampNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlOUTSubCampNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
@@ -694,14 +694,14 @@
                                                             <dx:LayoutItem Caption="Transfer timp platit la" FieldName="OUTPesteCampPlatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlOUTPesteCampPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlOUTPesteCampPlatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
                                                             <dx:LayoutItem Caption="Transfer timp neplatit la" FieldName="OUTPesteCampNeplatit">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-							                                            <dx:ASPxComboBox ID="ctlOUTPesteCampNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" oncontextMenu="ctx(this,event)"/>
+							                                            <dx:ASPxComboBox ID="ctlOUTPesteCampNeplatit" ClientIDMode="Static" runat="server" DropDownStyle="DropDownList" TextField="Alias" ValueField="Denumire" ValueType="System.String" AllowNull="true" oncontextMenu="ctx(this,event)"/>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>

@@ -1168,7 +1168,10 @@ namespace WizOne.Module
                                         if (difOs > 0) os += difOs;
                                     }
 
-                                    ent["F60"] = os;
+                                    //Florin 2020.05.28
+                                    if (ent.Table.Columns["TimpOSReal"] != null)
+                                        ent["TimpOSReal"] = os;
+
                                     //Florin 2016.12.06  End
                                     //Florin 2016.11.07 End  ###################################
                                 }

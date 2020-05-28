@@ -13486,3 +13486,7 @@ GO
 
 ALTER TABLE "Ptj_Intrari" ADD "TimpOSReal" int
 GO
+
+https://github.com/wizromRD/WizOne/issues/456
+ALTER TABLE "tblNomenConfig" ADD "Alias" nvarchar(250)
+GO

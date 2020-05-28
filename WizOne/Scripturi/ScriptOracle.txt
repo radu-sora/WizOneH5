@@ -14188,3 +14188,7 @@ COMMIT;
 
 ALTER TABLE "Ptj_Intrari" ADD "TimpOSReal" number(10);
 /
+
+--https://github.com/wizromRD/WizOne/issues/456
+ALTER TABLE "tblNomenConfig" ADD "Alias" varchar2(250)
+/

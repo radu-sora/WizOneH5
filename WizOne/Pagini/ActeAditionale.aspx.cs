@@ -541,11 +541,11 @@ namespace WizOne.Pagini
                                             msg += obj[8] + " - " + Dami.TraduCuvant("este finalizata") + System.Environment.NewLine;
                                             continue;
                                         }
-                                        if (Convert.ToInt32(General.Nz(obj[12], 0)) != 0 || Convert.ToInt32(General.Nz(obj[13], 0)) != 0 || Convert.ToInt32(General.Nz(obj[14], 0)) != 0 || Convert.ToInt32(General.Nz(obj[15], 0)) != 0 || Convert.ToInt32(General.Nz(obj[16], 0)) != 0)
-                                        {
-                                            msg += obj[8] + " - " + Dami.TraduCuvant("atribuirea de numar se face doar prin editare") + System.Environment.NewLine;
-                                            continue;
-                                        }
+                                        //if (Convert.ToInt32(General.Nz(obj[12], 0)) != 0 || Convert.ToInt32(General.Nz(obj[13], 0)) != 0 || Convert.ToInt32(General.Nz(obj[14], 0)) != 0 || Convert.ToInt32(General.Nz(obj[15], 0)) != 0 || Convert.ToInt32(General.Nz(obj[16], 0)) != 0)
+                                        //{
+                                        //    msg += obj[8] + " - " + Dami.TraduCuvant("atribuirea de numar se face doar prin editare") + System.Environment.NewLine;
+                                        //    continue;
+                                        //}
 
 
                                         if (General.Nz(obj[2], "").ToString() == "")
@@ -556,28 +556,28 @@ namespace WizOne.Pagini
                                             }
                                             else
                                             {
-                                                int idTipDoc = -99;
+                                                int idTipDoc = 2;
                                                 //candidati
-                                                if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1) idTipDoc = 1;
-                                                //modificari contract
-                                                if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1) idTipDoc = 2;
+                                                if (Convert.ToInt32(General.Nz(obj[10], 0)) == 1) idTipDoc = 1;
+                                                ////modificari contract
+                                                //if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1) idTipDoc = 2;
                                                 //inncetare
-                                                if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1) idTipDoc = 3;
+                                                if (Convert.ToInt32(General.Nz(obj[12], 0)) == 1) idTipDoc = 3;
                                                 //detasare
-                                                if (Convert.ToInt32(General.Nz(obj[18], 0)) == 1) idTipDoc = 4;
+                                                if (Convert.ToInt32(General.Nz(obj[15], 0)) == 1) idTipDoc = 4;
                                                 //revenire detasare
-                                                if (Convert.ToInt32(General.Nz(obj[19], 0)) == 1) idTipDoc = 5;
+                                                if (Convert.ToInt32(General.Nz(obj[16], 0)) == 1) idTipDoc = 5;
                                                 //suspendare
-                                                if (Convert.ToInt32(General.Nz(obj[16], 0)) == 1) idTipDoc = 6;
+                                                if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1) idTipDoc = 6;
                                                 //revenire suspendare
-                                                if (Convert.ToInt32(General.Nz(obj[17], 0)) == 1) idTipDoc = 7;
+                                                if (Convert.ToInt32(General.Nz(obj[14], 0)) == 1) idTipDoc = 7;
 
 
                                                 int idRegistru = -99;
                                                 int nrStart = 0;
                                                 string docNr = "";
                                                 DataTable dtSet = General.IncarcaDT(@"SELECT * FROM ""MP_ActAdSetari""");
-                                                DataRow[] arr = dtSet.Select("Id=" + idTipDoc);
+                                                DataRow[] arr = dtSet.Select("IdTip=" + idTipDoc);
                                                 if (arr.Count() > 0)
                                                 {
                                                     idRegistru = Convert.ToInt32(General.Nz(arr[0]["IdRegistru"], -99));
@@ -585,8 +585,8 @@ namespace WizOne.Pagini
                                                 }
 
                                                 string filtruSup = "";
-                                                if (idRegistru == 2) filtruSup = " AND A.F10003=@1 ";
-                                                docNr = $@"COALESCE((SELECT MAX(COALESCE(""DocNr"",{nrStart})) FROM ""Admin_NrActAd"" WHERE COALESCE(""Candidat"",0)=0 AND COALESCE(A.""IdRegistru"",-99)={idRegistru} {filtruSup}),{nrStart}) + 1";
+                                                if (idRegistru == 2) filtruSup = " AND F10003=@1 ";
+                                                docNr = $@"COALESCE((SELECT MAX(COALESCE(""DocNr"",{nrStart})) FROM ""Admin_NrActAd"" WHERE COALESCE(""Candidat"",0)=0 AND COALESCE(""IdRegistru"",-99)={idRegistru} {filtruSup}),{nrStart}) + 1";
 
                                                 DataTable dt = new DataTable();
                                                 int id = -99;
@@ -595,10 +595,10 @@ namespace WizOne.Pagini
                                                 if (Constante.tipBD == 1)
                                                 {
                                                     dt = General.IncarcaDT(
-                                                    $@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    $@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"", ""IdRegistru"", ""IdTip"") 
                                                     OUTPUT Inserted.IdAuto
-                                                    VALUES(@1, {docNr}, {General.CurrentDate()}, {docData}, @2, {General.CurrentDate()}, {termen}, @3);",
-                                                    new object[] { obj[0], Session["UserId"], obj[10] });
+                                                    VALUES(@1, {docNr}, {General.CurrentDate()}, {docData}, @2, {General.CurrentDate()}, {termen}, @3, @4, @5);",
+                                                    new object[] { obj[0], Session["UserId"], obj[10], idRegistru, idTipDoc });
 
                                                     if (dt.Rows.Count > 0)
                                                         id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
@@ -606,9 +606,9 @@ namespace WizOne.Pagini
                                                 else
                                                 {
                                                     id = Convert.ToInt32(General.Nz(General.DamiOracleScalar(
-                                                    $@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                    VALUES(@1, {docNr}, {General.CurrentDate()}, {docData}, @2, {General.CurrentDate()}, {termen}, @3) RETURNING ""IdAuto"" INTO @out_1",
-                                                    new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
+                                                    $@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"", ""IdRegistru"", ""IdTip"") 
+                                                    VALUES(@1, {docNr}, {General.CurrentDate()}, {docData}, @2, {General.CurrentDate()}, {termen}, @3, @4, @5) RETURNING ""IdAuto"" INTO @out_1",
+                                                    new object[] { "int", obj[0], Session["UserId"], obj[10], idRegistru, idTipDoc }), 0));
                                                 }
 
                                                 //if (Constante.tipBD == 1)
@@ -1297,7 +1297,7 @@ namespace WizOne.Pagini
             {
                 int id = Convert.ToInt32(e.Keys["Id"]);
 
-                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAutoAct", "F10003", "DataModif", "Revisal", "TermenDepasire", "IdAvans", "Semnat", "Motiv", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev" }) as object[];
+                object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAutoAct", "F10003", "DataModif", "Revisal", "TermenDepasire", "IdAvans", "Semnat", "Motiv", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev", "Candidat" }) as object[];
 
                 if (Convert.ToInt32(General.Nz(obj[3], 0)) != 0 || Convert.ToInt32(General.Nz(obj[6], 0)) != 0)
                 {
@@ -1314,22 +1314,45 @@ namespace WizOne.Pagini
                     ASPxDateEdit txtDocData = grDate.FindEditFormTemplateControl("txtDocData") as ASPxDateEdit;
                     if (txtDocData != null && txtDocData.Value != null) docData = txtDocData.Value;
 
-                    //Florin 2020.03.10 - nu se mai face verificarea pt atributele motiv plecare, Suspendare, Revenire Suspendare, Detasare, Revenire Detasare
-                    if (General.Nz(obj[7], 0).ToString() == "0" && General.Nz(obj[8], 0).ToString() == "0" && General.Nz(obj[9], 0).ToString() == "0" && General.Nz(obj[10], 0).ToString() == "0" && General.Nz(obj[11], 0).ToString() == "0")
-                    {
-                        int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(
-                            @"SELECT COUNT(*) FROM ""Admin_NrActAd"" A
-                            INNER JOIN ""Avs_Cereri"" B ON A.""IdAuto""=B.""IdActAd"" AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33)
-                            WHERE A.""DocNr""=@1 AND A.F10003=@2 AND A.""IdAuto""<>@3", new object[] { docNr, General.Nz(obj[1], -99), General.Nz(obj[0], -99) }), 0));
-                        if (cnt > 0)
-                        {
-                            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numarul de document exista deja");
-                            e.Cancel = true;
-                            grDate.CancelEdit();
+                    int idTipDoc = 2;
+                    //candidati
+                    if (Convert.ToInt32(General.Nz(obj[12], 0)) == 1) idTipDoc = 1;
+                    ////modificari contract
+                    //if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1) idTipDoc = 2;
+                    //inncetare
+                    if (Convert.ToInt32(General.Nz(obj[7], 0)) == 1) idTipDoc = 3;
+                    //detasare
+                    if (Convert.ToInt32(General.Nz(obj[10], 0)) == 1) idTipDoc = 4;
+                    //revenire detasare
+                    if (Convert.ToInt32(General.Nz(obj[11], 0)) == 1) idTipDoc = 5;
+                    //suspendare
+                    if (Convert.ToInt32(General.Nz(obj[8], 0)) == 1) idTipDoc = 6;
+                    //revenire suspendare
+                    if (Convert.ToInt32(General.Nz(obj[9], 0)) == 1) idTipDoc = 7;
 
-                            IncarcaGrid();
-                            return;
-                        }
+
+                    int idRegistru = -99;
+                    int nrStart = 0;
+                    DataTable dtSet = General.IncarcaDT(@"SELECT * FROM ""MP_ActAdSetari""");
+                    DataRow[] arr = dtSet.Select("IdTip=" + idTipDoc);
+                    if (arr.Count() > 0)
+                    {
+                        idRegistru = Convert.ToInt32(General.Nz(arr[0]["IdRegistru"], -99));
+                        nrStart = Convert.ToInt32(General.Nz(arr[0]["NrStart"], 0));
+                    }
+
+                    string filtruSup = "";
+                    if (idRegistru == 2) filtruSup = " AND A.F10003=@2 ";
+                    int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(
+                        @"SELECT COUNT(*) FROM ""Admin_NrActAd"" A WHERE A.""DocNr""=@1 AND A.""IdRegistru""=@4 AND A.""IdAuto""<>@3 " + filtruSup, new object[] { docNr, General.Nz(obj[1], -99), General.Nz(obj[0], -99), idRegistru }), 0));
+                    if (cnt > 0)
+                    {
+                        grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numarul de document exista deja");
+                        e.Cancel = true;
+                        grDate.CancelEdit();
+
+                        IncarcaGrid();
+                        return;
                     }
 
                     if (Convert.ToInt32(General.Nz(obj[0], -99)) == -99)
@@ -1339,19 +1362,19 @@ namespace WizOne.Pagini
 
                         if (Constante.tipBD == 1)
                         {
-                            dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"") 
+                            dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"", ""IdRegistru"", ""IdTip"") 
                                             OUTPUT Inserted.IdAuto
-                                            VALUES(@1, @2, @3, @4, {Session["UserId"]}, {General.CurrentDate()}, @5);",
-                                            new object[] { obj[1], docNr, docData, obj[2], obj[4] });
+                                            VALUES(@1, @2, @3, @4, {Session["UserId"]}, {General.CurrentDate()}, @5, @6, @7, @8);",
+                                            new object[] { obj[1], docNr, docData, obj[2], obj[4], obj[12], idRegistru, idTipDoc });
 
                             if (dt.Rows.Count > 0)
-                                id = Convert.ToInt32(General.Nz(dt.Rows[0][0],-99));
+                                id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
                         }
                         else
                         {
-                            id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"") 
-                                        VALUES(@2, @3, @4, @5, {Session["UserId"]}, {General.CurrentDate()}, @6) RETURNING ""IdAuto"" INTO @out_1",
-                                        new object[] { "int", obj[1], docNr, docData, obj[2], obj[4] });
+                            id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"", ""IdRegistru"", ""IdTip"") 
+                                        VALUES(@2, @3, @4, @5, {Session["UserId"]}, {General.CurrentDate()}, @6, @7, @8, @9) RETURNING ""IdAuto"" INTO @out_1",
+                                        new object[] { "int", obj[1], docNr, docData, obj[2], obj[4], obj[12], idRegistru, idTipDoc });
                         }
 
                         if (id != -99)
@@ -1388,6 +1411,105 @@ namespace WizOne.Pagini
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }
+
+
+        //protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        //{
+        //    try
+        //    {
+        //        int id = Convert.ToInt32(e.Keys["Id"]);
+
+        //        object[] obj = grDate.GetRowValues(grDate.FocusedRowIndex, new string[] { "IdAutoAct", "F10003", "DataModif", "Revisal", "TermenDepasire", "IdAvans", "Semnat", "Motiv", "Suspendare", "SuspendareRev", "Detasare", "DetasareRev" }) as object[];
+
+        //        if (Convert.ToInt32(General.Nz(obj[3], 0)) != 0 || Convert.ToInt32(General.Nz(obj[6], 0)) != 0)
+        //        {
+        //            grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("In acest stadiu nu mai sunt permise modificari");
+        //        }
+        //        else
+        //        {
+        //            object docNr = null;
+        //            object docData = null;
+
+        //            ASPxTextBox txtDocNr = grDate.FindEditFormTemplateControl("txtDocNr") as ASPxTextBox;
+        //            if (txtDocNr != null && txtDocNr.Value != null) docNr = txtDocNr.Value;
+
+        //            ASPxDateEdit txtDocData = grDate.FindEditFormTemplateControl("txtDocData") as ASPxDateEdit;
+        //            if (txtDocData != null && txtDocData.Value != null) docData = txtDocData.Value;
+
+        //            //Florin 2020.03.10 - nu se mai face verificarea pt atributele motiv plecare, Suspendare, Revenire Suspendare, Detasare, Revenire Detasare
+        //            if (General.Nz(obj[7], 0).ToString() == "0" && General.Nz(obj[8], 0).ToString() == "0" && General.Nz(obj[9], 0).ToString() == "0" && General.Nz(obj[10], 0).ToString() == "0" && General.Nz(obj[11], 0).ToString() == "0")
+        //            {
+        //                int cnt = Convert.ToInt32(General.Nz(General.ExecutaScalar(
+        //                    @"SELECT COUNT(*) FROM ""Admin_NrActAd"" A
+        //                    INNER JOIN ""Avs_Cereri"" B ON A.""IdAuto""=B.""IdActAd"" AND B.""IdAtribut"" NOT IN (4, 30, 31, 32, 33)
+        //                    WHERE A.""DocNr""=@1 AND A.F10003=@2 AND A.""IdAuto""<>@3", new object[] { docNr, General.Nz(obj[1], -99), General.Nz(obj[0], -99) }), 0));
+        //                if (cnt > 0)
+        //                {
+        //                    grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Numarul de document exista deja");
+        //                    e.Cancel = true;
+        //                    grDate.CancelEdit();
+
+        //                    IncarcaGrid();
+        //                    return;
+        //                }
+        //            }
+
+        //            if (Convert.ToInt32(General.Nz(obj[0], -99)) == -99)
+        //            {
+        //                DataTable dt = new DataTable();
+        //                id = -99;
+
+        //                if (Constante.tipBD == 1)
+        //                {
+        //                    dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"") 
+        //                                    OUTPUT Inserted.IdAuto
+        //                                    VALUES(@1, @2, @3, @4, {Session["UserId"]}, {General.CurrentDate()}, @5);",
+        //                                    new object[] { obj[1], docNr, docData, obj[2], obj[4] });
+
+        //                    if (dt.Rows.Count > 0)
+        //                        id = Convert.ToInt32(General.Nz(dt.Rows[0][0],-99));
+        //                }
+        //                else
+        //                {
+        //                    id = General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"") 
+        //                                VALUES(@2, @3, @4, @5, {Session["UserId"]}, {General.CurrentDate()}, @6) RETURNING ""IdAuto"" INTO @out_1",
+        //                                new object[] { "int", obj[1], docNr, docData, obj[2], obj[4] });
+        //                }
+
+        //                if (id != -99)
+        //                    General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[5] + ")", new object[] { id });
+        //            }
+        //            else
+        //            {
+        //                string strSql = "";
+        //                if (docNr == null || docData == null)
+        //                    strSql = $@"
+        //                        BEGIN
+        //                            UPDATE ""Avs_Cereri"" SET ""IdActAd""=NULL WHERE ""IdActAd""=@1;
+        //                            DELETE FROM ""Admin_NrActAd"" WHERE ""IdAuto""=@1;
+        //                        END;";
+        //                else
+        //                    strSql = $@"UPDATE ""Admin_NrActAd"" SET ""DocNr""=@2, ""DocData""=@3, ""Tiparit""=0 WHERE ""IdAuto""=@1";
+
+        //                General.ExecutaNonQuery(strSql, new object[] { obj[0], docNr, docData, obj[1], obj[2], Session["UserId"] });
+        //            }
+
+        //            if (Convert.ToDateTime(General.Nz(obj[2], 0)) < Convert.ToDateTime(docData))
+        //                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Atentie, data modificare este mai mica decat data documentului") + System.Environment.NewLine;
+
+        //        }
+
+        //        e.Cancel = true;
+        //        grDate.CancelEdit();
+
+        //        IncarcaGrid();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
         protected void grDate_AutoFilterCellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
         {

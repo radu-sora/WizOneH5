@@ -556,31 +556,83 @@ namespace WizOne.Pagini
                                             }
                                             else
                                             {
+                                                int idTipDoc = -99;
+                                                //candidati
+                                                if (Convert.ToInt32(General.Nz(obj[13], 0)) == 1) idTipDoc = 1;
+                                                //modificari contract
+                                                if (Convert.ToInt32(General.Nz(obj[2], 0)) == 1 || Convert.ToInt32(General.Nz(obj[3], 0)) == 1 || Convert.ToInt32(General.Nz(obj[4], 0)) == 1 || Convert.ToInt32(General.Nz(obj[5], 0)) == 1 || Convert.ToInt32(General.Nz(obj[6], 0)) == 1 || Convert.ToInt32(General.Nz(obj[7], 0)) == 1 || Convert.ToInt32(General.Nz(obj[8], 0)) == 1 || Convert.ToInt32(General.Nz(obj[9], 0)) == 1 || Convert.ToInt32(General.Nz(obj[15], 0)) == 1) idTipDoc = 2;
+                                                //inncetare
+                                                if (Convert.ToInt32(General.Nz(obj[1], 0)) == 1) idTipDoc = 3;
+                                                //detasare
+                                                if (Convert.ToInt32(General.Nz(obj[18], 0)) == 1) idTipDoc = 4;
+                                                //revenire detasare
+                                                if (Convert.ToInt32(General.Nz(obj[19], 0)) == 1) idTipDoc = 5;
+                                                //suspendare
+                                                if (Convert.ToInt32(General.Nz(obj[16], 0)) == 1) idTipDoc = 6;
+                                                //revenire suspendare
+                                                if (Convert.ToInt32(General.Nz(obj[17], 0)) == 1) idTipDoc = 7;
+
+
+                                                int idRegistru = -99;
+                                                int nrStart = 0;
+                                                string docNr = "";
+                                                DataTable dtSet = General.IncarcaDT(@"SELECT * FROM ""MP_ActAdSetari""");
+                                                DataRow[] arr = dtSet.Select("Id=" + idTipDoc);
+                                                if (arr.Count() > 0)
+                                                {
+                                                    idRegistru = Convert.ToInt32(General.Nz(arr[0]["IdRegistru"], -99));
+                                                    nrStart = Convert.ToInt32(General.Nz(arr[0]["NrStart"], 0));
+                                                }
+
+                                                string filtruSup = "";
+                                                if (idRegistru == 2) filtruSup = " AND A.F10003=@1 ";
+                                                docNr = $@"COALESCE((SELECT MAX(COALESCE(""DocNr"",{nrStart})) FROM ""Admin_NrActAd"" WHERE COALESCE(""Candidat"",0)=0 AND COALESCE(A.""IdRegistru"",-99)={idRegistru} {filtruSup}),{nrStart}) + 1";
+
                                                 DataTable dt = new DataTable();
                                                 int id = -99;
-
+                                                string docData = General.ToDataUniv(Convert.ToDateTime(obj[1]));
+                                                string termen = General.ToDataUniv(Convert.ToDateTime(obj[11]));
                                                 if (Constante.tipBD == 1)
                                                 {
-                                                    dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    dt = General.IncarcaDT(
+                                                    $@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
                                                     OUTPUT Inserted.IdAuto
-                                                    VALUES(@1, 
-                                                    COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
-                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT COALESCE(B.""IdActAd"",-99) FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" IN (4, 30, 31, 32, 33))),0) + 1, 
-                                                    { General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
-                                                    new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+                                                    VALUES(@1, {docNr}, {General.CurrentDate()}, {docData}, @2, {General.CurrentDate()}, {termen}, @3);",
+                                                    new object[] { obj[0], Session["UserId"], obj[10] });
 
                                                     if (dt.Rows.Count > 0)
                                                         id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
                                                 }
                                                 else
                                                 {
-                                                    id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
-                                                    VALUES(@2, 
-                                                    COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
-                                                    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT COALESCE(B.""IdActAd"",-99) FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" IN (4, 30, 31, 32, 33))),0) + 1, 
-                                                    {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                    id = Convert.ToInt32(General.Nz(General.DamiOracleScalar(
+                                                    $@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                    VALUES(@1, {docNr}, {General.CurrentDate()}, {docData}, @2, {General.CurrentDate()}, {termen}, @3) RETURNING ""IdAuto"" INTO @out_1",
                                                     new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
                                                 }
+
+                                                //if (Constante.tipBD == 1)
+                                                //{
+                                                //    dt = General.IncarcaDT($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //    OUTPUT Inserted.IdAuto
+                                                //    VALUES(@1, 
+                                                //    COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
+                                                //    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT COALESCE(B.""IdActAd"",-99) FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" IN (4, 30, 31, 32, 33))),0) + 1, 
+                                                //    { General.CurrentDate()},@2, @3, {General.CurrentDate()}, @4, @5);",
+                                                //    new object[] { obj[0], obj[1], Session["UserId"], obj[11], obj[10] });
+
+                                                //    if (dt.Rows.Count > 0)
+                                                //        id = Convert.ToInt32(General.Nz(dt.Rows[0][0], -99));
+                                                //}
+                                                //else
+                                                //{
+                                                //    id = Convert.ToInt32(General.Nz(General.DamiOracleScalar($@"INSERT INTO ""Admin_NrActAd""(F10003, ""DocNr"", ""DocData"", ""DataModificare"", USER_NO, TIME, ""TermenDepasireRevisal"", ""Candidat"") 
+                                                //    VALUES(@2, 
+                                                //    COALESCE((SELECT MAX(COALESCE(A.""DocNr"",0)) FROM ""Admin_NrActAd"" A
+                                                //    WHERE A.F10003=@1 AND COALESCE(A.""Candidat"",0)=0 AND A.""IdAuto"" NOT IN (SELECT COALESCE(B.""IdActAd"",-99) FROM ""Avs_Cereri"" B WHERE B.F10003=A.F10003 AND B.""IdAtribut"" IN (4, 30, 31, 32, 33))),0) + 1, 
+                                                //    {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[1]))}, @3, {General.CurrentDate()}, {General.ToDataUniv(Convert.ToDateTime(obj[11]))}, @4) RETURNING ""IdAuto"" INTO @out_1",
+                                                //    new object[] { "int", obj[0], Session["UserId"], obj[10] }), 0));
+                                                //}
 
                                                 if (Convert.ToInt32(General.Nz(id, -99)) != -99)
                                                     General.ExecutaNonQuery($@"UPDATE ""Avs_Cereri"" SET ""IdActAd""=@1 WHERE ""Id"" IN (-1" + obj[4] + ")", new object[] { id });
@@ -1459,6 +1511,24 @@ namespace WizOne.Pagini
                 MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        }        
+        }
+
+        private int DamiSetare(DataTable dtSet, int idTip, string camp)
+        {
+            int rez = -99;
+
+            try
+            {
+                DataRow[] arr = dtSet.Select("Id=" + idTip);
+                if (arr.Count() > 0 && General.Nz(arr[0][camp], "").ToString() != "")
+                    rez = Convert.ToInt32(General.Nz(arr[0][camp], 0));
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+            return rez;
+        }
     }
 }

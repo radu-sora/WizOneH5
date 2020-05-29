@@ -835,6 +835,7 @@
     <Content Include="Personal\Atestate.ascx" />
     <Content Include="Personal\LipsaNecesar.ascx" />
     <Content Include="Personal\ListaDocumente.aspx" />
+    <Content Include="Personal\NotaLichidare.aspx" />
     <Content Include="Personal\Sporuri.ascx" />
     <Content Include="Personal\SporuriTranzactii.ascx" />
     <Content Include="Personal\StudiiNou.ascx" />
@@ -1740,6 +1741,13 @@
     </Compile>
     <Compile Include="Personal\ListaDocumente.aspx.designer.cs">
       <DependentUpon>ListaDocumente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Personal\NotaLichidare.aspx.cs">
+      <DependentUpon>NotaLichidare.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Personal\NotaLichidare.aspx.designer.cs">
+      <DependentUpon>NotaLichidare.aspx</DependentUpon>
     </Compile>
     <Compile Include="Personal\Sporuri.ascx.cs">
       <DependentUpon>Sporuri.ascx</DependentUpon>

@@ -3728,6 +3728,8 @@ namespace WizOne.Avs
                             }
                             else
                                 General.CalculCO(dtModif.Year, f10003);
+
+                            AdaugaNotaLichidare(f10003);
                         }
                         break;
                     case (int)Constante.Atribute.Norma:
@@ -5772,6 +5774,68 @@ namespace WizOne.Avs
             catch (Exception ex)
             {
                 //MessageBox.Show(ex, MessageBox.icoError, "Atentie !");
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+        }
+
+        private void AdaugaNotaLichidare(int f10003)
+        {
+            try
+            {        
+                string sql = "INSERT INTO \"MP_NotaLichidare\"(F10003, \"NrDoc\", \"DataDoc\", \"IdStare\", USER_NO, TIME) OUTPUT Inserted.IdAuto "
+                    + " VALUES (" + f10003 + ", (CASE WHEN (SELECT COUNT(*) FROM \"MP_NotaLichidare\") = 0 THEN 1 ELSE  (SELECT max(\"NrDoc\")+1 FROM \"MP_NotaLichidare\") END), "
+                    + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") +", 1, " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ") ";
+
+                if (Constante.tipBD == 2)
+                    sql = "INSERT INTO \"MP_NotaLichidare\"(F10003, \"NrDoc\", \"DataDoc\", \"IdStare\", USER_NO, TIME) "
+                    + " VALUES (" + f10003 + ", (CASE WHEN (SELECT COUNT(*) FROM \"MP_NotaLichidare\") = 0 THEN 1 ELSE  (SELECT max(\"NrDoc\")+1 FROM \"MP_NotaLichidare\") END), "
+                    + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", 1, " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ") RETURNING \"IdAuto\" INTO @out_1";
+
+                DataTable dtCer = new DataTable();
+                int idAuto = -99;
+                if (Constante.tipBD == 1)
+                {
+                    dtCer = General.IncarcaDT(sql, null);
+                    if (dtCer.Rows.Count > 0)                    
+                        idAuto = Convert.ToInt32(dtCer.Rows[0]["IdAuto"]);                    
+                }
+                else
+                {
+                    List<string> lstOut = General.DamiOracleScalar(sql, new object[] { "int" });
+                    if (lstOut.Count == 1)                    
+                        idAuto = Convert.ToInt32(lstOut[0]);                    
+                }
+
+                sql = "SELECT * FROM \"MP_NotaLichidare_Circuit\" WHERE \"GrupAngajati\" IN (SELECT \"IdGrup\" FROM \"relGrupAngajat\" WHERE F10003 = " + f10003 + ") ORDER BY \"GrupAngajati\" DESC";
+                DataTable dt = General.IncarcaDT(sql, null);            
+                
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    int grup = Convert.ToInt32(dt.Rows[0]["GrupAngajati"].ToString());
+                    int i = 0;
+                    while (grup == Convert.ToInt32(dt.Rows[i]["GrupAngajati"].ToString()))
+                    {
+                        string valoare = "NULL";
+                        if (dt.Rows[i]["Valoare"] != null && dt.Rows[i]["Valoare"].ToString().Length > 0)
+                        {
+                            DataTable dtVal = General.IncarcaDT(dt.Rows[i]["Valoare"].ToString().Replace("ent.F10003", f10003.ToString()), null);
+                            if (dtVal != null && dtVal.Rows.Count > 0 && dtVal.Rows[0][0] != null)
+                                valoare = "'" + dtVal.Rows[0][0].ToString() + "'";
+                        }
+
+                        sql = "INSERT INTO \"MP_NotaLichidare_Detalii\"(\"IdNotaLichidare\", \"Rol\", USER_NO, TIME, \"Valoare\") "
+                            + " VALUES (" + idAuto + ", '" + dt.Rows[i]["Rol"].ToString() + "', " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", " + valoare + ")";
+                        General.ExecutaNonQuery(sql, null);
+
+                        i++;
+                        if (i == dt.Rows.Count)
+                            break;
+                        grup = Convert.ToInt32(dt.Rows[i]["GrupAngajati"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
         }

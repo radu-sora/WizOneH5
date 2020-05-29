@@ -163,6 +163,8 @@ namespace WizOne.Personal
                 string salariu = Dami.ValoareParam("REVISAL_SAL", "F100699");
                 txtSalariu.Text = ds.Tables[0].Rows[0][salariu].ToString();
 
+                CalculCO();
+
             }
             else
             {
@@ -895,10 +897,10 @@ namespace WizOne.Personal
                    + " F026 c where " + grila + " = c.F02604 and(to_number(c.F02610 / 100) * 12) <= " + calcLuni + " and " + calcLuni + " < (to_number(c.F02611 / 100) * 12) ";
 
             DataTable dtGrila = General.IncarcaDT(sql, null);
-            if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][0] != null && dtGrila.Rows[0][0].ToString().Length > 0)
-                txtZileCOCuvAnCrt.Text = dtGrila.Rows[0][0].ToString();
-            else
-                txtZileCOCuvAnCrt.Text = "";
+            //if (dtGrila != null && dtGrila.Rows.Count > 0 && dtGrila.Rows[0][0] != null && dtGrila.Rows[0][0].ToString().Length > 0)
+            //    txtZileCOCuvAnCrt.Text = dtGrila.Rows[0][0].ToString();
+            //else
+            //    txtZileCOCuvAnCrt.Text = "";
         }
         
 

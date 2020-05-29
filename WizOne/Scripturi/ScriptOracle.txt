@@ -14192,3 +14192,108 @@ ALTER TABLE "Ptj_Intrari" ADD "TimpOSReal" number(10);
 --https://github.com/wizromRD/WizOne/issues/456
 ALTER TABLE "tblNomenConfig" ADD "Alias" varchar2(250)
 /
+
+
+CREATE TABLE "MP_NotaLichidare_Circuit"(
+	"GrupAngajati" NUMBER(9),
+	"Rol" varchar2(250),
+	"Supervizor" NUMBER(9),
+	"Valoare" CLOB,
+	"IdAuto" NUMBER(9) NOT NULL,
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_MP_NotaLichidare_Circuit" ON "MP_NotaLichidare_Circuit" ("IdAuto") ;
+
+ALTER TABLE "MP_NotaLichidare_Circuit" ADD CONSTRAINT "PK_MP_NotaLichidare_Circuit" PRIMARY KEY ("IdAuto");
+
+CREATE SEQUENCE "MP_NotaLichidare_Circuit_SEQ"  MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER  NOCYCLE ;
+
+
+create or replace TRIGGER "Auto_MP_NotaLichidare_Circuit"
+  BEFORE INSERT ON "MP_NotaLichidare_Circuit"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "MP_NotaLichidare_Circuit_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+
+
+
+
+CREATE TABLE "MP_NotaLichidare"(
+	F10003 NUMBER(9),
+	"NrDoc" NUMBER(9),
+	"Observatii" VARCHAR2(250),
+  "IdStare" NUMBER(9),
+  "DataDoc" DATE,
+	"IdAuto" NUMBER(9) NOT NULL,
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_MP_NotaLichidare" ON "MP_NotaLichidare" ("IdAuto") ;
+
+ALTER TABLE "MP_NotaLichidare" ADD CONSTRAINT "PK_MP_NotaLichidare" PRIMARY KEY ("IdAuto");
+
+CREATE SEQUENCE "MP_NotaLichidare_SEQ"  MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER  NOCYCLE ;
+
+
+create or replace TRIGGER "Auto_MP_NotaLichidare"
+  BEFORE INSERT ON "MP_NotaLichidare"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "MP_NotaLichidare_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+
+
+
+CREATE TABLE "MP_NotaLichidare_Detalii"(
+	"IdNotaLichidare" NUMBER(9),
+	"Rol" varchar2(250),
+	"Valoare" CLOB,
+  "Datorii" NUMBER(9),
+  "Comentarii" varchar2(250),
+	"IdAuto" NUMBER(9) NOT NULL,
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_MP_NotaLichidare_Detalii" ON "MP_NotaLichidare_Detalii" ("IdAuto") ;
+
+ALTER TABLE "MP_NotaLichidare_Detalii" ADD CONSTRAINT "PK_MP_NotaLichidare_Detalii" PRIMARY KEY ("IdAuto");
+
+CREATE SEQUENCE "MP_NotaLichidare_Detalii_SEQ"  MINVALUE 1 MAXVALUE 9999999800000 INCREMENT BY 1 START WITH 1 CACHE 20 ORDER  NOCYCLE ;
+
+
+create or replace TRIGGER "Auto_MP_NotaLichidare_Detalii"
+  BEFORE INSERT ON "MP_NotaLichidare_Detalii"
+  REFERENCING FOR EACH ROW
+  BEGIN
+ SELECT "MP_NotaLichidare_Detalii_SEQ".nextval
+    INTO :new."IdAuto"
+    FROM dual;
+END;
+
+
+CREATE TABLE "MP_NotaLichidare_Stari"(
+	"Id" NUMBER(9),
+	"Denumire" varchar2(250),
+	USER_NO NUMBER(9),
+	TIME DATE DEFAULT SYSDATE);
+  
+  CREATE UNIQUE INDEX "PK_MP_NotaLichidare_Stari" ON "MP_NotaLichidare_Stari" ("Id") ;
+
+ALTER TABLE "MP_NotaLichidare_Stari" ADD CONSTRAINT "PK_MP_NotaLichidare_Stari" PRIMARY KEY ("Id");
+
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (-1, 'Anulat');
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (1, 'Initiat');
+INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (3, 'Finalizat');
+COMMIT;
+
+ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportNotaLichidare', '-99', 'Id Raport pentru Nota Lichidare', 0);
+COMMIT;
+
+ INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png');
+COMMIT;

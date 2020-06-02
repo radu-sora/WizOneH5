@@ -103,8 +103,8 @@
                                                             <dx:LayoutItem Caption="Flexibil" FieldName="Flexibil">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
-                                                                        <dx:ASPxCheckBox ID="ctlFlexibil" ClientIDMode="Static" runat="server" ToggleSwitchDisplayMode="Always" oncontextMenu="ctx(this,event)">
-                                                                            <ClientSideEvents CheckedChanged="function(s,e) { OnFlexibilCheckedChanged(s,e) }" />
+                                                                        <dx:ASPxCheckBox ID="ctlFlexibil" ClientInstanceName="ctlFlexibil" ClientIDMode="Static" runat="server" ToggleSwitchDisplayMode="Always" oncontextMenu="ctx(this,event)">
+                                                                            <ClientSideEvents CheckedChanged="function(s,e) { OnFlexibilCheckedChanged() }" />
                                                                         </dx:ASPxCheckBox>
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
@@ -116,7 +116,7 @@
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
-                                                            <dx:LayoutItem Caption="Ora Intrare" FieldName="OraIntrare" Name="OraIntrare">
+                                                            <dx:LayoutItem Caption="Ora" FieldName="OraIntrare" Name="OraIntrare">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
 							                                            <dx:ASPxTimeEdit ID="ctlOraIntrare" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
@@ -130,7 +130,7 @@
                                                                     </dx:LayoutItemNestedControlContainer>
                                                                 </LayoutItemNestedControlCollection>
                                                             </dx:LayoutItem>
-                                                            <dx:LayoutItem Caption="Ora Iesire" FieldName="OraIesire" Name="OraIesire">
+                                                            <dx:LayoutItem Caption="Ora" FieldName="OraIesire" Name="OraIesire">
                                                                 <LayoutItemNestedControlCollection>
                                                                     <dx:LayoutItemNestedControlContainer runat="server" SupportsDisabledAttribute="True">
 							                                            <dx:ASPxTimeEdit ID="ctlOraIesire" ClientInstanceName="txtOraOut" ClientIDMode="Static" runat="server" Width="100" DisplayFormatString="HH:mm" EditFormatString="HH:mm" EditFormat="Custom" oncontextMenu="ctx(this,event)"/>
@@ -721,11 +721,13 @@
     </dx:ASPxCallbackPanel>
 
     <script>
+        OnFlexibilCheckedChanged();
+
         function OnPanelEndCallback() {
             pnlLoading.Hide();
         }
-        function OnFlexibilCheckedChanged(s, e) {
-            if (s.GetChecked()) {
+        function OnFlexibilCheckedChanged() {
+            if (ctlFlexibil.GetChecked()) {
                 pnlTab.GetItemByName("OraIntrare").SetCaption("Ora Intrare: De La");
                 pnlTab.GetItemByName("OraIesire").SetCaption("Ora Intrare: La");
             }

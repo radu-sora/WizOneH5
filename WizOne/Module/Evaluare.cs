@@ -1377,7 +1377,7 @@ namespace WizOne.Module
                 join ""F100"" fnume on rasp.""F10003"" = fnume.""F10003""
                 LEFT JOIN ""Eval_tblCategorie"" ctg ON chest.""CategorieQuiz""=ctg.""Id""
                 {12} join ""Eval_RaspunsIstoric"" ist on rasp.""IdQuiz"" = ist.""IdQuiz""
-							                and rasp.""F10003"" = ist.""F10003"" AND (ist.""IdUser"" = {4}  OR (ist.""Pozitie""=1 AND ctg.""Id"" = 0 AND rasp.F10003={10} AND {4} NOT IN (SELECT XX.""IdUser"" FROM ""Eval_RaspunsIstoric"" XX WHERE XX.F10003=ist.F10003 AND XX.""IdQuiz""=ist.""IdQuiz"")))
+							                and rasp.""F10003"" = ist.""F10003"" AND (ist.""IdUser"" = {4}  OR (ist.""Pozitie""=1 AND ctg.""Id"" = 0 AND rasp.F10003={10} AND {4} NOT IN (SELECT COALESCE(XX.""IdUser"",-97) FROM ""Eval_RaspunsIstoric"" XX WHERE XX.F10003=ist.F10003 AND XX.""IdQuiz""=ist.""IdQuiz"")))
                 left join ""Eval_RaspunsIstoric"" istPoz on rasp.""IdQuiz"" = istPoz.""IdQuiz""
 									                and rasp.""F10003"" = istPoz.""F10003""
 									                and rasp.""Pozitie"" = istPoz.""Pozitie""

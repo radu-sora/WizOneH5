@@ -72,7 +72,7 @@
                                                 <dx:LayoutItem Caption="Raportare ore noapte" FieldName="TipRaportareOreNoapte">
                                                     <LayoutItemNestedControlCollection>
                                                         <dx:LayoutItemNestedControlContainer>
-    							                            <dx:ASPxComboBox ID="cmbRap" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150" oncontextMenu="ctx(this,event)">
+    							                            <dx:ASPxComboBox ID="cmbRap" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="150" AllowNull="true" oncontextMenu="ctx(this,event)">
                                                                 <Items>
                                                                     <dx:ListEditItem Text="Pe inceput de schimb" Value="1" />
                                                                     <dx:ListEditItem Text="Pe sfarsit de schimb" Value="2" />
@@ -166,7 +166,7 @@
                                                                                 <dx:LayoutItem Caption="Duplica">
                                                                                     <LayoutItemNestedControlCollection>
                                                                                         <dx:LayoutItemNestedControlContainer>
-							                                                                <dx:ASPxComboBox ID="cmbZiDeLa" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" Width="100">
+							                                                                <dx:ASPxComboBox ID="cmbZiDeLa" runat="server" DropDownStyle="DropDown" TextField="Denumire" ValueField="Id" ValueType="System.Int32" AutoPostBack="false" AllowNull="true" Width="100">
                                                                                                 <Items>
                                                                                                     <dx:ListEditItem Text="Luni" Value="1" />
                                                                                                     <dx:ListEditItem Text="Marti" Value="2" />

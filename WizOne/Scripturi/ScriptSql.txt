@@ -13731,3 +13731,7 @@ UPDATE A
 SET A.IdRegistru=B.IdRegistru
 FROM Admin_NrActAd A
 INNER JOIN MP_ActAdSetari B ON B.IdTip=A.IdTip
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('BlocareIncetariSuspendariDeschise', '0', '0 - se permite incetarea contractelor care au suspendari deschise; 1- nu se permite', 0)
+GO

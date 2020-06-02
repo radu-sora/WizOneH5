@@ -14398,3 +14398,8 @@ ALTER TABLE "Admin_NrActAd" ADD "IdTip" number(10);
 /
 ALTER TABLE "Admin_NrActAd" ADD "IdRegistru" number(10);
 /
+
+
+ INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('BlocareIncetariSuspendariDeschise', '0', '0 - se permite incetarea contractelor care au suspendari deschise; 1- nu se permite', 0);
+COMMIT;
+

@@ -14292,8 +14292,109 @@ INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (1, 'Initiat');
 INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (3, 'Finalizat');
 COMMIT;
 
- INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportNotaLichidare', '-99', 'Id Raport pentru Nota Lichidare', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportNotaLichidare', '-99', 'Id Raport pentru Nota Lichidare', 0);
 COMMIT;
 
- INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png');
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png');
 COMMIT;
+
+
+--Automatizarea acordarii de numere in Circuit Documente #343
+--https://github.com/wizromRD/WizOne/issues/343
+
+DELETE FROM "tblNomenConfig" WHERE "Tabela"='MP_ActAdSetari';
+COMMIT;
+
+CREATE TABLE "MP_ActAdSetari" 
+(	"IdTip" NUMBER(10,0), 
+    "IdRegistru" NUMBER(10,0), 
+    "NrStart" NUMBER(10,0), 
+    "IdRaport" NUMBER(10,0), 
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE
+);
+
+CREATE UNIQUE INDEX "MP_ActAdSetari_PK" ON "MP_ActAdSetari" ("IdTip");
+ALTER TABLE "MP_ActAdSetari" ADD CONSTRAINT "MP_ActAdSetari_PK" PRIMARY KEY ("IdTip");
+ALTER TABLE "MP_ActAdSetari" MODIFY ("IdTip" NOT NULL ENABLE);
+/
+
+CREATE TABLE "MP_ActAdTip" 
+(	"Id" NUMBER(10,0), 
+    "Denumire" VARCHAR2(150 BYTE), 
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE
+);
+
+ALTER TABLE "MP_ActAdTip" MODIFY ("Id" NOT NULL ENABLE);
+/
+
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(1, 'Angajari');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(2, 'Acte Aditionale');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(3, 'Incetari');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(4, 'Detasari');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(5, 'DetasariRevenire');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(6, 'Suspendari');
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(7, 'SuspendariRevenire');
+COMMIT;
+
+
+
+CREATE TABLE "MP_ActAdRegistru" 
+(	"Id" NUMBER(10,0), 
+    "Denumire" VARCHAR2(150 BYTE), 
+    "USER_NO" NUMBER(10,0), 
+    "TIME" DATE DEFAULT SYSDATE
+);
+
+ALTER TABLE "MP_ActAdRegistru" MODIFY ("Id" NOT NULL ENABLE);
+/
+
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(1, 'Numar marca');
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(2, 'Registru pe angajat');
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(3, 'Registru pe firma nr 1');
+COMMIT;
+
+
+BEGIN
+DECLARE vExists number;
+BEGIN
+SELECT COUNT(*) INTO vExists FROM "tblMeniuri" WHERE "Pagina" LIKE '%MP_ActAdSetari%';
+  IF vExists > 0 THEN 
+    EXECUTE IMMEDIATE 'INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana", USER_NO) VALUES(COALESCE((SELECT MAX(COALESCE("Id",0))+1 FROM "tblMeniuri"),0), ''Setari circuit documente'', ''Setari circuit documente'', ''Pagini\SablonNomen[MP_ActAdSetari]'', 1, ''m1.png'', -45)';
+  END IF;
+END;
+END;
+/
+
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdTip',2,1,'SELECT Id, Denumire FROM MP_ActAdTip ORDER BY Denumire',0,-45);
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdRegistru',2,1,'SELECT Id, Denumire FROM MP_ActAdRegistru ORDER BY Denumire',0,-45);
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','NrStart',0,1,NULL,0,-45);
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdRaport',2,1,'SELECT DynReportId AS Id, Name AS Denumire FROM DynReports ORDER BY Name',0,-45);
+COMMIT;
+
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (1, 1, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (2, 2, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (3, 3, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (4, 3, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (5, 3, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (6, 3, 1, 1, 2, NULL);
+INSERT INTO "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (7, 3, 1, 1, 2, NULL);
+COMMIT;
+
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_CIM') WHERE "IdTip"=1;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_ModificariCIM') WHERE "IdTip"=2;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Incetare') WHERE "IdTip"=3;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Detasare') WHERE "IdTip"=4;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_DetasareRevenire') WHERE "IdTip"=5;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Suspendare') WHERE "IdTip"=6;
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_SuspendareRevenire') WHERE "IdTip"=7;
+COMMIT;
+
+DELETE FROM "tblParametrii" WHERE "Nume" IN ('RaportActeAditionale_CIM', 'RaportActeAditionale_ModificariCIM', 'RaportActeAditionale_Incetare', 'RaportActeAditionale_Detasare' ,'RaportActeAditionale_DetasareRevenire' , 'RaportActeAditionale_Suspendare', 'RaportActeAditionale_SuspendareRevenire');
+COMMIT;
+
+ALTER TABLE "Admin_NrActAd" ADD "IdTip" number(10);
+/
+ALTER TABLE "Admin_NrActAd" ADD "IdRegistru" number(10);
+/

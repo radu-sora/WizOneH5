@@ -13487,7 +13487,7 @@ GO
 ALTER TABLE "Ptj_Intrari" ADD "TimpOSReal" int
 GO
 
-https://github.com/wizromRD/WizOne/issues/456
+--https://github.com/wizromRD/WizOne/issues/456
 ALTER TABLE "tblNomenConfig" ADD "Alias" nvarchar(250)
 GO
 
@@ -13565,8 +13565,169 @@ GO
 INSERT INTO "MP_NotaLichidare_Stari" ("Id", "Denumire") VALUES (3, 'Finalizat')
 GO
 
- INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportNotaLichidare', '-99', 'Id Raport pentru Nota Lichidare', 0);
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('IdRaportNotaLichidare', '-99', 'Id Raport pentru Nota Lichidare', 0);
 GO
 
- INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png')
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana") VALUES(81, 'Nota lichidare', 'Nota lichidare', 'Personal\NotaLichidare', 1, 'm1.png')
 GO
+
+
+
+--Automatizarea acordarii de numere in Circuit Documente #343
+--https://github.com/wizromRD/WizOne/issues/343
+
+CREATE TABLE [dbo].[MP_ActAdSetari](
+	[IdTip] [int] NOT NULL,
+	[IdRegistru] [int] NULL,
+	[NrStart] [int] NULL,
+	[IdRaport] [int] NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_ActAdSetari] PRIMARY KEY CLUSTERED 
+(
+	[IdTip] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[MP_ActAdSetari] ADD  CONSTRAINT [DF_MP_ActAdSetari_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+
+
+CREATE TABLE [dbo].[MP_ActAdTip](
+	[Id] [int] NOT NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_ActAdTip] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[MP_ActAdTip] ADD  CONSTRAINT [DF_MP_ActAdTip_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(1, 'Angajari')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(2, 'Acte Aditionale')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(3, 'Incetari')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(4, 'Detasari')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(5, 'DetasariRevenire')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(6, 'Suspendari')
+GO
+INSERT INTO "MP_ActAdTip"("Id", "Denumire") VALUES(7, 'SuspendariRevenire')
+GO
+
+
+
+CREATE TABLE [dbo].[MP_ActAdRegistru](
+	[Id] [int] NOT NULL,
+	[Denumire] [nvarchar](150) NULL,
+	[USER_NO] [int] NULL,
+	[TIME] [datetime] NULL,
+ CONSTRAINT [PK_MP_ActAdRegistru] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[MP_ActAdRegistru] ADD  CONSTRAINT [DF_MP_ActAdRegistru_TIME]  DEFAULT (getdate()) FOR [TIME]
+GO
+
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(1, 'Numar marca')
+GO
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(2, 'Registru pe angajat')
+GO
+INSERT INTO "MP_ActAdRegistru"("Id", "Denumire") VALUES(3, 'Registru pe firma nr 1')
+GO
+
+
+
+IF((SELECT COUNT(*) FROM "tblMeniuri" WHERE "Pagina" LIKE '%MP_ActAdSetari%') = 0)
+INSERT INTO "tblMeniuri"("Id", "Nume", "Descriere", "Pagina", "Stare", "Icoana", USER_NO) VALUES(COALESCE((SELECT MAX(COALESCE("Id",0))+1 FROM "tblMeniuri"),0), 'Setari circuit documente', 'Setari circuit documente', 'Pagini\SablonNomen[MP_ActAdSetari]', 1, 'm1.png', -45);
+GO
+
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdTip',2,1,'SELECT Id, Denumire FROM MP_ActAdTip ORDER BY Denumire',0,-45);
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdRegistru',2,1,'SELECT Id, Denumire FROM MP_ActAdRegistru ORDER BY Denumire',0,-45);
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','NrStart',0,1,NULL,0,-45);
+GO
+INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo", "IdAutomat", USER_NO) VALUES('MP_ActAdSetari','IdRaport',2,1,'SELECT DynReportId AS Id, Name AS Denumire FROM DynReports ORDER BY Name',0,-45);
+GO
+
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (1, 1, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (2, 2, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (3, 3, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (4, 3, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (5, 3, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (6, 3, 1, 1, 2, NULL)
+GO
+INSERT "MP_ActAdSetari" ("IdTip", "IdRegistru", "NrStart", "IdRaport", "USER_NO", "TIME") VALUES (7, 3, 1, 1, 2, NULL)
+GO
+
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_CIM') WHERE "IdTip"=1;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_ModificariCIM') WHERE "IdTip"=2;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Incetare') WHERE "IdTip"=3;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Detasare') WHERE "IdTip"=4;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_DetasareRevenire') WHERE "IdTip"=5;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_Suspendare') WHERE "IdTip"=6;
+GO
+UPDATE "MP_ActAdSetari" SET "IdRaport"=(SELECT "Valoare" FROM "tblParametrii" WHERE "Nume"='RaportActeAditionale_SuspendareRevenire') WHERE "IdTip"=7;
+GO
+
+DELETE FROM "tblParametrii" WHERE "Nume" IN ('RaportActeAditionale_CIM', 'RaportActeAditionale_ModificariCIM', 'RaportActeAditionale_Incetare', 'RaportActeAditionale_Detasare' ,'RaportActeAditionale_DetasareRevenire' , 'RaportActeAditionale_Suspendare', 'RaportActeAditionale_SuspendareRevenire');
+GO
+
+ALTER TABLE "Admin_NrActAd" ADD "IdTip" int
+GO
+ALTER TABLE "Admin_NrActAd" ADD "IdRegistru" int
+GO
+
+
+
+UPDATE A
+SET A.IdTip=2
+FROM Admin_NrActAd A
+WHERE (SELECT COUNT(*) FROM Avs_Cereri B WHERE A.IdAuto=B.IdActAd) > 1
+
+
+UPDATE A
+SET A.IdTip=(
+CASE B.IdAtribut
+WHEN 4 THEN 3
+WHEN 32 THEN 4
+WHEN 33 THEN 5
+WHEN 30 THEN 6
+WHEN 31 THEN 7
+ELSE 2
+END)
+FROM Admin_NrActAd a
+INNER JOIN Avs_Cereri B ON A.IdAuto=B.IdActAd
+WHERE (SELECT COUNT(*) FROM Avs_Cereri B WHERE A.IdAuto=B.IdActAd) = 1
+
+
+UPDATE A
+SET A.IdRegistru=B.IdRegistru
+FROM Admin_NrActAd A
+INNER JOIN MP_ActAdSetari B ON B.IdTip=A.IdTip

@@ -1074,5 +1074,32 @@ namespace WizOne.Absente
             return val;
         }
 
+        //Radu 02.06.2020
+        protected void grDate_CustomUnboundColumnData(object sender, ASPxGridViewColumnDataEventArgs e)
+        {
+            if (e.Column.FieldName == "NumarOre")
+            {
+                decimal nrOre = 0;
+                string ore = "{0}:{1}";
+                string nr = (e.GetListSourceFieldValue("NrOre") ?? "").ToString();
+
+                if (nr.Length > 0)
+                {
+                    nrOre = Convert.ToDecimal(nr);
+
+                    int x = Convert.ToInt32(Math.Truncate(nrOre));
+                    decimal y = nrOre - Math.Truncate(nrOre);
+
+                    ore = string.Format(ore, x.ToString().PadLeft(2, '0'), Convert.ToInt32(y * 60).ToString().PadLeft(2, '0'));
+
+                    e.Value = ore;
+                }           
+
+                
+            }
+        }
+
+
+
     }
 }

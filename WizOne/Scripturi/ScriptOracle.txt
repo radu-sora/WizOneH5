@@ -14286,3 +14286,12 @@ COMMIT;
 
  INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('BlocareIncetariSuspendariDeschise', '0', '0 - se permite incetarea contractelor care au suspendari deschise; 1- nu se permite', 0);
 COMMIT;
+
+
+    declare
+    column_exists exception;
+    pragma exception_init (column_exists , -01430);
+    begin
+        execute immediate 'ALTER TABLE F1001 ADD F1001135 NUMBER(9) NULL';
+        exception when column_exists then null;
+    end;

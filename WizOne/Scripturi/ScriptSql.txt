@@ -13543,3 +13543,8 @@ GO
 
  INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('BlocareIncetariSuspendariDeschise', '0', '0 - se permite incetarea contractelor care au suspendari deschise; 1- nu se permite', 0)
 GO
+
+IF COL_LENGTH('F1001', 'F1001135') IS NULL
+BEGIN
+    ALTER TABLE F1001 ADD F1001135 INT NULL ;
+END;

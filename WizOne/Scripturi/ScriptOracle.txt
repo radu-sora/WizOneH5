@@ -14534,3 +14534,17 @@ LEFT JOIN "Ptj_Programe" C ON C."Id" = (CASE WHEN COALESCE(A."TipSchimb8", A."Ti
 WHERE X."ProgramId" IS NOT NULL
 AND ("ContractId" * 1000000 + "ProgramId" * 10 + "ZiSapt") NOT IN 
 (SELECT "IdContract" * 1000000 + "IdProgram" * 10 + "TipSchimb" FROM "Ptj_ContracteSchimburi");
+COMMIT;
+
+BEGIN
+DECLARE vExists number;
+BEGIN
+SELECT COUNT(*) INTO vExists FROM "tblNomenConfig" WHERE "Tabela"='Ptj_CumulatSetari' and "Camp" = 'Coloana';
+  IF vExists = 0 THEN 
+    INSERT INTO "tblNomenConfig"("Tabela", "Camp", "TipCamp", "Vizibil", "SursaCombo") VALUES('Ptj_CumulatSetari','Coloana',2,1,'SELECT ''F'' || CAST(Id as varchar2(3)) FROM (SELECT CAST(ROW_NUMBER() OVER (ORDER BY (SELECT 1 FROM DUAL)) AS int) AS Id FROM "tblZile") X WHERE X.Id <= 100');
+  ELSE
+    UPDATE "tblNomenConfig" SET "SursaCombo" = REPLACE(REPLACE("SursaCombo",'60','100'), 'varchar2(2)', 'varchar2(3)') WHERE "Tabela"='Ptj_CumulatSetari' AND "Camp" = 'Coloana';
+  END IF;
+END;
+END;
+/

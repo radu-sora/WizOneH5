@@ -2351,7 +2351,8 @@ namespace WizOne.Avs
                 }
 
                 //Radu 05.05.2020
-                if (idAtr == (int)Constante.Atribute.MotivPlecare)
+                int valSusp = Convert.ToInt32(Dami.ValoareParam("BlocareIncetariSuspendariDeschise", "0"));
+                if (idAtr == (int)Constante.Atribute.MotivPlecare && valSusp == 1)
                 {
                     DataTable dtSusp = General.IncarcaDT("SELECT COUNT(*) FROM F111 WHERE F11103 = " + F10003 + " AND (F11107 IS NULL OR F11107 = " + (Constante.tipBD == 1 ? "CONVERT(DATETIME, '01/01/2100', 103))" : "TO_DATE('01/01/2100', 'dd/mm/yyyy'))"), null);
                     if (dtSusp != null && dtSusp.Rows.Count > 0 && Convert.ToInt32(dtSusp.Rows[0][0].ToString()) > 0)
@@ -2359,7 +2360,7 @@ namespace WizOne.Avs
                         pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu puteti inceta acest contract deoarece angajatul are cel putin o suspendare activa!");
                         return false;
                     }
-                }    
+                }
 
                 if (cmbAng.Value == null) strErr += ", angajat";
                 if (idAtr == -99) strErr += ", atribut";

@@ -14536,6 +14536,7 @@ AND ("ContractId" * 1000000 + "ProgramId" * 10 + "ZiSapt") NOT IN
 (SELECT "IdContract" * 1000000 + "IdProgram" * 10 + "TipSchimb" FROM "Ptj_ContracteSchimburi");
 COMMIT;
 
+
 BEGIN
 DECLARE vExists number;
 BEGIN
@@ -14545,6 +14546,7 @@ SELECT COUNT(*) INTO vExists FROM "tblNomenConfig" WHERE "Tabela"='Ptj_CumulatSe
   ELSE
     UPDATE "tblNomenConfig" SET "SursaCombo" = REPLACE(REPLACE("SursaCombo",'60','100'), 'varchar2(2)', 'varchar2(3)') WHERE "Tabela"='Ptj_CumulatSetari' AND "Camp" = 'Coloana';
   END IF;
+  COMMIT;
 END;
 END;
 /

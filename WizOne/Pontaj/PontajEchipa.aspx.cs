@@ -3078,7 +3078,7 @@ namespace WizOne.Pontaj
                 {
                     //Florin 2020.05.15 - am scos conditia WHERE COALESCE(""Vizibil"", 0) = 1
                     //Florin 2020.04.30 - am modificat X.* cu colCumulat
-                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT ',X.' + ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" ORDER BY COALESCE(""OrdineAfisare"", 999999) FOR XML Path('')"), "").ToString();
+                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT ',X.' + ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" GROUP BY ""Coloana"" FOR XML Path('')"), "").ToString();
 
                     strSql = $@"with ptj_intrari_2 as (select A.* from Ptj_Intrari A 
                                 LEFT JOIN Ptj_Contracte C ON A.IdContract=C.Id
@@ -3149,7 +3149,7 @@ namespace WizOne.Pontaj
                 {
                     //Florin 2020.05.15 - am scos conditia WHERE COALESCE(""Vizibil"", 0) = 1
                     //Florin 2020.04.30 - am modificat X.* cu colCumulat
-                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT LISTAGG(',X.' || ""Coloana"") WITHIN GROUP (ORDER BY COALESCE(""OrdineAfisare"", 999999)) FROM ""Ptj_tblFormuleCumulat"" ORDER BY COALESCE(""OrdineAfisare"", 999999)"), "").ToString();
+                    string colCumulat = General.Nz(General.ExecutaScalar(@"SELECT LISTAGG(',X.' || ""Coloana"") WITHIN GROUP (ORDER BY COALESCE(""Coloana"", '')) FROM (SELECT ""Coloana"" FROM ""Ptj_tblFormuleCumulat"" WHERE COALESCE(""Vizibil"", 0) = 1 GROUP BY ""Coloana"")"), "").ToString();
 
                     strSql = $@"with ""Ptj_Intrari_2"" as (select A.* from ""Ptj_Intrari"" A 
                                 LEFT JOIN ""Ptj_Contracte"" C ON A.""IdContract""=C.""Id""

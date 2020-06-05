@@ -473,9 +473,11 @@ namespace WizOne.Personal
                 //Florin 2018-10-30
                 //calculam CO daca se insereaza un angajat
                 bool calcCO = false;
+                bool esteNou = false;
                 if (Session["esteNou"] != null && Session["esteNou"].ToString().Length > 0 && Session["esteNou"].ToString() == "true")
                 {
                     int val = 1;
+                    esteNou = true;
                     sql = "SELECT \"Valoare\" FROM \"tblParametrii\" WHERE \"Nume\" = 'TermenDepasireRevisal'";
                     dt = General.IncarcaDT(sql, null);
                     if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != null && dt.Rows[0][0].ToString().Length > 0 )
@@ -694,11 +696,15 @@ namespace WizOne.Personal
                 //Florin 2018-10-30
                 //calculam CO daca se modifica data plecare
                 //if (calcCO)   Radu 22.05.2020 - calculul CO sa se efectueze la fiecare salvare, deoarece se pot modifica multi factori care influenteaza zilele de CO
+                if (!esteNou)
                 {
                     try
                     {
                         int an = DateTime.Now.Year;
-                        if (ds != null && ds.Tables.Count > 1 && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0 && ds.Tables[1].Rows[0]["F10023"] != DBNull.Value) an = Convert.ToDateTime(ds.Tables[1].Rows[0]["F10023"]).Year;
+                        if (ds != null && ds.Tables.Count > 1 && ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0 && ds.Tables[1].Rows[0]["F10023"] != DBNull.Value) 
+                            an = Convert.ToDateTime(ds.Tables[1].Rows[0]["F10023"]).Year;                        
+                        if (an == 2100)
+                            an = DateTime.Now.Year;
                         General.CalculCO(an, Convert.ToInt32(General.Nz(Session["Marca"], -99)));
                     }
                     catch (Exception) { }
@@ -923,7 +929,7 @@ namespace WizOne.Personal
         }
 
 
-        protected void Initializare(ref DataSet ds)
+        public void Initializare(ref DataSet ds)
         {
             try
             {

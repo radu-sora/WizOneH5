@@ -4249,7 +4249,7 @@ namespace WizOne.Avs
                     if (dtSuspNomen.Rows[0]["TransferPontaj"] != null && dtSuspNomen.Rows[0]["TransferPontaj"].ToString().Length > 0 && Convert.ToInt32(dtSuspNomen.Rows[0]["TransferPontaj"].ToString()) == 1)
                         General.TransferPontaj(f10003.ToString(), Convert.ToDateTime(dtSuspAng.Rows[0]["F11105"].ToString()),
                              Convert.ToDateTime(dtSuspAng.Rows[0]["F11106"].ToString()), Convert.ToDateTime(dtSuspAng.Rows[0]["F11107"].ToString()),
-                            (dtSuspNomen.Rows[0]["DenumireScurta"] as string));                    
+                            (dtSuspNomen.Rows[0]["DenumireScurta"] as string), new DateTime(2100, 1, 1));                    
                 }
             }
         }

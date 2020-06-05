@@ -5571,6 +5571,9 @@ namespace WizOne.Module
                 //Florin 2020.01.03
                 HttpContext.Current.Session["Eval_tblCategorieObiective"] = null;
 
+                //Radu 15.05.2020
+                HttpContext.Current.Session["TipInfoChiosc"] = 0;
+
 
                 string ti = "nvarchar";
                 if (Constante.tipBD == 2) ti = "varchar2";
@@ -6983,7 +6986,8 @@ namespace WizOne.Module
 
                 //Radu 21.04.2020
                 //string strSql = SelectCalculCO(an, f10003, filtruIns);
-                //General.ExecutaNonQuery(strSql, null);
+                string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-12-31'), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
+                General.ExecutaNonQuery(strSql, null);
 
 
                 if (cuActualizareInF100)
@@ -8156,7 +8160,7 @@ namespace WizOne.Module
             }
         }
 
-        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare, string denScurta)
+        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare, string denScurta, DateTime dtIncetareVeche)
         {
             try
             {
@@ -8168,7 +8172,7 @@ namespace WizOne.Module
                 if (dtAbsNomen != null && dtAbsNomen.Rows.Count > 0)
                     idAbs = Convert.ToInt32(dtAbsNomen.Rows[0]["Id"].ToString());
                 else
-                    return;  
+                    return;
 
                 string sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataInceput.Date) + " AND " + General.ToDataUniv(dtSf.Date);
                 ExecutaNonQuery(sql, null);
@@ -8268,11 +8272,19 @@ namespace WizOne.Module
                     ExecutaNonQuery(sql, null);
                 }
 
+                if (dtIncetareVeche.Date != new DateTime(2100, 1, 1) && dataIncetare.Date < dtIncetareVeche.Date)
+                {//stergerea pontarilor adaugate in plus
+                    sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dtIncetareVeche.Date);
+                    ExecutaNonQuery(sql, null);
+                    sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dtIncetareVeche.Date);
+                    ExecutaNonQuery(sql, null);
+                }
+
                 //inserare in Ptj_cereri
                 int nrZile = 0;
                 DataTable dtAbs = General.IncarcaDT(SelectAbsentaInCereri(Convert.ToInt32(marca), dataInceput.Date, dtSf.Date, 3, idAbs), null);
-                for (int i = 0; i < dtAbs.Rows.Count; i++)                  
-                    if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)                    
+                for (int i = 0; i < dtAbs.Rows.Count; i++)
+                    if (Convert.ToInt32(General.Nz(dtAbs.Rows[i]["AreDrepturi"], 0)) == 1)
                         nrZile++;
 
                 ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE F10003 = " + marca + " AND \"IdAbsenta\" = " + idAbs + " AND \"DataInceput\" = " + General.ToDataUniv(dataInceput.Date), null);
@@ -8285,7 +8297,7 @@ namespace WizOne.Module
                                 idAbs + ", " +
                                 General.ToDataUniv(dataInceput.Date) + ", " +
                                 General.ToDataUniv(dtSf.Date) + ", " +
-                                nrZile.ToString() + ", " +                                
+                                nrZile.ToString() + ", " +
                                 "'Transfer din Suspendari', " +
                                 "3, " + HttpContext.Current.Session["UserId"].ToString() + ", " + General.CurrentDate() + ")";
                 ExecutaNonQuery(sqlInsert, null);

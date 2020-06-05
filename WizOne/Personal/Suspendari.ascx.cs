@@ -304,11 +304,15 @@ namespace WizOne.Personal
                 DataTable dtSusp = Session["MP_Suspendari"] as DataTable;
                 DataRow row = dtSusp.Rows.Find(keys);
 
+                DateTime dtIncetareVeche = new DateTime(2100, 1, 1);
+
                 foreach (DataColumn col in dtSusp.Columns)
                 {
                     if (!col.AutoIncrement && grDateSuspendari.Columns[col.ColumnName] != null && grDateSuspendari.Columns[col.ColumnName].Visible)
                     {
                         var edc = e.NewValues[col.ColumnName];
+                        if (col.ColumnName == "F11107" && row[col.ColumnName] != DBNull.Value)
+                            dtIncetareVeche = Convert.ToDateTime(row[col.ColumnName].ToString());
                         row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
                     }
                     if (col.ColumnName.ToUpper() == "USER_NO")                     
@@ -365,7 +369,7 @@ namespace WizOne.Personal
                         if (dr[0]["TransferPontaj"] != null && dr[0]["TransferPontaj"].ToString().Length > 0 && Convert.ToInt32(dr[0]["TransferPontaj"].ToString()) == 1)
                             General.TransferPontaj(Session["Marca"].ToString(), Convert.ToDateTime(e.NewValues["F11105"].ToString()), 
                                 Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()),
-                                (dr[0]["DenumireScurta"] as string));
+                                (dr[0]["DenumireScurta"] as string), dtIncetareVeche);
 
                     }
                 }
@@ -547,7 +551,7 @@ namespace WizOne.Personal
                                     Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()));
                             if (dr[0]["TransferPontaj"] != null && dr[0]["TransferPontaj"].ToString().Length > 0 && Convert.ToInt32(dr[0]["TransferPontaj"].ToString()) == 1)
                                 General.TransferPontaj(Session["Marca"].ToString(), Convert.ToDateTime(e.NewValues["F11105"].ToString()), Convert.ToDateTime(e.NewValues["F11106"].ToString()), Convert.ToDateTime(e.NewValues["F11107"].ToString()),
-                                    (dr[0]["DenumireScurta"] as string));
+                                    (dr[0]["DenumireScurta"] as string), new DateTime(2100, 1, 1));
 
                         }
                     }

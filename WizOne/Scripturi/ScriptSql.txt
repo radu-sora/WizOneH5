@@ -13875,3 +13875,18 @@ INSERT INTO tblNomenConfig(Tabela, Camp, TipCamp, Vizibil, SursaCombo) VALUES('P
 ELSE
 UPDATE "tblNomenConfig" SET "SursaCombo" = REPLACE(REPLACE("SursaCombo",'60','100'), 'nvarchar(2)', 'nvarchar(3)') WHERE "Tabela"='Ptj_CumulatSetari' AND "Camp" = 'Coloana'
 GO
+
+
+
+
+IF COL_LENGTH('F1001', 'F1001135') IS NULL
+BEGIN
+    ALTER TABLE F1001 ADD F1001135 INT NULL ;
+END;
+
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCO_Proportional_18Ani', '0', '1 - zilele de CO suplimentare se calculeaza proportional cu data la care implineste 18 ani; 0- zilele CO suplimentare se calculeaza la nivel de an', 0)
+GO
+
+INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCO_Proportional_Handicap', '0', '1 - zilele de CO suplimentare se calculeaza proportional cu data la care inceteaza starea de invaliditate; 0- zilele CO suplimentare se calculeaza la nivel de an', 0)
+GO

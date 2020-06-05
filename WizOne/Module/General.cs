@@ -6934,8 +6934,9 @@ namespace WizOne.Module
                     f10003 = "a.F10003";
 
                 //Radu 21.04.2020
-                string strSql = SelectCalculCO(an, f10003, filtruIns);
-                //General.ExecutaNonQuery(strSql, null);
+                //string strSql = SelectCalculCO(an, f10003, filtruIns);
+                string strSql = "select * from calculCO(" + f10003 + ", CONVERT(date,'" + an + "-12-31'), 1, (SELECT F10072 FROM f100 where f10003=" + f10003 + "))";
+                General.ExecutaNonQuery(strSql, null);
 
 
                 if (cuActualizareInF100)
@@ -8105,7 +8106,7 @@ namespace WizOne.Module
             }
         }
 
-        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare, string denScurta)
+        public static void TransferPontaj(string marca, DateTime dataInceput, DateTime dataSfarsit, DateTime dataIncetare, string denScurta, DateTime dtIncetareVeche)
         {
             try
             {
@@ -8214,6 +8215,14 @@ namespace WizOne.Module
                     sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dataSfarsit.Date);
                     ExecutaNonQuery(sql, null);
                     sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dataSfarsit.Date);
+                    ExecutaNonQuery(sql, null);
+                }
+
+                if (dtIncetareVeche.Date != new DateTime(2100, 1, 1) && dataIncetare.Date < dtIncetareVeche.Date)
+                {//stergerea pontarilor adaugate in plus
+                    sql = "UPDATE \"Ptj_Intrari\" SET \"ValStr\" = NULL WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dtIncetareVeche.Date);
+                    ExecutaNonQuery(sql, null);
+                    sql = "DELETE FROM  \"Ptj_IstoricVal\" WHERE F10003 = " + marca + " AND  \"Ziua\" BETWEEN " + General.ToDataUniv(dataIncetare.Date) + " AND " + General.ToDataUniv(dtIncetareVeche.Date);
                     ExecutaNonQuery(sql, null);
                 }
 

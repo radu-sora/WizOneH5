@@ -193,7 +193,7 @@
                         <td width="275" align="left">
                                     <dx:ASPxDateEdit ID="txtDataInc"   runat="server"  style="font-size:30px;left:auto" Width="250px" HorizontalAlign="Center"   ButtonStyle-Width="75" Height="75"  DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataIncResource1" >
                              
-                                        <ClientSideEvents ValueChanged="function(s, e) { VerifInterval(s,e); pnlCtl.PerformCallback(3); }" />
+                                        <ClientSideEvents ValueChanged="function(s, e) { pnlCtl.PerformCallback(3); }" />
                                 
                                         <CalendarProperties>                                
                                             <MonthGridPaddings Padding="30px" />
@@ -208,7 +208,7 @@
                         <td width="300" align="left" id="tdDataSf" runat="server">
                                     <dx:ASPxDateEdit ID="txtDataSf" runat="server"  style="font-size:30px;" Width="250px" HorizontalAlign="Center"     ButtonStyle-Width="75" Height="75"  DisplayFormatString="dd/MM/yyyy" EditFormatString="dd/MM/yyyy" EditFormat="Custom" meta:resourcekey="txtDataSfResource1" >
                                
-                                        <ClientSideEvents ValueChanged="function(s, e) { VerifInterval(s,e);  pnlCtl.PerformCallback(6); }" />   
+                                        <ClientSideEvents ValueChanged="function(s, e) {  pnlCtl.PerformCallback(6); }" />   
                                        <CalendarProperties>                                
                                             <MonthGridPaddings Padding="30px" />
                                             <DayStyle Font-Size="30px">
@@ -218,7 +218,7 @@
                                     </dx:ASPxDateEdit>  
                         </td>
                         <td width="290" align="right"  id="tdNrOre" runat="server"  visible="false">
-                                    <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  Visible="false"/>                                    
+                                    <dx:ASPxSpinEdit ID="txtNrOre" ClientInstanceName="txtNrOre" runat="server" Width="200px"  Height="75"  HorizontalAlign="Center" ButtonStyle-Width="75"  style="font-size:30px;"  ClientVisible="false"/>                                    
  
                         </td>
                         <td width="10" align="left"  id="tdNrOreInMinute" runat="server" visible="false">
@@ -227,13 +227,13 @@
  
                         </td>
                           <td width="100" align="right"  id="tdOraInc" runat="server"  visible="false">                          
-                            <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="200px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList"  DropDownWidth="100" DropDownHeight="200"  style="font-size:30px;" Height="75"  ButtonStyle-Width="75">
+                            <dx:ASPxComboBox ID="cmbOraInc" ClientInstanceName="cmbOraInc" runat="server" Width="200px" ClientVisible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList"  DropDownWidth="100" DropDownHeight="200"  style="font-size:30px;" Height="75"  ButtonStyle-Width="75">
                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e); }" />
                                 <ItemStyle Font-Size="XX-Large" />
                             </dx:ASPxComboBox>
                           </td>                                        
                          <td width="450" align="right"  id="tdOraSf" runat="server"  visible="false">                           
-                            <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="200px" Visible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList" DropDownWidth="100" DropDownHeight="200"  style="font-size:30px;" Height="75" ButtonStyle-Width="75">
+                            <dx:ASPxComboBox ID="cmbOraSf" ClientInstanceName="cmbOraSf" runat="server" Width="200px" ClientVisible="false" ValueField="Denumire" TextField="Denumire" ValueType="System.String" AutoPostBack="false" DropDownStyle="DropDownList" DropDownWidth="100" DropDownHeight="200"  style="font-size:30px;" Height="75" ButtonStyle-Width="75">
                                 <ClientSideEvents SelectedIndexChanged="function(s, e) { VerifInterval(s,e);  }" />
                                 <ItemStyle Font-Size="XX-Large" />
                             </dx:ASPxComboBox>

@@ -1206,7 +1206,7 @@ namespace WizOne.Module
             return rez;
         }
 
-        internal static string ValoareParam(string strParam, string replaceValue = "")
+        public static string ValoareParam(string strParam, string replaceValue = "")
         {
             string rez = "";
 

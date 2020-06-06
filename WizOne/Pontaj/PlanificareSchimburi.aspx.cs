@@ -408,6 +408,7 @@ namespace WizOne.Pontaj
                 string zileVal = "";
                 string strFiltru = "";
                 string strLeg = "";
+                string cmpCateg = @" ,NULL AS ""Categorie"" ";
 
                 string dtInc = General.ToDataUniv(txtDtInc.Date);
                 string dtSf = General.ToDataUniv(txtDtSf.Date);
@@ -428,6 +429,7 @@ namespace WizOne.Pontaj
                 {
                     if (General.Nz(cmbCateg.Value, "").ToString() != "")
                     {
+                        cmpCateg = @" ,CTG.""Denumire"" AS ""Categorie"" ";
                         strFiltru += @" AND CTG.""Denumire"" = '" + cmbCateg.Value + "'";
                         strLeg += @" LEFT JOIN ""viewCategoriePontaj"" CTG ON A.F10003 = CTG.F10003 ";
                     }
@@ -459,7 +461,9 @@ namespace WizOne.Pontaj
                         WHERE X.F10003=A.F10003
                         FOR XML PATH ('')) + ',' AS ZileGri
                         FROM (
-                        SELECT TOP 100 PERCENT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"" {zileVal}
+                        SELECT TOP 100 PERCENT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"",
+                        S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S5.F00507 AS ""Sectie"", S6.F00608 AS ""Dept"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"" {cmpCateg}
+                        {zileVal}
                         FROM
                         (SELECT F10003 {zileAs} FROM 
                         (SELECT  A.""Ziua"", A.F10003, 
@@ -495,7 +499,9 @@ namespace WizOne.Pontaj
                         WHERE X.F10003 = A.F10003
                         ) AS ""ZileGri""
                         FROM (
-                        SELECT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"" {zileVal}
+                        SELECT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS ""AngajatNume"", C.""Denumire"" AS ""Contract"", 
+                        S2.F00204 AS ""Companie"", S3.F00305 AS ""Subcompanie"", S4.F00406 AS ""Filiala"", S5.F00507 AS ""Sectie"", S6.F00608 AS ""Dept"", S7.F00709 AS ""Subdept"", S8.F00810 AS ""Birou"" {cmpCateg}
+                        {zileVal}
                         FROM
                         (SELECT * FROM 
                         (SELECT  A.""Ziua"", A.F10003, 
@@ -699,6 +705,7 @@ namespace WizOne.Pontaj
                     c.FieldName = "Ziua" + cnt;
                     c.Caption = Convert.ToDateTime(dtZi.Rows[i]["Zi"]).Day.ToString().PadLeft(2, '0') + "." + Convert.ToDateTime(dtZi.Rows[i]["Zi"]).Month.ToString().PadLeft(2, '0');
                     c.UnboundType = DevExpress.Data.UnboundColumnType.Integer;
+                    c.VisibleIndex = 30 + cnt;
 
                     c.PropertiesComboBox.DataSource = dt;
                     c.PropertiesComboBox.AllowNull = true;

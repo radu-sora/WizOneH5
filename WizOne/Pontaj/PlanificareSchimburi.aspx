@@ -184,18 +184,51 @@
                         EndCallback="function(s,e) { OnGridEndCallback(s); }"
                         BatchEditStartEditing="function(s,e) { OnGridBatchEditStartEditing(s,e) }"/>                    
                     <Columns>
-                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" FixedStyle="Left" VisibleIndex="2">
+                        <dx:GridViewDataTextColumn FieldName="F10003" Caption="Marca" ReadOnly="true" VisibleIndex="2">
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
                             <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" FixedStyle="Left" VisibleIndex="3" Width="250px">
+                        <dx:GridViewDataTextColumn FieldName="AngajatNume" Caption="Angajat" ReadOnly="true" VisibleIndex="3" Width="250px">
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
                             <SettingsHeaderFilter Mode="CheckedList" />
                         </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="Contract" Caption="Contract" ReadOnly="true" FixedStyle="Left" VisibleIndex="4" Width="250px">
+                        <dx:GridViewDataTextColumn FieldName="Contract" Caption="Contract" ReadOnly="true" VisibleIndex="4" Width="250px">
                             <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
                             <SettingsHeaderFilter Mode="CheckedList" />
-                        </dx:GridViewDataTextColumn>                            
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Companie" Caption="Companie" ReadOnly="true" VisibleIndex="4" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Subcompanie" Caption="Subcompanie" ReadOnly="true" VisibleIndex="5" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Filiala" Caption="Filiala" ReadOnly="true" VisibleIndex="6" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Sectie" Caption="Sectie" ReadOnly="true" VisibleIndex="7" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Dept" Caption="Dept" ReadOnly="true" VisibleIndex="8" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Subdept" Caption="Subdept" ReadOnly="true" VisibleIndex="9" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Birou" Caption="Birou" ReadOnly="true" VisibleIndex="10" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        <dx:GridViewDataTextColumn FieldName="Categorie" Caption="Categorie" ReadOnly="true" VisibleIndex="11" Width="250px">
+                            <Settings AllowHeaderFilter="True" AllowAutoFilter="False" SortMode="DisplayText" />
+                            <SettingsHeaderFilter Mode="CheckedList" />
+                        </dx:GridViewDataTextColumn>
+                        
                         <dx:GridViewDataTextColumn FieldName="ZileGri" Caption="ZileGri" ReadOnly="true" Visible="false" ShowInCustomizationForm="false" />
                     </Columns>
                 </dx:ASPxGridView>

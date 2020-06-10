@@ -998,7 +998,7 @@ namespace WizOne.Absente
                     //daca este absenta de tip ora 
 
                     //verificam NrMax pe cerere
-                    if (Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) < Convert.ToInt32(txtNrOre.Value))
+                    if (Convert.ToDecimal(General.Nz(drAbs["NrMax"], 999)) < Convert.ToDecimal(txtNrOre.Value))
                     {
                         //strErr += " " + Dami.TraduCuvant("Aveti voie sa cereti un numar maxim de " + Convert.ToInt32(General.Nz(drAbs["NrMax"], 999)) + " ore");
                         if (tip == 1)
@@ -1014,7 +1014,7 @@ namespace WizOne.Absente
                     string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrOre"",0)),0) AS ""OreAn"" FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
                     DataRow drAn = General.IncarcaDR(sqlAn, new object[] { Convert.ToInt32(cmbAng.Value), txtDataInc.Date.Year, Convert.ToInt32(cmbAbs.Value) });
 
-                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(General.Nz(drAn[0], 0)) >= Convert.ToInt32(drAbs["NrMaxAn"]))
+                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && (Convert.ToDecimal(General.Nz(drAn[0], 0)) + Convert.ToDecimal(txtNrOre.Value)) > Convert.ToDecimal(drAbs["NrMaxAn"]))
                     {
                         if (tip == 1)
                             MessageBox.Show(Dami.TraduCuvant("Nr total de ore depaseste nr maxim de ore cuvenite in an"), MessageBox.icoWarning);
@@ -1045,7 +1045,7 @@ namespace WizOne.Absente
                     string sqlAn = $@"SELECT COALESCE(SUM(COALESCE(""NrZile"",0)),0) AS ""ZileAn"" FROM ""Ptj_Cereri"" WHERE F10003=@1 AND {General.FunctiiData("\"DataInceput\"", "A")}=@2 AND ""IdAbsenta"" = @3 AND ""IdStare"" IN (1,2,3)";
                     DataRow drAn = General.IncarcaDR(sqlAn, new object[] { Convert.ToInt32(cmbAng.Value), txtDataInc.Date.Year, Convert.ToInt32(cmbAbs.Value) });
 
-                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && Convert.ToInt32(General.Nz(drAn[0], 0)) >= Convert.ToInt32(drAbs["NrMaxAn"]))
+                    if (drAn != null && drAbs[0] != null && drAbs["NrMaxAn"] != DBNull.Value && (Convert.ToInt32(General.Nz(drAn[0], 0)) + Convert.ToInt32(txtNrZile.Value)) > Convert.ToInt32(drAbs["NrMaxAn"]))
                     {
                         if (tip == 1)
                             MessageBox.Show(Dami.TraduCuvant("Nr de zile depaseste nr maxim de zile cuvenite in an"), MessageBox.icoWarning);

@@ -13704,35 +13704,6 @@ GO
 ALTER TABLE "Admin_NrActAd" ADD "IdRegistru" int
 GO
 
-
-
-UPDATE A
-SET A.IdTip=2
-FROM Admin_NrActAd A
-WHERE (SELECT COUNT(*) FROM Avs_Cereri B WHERE A.IdAuto=B.IdActAd) > 1
-GO
-
-UPDATE A
-SET A.IdTip=(
-CASE B.IdAtribut
-WHEN 4 THEN 3
-WHEN 32 THEN 4
-WHEN 33 THEN 5
-WHEN 30 THEN 6
-WHEN 31 THEN 7
-ELSE 2
-END)
-FROM Admin_NrActAd a
-INNER JOIN Avs_Cereri B ON A.IdAuto=B.IdActAd
-WHERE (SELECT COUNT(*) FROM Avs_Cereri B WHERE A.IdAuto=B.IdActAd) = 1
-GO
-
-UPDATE A
-SET A.IdRegistru=B.IdRegistru
-FROM Admin_NrActAd A
-INNER JOIN MP_ActAdSetari B ON B.IdTip=A.IdTip
-GO
-
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('BlocareIncetariSuspendariDeschise', '0', '0 - se permite incetarea contractelor care au suspendari deschise; 1- nu se permite', 0)
 GO
 

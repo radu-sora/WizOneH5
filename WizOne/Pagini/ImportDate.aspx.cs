@@ -1307,7 +1307,15 @@ namespace WizOne.Pagini
                                 for (int x = 0; x < lstCampuri.Length; x++)
                                 {
                                     if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "DataInceput")
-                                        dataInc = Convert.ToDateTime(lstCampuri[x].Split('=')[1].Trim());
+                                    {
+                                        string data = lstCampuri[x].Split('=')[1].Trim();
+                                        if (Constante.tipBD == 1)
+                                            data = data.Replace("CONVERT(DATETIME#&* '", "").Replace("'#&* 103)", "");
+                                        else
+                                            data = data.Replace("TO_DATE('", "").Replace("'#&* dd/mm/yyyy)", "");
+
+                                        dataInc = Convert.ToDateTime(data);
+                                    }
                                     if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "Inlocuitor" && lstCampuri[x].Split('=')[1].Trim() != "NULL")
                                         inloc = Convert.ToInt32(lstCampuri[x].Split('=')[1].Trim());
                                 }

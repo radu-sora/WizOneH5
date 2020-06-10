@@ -338,6 +338,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Absente\AnulareCO.aspx" />
     <Content Include="Absente\Cereri.aspx" />
     <Content Include="Absente\CereriAutomate.aspx" />
     <Content Include="Absente\IstoricExtins.aspx" />
@@ -1022,6 +1023,13 @@
     <Content Include="Web_adfs.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Absente\AnulareCO.aspx.cs">
+      <DependentUpon>AnulareCO.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Absente\AnulareCO.aspx.designer.cs">
+      <DependentUpon>AnulareCO.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Absente\Cereri.aspx.cs">
       <DependentUpon>Cereri.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -1836,18 +1836,18 @@ namespace WizOne.Module
 
                     gridOut = ent["Out" + i];
 
-                    if (gridIn != null && gridOut != null)
+                    if (Convert.ToDateTime(gridIn) < firstInPaid)
+                        gridIn = firstInPaid;
+
+                    if (Convert.ToDateTime(gridOut) > lastOutPaid)
+                        gridOut = lastOutPaid;
+
+                    if (gridIn != null && gridOut != null && Convert.ToDateTime(gridIn) < Convert.ToDateTime(gridOut))
                     {
                         try
                         {
                             if (tip == 1)
                             {
-                                if (prima)
-                                {
-                                    gridIn = firstInPaid;
-                                    prima = false;
-                                }
-
                                 dif = CalculTimp(Convert.ToDateTime(OraInceput), Convert.ToDateTime(OraSfarsit), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(gridIn), Convert.ToDateTime(gridOut), rap);
 
                                 if (dif > 0)
@@ -1868,13 +1868,6 @@ namespace WizOne.Module
                         {
                         }
                     }
-                }
-
-                if (tip == 1 && ultIn != null && ultOut != null)
-                {
-                    //utilizam lastoutpaid ca ultima iesire
-                    dif = CalculTimp(Convert.ToDateTime(OraInceput), Convert.ToDateTime(OraSfarsit), Convert.ToDateTime(ent["Ziua"]), Convert.ToDateTime(ultIn), Convert.ToDateTime(ultOut), rap);
-                    rez = total - ultima + dif;
                 }
             }
             catch (Exception ex)

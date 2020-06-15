@@ -1388,13 +1388,14 @@ namespace WizOne.Pagini
                                     if (lstCampuri[x].Split('=')[0].Replace("\"", "").Trim() == "IdCircuit" && lstCampuri[x].Split('=')[1].Trim() != "NULL")
                                         idCir = Convert.ToInt32(lstCampuri[x].Split('=')[1].Trim());
                                 }
+                                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) FROM ""Ptj_Cereri"") ";
+                                DataTable dtId = General.IncarcaDT(sqlIdCerere, null);
                                 DataTable dtAbs = General.IncarcaDT(General.SelectAbsente(marcaInit, dataInc), null);
-                                General.SelectCereriIstoric(Convert.ToInt32(marcaInit), inloc, idCir < 0 ? Convert.ToInt32(dtAbs.Rows[0]["IdCircuit"].ToString()) : idCir, Convert.ToInt32(General.Nz(dtAbs.Rows[0]["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor);
+                                General.SelectCereriIstoric(Convert.ToInt32(marcaInit), inloc, idCir < 0 ? Convert.ToInt32(dtAbs.Rows[0]["IdCircuit"].ToString()) : idCir, Convert.ToInt32(General.Nz(dtAbs.Rows[0]["EstePlanificare"], 0)), out sqlIst, out trimiteLaInlocuitor, Convert.ToInt32(dtId.Rows[0][0].ToString()));
                                 General.ExecutaNonQuery(sqlIst, null);
 
                                 string strTop = "";
-                                if (Constante.tipBD == 1) strTop = "TOP 1";
-                                string sqlIdCerere = @"(SELECT COALESCE(MAX(COALESCE(""Id"",0)),0) FROM ""Ptj_Cereri"") ";
+                                if (Constante.tipBD == 1) strTop = "TOP 1";   
                                 string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + sqlIdCerere + ")";
                                 string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
                                 string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";

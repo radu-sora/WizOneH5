@@ -22,6 +22,33 @@ namespace WizOne.Personal
     {
         //int F10003 = -99;
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dt = General.IncarcaDT("SELECT * FROM \"MP_NotaLichidare_Stari\"", null);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    ASPxListBox nestedListBox = checkComboBoxStare.FindControl("listBox") as ASPxListBox;
+                    nestedListBox.Items.Clear();
+                    nestedListBox.Items.Add("(Selectie toate)", 0);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        nestedListBox.Items.Add(dt.Rows[i]["Denumire"].ToString(), Convert.ToInt32(dt.Rows[i]["Id"].ToString()));
+                        if (!IsPostBack)
+                            if (Convert.ToInt32(dt.Rows[i]["Id"].ToString()) == 1)
+                                nestedListBox.Items[nestedListBox.Items.Count - 1].Selected = true;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+            }
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -32,8 +59,14 @@ namespace WizOne.Personal
                 GridViewDataComboBoxColumn col = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = table;
 
+                col = (grDateDet.Columns["IdStare"] as GridViewDataComboBoxColumn);
+                col.PropertiesComboBox.DataSource = table;
+
                 table = General.IncarcaDT(SelectAngajati(), null);
                 col = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
+                col.PropertiesComboBox.DataSource = table;
+
+                col = (grDateDet.Columns["F10003"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = table;
 
                 #region Traducere
@@ -41,20 +74,7 @@ namespace WizOne.Personal
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 #endregion
 
-                DataTable dt = General.IncarcaDT("SELECT * FROM \"MP_NotaLichidare_Stari\"", null);
-                if (dt != null && dt.Rows.Count > 0)
-                {   
-                    ASPxListBox nestedListBox = checkComboBoxStare.FindControl("listBox") as ASPxListBox;
-                    nestedListBox.Items.Clear();
-                    nestedListBox.Items.Add("(Selectie toate)", 0);
-                    for (int i = 0; i < dt.Rows.Count; i++)
-                    {
-                        nestedListBox.Items.Add(dt.Rows[i]["Denumire"].ToString(), Convert.ToInt32(dt.Rows[i]["Id"].ToString()));
-                        if (!IsPostBack)
-                            if (Convert.ToInt32(dt.Rows[i]["Id"].ToString()) == 1)
-                                nestedListBox.Items[nestedListBox.Items.Count - 1].Value = 1;
-                    }
-                }
+
 
                 DataTable dtDat = new DataTable();
                 dtDat.Columns.Add("Id", typeof(int));
@@ -62,8 +82,11 @@ namespace WizOne.Personal
 
                 dtDat.Rows.Add(1, "Are datorii");
                 dtDat.Rows.Add(2, "Nu are datorii");
-                cmbStareDatorii.DataSource = dtDat;
-                cmbStareDatorii.DataBind();
+                //cmbStareDatorii.DataSource = dtDat;
+                //cmbStareDatorii.DataBind();
+
+                GridViewDataComboBoxColumn colDat = (grDateDet.Columns["Datorii"] as GridViewDataComboBoxColumn);
+                colDat.PropertiesComboBox.DataSource = dtDat;
 
                 DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
                 cmbAng.DataSource = dtAng;
@@ -85,8 +108,8 @@ namespace WizOne.Personal
                                 nestedListBox.Items[i].Selected = true;
                         }
                         grDateDet.ClientVisible = false;
-                        lblStareDatorii.ClientVisible = false;
-                        cmbStareDatorii.ClientVisible = false;
+                        //lblStareDatorii.ClientVisible = false;
+                        //cmbStareDatorii.ClientVisible = false;
                     }
                     else
                     {
@@ -103,7 +126,7 @@ namespace WizOne.Personal
                             sir += ";";
                     }
                     Session["NL_Stare"] = sir;
-                    cmbStareDatorii.SelectedIndex = 1;
+                    //cmbStareDatorii.SelectedIndex = 1;
                     IncarcaGrid();
                     IncarcaGridDet();
 
@@ -113,8 +136,8 @@ namespace WizOne.Personal
                     if (Session["NL_HR"] != null && Session["NL_HR"].ToString() == "1")
                     {                        
                         grDateDet.ClientVisible = false;
-                        lblStareDatorii.ClientVisible = false;
-                        cmbStareDatorii.ClientVisible = false;
+                        //lblStareDatorii.ClientVisible = false;
+                        //cmbStareDatorii.ClientVisible = false;
                     }
                     else
                     {
@@ -184,8 +207,8 @@ namespace WizOne.Personal
                 else
                     filtru += " AND F10003 IN (SELECT F10003 FROM (" + SelectAngajati() + ") a)";
 
-                if (cmbStareDatorii.Value != null)
-                    filtru += " AND (\"Datorii\" " + (Convert.ToInt32(cmbStareDatorii.Value) == 1 ? " <> 0 AND \"Datorii\" IS NOT NULL)" : " = 0 OR \"Datorii\" IS NULL)");
+                //if (cmbStareDatorii.Value != null)
+                //    filtru += " AND (\"Datorii\" " + (Convert.ToInt32(cmbStareDatorii.Value) == 1 ? " <> 0 AND \"Datorii\" IS NOT NULL)" : " = 0 OR \"Datorii\" IS NULL)");
 
                 if (checkComboBoxStare.Value != null) 
                     filtru += " AND \"IdStare\" IN (" + FiltruTipStari(checkComboBoxStare.Value.ToString().Replace(";", ",")).Replace(";", ",").Substring(0, FiltruTipStari(checkComboBoxStare.Value.ToString()).Length - 1) + ")";
@@ -374,27 +397,35 @@ namespace WizOne.Personal
 
                 DataTable dt = Session["NL_Grid"] as DataTable;
 
-                ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
-                object[] keys = new object[] { upd.Keys[0] };
 
-                DataRow row = dt.Rows.Find(keys);
-                if (row == null) return;
-
-
-                foreach (DataColumn col in dt.Columns)
+                for (int i = 0; i < e.UpdateValues.Count; i++)
                 {
-                    if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
+                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow row = dt.Rows.Find(keys);
+                    if (row == null) continue;
+
+                    foreach (DataColumn col in dt.Columns)
                     {
-                        row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                        if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
+                        {
+                            row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                        }
+
+                        if (col.ColumnName == "USER_NO")
+                            row[col.ColumnName] = Session["UserId"].ToString();
+                        if (col.ColumnName == "TIME")
+                            row[col.ColumnName] = DateTime.Now;
 
                     }
 
-                    if (col.ColumnName == "USER_NO")
-                        row[col.ColumnName] = Session["UserId"].ToString();
-                    if (col.ColumnName == "TIME")
-                        row[col.ColumnName] = DateTime.Now;
+                }   
 
-                }
+                e.Handled = true;
 
                 Session["NL_Grid"] = dt;
                 grDate.DataSource = dt;
@@ -415,27 +446,33 @@ namespace WizOne.Personal
 
                 DataTable dt = Session["NL_GridDet"] as DataTable;
 
-                ASPxDataUpdateValues upd = e.UpdateValues[0] as ASPxDataUpdateValues;
-                object[] keys = new object[] { upd.Keys[0] };
-
-                DataRow row = dt.Rows.Find(keys);
-                if (row == null) return;
-
-
-                foreach (DataColumn col in dt.Columns)
+                for (int i = 0; i < e.UpdateValues.Count; i++)
                 {
-                    if (!col.AutoIncrement && grDateDet.Columns[col.ColumnName] != null && grDateDet.Columns[col.ColumnName].Visible)
+                    ASPxDataUpdateValues upd = e.UpdateValues[i] as ASPxDataUpdateValues;
+
+                    object[] keys = new object[upd.Keys.Count];
+                    for (int x = 0; x < upd.Keys.Count; x++)
+                    { keys[x] = upd.Keys[x]; }
+
+                    DataRow row = dt.Rows.Find(keys);
+                    if (row == null) continue;
+
+                    foreach (DataColumn col in dt.Columns)
                     {
-                        row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                        if (!col.AutoIncrement && grDateDet.Columns[col.ColumnName] != null && grDateDet.Columns[col.ColumnName].Visible)
+                        {
+                            row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                        }
+
+                        if (col.ColumnName == "USER_NO")
+                            row[col.ColumnName] = Session["UserId"].ToString();
+                        if (col.ColumnName == "TIME")
+                            row[col.ColumnName] = DateTime.Now;
 
                     }
 
-                    if (col.ColumnName == "USER_NO")
-                        row[col.ColumnName] = Session["UserId"].ToString();
-                    if (col.ColumnName == "TIME")
-                        row[col.ColumnName] = DateTime.Now;
-
                 }
+                e.Handled = true;
 
                 Session["NL_GridDet"] = dt;
                 grDateDet.DataSource = dt;
@@ -482,8 +519,8 @@ namespace WizOne.Personal
         {      
             cmbAng.Value = null;
             cmbAng.SelectedIndex = -1;
-            cmbStareDatorii.Value = null;
-            cmbStareDatorii.SelectedIndex = -1;
+            //cmbStareDatorii.Value = null;
+            //cmbStareDatorii.SelectedIndex = -1;
         }
 
 
@@ -537,7 +574,12 @@ namespace WizOne.Personal
             return strSql;
         }
 
-
+   					//<td style = "padding-right:15px !important;" >
+        //                < dx:ASPxLabel id = "lblStareDatorii" runat="server" style="display:inline-block;" Text="Stare datorii"></dx:ASPxLabel>
+        //                <dx:ASPxComboBox ID = "cmbStareDatorii" runat="server" ClientInstanceName="cmbStareDatorii" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
+        //                    TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
+        //                </dx:ASPxComboBox>
+        //            </td>
 
 
 

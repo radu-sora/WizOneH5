@@ -33,6 +33,15 @@ namespace WizOne.Personal
         protected global::DevExpress.Web.ASPxButton btnRap;
 
         /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnSave;
+
+        /// <summary>
         /// btnExit control.
         /// </summary>
         /// <remarks>
@@ -85,24 +94,6 @@ namespace WizOne.Personal
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxDropDownEdit checkComboBoxStare;
-
-        /// <summary>
-        /// lblStareDatorii control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxLabel lblStareDatorii;
-
-        /// <summary>
-        /// cmbStareDatorii control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxComboBox cmbStareDatorii;
 
         /// <summary>
         /// btnFiltru control.

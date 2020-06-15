@@ -13861,3 +13861,9 @@ GO
 
 INSERT INTO "tblParametrii"("Nume", "Valoare", "Explicatie", "IdModul") VALUES('ModCalculZileCO_Proportional_Handicap', '0', '1 - zilele de CO suplimentare se calculeaza proportional cu data la care inceteaza starea de invaliditate; 0- zilele CO suplimentare se calculeaza la nivel de an', 0)
 GO
+
+    ALTER TABLE Ptj_tblZileCO ADD Anulate INT 
+	GO
+
+    ALTER TABLE TemplateCampuri ADD Tabela NVARCHAR(50) 
+	GO

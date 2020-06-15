@@ -30,11 +30,7 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnAnulare" ClientInstanceName="btnAnulare" ClientIDMode="Static" runat="server" Text="Anulare" AutoPostBack="false" oncontextMenu="ctx(this,event)" >
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        pnlCtl.PerformCallback('btnAnulare');
-                    }" />
+                <dx:ASPxButton ID="btnAnulare" ClientInstanceName="btnAnulare" ClientIDMode="Static" runat="server" Text="Anulare" AutoPostBack="true" OnClick="btnAnulare_Click" oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/sterge.png"></Image>
                 </dx:ASPxButton>  
                 <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
@@ -67,22 +63,22 @@
                 </tr>
             </table>
             <br />
-            <table style="width:100%;">
+            <table style="width:57%;">
                 <tr>
                     <td >
                         <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  >
-                            <SettingsBehavior AllowFocusedRow="true"  />
+                            <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                             <Settings ShowFilterRow="true" ShowColumnHeaders="true" />  
                             <SettingsEditing Mode="Inline" />  
                             <ClientSideEvents  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />           
                             <Columns>  
                                 <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" FixedStyle="Left" SelectAllCheckboxMode="AllPages" />
-                                 <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" >           
+                                 <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="250px" >           
                                      <Settings SortMode="DisplayText" />
                                     <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown">                                        
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>        
-						        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="100px"  />
+						        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="150px"  />
                                 <dx:GridViewDataTextColumn FieldName="ZileCO" Name="ZileCO" Caption="Zile CO (total)" ReadOnly="true" Width="100px"  />
                                 <dx:GridViewDataTextColumn FieldName="ZileCOAnC" Name="ZileCOAnC" Caption="Zile CO (an curent)" ReadOnly="true" Width="100px"  />
                                 <dx:GridViewDataTextColumn FieldName="ZileCOAnAnt" Name="ZileCOAnAnt" Caption="Zile CO (an anterior)" ReadOnly="true" Width="100px"  />

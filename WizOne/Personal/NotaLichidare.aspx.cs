@@ -495,7 +495,7 @@ namespace WizOne.Personal
             {
                 string op = "+";
                 if (Constante.tipBD == 2) op = "||";
-
+                
                 strSql = $@"SELECT  A.F10003, A.F10008 {op} ' ' {op} A.F10009 AS ""NumeComplet"" 
                           FROM (
                         SELECT A.F10003
@@ -507,11 +507,13 @@ namespace WizOne.Personal
                         INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
                         INNER JOIN ""MP_NotaLichidare_Circuit"" C ON B.""IdSuper"" = -1 * c.""Supervizor""
                         LEFT JOIN ""tblSupervizori"" D ON D.""Id"" = B.""IdSuper""
-                        WHERE B.""IdUser""={Session["UserId"]}
+                        WHERE B.""IdUser""={Session["UserId"]} AND B.""DataInceput"" <= {General.ToDataUniv(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)} AND {General.ToDataUniv(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)} <= B.""DataSfarsit""
                         UNION
                         SELECT A.F10003
                         FROM F100 A
+                        INNER JOIN ""F100Supervizori"" B ON A.F10003=B.F10003
                         INNER JOIN ""MP_NotaLichidare_Circuit"" C ON C.""Supervizor""={Session["UserId"]}
+                        WHERE B.""IdUser""={Session["UserId"]} AND B.""DataInceput"" <= {General.ToDataUniv(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)} AND {General.ToDataUniv(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)} <= B.""DataSfarsit""
                         ) B
                         INNER JOIN F100 A ON A.F10003=B.F10003
                         LEFT JOIN F002 C ON A.F10002 = C.F00202

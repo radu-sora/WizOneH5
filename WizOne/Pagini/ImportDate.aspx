@@ -218,6 +218,7 @@
                                             </PropertiesComboBox>
                                         </dx:GridViewDataComboBoxColumn> 
                                         <dx:GridViewDataCheckColumn FieldName="Obligatoriu" Name="Obligatoriu" Caption="Cheie unica"  Width="50px"  />
+                                        <dx:GridViewDataCheckColumn FieldName="Tabela" Name="Tabela" Caption="Tabela"  Width="50px" Visible="false"  />
                                         <dx:GridViewDataCheckColumn FieldName="OmiteLaActualizare" Name="OmiteLaActualizare" Caption="Omite la actualizare"  Width="50px"  />
                                         <dx:GridViewDataComboBoxColumn FieldName="ColoanaFisier" Name="ColoanaFisier" Caption="Coloana din fisier" Width="150px" >
                                             <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.String" DropDownStyle="DropDown" >

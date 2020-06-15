@@ -14251,6 +14251,8 @@ END;
 
 
 CREATE TABLE "MP_NotaLichidare_Detalii"(
+	F10003 NUMBER(9),
+	"IdStare" NUMBER(9),
 	"IdNotaLichidare" NUMBER(9),
 	"Rol" varchar2(250),
 	"Valoare" CLOB,

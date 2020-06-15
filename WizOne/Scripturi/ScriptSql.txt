@@ -13529,6 +13529,8 @@ GO
 
 
 CREATE TABLE MP_NotaLichidare_Detalii(	
+	F10003 [int],
+	IdStare [int],
 	IdNotaLichidare [int],
 	Rol [nvarchar](250),
 	Valoare [nvarchar](max),

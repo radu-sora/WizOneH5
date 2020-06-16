@@ -69,6 +69,24 @@ namespace WizOne.Absente
         protected global::DevExpress.Web.ASPxDateEdit txtAnLuna;
 
         /// <summary>
+        /// lblStare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblStare;
+
+        /// <summary>
+        /// checkComboBoxStare control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxDropDownEdit checkComboBoxStare;
+
+        /// <summary>
         /// lblPer control.
         /// </summary>
         /// <remarks>

@@ -1075,9 +1075,9 @@ namespace WizOne.Pagini
                     campNonObligAct2 = campNonObligAct2.Replace("GLOBAL.IDUSER", Session["UserId"].ToString());
                     valoare = valoare.Replace("GLOBAL.IDUSER", Session["UserId"].ToString());
 
-                    if (numeTabela == "F100")
-                        if (campOblig.Length <= 0 || !campOblig.Contains("F10003"))
-                            campOblig += ", F10003 = " + marcaInit;
+                    //if (numeTabela == "F100")
+                    //    if (campOblig.Length <= 0 || !campOblig.Contains("F10003"))
+                    //        campOblig += ", F10003 = " + marcaInit;
 
                     DataTable dtTest = General.IncarcaDT("SELECT COUNT(*) FROM \"" + numeTabela + "\" WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ","), null);
                     sql = "";
@@ -1397,19 +1397,30 @@ namespace WizOne.Pagini
                                 string strTop = "";
                                 if (Constante.tipBD == 1) strTop = "TOP 1";   
                                 string sqlTotal = @"(SELECT COUNT(*) FROM ""Ptj_CereriIstoric"" WHERE ""IdCerere""=" + sqlIdCerere + ")";
-                                string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
-                                string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
-                                string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC) ";
+                                string sqlIdStare = $@"(SELECT {strTop} ""IdStare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC)";
+                                string sqlPozitie = $@"(SELECT {strTop} ""Pozitie"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC)";
+                                string sqlCuloare = $@"(SELECT {strTop} ""Culoare"" FROM ""Ptj_CereriIstoric"" WHERE ""Aprobat""=1 AND ""IdCerere""={sqlIdCerere} ORDER BY ""Pozitie"" DESC)";
 
                                 if (Constante.tipBD == 2)
                                 {
                                     sqlIdStare = $@"(SELECT * FROM ({sqlIdStare}) WHERE ROWNUM=1)";
                                     sqlPozitie = $@"(SELECT * FROM ({sqlPozitie}) WHERE ROWNUM=1)";
                                     sqlCuloare = $@"(SELECT * FROM ({sqlCuloare}) WHERE ROWNUM=1)";
-                             }
+                                }
 
-                                sql = "UPDATE \"Ptj_Cereri\" SET \"IdStare\" =  " + sqlIdStare + ", \"Culoare\" = " + sqlCuloare + ", \"TotalSuperCircuit\" = " + sqlTotal + ", \"Pozitie\" = " + sqlPozitie + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
-                                General.ExecutaNonQuery(sql, null);
+                                DataTable dtVerif = General.IncarcaDT(sqlPozitie.Substring(1, sqlPozitie.Length - 2), null);
+                                if (dtVerif == null || dtVerif.Rows.Count <= 0 || dtVerif.Rows[0][0] == null || Convert.ToInt32(dtVerif.Rows[0][0].ToString()) < 1)
+                                {
+                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_CereriIstoric\" WHERE \"IdCerere\" = " + sqlIdCerere, null);
+                                    General.ExecutaNonQuery("DELETE FROM \"Ptj_Cereri\" WHERE \"Id\" = " + sqlIdCerere, null);                                   
+                                    dtViz.Rows[j - 2]["Actiune"] = "";
+                                    dtViz.Rows[j - 2]["MesajEroare"] = "Circuitul nu este valid!";
+                                }
+                                else
+                                {
+                                    sql = "UPDATE \"Ptj_Cereri\" SET \"IdStare\" =  " + sqlIdStare + ", \"Culoare\" = " + sqlCuloare + ", \"TotalSuperCircuit\" = " + sqlTotal + ", \"Pozitie\" = " + sqlPozitie + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
+                                    General.ExecutaNonQuery(sql, null);
+                                }
 
                             }
                             break;

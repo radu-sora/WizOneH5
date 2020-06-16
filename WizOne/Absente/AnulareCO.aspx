@@ -17,7 +17,51 @@
             }
         }
 
+        var textSeparator = ",";
+        function OnListBoxSelectionChanged(listBox, args) {
+            if (args.index == 0)
+                args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+            UpdateSelectAllItemState();
+            UpdateText();
 
+            pnlCtl.PerformCallback('cmbStare');
+        }
+        function UpdateSelectAllItemState() {
+            IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
+        }
+        function IsAllSelected() {
+            var selectedDataItemCount = checkListBox.GetItemCount() - (checkListBox.GetItem(0).selected ? 0 : 1);
+            return checkListBox.GetSelectedItems().length == selectedDataItemCount;
+        }
+        function UpdateText() {
+            var selectedItems = checkListBox.GetSelectedItems();
+            checkComboBoxStare.SetText(GetSelectedItemsText(selectedItems));
+        }
+        function SynchronizeListBoxValues(dropDown, args) {
+            checkListBox.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = GetValuesByTexts(texts);
+            checkListBox.SelectValues(values);
+            UpdateSelectAllItemState();
+            UpdateText();
+        }
+        function GetSelectedItemsText(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                if (items[i].index != 0)
+                    texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function GetValuesByTexts(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
+        }
 
     </script>
 
@@ -54,9 +98,42 @@
                             <CalendarProperties FirstDayOfWeek="Monday" />
                         </dx:ASPxDateEdit>
                     </td>
+			        <td align="left">		
+                        <label id="lblStare" runat="server" style="display:inline-block;">Stare</label>	
+                        <dx:ASPxDropDownEdit ClientInstanceName="checkComboBoxStare" ID="checkComboBoxStare" Width="210px" runat="server" AnimationType="None">
+                            <DropDownWindowStyle BackColor="#EDEDED" />
+                            <DropDownWindowTemplate>
+                                <dx:ASPxListBox Width="100%" ID="listBox" ClientInstanceName="checkListBox" SelectionMode="CheckColumn" runat="server" Height="170px">
+                                    <Border BorderStyle="None" />
+                                   <Items>
+                                        <dx:ListEditItem Text="(Selectie toate)" />
+                                        <dx:ListEditItem Text="Activ" Value="0" />
+                                        <dx:ListEditItem Text="Activ detasat" Value="2" />
+                                        <dx:ListEditItem Text="Activ suspendat" Value="3" />
+                                        <dx:ListEditItem Text="Inactiv" Value="1" />     
+                                        <dx:ListEditItem Text="Angajat in avans" Value="999" />
+                                        <dx:ListEditItem Text="Candidat" Value="900" />
+                                    </Items>
+                                    <BorderBottom BorderStyle="Solid" BorderWidth="1px" BorderColor="#DCDCDC" />             
+                                    <ClientSideEvents SelectedIndexChanged="OnListBoxSelectionChanged" />
+                                </dx:ASPxListBox>
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            <dx:ASPxButton ID="ASPxButton1" AutoPostBack="False" runat="server" Text="Inchide" style="float: right">
+                                                <ClientSideEvents Click="function(s, e){ checkComboBoxStare.HideDropDown(); }" />
+                                            </dx:ASPxButton>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </DropDownWindowTemplate>
+                            <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />
+                        </dx:ASPxDropDownEdit>
+
+                    </td>
                     <td style="padding-right:15px !important;">
                         <dx:ASPxLabel  ID="lblPer" runat="server"  style="display:inline-block;"  Text="Perioada"></dx:ASPxLabel>
-                        <dx:ASPxComboBox ID="cmbPerioada" runat="server" ClientInstanceName="cmbPerioada" ClientIDMode="Static" Width="100px" ValueField="Id" DropDownWidth="100" 
+                        <dx:ASPxComboBox ID="cmbPerioada" runat="server" ClientInstanceName="cmbPerioada" ClientIDMode="Static" Width="200px" ValueField="Id" DropDownWidth="200" 
                             TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
                         </dx:ASPxComboBox>
                     </td>                                      	
@@ -75,7 +152,11 @@
                                 <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" FixedStyle="Left" SelectAllCheckboxMode="AllPages" />
                                  <dx:GridViewDataComboBoxColumn FieldName="F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="250px" >           
                                      <Settings SortMode="DisplayText" />
-                                    <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown">                                        
+                                    <PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown">   
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
+                                            <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
+                                        </Columns>                                        
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>        
 						        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="150px"  />

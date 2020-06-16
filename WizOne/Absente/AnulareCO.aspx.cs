@@ -109,9 +109,15 @@ namespace WizOne.Absente
                 string ctrl = e.Parameter.Split(';')[0];
                 switch (ctrl)
                 {
-                    case "txtAnLuna":
+                    case "txtAnLuna":                    
                         IncarcaGrid();
-                        break;               
+                        break;
+                    case "cmbStare":
+                        string filtru = "";
+                        if (checkComboBoxStare.Value != null) filtru += FiltruTipStari(checkComboBoxStare.Value.ToString()).Substring(0, FiltruTipStari(checkComboBoxStare.Value.ToString()).Length - 1);
+
+                        grDate.FilterExpression = filtru ;
+                        break;
                 } 
             }
             catch (Exception ex)
@@ -152,19 +158,19 @@ namespace WizOne.Absente
                 string data = General.ToDataUniv(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, 99);
                 string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";     
                 if (Constante.tipBD == 2)                
-                    idAuto = "ROWNUM";  
+                    idAuto = "ROWNUM";
 
                 string sql = "select " + idAuto + " as \"IdAuto\", a.F10003, CASE WHEN d.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN d.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN d.F10025 = 0 THEN "
                                 + "(CASE WHEN(d.F100925 <> 0 AND F100922 IS NOT NULL AND F100923 IS NOT NULL AND F100923 IS NOT NULL AND F100922 <= {0} AND {0} <= F100923 AND {0} <= F100924) "
                                 + "THEN 'Activ suspendat' ELSE CASE WHEN(d.F100915 <= {0} AND {0} <= d.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END AS \"Stare\", "
-                                + func + "(a.\"Cuvenite\", 0) as \"ZileCO\", " + func + "(a.\"Cuvenite\", 0) - " + func + "(a.\"SoldAnterior\", 0) as \"ZileCOAnC\", "
-                                + "case when " + func + "(b.\"Cuvenite\", 0) - " + func + "(b.\"SoldAnterior\", 0) >= " + func + "(a.\"SoldAnterior\", 0) then " + func + "(a.\"SoldAnterior\", 0) else " + func + "(b.\"Cuvenite\", 0) - " + func + "(b.\"SoldAnterior\", 0) end as \"ZileCOAnAnt\", "
-                                + "case when " + func + "(c.\"Cuvenite\", 0) - " + func + "(c.\"SoldAnterior\", 0) >= " + func + "(b.\"SoldAnterior\", 0) then " + func + "(b.\"SoldAnterior\", 0) else " + func + "(c.\"Cuvenite\", 0) - " + func + "(c.\"SoldAnterior\", 0) end as \"ZileCOAnAnt2\", "
-                                + "case when " + func + "(a.\"SoldAnterior\", 0) - " + func + "(b.\"Cuvenite\", 0) - " + func + "(b.\"SoldAnterior\", 0) - " + func + "(c.\"Cuvenite\", 0) - " + func + "(c.\"SoldAnterior\", 0) > 0 then "
-                                + func + "(a.\"SoldAnterior\", 0) - " + func + "(b.\"Cuvenite\", 0) - " + func + "(b.\"SoldAnterior\", 0) - " + func + "(c.\"Cuvenite\", 0) - " + func + "(c.\"SoldAnterior\", 0) else 0 end as \"ZileCOMaiVechi\""
+                                + " case when a.\"An\" is null then 0 else " + func + "(a.\"Cuvenite\", 0) + " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Efectuate\", 0) - " + func + "(a.\"Anulate\", 0) end as \"ZileCO\", "
+                                + " case when a.\"An\" is null then 0 else case when " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Anulate\", 0) < " + func + "(a.\"Efectuate\", 0) then " + func + "(a.\"Cuvenite\", 0) + " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Efectuate\", 0) - " + func + "(a.\"Anulate\", 0) else " + func + "(a.\"Cuvenite\", 0) end end as \"ZileCOAnC\", "  
+                                + " case when b.\"An\" is null then 0 else case when " + func + "(b.\"SoldAnterior\", 0) - " + func + "(b.\"Anulate\", 0) < " + func + "(b.\"Efectuate\", 0) then " + func + "(b.\"Cuvenite\", 0) + " + func + "(b.\"SoldAnterior\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(b.\"Anulate\", 0) else " + func + "(b.\"Cuvenite\", 0) end end as \"ZileCOAnAnt\","
+                                + " case when c.\"An\" is null then 0 else case when " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) < " + func + "(c.\"Efectuate\", 0) + " + func + "(b.\"Efectuate\", 0) then " + func + "(c.\"Cuvenite\", 0) + " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Efectuate\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(c.\"Anulate\", 0) else " + func + "(c.\"Cuvenite\", 0) end end as \"ZileCOAnAnt2\","
+                                + " case when c.\"An\" is null then 0 else case when " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) > " + func + "(c.\"Efectuate\", 0) + " + func + "(b.\"Efectuate\", 0) + " + func + "(a.\"Efectuate\", 0)  then " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) - " + func + "(c.\"Efectuate\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(a.\"Efectuate\", 0) else 0 end end as \"ZileCOMaiVechi\""
                                 + " from \"Ptj_tblZileCO\" a "
-                                + "left join \"Ptj_tblZileCO\" b on a.f10003 = b.f10003 and b.\"An\" = " + (an - 1).ToString()
-                                + "left join \"Ptj_tblZileCO\" c on a.f10003 = c.f10003  and c.\"An\" = " + (an - 2).ToString()
+                                + "left join \"Ptj_tblZileCO\" b on a.f10003 = b.f10003 and b.\"An\" = a.\"An\" - 1 " 
+                                + "left join \"Ptj_tblZileCO\" c on a.f10003 = c.f10003  and c.\"An\" = a.\"An\" - 2 "
                                 + " LEFT JOIN F100 D on a.F10003 = d.F10003 "
                                 + "where a.\"An\" = " + an;
                 sql = string.Format(sql, data);
@@ -187,8 +193,48 @@ namespace WizOne.Absente
             {
                 General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
             }
-        } 
+        }
 
+ 
+
+        public static string FiltruTipStari(string stari)
+        {
+            string val = "";
+
+            try
+            {
+                string[] param = stari.Split(',');
+                foreach (string elem in param)
+                {
+                    switch (elem.ToLower())
+                    {
+                        case "activ":
+                            val += "OR [Stare] = 'Activ' ";
+                            break;
+                        case "activ detasat":
+                            val += "OR [Stare] = 'Activ detasat' ";
+                            break;
+                        case "activ suspendat":
+                            val += "OR [Stare] = 'Activ suspendat' ";
+                            break;
+                        case "inactiv":
+                            val += "OR [Stare] = 'Inactiv' ";
+                            break;
+                        case "angajat in avans":
+                            val += "OR [Stare] = 'Angajat in avans' ";
+                            break;
+                        case "candidat":
+                            val += "OR [Stare] = 'Candidat' ";
+                            break;      
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return val.Substring(2);
+        }
 
         protected void btnFiltru_Click(object sender, EventArgs e)
         {

@@ -1086,7 +1086,7 @@ namespace WizOne.Pagini
                     {
                         sql = "UPDATE \"" + numeTabela + "\" SET " + campNonObligAct.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");                      
                         if (campNonObligAct2.Length > 0)
-                            sql1001 = "UPDATE F1001 SET " + campNonObligAct2.Substring(1).Replace("#&*", ",") + " WHERE F10003 = " + marcaInit;
+                            sql1001 = "UPDATE F1001 SET " + campNonObligAct2.Substring(1).Replace("#&*", ",") + " WHERE F10003 IN (SELECT F10003 FROM F100 WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",") + ")";
                         dtViz.Rows[j - 1]["Actiune"] = "UPDATE";                       
                     }
                     else

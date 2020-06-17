@@ -73,7 +73,9 @@ namespace WizOne.Absente
                 {
                     IncarcaGrid();
                 }
-       
+
+                grDate.SettingsPager.PageSize = 20;
+
             }
             catch (Exception ex)
             {
@@ -152,27 +154,45 @@ namespace WizOne.Absente
 
                 int an = Convert.ToDateTime(txtAnLuna.Value).Year;
 
-                string func = "ISNULL";
-                if (Constante.tipBD == 2)
-                    func = "NVL";
                 string data = General.ToDataUniv(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, 99);
                 string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";     
                 if (Constante.tipBD == 2)                
                     idAuto = "ROWNUM";
 
-                string sql = "select " + idAuto + " as \"IdAuto\", a.F10003, CASE WHEN d.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN d.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN d.F10025 = 0 THEN "
-                                + "(CASE WHEN(d.F100925 <> 0 AND F100922 IS NOT NULL AND F100923 IS NOT NULL AND F100923 IS NOT NULL AND F100922 <= {0} AND {0} <= F100923 AND {0} <= F100924) "
-                                + "THEN 'Activ suspendat' ELSE CASE WHEN(d.F100915 <= {0} AND {0} <= d.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END AS \"Stare\", "
-                                + " case when a.\"An\" is null then 0 else " + func + "(a.\"Cuvenite\", 0) + " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Efectuate\", 0) - " + func + "(a.\"Anulate\", 0) end as \"ZileCO\", "
-                                + " case when a.\"An\" is null then 0 else case when " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Anulate\", 0) < " + func + "(a.\"Efectuate\", 0) then " + func + "(a.\"Cuvenite\", 0) + " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Efectuate\", 0) - " + func + "(a.\"Anulate\", 0) else " + func + "(a.\"Cuvenite\", 0) end end as \"ZileCOAnC\", "  
-                                + " case when b.\"An\" is null then 0 else case when " + func + "(b.\"SoldAnterior\", 0) - " + func + "(b.\"Anulate\", 0) < " + func + "(b.\"Efectuate\", 0) then " + func + "(b.\"Cuvenite\", 0) + " + func + "(b.\"SoldAnterior\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(b.\"Anulate\", 0) else " + func + "(b.\"Cuvenite\", 0) end end as \"ZileCOAnAnt\","
-                                + " case when c.\"An\" is null then 0 else case when " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) < " + func + "(c.\"Efectuate\", 0) + " + func + "(b.\"Efectuate\", 0) then " + func + "(c.\"Cuvenite\", 0) + " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Efectuate\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(c.\"Anulate\", 0) else " + func + "(c.\"Cuvenite\", 0) end end as \"ZileCOAnAnt2\","
-                                + " case when c.\"An\" is null then 0 else case when " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) > " + func + "(c.\"Efectuate\", 0) + " + func + "(b.\"Efectuate\", 0) + " + func + "(a.\"Efectuate\", 0)  then " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) - " + func + "(c.\"Efectuate\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(a.\"Efectuate\", 0) else 0 end end as \"ZileCOMaiVechi\""
-                                + " from \"Ptj_tblZileCO\" a "
-                                + "left join \"Ptj_tblZileCO\" b on a.f10003 = b.f10003 and b.\"An\" = a.\"An\" - 1 " 
-                                + "left join \"Ptj_tblZileCO\" c on a.f10003 = c.f10003  and c.\"An\" = a.\"An\" - 2 "
-                                + " LEFT JOIN F100 D on a.F10003 = d.F10003 "
-                                + "where a.\"An\" = " + an;
+
+                //string sql = "select " + idAuto + " as \"IdAuto\", a.F10003, CASE WHEN d.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN d.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN d.F10025 = 0 THEN "
+                //                + "(CASE WHEN(d.F100925 <> 0 AND F100922 IS NOT NULL AND F100923 IS NOT NULL AND F100923 IS NOT NULL AND F100922 <= {0} AND {0} <= F100923 AND {0} <= F100924) "
+                //                + "THEN 'Activ suspendat' ELSE CASE WHEN(d.F100915 <= {0} AND {0} <= d.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END AS \"Stare\", "
+                //                + " case when a.\"An\" is null then 0 else " + func + "(a.\"Cuvenite\", 0) + " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Efectuate\", 0) - " + func + "(a.\"Anulate\", 0) end as \"ZileCO\", "
+                //                + " case when a.\"An\" is null then 0 else case when " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Anulate\", 0) < " + func + "(a.\"Efectuate\", 0) then " + func + "(a.\"Cuvenite\", 0) + " + func + "(a.\"SoldAnterior\", 0) - " + func + "(a.\"Efectuate\", 0) - " + func + "(a.\"Anulate\", 0) else " + func + "(a.\"Cuvenite\", 0) end end as \"ZileCOAnC\", "
+                //                + " case when b.\"An\" is null then 0 else case when " + func + "(b.\"SoldAnterior\", 0) - " + func + "(b.\"Anulate\", 0) < " + func + "(b.\"Efectuate\", 0) then " + func + "(b.\"Cuvenite\", 0) + " + func + "(b.\"SoldAnterior\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(b.\"Anulate\", 0) else " + func + "(b.\"Cuvenite\", 0) end end as \"ZileCOAnAnt\","
+                //                + " case when c.\"An\" is null then 0 else case when " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) < " + func + "(c.\"Efectuate\", 0) + " + func + "(b.\"Efectuate\", 0) then " + func + "(c.\"Cuvenite\", 0) + " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Efectuate\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(c.\"Anulate\", 0) else " + func + "(c.\"Cuvenite\", 0) end end as \"ZileCOAnAnt2\","
+                //                + " case when c.\"An\" is null then 0 else case when " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) > " + func + "(c.\"Efectuate\", 0) + " + func + "(b.\"Efectuate\", 0) + " + func + "(a.\"Efectuate\", 0)  then " + func + "(c.\"SoldAnterior\", 0) - " + func + "(c.\"Anulate\", 0) - " + func + "(c.\"Efectuate\", 0) - " + func + "(b.\"Efectuate\", 0) - " + func + "(a.\"Efectuate\", 0) else 0 end end as \"ZileCOMaiVechi\""
+                //                + " from \"Ptj_tblZileCO\" a "
+                //                + "left join \"Ptj_tblZileCO\" b on a.f10003 = b.f10003 and b.\"An\" = a.\"An\" - 1 "
+                //                + "left join \"Ptj_tblZileCO\" c on a.f10003 = c.f10003  and c.\"An\" = a.\"An\" - 2 "
+                //                + " LEFT JOIN F100 D on a.F10003 = d.F10003 "
+                //                + "where a.\"An\" = " + an;
+
+                string sql = " with \"Ptj_Detaliat\" as "
+                             + "(select ptj.f10003, ptj.\"An\", coalesce(ptj_an.\"Ramase\", 0)  limita, "
+                             + " coalesce(ptj.\"Cuvenite\", 0) as \"Cuvenite\", sum(coalesce(ptj.\"Cuvenite\", 0)) over(partition by ptj.f10003 order by ptj.\"An\" desc) suma "
+                            + " from (select * from \"Ptj_tblZileCO\" where \"An\" <= " + an + ") ptj "
+                            + " left join (select * from \"SituatieZileAbsente\" where \"An\" = " + an + ") Ptj_An on ptj.f10003 = ptj_An.f10003), "
+                            + " Ptj_Raport as (select f10003, limita, \"An\", case when suma <= limita then \"Cuvenite\" when suma-\"Cuvenite\" >= limita then 0 else limita - suma + \"Cuvenite\"   end as Sold_An from \"Ptj_Detaliat\") "
+
+                            + "select " + idAuto + " as \"IdAuto\", F100.F10003, CASE WHEN F100.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN F100.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN F100.F10025 = 0 THEN "
+                                + "(CASE WHEN(F100.F100925 <> 0 AND F100922 IS NOT NULL AND F100923 IS NOT NULL AND F100923 IS NOT NULL AND F100922 <= {0} AND {0} <= F100923 AND {0} <= F100924) "
+                                + "THEN 'Activ suspendat' ELSE CASE WHEN(F100.F100915 <= {0} AND {0} <= F100.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END AS \"Stare\", "
+
+                                + " coalesce(rap0.limita, 0) as \"ZileCO\", "
+                               + "  coalesce(rap0.Sold_An, 0) \"ZileCOAnC\", coalesce(rap1.Sold_An, 0) \"ZileCOAnAnt\", coalesce(rap2.Sold_An, 0) \"ZileCOAnAnt2\", coalesce(rap3.Sold_An, 0) \"ZileCOMaiVechi\" "
+                               + "      from f100  left join(select * from ptj_raport where \"An\" = " + an + ") rap0 on f100.f10003 = rap0.f10003 "
+                               + " left join (select * from ptj_raport where \"An\"= " + an + " - 1) rap1 on f100.f10003 = rap1.f10003 "
+                               + " left join (select * from ptj_raport where \"An\"= " + an + " - 2) rap2 on f100.f10003 = rap2.f10003 "
+                               + " left join (select f10003, sum(coalesce(sold_an,0)) sold_an from ptj_raport where \"An\" <= " + an + " - 3  group by f10003) rap3 on f100.f10003 = rap3.f10003 "
+                               + " WHERE coalesce(rap0.limita, 0) > 0";
+
                 sql = string.Format(sql, data);
                 DataTable dt = General.IncarcaDT(sql, null);
                 grDate.KeyFieldName = "IdAuto";

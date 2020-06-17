@@ -1104,7 +1104,7 @@ namespace WizOne.Pagini
                             General.SalveazaDate(ds.Tables[1], "F100");
                             General.SalveazaDate(ds.Tables[2], "F1001");
 
-                            sql = "UPDATE \"" + numeTabela + "\" SET " + campNonObligAct.Substring(1).Replace("#&*", ",") + " WHERE " + campOblig.Substring(1).Replace(",", " AND ").Replace("#&*", ",");
+                            sql = "UPDATE \"" + numeTabela + "\" SET " + campOblig.Substring(1).Replace("#&*", ",") + ", " + campNonObligAct.Substring(1).Replace("#&*", ",") + " WHERE F10003 = " + marcaInit;
                             if (campNonObligAct2.Length > 0)
                                 sql1001 = "UPDATE F1001 SET " + campNonObligAct2.Substring(1).Replace("#&*", ",") + " WHERE F10003 = " + marcaInit;
                         }

@@ -14255,6 +14255,7 @@ CREATE TABLE "MP_NotaLichidare_Detalii"(
 	"IdStare" NUMBER(9),
 	"IdNotaLichidare" NUMBER(9),
 	"Rol" varchar2(250),
+	"Supervizor" NUMBER(9),
 	"Valoare" CLOB,
   "Datorii" NUMBER(9),
   "Comentarii" varchar2(250),

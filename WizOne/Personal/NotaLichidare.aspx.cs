@@ -15,6 +15,7 @@ using System.Data.OleDb;
 using Oracle.ManagedDataAccess.Client;
 using DevExpress.Utils.DPI;
 using DevExpress.Web.Data;
+using DevExpress.Web.Internal;
 
 namespace WizOne.Personal
 {
@@ -22,10 +23,41 @@ namespace WizOne.Personal
     {
         //int F10003 = -99;
 
+        //tip = 1       Meniu HR
+        //tip = 2       Meniu manager
+        public int tip = 1;
+
         protected void Page_Init(object sender, EventArgs e)
         {
             try
             {
+                tip = Convert.ToInt32(General.Nz(Request["tip"], 1));
+
+
+                if (!IsPostBack)
+                {
+         
+                    if (tip == 1)
+                    {
+                        Session["NL_HR"] = "1";
+                        ASPxListBox nestedListBox = checkComboBoxStare.FindControl("listBox") as ASPxListBox;
+                        for (int i = 0; i < nestedListBox.Items.Count; i++)
+                        {
+                            if (Convert.ToInt32(nestedListBox.Items[i].Value) == 1)
+                                nestedListBox.Items[i].Selected = true;
+                        }
+                        grDateDet.ClientVisible = false;
+                        //lblStareDatorii.ClientVisible = false;
+                        //cmbStareDatorii.ClientVisible = false;
+                    }
+                    else
+                    {
+                        btnRap.ClientVisible = false;
+                        grDate.ClientVisible = false;
+                    }
+
+                }
+
                 DataTable dt = General.IncarcaDT("SELECT * FROM \"MP_NotaLichidare_Stari\"", null);
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -93,39 +125,17 @@ namespace WizOne.Personal
                 cmbAng.DataBind();
 
                 if (!IsPostBack)
-                {
-                    string idHR = Dami.ValoareParam("Avans_IDuriRoluriHR", "-99");
-                    string sql = "SELECT COUNT(*) FROM \"F100Supervizori\" WHERE \"IdUser\" = {0} AND \"IdSuper\" IN ({1})";
-                    sql = string.Format(sql, Session["UserId"].ToString(), idHR);
-                    DataTable dtHR = General.IncarcaDT(sql, null);
-                    if (dtHR != null && dtHR.Rows.Count > 0 && dtHR.Rows[0][0] != null && dtHR.Rows[0][0].ToString().Length > 0 && Convert.ToInt32(dtHR.Rows[0][0].ToString()) > 0)
-                    {
-                        Session["NL_HR"] = "1";
-                        ASPxListBox nestedListBox = checkComboBoxStare.FindControl("listBox") as ASPxListBox;
-                        for (int i = 0; i < nestedListBox.Items.Count; i++)
-                        {
-                            if (Convert.ToInt32(nestedListBox.Items[i].Value) == 1)
-                                nestedListBox.Items[i].Selected = true;
-                        }
-                        grDateDet.ClientVisible = false;
-                        //lblStareDatorii.ClientVisible = false;
-                        //cmbStareDatorii.ClientVisible = false;
-                    }
-                    else
-                    {
-                        btnRap.ClientVisible = false;
-                        grDate.ClientVisible = false;
-                    }
+                {  
 
-                    DataTable dtStare = General.IncarcaDT("SELECT \"IdStare\", \"IdAuto\" FROM \"MP_NotaLichidare\"", null);
-                    string sir = "";
-                    for (int i = 0; i < dtStare.Rows.Count; i++)
-                    {
-                        sir += dtStare.Rows[i]["IdAuto"].ToString() + "," + dtStare.Rows[i]["IdStare"].ToString();
-                        if (i < dtStare.Rows.Count - 1)
-                            sir += ";";
-                    }
-                    Session["NL_Stare"] = sir;
+                    //DataTable dtStare = General.IncarcaDT("SELECT \"IdStare\", \"IdAuto\" FROM \"MP_NotaLichidare\"", null);
+                    //string sir = "";
+                    //for (int i = 0; i < dtStare.Rows.Count; i++)
+                    //{
+                    //    sir += dtStare.Rows[i]["IdAuto"].ToString() + "," + dtStare.Rows[i]["IdStare"].ToString();
+                    //    if (i < dtStare.Rows.Count - 1)
+                    //        sir += ";";
+                    //}
+                    //Session["NL_Stare"] = sir;
                     //cmbStareDatorii.SelectedIndex = 1;
                     IncarcaGrid();
                     IncarcaGridDet();
@@ -177,7 +187,9 @@ namespace WizOne.Personal
                 else
                     filtru += " AND F10003 IN (SELECT F10003 FROM (" + SelectAngajati() + ") a)";
 
-                if (checkComboBoxStare.Value != null)
+                if (!IsPostBack)
+                    filtru += " AND \"IdStare\" = 1";
+                else if (checkComboBoxStare.Value != null)
                     filtru += " AND \"IdStare\" IN (" + FiltruTipStari(checkComboBoxStare.Value.ToString().Replace(";", ",")).Replace(";", ",").Substring(0, FiltruTipStari(checkComboBoxStare.Value.ToString()).Length - 1) + ")";
 
 
@@ -203,18 +215,28 @@ namespace WizOne.Personal
             {
                 string filtru = "";
                 if (cmbAng.Value != null)
-                    filtru += " AND F10003 = " + Convert.ToInt32(cmbAng.Value);
+                    filtru += " AND a.F10003 = " + Convert.ToInt32(cmbAng.Value);
                 else
-                    filtru += " AND F10003 IN (SELECT F10003 FROM (" + SelectAngajati() + ") a)";
+                    filtru += " AND a.F10003 IN (SELECT F10003 FROM (" + SelectAngajati() + ") a)";
 
                 //if (cmbStareDatorii.Value != null)
                 //    filtru += " AND (\"Datorii\" " + (Convert.ToInt32(cmbStareDatorii.Value) == 1 ? " <> 0 AND \"Datorii\" IS NOT NULL)" : " = 0 OR \"Datorii\" IS NULL)");
 
-                if (checkComboBoxStare.Value != null) 
-                    filtru += " AND \"IdStare\" IN (" + FiltruTipStari(checkComboBoxStare.Value.ToString().Replace(";", ",")).Replace(";", ",").Substring(0, FiltruTipStari(checkComboBoxStare.Value.ToString()).Length - 1) + ")";
+                if (!IsPostBack)
+                    filtru += " AND a.\"IdStare\" = 1";
+                else if(checkComboBoxStare.Value != null) 
+                    filtru += " AND a.\"IdStare\" IN (" + FiltruTipStari(checkComboBoxStare.Value.ToString().Replace(";", ",")).Replace(";", ",").Substring(0, FiltruTipStari(checkComboBoxStare.Value.ToString()).Length - 1) + ")";
 
+                //string condHR = "", idHR = Dami.ValoareParam("Avans_IDuriRoluriHR");
+                //if (idHR.Length > 0)
+                //    condHR = " AND B.\"IdSuper\" NOT IN (" + idHR + ")";
 
-                string sql = "SELECT a.* FROM \"MP_NotaLichidare_Detalii\" a LEFT JOIN \"MP_NotaLichidare\" b on a.\"IdNotaLichidare\" = b.\"IdAuto\"  WHERE 1=1 " + filtru;
+                string sql = "SELECT a.* FROM \"MP_NotaLichidare_Detalii\" a LEFT JOIN \"MP_NotaLichidare\" b on a.\"IdNotaLichidare\" = b.\"IdAuto\"  " 
+                    + " WHERE (\"Supervizor\"  = " + Session["UserId"].ToString() + " OR ( \"Supervizor\" IN (Select -1 * \"IdSuper\" from \"F100Supervizori\" B "
+                    + " INNER JOIN \"MP_NotaLichidare_Circuit\" C ON B.\"IdSuper\" = -1 * c.\"Supervizor\" "
+                    + "  WHERE B.\"IdUser\" = " + Session["UserId"].ToString() +  "  AND B.\"DataInceput\" <= " + General.ToDataUniv(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) 
+                    + " AND " + General.ToDataUniv(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + " <= B.\"DataSfarsit\"))) "                    
+                    + filtru;
                 //string sql = "SELECT a.* FROM \"MP_NotaLichidare_Detalii\" a  ";
                 DataTable dt =  General.IncarcaDT(sql, null);               
 
@@ -396,7 +418,7 @@ namespace WizOne.Personal
                 grDate.CancelEdit();
 
                 DataTable dt = Session["NL_Grid"] as DataTable;
-
+                int idStare = -99, idNota = -99;
 
                 for (int i = 0; i < e.UpdateValues.Count; i++)
                 {
@@ -405,6 +427,8 @@ namespace WizOne.Personal
                     object[] keys = new object[upd.Keys.Count];
                     for (int x = 0; x < upd.Keys.Count; x++)
                     { keys[x] = upd.Keys[x]; }
+
+                    idNota = Convert.ToInt32(upd.Keys[0].ToString());
 
                     DataRow row = dt.Rows.Find(keys);
                     if (row == null) continue;
@@ -420,6 +444,8 @@ namespace WizOne.Personal
                             row[col.ColumnName] = Session["UserId"].ToString();
                         if (col.ColumnName == "TIME")
                             row[col.ColumnName] = DateTime.Now;
+                        if (col.ColumnName == "IdStare")
+                            idStare = Convert.ToInt32(upd.NewValues[col.ColumnName].ToString());               
 
                     }
 
@@ -430,6 +456,7 @@ namespace WizOne.Personal
                 Session["NL_Grid"] = dt;
                 grDate.DataSource = dt;
                 General.SalveazaDate(dt, "MP_NotaLichidare");
+                General.ExecutaNonQuery("UPDATE \"MP_NotaLichidare_Detalii\" SET \"IdStare\" = " + idStare + " WHERE \"IdNotaLichidare\" = " + idNota, null);
 
             }
             catch (Exception ex)
@@ -445,6 +472,7 @@ namespace WizOne.Personal
                 grDateDet.CancelEdit();
 
                 DataTable dt = Session["NL_GridDet"] as DataTable;
+                        
 
                 for (int i = 0; i < e.UpdateValues.Count; i++)
                 {
@@ -467,8 +495,7 @@ namespace WizOne.Personal
                         if (col.ColumnName == "USER_NO")
                             row[col.ColumnName] = Session["UserId"].ToString();
                         if (col.ColumnName == "TIME")
-                            row[col.ColumnName] = DateTime.Now;
-
+                            row[col.ColumnName] = DateTime.Now;       
                     }
 
                 }
@@ -574,9 +601,22 @@ namespace WizOne.Personal
             return strSql;
         }
 
-   					//<td style = "padding-right:15px !important;" >
+        protected void grDate_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            if (e.Column.FieldName == "F10003" || e.Column.FieldName == "DataDoc")
+                e.Editor.ClientEnabled = false;
+        }
+
+        protected void grDateDet_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            if (e.Column.FieldName == "F10003" || e.Column.FieldName == "IdStare")
+                e.Editor.ClientEnabled = false;
+
+        }
+
+        //<td style = "padding-right:15px !important;" >
         //                < dx:ASPxLabel id = "lblStareDatorii" runat="server" style="display:inline-block;" Text="Stare datorii"></dx:ASPxLabel>
-        //                <dx:ASPxComboBox ID = "cmbStareDatorii" runat="server" ClientInstanceName="cmbStareDatorii" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
+        //                <dx:ASPxComboBox ID = "cmbStareDatorii" runat="server" ClientInstanceName="cmbStareDatorii" ClientIDMode="Static" Width="150px" ValueField="Id" DropDownWidth="150" 
         //                    TextField="Denumire" ValueType="System.Int32" AutoPostBack="false">
         //                </dx:ASPxComboBox>
         //            </td>

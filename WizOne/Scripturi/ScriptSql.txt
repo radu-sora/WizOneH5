@@ -13533,6 +13533,7 @@ CREATE TABLE MP_NotaLichidare_Detalii(
 	IdStare [int],
 	IdNotaLichidare [int],
 	Rol [nvarchar](250),
+	Supervizor [int],
 	Valoare [nvarchar](max),
 	Datorii [int],
 	Comentarii [nvarchar](250),

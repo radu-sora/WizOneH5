@@ -5843,8 +5843,8 @@ namespace WizOne.Avs
                                 valoare = "'" + dtVal.Rows[0][0].ToString() + "'";
                         }
 
-                        sql = "INSERT INTO \"MP_NotaLichidare_Detalii\"(\"IdNotaLichidare\", \"Rol\", USER_NO, TIME, \"Valoare\") "
-                            + " VALUES (" + idAuto + ", '" + dt.Rows[i]["Rol"].ToString() + "', " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", " + valoare + ")";
+                        sql = "INSERT INTO \"MP_NotaLichidare_Detalii\"(F10003, \"IdStare\", \"IdNotaLichidare\", \"Rol\", USER_NO, TIME, \"Valoare\", \"Supervizor\") "
+                            + " VALUES (" + f10003 + ", 1, " + idAuto + ", '" + dt.Rows[i]["Rol"].ToString() + "', " + Session["UserId"].ToString() + ", " + (Constante.tipBD == 1 ? "GETDATE()" : "SYSDATE") + ", " + valoare + ", '" + dt.Rows[i]["Supervizor"].ToString() + "')";
                         General.ExecutaNonQuery(sql, null);
 
                         i++;

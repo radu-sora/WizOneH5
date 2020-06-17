@@ -29,17 +29,20 @@
 
         }
         function OnGridDetBatchEditStartEditing(s, e) {
-            var keyIndex = s.GetColumnByField("IdNotaLichidare").index;
+            var keyIndex = s.GetColumnByField("IdStare").index;
             var key = e.rowValues[keyIndex].value;
 
-            var sir = "<%=Session["NL_Stare"] %>";
+            if (key == -1 || key == 3)
+                e.cancel = true; 
+
+<%--            var sir = "<%=Session["NL_Stare"] %>";
             var res = sir.split(";");
             for (var i = 0; i < res.length; i++) {
                 var linie = res[i].split(",");
                 if (linie[0] == key && (linie[1] == -1 || linie [1] == 3)) {
                     e.cancel = true;
                 }
-            }
+            }--%>
         }
 
         var textSeparator = ",";
@@ -184,7 +187,7 @@
             <table style="width:70%;">
                 <tr>
                     <td >
-                        <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  OnBatchUpdate="grDate_BatchUpdate"  >
+                        <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  OnBatchUpdate="grDate_BatchUpdate" OnCellEditorInitialize="grDate_CellEditorInitialize"  >
                             <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                             <Settings ShowFilterRow="false" ShowColumnHeaders="true" ShowStatusBar="Hidden"/>  
                              <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" /> 
@@ -226,7 +229,7 @@
             <table style="width:70%;">
                 <tr>
                     <td >
-                        <dx:ASPxGridView ID="grDateDet" runat="server" ClientInstanceName="grDateDet" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"   OnBatchUpdate="grDateDet_BatchUpdate"    >
+                        <dx:ASPxGridView ID="grDateDet" runat="server" ClientInstanceName="grDateDet" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"   OnBatchUpdate="grDateDet_BatchUpdate"   OnCellEditorInitialize="grDateDet_CellEditorInitialize"  >
                            <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control"  />
                             <Settings ShowFilterRow="false" ShowColumnHeaders="true" ShowStatusBar="Hidden"/>  
                             <SettingsEditing Mode="Batch" BatchEditSettings-EditMode="Cell" BatchEditSettings-StartEditAction="Click" BatchEditSettings-ShowConfirmOnLosingChanges="false" />
@@ -247,7 +250,7 @@
                                         </Columns>
                                     </PropertiesComboBox>
                                 </dx:GridViewDataComboBoxColumn>
-                                <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare"  Width="100px" VisibleIndex="2">                            
+                                <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare"  Width="100px"  ReadOnly="true"  VisibleIndex="2">                            
                                     <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
                                 </dx:GridViewDataComboBoxColumn>
 						        <dx:GridViewDataTextColumn FieldName="IdNotaLichidare" Name="IdNotaLichidare" Caption="Id" ReadOnly="true" Width="100px" Visible="false" />

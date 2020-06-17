@@ -90,6 +90,7 @@ namespace WizOne.Personal
                 DataTable table = General.IncarcaDT("SELECT * FROM \"MP_NotaLichidare_Stari\"", null);
                 GridViewDataComboBoxColumn col = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = table;
+                Session["NL_Stare"] = table;
 
                 col = (grDateDet.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = table;
@@ -106,6 +107,10 @@ namespace WizOne.Personal
                 btnExit.Text = Dami.TraduCuvant("btnExit", "Iesire");
                 #endregion
 
+                if (tip == 1)
+                    txtTitlu.Text = Dami.TraduCuvant("Nota de lichidare HR");
+                else
+                    txtTitlu.Text = Dami.TraduCuvant("Nota de lichidare");
 
 
                 DataTable dtDat = new DataTable();
@@ -120,7 +125,7 @@ namespace WizOne.Personal
                 GridViewDataComboBoxColumn colDat = (grDateDet.Columns["Datorii"] as GridViewDataComboBoxColumn);
                 colDat.PropertiesComboBox.DataSource = dtDat;
 
-                DataTable dtAng = General.IncarcaDT(SelectAngajati(), null);
+                DataTable dtAng = General.IncarcaDT(SelectAngajati() + " ORDER BY \"NumeComplet\"", null);                
                 cmbAng.DataSource = dtAng;
                 cmbAng.DataBind();
 
@@ -437,7 +442,17 @@ namespace WizOne.Personal
                     {
                         if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
                         {
-                            row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                            if (col.ColumnName == "IdStare")
+                            {
+                                DataTable table = Session["NL_Stare"] as DataTable;
+                                List<int> lstId = new List<int>();
+                                for (int j = 0; j < table.Rows.Count; j++)
+                                    lstId.Add(Convert.ToInt32(table.Rows[i]["Id"].ToString()));
+                                if (upd.NewValues[col.ColumnName] != null && lstId.Contains(Convert.ToInt32(upd.NewValues[col.ColumnName].ToString())))
+                                    row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                            }
+                            else
+                                row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
                         }
 
                         if (col.ColumnName == "USER_NO")
@@ -457,6 +472,7 @@ namespace WizOne.Personal
                 grDate.DataSource = dt;
                 General.SalveazaDate(dt, "MP_NotaLichidare");
                 General.ExecutaNonQuery("UPDATE \"MP_NotaLichidare_Detalii\" SET \"IdStare\" = " + idStare + " WHERE \"IdNotaLichidare\" = " + idNota, null);
+                grDate.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
 
             }
             catch (Exception ex)
@@ -489,7 +505,14 @@ namespace WizOne.Personal
                     {
                         if (!col.AutoIncrement && grDateDet.Columns[col.ColumnName] != null && grDateDet.Columns[col.ColumnName].Visible)
                         {
-                            row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+
+                            if (col.ColumnName == "Datorii")
+                            {
+                                if (upd.NewValues[col.ColumnName] == null || upd.NewValues[col.ColumnName].ToString() == "1" || upd.NewValues[col.ColumnName].ToString() == "2")
+                                    row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                            }    
+                            else
+                                row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
                         }
 
                         if (col.ColumnName == "USER_NO")
@@ -504,6 +527,7 @@ namespace WizOne.Personal
                 Session["NL_GridDet"] = dt;
                 grDateDet.DataSource = dt;
                 General.SalveazaDate(dt, "MP_NotaLichidare_Detalii");
+                grDateDet.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Proces realizat cu succes!");
 
             }
             catch (Exception ex)

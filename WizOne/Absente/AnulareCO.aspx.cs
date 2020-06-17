@@ -44,14 +44,14 @@ namespace WizOne.Absente
 
                 dtPer.Rows.Add(1, "Pana in " + (Convert.ToDateTime(txtAnLuna.Value).Year - 1).ToString() + " inclusiv");
                 dtPer.Rows.Add(2, "Pana in " + (Convert.ToDateTime(txtAnLuna.Value).Year - 2).ToString() + " inclusiv");
-                dtPer.Rows.Add(3, "Mai vechi");
+                //dtPer.Rows.Add(3, "Mai vechi");
 
                 cmbPerioada.DataSource = dtPer;
                 cmbPerioada.DataBind();
 
-                DataTable dtAng = General.IncarcaDT(Dami.SelectAngajati(), null);
-                GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
-                colAng.PropertiesComboBox.DataSource = dtAng;
+                //DataTable dtAng = General.IncarcaDT(Dami.SelectAngajati(), null);
+                //GridViewDataComboBoxColumn colAng = (grDate.Columns["F10003"] as GridViewDataComboBoxColumn);
+                //colAng.PropertiesComboBox.DataSource = dtAng;
 
                 if (IsPostBack)
                 {
@@ -65,9 +65,13 @@ namespace WizOne.Absente
                     GridViewDataTextColumn colAnCurent = (grDate.Columns["ZileCOAnC"] as GridViewDataTextColumn);
                     GridViewDataTextColumn colAncurentAnt = (grDate.Columns["ZileCOAnAnt"] as GridViewDataTextColumn);
                     GridViewDataTextColumn colAnCurentAnt2 = (grDate.Columns["ZileCOAnAnt2"] as GridViewDataTextColumn);
+                    GridViewDataTextColumn colAnCurentAnt3 = (grDate.Columns["ZileCOMaiVechi"] as GridViewDataTextColumn);
                     colAnCurent.Caption = "Zile CO (" + an + ")";
                     colAncurentAnt.Caption = "Zile CO (" + (an - 1).ToString() + ")";
                     colAnCurentAnt2.Caption = "Zile CO (" + (an - 2).ToString() + ")";
+                    colAnCurentAnt3.Caption = "Zile CO (<=" + (an - 3).ToString() + ")";
+
+                    //grDate.SortBy(colAng, DevExpress.Data.ColumnSortOrder.Ascending);
                 }
                 else
                 {
@@ -83,25 +87,25 @@ namespace WizOne.Absente
             }
         }
 
-        internal static string SelectAngajati()
-        {
-            string strSql = "";
+        //internal static string SelectAngajati()
+        //{
+        //    string strSql = "";
 
-            try
-            {
-                strSql = $@"SELECT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS NumeComplet, G.F00406 AS Filiala, H.F00507 AS Sectie, I.F00608 AS Departament
-                        FROM F100 A
-                        LEFT JOIN F004 G ON A.F10005 = G.F00405
-                        LEFT JOIN F005 H ON A.F10006 = H.F00506
-                        LEFT JOIN F006 I ON A.F10007 = I.F00607";
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
-            }
+        //    try
+        //    {
+        //        strSql = $@"SELECT A.F10003, A.F10008 {Dami.Operator()} ' ' {Dami.Operator()} A.F10009 AS NumeComplet, G.F00406 AS Filiala, H.F00507 AS Sectie, I.F00608 AS Departament
+        //                FROM F100 A
+        //                LEFT JOIN F004 G ON A.F10005 = G.F00405
+        //                LEFT JOIN F005 H ON A.F10006 = H.F00506
+        //                LEFT JOIN F006 I ON A.F10007 = I.F00607";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, "Dami", new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
 
-            return strSql;
-        }
+        //    return strSql;
+        //}
 
 
         protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
@@ -155,9 +159,13 @@ namespace WizOne.Absente
                 int an = Convert.ToDateTime(txtAnLuna.Value).Year;
 
                 string data = General.ToDataUniv(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, 99);
-                string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";     
-                if (Constante.tipBD == 2)                
+                string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
+                string op = "+";
+                if (Constante.tipBD == 2)
+                {
                     idAuto = "ROWNUM";
+                    op = "||";
+                }
 
 
                 //string sql = "select " + idAuto + " as \"IdAuto\", a.F10003, CASE WHEN d.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN d.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN d.F10025 = 0 THEN "
@@ -181,7 +189,7 @@ namespace WizOne.Absente
                             + " left join (select * from \"SituatieZileAbsente\" where \"An\" = " + an + ") Ptj_An on ptj.f10003 = ptj_An.f10003), "
                             + " Ptj_Raport as (select f10003, limita, \"An\", case when suma <= limita then \"Cuvenite\" when suma-\"Cuvenite\" >= limita then 0 else limita - suma + \"Cuvenite\"   end as Sold_An from \"Ptj_Detaliat\") "
 
-                            + "select " + idAuto + " as \"IdAuto\", F100.F10003, CASE WHEN F100.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN F100.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN F100.F10025 = 0 THEN "
+                            + "select " + idAuto + " as \"IdAuto\", F100.F10003, F10008 " + op + " ' ' " + op + " F10009 AS \"Nume\", CASE WHEN F100.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN F100.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN F100.F10025 = 0 THEN "
                                 + "(CASE WHEN(F100.F100925 <> 0 AND F100922 IS NOT NULL AND F100923 IS NOT NULL AND F100923 IS NOT NULL AND F100922 <= {0} AND {0} <= F100923 AND {0} <= F100924) "
                                 + "THEN 'Activ suspendat' ELSE CASE WHEN(F100.F100915 <= {0} AND {0} <= F100.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END AS \"Stare\", "
 
@@ -191,7 +199,7 @@ namespace WizOne.Absente
                                + " left join (select * from ptj_raport where \"An\"= " + an + " - 1) rap1 on f100.f10003 = rap1.f10003 "
                                + " left join (select * from ptj_raport where \"An\"= " + an + " - 2) rap2 on f100.f10003 = rap2.f10003 "
                                + " left join (select f10003, sum(coalesce(sold_an,0)) sold_an from ptj_raport where \"An\" <= " + an + " - 3  group by f10003) rap3 on f100.f10003 = rap3.f10003 "
-                               + " WHERE coalesce(rap0.limita, 0) > 0";
+                               + " WHERE coalesce(rap0.limita, 0) > 0 ORDER BY \"Nume\"";
 
                 sql = string.Format(sql, data);
                 DataTable dt = General.IncarcaDT(sql, null);
@@ -202,9 +210,14 @@ namespace WizOne.Absente
                 GridViewDataTextColumn colAnCurent = (grDate.Columns["ZileCOAnC"] as GridViewDataTextColumn);
                 GridViewDataTextColumn colAncurentAnt = (grDate.Columns["ZileCOAnAnt"] as GridViewDataTextColumn);
                 GridViewDataTextColumn colAnCurentAnt2 = (grDate.Columns["ZileCOAnAnt2"] as GridViewDataTextColumn);
+                GridViewDataTextColumn colAnCurentAnt3 = (grDate.Columns["ZileCOMaiVechi"] as GridViewDataTextColumn);
                 colAnCurent.Caption = "Zile CO (" + an + ")";
                 colAncurentAnt.Caption = "Zile CO (" + (an - 1).ToString() + ")";
                 colAnCurentAnt2.Caption = "Zile CO (" + (an - 2).ToString() + ")";
+                colAnCurentAnt3.Caption = "Zile CO (<=" + (an - 3).ToString() + ")";
+
+                //GridViewDataTextColumn colAng = (grDate.Columns["F10003"] as GridViewDataTextColumn);
+                //grDate.SortBy(colAng, DevExpress.Data.ColumnSortOrder.Ascending);
 
                 Session["AnulareCO_Grid"] = dt;   
 
@@ -321,3 +334,15 @@ namespace WizOne.Absente
 
 
 }
+
+
+
+                                // <dx:GridViewDataComboBoxColumn FieldName = "F10003" Name="F10003" Caption="Angajat" ReadOnly="true" Width="250px" >           
+                                //     <Settings SortMode = "DisplayText" />
+                                //    < PropertiesComboBox TextField="NumeComplet" ValueField="F10003" ValueType="System.Int32" DropDownStyle="DropDown">   
+                                //        <Columns>
+                                //            <dx:ListBoxColumn FieldName = "F10003" Caption="Marca" Width="130px" />
+                                //            <dx:ListBoxColumn FieldName = "NumeComplet" Caption="Angajat" Width="130px" />
+                                //        </Columns>                                        
+                                //    </PropertiesComboBox>
+                                //</dx:GridViewDataComboBoxColumn> 

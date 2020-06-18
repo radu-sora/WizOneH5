@@ -90,7 +90,7 @@ namespace WizOne.Personal
                 DataTable table = General.IncarcaDT("SELECT * FROM \"MP_NotaLichidare_Stari\"", null);
                 GridViewDataComboBoxColumn col = (grDate.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = table;
-                Session["NL_Stare"] = table;
+                //Session["NL_Stare"] = table;
 
                 col = (grDateDet.Columns["IdStare"] as GridViewDataComboBoxColumn);
                 col.PropertiesComboBox.DataSource = table;
@@ -442,17 +442,7 @@ namespace WizOne.Personal
                     {
                         if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
                         {
-                            if (col.ColumnName == "IdStare")
-                            {
-                                DataTable table = Session["NL_Stare"] as DataTable;
-                                List<int> lstId = new List<int>();
-                                for (int j = 0; j < table.Rows.Count; j++)
-                                    lstId.Add(Convert.ToInt32(table.Rows[i]["Id"].ToString()));
-                                if (upd.NewValues[col.ColumnName] != null && lstId.Contains(Convert.ToInt32(upd.NewValues[col.ColumnName].ToString())))
-                                    row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
-                            }
-                            else
-                                row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                            row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
                         }
 
                         if (col.ColumnName == "USER_NO")
@@ -505,14 +495,7 @@ namespace WizOne.Personal
                     {
                         if (!col.AutoIncrement && grDateDet.Columns[col.ColumnName] != null && grDateDet.Columns[col.ColumnName].Visible)
                         {
-
-                            if (col.ColumnName == "Datorii")
-                            {
-                                if (upd.NewValues[col.ColumnName] == null || upd.NewValues[col.ColumnName].ToString() == "1" || upd.NewValues[col.ColumnName].ToString() == "2")
-                                    row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
-                            }    
-                            else
-                                row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
+                            row[col.ColumnName] = upd.NewValues[col.ColumnName] ?? DBNull.Value;
                         }
 
                         if (col.ColumnName == "USER_NO")

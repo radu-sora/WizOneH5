@@ -18,13 +18,15 @@ namespace WizOne.Absente
 {
     public partial class AnulareCO : System.Web.UI.Page
     {
-        //int F10003 = -99;
+        //int F10003 = -99;     
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-                Dami.AccesApp();
+                Dami.AccesApp();   
+
 
                 #region Traducere
                 string ctlPost = Request.Params["__EVENTTARGET"];
@@ -156,15 +158,19 @@ namespace WizOne.Absente
                     dtPer.Rows.Add(3, "Mai vechi");
                 }
 
-                int an = Convert.ToDateTime(txtAnLuna.Value).Year;
+                int anul = Convert.ToDateTime(txtAnLuna.Value).Year;
 
                 string data = General.ToDataUniv(Convert.ToDateTime(txtAnLuna.Value).Year, Convert.ToDateTime(txtAnLuna.Value).Month, 99);
                 string idAuto = "CONVERT(int,ROW_NUMBER() OVER (ORDER BY (SELECT 1))) ";
                 string op = "+";
+                string variabila = "declare @an int = " + anul + ";";
+                string an = "@an";
                 if (Constante.tipBD == 2)
                 {
                     idAuto = "ROWNUM";
                     op = "||";
+                    variabila = "DEFINE an = " + anul + ";";
+                    an = "&an";
                 }
 
 
@@ -182,11 +188,13 @@ namespace WizOne.Absente
                 //                + " LEFT JOIN F100 D on a.F10003 = d.F10003 "
                 //                + "where a.\"An\" = " + an;
 
-                string sql = " with \"Ptj_Detaliat\" as "
+
+                string sql = variabila 
+                            + " with \"Ptj_Detaliat\" as "
                              + "(select ptj.f10003, ptj.\"An\", coalesce(ptj_an.\"Ramase\", 0)  limita, "
                              + " coalesce(ptj.\"Cuvenite\", 0) as \"Cuvenite\", sum(coalesce(ptj.\"Cuvenite\", 0)) over(partition by ptj.f10003 order by ptj.\"An\" desc) suma "
                             + " from (select * from \"Ptj_tblZileCO\" where \"An\" <= " + an + ") ptj "
-                            + " left join (select * from \"SituatieZileAbsente\" where \"An\" = " + an + ") Ptj_An on ptj.f10003 = ptj_An.f10003), "
+                            + " join (select * from \"SituatieZileAbsente\" where \"An\" = " + an + " and coalesce(\"Ramase\",0)>0) Ptj_An on ptj.f10003 = ptj_An.f10003), "
                             + " Ptj_Raport as (select f10003, limita, \"An\", case when suma <= limita then \"Cuvenite\" when suma-\"Cuvenite\" >= limita then 0 else limita - suma + \"Cuvenite\"   end as Sold_An from \"Ptj_Detaliat\") "
 
                             + "select " + idAuto + " as \"IdAuto\", F100.F10003, F10008 " + op + " ' ' " + op + " F10009 AS \"Nume\", CASE WHEN F100.F10025 = 900 THEN 'Candidat' ELSE CASE WHEN F100.F10025 = 999 THEN 'Angajat in avans' ELSE (CASE WHEN F100.F10025 = 0 THEN "
@@ -194,27 +202,28 @@ namespace WizOne.Absente
                                 + "THEN 'Activ suspendat' ELSE CASE WHEN(F100.F100915 <= {0} AND {0} <= F100.F100916) THEN 'Activ detasat' ELSE 'Activ' END END) ELSE 'Inactiv' END) END END AS \"Stare\", "
 
                                 + " coalesce(rap0.limita, 0) as \"ZileCO\", "
-                               + "  coalesce(rap0.Sold_An, 0) \"ZileCOAnC\", coalesce(rap1.Sold_An, 0) \"ZileCOAnAnt\", coalesce(rap2.Sold_An, 0) \"ZileCOAnAnt2\", coalesce(rap3.Sold_An, 0) \"ZileCOMaiVechi\" "
-                               + "      from f100  left join(select * from ptj_raport where \"An\" = " + an + ") rap0 on f100.f10003 = rap0.f10003 "
+                               + "  coalesce(rap0.Sold_An, 0) \"ZileCOAnC\", coalesce(rap1.Sold_An, 0) \"ZileCOAnAnt\", coalesce(rap2.Sold_An, 0) \"ZileCOAnAnt2\", coalesce(rap3.Sold_An, 0) \"ZileCOMaiVechi\", "
+                               + " coalesce(rap0.limita, 0) - (coalesce(rap0.Sold_An, 0) + coalesce(rap1.Sold_An, 0) + coalesce(rap2.Sold_An, 0) + coalesce(rap3.Sold_An, 0)) AS \"Diferenta\""
+                               + "      from f100  join (select * from ptj_raport where \"An\" = " + an + ") rap0 on f100.f10003 = rap0.f10003 "
                                + " left join (select * from ptj_raport where \"An\"= " + an + " - 1) rap1 on f100.f10003 = rap1.f10003 "
                                + " left join (select * from ptj_raport where \"An\"= " + an + " - 2) rap2 on f100.f10003 = rap2.f10003 "
                                + " left join (select f10003, sum(coalesce(sold_an,0)) sold_an from ptj_raport where \"An\" <= " + an + " - 3  group by f10003) rap3 on f100.f10003 = rap3.f10003 "
-                               + " WHERE coalesce(rap0.limita, 0) > 0 ORDER BY \"Nume\"";
+                               + " ORDER BY \"Nume\"";
 
                 sql = string.Format(sql, data);
                 DataTable dt = General.IncarcaDT(sql, null);
                 grDate.KeyFieldName = "IdAuto";
                 grDate.DataSource = dt;              
-                grDate.DataBind();
+                grDate.DataBind();                
 
                 GridViewDataTextColumn colAnCurent = (grDate.Columns["ZileCOAnC"] as GridViewDataTextColumn);
                 GridViewDataTextColumn colAncurentAnt = (grDate.Columns["ZileCOAnAnt"] as GridViewDataTextColumn);
                 GridViewDataTextColumn colAnCurentAnt2 = (grDate.Columns["ZileCOAnAnt2"] as GridViewDataTextColumn);
                 GridViewDataTextColumn colAnCurentAnt3 = (grDate.Columns["ZileCOMaiVechi"] as GridViewDataTextColumn);
-                colAnCurent.Caption = "Zile CO (" + an + ")";
-                colAncurentAnt.Caption = "Zile CO (" + (an - 1).ToString() + ")";
-                colAnCurentAnt2.Caption = "Zile CO (" + (an - 2).ToString() + ")";
-                colAnCurentAnt3.Caption = "Zile CO (<=" + (an - 3).ToString() + ")";
+                colAnCurent.Caption = "Zile CO (" + anul + ")";
+                colAncurentAnt.Caption = "Zile CO (" + (anul - 1).ToString() + ")";
+                colAnCurentAnt2.Caption = "Zile CO (" + (anul - 2).ToString() + ")";
+                colAnCurentAnt3.Caption = "Zile CO (<=" + (anul - 3).ToString() + ")";
 
                 //GridViewDataTextColumn colAng = (grDate.Columns["F10003"] as GridViewDataTextColumn);
                 //grDate.SortBy(colAng, DevExpress.Data.ColumnSortOrder.Ascending);

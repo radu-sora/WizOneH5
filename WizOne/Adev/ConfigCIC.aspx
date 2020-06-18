@@ -29,6 +29,10 @@
                         <Image Url="~/Fisiere/Imagini/Icoane/finalizare.png"></Image>
                         <ClientSideEvents Click="OnBtnClientClick" />
                     </dx:ASPxButton>
+                    <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" >
+                        <ClientSideEvents Click="OnBtnClientClick" />
+                        <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
+                    </dx:ASPxButton>
                 </td>
             </tr>
             <tr>
@@ -42,7 +46,7 @@
                         <Columns>	
                             <dx:GridViewCommandColumn Width="75px" ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0" ButtonType="Image" Caption=" " />
                             <dx:GridViewDataTextColumn FieldName="MARCA" Name="MARCA" Caption="Marca" Width="75px" ReadOnly="true" />
-                            <dx:GridViewDataTextColumn FieldName="NUME" Name="NUME" Caption="Nume si prenume copil"  Width="180px" />
+                            <dx:GridViewDataTextColumn FieldName="NUME" Name="NUME" Caption="Nume si prenume"  Width="180px" />
                             <dx:GridViewDataDateColumn FieldName="DATA_NASTERE" Name="DATA_NASTERE" Caption="Data nastere copil"  Width="100px" >
                                 <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                             </dx:GridViewDataDateColumn>

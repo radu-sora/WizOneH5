@@ -69,9 +69,13 @@ namespace WizOne.Personal
                         nestedListBox.Items.Add(dt.Rows[i]["Denumire"].ToString(), Convert.ToInt32(dt.Rows[i]["Id"].ToString()));
                         if (!IsPostBack)
                             if (Convert.ToInt32(dt.Rows[i]["Id"].ToString()) == 1)
+                            {
                                 nestedListBox.Items[nestedListBox.Items.Count - 1].Selected = true;
+                                checkComboBoxStare.Text = dt.Rows[i]["Denumire"].ToString();
+                            }
 
                     }
+
                 }
             }
             catch (Exception ex)
@@ -553,8 +557,12 @@ namespace WizOne.Personal
         {      
             cmbAng.Value = null;
             cmbAng.SelectedIndex = -1;
+            checkComboBoxStare.Value = null;
             //cmbStareDatorii.Value = null;
             //cmbStareDatorii.SelectedIndex = -1;
+            ASPxListBox nestedListBox = checkComboBoxStare.FindControl("listBox") as ASPxListBox;
+            foreach (ListEditItem item in nestedListBox.Items)
+                item.Selected = false;
         }
 
 

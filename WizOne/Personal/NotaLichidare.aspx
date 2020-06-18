@@ -134,8 +134,8 @@
                         <dx:ASPxComboBox ID="cmbAng" ClientInstanceName="cmbAng" ClientIDMode="Static" runat="server" Width="250px" ValueField="F10003" TextField="NumeComplet" ValueType="System.Int32" AutoPostBack="false"
                                 CallbackPageSize="15" EnableCallbackMode="true" TextFormatString="{0} {1}" >         
                             <Columns>
-                                <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="130px" />
-                                <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="130px" />
+                                <dx:ListBoxColumn FieldName="F10003" Caption="Marca" Width="50px" />
+                                <dx:ListBoxColumn FieldName="NumeComplet" Caption="Angajat" Width="200px" />
                             </Columns>
                             <ClientSideEvents SelectedIndexChanged="function(s, e) { pnlLoading.Show(); pnlCtl.PerformCallback(9); }" />
                         </dx:ASPxComboBox>
@@ -160,7 +160,7 @@
                                     </tr>
                                 </table>
                             </DropDownWindowTemplate>
-                            <ClientSideEvents TextChanged="SynchronizeListBoxValues" DropDown="SynchronizeListBoxValues" />
+                            <ClientSideEvents TextChanged="SynchronizeListBoxValues"  />
                         </dx:ASPxDropDownEdit>
 
                     </td>

@@ -856,7 +856,7 @@ namespace WizOne.Pagini
                     k = 0;
                     while (!ws2.Cells[0, k].Value.IsEmpty)
                     {
-                        if (ws2.Cells[0, k].Value.ToString() == dtCombinat.Rows[i]["ColoanaFisier"].ToString())
+                        if (ws2.Cells[0, k].Value.ToString().Trim() == dtCombinat.Rows[i]["ColoanaFisier"].ToString())
                         {
                             dtCombinat.Rows[i]["PozitieFisier"] = k;
                             break;

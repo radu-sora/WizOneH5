@@ -6,6 +6,10 @@
     <script language="javascript" type="text/javascript">
         
 
+        function OnInit(s, e) {
+            AdjustSize();
+        }
+
         function OnEndCallback(s, e) {
             pnlLoading.Hide();
             if (s.cpAlertMessage != null) {
@@ -141,24 +145,24 @@
                 </tr>
             </table>
             <br />
-            <table style="width:62%;">
+            <table style="width:90%;">
                 <tr>
                     <td >
                         <dx:ASPxGridView ID="grDate" runat="server" ClientInstanceName="grDate" ClientIDMode="Static" Width="100%" AutoGenerateColumns="false"  >
                             <SettingsBehavior AllowSelectByRowClick="true" AllowFocusedRow="true" AllowSelectSingleRowOnly="false" EnableCustomizationWindow="true" ColumnResizeMode="Control" />
                             <Settings ShowFilterRow="true" ShowColumnHeaders="true" ShowFilterRowMenu="true" HorizontalScrollBarMode="Visible" />  
-                            <SettingsEditing Mode="Inline" /> 
+                            <SettingsEditing Mode="Inline" />                           
                             <ClientSideEvents  ContextMenu="ctx" EndCallback="function(s,e) { OnEndCallback(s,e); }" />           
                             <Columns>  
                                 <dx:GridViewCommandColumn Width="30px" VisibleIndex="0" ButtonType="Image" Caption=" " ShowSelectCheckbox="true" FixedStyle="Left" SelectAllCheckboxMode="AllPages" />
-                                <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca" ReadOnly="true" Width="55px"  />
-                                <dx:GridViewDataTextColumn FieldName="Nume" Name="Nume" Caption="Nume angajat" ReadOnly="true" Width="200px"  />
-						        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="100px"  />
-                                <dx:GridViewDataTextColumn FieldName="ZileCO" Name="ZileCO" Caption="Zile CO (total)" ReadOnly="true" Width="90px"  />
-                                <dx:GridViewDataTextColumn FieldName="ZileCOAnC" Name="ZileCOAnC" Caption="Zile CO (an curent)" ReadOnly="true" Width="90px"  />
-                                <dx:GridViewDataTextColumn FieldName="ZileCOAnAnt" Name="ZileCOAnAnt" Caption="Zile CO (an anterior)" ReadOnly="true" Width="90px"  />
-                                <dx:GridViewDataTextColumn FieldName="ZileCOAnAnt2" Name="ZileCOAnAnt2" Caption="Zile CO (an anterior 2)" ReadOnly="true" Width="90px"  />
-                                <dx:GridViewDataTextColumn FieldName="ZileCOMaiVechi" Name="ZileCOMaiVechi" Caption="Zile CO (an anterior 3)" ReadOnly="true" Width="110px"  />  
+                                <dx:GridViewDataTextColumn FieldName="F10003" Name="F10003" Caption="Marca" ReadOnly="true" Width="75px"  />
+                                <dx:GridViewDataTextColumn FieldName="Nume" Name="Nume" Caption="Nume angajat" ReadOnly="true" Width="500px"  />
+						        <dx:GridViewDataTextColumn FieldName="Stare" Name="Stare" Caption="Stare" ReadOnly="true" Width="150px"  />
+                                <dx:GridViewDataTextColumn FieldName="ZileCO" Name="ZileCO" Caption="Zile CO (total)" ReadOnly="true" Width="100px"  />
+                                <dx:GridViewDataTextColumn FieldName="ZileCOAnC" Name="ZileCOAnC" Caption="Zile CO (an curent)" ReadOnly="true" Width="100px"  />
+                                <dx:GridViewDataTextColumn FieldName="ZileCOAnAnt" Name="ZileCOAnAnt" Caption="Zile CO (an anterior)" ReadOnly="true" Width="100px"  />
+                                <dx:GridViewDataTextColumn FieldName="ZileCOAnAnt2" Name="ZileCOAnAnt2" Caption="Zile CO (an anterior 2)" ReadOnly="true" Width="100px"  />
+                                <dx:GridViewDataTextColumn FieldName="ZileCOMaiVechi" Name="ZileCOMaiVechi" Caption="Zile CO (an anterior 3)" ReadOnly="true" Width="120px"  />  
                                 <dx:GridViewDataTextColumn FieldName="Diferenta" Name="Diferenta" Caption="Nu exista istoric" ReadOnly="true" Width="100px"  />  
                                 <dx:GridViewDataTextColumn FieldName="IdAuto" Name="IdAuto" Caption="IdAuto" Visible="false" ReadOnly="true" Width="100px"  />	
                             </Columns>

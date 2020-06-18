@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizOne.Adev {
-    
-    
-    public partial class ConfigCIC {
-        
+namespace WizOne.Adev
+{
+
+
+    public partial class ConfigCIC
+    {
+
         /// <summary>
         /// form1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// btnGenerare control.
         /// </summary>
@@ -29,7 +31,16 @@ namespace WizOne.Adev {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxButton btnGenerare;
-        
+
+        /// <summary>
+        /// btnExit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnExit;
+
         /// <summary>
         /// grDate control.
         /// </summary>

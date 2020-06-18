@@ -25,7 +25,7 @@
 
         }
 
-        function OnGridDetBatchEditEndEditing(s, e) {
+        function OnGridDetBatchEditEndEditing(s, e) {      
 
         }
         function OnGridDetBatchEditStartEditing(s, e) {
@@ -108,8 +108,8 @@
                     <Image Url="~/Fisiere/Imagini/Icoane/view.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
-                    <ClientSideEvents Click="function(s, e) {
-                        grDate.UpdateEdit();
+                    <ClientSideEvents Click="function(s, e) {                        
+                        grDate.UpdateEdit();                        
                         grDateDet.UpdateEdit();
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
@@ -213,7 +213,7 @@
                                         <PropertiesDateEdit DisplayFormatString="dd/MM/yyyy"></PropertiesDateEdit>
                                 </dx:GridViewDataDateColumn>                               
                                 <dx:GridViewDataComboBoxColumn FieldName="IdStare" Name="IdStare" Caption="Stare"  Width="100px" VisibleIndex="4">                            
-                                    <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                                    <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" AllowNull="true"  />
                                 </dx:GridViewDataComboBoxColumn>
 				                <dx:GridViewDataTextColumn FieldName="Observatii" Name="Observatii" Caption="Observatii"  Width="100px" VisibleIndex="5" />
                                 <dx:GridViewDataTextColumn FieldName="USER_NO" Name="USER_NO" Caption="USER_NO" Visible="false"  Width="100px"  />	
@@ -256,7 +256,7 @@
 						        <dx:GridViewDataTextColumn FieldName="IdNotaLichidare" Name="IdNotaLichidare" Caption="Id" ReadOnly="true" Width="100px" Visible="false" />
                                 <dx:GridViewDataTextColumn FieldName="Rol" Name="Rol" Caption="Rol" ReadOnly="true" Width="100px" VisibleIndex="3" />    
                                 <dx:GridViewDataComboBoxColumn FieldName="Datorii" Name="Datorii" Caption="Datorii"  Width="100px" VisibleIndex="4">                            
-                                    <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDown" />
+                                    <PropertiesComboBox TextField="Denumire" ValueField="Id" ValueType="System.Int32" DropDownStyle="DropDownList" AllowNull="true" />                                    
                                 </dx:GridViewDataComboBoxColumn>
                                 <dx:GridViewDataTextColumn FieldName="Valoare" Name="Valoare" Caption="Detalii datorii"  Width="100px" VisibleIndex="5" />                                                        
 				                <dx:GridViewDataTextColumn FieldName="Comentarii" Name="Comentarii" Caption="Comentarii"  Width="100px" VisibleIndex="6" />

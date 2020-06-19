@@ -36,7 +36,7 @@ namespace WizOne.Personal
 
                 if (!IsPostBack)
                 {
-         
+                    Session["NL_HR"] = null;
                     if (tip == 1)
                     {
                         Session["NL_HR"] = "1";
@@ -55,6 +55,9 @@ namespace WizOne.Personal
                         btnRap.ClientVisible = false;
                         grDate.ClientVisible = false;
                     }
+
+                    Session["NL_Grid"] = null;
+                    Session["NL_GridDet"] = null;
 
                 }
 
@@ -134,7 +137,7 @@ namespace WizOne.Personal
                 cmbAng.DataBind();
 
                 if (!IsPostBack)
-                {  
+                {
 
                     //DataTable dtStare = General.IncarcaDT("SELECT \"IdStare\", \"IdAuto\" FROM \"MP_NotaLichidare\"", null);
                     //string sir = "";
@@ -146,8 +149,10 @@ namespace WizOne.Personal
                     //}
                     //Session["NL_Stare"] = sir;
                     //cmbStareDatorii.SelectedIndex = 1;
-                    IncarcaGrid();
-                    IncarcaGridDet();
+                    if (Session["NL_HR"] != null && Session["NL_HR"].ToString() == "1")
+                        IncarcaGrid();
+                    else
+                        IncarcaGridDet();
 
                 }
                 else
@@ -164,16 +169,20 @@ namespace WizOne.Personal
                         grDate.ClientVisible = false;
                     }
 
-
-                    DataTable dt1 = Session["NL_Grid"] as DataTable;
-                    grDate.KeyFieldName = "IdAuto";
-                    grDate.DataSource = dt1;
-                    grDate.DataBind();
-
-                    DataTable dt2 = Session["NL_GridDet"] as DataTable;
-                    grDateDet.KeyFieldName = "IdAuto";
-                    grDateDet.DataSource = dt2;
-                    grDateDet.DataBind();
+                    if (Session["NL_HR"] != null && Session["NL_HR"].ToString() == "1")
+                    {
+                        DataTable dt1 = Session["NL_Grid"] as DataTable;
+                        grDate.KeyFieldName = "IdAuto";
+                        grDate.DataSource = dt1;
+                        grDate.DataBind();
+                    }
+                    else
+                    {
+                        DataTable dt2 = Session["NL_GridDet"] as DataTable;
+                        grDateDet.KeyFieldName = "IdAuto";
+                        grDateDet.DataSource = dt2;
+                        grDateDet.DataBind();
+                    }
 
                 }
 
@@ -286,7 +295,7 @@ namespace WizOne.Personal
             return val;
         }
 
-        protected void btnRap_Click(object sender, EventArgs e)
+        protected void btnRap_Click()
         {
             try
             {
@@ -298,14 +307,15 @@ namespace WizOne.Personal
                     marca = Convert.ToInt32(obj[0]);
                 else
                 {
-                    MessageBox.Show("Nu ati selectat nicio linie!", MessageBox.icoError, "Atentie !");
+                    pnlCtl.JSProperties["cpAlertMessage"] = Dami.TraduCuvant("Nu ati selectat nicio linie!");             
                     return;
                 }
 
                 var reportSettings = Wizrom.Reports.Pages.Manage.GetReportSettings(idRap);
                 var reportUrl = Wizrom.Reports.Code.ReportProxy.GetViewUrl(idRap, reportSettings.ToolbarType, reportSettings.ExportOptions, new { Angajat = marca.ToString() });
 
-                Response.Redirect(reportUrl, false);
+                //Response.Redirect(reportUrl, false);
+                Response.RedirectLocation = System.Web.VirtualPathUtility.ToAbsolute(reportUrl);
             }
             catch (Exception ex)
             {
@@ -313,88 +323,88 @@ namespace WizOne.Personal
             }
         }
 
-        protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
-        {
-            try
-            {
-                object[] keys = new object[e.Keys.Count];
-                for (int i = 0; i < e.Keys.Count; i++)
-                { keys[i] = e.Keys[i]; }
+        //protected void grDate_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        //{
+        //    try
+        //    {
+        //        object[] keys = new object[e.Keys.Count];
+        //        for (int i = 0; i < e.Keys.Count; i++)
+        //        { keys[i] = e.Keys[i]; }
 
-                DataTable dt = Session["NL_Grid"] as DataTable;
+        //        DataTable dt = Session["NL_Grid"] as DataTable;
 
 
-                DataRow row = dt.Rows.Find(keys);
+        //        DataRow row = dt.Rows.Find(keys);
 
               
-                foreach (DataColumn col in dt.Columns)
-                {
-                    if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
-                    {
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;                                               
+        //        foreach (DataColumn col in dt.Columns)
+        //        {
+        //            if (!col.AutoIncrement && grDate.Columns[col.ColumnName] != null && grDate.Columns[col.ColumnName].Visible)
+        //            {
+        //                row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;                                               
 
-                    }
+        //            }
 
-                    if (col.ColumnName == "USER_NO")
-                        row[col.ColumnName] = Session["UserId"].ToString();
-                    if (col.ColumnName == "TIME")
-                        row[col.ColumnName] = DateTime.Now;
+        //            if (col.ColumnName == "USER_NO")
+        //                row[col.ColumnName] = Session["UserId"].ToString();
+        //            if (col.ColumnName == "TIME")
+        //                row[col.ColumnName] = DateTime.Now;
 
-                }
+        //        }
 
-                e.Cancel = true;
-                grDate.CancelEdit();
-                Session["NL_Grid"] = dt;
-                grDate.DataSource = dt;               
+        //        e.Cancel = true;
+        //        grDate.CancelEdit();
+        //        Session["NL_Grid"] = dt;
+        //        grDate.DataSource = dt;               
 
-                General.SalveazaDate(dt, "MP_NotaLichidare");
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        General.SalveazaDate(dt, "MP_NotaLichidare");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
-        protected void grDateDet_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
-        {
-            try
-            {
-                object[] keys = new object[e.Keys.Count];
-                for (int i = 0; i < e.Keys.Count; i++)
-                { keys[i] = e.Keys[i]; }
+        //protected void grDateDet_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        //{
+        //    try
+        //    {
+        //        object[] keys = new object[e.Keys.Count];
+        //        for (int i = 0; i < e.Keys.Count; i++)
+        //        { keys[i] = e.Keys[i]; }
 
-                DataTable dt = Session["NL_GridDet"] as DataTable;
-
-
-                DataRow row = dt.Rows.Find(keys);
+        //        DataTable dt = Session["NL_GridDet"] as DataTable;
 
 
-                foreach (DataColumn col in dt.Columns)
-                {
-                    if (!col.AutoIncrement && grDateDet.Columns[col.ColumnName] != null && grDateDet.Columns[col.ColumnName].Visible)
-                    {
-                        row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
+        //        DataRow row = dt.Rows.Find(keys);
 
-                    }
-                    if (col.ColumnName == "USER_NO")
-                        row[col.ColumnName] = Session["UserId"].ToString();
-                    if (col.ColumnName == "TIME")
-                        row[col.ColumnName] = DateTime.Now;
 
-                }
+        //        foreach (DataColumn col in dt.Columns)
+        //        {
+        //            if (!col.AutoIncrement && grDateDet.Columns[col.ColumnName] != null && grDateDet.Columns[col.ColumnName].Visible)
+        //            {
+        //                row[col.ColumnName] = e.NewValues[col.ColumnName] ?? DBNull.Value;
 
-                e.Cancel = true;
-                grDateDet.CancelEdit();
-                Session["NL_GridDet"] = dt;
-                grDateDet.DataSource = dt;
+        //            }
+        //            if (col.ColumnName == "USER_NO")
+        //                row[col.ColumnName] = Session["UserId"].ToString();
+        //            if (col.ColumnName == "TIME")
+        //                row[col.ColumnName] = DateTime.Now;
 
-                General.SalveazaDate(dt, "MP_NotaLichidare_Detalii");
-            }
-            catch (Exception ex)
-            {
-                General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
-            }
-        }
+        //        }
+
+        //        e.Cancel = true;
+        //        grDateDet.CancelEdit();
+        //        Session["NL_GridDet"] = dt;
+        //        grDateDet.DataSource = dt;
+
+        //        General.SalveazaDate(dt, "MP_NotaLichidare_Detalii");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        General.MemoreazaEroarea(ex, Path.GetFileName(Page.AppRelativeVirtualPath), new StackTrace().GetFrame(0).GetMethod().Name);
+        //    }
+        //}
 
 
         protected void pnlCtl_Callback(object source, CallbackEventArgsBase e)
@@ -404,13 +414,18 @@ namespace WizOne.Personal
                 string ctrl = e.Parameter.Split(';')[0];
                 switch (ctrl)
                 { 
-                    case "btnFiltru": 
-                        IncarcaGrid();
-                        IncarcaGridDet();
+                    case "btnFiltru":
+                        if (Session["NL_HR"] != null && Session["NL_HR"].ToString() == "1")
+                            IncarcaGrid();
+                        else
+                            IncarcaGridDet();
                         break;
                     case "btnFiltruSterge":
                         StergeFiltre();
-                        break;             
+                        break;
+                    case "btnRap":
+                        btnRap_Click();
+                        break;
                 } 
             }
             catch (Exception ex)

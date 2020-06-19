@@ -45,6 +45,42 @@
             }--%>
         }
 
+        function OnExit(s, e) {
+            if (grDate.batchEditApi.HasChanges() || grDateDet.batchEditApi.HasChanges()) {
+                swal({
+                    title: 'Salvare modificari', text: 'Exista modificari nesalvate! Doriti sa le salvati?',
+                    type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', confirmButtonText: 'Da', cancelButtonText: 'Nu', closeOnConfirm: true
+                }, function (isConfirm) {
+                        if (isConfirm) {
+                            pnlLoading.Show();
+                            if (grDate.batchEditApi.HasChanges())
+                                grDate.UpdateEdit();
+                            if (grDateDet.batchEditApi.HasChanges())
+                                grDateDet.UpdateEdit();
+                            if (s.name == "btnExit")
+                                window.history.back();
+                            else if (s.name == "btnRap")
+                                pnlCtl.PerformCallback("btnRap");
+                        }
+                        else {
+                            if (s.name == "btnExit")
+                                window.history.back();
+                            else if (s.name == "btnRap") {
+                                for (var i = 0; i < grDate.VisibleRowCount; i++)
+                                    grDate.batchEditApi.ResetChanges(i);
+                                pnlCtl.PerformCallback("btnRap");
+                            }
+                        }
+                });
+            }
+            else {
+                if (s.name == "btnExit")
+                    window.history.back();
+                else if (s.name == "btnRap")
+                    pnlCtl.PerformCallback("btnRap");
+            }
+        }
+
         var textSeparator = ",";
         function OnListBoxSelectionChanged(listBox, args) {
             if (args.index == 0)
@@ -100,11 +136,8 @@
                 <dx:ASPxLabel ID="txtTitlu" runat="server" Text="" Font-Size="14px" Font-Bold="true" ForeColor="#00578a" Font-Underline="true" />
             </td>
             <td align="right">
-                <dx:ASPxButton ID="btnRap" ClientInstanceName="btnRap" ClientIDMode="Static" runat="server" Text="Raport" OnClick="btnRap_Click" oncontextMenu="ctx(this,event)">
-                    <ClientSideEvents Click="function(s, e) {
-                        pnlLoading.Show();
-                        e.processOnServer = true;
-                    }" />
+                <dx:ASPxButton ID="btnRap" ClientInstanceName="btnRap" ClientIDMode="Static" runat="server" Text="Raport" AutoPostBack="false" oncontextMenu="ctx(this,event)">
+                    <ClientSideEvents Click="function(s, e) { OnExit(s,e); }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/view.png"></Image>
                 </dx:ASPxButton>
                 <dx:ASPxButton ID="btnSave" ClientInstanceName="btnSave" ClientIDMode="Static" runat="server" Text="Salveaza" AutoPostBack="false" oncontextMenu="ctx(this,event)">
@@ -114,8 +147,9 @@
                     }" />
                     <Image Url="~/Fisiere/Imagini/Icoane/salveaza.png"></Image>
                 </dx:ASPxButton>
-                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="true" PostBackUrl="../Pagini/MainPage.aspx" oncontextMenu="ctx(this,event)" >
+                <dx:ASPxButton ID="btnExit" ClientInstanceName="btnExit" ClientIDMode="Static" runat="server" Text="Iesire" AutoPostBack="false"  oncontextMenu="ctx(this,event)" >
                     <Image Url="~/Fisiere/Imagini/Icoane/iesire.png"></Image>
+                    <ClientSideEvents Click ="function (s,e) { OnExit(s,e); }" />
                 </dx:ASPxButton>
             </td>
         </tr>

@@ -888,6 +888,9 @@ namespace WizOne.Module
                 DataRow entProg = General.IncarcaDR(string.Format(@"SELECT * FROM ""Ptj_Programe"" WHERE ""Id""={0}", idProg));
                 DataTable dtPauza = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_ProgramePauza"" WHERE ""IdProgram""={0}", idProg));
 
+                //Florin 2020.06.22
+                if (entProg == null) return tpd;
+
                 int idCtr = Convert.ToInt32(General.Nz(ent["IdContract"], -99));
                 DataTable dtCtr = General.IncarcaDT(string.Format(@"SELECT * FROM ""Ptj_Contracte"" WHERE ""Id""={0}", idCtr));
                 object rap = 1;
@@ -1301,7 +1304,6 @@ namespace WizOne.Module
 
                 try
                 {
-                    string ert = entPrg["ONCamp"].ToString();
                     if (entPrg != null && entPrg["ONCamp"] != null && entPrg["ONCamp"].ToString() != "") ent[entPrg["ONCamp"].ToString()] = oreCalc;
                 }
                 catch (Exception)
@@ -1836,13 +1838,14 @@ namespace WizOne.Module
 
                     gridOut = ent["Out" + i];
 
-                    if (Convert.ToDateTime(gridIn) < firstInPaid)
+                    //Florin 2020.06.22
+                    if (gridIn != DBNull.Value && Convert.ToDateTime(gridIn) < firstInPaid)
                         gridIn = firstInPaid;
 
-                    if (Convert.ToDateTime(gridOut) > lastOutPaid)
+                    if (gridOut != DBNull.Value && Convert.ToDateTime(gridOut) > lastOutPaid)
                         gridOut = lastOutPaid;
 
-                    if (gridIn != null && gridOut != null && Convert.ToDateTime(gridIn) < Convert.ToDateTime(gridOut))
+                    if (gridIn != DBNull.Value && gridOut != DBNull.Value && Convert.ToDateTime(gridIn) < Convert.ToDateTime(gridOut))
                     {
                         try
                         {
